@@ -14,8 +14,7 @@
 
 module.exports.adapters = {
 
-    // If you leave the adapter config unspecified 
-    // in a model definition, 'default' will be used.
+    // refer to https://github.com/balderdashy/sails-mongo for advance config
     'default': 'mongo',
     mongo: {
         module   : 'sails-mongo',
