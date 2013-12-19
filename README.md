@@ -1,2 +1,2 @@
-# bio.indigenous
+# bioindigenous
 ### a Sails application
