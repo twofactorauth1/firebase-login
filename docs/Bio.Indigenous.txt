@@ -1,0 +1,1119 @@
+Summary Object
+All GET responses contain a summary object with information about the request. For the sake of brevity, we will not duplicate the summary object elsewhere in the examples. This functionality should be assumed for all GET responses.
+
+A sample summary object:
+200
+{
+  "summary": {
+    "status": 200,
+    "message": "OK",
+    "results": 3,
+    "start_date": "2013-03-27T00:00:00+00:00",
+    "end_date": "2013-03-27T23:59:59+00:00",
+    "offset": 0,
+    "limit": 100,
+    "previous": null,
+    "next": null,
+    "params": {
+      "start_date": null,
+      "end_date": null,
+      "offset": null,
+      "limit": null
+    }
+  }
+}
+
+Summary Params
+
+Field	Type	Description
+status	Integer	The HTTP header response code returned
+message	String	The HTTP header response code message returned
+results	Integer	The total number of records returned across all pages.
+start_date	String	The optional start timestamp of the activities you wish to pull in the ISO 8601 standard format "YYYY-MM-DDThh:mm:ssZ" (e.g., "2013-03-28T14:32:00+00:00" where "+00:00" is the UTC offset). Defaults to yesterday's start of day (e.g., "2013-03-27T00:00:00+00:00"). May be set in GET request (e.g., &start_date=2013-03-28T14:32:00+00:00).
+end_date	String	The optional end timestamp of the activities you wish to pull in the ISO 8601 standard format "YYYY-MM-DDThh:mm:ssZ" (e.g., "2013-03-28T14:32:00+00:00" where "+00:00" is the UTC offset). Defaults to yesterday's end of day (e.g., "2013-03-27T23:59:59+00:00"). May be set in GET request (e.g., &end_date=2013-03-28T14:32:00+00:00).
+offset	Integer	Record offset for retrieving paginated records. Default is 0. May be set in GET request.
+limit	Integer	Limit of records returned per page. Default is 100. Must be an integer between 1 and 200. May be set in GET request.
+previous	String	The URI of the previous page in the feed.
+next	String	The URI of the next page in the feed.
+
+Users
+Provisioning Users
+
+To ensure HIPAA/PHI compliant data storage and transfer, bio.indigenous does not store identifiable user information in our system. As such, users must be provisioned in a unique way to provide user authentication and data linkage between your system in bio.indigenous.
+
+When provisioning a user in bio.indigenous, you will be required to pass a unique User ID (UID). This UID is typically the user's ID in your system. This information is encrypted before being stored in our system.
+
+Users are provisioned in bio.indigenous with a POST call that includes a unique UID and the organization's access_token (both are required), and optional profile parameters.
+
+After the user POST request is sent, a 201 Created HTTP response code will be returned, echoing your input with the addition of a bio.indigenous User ID and User Access Token. It is imperative that you store the id and access token, as they will be used to help authenticate the user to bio.indigenous.
+
+Basic User Provisioning:
+
+POST https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users.json
+POST https://bio.indigenous.io/v1/organizations/516828cf6deddabe51000001/users.json
+{
+  "user": {
+    "uid": "123467890"
+  },
+  "access_token": "e61467e3845e8a66f7453dc55ea3fc445d1b879a6f96ebe7b243badbeae04f63"
+}
+201
+{
+  "code": 201,
+  "message": "Ok",
+  "user": {
+    "_id": "51552cd7fded0807c4000017",
+    "access_token": "d18397e3845e8b66f7453dc55ea3fc445d1b879a6f96ebe7b243badabce08c98"
+  }
+}
+User Provisioning with Optional Profile Parameters:
+
+POST https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users.json
+POST https://bio.indigenous.io/v1/organizations/516828cf6deddabe51000001/users.json
+{
+  "user": {
+    "uid": "123467890",
+    "profile": {
+      "gender": "M",
+      "location": "NC",
+      "birth_year": "1973",
+      "height": 167.5,
+      "weight": 83.9146
+    }
+  },
+  "access_token": "e61467e3845e8a66f7453dc55ea3fc445d1b879a6f96ebe7b243badbeae04f63"
+}
+201
+{
+  "code": 201,
+  "message": "Ok",
+  "user": {
+    "_id": "51552cd7fded0807c4000017",
+    "access_token": "d18397e3845e8b66f7453dc55ea3fc445d1b879a6f96ebe7b243badabce08c98",
+    "profile": {
+      "gender": "M",
+      "location": "NC",
+      "birth_year": "1973",
+      "height": 167.5,
+      "weight": 83.9146
+    }
+  }
+}
+Refreshing or Re-acquiring the User's Access Token:
+
+If you need to reset or re-acquire a user's access token, you may make a GET request call for a new user access token:
+
+GET https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/refresh_token.json
+GET https://bio.indigenous.io/v1/organizations/516828cf6deddabe51000001/users/51552cd7fded0807c4000017/refresh_token.json
+200
+{
+  "code": 200,
+  "message": "Ok",
+  "user": {
+    "id_": "51552cd7fded0807c4000017",
+    "uid": "123456",
+    "authentication_token": "cPDsxsTuLpSmgsxsXuLF3dc55ea3fc441d1b899a6fU6ebeTb243xadabce08d98"
+  }
+}
+Deleting Users
+
+You may want to permanently disconnect a user from bio.indigenous, for example, if the person is no longer employed at an organization. You may delete a user by making a delete call to the user's ID provided during provisioning or the uid you provided during provisioning. Deleting a user follows REST standards. Note that the Organization access token must be passed for authentication.
+
+Deleting a user by specifying the user's bio.indigenous ID:
+
+DELETE https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}
+DELETE https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017.json
+{
+  "access_token": "e61467e3845e8a66f7453dc55ea3fc445d1b879a6f96ebe7b243badbeae04f63"
+}
+200
+{
+  "code": 200,
+  "message": "Ok"
+}
+Deleting a user by specifying the uid provided when user was provisioned:
+
+DELETE https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users
+DELETE https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users.json
+{
+  "access_token": "e61467e3845e8a66f7453dc55ea3fc445d1b879a6f96ebe7b243badbeae04f63",
+  "uid": "121212"
+}
+200
+{
+  "code": 200,
+  "message": "Ok"
+}
+Alternatively, you may pass the access token as a URL parameter instead.
+
+Suspending Users
+
+You may want to suspend a user from bio.indigenous, for example, if the person is similarly suspended in your organization. A suspended user will not have access to your bio.indigenous Marketplace. Additionally, bio.indigenous will discontinue syncing data from their applications. Suspending a user follows REST standards. Note that the Organization access token must be passed for authentication.
+
+PUT https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}
+PUT https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017.json
+{
+  "suspend": "1",
+  "access_token": "e61467e3845e8a66f7453dc55ea3fc445d1b879a6f96ebe7b243badbeae04f63"
+}
+200
+{
+  "code": 200,
+  "message": "The user has been suspended successfully"
+}
+You may unsuspend a user by setting suspend to 0.
+
+User Credentials
+All Users in bio.indigenous have credentials which can be accessed with a /me call. Due to HIPAA de-identification standards, only non-identifiable data is available.
+
+GET https://bio.indigenous.io/v1/me.json?access_token={USER_ACCESS_TOKEN}
+GET https://bio.indigenous.io/v1/me.json?access_token=e61467e3845e8a66f7453dc55ea3fc445d1b879a6f96ebe7b243badbeae04f63
+200
+{ 
+  "me": {
+    "_id": "51552cdafded0807c4000053"
+  }
+}
+
+User Profile
+A profile contains information about a User including connected applications. Due to HIPAA de-identification standards, only non-identifiable data is available.
+
+GET https://bio.indigenous.io/v1/profile.json?access_token={USER_ACCESS_TOKEN}
+GET https://bio.indigenous.io/v1/profile.json?access_token=dbcd72a51f1b4a78450791a7f5c832b7a0876ffd03703bcce5d3a62e47c37c78
+200
+{ 
+  "profile": {
+    "uid": "122304",
+    "_id": "51552cd6fded0807c4000007",
+    "gender": "M",
+    "location": "NC",
+    "country": "United States",
+    "birth_year": "1973",
+    "height": 167.5,
+    "weight": 83.9146,
+    "applications": []
+  }
+}
+POST https://bio.indigenous.io/v1/profile.json
+POST https://bio.indigenous.io/v1/profile.json
+{
+  "profile": {
+    "gender": "M",
+    "location": "NC",
+    "country": "United States",
+    "birth_year": "1973",
+    "height": 167.5,
+    "weight": 83.9146
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+201
+{
+  "code": 201,
+  "message": "Ok",
+  "profile": {
+    "uid": "122304",
+    "_id": "51552cd6fded0807c4000007",
+    "gender": "M",
+    "location": "NC",
+    "country": "United States",
+    "birth_year": "1973",
+    "height": 167.5,
+    "weight": 83.9146,
+    "applications": []
+  }
+}
+Params
+
+Field	Type	Description
+gender	String	Either M or F
+location	String	2-letter State abbreviation in United States, postal code or City, State for other countries
+country	String	The user's Country of residence (e.g., "United States," "Canada," etc.)
+birth_year	String	User's year of birth
+height	Double	User's most current height in cm
+weight	Double	User's most current weight in kg
+applications	String	A list of connected 3rd party applications (stored in a hash)
+
+Fitness Activities
+Activities that are undertaken with the express purpose of exercising. These activities have a defined duration (time, distance, elevation, etc.). Activities are stored in the items array structure as follows:
+
+GET https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/fitness.json?access_token={ACCESS_TOKEN}
+GET https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/fitness.json?access_token=e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb
+200
+{
+  "summary": {
+    ...
+  }, "fitness": [
+    {
+      "_id": "51552cd7fded0807c400001f",
+      "timestamp": "2013-03-10T07:12:16+00:00",
+      "utc_offset": "+00:00",
+      "type": "Walking",
+      "intensity": "low",
+      "start_time": "2013-03-10T07:12:16+00:00",
+      "distance": 2600,
+      "duration": 2460,
+      "calories": 350,
+      "source": "sample_app",
+      "source_name": "Sample App",
+      "last_updated": "2013-03-10T07:12:16+00:00"
+    }
+  ]
+}
+POST https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/fitness.json
+POST https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/fitness.json
+{
+  "fitness": {
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "-05:00",
+    "type": "Running",
+    "intensity": "medium",
+    "start_time": "2013-03-09T02:12:16-05:00",
+    "distance": 5149.9,
+    "duration": 1959,
+    "calories": 350
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+201
+{
+  "code": 201,
+  "message": "Ok",
+  "fitness": {
+    "_id": "51552cd8fded0807c400002a",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "-05:00",
+    "type": "Running",
+    "intensity": "medium",
+    "start_time": "2013-03-09T02:12:16-05:00",
+    "distance": 5149.9,
+    "duration": 1959,
+    "calories": 350,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+PUT https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/fitness/{FITNESS_ID}.json
+PUT https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/fitness/51552cd8fded0807c400002a.json
+{
+  "fitness": {
+    "intensity": "high"
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok",
+  "fitness": {
+    "_id": "51552cd8fded0807c400002a",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "-05:00",
+    "type": "Running",
+    "intensity": "high",
+    "start_time": "2013-03-09T02:12:16-05:00",
+    "distance": 5149.9,
+    "duration": 1959,
+    "calories": 350,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+DELETE https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/fitness/{FITNESS_ID}.json
+DELETE https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/fitness/51552cd8fded0807c400002a.json
+{
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok"
+}
+
+Params
+
+Field	Type	Description
+timestamp	String	Timestamp for the measurement set
+utc_offset	String	Timezone information for the measurement set
+type	String	Type of activity: Running, Cycling, Mountain Biking, Walking, Hiking, Downhill Skiing, Cross-country Skiing, Snowboarding, Skating, Swimming, Rowing, Elliptical, Other
+intensity	String	Subjective intensity with which an activity was performed. Options are: low, medium, high (default is medium)
+start_time	String	Starting time for the activity. Preferred format is an ISO 8601 timestamp (YYYY-MM-DDThh:mm:ssZ, e.g., 2013-03-10T07:12:16-05:00).
+distance	Double	Total distance for the activity in meters
+duration	Double	Duration of the activity in seconds
+calories	Double	Total calories burned for the activity
+source	String	The short name of the application that recorded the activity
+source_name	String	The display name of the application that recorded the activity
+last_updated	String	Date and time when the measurement set was last updated
+
+Routine Activities
+Activities that occur regularly throughout the day, without the specific goal of exercise, for example calories burned and consumed, steps taken, stairs climbed. These activities are aggregate throughout the day. Activities are stored in the items array structure as follows:
+
+GET https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/routine.json?access_token={ACCESS_TOKEN}
+GET https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/routine.json?access_token=e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb
+200
+{
+  "summary": {
+    ...
+  }, "routine": [
+    {
+      "_id": "51552cdbfded0807c4000062",
+      "timestamp": "2013-03-10T07:12:16+00:00",
+      "utc_offset": "+00:00",
+      "steps": 9355,
+      "distance": 7290.33,
+      "floors": 23,
+      "elevation": 3.4,
+      "calories_burned": 2874,
+      "source": "sample_app",
+      "source_name": "Sample App",
+      "last_updated": "2013-03-10T07:12:16+00:00"
+    }
+  ]
+}
+POST https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/routine.json
+POST https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/routine.json
+{
+  "routine": {
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "steps": 9355,
+    "distance": 7290.33,
+    "floors": 23,
+    "elevation": 3.4,
+    "calories_burned": 2874
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+201
+{
+  "code": 201,
+  "message": "Ok",
+  "routine": {
+    "_id": "51552cdbfded0807c400006d",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "steps": 9355,
+    "distance": 7290.33,
+    "floors": 23.0,
+    "elevation": 3.4,
+    "calories_burned": 2874,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+PUT https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/routine/{ROUTINE_ID}.json
+PUT https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/routine/51552cdbfded0807c400006d.json
+{
+  "routine": {
+    "steps": 10355,
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok",
+  "routine": {
+    "_id": "51552cdbfded0807c400006d",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "steps": 10355,
+    "distance": 7290.33,
+    "floors": 23.0,
+    "elevation": 3.4,
+    "calories_burned": 2874,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+DELETE https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/routine/{ROUTINE_ID}.json
+DELETE https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/routine/51552cdbfded0807c400006d.json
+{
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok"
+}
+Params
+
+Field	Type	Description
+timestamp	String	Timestamp for the measurement set
+utc_offset	String	Timezone information for the measurement set
+steps	Double	The value of the measured quantity
+distance	Double	The value of the measured quantity in meters
+floors	Double	The value of the measured quantity
+elevation	Double	The value of the measured quantity in meters
+calories_burned	Double	The value of the measured quantity
+source	String	The short name of the application that recorded the activity
+source_name	String	The display name of the application that recorded the activity
+last_updated	String	Date and time when the measurement set was last updated
+
+Nutrition
+Activities related to calorie intake and consumption and nutritional information (such as fat, protein, carbohydrates, sodium, etc.).
+
+GET https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/nutrition.json?access_token={ACCESS_TOKEN}
+GET https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/nutrition.json?access_token=e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb
+200
+{
+  "summary": {
+    ...
+  }, "nutrition": [
+    {
+      "_id": "51552cd9fded0807c4000043",
+      "timestamp": "2013-03-10T07:12:16+00:00",
+      "utc_offset": "+00:00",
+      "calories": 865,
+      "carbohydrates": 121,
+      "fat": 31,
+      "fiber": 9,
+      "protein": 21,
+      "sodium": 1129,
+      "water": 14,
+      "meal": "lunch",
+      "source": "sample_app",
+      "source_name": "Sample App",
+      "last_updated": "2013-03-10T07:12:16+00:00"
+    }
+  ]
+}
+POST https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/nutrition.json
+POST https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/nutrition.json
+{
+  "nutrition": {
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "calories": 865,
+    "carbohydrates": 121,
+    "fat": 31,
+    "fiber": 9,
+    "protein": 21,
+    "sodium": 1129,
+    "water": 14,
+    "meal": "lunch"
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+201
+{
+  "code": 201,
+  "message": "Ok",
+  "nutrition": {
+    "_id": "51552cdafded0807c400004e",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "calories": 865,
+    "carbohydrates": 121,
+    "fat": 31,
+    "fiber": 9,
+    "protein": 21,
+    "sodium": 1129,
+    "water": 14,
+    "meal": "lunch",
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+PUT https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/nutrition/{NUTRITION_ID}.json
+PUT https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/nutrition/51552cdafded0807c400004e.json
+{
+  "nutrition": {
+    "meal": "dinner"
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok",
+  "nutrition": {
+    "_id": "51552cdafded0807c400004e",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "calories": 865,
+    "carbohydrates": 121,
+    "fat": 31,
+    "fiber": 9,
+    "protein": 21,
+    "sodium": 1129,
+    "water": 14,
+    "meal": "dinner",
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+DELETE https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/nutrition/{NUTRITION_ID}.json
+DELETE https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/nutrition/51552cdafded0807c400004e.json
+{
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok"
+}
+Params
+
+Field	Type	Description
+timestamp	String	Timestamp for the measurement set
+utc_offset	String	Timezone information for the measurement set
+calories	Double	The value of the measured quantity
+carbohydrates	Double	The value of the measured quantity in g
+fat	Double	The value of the measured quantity in g
+fiber	Double	The value of the measured quantity in g
+protein	Double	The value of the measured quantity in g
+sodium	Double	The value of the measured quantity in mg
+water	Double	The value of the measured quantity in fl oz
+meal	String	The meal, as one of the following values: breakfast, lunch, dinner, snack, other, unspecified
+source	String	The short name of the application that recorded the activity
+source_name	String	The display name of the application that recorded the activity
+last_updated	String	Date and time when the measurement set was last updated
+
+Sleep
+Measurements related to the length of time spent in various sleep cycles, as well as number of times woken during the night.
+
+GET https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/sleep.json?access_token={ACCESS_TOKEN}
+GET https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/sleep.json?access_token=e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb
+200
+{
+  "summary": {
+    ...
+  }, "sleep": [
+    {
+      "_id": "51552cddfded0807c400008b",
+      "timestamp": "2013-03-10T07:12:16+00:00",
+      "utc_offset": "+00:00",
+      "awake": 34,
+      "deep": 234,
+      "light": 94,
+      "rem": 115,
+      "times_woken": 4,
+      "total_sleep": 477,
+      "source": "sample_app",
+      "source_name": "Sample App",
+      "last_updated": "2013-03-10T07:12:16+00:00"
+    }
+  ]
+}
+POST https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/sleep.json
+POST https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/sleep.json
+{
+  "sleep": {
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "total_sleep": 477,
+    "awake": 34,
+    "deep": 234,
+    "light": 94,
+    "rem": 115,
+    "times_woken": 4
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+201
+{
+  "code": 201,
+  "message": "Ok",
+  "sleep": {
+    "_id": "51552cddfded0807c4000096",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "awake": 34,
+    "deep": 234,
+    "light": 94,
+    "rem": 115,
+    "times_woken": 4,
+    "total_sleep": 477,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+PUT https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/sleep/{SLEEP_ID}.json
+PUT https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/sleep/51552cddfded0807c4000096.json
+{
+  "sleep": {
+    "total_sleep": 500
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok",
+  "sleep": {
+    "_id": "51552cddfded0807c4000096",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "awake": 34,
+    "deep": 234,
+    "light": 94,
+    "rem": 115,
+    "times_woken": 4,
+    "total_sleep": 500,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+DELETE https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/sleep/{SLEEP_ID}.json
+DELETE https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/sleep/51552cddfded0807c4000096.json
+{
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok"
+}
+Params
+
+Field	Type	Description
+timestamp	String	Timestamp for the measurement set
+utc_offset	String	Timezone information for the measurement set
+total_sleep	Double	The value of the measured quantity in seconds
+awake	Double	The value of the measured quantity in seconds
+deep	Double	The value of the measured quantity in seconds
+light	Double	The value of the measured quantity in seconds
+rem	Double	The value of the measured quantity in seconds
+times_woken	Double	The value of the measured quantity
+source	String	The short name of the application that recorded the activity
+source_name	String	The display name of the application that recorded the activity
+last_updated	String	Date and time when the measurement set was last updated
+Weight
+Measurements associated with a user’s weight and body mass.
+
+GET https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/weight.json?access_token={ACCESS_TOKEN}
+GET https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/weight.json?access_token=e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb
+200
+{
+  "summary": {
+    ...
+  }, "weight": [
+    {
+      "_id": "51552cdcfded0807c4000075",
+      "timestamp": "2013-03-10T07:12:16+00:00",
+      "utc_offset": "+00:00",
+      "weight": 83.9146,
+      "height": 167.5,
+      "free_mass": 83.9146,
+      "fat_percent": 21.4,
+      "mass_weight": 83.9146,
+      "bmi": 29.9,
+      "source": "sample_app",
+      "source_name": "Sample App",
+      "last_updated": "2013-03-10T07:12:16+00:00"
+    }
+  ]
+}
+POST https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/weight.json
+POST https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/weight.json
+{
+  "weight": {
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "weight": 83.9146,
+    "height": 167.5,
+    "free_mass": 83.9146,
+    "fat_percent": 21.4,
+    "mass_weight": 83.9146,
+    "bmi": 29.9
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+201
+{
+  "code": 201,
+  "message": "Ok",
+  "weight": {
+    "_id": "51552cddfded0807c4000083",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "weight": 83.9146,
+    "height": 167.5,
+    "free_mass": 83.9146,
+    "fat_percent": 21.4,
+    "mass_weight": 83.9146,
+    "bmi": 29.9,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+PUT https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/weight/{WEIGHT_ID}.json
+PUT https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/weight/51552cddfded0807c4000083.json
+{
+  "weight": {
+    "weight": 84.6
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok",
+  "weight": {
+    "_id": "51552cddfded0807c4000083",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "weight": 84.6,
+    "height": 167.5,
+    "free_mass": 83.9146,
+    "fat_percent": 21.4,
+    "mass_weight": 83.9146,
+    "bmi": 29.9,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+DELETE https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/weight/{WEIGHT_ID}.json
+DELETE https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/weight/51552cddfded0807c4000083.json
+{
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok"
+}
+Params
+
+Field	Type	Description
+timestamp	String	Timestamp for the measurement set
+utc_offset	String	Timezone information for the measurement set
+weight	Double	The value of the measured quantity in kg
+height	Double	The value of the measured quantity in cm
+free_mass	Double	The value of the measured quantity in kg
+fat_percent	Double	The value of the measured quantity
+mass_weight	Double	The value of the measured quantity in kg
+bmi	Double	The value of the measured quantity
+source	String	The short name of the application that recorded the activity
+source_name	String	The display name of the application that recorded the activity
+last_updated	String	Date and time when the measurement set was last updated
+
+Diabetes Measurements
+Diabetes Measurements are comprised of a user's blood glucose and hormone levels related to diabetes treatment and management.
+
+GET https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/diabetes.json?access_token={ACCESS_TOKEN}
+GET https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/diabetes.json?access_token=e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb
+200
+{
+  "summary": {
+    ...
+  }, "diabetes": [
+    {
+      "_id": "51552cd6fded0807c4000007",
+      "timestamp": "2013-03-10T07:12:16+00:00",
+      "utc_offset": "+00:00",
+      "c_peptide": 0.6,
+      "fasting_plasma_glucose_test": 95,
+      "hba1c": 4.8,
+      "insulin": 460,
+      "oral_glucose_tolerance_test": 137,
+      "random_plasma_glucose_test": 256,
+      "triglyceride": 128,
+      "source": "sample_app",
+      "source_name": "Sample App",
+      "last_updated": "2013-03-10T07:12:16+00:00"
+    }
+  ]
+}
+POST https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/diabetes.json
+POST https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/diabetes.json
+{
+  "diabetes": {
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "c_peptide": 0.6,
+    "fasting_plasma_glucose_test": 95,
+    "hba1c": 4.8,
+    "insulin": 460,
+    "oral_glucose_tolerance_test": 137,
+    "random_plasma_glucose_test": 256,
+    "triglyceride": 128
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+201
+{
+  "code": 201,
+  "message": "Ok",
+  "diabetes": {
+    "_id": "51552cd6fded0807c4000007",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "c_peptide": 0.6,
+    "fasting_plasma_glucose_test": 95,
+    "hba1c": 4.8,
+    "insulin": 460,
+    "oral_glucose_tolerance_test": 137,
+    "random_plasma_glucose_test": 256,
+    "triglyceride": 128,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+PUT https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/diabetes/{DIABETES_ID}.json
+PUT https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/diabetes/51552cd6fded0807c4000007.json
+{
+  "diabetes": {
+    "insulin": 380,
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok",
+  "diabetes": {
+    "_id": "51552cd6fded0807c4000007",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "c_peptide": 0.6,
+    "fasting_plasma_glucose_test": 95,
+    "hba1c": 4.8,
+    "insulin": 380,
+    "oral_glucose_tolerance_test": 137,
+    "random_plasma_glucose_test": 256,
+    "triglyceride": 128,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+DELETE https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/diabetes/{DIABETES_ID}.json
+DELETE https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/diabetes/51552cd6fded0807c4000007.json
+{
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok"
+}
+Params
+
+Field	Type	Description
+timestamp	String	Timestamp for the measurement set
+utc_offset	String	Timezone information for the measurement set
+c_peptide	Double	The value of the measured quantity in ng/mL
+fasting_plasma_glucose_test	Double	The value of the measured quantity in mg/dL
+hba1c	Double	The value of the measured quantity in %
+insulin	Double	The value of the measured quantity in U
+oral_glucose_tolerance_test	Double	The value of the measured quantity in mg/dL
+random_plasma_glucose_test	Double	The value of the measured quantity in mg/dL
+triglyceride	Double	The value of the measured quantity in mg/dL
+source	String	The short name of the application that recorded the activity
+source_name	String	The display name of the application that recorded the activity
+last_updated	String	Date and time when the measurement set was last updated
+
+Biometric Measurements
+Biometric Measurements are comprised of a user's biometric health data such as blood pressure, cholesterol, heart rate, and blood and hormone levels.
+
+GET https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/biometrics.json?access_token={ACCESS_TOKEN}
+GET https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/biometrics.json?access_token=e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb
+200
+{
+  "summary": {
+    ...
+  }, "biometrics": [
+    {
+      "_id": "51552cdcfded0807c4000075",
+      "timestamp": "2013-03-10T07:12:16+00:00",
+      "utc_offset": "+00:00",
+      "blood_calcium": 9.2,
+      "blood_chromium": 1.32,
+      "blood_folic_acid": 8.1,
+      "blood_magnesium": 1.89,
+      "blood_potassium": 3.9,
+      "blood_sodium": 137.8,
+      "blood_vitamin_b12": 612,
+      "blood_zinc": 93,
+      "creatine_kinase": 87,
+      "crp": 0,
+      "diastolic": 73,
+      "ferritin": 189,
+      "hdl": 44,
+      "hscrp": 0.3,
+      "il6": 6.4,
+      "ldl": 156,
+      "resting_heartrate": 74,
+      "systolic": 122,
+      "testosterone": 457,
+      "total_cholesterol": 208,
+      "tsh": 0.6,
+      "uric_acid": 4.2,
+      "vitamin_d": 54.8,
+      "white_cell_count": 7453,
+      "source": "sample_app",
+      "source_name": "Sample App",
+      "last_updated": "2013-03-10T07:12:16+00:00"
+    }
+  ]
+}
+POST https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/biometrics.json
+POST https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/biometrics.json
+{
+  "biometrics": {
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "blood_calcium": 9.2,
+    "blood_chromium": 1.32,
+    "blood_folic_acid": 8.1,
+    "blood_magnesium": 1.89,
+    "blood_potassium": 3.9,
+    "blood_sodium": 137.8,
+    "blood_vitamin_b12": 612,
+    "blood_zinc": 93,
+    "creatine_kinase": 87,
+    "crp": 0,
+    "diastolic": 73,
+    "ferritin": 189,
+    "hdl": 44,
+    "hscrp": 0.3,
+    "il6": 6.4,
+    "ldl": 156,
+    "resting_heartrate": 74,
+    "systolic": 122,
+    "testosterone": 457,
+    "total_cholesterol": 208,
+    "tsh": 0.6,
+    "uric_acid": 4.2,
+    "vitamin_d": 54.8,
+    "white_cell_count": 7453,
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+201
+{
+  "code": 201,
+  "message": "Ok",
+  "biometrics": {
+    "_id": "51552cdcfded0807c4000075",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "blood_calcium": 9.2,
+    "blood_chromium": 1.32,
+    "blood_folic_acid": 8.1,
+    "blood_magnesium": 1.89,
+    "blood_potassium": 3.9,
+    "blood_sodium": 137.8,
+    "blood_vitamin_b12": 612,
+    "blood_zinc": 93,
+    "creatine_kinase": 87,
+    "crp": 0,
+    "diastolic": 73,
+    "ferritin": 189,
+    "hdl": 44,
+    "hscrp": 0.3,
+    "il6": 6.4,
+    "ldl": 156,
+    "resting_heartrate": 74,
+    "systolic": 122,
+    "testosterone": 457,
+    "total_cholesterol": 208,
+    "tsh": 0.6,
+    "uric_acid": 4.2,
+    "vitamin_d": 54.8,
+    "white_cell_count": 7453,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+PUT https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/biometrics/{BIOMETRICS_ID}.json
+PUT https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/biometrics/51552cdcfded0807c4000075.json
+{
+  "biometrics": {
+    "resting_heartrate": 78
+  },
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok",
+  "biometrics": {
+    "_id": "51552cdcfded0807c4000075",
+    "timestamp": "2013-03-10T07:12:16+00:00",
+    "utc_offset": "+00:00",
+    "blood_calcium": 9.2,
+    "blood_chromium": 1.32,
+    "blood_folic_acid": 8.1,
+    "blood_magnesium": 1.89,
+    "blood_potassium": 3.9,
+    "blood_sodium": 137.8,
+    "blood_vitamin_b12": 612,
+    "blood_zinc": 93,
+    "creatine_kinase": 87,
+    "crp": 0,
+    "diastolic": 73,
+    "ferritin": 189,
+    "hdl": 44,
+    "hscrp": 0.3,
+    "il6": 6.4,
+    "ldl": 156,
+    "resting_heartrate": 78,
+    "systolic": 122,
+    "testosterone": 457,
+    "total_cholesterol": 208,
+    "tsh": 0.6,
+    "uric_acid": 4.2,
+    "vitamin_d": 54.8,
+    "white_cell_count": 7453,
+    "source": "sample_app",
+    "source_name": "Sample App",
+    "last_updated": "2013-03-10T07:12:16+00:00"
+  }
+}
+DELETE https://bio.indigenous.io/v1/organizations/{ORGANIZATION_ID}/users/{USER_ID}/biometrics/{BIOMETRICS_ID}.json
+DELETE https://bio.indigenous.io/v1/organizations/5176906c6deddac02c000001/users/51552cd7fded0807c4000017/biometrics/51552cdcfded0807c4000075.json
+{
+  "access_token": "e7ba1f04e88f25d399a91c8cbcd72300e01309e96b7725e40b49cd1effaa5deb"
+}
+200
+{
+  "code": 200,
+  "message": "Ok"
+}
+Params
+
+Field	Type	Description
+timestamp	String	Timestamp for the measurement set
+utc_offset	String	Timezone information for the measurement set
+blood_calcium	Double	The value of the measured quantity in mg/dL
+blood_chromium	Double	The value of the measured quantity in µg/L
+blood_folic_acid	Double	The value of the measured quantity in ng/mL
+blood_magnesium	Double	The value of the measured quantity in mg/dL
+blood_potassium	Double	The value of the measured quantity in mEq/L
+blood_sodium	Double	The value of the measured quantity in mEq/L
+blood_vitamin_b12	Double	The value of the measured quantity in pg/mL
+blood_zinc	Double	The value of the measured quantity in µg/dL
+creatine_kinase	Double	The value of the measured quantity in U/L
+crp	Double	The value of the measured quantity in mg/L
+diastolic	Double	The value of the measured quantity in mmHg
+ferritin	Double	The value of the measured quantity in ng/mL
+hdl	Double	The value of the measured quantity in mg/dL
+hscrp	Double	The value of the measured quantity in mg/L
+il6	Double	The value of the measured quantity in pg/mL
+ldl	Double	The value of the measured quantity in mg/dL
+resting_heartrate	Double	The value of the measured quantity in bpm
+systolic	Double	The value of the measured quantity in mmHg
+testosterone	Double	The value of the measured quantity in ng/dL
+total_cholesterol	Double	The value of the measured quantity in mg/dL
+tsh	Double	The value of the measured quantity in mIU/L
+uric_acid	Double	The value of the measured quantity in mg/dL
+vitamin_d	Double	The value of the measured quantity in ng/mL
+white_cell_count	Double	The value of the measured quantity in cells/µL
+source	String	The short name of the application that recorded the activity
+source_name	String	The display name of the application that recorded the activity
+last_updated	String	Date and time when the measurement set was last updated
