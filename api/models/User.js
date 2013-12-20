@@ -23,8 +23,7 @@ module.exports = {
         gender: {
             type: 'STRING',
             required: false,
-            maxLength: 1,
-                in: ['M', 'F']
+            in: ['M', 'F']
         },
         location: {
             type: 'STRING', //TODO: require location code list for restriction
