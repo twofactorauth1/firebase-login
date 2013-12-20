@@ -1,8 +1,8 @@
 /**
- * Fitness
+ * Routine
  *
  * @module      :: Model
- * @description :: User fitness information model. One to many relation between user and fitness.
+ * @description :: User fitness routine and attributes. One to many relation between user and routine.
  * @docs		:: http://sailsjs.org/#!documentation/models
  */
 
@@ -20,32 +20,23 @@ module.exports = {
             type: 'STRING',
             required: true
         },
-        type: {
-            type: 'STRING',
-            required: true,
-            in: ['Cycling', 'Mountain Biking', 'Walking, Hiking', 
-                 'Downhill Skiing', 'Cross-country Skiing', 'Snowboarding', 
-                 'Skating', 'Swimming', 'Rowing', 'Elliptical', 'Other']
-        },
-        intensity: {
-            type: 'STRING', 
-            required: true, 
-            in: ['low', 'medium', 'high'],
-            defaultsTo: 'medium'
-        },
-        start_time: {
-            type: 'DATETIME',
+        steps: {
+            type: 'INTEGER',
             required: true
         },
         distance: {
             type: 'decimal',
             required: true
         },
-        duration: {
+        floors: {
             type: 'decimal',
             required: true
         },
-        calories: {
+        elevation: {
+            type: 'decimal',
+            required: true
+        },
+        calories_burned: {
             type: 'decimal',
             required: true
         },
