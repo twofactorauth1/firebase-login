@@ -9,12 +9,12 @@
 module.exports = {
     attributes: {
         name: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
-        address: 'TEXT',
+        address: 'text',
         isActive: {
-            type: 'BOOLEAN',
+            type: 'boolean',
             defaultsTo: true
         }
     }

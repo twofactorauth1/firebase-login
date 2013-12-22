@@ -13,15 +13,15 @@ module.exports = {
             required: true
         },
         timestamp: {
-            type: 'DATETIME', 
+            type: 'datetime', 
             required: true
         },
         utc_offset: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
         steps: {
-            type: 'INTEGER',
+            type: 'integer',
             required: true
         },
         distance: {
@@ -41,15 +41,15 @@ module.exports = {
             required: true
         },
         source: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
         source_name: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
         last_updated: {
-            type: 'DATETIME',
+            type: 'datetime',
             required: true
         }
     }
