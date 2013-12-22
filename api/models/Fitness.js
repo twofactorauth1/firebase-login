@@ -13,28 +13,28 @@ module.exports = {
             required: true
         },
         timestamp: {
-            type: 'DATETIME', 
+            type: 'datetime', 
             required: true
         },
         utc_offset: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
         type: {
-            type: 'STRING',
+            type: 'string',
             required: true,
             in: ['Cycling', 'Mountain Biking', 'Walking, Hiking', 
                  'Downhill Skiing', 'Cross-country Skiing', 'Snowboarding', 
                  'Skating', 'Swimming', 'Rowing', 'Elliptical', 'Other']
         },
         intensity: {
-            type: 'STRING', 
+            type: 'string', 
             required: true, 
             in: ['low', 'medium', 'high'],
             defaultsTo: 'medium'
         },
         start_time: {
-            type: 'DATETIME',
+            type: 'datetime',
             required: true
         },
         distance: {
@@ -50,15 +50,15 @@ module.exports = {
             required: true
         },
         source: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
         source_name: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
         last_updated: {
-            type: 'DATETIME',
+            type: 'datetime',
             required: true
         }
     }
