@@ -21,21 +21,21 @@ module.exports = {
             required: true
         },
         gender: {
-            type: 'STRING',
+            type: 'string',
             required: false,
             in: ['M', 'F']
         },
         location: {
-            type: 'STRING', //TODO: require location code list for restriction
+            type: 'string', //TODO: require location code list for restriction
             required: false,
             maxLength: 2
         },
         country: {
-            type: 'STRING', //TODO: require country list for restriction
+            type: 'string', //TODO: require country list for restriction
             required: false
         },
         birth_year: {
-            type: 'STRING',
+            type: 'string',
             required: false,
             len: 4
         },
@@ -48,7 +48,7 @@ module.exports = {
             required: false
         },
         applications: {
-            type: 'ARRAY',
+            type: 'array',
             required: false
         }
     }
