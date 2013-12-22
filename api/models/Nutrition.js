@@ -13,11 +13,11 @@ module.exports = {
             required: true
         },
         timestamp: {
-            type: 'DATETIME', 
+            type: 'datetime', 
             required: true
         },
         utc_offset: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
         calories: {
@@ -49,20 +49,20 @@ module.exports = {
             required: true
         },
         meal: {
-            type: 'STRING',
+            type: 'string',
             required: true,
             in: ['breakfast', 'lunch', 'dinner', 'snack', 'other', 'unspecified']
         },
         source: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
         source_name: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
         last_updated: {
-            type: 'DATETIME',
+            type: 'datetime',
             required: true
         }
     }
