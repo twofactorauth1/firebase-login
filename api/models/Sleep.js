@@ -20,8 +20,30 @@ module.exports = {
             type: 'string',
             required: true
         },
-
-        
+        total_sleep: {
+            type: 'decimal',
+            required: true
+        },
+        awake: {
+            type: 'decimal',
+            required: true
+        },
+        deep: {
+            type: 'decimal',
+            required: true
+        },
+        light: {
+            type: 'decimal',
+            required: true
+        },
+        rem: {
+            type: 'decimal',
+            required: true
+        },
+        times_woken: {
+            type: 'decimal',
+            required: true
+        },
         source: {
             type: 'string',
             required: true
