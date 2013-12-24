@@ -16,15 +16,9 @@
  */
 
 module.exports = {
-    
-  
-
-
-  /**
-   * Overrides for the settings in `config/controllers.js`
-   * (specific to UserController)
-   */
-  _config: {}
-
-  
+    create: function(req, res) {
+        console.log(req);
+        return next();
+    },
+    _config: {}
 };
