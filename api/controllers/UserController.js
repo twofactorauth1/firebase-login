@@ -17,8 +17,15 @@
 
 module.exports = {
     create: function(req, res) {
-        console.log(req);
-        return next();
+        console.log(req.method);
+        OrganizationService.checkOrganizationExist(req.body.organization, function (org_exist) {
+            if (org_exist) {
+                
+            }
+            else {
+                return res.json(ErrorMessageService.errorMessage(29041));
+            }
+        });
     },
     _config: {}
 };
