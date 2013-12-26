@@ -1,5 +1,7 @@
 var ERROR_MSGS = {};
 ERROR_MSGS[29041] = 'Organization doesnt exist';
+ERROR_MSGS[29042] = 'Organization param missing';
+ERROR_MSGS[29043] = 'user ID param missing';
 
 exports.errorMessage = function (err) {
     if (ERROR_MSGS.hasOwnProperty(err)) {
@@ -9,6 +11,6 @@ exports.errorMessage = function (err) {
         return ret;
     }
     else {
-        console.log('ErrorMsgMissing:', err);
+        sails.log.warn('missing error code ', err);
     }
 };
