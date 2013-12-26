@@ -2,6 +2,7 @@ var ERROR_MSGS = {};
 ERROR_MSGS[29041] = 'Organization doesnt exist';
 ERROR_MSGS[29042] = 'Organization param missing';
 ERROR_MSGS[29043] = 'user ID param missing';
+ERROR_MSGS[29044] = 'user does not exist';
 
 exports.errorMessage = function (err) {
     if (ERROR_MSGS.hasOwnProperty(err)) {

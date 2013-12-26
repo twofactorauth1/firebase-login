@@ -74,10 +74,31 @@ module.exports = {
      *    `/user/destroy`
      */
     destroy: function (req, res) {
-        
-        // Send a JSON response
-        return res.json({
-            hello: 'world'
+        if (!(req.body.organization)) {
+            res.json(ErrorMessageService.errorMessage(29042));
+        }
+        if (!(req.body._id || req.body.uid)) {
+            res.json(ErrorMessageService.errorMessage(29043));
+        }
+        User.findOne(req.body).done(function (err, user) {
+            if (err) {
+                res.json(err);
+            }
+            else {
+                if (user) {
+                    user.destroy(function (err) {
+                        if (err) {
+                            res.json(err);
+                        }
+                        else {
+                            res.json({code: 200, message: 'Ok'});
+                        }
+                    });
+                }
+                else {
+                    res.json(ErrorMessageService.errorMessage(29044));
+                }
+            }
         });
     },
 

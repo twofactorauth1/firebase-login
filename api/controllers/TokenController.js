@@ -44,6 +44,7 @@ module.exports = {
                 res.json(err);
             }
             else {
+                //TODO: add access token generation and reset logic.
                 res.json(user);
             }
         });
