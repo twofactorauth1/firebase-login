@@ -16,16 +16,79 @@
  */
 
 module.exports = {
-    create: function(req, res) {
-        console.log(req.method);
+    
+    
+    /**
+     * Action blueprints:
+     *    `/user/find`
+     */
+    find: function (req, res) {
+        
+        // Send a JSON response
+        return res.json({
+            hello: 'world'
+        });
+    },
+
+
+    /**
+     * Action blueprints:
+     *    `/user/create`
+     */
+    create: function (req, res) {
         OrganizationService.checkOrganizationExist(req.body.organization, function (org_exist) {
             if (org_exist) {
-                
+                User.create(req.body).done(function (err, user) {
+                    if (err) {
+                        return res.json(err);
+                    }
+                    else {
+                        user.code = 201;
+                        user.message = 'Ok';
+                        return res.json(user);
+                    }
+                });
             }
             else {
                 return res.json(ErrorMessageService.errorMessage(29041));
             }
         });
     },
+
+
+    /**
+     * Action blueprints:
+     *    `/user/update`
+     */
+    update: function (req, res) {
+        
+        // Send a JSON response
+        return res.json({
+            hello: 'world'
+        });
+    },
+
+
+    /**
+     * Action blueprints:
+     *    `/user/destroy`
+     */
+    destroy: function (req, res) {
+        
+        // Send a JSON response
+        return res.json({
+            hello: 'world'
+        });
+    },
+
+
+
+
+    /**
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to UserController)
+     */
     _config: {}
+
+    
 };

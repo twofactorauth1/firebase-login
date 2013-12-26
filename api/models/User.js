@@ -9,15 +9,15 @@
 module.exports = {
     attributes: {
         organization: {
-            type: 'uuid',
+            type: 'string',
             required: true
         },
         uid: {
-            type: 'alphanumeric', 
+            type: 'string', 
             required: true
         },
         access_token: {
-            type: 'alphanumeric', //TODO: require computation logic
+            type: 'string', //TODO: require computation logic
             required: true
         },
         gender: {
@@ -40,11 +40,11 @@ module.exports = {
             len: 4
         },
         height: {
-            type: 'decimal',
+            type: 'float',
             required: false,
         },
         weight: {
-            type: 'decimal',
+            type: 'float',
             required: false
         },
         applications: {

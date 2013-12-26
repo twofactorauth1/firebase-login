@@ -12,7 +12,10 @@ module.exports = {
             type: 'string',
             required: true
         },
-        address: 'text',
+        address: {
+            type: 'text',
+            required: false
+        },
         isActive: {
             type: 'boolean',
             defaultsTo: true
