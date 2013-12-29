@@ -24,7 +24,7 @@ module.exports = {
      */
     find: function (req, res) {
         console.log(req.param('organization'));
-        var query = {};
+        var query = {isActive: true};
         if (req.param('organization')) {
             query.organization = req.param('organization');
         }
@@ -45,7 +45,7 @@ module.exports = {
             }
             else {
                 //TODO: add access token generation and reset logic.
-                if (user && user.isActive) {
+                if (user) {
                     return res.json(user);
                 }
                 else {

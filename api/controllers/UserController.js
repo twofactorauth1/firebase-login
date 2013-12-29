@@ -26,12 +26,12 @@ module.exports = {
         if (!(req.param('access_token'))) {
             return res.json(ErrorMessageService.errorMessage(29045));
         }
-        User.findOne({'access_token': req.param('access_token')}).done(function (err, user) {
+        User.findOne({'access_token': req.param('access_token'), isActive: true}).done(function (err, user) {
             if (err) {
                 return res.json(err);
             }
             else {
-                if (user && user.isActive) {
+                if (user) {
                     return res.json({_id: user._id});
                 }
                 else {
@@ -124,12 +124,14 @@ module.exports = {
         if (!(req.body.access_token)) {
             return res.json(ErrorMessageService.errorMessage(29045));
         }
-        User.findOne(req.body).done(function (err, user) {
+        var query = req.body;
+        query.isActive = true;
+        User.findOne(query).done(function (err, user) {
             if (err) {
                 return res.json(err);
             }
             else {
-                if (user && user.isActive) {
+                if (user) {
                     user.destroy(function (err) {
                         if (err) {
                             return res.json(err);

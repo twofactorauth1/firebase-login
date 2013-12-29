@@ -26,12 +26,12 @@ module.exports = {
         if (!(req.param('access_token'))) {
             return res.json(ErrorMessageService.errorMessage(29045));
         }
-        User.findOne({'access_token': req.param('access_token')}).done(function (err, user) {
+        User.findOne({'access_token': req.param('access_token'), isActive: true}).done(function (err, user) {
             if (err) {
                 return res.json(err);
             }
             else {
-                if (user && user.isActive) {
+                if (user) {
                     return res.json(user);
                 }
                 else {
@@ -47,10 +47,24 @@ module.exports = {
      *    `/profile/create`
      */
     create: function (req, res) {
-        
-        // Send a JSON response
-        return res.json({
-            hello: 'world'
+        if (!(req.body.access_token)) {
+            return res.json(ErrorMessageService.errorMessage(29045));
+        }
+        User.update({access_token: req.body.access_token, isActive: true}, req.body, function (err, users) {
+            if (err) {
+                return res.json(err);
+            }
+            else {
+                if (users && users.length) {
+                    var user = users[0];
+                    user.code = 201;
+                    user.message = 'Ok';
+                    return res.json(user);
+                }
+                else {
+                    return res.json(ErrorMessageService.errorMessage(29044));
+                }
+            }
         });
     },
 
