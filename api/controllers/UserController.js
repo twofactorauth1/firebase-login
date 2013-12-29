@@ -36,6 +36,15 @@ module.exports = {
      *    `/user/create`
      */
     create: function (req, res) {
+        if (!(req.body.organization)) {
+            return res.json(ErrorMessageService.errorMessage(29042));
+        }
+        if (!(req.body._id || req.body.uid)) {
+            return res.json(ErrorMessageService.errorMessage(29043));
+        }
+        if (!(req.body.access_token)) {
+            return res.json(ErrorMessageService.errorMessage(29045));
+        }
         OrganizationService.checkOrganizationExist(req.body.organization, function (org_exist) {
             if (org_exist) {
                 User.create(req.body).done(function (err, user) {
@@ -61,10 +70,31 @@ module.exports = {
      *    `/user/update`
      */
     update: function (req, res) {
-        
-        // Send a JSON response
-        return res.json({
-            hello: 'world'
+        if (!(req.body.organization)) {
+            return res.json(ErrorMessageService.errorMessage(29042));
+        }
+        if (!(req.body._id || req.body.uid)) {
+            return res.json(ErrorMessageService.errorMessage(29043));
+        }
+        if (!(req.body.access_token)) {
+            return res.json(ErrorMessageService.errorMessage(29045));
+        }
+        User.update(req.body, {isActive: false}, function (err, users) {
+            if (err) {
+                return res.json(err);
+            }
+            else {
+                if (users && users.length) {
+                    var user = users[0];
+                    user.code = 201;
+                    user.message = 'Ok';
+                    return res.json(user);
+                }
+                else {
+                    sails.log.error('no user updated');
+                    return res.json(ErrorMessageService.errorMessage(29043));
+                }
+            }
         });
     },
 
@@ -75,28 +105,31 @@ module.exports = {
      */
     destroy: function (req, res) {
         if (!(req.body.organization)) {
-            res.json(ErrorMessageService.errorMessage(29042));
+            return res.json(ErrorMessageService.errorMessage(29042));
         }
         if (!(req.body._id || req.body.uid)) {
-            res.json(ErrorMessageService.errorMessage(29043));
+            return res.json(ErrorMessageService.errorMessage(29043));
+        }
+        if (!(req.body.access_token)) {
+            return res.json(ErrorMessageService.errorMessage(29045));
         }
         User.findOne(req.body).done(function (err, user) {
             if (err) {
-                res.json(err);
+                return res.json(err);
             }
             else {
-                if (user) {
+                if (user && user.isActive) {
                     user.destroy(function (err) {
                         if (err) {
-                            res.json(err);
+                            return res.json(err);
                         }
                         else {
-                            res.json({code: 200, message: 'Ok'});
+                            return res.json({code: 200, message: 'Ok'});
                         }
                     });
                 }
                 else {
-                    res.json(ErrorMessageService.errorMessage(29044));
+                    return res.json(ErrorMessageService.errorMessage(29044));
                 }
             }
         });

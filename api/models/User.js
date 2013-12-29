@@ -16,6 +16,10 @@ module.exports = {
             type: 'string', 
             required: true
         },
+        isActive: {
+            type: 'boolean',
+            defaultsTo: true
+        },
         access_token: {
             type: 'string', //TODO: require computation logic
             required: true
