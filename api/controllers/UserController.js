@@ -23,10 +23,21 @@ module.exports = {
      *    `/user/find`
      */
     find: function (req, res) {
-        
-        // Send a JSON response
-        return res.json({
-            hello: 'world'
+        if (!(req.param('access_token'))) {
+            return res.json(ErrorMessageService.errorMessage(29045));
+        }
+        User.findOne({'access_token': req.param('access_token')}).done(function (err, user) {
+            if (err) {
+                return res.json(err);
+            }
+            else {
+                if (user && user.isActive) {
+                    return res.json(user);
+                }
+                else {
+                    return res.json(ErrorMessageService.errorMessage(29043));
+                }
+            }
         });
     },
 
