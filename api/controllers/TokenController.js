@@ -29,23 +29,28 @@ module.exports = {
             query.organization = req.param('organization');
         }
         else {
-            res.json(ErrorMessageService.errorMessage(29042));
+            return res.json(ErrorMessageService.errorMessage(29042));
         }
         
         if (req.param('_id')) {
             query._id = req.param('_id');
         }
         else {
-            res.json(ErrorMessageService.errorMessage(29043));
+            return res.json(ErrorMessageService.errorMessage(29043));
         }
         
         User.findOne(query).done(function (err, user) {
             if (err) {
-                res.json(err);
+                return res.json(err);
             }
             else {
                 //TODO: add access token generation and reset logic.
-                res.json(user);
+                if (user && user.isActive) {
+                    return res.json(user);
+                }
+                else {
+                    return res.json(ErrorMessageService.errorMessage(29043));
+                }
             }
         });
     },
