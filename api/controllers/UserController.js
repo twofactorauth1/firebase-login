@@ -32,7 +32,7 @@ module.exports = {
             }
             else {
                 if (user && user.isActive) {
-                    return res.json(user);
+                    return res.json({_id: user._id});
                 }
                 else {
                     return res.json(ErrorMessageService.errorMessage(29043));
