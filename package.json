@@ -10,7 +10,8 @@
         "ejs": "0.8.4",
         "optimist": "0.3.4",
         "sails-mongo": "0.9.6",
-        "api-easy": "@0.3.8"
+        "api-easy": "0.3.8",
+        "barrels": "0.0.2"
     },
     "scripts": {
         "start": "node app.js",
