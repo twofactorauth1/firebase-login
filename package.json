@@ -15,7 +15,7 @@
     "scripts": {
         "start": "node app.js",
         "debug": "node debug app.js",
-        "test": "node_modules/api-easy/node_modules/vows/bin/vows test/*-test.js"
+        "test": "node_modules/api-easy/node_modules/vows/bin/vows test/*-test.js --spec"
     },
     "main": "app.js",
     "repository": "https://jaideep.das@bitbucket.org/amitgupta1978/bio.indigenous.git",
