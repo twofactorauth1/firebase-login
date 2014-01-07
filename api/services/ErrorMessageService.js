@@ -7,6 +7,8 @@ ERROR_MSGS[29045] = 'access token missing';
 ERROR_MSGS[29046] = 'login failed';
 ERROR_MSGS[29047] = 'login successful';
 ERROR_MSGS[29048] = 'logout successful';
+ERROR_MSGS[29049] = 'unknown user';
+ERROR_MSGS[290410] = 'invalid password';
 
 exports.errorMessage = function (err) {
     if (ERROR_MSGS.hasOwnProperty(err)) {
