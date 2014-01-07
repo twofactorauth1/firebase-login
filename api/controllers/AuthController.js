@@ -23,21 +23,21 @@ module.exports = {
     process: function (req, res) {
         passport.authenticate('local', function (err, authUser, info) {
             if ((err) || !(authUser)) {
-                return res.json(ErrorMessageService.errorMessage(29046));
+                return res.redirect('/auth/login/');
             }
             req.logIn(authUser, function (err) {
                 if (err) {
-                    return res.json(err);
+                    return res.view();
                 }
                 else {
-                    return res.json(ErrorMessageService.errorMessage(29047));
+                    return res.redirect('/');
                 }
             });
-        });
+        })(req, res);
     },
     logout: function (req, res) {
         req.logout();
-        return res.json(ErrorMessageService.errorMessage(29048));
+        return res.redirect('/');
     },
     _config: {}
 };
