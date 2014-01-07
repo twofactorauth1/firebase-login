@@ -2,10 +2,15 @@
  * Allow any authenticated user.
  */
 module.exports = function (req, res, next) {
-    if (req.isAuthenticated()) {
+    if (req.session.passport.user) {
         return next();
     }
     else {
-        return res.redirect('/auth/login/');
+        if (req.isSocket) {
+            return res.json(ErrorMessageService.errorMessage(290411));
+        }
+        else {
+            return res.redirect('/auth/login/');
+        }
     }
 };

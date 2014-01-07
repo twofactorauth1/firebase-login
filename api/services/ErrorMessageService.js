@@ -9,6 +9,7 @@ ERROR_MSGS[29047] = 'login successful';
 ERROR_MSGS[29048] = 'logout successful';
 ERROR_MSGS[29049] = 'unknown user';
 ERROR_MSGS[290410] = 'invalid password';
+ERROR_MSGS[290411] = 'unauthenticated user';
 
 exports.errorMessage = function (err) {
     if (ERROR_MSGS.hasOwnProperty(err)) {
