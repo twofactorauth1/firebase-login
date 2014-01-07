@@ -18,7 +18,7 @@ var passport = require('passport');
 
 module.exports = {
     login: function (req, res) {
-        res.view();
+        return res.view();
     },
     process: function (req, res) {
         passport.authenticate('local', function (err, authUser, info) {
@@ -29,13 +29,15 @@ module.exports = {
                 if (err) {
                     return res.json(err);
                 }
-                return res.json(ErrorMessageService.errorMessage(29047));
+                else {
+                    return res.json(ErrorMessageService.errorMessage(29047));
+                }
             });
         });
     },
     logout: function (req, res) {
         req.logout();
-        res.json(ErrorMessageService.errorMessage(29048));
+        return res.json(ErrorMessageService.errorMessage(29048));
     },
     _config: {}
 };
