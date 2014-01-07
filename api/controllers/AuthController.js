@@ -14,17 +14,28 @@
  *
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
+var passport = require('passport');
 
 module.exports = {
-    
-  
-
-
-  /**
-   * Overrides for the settings in `config/controllers.js`
-   * (specific to AuthController)
-   */
-  _config: {}
-
-  
+    login: function (req, res) {
+        res.view();
+    },
+    process: function (req, res) {
+        passport.authenticate('local', function (err, authUser, info) {
+            if ((err) || !(authUser)) {
+                return res.json(ErrorMessageService.errorMessage(29046));
+            }
+            req.logIn(authUser, function (err) {
+                if (err) {
+                    return res.json(err);
+                }
+                return res.json(ErrorMessageService.errorMessage(29047));
+            });
+        });
+    },
+    logout: function (req, res) {
+        req.logout();
+        res.json(ErrorMessageService.errorMessage(29048));
+    },
+    _config: {}
 };
