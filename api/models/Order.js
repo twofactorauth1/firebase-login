@@ -16,6 +16,22 @@ module.exports = {
         totalAmount: {
             type: 'float', 
             required: true
+        },
+        getOrderItems: function (callback) {
+            var id = this._id;
+            OrderProduct.find({order: id}).done(function (err, orderProducts) {
+                if (err) {
+                    callback(err, null);
+                }
+                else {
+                    if (orderProducts) {
+                        callback(null, orderProducts);
+                    }
+                    else {
+                        callback(null, null);
+                    }
+                }
+            });
         }
     }
 };

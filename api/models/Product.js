@@ -25,7 +25,11 @@ module.exports = {
         isAddon: {
             type: 'boolean', 
             defaultsTo: false
-        }
+        },
+       amount: {
+           type: 'float',
+           required: true
+       }
     },
     beforeCreate: function (product, callback) {
         product.slug = slug(product.name);

@@ -12,8 +12,24 @@ module.exports = {
             type: 'string', 
             required: true
         },
-        product: {
+        productId: {
             type: 'string', 
+            required: true
+        },
+        productName: {
+            type: 'string',
+            required: true
+        },
+        productDescription: {
+            type: 'text', 
+            required: true
+        },
+        productIsAddon: {
+            type: 'boolean',
+            required: true
+        },
+        productAmount: {
+            type: 'float', 
             required: true
         }
     }

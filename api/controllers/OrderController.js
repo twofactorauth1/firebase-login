@@ -17,14 +17,20 @@
 
 module.exports = {
     
-  
+    
+    /**
+     * Action blueprints:
+     *    `/profile/find`
+     */
+    find: function (req, res) {
+        return res.json(ErrorMessageService.errorMessage(29045));
+    },
 
+    /**
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to OrderController)
+     */
+    _config: {}
 
-  /**
-   * Overrides for the settings in `config/controllers.js`
-   * (specific to OrderController)
-   */
-  _config: {}
-
-  
+    
 };
