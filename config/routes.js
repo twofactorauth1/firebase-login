@@ -46,6 +46,10 @@ module.exports.routes = {
     '/auth/logout/': {
         controller: 'AuthController',
         action: 'logout'
+    },
+    '/stripe/checkout/': {
+        controller: 'StripeController',
+        action: 'checkout'
     }
 
     /*
