@@ -9,9 +9,23 @@ var slug = require('slugg');
 
 module.exports = {
     attributes: {
-        name: {type: 'string', required: true},
-        slug: {type: 'string', required: true, unique: true},
-        description: {type: 'text', required: true}
+        name: {
+            type: 'string', 
+            required: true
+        },
+        slug: {
+            type: 'string', 
+            required: true, 
+            unique: true
+        },
+        description: {
+            type: 'text', 
+            required: true
+        },
+        isAddon: {
+            type: 'boolean', 
+            defaultsTo: false
+        }
     },
     beforeCreate: function (product, callback) {
         product.slug = slug(product.name);
