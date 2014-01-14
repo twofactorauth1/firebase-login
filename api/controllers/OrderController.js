@@ -23,7 +23,30 @@ module.exports = {
      *    `/profile/find`
      */
     find: function (req, res) {
-        return res.json(ErrorMessageService.errorMessage(29045));
+        if (!(req.param('id'))) {
+            //TODO: add error msg
+        }
+        if (!(req.param('organization'))) {
+            //TODO: error msg
+        }
+        Order.findOne({id: req.param('id'), organization: req.param('organization')}).done(function (err, order) {
+            if (err) {
+                res.json(err);
+            }
+            else {
+                if (order) {
+                    order.getOrderItems(function (err, orderProducts) {
+                        if (orderProducts) {
+                            order.items = orderProducts;
+                        }
+                        return res.json(order);
+                    });
+                }
+                else {
+                    return res.json(ErrorMessageService.errorMessage(290412));
+                }
+            }
+        });
     },
 
     /**
