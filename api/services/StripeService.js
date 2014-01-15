@@ -7,24 +7,24 @@ exports.createPlan = function (product) {
         interval: product.interval,
         name: product.name,
         currency: "usd",
-        id: product._id
+        id: product.id
     }, function (err, plan) {
         if (err) {
-            sails.log.error(err);
+            sails.log.error(err.message);
         }
         else {
             if (plan) {
                 sails.log.info('plan ' + plan.id + ' created.');
             }
             else {
-                sails.log.info('plan for ' + product._id + ' failed.');
+                sails.log.warn('plan for ' + product.id + ' failed.');
             }
         }
     });
 };
 
 exports.planUpdate = function (product) {
-    stripe.plans.update(product._id, {
+    stripe.plans.update(product.id, {
         name: product.name
     }, function (err, plan) {
         if (err) {
@@ -35,23 +35,23 @@ exports.planUpdate = function (product) {
                 sails.log.info('plan ' + plan.id + ' updated.');
             }
             else {
-                sails.log.warn('plan for ' + product._id + ' failed.');
+                sails.log.warn('plan for ' + product.id + ' failed.');
             }
         }
     });
 };
 
-exports.planDelete = function (product) {
-    stripe.plans.del(product._id, function (err, confirmation) {
+exports.planDelete = function (productId) {
+    stripe.plans.del(productId, function (err, confirmation) {
         if (err) {
             sails.log.error(err);
         }
         else {
             if (confirmation) {
-                sails.log.info('plan ' + product._id + ' deleted.');
+                sails.log.info('plan ' + product.id + ' deleted.');
             }
             else {
-                sails.log.warn('plan ' + product._id + ' not deleted.');
+                sails.log.warn('plan ' + product.id + ' not deleted.');
             }
         }
     });

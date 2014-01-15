@@ -39,16 +39,16 @@ module.exports = {
         product.slug = slug(product.name);
         callback(null, product);
     },
+    beforeUpdate: function (product, callback) {
+        product.slug = slug(product.name);
+        callback(null, product);
+    },
     afterCreate: function (product, callback) {
         StripeService.createPlan(product);
         callback(null, product);
     },
     afterUpdate: function (product, callback) {
         StripeService.planUpdate(product);
-        callback(null, product);
-    },
-    afterDestroy: function (product, callback) {
-        StripeService.planDelete(product);
         callback(null, product);
     }
 };
