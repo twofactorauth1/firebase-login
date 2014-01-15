@@ -17,14 +17,45 @@
 
 module.exports = {
     
-  
+    /**
+     * Action blueprints:
+     *    `/fitness/find`
+     */
+    find: function (req, res) {
+        if (!(req.body.organization)) {
+            return res.json(ErrorMessageService.errorMessage(29042));
+        }
+        if (!(req.body._id || req.body.uid)) {
+            return res.json(ErrorMessageService.errorMessage(29043));
+        }
+        if (!(req.body.access_token)) {
+            return res.json(ErrorMessageService.errorMessage(29045));
+        }
+        OrganizationService.checkOrganizationExist(req.body.organization, function (orgExist) {
+            if (orgExist) {
+                UserService.UserExists(req.body._id, req.body.uid, req.body.access_token, function(userExists) {
+                    if (userExists) {
+                        Fitness.find({user: req.body._id}).done(function (err, fitness) {
+                            return res.json(fitness);
+                        });
+                    }
+                    else {
+                        return res.json(ErrorMessageService.errorMessage(29044));
+                    }
+                });
+            }
+            else {
+                return res.json(ErrorMessageService.errorMessage(29041));
+            }
+        });
+    },
 
 
-  /**
-   * Overrides for the settings in `config/controllers.js`
-   * (specific to FitnessController)
-   */
-  _config: {}
+    /**
+     * Overrides for the settings in `config/controllers.js`
+     * (specific to FitnessController)
+     */
+    _config: {}
 
-  
+    
 };
