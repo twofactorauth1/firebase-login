@@ -11,6 +11,7 @@ ERROR_MSGS[29049] = 'unknown user';
 ERROR_MSGS[290410] = 'invalid password';
 ERROR_MSGS[290411] = 'unauthenticated user';
 ERROR_MSGS[290412] = 'order missing';
+ERROR_MSGS[290413] = 'fitness missing';
 
 exports.errorMessage = function (err) {
     if (ERROR_MSGS.hasOwnProperty(err)) {
