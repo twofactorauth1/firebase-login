@@ -25,6 +25,7 @@ module.exports = {
     checkout: function (req, res) {
         if (req.method === 'POST') {
             console.log(req.body);
+            StripeService.charge(req.body.stripeEmail, 2000, req.body.stripeToken, 1);
         }
         return res.view();
     },
