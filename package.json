@@ -19,7 +19,8 @@
         "jasmine-node": "1.12.0",
         "selenium-webdriver": "2.39.0",
         "stripe": "2.3.2",
-        "slugg": "0.1.2"
+        "slugg": "0.1.2",
+        "deepcopy": "0.3.3"
     },
     "scripts": {
         "start": "node app.js",
