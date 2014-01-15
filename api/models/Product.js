@@ -26,13 +26,24 @@ module.exports = {
             type: 'boolean', 
             defaultsTo: false
         },
-       amount: {
-           type: 'float',
-           required: true
-       }
+        amount: {
+            type: 'float',
+            required: true
+        },
+        interval: {
+            type: 'string',
+            in: ['week', 'month', 'year']
+        }
     },
     beforeCreate: function (product, callback) {
         product.slug = slug(product.name);
+        callback(null, product);
+    },
+    afterCreate: function (product, callback) {
+        StripeService.createPlan(product);
+        callback(null, product);
+    },
+    afterUpdate: function (product, callback) {
         callback(null, product);
     }
 };
