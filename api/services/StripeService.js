@@ -41,17 +41,18 @@ exports.planUpdate = function (product) {
     });
 };
 
-exports.planDelete = function (productId) {
-    stripe.plans.del(productId, function (err, confirmation) {
+exports.planDelete = function (criteria) {
+    var id = criteria.where.id;
+    stripe.plans.del(id, function (err, confirmation) {
         if (err) {
             sails.log.error(err);
         }
         else {
             if (confirmation) {
-                sails.log.info('plan ' + product.id + ' deleted.');
+                sails.log.info('plan ' + id + ' deleted.');
             }
             else {
-                sails.log.warn('plan ' + product.id + ' not deleted.');
+                sails.log.warn('plan ' + id + ' not deleted.');
             }
         }
     });

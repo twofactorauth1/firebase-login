@@ -50,5 +50,9 @@ module.exports = {
     afterUpdate: function (product, callback) {
         StripeService.planUpdate(product);
         callback(null, product);
+    },
+    beforeDestroy: function (criteria, callback) {
+        StripeService.planDelete(criteria);
+        callback(null, criteria);
     }
 };
