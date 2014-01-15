@@ -44,6 +44,11 @@ module.exports = {
         callback(null, product);
     },
     afterUpdate: function (product, callback) {
+        StripeService.planUpdate(product);
+        callback(null, product);
+    },
+    afterDestroy: function (product, callback) {
+        StripeService.planDelete(product);
         callback(null, product);
     }
 };
