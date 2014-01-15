@@ -73,3 +73,27 @@ exports.charge = function (email, amount, card, orderId) {
         console.log(err, chargeRes);
     });
 };
+
+exports.subscribeCustomer = function (email, card, productId) {
+    var customer = {
+        description: 'Customer ' + email,
+        card: card,
+        meta: {
+            email: email
+        }
+    };
+    stripe.customers.create(customer, function (err, customerObj) {
+        if (err) {
+            sails.log.error(err.message);
+        }
+        else {
+            if (customerObj) {
+                //TODO: create a entry in user table
+                stripe.customers.updateSubscription(customerObj.id, {plan: productId});
+            }
+            else {
+                sails.log.warn('customer not created for ' + email);
+            }
+        }
+    });
+};
