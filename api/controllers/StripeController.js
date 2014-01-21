@@ -24,14 +24,23 @@ module.exports = {
      */
     checkout: function (req, res) {
         if (req.method === 'POST') {
-            console.log(req.body);
             StripeService.charge(req.body.stripeEmail, 2000, req.body.stripeToken, 1);
         }
         return res.view();
     },
-
-
-
+    /**
+     * Action blueprints:
+     *    `/stripe/checkout/charge/`
+     */
+    charge: function (req, res) {
+        if (req.method === 'POST') {
+            StripeService.orderCharge(req.body);
+            return res.json(ErrorMessageService.ErrorMessage(290414));
+        }
+        else {
+            return res.view('404');
+        }
+    },
 
     /**
      * Overrides for the settings in `config/controllers.js`

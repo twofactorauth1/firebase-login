@@ -133,7 +133,7 @@ exports.unSubscribeCustomer = function (customerId) {
     });
 };
 
-exports.charge = function (email, amount, customerId, orderId) {
+exports.orderCharge = function (email, amount, customerId, orderId) {
     var charge = {
         amount: amount,
         currency: 'usd',

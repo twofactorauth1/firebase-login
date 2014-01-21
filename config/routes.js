@@ -47,10 +47,14 @@ module.exports.routes = {
         controller: 'AuthController',
         action: 'logout'
     },
+    '/stripe/charge/': {
+        controller: 'StripeController',
+        action: 'charge'
+    },
     '/stripe/checkout/': {
         controller: 'StripeController',
         action: 'checkout'
-    }
+    },
 
     /*
     // But what if you want your home page to display
