@@ -11,6 +11,7 @@ module.exports = {
     attributes: {
         username: {type: 'string', required: true, unique: true},
         password: {type:'string', required: true},
+        stripeUserId: {type: 'string', required: false},
         toJSON: function () {
             var obj = this.toObject();
             delete obj.password;

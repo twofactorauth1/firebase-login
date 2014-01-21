@@ -1,3 +1,4 @@
+var util = require('util');
 var sails = require('sails');
 var stripe = require('stripe')(sails.config.stripe.secret_key);
 
@@ -58,23 +59,7 @@ exports.planDelete = function (criteria) {
     });
 };
 
-exports.charge = function (email, amount, card, orderId) {
-    var charge = {
-        amount: amount,
-        currency: 'usd',
-        card: card,
-        description: 'Charge for ' + email + ' orderId:' + orderId,
-        metadata: {
-            email: email,
-            orderId: orderId
-        }
-    };
-    stripe.charges.create(charge, function (err, chargeRes) {
-        console.log(err, chargeRes);
-    });
-};
-
-exports.subscribeCustomer = function (email, card, productId) {
+exports.createCustomer = function (email, card, callback) {
     var customer = {
         description: 'Customer ' + email,
         card: card,
@@ -88,11 +73,99 @@ exports.subscribeCustomer = function (email, card, productId) {
         }
         else {
             if (customerObj) {
-                //TODO: create a entry in user table
-                stripe.customers.updateSubscription(customerObj.id, {plan: productId});
+                AuthUser.update({username: email}, {stripeUserId: customerObj.id}, function (err, users) {
+                    if (err) {
+                        callback(err, null);
+                        sails.log.error(err);
+                    }
+                    else {
+                        if (users) {
+                            callback(null, customerObj.id);
+                        }
+                        else {
+                            callback(null, null);
+                            sails.log.error('Auth user not updated ' + email);
+                        }
+                    }
+                });
             }
             else {
-                sails.log.warn('customer not created for ' + email);
+                callback(null, null);
+                sails.log.error('customer not created for ' + email);
+            }
+        }
+    });
+};
+
+exports.subscribeCustomer = function (customerId, productId, prorate) {
+    stripe.customers.updateSubscription(customerObj.id, 
+                                        {plan: productId, prorate: prorate}, 
+                                        function (err, confirmation) {
+                                            if (err) {
+                                                sails.log.err(err.message);
+                                            }
+                                            else {
+                                                if (confirmation) {
+                                                    sails.log.info('customer %s subscribed to %s', 
+                                                                   customerId, 
+                                                                   productId);
+                                                }
+                                                else {
+                                                    sails.log.error('customer %s subscription failed', customerId);
+                                                }
+                                            }
+                                        });
+};
+
+exports.unSubscribeCustomer = function (customerId) {
+    stripe.customers.cancelSubscription(customerId, function (err, confirmation) {
+        if (err) {
+            sails.log.err(err.message);
+        }
+        else {
+            if (confirmation) {
+                sails.log.info('customer %s unsubscribed', customerId);
+            }
+            else {
+                sails.log.error('customer %s unsubscribe failed', customerId);
+            }
+        }
+    });
+};
+
+exports.charge = function (email, amount, customerId, orderId) {
+    var charge = {
+        amount: amount,
+        currency: 'usd',
+        customer: customerId,
+        description: util.format('charge for %s orderId: %d', email, orderId),
+        metadata: {
+            email: email,
+            orderId: orderId
+        }
+    };
+    stripe.charges.create(charge, function (err, chargeRes) {
+        if (err) {
+            sails.log.error(err.message);
+        }
+        else {
+            if (chargeRes) {
+                Order.update(orderId, {stripeChargeId: chargeRes.id}, function (err, orders) {
+                    if (err) {
+                        sails.log.error(err.message);
+                    }
+                    else {
+                        if (orders) {
+                            sails.log.info('OrderID: %s charged', orderId);
+                        }
+                        else {
+                            sails.log.error('orderID: %s failed to update', orderId);
+                        }
+                    }
+                });
+            }
+            else {
+                sails.log.error('charge failed for customerID: %s orderID: %s', customerId, orderId);
             }
         }
     });

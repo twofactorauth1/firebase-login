@@ -17,6 +17,10 @@ module.exports = {
             type: 'float', 
             required: true
         },
+        stripeChargeId: {
+            type: 'string',
+            required: false
+        },
         getOrderItems: function (callback) {
             var id = this._id;
             OrderProduct.find({order: id}).done(function (err, orderProducts) {
