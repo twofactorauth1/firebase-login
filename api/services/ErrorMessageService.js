@@ -13,6 +13,7 @@ ERROR_MSGS[290411] = 'unauthenticated user';
 ERROR_MSGS[290412] = 'order missing';
 ERROR_MSGS[290413] = 'fitness missing';
 ERROR_MSGS[290414] = 'customer charge success';
+ERROR_MSGS[290415] = 'customer subscribe success';
 
 exports.errorMessage = function (err) {
     if (ERROR_MSGS.hasOwnProperty(err)) {

@@ -30,12 +30,25 @@ module.exports = {
     },
     /**
      * Action blueprints:
-     *    `/stripe/checkout/charge/`
+     *    `/stripe/charge/`
      */
     charge: function (req, res) {
         if (req.method === 'POST') {
             StripeService.orderCharge(req.body);
-            return res.json(ErrorMessageService.ErrorMessage(290414));
+            return res.json(ErrorMessageService.errorMessage(290414));
+        }
+        else {
+            return res.view('404');
+        }
+    },
+    /**
+     * Action blueprints:
+     *    `/stripe/subscribe/`
+     */
+    subscribe: function (req, res) {
+        if (req.method === 'POST') {
+            StripeService.subscribeCustomer(req.body);
+            return res.json(ErrorMessageService.errorMessage(290415));
         }
         else {
             return res.view('404');

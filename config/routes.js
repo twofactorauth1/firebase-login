@@ -55,6 +55,10 @@ module.exports.routes = {
         controller: 'StripeController',
         action: 'checkout'
     },
+    '/stripe/subscribe/': {
+        controller: 'StripeController',
+        action: 'subscribe'
+    },
 
     /*
     // But what if you want your home page to display
