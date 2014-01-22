@@ -4,7 +4,7 @@
 
 **Now it simple to collect data from best-in-class mobile health apps and devices.**
 
-_It works seamlessly with your existing system and allows for a simple, one-to-many connection with mobile health apps, wearables and in-home medical devices. Bio indegenious operates behind the scenes to enable your customers to connect and deliver mobile health data into your app or web portal._
+_It works easily with your existing system and allows for a simple, one-to-many connection with mobile health apps, wearables and in-home medical devices. Bio indegenious operates behind the scenes to enable your customers to connect and deliver mobile health data into your app or web portal._
 
 
 ## Setup
