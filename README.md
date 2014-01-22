@@ -2,7 +2,7 @@
 
 ## Description
 
-**Now it very very simple to collect data from best-in-class mobile health apps and devices.**
+**Now it very simple to collect data from best-in-class mobile health apps and devices.**
 
 _It works very easily with your existing system and allows for a simple, one-to-many connection with mobile health apps, wearables and in-home medical devices. Bio indegenious operates behind the scenes to enable your customers to connect and deliver mobile health data into your app or web portal._
 
