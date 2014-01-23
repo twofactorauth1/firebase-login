@@ -1,96 +1,53 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <!--
-        For demonstration purposes, the `title` is dynamically set here based on
-        your `sails.config.appName` to show that you can inject data into layouts
-        exactly the same way as with your other view templates.
-    -->
-    <title><%- title %></title>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Indigenous.io</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
 
-    <!-- Viewport mobile tag for sensible mobile support -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <!--STYLES-->
+  <link rel="stylesheet" href="/linker/styles/config.less">
+  <link rel="stylesheet" href="/linker/styles/config.css">
+  <link rel="stylesheet" href="/linker/vendor/bootstrap/css/bootstrap-theme.css">
+  <link rel="stylesheet" href="/linker/vendor/bootstrap/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="/linker/vendor/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="/linker/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/linker/vendor/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="/linker/vendor/font-awesome/css/font-awesome.min.css">
+  <!--STYLES END-->
+</head>
+<body>
+  <!--[if lt IE 7]>
+  <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+  <![endif]-->
 
-    <!--
+  <!--TEMPLATES-->
+  
+  <!--TEMPLATES END-->
 
-      Stylesheets
-      ========================
-
-      You can link any CSS, LESS, or image files in your `assets` directory
-      as you would normally: using <link/> tags.
-      
-    -->
-
-    <!--
-
-      Support for LESS included by default
-      ================================================
-
-      LESS files are automatically compiled when they change using the Gruntfile
-      located in the top-level of this Sails app.  If you run into issues with styles
-      not reloading, check the Sails log output in your console for LESS compilation errors.
-      If necessary, shut down and then lift your app again.
-      
-    -->
-
-  </head>
-
-  <body>
-
-    <!-- Include the view file for the current controller/route -->
-    <%- body %>
-
-
-    <!--
-
-      Client-side Javascript
-      ========================
-
-      You can import any js files in your `assets` directory as you would 
-      normally: using <script></script> tags.
-
-      Here's an example of importing a few dependencies, in order:
-    -->
-    <!-- Bring in the socket.io client -->
-    <script type="text/javascript" src="/js/socket.io.js"></script>
-    <!-- then beef it up with some convenience logic for talking to Sails.js -->
-    <script type="text/javascript" src="/js/sails.io.js"></script>
-    <!-- listen on socket.io for incoming messages -->
-    <script type="text/javascript" src="/js/app.js"></script>
-
-    <!-- Your scripts here? -->
-    <!-- Your scripts here? -->
-    <!-- Your scripts here? -->
-
-
-    <!--
-
-      Looking for client-side CoffeeScript or TypeScript?
-      ================================================
-
-      CoffeeScript and TypeScript precompilation are not installed by default,
-      but if you'd like to mix those features in, it is straightforward to
-      `npm install` the relevant grunt community modules and modify your Gruntfile
-      to use them.
-
-    -->
-
-
-
-    <!--
-
-      Another way: The Asset Linker
-      ========================
-
-      Sails supports a Grunt-based asset linker, to automatically inject 
-      <link> and <script> tags, as well any client-side templates you're using
-      into your HTML layouts and views, respecting dependencies.
-
-      You created this Sails app with the asset linker disabled.
-      If you change your mind, check out the docs on the subject:
-      http://sailsjs.org/#!documentation/asset-management
-
-    -->
-
-    </body>
+  <!--SCRIPTS-->
+  <script src="/linker/vendor/jquery/jquery.js"></script>
+  <script src="/linker/vendor/handlebars/handlebars.js"></script>
+  <script src="/linker/vendor/ember/ember.js"></script>
+  <script src="/linker/vendor/ember-data-shim/ember-data.js"></script>
+  <script src="/linker/vendor/ember-addons.bs_for_ember/bs-core.min.js"></script>
+  <script src="/linker/vendor/ember-addons.bs_for_ember/bs-buttons.min.js"></script>
+  <script src="/linker/vendor/redactor/redactor.min.js"></script>
+  <script src="/linker/vendor/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/linker/app.js"></script>
+  <script src="/linker/initialize.js"></script>
+  <script src="/linker/templates.js"></script>
+  <script src="/linker/views/application.js"></script>
+  <script src="/linker/routes/index.js"></script>
+  <script src="/linker/models/media.js"></script>
+  <script src="/linker/models/sections.js"></script>
+  <script src="/linker/vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="/linker/vendor/ember-addons.bs_for_ember/dist/js/bs-button.min.js"></script>
+  <!--SCRIPTS END-->
+</body>
 </html>

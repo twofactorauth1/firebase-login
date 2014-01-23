@@ -29,6 +29,7 @@ module.exports = function (grunt) {
    */
 
   var cssFilesToInject = [
+    'linker/styles/config.less',
     'linker/**/*.css'
   ];
 
@@ -47,19 +48,42 @@ module.exports = function (grunt) {
     // linked in the proper order order
 
     // Bring in the socket.io client
-    'linker/js/socket.io.js',
+    //'linker/js/socket.io.js',
 
     // then beef it up with some convenience logic for talking to Sails.js
-    'linker/js/sails.io.js',
+    //'linker/js/sails.io.js',
 
     // A simpler boilerplate library for getting you up and running w/ an
     // automatic listener for incoming messages from Socket.io.
-    'linker/js/app.js',
+    //'linker/js/app.js',
 
-    // *->    put other dependencies here   <-*
+    // Set Up Ember app
+    'linker/vendor/jquery/jquery.js',
+    'linker/vendor/handlebars/handlebars.js',
+    'linker/vendor/ember/ember.js',
+    'linker/vendor/ember-data-shim/ember-data.js',
+    'linker/vendor/ember-addons.bs_for_ember/bs-core.min.js',
+    'linker/vendor/ember-addons.bs_for_ember/bs-buttons.min.js',
+    'linker/vendor/redactor/redactor.min.js',
+    'linker/vendor/bootstrap/js/bootstrap.min.js',
+    'linker/app.js',
+    'linker/initialize.js',
+    'linker/templates.js',
+    // Views
+    'linker/views/application.js',
+
+    // Routes
+    'linker/routes/index.js',
+
+    // Models
+    'linker/models/media.js',
+    'linker/models/sections.js',
+
+    // Helpers will go here
+    // Controllers will go here
 
     // All of the rest of your app scripts imported here
-    'linker/**/*.js'
+    'linker/**/**/*.js'
   ];
 
 
@@ -122,6 +146,7 @@ module.exports = function (grunt) {
 
 
   // Get path to core grunt dependencies from Sails
+
   var depsPath = grunt.option('gdsrc') || 'node_modules/sails/node_modules';
   grunt.loadTasks(depsPath + '/grunt-contrib-clean/tasks');
   grunt.loadTasks(depsPath + '/grunt-contrib-copy/tasks');
@@ -134,10 +159,43 @@ module.exports = function (grunt) {
   grunt.loadTasks(depsPath + '/grunt-contrib-less/tasks');
   grunt.loadTasks(depsPath + '/grunt-contrib-coffee/tasks');
 
+  //moves dist bower components
+  grunt.loadNpmTasks('grunt-bowercopy');
+  grunt.loadNpmTasks('grunt-ember-templates');
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-
+    emberTemplates: {
+        compile: {
+            options: {
+                templateBasePath: /assets\/linker\/templates\//
+            },
+            files: {
+                "assets/linker/templates.js": ["assets/linker/templates/*.hbs"]
+            }
+        }
+    },
+    bowercopy: {
+        options: {
+            srcPrefix: 'vendor'
+        },
+        scripts: {
+            options: {
+                destPrefix: 'assets/linker/vendor'
+            },
+            files: {
+                'jquery/jquery.js': 'jquery/jquery.js',
+                'ember/ember.js': 'ember/ember.js',
+                'ember-addons.bs_for_ember/dist/js/bs-button.min.js': 'ember-addons.bs_for_ember/dist/js/bs-button.min.js',
+                'ember-data-shim/ember-data.js': 'ember-data-shim/ember-data.js',
+                'handlebars/handlebars.js': 'handlebars/handlebars.js',
+                'font-awesome/css': 'font-awesome/css',
+                'font-awesome/fonts': 'font-awesome/fonts',
+                'bootstrap': 'bootstrap/dist/',
+            }
+        }
+    },
     copy: {
       dev: {
         files: [
@@ -182,7 +240,7 @@ module.exports = function (grunt) {
       }
     },
 
-    less: {
+   less: {
       dev: {
         files: [
           {
@@ -201,7 +259,7 @@ module.exports = function (grunt) {
         ]
       }
     },
-    
+
     coffee: {
       dev: {
         options:{
