@@ -1,0 +1,119 @@
+
+/* Navigation */
+/* -------------------------------------------------- */
+
+/* Nav */
+.navbar-white {
+    background-color:@navbar-color;
+    color:@link-color;
+    border-radius:0;
+    border-bottom: 3px solid @color-1!important;
+}
+
+.navbar-white .navbar-nav > li > a {
+    color:@navbar-default-link-color;
+}
+.navbar-white .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    color: @navbar-default-link-color;
+    background-color:transparent;
+}
+.navbar-white .navbar-brand {
+    color:@navbar-default-brand-color;
+}
+
+.navbar {
+
+  ul{
+    font-size: 15px;
+    margin-top: 20px;
+  }
+  border: 0;
+  .navbar-container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .navbar-toggle {
+    color: #fff;
+  }
+  li a {
+    padding-left: 25px;
+    padding-right: 25px;
+    font-weight: bold;
+  }
+}
+
+.navbar .logo-1 img {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+  -webkit-transition: opacity 1s ease-in-out;
+}
+
+.navbar.fixed .logo-1 img {
+  opacity: 0!important;
+}
+
+.navbar .logo-2 img{
+   opacity: 0;
+   margin-top: -57px;
+   transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+  -webkit-transition: opacity 1s ease-in-out;
+}
+
+.navbar.fixed .logo-2 img{
+  opacity: 1;
+}
+
+.navbar .logo img{
+   height: 60px;
+}
+
+
+.navbar.fixed {
+  background: @color-1;
+}
+
+.navbar {
+  transition: 1.4s;
+-moz-transition: 1.4s;
+-webkit-transition: 1.4s;
+-webkit-box-shadow: 0 6px 5px -5px #777;
+-moz-box-shadow: 0 6px 5px -5px #777;
+box-shadow: 0 6px 5px -5px #777;
+}
+
+/* Menu colors */
+.active .brand-1 {
+  background-color: @color-1 !important;
+}
+
+.brand-1:hover  {
+  background-color: @color-1 !important;
+} 
+
+.active .brand-2 {
+  background-color: @color-2 !important;
+} 
+
+.brand-2:hover  {
+  background-color: @color-2 !important;
+} 
+
+.active .brand-3 {
+  background-color: @color-3 !important;
+} 
+
+.brand-3:hover {
+  background-color: @color-3 !important;
+} 
+
+.active .brand-4 {
+  background-color: @color-4 !important;
+} 
+
+.brand-4:hover  {
+  background-color: @color-4 !important;
+} 
+
+
