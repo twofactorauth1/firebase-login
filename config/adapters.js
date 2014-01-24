@@ -34,6 +34,5 @@ module.exports.adapters = {
 
     // refer to https://github.com/balderdashy/sails-mongo for advance config
     'default': 'mongo',
-    // indigenous:oxf25ufo@novus.modulusmongo.net:27017/H2inesux
     mongo: mongo_settings
 };
