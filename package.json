@@ -22,7 +22,9 @@
         "selenium-webdriver": "2.39.0",
         "stripe": "2.3.2",
         "slugg": "0.1.2",
-        "deepcopy": "0.3.3"
+        "deepcopy": "0.3.3",
+        "subdomain": "0.1.0",
+        "Haraka": "2.2.8"
     },
     "scripts": {
         "start": "node app.js",
