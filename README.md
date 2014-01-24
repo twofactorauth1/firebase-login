@@ -63,3 +63,10 @@ sails lift
 ```
 npm test
 ```
+
+#### Run SMTP server
+
+```
+sudo node_modules/Haraka/bin/haraka -c haraka
+```
+
