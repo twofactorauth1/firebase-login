@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
                       host: 'novus.modulusmongo.net',
                       port: 27017,
                       user: 'indigenous',
-                      password: 'oxf25ufo',
+                      password: '$Oxf25Ufo$',
                       database: 'H2inesux'};
 }
 else {
