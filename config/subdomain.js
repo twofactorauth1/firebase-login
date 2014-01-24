@@ -6,10 +6,19 @@
  */
 var subdomain = require('subdomain');
 
+var hostname = '';
+
+if (process.env.NODE_ENV === 'production') {
+    hostname = 'indigenous-10744.onmodulus.net';
+}
+else {
+    hostname = 'localhost:1337';
+}
+
 module.exports = {
     express: {
         customMiddleware: function (app) {
-            app.use(subdomain({ base : 'localhost:1337', removeWWW : true })); //TODO: add domain name for production.
+            app.use(subdomain({ base : hostname, removeWWW : true })); //TODO: add domain name for production.
         }
     }
 };
