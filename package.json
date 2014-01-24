@@ -24,7 +24,8 @@
         "slugg": "0.1.2",
         "deepcopy": "0.3.3",
         "subdomain": "0.1.0",
-        "Haraka": "2.2.8"
+        "Haraka": "2.2.8",
+        "nodemailer": "0.6.0"
     },
     "scripts": {
         "start": "node app.js",
