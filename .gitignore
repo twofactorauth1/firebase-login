@@ -1,9 +1,7 @@
 # Ignore Mac-generated files
 .DS_STORE
-
-# Ignore node modules installed with npm install
-node_modules/
-
+node_modules
 # Ignore swap files
 *.swp
 *~
+.tmp

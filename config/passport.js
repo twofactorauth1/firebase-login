@@ -1,7 +1,7 @@
 /**
  * Passport middleware
  *
- * For more information on routes, check out:
+ * For more information on passport middleware, check out:
  * http://passportjs.org/guide/
  */
 var passport = require('passport');
