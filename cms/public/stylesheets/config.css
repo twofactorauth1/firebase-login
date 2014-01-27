@@ -257,7 +257,7 @@ footer a {
 #home {
   margin-top: 0;
   padding: 0;
-  background: url(../img/top_bg.jpg) no-repeat;
+  background: url(../../images/top_bg.jpg) no-repeat;
   height: auto;
   background-size: 100%;
 }
@@ -274,7 +274,7 @@ footer a {
 }
 #feature_two {
   padding: 0;
-  background: 0px -250px url(../img/feature_two.jpg) no-repeat;
+  background: 0px -250px url(../../images/feature_two.jpg) no-repeat;
   height: auto;
   background-size: 100%;
   max-width: none;
@@ -287,7 +287,7 @@ footer a {
   max-width: none;
 }
 #features {
-  background: url(../img/middle_bg.jpg);
+  background: url(../../images/middle_bg.jpg);
 }
 #features img,
 #assets img {
@@ -732,7 +732,7 @@ ul {
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
 }
 .gridster .gs-w.try {
-  background-image: url(../img/sprite.png);
+  background-image: url(../../images/sprite.png);
   background-repeat: no-repeat;
   background-position: 37px -169px;
 }
