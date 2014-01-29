@@ -12,7 +12,21 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var passportHelper = require('./helpers/passport');
+var auth = require('./routes/auth');
 var app = express();
+
+//passport auth setup
+passport.serializeUser(function(user, done) {
+  done(null, user._id);
+});
+passport.deserializeUser(function(id, done) {
+    passportHelper.deserializeUser(id, done);
+});
+
+//passport local auth setup
+passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password'}, function (email, password, done) {
+    return passportHelper.localStrategyCallback(email, password, done);
+}));
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -25,14 +39,11 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
-
-//passport auth setup
-passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password'}, function (email, password, done) {
-    return passportHelper.localStrategyCallback(email, password, done);
-}));
 
 // development only
 if ('development' == app.get('env')) {
@@ -41,7 +52,9 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/profile', user.profile);
+app.post('/login', auth.login);
+app.get('/logout', auth.logout);
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));

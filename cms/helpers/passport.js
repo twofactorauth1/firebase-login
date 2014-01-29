@@ -14,3 +14,9 @@ exports.localStrategyCallback = function (email, password, callback) {
         }
     });
 };
+
+exports.deserializeUser = function (id, callback) {
+    User.findOne({_id: id}, function (err, user) {
+        callback(err, user);
+    });
+};
