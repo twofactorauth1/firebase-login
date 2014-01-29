@@ -8,11 +8,9 @@ var schema = new Schema({
     authType: Number,
     id: String,
     token: String,
-    email: String,
-    displayName: String,
     isActive: {type: Boolean, default: true},
     addedOn: Date,
     updatedOn: Date
 });
-exports.Site = mongoose.model('Site', schema);
+exports.SocialUser = mongoose.model('SocialUser', schema);
 

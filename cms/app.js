@@ -11,6 +11,7 @@ var path = require('path');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
 var passportHelper = require('./helpers/passport');
 var auth = require('./routes/auth');
 var app = express();
@@ -26,6 +27,10 @@ passport.deserializeUser(function(id, done) {
 //passport local auth setup
 passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password'}, function (email, password, done) {
     return passportHelper.localStrategyCallback(email, password, done);
+}));
+
+passport.use(new FacebookStrategy({clientID: '594182237332636', clientSecret: '3edc02755477b84040c4a26075da1e72', callbackURL: 'http://localhost:3000/login/facebook/callback'}, function (accessToken, refreshToken, profile, done) {
+    passportHelper.createFacebookUser(accessToken, refreshToken, profile, done);
 }));
 
 // all environments
@@ -55,6 +60,8 @@ app.get('/', routes.index);
 app.get('/profile', user.profile);
 app.post('/login', auth.login);
 app.get('/logout', auth.logout);
+app.get('/login/facebook', passport.authenticate('facebook', {scope: ['email']}));
+app.get('/login/facebook/callback', passport.authenticate('facebook', {successRedirect: '/', failureRedirect: '/login/facebook'}));
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
