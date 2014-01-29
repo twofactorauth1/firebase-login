@@ -9,7 +9,9 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
-
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var passportHelper = require('./helpers/passport');
 var app = express();
 
 // all environments
@@ -26,6 +28,11 @@ app.use(express.session());
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+//passport auth setup
+passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password'}, function (email, password, done) {
+    return passportHelper.localStrategyCallback(email, password, done);
+}));
 
 // development only
 if ('development' == app.get('env')) {

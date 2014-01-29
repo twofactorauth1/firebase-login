@@ -4,6 +4,7 @@ var mongoose = require('mongoose')
 var schema = new Schema({
     user: {type: Schema.Types.ObjectId, ref: 'User'},
     domain: String,
+    isActive: {type: Boolean, default: true},
     addedOn: Date,
     updatedOn: Date
 });
