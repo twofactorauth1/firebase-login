@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // development only
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
-    mongoose.connect('mongodb://localhost/bioindigenous_cms');
+    mongoose.connect('mongodb://localhost/bioindigenousCMS');
 }
 
 app.get('/', routes.index);
