@@ -3,7 +3,11 @@ var mongoose = require('mongoose')
 
 var schema = new Schema({
     user: {type: Schema.Types.ObjectId, ref: 'User'},
-    domain: String,
+    id: String,
+    token: String,
+    email: String,
+    displayName: String,
+    isActive: {type: Boolean, default: true},
     addedOn: Date,
     updatedOn: Date
 });
