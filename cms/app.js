@@ -64,6 +64,7 @@ app.get('/logout', auth.logout);
 app.get('/login/facebook', passport.authenticate('facebook', {scope: ['email']}));
 app.get('/login/facebook/callback', passport.authenticate('facebook', {successRedirect: '/', failureRedirect: '/login/facebook'}));
 app.post('/profile/add', profile.profileAdd);
+app.put('/profile/update', profile.profileUpdate);
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
