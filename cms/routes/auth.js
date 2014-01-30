@@ -1,6 +1,9 @@
 var passport = require('passport');
 
 exports.login = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.json({status: true, message: 'Login Successful.'});
+    }
     passport.authenticate('local', function (err, user) {
         if (err) {
             return res.json({status: false, message: err.message});
