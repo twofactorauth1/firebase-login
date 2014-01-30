@@ -5,7 +5,9 @@ exports.profileAdd = function (req, res) {
     if (req.isAuthenticated() == false) {
         return res.json({status: false, message: 'User not authenticated.'});
     }
-    Profile.create(req.body, function (err, profile) {
+    var insertDict = deepcopy(req.body);
+    insertDict['user'] = req.user._id;
+    Profile.create(insertDict, function (err, profile) {
         if (err) {
             return res.json({status: false, message: err.message});
         }
