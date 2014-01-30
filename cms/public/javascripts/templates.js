@@ -1,4 +1,4 @@
-Ember.TEMPLATES["application"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["app/templates/application"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
@@ -7,9 +7,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   data.buffer.push(escapeExpression((helper = helpers.outlet || (depth0 && depth0.outlet),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "nav", options) : helperMissing.call(depth0, "outlet", "nav", options))));
   data.buffer.push("\n");
   data.buffer.push(escapeExpression((helper = helpers.outlet || (depth0 && depth0.outlet),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "section_1", options) : helperMissing.call(depth0, "outlet", "section_1", options))));
-  data.buffer.push("\n");
-  data.buffer.push(escapeExpression((helper = helpers.outlet || (depth0 && depth0.outlet),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "section_2", options) : helperMissing.call(depth0, "outlet", "section_2", options))));
-  data.buffer.push("\n");
+  data.buffer.push("\n\n");
   data.buffer.push(escapeExpression((helper = helpers.outlet || (depth0 && depth0.outlet),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "section_3", options) : helperMissing.call(depth0, "outlet", "section_3", options))));
   data.buffer.push("\n");
   data.buffer.push(escapeExpression((helper = helpers.outlet || (depth0 && depth0.outlet),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "section_4", options) : helperMissing.call(depth0, "outlet", "section_4", options))));
@@ -27,7 +25,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 });
 
-Ember.TEMPLATES["footer"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["app/templates/footer"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
@@ -37,13 +35,13 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 });
 
-Ember.TEMPLATES["nav"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["app/templates/nav"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', escapeExpression=this.escapeExpression;
 
 
-  data.buffer.push("<nav class=\"navbar navbar-white navbar-fixed-top\" role=\"navigation\">\n    <div class=\"navbar-container\">\n      <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <i class=\"fa fa-bars\"></i>\n        </button>\n        <a class=\"navbar-brand editable\" href=\"#\">\n          <span class=\"logo-1\"> <img src=\"/images/logo.png\"> </span>\n          <span class=\"logo-2\"> <img src=\"/images/logo-2.png\"> </span>\n        </a>\n      </div>\n      <div id=\"nav-collapse\" class=\"collapse navbar-collapse navbar-ex1-collapse\">\n        <ul class=\"nav navbar-nav navbar-right\">\n          <li class=\"active\"><a title=\"Home page\" class=\"scroll brand-1\" href=\"#/\" ");
+  data.buffer.push("<nav class=\"navbar navbar-white navbar-fixed-top\" role=\"navigation\">\n    <div class=\"navbar-container\">\n      <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-ex1-collapse\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <i class=\"fa fa-bars\"></i>\n        </button>\n        <a class=\"navbar-brand editable\" href=\"#\">\n          <span class=\"logo-1\"> <img src=\"images/logo.png\"> </span>\n          <span class=\"logo-2\"> <img src=\"images/logo-2.png\"> </span>\n        </a>\n      </div>\n      <div id=\"nav-collapse\" class=\"collapse navbar-collapse navbar-ex1-collapse\">\n        <ul class=\"nav navbar-nav navbar-right\">\n          <li class=\"active\"><a title=\"Home page\" class=\"scroll brand-1\" href=\"#/\" ");
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "goToLink", "index", "#home", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0,depth0],types:["ID","STRING","STRING"],data:data})));
   data.buffer.push(">Home</a></li>\n          <li><a title=\"Check out our awesome services\" href=\"#/\" ");
   data.buffer.push(escapeExpression(helpers.action.call(depth0, "goToLink", "index", "#features", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0,depth0],types:["ID","STRING","STRING"],data:data})));
@@ -58,7 +56,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 });
 
-Ember.TEMPLATES["section_1"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["app/templates/section_1"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, helper, options, self=this, helperMissing=helpers.helperMissing;
@@ -69,7 +67,7 @@ function program1(depth0,data) {
   data.buffer.push("Learn more <i class=\"fa fa-arrow-circle-o-down\"></i>");
   }
 
-  data.buffer.push("<div id=\"home\" class=\"page color-1\">\n  <div class=\"row inner-page\">\n    <div class=\"col-md-8 col-md-push-4 lazy-container\">\n      <img class=\"lazy\" alt=\"Looks great on every device\" src=\"/images/pixel.png\" data-original=\"/images/home.png\" />\n    </div>\n    <div class=\"col-md-4 col-md-pull-7 top_content\">\n      <h2 class=\" editable\">Introducing Indigenous</h2>\n      <p class=\"editable\">Indigenous is a fully integrated business management platform for independent service professionals and small businesses</p>\n      <br />\n      ");
+  data.buffer.push("<div id=\"home\" class=\"page color-1\">\n  <div class=\"row inner-page\">\n    <div class=\"col-md-8 col-md-push-4 lazy-container\">\n      <img class=\"lazy\" alt=\"Looks great on every device\" src=\"images/pixel.png\" data-original=\"images/home.png\" />\n    </div>\n    <div class=\"col-md-4 col-md-pull-7 top_content\">\n      <h2 class=\" editable\">Introducing Indigenous</h2>\n      <p class=\"editable\">Indigenous is a fully integrated business management platform for independent service professionals and small businesses</p>\n      <br />\n      ");
   stack1 = (helper = helpers['bs-button'] || (depth0 && depth0['bs-button']),options={hash:{
     'type': ("primary"),
     'class': ("btn-centered editable")
@@ -80,47 +78,47 @@ function program1(depth0,data) {
   
 });
 
-Ember.TEMPLATES["section_2"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["app/templates/section_2"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 
 
-  data.buffer.push("<!-- Feature page-->\n<div id=\"features\" class=\"page color-4\">\n\n<div id=\"section_2\" class=\"row inner-page\">\n  <div class=\"col-md-6 col-md-push-6\">\n    <div class=\"btn-container editable\">\n      <img src=\"/images/feature_right.png\" alt=\"Play video\" />\n    </div>\n  </div>\n  <div class=\"col-md-6 col-md-pull-6\">\n    <h3 class=\"editable\">Another feature</h3>\n    <p class=\"editable\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dictum at metus sed molestie. Proin auctor facilisis diam sit amet eleifend. Quisque venenatis tellus in nisl lacinia pellentesque. Vivamus consequat ac quam eget fusce consectetur.</p>\n    <br />\n    <a href=\"#assets\" class=\"scroll btn btn-clean btn-centered editable\"> Learn More  <i class=\"fa fa-chevron-right\"></i></a>\n  </div>\n</div>\n\n<hr>");
+  data.buffer.push("<!-- Feature page-->\n<div id=\"features\" class=\"page color-4\">\n\n<div id=\"section_2\" class=\"row inner-page\">\n  <div class=\"col-md-6 col-md-push-6\">\n    <div class=\"btn-container editable\">\n      <img src=\"images/feature_right.png\" alt=\"Play video\" />\n    </div>\n  </div>\n  <div class=\"col-md-6 col-md-pull-6\">\n    <h3 class=\"editable\">Another feature</h3>\n    <p class=\"editable\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dictum at metus sed molestie. Proin auctor facilisis diam sit amet eleifend. Quisque venenatis tellus in nisl lacinia pellentesque. Vivamus consequat ac quam eget fusce consectetur.</p>\n    <br />\n    <a href=\"#assets\" class=\"scroll btn btn-clean btn-centered editable\"> Learn More  <i class=\"fa fa-chevron-right\"></i></a>\n  </div>\n</div>\n\n<hr>");
   
 });
 
-Ember.TEMPLATES["section_3"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["app/templates/section_3"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 
 
-  data.buffer.push("<div class=\"row inner-page\">\n      <div class=\"col-md-6 editable\">\n        <img src=\"/images/graph.png\" data-original=\"/images/two-phones.png\" alt=\"Zombie ipsum\" />\n      </div>\n      <div class=\"col-md-6\">\n        <h3 class=\"editable\">Another feature</h3>\n        <ul class=\"list-wide\">\n          <li class=\"editable\"><i class=\"fa fa-check-circle\"></i> Morbi consectetur quam quis nulla tempor malesuada</li>\n          <li class=\"editable\"><i class=\"fa fa-check-circle\"></i> Suspendisse lacinia tellus nec eleifend blandit</li>\n          <li class=\"editable\"><i class=\"fa fa-check-circle\"></i> Donec dapibus aliquet enim sit amet porttitor</li>\n          <li class=\"editable\"><i class=\"fa fa-check-circle\"></i> Proin auctor facilisis diam sit amet eleifend</li>\n        </ul>\n      </div>\n    </div>\n\n    <hr>");
+  data.buffer.push("<div class=\"row inner-page\">\n      <div class=\"col-md-6 editable\">\n        <img src=\"images/graph.png\" data-original=\"images/two-phones.png\" alt=\"Zombie ipsum\" />\n      </div>\n      <div class=\"col-md-6\">\n        <h3 class=\"editable\">Another feature</h3>\n        <ul class=\"list-wide\">\n          <li class=\"editable\"><i class=\"fa fa-check-circle\"></i> Morbi consectetur quam quis nulla tempor malesuada</li>\n          <li class=\"editable\"><i class=\"fa fa-check-circle\"></i> Suspendisse lacinia tellus nec eleifend blandit</li>\n          <li class=\"editable\"><i class=\"fa fa-check-circle\"></i> Donec dapibus aliquet enim sit amet porttitor</li>\n          <li class=\"editable\"><i class=\"fa fa-check-circle\"></i> Proin auctor facilisis diam sit amet eleifend</li>\n        </ul>\n      </div>\n    </div>\n\n    <hr>");
   
 });
 
-Ember.TEMPLATES["section_4"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["app/templates/section_4"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 
 
-  data.buffer.push("<div class=\"inner-page row\">\n      <ul class=\"features list-inline\">\n        <li>\n          <div class=\"editable\">\n            <img src=\"/images/feat_sm_1.png\" alt=\"Lock Icon\" />\n          </div>\n          <h3 class=\"editable\"> The Real Deal</h3>\n          <p class=\"editable\">Fusce pellentesque, odio ornare elementum ferme,  ipsum facilisis est, eu pellentesque tellus eros sit amet erat. Vestibulum id.</p>\n        </li>\n        <li>\n          <div class=\"editable\">\n            <img src=\"/images/feat_sm_2.png\" alt=\"Chat Icon\" />\n          </div>\n          <h3 class=\"editable\"> The Real Deal</h3>\n          <p class=\"editable\">Fusce pellentesque, odio ornare elementum ferme,  ipsum facilisis est, eu pellentesque tellus eros sit amet erat. Vestibulum id.</p>\n        </li>\n        <li>\n          <div class=\"editable\">\n            <img src=\"/images/feat_sm_2.png\" alt=\"Chat Icon\" />\n          </div>\n          <h3 class=\"editable\"> The Real Deal</h3>\n          <p class=\"editable\">\n            <strong>Fusce pellentesque, odio ornare elementum ferme,  ipsum facilisis est, eu pellentesque tellus eros sit amet erat. Vestibulum id.</p>\n        </li>\n      </ul>\n    </div>\n\n  </div> <!-- /#features -->");
+  data.buffer.push("<div class=\"inner-page row\">\n      <ul class=\"features list-inline\">\n        <li>\n          <div class=\"editable\">\n            <img src=\"images/feat_sm_1.png\" alt=\"Lock Icon\" />\n          </div>\n          <h3 class=\"editable\"> The Real Deal</h3>\n          <p class=\"editable\">Fusce pellentesque, odio ornare elementum ferme,  ipsum facilisis est, eu pellentesque tellus eros sit amet erat. Vestibulum id.</p>\n        </li>\n        <li>\n          <div class=\"editable\">\n            <img src=\"images/feat_sm_2.png\" alt=\"Chat Icon\" />\n          </div>\n          <h3 class=\"editable\"> The Real Deal</h3>\n          <p class=\"editable\">Fusce pellentesque, odio ornare elementum ferme,  ipsum facilisis est, eu pellentesque tellus eros sit amet erat. Vestibulum id.</p>\n        </li>\n        <li>\n          <div class=\"editable\">\n            <img src=\"images/feat_sm_2.png\" alt=\"Chat Icon\" />\n          </div>\n          <h3 class=\"editable\"> The Real Deal</h3>\n          <p class=\"editable\">\n            <strong>Fusce pellentesque, odio ornare elementum ferme,  ipsum facilisis est, eu pellentesque tellus eros sit amet erat. Vestibulum id.</p>\n        </li>\n      </ul>\n    </div>\n\n  </div> <!-- /#features -->");
   
 });
 
-Ember.TEMPLATES["section_5"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["app/templates/section_5"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 
 
-  data.buffer.push("  <!-- Assets page -->\n  <div id=\"assets\" class=\"page\">\n\n    <!-- Feature Two -->\n    <div id=\"feature_two\" class=\"row inner-page color-3\">\n      <div class=\"col-md-6\"></div>\n      <div class=\"col-md-6\">\n        <h3>Easy accounting</h3>\n        <p class=\"lead editable\">Zombie ipsum\n          <abbr title=\"HyperText Markup Language\" class=\"initialism editable\">HTML</abbr>reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering animata corpora quaeirtis.</p>\n        <p class=\"editable\">The voodoo sacerdos flesh eater, suscitat mortuos comedere carnem virus. Zonbi tattered for solum oculi eorum defunctis go lum cerebro..</p>\n      </div>\n    </div>  <!-- /vectors -->\n\n    <!-- Feature Three -->\n    <div id=\"feature_three\" class=\"row inner-page color-1\">\n      <div class=\"col-md-6\">\n        <img class=\"figurette\" src=\"/images/feature_four.png\" alt=\"Zombie ipsum\" />\n      </div>\n      <div class=\"col-md-6\">\n        <h3 class=\"editable\">We make it work for you</h3>\n        <p class=\"lead editable\">Vivamus viverra nisi sit amet diam ornare pretium. Integer vulputate mi sit amet rutrum vehicula. Donec vulputate, arcu semper pellentesque egestas, nisl neque posuere lorem, id rutrum libero arcu accumsan risus. Donec erat metus, ornare a lacinia ac, ornare eu risus. Curabitur non arcu aliquam, accumsan turpis in, laoreet magna. Phasellus quis mauris scelerisque, pretium sapien quis, rutrum elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras viverra, augue nec pulvinar pellentesque, enim eros sodales nulla, quis mattis diam eros non arcu.</p>\n      </div>\n    </div>");
+  data.buffer.push("  <!-- Assets page -->\n  <div id=\"assets\" class=\"page\">\n\n    <!-- Feature Two -->\n    <div id=\"feature_two\" class=\"row inner-page color-3\">\n      <div class=\"col-md-6\"></div>\n      <div class=\"col-md-6\">\n        <h3>Easy accounting</h3>\n        <p class=\"lead editable\">Zombie ipsum\n          <abbr title=\"HyperText Markup Language\" class=\"initialism editable\">HTML</abbr>reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering animata corpora quaeirtis.</p>\n        <p class=\"editable\">The voodoo sacerdos flesh eater, suscitat mortuos comedere carnem virus. Zonbi tattered for solum oculi eorum defunctis go lum cerebro..</p>\n      </div>\n    </div>  <!-- /vectors -->\n\n    <!-- Feature Three -->\n    <div id=\"feature_three\" class=\"row inner-page color-1\">\n      <div class=\"col-md-6\">\n        <img class=\"figurette\" src=\"images/feature_four.png\" alt=\"Zombie ipsum\" />\n      </div>\n      <div class=\"col-md-6\">\n        <h3 class=\"editable\">We make it work for you</h3>\n        <p class=\"lead editable\">Vivamus viverra nisi sit amet diam ornare pretium. Integer vulputate mi sit amet rutrum vehicula. Donec vulputate, arcu semper pellentesque egestas, nisl neque posuere lorem, id rutrum libero arcu accumsan risus. Donec erat metus, ornare a lacinia ac, ornare eu risus. Curabitur non arcu aliquam, accumsan turpis in, laoreet magna. Phasellus quis mauris scelerisque, pretium sapien quis, rutrum elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras viverra, augue nec pulvinar pellentesque, enim eros sodales nulla, quis mattis diam eros non arcu.</p>\n      </div>\n    </div>");
   
 });
 
-Ember.TEMPLATES["section_6"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["app/templates/section_6"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   var buffer = '', stack1, escapeExpression=this.escapeExpression, self=this;
@@ -147,7 +145,7 @@ function program1(depth0,data) {
   
 });
 
-Ember.TEMPLATES["section_7"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["app/templates/section_7"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
@@ -157,7 +155,7 @@ helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   
 });
 
-Ember.TEMPLATES["section_8"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+Ember.TEMPLATES["app/templates/section_8"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
   

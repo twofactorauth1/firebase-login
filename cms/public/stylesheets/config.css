@@ -4,14 +4,17 @@
   src: url('../fonts/298CA1_0_0.eot?#iefix') format('embedded-opentype'), url('../fonts/298CA1_0_0.woff') format('woff'), url('../fonts/298CA1_0_0.ttf') format('truetype'), url('../fonts/298CA1_0_0.svg#wf') format('svg');
 }
 /* Footer */
+/* line 3, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/footer.less */
 .copyright {
   line-height: 50px;
 }
 /* Newsletter */
+/* line 10, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/footer.less */
 .newsletter h4 {
   font-size: 24px;
   margin: 0;
 }
+/* line 14, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/footer.less */
 .newsletter .btn,
 .newsletter input {
   height: 50px;
@@ -19,15 +22,18 @@
   padding: 0;
   border: 0;
 }
+/* line 20, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/footer.less */
 .newsletter input {
   width: 100%;
   text-indent: 10px;
 }
 /* Global */
 /* -------------------------------------------------- */
+/* line 4, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/global.less */
 body {
   font-weight: 300;
 }
+/* line 8, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/global.less */
 body,
 textarea:focus,
 input:focus {
@@ -35,86 +41,106 @@ input:focus {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 /* Remove horizontal scrollbar */
+/* line 15, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/global.less */
 html {
   overflow-x: hidden;
 }
 /* Selection color */
+/* line 21, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/global.less */
 ::selection {
   background: #000000;
   color: #ffffff;
 }
+/* line 26, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/global.less */
 ::-moz-selection {
   background: #000000;
   color: #ffffff;
 }
 /* Useful classes */
+/* line 33, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/global.less */
 .centered {
   margin: 0 auto;
   display: block;
 }
+/* line 38, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/global.less */
 .border {
   border: 1px solid #2387ac;
 }
+/* line 44, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/global.less */
 img {
   display: block;
   height: auto;
   max-width: 100%;
 }
+/* line 51, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/global.less */
 .fade {
   opacity: 0;
 }
+/* line 53, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/global.less */
 .fade.in {
   opacity: 1;
 }
 /* Navigation */
 /* -------------------------------------------------- */
 /* Nav */
+/* line 6, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar-white {
   background-color: #ffffff;
   color: #5db8d0;
   border-radius: 0;
   border-bottom: 3px solid #5db8d0 !important;
 }
+/* line 13, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar-white .navbar-nav > li > a {
   color: #58585b;
 }
+/* line 16, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar-white .navbar-nav > .active > a,
 .navbar-nav > .active > a:hover,
 .navbar-nav > .active > a:focus {
   color: #58585b;
   background-color: transparent;
 }
+/* line 20, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar-white .navbar-brand {
   color: #58585b;
 }
+/* line 24, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar {
   border: 0;
 }
+/* line 26, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar ul {
   font-size: 15px;
   margin-top: 20px;
 }
+/* line 31, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar .navbar-container {
   max-width: 1100px;
   margin: 0 auto;
 }
+/* line 35, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar .navbar-toggle {
   color: #fff;
 }
+/* line 38, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar li a {
   padding-left: 25px;
   padding-right: 25px;
   font-weight: bold;
 }
+/* line 45, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar .logo-1 img {
   opacity: 1;
   transition: opacity 1s ease-in-out;
   -moz-transition: opacity 1s ease-in-out;
   -webkit-transition: opacity 1s ease-in-out;
 }
+/* line 52, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar.fixed .logo-1 img {
   opacity: 0!important;
 }
+/* line 56, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar .logo-2 img {
   opacity: 0;
   margin-top: -57px;
@@ -122,15 +148,19 @@ img {
   -moz-transition: opacity 1s ease-in-out;
   -webkit-transition: opacity 1s ease-in-out;
 }
+/* line 64, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar.fixed .logo-2 img {
   opacity: 1;
 }
+/* line 68, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar .logo img {
   height: 60px;
 }
+/* line 73, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar.fixed {
   background: #5db8d0;
 }
+/* line 77, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .navbar {
   transition: 1.4s;
   -moz-transition: 1.4s;
@@ -140,27 +170,35 @@ img {
   box-shadow: 0 6px 5px -5px #777777;
 }
 /* Menu colors */
+/* line 87, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .active .brand-1 {
   background-color: #5db8d0 !important;
 }
+/* line 91, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .brand-1:hover {
   background-color: #5db8d0 !important;
 }
+/* line 95, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .active .brand-2 {
   background-color: #2387ac !important;
 }
+/* line 99, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .brand-2:hover {
   background-color: #2387ac !important;
 }
+/* line 103, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .active .brand-3 {
   background-color: #ecf9ff !important;
 }
+/* line 107, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .brand-3:hover {
   background-color: #ecf9ff !important;
 }
+/* line 111, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .active .brand-4 {
   background-color: #ffffff !important;
 }
+/* line 115, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/navigation.less */
 .brand-4:hover {
   background-color: #ffffff !important;
 }
@@ -169,17 +207,21 @@ img {
 /* -------------------------------------------------- */
 /* Colors. Just add appropriate class
  to your new page.*/
+/* line 9, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-1 {
   background: #5db8d0;
   color: #ffffff;
 }
+/* line 14, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-2 {
   background: #2387ac;
   color: #ffffff;
 }
+/* line 19, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-3 {
   background: #ecf9ff;
 }
+/* line 21, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-3 h1,
 .color-3 h2,
 .color-3 h3,
@@ -188,16 +230,20 @@ img {
 .color-3 h6 {
   color: #000000;
 }
+/* line 24, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-3 a {
   color: #2387ac;
 }
+/* line 27, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-3 .btn {
   color: #ffffff;
 }
+/* line 32, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-4 {
   background: #ffffff;
   color: #333;
 }
+/* line 35, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-4 h1,
 .color-4 h2,
 .color-4 h3,
@@ -206,54 +252,67 @@ img {
 .color-4 h6 {
   color: #000000;
 }
+/* line 38, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-4 a {
   color: #3083a7;
 }
+/* line 41, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-4 .btn {
   color: #ffffff;
 }
+/* line 46, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-5 {
   background: #010a0c;
   color: #ffffff;
 }
+/* line 51, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-8 {
   background: #41a6c1;
 }
+/* line 55, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .color-9 {
   background: #2b2b2b;
 }
 /* Layout */
+/* line 61, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .page {
   _padding-top: 70px;
 }
+/* line 65, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .inner-page {
   padding-top: 30px;
   padding-bottom: 30px;
   max-width: 1100px;
   margin: 0 auto!important;
 }
+/* line 72, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .newsletter,
 footer {
   padding: 0!important;
   margin: 0!important;
 }
+/* line 76, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .newsletter a,
 footer a {
   color: #fff;
 }
+/* line 81, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .figurette {
   margin-top: 30px;
 }
+/* line 85, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .lazy-container {
   text-align: center;
   min-height: 400px;
 }
+/* line 90, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .spinner {
   padding-top: 200px;
 }
 /* Individual pages */
 /* -------------------------------------------------- */
 /* Home page */
+/* line 98, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 #home {
   margin-top: 0;
   padding: 0;
@@ -261,17 +320,21 @@ footer a {
   height: auto;
   background-size: 100%;
 }
+/* line 107, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .top_content h2 {
   font-family: Capita Light!important;
 }
+/* line 111, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .top_content {
   margin-top: 130px;
   background: rgba(0, 0, 0, 0.3);
   padding: 20px;
 }
+/* line 117, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 #feature_one {
   text-align: center;
 }
+/* line 121, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 #feature_two {
   padding: 0;
   background: 0px -250px url(../../images/feature_two.jpg) no-repeat;
@@ -280,47 +343,60 @@ footer a {
   max-width: none;
   min-height: 350px;
 }
+/* line 130, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 #redactor_modal {
   box-shadow: 0px 2px 3px 2px rgba(0, 0, 0, 0.3) !important;
 }
+/* line 134, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 #feature_three {
   max-width: none;
 }
+/* line 138, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 #features {
   background: url(../../images/middle_bg.jpg);
 }
+/* line 141, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 #features img,
 #assets img {
   margin: 0 auto;
 }
 /* About page */
+/* line 148, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .team img {
   margin-right: 30px;
 }
+/* line 151, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .team .social i {
   color: #333;
 }
 /* Sign up text */
+/* line 159, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .sign-up h4 {
   font-size: 26px;
 }
+/* line 162, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .sign-up .btn {
   margin-top: 10px;
 }
+/* line 167, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 #feature_four {
   margin: 0;
 }
+/* line 171, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .full-width {
   width: 100%;
   height: 100%;
 }
+/* line 176, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .fill-space {
   min-width: 100%;
   min-height: 100%;
 }
+/* line 181, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 #section_6 img {
   width: 100%;
 }
+/* line 185, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 #section_6 .thumbnail {
   overflow: hidden;
   height: 150px;
@@ -331,11 +407,13 @@ footer a {
   border-radius: 0;
   padding: 2px;
 }
+/* line 196, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 #section_6 .col-lg-3,
 #section_6 .col-sm-4,
 #section_6 .col-xs-6 {
   padding: 0;
 }
+/* line 202, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .photo .caption {
   position: absolute;
   background: black;
@@ -347,14 +425,17 @@ footer a {
   -moz-transition: all 0.6s ease;
   -o-transition: all 0.6s ease;
 }
+/* line 214, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .photo:before {
   bottom: 10px;
   left: 10px;
 }
+/* line 215, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .photo .caption {
   left: 0;
   bottom: -30%;
 }
+/* line 216, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/pages.less */
 .photo:hover .caption {
   bottom: 0;
 }
@@ -362,51 +443,64 @@ footer a {
 /* -------------------------------------------------- */
 @media (max-width: 979px) {
   /* Layout */
+  /* line 8, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   body {
     padding: 0;
   }
+  /* line 12, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   #home,
   #sample-page {
     padding: 1px 0;
   }
+  /* line 17, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   [class*="col-md"] {
     padding: 0 60px;
   }
   /* Typography */
+  /* line 23, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   hr {
     margin: 10px auto;
   }
+  /* line 27, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .team2 {
     margin-top: 120px;
   }
+  /* line 31, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .team img {
     margin: 0 30px;
   }
+  /* line 35, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   p {
     margin: 10px auto;
     padding: 0;
   }
+  /* line 40, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .newsletter input,
   .newsletter .btn {
     margin-top: 10px;
   }
+  /* line 44, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .page {
     padding-top: 20px;
   }
+  /* line 48, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .figurette {
     padding-top: 10px;
     margin: 0px auto;
     display: block;
   }
+  /* line 54, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .sign-up,
   .newsletter,
   footer {
     padding: 0 40px!important;
   }
+  /* line 61, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .big-list li {
     height: auto;
     line-height: 30px;
   }
+  /* line 66, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .lazy-container {
     min-height: 100px;
   }
@@ -414,33 +508,40 @@ footer a {
 /* Tablet */
 @media (max-width: 768px) {
   /* Typography */
+  /* line 77, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .navbar-brand {
     line-height: 32px;
     padding: 4px 0;
     text-align: center;
     width: 100%;
   }
+  /* line 84, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .navbar-toggle {
     position: absolute;
     top: 0px;
     right: 5px;
     padding: 5px;
   }
+  /* line 91, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .lead {
     font-size: 22px;
   }
+  /* line 95, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .page-headline {
     font-size: 42px;
   }
   /* Layout */
+  /* line 101, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .page {
     padding-top: 30px;
   }
+  /* line 105, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .big-list {
     font-size: 28px;
     margin: 30px auto!important;
     padding: 0;
   }
+  /* line 109, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .big-list li {
     line-height: 24px;
     text-align: center;
@@ -449,6 +550,7 @@ footer a {
     margin: 10px 0;
     height: auto;
   }
+  /* line 117, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .big-list i {
     font-size: 64px;
     width: 100%;
@@ -457,50 +559,63 @@ footer a {
 }
 /* Mobile phone */
 @media (max-width: 420px) {
+  /* line 130, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .btn-map div {
     display: none;
   }
+  /* line 134, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   [class*="col-md"] {
     padding: 0 10px;
   }
   /* Typography */
+  /* line 140, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .page-headline {
     font-size: 28px;
   }
+  /* line 144, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .btn-centered {
     width: auto;
   }
+  /* line 148, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   h3 {
     font-size: 24px;
   }
+  /* line 152, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .team img {
     display: block;
     margin: 20px ;
     float: none;
   }
+  /* line 158, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .pull-left {
     float: none;
   }
+  /* line 162, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .row {
     padding-top: 20px;
     padding-bottom: 20px;
   }
+  /* line 167, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .nav-tabs > li {
     float: none;
   }
+  /* line 171, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .big-list {
     margin: 20px auto!important;
     padding: 0;
     font-size: 18px;
   }
+  /* line 176, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .big-list i {
     font-size: 32px;
   }
+  /* line 180, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/responsive.less */
   .copyright {
     line-height: 18px;
   }
 }
 /* Buttons */
+/* line 3, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/thebuttons.less */
 .btn {
   font-weight: 400;
   color: #ffffff;
@@ -508,29 +623,34 @@ footer a {
   background-color: #5db8d0;
   border-bottom: 3px solid #2387ac;
 }
+/* line 11, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/thebuttons.less */
 .btn-clean {
   background: none!important;
   color: #58585b !important;
   border-bottom: none;
 }
+/* line 17, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/thebuttons.less */
 .btn-centered {
   width: 50%;
   margin: 0 auto!important;
   display: block;
 }
 /* Social Buttons */
+/* line 26, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/thebuttons.less */
 .social i {
   font-size: 38px;
   padding: 2px;
   margin: 2px;
   color: #F1F1F1;
 }
+/* line 33, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/thebuttons.less */
 .social i:hover {
   color: #2387ac;
   text-decoration: none;
 }
 /* Typography */
 /* -------------------------------------------------- */
+/* line 5, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/typography.less */
 .navbar-brand {
   margin: 0;
   padding: 6px;
@@ -539,28 +659,35 @@ footer a {
   letter-spacing: 1px;
   font-weight: 600;
 }
+/* line 14, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/typography.less */
 .page-headline {
   font-size: 42px;
   text-align: center;
 }
+/* line 19, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/typography.less */
 .large {
   font-size: 52px;
 }
+/* line 23, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/typography.less */
 .lead {
   font-size: 22px;
   line-height: 28px;
 }
+/* line 28, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/typography.less */
 .big {
   font-size: 25px;
   line-height: 29px;
   padding: 0;
 }
+/* line 34, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/typography.less */
 strong {
   font-weight: 400;
 }
+/* line 38, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/typography.less */
 body {
   text-rendering: optimizeLegibility;
 }
+/* line 42, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/typography.less */
 h1,
 h2,
 h3,
@@ -570,9 +697,11 @@ h5 {
 }
 /* User Interface */
 /* -------------------------------------------------- */
+/* line 7, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 a:hover {
   text-decoration: none;
 }
+/* line 13, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 #contact-form textarea,
 #contact-form input {
   width: 100%;
@@ -580,9 +709,11 @@ a:hover {
   margin: 5px 0;
   text-indent: 10px;
 }
+/* line 19, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 #contact-form .btn {
   margin-top: 25px;
 }
+/* line 24, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 hr {
   width: 80%;
   margin: 30px auto;
@@ -590,98 +721,120 @@ hr {
   border-color: #e5e5e5;
 }
 /* Lists */
+/* line 32, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 ul {
   list-style: none;
 }
+/* line 37, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .list-inline li {
   display: inline-block;
   padding-right: 8px;
 }
 /* Clients list */
+/* line 47, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .clients h2 {
   color: #ffffff;
 }
+/* line 50, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .clients ul {
   font-size: 32px;
   font-weight: 400;
   text-align: center;
 }
+/* line 55, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .clients li {
   background: #2387ac;
   width: 220px;
   padding: 15px!important;
   margin-bottom: 10px;
 }
+/* line 60, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .clients li:hover {
   cursor: pointer;
   background: #124457;
 }
 /* Feature List */
+/* line 69, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .features {
   text-align: center;
 }
+/* line 71, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .features h3 {
   font-size: 32px;
 }
+/* line 74, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .features li {
   max-width: 310px;
   text-align: left;
   margin: 0 10px;
 }
+/* line 75, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .features li i {
   color: #2387ac;
   font-size: 32px;
   padding-top: 30px;
 }
+/* line 82, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .big-list {
   font-size: 25px;
   font-weight: 300;
 }
+/* line 85, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .big-list li {
   line-height: 35px;
   height: 50px;
   margin: 10px;
 }
+/* line 90, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .big-list i {
   float: left;
   width: 50px;
   font-size: 40px;
   margin-right: 20px;
 }
+/* line 99, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .list-wide li {
   padding: 5px 0;
 }
 /* Accordions */
+/* line 106, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .panel {
   border: 0;
   margin: 10px 0;
 }
+/* line 109, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .panel .panel-body {
   padding: 9px 15px;
   border-top: 0;
   background: #ecf9ff;
 }
+/* line 114, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .panel .panel-heading {
   color: #ffffff;
   background: #5db8d0;
 }
+/* line 116, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .panel .panel-heading i {
   margin-top: 5px;
   float: right;
   font-size: 18px;
 }
+/* line 122, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .panel .panel-heading:hover {
   background: #2387ac;
 }
+/* line 123, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .panel .panel-heading.active {
   background: #2387ac;
 }
 /* Tabs */
+/* line 129, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .nav-tabs {
   border: 0;
   background: #5db8d0;
   margin: 0;
 }
+/* line 133, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .nav-tabs li a {
   color: #ffffff;
   padding-top: 8px;
@@ -689,10 +842,12 @@ ul {
   margin-right: 0px;
   border: 0!important;
 }
+/* line 139, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .nav-tabs li a:hover {
   background: #ecf9ff;
   color: #000000;
 }
+/* line 144, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
@@ -701,41 +856,50 @@ ul {
   border: 0;
   cursor: default;
 }
+/* line 153, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .tab-content {
   background: #ecf9ff;
   padding: 30px 50px;
 }
+/* line 161, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .carousel-control.left {
   background-image: none;
 }
+/* line 164, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .carousel-control.right {
   background-image: none;
 }
 /* Gridster styles */
+/* line 170, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .demo {
   margin: 3em 0;
   padding: 7.5em 0 5.5em;
   background: #004756;
 }
+/* line 176, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .gridster {
   width: 960px;
   margin: 0 auto;
 }
+/* line 181, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .gridster .gs-w {
   background: #FFF;
   cursor: pointer;
   -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
+/* line 188, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .gridster .player {
   -webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
 }
+/* line 194, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .gridster .gs-w.try {
   background-image: url(../../images/sprite.png);
   background-repeat: no-repeat;
   background-position: 37px -169px;
 }
+/* line 201, /Users/bradlyrisse/Clients/Indigenous/bitbucket/cms/app/stylesheets/comingsoon/ui.less */
 .gridster .preview-holder {
   border: none!important;
   border-radius: 0!important;
