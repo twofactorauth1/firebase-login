@@ -14,6 +14,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var passportHelper = require('./helpers/passport');
 var auth = require('./routes/auth');
+var profile = require('./routes/profile');
 var app = express();
 
 //passport auth setup
@@ -62,6 +63,7 @@ app.post('/login', auth.login);
 app.get('/logout', auth.logout);
 app.get('/login/facebook', passport.authenticate('facebook', {scope: ['email']}));
 app.get('/login/facebook/callback', passport.authenticate('facebook', {successRedirect: '/', failureRedirect: '/login/facebook'}));
+app.post('/profile/add', profile.profileAdd);
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
