@@ -13,5 +13,35 @@
     "passport": "~0.2.0",
     "passport-local": "~0.1.6",
     "passport-facebook": "~1.0.2"
+  },
+  "devDependencies": {
+      "grunt": "*",
+      "matchdep": "*",
+      "grunt-contrib-clean": "*",
+      "grunt-bowercopy": "0.7.1",
+      "grunt-contrib-concat": "*",
+      "grunt-contrib-connect": "*",
+      "grunt-contrib-copy": "*",
+      "grunt-contrib-htmlmin": "*",
+      "grunt-contrib-imagemin": "*",
+      "grunt-contrib-jshint": "*",
+      "grunt-contrib-less": "*",
+      "grunt-contrib-uglify": "*",
+      "grunt-contrib-requirejs": "*",
+      "grunt-contrib-watch": "*",
+      "grunt-ember-templates": "*",
+      "grunt-concurrent": "*",
+      "grunt-usemin": "*",
+      "grunt-open": "*",
+      "connect-livereload": "*",
+      "grunt-rev": "*",
+      "supertest": "*",
+      "should": "*",
+      "mocha": "*",
+      "nodemon": "*"
+  },
+  "engines": {
+      "node": "0.10.x",
+      "npm": "1.2.x"
   }
 }

@@ -66,3 +66,5 @@ app.get('/login/facebook/callback', passport.authenticate('facebook', {successRe
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
 });
+
+// require('./models.user').User.create();
