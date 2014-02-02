@@ -1,6 +1,7 @@
 var util = require('util');
 var sails = require('sails');
-var stripe = require('stripe')(sails.config.stripe.secret_key);
+var constants = require('../constants');
+var stripe = require('stripe')(constants.STRIPE_SECRET_KEY);
 
 exports.createPlan = function (product) {
     stripe.plans.create({

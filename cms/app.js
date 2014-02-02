@@ -15,6 +15,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var passportHelper = require('./helpers/passport');
 var auth = require('./routes/auth');
 var profile = require('./routes/profile');
+var constants =require('./constants');
 var app = express();
 
 //passport auth setup
@@ -30,7 +31,7 @@ passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password
     return passportHelper.localStrategyCallback(email, password, done);
 }));
 
-passport.use(new FacebookStrategy({clientID: '594182237332636', clientSecret: '3edc02755477b84040c4a26075da1e72', callbackURL: 'http://localhost:3000/login/facebook/callback'}, function (accessToken, refreshToken, profile, done) {
+passport.use(new FacebookStrategy({clientID: constants.FACEBOOK_CLIENT_ID, clientSecret: constants.FACEBOOK_CLIENT_SECRET, callbackURL: 'http://localhost:3000/login/facebook/callback'}, function (accessToken, refreshToken, profile, done) {
     passportHelper.createFacebookUser(accessToken, refreshToken, profile, done);
 }));
 
@@ -54,8 +55,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // development only
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
-    app.set('stripe secret key', 'sk_test_iXKiJJ80BnXlAXnOqCX4FxjQ');
-    app.set('stripe publishable key', 'pk_test_EuZhZHVourE3RaRxELJaYEya');
     mongoose.connect('mongodb://localhost/bioindigenousCMS');
 }
 
