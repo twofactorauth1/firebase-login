@@ -54,6 +54,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // development only
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
+    app.set('stripe secret key', 'sk_test_iXKiJJ80BnXlAXnOqCX4FxjQ');
+    app.set('stripe publishable key', 'pk_test_EuZhZHVourE3RaRxELJaYEya');
     mongoose.connect('mongodb://localhost/bioindigenousCMS');
 }
 
@@ -70,4 +72,3 @@ http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
 });
 
-// require('./models.user').User.create();
