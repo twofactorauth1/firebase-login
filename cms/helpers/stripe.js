@@ -1,5 +1,4 @@
 var util = require('util');
-var sails = require('sails');
 var constants = require('../constants');
 var stripe = require('stripe')(constants.STRIPE_SECRET_KEY);
 
@@ -12,14 +11,14 @@ exports.createPlan = function (product) {
         id: product.id
     }, function (err, plan) {
         if (err) {
-            sails.log.error(err.message);
+            console.error(err.message);
         }
         else {
             if (plan) {
-                sails.log.info('plan ' + plan.id + ' created.');
+                console.info(util.format('plan %d created', plan.id));
             }
             else {
-                sails.log.warn('plan for ' + product.id + ' failed.');
+                console.warn(util.format('plan for %d failed', product.id));
             }
         }
     });
@@ -30,14 +29,14 @@ exports.planUpdate = function (product) {
         name: product.name
     }, function (err, plan) {
         if (err) {
-            sails.log.error(err);
+            console.error(err.message);
         }
         else {
             if (plan) {
-                sails.log.info('plan ' + plan.id + ' updated.');
+                console.info(util.format('plan %d updated', plan.id));
             }
             else {
-                sails.log.warn('plan for ' + product.id + ' failed.');
+                console.warn(util.format('plan for %d failed', product.id));
             }
         }
     });
@@ -47,14 +46,14 @@ exports.planDelete = function (criteria) {
     var id = criteria.where.id;
     stripe.plans.del(id, function (err, confirmation) {
         if (err) {
-            sails.log.error(err);
+            console.error(err.message);
         }
         else {
             if (confirmation) {
-                sails.log.info('plan ' + id + ' deleted.');
+                console.info(util.format('plan %d deleted', id));
             }
             else {
-                sails.log.warn('plan ' + id + ' not deleted.');
+                console.warn(util.format('plan %d not deleted', id));
             }
         }
     });
@@ -70,14 +69,14 @@ exports.createCustomer = function (email, card, callback) {
     };
     stripe.customers.create(customer, function (err, customerObj) {
         if (err) {
-            sails.log.error(err.message);
+            console.error(err.message);
         }
         else {
             if (customerObj) {
                 AuthUser.update({username: email}, {stripeUserId: customerObj.id}, function (err, users) {
                     if (err) {
                         callback(err, null);
-                        sails.log.error(err);
+                        console.error(err.message);
                     }
                     else {
                         if (users) {
@@ -85,14 +84,14 @@ exports.createCustomer = function (email, card, callback) {
                         }
                         else {
                             callback(null, null);
-                            sails.log.error('Auth user not updated ' + email);
+                            console.error(util.format('auth user not updated %s', email));
                         }
                     }
                 });
             }
             else {
                 callback(null, null);
-                sails.log.error('customer not created for ' + email);
+                console.error('customer not created for %s', email);
             }
         }
     });
@@ -103,16 +102,14 @@ exports.subscribeCustomer = function (customerId, productId, prorate) {
                                         {plan: productId, prorate: prorate},
                                         function (err, confirmation) {
                                             if (err) {
-                                                sails.log.err(err.message);
+                                                console.error(err.message);
                                             }
                                             else {
                                                 if (confirmation) {
-                                                    sails.log.info('customer %s subscribed to %s',
-                                                                   customerId,
-                                                                   productId);
+                                                    console.info(util.format('customer %s subscribed to %s', customerId, productId));
                                                 }
                                                 else {
-                                                    sails.log.error('customer %s subscription failed', customerId);
+                                                    console.error(util.format('customer %s subscription failed', customerId));
                                                 }
                                             }
                                         });
@@ -121,14 +118,14 @@ exports.subscribeCustomer = function (customerId, productId, prorate) {
 exports.unSubscribeCustomer = function (customerId) {
     stripe.customers.cancelSubscription(customerId, function (err, confirmation) {
         if (err) {
-            sails.log.err(err.message);
+            console.error(err.message);
         }
         else {
             if (confirmation) {
-                sails.log.info('customer %s unsubscribed', customerId);
+                console.info(util.format('customer %s unsubscribed', customerId));
             }
             else {
-                sails.log.error('customer %s unsubscribe failed', customerId);
+                console.error(util.format('customer %s unsubscribe failed', customerId));
             }
         }
     });
@@ -147,26 +144,26 @@ exports.orderCharge = function (email, amount, customerId, orderId) {
     };
     stripe.charges.create(charge, function (err, chargeRes) {
         if (err) {
-            sails.log.error(err.message);
+            console.error(err.message);
         }
         else {
             if (chargeRes) {
                 Order.update(orderId, {stripeChargeId: chargeRes.id}, function (err, orders) {
                     if (err) {
-                        sails.log.error(err.message);
+                        console.error(err.message);
                     }
                     else {
                         if (orders) {
-                            sails.log.info('OrderID: %s charged', orderId);
+                            console.info(util.format('order ID: %s charged', orderId));
                         }
                         else {
-                            sails.log.error('orderID: %s failed to update', orderId);
+                            console.error(util.format('order ID: %s failed to update', orderId));
                         }
                     }
                 });
             }
             else {
-                sails.log.error('charge failed for customerID: %s orderID: %s', customerId, orderId);
+                console.error(util.format('charge failed for customerID: %s orderID: %s', customerId, orderId));
             }
         }
     });
