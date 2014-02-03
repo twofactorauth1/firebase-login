@@ -168,3 +168,19 @@ exports.orderCharge = function (email, amount, customerId, orderId) {
         }
     });
 };
+
+exports.createRecipient = function (client, callback) {
+    stripe.recipients.create({name: client.fullName(), type: client.stripeType()}, function (err, res) {
+        if (err) {
+            console.error(err.message);
+        }
+        else {
+            if (res) {
+                callback(null, res);
+            }
+            else {
+                callback(null, null);
+            }
+        }
+    });
+};
