@@ -1,7 +1,8 @@
 # Ignore Mac-generated files
 .DS_STORE
-node_modules
+node_modules/
 # Ignore swap files
 *.swp
 *~
 .tmp
+bioindigenous.komodoproject
