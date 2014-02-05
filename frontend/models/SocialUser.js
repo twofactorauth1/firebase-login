@@ -9,7 +9,8 @@ var schema = new Schema({
     authType: Number,
     id: String,
     token: String,
-    isActive: {type: Boolean, default: true}
+    isActive: {type: Boolean, default: true},
+    rawData: Array
 });
 schema.plugin(SimpleTimestamps);
 module.exports = mongoose.model('SocialUser', schema);

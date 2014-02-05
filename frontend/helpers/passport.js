@@ -37,7 +37,7 @@ module.exports.createFacebookUser = function (accessToken, refreshToken, profile
                     else {
                         if (socialUser) {
                             SocialUser.update({_id: socialUser},
-                                              {$set: {token: accessToken, updatedOn: Date()}},
+                                              {$set: {token: accessToken, rawData: profile}},
                                               {upsert: false, multi: true},
                                               function (err, numberAffected, raw) {
                                                   if (err) {
@@ -59,8 +59,7 @@ module.exports.createFacebookUser = function (accessToken, refreshToken, profile
                                               authType: 1,
                                               id: profile.username,
                                               token: accessToken,
-                                              addedOn: Date(),
-                                              updatedOn: Date()},
+                                              rawData: profile},
                                               function (err, socialUser) {
                                                   if (err) {
                                                       callback(err);
@@ -89,8 +88,7 @@ module.exports.createFacebookUser = function (accessToken, refreshToken, profile
                                               authType: 1,
                                               id: profile.username,
                                               token: accessToken,
-                                              addedOn: Date(),
-                                              updatedOn: Date()},
+                                              rawData: profile},
                                               function (err, socialUser) {
                                                   if (err) {
                                                       callback(err);
