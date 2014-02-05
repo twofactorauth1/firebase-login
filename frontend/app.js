@@ -6,11 +6,11 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var subdomainAuthorize = require('./middlewares/subdomainAuthorize');
+var passport = require('passport');
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
-var passport = require('passport');var passport = require('passport');
 
 var app = express();
 
@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
-  mongoose.connect('mongodb://localhost/bioindigenousCMS');
+  mongoose.connect('mongodb://localhost/bioindigenous');
 }
 
 app.get('/', routes.index);
