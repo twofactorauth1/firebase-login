@@ -8,8 +8,8 @@ var mongoose = require('mongoose');
 var http = require('http');
 var path = require('path');
 var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 var routes = require('./routes');
-var user = require('./routes/user');
 var subdomainAuthorize = require('./middlewares/subdomainAuthorize');
 var passportHelper = require('./helpers/passport');
 
@@ -56,7 +56,6 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.info('Express server listening on port ' + app.get('port'));
