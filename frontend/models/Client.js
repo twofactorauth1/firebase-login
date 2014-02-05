@@ -12,7 +12,8 @@ var schema = new Schema({
     name: String,
     businessType1: Number,
     businessType2: Number,
-    size: Number
+    size: Number,
+    isActive: {type: Boolean, default: true}
 });
 schema.plugin(SimpleTimestamps);
 module.exports = mongoose.model('Client', schema);
