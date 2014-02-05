@@ -4,6 +4,7 @@
  */
 
 var express = require('express');
+var mongoose = require('mongoose');
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
+  mongoose.connect('mongodb://localhost/bioindigenousCMS');
 }
 
 app.get('/', routes.index);
