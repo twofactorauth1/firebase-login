@@ -1,12 +1,23 @@
+var Customer = require('./models/Customer');
+var Client = require('./models/Client');
+
 module.exports = function () {
     return function (req, res, next) {
-        console.log(req.subdomains);
         if (req.isAuthenticated()) {
-            //code
-            next();
+            var userType = req.user.role;
+            if (userType===1) {
+                
+                next();
+            }
+            else if (userType===2) {
+                next();
+            }
+            else {
+                next();
+            }
         }
         else {
-            //code    
+            return res.send(404, 'View does not exist.');
         }
     }
 };

@@ -54,7 +54,7 @@ app.use(express.session());
 app.use(passport.initialize());
 app.use(passport.session());
 console.info('Passport middleware enabled.');
-//app.use(subdomainAuthorize());
+app.use(subdomainAuthorize());
 console.info('Subdomain authorization middleware enabled.');
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
