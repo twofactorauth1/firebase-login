@@ -1,6 +1,6 @@
 var passport = require('passport');
 
-exports.login = function (req, res, next) {
+module.exports.login = function (req, res, next) {
     if (req.isAuthenticated()) {
         return res.json({status: true, message: 'Login Successful.'});
     }
@@ -26,7 +26,7 @@ exports.login = function (req, res, next) {
     })(req, res, next);
 };
 
-exports.logout = function (req, res) {
+module.exports.logout = function (req, res) {
     req.logout();
     return res.json({status: true, message: 'Logout Successful.'});
 };

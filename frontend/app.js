@@ -10,6 +10,7 @@ var path = require('path');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var routes = require('./routes');
+var authRoutes = require('./routes/auth');
 var subdomainAuthorize = require('./middlewares/subdomainAuthorize');
 var passportHelper = require('./helpers/passport');
 
@@ -55,7 +56,10 @@ if ('development' == app.get('env')) {
   mongoose.connect('mongodb://localhost/bioindigenous');
 }
 
+// views and routes
 app.get('/', routes.index);
+app.post('/login', authRoutes.login);
+app.get('/logout', authRoutes.logout);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.info('Express server listening on port ' + app.get('port'));
