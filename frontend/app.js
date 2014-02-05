@@ -9,10 +9,12 @@ var http = require('http');
 var path = require('path');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
 var routes = require('./routes');
 var authRoutes = require('./routes/auth');
 var subdomainAuthorize = require('./middlewares/subdomainAuthorize');
 var passportHelper = require('./helpers/passport');
+var constants =require('./constants');
 
 var app = express();
 
@@ -29,6 +31,13 @@ passport.use(new LocalStrategy({usernameField: 'email',
                                 return passportHelper.localStrategyCallback(email, password, done);
                               }
 ));
+passport.use(new FacebookStrategy({clientID: constants.FACEBOOK_CLIENT_ID,
+                                  clientSecret: constants.FACEBOOK_CLIENT_SECRET,
+                                  callbackURL: 'http://localhost:3000/login/facebook/callback'},
+                                  function (accessToken, refreshToken, profile, done) {
+                                    passportHelper.createFacebookUser(accessToken, refreshToken, profile, done);
+                                  }
+));
 console.info('Enabling passport settings.');
 
 // all environments
@@ -42,7 +51,10 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session());
-app.use(subdomainAuthorize());
+app.use(passport.initialize());
+app.use(passport.session());
+console.info('Passport middleware enabled.');
+//app.use(subdomainAuthorize());
 console.info('Subdomain authorization middleware enabled.');
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
@@ -60,6 +72,9 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.post('/login', authRoutes.login);
 app.get('/logout', authRoutes.logout);
+app.get('/login/facebook', passport.authenticate('facebook', {scope: ['email']}));
+app.get('/login/facebook/callback', passport.authenticate('facebook', {successRedirect: '/',
+                                                                      failureRedirect: '/login/facebook'}));
 
 http.createServer(app).listen(app.get('port'), function(){
   console.info('Express server listening on port ' + app.get('port'));
