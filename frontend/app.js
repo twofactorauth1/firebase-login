@@ -5,14 +5,30 @@
 
 var express = require('express');
 var mongoose = require('mongoose');
-var subdomainAuthorize = require('./middlewares/subdomainAuthorize');
+var http = require('http');
+var path = require('path');
 var passport = require('passport');
 var routes = require('./routes');
 var user = require('./routes/user');
-var http = require('http');
-var path = require('path');
+var subdomainAuthorize = require('./middlewares/subdomainAuthorize');
+var passportHelper = require('./helpers/passport');
 
 var app = express();
+
+//passport setup
+passport.serializeUser(function(user, done) {
+  done(null, user._id);
+});
+passport.deserializeUser(function(id, done) {
+    passportHelper.deserializeUser(id, done);
+});
+passport.use(new LocalStrategy({usernameField: 'email',
+                               passwordField: 'password'},
+                               function (email, password, done) {
+                                return passportHelper.localStrategyCallback(email, password, done);
+                              }
+));
+console.info('Enabling passport settings.');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
