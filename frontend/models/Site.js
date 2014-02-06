@@ -3,8 +3,8 @@ var mongoose = require('mongoose')
 var SimpleTimestamps = require( "mongoose-SimpleTimestamps" ).SimpleTimestamps;
 
 var schema = new Schema({
-    user: {type: Schema.Types.ObjectId, ref: 'Client'},
-    domain: String,
+    client: {type: Schema.Types.ObjectId, ref: 'Client'},
+    subDomain: String,
     isActive: {type: Boolean, default: true}
 });
 
