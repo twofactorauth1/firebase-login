@@ -1,21 +1,60 @@
 var mongoose = require('mongoose');
+var Client = mongoose.model('Client');
+var Customer = mongoose.model('Customer');
+var Site = mongoose.model('Site');
 
 module.exports = function () {
     return function (req, res, next) {
         if (req.isAuthenticated()) {
             var userType = req.user.role;
             if (userType===1) {
-                next();
+                Customer.findOne({user: req.user._id}, function (err, customer) {
+                    next();
+                });
             }
             else if (userType===2) {
-                next();
+                Client.findOne({user: req.user._id}, function (err, client) {
+                    if (err) {
+                        return res.send(404, 'View does not exist');
+                    }
+                    else {
+                        if (client) {
+                            Site.find({client: client._id}, function (err, sites) {
+                                if (err) {
+                                    return res.send(404, 'View does not exist');
+                                }
+                                else {
+                                    if (sites) {
+                                        var subDomains = [];
+                                        sites.forEach(function (elment, index, array) {
+                                            subDomains.push(element.subDomain);
+                                        });
+                                        if (subDomains.indexOf(req.subdomains.join('.'))===-1) {
+                                            return res.send(404, 'View does not exist');
+                                        }
+                                        else {
+                                            next();
+                                        }
+                                    }
+                                    else {
+                                        return res.send(404, 'View does not exist');
+                                    }
+                                }
+                            });    
+                        }
+                        else {
+                            return res.send(404, 'View does not exist');
+                        }
+                    }
+                });
             }
             else {
                 next();
             }
         }
         else {
-            return res.send(404, 'View does not exist.');
+            //return res.send(404, 'View does not exist.');
+            next();
         }
     }
 };
