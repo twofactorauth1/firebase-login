@@ -91,10 +91,10 @@ module.exports = function () {
             }
         } else {
             var allowedPaths = ['/login', '/login/'];
-            if (allowedPaths.indexOf(req.path)) {
-                next();
-            } else {
+            if (allowedPaths.indexOf(req.path) === -1) {
                 return res.send(404, 'View does not exist.');
+            } else {
+                next();
             }
         }
     }
