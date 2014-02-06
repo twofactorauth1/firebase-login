@@ -10,11 +10,12 @@ var path = require('path');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var models = require('./models');
 var routes = require('./routes');
 var authRoutes = require('./routes/auth');
 var subdomainAuthorize = require('./middlewares/subdomainAuthorize');
 var passportHelper = require('./helpers/passport');
-var constants =require('./constants');
+var constants = require('./constants');
 
 var app = express();
 

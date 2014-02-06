@@ -1,12 +1,10 @@
-var Customer = require('./models/Customer');
-var Client = require('./models/Client');
+var mongoose = require('mongoose');
 
 module.exports = function () {
     return function (req, res, next) {
         if (req.isAuthenticated()) {
             var userType = req.user.role;
             if (userType===1) {
-                
                 next();
             }
             else if (userType===2) {

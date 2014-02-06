@@ -1,5 +1,6 @@
-var User = require('../models/user');
-var SocialUser = require('../models/socialUser');
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
+var SocialUser = mongoose.model('SocialUser');
 
 module.exports.localStrategyCallback = function (email, password, callback) {
     //TODO: add encryption logic for password.
