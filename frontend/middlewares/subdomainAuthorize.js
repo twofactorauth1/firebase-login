@@ -13,40 +13,51 @@ module.exports = function () {
                 });
             }
             else if (userType===2) {
-                Client.findOne({user: req.user._id}, function (err, client) {
-                    if (err) {
+                if (req.session.subDomains) {
+                    if (req.session.subDomains.indexOf(req.subdomains.join('.'))===-1) {
                         return res.send(404, 'View does not exist');
                     }
                     else {
-                        if (client) {
-                            Site.find({client: client._id}, function (err, sites) {
-                                if (err) {
-                                    return res.send(404, 'View does not exist');
-                                }
-                                else {
-                                    if (sites) {
-                                        var subDomains = [];
-                                        sites.forEach(function (element, index, array) {
-                                            subDomains.push(element.subDomain);
-                                        });
-                                        if (subDomains.indexOf(req.subdomains.join('.'))===-1) {
-                                            return res.send(404, 'View does not exist');
-                                        }
-                                        else {
-                                            next();
-                                        }
-                                    }
-                                    else {
-                                        return res.send(404, 'View does not exist');
-                                    }
-                                }
-                            });    
-                        }
-                        else {
+                        next();
+                    }
+                }
+                else {
+                    Client.findOne({user: req.user._id}, function (err, client) {
+                        if (err) {
                             return res.send(404, 'View does not exist');
                         }
-                    }
-                });
+                        else {
+                            if (client) {
+                                Site.find({client: client._id}, function (err, sites) {
+                                    if (err) {
+                                        return res.send(404, 'View does not exist');
+                                    }
+                                    else {
+                                        if (sites) {
+                                            var subDomains = [];
+                                            sites.forEach(function (element, index, array) {
+                                                subDomains.push(element.subDomain);
+                                            });
+                                            req.session.subDomains = subDomains;
+                                            if (subDomains.indexOf(req.subdomains.join('.'))===-1) {
+                                                return res.send(404, 'View does not exist');
+                                            }
+                                            else {
+                                                next();
+                                            }
+                                        }
+                                        else {
+                                            return res.send(404, 'View does not exist');
+                                        }
+                                    }
+                                });    
+                            }
+                            else {
+                                return res.send(404, 'View does not exist');
+                            }
+                        }
+                    });
+                }
             }
             else {
                 next();
