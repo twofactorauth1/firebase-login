@@ -8,11 +8,41 @@ module.exports = function () {
         if (req.isAuthenticated()) {
             var userType = req.user.role;
             if (userType === 1) {
-                Customer.findOne({
-                    user: req.user._id
-                }, function (err, customer) {
-                    next();
-                });
+                if (req.session.subDomains) {
+                    if (req.session.subDomains.indexOf(req.subdomains.join('.')) === -1) {
+                        return res.send(404, 'View does not exist');
+                    } else {
+                        next();
+                    }
+                } else {
+                    Customer.findOne({
+                        user: req.user._id
+                    }, function (err, customer) {
+                        if (err) {
+                            return res.send(404, 'View does not exist.');
+                        } else {
+                            if (customer) {
+                                Site.findOne(customer.site, function (err, site) {
+                                    if (err) {
+                                        return res.send(404, 'View does not exist.');
+                                    } else {
+                                        if (site) {
+                                            if (site.subDomain === req.subdomains.join('.')) {
+                                                next();
+                                            } else {
+                                                return res.send(404, 'View does not exist.');
+                                            }
+                                        } else {
+                                            return res.send(404, 'View does not exist.');
+                                        }
+                                    }
+                                });
+                            } else {
+                                return res.send(404, 'View does not exist.');
+                            }
+                        }
+                    });
+                }
             } else if (userType === 2) {
                 if (req.session.subDomains) {
                     if (req.session.subDomains.indexOf(req.subdomains.join('.')) === -1) {
