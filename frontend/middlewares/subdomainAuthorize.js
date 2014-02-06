@@ -26,7 +26,7 @@ module.exports = function () {
                                 else {
                                     if (sites) {
                                         var subDomains = [];
-                                        sites.forEach(function (elment, index, array) {
+                                        sites.forEach(function (element, index, array) {
                                             subDomains.push(element.subDomain);
                                         });
                                         if (subDomains.indexOf(req.subdomains.join('.'))===-1) {
@@ -53,8 +53,13 @@ module.exports = function () {
             }
         }
         else {
-            //return res.send(404, 'View does not exist.');
-            next();
+            var allowedPaths = ['/login', '/login/'];
+            if (allowedPaths.indexOf(req.path)) {
+                next();
+            }
+            else {
+                return res.send(404, 'View does not exist.');    
+            }
         }
     }
 };

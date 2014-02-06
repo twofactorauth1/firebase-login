@@ -71,10 +71,10 @@ if ('development' == app.get('env')) {
 
 // views and routes
 app.get('/', routes.index);
-app.post('/login', authRoutes.login);
-app.get('/logout', authRoutes.logout);
-app.get('/login/facebook', passport.authenticate('facebook', {scope: ['email']}));
-app.get('/login/facebook/callback', passport.authenticate('facebook', {successRedirect: '/',
+app.post('/login/', authRoutes.login);
+app.get('/logout/', authRoutes.logout);
+app.get('/login/facebook/', passport.authenticate('facebook', {scope: ['email']}));
+app.get('/login/facebook/callback/', passport.authenticate('facebook', {successRedirect: '/',
                                                                       failureRedirect: '/login/facebook'}));
 
 http.createServer(app).listen(app.get('port'), function(){
