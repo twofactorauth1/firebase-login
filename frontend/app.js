@@ -13,6 +13,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var models = require('./models');
 var routes = require('./routes');
 var authRoutes = require('./routes/auth');
+var crmRoutes = require('./routes/crm');
 var subdomainAuthorize = require('./middlewares/subdomainAuthorize');
 var passportHelper = require('./helpers/passport');
 var constants = require('./constants');
@@ -55,13 +56,15 @@ app.use(express.session());
 app.use(passport.initialize());
 app.use(passport.session());
 console.info('Passport middleware enabled.');
-app.use(subdomainAuthorize());
+//app.use(subdomainAuthorize()); //TODO: enable it before final deployment.
 console.info('Subdomain authorization middleware enabled.');
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+//production only
+mongoose.connect('mongodb://indigenous:$Oxf25Ufo$@novus.modulusmongo.net:27017/H2inesux');
 
 // development only
 if ('development' == app.get('env')) {
@@ -76,6 +79,7 @@ app.get('/logout/', authRoutes.logout);
 app.get('/login/facebook/', passport.authenticate('facebook', {scope: ['email']}));
 app.get('/login/facebook/callback/', passport.authenticate('facebook', {successRedirect: '/',
                                                                       failureRedirect: '/login/facebook'}));
+app.get('/crm', crmRoutes.index);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.info('Express server listening on port ' + app.get('port'));
