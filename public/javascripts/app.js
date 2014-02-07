@@ -33,11 +33,11 @@ customersManager.customersApp = {};
                 controller: 'LoginController',
                 templateUrl: '/javascripts/views/login.html'
             })
-            .otherwise({ redirectTo: '/customers' });
+            .otherwise({ redirectTo: '/login' });
 
     }]);
 
-    //Only needed for Breeze. Maps Q (used by default in Breeze) to Angular's $q to avoid having to call scope.$apply() 
+    //Only needed for Breeze. Maps Q (used by default in Breeze) to Angular's $q to avoid having to call scope.$apply()
     customersManager.customersApp.run(['$q', '$rootScope',
         function ($q, $rootScope) {
             breeze.core.extendQ($rootScope, $q);

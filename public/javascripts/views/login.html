@@ -20,10 +20,13 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="button" class="btn btn-default" ng-click="loginUser()">Sign in</button>
+                        <button type="button" class="btn btn-default" ng-click="loginClient()">Sign in</button>
                     </div>
                 </div>
             </form>
+        </div>
+        <div class="row">
+            <p class="bg-danger" ng-show="loginFailed">Invalid Email / Password.</p>
         </div>
     </div>
 </div>
