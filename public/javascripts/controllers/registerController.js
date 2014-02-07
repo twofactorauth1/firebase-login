@@ -2,22 +2,21 @@
 
     var registerController = function ($scope, $location, $filter, dataService, modalService, clientService) {
         $scope.client = {};
+        $scope.message = null;
         $scope.addClient = function () {
             if ($scope.addForm.$valid) {
-                clientService.loginClient($scope.credential, successCallback, errorCallback);
+                clientService.addClient($scope.client, successCallback, errorCallback);
             }
         };
         function successCallback (data, status, headers, config) {
             if (data.status) {
-                $location.path('/customers');
-                $scope.loginFailed = false;
+                $location.path('/login');
             }
             else {
-                $scope.loginFailed = true;
+                $scope.message = data.message;
             }
         };
         function errorCallback (data, status, headers, config) {
-            $scope.loginFailed = true;
         };
     };
 

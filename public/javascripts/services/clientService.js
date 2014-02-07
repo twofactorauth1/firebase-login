@@ -6,8 +6,13 @@
         clientFactory.loginClient = function (credential, success, error) {
             $http.post('/login/', credential).success(success).error(error);
         };
+
         clientFactory.logoutClient = function (success, error) {
             $http.get('/logout/').success(success).error(error);
+        };
+
+        clientFactory.addClient = function (client, success, error) {
+            $http.post('/client/add/', client).success(success).error(error);
         };
 
         return clientFactory;

@@ -14,6 +14,7 @@ var models = require('./models');
 var routes = require('./routes');
 var authRoutes = require('./routes/auth');
 var crmRoutes = require('./routes/crm');
+var clientRoutes = require('./routes/client');
 var subdomainAuthorize = require('./middlewares/subdomainAuthorize');
 var passportHelper = require('./helpers/passport');
 var constants = require('./constants');
@@ -69,7 +70,7 @@ if ('development' == app.get('env')) {
 }
 // production only
 else {
-  mongoose.connect('mongodb://indigenous:$Oxf25Ufo$@novus.modulusmongo.net:27017/H2inesux');  
+  mongoose.connect('mongodb://indigenous:$Oxf25Ufo$@novus.modulusmongo.net:27017/H2inesux');
 }
 
 // views and routes
@@ -80,6 +81,7 @@ app.get('/login/facebook/', passport.authenticate('facebook', {scope: ['email']}
 app.get('/login/facebook/callback/', passport.authenticate('facebook', {successRedirect: '/',
                                                                       failureRedirect: '/login/facebook'}));
 app.get('/crm', crmRoutes.index);
+app.post('/client/add/', clientRoutes.add);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.info('Express server listening on port ' + app.get('port'));
