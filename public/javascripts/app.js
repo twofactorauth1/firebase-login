@@ -33,6 +33,10 @@ customersManager.customersApp = {};
                 controller: 'LoginController',
                 templateUrl: '/javascripts/views/login.html'
             })
+            .when('/register', {
+                controller: 'RegisterController',
+                templateUrl: '/javascripts/views/register.html'
+            })
             .when('/logout', {
                 controller: 'LogoutController',
                 templateUrl: '/javascripts/views/logout.html'
