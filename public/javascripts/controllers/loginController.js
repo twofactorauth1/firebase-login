@@ -9,7 +9,6 @@
             }
         };
         function successCallback (data, status, headers, config) {
-            console.log(data, status, headers, config);
             if (data.status) {
                 $location.path('/customers');
                 $scope.loginFailed = false;
@@ -20,7 +19,7 @@
         };
         function errorCallback (data, status, headers, config) {
             $scope.loginFailed = true;
-        }
+        };
     };
 
     customersManager.customersApp.controller('LoginController',
