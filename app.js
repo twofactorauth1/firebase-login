@@ -62,14 +62,14 @@ app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-//production only
-mongoose.connect('mongodb://indigenous:$Oxf25Ufo$@novus.modulusmongo.net:27017/H2inesux');
-
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
   mongoose.connect('mongodb://localhost/bioindigenous');
+}
+// production only
+else {
+  mongoose.connect('mongodb://indigenous:$Oxf25Ufo$@novus.modulusmongo.net:27017/H2inesux');  
 }
 
 // views and routes
