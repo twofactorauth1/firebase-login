@@ -29,6 +29,10 @@ customersManager.customersApp = {};
                 controller: 'AboutController',
                 templateUrl: '/javascripts/views/about.html'
             })
+            .when('/login', {
+                controller: 'LoginController',
+                templateUrl: '/javascripts/views/login.html'
+            })
             .otherwise({ redirectTo: '/customers' });
 
     }]);
