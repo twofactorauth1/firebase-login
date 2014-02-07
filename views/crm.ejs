@@ -1,1 +1,85 @@
-<% include crm.html %>
+<!DOCTYPE html>
+<html data-ng-app="customersApp">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
+    <title>Customer Manager</title>
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" />
+    <link href="/stylesheets/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link href="/stylesheets/styles.css" rel="stylesheet" />
+    <link href="/stylesheets/animations.css" rel="stylesheet" />
+</head>
+<body data-ng-cloak="">
+
+    <div class="navbar navbar-fixed-top" data-ng-controller="NavbarController">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand " href="#/">
+                    <img src="/images/people.png" alt="logo"> {{ appTitle }}
+                </a>
+                <ul class="nav nav-pills navBarPadding">
+                    <li data-ng-class="{'active':highlight('/customers')}"><a href="#/customers">Customers</a></li>
+                    <li data-ng-class="{'active':highlight('/orders')}"><a href="#/orders">Orders</a></li>
+                    <li data-ng-class="{'active':highlight('/about')}"><a href="#/about">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div data-ng-view="" id="ng-view" class="slide-animation"></div>
+
+    <div id="footer">
+        <div class="navbar navbar-fixed-bottom">
+            <div class="navbar-inner footer">
+                <div class="container">
+                    <footer>
+                        <div class="row">
+                            <div class="span12">
+                                Created by <a href="http://twitter.com/DanWahlin" target="_blank">Dan Wahlin</a>
+                            </div>
+                        </div>
+                   </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div data-wc-overlay="" data-wc-overlay-delay="300">
+        <br /><img src="/images/spinner.gif" />&nbsp;&nbsp;Loading
+    </div>
+
+    <!-- 3rd party libraries -->
+    <script src="/javascripts/vendor/angular.js"></script>
+    <script src="/javascripts/vendor/angular-route.js"></script>
+    <script src="/javascripts/vendor/angular-animate.js"></script>
+    <script src="/javascripts/vendor/angular-ui-bootstrap.js"></script>
+    <script src="/javascripts/vendor/tweenMax.min.js"></script>
+
+    <!-- jQuery only needed with Breeze so not loaded before AngularJS in this example-->
+    <!-- If you want jQuery to replace jqlite in AngularJS then load jQuery before angular.js (not needed in this app though) -->
+    <script src="/javascripts/vendor/jquery.min.js"></script>
+    <script src="/javascripts/vendor/q.min.js"></script>
+    <script src="/javascripts/vendor/breeze.min.js"></script>
+    <script src="/javascripts/vendor/to$q.js"></script>
+
+    <!-- Custom scripts -->
+    <script src="/javascripts/app.js"></script>
+    <script src="/javascripts/animations/listAnimations.js"></script>
+    <script src="/javascripts/directives/wcOverlay.js"></script>
+    <script src="/javascripts/directives/wcUnique.js"></script>
+    <script src="/javascripts/filters/nameCityStateFilter.js"></script>
+    <script src="/javascripts/filters/nameProductFilter.js"></script>
+    <script src="/javascripts/services/config.js"></script>
+    <script src="/javascripts/services/customersBreezeService.js"></script>
+    <script src="/javascripts/services/customersService.js"></script>
+    <script src="/javascripts/services/dataService.js"></script>
+    <script src="/javascripts/services/modalService.js"></script>
+    <script src="/javascripts/services/routeResolver.js"></script>
+    <script src="/javascripts/controllers/customers/customerEditController.js"></script>
+    <script src="/javascripts/controllers/customers/customerOrdersController.js"></script>
+    <script src="/javascripts/controllers/customers/customersController.js"></script>
+    <script src="/javascripts/controllers/orders/orderChildController.js"></script>
+    <script src="/javascripts/controllers/orders/ordersController.js"></script>
+    <script src="/javascripts/controllers/aboutController.js"></script>
+    <script src="/javascripts/controllers/navbarController.js"></script>
+</body>
+</html>
