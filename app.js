@@ -15,6 +15,7 @@ var routes = require('./routes');
 var authRoutes = require('./routes/auth');
 var crmRoutes = require('./routes/crm');
 var clientRoutes = require('./routes/client');
+var customerRoutes = require('./routes/customer');
 var subdomainAuthorize = require('./middlewares/subdomainAuthorize');
 var passportHelper = require('./helpers/passport');
 var constants = require('./constants');
@@ -82,6 +83,7 @@ app.get('/login/facebook/callback/', passport.authenticate('facebook', {successR
                                                                       failureRedirect: '/login/facebook'}));
 app.get('/crm', crmRoutes.index);
 app.post('/client/add/', clientRoutes.add);
+app.post('/customer/add/', customerRoutes.add);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.info('Express server listening on port ' + app.get('port'));
