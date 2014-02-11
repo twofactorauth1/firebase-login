@@ -33,21 +33,25 @@ exports.add = function (req, res) {
         }
         else {
             if (user) {
-                var customerInsert = deepcopy(req.body);
-                customerInsert.user = user._id;
-                //TODO add site ref.
-                Customer.create(customerInsert, function (err, customer) {
-                    if (err) {
-                        return res.json({status: false, message: err.message});
-                    }
-                    else {
-                        if (customer) {
-                            return res.json({status: true, message: 'customer created', user: user, customer: customer});
+                Site.findOne({subDomain: req.subdomains.join('.')}, function (err, site) {
+                    var customerInsert = deepcopy(req.body);
+                    customerInsert.user = user._id;
+                    if (site) {
+                        customerInsert.site = site._id;
+                    };
+                    Customer.create(customerInsert, function (err, customer) {
+                        if (err) {
+                            return res.json({status: false, message: err.message});
                         }
                         else {
-                            return res.json({status: false, message: 'customer not created'});
+                            if (customer) {
+                                return res.json({status: true, message: 'customer created', user: user, customer: customer});
+                            }
+                            else {
+                                return res.json({status: false, message: 'customer not created'});
+                            }
                         }
-                    }
+                    });
                 });
             }
             else {
