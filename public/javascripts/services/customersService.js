@@ -4,11 +4,11 @@
         var customersFactory = {};
 
         customersFactory.getCustomers = function (pageIndex, pageSize) {
-            return getPagedResource('customers', pageIndex, pageSize);
+            return getPagedResource('/customer/find/', pageIndex, pageSize);
         };
 
         customersFactory.getCustomersSummary = function (pageIndex, pageSize) {
-            return getPagedResource('customersSummary', pageIndex, pageSize);
+            return getPagedResource('/customer/find/', pageIndex, pageSize);
         };
 
         customersFactory.getStates = function () {
@@ -78,7 +78,7 @@
             var resource = baseResource;
             resource += (arguments.length == 3) ? buildPagingUri(pageIndex, pageSize) : '';
             return $http.get(resource).then(function (response) {
-                var custs = response.data;
+                var custs = response.data.customers;
                 extendCustomers(custs);
                 return {
                     totalRecords: parseInt(response.headers('X-InlineCount')),
