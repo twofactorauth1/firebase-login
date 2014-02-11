@@ -18,5 +18,9 @@ var schema = new Schema({
 });
 
 schema.plugin(SimpleTimestamps);
+
+schema.virtual('id').get(function () {return this._id});
+schema.set('toObject', { virtuals: true });
+schema.set('toJSON', { virtuals: true });
 module.exports = mongoose.model('Customer', schema);
 
