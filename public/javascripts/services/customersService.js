@@ -20,7 +20,7 @@
 
         customersFactory.checkUniqueValue = function (id, property, value) {
             if (!id) id = 0;
-            return $http.get('/checkUnique/' + id + '?property=' + property + '&value=' + escape(value)).then(
+            return $http.get('/customer/check/unique/?property=' + property + '&value=' + escape(value) + '&type=User').then(
                 function (results) {
                     return results.data.status;
                 });
@@ -39,7 +39,7 @@
 
         customersFactory.updateCustomer = function (customer) {
             return $http.put('/putCustomer/' + customer.id, customer).then(function (status) {
-                return status.data;
+                return status;
             });
         };
 

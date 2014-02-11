@@ -84,6 +84,7 @@ app.get('/login/facebook/callback/', passport.authenticate('facebook', {successR
 app.get('/crm', crmRoutes.index);
 app.post('/client/add/', clientRoutes.add);
 app.post('/customer/add/', customerRoutes.add);
+app.get('/customer/check/unique/', customerRoutes.check);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.info('Express server listening on port ' + app.get('port'));
