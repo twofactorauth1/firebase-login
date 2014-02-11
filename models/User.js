@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var SimpleTimestamps = require( "mongoose-SimpleTimestamps" ).SimpleTimestamps;
+var SimpleTimestamps = require( "mongoose-simpletimestamps" ).SimpleTimestamps;
 var userRole = {1: 'Customer', 2: 'Client', 3: 'Backend'};
 
 var schema = new mongoose.Schema({

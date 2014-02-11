@@ -1,6 +1,6 @@
 var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
-var SimpleTimestamps = require( "mongoose-SimpleTimestamps" ).SimpleTimestamps;
+var SimpleTimestamps = require( "mongoose-simpletimestamps" ).SimpleTimestamps;
 
 var authTypes = {1: 'Facebook', 2: 'Google', 3: 'Twitter'};
 

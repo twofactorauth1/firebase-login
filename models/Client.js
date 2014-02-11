@@ -1,6 +1,6 @@
 var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
-var SimpleTimestamps = require( "mongoose-SimpleTimestamps" ).SimpleTimestamps;
+var SimpleTimestamps = require( "mongoose-simpletimestamps" ).SimpleTimestamps;
 
 var registrationTypes = {1: 'Professional', 2: 'Business', 3: 'Enterprise'};
 var businessTypes1 = {1: 'Fitness'};

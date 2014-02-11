@@ -1,6 +1,6 @@
 var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
-var SimpleTimestamps = require( "mongoose-SimpleTimestamps" ).SimpleTimestamps;
+var SimpleTimestamps = require( "mongoose-simpletimestamps" ).SimpleTimestamps;
 
 var schema = new Schema({
     client: {type: Schema.Types.ObjectId, ref: 'Client'},

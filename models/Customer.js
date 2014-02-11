@@ -1,6 +1,6 @@
 var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
-var SimpleTimestamps = require( "mongoose-SimpleTimestamps" ).SimpleTimestamps;
+var SimpleTimestamps = require( "mongoose-simpletimestamps" ).SimpleTimestamps;
 
 var genderType = {1: 'Male', 2: 'Female'};
 
