@@ -28,7 +28,7 @@
 
         customersFactory.insertCustomer = function (customer) {
             return $http.post('/customer/add/', customer).then(function (results) {
-                customer.id = results.data.obj._id;
+                customer.id = results.data.customer._id;
                 return results.data.obj;
             });
         };
