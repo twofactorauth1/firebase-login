@@ -77,3 +77,27 @@ exports.find = function (req, res) {
         });
     });
 };
+
+exports.destroy = function (req, res) {
+    Customer.findOne({_id: req.param('id')}, function (err, customer) {
+        if (err) {
+            return res.json({status: false, message: err.message});
+        }
+        else {
+            if (customer) {
+                User.remove({_id: customer.user}, function (err) {
+                    if (err) {
+                        return res.json({status: false, message: err.message});
+                    }
+                    else {
+                        customer.remove();
+                        return res.json({status: true, message: 'customer deleted'});
+                    }
+                });
+            }
+            else {
+                return res.json({status: false, message: 'customer not deleted'});
+            }
+        }
+    });
+};

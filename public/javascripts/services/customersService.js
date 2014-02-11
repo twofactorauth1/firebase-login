@@ -44,7 +44,7 @@
         };
 
         customersFactory.deleteCustomer = function (id) {
-            return $http.delete('/deleteCustomer/' + id).then(function (status) {
+            return $http.delete('/customer/delete/' + id + '/').then(function (status) {
                 return status.data;
             });
         };
