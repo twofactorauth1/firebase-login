@@ -16,5 +16,6 @@
     "stripe": "~2.4.0",
     "mongoose-simpletimestamps": "~1.0.0",
     "passport-facebook": "~1.0.2"
-  }
+  },
+  "main": "./app.js"
 }
