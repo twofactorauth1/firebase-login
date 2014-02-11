@@ -90,21 +90,7 @@
                         </span>  
                     </div>
                 </div>
-                <div class="row">
-                    <div class="span2">
-                        State:
-                    </div>
-                    <div class="span10">
-                        <select name="state" required
-                            data-ng-model="customer.stateId" 
-                            data-ng-options="state.id as state.name for state in states">
-                            <option value=""></option>
-                        </select>
-                        <span class="errorMessage" ng-show="editForm.state.$dirty && editForm.state.$invalid">
-                            2 character state is required
-                        </span>  
-                    </div>
-                </div>
+                
                 <div class="row">
                     <div class="span2">
                         Zip:

@@ -19,7 +19,7 @@ exports.add = function (req, res) {
                     }
                     else {
                         if (newUser) {
-                            Client.create({user: newUser._id}, function (err, client) {
+                            Client.create({user: newUser._id, role: 2}, function (err, client) {
                                 if (err) {
                                     return res.json({status: false, message: err.message});
                                 }

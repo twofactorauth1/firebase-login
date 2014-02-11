@@ -28,8 +28,8 @@
 
         customersFactory.insertCustomer = function (customer) {
             return $http.post('/customer/add/', customer).then(function (results) {
-                customer.id = results.data.id;
-                return results.data;
+                customer.id = results.data.obj._id;
+                return results.data.obj;
             });
         };
 

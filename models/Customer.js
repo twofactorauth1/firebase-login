@@ -9,10 +9,11 @@ var schema = new Schema({
     site: {type: Schema.Types.ObjectId, ref: 'Site'},
     firstName: String,
     lastName: String,
-    gender: Number,
+    gender: String,
+    address: String,
     city: String,
-    state: Number,
-    zip: Number,
+    state: String,
+    zip: String,
     isActive: {type: Boolean, default: true}
 });
 
