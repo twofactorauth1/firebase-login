@@ -7,7 +7,7 @@
             keyboard: true,
             backdropClick: true,
             dialogFade: true,
-            templateUrl: '/app/partials/dialog.html'
+            templateUrl: '/javascripts/partials/dialog.html'
         };
 
         var dialogOptions = {

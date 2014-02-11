@@ -7,8 +7,8 @@
         };
 
         this.routeConfig = function () {
-            var viewsDirectory = '/app/views/',
-                controllersDirectory = '/app/controllers/',
+            var viewsDirectory = '/javascripts/views/',
+                controllersDirectory = '/javascripts/controllers/',
 
             setBaseDirectories = function (viewsDir, controllersDir) {
                 viewsDirectory = viewsDir;
