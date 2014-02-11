@@ -62,15 +62,18 @@ exports.add = function (req, res) {
 };
 
 exports.find = function (req, res) {
-    Customer.find({})
-    .skip(req.param('$skip'))
-    .limit(req.param('$top'))
-    .exec(function (err, customers) {
-        if (err) {
-            return res.json({status: false, message: err.message, customers: []});
-        }
-        else {
-            return res.json({status: true, message: '', customers: customers});
-        }
+    Customer.count({}, function (err, count) {
+        res.set('X-InlineCount', count);
+        Customer.find({})
+        .skip(req.param('$skip'))
+        .limit(req.param('$top'))
+        .exec(function (err, customers) {
+            if (err) {
+                return res.json({status: false, message: err.message, customers: []});
+            }
+            else {
+                return res.json({status: true, message: '', customers: customers});
+            }
+        });
     });
 };
