@@ -3,91 +3,150 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var mongoose = require('mongoose');
-var http = require('http');
-var path = require('path');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
-var models = require('./models');
-var routes = require('./routes');
-var authRoutes = require('./routes/auth');
-var crmRoutes = require('./routes/crm');
-var clientRoutes = require('./routes/client');
-var customerRoutes = require('./routes/customer');
-var subdomainAuthorize = require('./middlewares/subdomainAuthorize');
-var passportHelper = require('./helpers/passport');
-var constants = require('./constants');
+var express = require('express')
+    , connect = require('connect')
+    , mongoose = require('mongoose')
+    , http = require('http')
+    , path = require('path')
+    , passport = require('passport')
+    , models = require('./models')
+    , routes = require('./routes')
+    , authRoutes = require('./routes/auth')
+    , crmRoutes = require('./routes/crm')
+    , clientRoutes = require('./routes/client')
+    , customerRoutes = require('./routes/customer')
+    , subdomainAuthorize = require('./middlewares/subdomainAuthorize')
+    , constants = require('./constants')
+    , appConfig = require('./configs/app.config');
 
+//---------------------------------------------------------
+//  SETUP NAMESPACES
+//---------------------------------------------------------
+require('./utils/namespaces');
+
+
+//---------------------------------------------------------
+//  SETUP LOGGING
+//---------------------------------------------------------
+require('./configs/log4js.config').configure();
+var log = $$.g.getLogger("app");
+log.info("Log4js setup successfully");
+
+
+//---------------------------------------------------------
+//  INIT MONGODB
+//---------------------------------------------------------
+require('./configs/mongodb.config').connect();
+log.info("Connected to MongoDB successfully");
+
+
+//---------------------------------------------------------
+//  SETUP PASSPORT METHODS
+//---------------------------------------------------------
+require('./utils/passportsetup');
+log.info('Passport Settings Enabled');
+
+
+//---------------------------------------------------------
+//  SETUP APP CACHE
+//---------------------------------------------------------
+$$.g.cache = require('./configs/cache.config').configure();
+log.info("Global App Cache setup");
+
+
+//---------------------------------------------------------
+//  INIT APPLICATION
+//---------------------------------------------------------
 var app = express();
-
-//passport setup
-passport.serializeUser(function(user, done) {
-  done(null, user._id);
-});
-passport.deserializeUser(function(id, done) {
-    passportHelper.deserializeUser(id, done);
-});
-passport.use(new LocalStrategy({usernameField: 'email',
-                               passwordField: 'password'},
-                               function (email, password, done) {
-                                return passportHelper.localStrategyCallback(email, password, done);
-                              }
-));
-passport.use(new FacebookStrategy({clientID: constants.FACEBOOK_CLIENT_ID,
-                                  clientSecret: constants.FACEBOOK_CLIENT_SECRET,
-                                  callbackURL: 'http://localhost:3000/login/facebook/callback'},
-                                  function (accessToken, refreshToken, profile, done) {
-                                    passportHelper.createFacebookUser(accessToken, refreshToken, profile, done);
-                                  }
-));
-console.info('Enabling passport settings.');
+global.app = app;
 
 // all environments
-app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view options', { layout:false });
+app.set('view engine', appConfig.view_engine);
 app.use(express.favicon());
-app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
+app.use(express.cookieParser('mys3cr3tco00k13s'));
 app.use(express.session());
 app.use(passport.initialize());
 app.use(passport.session());
-console.info('Passport middleware enabled.');
 //app.use(subdomainAuthorize()); //TODO: enable it before final deployment.
-console.info('Subdomain authorization middleware enabled.');
 app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(connect.compress());
 
 // development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-  mongoose.connect('mongodb://localhost/bioindigenous');
-}
-// production only
-else {
-  mongoose.connect('mongodb://indigenous:$Oxf25Ufo$@novus.modulusmongo.net:27017/H2inesux');
+if (process.env.NODE_ENV == appConfig.environments.DEVELOPMENT) {
+    //TODO - Set up proper error handling for production environments
+    app.use(express.errorHandler());
 }
 
-// views and routes
-app.get('/', routes.index);
-app.post('/login/', authRoutes.login);
-app.get('/logout/', authRoutes.logout);
-app.get('/login/facebook/', passport.authenticate('facebook', {scope: ['email']}));
-app.get('/login/facebook/callback/', passport.authenticate('facebook', {successRedirect: '/',
-                                                                      failureRedirect: '/login/facebook'}));
-app.get('/crm', crmRoutes.index);
-app.post('/client/add/', clientRoutes.add);
-app.post('/customer/add/', customerRoutes.add);
-app.get('/customer/check/unique/', customerRoutes.check);
-app.get('/customer/find/', customerRoutes.find);
-app.del('/customer/delete/:id/', customerRoutes.destroy);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.info('Express server listening on port ' + app.get('port'));
-});
+//-----------------------------------------------------
+//  START LISTENING
+//-----------------------------------------------------
+var setUpListener = function(app) {
+    app.listen(appConfig.port, function(){
+        log.info("Express server listening on port " + appConfig.port);
+        if (cluster != null) {
+            if (cluster.worker != null) {
+                log.info("Cluster Worker " + cluster.worker.id + " running");
+            }
+        }
+    });
+};
+
+
+//-----------------------------------------------------
+//  CLUSTERING
+//-----------------------------------------------------
+if (appConfig.cluster == true) {
+    var cluster = require('cluster');
+    if (cluster.isMaster) {
+        var cpuCount = require('os').cpus().length;
+
+        var freeCpus = appConfig.freeCpus;
+        cpuCount = cpuCount - freeCpus;
+
+        if (cpuCount <= 0) {
+            cpuCount = 1;
+        }
+
+        for (var i = 0; i < cpuCount; i += 1) {
+            log.info("Creating worker...");
+            cluster.fork();
+        }
+
+        cluster.on('listening', function(worker, address) {
+            log.info("A worker is now connected to " + address.address + ":" + address.port);
+        });
+
+        cluster.on('disconnect', function(worker) {
+            log.info('The worker #' + worker.id + ' has disconnected');
+        });
+
+        // Listen for dying workers
+        cluster.on('exit', function (worker) {
+
+            // Replace the dead worker,
+            // we're not sentimental
+            log.error('The Worker #' + worker.id + ' has died');
+            log.error('... Restarting new worker');
+            cluster.fork();
+        });
+    } else {
+        setUpListener(app);
+    }
+} else {
+    setUpListener(app);
+}
+
+//-----------------------------------------------------
+//  SETUP ROUTING
+//-----------------------------------------------------
+
+require('./routers/routerloader');
+
