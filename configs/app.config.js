@@ -9,9 +9,9 @@ var environments = {
 //---------------------------------------------------------
 
 process.env.NODE_ENV = environments.DEVELOPMENT;
-process.env.PORT = 3001;
+process.env.PORT = 3000; //remember to change serverURL as well, when changing port!
 
-var serverUrl = "http://localhost:3001";
+var serverUrl = "http://localhost:3000";
 
 //---------------------------------------------------------
 // EXPORTS
