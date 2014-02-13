@@ -7,7 +7,7 @@ var log4js = require('log4js');
 //---------------------------------------------------------
 
 var props = {
-    logDir:"../Logs",
+    logDir:"Logs",
     logLevel:log4js.levels.ERROR,
     logName:"bio.indigenous.log"
 };

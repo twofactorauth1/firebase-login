@@ -1,0 +1,10 @@
+[2014-02-12 17:12:31.225] [INFO] app - Log4js setup successfully
+[2014-02-12 17:12:31.235] [INFO] app - Connected to MongoDB successfully
+[2014-02-12 17:12:31.396] [INFO] app - Passport Settings Enabled
+[2014-02-12 17:12:31.413] [INFO] app - Global App Cache setup
+[2014-02-12 17:12:31.625] [INFO] app - Express server listening on port 3000
+[2014-02-12 17:13:46.389] [INFO] app - Log4js setup successfully
+[2014-02-12 17:13:46.398] [INFO] app - Connected to MongoDB successfully
+[2014-02-12 17:13:46.442] [INFO] app - Passport Settings Enabled
+[2014-02-12 17:13:46.448] [INFO] app - Global App Cache setup
+[2014-02-12 17:13:46.507] [INFO] app - Express server listening on port 3000
