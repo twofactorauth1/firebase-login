@@ -9,9 +9,15 @@ var environments = {
 //---------------------------------------------------------
 
 process.env.NODE_ENV = environments.PRODUCTION;
-process.env.PORT = 3000; //remember to change serverURL as well, when changing port!
 
-var serverUrl = "http://localhost:3000";
+var serverUrl = "";
+//We don't want to specifcy a port if we're on MODULUS.IO - needs to be dynamic
+if (process.env.NODE_ENV != environments.PRODUCTION) {
+    process.env.PORT = 3000; //remember to change serverURL as well, when changing port!
+    serverUrl = "http://localhost:" + process.env.PORT;
+} else {
+    serverUrl = "http://indigenous-10744.onmodulus.net/";
+}
 
 //---------------------------------------------------------
 // EXPORTS
