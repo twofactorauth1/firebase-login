@@ -11,10 +11,6 @@ var express = require('express')
     , passport = require('passport')
     , models = require('./models')
     , routes = require('./routes')
-    , authRoutes = require('./routes/auth')
-    , crmRoutes = require('./routes/crm')
-    , clientRoutes = require('./routes/client')
-    , customerRoutes = require('./routes/customer')
     , subdomainAuthorize = require('./middlewares/subdomainAuthorize')
     , constants = require('./constants')
     , appConfig = require('./configs/app.config');
@@ -26,7 +22,7 @@ require('./utils/namespaces');
 
 
 //---------------------------------------------------------
-//  SETUP REQUIREJS FOR SHARED RESOURCES
+//  SETUP REQUIREJS  SHARED RESOURCES
 //---------------------------------------------------------
 require('./configs/requirejs.config');
 
@@ -80,15 +76,28 @@ app.use(passport.initialize());
 app.use(passport.session());
 //app.use(subdomainAuthorize()); //TODO: enable it before final deployment.
 app.use(app.router);
-app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(connect.compress());
 
-// development only
-if (process.env.NODE_ENV == appConfig.environments.DEVELOPMENT) {
+app.configure('development', function() {
     //TODO - Set up proper error handling for production environments
     app.use(express.errorHandler());
-}
+    app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
+    app.use(express.static(path.join(__dirname, 'public')));
+});
+
+app.configure('staging', function() {
+    //TODO - Set up proper error handling for production environments
+    app.use(express.errorHandler());
+    app.use(require('less-middleware')({ src: path.join(__dirname, 'public-built') }));
+    app.use(express.static(path.join(__dirname, 'public-built')));
+});
+
+app.configure('production', function() {
+    //TODO - Set up proper error handling for production environments
+    app.use(express.errorHandler());
+    app.use(require('less-middleware')({ src: path.join(__dirname, 'public-built') }));
+    app.use(express.static(path.join(__dirname, 'public-built')));
+});
 
 
 //-----------------------------------------------------
