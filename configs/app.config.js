@@ -20,7 +20,8 @@ module.exports = {
     environments: environments,
     environment: process.env.NODE_ENV,
     port: process.env.PORT,
-    view_engine: 'ejs', //'jade',
+    view_engine: 'jade', //'ejs'
+    view_dir: 'templates', //'views'
     server_url: serverUrl,
     cluster:false,
     freeCpus:2

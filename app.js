@@ -26,6 +26,12 @@ require('./utils/namespaces');
 
 
 //---------------------------------------------------------
+//  SETUP REQUIREJS FOR SHARED RESOURCES
+//---------------------------------------------------------
+require('./configs/requirejs.config');
+
+
+//---------------------------------------------------------
 //  SETUP LOGGING
 //---------------------------------------------------------
 require('./configs/log4js.config').configure();
@@ -61,7 +67,7 @@ var app = express();
 global.app = app;
 
 // all environments
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, appConfig.view_dir));
 app.set('view options', { layout:false });
 app.set('view engine', appConfig.view_engine);
 app.use(express.favicon());
