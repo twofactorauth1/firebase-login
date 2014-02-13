@@ -1,0 +1,33 @@
+doctype html
+html
+    head
+        block head
+            //- override this to include a different head section (e.g. requirehead.jade)
+            block headattributes
+                include standardhead
+            title=title
+            link(rel='stylesheet', href='/css/site.css')
+    body
+        #wrap
+            #header-background
+                include _header
+            .container
+                #container-alert.hide
+                #main-viewport
+                    block content
+                        //- Anything here gets overwritten by sub views that extend "block content"
+                //- some common modals
+                #common-modal.modal.fade.hide
+                //- common progress modal
+                #common-progress.modal.fade.hide
+                    #common-progress-title.modal-header Progress...
+                    .modal-body
+                        .progress.progress-striped.active
+                            .bar(style="width:100%") Processing...
+                    #common-progress-label.modal-footer
+
+            //required for sticky footer
+            #push
+
+        include _footer
+
