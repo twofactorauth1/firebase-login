@@ -31,11 +31,11 @@ switch(process.env.NODE_ENV) {
 
 var logConfigs = {
     "appenders": [
-        {
+        /*{
             "type":"dateFile",
             "filename":props.logName,
             "pattern":"-yyyy-MM-dd"
-        },
+        },*/
 
         {
             "type":"console"
