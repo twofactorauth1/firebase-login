@@ -3,8 +3,10 @@ var mongoose = require('mongoose');
 
 var connectionString = "mongodb://localhost/bioindigenous";
 
-if (typeof(process.env.MONGO_CONNECT) != 'undefined' && process.env.MONGO_CONNECT != null) {
-    connectionString = process.env.MONGO_CONNECT;
+if (process.env.NODE_ENV == config.environments.PRODUCTION) {
+    connectionString = "mongodb://indigenous:$Oxf25Ufo$@novus.modulusmongo.net:27017/H2inesux";
+} else if (process.env.PAAS_HOST != null && process.env.PAAS_HOST == "modulus") {
+    connectionString = "mongodb://indigenous:$Oxf25Ufo$@novus.modulusmongo.net:27017/H2inesux";
 }
 
 module.exports = {
