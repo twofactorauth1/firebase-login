@@ -8,7 +8,7 @@ var environments = {
 //  CONFIGURE THESE
 //---------------------------------------------------------
 
-process.env.NODE_ENV = environments.DEVELOPMENT;
+process.env.NODE_ENV = environments.PRODUCTION;
 process.env.PORT = 3000; //remember to change serverURL as well, when changing port!
 
 var serverUrl = "http://localhost:3000";
