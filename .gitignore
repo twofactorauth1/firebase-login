@@ -6,4 +6,5 @@ node_modules/
 *~
 .tmp
 *.log
+public/min/
 bioindigenous.komodoproject
