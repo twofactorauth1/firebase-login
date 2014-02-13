@@ -8,21 +8,22 @@ var environments = {
 //  CONFIGURE THESE
 //---------------------------------------------------------
 
-process.env.NODE_ENV = environments.PRODUCTION;
+if (process.env.NODE_ENV == null) {
+    process.env.NODE_ENV = environments.DEVELOPMENT;
+}
 
-var port = 3000;
+if (process.env.PORT == null) {
+    process.env.PORT = 3000;
+}
 
 //---------------------------------------------------------
 //
 //---------------------------------------------------------
-var serverUrl = "";
+var serverUrl = "http://localhost:" + process.env.PORT;
 
-//We don't want to specifcy a port if we're on MODULUS.IO - needs to be dynamic.
-if (process.env.NODE_ENV != environments.PRODUCTION || process.env.PORT == null) {
-    process.env.PORT = port; //remember to change serverURL as well, when changing port!
-    serverUrl = "http://localhost:" + process.env.PORT;
-} else {
-    serverUrl = "http://indigenous-10744.onmodulus.net/";
+//Attempt to get from environment, if set
+if (typeof(process.env.SERVER_URL) != 'undefined' && process.env.SERVER_URL != null) {
+    serverUrl = process.env.SERVER_URL;
 }
 
 

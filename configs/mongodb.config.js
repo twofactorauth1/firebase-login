@@ -1,11 +1,10 @@
 var config = require('./app.config');
 var mongoose = require('mongoose');
 
-var connectionString = "";
-if (process.env.NODE_ENV == config.environments.PRODUCTION) {
-    connectionString = "mongodb://indigenous:$Oxf25Ufo$@novus.modulusmongo.net:27017/H2inesux";
-} else {
-    connectionString = "mongodb://localhost/bioindigenous";
+var connectionString = "mongodb://localhost/bioindigenous";
+
+if (typeof(process.env.MONGO_CONNECT) != 'undefined' && process.env.MONGO_CONNECT != null) {
+    connectionString = process.env.MONGO_CONNECT;
 }
 
 module.exports = {
