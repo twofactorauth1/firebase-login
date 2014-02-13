@@ -1,0 +1,78 @@
+(function() {
+
+    var passThroughs = [
+        "/home",
+        "/login",
+        "/logout",
+        "/resetpassword",
+        "/",
+        ""
+    ];
+
+    //ensure we don't have any changed
+    $(document).on("click", "a", function(event) {
+        if ($(event.currentTarget).attr("target") == "_blank") {
+            return;
+        }
+        if ($(event.currentTarget).attr("href") == "#") {
+            return;
+        }
+        var hasUnsaved = $$.viewManager.hasUnsavedInMain();
+        if (hasUnsaved === true || _.isString(hasUnsaved)) {
+            var str = "There are unsaved changes on the page.  Are you sure you want to continue?";
+            if (!(hasUnsaved === true)) {
+                str = hasUnsaved + " Are you sure you want to continue?";
+            }
+
+            var continueWithLoad = window.confirm(str);
+
+            if (continueWithLoad === false) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+            }
+        }
+
+    });
+
+
+    //# Globally capture clicks. If they are internal and not in the pass
+    //# through list, route them through Backbone's navigate method.
+    $(document).on("click", "a[href^='/']", function(event) {
+        var href = $(event.currentTarget).attr("href");
+
+        var currPath = window.location.pathname;
+
+        var passThrough;
+        for(var i = 0; i < passThroughs.length; i++) {
+            if (href.indexOf(passThroughs[i]) >= 0) {
+                //if this is a passthrough, ensure we're not already on that base
+                if (passThroughs[i] !== "/" && currPath.indexOf(passThroughs[i]) === 0) {
+                    passThrough = false;
+                    break;
+                } else {
+                    passThrough = true;
+                    break;
+                }
+            }
+        }
+
+        if (!passThrough && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+            event.preventDefault();
+            var url = $(event.currentTarget).attr("href").replace(/^\//, "");
+            $$.r.mainAppRouter.navigate(url, { trigger: true });
+            return false;
+        }
+    });
+
+
+    var redirectHashTag = function() {
+        window.location = window.location.hash.substring(1);
+    };
+
+
+    $(document).ready(function() {
+        if (window.location.hash.indexOf("#") > -1) {
+            return redirectHashTag();
+        }
+    });
+}).call(this);
