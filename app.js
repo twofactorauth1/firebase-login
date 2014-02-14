@@ -165,10 +165,16 @@ require('./models_new/account');
 
 require('./dao/account.dao');
 
-console.log($$.m.Account.storage);
-
 $$.dao.AccountDao.getById(6, function(err, result) {
-    console.log(result.toJSON());
+    if (!err) {
+        result.set({name: "Geoff Mina"});
+        $$.dao.AccountDao.saveOrUpdate(result, function(err, result) {
+            console.log(result.toJSON());
+        });
+    } else {
+        console.log(err);
+    }
+
 });
 
 

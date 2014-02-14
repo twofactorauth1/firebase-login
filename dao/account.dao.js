@@ -3,10 +3,8 @@ var baseDao = require('./base.dao');
 var dao = {
 
     options: {
-        collection: "accounts",
-        name: "account.dao",
-        model: $$.m.Account,
-        storage: "mongo"
+        name:"account.dao",
+        defaultModel: $$.m.Account
     }
 };
 
