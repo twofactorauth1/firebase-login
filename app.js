@@ -159,23 +159,3 @@ if (appConfig.cluster == true) {
 //-----------------------------------------------------
 
 require('./routers/routerloader');
-
-
-require('./models_new/account');
-
-require('./dao/account.dao');
-
-$$.dao.AccountDao.getById(6, function(err, result) {
-    if (!err) {
-        result.set({name: "Geoff Mina"});
-        $$.dao.AccountDao.saveOrUpdate(result, function(err, result) {
-            console.log(result.toJSON());
-        });
-    } else {
-        console.log(err);
-    }
-
-});
-
-
-
