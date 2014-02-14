@@ -77,26 +77,21 @@ app.use(passport.session());
 //app.use(subdomainAuthorize()); //TODO: enable it before final deployment.
 app.use(app.router);
 app.use(connect.compress());
+app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.configure('development', function() {
-    //TODO - Set up proper error handling for production environments
     app.use(express.errorHandler());
-    app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
-    app.use(express.static(path.join(__dirname, 'public')));
 });
 
 app.configure('staging', function() {
     //TODO - Set up proper error handling for production environments
     app.use(express.errorHandler());
-    app.use(require('less-middleware')({ src: path.join(__dirname, 'public-built') }));
-    app.use(express.static(path.join(__dirname, 'public-built')));
 });
 
 app.configure('production', function() {
     //TODO - Set up proper error handling for production environments
     app.use(express.errorHandler());
-    app.use(require('less-middleware')({ src: path.join(__dirname, 'public-built') }));
-    app.use(express.static(path.join(__dirname, 'public-built')));
 });
 
 

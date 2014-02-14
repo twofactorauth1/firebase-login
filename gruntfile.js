@@ -3,18 +3,41 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        copy: {
+            main: {
+                expand: true,
+                src: ['!node_modules/','./**'],
+                dest: '../bio-release/'
+            }
+        },
+
+        clean: {
+            options: {
+                force:true
+            },
+            release: {
+                src: ["../bio-release/public/less","../bio-release/deploy", "../bio-release/public/css", "../bio-release/node_modules", "../bio-release/Logs/*.log", "../bio-release/public/js"]
+            }
+        },
+
+        less: {
+            style: {
+                files: {"../bio-release/public/css/site.css":"public/less/site.less"}
+            }
+        },
+
         requirejs: {
             compile: {
                 options: {
-                    baseUrl: "public/js",
+                    baseUrl: "public/js", //relative to appdir
 
                     appDir: "",
 
-                    dir: "public/min",
+                    dir: "../bio-release/public/js",
 
-                    mainConfigFile: "public/js/main.js",
+                    optimize: grunt.option('optimize') || 'none',
 
-                    optimize: "none",
+                    mainConfigFile:"public/js/main.js",
 
                     modules: [
                         { name: "main",
@@ -43,6 +66,10 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-less');
 
-    grunt.registerTask('default', ['requirejs']);
+    grunt.registerTask('default',['copy','clean','less','requirejs']);
+
 };
