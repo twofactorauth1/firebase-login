@@ -47,6 +47,16 @@ _.extend(modelBase.prototype, {
     },
 
 
+    storage: function() {
+        return this.__proto__.db.storage;
+    },
+
+
+    table: function() {
+        return this.__proto__.db.table;
+    },
+
+
     props: function() {
         return this.attributes;
     },

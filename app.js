@@ -165,6 +165,8 @@ require('./models_new/account');
 
 require('./dao/account.dao');
 
+console.log($$.m.Account.storage);
+
 $$.dao.AccountDao.getById(6, function(err, result) {
     console.log(result.toJSON());
 });

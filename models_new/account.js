@@ -14,6 +14,11 @@ var account = $$.m.ModelBase.extend({
     initialize: function(options) {
 
     }
+}, {
+    db: {
+        storage: "mongo",
+        table: "accounts"
+    }
 });
 
 $$.m.Account = account;

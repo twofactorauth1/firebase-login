@@ -5,7 +5,8 @@ var dao = {
     options: {
         collection: "accounts",
         name: "account.dao",
-        model: $$.m.Account
+        model: $$.m.Account,
+        storage: "mongo"
     }
 };
 

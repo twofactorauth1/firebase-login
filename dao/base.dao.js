@@ -19,7 +19,9 @@ _.extend(baseDao.prototype, {
         this.log = $$.g.getLogger(this.name || "base.dao");
 
         //ensure we have our ID counters set up for this collection
-        this._ensureCounters();
+        if (this.storage == "mongo" || (this.model && this.model.db.storage == "mongo")) {
+            this._ensureCounters();
+        }
 
         return this;
     },
@@ -27,9 +29,15 @@ _.extend(baseDao.prototype, {
 
     //region PUBLIC
     saveOrUpdate: function(model, fn) {
+        if (model.storage() == "mongo") {
+            this._saveOrUpdateMongo(model, fn);
+        }
+    },
+
+    _saveOrUpdateMongo: function(model, fn) {
         var self = this;
         if (model.id() == null) {
-            this.getNextSequence(function(err, value) {
+            this._getNextSequence(model.table, function(err, value) {
                 if (!err) {
                     model.id(value);
                     self.save(model, fn);
@@ -41,7 +49,7 @@ _.extend(baseDao.prototype, {
         }
 
         var self = this;
-        this.db().save(model.props(), function(err, result) {
+        this.db(model.table).save(model.props(), function(err, result) {
             if (!err) {
                 model.set(result[0]);
                 fn(null, model);
@@ -52,9 +60,16 @@ _.extend(baseDao.prototype, {
     },
 
 
-    getById: function(id, fn) {
+    getById: function(id, type, fn) {
+        if (type.db.storage == "mongo") {
+            this._getByIdMongo(id, fn);
+        }
+    },
+
+
+    _getByIdMongo: function(id, type, fn) {
         var self = this;
-        this.db().findById(id, function(err, result) {
+        this.db(type.db.table).findById(id, function(err, result) {
             if (!err) {
                 fn(err, new self.model(result));
             } else {
@@ -64,7 +79,7 @@ _.extend(baseDao.prototype, {
     },
 
 
-    getNextSequence: function(collection, fn) {
+    _getNextSequence: function(collection, fn) {
         var self = this;
 
         if (_.isFunction(collection)) {
@@ -77,7 +92,7 @@ _.extend(baseDao.prototype, {
         if (this._isLocked(collection)) {
             (function(collection, fn) {
                 self._registerUnlock(collection, function() {
-                    self.getNextSequence(collection, fn);
+                    self._getNextSequence(collection, fn);
                 });
             })(collection, fn);
             return;
