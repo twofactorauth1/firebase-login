@@ -160,3 +160,14 @@ if (appConfig.cluster == true) {
 
 require('./routers/routerloader');
 
+
+require('./models_new/account');
+
+require('./dao/account.dao');
+
+$$.dao.AccountDao.getById(6, function(err, result) {
+    console.log(result.toJSON());
+});
+
+
+
