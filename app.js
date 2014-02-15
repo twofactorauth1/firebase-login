@@ -1,19 +1,9 @@
 
-/**
- * Module dependencies.
- */
+//---------------------------------------------------------
+//  SETUP REQUIREJS FOR SHARED RESOURCES
+//---------------------------------------------------------
+require('./configs/requirejs.config');
 
-var express = require('express')
-    , connect = require('connect')
-    , mongoose = require('mongoose')
-    , http = require('http')
-    , path = require('path')
-    , passport = require('passport')
-    , models = require('./models')
-    , routes = require('./routes')
-    , subdomainAuthorize = require('./middlewares/subdomainAuthorize')
-    , constants = require('./constants')
-    , appConfig = require('./configs/app.config');
 
 //---------------------------------------------------------
 //  SETUP NAMESPACES
@@ -21,10 +11,34 @@ var express = require('express')
 require('./utils/namespaces');
 
 
+/**
+ * Module dependencies.
+ */
+
+var express = require('express')
+    , connect = require('connect')
+    , http = require('http')
+    , path = require('path')
+    , passport = require('passport')
+    , flash = require('connect-flash')
+    //, subdomainAuthorize = require('./middlewares/subdomainAuthorize')
+    , constants = require('./constants')
+    , appConfig = require('./configs/app.config')
+    , mongoConfig = require('./configs/mongodb.config')
+    , MongoStore = require('connect-mongo-store')(express)
+    , mongoStore = new MongoStore(mongoConfig.MONGODB_CONNECT);
+
+
 //---------------------------------------------------------
-//  SETUP REQUIREJS  SHARED RESOURCES
+//Load globally accessible libraries
 //---------------------------------------------------------
-require('./configs/requirejs.config');
+_ = require('underscore');
+requirejs('utils/commonutils');
+var deferred = require("jquery-deferred");
+if (typeof $ == 'undefined') {
+    $ = {};
+}
+_.extend($, deferred);
 
 
 //---------------------------------------------------------
@@ -38,15 +52,22 @@ log.info("Log4js setup successfully");
 //---------------------------------------------------------
 //  INIT MONGODB
 //---------------------------------------------------------
-require('./configs/mongodb.config').connect();
+mongoConfig.connect();
 log.info("Connected to MongoDB successfully");
+
+
+//-----------------------------------------------------
+//  CONFIGURE PASSPORT & STRATEGIES
+//-----------------------------------------------------
+require('./authentication/passport.setup');
 
 
 //---------------------------------------------------------
 //  SETUP PASSPORT METHODS
 //---------------------------------------------------------
-require('./utils/passportsetup');
-log.info('Passport Settings Enabled');
+
+//require('./utils/passportsetup');
+//log.info('Passport Settings Enabled');
 
 
 //---------------------------------------------------------
@@ -57,9 +78,23 @@ log.info("Global App Cache setup");
 
 
 //---------------------------------------------------------
+//  LIST FOR CONNECTIONS TO MONGODB SESSION STORE
+//---------------------------------------------------------
+
+mongoStore.on('connect', function() {
+    log.info("Session store is ready for use");
+});
+
+mongoStore.on('error', function() {
+    log.error("An error occurred connecting to MongoDB Session Storage");
+});
+
+
+
+//---------------------------------------------------------
 //  INIT APPLICATION
 //---------------------------------------------------------
-var app = express();
+app = express();
 global.app = app;
 
 // all environments
@@ -71,9 +106,23 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('mys3cr3tco00k13s'));
-app.use(express.session());
+app.use(express.session({
+    store: mongoStore,
+    secret: 'mys3cr3t',
+    cookie: {maxAge:24*60*60*1000} //stay open for 1 day of inactivity
+}));
+
+//Middle ware to refresh the session cookie expiration on every hit
+app.use(function(req, res, next) {
+    req.session._garbage = Date();
+    req.session.touch();
+    next();
+});
+
+//app.use(express.session({ secret:'mys3cr3ts3sEss10n' }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 //app.use(subdomainAuthorize()); //TODO: enable it before final deployment.
 app.use(app.router);
 app.use(connect.compress());
@@ -154,8 +203,14 @@ if (appConfig.cluster == true) {
     setUpListener(app);
 }
 
+
 //-----------------------------------------------------
 //  SETUP ROUTING
 //-----------------------------------------------------
+require('./routers/router.manager');
 
-require('./routers/routerloader');
+
+//-----------------------------------------------------
+//  SETUP API
+//-----------------------------------------------------
+require('./api/api.manager');

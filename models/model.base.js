@@ -1,6 +1,3 @@
-_ = require('underscore');
-var utils = requirejs('utils/commonutils');
-
 var modelBase = function(options) {
     this.init.apply(this, arguments);
 };

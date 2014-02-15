@@ -1,0 +1,25 @@
+extends snippets/_requirelayout
+
+block content
+    #body
+        form(role="form", action="/login" method="post")
+            if errorMsg
+                p.bg-danger(style="padding:15px;"): b #{errorMsg}
+
+            input.hidden(type="text" name="remembermepresent")
+            div.form-group
+                label Username
+                input.form-control(type="text", name="username", placeholder="Username")
+
+            div.form-group
+                label Password
+                input.form-control(type="password" name="password", placeholder="Password")
+
+            div.checkbox
+                label
+                    input(type="checkbox" name="rememberme" id="rememberme")
+                    |Remember me on this computer
+
+            div.btn-toolbar
+                button.btn.btn-primary(type="submit", value="Login" role="button") Login
+                a.btn.btn-default(href="/signup", role="button") Signup Now

@@ -23,7 +23,11 @@
     "requirejs": "2.1.10",
     "node-uuid": "1.4.1",
     "json-gate": "0.8.21",
-    "mongoskin": "0.6.1"
+    "mongoskin": "0.6.1",
+    "bcrypt":">=0.7.5",
+    "jquery-deferred":"0.3.0",
+    "connect-flash":"0.1.1",
+    "connect-mongo-store":"0.1.8"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

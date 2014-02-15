@@ -1,11 +1,10 @@
-_ = require('underscore');
 var mongoBaseDao = require('./base.dao.mongo');
 
 var baseDao = function() {
 
 };
 
-_.extend(baseDao.prototype, mongoBaseDao.mongodao, {
+_.extend(baseDao.prototype, mongoBaseDao, {
 
     name: "",
     model: null,
@@ -24,7 +23,9 @@ _.extend(baseDao.prototype, mongoBaseDao.mongodao, {
         if (this.getStorage(model) === "mongo") {
             this._saveOrUpdateMongo(model, fn);
         } else {
-            fn("No storage medium available for this model");
+            if (fn != null) {
+                fn("No storage medium available for this model");
+            }
         }
     },
 
@@ -32,6 +33,15 @@ _.extend(baseDao.prototype, mongoBaseDao.mongodao, {
     getById: function(id, type, fn) {
         if (this.getStorage(type) === "mongo") {
             this._getByIdMongo(id, type, fn);
+        } else {
+            fn("No storage medium available for this model");
+        }
+    },
+
+
+    findOne: function(query, type, fn) {
+        if (this.getStorage(type) === "mongo") {
+            this._findOneMongo(query, type, fn);
         } else {
             fn("No storage medium available for this model");
         }
@@ -65,4 +75,4 @@ _.extend(baseDao.prototype, mongoBaseDao.mongodao, {
 $$.dao = $$.dao || {};
 $$.dao.BaseDao = baseDao;
 
-module.exports.BaseDao = baseDao;
+module.exports = baseDao;

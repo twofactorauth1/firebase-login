@@ -19,6 +19,17 @@ var mongodao = {
     },
 
 
+    _createModel: function(object, type) {
+        if (object == null) {
+            return null;
+        }
+        if (_.isFunction(type)) {
+            return new type(object);
+        } else {
+            return new this.defaultModel(object);
+        }
+    },
+
     //region PROTECTED
     _getByIdMongo: function(id, type, fn) {
         var self = this;
@@ -31,7 +42,7 @@ var mongodao = {
         var collection = this.getTable(type);
         this.mongo(collection).findById(id, function(err, result) {
             if (!err) {
-                fn(err, new self.defaultModel(result));
+                fn(err, self._createModel(result));
             } else {
                 fn(err, result);
             }
@@ -39,16 +50,36 @@ var mongodao = {
     },
 
 
+    _findOneMongo: function(query, type, fn) {
+        var self = this;
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+        this.mongo(collection).findOne(query, function(err, result) {
+           if (!err) {
+                   fn(err, self._createModel(result));
+           } else {
+               fn(err, result);
+           }
+        });
+    },
+
+
     _saveOrUpdateMongo: function(model, fn) {
         var self = this;
         var collection = this.getTable(model);
-        if (model.id() == null) {
+        if (model.id() == null || model.id() == 0 || model.id() == "") {
             this._getNextSequence(collection, function(err, value) {
                 if (!err) {
                     model.id(value);
-                    self.save(model, fn);
+                    self._saveOrUpdateMongo(model, fn);
                 } else {
-                    fn(err, value);
+                    if (fn != null) {
+                        fn(err, value);
+                    }
                 }
             });
             return;
@@ -57,10 +88,13 @@ var mongodao = {
         var self = this;
         this.mongo(collection).save(model.props(), function(err, result) {
             if (!err) {
-                model.set(result[0]);
-                fn(null, model);
+                if (fn != null) {
+                    fn(null, model);
+                }
             } else {
-                fn(err, result);
+                if (fn != null) {
+                    fn(err, value);
+                }
             }
         });
     },
@@ -92,9 +126,13 @@ var mongodao = {
             { new: true, upsert: true },
             function(err, value) {
                 if (!err && value != null && value.hasOwnProperty('seq')) {
-                    fn(null, value.seq);
+                    if (fn != null) {
+                        fn(null, value.seq);
+                    }
                 } else {
-                    fn(err, value);
+                    if (fn != null) {
+                        fn(err, value);
+                    }
                 }
             }
         );
@@ -171,4 +209,4 @@ var mongodao = {
     //endregion PRIVATE
 };
 
-module.exports.mongodao = mongodao;
+module.exports = mongodao;

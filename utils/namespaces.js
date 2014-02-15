@@ -12,6 +12,8 @@
 
     $$ = $$ || {};
     $$.m = $$.models = $$.models || {};
+    $$.v = $$.views = $$.views || {};
+    $$.r = $$.routers = $$.routers || {};
     $$.s = $$.security = $$.security || {};
     $$.g = $$.global = global = $$.global || {};
 
