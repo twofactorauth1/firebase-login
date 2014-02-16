@@ -3,6 +3,43 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+
+        compilehbs: {
+            options: {
+                source: "public/templates",
+                output: "hbs",
+                helpers: "public/js/compiled/hbshelpers.js"
+            },
+            main: {
+
+            }
+        },
+
+        handlebars: {
+            options: {
+                amd: true,
+                partialsUseNamespace: true,
+
+                namespace: function(filename) {
+                    var names = filename.replace(/hbs\/(.*)(\/\w+\.hbs)/, '$1');
+                    names = names.split('/').join('.').replace(".hbs", "");
+                    grunt.log.write(names);
+                    grunt.log.writeln();
+                    return names;
+                },
+
+                processName: function(filename) {
+                    return "hbs";
+                }
+            },
+            main: {
+                files: { 'public/js/compiled/templates.js' : [ 'hbs/*/*.hbs'] }
+            },
+            apps: {
+                files: { 'public/js/compiled/apps/templates.js' : [ 'hbs/apps/**/*.hbs'] }
+            }
+        },
+
         copy: {
             main: {
                 expand: true,
@@ -14,6 +51,12 @@ module.exports = function(grunt) {
         clean: {
             options: {
                 force:true
+            },
+            hbs: {
+                src: ["hbs"]
+            },
+            biorelease: {
+                src: ["../bio-release"]
             },
             release: {
                 src: ["../bio-release/public/less","../bio-release/deploy", "../bio-release/public/css", "../bio-release/node_modules", "../bio-release/Logs/*.log", "../bio-release/public/js"]
@@ -43,7 +86,7 @@ module.exports = function(grunt) {
                         { name: "main",
                             excludeShallow: [],
                             include: [
-                                'css', 'normalize','text',
+                                'css', 'normalize','text'
                             ]},
                         { name: "routers/home.router", excludeShallow:['utils/cachemixin','libs/requirejs/plugins/text']}
                     ],
@@ -69,7 +112,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-contrib-handlebars');
+    grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
-    grunt.registerTask('default',['copy','clean','less','requirejs']);
+    grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
+    grunt.registerTask('copyroot', ['clean:biorelease','copy']);
+    grunt.registerTask('default',['clean:release','less','requirejs']);
 
 };

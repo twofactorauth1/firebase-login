@@ -71,7 +71,8 @@ require.config({
                 'backbone',
                 'backboneExtended',
                 'handlebars',
-                'bootstrap'
+                'bootstrap',
+                'handlebars'
             ]
         }
     },
@@ -96,10 +97,7 @@ require.config({
 
 define([
     'app',
-    'text!templates/Utils.html'
-], function (app, utilTempltaes) {
-    $$.templateManager.setFile(utilTempltaes, "utils");
-
+], function (app) {
     $(document).ready(function(){
         app.initialize();
     });

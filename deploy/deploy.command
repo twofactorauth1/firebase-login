@@ -7,11 +7,16 @@ cd ../
 
 echo $(pwd)
 
+# Compile all handlebars templates
+grunt compiletemplates
+
+# run grunt copy - this removes old bio-release dir and copies new one in
+grunt copyroot
+
 # run grunt
-grunt
+grunt default
 
 # deploy to modulus
 cd ../bio-release
 
-echo $(pwd)
-modulus deploy
+#--modulus deploy

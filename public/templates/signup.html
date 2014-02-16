@@ -1,9 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+<script type="text/x-handlebars-template" name="text-template-1">
+    HELLO
+</script>
 
-</body>
-</html>
+
+<script type="text/x-handlebars-template" name="text-template-2">
+    HELLO WORLD {{> signup-partial}}
+</script>
+
+
+<script type="text/x-handlebars-template" name="signup-partial" partial="true">
+    MY PARTIAL! {{name}}
+</script>
+
+
+<script type="text/javascript">
+    Handlebars.registerHelper("my-test-helper", function() {
+        return "TESTING!"
+    });
+
+    Handlebars.registerHelper("my-test-helper2", function() {
+        return "TESTING2!"
+    });
+</script>

@@ -4,8 +4,15 @@ define([
     'handlebarsHelpers',
     'viewManager',
     'appsetup',
-    'pushStateUtils'
-], function () {
+    'pushStateUtils',
+
+    'text!templates/Utils.html',
+    'compiled/hbshelpers',
+    'compiled/templates',
+    'compiled/apps/templates'
+], function (a1,a2,a3,a4,a5,a6,utilsTemplate,hbsHelpers,mainTemplates, appTemplates) {
+
+    $$.templateManager.setFile(utilsTemplate, "utils");
 
     var app = {
 
