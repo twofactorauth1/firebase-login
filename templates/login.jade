@@ -1,10 +1,8 @@
-extends snippets/_requirelayout
+extends snippets/_layout
 
 block content
     #body
         form(role="form", action="/login" method="post")
-            if errorMsg
-                p.bg-danger(style="padding:15px;"): b #{errorMsg}
 
             input.hidden(type="text" name="remembermepresent")
             div.form-group
@@ -22,4 +20,5 @@ block content
 
             div.btn-toolbar
                 button.btn.btn-primary(type="submit", value="Login" role="button") Login
+                a.btn.btn-primary(href="/forgotpassword", role="button") Forgot Password
                 a.btn.btn-default(href="/signup", role="button") Signup Now

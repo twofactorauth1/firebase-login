@@ -4,7 +4,8 @@
         "/home",
         "/login",
         "/logout",
-        "/resetpassword",
+        "/forgotpassword",
+        "/signup",
         "/",
         ""
     ];
@@ -31,7 +32,6 @@
                 event.stopImmediatePropagation();
             }
         }
-
     });
 
 
@@ -47,6 +47,9 @@
             if (href.indexOf(passThroughs[i]) >= 0) {
                 //if this is a passthrough, ensure we're not already on that base
                 if (passThroughs[i] !== "/" && currPath.indexOf(passThroughs[i]) === 0) {
+                    passThrough = false;
+                    break;
+                } else if (passThroughs[i] === "/") {
                     passThrough = false;
                     break;
                 } else {

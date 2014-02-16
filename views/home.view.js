@@ -6,9 +6,14 @@ var view = function(req,resp,options) {
 
 _.extend(view.prototype, BaseView.prototype, {
 
-    show: function() {
-        var data = this.baseData();
-        data.location = "home";
+    show: function(root) {
+        var data = this.baseData(
+            {
+                router:"home",
+                root:root || "home",
+                location:"home"
+            }
+        );
 
         this.resp.render('home', data);
     }

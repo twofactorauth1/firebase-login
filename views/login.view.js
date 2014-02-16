@@ -7,12 +7,14 @@ var view = function(req,resp,options) {
 _.extend(view.prototype, BaseView.prototype, {
 
     show: function() {
-        var data = this.baseData();
+        var data = this.baseData({
+
+        });
 
         this.resp.render('login', data);
     }
 });
 
-$$.v.HomeView = view;
+$$.v.LoginView = view;
 
 module.exports = view;

@@ -27,7 +27,8 @@
     "bcrypt":">=0.7.5",
     "jquery-deferred":"0.3.0",
     "connect-flash":"0.1.1",
-    "connect-mongo-store":"0.1.8"
+    "connect-mongo-store":"0.1.8",
+    "nodemailer":"0.6.0"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

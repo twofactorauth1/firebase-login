@@ -44,6 +44,11 @@ _.extend(modelBase.prototype, {
     },
 
 
+    clear: function(key) {
+        delete this.attributes[key];
+    },
+
+
     storage: function() {
         return this.__proto__.db.storage;
     },

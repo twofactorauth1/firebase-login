@@ -56,7 +56,11 @@ define([
 
 
             generateUniqueAlphaNumeric: function () {
-                return ((new Date().getTime() * parseInt(Math.random() * 1000, 8)) + new Date().getTime()).toString(36);
+                var val = ((new Date().getTime() * parseInt(Math.random() * 1000)) + new Date().getTime()).toString(36);
+                if (val == NaN || val == undefined) {
+                    return this.generateUniqueAlphaNumeric();
+                }
+                return val;
             },
 
 

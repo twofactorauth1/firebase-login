@@ -4,8 +4,6 @@ block content
         h3 Create an account
 
         form(role="form", action="/signup" method="post")
-            if errorMsg
-                p.bg-danger(style="padding:15px;"): b #{errorMsg}
 
             div.form-group
                 label Username

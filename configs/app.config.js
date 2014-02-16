@@ -37,6 +37,7 @@ module.exports = {
     view_engine: 'jade',
     view_dir: 'templates',
     server_url: serverUrl,
+    support_email: "support@indigenous.com",
     cluster:false,
     freeCpus:2
 };

@@ -7,7 +7,10 @@ var view = function(req,resp,options) {
 _.extend(view.prototype, BaseView.prototype, {
 
     show: function() {
-        var data = this.baseData();
+        var data = this.baseData({
+            router:"signup",
+            root:"signup"
+        });
 
         this.resp.render('signup', data);
     }

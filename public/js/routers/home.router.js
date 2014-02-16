@@ -6,7 +6,8 @@ define([
 
         routes: {
             "":"showHome",
-            "/":"showHome"
+            "/":"showHome",
+            "/home":"showHome"
         },
 
         showHome: function() {
@@ -18,10 +19,7 @@ define([
         }
     });
 
-    var initialize = function () {
-        $$.r.homeRouter = new router();
-        return $$.r.homeRouter;
-    };
+    $$.r.homeRouter = new router();
 
-    return { initialize: initialize };
+    return $$.r.homeRouter;
 });

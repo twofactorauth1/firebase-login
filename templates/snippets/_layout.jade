@@ -12,7 +12,17 @@ html
             #header-background
                 include _header
             .container
-                #container-alert.hide
+                if errorMsg
+                    p.bg-danger(id="error-msg" style="padding:15px;"): b #{errorMsg}
+                else
+                    p.bg-danger.hidden(id="error-msg" style="padding:15px;")
+
+                if infoMsg
+                   p.bg-info(id="info-msg" style="padding:15px"): b #{infoMsg}
+                else
+                    p.bg-info.hidden(id="info-msg" style="padding:15px"): b #{infoMsg}
+
+                #container-alert.hidden
                 #main-viewport
                     block content
                         //- Anything here gets overwritten by sub views that extend "block content"

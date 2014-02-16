@@ -1,4 +1,5 @@
 require('../utils/jadehelpers');
+var url = require('url');
 
 var baseView = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -22,13 +23,33 @@ _.extend(baseView.prototype, {
         }
     },
 
-    baseData: function() {
+    baseData: function(options) {
+        options = options || {};
+        var serverProps = options.serverProps || {};
+        serverProps.router = options.router;
+        serverProps.root = options.root;
+
+        delete options.router;
+        delete options.root;
+
         var data = {
-            title: "indigenous"
+            title: "indigenous",
+            serverProps: serverProps
         };
+
+        if (this.req.user != null) {
+            data.serverProps.userId = this.req.user.id();
+        }
 
         try {
             data.errorMsg = this.req.flash('error')[0];
+        }catch(exception) {
+            console.log(exception);
+        }
+
+
+        try {
+            data.infoMsg = this.req.flash('info')[0];
         }catch(exception) {
             console.log(exception);
         }
@@ -39,6 +60,11 @@ _.extend(baseView.prototype, {
         } else {
             data.authenticated = false;
         }
+
+        for(var key in options) {
+            data[key] = options[key];
+        }
+
         return data;
     }
 });

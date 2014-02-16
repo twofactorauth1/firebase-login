@@ -12,27 +12,6 @@ var dao = {
         defaultModel: $$.m.User
     },
 
-
-    getUserBySessionId: function(sessionId, fn) {
-        this.findOne( { 'sessions.id':sessionid }, fn)
-    },
-
-
-    getUserIdBySessionId: function(sessionId, fn) {
-        this.getUserBySessionId(sessionId, function(err, value) {
-            if (!err ) {
-                if (value != null) {
-                    fn(null, value.id());
-                } else {
-                    fn(null, null);
-                }
-            } else {
-                fn(err, value);
-            }
-        });
-    },
-
-
     getUserByUserName: function(username, fn) {
         this.findOne( {'username':username}, fn);
     },
@@ -40,6 +19,48 @@ var dao = {
 
     getUserByEmail: function(email, fn) {
         this.findOne( {'email':email}, fn);
+    },
+
+
+    getUserByUsernameOrEmail: function(username, fn) {
+        var deferred = $.Deferred();
+        var self = this;
+        var fxn1, fxn2;
+
+        var isEmail = $$.u.validate(username, { required: true, email: true }).success;
+
+        if (isEmail) {
+            fxn1 = this.getUserByEmail;
+            fxn2 = this.getUserByUserName;
+        } else {
+            fxn1 = this.getUserByUserName;
+            fxn2 = this.getUserByEmail;
+        }
+
+        fxn1.call(self, username, function(err, value) {
+            if (err || value == null) {
+                fxn2.call(self, username, function(err, value) {
+                    if (!err) {
+                        deferred.resolve(value);
+                        if (fn) {
+                            fn(null, value);
+                        }
+                    } else {
+                        deferred.reject(err);
+                        if (fn) {
+                            fn(err, value);
+                        }
+                    }
+                });
+            } else {
+                deferred.resolve(value);
+                if (fn) {
+                    fn(null, value);
+                }
+            }
+        });
+
+        return deferred;
     },
 
 

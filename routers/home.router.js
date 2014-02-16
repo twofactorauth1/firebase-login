@@ -1,5 +1,5 @@
 var BaseRouter = require('./base.router');
-var HomeView = require('../')
+var HomeView = require('../views/home.view');
 
 
 var router = function() {
@@ -11,20 +11,20 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/", this.isAuth, this.index.bind(this));
+        app.get("/", this.index.bind(this));
         app.get("/home", this.isAuth, this.showHome.bind(this));
-
         return this;
     },
 
 
     index: function(req,resp) {
-        resp.render('index', { title: 'Indigenous' });
+        resp.redirect("/home");
+        //new HomeView(req,resp).show("");
     },
 
 
     showHome: function(req,resp) {
-        new HomeView(req,resp).show();
+        new HomeView(req,resp).show("home");
     }
 });
 

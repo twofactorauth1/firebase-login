@@ -34,6 +34,7 @@ var express = require('express')
 //---------------------------------------------------------
 _ = require('underscore');
 requirejs('utils/commonutils');
+require('./utils/jsvalidate');
 var deferred = require("jquery-deferred");
 if (typeof $ == 'undefined') {
     $ = {};
@@ -63,14 +64,6 @@ require('./authentication/passport.setup');
 
 
 //---------------------------------------------------------
-//  SETUP PASSPORT METHODS
-//---------------------------------------------------------
-
-//require('./utils/passportsetup');
-//log.info('Passport Settings Enabled');
-
-
-//---------------------------------------------------------
 //  SETUP APP CACHE
 //---------------------------------------------------------
 $$.g.cache = require('./configs/cache.config').configure();
@@ -89,6 +82,11 @@ mongoStore.on('error', function() {
     log.error("An error occurred connecting to MongoDB Session Storage");
 });
 
+
+//---------------------------------------------------------
+//  SET UP EMAILER
+//---------------------------------------------------------
+require('./configs/nodemailer.config').configure();
 
 
 //---------------------------------------------------------

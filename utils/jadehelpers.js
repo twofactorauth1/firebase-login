@@ -39,13 +39,13 @@ app.locals.formatDateDiff = $$.u.formatutils.formatDateDiffInHHMMSS;
 //-------------------------------
 app.locals.setServerProp = function(key, value) {
     var str =
-        "window.siplynks = window.siplynks || {};" +
-            "window.siplynks.server = window.siplynks.server || {};";
+        "window.indigenous = window.indigeous || {};" +
+            "window.indigenous.server = window.indigenous.server || {};";
 
     if (_.isNaN(parseFloat(value)) == false || value == null || _.isBoolean(value)) {
-        str +=  "window.siplynks.server." + key + "=" + value;
+        str +=  "window.indigeous.server." + key + "=" + value;
     } else {
-        str += "window.siplynks.server." + key + "='" + value + "'";
+        str += "window.indigenous.server." + key + "='" + value + "'";
     }
     return str;
 };
@@ -53,16 +53,16 @@ app.locals.setServerProp = function(key, value) {
 
 app.locals.setServerProps = function(serverProps) {
     var str =
-        "window.siplynks = window.siplynks || {};" +
-            "window.siplynks.server = window.siplynks.server || {};";
+        "window.indigenous = window.indigenous || {};" +
+            "window.indigenous.server = window.indigenous.server || {};";
 
     for (var key in serverProps) {
         var value = serverProps[key];
 
         if (_.isNaN(parseFloat(value)) == false || value == null || _.isBoolean(value)) {
-            str +=  "window.siplynks.server." + key + "=" + value + ";";
+            str +=  "window.indigenous.server." + key + "=" + value + ";";
         } else {
-            str += "window.siplynks.server." + key + "='" + value + "';";
+            str += "window.indigenous.server." + key + "='" + value + "';";
         }
     }
     return str;

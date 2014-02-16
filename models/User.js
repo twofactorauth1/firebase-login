@@ -7,6 +7,8 @@ var user = $$.m.ModelBase.extend({
         accountId: null,
         username:"",
         email: "",
+        first:"",
+        last:"",
         credentials: [], //[ { type:int, username:string, password:string, oathtoken:string } ]
         name:""
     },
@@ -61,6 +63,28 @@ var user = $$.m.ModelBase.extend({
 
         if (creds != null && isNew == true) {
             credentials.push(creds);
+        }
+    },
+
+
+    setPasswordRecoverToken: function() {
+        var token = $$.u.idutils.generateUniqueAlphaNumeric();
+        this.set({passRecover:token, passRecoverExp:new Date().getTime() + $$.u.dateutils.DAY_IN_SEC * 1000});
+        return token;
+    },
+
+
+    clearPasswordRecoverToken: function() {
+        this.clear("passRecover");
+        this.clear("passRecoverExp");
+    },
+
+
+    fullName: function() {
+        if (this.get("first") != null) {
+            return this.get("first") + this.get("last") == null ? "" : (" " + this.get("last"));
+        } else {
+            return this.get("username");
         }
     }
 

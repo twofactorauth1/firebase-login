@@ -10,18 +10,23 @@ define([
     var app = {
 
         initialize: function () {
-            var routerName = "home.router";
+            var root = "home";
+            if ($$.server.get("root") != null) {
+                root = $$.server.get("root");
+            }
+
+            var routerName = "home";
             if ($$.server.get("router") != null) {
                 routerName = $$.server.get("router");
             }
 
-            routerName = "routers/" + routerName;
+            var _routerName = "routers/" + routerName + ".router";
 
-            require([routerName], function (router) {
-                $$.r.mainAppRouter = router.initialize();
+            require([_routerName], function (router) {
+                $$.r.mainAppRouter = router;
                 Backbone.history.start({
                     pushState:true,
-                    root: "/"
+                    root: "/" + root
                 });
             });
         }

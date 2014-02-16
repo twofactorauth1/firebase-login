@@ -5,6 +5,7 @@ var AccountDao = require('../dao/account.dao');
 var cookies = require("../utils/cookieutil");
 
 var LoginView = require('../views/login.view');
+var ForgotPasswordView = require('../views/forgotpassword.view');
 var SignupView = require('../views/signup.view');
 
 var router = function() {
@@ -24,10 +25,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/signup", this.showSignup.bind(this));
         app.post("/signup", this.handleSignup.bind(this));
 
+        app.get("/forgotpassword", this.showForgotPassword.bind(this));
+        app.post("/forgotpassword", this.handleForgotPassword.bind(this));
+        app.get("/forgotpassword/reset/:token", this.showResetPasswordByToken.bind(this));
+        app.post("/forgotpassword/reset/:token", this.handleResetPasswordByToken.bind(this));
+
         return this;
     },
 
 
+    //region LOGIN / LOGOUT
     showLogin: function(req,resp) {
         if (req.isAuthenticated()) {
             return resp.redirect("/");
@@ -49,8 +56,45 @@ _.extend(router.prototype, BaseRouter.prototype, {
         req.logout();
         return resp.redirect("/");
     },
+    //endregion
+
+    //region FORGOT PASSWORD
+    showForgotPassword: function(req,resp) {
+        if (req.isAuthenticated()) {
+            return resp.redirect("/");
+        }
+
+        new ForgotPasswordView(req,resp).show();
+    },
 
 
+    handleForgotPassword: function(req,resp) {
+        var username = req.body.username;
+        new ForgotPasswordView(req,resp).handleForgotPassword(username);
+    },
+
+
+    showResetPasswordByToken: function(req,resp) {
+        var token = req.params.token;
+        new ForgotPasswordView(req,resp).resetByToken(token);
+    },
+
+
+    handleResetPasswordByToken: function(req,resp) {
+        var password = req.body.password;
+        var password2 = req.body.password2;
+        var token = req.params.token;
+
+        if (password !== password2) {
+            req.flash("error", "Passwords do not match");
+            return resp.redirect("/forgotpassword/reset/" + token);
+        }
+
+        new ForgotPasswordView(req,resp).handleResetByToken(token, password);
+    },
+    //endregion
+
+    //region SIGNUP
     showSignup: function(req,resp) {
         if (req.isAuthenticated()) {
             return resp.redirect("/");
@@ -91,6 +135,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             }
         });
     }
+    //endregion
 });
 
 module.exports = new router();
