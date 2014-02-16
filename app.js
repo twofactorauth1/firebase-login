@@ -50,12 +50,6 @@ var log = $$.g.getLogger("app");
 log.info("Log4js setup successfully");
 
 
-//---------------------------------------------------------
-//  INIT MONGODB
-//---------------------------------------------------------
-mongoConfig.connect();
-log.info("Connected to MongoDB successfully");
-
 
 //-----------------------------------------------------
 //  CONFIGURE PASSPORT & STRATEGIES
