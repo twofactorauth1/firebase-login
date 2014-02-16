@@ -4,6 +4,15 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
 
+        copy: {
+            main: {
+                expand: true,
+                src: ['./**'],
+                dest: '../bio-release/'
+            }
+        },
+
+
         compilehbs: {
             options: {
                 source: "public/templates",
@@ -40,14 +49,6 @@ module.exports = function(grunt) {
             }
         },
 
-        copy: {
-            main: {
-                expand: true,
-                src: ['!node_modules/','./**'],
-                dest: '../bio-release/'
-            }
-        },
-
         clean: {
             options: {
                 force:true
@@ -59,15 +60,17 @@ module.exports = function(grunt) {
                 src: ["../bio-release"]
             },
             release: {
-                src: ["../bio-release/public/less","../bio-release/deploy", "../bio-release/public/css", "../bio-release/node_modules", "../bio-release/Logs/*.log", "../bio-release/public/js"]
+                src: ["../bio-release/public/less","../bio-release/deploy", "../bio-release/public/css", /*"../bio-release/node_modules", */"../bio-release/Logs/*.log", "../bio-release/public/js"]
             }
         },
+
 
         less: {
             style: {
                 files: {"../bio-release/public/css/site.css":"public/less/site.less"}
             }
         },
+
 
         requirejs: {
             compile: {
@@ -89,20 +92,7 @@ module.exports = function(grunt) {
                                 'css', 'normalize','text'
                             ]},
                         { name: "routers/home.router", excludeShallow:['utils/cachemixin','libs/requirejs/plugins/text']}
-                    ],
-
-
-                    done: function(done, output) {
-                        var duplicates = require('rjs-build-analysis').duplicates(output);
-
-                        if (duplicates.length > 0) {
-                            grunt.log.subhead('Duplicates found in requirejs build:');
-                            grunt.log.warn(duplicates);
-                            done(new Error('r.js built duplicate modules, please check the excludes option.'));
-                        }
-
-                        done();
-                    }
+                    ]
                 }
             }
         }
@@ -116,7 +106,7 @@ module.exports = function(grunt) {
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
-    grunt.registerTask('copyroot', ['clean:biorelease','copy']);
-    grunt.registerTask('default',['clean:release','less','requirejs']);
+    grunt.registerTask('copyroot', ['clean:biorelease','copy:main']);
+    grunt.registerTask('production',['clean:release','less','requirejs']);
 
 };

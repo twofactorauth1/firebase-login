@@ -7,16 +7,23 @@ cd ../
 
 echo $(pwd)
 
-# Compile all handlebars templates
-grunt compiletemplates
-
 # run grunt copy - this removes old bio-release dir and copies new one in
 grunt copyroot
 
-# run grunt
-grunt default
-
-# deploy to modulus
+# Get into newly created deploy file
 cd ../bio-release
 
+# remove original main file
+rm -f public/js/main.js
+
+# rename mainforproduction to main.js
+mv public/js/mainforproduction.js public/js/main.js
+
+# Compile all handlebars templates
+grunt compiletemplates
+
+# run grunt
+grunt production
+
+# deploy to modulus
 #--modulus deploy

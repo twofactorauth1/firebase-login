@@ -1,5 +1,5 @@
 if (typeof CACHEBUSTER === 'undefined') {
-    CACHEBUSTER = new Date().getTime();
+    CACHEBUSTER = '2014.02.15'
 }
 
 require.config({
@@ -10,7 +10,7 @@ require.config({
         backbone: 'libs/backbone/backbone',
         backboneAssoc: 'libs/backbone/backbone-associations',
         backboneExtended: 'libs/backbone/backboneExtended',
-        handlebars: 'libs/handlebars/handlebars',
+        handlebars: 'libs/handlebars/handlebars.runtime',
         handlebarsHelpers: 'libs/handlebars/handlebarshelpers',
         bootstrap: 'libs/bootstrap/bootstrap',
         templates: '../templates',
@@ -22,8 +22,7 @@ require.config({
         appsetup: 'utils/appsetup',
         pushStateUtils: 'utils/pushstateutils',
         usersData: 'global/users.data',
-        app: 'app',
-        text: "libs/requirejs/plugins/text"
+        app: 'app'
     },
 
     shim: {
