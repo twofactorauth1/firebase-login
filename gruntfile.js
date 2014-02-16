@@ -59,8 +59,11 @@ module.exports = function(grunt) {
             biorelease: {
                 src: ["../bio-release"]
             },
-            release: {
-                src: ["../bio-release/public/less","../bio-release/deploy", "../bio-release/public/css", /*"../bio-release/node_modules", */"../bio-release/Logs/*.log", "../bio-release/public/js"]
+            prebuild: {
+                src: ["../bio-release/public/css"]
+            },
+            postbuild: {
+                src: ["../bio-release/public/less", "../bio-release/public/js", "../bio-release/deploy",/*"../bio-release/node_modules",*/"../bio-release/Logs/*.log"]
             }
         },
 
@@ -79,7 +82,7 @@ module.exports = function(grunt) {
 
                     appDir: "",
 
-                    dir: "../bio-release/public/js",
+                    dir: "../bio-release/public/min",
 
                     optimize: grunt.option('optimize') || 'none',
 
@@ -105,8 +108,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
-    grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
     grunt.registerTask('copyroot', ['clean:biorelease','copy:main']);
-    grunt.registerTask('production',['clean:release','less','requirejs']);
+    grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
+    grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
 
 };

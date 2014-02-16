@@ -1,4 +1,8 @@
-<script type="text/x-handlebars-template" name="fetching-data-progress-bar" partial="true">
+<script type="text/x-handlebars-template" name="fetching-data-progress-bar">
+    {{> fetching-data-progress-bar-partial}}
+</script>
+
+<script type="text/x-handlebars-template" name="fetching-data-progress-bar-partial" partial="true">
     <div class="progress progress-striped active">
         <div class="bar" style="width:100%">
             {{#if label}}

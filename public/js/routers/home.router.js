@@ -12,7 +12,7 @@ define([
 
         showHome: function() {
             //Testing...
-            var tmpl = $$.templateManager.getNow("fetching-data-progress-bar", "utils");
+            var tmpl = $$.templateManager.get("fetching-data-progress-bar", "utils");
             var html = tmpl({label:"testing only"});
 
             $$.viewManager.replaceMainHtml(html);

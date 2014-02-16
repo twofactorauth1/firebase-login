@@ -1,9 +1,10 @@
 if (typeof CACHEBUSTER === 'undefined') {
-    CACHEBUSTER = new Date().getTime();
+    CACHEBUSTER = "12345"
 }
 
 require.config({
     paths: {
+        jquery: 'libs/jquery/jquery',
         jqueryvalidate: 'libs/jquery/jquery.validate',
         underscore: 'libs/underscore/underscore',
         json2: 'libs/json/json2',
@@ -28,16 +29,17 @@ require.config({
 
     shim: {
         jqueryvalidate: {
-            deps: []
+            deps: ['jquery']
         },
         underscore: {
+            deps: ['jquery'],
             exports: "_"
         },
         handlebars: {
             exports: "Handlebars"
         },
         backbone: {
-            deps: ['underscore', 'json2'],
+            deps: ['jquery','underscore', 'json2'],
             exports: "Backbone"
         },
         backboneAssoc: {
@@ -47,7 +49,7 @@ require.config({
             deps: ['backbone']
         },
         bootstrap: {
-            //deps: []
+            deps: ['jquery']
         },
         commonutils: {
             deps: ['underscore']
@@ -66,6 +68,7 @@ require.config({
         },
         app: {
             deps: [
+                'jquery',
                 'jqueryvalidate',
                 'underscore',
                 'backbone',

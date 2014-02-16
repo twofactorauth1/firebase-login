@@ -25,5 +25,8 @@ grunt compiletemplates
 # run grunt
 grunt production
 
+# rename /min to /js directory
+mv public/min public/js
+
 # deploy to modulus
 #--modulus deploy

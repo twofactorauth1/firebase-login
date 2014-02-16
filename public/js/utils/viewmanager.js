@@ -79,38 +79,35 @@ define([
         alertTimerId : null,
         showAlert : function(content, heading, alertType, selector) {
             var self = this;
-            require(['text!templates/Alert.html'], function(template){
-                $$.templateManager.setFile(template, "Alert");
-                var data = {};
-                data.content = content;
-                if ($$.u.stringutils.isNullOrEmpty(heading) === false){
-                    data.heading = heading;
+            var data = {};
+            data.content = content;
+            if ($$.u.stringutils.isNullOrEmpty(heading) === false){
+                data.heading = heading;
+            }
+            if ($$.u.stringutils.isNullOrEmpty(alertType) === true) {
+                alertType = "alert-success";
+            }
+
+            data.alertType = alertType;
+
+            var templ = $$.templateManager.get("alert", "Alert");
+            var html = templ(data);
+
+            if (selector == null || selector === ""){
+                selector = "#container-alert";
+            }
+            $(selector).html(html);
+            $(selector).show();
+
+            if (alertType == "alert-success"){
+                if (self.alertTimerId != null){
+                    clearTimeout(this.alertTimerId);
                 }
-                if ($$.u.stringutils.isNullOrEmpty(alertType) === true) {
-                    alertType = "alert-success";
-                }
 
-                data.alertType = alertType;
-
-                var templ = $$.templateManager.getNow("alert", "Alert");
-                var html = templ(data);
-
-                if (selector == null || selector === ""){
-                    selector = "#container-alert";
-                }
-                $(selector).html(html);
-                $(selector).show();
-
-                if (alertType == "alert-success"){
-                    if (self.alertTimerId != null){
-                        clearTimeout(this.alertTimerId);
-                    }
-
-                    self.alertTimerId = setTimeout(function(){
-                        $(selector).fadeOut();
-                    }, 5000);
-                }
-            });
+                self.alertTimerId = setTimeout(function(){
+                    $(selector).fadeOut();
+                }, 5000);
+            }
         },
 
 
@@ -127,7 +124,7 @@ define([
                 }
                 data.alertType = alertType;
 
-                var templ = $$.templateManager.getNow("alert-progress", "Alert");
+                var templ = $$.templateManager.get("alert-progress", "Alert");
                 var html = templ(data);
 
                 if (selector == null || selector === ""){
