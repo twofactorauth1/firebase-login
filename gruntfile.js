@@ -26,7 +26,7 @@ module.exports = function(grunt) {
 
         handlebars: {
             options: {
-                amd: true,
+                amd: false,
                 partialsUseNamespace: true,
 
                 namespace: function(filename) {
@@ -42,10 +42,10 @@ module.exports = function(grunt) {
                 }
             },
             main: {
-                files: { 'public/js/compiled/templates.js' : [ 'hbs/*/*.hbs'] }
+                files: { 'public/js/compiled/templates.js' : [ 'hbs/*/*.hbs'] } //compiled/templates.js
             },
             apps: {
-                files: { 'public/js/compiled/apps/templates.js' : [ 'hbs/apps/**/*.hbs'] }
+                files: { 'public/js/compiled/apps/templates.js' : [ 'hbs/apps/**/*.hbs'] } //compiled/apps/templates/js
             }
         },
 
@@ -92,9 +92,14 @@ module.exports = function(grunt) {
                         { name: "main",
                             excludeShallow: [],
                             include: [
-                                'css', 'normalize','text'
-                            ]},
-                        { name: "routers/home.router", excludeShallow:['utils/cachemixin','libs/requirejs/plugins/text']}
+                                'utils/cachemixin','compiled/hbshelpers','compiled/templates','compiled/apps/templates'
+                            ]
+                        },
+                        { name: "routers/home.router",
+                            excludeShallow:['utils/cachemixin'],
+                            include: [
+                            ]
+                        }
                     ]
                 }
             }

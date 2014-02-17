@@ -4,11 +4,7 @@ define([
     'handlebarsHelpers',
     'viewManager',
     'appsetup',
-    'pushStateUtils',
-
-    //'compiled/hbshelpers',
-    //'compiled/templates',
-    //'compiled/apps/templates'
+    'pushStateUtils'
 ], function () {
 
     var app = {

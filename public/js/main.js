@@ -73,7 +73,6 @@ require.config({
                 'underscore',
                 'backbone',
                 'backboneExtended',
-                'handlebars',
                 'bootstrap',
                 'handlebars'
             ]
