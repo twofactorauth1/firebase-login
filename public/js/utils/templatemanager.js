@@ -29,8 +29,17 @@ define(function() {
                 return template;
             }
 
-            // Lets go back to the server for this template
+            //In production, if we accidentally forgot to compile a template,
+            //This will force a call to the server.  In this case, we need the full
+            //version of handlebars.js
+            if (typeof Handlebars == 'undefined' || Handlebars.compile == null) {
+                $.ajax({
+                    url : 'js/libs/handlebars/handlebars.js',
+                    async : false
+                })
+            }
 
+            // Lets go back to the server for this template
             var self = this;
             $.ajax({
                 url : 'templates/' + fileName + '.html',
