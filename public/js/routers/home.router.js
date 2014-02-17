@@ -1,6 +1,6 @@
 define([
 
-], function (user, org) {
+], function () {
 
     var router = Backbone.Router.extend({
 

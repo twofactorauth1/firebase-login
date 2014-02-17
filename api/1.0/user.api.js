@@ -15,11 +15,12 @@ _.extend(api.prototype, BaseApi.prototype, {
     dao: UserDao,
 
     initialize: function() {
-        app.get(this.getUrlRoute(''), this.isAuthApi, this.getLoggedInUser.bind(this));
-        app.get(this.getUrlRoute(':id'), this.isAuthApi, this.getUserById.bind(this));
+        app.get(this.getUrlRoute(''), this.isAuthApi.bind(this), this.getLoggedInUser.bind(this));
+        app.get(this.getUrlRoute('exists/username=:username'), this.userExists.bind(this));
+        app.get(this.getUrlRoute(':id'), this.isAuthApi.bind(this), this.getUserById.bind(this));
         app.post(this.getUrlRoute(''), this.createUser.bind(this));
-        app.put(this.getUrlRoute(''), this.isAuthApi, this.updateUser.bind(this));
-        app.delete(this.getUrlRoute(':id'), this.isAuthApi, this.deleteUser.bind(this));
+        app.put(this.getUrlRoute(''), this.isAuthApi.bind(this), this.updateUser.bind(this));
+        app.delete(this.getUrlRoute(':id'), this.isAuthApi.bind(this), this.deleteUser.bind(this));
     },
 
 
@@ -27,7 +28,7 @@ _.extend(api.prototype, BaseApi.prototype, {
         var self = this;
 
         var user = req.user;
-        resp.send(user);
+        resp.send(user.toJSON());
     },
 
 
@@ -36,17 +37,34 @@ _.extend(api.prototype, BaseApi.prototype, {
         var userId = req.params.id;
 
         if (!userId) {
-            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+            return this.wrapError(resp, 400, null, "Invalid paramater for ID");
         }
 
         userId = parseInt(userId);
 
         UserDao.getById(userId, function(err, value) {
             if (!err) {
-                resp.send(value);
+                if (value == null) {
+                    return self.wrapError(resp, 404, null, "No User found with ID: [" + userId + "]");
+                }
+                return resp.send(value.toJSON());
             } else {
-                self.wrapError(resp, 401, null, err, value);
+                return self.wrapError(resp, 401, null, err, value);
             }
+        });
+    },
+
+
+    userExists: function(req,resp) {
+        var self = this;
+
+        var username = req.params.username;
+
+        UserDao.usernameExists(username, function(err, value) {
+            if (err) {
+                return self.wrapError(resp, 500, null, err, value);
+            }
+            return resp.send(value);
         });
     },
 

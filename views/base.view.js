@@ -39,7 +39,12 @@ _.extend(baseView.prototype, {
 
         if (this.req.user != null) {
             data.serverProps.userId = this.req.user.id();
+            data.isLoggedIn = true;
+            data.user = this.req.user.props();
+        } else {
+            data.isLoggedIn = false;
         }
+
 
         try {
             data.errorMsg = this.req.flash('error')[0];

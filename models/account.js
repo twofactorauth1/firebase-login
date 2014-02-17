@@ -2,31 +2,36 @@ require('./model.base');
 
 var account = $$.m.ModelBase.extend({
 
-    defaults: {
-        _id: null,
-        company: null, // { name:string, type:int, size:int }
-        subdomain:"",
-        domain:"",
-        token:""
+    defaults: function() {
+        return {
+            _id: null,
+            company: {
+                name:"",
+                type:0,
+                size:0
+            }, // { name:string, type:int, size:int }
+            subdomain:"",
+            domain:"",
+            token:""
+        }
     },
+
 
     initialize: function(options) {
+        if ($$.u.stringutils.isNullOrEmpty(this.get("token"))) {
+            var token = $$.u.idutils.generateUUID();
+            this.set({token:token});
+        }
 
+        if ($$.u.stringutils.isNullOrEmpty(this.get("subdomain"))) {
+            var subdomain = this.get("subdomain");
+            subdomain = subdomain.trim().replace(" ", "");
+            this.set({subdomain:subdomain});
+        }
     }
+
+
 }, {
-
-    COMPANY_TYPES: {
-        PROFESSIONAL:1,
-        BUSINESS:2
-    },
-
-    COMPANY_SIZE: {
-        SMALL: 1,
-        MEDIUM: 2,
-        LARGE: 3,
-        ENTERPRISE: 4
-    },
-
     db: {
         storage: "mongo",
         table: "accounts"

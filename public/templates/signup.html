@@ -1,24 +1,164 @@
-<script type="text/x-handlebars-template" name="text-template-1">
-    HELLO
+<script type="text/x-handlebars-template" name="signup-start">
+    <div>
+        <strong>What kind of business are you?</strong>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-xs-6 col-md-6 col-lg-6">
+                <div class="panel panel-default equalheight">
+                    <div class="panel-heading">
+                        <strong>Professional</strong>
+                    </div>
+
+                    <div class="panel-body">
+                        <p>Are you a single person company looking to
+                            offer services or sell your home made goods?</p>
+
+                        <p>If so, click here</p>
+
+                        <div id="btn-professional" class="btn btn-large {{#if isProfessional}}btn-primary{{else}}btn-default{{/if}}" data-type="professional">I'm a professional</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6 col-md-6 col-lg-6">
+                <div class="panel panel-default equalheight">
+                    <div class="panel-heading">
+                        <strong>Business</strong>
+                    </div>
+
+                    <div class="panel-body">
+                        <p>Are you a small to medium sized company selling services or goods?</p>
+
+                        <p>If so, click here</p>
+
+                        <div id="btn-business" class="btn btn-large btn-default {{#if isBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="business">I'm a Business</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="/details" class="btn btn-large btn-default {{#superUnless "or" isProfessional isBusiness}}hidden{{/superUnless}}">Next</a>
+    </div>
 </script>
 
 
-<script type="text/x-handlebars-template" name="text-template-2">
-    HELLO WORLD {{> signup-partial}}
+<script type="text/x-handlebars-template" name="signup-details">
+    <div>
+        <strong>Tell us a little about your
+            {{#if isBusiness}}business{{/if}}
+            {{#if isProfessional}}professional services or goods{{/if}}
+        </strong>
+
+
+        <hr/>
+
+        <form role="form">
+            <div class="form-group row">
+                <div class="col-md-5">
+                    <label>
+                        {{#if isBusiness}}What is the name of your business{{/if}}
+                        {{#if isProfessional}}Does your professional business have a name?{{/if}}
+                    </label>
+                    <input class="form-control" type="text" id="input-company-name" value="{{account.company.name}}" />
+                </div>
+            </div>
+
+
+            {{#if isBusiness}}
+            <div class="form-group row">
+                <div class="col-md-5">
+                    <label>
+                        How large is your business?
+                    </label>
+
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-default {{#check account.company.size 2}}active{{/check}}">
+                            <input type="radio" name="radio-company-size" class="radio-company-size" data-size=2> Small (0-4)
+                        </label>
+
+                        <label class="btn btn-default {{#check account.company.size 3}}active{{/check}}">
+                            <input type="radio" name="radio-company-size" class="radio-company-size" data-size=3> Medium (5-24)
+                        </label>
+
+                        <label class="btn btn-default {{#check account.company.size 4}}active{{/check}}">
+                            <input type="radio" name="radio-company-size" class="radio-company-size" data-size=4> Large(25-99)
+                        </label>
+
+                        <label class="btn btn-default {{#check account.company.size 5}}active{{/check}}">
+                            <input type="radio" name="radio-company-size" class="radio-company-size" data-size=5> Enterprise(100+)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+        </form>
+
+        <div class="btn-toolbar">
+            <a href="/start" class="btn btn-large btn-default">Previous</a>
+            <a href="/create" class="btn btn-large btn-default">Next</a>
+        </div>
+
+    </div>
 </script>
 
 
-<script type="text/x-handlebars-template" name="signup-partial" partial="true">
-    MY PARTIAL! {{name}}
-</script>
+<script type="text/x-handlebars-template" name="signup-create">
+    <h3>Create an account</h3>
 
+    <hr/>
 
-<script type="text/javascript">
-    Handlebars.registerHelper("my-test-helper", function() {
-        return "TESTING!"
-    });
+    <form role="form" id="form-create-account" action="/signup" method="post">
+        <div class="form-group row">
+            <div class="col-md-5">
+                <label>Username <small>Can be your email</small></label>
+                <div class="input-group">
+                    <input class="form-control" id="input-username" type="text" name="username" placeholder="username"/>
+                    <span class="input-group-addon"><i id="icon-username" class="glyphicon glyphicon-remove"/> </span>
+                </div>
+                <span id="help-username" class="error" />
+            </div>
+        </div>
 
-    Handlebars.registerHelper("my-test-helper2", function() {
-        return "TESTING2!"
-    });
+        <div class="form-group row">
+            <div class="col-md-5">
+                <label>Password</label>
+                <div class="input-group">
+                    <input class="form-control" id="input-password" type="password" name="password" placeholder="password"/>
+                    <span class="input-group-addon"><i id="icon-password" class="glyphicon glyphicon-remove"/> </span>
+                </div>
+                <span id="help-password" class="error" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-5">
+                <label>Re-enter Password</label>
+
+                <div class="input-group">
+                    <input class="form-control" id="input-password2" type="password" name="password2" placeholder="password"/>
+                    <span class="input-group-addon"><i id="icon-password2" class="glyphicon glyphicon-remove"/> </span>
+                </div>
+                <span id="help-password2" class="error" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-5">
+                <label class="required">Email</label>
+                <div class="input-group">
+                    <input class="form-control" id="input-email" type="email" name="email" placeholder="email"/>
+                    <span class="input-group-addon"><i id="icon-email" class="glyphicon glyphicon-remove"/> </span>
+                </div>
+                <span id="help-email" class="error" />
+            </div>
+        </div>
+
+        <div class="btn-toolbar">
+            <a href="/details" class="btn btn-large btn-default">Previous</a>
+            <button class="btn btn-primary" type="submit" value="Create Account" role="button">Create Account</button>
+        </div>
+    </form>
+
 </script>

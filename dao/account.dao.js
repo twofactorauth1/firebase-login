@@ -14,68 +14,32 @@ var dao = {
     },
 
 
-    createAccount: function(name, type, size, subdomain, fn) {
-        var account = this._createAccount(name, type, size, subdomain);
-        this.saveOrUpdate(account, fn);
-    },
-
-
-    createTempAccount: function(name, type, size, subdomain, fn) {
-        var account = this._createAccount(name, type, size, subdomain);
-
-        $$.g.cache.set(token, account, 3600*24, "accounts");
+    //region TEMPORARILY STORE ACCOUNT INFO DURING CREATION
+    getTempAccount: function(accountToken, fn) {
+        var account = $$.g.cache.get(accountToken, true, 3600*24, "accounts");
         fn(null, account);
     },
 
 
-    _createAccount: function(name, type, size, subdomain) {
-        if (subdomain == null) {
-            subdomain = name.trim().replace(" ", "");
-        }
-
-        var token = $$.u.idutils.generateUUID();
-        var account = new $$.m.Account({
-            subdomain: subdomain,
-            token: token,
-            company: {
-                name:name,
-                type: type,
-                size: size
-            }
-        });
-
-        return account;
-    },
-
-
-    //region TEMPORARILY STORE ACCOUNT INFO DURING CREATION
-    updateTempAccount: function(account, fn) {
-        var account = this._createModel(account);
-
+    saveOrUpdateTmpAccount: function(account, fn) {
         $$.g.cache.set(account.get("token"), account, 3600*24, "accounts");
         fn(null, account);
     },
 
 
     convertTempAccount: function(accountToken, fn) {
-        var account = $$.g.cache.get(accountToken);
+        var account = $$.g.cache.get(accountToken, "accounts");
 
         if (account != null) {
             this.saveOrUpdate(account, function(err, value) {
                 if (!err) {
-                    $$.g.cache.remove(accountToken);
+                    $$.g.cache.remove(accountToken, "accounts");
                 }
                 fn(err, value);
             });
         } else {
             fn(null, null);
         }
-    },
-
-
-    getTempAccount: function(accountToken, fn) {
-        var account = $$.g.cache.get(accountToken);
-        fn(null, account);
     }
     //endregion
 };

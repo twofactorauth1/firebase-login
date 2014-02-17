@@ -12,7 +12,7 @@ _.extend(view.prototype, BaseView.prototype, {
             root:"signup"
         });
 
-        this.resp.render('signup', data);
+        this.resp.render('home', data);
     }
 });
 

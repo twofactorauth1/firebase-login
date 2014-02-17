@@ -68,6 +68,28 @@ var mongodao = {
     },
 
 
+    _existsMongo: function(query, type, fn) {
+        var self = this;
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+            this.mongo(collection).find(query).limit(1).count(function(err, result) {
+            if (!err) {
+                if (result > 0) {
+                    fn(null, true);
+                } else {
+                    fn(null, false);
+                }
+            } else {
+                fn(err, result);
+            }
+        });
+    },
+
+
     _saveOrUpdateMongo: function(model, fn) {
         var self = this;
         var collection = this.getTable(model);

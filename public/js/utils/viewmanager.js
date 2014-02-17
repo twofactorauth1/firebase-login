@@ -76,6 +76,20 @@ define([
         },
 
 
+        showInfo: function(message) {
+            $("#info-msg").removeClass("hidden").alert().find("span.message").html(message);
+        },
+
+        showError: function(message) {
+            $("#error-msg").removeClass("hidden").alert().find("span.message").html(message);
+        },
+
+        setUpListeners: function() {
+            $("#info-msg, #error-msg").find("button.close").on("click", function(event) {
+                $(event.currentTarget).parents(".alert").eq(0).addClass("hidden");
+            });
+        }(),
+
         alertTimerId : null,
         showAlert : function(content, heading, alertType, selector) {
             var self = this;

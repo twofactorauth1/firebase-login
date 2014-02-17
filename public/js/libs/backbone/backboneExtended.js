@@ -49,7 +49,7 @@
             return promise;
         },
 
-        saveWithCustomUrl: function (url) {
+        saveCustomUrl: function (url) {
             var origUrl = this.url;
             this.url = url;
             var promise = this.save();
@@ -142,6 +142,18 @@
          * Event Dispatcher
          */
         vent: _.clone(Backbone.Events),
+
+
+        /**
+         * @show
+         *
+         * Shortcut to just set the html on this element
+         *
+         * @param html
+         */
+        show: function(html) {
+            this.$el.html(html);
+        },
 
         /**
          * @close

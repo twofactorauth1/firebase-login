@@ -11,14 +11,18 @@
                 a.navbar-brand(href="#") #{title}
             div.navbar-collapse.collapse
                 ul.nav.navbar-nav
-                    li.active
-                        a(href="#/customers") Customers
-                    li
-                        a(href="#/orders") Orders
-                    li
-                        a(href="#/about") About
-                    li
-                        a(href="#/logout") Logout
+
+                p.navbar-text.navbar-right
+                    if isLoggedIn
+                        |Signed in as &nbsp;
+                        a(href="/myaccount") #{user.username}
+                        |&nbsp;
+                        a(href="/logout" title="Sign out")
+                            i.glyphicon.glyphicon-log-out
+                    else
+                        |You're not signed in &nbsp;
+                        a(href="/login" title="sign in")
+                            i.glyphicon.glyphicon-log-in
 
     .clearfix
 

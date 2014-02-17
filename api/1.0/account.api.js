@@ -14,14 +14,40 @@ _.extend(api.prototype, BaseApi.prototype, {
     dao: AccountDao,
 
     initialize: function() {
-        //GET
-        app.get(this.getUrlRoute(':id'), this.isAuthApi, this.getAccountById.bind(this));
-        app.post(this.getUrlRoute(''), this.isAuthApi, this.createAccount.bind(this));
-        app.put(this.getUrlRoute(''), this.isAuthApi, this.updateAccount.bind(this));
-        app.delete(this.getUrlRoute(':id'), this.isAuthApi, this.deleteAccount.bind(this));
-
+        //TMP Accont
         app.get(this.getUrlRoute('tmp'), this.getTempAccount.bind(this));
-        app.post(this.getUrlRoute('tmp'), this.createTempAccount.bind(this));
+        app.post(this.getUrlRoute('tmp'), this.saveOrUpdateTmpAccount.bind(this));
+        app.put(this.getUrlRoute('tmp'), this.saveOrUpdateTmpAccount.bind(this));
+
+        //GET
+        app.get(this.getUrlRoute(''), this.isAuthApi.bind(this), this.getCurrentAccount.bind(this));
+        app.get(this.getUrlRoute(':id'), this.isAuthApi.bind(this), this.getAccountById.bind(this));
+        app.post(this.getUrlRoute(''), this.isAuthApi.bind(this), this.createAccount.bind(this));
+        app.put(this.getUrlRoute(''), this.isAuthApi.bind(this), this.updateAccount.bind(this));
+        app.delete(this.getUrlRoute(':id'), this.isAuthApi.bind(this), this.deleteAccount.bind(this));
+    },
+
+
+    getCurrentAccount: function(req, resp) {
+        var self = this;
+
+        var user = req.user;
+        var accountId = req.user.get("accountId");
+        if (accountId != null) {
+            AccountDao.getById(accountId, function(err, value) {
+                if (!err) {
+                    if (value == null) {
+                        return resp.send({});
+                    } else {
+                        return resp.send(value.toJSON());
+                    }
+                } else {
+                    return self.wrapError(resp, 500, null, err, value);
+                }
+            });
+        } else {
+            return resp.send({});
+        }
     },
 
 
@@ -36,7 +62,7 @@ _.extend(api.prototype, BaseApi.prototype, {
         accountId = parseInt(accountId);
         AccountDao.getById(accountId, function(err, value) {
             if (!err) {
-                resp.send(value);
+                resp.send(value.toJSON());
             } else {
                 self.wrapError(resp, 401, null, err, value);
             }
@@ -60,14 +86,15 @@ _.extend(api.prototype, BaseApi.prototype, {
 
 
     getTempAccount: function(req,resp) {
+        var self = this;
         var token = cookies.getAccountToken(req);
 
         AccountDao.getTempAccount(token, function(err, value) {
             if (!err) {
                 if (value != null) {
-                    resp.send(value);
+                    resp.send(value.toJSON());
                 } else {
-                    self.wrapError(resp, 404, null, "Temporary account not found");
+                    resp.send({});
                 }
             } else {
                 resp.wrapError(resp, 500, null, err, value);
@@ -76,26 +103,16 @@ _.extend(api.prototype, BaseApi.prototype, {
     },
 
 
-    createTempAccount: function(req,resp) {
-        AccountDao.createTempAccount(req.body.name, req.body.type, req.body.size, req.body.subdomain, function(err, value) {
+    saveOrUpdateTmpAccount: function(req,resp) {
+        var self = this;
+        var account = new $$.m.Account(req.body);
+        AccountDao.saveOrUpdateTmpAccount(account, function(err, value) {
            if (!err) {
                cookies.setAccountToken(resp, value.get("token"));
-               resp.send(value);
+               resp.send(value.toJSON());
            } else {
                self.wrapError(resp, 500, null, err, value);
            }
-        });
-    },
-
-
-    updateTempAccount: function(req, resp) {
-        AccountDao.updateTempAccount(req.body, function(err, value) {
-            if (!err) {
-                cookies.setAccountToken(resp, value.get("token"));
-                resp.send(value);
-            } else {
-                self.wrapError(resp, 500, null, err, value);
-            }
         });
     }
 });

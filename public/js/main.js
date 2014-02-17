@@ -14,6 +14,7 @@ require.config({
         handlebars: 'libs/handlebars/handlebars',
         handlebarsHelpers: 'libs/handlebars/handlebarshelpers',
         bootstrap: 'libs/bootstrap/bootstrap',
+        modernizr: 'libs/modernizr/modernizr',
         templates: '../templates',
         namespaces: 'utils/namespaces',
         commonutils: 'utils/commonutils',
@@ -74,7 +75,8 @@ require.config({
                 'backbone',
                 'backboneExtended',
                 'bootstrap',
-                'handlebars'
+                'handlebars',
+                'modernizr'
             ]
         }
     },

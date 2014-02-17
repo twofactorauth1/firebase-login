@@ -47,7 +47,7 @@ var cookieUtil =  {
     },
 
     getAccountToken: function(req) {
-        this.getCookie(req, "ind-acc", true);
+        return this.getCookie(req, "ind-acc", true);
     },
 
     clearAccountToken: function(resp) {

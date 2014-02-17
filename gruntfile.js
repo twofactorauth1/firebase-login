@@ -43,10 +43,11 @@ module.exports = function(grunt) {
             },
             main: {
                 files: { 'public/js/compiled/templates.js' : [ 'hbs/*/*.hbs'] } //compiled/templates.js
-            },
-            apps: {
-                files: { 'public/js/compiled/apps/templates.js' : [ 'hbs/apps/**/*.hbs'] } //compiled/apps/templates/js
             }
+            //This is how to comile other modules in any subdirectories of /templates
+            //apps: {
+            //    files: { 'public/js/compiled/apps/templates.js' : [ 'hbs/apps/**/*.hbs'] } //compiled/apps/templates/js
+            //}
         },
 
         clean: {
@@ -92,10 +93,20 @@ module.exports = function(grunt) {
                         { name: "main",
                             excludeShallow: [],
                             include: [
-                                'utils/cachemixin','compiled/hbshelpers','compiled/templates','compiled/apps/templates'
+                                'utils/cachemixin',
+                                'compiled/hbshelpers',
+                                'compiled/templates',
+                                /*'compiled/apps/templates'*/ //this is part of example from above in handlebars task
                             ]
                         },
+
                         { name: "routers/home.router",
+                            excludeShallow:['utils/cachemixin'],
+                            include: [
+                            ]
+                        },
+
+                        { name: "routers/signup.router",
                             excludeShallow:['utils/cachemixin'],
                             include: [
                             ]

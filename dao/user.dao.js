@@ -1,6 +1,6 @@
 var baseDao = require('./base.dao');
 var AccountDao = require('./account.dao');
-
+var Constants = requirejs('constants/constants');
 var crypto = require('../utils/security/crypto');
 require('../models/user');
 
@@ -11,6 +11,12 @@ var dao = {
         name:"user.dao",
         defaultModel: $$.m.User
     },
+
+
+    usernameExists: function(username, fn) {
+        this.exists({'username':username}, fn);
+    },
+
 
     getUserByUserName: function(username, fn) {
         this.findOne( {'username':username}, fn);
@@ -64,7 +70,7 @@ var dao = {
     },
 
 
-    createUserFromUsernamePassword: function(username, password, accountToken, fn) {
+    createUserFromUsernamePassword: function(username, password, email, accountToken, fn) {
         var self = this;
         this.getUserByUserName(username, function(err, value) {
             if (err) {
@@ -83,7 +89,7 @@ var dao = {
              they are actually signing up.
              */
             if (accountToken != null) {
-                AccountDao.convertTempAccount(token, function(err, value) {
+                AccountDao.convertTempAccount(accountToken, function(err, value) {
                     if (!err) {
                         deferred.resolve(value);
                     } else {
@@ -91,7 +97,7 @@ var dao = {
                     }
                 });
             } else {
-                AccountDao.createAccount("", $$.m.Account.COMPANY_TYPES.PROFESSIONAL, $$.m.Account.COMPANY_SIZE.SMALL, null, function(err, value) {
+                AccountDao.createAccount("", $$.constants.account.company_types.PROFESSIONAL, $$.constants.account.company_size.SINGLE, null, function(err, value) {
                     if (!err) {
                         deferred.resolve(value);
                     } else {
@@ -113,6 +119,7 @@ var dao = {
 
                     var user = new $$.m.User({
                         username:username,
+                        email:email,
                         accountId:accountId
                     });
 

@@ -23,6 +23,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/logout", this.handleLogout.bind(this));
 
         app.get("/signup", this.showSignup.bind(this));
+        app.get("/signup/*", this.showSignup.bind(this)); //catch all routed routes
         app.post("/signup", this.handleSignup.bind(this));
 
         app.get("/forgotpassword", this.showForgotPassword.bind(this));
@@ -110,16 +111,36 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var username = req.body.username;
         var password1 = req.body.password;
         var password2 = req.body.password2;
+        var email = req.body.email;
+
+        if (username == null || username.trim() == "") {
+            req.flash("error", "You must enter a valid username");
+            return resp.redirect("/signup/create");
+        }
 
         if (password1 !== password2) {
             req.flash("error", "Passwords do not match");
-            return resp.redirect("/signup");
+            return resp.redirect("/signup/create");
         }
+
+        if (password1 == null || password1.trim() == "" || password1.length < 5)
+        {
+            req.flash("error", "You must enter a valid password at least 5 characters long");
+            return resp.redirect("/signup/create");
+        }
+
+        var isEmail = $$.u.validate(email, { required: true, email: true }).success;
+        if (isEmail === false) {
+            req.flash("error", "You must enter a valid email");
+            return resp.redirect("/signup/create");
+        }
+
+
 
         //ensure we don't have another user with this username;
         var accountToken = cookies.getAccountToken(req);
 
-        UserDao.createUserFromUsernamePassword(username, password1, accountToken, function(err, value) {
+        UserDao.createUserFromUsernamePassword(username, password1, email, accountToken, function(err, value) {
             if (!err) {
                 req.login(value, function(err) {
                     if (err) {

@@ -5,7 +5,6 @@
         "/login",
         "/logout",
         "/forgotpassword",
-        "/signup",
         "/",
         ""
     ];
@@ -67,15 +66,9 @@
         }
     });
 
-
-    var redirectHashTag = function() {
-        window.location = window.location.hash.substring(1);
-    };
-
-
-    $(document).ready(function() {
-        if (window.location.hash.indexOf("#") > -1) {
-            return redirectHashTag();
-        }
-    });
+    //in your application, rather than using window.location to get the current url
+    $$.getLocation = function(){
+        return window.location.protocol + '//' + window.location.host
+            + '/' + Backbone.history.options.root + Backbone.history.getFragment()
+    }
 }).call(this);

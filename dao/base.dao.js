@@ -39,6 +39,15 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
+    exists: function(query, type, fn) {
+        if (this.getStorage(type) === "mongo") {
+            this._existsMongo(query, type, fn);
+        } else {
+            fn("No storage medium available for this model");
+        }
+    },
+
+
     findOne: function(query, type, fn) {
         if (this.getStorage(type) === "mongo") {
             this._findOneMongo(query, type, fn);

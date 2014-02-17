@@ -1,5 +1,5 @@
 if (typeof CACHEBUSTER === 'undefined') {
-    CACHEBUSTER = '2014.02.15'
+    CACHEBUSTER = '2014.02.15' //Modify this before a deploy to production.
 }
 
 require.config({
@@ -13,6 +13,7 @@ require.config({
         handlebars: 'libs/handlebars/handlebars.runtime',
         handlebarsHelpers: 'libs/handlebars/handlebarshelpers',
         bootstrap: 'libs/bootstrap/bootstrap',
+        modernizr: 'libs/modernizr/modernizr',
         templates: '../templates',
         namespaces: 'utils/namespaces',
         commonutils: 'utils/commonutils',
@@ -70,7 +71,8 @@ require.config({
                 'backboneExtended',
                 'handlebars',
                 'bootstrap',
-                'handlebars'
+                'handlebars',
+                'modernizr'
             ]
         }
     },

@@ -34,7 +34,7 @@ define(function() {
             //version of handlebars.js
             if (typeof Handlebars == 'undefined' || Handlebars.compile == null) {
                 $.ajax({
-                    url : 'js/libs/handlebars/handlebars.js',
+                    url : '/js/libs/handlebars/handlebars.js',
                     async : false
                 })
             }
@@ -42,7 +42,7 @@ define(function() {
             // Lets go back to the server for this template
             var self = this;
             $.ajax({
-                url : 'templates/' + fileName + '.html',
+                url : '/templates/' + fileName + '.html',
                 success : function(data) {
                     self._processTemplateFile(fileName, data);
                 },

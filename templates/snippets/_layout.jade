@@ -13,14 +13,22 @@ html
                 include _header
             .container
                 if errorMsg
-                    p.bg-danger(id="error-msg" style="padding:15px;"): b #{errorMsg}
+                    #error-msg.alert.alert-danger
+                        button.close(type="button" aria-hidden="true") &times;
+                        span.message #{errorMsg}
                 else
-                    p.bg-danger.hidden(id="error-msg" style="padding:15px;")
+                    #error-msg.alert.alert-danger.hidden
+                        button.close(type="button" aria-hidden="true") &times;
+                        span.message #{errorMsg}
 
                 if infoMsg
-                   p.bg-info(id="info-msg" style="padding:15px"): b #{infoMsg}
+                    #info-msg.alert.alert-info
+                        button.close(type="button" aria-hidden="true") &times;
+                        span.message #{infoMsg}
                 else
-                    p.bg-info.hidden(id="info-msg" style="padding:15px"): b #{infoMsg}
+                    #info-msg.alert.alert-info.hidden
+                        button.close(type="button" aria-hidden="true") &times;
+                        span.message #{infoMsg}
 
                 #container-alert.hidden
                 #main-viewport
