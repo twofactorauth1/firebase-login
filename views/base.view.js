@@ -34,7 +34,8 @@ _.extend(baseView.prototype, {
 
         var data = {
             title: "indigenous",
-            serverProps: serverProps
+            serverProps: serverProps,
+            includeHeader:true
         };
 
         if (this.req.user != null) {

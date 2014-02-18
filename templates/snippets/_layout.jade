@@ -9,11 +9,12 @@ html
             link(rel='stylesheet', href='/css/site.css')
     body
         #wrap
-            #header-background
-                include _header
+            if includeHeader
+                #header-background
+                    include _header
             .container
                 if errorMsg
-                    #error-msg.alert.alert-danger
+                    #error-msg.alert.alert-danger.
                         button.close(type="button" aria-hidden="true") &times;
                         span.message #{errorMsg}
                 else

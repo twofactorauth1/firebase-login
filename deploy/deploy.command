@@ -29,4 +29,4 @@ grunt production
 mv public/min public/js
 
 # deploy to modulus
-#--modulus deploy
+modulus deploy

@@ -211,7 +211,7 @@ define([
                 icon.removeClass("glphyicon-ok").addClass("glyphicon-remove");
             } else {
                 this.emailvalid = true;
-                icon.removeClass("glphyicon-remove").addClass("glyphicon-ok");
+                icon.removeClass("glyphicon-remove").addClass("glyphicon-ok");
             }
         },
 

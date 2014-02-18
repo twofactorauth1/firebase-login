@@ -8,7 +8,8 @@ _.extend(view.prototype, BaseView.prototype, {
 
     show: function() {
         var data = this.baseData({
-            includeJs:true
+            includeJs:true,
+            includeHeader:false
         });
 
         this.resp.render('login', data);
