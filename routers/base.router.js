@@ -19,10 +19,30 @@ _.extend(baseRouter.prototype, {
             this.base = "base";
         }
 
-        this.log = global.getLogger(this.base + ".router");
+        this.log = $$.g.getLogger(this.base + ".router");
 
         if (this.initialize != 'undefined') {
             this.initialize();
+        }
+    },
+
+
+    setup: function(req,resp, next) {
+        if (req["session"] != null && req.session["accountId"] == null) {
+            var AccountDao = require("../dao/account.dao");
+            AccountDao.getAccountByHost(req.get("host"), function(err, value) {
+                if (!err && value != null) {
+                    if (value === true) {
+                        req.session.accountId = 0;
+                    } else {
+                        req.session.accountId = value.id();
+                    }
+                }
+
+                return next();
+            });
+        } else {
+            return next();
         }
     },
 
@@ -32,9 +52,33 @@ _.extend(baseRouter.prototype, {
             return next()
         }
 
-        cookies.setRedirectUrl(req, resp);
+        if (req["session"] != null && req.session["accountId"] == null) {
+            var AccountDao = require("../dao/account.dao");
+            AccountDao.getAccountByHost(req.get("host"), function(err, value) {
+                if (!err && value != null) {
+                    if (value === true) {
+                        req.session.accountId = 0;
+                    } else {
+                        req.session.accountId = value.id();
+                    }
+                }
 
-        return resp.redirect("/login");
+                cookies.setRedirectUrl(req,resp);
+                resp.redirect("/login");
+            });
+        } else {
+            cookies.setRedirectUrl(req,resp);
+            resp.redirect("/login");
+        }
+    },
+
+
+    accountId: function(req) {
+        try {
+            return req.session.accountId;
+        }catch(exception) {
+            return null;
+        }
     }
 });
 

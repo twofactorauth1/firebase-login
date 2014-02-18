@@ -9,10 +9,17 @@ _.extend(view.prototype, BaseView.prototype, {
     show: function() {
         var data = this.baseData({
             includeJs:true,
-            includeHeader:false
+            includeHeader:true
         });
 
-        this.resp.render('login', data);
+        var self = this;
+        this.account(function(err, value) {
+            if (!err && value != null) {
+                data.account = value.props()
+            }
+            self.resp.render('login', data);
+        });
+
     }
 });
 

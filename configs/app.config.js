@@ -16,6 +16,12 @@ if (process.env.PORT == null) {
     process.env.PORT = 3000;
 }
 
+if (process.env.ROOT_HOST == null) {
+    process.env.ROOT_HOST = "indigenous.local";
+}
+
+process.env.INVALID_SUBDOMAINS = ["indigenous","www"];
+
 //---------------------------------------------------------
 //
 //---------------------------------------------------------

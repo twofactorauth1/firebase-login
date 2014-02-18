@@ -15,7 +15,13 @@ _.extend(view.prototype, BaseView.prototype, {
             }
         );
 
-        this.resp.render('home', data);
+        var self = this;
+        this.account(function(err, value) {
+            if (!err && value != null) {
+                data.account = value.props();
+            }
+            self.resp.render('home', data);
+        });
     }
 });
 

@@ -1,40 +1,75 @@
 var passport = require('passport')
     , LocalStrategy = require('passport-local').Strategy
     , UserDao = require('../dao/user.dao.js')
-    , crypto = require('../utils/security/crypto');
+    , AccountDao = require('../dao/account.dao')
+    , crypto = require('../utils/security/crypto')
+    , os = require('os');
 
-passport.use(new LocalStrategy(
-    function(username, password, done) {
+passport.use(new LocalStrategy({
+        passReqToCallback:true
+    },
+    function(req, username, password, done) {
         var self = this;
 
-        UserDao.getUserByUserName(username, function(err, value) {
+        var host = req.get("host");
+        AccountDao.getAccountByHost(host, function(err, value) {
+            if (err) {
+                return done(null, false, {message:"An error occurred validating account"});
+            }
 
-            if (!err) {
-                if (value == null) {
-                    return done(null, false, {message:"Incorrect username"});
-                }
-
-                var user = value;
-
-                var credentials = user.getCredentials($$.m.User.CREDENTIAL_TYPES.LOCAL);
-                if (credentials == null) {
-                    return done(null, false, {message:"No login credentials found"});
-                }
-
-                var encryptedPass = credentials.password;
-                var isValid = crypto.verify(password, encryptedPass, function(err, value) {
+            var account = value;
+            if (account !== true && (account == null || account.id() == null || account.id() == 0)) {
+                return done(null, false, {message:"No account found at this location"});
+            }
+            else if (account === true) {
+                UserDao.getUserByUsernameOrEmail(username, function(err, value) {
                     if (!err) {
-                        if (value === false) {
-                            return done(null, false, {message:"Incorrect password"});
-                        } else {
-                            return done(null, user);
+                        if (value == null) {
+                            return done(null, false, {message:"Incorrect username"});
                         }
+
+                        var user = value;
+
+                        user.verifyPassword(password, $$.m.User.CREDENTIAL_TYPES.LOCAL, function(err, value) {
+                            if (!err) {
+                                if (value === false) {
+                                    return done(null, false, {message:"Incorrect password"});
+                                } else {
+                                    req.session.accountId = 0;
+                                    return done(null, user);
+                                }
+                            } else {
+                                return done(null, false, {message:"An error occurred verifying encrypted password"});
+                            }
+                        });
                     } else {
-                        return done(null, false, {message:"An error occurred verifying encrypted password"});
+                        fn(err, value);
                     }
                 });
             } else {
-                fn(err, value);
+                UserDao.getUserForAccount(account.id(), username, function(err, value) {
+                    if (err) {
+                        return done(null, false, {message:"An error occurred retrieving user for account"});
+                    } else {
+                        if (value == null) {
+                            return done(null, false, {message:"Incorrect username"});
+                        } else {
+                            var user = value;
+                            user.verifyPasswordForAccount(account.id(), password, $$.m.User.CREDENTIAL_TYPES.LOCAL, function(err, value) {
+                                if (!err) {
+                                    if (value === false) {
+                                        return done(null, false, {message:"Incorrect password"});
+                                    } else {
+                                        req.session.accountId = account.id();
+                                        return done(null, user);
+                                    }
+                                } else {
+                                    return done(null, false, {message:"An error occurred verifying encrypted password"});
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
     }

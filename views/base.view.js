@@ -1,5 +1,7 @@
 require('../utils/jadehelpers');
 var url = require('url');
+var AccountDao = require('../dao/account.dao');
+
 
 var baseView = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -72,6 +74,24 @@ _.extend(baseView.prototype, {
         }
 
         return data;
+    },
+
+
+    accountId: function() {
+        try {
+            return this.req.session.accountId;
+        }catch(exception) {
+            return null;
+        }
+    },
+
+
+    account: function(fn) {
+        var accountId = this.accountId();
+        if (accountId != null) {
+            return AccountDao.getById(accountId, fn);
+        }
+        fn();
     }
 });
 

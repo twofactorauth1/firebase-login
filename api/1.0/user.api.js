@@ -15,12 +15,12 @@ _.extend(api.prototype, BaseApi.prototype, {
     dao: UserDao,
 
     initialize: function() {
-        app.get(this.getUrlRoute(''), this.isAuthApi.bind(this), this.getLoggedInUser.bind(this));
+        app.get(this.getUrlRoute(''), this.isAuthApi, this.getLoggedInUser.bind(this));
         app.get(this.getUrlRoute('exists/username=:username'), this.userExists.bind(this));
-        app.get(this.getUrlRoute(':id'), this.isAuthApi.bind(this), this.getUserById.bind(this));
+        app.get(this.getUrlRoute(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.post(this.getUrlRoute(''), this.createUser.bind(this));
-        app.put(this.getUrlRoute(''), this.isAuthApi.bind(this), this.updateUser.bind(this));
-        app.delete(this.getUrlRoute(':id'), this.isAuthApi.bind(this), this.deleteUser.bind(this));
+        app.put(this.getUrlRoute(''), this.isAuthApi, this.updateUser.bind(this));
+        app.delete(this.getUrlRoute(':id'), this.isAuthApi, this.deleteUser.bind(this));
     },
 
 

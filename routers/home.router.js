@@ -11,7 +11,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/", this.index.bind(this));
+        app.get("/", this.isAuth, this.index.bind(this));
         app.get("/home", this.isAuth, this.showHome.bind(this));
         return this;
     },

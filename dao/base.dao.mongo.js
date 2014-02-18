@@ -60,7 +60,7 @@ var mongodao = {
         var collection = this.getTable(type);
         this.mongo(collection).findOne(query, function(err, result) {
            if (!err) {
-                   fn(err, self._createModel(result));
+               fn(err, self._createModel(result));
            } else {
                fn(err, result);
            }

@@ -1,3 +1,22 @@
+##------------------------
+##-- Steps to run this:
+##-- 1) Ensure you have access to the parent of the root directory of this application.
+##--    In this we have a root directory called "bio", taken from the Source Code Repo.
+##--    This script will write a new directory called ../bio-release, so you must have
+##--    write access to that environment.
+##--
+##-- 2) Ensure you have the latest version of node installed > 0.10.25
+##--
+##-- 3) Install the modulus CLI, open terminal and type: "npm install -g modulus"
+##--
+##-- 4) If you only want to run locally, comment out "modulus deploy" below, and then run this script.
+##--    then you can run your node app by CD'ing into the bio-release directory and running node app.js.
+##--    This will allow you to test the optimized project before a deploy.
+##--
+##-- 5) If you want to test a production simulated environment with subdomains, alter your hosts file
+##--    /etc/hosts or /private/etc/hosts, and add something "127.0.0.1 {subdomain}.indigenous.local"
+
+
 # Get current directory, should be root/deploy
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $dir

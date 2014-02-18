@@ -18,7 +18,7 @@ var dao = {
     },
 
 
-    getUserByUserName: function(username, fn) {
+    getUserByUsername: function(username, fn) {
         this.findOne( {'username':username}, fn);
     },
 
@@ -37,9 +37,9 @@ var dao = {
 
         if (isEmail) {
             fxn1 = this.getUserByEmail;
-            fxn2 = this.getUserByUserName;
+            fxn2 = this.getUserByUsername;
         } else {
-            fxn1 = this.getUserByUserName;
+            fxn1 = this.getUserByUsername;
             fxn2 = this.getUserByEmail;
         }
 
@@ -70,9 +70,15 @@ var dao = {
     },
 
 
+    getUserForAccount: function(accountId, username, fn) {
+        var query = { "accounts.accountId" : accountId, username:username };
+        return this.findOne(query, fn);
+    },
+
+
     createUserFromUsernamePassword: function(username, password, email, accountToken, fn) {
         var self = this;
-        this.getUserByUserName(username, function(err, value) {
+        this.getUserByUsername(username, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
@@ -120,14 +126,10 @@ var dao = {
                     var user = new $$.m.User({
                         username:username,
                         email:email,
-                        accountId:accountId
                     });
 
-                    user.setCredentials({
-                        username:username,
-                        password:crypto.hash(password),
-                        type: $$.m.User.CREDENTIAL_TYPES.LOCAL
-                    });
+                    user.createOrUpdateLocalCredentials(password);
+                    user.createUserAccount(accountId, username, password, ["super","admin","member"]);
 
                     self.saveOrUpdate(user, fn);
                 });

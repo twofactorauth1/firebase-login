@@ -59,7 +59,14 @@ _.extend(apiBase.prototype, {
             return next()
         }
 
-        return this.wrapError(resp, 401, "Not Authenticated", "User is not authenticated");
+        var response = {
+            code:401,
+            status:"Not Authenticated",
+            message:"User is not Authenticated",
+            detail: ""
+        };
+
+        resp.send(response.code, response);
     },
 
 

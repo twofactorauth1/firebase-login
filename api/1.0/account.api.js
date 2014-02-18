@@ -20,34 +20,28 @@ _.extend(api.prototype, BaseApi.prototype, {
         app.put(this.getUrlRoute('tmp'), this.saveOrUpdateTmpAccount.bind(this));
 
         //GET
-        app.get(this.getUrlRoute(''), this.isAuthApi.bind(this), this.getCurrentAccount.bind(this));
-        app.get(this.getUrlRoute(':id'), this.isAuthApi.bind(this), this.getAccountById.bind(this));
-        app.post(this.getUrlRoute(''), this.isAuthApi.bind(this), this.createAccount.bind(this));
-        app.put(this.getUrlRoute(''), this.isAuthApi.bind(this), this.updateAccount.bind(this));
-        app.delete(this.getUrlRoute(':id'), this.isAuthApi.bind(this), this.deleteAccount.bind(this));
+        app.get(this.getUrlRoute(''), this.isAuthApi, this.getCurrentAccount.bind(this));
+        app.get(this.getUrlRoute(':id'), this.isAuthApi, this.getAccountById.bind(this));
+        app.post(this.getUrlRoute(''), this.isAuthApi, this.createAccount.bind(this));
+        app.put(this.getUrlRoute(''), this.isAuthApi, this.updateAccount.bind(this));
+        app.delete(this.getUrlRoute(':id'), this.isAuthApi, this.deleteAccount.bind(this));
     },
 
 
     getCurrentAccount: function(req, resp) {
         var self = this;
 
-        var user = req.user;
-        var accountId = req.user.get("accountId");
-        if (accountId != null) {
-            AccountDao.getById(accountId, function(err, value) {
-                if (!err) {
-                    if (value == null) {
-                        return resp.send({});
-                    } else {
-                        return resp.send(value.toJSON());
-                    }
+        AccountDao.getAccountByHost(req.get("host"), function(err, value) {
+            if (!err) {
+                if (value == null) {
+                    return resp.send({});
                 } else {
-                    return self.wrapError(resp, 500, null, err, value);
+                    return resp.send(value.toJSON());
                 }
-            });
-        } else {
-            return resp.send({});
-        }
+            } else {
+                return self.wrapError(resp, 500, null, err, value);
+            }
+        });
     },
 
 

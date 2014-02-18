@@ -17,19 +17,19 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "login",
 
     initialize: function() {
-        app.get("/login", this.showLogin.bind(this));
+        app.get("/login", this.setup, this.showLogin.bind(this));
         app.post("/login", passport.authenticate('local', { failureRedirect: "/login", failureFlash:true } ), this.onLogin.bind(this));
 
-        app.get("/logout", this.handleLogout.bind(this));
+        app.get("/logout", this.setup, this.handleLogout.bind(this));
 
-        app.get("/signup", this.showSignup.bind(this));
-        app.get("/signup/*", this.showSignup.bind(this)); //catch all routed routes
-        app.post("/signup", this.handleSignup.bind(this));
+        app.get("/signup", this.setup, this.showSignup.bind(this));
+        app.get("/signup/*", this.setup, this.showSignup.bind(this)); //catch all routed routes
+        app.post("/signup", this.setup, this.handleSignup.bind(this));
 
-        app.get("/forgotpassword", this.showForgotPassword.bind(this));
-        app.post("/forgotpassword", this.handleForgotPassword.bind(this));
-        app.get("/forgotpassword/reset/:token", this.showResetPasswordByToken.bind(this));
-        app.post("/forgotpassword/reset/:token", this.handleResetPasswordByToken.bind(this));
+        app.get("/forgotpassword", this.setup, this.showForgotPassword.bind(this));
+        app.post("/forgotpassword", this.setup, this.handleForgotPassword.bind(this));
+        app.get("/forgotpassword/reset/:token", this.setup, this.showResetPasswordByToken.bind(this));
+        app.post("/forgotpassword/reset/:token", this.setup, this.handleResetPasswordByToken.bind(this));
 
         return this;
     },

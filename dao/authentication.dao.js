@@ -2,6 +2,7 @@ var User = require('../models/user');
 var UserDao = require('./user.dao');
 var cookies = require('../utils/cookieutil');
 var EmailTemplateUtil = require('../utils/emailtemplateutil');
+var crypto = require('../utils/security/crypto');
 
 var dao = {
 
@@ -76,6 +77,8 @@ var dao = {
             if (!err) {
                 var user = value;
                 user.clearPasswordRecoverToken();
+
+                user.createOrUpdateLocalCredentials(password);
 
                 UserDao.saveOrUpdate(user, function(err, value) {
                     if (!err) {

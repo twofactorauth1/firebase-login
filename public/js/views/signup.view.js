@@ -117,6 +117,10 @@ define([
 
             this.tmpAccount.get("company").name = name;
 
+            //TODO: Remove this, only for initial testing
+            var subdomain = $.trim(name).replace(" ", "").replace(".","_");
+            this.tmpAccount.set({subdomain:subdomain});
+
             this.tmpAccount.saveOrUpdateTmpAccount();
         },
 
