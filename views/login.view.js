@@ -22,6 +22,7 @@ _.extend(view.prototype, BaseView.prototype, {
         });
 
     }
+
 });
 
 $$.v.LoginView = view;
