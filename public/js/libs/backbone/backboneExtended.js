@@ -155,6 +155,136 @@
             this.$el.html(html);
         },
 
+
+        /**
+         * @transitionIn
+         *
+         * This is a transition effect.  By specifying "default" instead of a function, a default
+         * transitionIn effect will be used. A custom transition effect can be implemented by making
+         * this a function with a callback argument passed in.
+         *
+         * transitionIn: function(cb)
+         */
+        transitionIn: "default",
+
+
+        /**
+         * @doTransitionIn
+         *
+         * This method invokes any transitionIn methods, if available.  A callback function is required
+         * to alert when the transition has been completed
+         *
+         * @param fn
+         * @returns {*}
+         */
+        doTransitionIn: function(fn) {
+            if (this.transitionIn === "default") {
+                return this._defaultTransitionIn(fn);
+            } else if (_.isFunction(this.transitionIn)) {
+                return this.transitionIn(fn);
+            }
+            if (fn != null) fn();
+        },
+
+
+        /**
+         * @setUpForTransitionIn
+         *
+         * This method is used to setup a view for a transition effect before transitioning. It can
+         * be used to apply any necessary classes to the view for the purposes of aiding in the transition.
+         * You can override this by setting a new function.  The signature expects synchronous return.
+         *
+         * @param fn
+         */
+        setUpTransitionIn: function() {
+            if (this.transitionIn === "default" || _.isFunction(this.transitionIn)) {
+                //TODO: remove this and replace with real css classes, or whatever you want to do
+                this.$el.hide();
+
+                //TODO: This is an example, you would add a new css class(es) here that define the transition
+                this.$el.addClass("transitionIn");
+            }
+            return;
+        },
+
+
+        /**
+         * The default TransitionIn Method.
+         *
+         * @param fn
+         * @private
+         */
+        _defaultTransitionIn: function(fn) {
+            //TODO: Do something here.
+            this.$el.fadeIn(1500, function() {
+                if (fn != null) fn();
+            });
+        },
+
+
+        /**
+         * @transitionOut
+         *
+         * This is a transition effect for the outbound view. By specificying "default" instead of a function,
+         * a default transitionOut effect will be used.  A custom transition effect can be implemented by making
+         * this a function with a callback argument.
+         *
+         * transitionOut: function(cb)
+         */
+        transitionOut: "default",
+
+
+        /**
+         * @doTransitionOut
+         *
+         * This method invokes any transitionOut methods, if available.  A callback function is required
+         * to alert when the transition has been completed
+         *
+         * @param fn
+         * @returns {*}
+         */
+        doTransitionOut: function(fn) {
+            if (this.transitionOut === "default") {
+                return this._defaultTransitionOut(fn);
+            } else if (_.isFunction(this.transitionOut)) {
+                return this.transitionOut(fn);
+            }
+            if (fn != null) fn();
+        },
+
+
+        /**
+         * @setUpForTransitionOut
+         *
+         * This method is used to setup a view for a transition effect before transitioning out. It can
+         * be used to apply any necessary classes to the view for the purposes of aiding in the transition.
+         * You can override this by setting a new function.  The signature expects synchronous return.
+         *
+         * @param fn
+         */
+        setUpTransitionOut: function() {
+            if (this.transitionIn === "default" || _.isFunction(this.transitionIn)) {
+
+                //TODO:  this is just an example, you can add / remove classes here to define your trnasition.
+                this.$el.removeClass("transitionIn");
+            }
+            return;
+        },
+
+
+        /**
+         * The default Transition Out Method.
+         *
+         * @param cb
+         * @private
+         */
+        _defaultTransitionOut: function(fn) {
+            //TODO: Do something here
+            this.$el.fadeOut(1000, function() {
+                if (fn != null) fn();
+            });
+        },
+
         /**
          * @close
          *
@@ -627,11 +757,23 @@
          * @protected
          */
         _show: function (view, selector, beforeAddToDOM, closeOldFunction) {
+
             var oldView = this._getView(selector);
-            if (oldView != null && closeOldFunction != null) {
-                closeOldFunction(this);
-            } else if (oldView != null && oldView != view) {
-                oldView.close();
+
+            if (oldView === view) {
+                console.log("Attempting to show the same view as what's currently in place");
+                return;
+            }
+
+            if (oldView != null) {
+                oldView.setUpTransitionOut();
+                oldView.doTransitionOut(function() {
+                    if (closeOldFunction != null) {
+                        closeOldFunction(this);
+                    } else {
+                        oldView.close();
+                    }
+                });
             }
 
 
@@ -646,15 +788,22 @@
                 beforeAddToDOM();
             }
 
-            if (view != null) {
-                $(container).html(view.el);
-            } else {
-                $(container).html("");
+            if (view == null) {
+                $(container).append("");
+                return true;
             }
 
-            if (view != null) {
-                view.render();
-                view.postRender();
+            view.render();
+            view.postRender();
+
+            if (oldView != null) {
+                view.setUpTransitionIn();
+            }
+
+            $(container).append(view.$el);
+
+            if (oldView != null) {
+                view.doTransitionIn();
             }
 
             return true;
