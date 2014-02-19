@@ -1,27 +1,24 @@
 extends snippets/_layout
 
 block content
-    #body
-        form(role="form", action="/login" method="post")
-            input.hidden(type="text" name="remembermepresent")
-            div.form-group
-                .row
-                    .col-xs-12.col-md-6
-                        label Username
-                        input.form-control.col-xs-12.col-md-6(type="text", name="username", placeholder="Username")
 
-            div.form-group
-                .row
-                    .col-xs-12.col-md-6
-                        label Password
-                        input.form-control.col-xs-12.col-md-6(type="password" name="password", placeholder="Password")
+ section
+      .signinpanel
+            img.logo(src='assets/images/logo.png')
+            form(role="form", action="/login" method="post")
+              h4.nomargin Sign In
+              p.mt5.mb20 Login to access your account&period;
+              input.form-control.uname(type='text', name='username', placeholder='Username')
+              input.form-control.pword(type='password', name='password', placeholder='Password')
+              a(href='/forgotpassword')
+                small Forgot Your Password&quest;
+              button.btn.btn-success.btn-block(type="submit", value="Login") Sign In
 
-            div.checkbox
+              div.checkbox
                 label
                     input(type="checkbox" name="rememberme" id="rememberme")
                     |Remember me on this computer
 
-            div.btn-toolbar
-                button.btn.btn-primary(type="submit", value="Login" role="button") Login
-                a.btn.btn-primary(href="/forgotpassword", role="button") Forgot Password
-                a.btn.btn-default(href="/signup", role="button") Signup Now
+              strong
+                | Not a member&quest;
+                a(href='/signup')  Sign Up

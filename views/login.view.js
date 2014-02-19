@@ -9,7 +9,8 @@ _.extend(view.prototype, BaseView.prototype, {
     show: function() {
         var data = this.baseData({
             includeJs:true,
-            includeHeader:true
+            includeHeader:false,
+            includeFooter:false
         });
 
         var self = this;

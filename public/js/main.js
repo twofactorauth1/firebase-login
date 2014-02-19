@@ -104,5 +104,6 @@ define([
 ], function (app) {
     $(document).ready(function(){
         app.initialize();
+        // Page Preloader
     });
 });

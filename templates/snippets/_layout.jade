@@ -7,11 +7,16 @@ html
                 include standardhead
             title=title
             link(rel='stylesheet', href='/css/site.css')
+            link(rel='stylesheet', href='/css/font-awesome.min.css')
     body
+        //- #preloader
+        //-   #status
+        //-     i.fa.fa-spinner.fa-spin
         #wrap
             if includeHeader
                 #header-background
                     include _header
+
             .container
                 if errorMsg
                     #error-msg.alert.alert-danger
@@ -48,5 +53,8 @@ html
             //required for sticky footer
             #push
 
-        include _footer
+        if includeFooter
+            include _footer
+        else
+            include _serverProps
 

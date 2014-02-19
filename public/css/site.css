@@ -5819,6 +5819,74 @@ td.visible-print {
   }
 }
 /*  ENTER CUSTOM OVERRIDES FOR THE DEFAULT BOOTSTRAP STYLES HERE */
+/* preloader */
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #e4e7ea;
+  z-index: 10000;
+}
+#status {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
+  font-size: 32px;
+}
+/* sign in */
+.signinpanel {
+  max-width: 480px;
+  margin: 10% auto 0 auto;
+}
+.signinpanel .logo {
+  padding: 15px;
+  margin: 0 auto;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+}
+.signinpanel .form-control {
+  display: block;
+  margin-top: 15px;
+}
+.signinpanel .uname {
+  background: #ffffff url(../images/user.png) no-repeat 95% center;
+}
+.signinpanel .pword {
+  background: #ffffff url(../images/locked.png) no-repeat 95% center;
+}
+.signinpanel .btn {
+  margin-top: 15px;
+}
+.signinpanel form {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid #ccc;
+  -moz-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+  -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+  box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  padding: 30px;
+  padding-top: 10px;
+}
+.signinpanel form a {
+  color: #666;
+}
+@media screen and (max-width: 640px) {
+  .signinpanel {
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .signinpanel form {
+    margin-top: 20px;
+  }
+}
 /*  ENTER CUSTOM GLOBAL STYLES HERE  */
 /********************************
   CUSTOM ICONS
