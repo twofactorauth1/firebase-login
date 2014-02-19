@@ -215,6 +215,12 @@
          * @private
          */
         _defaultTransitionIn: function(fn) {
+            //TODO: if using a css transition, you must listen for the transition end:
+            this.$el.on("transitionend webkitTransitionEnd", function(event) {
+                var $target = $(e.target).off("transitionend webkitTransitionEnd");
+                if (fn != null) fn();
+            });
+
             //TODO: Do something here.
             this.$el.fadeIn(1500, function() {
                 if (fn != null) fn();
@@ -275,10 +281,16 @@
         /**
          * The default Transition Out Method.
          *
-         * @param cb
+         * @param fn
          * @private
          */
         _defaultTransitionOut: function(fn) {
+            //TODO: if using a css transition, you must listen for the transition end, if you want to listen for it
+            this.$el.on("transitionend webkitTransitionEnd", function(event) {
+                var $target = $(e.target).off("transitionend webkitTransitionEnd");
+                if (fn != null) fn();
+            });
+
             //TODO: Do something here
             this.$el.fadeOut(1000, function() {
                 if (fn != null) fn();
