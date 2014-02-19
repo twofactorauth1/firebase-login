@@ -8,3 +8,5 @@ node_modules/
 *.log
 public/min/
 bioindigenous.komodoproject
+*global.css
+*site.css
