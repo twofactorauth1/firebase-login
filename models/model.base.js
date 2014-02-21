@@ -64,11 +64,9 @@ _.extend(modelBase.prototype, {
         return this.__proto__.db.table;
     },
 
-
-    props: function() {
-        return this.attributes;
+    idStrategy: function() {
+        return this.__proto__.db.idStrategy || "increment";
     },
-
 
     toJSON: function() {
         return _.clone(this.attributes); //shallow copy

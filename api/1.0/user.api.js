@@ -15,12 +15,12 @@ _.extend(api.prototype, BaseApi.prototype, {
     dao: UserDao,
 
     initialize: function() {
-        app.get(this.getUrlRoute(''), this.isAuthApi, this.getLoggedInUser.bind(this));
-        app.get(this.getUrlRoute('exists/username=:username'), this.userExists.bind(this));
-        app.get(this.getUrlRoute(':id'), this.isAuthApi, this.getUserById.bind(this));
-        app.post(this.getUrlRoute(''), this.createUser.bind(this));
-        app.put(this.getUrlRoute(''), this.isAuthApi, this.updateUser.bind(this));
-        app.delete(this.getUrlRoute(':id'), this.isAuthApi, this.deleteUser.bind(this));
+        app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
+        app.get(this.url('exists/username=:username'), this.userExists.bind(this));
+        app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
+        app.post(this.url(''), this.createUser.bind(this));
+        app.put(this.url(''), this.isAuthApi, this.updateUser.bind(this));
+        app.delete(this.url(':id'), this.isAuthApi, this.deleteUser.bind(this));
     },
 
 
@@ -28,11 +28,22 @@ _.extend(api.prototype, BaseApi.prototype, {
         var self = this;
 
         var user = req.user;
+
+        UserDao.getById(user.id(), function(err, value) {
+           if (!err) {
+               return resp.send(value.toJSON());
+           } else {
+               return self.wrapError(resp, 500, null, err, value);
+           }
+        });
+
         resp.send(user.toJSON());
     },
 
 
     getUserById: function(req,resp) {
+        //TODO - add granular security;
+
         var self = this;
         var userId = req.params.id;
 

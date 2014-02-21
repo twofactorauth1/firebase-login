@@ -15,20 +15,22 @@ _.extend(api.prototype, BaseApi.prototype, {
 
     initialize: function() {
         //TMP Accont
-        app.get(this.getUrlRoute('tmp'), this.getTempAccount.bind(this));
-        app.post(this.getUrlRoute('tmp'), this.saveOrUpdateTmpAccount.bind(this));
-        app.put(this.getUrlRoute('tmp'), this.saveOrUpdateTmpAccount.bind(this));
+        app.get(this.url('tmp'), this.getTempAccount.bind(this));
+        app.post(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
+        app.put(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
 
         //GET
-        app.get(this.getUrlRoute(''), this.isAuthApi, this.getCurrentAccount.bind(this));
-        app.get(this.getUrlRoute(':id'), this.isAuthApi, this.getAccountById.bind(this));
-        app.post(this.getUrlRoute(''), this.isAuthApi, this.createAccount.bind(this));
-        app.put(this.getUrlRoute(''), this.isAuthApi, this.updateAccount.bind(this));
-        app.delete(this.getUrlRoute(':id'), this.isAuthApi, this.deleteAccount.bind(this));
+        app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
+        app.get(this.url(':id'), this.isAuthApi, this.getAccountById.bind(this));
+        app.post(this.url(''), this.isAuthApi, this.createAccount.bind(this));
+        app.put(this.url(''), this.isAuthApi, this.updateAccount.bind(this));
+        app.delete(this.url(':id'), this.isAuthApi, this.deleteAccount.bind(this));
     },
 
 
     getCurrentAccount: function(req, resp) {
+        //TODO - add granular security
+
         var self = this;
 
         AccountDao.getAccountByHost(req.get("host"), function(err, value) {
@@ -46,6 +48,8 @@ _.extend(api.prototype, BaseApi.prototype, {
 
 
     getAccountById: function(req,resp) {
+        //TODO - add granular security
+
         var self = this;
         var accountId = req.params.id;
 

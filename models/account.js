@@ -34,7 +34,8 @@ var account = $$.m.ModelBase.extend({
 }, {
     db: {
         storage: "mongo",
-        table: "accounts"
+        table: "accounts",
+        idStategy: "increment"
     }
 });
 

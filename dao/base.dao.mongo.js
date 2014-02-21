@@ -60,10 +60,34 @@ var mongodao = {
         var collection = this.getTable(type);
         this.mongo(collection).findOne(query, function(err, result) {
            if (!err) {
-               fn(err, self._createModel(result));
+               fn(null, self._createModel(result));
            } else {
                fn(err, result);
            }
+        });
+    },
+
+
+    _findManyMongo: function(query, type, fn) {
+        var self = this;
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+        this.mongo(collection).find(query, function(err, result) {
+            if (!err) {
+                var arr = [];
+
+                result.forEach(function(item) {
+                   arr.push(self._createModel(item));
+                });
+
+                fn(null, arr);
+            } else {
+                fn(err, result);
+            }
         });
     },
 

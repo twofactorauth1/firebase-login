@@ -20,29 +20,35 @@ define([], function() {
             }
         },
 
-        customer: {
+        contact: {
             detail_types: {
-                LOCAL: 1,
-                FACEBOOK: 2,
-                TWITTER: 3,
-                LINKDIN: 4,
-                CONSTANT_CONTACT: 5
+                LOCAL: "lo",
+                FACEBOOK: "fb",
+                TWITTER: "tw",
+                LINKDIN: "li",
+                GOOGLE: "go",
+                CONSTANT_CONTACT: "cc"
             },
 
             phone_types: {
                 MOBILE: "m",
                 HOME: "h",
                 WORK: "w"
+            },
+
+            activity_types: {
+                PHONE: "p",
+                EMAIL: "e"
             }
         },
 
         user: {
             credential_types: {
-                LOCAL: 1,
-                FACEBOOK: 2,
-                TWITTER: 3,
-                LINKDIN: 4,
-                GOOGLE: 5
+                LOCAL: "lo",
+                FACEBOOK: "fb",
+                TWITTER: "tw",
+                LINKDIN: "li",
+                GOOGLE: "go"
             }
         }
     };

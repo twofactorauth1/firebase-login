@@ -272,7 +272,8 @@ var user = $$.m.ModelBase.extend({
 }, {
     db: {
         storage: "mongo",
-        table: "users"
+        table: "users",
+        idStrategy: "increment"
     }
 });
 

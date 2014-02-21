@@ -19,7 +19,7 @@ _.extend(apiBase.prototype, {
             this.base = options.base;
         }
 
-        app.get(this.getUrlRoute('ping'), this.ping.bind(this));
+        app.get(this.url('ping'), this.ping.bind(this));
 
         this.log = global.getLogger(this.base + ".api");
 
@@ -29,7 +29,7 @@ _.extend(apiBase.prototype, {
     },
 
 
-    getUrlRoute: function(route, version, overrideBase) {
+    url: function(route, version, overrideBase) {
         if (version != null) {
             var match = version.match(/[a-zA-Z]*/);
             if (match != null && match.length > 0) {

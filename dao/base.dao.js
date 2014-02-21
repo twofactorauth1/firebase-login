@@ -1,4 +1,5 @@
 var mongoBaseDao = require('./base.dao.mongo');
+var utils = requirejs("utils/commonutils");
 
 var baseDao = function() {
 
@@ -20,6 +21,17 @@ _.extend(baseDao.prototype, mongoBaseDao, {
 
 
     saveOrUpdate: function(model, fn) {
+        if ((model.id() == null || model.id() == 0)) {
+            var strategy = this.getIdStrategy(model);
+            switch(strategy) {
+                case "uuid":
+                    model.id($$.u.idutils.generateUUID());
+                    break;
+                default: //increment
+                    break;
+            }
+        }
+
         if (this.getStorage(model) === "mongo") {
             this._saveOrUpdateMongo(model, fn);
         } else {
@@ -57,11 +69,20 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
+    findMany: function(query, type, fn) {
+        if (this.getStorage(type) === "mongo") {
+            this._findManyMongo(query, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
+
     getStorage: function(type) {
         if (type != null && type.hasOwnProperty != null) {
             if (type.hasOwnProperty("db")) {
                 return type.db.storage;
-            } else if(type.hasOwnProperty("storage")) {
+            } else if(_.isFunction(type.db)) {
                 return type.storage();
             }
         }
@@ -73,11 +94,23 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         if (type != null && type.hasOwnProperty != null) {
             if (type.hasOwnProperty("db")) {
                 return type.db.table;
-            } else if(type.hasOwnProperty("table")) {
+            } else if(_.isFunction(type.table)) {
                 return type.table();
             }
         }
         return this.defaultModel.db.table;
+    },
+
+
+    getIdStrategy: function(type) {
+        if (type != null && type.hasOwnProperty != null) {
+            if (type.hasOwnProperty("db")) {
+                return type.db.idStrategy || "increment";
+            } else if(_.isFunction(type.idStrategy)) {
+                return type.idStrategy();
+            }
+        }
+        return this.defaultModel.db.idStrategy || "incrememnt";
     }
 });
 
