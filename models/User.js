@@ -1,5 +1,6 @@
 require('./model.base');
 var crypto = require('../utils/security/crypto');
+var constants = requirejs("constants/constants");
 
 var user = $$.m.ModelBase.extend({
 
@@ -56,7 +57,7 @@ var user = $$.m.ModelBase.extend({
 
     //region CREDENTIALS
     createOrUpdateLocalCredentials: function(password) {
-        var creds = this._getCredentials($$.m.User.CREDENTIAL_TYPES.LOCAL);
+        var creds = this._getCredentials($$.constants.user.credential_types.LOCAL);
         if (creds == null) {
             return this._createLocalCredentials(this.get("username"), password);
         } else {
@@ -70,7 +71,7 @@ var user = $$.m.ModelBase.extend({
         var creds = {
             username:username || this.get("username"),
             password:password,
-            type:$$.m.User.CREDENTIAL_TYPES.LOCAL
+            type:$$.constants.user.credential_types.LOCAL
         };
 
         return this._setCredentials(creds, true);
@@ -91,21 +92,20 @@ var user = $$.m.ModelBase.extend({
             isNew = true;
         }
 
+        creds = creds || {};
         switch(options.type) {
-            case $$.m.User.CREDENTIAL_TYPES.LOCAL:
-                creds = creds || {};
+            case $$.constants.user.credential_types.LOCAL:
                 creds.type = options.type;
                 creds.username = options.username;
                 creds.password = options.password;
                 break;
-            case $$.m.User.CREDENTIAL_TYPES.FACEBOOK:
-                creds = creds || {};
+            case $$.constants.user.credential_types.FACEBOOK:
                 break;
-            case $$.m.User.CREDENTIAL_TYPES.TWITTER:
-                creds = creds || {};
+            case $$.constants.user.credential_types.TWITTER:
                 break;
-            case $$.m.User.CREDENTIAL_TYPES.LINKDIN:
-                creds = creds || {};
+            case $$.constants.user.credential_types.LINKDIN:
+                break;
+            case $$.constants.use.credential_types.GOOGLE:
                 break;
         }
 
@@ -201,7 +201,7 @@ var user = $$.m.ModelBase.extend({
             credentials: [{
                 username:username,
                 password:crypto.hash(password),
-                type: $$.m.User.CREDENTIAL_TYPES.LOCAL
+                type: $$.constants.user.credential_types.LOCAL
             }],
             permissions: permissions
         };
@@ -225,7 +225,7 @@ var user = $$.m.ModelBase.extend({
                 // we merge the new into the old
                 var oldCreds;
                 oldAccount.credentials.forEach(function(_oldCreds) {
-                    if (_oldCreds.type == $$.m.User.CREDENTIAL_TYPES.LOCAL) {
+                    if (_oldCreds.type == $$.constants.user.credential_types.LOCAL) {
                         oldCreds = _oldCreds;
                     }
                 });
@@ -270,14 +270,6 @@ var user = $$.m.ModelBase.extend({
     //endregion
 
 }, {
-
-    CREDENTIAL_TYPES: {
-        LOCAL: 1,
-        FACEBOOK: 2,
-        TWITTER: 3,
-        LINKDIN: 4
-    },
-
     db: {
         storage: "mongo",
         table: "users"

@@ -18,6 +18,26 @@ define([], function() {
                 LARGE: 4,
                 ENTERPRISE: 5
             }
+        },
+
+        customer: {
+            detail_types: {
+                LOCAL: 1,
+                FACEBOOK: 2,
+                TWITTER: 3,
+                LINKDIN: 4,
+                CONSTANT_CONTACT: 5
+            }
+        },
+
+        user: {
+            credential_types: {
+                LOCAL: 1,
+                FACEBOOK: 2,
+                TWITTER: 3,
+                LINKDIN: 4,
+                GOOGLE: 5
+            }
         }
     };
 

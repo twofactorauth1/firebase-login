@@ -3,7 +3,8 @@ var passport = require('passport')
     , UserDao = require('../dao/user.dao.js')
     , AccountDao = require('../dao/account.dao')
     , crypto = require('../utils/security/crypto')
-    , os = require('os');
+    , os = require('os')
+    , constants = requirejs("constants/constants");
 
 passport.use(new LocalStrategy({
         passReqToCallback:true
@@ -30,7 +31,7 @@ passport.use(new LocalStrategy({
 
                         var user = value;
 
-                        user.verifyPassword(password, $$.m.User.CREDENTIAL_TYPES.LOCAL, function(err, value) {
+                        user.verifyPassword(password, $$.constants.user.credential_types.LOCAL, function(err, value) {
                             if (!err) {
                                 if (value === false) {
                                     return done(null, false, {message:"Incorrect password"});
@@ -55,7 +56,7 @@ passport.use(new LocalStrategy({
                             return done(null, false, {message:"Incorrect username"});
                         } else {
                             var user = value;
-                            user.verifyPasswordForAccount(account.id(), password, $$.m.User.CREDENTIAL_TYPES.LOCAL, function(err, value) {
+                            user.verifyPasswordForAccount(account.id(), password, $$.constants.user.credential_types.LOCAL, function(err, value) {
                                 if (!err) {
                                     if (value === false) {
                                         return done(null, false, {message:"Incorrect password"});
