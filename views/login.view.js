@@ -16,7 +16,7 @@ _.extend(view.prototype, BaseView.prototype, {
         var self = this;
         this.account(function(err, value) {
             if (!err && value != null) {
-                data.account = value.props()
+                data.account = value.toJSON()
             }
             self.resp.render('login', data);
         });

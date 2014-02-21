@@ -1,3 +1,5 @@
+var _ = require("underscore");
+
 var modelBase = function(options) {
     this.init.apply(this, arguments);
 };
@@ -38,8 +40,12 @@ _.extend(modelBase.prototype, {
 
 
     set: function(props) {
-        for(var key in props) {
-            this.attributes[key] = props[key];
+        if (arguments.length == 2 && _.isString(arguments[0])) {
+            this.attributes[arguments[0]] = arguments[1];
+        } else {
+            for(var key in props) {
+                this.attributes[key] = props[key];
+            }
         }
     },
 
@@ -65,7 +71,7 @@ _.extend(modelBase.prototype, {
 
 
     toJSON: function() {
-        return JSON.stringify(this.attributes);
+        return _.clone(this.attributes); //shallow copy
     }
 });
 
@@ -114,4 +120,4 @@ modelBase.extend = extend;
 
 $$.m.ModelBase = modelBase;
 
-module.exports.ModelBase = modelBase;
+module.exports = modelBase;

@@ -9,7 +9,7 @@ var account = $$.m.ModelBase.extend({
                 name:"",
                 type:0,
                 size:0
-            }, // { name:string, type:int, size:int }
+            },
             subdomain:"",
             domain:"",
             token:""

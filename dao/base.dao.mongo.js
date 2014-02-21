@@ -108,7 +108,7 @@ var mongodao = {
         }
 
         var self = this;
-        this.mongo(collection).save(model.props(), function(err, result) {
+        this.mongo(collection).save(model.toJSON(), function(err, result) {
             if (!err) {
                 if (fn != null) {
                     fn(null, model);

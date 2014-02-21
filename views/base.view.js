@@ -44,7 +44,7 @@ _.extend(baseView.prototype, {
         if (this.req.user != null) {
             data.serverProps.userId = this.req.user.id();
             data.isLoggedIn = true;
-            data.user = this.req.user.props();
+            data.user = this.req.user.toJSON();
         } else {
             data.isLoggedIn = false;
         }
@@ -65,7 +65,7 @@ _.extend(baseView.prototype, {
 
         if (this.req.isAuthenticated()) {
             data.authenticated = true;
-            data.user = this.req.user.props();
+            data.user = this.req.user.toJSON();
         } else {
             data.authenticated = false;
         }

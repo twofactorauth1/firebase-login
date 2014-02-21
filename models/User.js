@@ -10,32 +10,32 @@ var user = $$.m.ModelBase.extend({
         email: "",
         first:"",
         last:"",
+
+        /**
+         * [{
+         *  accountId:int,
+         *  username:string,
+         *  password:string
+         *  credentials: [
+         *      type:int,
+         *      username:string
+         *      password:string,
+         *      authtoken:string
+         *  ],
+         *  permissions: [ super, admin, member ]
+         * }]
+         */
         accounts: [],
-            /*
-            [ {
-                accountId:int,
-                username:string,
-                password:string,
-                credentials: [
-                    {
-                        type:int,
-                        username:string,
-                        password:string,
-                        oathtoken:string
-                    }
-                ]
-                permissions: [ super,admin,member ]
-            } ]
-            */
+
+        /**
+         * [{
+         *  type:int,
+         *  username:string,
+         *  password:string,
+         *  authtoken:string
+         * }]
+         */
         credentials: []
-            /*
-            [ {
-                type:int,
-                username:string,
-                password:string,
-                oathtoken:string
-            } ]
-             */
     },
 
 

@@ -10,7 +10,7 @@ _.extend(view.prototype, BaseView.prototype, {
         var user = this.req.user;
 
         var data = {
-            user: user.props(),
+            user: user.toJSON(),
             location: "home"
         };
 

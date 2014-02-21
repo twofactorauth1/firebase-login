@@ -27,6 +27,12 @@ define([], function() {
                 TWITTER: 3,
                 LINKDIN: 4,
                 CONSTANT_CONTACT: 5
+            },
+
+            phone_types: {
+                MOBILE: "m",
+                HOME: "h",
+                WORK: "w"
             }
         },
 
