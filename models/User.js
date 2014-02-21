@@ -157,7 +157,7 @@ var user = $$.m.ModelBase.extend({
 
     _verifyPasswordForCredentials: function(credentials, password, fn) {
         if (credentials === null) {
-            return fn("No login credentials found for type: " + type);
+            return fn("No login credentials found");
         }
 
         if (credentials.hasOwnProperty("password")) {

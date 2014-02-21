@@ -40,7 +40,7 @@ passport.use(new LocalStrategy({
                                     return done(null, user);
                                 }
                             } else {
-                                return done(null, false, {message:"An error occurred verifying encrypted password"});
+                                return done(null, false, {message:"An error occurred verifying password - " + err});
                             }
                         });
                     } else {

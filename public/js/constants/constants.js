@@ -8,7 +8,8 @@ define([], function() {
         account: {
             company_types: {
                 PROFESSIONAL:1,
-                BUSINESS:2
+                BUSINESS:2,
+                ENTERPRISE: 3
             },
 
             company_size: {

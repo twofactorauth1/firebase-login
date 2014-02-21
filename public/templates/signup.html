@@ -41,6 +41,7 @@
                 <strong>Tell us a little about your
                     {{#if isBusiness}}business{{/if}}
                     {{#if isProfessional}}professional services or goods{{/if}}
+                    {{#if isEnterprise}}enterprise corporation{{/if}}
                 </strong>
 
 
@@ -52,6 +53,7 @@
                             <label>
                                 {{#if isBusiness}}What is the name of your business{{/if}}
                                 {{#if isProfessional}}Does your professional business have a name?{{/if}}
+                                {{#if isEnterprise}}What is the name of your corporation{{/if}}
                             </label>
                             <input class="form-control" type="text" id="input-company-name" value="{{account.company.name}}" />
                         </div>

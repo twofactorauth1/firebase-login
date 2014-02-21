@@ -16,7 +16,7 @@ define([
         usernamevalid: false,
 
         events: {
-            "click #btn-business,#btn-professional": "onCompanyTypeChanged",
+            "click #btn-business,#btn-professional,#btn-enterprise": "onCompanyTypeChanged",
             "change .radio-company-size": "onCompanySizeChanged",
 
             "onkeytimer #input-company-name": "onCompanyNameKeyTimer",
@@ -50,7 +50,8 @@ define([
             return {
                 account:this.tmpAccount.toJSON(),
                 isProfessional:this.tmpAccount.get("company").type === $$.constants.account.company_types.PROFESSIONAL,
-                isBusiness:this.tmpAccount.get("company").type === $$.constants.account.company_types.BUSINESS
+                isBusiness:this.tmpAccount.get("company").type === $$.constants.account.company_types.BUSINESS,
+                isEnterprise:this.tmpAccount.get("company").type === $$.constants.account.company_types.ENTERPRISE
             };
         },
 
@@ -104,6 +105,8 @@ define([
                 company.type = $$.constants.account.company_types.BUSINESS;
             } else if(type == "professional") {
                 company.type = $$.constants.account.company_types.PROFESSIONAL;
+            } else if(type == "enterprise") {
+                company.type = $$.constants.accounts.company_types.ENTERPRISE;
             }
 
             this.tmpAccount.saveOrUpdateTmpAccount();
