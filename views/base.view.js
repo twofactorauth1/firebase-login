@@ -31,6 +31,12 @@ _.extend(baseView.prototype, {
         serverProps.router = options.router;
         serverProps.root = options.root;
 
+        if (options.serverProps != null) {
+            for(var key in options.serverProps) {
+                serverProps[key] = options.serverProps[key];
+            }
+        }
+
         delete options.router;
         delete options.root;
 

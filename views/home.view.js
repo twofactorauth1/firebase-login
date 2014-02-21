@@ -11,7 +11,9 @@ _.extend(view.prototype, BaseView.prototype, {
             {
                 router:"home",
                 root:root || "home",
-                location:"home"
+                location:"home",
+                includeHeader:true,
+                includeFooter:true
             }
         );
 

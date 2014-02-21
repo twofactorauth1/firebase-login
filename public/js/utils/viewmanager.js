@@ -155,6 +155,14 @@ define([
                 selector = "#container-alert";
             }
             $(selector).fadeOut();
+        },
+
+
+        onAllRender: function() {
+            $('#status').delay(350).fadeOut();
+            $('#preloader').delay(500).fadeOut(function(){
+                $('body').delay(350).css({'overflow':'visible'});
+            });
         }
     });
 

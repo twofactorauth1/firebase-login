@@ -741,6 +741,10 @@
                 $(container).html(html);
             }
 
+            if (this.onAllRender != null) {
+                this.onAllRender();
+            }
+
             return true;
         },
 
@@ -808,6 +812,10 @@
             view.render();
             view.postRender();
 
+            if (this.onAllRender != null) {
+                this.onAllRender();
+            }
+
             if (oldView != null) {
                 view.setUpTransitionIn();
             }
@@ -819,6 +827,11 @@
             }
 
             return true;
+        },
+
+
+        onAllRender: function() {
+
         },
 
 
