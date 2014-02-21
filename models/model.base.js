@@ -56,16 +56,16 @@ _.extend(modelBase.prototype, {
 
 
     storage: function() {
-        return this.__proto__.db.storage;
+        Object.getPrototypeOf(this).constructor.db.storage;
     },
 
 
     table: function() {
-        return this.__proto__.db.table;
+        Object.getPrototypeOf(this).constructor.db.table;
     },
 
     idStrategy: function() {
-        return this.__proto__.db.idStrategy || "increment";
+        Object.getPrototypeOf(this).constructor.db.idStrategy || "increment";
     },
 
     toJSON: function() {
