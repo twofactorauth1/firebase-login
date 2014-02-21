@@ -106,7 +106,7 @@ define([
             } else if(type == "professional") {
                 company.type = $$.constants.account.company_types.PROFESSIONAL;
             } else if(type == "enterprise") {
-                company.type = $$.constants.accounts.company_types.ENTERPRISE;
+                company.type = $$.constants.account.company_types.ENTERPRISE;
             }
 
             this.tmpAccount.saveOrUpdateTmpAccount();
