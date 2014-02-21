@@ -20,8 +20,7 @@ if (process.env.ROOT_HOST == null) {
     process.env.ROOT_HOST = "indigenous.local";
 }
 
-process.env.INVALID_SUBDOMAINS = ["indigenous","www"];
-
+process.env.GLOBAL_SUBDOMAINS = "www,home,app";
 //---------------------------------------------------------
 //
 //---------------------------------------------------------

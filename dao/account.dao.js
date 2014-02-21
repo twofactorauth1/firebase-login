@@ -27,9 +27,12 @@ var dao = {
     getAccountByHost: function(host, fn) {
         var self = this
             , defaultHost = process.env.ROOT_HOST || "indigenous"
+            , globalSubdomains = process.env.GLOBAL_SUBDOMAINS || "www"
             , hosts
             , subdomain
             , domain;
+
+        globalSubdomains = globalSubdomains.split(",");
 
         //If we're length one and hosts[0] == defaultHost, then it's ok
         //If we're length two and hosts[0] == www and hosts[1] == defaultHost, then its ok
@@ -43,6 +46,7 @@ var dao = {
             host = host.substr(0, portIndex);
         }
 
+
         hosts = host.split(".");
 
         if (hosts[0] == "localhost") {
@@ -54,8 +58,17 @@ var dao = {
             return fn(null, true);
         } else if(hosts.join(".") == defaultHost) {
             return fn(null, true);
-        } else if((hosts.length == 2 || hosts.length == 3) && hosts[1] == defaultHost) {
-            subdomain = hosts[0]; //custom subdomain
+        } else if((hosts.length == 2 || hosts.length == 3)) {
+            if (hosts[1] == defaultHost) {
+                subdomain = hosts[0];
+            } else if(hosts.length == 3 && (hosts[1] + "." + hosts[2]) == defaultHost) {
+                subdomain = hosts[0];
+            }
+            if (subdomain != null && globalSubdomains.indexOf(subdomain) > -1) {
+                return fn(null, true);
+            } else if(subdomain == null) {
+                domain = hosts.join(".");
+            }
         } else {
             domain = hosts.join("."); //custom domain
         }
