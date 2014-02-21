@@ -249,6 +249,10 @@ define([
             $('#preloader').delay(500).fadeOut(function(){
               $('body').delay(350).css({'overflow':'visible'});
             });
+        },
+
+        setUpTransitionIn: function() {
+            console.log('in');
         }
     });
 

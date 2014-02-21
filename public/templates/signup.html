@@ -1,117 +1,117 @@
 <script type="text/x-handlebars-template" name="signup-start">
-    <div>
-        <strong>What kind of business are you?</strong>
+    <section>
+    <div class="signuppanel">
+        <a href="/login" class="left-nav"></a>
+        <a href="/details" class="right-nav {{#superUnless "or" isProfessional isBusiness}}hidden{{/superUnless}}"></a>
+        <span class="logo"></span>
+            <div class="form">
+            <ul id="progressbar">
+                <li class="active"></li>
+                <li></li>
+                <li></li>
+            </ul>
+                <h4>Choose Your Business Model</h4>
+                <hr>
+                    <div class="models">
+                        <div id="btn-professional" class="btn btn-large btn-bus-model {{#if isProfessional}}btn-primary{{else}}btn-default{{/if}}" data-type="professional"><span class="fa fa-user"></span></div>
 
-        <hr/>
+                        <div id="btn-business" class="btn btn-large btn-default btn-bus-model {{#if isBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="business"><span class="fa fa-users"></span></div>
 
-        <div class="row">
-            <div class="col-xs-6 col-md-6 col-lg-6">
-                <div class="panel panel-default equalheight">
-                    <div class="panel-heading">
-                        <strong>Professional</strong>
+                        <div id="btn-enterprise" class="btn btn-large btn-default btn-bus-model {{#if isEnterprise}}btn-primary{{else}}btn-default{{/if}}" data-type="enterprise"><span class="fa fa-building-o"></span></div>
                     </div>
-
-                    <div class="panel-body">
-                        <p>Are you a single person company looking to
-                            offer services or sell your home made goods?</p>
-
-                        <p>If so, click here</p>
-
-                        <div id="btn-professional" class="btn btn-large {{#if isProfessional}}btn-primary{{else}}btn-default{{/if}}" data-type="professional">I'm a professional</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-6 col-md-6 col-lg-6">
-                <div class="panel panel-default equalheight">
-                    <div class="panel-heading">
-                        <strong>Business</strong>
-                    </div>
-
-                    <div class="panel-body">
-                        <p>Are you a small to medium sized company selling services or goods?</p>
-
-                        <p>If so, click here</p>
-
-                        <div id="btn-business" class="btn btn-large btn-default {{#if isBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="business">I'm a Business</div>
-                    </div>
-                </div>
-            </div>
         </div>
-
-        <a href="/details" class="btn btn-large btn-default {{#superUnless "or" isProfessional isBusiness}}hidden{{/superUnless}}">Next</a>
     </div>
+    </section>
 </script>
 
 
 <script type="text/x-handlebars-template" name="signup-details">
-    <div>
-        <strong>Tell us a little about your
-            {{#if isBusiness}}business{{/if}}
-            {{#if isProfessional}}professional services or goods{{/if}}
-        </strong>
+<section>
+    <div class="signuppanel">
+        <a href="/start" class="left-nav"></a>
+        <a href="/create" class="right-nav"></a>
+        <span class="logo"></span>
+        <div class="form">
+            <ul id="progressbar">
+                <li>Account Setup</li>
+                <li class="active">Social Profiles</li>
+                <li>Personal Details</li>
+            </ul>
+            <div>
+                <strong>Tell us a little about your
+                    {{#if isBusiness}}business{{/if}}
+                    {{#if isProfessional}}professional services or goods{{/if}}
+                </strong>
 
 
-        <hr/>
+                <hr/>
 
-        <form role="form">
-            <div class="form-group row">
-                <div class="col-md-5">
-                    <label>
-                        {{#if isBusiness}}What is the name of your business{{/if}}
-                        {{#if isProfessional}}Does your professional business have a name?{{/if}}
-                    </label>
-                    <input class="form-control" type="text" id="input-company-name" value="{{account.company.name}}" />
-                </div>
-            </div>
-
-
-            {{#if isBusiness}}
-            <div class="form-group row">
-                <div class="col-md-5">
-                    <label>
-                        How large is your business?
-                    </label>
-
-                    <div class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-default {{#check account.company.size 2}}active{{/check}}">
-                            <input type="radio" name="radio-company-size" class="radio-company-size" data-size=2> Small (0-4)
-                        </label>
-
-                        <label class="btn btn-default {{#check account.company.size 3}}active{{/check}}">
-                            <input type="radio" name="radio-company-size" class="radio-company-size" data-size=3> Medium (5-24)
-                        </label>
-
-                        <label class="btn btn-default {{#check account.company.size 4}}active{{/check}}">
-                            <input type="radio" name="radio-company-size" class="radio-company-size" data-size=4> Large(25-99)
-                        </label>
-
-                        <label class="btn btn-default {{#check account.company.size 5}}active{{/check}}">
-                            <input type="radio" name="radio-company-size" class="radio-company-size" data-size=5> Enterprise(100+)
-                        </label>
+                <form role="form">
+                    <div class="form-group row">
+                        <div class="">
+                            <label>
+                                {{#if isBusiness}}What is the name of your business{{/if}}
+                                {{#if isProfessional}}Does your professional business have a name?{{/if}}
+                            </label>
+                            <input class="form-control" type="text" id="input-company-name" value="{{account.company.name}}" />
+                        </div>
                     </div>
-                </div>
+
+
+                    {{#if isBusiness}}
+                    <div class="form-group row">
+                        <div class="">
+                            <label>
+                                How large is your business?
+                            </label>
+
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-default {{#check account.company.size 2}}active{{/check}}">
+                                    <input type="radio" name="radio-company-size" class="radio-company-size" data-size=2> Small (0-4)
+                                </label>
+
+                                <label class="btn btn-default {{#check account.company.size 3}}active{{/check}}">
+                                    <input type="radio" name="radio-company-size" class="radio-company-size" data-size=3> Medium (5-24)
+                                </label>
+
+                                <label class="btn btn-default {{#check account.company.size 4}}active{{/check}}">
+                                    <input type="radio" name="radio-company-size" class="radio-company-size" data-size=4> Large(25-99)
+                                </label>
+
+                                <label class="btn btn-default {{#check account.company.size 5}}active{{/check}}">
+                                    <input type="radio" name="radio-company-size" class="radio-company-size" data-size=5> Enterprise(100+)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    {{/if}}
+                </form>
+
             </div>
-            {{/if}}
-        </form>
-
-        <div class="btn-toolbar">
-            <a href="/start" class="btn btn-large btn-default">Previous</a>
-            <a href="/create" class="btn btn-large btn-default">Next</a>
         </div>
-
     </div>
+</section>
 </script>
 
 
 <script type="text/x-handlebars-template" name="signup-create">
+<section>
+    <div class="signuppanel">
+    <a href="/details" class="left-nav"></a>
+    <span class="logo"></span>
+    <div class="form">
+    <ul id="progressbar">
+        <li>Account Setup</li>
+        <li>Social Profiles</li>
+        <li class="active">Personal Details</li>
+    </ul>
     <h3>Create an account</h3>
 
     <hr/>
 
     <form role="form" id="form-create-account" action="/signup" method="post">
         <div class="form-group row">
-            <div class="col-md-5">
+            <div class="">
                 <label>Username <small>Can be your email</small></label>
                 <div class="input-group">
                     <input class="form-control" id="input-username" type="text" name="username" placeholder="username"/>
@@ -122,7 +122,7 @@
         </div>
 
         <div class="form-group row">
-            <div class="col-md-5">
+            <div class="">
                 <label>Password</label>
                 <div class="input-group">
                     <input class="form-control" id="input-password" type="password" name="password" placeholder="password"/>
@@ -133,7 +133,7 @@
         </div>
 
         <div class="form-group row">
-            <div class="col-md-5">
+            <div class="">
                 <label>Re-enter Password</label>
 
                 <div class="input-group">
@@ -145,7 +145,7 @@
         </div>
 
         <div class="form-group row">
-            <div class="col-md-5">
+            <div class="">
                 <label class="required">Email</label>
                 <div class="input-group">
                     <input class="form-control" id="input-email" type="email" name="email" placeholder="email" autocomplete="off"/>
@@ -155,10 +155,10 @@
             </div>
         </div>
 
-        <div class="btn-toolbar">
-            <a href="/details" class="btn btn-large btn-default">Previous</a>
-            <button class="btn btn-primary" type="submit" value="Create Account" role="button">Create Account</button>
-        </div>
-    </form>
 
+            <button class="btn btn-primary btn-default" type="submit" value="Create Account" role="button">Create Account</button>
+    </form>
+    </div>
+    </div>
+    </section>
 </script>

@@ -4,7 +4,7 @@ block content
 
  section
       .signinpanel
-            img.logo(src='assets/images/logo.png')
+            span.logo
             form(role="form", action="/login" method="post")
               h4.nomargin Sign In
               p.mt5.mb20 Login to access your account&period;
@@ -23,9 +23,9 @@ block content
                 | Not a member&quest;
                 a(href='/signup')  Sign Up
   script.
-            $(window).load(function() {
-                $('#status').delay(350).fadeOut();
-                $('#preloader').delay(500).fadeOut(function(){
-                  $('body').delay(350).css({'overflow':'visible'});
-                });
-              });
+    $(window).load(function() {
+        $('#status').delay(350).fadeOut();
+        $('#preloader').delay(500).fadeOut(function(){
+          $('body').delay(350).css({'overflow':'visible'});
+        });
+      });
