@@ -124,15 +124,39 @@ var dao = {
 
 
     convertTempAccount: function(accountToken, fn) {
+        var self = this;
         var account = $$.g.cache.get(accountToken, "accounts");
 
         if (account != null) {
-            this.saveOrUpdate(account, function(err, value) {
-                if (!err) {
-                    $$.g.cache.remove(accountToken, "accounts");
-                }
-                fn(err, value);
-            });
+
+            //Test to see if subdomain is already taken
+            var p = $.Deferred();
+            var subdomain = account.getOrGenerateSubdomain();
+            if (account.get("subdomain") != null && account.get("subdomain") != "") {
+                this.getAccountBySubdomain(account.get("subdomain"), function(err, value) {
+                    if (!err) {
+                        if (value != null) {
+                            var subdomain = account.get("subdomain");
+                            subdomain = subdomain + "-" + Math.round(Math.random()*1000000);
+                            account.set({subdomain:subdomain});
+                        }
+                    } else {
+                        return fn(err, avlue);
+                    }
+                    p.resolve();
+                });
+            }
+
+            $.when(p)
+                .done(function() {
+                    self.saveOrUpdate(account, function(err, value) {
+                        if (!err) {
+                            $$.g.cache.remove(accountToken, "accounts");
+                        }
+                        fn(err, value);
+                    });
+                });
+
         } else {
             fn(null, null);
         }
