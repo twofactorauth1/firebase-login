@@ -54,6 +54,26 @@ _.extend(apiBase.prototype, {
     },
 
 
+    setup: function(req,resp, next) {
+        if (req["session"] != null && req.session["accountId"] == null) {
+            var AccountDao = require("../dao/account.dao");
+            AccountDao.getAccountByHost(req.get("host"), function(err, value) {
+                if (!err && value != null) {
+                    if (value === true) {
+                        req.session.accountId = 0;
+                    } else {
+                        req.session.accountId = value.id();
+                    }
+                }
+
+                return next();
+            });
+        } else {
+            return next();
+        }
+    },
+
+
     isAuthApi: function(req, resp, next) {
         if (req.isAuthenticated()) {
             return next()
@@ -85,6 +105,15 @@ _.extend(apiBase.prototype, {
             result = result.toJSON("public");
         }
         return resp.send(result);
+    },
+
+
+    accountId: function(req) {
+        try {
+            return (req.session.accountId == null || req.session.accountId == 0) ? 0 : req.session.accountId;
+        }catch(exception) {
+            return null;
+        }
     },
 
 

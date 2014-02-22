@@ -46,7 +46,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     showHome: function(req,resp) {
         var accountId = this.accountId(req);
-        if (accountId > null) {
+        if (accountId > 0) {
             //This is an account based url, there is no /home
             resp.redirect("/admin");
         } else {
@@ -57,7 +57,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     showAdmin: function(req,resp) {
         var accountId = this.accountId(req);
-        if (accountId != null) {
+        if (accountId > 0) {
             new AdminView(req,resp).show();
         } else {
             //send them back to the main home

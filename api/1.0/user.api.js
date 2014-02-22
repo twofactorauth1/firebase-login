@@ -21,7 +21,8 @@ _.extend(api.prototype, BaseApi.prototype, {
         app.put(this.url(''), this.isAuthApi, this.updateUser.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteUser.bind(this));
 
-        app.get(this.url('exists/username'), this.userExists.bind(this));
+        app.get(this.url('exists/:username'), this.setup, this.userExists.bind(this));
+        app.get(this.url(':accountId/user/exists/:username', "account"), this.setup, this.userExistsForAccount.bind(this));
     },
 
 
@@ -70,9 +71,30 @@ _.extend(api.prototype, BaseApi.prototype, {
 
         var username = req.params.username;
 
+        var accountId = this.accountId(req);
+        if (accountId > 0) {
+            req.params.accountId = accountId;
+            return this.userExistsForAccount(req, resp);
+        }
         UserDao.usernameExists(username, function(err, value) {
             if (err) {
-                return self.wrapError(resp, 500, null, err, value);
+                return self.wrapError(resp, 500, "An error occurred checking username", err, value);
+            }
+            return resp.send(value);
+        });
+    },
+
+
+    userExistsForAccount: function(req,resp) {
+        var self = this;
+        var username = req.params.username;
+        var accountId = req.params.accountId;
+
+        accountId = parseInt(accountId);
+
+        UserDao.usernameExistsForAccount(accountId, username, function(err, value) {
+            if (err) {
+                return self.wrapError(resp, 500, "An error occurred checking username for account", err, value);
             }
             return resp.send(value);
         });

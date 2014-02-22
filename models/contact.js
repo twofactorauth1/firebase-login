@@ -14,6 +14,7 @@ var contact = $$.m.ModelBase.extend({
             cBy:null,       //Created By
             mDate:null,     //ModifiedDate
             mBy:null,       //Modified By
+            _v:"0.1",
 
             /**
              * Array of site activity objects of the form:
@@ -79,6 +80,19 @@ var contact = $$.m.ModelBase.extend({
 
     initialize: function(options) {
 
+    },
+
+
+    serializers:  {
+        db: function(json) {
+            json._first = this.get("first") ? this.get("first").toLowerCase() : null;
+            json._last = this.get("last") ? this.get("last").toLowerCase() : null;
+            json.full = json._first + " " + json._last;
+        },
+
+        public: function(json) {
+            json.full = this.get("first") + " " + this.get("last");
+        }
     },
 
 

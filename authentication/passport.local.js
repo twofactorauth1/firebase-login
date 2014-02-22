@@ -36,7 +36,7 @@ passport.use(new LocalStrategy({
                                 if (value === false) {
                                     return done(null, false, {message:"Incorrect password"});
                                 } else {
-                                    req.session.accountId = null;
+                                    req.session.accountId = 0;
                                     return done(null, user);
                                 }
                             } else {

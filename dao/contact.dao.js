@@ -19,13 +19,11 @@ var dao = {
 
 
         var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
-        var query = {accountId: accountId, last: { $gte: letter, $lt: nextLetter } };
+        var query = {accountId: accountId, _last: { $gte: letter, $lt: nextLetter } };
         var fields = {accountId:1, first:1, last:1, siteActivity:1};
 
         var obj = {query:query, fields:fields};
-        this.findMany(obj, function() {
-
-        });
+        this.findManyWithFields(query, fields, fn);
     }
 };
 

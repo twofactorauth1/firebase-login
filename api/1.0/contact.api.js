@@ -21,6 +21,8 @@ _.extend(api.prototype, BaseApi.prototype, {
         app.put(this.url(''), this.isAuthApi, this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteContact.bind(this));
 
+        app.get(this.url(':accountId/contacts/:letter', "account"), this.isAuthApi, this.getContactsForAccountByLetter.bind(this));
+
         app.get(this.url(':id/activity'), this.isAuthApi, this.getActivityByContactId.bind(this));
         app.get(this.url('activity/:id'), this.isAuthApi, this.getActivityById.bind(this));
         app.post(this.url('activity'), this.isAuthApi, this.createActivity.bind(this));
@@ -28,6 +30,8 @@ _.extend(api.prototype, BaseApi.prototype, {
     },
 
 
+
+    //region CONTACT
     getContactById: function(req,resp) {
         //TODO - add granular security
         var self = this;
@@ -48,7 +52,6 @@ _.extend(api.prototype, BaseApi.prototype, {
     },
 
 
-    //region CONTACT
     createContact: function(req,resp) {
 
     },
@@ -62,6 +65,38 @@ _.extend(api.prototype, BaseApi.prototype, {
     deleteContact: function(req,resp) {
 
     },
+
+
+    getContactsForAccountByLetter: function(req,resp) {
+        //TODO - add granular security
+
+        var self = this;
+        var accountId = req.params.accountId;
+        var letter = req.params.letter;
+
+        if (!accountId) {
+            return self.wrapError(resp, 400, null, "Invalid parameter for account id");
+        }
+
+        accountId = parseInt(accountId);
+
+        if (letter == null || letter == "") {
+            letter = "a";
+        }
+
+        if (letter.length > 1) {
+            return self.wrapError(resp, 401, null, "Invalid parameter for :letter");
+        }
+
+        ContactDao.getContactsShort(accountId, letter, function(err, value) {
+            if (!err) {
+                return self.sendResult(resp, value);
+            } else {
+                return self.wrapError(resp, 500, "failed to retrieve contacts by letter", err, value);
+            }
+        });
+
+    },
     //endregion CONTACT
 
 
@@ -73,11 +108,17 @@ _.extend(api.prototype, BaseApi.prototype, {
         var contactId = req.params.id;
 
         if (!contactId) {
-            self.wrapError(resp, 400, null, "Invalid parameter for contact id");
+            return self.wrapError(resp, 400, null, "Invalid parameter for contact id");
         }
 
         contactId = parseInt(contactId);
-        ContactActivityDao.getByContactId(contactId);
+        ContactActivityDao.getByContactId(contactId, function(err, value) {
+            if (!err) {
+                return self.sendResult(resp, value);
+            } else {
+                return self.wrapError(resp, 500, "failed to retrieve activity by contact id", err, value);
+            }
+        });
     },
 
 

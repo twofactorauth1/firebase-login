@@ -14,12 +14,17 @@ var dao = {
 
 
     usernameExists: function(username, fn) {
-        this.exists({'username':username}, fn);
+        this.exists({'_username':username.toLowerCase()}, fn);
+    },
+
+
+    usernameExistsForAccount: function(accountId, username, fn) {
+        this.exists({"accounts.accountId" : accountId, "accounts.credentials._username" : username.toLowerCase() }, fn);
     },
 
 
     getUserByUsername: function(username, fn) {
-        this.findOne( {'username':username}, fn);
+        this.findOne( {'_username':username}, fn);
     },
 
 
@@ -133,6 +138,25 @@ var dao = {
 
                     self.saveOrUpdate(user, fn);
                 });
+        });
+    },
+
+
+    //TODO - remove this after March 1, 2014
+    _onStartup: function() {
+        var query = {};
+        var self = this;
+        this.findMany(null, function(err, value) {
+            if (!err) {
+                if (value.length > 0) {
+                    value.forEach(function(user) {
+                        if (user.get("_v") < "0.2") {
+                            user.set({_v:"0.2"});
+                            self.saveOrUpdate(user);
+                        }
+                    });
+                }
+            }
         });
     }
 };

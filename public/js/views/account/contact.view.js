@@ -1,7 +1,10 @@
 define([
     'models/user',
-    'models/account'
-], function(User, Account) {
+    'models/account',
+    'models/contact',
+    'collections/contacts'
+
+], function(User, Account, Contact, Contacts) {
 
     var view = Backbone.View.extend({
 
@@ -10,31 +13,57 @@ define([
         userId: null,
         user: null,
         accounts: null,
-
+        currentLetter: "a",
 
         events: {
-
+            "click .btn-letter":"showLetter"
         },
 
 
         render: function() {
             var self = this
                 , p1 = this.getAccount()
-                , p2 = this.getUser();
+                , p2 = this.getUser()
+                , p3 = this.getContacts(this.currentLetter);
 
-            $.when(p1, p2)
+            $.when(p1, p2, p3)
                 .done(function() {
-                    var data = {
-                        account: self.account.toJSON(),
-                        user: self.user.toJSON()
-                    };
-
-                    var tmpl = $$.templateManager.get("contacts-main", self.templateKey);
-                    var html = tmpl(data);
-
-                    self.show(html);
+                    self.renderContacts();
                 });
         },
+
+
+        renderContacts: function() {
+            var self = this;
+            var data = {
+                account: self.account.toJSON(),
+                user: self.user.toJSON(),
+                contacts: self.contacts.toJSON(),
+                currentLetter: self.currentLetter.toUpperCase()
+            };
+
+            data.min = 10;
+            data.count = data.contacts.length;
+
+            var tmpl = $$.templateManager.get("contacts-main", self.templateKey);
+            var html = tmpl(data);
+
+            self.show(html);
+        },
+
+
+        showLetter: function(event) {
+            var self = this;
+
+            var letter = $(event.currentTarget).html();
+            this.currentLetter = letter.toLowerCase();
+
+            this.getContacts(this.currentLetter)
+                .done(function() {
+                    self.renderContacts();
+                });
+        },
+
 
 
         getUser: function() {
@@ -60,6 +89,16 @@ define([
             });
 
             return this.account.fetch();
+        },
+
+
+        getContacts: function(letter) {
+            if (this.accountId == null) {
+                this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
+            }
+
+            this.contacts = new $$.c.Contacts();
+            return this.contacts.getContactsByLetter(this.accountId, letter);
         }
     });
 

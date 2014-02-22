@@ -11,6 +11,7 @@ var user = $$.m.ModelBase.extend({
             email: "",
             first:"",
             last:"",
+            _v:"0.1",
 
             /**
              * @profilePhotos
@@ -63,6 +64,18 @@ var user = $$.m.ModelBase.extend({
                 });
             }
         }]
+    },
+
+
+    serializers: {
+        db: function(json) {
+            json._username = json.username.toLowerCase();
+            for(var i = 0; i < json.accounts.length; i++) {
+                for (var j = 0; j < json.accounts[i].credentials.length; j++) {
+                    json.accounts[i].credentials[j]._username = json.accounts[i].credentials[i].username.toLowerCase();
+                }
+            }
+        }
     },
 
 

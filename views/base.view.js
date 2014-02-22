@@ -94,7 +94,7 @@ _.extend(baseView.prototype, {
 
     accountId: function() {
         try {
-            return this.req.session.accountId;
+            return (this.req.session.accountId == null || this.req.session.accountId == 0) ? 0 : this.req.session.accountId;
         }catch(exception) {
             return null;
         }
@@ -103,7 +103,7 @@ _.extend(baseView.prototype, {
 
     getAccount: function(fn) {
         var accountId = this.accountId();
-        if (accountId != null) {
+        if (accountId > 0) {
             return AccountDao.getById(accountId, fn);
         }
         fn();

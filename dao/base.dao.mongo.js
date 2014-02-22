@@ -10,6 +10,9 @@ var mongodao = {
         //ensure we have our ID counters set up for this collection
         if (this.getStorage() == "mongo") {
             this._ensureCounters();
+            if (this._onStartup != null && _.isFunction(this._onStartup)) {
+                this._onStartup();
+            }
         }
     },
 
@@ -75,38 +78,42 @@ var mongodao = {
 
 
     _findManyMongo: function(query, type, fn) {
+        this._findManyWithFieldsMongo(query, null, type, fn);
+    },
+
+
+    _findManyWithFieldsMongo: function(query, fields, type, fn) {
         var self = this;
         if (fn == null) {
             fn = type;
             type = null;
         }
 
-        var _query, _fields;
-        if (query.hasOwnProperty("query")) {
-            _query = query.query;
-
-            if (query.hasOwnProperty("fields")) {
-                _fields = query.fields;
-            }
-        } else {
-            _query = query;
-        }
-
-
         var collection = this.getTable(type);
-        this.mongo(collection).find(_query, _fields).toArray(function(err, result) {
+        var mongoColl = this.mongo(collection);
+
+        var fxn = function(err, value) {
             if (!err) {
                 var arr = [];
 
-                result.forEach(function(item) {
-                   arr.push(self._createModel(item));
+                value.forEach(function(item) {
+                    arr.push(self._createModel(item));
                 });
 
                 fn(null, arr);
             } else {
                 fn(err, result);
             }
-        });
+        };
+
+
+        if (query == null && fields == null) {
+            mongoColl.find().toArray(fxn);
+        } else if (query != null) {
+            mongoColl.find(query).toArray(fxn);
+        } else if(fields != null) {
+            mongoColl.find(null, fields).toArray(fxn);
+        }
     },
 
 
@@ -150,7 +157,7 @@ var mongodao = {
         }
 
         var self = this;
-        this.mongo(collection).save(model.toJSON(), function(err, result) {
+        this.mongo(collection).save(model.toJSON("db"), function(err, result) {
             if (!err) {
                 if (fn != null) {
                     fn(null, model);

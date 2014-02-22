@@ -14,7 +14,8 @@ var account = $$.m.ModelBase.extend({
             },
             subdomain:"",
             domain:"",
-            token:""
+            token:"",
+            _v:"0.1"
         }
     },
 
