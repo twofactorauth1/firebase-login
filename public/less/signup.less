@@ -6,7 +6,11 @@
    position: absolute;  
 }
 
-.signuppanel .logo {
+.mainpanel .signuppanel:not(:first-of-type) {
+   display: none;
+}
+
+.mainpanel .logo {
    padding: 15px;
    margin: 15px auto;
    display: block;
@@ -52,9 +56,8 @@
    -webkit-border-radius: 3px;
    border-radius: 3px;
    padding: 30px;
-   opacity: 0;
    width: 90%;
-   margin: 0 10%;
+   margin: 0 auto;
    position: absolute;
 }
 
