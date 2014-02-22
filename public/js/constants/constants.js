@@ -39,6 +39,15 @@ define([], function() {
                 CONSTANT_CONTACT: "cc"
             },
 
+            contact_types: {
+                CUSTOMER: "cu",
+                COLLEAGUE: "co",
+                FRIEND: "fr",
+                MEMBER: "mb",
+                FAMILY: "fa",
+                ADMIN: "ad"
+            },
+
             phone_types: {
                 MOBILE: "m",
                 HOME: "h",

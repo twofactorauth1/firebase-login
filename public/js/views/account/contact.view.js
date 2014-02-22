@@ -53,6 +53,9 @@ define([
 
 
         showLetter: function(event) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+
             var self = this;
 
             var letter = $(event.currentTarget).html();
@@ -62,6 +65,8 @@ define([
                 .done(function() {
                     self.renderContacts();
                 });
+
+            $$.r.AccountAdminRouter.navigateToShowContactsForLetter(this.currentLetter);
         },
 
 
@@ -92,13 +97,17 @@ define([
         },
 
 
-        getContacts: function(letter) {
+        getContacts: function() {
             if (this.accountId == null) {
                 this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
             }
-
             this.contacts = new $$.c.Contacts();
-            return this.contacts.getContactsByLetter(this.accountId, letter);
+
+            if (this.currentLetter == null) {
+                this.currentLetter = "a";
+            }
+            this.currentLetter = this.currentLetter.toLowerCase();
+            return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
         }
     });
 

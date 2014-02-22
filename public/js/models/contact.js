@@ -9,6 +9,8 @@ define([], function() {
             accountId: 0,   //int
             first:"",       //string,
             last:"",        //string,
+            type:"",        //contact_types
+            photo:"",       //string
             cDate:null,     //Created Date
             cBy:null,       //Created By
             mDate:null,     //ModifiedDate

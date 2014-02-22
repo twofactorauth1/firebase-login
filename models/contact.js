@@ -10,6 +10,8 @@ var contact = $$.m.ModelBase.extend({
             accountId: 0,   //int
             first:"",       //string,
             last:"",        //string,
+            photo:"",       //string,
+            type:"c",       //contact_types
             cDate:null,     //Created Date
             cBy:null,       //Created By
             mDate:null,     //ModifiedDate
@@ -56,6 +58,7 @@ var contact = $$.m.ModelBase.extend({
              * [{
              *   type:int
              *   email:string
+             *   photo:string
              *   phones: [{
              *       type: string "m|w|h" //mobile, work, home
              *       number: string
@@ -71,9 +74,6 @@ var contact = $$.m.ModelBase.extend({
              * }]
              */
             details: []
-
-
-
         }
     },
 
@@ -83,15 +83,16 @@ var contact = $$.m.ModelBase.extend({
     },
 
 
+    transients: {
+        public: ["_first","_last","_full"]
+    },
+
+
     serializers:  {
         db: function(json) {
             json._first = this.get("first") ? this.get("first").toLowerCase() : null;
             json._last = this.get("last") ? this.get("last").toLowerCase() : null;
-            json.full = json._first + " " + json._last;
-        },
-
-        public: function(json) {
-            json.full = this.get("first") + " " + this.get("last");
+            json._full = json._first + " " + json._last;
         }
     },
 

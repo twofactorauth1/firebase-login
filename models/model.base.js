@@ -6,7 +6,7 @@ var modelBase = function(options) {
 
 _.extend(modelBase.prototype, {
 
-    init: function(options) {
+    init: function(options, xFields) {
         var defaults;
         if (_.isFunction(this.defaults)) {
             defaults = this.defaults();
@@ -22,6 +22,14 @@ _.extend(modelBase.prototype, {
 
         if (typeof this.initialize !== 'undefined') {
             this.initialize(options);
+        }
+
+        if (xFields != null) {
+            for(var key in this.attributes) {
+                if (xFields[key] == null) {
+                    delete this.attributes[key];
+                }
+            }
         }
     },
 

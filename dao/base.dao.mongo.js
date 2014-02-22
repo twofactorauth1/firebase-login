@@ -28,14 +28,14 @@ var mongodao = {
     },
 
 
-    _createModel: function(object, type) {
+    _createModel: function(object, type, xFields) {
         if (object == null) {
             return null;
         }
         if (_.isFunction(type)) {
-            return new type(object);
+            return new type(object, xFields);
         } else {
-            return new this.defaultModel(object);
+            return new this.defaultModel(object, xFields);
         }
     },
 
@@ -94,7 +94,7 @@ var mongodao = {
 
         var fxn = function(err, value) {
             if (!err) {
-                return self._wrapArrayMongo(value, fn);
+                return self._wrapArrayMongo(value, fields, fn);
             } else {
                 fn(err, value);
             }
@@ -110,11 +110,11 @@ var mongodao = {
     },
 
 
-    _wrapArrayMongo: function(value, fn) {
+    _wrapArrayMongo: function(value, fields, fn) {
         var arr = [];
         var self = this;
         value.forEach(function(item) {
-            arr.push(self._createModel(item));
+            arr.push(self._createModel(item, null, fields));
         });
 
         fn(null, arr);

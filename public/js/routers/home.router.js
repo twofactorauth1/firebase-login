@@ -16,6 +16,7 @@ define([
         }
     });
 
+    $$.r.HomeRouter = router;
     $$.r.homeRouter = new router();
 
     return $$.r.homeRouter;

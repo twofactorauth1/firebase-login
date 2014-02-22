@@ -28,7 +28,8 @@ define([
         }
     });
 
-    $$.r.SignupRouter = new router();
+    $$.r.SignupRouter = router;
+    $$.r.signupRouter = new router();
 
-    return $$.r.SignupRouter;
+    return $$.r.signupRouter;
 });

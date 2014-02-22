@@ -1,1 +1,17 @@
-/*  ENTER CUSTOM OVERRIDES FOR THE DEFAULT BOOTSTRAP STYLES HERE */
+.hidden-inline-xs {
+  display: inline !important;
+}
+
+.visible-inline-xs {
+  display: none !important;
+}
+
+@media (max-width: 767px) {
+  .hidden-inline-xs {
+    display: none !important;
+  }
+
+  .visible-inline-xs {
+    display: inline !important;
+  }
+}
