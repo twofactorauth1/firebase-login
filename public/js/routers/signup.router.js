@@ -15,6 +15,14 @@ define([
             place = place || "start";
             var view = new SignupView();
             view.place = place;
+            view.lastPlace = null;
+            view.nextPlace = null;
+
+            var oldView = $$.viewManager.getExistingMainView();
+            if (oldView != null && oldView.hasOwnProperty("place")) {
+                view.lastPlace = oldView.place;
+                oldView.nextPlace = place;
+            }
 
             $$.viewManager.replaceMain(view);
         }

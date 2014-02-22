@@ -693,13 +693,23 @@
         },
 
 
-        replaceMain: function(view) {
-            this.show(view, this.mainViewport);
+        replaceMain: function(view, options) {
+            this.show(view, this.mainViewport, options);
         },
 
 
         replaceMainHtml: function(html) {
             this.showHtml(html, this.mainViewport);
+        },
+
+
+        getExistingMainView: function() {
+            this._getView(this.mainViewport);
+        },
+
+
+        getExistingView: function(selector) {
+            this._getView(selector);
         },
 
 
@@ -713,8 +723,8 @@
          * add the el property of the new view to the selected element, and finally,
          * call the #afterRender() method on the view, if it exists.
          */
-        show: function (view, selector) {
-            this._show(view, selector);
+        show: function (view, selector, options) {
+            this._show(view, selector, options);
         },
 
 
@@ -772,7 +782,15 @@
         /**
          * @protected
          */
-        _show: function (view, selector, beforeAddToDOM, closeOldFunction) {
+        _show: function (view, selector, options, beforeAddToDOM, closeOldFunction) {
+
+            if (_.isFunction(options)) {
+                closeOldFunction = beforeAddToDOM;
+                beforeAddToDOM = options;
+                options = null;
+            }
+
+            options = options || {};
 
             var oldView = this._getView(selector);
 
@@ -782,15 +800,15 @@
             }
 
             if (oldView != null) {
-                oldView.setUpTransitionOut();
-                view.setUpTransitionIn();
+                oldView.setUpTransitionOut(options.oldView);
+                view.setUpTransitionIn(options.newView);
                 oldView.doTransitionOut(function() {
                     if (closeOldFunction != null) {
                         closeOldFunction(this);
                     } else {
                         oldView.close();
                     }
-                });
+                }, options.oldView);
             }
 
 
@@ -818,13 +836,13 @@
             }
 
             if (oldView != null) {
-                view.setUpTransitionIn();
+                view.setUpTransitionIn(options.newView);
             }
 
             $(container).append(view.$el);
 
             if (oldView != null) {
-                view.doTransitionIn();
+                view.doTransitionIn(options.newView);
             }
 
             return true;

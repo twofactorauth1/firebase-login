@@ -2,13 +2,15 @@ define([
     'services/user.service',
     'models/account',
     'libs/jquery/jquery.keytimer'
-], function(UserServices) {
+], function (UserServices) {
 
     var view = Backbone.View.extend({
 
         templateKey: "signup",
 
         place: "start",
+        lastPlace: null,
+        nextPlace: null,
 
         emailvalid: false,
         passwordsvalid: false,
@@ -22,16 +24,14 @@ define([
             "onkeytimer #input-password": "onPasswordKeyTimer",
             "onkeytimer #input-password2": "onPasswordKeyTimer",
             "onkeytimer #input-email": "onEmailKeyTimer",
-            "submit #form-create-account": "onCreateAccount",
-            "click .right-nav": "nextPanel",
-            "click .left-nav": "prevPanel",
+            "submit #form-create-account": "onCreateAccount"
         },
 
 
-        render: function() {
+        render: function () {
             var self = this;
             this.getTempAccount()
-                .done(function(value) {
+                .done(function (value) {
                     self.tmpAccount = value;
                     if (self.place == 'start') {
                         self.renderStartSignup();
@@ -46,16 +46,16 @@ define([
         },
 
 
-        _getData: function() {
+        _getData: function () {
             return {
-                account:this.tmpAccount.toJSON(),
-                isProfessional:this.tmpAccount.get("company").type === $$.constants.account.company_types.PROFESSIONAL,
-                isBusiness:this.tmpAccount.get("company").type === $$.constants.account.company_types.BUSINESS,
-                isEnterprise:this.tmpAccount.get("company").type === $$.constants.account.company_types.ENTERPRISE
+                account: this.tmpAccount.toJSON(),
+                isProfessional: this.tmpAccount.get("company").type === $$.constants.account.company_types.PROFESSIONAL,
+                isBusiness: this.tmpAccount.get("company").type === $$.constants.account.company_types.BUSINESS,
+                isEnterprise: this.tmpAccount.get("company").type === $$.constants.account.company_types.ENTERPRISE
             };
         },
 
-        renderStartSignup: function() {
+        renderStartSignup: function () {
 
             var tmpl = $$.templateManager.get("signup-start", this.templateKey);
             var html = tmpl(this._getData());
@@ -64,7 +64,7 @@ define([
         },
 
 
-        renderSignupDetails: function() {
+        renderSignupDetails: function () {
             var data = this._getData();
 
             if (data.account == null || data.account.company.type == null) {
@@ -80,7 +80,7 @@ define([
         },
 
 
-        renderSignupCreate: function() {
+        renderSignupCreate: function () {
             var data = this._getData();
             if (data.account == null || data.account.company.type == null) {
                 $$.r.mainAppRouter.navigate("/start", true);
@@ -98,15 +98,15 @@ define([
         },
 
 
-        onCompanyTypeChanged: function(event) {
+        onCompanyTypeChanged: function (event) {
             var type = $(event.currentTarget).data("type");
 
             var company = this.tmpAccount.get("company");
             if (type == "business") {
                 company.type = $$.constants.account.company_types.BUSINESS;
-            } else if(type == "professional") {
+            } else if (type == "professional") {
                 company.type = $$.constants.account.company_types.PROFESSIONAL;
-            } else if(type == "enterprise") {
+            } else if (type == "enterprise") {
                 company.type = $$.constants.account.company_types.ENTERPRISE;
             }
 
@@ -116,20 +116,20 @@ define([
         },
 
 
-        onCompanyNameKeyTimer: function(event) {
+        onCompanyNameKeyTimer: function (event) {
             var name = $(event.currentTarget).val();
 
             this.tmpAccount.get("company").name = name;
 
             //TODO: Remove this, only for initial testing
-            var subdomain = $.trim(name).replace(" ", "").replace(".","_");
-            this.tmpAccount.set({subdomain:subdomain});
+            var subdomain = $.trim(name).replace(" ", "").replace(".", "_");
+            this.tmpAccount.set({subdomain: subdomain});
 
             this.tmpAccount.saveOrUpdateTmpAccount();
         },
 
 
-        onCompanySizeChanged: function(event) {
+        onCompanySizeChanged: function (event) {
             var size = $(event.currentTarget).data("size");
 
             this.tmpAccount.get("company").size = size;
@@ -138,7 +138,7 @@ define([
         },
 
 
-        onUsernameKeyTimer: function(event) {
+        onUsernameKeyTimer: function (event) {
             var self = this;
             this.usernamevalid = false;
 
@@ -154,7 +154,7 @@ define([
             }
             icon.removeClass("glyphicon-remove").removeClass("glyphicon").addClass("icon-loading");
             $$.services.UserService.usernameExists(username)
-                .done(function(exists) {
+                .done(function (exists) {
                     if (exists) {
                         icon.addClass("glyphicon").addClass("glyphicon-remove").removeClass("icon-loading");
                         helper.html("Username already exists");
@@ -166,7 +166,7 @@ define([
         },
 
 
-        onPasswordKeyTimer: function(event) {
+        onPasswordKeyTimer: function (event) {
             this.passwordsvalid = false;
             var pass1 = $("#input-password").val();
             var pass2 = $("#input-password2").val();
@@ -189,7 +189,7 @@ define([
 
                 helper1.html("Password must be at least 5 characters long");
                 helper2.html("");
-            } else if( pass1.length >= 5) {
+            } else if (pass1.length >= 5) {
                 icon1.removeClass("glyphicon-remove").addClass("glyphicon-ok");
 
                 if (pass1 != pass2) {
@@ -203,11 +203,11 @@ define([
         },
 
 
-        onEmailKeyTimer: function(event) {
+        onEmailKeyTimer: function (event) {
             this.emailvalid = false;
             var email = $(event.currentTarget).validate({
-                required:true,
-                email:true
+                required: true,
+                email: true
             });
 
             var icon = $("#icon-email", this.el);
@@ -224,7 +224,7 @@ define([
         },
 
 
-        onCreateAccount: function(event) {
+        onCreateAccount: function (event) {
 
             if (!this.usernamevalid || !this.passwordsvalid || !this.emailvalid) {
                 event.preventDefault();
@@ -234,109 +234,146 @@ define([
         },
 
 
-        getTempAccount: function() {
+        getTempAccount: function () {
             var deferred = $.Deferred();
 
             var account = new $$.m.Account();
             account.getTmpAccount()
-                .done(function() {
-                   deferred.resolve(account);
+                .done(function () {
+                    deferred.resolve(account);
                 })
-                .fail(function() {
+                .fail(function () {
                     deferred.resolve(null);
                 });
             return deferred;
         },
 
 
-        //panel transition variables
-        current_fs: '',
-        next_fs: '',
-        previous_fs: '',
-        left: '',
-        opacity: '',
-        scale: '',
-        animating: '',
+        //region TRANSITION
+        _getTransitionDirection: function(inOrOut) {
+            var arr = ["start","details","create"];
 
-        nextPanel: function() {
-            var self = this;
-            _.delay(function() {
-                if (self.animating) return false;
-                self.animating = true;
+            var currIndex = arr.indexOf(this.place);
+            var nextIndex; lastIndex;
+            if (inOrOut == "in") {
+                lastIndex = arr.indexOf(this.lastPlace);
 
-                //activate next step on progressbar using the index of next_fs
-                $("#progressbar li").eq($("fieldset").index(self.next_fs)).addClass("active");
+                if (lastIndex < currIndex) {
+                    return "left"; //we are moving onto the screen to the left, from the right
+                } else if (lastIndex > currIndex) {
+                    return "right"; //we are moving onto the screen to the right, from the left
+                }
+            } else {
+                nextIndex = arr.indexOf(this.nextPlace);
 
-                self.next_fs.fadeIn();
+                if (nextIndex < currIndex) {
+                    return "right"; //we're moving off the screen to the right, from the left;
+                } else if(nextIndex > currIndex) {
+                    return "left"; //we are moving off the screen, to the left, from the right
+                }
+            }
+            return null;
+        },
 
-                //hide the current fieldset with style
-                self.current_fs.animate({ opacity: 0 }, {
-                    step: function(now, mx) {
-                        //as the opacity of current_fs reduces to 0 - stored in "now"
-                        //1. scale current_fs down to 80%
-                        self.scale = 1 - (1 - now) * 0.2;
-                        //2. bring next_fs from the right(50%)
-                        self.left = (now * 50) + "%";
-                        //3. increase opacity of next_fs to 1 as it moves in
-                        self.opacity = 1 - now;
-                        self.current_fs.css({
-                            'transform': 'scale(' + self.scale + ')'
-                        });
-                        self.next_fs.css({
-                            'left': self.left,
-                            'opacity': self.opacity
-                        });
-                    },
-                    duration: 800,
-                    complete: function() {
-                        self.current_fs.hide();
-                        self.animating = false;
-                    },
-                    //this comes from the custom easing plugin
-                    easing: 'easeInOutBack'
-                });
-            }, 500);
-         },
 
-         prevPanel: function() {
-            var self = this;
-            _.delay(function() {
-                if(self.animating) return false;
-                self.animating = true;
-
-                $("#progressbar li").eq($("fieldset").index(self.current_fs)).removeClass("active");
-
-                self.next_fs.show();
-                self.current_fs.animate({ opacity: 0 }, {
-                    step: function(now, mx) {
-                        self.scale = 0.8 + (1 - now) * 0.2;
-                        self.left = ((1-now) * 50)+"%";
-                        self.opacity = 1 - now;
-                        self.current_fs.css({'left': self.left});
-                        self.next_fs.css({'transform': 'scale('+self.scale+')', 'opacity': self.opacity});
-                    },
-                    duration: 800,
-                    complete: function() {
-                        self.current_fs.hide();
-                        self.animating = false;
-                    },
-                    easing: 'easeInOutBack'
-                });
-            }, 500);
-         },
-
-         transitionIn: function() { 
+        transitionIn: function () {
             console.log('new transition in');
-            this.next_fs = this.$el;
-            //this.$el.fadeIn(2000);
-         },
 
-         transitionOut: function() { 
+            var direction = this._getTransitionDirection("in");   //  left|right
+
+            if (direction == "left") {
+                //you want to transition me in from the right to the left
+            } else if(direction == "right") {
+                //you want to transition me in from the left to the right
+            } else {
+                //you just want to show me with no animation
+            }
+        },
+
+
+        transitionOut: function () {
             console.log('new transition out');
-            this.current_fs = this.$el;
-            //this.$el.fadeOut(2000);
-         },
 
+            var direction = this._getTransitionDirection("out");  //  left|right
+
+            if (direction == "left") {
+                //you want to transition me out from the right to the left
+            } else if(direction == "right") {
+                //you want to transition me out from the left to the right
+            } else {
+                //you just want to show me with no animation
+            }
+        }
+
+        //endregion
+
+        /*
+         var self = this;
+         _.delay(function() {
+         if (self.animating) return false;
+         self.animating = true;
+
+         //activate next step on progressbar using the index of next_fs
+         $("#progressbar li").eq($("fieldset").index(self.next_fs)).addClass("active");
+
+         self.next_fs.fadeIn();
+
+         //hide the current fieldset with style
+         self.current_fs.animate({ opacity: 0 }, {
+         step: function(now, mx) {
+         //as the opacity of current_fs reduces to 0 - stored in "now"
+         //1. scale current_fs down to 80%
+         self.scale = 1 - (1 - now) * 0.2;
+         //2. bring next_fs from the right(50%)
+         self.left = (now * 50) + "%";
+         //3. increase opacity of next_fs to 1 as it moves in
+         self.opacity = 1 - now;
+         self.current_fs.css({
+         'transform': 'scale(' + self.scale + ')'
+         });
+         self.next_fs.css({
+         'left': self.left,
+         'opacity': self.opacity
+         });
+         },
+         duration: 800,
+         complete: function() {
+         self.current_fs.hide();
+         self.animating = false;
+         },
+         //this comes from the custom easing plugin
+         easing: 'easeInOutBack'
+         });
+         }, 500);
+         */
+
+
+        /*
+         var self = this;
+         _.delay(function() {
+         if(self.animating) return false;
+         self.animating = true;
+
+         $("#progressbar li").eq($("fieldset").index(self.current_fs)).removeClass("active");
+
+         self.next_fs.show();
+         self.current_fs.animate({ opacity: 0 }, {
+         step: function(now, mx) {
+         self.scale = 0.8 + (1 - now) * 0.2;
+         self.left = ((1-now) * 50)+"%";
+         self.opacity = 1 - now;
+         self.current_fs.css({'left': self.left});
+         self.next_fs.css({'transform': 'scale('+self.scale+')', 'opacity': self.opacity});
+         },
+         duration: 800,
+         complete: function() {
+         self.current_fs.hide();
+         self.animating = false;
+         },
+         easing: 'easeInOutBack'
+         });
+         }, 500);
+         */
     });
 
     $$.v.SignupView = view;
