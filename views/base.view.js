@@ -53,6 +53,7 @@ _.extend(baseView.prototype, {
             data.serverProps[$$.constants.server_props.USER_ID] = this.req.user.id();
             data.serverProps[$$.constants.server_props.IS_LOGGED_IN] = true;
             data.user = this.req.user.toJSON();
+            data.isLoggedIn = true;
         } else {
             data.isLoggedIn = false;
         }

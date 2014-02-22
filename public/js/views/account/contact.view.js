@@ -5,7 +5,7 @@ define([
 
     var view = Backbone.View.extend({
 
-        templateKey: "account/admin",
+        templateKey: "account/contacts",
 
         userId: null,
         user: null,
@@ -29,7 +29,7 @@ define([
                         user: self.user.toJSON()
                     };
 
-                    var tmpl = $$.templateManager.get("admin-main", self.templateKey);
+                    var tmpl = $$.templateManager.get("contacts-main", self.templateKey);
                     var html = tmpl(data);
 
                     self.show(html);

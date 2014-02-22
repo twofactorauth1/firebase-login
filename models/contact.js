@@ -7,11 +7,13 @@ var contact = $$.m.ModelBase.extend({
         return {
             _id: null,
 
-            accountId: 0, //int
-            first:"", //string,
-            last:"",  //string,
-            date:"",  //
-            createdBy:"",
+            accountId: 0,   //int
+            first:"",       //string,
+            last:"",        //string,
+            cDate:null,     //Created Date
+            cBy:null,       //Created By
+            mDate:null,     //ModifiedDate
+            mBy:null,       //Modified By
 
             /**
              * Array of site activity objects of the form:

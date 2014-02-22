@@ -1,17 +1,26 @@
 define([
-    'views/account/admin.view'
-], function (HomeView) {
+    'views/account/admin.view',
+    'views/account/contact.view'
+
+], function (AccountAdminView, AccountContactView) {
 
     var router = Backbone.Router.extend({
 
         routes: {
-            "":"showHome",
-            "/":"showHome",
-            "/home":"showHome"
+            "":"showMain",
+            "/":"showMain",
+            "contacts":"showContacts"
         },
 
-        showHome: function() {
-            var view = new HomeView();
+
+        showMain: function() {
+            var view = new AccountAdminView();
+            $$.viewManager.replaceMain(view);
+        },
+
+
+        showContacts: function() {
+            var view = new AccountContactView();
             $$.viewManager.replaceMain(view);
         }
     });

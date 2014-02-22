@@ -19,6 +19,12 @@ var mongodao = {
     },
 
 
+    getMongoCollection: function(type) {
+        var collection = this.getTable(type);
+        return this.mongo(collection);
+    },
+
+
     _createModel: function(object, type) {
         if (object == null) {
             return null;
@@ -75,8 +81,20 @@ var mongodao = {
             type = null;
         }
 
+        var _query, _fields;
+        if (query.hasOwnProperty("query")) {
+            _query = query.query;
+
+            if (query.hasOwnProperty("fields")) {
+                _fields = query.fields;
+            }
+        } else {
+            _query = query;
+        }
+
+
         var collection = this.getTable(type);
-        this.mongo(collection).find(query).toArray(function(err, result) {
+        this.mongo(collection).find(_query, _fields).toArray(function(err, result) {
             if (!err) {
                 var arr = [];
 

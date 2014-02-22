@@ -12,8 +12,12 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
         app.get("/", this.setup, this.index.bind(this));
+
         app.get("/home", this.isAuth, this.showHome.bind(this));
+        app.get("/home/*", this.isAuth, this.showHome.bind(this));
+
         app.get("/admin", this.isAuth, this.showAdmin.bind(this));
+        app.get("/admin/*", this.isAuth, this.showAdmin.bind(this));
         return this;
     },
 
@@ -22,15 +26,13 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var accountId = this.accountId(req);
 
         if (accountId > 0) {
-
-            //TODO - We are redirecting the user to the /admin site for now, but later, we'll want to redirect them
-            //       to the marketing site, unless /admin is specified
-
             var user = req.user;
-            if (user.isAdminOfAccount(accountId) == true) {
+            if (req.isAuthenticated() && user.isAdminOfAccount(accountId) == true) {
+                //TODO -- do not redirect to /admin, this should go to public website when such functionality is availble
                 resp.redirect("/admin");
             } else {
-                //Show them the normal public domain website for this account
+                //TODO -- do not redirect to login, this should go to public website when such functionality is availble
+                resp.redirect("/login");
             }
         } else {
             if (req.isAuthenticated()) {

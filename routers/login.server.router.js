@@ -56,7 +56,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     handleLogout: function(req,resp) {
         req.session.accountId = null;
         req.logout();
-        return resp.redirect("/");
+        return resp.redirect("/login");
     },
     //endregion
 

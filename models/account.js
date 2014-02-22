@@ -19,6 +19,21 @@ var account = $$.m.ModelBase.extend({
     },
 
 
+    getOrGenerateSubdomain: function() {
+        var subdomain = this.get("subdomain");
+        if ($$.u.stringutils.isNullOrEmpty(subdomain)) {
+            var companyName = this.get("company").name;
+            if ($$.u.stringutils.isNullOrEmpty(companyName) == false) {
+                subdomain = companyName.trim().replace(" ", "");
+            } else {
+                subdomain = "indig-" + Math.round(Math.random() * 1000000);
+            }
+        }
+
+        return subdomain;
+    },
+
+
     serializers: {
         public: function(json) {
             if (this.get("subdomain") != null) {
