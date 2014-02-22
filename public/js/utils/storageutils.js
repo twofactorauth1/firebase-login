@@ -3,7 +3,7 @@ define(['libs/jquery/jquery.cookie'], function() {
     //------------------------------------------------
     //
     //  Storage Utils
-    //
+    //ok
     // -----------------------------------------------
     var storageutils = {
         set: function(key, value, type) {
@@ -46,8 +46,8 @@ define(['libs/jquery/jquery.cookie'], function() {
             return value;
         }
     };
-    $$u = $$u || {};
-    $$u.storageutils = window.storageutils = storageutils;
+    $$.u = $$.u || {};
+    $$.u.storageutils = window.storageutils = storageutils;
 
     return storageutils;
 });
