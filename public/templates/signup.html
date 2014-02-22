@@ -1,5 +1,5 @@
 <script type="text/x-handlebars-template" name="signup-start">
-    <section>
+    <section class="panel">
     <div class="signuppanel">
         <a href="/login" class="left-nav"></a>
         <a href="/details" class="right-nav {{#superUnless "or" isProfessional isBusiness}}hidden{{/superUnless}}"></a>
@@ -17,7 +17,6 @@
 
                         <div id="btn-business" class="btn btn-large btn-default btn-bus-model {{#if isBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="business"><span class="fa fa-users"></span></div>
 
-                        <div id="btn-enterprise" class="btn btn-large btn-default btn-bus-model {{#if isEnterprise}}btn-primary{{else}}btn-default{{/if}}" data-type="enterprise"><span class="fa fa-building-o"></span></div>
                     </div>
         </div>
     </div>
@@ -26,38 +25,57 @@
 
 
 <script type="text/x-handlebars-template" name="signup-details">
-<section>
+<section class="panel">
     <div class="signuppanel">
         <a href="/start" class="left-nav"></a>
         <a href="/create" class="right-nav"></a>
         <span class="logo"></span>
         <div class="form">
             <ul id="progressbar">
-                <li>Account Setup</li>
-                <li class="active">Social Profiles</li>
-                <li>Personal Details</li>
+                <li></li>
+                <li class="active"></li>
+                <li></li>
             </ul>
+            <h4>Set Up Your Business</h4>
+            <hr>
             <div>
-                <strong>Tell us a little about your
-                    {{#if isBusiness}}business{{/if}}
-                    {{#if isProfessional}}professional services or goods{{/if}}
-                    {{#if isEnterprise}}enterprise corporation{{/if}}
-                </strong>
-
-
-                <hr/>
 
                 <form role="form">
                     <div class="form-group row">
                         <div class="">
+                            <div id="btn-newbusiness" class="btn btn-large {{#if isNewBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="new_business">New</div>
+
+                            <div id="btn-existingbusiness" class="btn btn-large btn-default {{#if isExistingBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="existing_business">Existing</div>
+
+                        </div>
+                        <div class="">
                             <label>
                                 {{#if isBusiness}}What is the name of your business{{/if}}
                                 {{#if isProfessional}}Does your professional business have a name?{{/if}}
-                                {{#if isEnterprise}}What is the name of your corporation{{/if}}
                             </label>
                             <input class="form-control" type="text" id="input-company-name" value="{{account.company.name}}" />
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <div class="col-xs-6">
+                            <select id="category_parent" class="form-control">
+                              <option>Fitness</option>
+                              <option>Services</option>
+                              <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6">
+                            <select id="category_child" class="form-control">
+                              <option>Yoga</option>
+                              <option>Personal Trainer</option>
+                              <option>Hair Stylist</option>
+                              <option>Make Up Artist</option>
+                              <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+
 
 
                     {{#if isBusiness}}
@@ -97,15 +115,15 @@
 
 
 <script type="text/x-handlebars-template" name="signup-create">
-<section>
+<section class="panel">
     <div class="signuppanel">
     <a href="/details" class="left-nav"></a>
     <span class="logo"></span>
     <div class="form">
     <ul id="progressbar">
-        <li>Account Setup</li>
-        <li>Social Profiles</li>
-        <li class="active">Personal Details</li>
+        <li></li>
+        <li></li>
+        <li class="active"></li>
     </ul>
     <h3>Create an account</h3>
 
@@ -157,8 +175,8 @@
             </div>
         </div>
 
-
-            <button class="btn btn-primary btn-default" type="submit" value="Create Account" role="button">Create Account</button>
+            <p class="termsOfuse">By clicking “Let’s Get Started” below you agree to the Terms of Use<p>
+            <button class="btn btn-primary btn-default btn-block" type="submit" value="Create Account" role="button">Create Account</button>
     </form>
     </div>
     </div>
