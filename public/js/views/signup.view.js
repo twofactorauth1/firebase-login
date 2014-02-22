@@ -24,7 +24,9 @@ define([
             "onkeytimer #input-password": "onPasswordKeyTimer",
             "onkeytimer #input-password2": "onPasswordKeyTimer",
             "onkeytimer #input-email": "onEmailKeyTimer",
-            "submit #form-create-account": "onCreateAccount"
+            "submit #form-create-account": "onCreateAccount",
+            "click .right-nav": "nextPanel",
+            "click .left-nav": "prevPanel"
         },
 
 
@@ -33,13 +35,14 @@ define([
             this.getTempAccount()
                 .done(function (value) {
                     self.tmpAccount = value;
-                    if (self.place == 'start') {
-                        self.renderStartSignup();
-                    } else if (self.place == 'details') {
-                        self.renderSignupDetails();
-                    } else if (self.place == 'create') {
-                        self.renderSignupCreate();
-                    }
+                    self.renderSignup();
+                    // if (self.place == 'start') {
+                    //     self.renderStartSignup();
+                    // } else if (self.place == 'details') {
+                    //     self.renderSignupDetails();
+                    // } else if (self.place == 'create') {
+                    //     self.renderSignupCreate();
+                    // }
                 });
 
             return this;
@@ -55,47 +58,46 @@ define([
             };
         },
 
-        renderStartSignup: function () {
-
-            var tmpl = $$.templateManager.get("signup-start", this.templateKey);
+        renderSignup: function () {
+            var tmpl = $$.templateManager.get("signup-main", this.templateKey);
             var html = tmpl(this._getData());
             this.show(html);
             return this;
         },
 
 
-        renderSignupDetails: function () {
-            var data = this._getData();
+        // renderSignupDetails: function () {
+        //     var data = this._getData();
 
-            if (data.account == null || data.account.company.type == null) {
-                $$.r.mainAppRouter.navigate("/start", true);
-            }
+        //     if (data.account == null || data.account.company.type == null) {
+        //         $$.r.mainAppRouter.navigate("/start", true);
+        //     }
 
-            var tmpl = $$.templateManager.get("signup-details", this.templateKey);
-            var html = tmpl(data);
-            this.show(html);
+        //     var tmpl = $$.templateManager.get("signup-details", this.templateKey);
+        //     var html = tmpl(data);
+        //     this.show(html);
 
-            $("#input-company-name", this.el).startKeyTimer(500);
-            return this;
-        },
+        //     $("#input-company-name", this.el).startKeyTimer(500);
+        //     return this;
+        // },
 
 
-        renderSignupCreate: function () {
-            var data = this._getData();
-            if (data.account == null || data.account.company.type == null) {
-                $$.r.mainAppRouter.navigate("/start", true);
-            }
+        // renderSignupCreate: function () {
+        //     var data = this._getData();
+        //     if (data.account == null || data.account.company.type == null) {
+        //         $$.r.mainAppRouter.navigate("/start", true);
+        //     }
 
-            var tmpl = $$.templateManager.get("signup-create", this.templateKey);
-            var html = tmpl(data);
-            this.show(html);
+        //     var tmpl = $$.templateManager.get("signup-create", this.templateKey);
+        //     var html = tmpl(data);
+        //     this.show(html);
 
-            $("#input-username", this.el).startKeyTimer(400);
-            $("#input-password", this.el).startKeyTimer(400);
-            $("#input-password2", this.el).startKeyTimer(400);
-            $("#input-email", this.el).startKeyTimer(400);
-            return this;
-        },
+        //     $("#input-username", this.el).startKeyTimer(400);
+        //     $("#input-password", this.el).startKeyTimer(400);
+        //     $("#input-password2", this.el).startKeyTimer(400);
+        //     $("#input-email", this.el).startKeyTimer(400);
+        //     return this;
+        // },
 
 
         onCompanyTypeChanged: function (event) {
@@ -248,6 +250,10 @@ define([
             return deferred;
         },
 
+        postRender: function() {
+            this.$el.find('.signuppanel .form').css({'opacity': 0});
+        },
+
 
         //region TRANSITION
         _getTransitionDirection: function(inOrOut) {
@@ -275,105 +281,150 @@ define([
             return null;
         },
 
+        left: '',
+        opacity: '',
+        scale: '',
+        animating: '',
 
-        transitionIn: function () {
-            console.log('new transition in');
+        nextPanel: function (ev) {
+            var self = this;
+            if(this.animating) return false;
+            this.animating = true;
 
-            var direction = this._getTransitionDirection("in");   //  left|right
+            var panelarr = ["start","details","create"];
+            var currIndex = panelarr.indexOf(this.place);
+            var current_fs = $('#'+this.place+'.signuppanel');
+            var next_fs = $('#'+panelarr[currIndex+1]+'.signuppanel');
 
-            if (direction == "left") {
-                //you want to transition me in from the right to the left
-            } else if(direction == "right") {
-                //you want to transition me in from the left to the right
-            } else {
-                //you just want to show me with no animation
-            }
+
+            $("#progressbar li").eq($("fieldset").index(currIndex+1)).addClass("active");
+
+            next_fs.show();
+            current_fs.animate({opacity: 0}, {
+                step: function(now, mx) {
+                    this.scale = 1 - (1 - now) * 0.2;
+                    this.left = (now * 50)+"%";
+                    this.opacity = 1 - now;
+                    current_fs.css({'transform': 'scale('+this.scale+')'});
+                    next_fs.css({'left': this.left, 'opacity': this.opacity});
+                },
+                duration: 800,
+                complete: function(){
+                    current_fs.hide();
+                    self.place = panelarr[currIndex+1];
+                    self.animating = false;
+                },
+                easing: 'easeInOutBack'
+            });
+        },
+
+        prevPanel: function (ev) {
+            var self = this;
+            if(this.animating) return false;
+            this.animating = true;
+
+            var panelarr = ["start","details","create"];
+            var currIndex = panelarr.indexOf(this.place);
+            var current_fs = $('#'+this.place+'.signuppanel');
+            var previous_fs = $('#'+panelarr[currIndex-1]+'.signuppanel');
+
+
+            $("#progressbar li").eq($("fieldset").index(currIndex+1)).addClass("active");
+
+            previous_fs.show();
+            current_fs.animate({opacity: 0}, {
+                step: function(now, mx) {
+                    this.scale = 0.8 + (1 - now) * 0.2;
+                    this.left = ((1-now) * 50)+"%";
+                    //3. increase opacity of previous_fs to 1 as it moves in
+                    this.opacity = 1 - now;
+                    current_fs.css({'left': this.left});
+                    previous_fs.css({'transform': 'scale('+this.scale+')', 'opacity': this.opacity});
+                },
+                duration: 800,
+                complete: function(){
+                    current_fs.hide();
+                    self.place = panelarr[currIndex-1];
+                    self.animating = false;
+                },
+                easing: 'easeInOutBack'
+            });
         },
 
 
-        transitionOut: function () {
+        nextPanelOLD: function () {
+            console.log('next panel');
+            var self = this;
+            console.log('new transition in');
+            var direction = this._getTransitionDirection("in");   //  left|right
+                 _.delay(function() {
+                     if (self.animating) return false;
+                     self.animating = true;
+
+                     if (direction == "left") {
+                        //you want to transition me in from the right to the left
+                        console.log('transitionIn from the left');
+                        self.$el.find('.signuppanel').css({'opacity': 1});
+                        self.$el.find('.signuppanel .form').css({'opacity': 0, 'left': '100%', 'display': 'block'});
+                        self.$el.find('.signuppanel .form').animate({ 'opacity': 1, 'left': 0 }, {duration: 800, complete: function() {self.animating = false;},easing: 'easeInOutBack'});
+                    } else if(direction == "right") {
+                        //you want to transition me in from the left to the right
+                        console.log('transitionIn from the right');
+                        self.$el.find('.signuppanel .form').css({'opacity': 0, 'right': '100%', 'display': 'block'});
+                        self.$el.find('.signuppanel .form').animate({ 'opacity': 1, 'right': 0 }, {duration: 800, complete: function() {self.animating = false;},easing: 'easeInOutBack'});
+                    } else {
+                        //you just want to show me with no animation
+                        console.log('no direction');
+                    }
+
+
+                 }, 50);
+        },
+
+
+        prevPanelOLD: function () {
+            console.log('prev panel');
             console.log('new transition out');
 
             var direction = this._getTransitionDirection("out");  //  left|right
 
-            if (direction == "left") {
-                //you want to transition me out from the right to the left
-            } else if(direction == "right") {
-                //you want to transition me out from the left to the right
-            } else {
-                //you just want to show me with no animation
-            }
+            // if (direction == "left") {
+            //     //you want to transition me out from the right to the left
+            // } else if(direction == "right") {
+            //     //you want to transition me out from the left to the right
+            //     console.log('transitionOut from the right');
+            //     //this.$el.addClass('transitionRight');
+            // } else {
+            //     //you just want to show me with no animation
+            // }
+
+
+
+            var self = this;
+                 _.delay(function() {
+                     if (self.animating) return false;
+                     self.animating = true;
+
+                     self.$el.find('.signuppanel .form').animate({ opacity: 0 }, {
+                        step: function(now, mx) {
+                            var scale = 1 - (1 - now) * 0.2;
+                            self.$el.find('.signuppanel .form').css({ 'transform': 'scale(' + scale + ')'});
+                        },
+                        duration: 800,
+                        complete: function() {
+                            console.log('transition complete');
+                            self.$el.hide();
+                            self.animating = false;
+                        },
+                            easing: 'easeInOutBack'
+                        });
+                 }, 50);
+
+            self.$el.find('.signuppanel .logo').css({'opacity':0});
+                    self.$el.find('.signuppanel .left-nav').css({'opacity':0});
+                    self.$el.find('.signuppanel .right-nav').css({'opacity':0});
         }
 
-        //endregion
-
-        /*
-         var self = this;
-         _.delay(function() {
-         if (self.animating) return false;
-         self.animating = true;
-
-         //activate next step on progressbar using the index of next_fs
-         $("#progressbar li").eq($("fieldset").index(self.next_fs)).addClass("active");
-
-         self.next_fs.fadeIn();
-
-         //hide the current fieldset with style
-         self.current_fs.animate({ opacity: 0 }, {
-         step: function(now, mx) {
-         //as the opacity of current_fs reduces to 0 - stored in "now"
-         //1. scale current_fs down to 80%
-         self.scale = 1 - (1 - now) * 0.2;
-         //2. bring next_fs from the right(50%)
-         self.left = (now * 50) + "%";
-         //3. increase opacity of next_fs to 1 as it moves in
-         self.opacity = 1 - now;
-         self.current_fs.css({
-         'transform': 'scale(' + self.scale + ')'
-         });
-         self.next_fs.css({
-         'left': self.left,
-         'opacity': self.opacity
-         });
-         },
-         duration: 800,
-         complete: function() {
-         self.current_fs.hide();
-         self.animating = false;
-         },
-         //this comes from the custom easing plugin
-         easing: 'easeInOutBack'
-         });
-         }, 500);
-         */
-
-
-        /*
-         var self = this;
-         _.delay(function() {
-         if(self.animating) return false;
-         self.animating = true;
-
-         $("#progressbar li").eq($("fieldset").index(self.current_fs)).removeClass("active");
-
-         self.next_fs.show();
-         self.current_fs.animate({ opacity: 0 }, {
-         step: function(now, mx) {
-         self.scale = 0.8 + (1 - now) * 0.2;
-         self.left = ((1-now) * 50)+"%";
-         self.opacity = 1 - now;
-         self.current_fs.css({'left': self.left});
-         self.next_fs.css({'transform': 'scale('+self.scale+')', 'opacity': self.opacity});
-         },
-         duration: 800,
-         complete: function() {
-         self.current_fs.hide();
-         self.animating = false;
-         },
-         easing: 'easeInOutBack'
-         });
-         }, 500);
-         */
     });
 
     $$.v.SignupView = view;

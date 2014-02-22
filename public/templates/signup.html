@@ -1,10 +1,21 @@
-<script type="text/x-handlebars-template" name="signup-start">
-    <section class="panel">
-    <div class="signuppanel">
-        <a href="/login" class="left-nav"></a>
-        <a href="/details" class="right-nav {{#superUnless "or" isProfessional isBusiness}}hidden{{/superUnless}}"></a>
-        <span class="logo"></span>
-            <div class="form">
+<script type="text/x-handlebars-template" name="signup-main">
+    <section class="mainpanel">
+        {{> signup-controls }}
+        {{> signup-start }}
+        {{> signup-details }}
+        {{> signup-create }}
+    </section>
+</script>
+
+<script type="text/x-handlebars-template" name="signup-controls" partial="true">
+    <button class="left-nav"></button>
+    <button class="right-nav {{#superUnless "or" isProfessional isBusiness}}hidden{{/superUnless}}"></button>
+    {{#checknot place "create"}}<span class="logo"></span> {{/checknot}}
+</script>
+
+<script type="text/x-handlebars-template" name="signup-start" partial="true">
+    <div id="start" class="signuppanel">
+            <div class="form" style="opacity:1;">
             <ul id="progressbar">
                 <li class="active"></li>
                 <li></li>
@@ -24,16 +35,11 @@
             </div>
         </div>
     </div>
-    </section>
 </script>
 
 
-<script type="text/x-handlebars-template" name="signup-details">
-<section class="panel">
-    <div class="signuppanel">
-        <a href="/start" class="left-nav"></a>
-        <a href="/create" class="right-nav"></a>
-        <span class="logo"></span>
+<script type="text/x-handlebars-template" name="signup-details" partial="true">
+    <div id="details" class="signuppanel">
         <div class="form">
             <ul id="progressbar">
                 <li></li>
@@ -113,15 +119,11 @@
             </div>
         </div>
     </div>
-</section>
 </script>
 
 
-<script type="text/x-handlebars-template" name="signup-create">
-<section class="panel">
-    <div class="signuppanel">
-        <a href="/details" class="left-nav"></a>
-        <span class="logo"></span>
+<script type="text/x-handlebars-template" name="signup-create" partial="true">
+    <div id="create" class="signuppanel">
         <div class="form">
             <ul id="progressbar">
         	<li></li>
@@ -183,5 +185,4 @@
             </form>
         </div>
     </div>
-</section>
 </script>

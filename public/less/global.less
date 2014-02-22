@@ -9,21 +9,20 @@
    z-index: 10000; 
 }
 
-/*
-.panel {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}*/
 
-.panel.is-visible {
+.mainpanel {
+  width: 480px;
+  margin: 50px auto;
+  text-align: center;
+  position: relative;
+}
+
+.mainpanel.is-visible {
   -webkit-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
 }
 
-.panel.slideleft {
+.mainpanel.slideleft {
   transition: transition .5s ease;
   transition-property: -webkit-transform;
   transition-property: transform;
@@ -52,6 +51,8 @@
   float: left;
   margin: 220px 0 0 -50px;
   position: absolute;
+  border: none;
+  outline: none;
 }
 
 .right-nav {
@@ -61,6 +62,8 @@
   height: 60px;
   display: block;
   float: right;
+  border: none;
+  outline: none;
   margin: 220px -60px 0 0;
 }
 
