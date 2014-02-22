@@ -254,7 +254,7 @@ define([
             var arr = ["start","details","create"];
 
             var currIndex = arr.indexOf(this.place);
-            var nextIndex; lastIndex;
+            var nextIndex, lastIndex;
             if (inOrOut == "in") {
                 lastIndex = arr.indexOf(this.lastPlace);
 
