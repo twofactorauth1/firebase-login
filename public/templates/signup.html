@@ -1,6 +1,6 @@
 <script type="text/x-handlebars-template" name="signup-start">
-    <section class="panel">
-    <div class="signuppanel">
+    <section class="mainpanel">
+    <div class="signuppanel" style="opacity:1;">
         <a href="/login" class="left-nav"></a>
         <a href="/details" class="right-nav {{#superUnless "or" isProfessional isBusiness}}hidden{{/superUnless}}"></a>
         <span class="logo"></span>
@@ -29,7 +29,7 @@
 
 
 <script type="text/x-handlebars-template" name="signup-details">
-<section class="panel">
+<section class="mainpanel">
     <div class="signuppanel">
         <a href="/start" class="left-nav"></a>
         <a href="/create" class="right-nav"></a>
@@ -118,7 +118,7 @@
 
 
 <script type="text/x-handlebars-template" name="signup-create">
-<section class="panel">
+<section class="mainpanel">
     <div class="signuppanel">
         <a href="/details" class="left-nav"></a>
         <span class="logo"></span>

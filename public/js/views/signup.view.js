@@ -277,17 +277,42 @@ define([
 
 
         transitionIn: function () {
+            var self = this;
             console.log('new transition in');
-
             var direction = this._getTransitionDirection("in");   //  left|right
 
-            if (direction == "left") {
-                //you want to transition me in from the right to the left
-            } else if(direction == "right") {
-                //you want to transition me in from the left to the right
-            } else {
-                //you just want to show me with no animation
-            }
+            // if (direction == "left") {
+            //     //you want to transition me in from the right to the left
+            //     console.log('transitionIn from the left');
+            // } else if(direction == "right") {
+            //     //you want to transition me in from the left to the right
+            //     console.log('transitionIn from the right');
+            // } else {
+            //     //you just want to show me with no animation
+            // }
+
+            var self = this;
+            //self.$el.find('.signuppanel').css({'opacity': 0, 'left': '100%', 'display': 'block'});
+                 _.delay(function() {
+                     if (self.animating) return false;
+                     self.animating = true;
+                     self.$el.find('.signuppanel').css({'left': '100%'});
+                    //self.$el.find('.signuppanel').animate({left:'0', opacity: 1, 'display': 'block'}, 800);
+                     self.$el.find('.signuppanel').animate({ opacity: 1, left: 0 }, {
+                        // step: function(now, mx) {
+                        //     var left = (now*50) + "%";
+                        //     var dir = self.direction;
+                        //     console.log(dir);
+                        //     self.$el.find('.signuppanel').css({ 'left' : left});
+                        // },
+                        duration: 800,
+                        complete: function() {
+                            //self.$el.hide();
+                            self.animating = false;
+                        },
+                            easing: 'easeInOutBack'
+                        });
+                 }, 500);
         },
 
 
@@ -296,13 +321,37 @@ define([
 
             var direction = this._getTransitionDirection("out");  //  left|right
 
-            if (direction == "left") {
-                //you want to transition me out from the right to the left
-            } else if(direction == "right") {
-                //you want to transition me out from the left to the right
-            } else {
-                //you just want to show me with no animation
-            }
+            // if (direction == "left") {
+            //     //you want to transition me out from the right to the left
+            // } else if(direction == "right") {
+            //     //you want to transition me out from the left to the right
+            //     console.log('transitionOut from the right');
+            //     //this.$el.addClass('transitionRight');
+            // } else {
+            //     //you just want to show me with no animation
+            // }
+
+
+
+            var self = this;
+                 _.delay(function() {
+                     if (self.animating) return false;
+                     self.animating = true;
+
+                     self.$el.find('.signuppanel').animate({ opacity: 0 }, {
+                        step: function(now, mx) {
+                            var scale = 1 - (1 - now) * 0.2;
+                            self.$el.find('.signuppanel').css({ 'transform': 'scale(' + scale + ')'});
+                        },
+                        duration: 800,
+                        complete: function() {
+                            console.log('transition complete');
+                            self.$el.hide();
+                            self.animating = false;
+                        },
+                            easing: 'easeInOutBack'
+                        });
+                 }, 500);
         }
 
         //endregion
