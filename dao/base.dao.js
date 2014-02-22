@@ -80,7 +80,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
 
     findManyWithFields: function(query, fields, type, fn) {
         if (this.getStorage(type) === "mongo") {
-            this._findManyWithFieldsMongo(query, type, fn);
+            this._findManyWithFieldsMongo(query, fields, type, fn);
         } else {
             fn("No storage medium available for this model type");
         }

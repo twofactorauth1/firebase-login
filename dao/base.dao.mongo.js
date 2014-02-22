@@ -94,18 +94,11 @@ var mongodao = {
 
         var fxn = function(err, value) {
             if (!err) {
-                var arr = [];
-
-                value.forEach(function(item) {
-                    arr.push(self._createModel(item));
-                });
-
-                fn(null, arr);
+                return self._wrapArrayMongo(value, fn);
             } else {
-                fn(err, result);
+                fn(err, value);
             }
         };
-
 
         if (query == null && fields == null) {
             mongoColl.find().toArray(fxn);
@@ -114,6 +107,18 @@ var mongodao = {
         } else if(fields != null) {
             mongoColl.find(null, fields).toArray(fxn);
         }
+    },
+
+
+    _wrapArrayMongo: function(value, fn) {
+        var arr = [];
+        var self = this;
+        value.forEach(function(item) {
+            arr.push(self._createModel(item));
+        });
+
+        fn(null, arr);
+        return arr;
     },
 
 
