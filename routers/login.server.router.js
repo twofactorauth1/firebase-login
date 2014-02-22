@@ -1,12 +1,12 @@
-var BaseRouter = require('./base.router');
+var BaseRouter = require('./base.server.router.js');
 var passport = require('passport');
 var UserDao = require('../dao/user.dao');
 var AccountDao = require('../dao/account.dao');
 var cookies = require("../utils/cookieutil");
 
-var LoginView = require('../views/login.view');
-var ForgotPasswordView = require('../views/forgotpassword.view');
-var SignupView = require('../views/signup.view');
+var LoginView = require('../views/login.server.view');
+var ForgotPasswordView = require('../views/forgotpassword.server.view');
+var SignupView = require('../views/signup.server.view');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -54,6 +54,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
     handleLogout: function(req,resp) {
+        req.session.accountId = null;
         req.logout();
         return resp.redirect("/");
     },

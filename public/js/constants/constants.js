@@ -5,6 +5,14 @@ if (typeof define !== 'function') {
 define([], function() {
 
     var constants = {
+        server_props: {
+            USER_ID: "userId",
+            ACCOUNT_ID: "accountId",
+            ROUTER: "router",
+            ROOT: "root",
+            IS_LOGGED_IN: "isLoggedIn"
+        },
+
         account: {
             company_types: {
                 PROFESSIONAL:1,
@@ -54,7 +62,10 @@ define([], function() {
         }
     };
 
-    $$ = $$ || {};
+    if (typeof $$ === 'undefined') {
+        $$ = {};
+    }
+
     $$.constants = $$.constants || {};
     $$.constants = _.extend($$.constants, constants);
 

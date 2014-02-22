@@ -1,6 +1,7 @@
 require('../utils/jadehelpers');
 var url = require('url');
 var AccountDao = require('../dao/account.dao');
+var constants = requirejs("constants/constants");
 
 
 var baseView = function(req,resp,options) {
@@ -28,8 +29,14 @@ _.extend(baseView.prototype, {
     baseData: function(options) {
         options = options || {};
         var serverProps = options.serverProps || {};
-        serverProps.router = options.router;
-        serverProps.root = options.root;
+        serverProps[$$.constants.server_props.ROUTER] = options.router;
+        serverProps[$$.constants.server_props.ROOT] = options.root;
+
+        if (options.serverProps != null) {
+            for(var key in options.serverProps) {
+                serverProps[key] = options.serverProps[key];
+            }
+        }
 
         delete options.router;
         delete options.root;
@@ -43,13 +50,18 @@ _.extend(baseView.prototype, {
         };
 
         if (this.req.user != null) {
-            data.serverProps.userId = this.req.user.id();
-            data.isLoggedIn = true;
+            data.serverProps[$$.constants.server_props.USER_ID] = this.req.user.id();
+            data.serverProps[$$.constants.server_props.IS_LOGGED_IN] = true;
             data.user = this.req.user.toJSON();
         } else {
             data.isLoggedIn = false;
         }
 
+        if (options.account != null) {
+            data.serverProps[$$.constants.server_props.ACCOUNT_ID] = options.account._id;
+        } else if(options.accountId != null) {
+            data.serverProps[$$.constants.server_props.ACCOUNT_ID] = options.accountId;
+        }
 
         try {
             data.errorMsg = this.req.flash('error')[0];
@@ -88,7 +100,7 @@ _.extend(baseView.prototype, {
     },
 
 
-    account: function(fn) {
+    getAccount: function(fn) {
         var accountId = this.accountId();
         if (accountId != null) {
             return AccountDao.getById(accountId, fn);

@@ -6,10 +6,10 @@
     if (typeof $$ == 'undefined') {
         $$ = indigenous;
     } else {
+        $$ = _.extend($$, indigenous);
         indigenous = $$;
     }
 
-    $$ = $$ || {};
     $$.m = $$.models = $$.models || {};
     $$.c = $$.collections = $$.collections || {};
     $$.v = $$.views = $$.views || {};

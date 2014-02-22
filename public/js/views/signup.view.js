@@ -1,7 +1,6 @@
 define([
     'services/user.service',
     'models/account',
-    'constants/constants',
     'libs/jquery/jquery.keytimer'
 ], function(UserServices) {
 
@@ -67,7 +66,8 @@ define([
 
         renderSignupDetails: function() {
             var data = this._getData();
-            if (data.isBusiness == false && data.isProfessional == false) {
+
+            if (data.account == null || data.account.company.type == null) {
                 $$.r.mainAppRouter.navigate("/start", true);
             }
 
@@ -82,7 +82,7 @@ define([
 
         renderSignupCreate: function() {
             var data = this._getData();
-            if (data.isBusiness == false && data.isProfessional == false) {
+            if (data.account == null || data.account.company.type == null) {
                 $$.r.mainAppRouter.navigate("/start", true);
             }
 
@@ -248,12 +248,6 @@ define([
             return deferred;
         },
 
-        postRender: function() {
-            $('#status').delay(350).fadeOut();
-            $('#preloader').delay(500).fadeOut(function(){
-              $('body').delay(350).css({'overflow':'visible'});
-            });
-        },
 
         //panel transition variables
         current_fs: '',

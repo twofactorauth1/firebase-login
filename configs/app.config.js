@@ -16,19 +16,42 @@ if (process.env.PORT == null) {
     process.env.PORT = 3000;
 }
 
+/**
+ * For local:  indigenous.local, localhost, etc.  -- modify hosts file to point 127.0.0.1 to app.indigenous.io
+ * For production: indigenous.io
+ */
 if (process.env.ROOT_HOST == null) {
     process.env.ROOT_HOST = "indigenous.local";
 }
 
-process.env.GLOBAL_SUBDOMAINS = "www,home,app";
-//---------------------------------------------------------
-//
-//---------------------------------------------------------
-var serverUrl = "http://localhost:" + process.env.PORT;
 
-//Attempt to get from environment, if set
-if (typeof(process.env.SERVER_URL) != 'undefined' && process.env.SERVER_URL != null) {
-    serverUrl = process.env.SERVER_URL;
+/**
+ * If we have SSL set to true, otherwise false.
+ * This is used in Full path URL creation.
+ *
+ * On production, this should be set in environment variables as true
+ */
+if (process.env.IS_SECURE == null) {
+    process.env.IS_SECURE = "false";
+}
+
+
+/**
+ * A "whitelist" of subdomains that are never "account specific".
+ * If a use hits one of these, they are at the main indigenous.io app.
+ */
+process.env.GLOBAL_SUBDOMAINS = "www,home,app";
+
+
+//---------------------------------------------------------
+//  SET UP SERVER_URL
+//---------------------------------------------------------
+
+var serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
+serverUrl += "app." + process.env.ROOT_HOST;
+
+if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443) {
+    serverUrl += ":" + process.env.PORT;
 }
 
 
@@ -44,5 +67,21 @@ module.exports = {
     server_url: serverUrl,
     support_email: "support@indigenous.com",
     cluster:false,
-    freeCpus:2
+    freeCpus:2,
+
+    getServerUrl: function(subdomain) {
+        if (subdomain == null) {
+            subdomain = "app";
+        }
+
+
+        var serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
+        serverUrl += subdomain + "." + process.env.ROOT_HOST;
+
+        if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443) {
+            serverUrl += ":" + process.env.PORT;
+        }
+
+        return serverUrl;
+    }
 };

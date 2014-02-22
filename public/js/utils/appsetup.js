@@ -8,7 +8,10 @@ define([], function() {
 
 
         setUpServerProps: function () {
-            $$ = $$ || {};
+            if (typeof $$ === 'undefined') {
+                $$ = {};
+            }
+
             $$.server = $$.server || {};
             $$.server.get = function (property) {
                 return $$.server[property];

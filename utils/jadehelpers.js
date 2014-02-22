@@ -39,6 +39,7 @@ app.locals.formatDateDiff = $$.u.formatutils.formatDateDiffInHHMMSS;
 //-------------------------------
 app.locals.setServerProp = function(key, value) {
     var str =
+        "if (typeof indigenous === 'undefined') indigenous = {};" +
         "window.indigenous = window.indigeous || {};" +
             "window.indigenous.server = window.indigenous.server || {};";
 
@@ -53,6 +54,7 @@ app.locals.setServerProp = function(key, value) {
 
 app.locals.setServerProps = function(serverProps) {
     var str =
+        "if (typeof indigenous === 'undefined') indigenous = {};" +
         "window.indigenous = window.indigenous || {};" +
             "window.indigenous.server = window.indigenous.server || {};";
 
@@ -65,5 +67,6 @@ app.locals.setServerProps = function(serverProps) {
             str += "window.indigenous.server." + key + "='" + value + "';";
         }
     }
+
     return str;
 };

@@ -1,5 +1,5 @@
-var loginRouter = require('../routers/login.router');
-var homeRouter = require('../routers/home.router');
+var loginRouter = require('../routers/login.server.router');
+var homeRouter = require('../routers/home.server.router');
 
 module.exports = {
     loginRouter: loginRouter,

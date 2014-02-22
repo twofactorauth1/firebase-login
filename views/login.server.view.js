@@ -14,7 +14,7 @@ _.extend(view.prototype, BaseView.prototype, {
         });
 
         var self = this;
-        this.account(function(err, value) {
+        this.getAccount(function(err, value) {
             if (!err && value != null) {
                 data.account = value.toJSON()
             }

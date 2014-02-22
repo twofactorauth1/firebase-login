@@ -4,38 +4,65 @@ var constants = requirejs("constants/constants");
 
 var user = $$.m.ModelBase.extend({
 
-    defaults: {
-        _id: null,
-        username:"",
-        email: "",
-        first:"",
-        last:"",
+    defaults: function() {
+        return {
+            _id: null,
+            username:"",
+            email: "",
+            first:"",
+            last:"",
 
-        /**
-         * [{
-         *  accountId:int,
-         *  username:string,
-         *  password:string
-         *  credentials: [
-         *      type:int,
-         *      username:string
-         *      password:string,
-         *      authtoken:string
-         *  ],
-         *  permissions: [ super, admin, member ]
-         * }]
-         */
-        accounts: [],
+            /**
+             * @profilePhotos
+             *
+             * [{
+             *  active:true|false,
+             *  url:"" //URL
+             *  source:"" //  lo|fb|tw|go|li|cc
+             * }]
+             */
+            profilePhotos: [],
 
-        /**
-         * [{
-         *  type:int,
-         *  username:string,
-         *  password:string,
-         *  authtoken:string
-         * }]
-         */
-        credentials: []
+            /**
+             * [{
+             *  accountId:int,
+             *  username:string,
+             *  password:string
+             *  credentials: [
+             *      type:int,
+             *      username:string
+             *      password:string,
+             *      authtoken:string
+             *  ],
+             *  permissions: [ super, admin, member ]
+             * }]
+             */
+            accounts: [],
+
+            /**
+             * [{
+             *  type:int,
+             *  username:string,
+             *  password:string,
+             *  authtoken:string
+             * }]
+             */
+            credentials: []
+        }
+    },
+
+
+    transients: {
+        deepCopy: true,
+        public: ["credentials", function(json) {
+            var self = this;
+            if (json.accounts != null) {
+                json.accounts.forEach(function(account) {
+                    delete account.permissions;
+                    delete account.credentials;
+                });
+            }
+        }]
     },
 
 
@@ -191,6 +218,17 @@ var user = $$.m.ModelBase.extend({
             }
         }
         return null;
+    },
+
+
+    isAdminOfAccount: function(accountId) {
+        var account = this.getUserAccount(accountId);
+        if (account != null &&
+            (account.permissions.indexOf("admin") > -1 || account.permissions.indexOf("super") > -1)) {
+
+            return true;
+        }
+        return false;
     },
 
 

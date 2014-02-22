@@ -70,6 +70,24 @@ _.extend(apiBase.prototype, {
     },
 
 
+    sendResult: function(resp, result) {
+        if (_.isArray(result)) {
+            var _arr = [];
+            result.forEach(function(item) {
+               if (typeof item.toJSON != undefined) {
+                   _arr.push(item.toJSON("public"));
+               } else {
+                   _arr.push(item);
+               }
+            });
+            result = _arr;
+        } else if (typeof result.toJSON != undefined) {
+            result = result.toJSON("public");
+        }
+        return resp.send(result);
+    },
+
+
     wrapError: function(resp, code, status, message, detail) {
         var response = {
             code:code || 500,

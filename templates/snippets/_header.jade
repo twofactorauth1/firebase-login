@@ -1,7 +1,4 @@
 .masthead.container#header
-    if account
-        h3 Account: #{account.company.name} [#{account._id}]
-
     div.navbar.navbar-default(role="navigation")
         div.container-fluid
             div.navbar-header
@@ -11,7 +8,13 @@
                     span.icon-bar
                     span.icon-bar
 
-                a.navbar-brand(href="#") #{title}
+                if account
+                    if account.company.logo
+                        a.accountLogo(href="#"): span: img(src="#{account.company.logo}" style="max-height:40px;")
+                    else
+                        a.navbar-brand(href="#") #{account.company.name}
+                else
+                    a.navbar-brand(href="#") #{title}
             div.navbar-collapse.collapse
                 ul.nav.navbar-nav
 

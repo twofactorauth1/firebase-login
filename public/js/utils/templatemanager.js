@@ -114,7 +114,10 @@ define(function() {
         }
     };
 
-    $$ = $$ || {};
+    if (typeof $$ === 'undefined') {
+        $$ = {};
+    }
+
     $$.templateManager = templateManager;
 
     return $$.templateManager;

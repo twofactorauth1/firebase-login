@@ -1,5 +1,5 @@
 define([
-    'views/home.view'
+    'views/account/admin.view'
 ], function (HomeView) {
 
     var router = Backbone.Router.extend({
@@ -16,7 +16,7 @@ define([
         }
     });
 
-    $$.r.homeRouter = new router();
+    $$.r.accountAdminRouter = new router();
 
-    return $$.r.homeRouter;
+    return $$.r.accountAdminRouter;
 });

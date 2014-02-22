@@ -67,7 +67,10 @@
     });
 
     //in your application, rather than using window.location to get the current url
-    $$ = $$ || {};
+    if (typeof $$ === 'undefined') {
+        $$ = {};
+    }
+
     $$.getLocation = function(){
         return window.location.protocol + '//' + window.location.host
             + '/' + Backbone.history.options.root + Backbone.history.getFragment()

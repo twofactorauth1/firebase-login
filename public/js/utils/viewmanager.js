@@ -155,10 +155,20 @@ define([
                 selector = "#container-alert";
             }
             $(selector).fadeOut();
+        },
+
+
+        onAllRender: function() {
+            $('#status').delay(350).fadeOut();
+            $('#preloader').delay(500).fadeOut(function(){
+                $('body').delay(350).css({'overflow':'visible'});
+            });
         }
     });
 
-    $$ = $$ || {};
+    if (typeof $$ === 'undefined') {
+        $$ = {};
+    }
 
     if ($$.viewManager != null) {
         window.alert("View Manager Instance already exists!");

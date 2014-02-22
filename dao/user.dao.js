@@ -125,7 +125,7 @@ var dao = {
 
                     var user = new $$.m.User({
                         username:username,
-                        email:email,
+                        email:email
                     });
 
                     user.createOrUpdateLocalCredentials(password);

@@ -33,7 +33,7 @@ _.extend(baseRouter.prototype, {
             AccountDao.getAccountByHost(req.get("host"), function(err, value) {
                 if (!err && value != null) {
                     if (value === true) {
-                        req.session.accountId = 0;
+                        req.session.accountId = null;
                     } else {
                         req.session.accountId = value.id();
                     }
@@ -57,7 +57,7 @@ _.extend(baseRouter.prototype, {
             AccountDao.getAccountByHost(req.get("host"), function(err, value) {
                 if (!err && value != null) {
                     if (value === true) {
-                        req.session.accountId = 0;
+                        req.session.accountId = null;
                     } else {
                         req.session.accountId = value.id();
                     }

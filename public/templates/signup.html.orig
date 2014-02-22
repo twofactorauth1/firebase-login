@@ -10,18 +10,14 @@
                 <li></li>
                 <li></li>
             </ul>
+                <h4>Choose Your Business Model</h4>
+                <hr>
+                    <div class="models">
+                        <div id="btn-professional" class="btn btn-large btn-bus-model {{#if isProfessional}}btn-primary{{else}}btn-default{{/if}}" data-type="professional"><span class="fa fa-user"></span></div>
 
-            <h4>Choose Your Business Model</h4>
+                        <div id="btn-business" class="btn btn-large btn-default btn-bus-model {{#if isBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="business"><span class="fa fa-users"></span></div>
 
-            <hr>
-
-            <div class="models">
-                <div id="btn-professional" class="btn btn-large btn-bus-model {{#if isProfessional}}btn-primary{{else}}btn-default{{/if}}" data-type="professional"><span class="fa fa-user"></span></div>
-
-                <div id="btn-business" class="btn btn-large btn-default btn-bus-model {{#if isBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="business"><span class="fa fa-users"></span></div>
-
-                <div id="btn-enterprise" class="btn btn-large btn-default btn-bus-model {{#if isEnterprise}}btn-primary{{else}}btn-default{{/if}}" data-type="enterprise"><span class="fa fa-building-o"></span></div>
-            </div>
+                    </div>
         </div>
     </div>
     </section>
@@ -43,6 +39,7 @@
             <h4>Set Up Your Business</h4>
             <hr>
             <div>
+
                 <form role="form">
                     <div class="form-group row">
                         <div class="">
@@ -120,13 +117,14 @@
 <script type="text/x-handlebars-template" name="signup-create">
 <section class="panel">
     <div class="signuppanel">
+<<<<<<< HEAD
         <a href="/details" class="left-nav"></a>
         <span class="logo"></span>
         <div class="form">
             <ul id="progressbar">
-        	<li></li>
-        	<li></li>
-        	<li class="active"></li>
+                <li>Account Setup</li>
+                <li>Social Profiles</li>
+                <li class="active">Personal Details</li>
             </ul>
             <h3>Create an account</h3>
 
@@ -142,6 +140,27 @@
                         </div>
                         <span id="help-username" class="error" />
                     </div>
+=======
+    <a href="/details" class="left-nav"></a>
+    <span class="logo"></span>
+    <div class="form">
+    <ul id="progressbar">
+        <li></li>
+        <li></li>
+        <li class="active"></li>
+    </ul>
+    <h3>Create an account</h3>
+
+    <hr/>
+
+    <form role="form" id="form-create-account" action="/signup" method="post">
+        <div class="form-group row">
+            <div class="">
+                <label>Username <small>Can be your email</small></label>
+                <div class="input-group">
+                    <input class="form-control" id="input-username" type="text" name="username" placeholder="username"/>
+                    <span class="input-group-addon"><i id="icon-username" class="glyphicon glyphicon-remove"/> </span>
+>>>>>>> 13f97f38edb6d2d24aa41a4c024adf5b08d738d4
                 </div>
 
                 <div class="form-group row">
@@ -178,10 +197,17 @@
                     </div>
                 </div>
 
-            <p class="termsOfuse">By clicking “Let’s Get Started” below you agree to the Terms of Use<p>
-            <button class="btn btn-primary btn-default btn-block" type="submit" value="Create Account" role="button">Create Account</button>
+<<<<<<< HEAD
+
+                    <button class="btn btn-primary btn-default" type="submit" value="Create Account" role="button">Create Account</button>
             </form>
         </div>
+=======
+            <p class="termsOfuse">By clicking “Let’s Get Started” below you agree to the Terms of Use<p>
+            <button class="btn btn-primary btn-default btn-block" type="submit" value="Create Account" role="button">Create Account</button>
+    </form>
+    </div>
+>>>>>>> 13f97f38edb6d2d24aa41a4c024adf5b08d738d4
     </div>
 </section>
 </script>
