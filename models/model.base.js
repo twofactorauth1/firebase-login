@@ -25,6 +25,52 @@ _.extend(modelBase.prototype, {
         }
     },
 
+    /**
+     * @transients
+     *
+     * Array of keys to mark whether or not certain properties get serialized
+     * when sent either publicly through the API, or serialized to the DB.  If a
+     * key is added here, it will not go out.
+     *
+     * for instance.
+     *
+     * transients: {
+     *      deepCopy: true
+     *      public: ["password", "internalId"],  //neither password nor internalId will be serialized to client
+     *      db: ["sessionid"],                   //current sessionid will not be serialized to database
+     * }
+     *
+     * You may also pass in a custom function that takes in the JSON and can remove any necessary properties manually.
+     * This is useful for removal of nested properties.
+     *
+     * Note, setting deepCopy to true will force the toJSON method to do a deep copy. this is useful if you have to
+     * remove deeper embedded objects that will be affected, as the standard toJSON method is a shallow copy.
+     *
+     * function(json) {};
+     */
+    transients: {
+        deepCopy: false,
+        public: null,
+        db: null
+    },
+
+
+    /**
+     * @serializers
+     *
+     * Allows you to specify a callback function that is called while serializing toJSON, and allows the model
+     * class to set custom properties to send to either the database ("db") or the public ("public");
+     *
+     * Invokes a function that should have a signature as:  function(json);
+     *
+     * @param value
+     * @returns {}
+     */
+     serializers: {
+        public: null,  //function(json);
+        db: null       //function(json);
+    },
+
 
     id: function(value) {
         if (value != null) {
@@ -68,8 +114,46 @@ _.extend(modelBase.prototype, {
         Object.getPrototypeOf(this).constructor.db.idStrategy || "increment";
     },
 
-    toJSON: function() {
-        return _.clone(this.attributes); //shallow copy
+    /**
+     * @toJSON
+     *
+     * Serializes the model object to JSON for send to client or DB or any other use
+     *
+     * @param transientMode - null|{empty}|public|db.  When public or db are passed in
+     *      we will remove any properties marked as transient for the given mode.  See
+     *      @transients
+     */
+    toJSON: function(transientMode) {
+        var json;
+        if (this.transients != null) {
+            if (this.transients.deepCopy === true) {
+                json = JSON.parse(JSON.stringify(this.attributes));
+            } else {
+                json = _.clone(this.attributes); //shallow copy
+            }
+            var keys;
+            if (transientMode == "public") keys = this.transients.public;
+            else if(transientMode == "db") keys = this.transients.db;
+
+            if (keys != null) {
+                for (var i = 0; i < keys.length; i++) {
+                    if (_.isFunction(keys[i])) {
+                        keys[i].call(this, json);
+                    } else {
+                        delete json[keys[i]];
+                    }
+                }
+            }
+        }
+
+        if (this.serializers != null) {
+            if (transientMode == "public" && _.isFunction(this.serializers.public)) {
+                this.serializers.public.call(this, json);
+            } else if(transientMode == "db" && _.isFunction(this.serializers.db)) {
+                this.serializers.db.call(this,json);
+            }
+        }
+        return json;
     }
 });
 

@@ -16,11 +16,12 @@ _.extend(api.prototype, BaseApi.prototype, {
 
     initialize: function() {
         app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
-        app.get(this.url('exists/username=:username'), this.userExists.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.post(this.url(''), this.createUser.bind(this));
         app.put(this.url(''), this.isAuthApi, this.updateUser.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteUser.bind(this));
+
+        app.get(this.url('exists/username'), this.userExists.bind(this));
     },
 
 
@@ -31,13 +32,11 @@ _.extend(api.prototype, BaseApi.prototype, {
 
         UserDao.getById(user.id(), function(err, value) {
            if (!err) {
-               return resp.send(value.toJSON());
+               return resp.send(value.toJSON("public"));
            } else {
                return self.wrapError(resp, 500, null, err, value);
            }
         });
-
-        resp.send(user.toJSON());
     },
 
 
@@ -58,7 +57,7 @@ _.extend(api.prototype, BaseApi.prototype, {
                 if (value == null) {
                     return self.wrapError(resp, 404, null, "No User found with ID: [" + userId + "]");
                 }
-                return resp.send(value.toJSON());
+                return resp.send(value.toJSON("public"));
             } else {
                 return self.wrapError(resp, 401, null, err, value);
             }

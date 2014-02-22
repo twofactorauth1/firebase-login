@@ -1,4 +1,4 @@
-var baseDao = require('./base.dao');
+require('./base.dao');
 require('../models/account');
 
 var dao = {
@@ -21,6 +21,25 @@ var dao = {
 
     getAccountByDomain: function(domain, fn) {
         this.findOne( {'domain':domain}, fn);
+    },
+
+
+    getAllAccountsForUserId: function(userId, fn) {
+        var self = this;
+        var UserDao = require('./user.dao');
+        UserDao.getById(userId, function(err, value) {
+            if (!err) {
+                var accounts = value.get("accounts");
+                var ids = [];
+                accounts.forEach(function(account) {
+                   ids.push(account.accountId);
+                });
+
+                var query = {_id: {$in: ids }};
+
+                self.findMany(query, fn);
+            }
+        });
     },
 
 

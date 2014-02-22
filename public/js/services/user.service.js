@@ -3,7 +3,7 @@ define([], function() {
     var services = {
 
         usernameExists: function(username, fn) {
-            var url = $$.api.getApiUrl("user", "exists/username=" + username);
+            var url = $$.api.getApiUrl("user", "exists/" + username);
 
             var deferred = $.Deferred();
             $.getJSON(url, function(data, status) {

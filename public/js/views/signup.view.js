@@ -1,7 +1,6 @@
 define([
     'services/user.service',
     'models/account',
-    'constants/constants',
     'libs/jquery/jquery.keytimer'
 ], function(UserServices) {
 

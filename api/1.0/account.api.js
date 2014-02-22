@@ -25,6 +25,8 @@ _.extend(api.prototype, BaseApi.prototype, {
         app.post(this.url(''), this.isAuthApi, this.createAccount.bind(this));
         app.put(this.url(''), this.isAuthApi, this.updateAccount.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteAccount.bind(this));
+
+        app.get(this.url(':userid/accounts', 'user'), this.isAuthApi, this.getAllAccountsForUserId.bind(this));
     },
 
 
@@ -38,7 +40,7 @@ _.extend(api.prototype, BaseApi.prototype, {
                 if (value == null) {
                     return resp.send({});
                 } else {
-                    return resp.send(value.toJSON());
+                    return resp.send(value.toJSON("public"));
                 }
             } else {
                 return self.wrapError(resp, 500, null, err, value);
@@ -60,9 +62,31 @@ _.extend(api.prototype, BaseApi.prototype, {
         accountId = parseInt(accountId);
         AccountDao.getById(accountId, function(err, value) {
             if (!err) {
-                resp.send(value.toJSON());
+                resp.send(value.toJSON("public"));
             } else {
-                self.wrapError(resp, 401, null, err, value);
+                self.wrapError(resp, 500, null, err, value);
+            }
+        });
+    },
+
+
+    getAllAccountsForUserId: function(req,resp) {
+        //TODO - add granular security
+
+        var self = this;
+        var userId = req.params.userid;
+
+        if (!userId) {
+            this.wrapError(resp, 400, null, "Invalid parameter for UserId");
+        }
+
+        userId = parseInt(userId);
+
+        AccountDao.getAllAccountsForUserId(userId, function(err, value) {
+            if (!err) {
+                self.sendResult(resp, value);
+            } else {
+                self.wrapError(resp, 500, null, err, value);
             }
         });
     },
@@ -90,7 +114,7 @@ _.extend(api.prototype, BaseApi.prototype, {
         AccountDao.getTempAccount(token, function(err, value) {
             if (!err) {
                 if (value != null) {
-                    resp.send(value.toJSON());
+                    resp.send(value.toJSON("public"));
                 } else {
                     resp.send({});
                 }
@@ -107,7 +131,7 @@ _.extend(api.prototype, BaseApi.prototype, {
         AccountDao.saveOrUpdateTmpAccount(account, function(err, value) {
            if (!err) {
                cookies.setAccountToken(resp, value.get("token"));
-               resp.send(value.toJSON());
+               resp.send(value.toJSON("public"));
            } else {
                self.wrapError(resp, 500, null, err, value);
            }

@@ -1,6 +1,6 @@
 define([
-
-], function () {
+    'views/home.view'
+], function (HomeView) {
 
     var router = Backbone.Router.extend({
 
@@ -11,11 +11,8 @@ define([
         },
 
         showHome: function() {
-            //Testing...
-            var tmpl = $$.templateManager.get("fetching-data-progress-bar", "utils");
-            var html = tmpl({label:"testing only"});
-
-            $$.viewManager.replaceMainHtml(html);
+            var view = new HomeView();
+            $$.viewManager.replaceMain(view);
         }
     });
 

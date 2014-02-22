@@ -99,68 +99,68 @@
 <script type="text/x-handlebars-template" name="signup-create">
 <section>
     <div class="signuppanel">
-    <a href="/details" class="left-nav"></a>
-    <span class="logo"></span>
-    <div class="form">
-    <ul id="progressbar">
-        <li>Account Setup</li>
-        <li>Social Profiles</li>
-        <li class="active">Personal Details</li>
-    </ul>
-    <h3>Create an account</h3>
+        <a href="/details" class="left-nav"></a>
+        <span class="logo"></span>
+        <div class="form">
+            <ul id="progressbar">
+                <li>Account Setup</li>
+                <li>Social Profiles</li>
+                <li class="active">Personal Details</li>
+            </ul>
+            <h3>Create an account</h3>
 
-    <hr/>
+            <hr/>
 
-    <form role="form" id="form-create-account" action="/signup" method="post">
-        <div class="form-group row">
-            <div class="">
-                <label>Username <small>Can be your email</small></label>
-                <div class="input-group">
-                    <input class="form-control" id="input-username" type="text" name="username" placeholder="username"/>
-                    <span class="input-group-addon"><i id="icon-username" class="glyphicon glyphicon-remove"/> </span>
+            <form role="form" id="form-create-account" action="/signup" method="post">
+                <div class="form-group row">
+                    <div class="">
+                        <label>Username <small>Can be your email</small></label>
+                        <div class="input-group">
+                            <input class="form-control" id="input-username" type="text" name="username" placeholder="username"/>
+                            <span class="input-group-addon"><i id="icon-username" class="glyphicon glyphicon-remove"/> </span>
+                        </div>
+                        <span id="help-username" class="error" />
+                    </div>
                 </div>
-                <span id="help-username" class="error" />
-            </div>
-        </div>
 
-        <div class="form-group row">
-            <div class="">
-                <label>Password</label>
-                <div class="input-group">
-                    <input class="form-control" id="input-password" type="password" name="password" placeholder="password"/>
-                    <span class="input-group-addon"><i id="icon-password" class="glyphicon glyphicon-remove"/> </span>
+                <div class="form-group row">
+                    <div class="">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <input class="form-control" id="input-password" type="password" name="password" placeholder="password"/>
+                            <span class="input-group-addon"><i id="icon-password" class="glyphicon glyphicon-remove"/> </span>
+                        </div>
+                        <span id="help-password" class="error" />
+                    </div>
                 </div>
-                <span id="help-password" class="error" />
-            </div>
-        </div>
 
-        <div class="form-group row">
-            <div class="">
-                <label>Re-enter Password</label>
+                <div class="form-group row">
+                    <div class="">
+                        <label>Re-enter Password</label>
 
-                <div class="input-group">
-                    <input class="form-control" id="input-password2" type="password" name="password2" placeholder="password"/>
-                    <span class="input-group-addon"><i id="icon-password2" class="glyphicon glyphicon-remove"/> </span>
+                        <div class="input-group">
+                            <input class="form-control" id="input-password2" type="password" name="password2" placeholder="password"/>
+                            <span class="input-group-addon"><i id="icon-password2" class="glyphicon glyphicon-remove"/> </span>
+                        </div>
+                        <span id="help-password2" class="error" />
+                    </div>
                 </div>
-                <span id="help-password2" class="error" />
-            </div>
-        </div>
 
-        <div class="form-group row">
-            <div class="">
-                <label class="required">Email</label>
-                <div class="input-group">
-                    <input class="form-control" id="input-email" type="email" name="email" placeholder="email" autocomplete="off"/>
-                    <span class="input-group-addon"><i id="icon-email" class="glyphicon glyphicon-remove"/> </span>
+                <div class="form-group row">
+                    <div class="">
+                        <label class="required">Email</label>
+                        <div class="input-group">
+                            <input class="form-control" id="input-email" type="email" name="email" placeholder="email" autocomplete="off"/>
+                            <span class="input-group-addon"><i id="icon-email" class="glyphicon glyphicon-remove"/> </span>
+                        </div>
+                        <span id="help-email" class="error" />
+                    </div>
                 </div>
-                <span id="help-email" class="error" />
-            </div>
+
+
+                    <button class="btn btn-primary btn-default" type="submit" value="Create Account" role="button">Create Account</button>
+            </form>
         </div>
-
-
-            <button class="btn btn-primary btn-default" type="submit" value="Create Account" role="button">Create Account</button>
-    </form>
     </div>
-    </div>
-    </section>
+</section>
 </script>

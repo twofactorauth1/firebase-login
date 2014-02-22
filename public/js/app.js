@@ -4,21 +4,21 @@ define([
     'handlebarsHelpers',
     'viewManager',
     'appsetup',
-    'pushStateUtils'
-], function () {
+    'pushStateUtils',
+    'constants/constants'
+], function (ns, common, hb, vm, appsetup) {
 
     var app = {
 
         initialize: function () {
-            var root = "home";
-            if ($$.server.get("root") != null) {
-                root = $$.server.get("root");
+            var accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
+            if (accountId != null) {
+                $$.g.accountId = accountId;
+                $$.g.isAccount = true;
             }
 
-            var routerName = "home";
-            if ($$.server.get("router") != null) {
-                routerName = $$.server.get("router");
-            }
+            var root = $$.server.get($$.constants.server_props.ROOT) || "home";
+            var routerName = $$.server.get($$.constants.server_props.ROUTER) || "home";
 
             var _routerName = "routers/" + routerName + ".router";
 

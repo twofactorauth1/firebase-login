@@ -76,7 +76,7 @@ var mongodao = {
         }
 
         var collection = this.getTable(type);
-        this.mongo(collection).find(query, function(err, result) {
+        this.mongo(collection).find(query).toArray(function(err, result) {
             if (!err) {
                 var arr = [];
 

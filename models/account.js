@@ -1,4 +1,5 @@
 require('./model.base');
+var appConfig = require('../configs/app.config');
 
 var account = $$.m.ModelBase.extend({
 
@@ -8,11 +9,21 @@ var account = $$.m.ModelBase.extend({
             company: {
                 name:"",
                 type:0,
-                size:0
+                size:0,
+                logo:""
             },
             subdomain:"",
             domain:"",
             token:""
+        }
+    },
+
+
+    serializers: {
+        public: function(json) {
+            if (this.get("subdomain") != null) {
+                json.accountUrl = appConfig.getServerUrl(this.get("subdomain"));
+            }
         }
     },
 

@@ -318,7 +318,10 @@ define([
         }
     };
 
-    $$ = $$ || {};
+    if (typeof $$ === 'undefined') {
+        $$ = {};
+    }
+
     $$.u = $$.u || {};
     $$.u = _.extend($$.u, utils);
 

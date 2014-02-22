@@ -166,7 +166,9 @@ define([
         }
     });
 
-    $$ = $$ || {};
+    if (typeof $$ === 'undefined') {
+        $$ = {};
+    }
 
     if ($$.viewManager != null) {
         window.alert("View Manager Instance already exists!");

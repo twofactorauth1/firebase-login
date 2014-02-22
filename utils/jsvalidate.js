@@ -252,7 +252,10 @@
     };
 
 
-    $$ = $$ || {};
+    if (typeof $$ === 'undefined') {
+        $$ = {};
+    }
+
     $$.u = $$.u || {};
     $$.u = _.extend($$.u, validate);
 }).call(this);
