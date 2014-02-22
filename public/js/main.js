@@ -6,6 +6,7 @@ require.config({
     paths: {
         jquery: 'libs/jquery/jquery',
         jqueryvalidate: 'libs/jquery/jquery.validate',
+        jqueryeasing: 'libs/jquery/jquery.easing',
         underscore: 'libs/underscore/underscore',
         json2: 'libs/json/json2',
         backbone: 'libs/backbone/backbone',
@@ -30,6 +31,9 @@ require.config({
 
     shim: {
         jqueryvalidate: {
+            deps: ['jquery']
+        },
+        jqueryeasing: {
             deps: ['jquery']
         },
         underscore: {
@@ -71,6 +75,7 @@ require.config({
             deps: [
                 'jquery',
                 'jqueryvalidate',
+                'jqueryeasing',
                 'underscore',
                 'backbone',
                 'backboneExtended',

@@ -197,7 +197,7 @@
          */
         setUpTransitionIn: function() {
             if (this.transitionIn === "default" || _.isFunction(this.transitionIn)) {
-                this.$el.find('section.panel').addClass('slideleft');
+                //this.current_fs = this.$el;
             }
             return;
         },
@@ -218,16 +218,9 @@
                 if (fn != null) fn();
             });
 
-           var animateIn = function () {
-              //self.$el.find('section.panel').removeClass('slideleft');
-            };
-
-            _.delay(animateIn, 20);
-
-            //TODO: Do something here.
-            // this.$el.fadeIn(2000, function() {
-            //     if (fn != null) fn();
-            // });
+            this.$el.fadeIn(2000, function() {
+                if (fn != null) fn();
+            });
         },
 
 
@@ -273,7 +266,7 @@
          */
         setUpTransitionOut: function() {
             if (this.transitionIn === "default" || _.isFunction(this.transitionIn)) {
-                //this.$el.find('section.panel').removeClass('slideleft');
+                //this.next_fs = this.$el;
             }
             return;
         },
@@ -287,8 +280,7 @@
          */
 
         _defaultTransitionOut: function(fn) {
-            console.log('default transition out');
-            //TODO: if using a css transition, you must listen for the transition end, if you want to listen for it
+            var self = this;
             this.$el.on("transitionend webkitTransitionEnd", function(e) {
                 var $target = $(e.target).off("transitionend webkitTransitionEnd");
                 if (fn != null) fn();

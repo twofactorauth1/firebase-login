@@ -15,20 +15,9 @@ define([
         passwordsvalid: false,
         usernamevalid: false,
 
-        //panel transition variables
-        current_fs: false,
-        next_fs: false,
-        previous_fs: false,
-        left: false,
-        opacity: false,
-        scale: false,
-        animating: false,
-
-
         events: {
             "click #btn-business,#btn-professional,#btn-enterprise": "onCompanyTypeChanged",
             "change .radio-company-size": "onCompanySizeChanged",
-
             "onkeytimer #input-company-name": "onCompanyNameKeyTimer",
             "onkeytimer #input-username": "onUsernameKeyTimer",
             "onkeytimer #input-password": "onPasswordKeyTimer",
@@ -36,6 +25,7 @@ define([
             "onkeytimer #input-email": "onEmailKeyTimer",
             "submit #form-create-account": "onCreateAccount",
             "click .right-nav": "nextPanel",
+            "click .left-nav": "prevPanel",
         },
 
 
@@ -265,43 +255,94 @@ define([
             });
         },
 
+        //panel transition variables
+        current_fs: '',
+        next_fs: '',
+        previous_fs: '',
+        left: '',
+        opacity: '',
+        scale: '',
+        animating: '',
+
         nextPanel: function() {
-            console.log('next panel');
-            // var self = this;
-            //     if(self.animating) return false;
-            //     self.animating = true;
+            var self = this;
+            _.delay(function() {
+                if (self.animating) return false;
+                self.animating = true;
 
-            //     self.current_fs = $(this).parent();
-            //     self.next_fs = $(this).parent().next();
+                //activate next step on progressbar using the index of next_fs
+                $("#progressbar li").eq($("fieldset").index(self.next_fs)).addClass("active");
 
-            //     //activate next step on progressbar using the index of next_fs
-            //     $("#progressbar li").eq($("fieldset").index(self.next_fs)).addClass("active");
+                self.next_fs.fadeIn();
 
-            //     //show the next fieldset
-            //     self.next_fs.show();
-            //     //hide the current fieldset with style
-            //     self.current_fs.animate({opacity: 0}, {
-            //         step: function(now, mx) {
-            //             //as the opacity of current_fs reduces to 0 - stored in "now"
-            //             //1. scale current_fs down to 80%
-            //             self.scale = 1 - (1 - now) * 0.2;
-            //             //2. bring next_fs from the right(50%)
-            //             self.left = (now * 50)+"%";
-            //             //3. increase opacity of next_fs to 1 as it moves in
-            //             self.opacity = 1 - now;
-            //             self.current_fs.css({'transform': 'scale('+self.scale+')'});
-            //             next_fs.css({'left': left, 'opacity': self.opacity});
-            //         }, 
-            //         duration: 800, 
-            //         complete: function(){
-            //             self.current_fs.hide();
-            //             self.animating = false;
-            //         }, 
-            //         //this comes from the custom easing plugin
-            //         easing: 'easeInOutBack'
-            //     });
+                //hide the current fieldset with style
+                self.current_fs.animate({ opacity: 0 }, {
+                    step: function(now, mx) {
+                        //as the opacity of current_fs reduces to 0 - stored in "now"
+                        //1. scale current_fs down to 80%
+                        self.scale = 1 - (1 - now) * 0.2;
+                        //2. bring next_fs from the right(50%)
+                        self.left = (now * 50) + "%";
+                        //3. increase opacity of next_fs to 1 as it moves in
+                        self.opacity = 1 - now;
+                        self.current_fs.css({
+                            'transform': 'scale(' + self.scale + ')'
+                        });
+                        self.next_fs.css({
+                            'left': self.left,
+                            'opacity': self.opacity
+                        });
+                    },
+                    duration: 800,
+                    complete: function() {
+                        self.current_fs.hide();
+                        self.animating = false;
+                    },
+                    //this comes from the custom easing plugin
+                    easing: 'easeInOutBack'
+                });
+            }, 500);
+         },
 
-        }
+         prevPanel: function() {
+            var self = this;
+            _.delay(function() {
+                if(self.animating) return false;
+                self.animating = true;
+
+                $("#progressbar li").eq($("fieldset").index(self.current_fs)).removeClass("active");
+
+                self.next_fs.show();
+                self.current_fs.animate({ opacity: 0 }, {
+                    step: function(now, mx) {
+                        self.scale = 0.8 + (1 - now) * 0.2;
+                        self.left = ((1-now) * 50)+"%";
+                        self.opacity = 1 - now;
+                        self.current_fs.css({'left': self.left});
+                        self.next_fs.css({'transform': 'scale('+self.scale+')', 'opacity': self.opacity});
+                    },
+                    duration: 800,
+                    complete: function() {
+                        self.current_fs.hide();
+                        self.animating = false;
+                    },
+                    easing: 'easeInOutBack'
+                });
+            }, 500);
+         },
+
+         transitionIn: function() { 
+            console.log('new transition in');
+            this.next_fs = this.$el;
+            //this.$el.fadeIn(2000);
+         },
+
+         transitionOut: function() { 
+            console.log('new transition out');
+            this.current_fs = this.$el;
+            //this.$el.fadeOut(2000);
+         },
+
     });
 
     $$.v.SignupView = view;
