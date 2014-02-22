@@ -76,7 +76,8 @@ define([
 
         renderSignupDetails: function() {
             var data = this._getData();
-            if (data.isBusiness == false && data.isProfessional == false) {
+
+            if (data.account == null || data.account.company.type == null) {
                 $$.r.mainAppRouter.navigate("/start", true);
             }
 
@@ -91,7 +92,7 @@ define([
 
         renderSignupCreate: function() {
             var data = this._getData();
-            if (data.isBusiness == false && data.isProfessional == false) {
+            if (data.account == null || data.account.company.type == null) {
                 $$.r.mainAppRouter.navigate("/start", true);
             }
 
