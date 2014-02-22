@@ -117,13 +117,14 @@
 <script type="text/x-handlebars-template" name="signup-create">
 <section class="panel">
     <div class="signuppanel">
+<<<<<<< HEAD
         <a href="/details" class="left-nav"></a>
         <span class="logo"></span>
         <div class="form">
             <ul id="progressbar">
-        	<li></li>
-        	<li></li>
-        	<li class="active"></li>
+                <li>Account Setup</li>
+                <li>Social Profiles</li>
+                <li class="active">Personal Details</li>
             </ul>
             <h3>Create an account</h3>
 
@@ -139,6 +140,27 @@
                         </div>
                         <span id="help-username" class="error" />
                     </div>
+=======
+    <a href="/details" class="left-nav"></a>
+    <span class="logo"></span>
+    <div class="form">
+    <ul id="progressbar">
+        <li></li>
+        <li></li>
+        <li class="active"></li>
+    </ul>
+    <h3>Create an account</h3>
+
+    <hr/>
+
+    <form role="form" id="form-create-account" action="/signup" method="post">
+        <div class="form-group row">
+            <div class="">
+                <label>Username <small>Can be your email</small></label>
+                <div class="input-group">
+                    <input class="form-control" id="input-username" type="text" name="username" placeholder="username"/>
+                    <span class="input-group-addon"><i id="icon-username" class="glyphicon glyphicon-remove"/> </span>
+>>>>>>> 13f97f38edb6d2d24aa41a4c024adf5b08d738d4
                 </div>
 
                 <div class="form-group row">
@@ -175,10 +197,17 @@
                     </div>
                 </div>
 
-            <p class="termsOfuse">By clicking “Let’s Get Started” below you agree to the Terms of Use<p>
-            <button class="btn btn-primary btn-default btn-block" type="submit" value="Create Account" role="button">Create Account</button>
+<<<<<<< HEAD
+
+                    <button class="btn btn-primary btn-default" type="submit" value="Create Account" role="button">Create Account</button>
             </form>
         </div>
+=======
+            <p class="termsOfuse">By clicking “Let’s Get Started” below you agree to the Terms of Use<p>
+            <button class="btn btn-primary btn-default btn-block" type="submit" value="Create Account" role="button">Create Account</button>
+    </form>
+    </div>
+>>>>>>> 13f97f38edb6d2d24aa41a4c024adf5b08d738d4
     </div>
 </section>
 </script>

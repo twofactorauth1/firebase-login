@@ -1,0 +1,42 @@
+An example URL:
+
+This URL retrieves all accounts for user 7
+https://app.indigenous.com/api/1.0/user/7/accounts
+
+Broken down:
+
+https://app.indigenous.com
+OR
+http://mycompany.indigenous.com.
+
+Depending on where URL lands, it is either an account leve API call that requires account level permissions, or it is a
+    global api call that requires global permissions.
+
+For instance:
+https://app.indigenous.com/api/1.0/users -- Get ALL users in the Indigenous system
+https://mycompany.indigenous.com/api/1.0/users -- Get ALL uses under the mycompany account
+
+
+/api
+This ensure we route the request to our API engine, and not a view / public page engine.
+
+/1.0
+This is the version of the API.  As the system grows, we will need to leverage this more and maintain backwards compatability
+    as much as possible
+
+/user/7
+This is the entry point, it doesn't necessary mean we are retrieving a user, but this is the base of our routing.  We
+    are dealing with an entity that relates somehow to users with ID 7
+
+/accounts
+This is the last noun of the URL, and thus this is the object type that we are retrieving.  Based on the final noun, the
+    browser can expect to receive objects of that type, in this case, account object.  If the final noun is plural,
+    the user can expect a JSON array of results.  If the final noun is singular, it should generally be followed by an ID
+    and the user can expect a single result object. For instance:
+
+This url will pull Account with ID #10, for User with ID #7, assuming the user has access to that account
+https://app.indigenous.com/api/1.0/user/7/account/10
+
+This url will pull all accounts for User with ID #7
+https://app.indigenous.com/api/1.0/user/7/accounts
+
