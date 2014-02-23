@@ -23,12 +23,19 @@
             </ul>
             <h4>Choose Your Business Model</h4>
             <hr>
-            <div class="models">
-                <div id="btn-professional" class="btn btn-large btn-bus-model {{#if isProfessional}}btn-primary{{else}}btn-default{{/if}}" data-type="professional"><span class="fa fa-user"></span></div>
-
-                <div id="btn-business" class="btn btn-large btn-default btn-bus-model {{#if isBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="business"><span class="fa fa-users"></span></div>
-
-                <div id="btn-enterprise" class="btn btn-large btn-default btn-bus-model {{#if isEnterprise}}btn-primary{{else}}btn-default{{/if}}" data-type="enterprise"><span class="fa fa-building-o"></span></div>
+            <div class="models row">
+                <div class="col-sm-4">
+                    <div id="btn-professional" class="btn btn-large btn-bus-model {{#if isProfessional}}btn-primary{{else}}btn-default{{/if}}" data-type="professional"><span class="fa fa-user"></span></div>
+                    <h4>Professional</h4>
+                </div>
+                <div class="col-sm-4">
+                    <div id="btn-business" class="btn btn-large btn-default btn-bus-model {{#if isBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="business"><span class="fa fa-users"></span></div>
+                    <h4>Business</h4>
+                </div>
+                <div class="col-sm-4">
+                    <div id="btn-enterprise" class="btn btn-large btn-default btn-bus-model {{#if isEnterprise}}btn-primary{{else}}btn-default{{/if}}" data-type="enterprise"><span class="fa fa-building-o"></span></div>
+                    <h4>Enterprise</h4>
+                </div>
             </div>
         </div>
     </div>
