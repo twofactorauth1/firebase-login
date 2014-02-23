@@ -141,6 +141,7 @@ define([
 
 
         onUsernameKeyTimer: function (event) {
+            console.log('username key timer');
             var self = this;
             this.usernamevalid = false;
 
@@ -227,7 +228,6 @@ define([
 
 
         onCreateAccount: function (event) {
-
             if (!this.usernamevalid || !this.passwordsvalid || !this.emailvalid) {
                 event.preventDefault();
                 return false;
@@ -295,9 +295,12 @@ define([
             var currIndex = panelarr.indexOf(this.place);
             var current_fs = $('#'+this.place+'.signuppanel');
             var next_fs = $('#'+panelarr[currIndex+1]+'.signuppanel');
-
+            var route = "/"+panelarr[currIndex+1];
+            $$.r.mainAppRouter.navigate(route);
 
             $("#progressbar li").eq($("fieldset").index(currIndex+1)).addClass("active");
+
+            if(currIndex === panelarr.length-2) { $('.right-nav').hide(); } else { $('.right-nav').show();}
 
             next_fs.show();
             current_fs.animate({opacity: 0}, {
@@ -330,6 +333,17 @@ define([
 
 
             $("#progressbar li").eq($("fieldset").index(currIndex+1)).addClass("active");
+
+            $('.right-nav').show();
+            if(currIndex === 0) {
+                window.location.href = "../login";
+                // var route = "../login";
+                // $$.r.mainAppRouter.navigate(route, {trigger:true});
+                // return;
+            }
+
+            var route = "/"+panelarr[currIndex-1];
+            $$.r.mainAppRouter.navigate(route);
 
             previous_fs.show();
             current_fs.animate({opacity: 0}, {

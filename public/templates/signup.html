@@ -8,9 +8,9 @@
 </script>
 
 <script type="text/x-handlebars-template" name="signup-controls" partial="true">
-    <button class="left-nav"></button>
-    <button class="right-nav {{#superUnless "or" isProfessional isBusiness}}hidden{{/superUnless}}"></button>
-    {{#checknot place "create"}}<span class="logo"></span> {{/checknot}}
+    <a class="left-nav"></a>
+    <a class="right-nav {{#superUnless "or" isProfessional isBusiness}}hidden{{/superUnless}}"></a>
+    <span class="logo"></span>
 </script>
 
 <script type="text/x-handlebars-template" name="signup-start" partial="true">
@@ -21,11 +21,8 @@
                 <li></li>
                 <li></li>
             </ul>
-
             <h4>Choose Your Business Model</h4>
-
             <hr>
-
             <div class="models">
                 <div id="btn-professional" class="btn btn-large btn-bus-model {{#if isProfessional}}btn-primary{{else}}btn-default{{/if}}" data-type="professional"><span class="fa fa-user"></span></div>
 
