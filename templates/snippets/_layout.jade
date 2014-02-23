@@ -9,15 +9,19 @@ html
             link(rel='stylesheet', href='/css/site.css')
             link(rel='stylesheet', href='/css/font-awesome.min.css')
     body
-        //- #preloader
-        //-   #status
-            img(src='/assets/icons/loader.gif')
+        if showPreloader
+            #preloader
+                #status
+                    img(src='/assets/icons/loader.gif')
+
+        if includeHeader
+            #header-background
+                include _header
+
         #wrap
-            if includeHeader
-                #header-background
-                    include _header
 
             .container
+
                 if errorMsg
                     #error-msg.alert.alert-danger
                         button.close(type="button" aria-hidden="true") &times;
@@ -37,9 +41,11 @@ html
                         span.message #{infoMsg}
 
                 #container-alert.hidden
+
                 #main-viewport
                     block content
                         //- Anything here gets overwritten by sub views that extend "block content"
+
                 //- some common modals
                 #common-modal.modal.fade.hide
                 //- common progress modal

@@ -63,7 +63,8 @@ define([
         }
     });
 
-    $$.v.AccountAdminView = view;
+    $$.v.account = $$.v.account || {};
+    $$.v.account.AccountAdminView = view;
 
     return view;
 });

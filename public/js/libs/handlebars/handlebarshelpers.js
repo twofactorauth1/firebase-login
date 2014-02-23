@@ -359,6 +359,8 @@ define([
         var ret = "";
         for(var i = 0; i < num; i++){
             this.$index = i+indexOffset;
+            this.$last = i == num-1;
+
             ret += options.fn(this);
         }
         return ret;

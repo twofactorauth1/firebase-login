@@ -159,6 +159,9 @@ define([
 
 
         onAllRender: function() {
+            if ($("#status").css("display") === "none") {
+                return;
+            }
             $('#status').delay(350).fadeOut();
             $('#preloader').delay(500).fadeOut(function(){
                 $('body').delay(350).css({'overflow':'visible'});

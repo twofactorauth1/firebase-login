@@ -197,7 +197,7 @@
          */
         setUpTransitionIn: function() {
             if (this.transitionIn === "default" || _.isFunction(this.transitionIn)) {
-                //this.current_fs = this.$el;
+                this.$el.hide();
             }
             return;
         },
@@ -212,13 +212,14 @@
         _defaultTransitionIn: function(fn) {
             var self = this;
             console.log('default transitionIn');
+
             //TODO: if using a css transition, you must listen for the transition end:
-            this.$el.on("transitionend webkitTransitionEnd", function(e) {
+            /*this.$el.on("transitionend webkitTransitionEnd", function(e) {
                 var $target = $(e.target).off("transitionend webkitTransitionEnd");
                 if (fn != null) fn();
-            });
+            });*/
 
-            this.$el.fadeIn(2000, function() {
+            this.$el.fadeIn(750, function() {
                 if (fn != null) fn();
             });
         },
@@ -280,21 +281,7 @@
          */
 
         _defaultTransitionOut: function(fn) {
-            var self = this;
-            this.$el.on("transitionend webkitTransitionEnd", function(e) {
-                var $target = $(e.target).off("transitionend webkitTransitionEnd");
-                if (fn != null) fn();
-            });
-
-            //TODO: Do something here
-            //this.$el.find('section.panel').removeClass('slideleft');
-            this.$el.fadeOut(500, function() {
-                if (fn != null) fn();
-            });
-
-            // this.$el.find('section.panel').animate({opacity: 0}, function() {
-            //      if (fn != null) fn();
-            // });
+            fn();
         },
 
         /**
@@ -835,15 +822,15 @@
                 this.onAllRender();
             }
 
-            if (oldView != null) {
+            //if (oldView != null) {
                 view.setUpTransitionIn(options.newView);
-            }
+            //}
 
             $(container).append(view.$el);
 
-            if (oldView != null) {
+            //if (oldView != null) {
                 view.doTransitionIn(options.newView);
-            }
+            //}
 
             return true;
         },

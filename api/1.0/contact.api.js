@@ -41,10 +41,10 @@ _.extend(api.prototype, BaseApi.prototype, {
             this.wrapError(resp, 400, null, "Invalid paramater for ID");
         }
 
-        contactId = parseInt(accountId);
+        contactId = parseInt(contactId);
         ContactDao.getById(contactId, function(err, value) {
             if (!err) {
-                resp.send(value.toJSON());
+                resp.send(value.toJSON("public"));
             } else {
                 self.wrapError(resp, 401, null, err, value);
             }

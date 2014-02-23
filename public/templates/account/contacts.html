@@ -1,3 +1,6 @@
+<!--
+CONTACTS MAIN VIEW
+-->
 <script type="text/x-handlebars-template" name="contacts-main">
     <div id="contacts-main-container">
 
@@ -32,10 +35,10 @@
                 {{/eachLetter}}
             </ul>
 
-            <div id="contacts-container" class="col-sm-11 col-md-12">
+            <div id="contacts-list-container" class="col-sm-11 col-md-12">
                 {{#each contacts}}
                 <div class="col-xs-11 col-sm-6 col-md-4 contact-thumbnail">
-                    <div class="inner">
+                    <div class="inner btn-view-contact-details" data-contactid="{{_id}}">
                         <strong>{{first}} {{last}}</strong> <span class="visible-inline-xs"><small>{{contactTypeLabel}}</small></span>
                         <div class="hidden-xs"><small>{{contactTypeLabel}}</small></div>
 
@@ -49,6 +52,10 @@
                             <div>Emails Opened: </div>
                             <div>Calls Made: </div>
                         </div>
+
+                        <div class="contact-thumbnail-actions hidden-xs">
+                            <div class="fa fa-envelope-o" title="send-message"/>
+                        </div>
                     </div>
                 </div>
                 {{else}}
@@ -61,7 +68,7 @@
                 {{/each}}
 
                 {{#iterateDifference min count 0}}
-                <div class="col-xs-11 col-sm-6 col-md-4 contact-thumbnail hidden-xs">
+                <div class="col-xs-11 col-sm-6 col-md-4 contact-thumbnail hidden-xs {{#if $last}}hidden-md hidden-lg{{/if}}">
                     <div class="inner">
                         <strong>Create new Contact</strong>
 
@@ -92,8 +99,37 @@
         {{/eachLetter}}
     </ul>
 </script>
+<!-- END CONTACTS MAIN -->
 
 
+<!--
+CONTACT DETAILS VIEW
+-->
+<script type="text/x-handlebars-template" name="contact-details-main">
+    <div id="contact-details-container">
+        <span id="btn-back-to-contacts" class="btn btn-default"><i class="fa fa-angle-left"/></span>
+        <span id="contact-name">{{contact.first}} {{contact.last}}</span>
+        <div id="contact-type"><small>{{contactTypeLabel contact}}</small></div>
+
+        <div class="contact-photo-container">
+            <img class="img-circle" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpeg{{/if}}">
+        </div>
+    </div>
+</script>
+<!-- END CONTACT DETAILS VIEW -->
+
+
+<!--
+CONTACTS EDIT VIEW
+-->
+
+<!-- END CONTACT EDIT VIEW -->
+
+
+
+<!--
+HELPERS
+-->
 <script type="text/javascript">
     Handlebars.registerHelper("eachLetter", function(options) {
         var charCode = "A".charCodeAt();
@@ -108,8 +144,11 @@
     });
 
 
-    Handlebars.registerHelper("contactTypeLabel", function() {
-        switch(this.type) {
+    Handlebars.registerHelper("contactTypeLabel", function(contact) {
+        if (contact == null) {
+            contact = this;
+        }
+        switch(contact.type) {
             case "cu": return "Customer";
             case "co": return "Colleague";
             case "fr": return "Friend";

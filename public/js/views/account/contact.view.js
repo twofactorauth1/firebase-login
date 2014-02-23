@@ -16,7 +16,8 @@ define([
         currentLetter: "a",
 
         events: {
-            "click .btn-letter":"showLetter"
+            "click .btn-letter":"showLetter",
+            "click .btn-view-contact-details":"viewContactDetails"
         },
 
 
@@ -70,6 +71,11 @@ define([
         },
 
 
+        viewContactDetails: function(event) {
+            var contactId = $(event.currentTarget).data("contactid");
+            $$.r.AccountAdminRouter.navigateToContactDetails(contactId, this.currentLetter);
+        },
+
 
         getUser: function() {
             if (this.userId == null) {
@@ -111,7 +117,8 @@ define([
         }
     });
 
-    $$.v.AccountAdminView = view;
+    $$.v.account = $$.v.account || {};
+    $$.v.account.AccountAdminView = view;
 
     return view;
 });
