@@ -1,7 +1,9 @@
 extends snippets/_layout
 
 block content
-
+    #preloader
+           #status
+            img(src='/assets/icons/loader.gif')
     section
         .signinpanel
             if account
@@ -15,11 +17,19 @@ block content
             form(role="form", action="/login" method="post")
                 h4.nomargin Sign In
                 p.mt5.mb20 Login to access your account&period;
-                input.form-control.uname(type='text', name='username', placeholder='Username')
-                input.form-control.pword(type='password', name='password', placeholder='Password')
+                .input-group
+                  span.input-group-addon
+                    i.fa.fa-user
+                  input.form-control.uname.input-lg(type='text', name='username', placeholder='Username')
+
+                .input-group
+                  span.input-group-addon
+                    i.fa.fa-lock
+                  input.form-control.pword.input-lg(type='password', name='password', placeholder='Password')
+
                 a(href='/forgotpassword')
                     small Forgot Your Password&quest;
-                button.btn.btn-success.btn-block(type="submit", value="Login") Sign In
+                button.btn.btn-success.btn-block.btn-lg(type="submit", value="Login") Sign In
 
                 div.checkbox
                     label

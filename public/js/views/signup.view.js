@@ -114,7 +114,7 @@ define([
 
             this.tmpAccount.saveOrUpdateTmpAccount();
 
-            this.renderStartSignup();
+            this.renderSignup();
         },
 
 
@@ -141,6 +141,7 @@ define([
 
 
         onUsernameKeyTimer: function (event) {
+            console.log('username key timer');
             var self = this;
             this.usernamevalid = false;
 
@@ -227,7 +228,6 @@ define([
 
 
         onCreateAccount: function (event) {
-
             if (!this.usernamevalid || !this.passwordsvalid || !this.emailvalid) {
                 event.preventDefault();
                 return false;
@@ -254,8 +254,6 @@ define([
             this.$el.find('.signuppanel .form').css({'opacity': 0});
         },
 
-
-        //region TRANSITION
         _getTransitionDirection: function(inOrOut) {
             var arr = ["start","details","create"];
 
@@ -288,6 +286,7 @@ define([
 
         nextPanel: function (ev) {
             var self = this;
+            var data = this._getData();
             if(this.animating) return false;
             this.animating = true;
 
@@ -295,9 +294,25 @@ define([
             var currIndex = panelarr.indexOf(this.place);
             var current_fs = $('#'+this.place+'.signuppanel');
             var next_fs = $('#'+panelarr[currIndex+1]+'.signuppanel');
-
+            var route = "/"+panelarr[currIndex+1];
+            $$.r.mainAppRouter.navigate(route);
 
             $("#progressbar li").eq($("fieldset").index(currIndex+1)).addClass("active");
+
+            if(currIndex === panelarr.length-2) { $('.right-nav').hide(); } else { $('.right-nav').show();}
+            console.log(currIndex+' '+this.place);
+            if(currIndex === 0) {
+                if (data.account == null || data.account.company.type == null) {
+                    $$.r.mainAppRouter.navigate("/start", true);
+                }
+                $("#input-company-name", this.el).startKeyTimer(500);
+            }
+            if(currIndex === 1) {
+                $("#input-username", this.el).startKeyTimer(400);
+                $("#input-password", this.el).startKeyTimer(400);
+                $("#input-password2", this.el).startKeyTimer(400);
+                $("#input-email", this.el).startKeyTimer(400);
+            }
 
             next_fs.show();
             current_fs.animate({opacity: 0}, {
@@ -330,6 +345,17 @@ define([
 
 
             $("#progressbar li").eq($("fieldset").index(currIndex+1)).addClass("active");
+
+            $('.right-nav').show();
+            if(currIndex === 0) {
+                window.location.href = "../login";
+                // var route = "../login";
+                // $$.r.mainAppRouter.navigate(route, {trigger:true});
+                // return;
+            }
+
+            var route = "/"+panelarr[currIndex-1];
+            $$.r.mainAppRouter.navigate(route);
 
             previous_fs.show();
             current_fs.animate({opacity: 0}, {
