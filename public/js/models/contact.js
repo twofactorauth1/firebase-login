@@ -8,6 +8,7 @@ define([], function() {
             _id: null,
             accountId: 0,   //int
             first:"",       //string,
+            middle:"",      //string,
             last:"",        //string,
             type:"",        //contact_types
             photo:"",       //string
@@ -25,7 +26,6 @@ define([], function() {
             switch(method) {
                 case "GET":
                     return $$.api.getApiUrl("contact", this.id);
-                    break;
                 case "PUT":
                 case "POST":
                     break;

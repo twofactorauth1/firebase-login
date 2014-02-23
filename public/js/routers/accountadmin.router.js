@@ -1,9 +1,10 @@
 define([
     'views/account/admin.view',
     'views/account/contact.view',
-    'views/account/contactdetails.view'
+    'views/account/contactdetails.view',
+    'views/account/contactedit.view'
 
-], function (AccountAdminView, AccountContactView, ContactDetailsView) {
+], function (AccountAdminView, AccountContactView, ContactDetailsView, ContactEditView) {
 
     var router = Backbone.Router.extend({
 

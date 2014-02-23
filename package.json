@@ -27,7 +27,8 @@
     "passport-local": "~0.1.6",
     "requirejs": "2.1.10",
     "stripe": "~2.4.0",
-    "underscore": ">=1.6.0"
+    "underscore": ">=1.6.0",
+    "aws-sdk": "~2.0.0-rc9"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

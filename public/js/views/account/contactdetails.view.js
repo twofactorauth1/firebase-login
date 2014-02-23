@@ -10,7 +10,8 @@ define([
         currentLetter: null,
 
         events: {
-
+            "click #btn-back-to-contacts":"goBack",
+            "click .btn-edit-contact":"editContact"
         },
 
 
@@ -39,6 +40,11 @@ define([
             });
 
             return this.contact.fetch();
+        },
+
+
+        editContact: function() {
+            $$.r.AccountAdminRouter.navigateToEditContact(this.contactId, this.currentLetter);
         },
 
 

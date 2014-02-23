@@ -1,0 +1,19 @@
+<script type="text/x-handlebars-template" name="aws-file-upload" partial="true">
+    <form id="form-upload-to-s3" action="" method="post" enctype="multipart/form-data" style="margin-bottom:0px">
+        <input type="hidden" id="key" name="key" value="${filename}">
+        <input type="hidden" id="awsaccesskeyid" name="AWSAccessKeyId" value="">
+        <input type="hidden" id="acl" name="acl" value="private">
+        <input type="hidden" id="redirect" name="success_action_redirect" value="">
+        <input type="hidden" id="policy" name="policy" value="">
+        <input type="hidden" id="signature" name="signature" value="">
+        <input type="hidden" id="contenttype" name="Content-Type" value="text/plain">
+
+        <input id="upload-to-s3-file" name="file" type="file" class="">
+
+        <br/><br/>
+
+        <div class="btn" id="btn-upload-to-s3" value="{{#if upload-label}}{{upload-label}}{{else}}Upload File{{/if}}">{{#if upload-label}}{{upload-label}}{{else}}Upload File{{/if}}</div>
+        <div class="btn" id="btn-upload-to-s3-cancel">Cancel</div>
+    </form>
+
+</script>

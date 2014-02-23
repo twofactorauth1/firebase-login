@@ -95,6 +95,10 @@
 
 #contact-details-container {
 
+  color: #676767;
+  position:relative;
+
+
   #contact-name {
     font-size:1.2em;
     font-weight:bold;
@@ -104,19 +108,110 @@
     i {
       font-weight:bold;
       font-size:2.0em;
+      margin-right:15px;
     }
   }
 
+  #btn-edit-contact-primary {
+    margin-left: 10px;
+    margin-top: -3px;
+  }
+
+  #btn-edit-contact-mobile {
+    margin-top: 10px;
+  }
+
   #contact-type {
-    margin-left: 40px;
+    margin-left: 30px;
   }
 
   .contact-photo-container {
     margin-top:20px;
 
     img {
-      max-height: 120px;
+      height: 110px;
     }
   }
+
+  #contact-summary {
+    position:absolute;
+    top:90px;
+    left:150px;
+  }
+
+  #contact-information {
+    margin-top: 30px;
+
+    hr {
+      margin-top:5px;
+    }
+
+    .icon-main.fa {
+      font-weight: bold;
+      font-size: 2em;
+      padding-top:5px;
+    }
+
+    .icon-social.fa {
+      margin-left:8px;
+    }
+
+    #address-row,#email-row {
+      margin-top:25px;
+    }
+  }
+}
+
+
+#contact-edit-container {
+
+  #contact-photo-container {
+
+    height: 145px;
+
+    img {
+      position:absolute;
+      top:75px;
+      height: 130px;
+    }
+
+    &:hover {
+      .btn-edit-photo {
+        opacity: 0.8;
+      }
+    }
+
+    .btn-edit-photo-mobile {
+      position:absolute;
+      top: 120px;
+      left:175px;
+    }
+
+
+    .btn-edit-photo {
+      position:absolute;
+      top: 75px;
+      width:130px;
+      height:130px;
+      background-color: #cccccc;
+      opacity: 0.0;
+
+      .edit-photo-controls {
+        position:absolute;
+        top: 40px;
+        left: 30px;
+        font-size:2em;
+
+        .fa {
+          cursor: pointer;
+
+          &:last-child {
+            margin-left:10px;
+          }
+        }
+      }
+    }
+  }
+
 }
 
