@@ -1,3 +1,4 @@
+/bio.komodoproject
 # Ignore Mac-generated files
 .DS_STORE
 node_modules/
