@@ -254,8 +254,6 @@ define([
             this.$el.find('.signuppanel .form').css({'opacity': 0});
         },
 
-
-        //region TRANSITION
         _getTransitionDirection: function(inOrOut) {
             var arr = ["start","details","create"];
 
@@ -301,6 +299,13 @@ define([
             $("#progressbar li").eq($("fieldset").index(currIndex+1)).addClass("active");
 
             if(currIndex === panelarr.length-2) { $('.right-nav').hide(); } else { $('.right-nav').show();}
+            console.log(currIndex+' '+this.place);
+            if(currIndex === 1) {
+                $("#input-username", this.el).startKeyTimer(400);
+                $("#input-password", this.el).startKeyTimer(400);
+                $("#input-password2", this.el).startKeyTimer(400);
+                $("#input-email", this.el).startKeyTimer(400);
+            }
 
             next_fs.show();
             current_fs.animate({opacity: 0}, {
