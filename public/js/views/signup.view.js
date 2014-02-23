@@ -114,7 +114,7 @@ define([
 
             this.tmpAccount.saveOrUpdateTmpAccount();
 
-            this.renderStartSignup();
+            this.renderSignup();
         },
 
 
@@ -286,6 +286,7 @@ define([
 
         nextPanel: function (ev) {
             var self = this;
+            var data = this._getData();
             if(this.animating) return false;
             this.animating = true;
 
@@ -300,6 +301,12 @@ define([
 
             if(currIndex === panelarr.length-2) { $('.right-nav').hide(); } else { $('.right-nav').show();}
             console.log(currIndex+' '+this.place);
+            if(currIndex === 0) {
+                if (data.account == null || data.account.company.type == null) {
+                    $$.r.mainAppRouter.navigate("/start", true);
+                }
+                $("#input-company-name", this.el).startKeyTimer(500);
+            }
             if(currIndex === 1) {
                 $("#input-username", this.el).startKeyTimer(400);
                 $("#input-password", this.el).startKeyTimer(400);
