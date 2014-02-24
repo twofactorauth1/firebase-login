@@ -28,7 +28,8 @@
     "requirejs": "2.1.10",
     "stripe": "~2.4.0",
     "underscore": ">=1.6.0",
-    "aws-sdk": "~2.0.0-rc9"
+    "aws-sdk": "~2.0.0-rc9",
+    "formidable": "~1.0.14"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

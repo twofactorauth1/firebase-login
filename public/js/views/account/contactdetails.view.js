@@ -28,7 +28,7 @@ define([
                     self.show(html);
                 })
                 .fail(function(resp) {
-                    $$.v.viewManager.showAlert("There was an error retrieving this contact");
+                    $$.viewManager.showAlert("There was an error retrieving this contact");
                     self.goBack();
                 });
         },

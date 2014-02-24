@@ -383,7 +383,7 @@
                 return;
             }
 
-            var i = this.subviews.index(view);
+            var i = this.subviews.indexOf(view);
             view.close();
 
             if (i > -1) {
@@ -787,15 +787,15 @@
             }
 
             if (oldView != null) {
-                oldView.setUpTransitionOut(options.oldView);
-                view.setUpTransitionIn(options.newView);
+                oldView.setUpTransitionOut();
+                view.setUpTransitionIn();
                 oldView.doTransitionOut(function() {
                     if (closeOldFunction != null) {
                         closeOldFunction(this);
                     } else {
                         oldView.close();
                     }
-                }, options.oldView);
+                });
             }
 
 
@@ -816,21 +816,20 @@
             }
 
             view.render();
-            view.postRender();
 
             if (this.onAllRender != null) {
                 this.onAllRender();
             }
 
             //if (oldView != null) {
-                view.setUpTransitionIn(options.newView);
+                view.setUpTransitionIn();
             //}
 
             $(container).append(view.$el);
 
-            //if (oldView != null) {
-                view.doTransitionIn(options.newView);
-            //}
+            view.doTransitionIn(function() {
+                view.postRender();
+            });
 
             return true;
         },

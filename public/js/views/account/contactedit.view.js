@@ -15,7 +15,8 @@ define([
 
             "click .btn-edit-photo":"changePhoto",
             "click .btn-upload-photo":"uploadPhoto",
-            "click .btn-remove-photo":"removePhoto"
+            "click .btn-remove-photo":"removePhoto",
+            "click #btn-upload-photo-modal":"uploadPhotoFromModal"
         },
 
 
@@ -32,7 +33,7 @@ define([
                     self.show(html);
                 })
                 .fail(function(resp) {
-                    $$.v.viewManager.showAlert("There was an error retrieving this contact");
+                    $$.viewManager.showAlert("There was an error retrieving this contact");
                 });
         },
 
@@ -48,13 +49,43 @@ define([
 
 
         changePhoto: function(event) {
-            $("#modal-change-photo").modal();
+            this._showPhotoModal();
+        },
+
+
+        uploadPhotoFromModal: function(event) {
+            this._showUploadForm();
         },
 
 
         uploadPhoto: function(event) {
             event.stopImmediatePropagation();
             event.preventDefault();
+
+            this._showPhotoModal();
+
+            this._showUploadForm();
+        },
+
+
+        _showPhotoModal: function() {
+            var self = this;
+            $("#modal-change-photo").modal();
+            $("#modal-change-photo").on("hide.bs.modal", function() {
+                self.removeSubView(self.uploadView);
+            });
+        },
+
+
+        _showUploadForm: function() {
+            var self = this;
+            require(['libs/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
+                self.uploadView = new uploadView();
+                self.uploadView.maxNumberOfFiles = 1;
+                self.uploadView.uploadType = "contact-photo";
+                $$.viewManager.show(self.uploadView, "#upload-photo-container");
+                self.addSubView(self.uploadView);
+            });
         },
 
 
@@ -85,6 +116,11 @@ define([
             });
 
             return this.contact.fetch();
+        },
+
+
+        onClose: function() {
+            this.uploadView = null;
         }
     });
 
