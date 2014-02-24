@@ -53,12 +53,26 @@ _.extend(api.prototype, BaseApi.prototype, {
 
 
     createContact: function(req,resp) {
-
+        this._saveOrUpdateContact(req, resp);
     },
 
 
     updateContact: function(req,resp) {
+        this._saveOrUpdateContact(req, resp);
+    },
 
+
+    _saveOrUpdateContact: function(req, resp) {
+        //TODO - add granular security
+        var self = this;
+        var contact = new $$.m.Contact(req.body);
+        ContactDao.saveOrUpdate(contact, function(err, value) {
+            if (!err) {
+                self.sendResult(resp, value);
+            } else {
+                self.wrapError(resp, 500, "There was an error updating contact", err, value);
+            }
+        });
     },
 
 

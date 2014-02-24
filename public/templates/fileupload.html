@@ -12,6 +12,7 @@
                     <input type="file" name="files[]" multiple>
                 </span>
 
+                {{#checknot maxNumberOfFiles 1}}
                 <button type="submit" class="btn btn-primary start">
                     <i class="glyphicon glyphicon-upload"></i>
                     <span>Start upload</span>
@@ -20,12 +21,14 @@
                     <i class="glyphicon glyphicon-ban-circle"></i>
                     <span>Cancel upload</span>
                 </button>
+                <!--
                 <button type="button" class="btn btn-danger delete">
                     <i class="glyphicon glyphicon-trash"></i>
                     <span>Delete</span>
                 </button>
                 <input type="checkbox" class="toggle">
-
+                -->
+                {{/checknot}}
                 <!-- The global file processing state -->
                 <span class="fileupload-process"></span>
             </div>

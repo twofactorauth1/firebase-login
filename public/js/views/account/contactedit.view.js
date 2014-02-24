@@ -30,11 +30,23 @@ define([
 
                     var tmpl = $$.templateManager.get("contact-edit-main", self.templateKey);
                     var html = tmpl(data);
+
                     self.show(html);
+
+                    $("#contact-photo", self.$el).on("load", _.bind(self.resizseBtnEditPhoto, self))
                 })
                 .fail(function(resp) {
                     $$.viewManager.showAlert("There was an error retrieving this contact");
                 });
+        },
+
+
+        resizseBtnEditPhoto: function() {
+            console.log("resizing");
+            var height = $("#contact-photo").height();
+            var width = $("#contact-photo").width();
+
+            $(".btn-edit-photo").height(height).width(width);
         },
 
 
@@ -72,6 +84,7 @@ define([
             var self = this;
             $("#modal-change-photo").modal();
             $("#modal-change-photo").on("hide.bs.modal", function() {
+                self.vent.off("uploadcomplete");
                 self.removeSubView(self.uploadView);
             });
         },
@@ -85,7 +98,20 @@ define([
                 self.uploadView.uploadType = "contact-photo";
                 $$.viewManager.show(self.uploadView, "#upload-photo-container");
                 self.addSubView(self.uploadView);
+
+                self.vent.off("uploadcomplete");
+                self.vent.on("uploadcomplete", self._onPhotoUploaded.bind(self));
             });
+        },
+
+
+        _onPhotoUploaded: function(result) {
+            var files = result.files;
+            var url = files[0].url;
+            this.contact.set({photo:url});
+            this.contact.save();
+            $("#contact-photo").attr("src", url);
+            console.log("Saving contact!");
         },
 
 
@@ -120,6 +146,7 @@ define([
 
 
         onClose: function() {
+            self.vent.off("uploadcomplete");
             this.uploadView = null;
         }
     });

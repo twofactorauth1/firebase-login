@@ -1,5 +1,8 @@
 var BaseApi = require('../base.api');
 var formidable = require('formidable');
+var S3Dao = require('../../dao/s3.dao');
+var awsConfig = require('../../configs/aws.config');
+
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -18,29 +21,59 @@ _.extend(api.prototype, BaseApi.prototype, {
     },
 
 
-    confirmUpload: function(req,resp) {
+    confirmUpload: function (req, resp) {
         resp.send("ok");
     },
 
 
-    uploadContactPhoto: function(req,resp) {
+    uploadContactPhoto: function (req, resp) {
+        var self = this;
         var form = new formidable.IncomingForm();
-        form.parse(req, function(er, fields, files) {
-            resp.send({status:"received upload"});
+        //form.hash = "md5";
+        form.parse(req, function (er, fields, files) {
+            var bucket = awsConfig.BUCKETS.CONTACT_PHOTOS;
+            var accountId = self.accountId();
+            var directory = "acct_indigenous";
+            if (accountId > 0) {
+                directory = "acct_" + accountId;
+            }
+
+            var file = files["files[]"];
+            //Lets send this up to s3
+            S3Dao.uploadToS3(bucket, directory, file, true, function (err, value) {
+                if (err) {
+                    self.sendFileUploadResult(resp, err, file);
+                } else {
+                    self.sendFileUploadResult(resp, err, value);
+                }
+            })
         });
-        var body = req.body;
+    },
 
-        var files = req.files;
 
-        var data = "";
-        req.on("data", function(buffer) {
-            console.log("data");
-            //data += buffer;
-        });
+    sendFileUploadResult: function (resp, err, value) {
+        var result = {};
+        result.files = [];
 
-        req.on("end", function() {
-            var end = true;
-        })
+        if (!err) {
+            var file = {
+                name: value.name,
+                size: value.size,
+                url: value.url,
+                resource: value.resource
+            };
+
+            result.files.push(file);
+        } else {
+            file = {
+                name: value.name,
+                error: err.toString()
+            };
+
+            result.files.push(file);
+        }
+
+        resp.send(result);
     }
 });
 

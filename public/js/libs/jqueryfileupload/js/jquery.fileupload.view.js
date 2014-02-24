@@ -30,8 +30,9 @@ define([
 
         templateKey: "fileupload",
 
-        maxNumberOfFiles: null,
+        maxNumberOfFiles: 1,
         uploadType: null,  //contact-photo |
+        uploadComplete: null,
 
         events: {
 
@@ -66,6 +67,8 @@ define([
                 // Uncomment the following to send cross-domain cookies:
                 //xhrFields: {withCredentials: true},
                 url: url
+            }).bind('fileuploaddone', function(err, data) {
+                self.vent.trigger($$.v.JQueryFileUpload.events.UPLOAD_COMPLETE, data.result);
             });
 
             // Enable iframe cross-domain access via redirect option:
@@ -103,7 +106,12 @@ define([
                     });
             }
         }
-    });
+    },
+        {
+            events: {
+                UPLOAD_COMPLETE: "uploadcomplete"
+            }
+        });
 
     $$.v.JQueryFileUpload = view;
 

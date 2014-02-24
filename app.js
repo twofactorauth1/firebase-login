@@ -81,6 +81,15 @@ mongoStore.on('error', function() {
 require('./configs/nodemailer.config').configure();
 
 
+//------------------------------------------------------
+// SET UP AWS
+//------------------------------------------------------
+
+var aws = require('aws-sdk');
+var awsConfigs = require('./configs/aws.config');
+aws.config.update(awsConfigs);
+
+
 //---------------------------------------------------------
 //  INIT APPLICATION
 //---------------------------------------------------------

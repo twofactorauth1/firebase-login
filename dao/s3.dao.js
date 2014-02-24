@@ -11,8 +11,8 @@ var dao = {
 
 
     getSignedRequest: function (bucket, resource, expirationTimeInSeconds) {
-        var s3AccessKey = awsConfigs.S3_ACCESS_KEY;
-        var s3SecretKey = awsConfigs.S3_SECRET_KEY;
+        var s3AccessKey = awsConfigs.AWS_ACCESS_KEY;
+        var s3SecretKey = awsConfigs.AWS_SECRET_ACCESS_KEY;
 
         var hmac = crypto.createHmac("sha1", s3SecretKey);
 
@@ -43,8 +43,8 @@ var dao = {
         }
 
         var defaultTTL = awsConfigs.POST_TTL || $$.u.dateutils.HOUR;
-        var s3AccessKey = awsConfigs.S3_ACCESS_KEY;
-        var s3SecretKey = awsConfigs.S3_SECRET_KEY;
+        var s3AccessKey = awsConfigs.AWS_ACCESS_KEY
+        var s3SecretKey = awsConfigs.AWS_SECRET_ACCESS_KEY;
 
         var crypto = require('crypto');
 
@@ -81,6 +81,7 @@ var dao = {
         var type = file.type;
         var size = file.size;
         var path = file.path;
+        var hash = file.hash;
 
         if (makeUnique === true) {
             //Rename file to ensure uniqueness
@@ -101,14 +102,12 @@ var dao = {
         var fs = require('fs');
 
         fs.readFile(path, function (err, data) {
-            var s3 = new AWS.S3();
-            s3.client.putObject({
-                Bucket: bucket,
-                Key: key,
-                Body: data
-            }, function (err, data) {
+            var s3 = new AWS.S3({params: {Bucket: bucket}});
+
+            var params = {Key: key, Body: data, ContentType:type};
+            s3.putObject(params, function (err, data) {
                 if (!err) {
-                    fn(null, {filename: name, url: "http://s3.amazonaws.com/" + bucket + "/" + key, resource: key, filesize: size});
+                    fn(null, {name: name, url: "http://s3.amazonaws.com/" + bucket + "/" + key, resource: key, size: size});
                 } else {
                     self.log.error("Failed to upload file to S3: " + err.toString() + " [" + data + "]");
                     fn(err, data);

@@ -28,7 +28,7 @@ define([], function() {
                     return $$.api.getApiUrl("contact", this.id);
                 case "PUT":
                 case "POST":
-                    break;
+                    return $$.api.getApiUrl("contact", "");
                 case "DELETE":
                     break;
             }
