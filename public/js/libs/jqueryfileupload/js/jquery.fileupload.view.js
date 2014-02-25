@@ -33,6 +33,7 @@ define([
         maxNumberOfFiles: 1,
         uploadType: null,  //contact-photo |
         uploadComplete: null,
+        photoUrl: null,
 
         events: {
 

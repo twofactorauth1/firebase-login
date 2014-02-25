@@ -39,8 +39,8 @@ CONTACTS MAIN VIEW
                 {{#each contacts}}
                 <div class="col-xs-11 col-sm-6 col-md-4 contact-thumbnail">
                     <div class="inner btn-view-contact-details" data-contactid="{{_id}}">
-                        <strong>{{first}} {{middle}} {{last}}</strong> <span class="visible-inline-xs"><small>{{contactTypeLabel}}</small></span>
-                        <div class="hidden-xs"><small>{{contactTypeLabel}}</small></div>
+                        <strong>{{first}} {{middle}} {{last}}</strong> <span class="visible-inline-xs"><small>{{contactTypeLabel this}}</small></span>
+                        <div class="hidden-xs"><small>{{contactTypeLabel this}}</small></div>
 
                         <div class="contacts-photo-container">
                             <img class="img-circle" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpeg{{/if}}">
@@ -129,7 +129,7 @@ CONTACT DETAILS VIEW
     <div id="contact-type"><small>{{contactTypeLabel contact}}</small></div>
 
     <div class="contact-photo-container">
-        <img class="img-circle" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpeg{{/if}}">
+        <img class="img-rounded" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpeg{{/if}}">
     </div>
 
     <div id="contact-summary">
@@ -160,15 +160,18 @@ CONTACT DETAILS VIEW
             <div class="col-xs-1"><i class="icon-main fa fa-map-marker"/> </div>
             <div class="col-xs-10">
                 {{#each contact.details}}
-                    {{#if address}}
-                        {{#with address}}
-                            {{#if address}}<div>{{address}}</div>{{/if}}
-                            {{#if address2}}</div>{{address2}}</div>{{/if}}
-                            <div>
-                                {{city}}, {{state}}, {{zip}} {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromType ../../type}}"/>
-                            </div>
-                        {{/with}}
-                    {{/if}}
+                    {{#each addresses}}
+                        {{#if address}}<div>{{address}}</div>{{/if}}
+                        {{#if address2}}</div>{{address2}}</div>{{/if}}
+                        <div>
+                            {{city}}, {{state}}, {{zip}} {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromType ../../type}}"/>
+                        </div>
+                        <div>
+                        {{#if defaultShipping}}<small>Shipping <i class="fa fa-check"/></small>{{/if}}
+                        {{#if defaultBilling}}<small>Billing <i class="fa fa-check"/> </small>{{/if}}
+                        </div>
+                    {{/each}}
+
                 {{/each}}
             </div>
         </div>
@@ -203,32 +206,108 @@ CONTACTS EDIT VIEW
     <div id="contact-edit-container">
         <div class="row">
             <div class="col-md-6">
-                <!-- UPDATE NAME -->
-                <div class="form" role="form">
-                    <div class="form-group">
-                        <label class="sr-only">Full Name</label>
-                        <input id="input-fullname" type="text" class="form-control" value="{{contact.first}} {{contact.middle}} {{contact.last}}" placeholder="full name">
-                        <small style="margin-left:10px;">
-                            <strong>first:</strong> <code><span id="hint-first">{{contact.first}}</span></code>
-                            <strong>middle:</strong> <code><span id="hint-middle">{{contact.middle}}</span></code>
-                            <strong>last:</strong> <code><span id="hint-last">{{contact.last}}</span></code>
-                        </small>
+                <div class="hidden-xs hidden-sm">
+                    <h4>Name & Photo</h4>
+                    <hr/>
+                </div>
+
+                <div class="row">
+                    <!-- UPDATE NAME -->
+                    <div class="col-xs-12 form" role="form">
+                        <div class="form-group">
+                            <label class="">Contact Name</label>
+                            <input id="input-fullname" type="text" class="form-control" value="{{contact.first}} {{contact.middle}} {{contact.last}}" placeholder="full name">
+                            <small style="margin-left:10px;">
+                                <strong>first:</strong> <code><span id="hint-first">{{contact.first}}</span></code>
+                                <strong>middle:</strong> <code><span id="hint-middle">{{contact.middle}}</span></code>
+                                <strong>last:</strong> <code><span id="hint-last">{{contact.last}}</span></code>
+                            </small>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-xs-6">
+                                <label>Contact Type</label>
+                                <select id="select-contact-type" class="form-control">
+                                    {{#contactTypeOptions}}
+                                    <option data-contacttype="{{data}}" {{#check data ../contact.type}}selected{{/check}}>{{label}}</option>
+                                    {{/contactTypeOptions}}
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+
                 <!-- UPDATE PHOTO -->
-                <div id="contact-photo-container">
-                    <img id="contact-photo" class="img-circle hand" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpeg{{/if}}">
-                    <div class="btn-edit-photo img-circle hand">
-                        <div class="edit-photo-controls">
-                            <i class="fa fa-upload btn-upload-photo" title="Upload new photo"/>
-                            <i class="fa fa-times-circle-o btn-remove-photo" title="Remove photo"/>
+                <div id="contact-photo-container" class="row">
+                    <row>
+                        <div class="col-xs-5 col-md-6">
+                            <div class="hidden-xs hidden-sm">
+                                <div class="btn-link btn-edit-photo">Change Photo</div>
+                            </div>
+                            <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpeg{{/if}}">
                         </div>
+
+                        <div class="col-xs-7 col-md-6">
+                            <div class="btn-edit-photo-controls hidden-md hidden-lg">
+                                <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
+                                <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+                            </div>
+                        </div>
+                    </row>
+                </div>
+            </div>
+
+            <!-- CONTACT DETAILS -->
+            <div class="col-md-6">
+                <h4>Contact Information</h4>
+                <hr/>
+
+                <div id="phone-row" class="row">
+                    <div class="col-xs-1"><i class="icon-main fa fa-phone"/> </div>
+                    <div class="col-xs-10">
+                        <div id="edit-phones-container">
+                        {{#each contact.details}}
+                            {{#canEditContactDetails this}}
+                                {{#each ../phones}}
+                                    {{> edit-phone}}
+                                {{/each}}
+                            {{else}}
+                                {{#each phones}}
+                                <div>
+                                    <a href="tel:+1{{number}}">+1 {{number}}</a> <small>{{phoneTypeLabel type}}</small> <i class="icon-social {{iconFromType ../type}}"/>
+                                </div>
+                                {{/each}}
+                            {{/canEditContactDetails}}
+                        {{/each}}
+
+                        <!-- ADD NEW PHONE -->
+                        {{> edit-phone}}
+                        </div>
+                        <span style="margin-top:-15px;" class="col-xs-10"><small>e.g. (303-555-5555)</small></span>
                     </div>
 
-                    <div class="btn-edit-photo-mobile hidden-md hidden-lg">
-                        <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
-                        <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+                </div>
+
+                <div id="address-row" class="row">
+                    <div class="col-xs-1"><i class="icon-main fa fa-map-marker"/> </div>
+                    <div class="col-xs-10">
+                        <div class="edit-addresses-container">
+                        {{#each contact.details}}
+                            {{> edit-addresses}}
+                        {{/each}}
+                        </div>
+                    </div>
+                </div>
+
+                <div id="email-row" class="row">
+                    <div class="col-xs-1"><i class="icon-main fa fa-envelope"/></div>
+                    <div class="col-xs-10">
+                        {{#each contact.details}}
+                            {{#if email}}
+                            <a href="mailto:{{email}}">{{email}}</a> <i class="icon-social {{iconFromType ../type}}"/>
+                            {{/if}}
+                        {{/each}}
                     </div>
                 </div>
             </div>
@@ -238,26 +317,23 @@ CONTACTS EDIT VIEW
     <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" data-dismiss="modal">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">Add or Remove Photo</h4>
                 </div>
 
                 <div class="modal-body">
-                    <div class="btn-group-vertical">
-
-                    </div>
                     <div class="row">
-                        <div class="btn btn-primary col-xs-12">Remove Photo</div>
+                        <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
                     </div>
 
-                    <div class="row" style="margin-top:6px;">
+                    <div class="row" style="margin-top:6px; margin-bottom:20px;">
                         <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
                     </div>
 
-                    <br/>
-
                     <div id="upload-photo-container"/>
+
+                    <img id="contact-photo-modal" src="{{contact.photo}}" style="max-width:100%; margin-top:20px;"/>
                 </div>
             </div>
         </div>
@@ -265,6 +341,64 @@ CONTACTS EDIT VIEW
 </script>
 <!-- END CONTACT EDIT VIEW -->
 
+
+<script type="text/x-handlebars-template" name="new-phone">
+    {{> edit-phone}}
+</script>
+
+
+<script type="text/x-handlebars-template" name="edit-phone" partial="true">
+    <div class="row edit-phone-container" data-id="{{_id}}" style="margin-top:8px;">
+        <div class="form-group col-xs-12 col-sm-8 col-md-10">
+            <div class="input-group">
+                <div class="input-group-addon">+1</div>
+                <input type="text" class="input-edit-phone form-control" value="{{number}}"/>
+                <div class="input-group-btn">
+                    <button type="button" class="btn-edit-phone-type btn btn-default dropdown-toggle" data-toggle="dropdown" data-type="{{type}}"><span class="edit-phone-type-label">{{phoneTypeLabel this}}</span> <span class="caret"></span> </button>
+                    <ul class="dropdown-menu pull-right">
+                        {{#phoneTypeOptions}}
+                        <li class="li-edit-phone-type" data-type="{{data}}"><a href="#">{{label}}</a></li>
+                        {{/phoneTypeOptions}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-handlebars-template" name="new-address">
+    {{> edit-address}}
+</script>
+
+
+<script type="text/x-handlebars-template" name="edit-addresses" partial="true">
+    {{#each addresses}}
+    <div class="edit-address-container" data-id="{{_id}}">
+        {{#if address}}<div>{{address}}</div>{{/if}}
+        {{#if address2}}</div>{{address2}}</div>{{/if}}
+        <div>{{city}}, {{state}}, {{zip}} {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromType ../type}}"/></div>
+        <div class="hidden-xs hidden-sm">
+            <div class="checkbox">
+                <label>
+                    <input class="chk-default-shipping" type="checkbox" {{#if defaultShipping}}checked{{/if}}/> Default Shipping
+                </label>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input class="chk-default-billing" type="checkbox" {{#if defaultBilling}}checked{{/if}}/> Default Billing
+                </label>
+            </div>
+        </div>
+
+        <div class="hidden-md hidden-lg" style="margin-top:10px">
+            <div class="btn-default-shipping btn btn-md {{#if defaultShipping}}default{{/if}}">Default Shipping <i class="fa fa-check"/> </div>
+            <div class="btn-default-billing btn btn-md {{#if defaultBilling}}default{{/if}}">Default Billing <i class="fa fa-check"/></div>
+        </div>
+    </div>
+    {{/each}}
+</script>
 
 
 <!--
@@ -277,7 +411,6 @@ HELPERS
         for (var i = 0; i < 26; i++) {
             this.letter = String.fromCharCode(charCode);
             str += options.fn(this);
-            //str += options.fn(String.fromCharCode(charCode));
             charCode++;
         }
         return str;
@@ -288,34 +421,75 @@ HELPERS
         if (contact == null) {
             contact = this;
         }
-        switch(contact.type) {
-            case "cu": return "Customer";
-            case "co": return "Colleague";
-            case "fr": return "Friend";
-            case "mb": return "Member";
-            case "fa": return "Family";
-            case "ad": return "Admin";
-        }
-        return "";
+        var contactTypes = $$.constants.contact.contact_types.dp;
+        var type = _.find(contactTypes, function(type) { return type.data === contact.type });
+        return type == null ? "" : type.label;
     });
 
 
-    Handlebars.registerHelper("phoneTypeLabel", function(type) {
-        switch(type) {
-            case "m": return "mobile";
-            case "w": return "work";
-            case "h": return "home";
+    Handlebars.registerHelper("phoneTypeLabel", function(phone) {
+        if (phone == null) {
+            phone = this;
         }
-        return "";
+        var phoneType = phone.hasOwnProperty("type") ? phone.type : phone;
+
+        var phoneTypes = $$.constants.contact.phone_types.dp;
+        var type = _.find(phoneTypes, function(type) { return type.data === phoneType });
+        return type == null ? "mobile" : type.label;
     });
+
+
+    Handlebars.registerHelper("contactTypeOptions", function(options) {
+        var contactTypes = $$.constants.contact.contact_types.dp;
+
+        var str = "";
+        for (var i = 0, l = contactTypes.length; i < l; i++) {
+            str += options.fn(contactTypes[i]);
+        }
+        return str;
+    });
+
+
+    Handlebars.registerHelper("phoneTypeOptions", function(options) {
+        var phoneTypes = $$.constants.contact.phone_types.dp;
+
+        var str = "";
+        for (var i = 0, l = phoneTypes.length; i < l; i++) {
+            str += options.fn(phoneTypes[i]);
+        }
+        return str;
+    });
+
+
+    Handlebars.registerHelper("canEditContactDetails", function(contactDetails, options) {
+         if (contactDetails.type == $$.constants.contact.detail_types.LOCAL) {
+             return options.fn(this);
+         } else {
+             return options.inverse(this);
+         }
+    });
+
+
+    Handlebars.registerHelper("unlessHasLocalPhone", function(contact, options) {
+        if (contact && contact.details != null) {
+            var localDetails = _.find(contact.details, function(details) { return details.type === $$.constants.contact.detail_types.LOCAL });
+            if (localDetails != null && localDetails.phones != null && localDetails.phones.length > 0) {
+                return options.inverse(this);
+            }
+        }
+        return options.fn(this);
+    });
+
 
     Handlebars.registerHelper("iconFromType", function(type) {
+        var p = $$.constants.contact.detail_types;
         switch(type) {
-            case "lo": return "";
-            case "fb": return "fa fa-facebook";
-            case "tw": return "fa fa-twitter";
-            case "li": return "fa fa-linkedin";
-            case "go": return "fa fa-google-plus";
+            case p.LOCAL: return "";
+            case p.FACEBOOK: return "fa fa-facebook";
+            case p.TWITTER: return "fa fa-twitter";
+            case p.LINKDIN: return "fa fa-linkedin";
+            case p.GOOGLE: return "fa fa-google-plus";
         }
+        return "";
     });
 </script>

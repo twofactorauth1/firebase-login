@@ -28,6 +28,13 @@
 define([], function () {
     jQuery.fn.startKeyTimer = function (duration) {
 
+        if (this.length > 1) {
+            this.each(function() {
+                $(this).startKeyTimer(duration);
+            });
+            return;
+        }
+
         var self = this;
         var onTimeout = function () {
             self.trigger("onkeytimer", [$.data(self, "keyevent")]);

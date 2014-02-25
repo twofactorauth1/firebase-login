@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define([], function() {
+define([], function () {
 
     var constants = {
         server_props: {
@@ -15,8 +15,8 @@ define([], function() {
 
         account: {
             company_types: {
-                PROFESSIONAL:1,
-                BUSINESS:2,
+                PROFESSIONAL: 1,
+                BUSINESS: 2,
                 ENTERPRISE: 3
             },
 
@@ -45,13 +45,28 @@ define([], function() {
                 FRIEND: "fr",
                 MEMBER: "mb",
                 FAMILY: "fa",
-                ADMIN: "ad"
+                ADMIN: "ad",
+
+                dp: [
+                    {label: "Customer", data: "cu"},
+                    {label: "Colleague", data: "co"},
+                    {label: "Friend", data: "fr"},
+                    {label: "Member", data: "mb"},
+                    {label: "Family", data: "fa"},
+                    {label: "Admin", data: "ad"}
+                ]
             },
 
             phone_types: {
                 MOBILE: "m",
                 HOME: "h",
-                WORK: "w"
+                WORK: "w",
+
+                dp: [
+                    {label:"mobile", data:"m"},
+                    {label:"home", data:"h"},
+                    {label:"work", data:"w"}
+                ]
             },
 
             activity_types: {

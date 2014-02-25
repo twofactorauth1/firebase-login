@@ -135,8 +135,8 @@
 
   #contact-summary {
     position:absolute;
-    top:90px;
-    left:150px;
+    top:70px;
+    left:180px;
   }
 
   #contact-information {
@@ -165,54 +165,33 @@
 
 #contact-edit-container {
 
+  #address-row,#email-row {
+    margin-top:25px;
+  }
+
+
   #contact-photo-container {
-
-    height: 145px;
-
     img {
-      position:absolute;
-      top:75px;
-      max-height: 150px;
-      max-width: 150px;
-    }
-
-    &:hover {
-      .btn-edit-photo {
+      &:hover {
         opacity: 0.8;
-      }
-    }
-
-    .btn-edit-photo-mobile {
-      position:absolute;
-      top: 120px;
-      left:175px;
-    }
-
-
-    .btn-edit-photo {
-      position:absolute;
-      top: 75px;
-      height:150px;
-      width:150px;
-      background-color: #cccccc;
-      opacity: 0.0;
-
-      .edit-photo-controls {
-        position:absolute;
-        top: 40px;
-        left: 30px;
-        font-size:2em;
-
-        .fa {
-          cursor: pointer;
-
-          &:last-child {
-            margin-left:10px;
-          }
-        }
       }
     }
   }
 
+  .btn.btn-default-shipping, .btn.btn-default-billing {
+    .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
+
+    i.fa {
+      visibility: hidden;
+    }
+  }
+
+  .btn.btn-default-shipping.default, .btn.btn-default-billing.default {
+    .button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border);
+
+    i.fa {
+      visibility: visible;
+    }
+  }
 }
 

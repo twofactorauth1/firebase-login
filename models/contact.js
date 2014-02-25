@@ -57,21 +57,27 @@ var contact = $$.m.ModelBase.extend({
              * stores an array of information collected from different sources,
              * either local or social.
              * [{
+             *   _id:""
              *   type:int
              *   email:string
              *   photo:string
              *   phones: [{
+             *       _id:"",
              *       type: string "m|w|h" //mobile, work, home
-             *       number: string
+             *       number: string,
+             *       default: false
              *   }],
-             *   address: {
+             *   addresses: [{
+             *       _id:""
              *       address:string
              *       address2:string
              *       city:string
              *       state:string
              *       zip:string
              *       country:string
-             *   }
+             *       defaultShipping: false
+             *       defaultBilling: false
+             *   }]
              * }]
              */
             details: []

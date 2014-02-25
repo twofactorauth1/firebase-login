@@ -12,12 +12,24 @@
                     <input type="file" name="files[]" multiple>
                 </span>
 
-                {{#checknot maxNumberOfFiles 1}}
-                <button type="submit" class="btn btn-primary start">
+
+                <!-- ALWAYS SHOW IF SMALL OR MEDIUM -->
+                <button type="submit" class="btn btn-primary start hidden-md hidden-lg">
                     <i class="glyphicon glyphicon-upload"></i>
                     <span>Start upload</span>
                 </button>
-                <button type="reset" class="btn btn-warning cancel">
+                <button type="reset" class="btn btn-warning cancel hidden-md hidden-lg">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel upload</span>
+                </button>
+
+                <!-- ONLY SHOW IF MAX NUMBER OF FILES > 1 -->
+                {{#checknot maxNumberOfFiles 1}}
+                <button type="submit" class="btn btn-primary start visible-md visible-lg">
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start upload</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel visible-md visible-lg">
                     <i class="glyphicon glyphicon-ban-circle"></i>
                     <span>Cancel upload</span>
                 </button>
