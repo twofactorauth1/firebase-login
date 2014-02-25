@@ -43,6 +43,9 @@ module.exports = function(grunt) {
             },
             main: {
                 files: { 'public/js/compiled/templates.js' : [ 'hbs/*/*.hbs'] } //compiled/templates.js
+            },
+            account: {
+                files: { 'public/js/compiled/account/templates.js' : [ 'hbs/account/**/*.hbs' ]}
             }
             //This is how to comile other modules in any subdirectories of /templates
             //apps: {
@@ -61,7 +64,7 @@ module.exports = function(grunt) {
                 src: ["../bio-release"]
             },
             prebuild: {
-                src: ["../bio-release/public/css"]
+                //src: ["../bio-release/public/css"] //don't remove css files
             },
             postbuild: {
                 src: ["../bio-release/public/less", "../bio-release/public/js", "../bio-release/deploy",/*"../bio-release/node_modules",*/"../bio-release/Logs/*.log"]
@@ -109,6 +112,13 @@ module.exports = function(grunt) {
                         { name: "routers/signup.router",
                             excludeShallow:['utils/cachemixin'],
                             include: [
+                            ]
+                        },
+
+                        { name: "routers/accountadmin.router",
+                            excludeShallow:['utils/cachemixin'],
+                            include: [
+                                'compiled/account/templates'
                             ]
                         }
                     ]

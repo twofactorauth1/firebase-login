@@ -10,6 +10,8 @@ define(function() {
             if (typeof hbs === 'undefined') {
                 return null;
             }
+            filename = filename.replace("/", ".");
+
             var obj = hbs;
             var path = filename.split(".");
             for (var i = 0; i < path.length; i++) {
@@ -70,6 +72,8 @@ define(function() {
             if (typeof hbs == 'undefined') {
                 hbs = {};
             }
+
+            filename = filename.replace("/", ".");
 
             var templateHome = hbs;
             var path = filename.split(".");
