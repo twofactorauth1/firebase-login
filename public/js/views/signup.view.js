@@ -251,7 +251,7 @@ define([
         },
 
         postRender: function() {
-            this.$el.find('.signuppanel .form').css({'opacity': 0});
+            //this.$el.find('.signuppanel .form').css({'opacity': 0});
         },
 
         _getTransitionDirection: function(inOrOut) {
