@@ -63,7 +63,7 @@ define([
             var data = this._getData();
 
             //If the user hasn't started yet, we want to be sure they start at the beginning
-            if (!this._isFirstPlace(this.place) && (data.account == null || data.account.company.type == null || data.account.company.type == 0)) {
+            if (!this._isFirstPlace(this.place) && (data.account === null || data.account.company.type === null || data.account.company.type === 0)) {
                 return $$.r.mainAppRouter.navigate("/start", {trigger:true});
             }
 
@@ -114,7 +114,6 @@ define([
 
 
         onUsernameKeyTimer: function (event) {
-            console.log('username key timer');
             var self = this;
             this.usernamevalid = false;
 
@@ -156,7 +155,7 @@ define([
             helper1.html("");
             helper2.html("");
 
-            if (pass1 == "" && pass2 == "") {
+            if (pass1 === "" && pass2 === "") {
                 return;
             }
             if (pass1.length < 5) {
@@ -268,7 +267,7 @@ define([
             var self = this;
             var data = this._getData();
 
-            if(this.animating) return false;
+            if(this.animating) { return false; }
             this.animating = true;
 
 
@@ -314,10 +313,11 @@ define([
             var self = this;
 
             if (this._isFirstPlace(this.place)) {
-                return window.location.href = "/login";
+                window.location.href = "/login";
+                return;
             }
 
-            if(this.animating) return false;
+            if(this.animating) { return false; }
             this.animating = true;
 
             var previousPlace = this._getPreviuosPlace();
