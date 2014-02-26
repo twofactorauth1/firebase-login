@@ -36,13 +36,13 @@ define([
                 .done(function (value) {
                     self.tmpAccount = value;
                     self.renderSignup();
-                    // if (self.place == 'start') {
-                    //     self.renderStartSignup();
-                    // } else if (self.place == 'details') {
-                    //     self.renderSignupDetails();
-                    // } else if (self.place == 'create') {
-                    //     self.renderSignupCreate();
-                    // }
+//                    if (self.place == 'start') {
+//                         self.renderStartSignup();
+//                    } else if (self.place == 'details') {
+//                         self.renderSignupDetails();
+//                    } else if (self.place == 'create') {
+//                         self.renderSignupCreate();
+//                    }
                 });
 
             return this;
@@ -51,6 +51,7 @@ define([
 
         _getData: function () {
             return {
+                place: this.place,
                 account: this.tmpAccount.toJSON(),
                 isProfessional: this.tmpAccount.get("company").type === $$.constants.account.company_types.PROFESSIONAL,
                 isBusiness: this.tmpAccount.get("company").type === $$.constants.account.company_types.BUSINESS,
@@ -59,45 +60,18 @@ define([
         },
 
         renderSignup: function () {
+            var data = this._getData();
+
+            //If the user hasn't started yet, we want to be sure they start at the beginning
+            if (!this._isFirstPlace(this.place) && (data.account == null || data.account.company.type == null || data.account.company.type == 0)) {
+                return $$.r.mainAppRouter.navigate("/start", {trigger:true});
+            }
+
             var tmpl = $$.templateManager.get("signup-main", this.templateKey);
-            var html = tmpl(this._getData());
+            var html = tmpl(data);
             this.show(html);
             return this;
         },
-
-
-        // renderSignupDetails: function () {
-        //     var data = this._getData();
-
-        //     if (data.account == null || data.account.company.type == null) {
-        //         $$.r.mainAppRouter.navigate("/start", true);
-        //     }
-
-        //     var tmpl = $$.templateManager.get("signup-details", this.templateKey);
-        //     var html = tmpl(data);
-        //     this.show(html);
-
-        //     $("#input-company-name", this.el).startKeyTimer(500);
-        //     return this;
-        // },
-
-
-        // renderSignupCreate: function () {
-        //     var data = this._getData();
-        //     if (data.account == null || data.account.company.type == null) {
-        //         $$.r.mainAppRouter.navigate("/start", true);
-        //     }
-
-        //     var tmpl = $$.templateManager.get("signup-create", this.templateKey);
-        //     var html = tmpl(data);
-        //     this.show(html);
-
-        //     $("#input-username", this.el).startKeyTimer(400);
-        //     $("#input-password", this.el).startKeyTimer(400);
-        //     $("#input-password2", this.el).startKeyTimer(400);
-        //     $("#input-email", this.el).startKeyTimer(400);
-        //     return this;
-        // },
 
 
         onCompanyTypeChanged: function (event) {
@@ -123,8 +97,7 @@ define([
 
             this.tmpAccount.get("company").name = name;
 
-            //TODO: Remove this, only for initial testing
-            var subdomain = $.trim(name).replace(" ", "").replace(".", "_");
+            var subdomain = $.trim(name).replace(" ", "").replace(".", "_").replace("@","");
             this.tmpAccount.set({subdomain: subdomain});
 
             this.tmpAccount.saveOrUpdateTmpAccount();
@@ -254,64 +227,68 @@ define([
             //this.$el.find('.signuppanel .form').css({'opacity': 0});
         },
 
-        _getTransitionDirection: function(inOrOut) {
-            var arr = ["start","details","create"];
 
-            var currIndex = arr.indexOf(this.place);
-            var nextIndex, lastIndex;
-            if (inOrOut == "in") {
-                lastIndex = arr.indexOf(this.lastPlace);
-
-                if (lastIndex < currIndex) {
-                    return "left"; //we are moving onto the screen to the left, from the right
-                } else if (lastIndex > currIndex) {
-                    return "right"; //we are moving onto the screen to the right, from the left
-                }
-            } else {
-                nextIndex = arr.indexOf(this.nextPlace);
-
-                if (nextIndex < currIndex) {
-                    return "right"; //we're moving off the screen to the right, from the left;
-                } else if(nextIndex > currIndex) {
-                    return "left"; //we are moving off the screen, to the left, from the right
-                }
-            }
-            return null;
-        },
-
+        //region TRANSITION
+        places: ["start","details","create"],
         left: '',
         opacity: '',
         scale: '',
         animating: '',
 
+        _getNextPlace: function() {
+            return this.places[this.places.indexOf(this.place)+1];
+        },
+
+
+        _getPreviuosPlace: function() {
+            return this.places[this.places.indexOf(this.place)-1];
+        },
+
+
+        _isFirstPlace: function(place) {
+            place = place || this.place;
+            return this.places.indexOf(place) === 0;
+        },
+
+
+        _isLastPlace: function(place) {
+            place = place || this.place;
+            return this.places.indexOf(place) === this.places.length-1;
+        },
+
+
+        _updateProgressBar: function(place) {
+            place = place || this.place;
+            var panelIndex = this.places.indexOf(place);
+            $("#progressbar li").eq($("fieldset").index(panelIndex)).addClass("active");
+        },
+
+
         nextPanel: function (ev) {
             var self = this;
             var data = this._getData();
+
             if(this.animating) return false;
             this.animating = true;
 
-            var panelarr = ["start","details","create"];
-            var currIndex = panelarr.indexOf(this.place);
-            var current_fs = $('#'+this.place+'.signuppanel');
-            var next_fs = $('#'+panelarr[currIndex+1]+'.signuppanel');
-            var route = "/"+panelarr[currIndex+1];
+
+            var nextPlace = this._getNextPlace();
+
+            //Update the URL
+            var route = "/"+nextPlace;
             $$.r.mainAppRouter.navigate(route);
 
-            $("#progressbar li").eq($("fieldset").index(currIndex+1)).addClass("active");
+            //Get the current panel and the next panel
+            var current_fs = $('#'+this.place+'.signuppanel');
+            var next_fs = $('#'+nextPlace+'.signuppanel');
 
-            if(currIndex === panelarr.length-2) { $('.right-nav').hide(); } else { $('.right-nav').show();}
-            console.log(currIndex+' '+this.place);
-            if(currIndex === 0) {
-                if (data.account == null || data.account.company.type == null) {
-                    $$.r.mainAppRouter.navigate("/start", true);
-                }
-                $("#input-company-name", this.el).startKeyTimer(500);
-            }
-            if(currIndex === 1) {
-                $("#input-username", this.el).startKeyTimer(400);
-                $("#input-password", this.el).startKeyTimer(400);
-                $("#input-password2", this.el).startKeyTimer(400);
-                $("#input-email", this.el).startKeyTimer(400);
+            //Update the progress bar
+            this._updateProgressBar(nextPlace);
+
+            if (this._isLastPlace(nextPlace)) {
+                $('.right-nav').hide();
+            } else {
+                $('.right-nav').show();
             }
 
             next_fs.show();
@@ -326,7 +303,7 @@ define([
                 duration: 800,
                 complete: function(){
                     current_fs.hide();
-                    self.place = panelarr[currIndex+1];
+                    self.place = nextPlace;
                     self.animating = false;
                 },
                 easing: 'easeInOutBack'
@@ -335,26 +312,23 @@ define([
 
         prevPanel: function (ev) {
             var self = this;
+
+            if (this._isFirstPlace(this.place)) {
+                return window.location.href = "/login";
+            }
+
             if(this.animating) return false;
             this.animating = true;
 
-            var panelarr = ["start","details","create"];
-            var currIndex = panelarr.indexOf(this.place);
-            var current_fs = $('#'+this.place+'.signuppanel');
-            var previous_fs = $('#'+panelarr[currIndex-1]+'.signuppanel');
+            var previousPlace = this._getPreviuosPlace();
+            var current_fs = $('#'+ this.place +'.signuppanel');
+            var previous_fs = $('#'+ previousPlace +'.signuppanel');
 
-
-            $("#progressbar li").eq($("fieldset").index(currIndex+1)).addClass("active");
+            this._updateProgressBar(previousPlace);
 
             $('.right-nav').show();
-            if(currIndex === 0) {
-                window.location.href = "../login";
-                // var route = "../login";
-                // $$.r.mainAppRouter.navigate(route, {trigger:true});
-                // return;
-            }
 
-            var route = "/"+panelarr[currIndex-1];
+            var route = "/" + previousPlace;
             $$.r.mainAppRouter.navigate(route);
 
             previous_fs.show();
@@ -370,7 +344,7 @@ define([
                 duration: 800,
                 complete: function(){
                     current_fs.hide();
-                    self.place = panelarr[currIndex-1];
+                    self.place = previousPlace;
                     self.animating = false;
                 },
                 easing: 'easeInOutBack'
@@ -378,77 +352,27 @@ define([
         },
 
 
-        nextPanelOLD: function () {
-            console.log('next panel');
-            var self = this;
-            console.log('new transition in');
-            var direction = this._getTransitionDirection("in");   //  left|right
-                 _.delay(function() {
-                     if (self.animating) return false;
-                     self.animating = true;
-
-                     if (direction == "left") {
-                        //you want to transition me in from the right to the left
-                        console.log('transitionIn from the left');
-                        self.$el.find('.signuppanel').css({'opacity': 1});
-                        self.$el.find('.signuppanel .form').css({'opacity': 0, 'left': '100%', 'display': 'block'});
-                        self.$el.find('.signuppanel .form').animate({ 'opacity': 1, 'left': 0 }, {duration: 800, complete: function() {self.animating = false;},easing: 'easeInOutBack'});
-                    } else if(direction == "right") {
-                        //you want to transition me in from the left to the right
-                        console.log('transitionIn from the right');
-                        self.$el.find('.signuppanel .form').css({'opacity': 0, 'right': '100%', 'display': 'block'});
-                        self.$el.find('.signuppanel .form').animate({ 'opacity': 1, 'right': 0 }, {duration: 800, complete: function() {self.animating = false;},easing: 'easeInOutBack'});
-                    } else {
-                        //you just want to show me with no animation
-                        console.log('no direction');
-                    }
-
-
-                 }, 50);
+        startKeyTimers: function() {
+            $("#input-company-name", this.el).startKeyTimer(500);
+            $("#input-username", this.el).startKeyTimer(400);
+            $("#input-password", this.el).startKeyTimer(400);
+            $("#input-password2", this.el).startKeyTimer(400);
+            $("#input-email", this.el).startKeyTimer(400);
         },
 
 
-        prevPanelOLD: function () {
-            console.log('prev panel');
-            console.log('new transition out');
-
-            var direction = this._getTransitionDirection("out");  //  left|right
-
-            // if (direction == "left") {
-            //     //you want to transition me out from the right to the left
-            // } else if(direction == "right") {
-            //     //you want to transition me out from the left to the right
-            //     console.log('transitionOut from the right');
-            //     //this.$el.addClass('transitionRight');
-            // } else {
-            //     //you just want to show me with no animation
-            // }
+        stopKeyTimers: function() {
+            $("#input-company-name", this.el).stopKeyTimer();
+            $("#input-username", this.el).stopKeyTimer();
+            $("#input-password", this.el).stopKeyTimer();
+            $("#input-password2", this.el).stopKeyTimer();
+            $("#input-email", this.el).stopKeyTimer();
+        },
 
 
+        onClose: function() {
+            this.stopKeyTimers();
 
-            var self = this;
-                 _.delay(function() {
-                     if (self.animating) return false;
-                     self.animating = true;
-
-                     self.$el.find('.signuppanel .form').animate({ opacity: 0 }, {
-                        step: function(now, mx) {
-                            var scale = 1 - (1 - now) * 0.2;
-                            self.$el.find('.signuppanel .form').css({ 'transform': 'scale(' + scale + ')'});
-                        },
-                        duration: 800,
-                        complete: function() {
-                            console.log('transition complete');
-                            self.$el.hide();
-                            self.animating = false;
-                        },
-                            easing: 'easeInOutBack'
-                        });
-                 }, 50);
-
-            self.$el.find('.signuppanel .logo').css({'opacity':0});
-                    self.$el.find('.signuppanel .left-nav').css({'opacity':0});
-                    self.$el.find('.signuppanel .right-nav').css({'opacity':0});
         }
 
     });

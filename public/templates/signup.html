@@ -9,13 +9,13 @@
 
 <script type="text/x-handlebars-template" name="signup-controls" partial="true">
     <a class="left-nav"></a>
-    <a class="right-nav {{#superUnless "or" isProfessional isBusiness}}hidden{{/superUnless}}"></a>
+    <a class="right-nav {{#superUnless "or" isProfessional isBusiness isEnterprise}}hidden{{/superUnless}}"></a>
     <span class="logo"></span>
 </script>
 
 <script type="text/x-handlebars-template" name="signup-start" partial="true">
-    <div id="start" class="signuppanel">
-            <div class="form" style="opacity:1;">
+    <div id="start" class="signuppanel" style="{{#check place 'start'}}display:block{{/check}}">
+            <div class="form" style="">
             <ul id="progressbar">
                 <li class="active"></li>
                 <li></li>
@@ -43,7 +43,7 @@
 
 
 <script type="text/x-handlebars-template" name="signup-details" partial="true">
-    <div id="details" class="signuppanel">
+    <div id="details" class="signuppanel" style="{{#check place 'details'}}display:block{{/check}}">
         <div class="form">
             <ul id="progressbar">
                 <li></li>
@@ -127,7 +127,7 @@
 
 
 <script type="text/x-handlebars-template" name="signup-create" partial="true">
-    <div id="create" class="signuppanel">
+    <div id="create" class="signuppanel" style="{{#check place 'create'}}display:block{{/check}}">
         <div class="form">
             <ul id="progressbar">
         	<li></li>

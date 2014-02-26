@@ -6,7 +6,7 @@
    position: absolute;  
 }
 
-.mainpanel .signuppanel:not(:first-of-type) {
+.mainpanel .signuppanel/*:not(:first-of-type)*/ {
    display: none;
 }
 
@@ -90,7 +90,7 @@
 
 .termsOfuse {}
 
-@media screen and (max-width: 640px) {
+@media(max-width: @screen-sm-max) {
    .signinpanel,
       .signuppanel {
          margin: 0 auto;
