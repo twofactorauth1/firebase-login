@@ -164,11 +164,15 @@ CONTACT DETAILS VIEW
                         {{#if address}}<div>{{address}}</div>{{/if}}
                         {{#if address2}}</div>{{address2}}</div>{{/if}}
                         <div>
-                            {{city}}, {{state}}, {{zip}} {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromType ../../type}}"/>
+                            {{city}}
+                            {{#if state}}, {{state}}{{/if}}
+                            {{#if zip}}, {{zip}}{{/if}}
+                            {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromType ../../type}}"/>
                         </div>
+
                         <div>
-                        {{#if defaultShipping}}<small>Shipping <i class="fa fa-check"/></small>{{/if}}
-                        {{#if defaultBilling}}<small>Billing <i class="fa fa-check"/> </small>{{/if}}
+                            {{#if defaultShipping}}<small>Shipping <i class="fa fa-check"/></small>{{/if}}
+                            {{#if defaultBilling}}<small>Billing <i class="fa fa-check"/> </small>{{/if}}
                         </div>
                     {{/each}}
 
@@ -292,11 +296,29 @@ CONTACTS EDIT VIEW
                 <div id="address-row" class="row">
                     <div class="col-xs-1"><i class="icon-main fa fa-map-marker"/> </div>
                     <div class="col-xs-10">
-                        <div class="edit-addresses-container">
+                        <div id="edit-addresses-container">
                         {{#each contact.details}}
-                            {{> edit-addresses}}
+                            {{#canEditContactDetails this}}
+                                {{> edit-addresses}}
+                            {{else}}
+                                {{#each addresses}}
+                                    {{#if address}}<div>{{address}}</div>{{/if}}
+                                    {{#if address2}}</div>{{address2}}</div>{{/if}}
+                                    <div>
+                                        {{city}}
+                                        {{#if state}}, {{state}}{{/if}}
+                                        {{#if zip}}, {{zip}}{{/if}}
+                                        {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromType ../../type}}"/>
+                                    </div>
+
+                                    {{> edit-default-shipping-billing}}
+                                {{/each}}
+                            {{/canEditContactDetails}}
                         {{/each}}
                         </div>
+
+                        <br/>
+                        <div id="btn-new-address" class="btn btn-primary">Add Address</div>
                     </div>
                 </div>
 
@@ -374,30 +396,41 @@ CONTACTS EDIT VIEW
 
 <script type="text/x-handlebars-template" name="edit-addresses" partial="true">
     {{#each addresses}}
-    <div class="edit-address-container" data-id="{{_id}}">
-        {{#if address}}<div>{{address}}</div>{{/if}}
-        {{#if address2}}</div>{{address2}}</div>{{/if}}
-        <div>{{city}}, {{state}}, {{zip}} {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromType ../type}}"/></div>
-        <div class="hidden-xs hidden-sm">
-            <div class="checkbox">
-                <label>
-                    <input class="chk-default-shipping" type="checkbox" {{#if defaultShipping}}checked{{/if}}/> Default Shipping
-                </label>
-            </div>
+        {{> edit-address}}
+    {{/each}}
+</script>
 
-            <div class="checkbox">
-                <label>
-                    <input class="chk-default-billing" type="checkbox" {{#if defaultBilling}}checked{{/if}}/> Default Billing
-                </label>
-            </div>
+
+<script type="text/x-handlebars-template" name="edit-address" partial="true">
+    <div class="edit-address-container" data-id="{{_id}}">
+        <div class="form form-horizontal">
+            
+        </div>
+        Address, Address2, City, State, Zip
+        {{> edit-default-shipping-billing}}
+    </div>
+</script>
+
+
+<script type="text/x-handlebars-template" name="edit-default-shipping-billing" partial="true">
+    <div class="hidden-xs hidden-sm">
+        <div class="checkbox">
+            <label>
+                <input class="chk-default-shipping" type="checkbox" {{#if defaultShipping}}checked{{/if}}/> Default Shipping
+            </label>
         </div>
 
-        <div class="hidden-md hidden-lg" style="margin-top:10px">
-            <div class="btn-default-shipping btn btn-md {{#if defaultShipping}}default{{/if}}">Default Shipping <i class="fa fa-check"/> </div>
-            <div class="btn-default-billing btn btn-md {{#if defaultBilling}}default{{/if}}">Default Billing <i class="fa fa-check"/></div>
+        <div class="checkbox">
+            <label>
+                <input class="chk-default-billing" type="checkbox" {{#if defaultBilling}}checked{{/if}}/> Default Billing
+            </label>
         </div>
     </div>
-    {{/each}}
+
+    <div class="hidden-md hidden-lg" style="margin-top:10px">
+        <div class="btn-default-shipping btn btn-md {{#if defaultShipping}}default{{/if}}">Default Shipping <i class="fa fa-check"/> </div>
+        <div class="btn-default-billing btn btn-md {{#if defaultBilling}}default{{/if}}">Default Billing <i class="fa fa-check"/></div>
+    </div>
 </script>
 
 
@@ -478,6 +511,20 @@ HELPERS
             }
         }
         return options.fn(this);
+    });
+
+
+    Handlebars.registerHelper("unlessAddressIsEmpty", function(address, options) {
+        if (address) {
+            if (String.isNullOrEmpty(address.address) && String.isNullOrEmpty(address.address2) && String.isNullOrEmpty(address.city)
+                    && String.isNullOrEmpty(address.state) && String.isNullOrEmpty(address.zip) && String.isNullOrEmpty(address.country)) {
+                return options.inverse(this);
+            } else {
+                return options.inverse(this);
+            }
+        } else {
+            return options.inverse(this);
+        }
     });
 
 

@@ -21,6 +21,7 @@ define([
             "onkeytimer .input-edit-phone":"phoneChanged",
             "click .li-edit-phone-type":"phoneTypeChanged",
 
+            "click #btn-new-address":"createNewAddress",
             "change .chk-default-shipping":"toggleDefaultShipping",
             "change .chk-default-billing":"toggleDefaultBilling",
             "click .btn-default-shipping":"toggleDefaultShipping",
@@ -171,6 +172,14 @@ define([
 
 
         //region ADDRESS
+        createNewAddress: function(event) {
+            var tmpl = $$.templateManager.get("new-address", this.templateKey);
+            var html = tmpl({});
+
+            $("#edit-addresses-container").append(html);
+        },
+
+
         toggleDefaultBilling: function(event) {
             var container = $(event.currentTarget).parents(".edit-address-container").eq(0);
             var addressId = $(container).data("id");
