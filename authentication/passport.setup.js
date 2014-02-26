@@ -3,6 +3,7 @@ var UserDao = require('../dao/user.dao');
 
 //  STRATEGIES IN USE
 require('./passport.local.js');
+require('./passport.facebook.js');
 
 
 //  Store only the User Id in the session

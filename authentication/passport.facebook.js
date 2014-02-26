@@ -1,6 +1,6 @@
 var passport = require('passport');
 var facebookStrategy = require('passport-facebook').Strategy;
-var facebookConfig = require('../config/facebook.config.js');
+var facebookConfig = require('../configs/facebook.config.js');
 var UserDao = require('../dao/user.dao.js');
 
 
@@ -37,4 +37,4 @@ passport.use(new facebookStrategy({
 	   }
        });
    }
-);
+));
