@@ -10,7 +10,7 @@ passport.use(new facebookStrategy({
     callbackURL: facebookConfig.FACEBOOK_CALLBACK_URL
     },
    function (accessToken, refreshToken, profile, done) {
-       var email = profile.emails[0];
+       var email = profile.emails[0].value;
        UserDao.getUserByEmail(email, function (err, user) {
 	   if (err) {
 	       return done(null, false, {message: 'An error occurred searching for user by email ID.'});
