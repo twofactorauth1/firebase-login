@@ -20,7 +20,7 @@ passport.use(new facebookStrategy({
 		   return done(null, user);
 	       }
 	       else {
-		   UserDao.createUserFromUsernamePassword(email, accessToken, email, accessToken, function (err, user) {
+		   UserDao.createUserFromFacebookProfile(accessToken, profile, function (err, user) {
 		       if (err) {
 			   return done(null, false, {message: 'An error occurred trying to create the user.'});
 		       }

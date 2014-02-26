@@ -140,6 +140,21 @@ var dao = {
                 });
         });
     },
+    
+    createUserFromFacebookProfile: function(accountToken, profile, fn) {
+        var self = this;
+        var deferred = $.Deferred();
+        deferred.done(function () {
+            var user = new $$.m.User({
+                username: profile.username,
+                email: profile.emails[0].value,
+                first: profile.name.givenName,
+                last: profile.name.familyName
+            });
+            user.createOrUpdateLocalCredentials(accountToken);
+            self.saveOrUpdate(user, fn);
+        });
+    },
 
 
     //TODO - remove this after March 1, 2014
