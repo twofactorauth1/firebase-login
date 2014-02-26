@@ -22,6 +22,8 @@ passport.use(new LocalStrategy({
             if (account !== true && (account == null || account.id() == null || account.id() == 0)) {
                 return done(null, false, {message:"No account found at this location"});
             }
+
+            //We are at the main indigenous level application, not at a custom subdomain
             else if (account === true) {
                 UserDao.getUserByUsernameOrEmail(username, function(err, value) {
                     if (!err) {

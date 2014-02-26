@@ -13,11 +13,14 @@ var contact = $$.m.ModelBase.extend({
             last:"",        //string,
             photo:"",       //string,
             type:"c",       //contact_types
-            cDate:null,     //Created Date
-            cBy:null,       //Created By
-            mDate:null,     //ModifiedDate
-            mBy:null,       //Modified By
             _v:"0.1",
+
+            created: {
+                date: "",        //Date created
+                strategy: "",    // lo|fb|tw|li|etc.  See $$.constants.user.credential_types
+                by: null,        //this is a nullable ID value, if created by an existing user, this will be populated.
+            },
+
 
             /**
              * Array of site activity objects of the form:

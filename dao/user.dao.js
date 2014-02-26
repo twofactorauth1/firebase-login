@@ -78,6 +78,7 @@ var dao = {
         this.findOne({'email': email, 'credentials.type':type}, fn);
     },
 
+
     getUserForAccount: function(accountId, username, fn) {
         var query = { "accounts.accountId" : accountId, username:username };
         return this.findOne(query, fn);
@@ -133,7 +134,13 @@ var dao = {
 
                     var user = new $$.m.User({
                         username:username,
-                        email:email
+                        email:email,
+                        created: {
+                            date: new Date().getTime(),
+                            strategy: $$.constants.user.credential_types.LOCAL,
+                            by: null, //self-created
+                            isNew: true
+                        }
                     });
 
                     user.createOrUpdateLocalCredentials(password);
@@ -147,6 +154,20 @@ var dao = {
     createUserFromOauthProfile: function(token, profile, type, fn) {
         var self = this;
         var deferred = $.Deferred();
+
+        //TODO - Jaideep - use a switch/case statement on the "type" parameter, as each profile will be different from
+        //      each service provider
+
+        //TODO - Jaideep - this method will never get called as "deferred" is never resolved. No need for the deferred
+        //       here.
+
+        //TODO - Jaideep - for future use in the application, please add a flag here when user is created through a social
+        //         profiled to flag the
+
+        //TODO - Jaideep - I added a new property on the User object called "created", take a look in user.js.  Please
+        //        populate this object appropriately when creating the user here.  You can see an example I've added
+        //        in #createUserFromUsernamePassword()
+
         deferred.done(function () {
             var user = new $$.m.User({
                 email: profile.emails[0].value,

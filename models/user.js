@@ -4,14 +4,22 @@ var constants = requirejs("constants/constants");
 
 var user = $$.m.ModelBase.extend({
 
-    defaults: function() {
+    defaults: function () {
         return {
             _id: null,
-            username:"",
+            username: "",
             email: "",
-            first:"",
-            last:"",
-            _v:"0.1",
+            first: "",
+            last: "",
+            _v: "0.1",
+
+            created: {
+                date: "",        //Date created
+                strategy: "",    // lo|fb|tw|li|etc.  See $$.constants.user.credential_types
+                by: null,        //this is a nullable ID value, if created by an existing user, this will be populated.
+                isNew: false     //If this is a brand new user, mark this as true, the application code will modify it later as necessary
+            },
+
 
             /**
              * @profilePhotos
@@ -55,10 +63,10 @@ var user = $$.m.ModelBase.extend({
 
     transients: {
         deepCopy: true,
-        public: ["credentials", function(json) {
+        public: ["credentials", function (json) {
             var self = this;
             if (json.accounts != null) {
-                json.accounts.forEach(function(account) {
+                json.accounts.forEach(function (account) {
                     delete account.permissions;
                     delete account.credentials;
                 });
@@ -68,9 +76,9 @@ var user = $$.m.ModelBase.extend({
 
 
     serializers: {
-        db: function(json) {
+        db: function (json) {
             json._username = json.username.toLowerCase();
-            for(var i = 0; i < json.accounts.length; i++) {
+            for (var i = 0; i < json.accounts.length; i++) {
                 for (var j = 0; j < json.accounts[i].credentials.length; j++) {
                     json.accounts[i].credentials[j]._username = json.accounts[i].credentials[i].username.toLowerCase();
                 }
@@ -79,13 +87,13 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    initialize: function(options) {
+    initialize: function (options) {
 
     },
 
 
     //region HELPERS
-    fullName: function() {
+    fullName: function () {
         if (this.get("first") != null) {
             return this.get("first") + this.get("last") == null ? "" : (" " + this.get("last"));
         } else {
@@ -96,7 +104,7 @@ var user = $$.m.ModelBase.extend({
 
 
     //region CREDENTIALS
-    createOrUpdateLocalCredentials: function(password) {
+    createOrUpdateLocalCredentials: function (password) {
         var creds = this._getCredentials($$.constants.user.credential_types.LOCAL);
         if (creds == null) {
             return this._createLocalCredentials(this.get("username"), password);
@@ -105,27 +113,29 @@ var user = $$.m.ModelBase.extend({
             return this._setCredentials(creds, true);
         }
     },
-    
+
+
     createOrUpdateOauthToken: function (token, type) {
         var creds = this._getCredentials($$.constants.user.credential_types[type]);
         if (creds == null) {
             return this._createOauthCredentials(this.get('email'), token, type);
         } else {
-          creds.authtoken = token;
-          return this._setCredentials(creds, false);
+            creds.authtoken = token;
+            return this._setCredentials(creds, false);
         }
     },
 
 
-    _createLocalCredentials: function(username, password) {
+    _createLocalCredentials: function (username, password) {
         var creds = {
-            username:username || this.get("username"),
-            password:password,
-            type:$$.constants.user.credential_types.LOCAL
+            username: username || this.get("username"),
+            password: password,
+            type: $$.constants.user.credential_types.LOCAL
         };
 
         return this._setCredentials(creds, true);
     },
+
 
     _createOauthCredentials: function (email, token, type) {
         var creds = {
@@ -136,9 +146,10 @@ var user = $$.m.ModelBase.extend({
         return this._setCredentials(creds, false);
     },
 
-    _setCredentials: function(options, encryptPassword) {
+
+    _setCredentials: function (options, encryptPassword) {
         var credentials = this.get("credentials"), creds;
-        for(var i = 0; i < credentials.length; i++) {
+        for (var i = 0; i < credentials.length; i++) {
             if (credentials[i].type == options.type) {
                 creds = credentials[i];
                 break;
@@ -151,7 +162,7 @@ var user = $$.m.ModelBase.extend({
         }
 
         creds = creds || {};
-        switch(options.type) {
+        switch (options.type) {
             case $$.constants.user.credential_types.LOCAL:
                 creds.type = options.type;
                 creds.username = options.username;
@@ -179,9 +190,9 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    _getCredentials: function(type) {
+    _getCredentials: function (type) {
         var credentials = this.get("credentials"), creds;
-        for(var i = 0; i < credentials.length; i++) {
+        for (var i = 0; i < credentials.length; i++) {
             if (credentials[i].type == type) {
                 return credentials[i];
             }
@@ -190,7 +201,7 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    _getUserAccountCredentials: function(accountId, type) {
+    _getUserAccountCredentials: function (accountId, type) {
         var userAccount = this.getUserAccount(accountId);
         if (userAccount != null) {
             var credentials = userAccount.credentials;
@@ -204,26 +215,26 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    verifyPassword: function(password, type, fn) {
+    verifyPassword: function (password, type, fn) {
         var credentials = this._getCredentials(type);
         this._verifyPasswordForCredentials(credentials, password, fn);
     },
 
 
-    verifyPasswordForAccount: function(accountId, password, type, fn) {
+    verifyPasswordForAccount: function (accountId, password, type, fn) {
         var credentials = this._getUserAccountCredentials(accountId, type);
         return this._verifyPasswordForCredentials(credentials, password, fn);
     },
 
 
-    _verifyPasswordForCredentials: function(credentials, password, fn) {
+    _verifyPasswordForCredentials: function (credentials, password, fn) {
         if (credentials === null) {
             return fn("No login credentials found");
         }
 
         if (credentials.hasOwnProperty("password")) {
             var encryptedPass = credentials.password;
-            crypto.verify(password, encryptedPass, function(err, value) {
+            crypto.verify(password, encryptedPass, function (err, value) {
                 if (err) {
                     return fn(err, value);
                 } else if (value === false) {
@@ -240,7 +251,7 @@ var user = $$.m.ModelBase.extend({
 
 
     //region User Accounts
-    getUserAccount: function(accountId) {
+    getUserAccount: function (accountId) {
         var accounts = this.get("accounts");
         if (accounts == null) {
             return null;
@@ -255,7 +266,7 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    isAdminOfAccount: function(accountId) {
+    isAdminOfAccount: function (accountId) {
         var account = this.getUserAccount(accountId);
         if (account != null &&
             (account.permissions.indexOf("admin") > -1 || account.permissions.indexOf("super") > -1)) {
@@ -266,29 +277,29 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    createUserAccount: function(accountId, username, password, permissions) {
+    createUserAccount: function (accountId, username, password, permissions) {
         var userAccount = {
             accountId: accountId,
             username: username,
-            credentials: [{
-                username:username,
-                password:crypto.hash(password),
-                type: $$.constants.user.credential_types.LOCAL
-            }],
+            credentials: [
+                {
+                    username: username,
+                    password: crypto.hash(password),
+                    type: $$.constants.user.credential_types.LOCAL
+                }
+            ],
             permissions: permissions
         };
 
         var accounts = this.get("accounts");
-        if (accounts == null)
-        {
+        if (accounts == null) {
             accounts = [];
-            this.set({accounts:accounts});
+            this.set({accounts: accounts});
         }
 
         //if we have a user account with matching account id, merge it, do not create new
         var oldAccount = this.getUserAccount(accountId);
-        if (oldAccount != null)
-        {
+        if (oldAccount != null) {
             if (oldAccount.username == null || oldAccount.username == username) {
                 //this is ok, lets merge them together
                 oldAccount.username = username;
@@ -296,7 +307,7 @@ var user = $$.m.ModelBase.extend({
                 //Look to see if we already have creds of the same type, if so,
                 // we merge the new into the old
                 var oldCreds;
-                oldAccount.credentials.forEach(function(_oldCreds) {
+                oldAccount.credentials.forEach(function (_oldCreds) {
                     if (_oldCreds.type == $$.constants.user.credential_types.LOCAL) {
                         oldCreds = _oldCreds;
                     }
@@ -310,7 +321,7 @@ var user = $$.m.ModelBase.extend({
                 }
 
                 //Attempt to merge the permissions
-                permissions.forEach(function(permission) {
+                permissions.forEach(function (permission) {
                     if (oldAccount.permissions.indexOf(permissions) == -1) {
                         oldAccount.permissions.push(push);
                     }
@@ -318,8 +329,7 @@ var user = $$.m.ModelBase.extend({
             }
             return oldAccount;
         }
-        else
-        {
+        else {
             accounts.push(userAccount);
             return userAccount;
         }
@@ -328,14 +338,14 @@ var user = $$.m.ModelBase.extend({
 
 
     //region PASSWORD RECOVERY
-    setPasswordRecoverToken: function() {
+    setPasswordRecoverToken: function () {
         var token = $$.u.idutils.generateUniqueAlphaNumeric();
-        this.set({passRecover:token, passRecoverExp:new Date().getTime() + $$.u.dateutils.DAY_IN_SEC * 1000});
+        this.set({passRecover: token, passRecoverExp: new Date().getTime() + $$.u.dateutils.DAY_IN_SEC * 1000});
         return token;
     },
 
 
-    clearPasswordRecoverToken: function() {
+    clearPasswordRecoverToken: function () {
         this.clear("passRecover");
         this.clear("passRecoverExp");
     }
