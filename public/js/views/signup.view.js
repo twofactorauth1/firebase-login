@@ -372,7 +372,6 @@ define([
 
         onClose: function() {
             this.stopKeyTimers();
-
         }
 
     });
