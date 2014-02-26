@@ -80,9 +80,8 @@ define(function() {
             for (var i = 0; i < path.length; i++) {
                 if (templateHome[path[i]] == null) {
                     templateHome[path[i]] = {};
-                    templateHome = templateHome[path[i]];
                 }
-                //templateHome = templateHome[path[i]] || {};
+                templateHome = templateHome[path[i]];
             }
 
             var div = '<div id="tmpTemplateHolder"></div>';
