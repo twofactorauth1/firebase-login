@@ -18,8 +18,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
         app.get("/login", this.setup, this.showLogin.bind(this));
+        
+        //local login
         app.post("/login", passport.authenticate('local', { failureRedirect: "/login", failureFlash:true } ), this.onLogin.bind(this));
-
+        
+        //facebook login
+        app.get('/login/facebook', passport.authenticate('facebook'));
+        app.get('/login/facebook/callback', passport.authenticate('facebook',
+                                                                  { successRedirect: '/', failureRedirect: '/login/facebook' }));
+        
+        
         app.get("/logout", this.setup, this.handleLogout.bind(this));
 
         app.get("/signup", this.setup, this.showSignup.bind(this));
