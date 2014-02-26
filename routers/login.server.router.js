@@ -25,7 +25,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //facebook login
         app.get('/login/facebook', passport.authenticate('facebook'));
         app.get('/login/facebook/callback', passport.authenticate('facebook',
-                                                                  { successRedirect: '/', failureRedirect: '/login/facebook' }));
+                                                                  { successRedirect: '/signup', failureRedirect: '/login/facebook' }));
         
         
         app.get("/logout", this.setup, this.handleLogout.bind(this));
