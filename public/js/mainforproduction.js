@@ -1,11 +1,12 @@
 if (typeof CACHEBUSTER === 'undefined') {
-    CACHEBUSTER = '2014.02.15' //Modify this before a deploy to production.
+    CACHEBUSTER = '2014.02.25' //Modify this before a deploy to production.
 }
 
 require.config({
     paths: {
         jquery: 'libs/jquery/jquery.min',
         jqueryvalidate: 'libs/jquery/jquery.validate',
+        jqueryeasing: 'libs/jquery/jquery.easing',
         underscore: 'libs/underscore/underscore',
         json2: 'libs/json/json2',
         backbone: 'libs/backbone/backbone',
@@ -23,11 +24,15 @@ require.config({
         appsetup: 'utils/appsetup',
         pushStateUtils: 'utils/pushstateutils',
         usersData: 'global/users.data',
-        app: 'app'
+        app: 'app',
+        text: "libs/requirejs/plugins/text"
     },
 
     shim: {
         jqueryvalidate: {
+            deps: ['jquery']
+        },
+        jqueryeasing: {
             deps: ['jquery']
         },
         underscore: {
@@ -69,6 +74,7 @@ require.config({
             deps: [
                 'jquery',
                 'jqueryvalidate',
+                'jqueryeasing',
                 'underscore',
                 'backbone',
                 'backboneExtended',

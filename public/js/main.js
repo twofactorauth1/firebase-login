@@ -19,7 +19,6 @@ require.config({
         templates: '../templates',
         namespaces: 'utils/namespaces',
         commonutils: 'utils/commonutils',
-        utils: 'utils/utils',
         viewManager: 'utils/viewmanager',
         templateManager: 'utils/templatemanager',
         appsetup: 'utils/appsetup',
