@@ -73,7 +73,10 @@ var dao = {
 
         return deferred;
     },
-
+    
+    getUserByOauthProfile: function (email, type, fn) {
+        this.findOne({'email': email, 'credentials.type':type}, fn);
+    },
 
     getUserForAccount: function(accountId, username, fn) {
         var query = { "accounts.accountId" : accountId, username:username };
@@ -141,20 +144,17 @@ var dao = {
         });
     },
     
-    createUserFromFacebookProfile: function(accountToken, profile, fn) {
+    createUserFromOauthProfile: function(token, profile, type, fn) {
         var self = this;
         var deferred = $.Deferred();
         deferred.done(function () {
-            //TODO - Jaideep, only update the first, last, and email here, do not update username.
             var user = new $$.m.User({
-                username: profile.username, //This is reserved for "local" login credentials, not social / facebook.
                 email: profile.emails[0].value,
                 first: profile.name.givenName,
                 last: profile.name.familyName
             });
 
-            //TODO - Jaideep, this should looking for / update FACEBOOK specific credentials
-            user.createOrUpdateLocalCredentials(accountToken);
+            user.createOrUpdateOauthToken(token, type);
             self.saveOrUpdate(user, fn);
         });
     },

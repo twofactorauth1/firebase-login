@@ -105,6 +105,16 @@ var user = $$.m.ModelBase.extend({
             return this._setCredentials(creds, true);
         }
     },
+    
+    createOrUpdateOauthToken: function (token, type) {
+        var creds = this._getCredentials($$.constants.user.credential_types[type]);
+        if (creds == null) {
+            return this._createOauthCredentials(this.get('email'), token, type);
+        } else {
+          creds.authtoken = token;
+          return this._setCredentials(creds, false);
+        }
+    },
 
 
     _createLocalCredentials: function(username, password) {
@@ -117,6 +127,14 @@ var user = $$.m.ModelBase.extend({
         return this._setCredentials(creds, true);
     },
 
+    _createOauthCredentials: function (email, token, type) {
+        var creds = {
+            username: email || this.get('email'),
+            authtoken: token,
+            type: $$.constants.user.credential_types[type]
+        };
+        return this._setCredentials(creds, false);
+    },
 
     _setCredentials: function(options, encryptPassword) {
         var credentials = this.get("credentials"), creds;
@@ -140,6 +158,9 @@ var user = $$.m.ModelBase.extend({
                 creds.password = options.password;
                 break;
             case $$.constants.user.credential_types.FACEBOOK:
+                creds.type = options.type;
+                creds.username = options.username;
+                creds.authtoken = options.authtoken;
                 break;
             case $$.constants.user.credential_types.TWITTER:
                 break;

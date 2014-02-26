@@ -2,6 +2,7 @@ var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var facebookConfig = require('../configs/facebook.config.js');
 var UserDao = require('../dao/user.dao.js');
+var constants = requirejs("constants/constants");
 
 
 passport.use(new FacebookStrategy({
@@ -12,16 +13,9 @@ passport.use(new FacebookStrategy({
 
     function (accessToken, refreshToken, profile, done) {
         var email = profile.emails[0].value;
+	var type = $$.constants.user.credential_types.FACEBOOK;
 
-        //TODO - Jaideep, first look up user by FB accessToken, in case they have already linked and session was destroyed.
-        //UserDao.getUserByFacebookAccessToken(.....)
-
-        //TODO - Jaideep, this should lookup ONLY by Facebook username. (User.credentials => type == $$.constants.user.credential_types.FACEBOOK).
-        //       Otherwise it creates a potential security risk.
-
-        //TODO - Jaideep, relating to the above two items, you can do them in a single query as well, UserDao.getUserByFacebookAccessTokenOrEmail(...)
-
-        UserDao.getUserByEmail(email, function (err, user) {
+        UserDao.getUserByOauthProfile(email, type, function (err, user) {
             if (err) {
                 return done(null, false, {message: 'An error occurred searching for user by email ID.'});
             }
@@ -31,7 +25,7 @@ passport.use(new FacebookStrategy({
                     return done(null, user);
                 }
                 else {
-                    UserDao.createUserFromFacebookProfile(accessToken, profile, function (err, user) {
+                    UserDao.createUserFromOauthProfile(accessToken, profile, type, function (err, user) {
                         if (err) {
                             return done(null, false, {message: 'An error occurred trying to create the user.'});
                         }
