@@ -8,10 +8,12 @@ var mongodao = {
 
     initMongo: function() {
         //ensure we have our ID counters set up for this collection
-        if (this.getStorage() == "mongo") {
-            this._ensureCounters();
-            if (this._onStartup != null && _.isFunction(this._onStartup)) {
-                this._onStartup();
+        if (this.defaultModel != null) {
+            if (this.getStorage() == "mongo") {
+                this._ensureCounters();
+                if (this._onStartup != null && _.isFunction(this._onStartup)) {
+                    this._onStartup();
+                }
             }
         }
     },

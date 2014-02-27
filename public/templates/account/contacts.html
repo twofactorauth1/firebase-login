@@ -404,7 +404,10 @@ CONTACTS EDIT VIEW
 <script type="text/x-handlebars-template" name="edit-address" partial="true">
     <div class="edit-address-container" data-id="{{_id}}">
         <div class="form form-horizontal">
-            
+            <div class="form-group">
+                <label>Address</label>
+                <input type="text" class="form-control">
+            </div>
         </div>
         Address, Address2, City, State, Zip
         {{> edit-default-shipping-billing}}
