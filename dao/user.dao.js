@@ -73,10 +73,6 @@ var dao = {
 
         return deferred;
     },
-    
-    getUserByOauthProfile: function (email, type, fn) {
-        this.findOne({'email': email, 'credentials.type':type}, fn);
-    },
 
 
     getUserForAccount: function(accountId, username, fn) {
@@ -151,23 +147,63 @@ var dao = {
         });
     },
     
-    createUserFromOauthProfile: function(token, profile, type, fn) {
+    getOrCreateUserFromOauthProfile: function(token, profile, type, accountToken, fn) {
         var self = this;
-        var user = new $$.m.User({
-                email: profile.emails[0].value,
-                first: profile.name.givenName,
-                last: profile.name.familyName,
-                isSocial: true,
-                created: {
-                    date: new Date().getTime(),
-                    strategy: $$.constants.user.credential_types.FACEBOOK,
-                    by: null,
-                    isNew: true
+        var email = profile.emails[0].value;
+        this.findOne({'credentials.authtoken': token, 'credentials.type':type}, function (err, user) {
+            if (err) {
+                return fn({message: 'An error occurred searching for user by access token.'}, null);
+            }
+            else {
+                if (user) {
+                    return fn(null, user);
                 }
+                else {
+                    this.findOne({'email': email, 'credentials.type':type}, function (err, user) {
+                        if (err) {
+                            return fn({message: 'An error occurred searching for user by email ID.'}, null);
+                        }
+                        else {
+                            if (user) {
+                                return fn(null, user);
+                            }
+                            else {
+                                if (accountToken) {
+                                    AccountDao.convertTempAccount(accountToken, function (err, account) {
+                                        if (err) {
+                                            return fn({message: 'An error occurred coverting temporary account.'}, null);
+                                        }
+                                        else {
+                                            if (account) {
+                                                var user = new $$.m.User({
+                                                        email: profile.emails[0].value,
+                                                        first: profile.name.givenName,
+                                                        last: profile.name.familyName,
+                                                        isSocial: true,
+                                                        created: {
+                                                            date: new Date().getTime(),
+                                                            strategy: $$.constants.user.credential_types.FACEBOOK,
+                                                            by: null,
+                                                            isNew: true
+                                                        }
+                                                });
+                                        
+                                                user.createOrUpdateOauthToken(token, type);
+                                                user.createUserAccount(accountId, username, password, ["super","admin","member"]);
+                                                self.saveOrUpdate(user, fn);
+                                            }
+                                            else {
+                                                return fn({message: 'Failed to convert temporary account.'}, null);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            }
         });
-
-        user.createOrUpdateOauthToken(token, type);
-        self.saveOrUpdate(user, fn);
     },
 
 
