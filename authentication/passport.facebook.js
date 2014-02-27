@@ -8,12 +8,7 @@ var constants = requirejs("constants/constants");
 passport.use(new FacebookStrategy({
         clientID: facebookConfig.FACEBOOK_CLIENT_ID,
         clientSecret: facebookConfig.FACEBOOK_CLIENT_SECRET,
-
-        //TODO - Jaideep - Make this dynamic, pass accounttoken information (see below for more information)
         callbackURL: facebookConfig.FACEBOOK_CALLBACK_URL
-
-        //TODO - Jaideep - See about using this param to access the request object
-        //        at this level (passReqToCallback:true).  See passport.local for example
     },
 
     function (accessToken, refreshToken, profile, done) {
