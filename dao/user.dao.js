@@ -191,6 +191,7 @@ var dao = {
                                                 user.createOrUpdateOauthToken(token, type);
                                                 user.createUserAccount(accountId, username, password, ["super","admin","member"]);
                                                 self.saveOrUpdate(user, fn);
+                                                return fn(null, user);
                                             }
                                             else {
                                                 return fn({message: 'Failed to convert temporary account.'}, null);
@@ -221,6 +222,7 @@ var dao = {
                                                 user.createOrUpdateOauthToken(token, type);
                                                 user.createUserAccount(accountId, username, password, ["super","admin","member"]);
                                                 self.saveOrUpdate(user, fn);
+                                                return fn(null, user);
                                             }
                                             else {
                                                 return fn({message: 'Failed to create account'}, null);
