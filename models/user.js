@@ -328,6 +328,62 @@ var user = $$.m.ModelBase.extend({
         }
     },
     //endregion
+    
+    createUserOauthAccount: function (accountId, email, token, permissions, type) {
+        var userAccount = {
+            accountId: accountId,
+            username: email,
+            credentials: [
+                {
+                    username: email,
+                    type: type
+                }
+            ],
+            permissions: permissions
+        };
+
+        var accounts = this.get("accounts");
+        if (accounts == null) {
+            accounts = [];
+            this.set({accounts: accounts});
+        }
+
+        //if we have a user account with matching account id, merge it, do not create new
+        var oldAccount = this.getUserAccount(accountId);
+        if (oldAccount != null) {
+            if (oldAccount.username == null || oldAccount.username == email) {
+                //this is ok, lets merge them together
+                oldAccount.username = email;
+
+                //Look to see if we already have creds of the same type, if so,
+                // we merge the new into the old
+                var oldCreds;
+                oldAccount.credentials.forEach(function (_oldCreds) {
+                    if (_oldCreds.type == type) {
+                        oldCreds = _oldCreds;
+                    }
+                });
+
+                if (oldCreds != null) {
+                    oldCreds.username = email;
+                } else {
+                    oldAccount.credentials.push(userAccount.credentials);
+                }
+
+                //Attempt to merge the permissions
+                permissions.forEach(function (permission) {
+                    if (oldAccount.permissions.indexOf(permissions) == -1) {
+                        oldAccount.permissions.push(push);
+                    }
+                });
+            }
+            return oldAccount;
+        }
+        else {
+            accounts.push(userAccount);
+            return userAccount;
+        }
+    },
 
 
     //region PASSWORD RECOVERY

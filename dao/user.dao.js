@@ -189,7 +189,7 @@ var dao = {
                                                 });
                                         
                                                 user.createOrUpdateOauthToken(token, type);
-                                                user.createUserAccount(accountId, username, password, ["super","admin","member"]);
+                                                user.createUserOauthAccount(account.id(), email, token, ["super","admin","member"], type);
                                                 self.saveOrUpdate(user, fn);
                                                 return fn(null, user);
                                             }
@@ -220,7 +220,7 @@ var dao = {
                                                 });
                                         
                                                 user.createOrUpdateOauthToken(token, type);
-                                                user.createUserAccount(accountId, username, password, ["super","admin","member"]);
+                                                user.createUserOauthAccount(account.id(), email, token, ["super","admin","member"], type);
                                                 self.saveOrUpdate(user, fn);
                                                 return fn(null, user);
                                             }
