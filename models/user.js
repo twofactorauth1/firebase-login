@@ -11,7 +11,6 @@ var user = $$.m.ModelBase.extend({
             email: "",
             first: "",
             last: "",
-            isSocial: false,
             _v: "0.1",
 
             created: {

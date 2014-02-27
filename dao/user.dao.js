@@ -179,7 +179,6 @@ var dao = {
                                                         email: profile.emails[0].value,
                                                         first: profile.name.givenName,
                                                         last: profile.name.familyName,
-                                                        isSocial: true,
                                                         created: {
                                                             date: new Date().getTime(),
                                                             strategy: $$.constants.user.credential_types.FACEBOOK,
@@ -210,7 +209,6 @@ var dao = {
                                                         email: profile.emails[0].value,
                                                         first: profile.name.givenName,
                                                         last: profile.name.familyName,
-                                                        isSocial: true,
                                                         created: {
                                                             date: new Date().getTime(),
                                                             strategy: $$.constants.user.credential_types.FACEBOOK,
