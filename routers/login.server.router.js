@@ -23,9 +23,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.post("/login", passport.authenticate('local', { failureRedirect: "/login", failureFlash:true } ), this.onLogin.bind(this));
         
         //facebook login
-        app.get('/login/facebook', passport.authenticate('facebook'));
-        app.get('/login/facebook/callback', passport.authenticate('facebook',
-                                                                  { successRedirect: '/signup', failureRedirect: '/login/facebook' }));
+        app.get('/login/facebook/:accountToken', this.facebookLogin.bind(this));
+        app.get('/login/facebook/callback/:accountToken', this.facebookLoginCallback.bind(this));
         
         
         app.get("/logout", this.setup, this.handleLogout.bind(this));
@@ -67,7 +66,22 @@ _.extend(router.prototype, BaseRouter.prototype, {
         return resp.redirect("/login");
     },
     //endregion
-
+    
+    // facebook login
+    facebookLogin: function (req, res, next) {
+        passport.authenticate('facebook', {
+                                            callbackURL: '/login/facebook/callback/'+req.params.accountToken
+                                        })(req, res, next);
+    },
+    
+    facebookLoginCallback: function (req, res, next) {
+        passport.authenticate('facebook', {
+                                            callbackURL: '/login/facebook/callback/'+req.params.accountToken,
+                                            successRedirect: '/signup',
+                                            failureRedirect: '/login/facebook'
+                                        })(req, res, next);
+    },
+    //end region
     //region FORGOT PASSWORD
     showForgotPassword: function(req,resp) {
         if (req.isAuthenticated()) {
