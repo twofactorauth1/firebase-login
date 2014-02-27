@@ -153,31 +153,21 @@ var dao = {
     
     createUserFromOauthProfile: function(token, profile, type, fn) {
         var self = this;
-        var deferred = $.Deferred();
-
-        //TODO - Jaideep - use a switch/case statement on the "type" parameter, as each profile will be different from
-        //      each service provider
-
-        //TODO - Jaideep - this method will never get called as "deferred" is never resolved. No need for the deferred
-        //       here.
-
-        //TODO - Jaideep - for future use in the application, please add a flag here when user is created through a social
-        //         profiled to flag the
-
-        //TODO - Jaideep - I added a new property on the User object called "created", take a look in user.js.  Please
-        //        populate this object appropriately when creating the user here.  You can see an example I've added
-        //        in #createUserFromUsernamePassword()
-
-        deferred.done(function () {
-            var user = new $$.m.User({
+        var user = new $$.m.User({
                 email: profile.emails[0].value,
                 first: profile.name.givenName,
-                last: profile.name.familyName
-            });
-
-            user.createOrUpdateOauthToken(token, type);
-            self.saveOrUpdate(user, fn);
+                last: profile.name.familyName,
+                isSocial: true,
+                created: {
+                    date: new Date().getTime(),
+                    strategy: $$.constants.user.credential_types.FACEBOOK,
+                    by: null,
+                    isNew: true
+                }
         });
+
+        user.createOrUpdateOauthToken(token, type);
+        self.saveOrUpdate(user, fn);
     },
 
 
