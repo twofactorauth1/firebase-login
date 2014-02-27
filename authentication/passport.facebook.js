@@ -8,13 +8,14 @@ var constants = requirejs("constants/constants");
 passport.use(new FacebookStrategy({
         clientID: facebookConfig.FACEBOOK_CLIENT_ID,
         clientSecret: facebookConfig.FACEBOOK_CLIENT_SECRET,
-        callbackURL: facebookConfig.FACEBOOK_CALLBACK_URL
+        callbackURL: facebookConfig.FACEBOOK_CALLBACK_URL,
+	passReqToCallback: true
     },
 
-    function (accessToken, refreshToken, profile, done) {
+    function (req, accessToken, refreshToken, profile, done) {
         var email = profile.emails[0].value;
 	var type = $$.constants.user.credential_types.FACEBOOK;
-
+	accountToken = req.params.accountToken;
 	UserDao.getOrCreateUserFromOauthProfile(accessToken, profile, type, accountToken, function (err, user) {
 	    if (err) {
 		return done(null, false, err);
