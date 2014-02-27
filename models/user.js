@@ -163,23 +163,15 @@ var user = $$.m.ModelBase.extend({
         }
 
         creds = creds || {};
-        switch (options.type) {
-            case $$.constants.user.credential_types.LOCAL:
-                creds.type = options.type;
-                creds.username = options.username;
-                creds.password = options.password;
-                break;
-            case $$.constants.user.credential_types.FACEBOOK:
-                creds.type = options.type;
-                creds.username = options.username;
-                creds.authtoken = options.authtoken;
-                break;
-            case $$.constants.user.credential_types.TWITTER:
-                break;
-            case $$.constants.user.credential_types.LINKDIN:
-                break;
-            case $$.constants.use.credential_types.GOOGLE:
-                break;
+        if (options.type == $$.constants.user.credential_types.LOCAL) {
+            creds.type = options.type;
+            creds.username = options.username;
+            creds.password = options.password;
+        }
+        else {
+            creds.type = options.type;
+            creds.username = options.username;
+            creds.authtoken = options.authtoken;
         }
 
         if (creds != null && encryptPassword == true && creds.hasOwnProperty("password")) {
