@@ -198,6 +198,36 @@ var dao = {
                                         }
                                     });
                                 }
+                                else {
+                                    AccountDao.createAccount("", $$.constants.account.company_types.PROFESSIONAL, $$.constants.account.company_size.SINGLE, null, function (err, account) {
+                                        if (err) {
+                                            return fn({message: 'Some error occurred while creating account.'}, null);
+                                        }
+                                        else {
+                                            if (account) {
+                                                var user = new $$.m.User({
+                                                        email: profile.emails[0].value,
+                                                        first: profile.name.givenName,
+                                                        last: profile.name.familyName,
+                                                        isSocial: true,
+                                                        created: {
+                                                            date: new Date().getTime(),
+                                                            strategy: $$.constants.user.credential_types.FACEBOOK,
+                                                            by: null,
+                                                            isNew: true
+                                                        }
+                                                });
+                                        
+                                                user.createOrUpdateOauthToken(token, type);
+                                                user.createUserAccount(accountId, username, password, ["super","admin","member"]);
+                                                self.saveOrUpdate(user, fn);
+                                            }
+                                            else {
+                                                return fn({message: 'Failed to create account'}, null);
+                                            }
+                                        }
+                                    });
+                                }
                             }
                         }
                     });
