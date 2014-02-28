@@ -1,6 +1,6 @@
 define([], function() {
 
-    var services = {
+    var userServices = {
 
         usernameExists: function(username, fn) {
             var url = $$.api.getApiUrl("user", "exists/" + username);
@@ -17,8 +17,7 @@ define([], function() {
         }
     };
 
-    $$.services = $$.services || {};
-    $$.services.UserService = services;
+    $$.svc.UserService = userServices;
 
-    return services;
+    return userServices;
 });

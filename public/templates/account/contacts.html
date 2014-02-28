@@ -161,21 +161,22 @@ CONTACT DETAILS VIEW
             <div class="col-xs-10">
                 {{#each contact.details}}
                     {{#each addresses}}
-                        {{#if address}}<div>{{address}}</div>{{/if}}
-                        {{#if address2}}</div>{{address2}}</div>{{/if}}
+                    <div class="edit-address-container" data-id="{{_id}}">
+                        {{#if address}}<div><strong>{{address}}</strong></div>{{/if}}
+                        {{#if address2}}<div>{{address2}}</div>{{/if}}
                         <div>
                             {{city}}
                             {{#if state}}, {{state}}{{/if}}
                             {{#if zip}}, {{zip}}{{/if}}
-                            {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromType ../../type}}"/>
+                            {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromType ../type}}"/>
                         </div>
 
                         <div>
                             {{#if defaultShipping}}<small>Shipping <i class="fa fa-check"/></small>{{/if}}
                             {{#if defaultBilling}}<small>Billing <i class="fa fa-check"/> </small>{{/if}}
                         </div>
+                    </div>
                     {{/each}}
-
                 {{/each}}
             </div>
         </div>
@@ -184,9 +185,11 @@ CONTACT DETAILS VIEW
             <div class="col-xs-1"><i class="icon-main fa fa-envelope"/></div>
             <div class="col-xs-10">
                 {{#each contact.details}}
-                    {{#if email}}
-                        <a href="mailto:{{email}}">{{email}}</a> <i class="icon-social {{iconFromType ../type}}"/>
-                    {{/if}}
+                    {{#each emails}}
+                        {{#if this}}
+                        <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromType ../../type}}"/>
+                        {{/if}}
+                    {{/each}}
                 {{/each}}
             </div>
         </div>
@@ -302,6 +305,7 @@ CONTACTS EDIT VIEW
                                 {{> edit-addresses}}
                             {{else}}
                                 {{#each addresses}}
+                                <div class="edit-address-container" id="{{_id}}">
                                     {{#if address}}<div>{{address}}</div>{{/if}}
                                     {{#if address2}}</div>{{address2}}</div>{{/if}}
                                     <div>
@@ -312,24 +316,37 @@ CONTACTS EDIT VIEW
                                     </div>
 
                                     {{> edit-default-shipping-billing}}
+                                </div>
                                 {{/each}}
                             {{/canEditContactDetails}}
                         {{/each}}
                         </div>
 
                         <br/>
-                        <div id="btn-new-address" class="btn btn-primary">Add Address</div>
+                        <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
                     </div>
                 </div>
 
                 <div id="email-row" class="row">
                     <div class="col-xs-1"><i class="icon-main fa fa-envelope"/></div>
                     <div class="col-xs-10">
+                        <div id="edit-emails-container">
                         {{#each contact.details}}
-                            {{#if email}}
-                            <a href="mailto:{{email}}">{{email}}</a> <i class="icon-social {{iconFromType ../type}}"/>
-                            {{/if}}
+                            {{#canEditContactDetails this}}
+                                {{#each emails}}
+                                    {{> edit-email}}
+                                {{/each}}
+                            {{else}}
+                                {{#each emails}}
+                                    {{#if this}}
+                                        <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromType ../../type}}"/>
+                                    {{/if}}
+                                {{/each}}
+                            {{/canEditContactDetails}}
                         {{/each}}
+
+                        {{> new-email-partial}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -389,6 +406,29 @@ CONTACTS EDIT VIEW
 </script>
 
 
+<script type="text/x-handlebars-template" name="new-email">
+    {{> new-email-partial}}
+</script>
+
+
+<script type="text/x-handlebars-template" name="edit-email" partial="true">
+    <div class="row edit-email-container">
+        <div class="form-group">
+            <input type="email" class="form-control input-edit-email" placeholder="new email" value="{{testEmail this}}" data-email="{{./this}}"/>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-handlebars-template" name="new-email-partial" partial="true">
+    <div class="row edit-email-container">
+        <div class="form-group">
+            <input type="email" class="form-control input-edit-email" placeholder="new email" value="" data-email=""/>
+        </div>
+    </div>
+</script>
+
+
 <script type="text/x-handlebars-template" name="new-address">
     {{> edit-address}}
 </script>
@@ -404,12 +444,38 @@ CONTACTS EDIT VIEW
 <script type="text/x-handlebars-template" name="edit-address" partial="true">
     <div class="edit-address-container" data-id="{{_id}}">
         <div class="form form-horizontal">
-            <div class="form-group">
+            <div class="fg-address-string form-group">
                 <label>Address</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control input-address-string" value="{{displayName}}">
+                <small>
+                    <span class="address-display-name hidden">{{displayName}}</span>
+                    <div class="btn-link btn-edit-address-fields">Modify</div>
+                </small>
+            </div>
+            <div class="edit-address-fields hidden">
+                <div class="form-group">
+                    <label>Street Address</label>
+                    <input type="text" class="form-control input-address input-address-field" value="{{address}}">
+                </div>
+
+                <div class="form-group">
+                    <label>Suite / Apt</label>
+                    <input type="text" class="form-control input-address2 input-address-field" value="{{address2}}">
+                </div>
+
+                <div class="form-group">
+                    <label>City, State, Zip</label>
+                    <input type="text" class="form-control input-city input-address-field" value="{{city}}">
+                    <input type="text" class="form-control input-state input-address-field" value="{{state}}">
+                    <input type="text" class="form-control input-zip input-address-field" value="{{zip}}">
+
+                    <small>
+                        <span class="address-display-name">{{displayName}}</span>
+                        <div class="btn-link btn-cancel-edit-address-fields">Close</div>
+                    </small>
+                </div>
             </div>
         </div>
-        Address, Address2, City, State, Zip
         {{> edit-default-shipping-billing}}
     </div>
 </script>

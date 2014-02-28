@@ -17,5 +17,6 @@
     $$.u = $$.utils = $$.utils || {};
     $$.s = $$.security = $$.security || {};
     $$.g = $$.global = $$.global || {};
+    $$.svc =  $$.services = $$.services || {};
     $$.constants = $$.constants || {};
 })();

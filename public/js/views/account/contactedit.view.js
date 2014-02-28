@@ -1,6 +1,7 @@
 define([
     'models/contact',
-    'libs/jquery/jquery.keytimer'
+    'libs/jquery/jquery.keytimer',
+    'services/geo.service'
 
 ], function(Contact) {
 
@@ -21,7 +22,13 @@ define([
             "onkeytimer .input-edit-phone":"phoneChanged",
             "click .li-edit-phone-type":"phoneTypeChanged",
 
+            "onkeytimer .input-edit-email":"emailChanged",
+
             "click #btn-new-address":"createNewAddress",
+            "onkeytimer .input-address-string":"addressStringChanged",
+            "onkeytimer .input-address-field":"addressFieldChanged",
+            "click .btn-edit-address-fields":"editAddressFields",
+            "click .btn-cancel-edit-address-fields":"cancelEditAddressFields",
             "change .chk-default-shipping":"toggleDefaultShipping",
             "change .chk-default-billing":"toggleDefaultBilling",
             "click .btn-default-shipping":"toggleDefaultShipping",
@@ -91,11 +98,13 @@ define([
         //endregion
 
 
+        //region CONTACT TYPE
         contactTypeChanged: function(event) {
             var data = $("option:selected", event.currentTarget).data("contacttype");
             this.contact.set({type:data});
             this.contact.save();
         },
+        //endregion
 
 
         //region PHONE
@@ -171,12 +180,146 @@ define([
         //endregion
 
 
+        //region EMAIL
+        emailChanged: function(event) {
+            var container = $(event.currentTarget).parents(".edit-email-container").eq(0);
+            var input = $(".input-edit-email", container).eq(0);
+            var oEmail = $(input).data("email");
+            var email = $(input).val();
+            $(input).data("email", email);
+
+            var details = this.contact.getOrCreateLocalDetails();
+            var emails = details.emails;
+
+            details.emails = details.emails || [];
+
+            var index = details.emails.indexOf(oEmail);
+            if (String.isNullOrEmpty(email)) {
+                if (index > -1) {
+                    details.emails.splice(index, 1);
+                    $(container).remove();
+                }
+            } else {
+                if (index > -1) {
+                    details.emails[index] = email;
+                } else {
+                    details.emails.push(email);
+                }
+            }
+
+            this.contact.save();
+
+
+            //Check to see if we have a new email container or not
+            var hasNewContainer = false;
+            $(".input-edit-email", this.el).each(function() {
+                if ($$.u.stringutils.isNullOrEmpty($(this).val())) {
+                    hasNewContainer = true;
+                }
+            });
+
+            //Create a new container now for a new phone number
+            if (hasNewContainer === false) {
+                var tmpl = $$.templateManager.get("new-email", this.templateKey);
+                var html = tmpl({});
+                $("#edit-emails-container").append(html);
+                this.stopKeyTimers();
+                this.startKeyTimers();
+            }
+        },
+        //endregion
+
+
         //region ADDRESS
         createNewAddress: function(event) {
+            var address = this.contact.getOrCreateAddress();
             var tmpl = $$.templateManager.get("new-address", this.templateKey);
-            var html = tmpl({});
+            var html = tmpl(address);
 
             $("#edit-addresses-container").append(html);
+
+            var addressContainer = $(".edit-address-container[data-id='" + address._id + "']", this.el);
+            $(".input-address-string", addressContainer).startKeyTimer(1500);
+            $(".input-address-field", addressContainer).startKeyTimer(500);
+        },
+
+
+        addressStringChanged: function(event) {
+            var self = this, addressId, address, addressString, addressContainer;
+
+            addressString = $(event.currentTarget).val();
+
+            $$.svc.GeoService.searchAddress(addressString)
+                .done(function(value) {
+                    if (value != null && value.get("error") == null) {
+                        if (address != null) {
+                            $.extend(address, value.toJSON());
+
+                            var _address = self.contact.getOrCreateAddress(addressId);
+                            self.contact.save();
+
+                            $(".input-address", addressContainer).val(_address.address);
+                            $(".input-address2", addressContainer).val(_address.address2);
+                            $(".input-city", addressContainer).val(_address.city);
+                            $(".input-state", addressContainer).val(_address.state);
+                            $(".input-zip", addressContainer).val(_address.zip);
+                            $(".address-display-name", addressContainer).removeClass("error").removeClass("hidden").html(_address.displayName);
+                        }
+                    } else if(value != null) {
+                        $(".address-display-name", addressContainer).addClass("error").removeClass("hidden").html("Address not found");
+                    }
+                })
+                .fail(function() {
+                    $(".address-display-name", addressContainer).addClass("error").removeClass("hidden").html("Address not found");
+                });
+
+            addressContainer = $(event.currentTarget).parents(".edit-address-container").eq(0);
+            addressId = addressContainer.data("id");
+            address = this.contact.getOrCreateAddress(addressId);
+        },
+
+
+        _addressFieldChangedTimerId:null,
+        addressFieldChanged: function(event) {
+            var self = this;
+
+            window.clearTimeout(this._addressFieldChangedTimerId);
+            var container = $(event.currentTarget).parents(".edit-address-container").eq(0);
+            var addressId = $(container).data("id");
+
+            var addressObj = this.contact.getOrCreateAddress(addressId);
+            addressObj.address = $(".input-address", container).val();
+            addressObj.address2 = $(".input-address2", container).val();
+            addressObj.city = $(".input-city", container).val();
+            addressObj.state = $(".input-state", container).val();
+            addressObj.zip = $(".input-zip", container).val();
+
+            this.contact.updateAddressDisplayName(addressId);
+            $(".address-display-name", container).removeClass("error").removeClass("hidden").html(addressObj.displayName);
+            $(".input-address-string", container).val(addressObj.displayName);
+
+            this._addressFieldChangedTimerId = window.setTimeout(function() {
+                self.contact.save();
+            }, 2000);
+        },
+
+
+        editAddressFields: function(event) {
+            var container = $(event.currentTarget).parents(".edit-address-container").eq(0);
+            var addressId = $(container).data("id");
+
+            $(".fg-address-string", container).addClass("hidden");
+            $(".edit-address-fields", container).removeClass("hidden");
+        },
+
+
+        cancelEditAddressFields: function(event) {
+            var container = $(event.currentTarget).parents(".edit-address-container").eq(0);
+            var addressId = $(container).data("id");
+
+            $(".fg-address-string", container).removeClass("hidden");
+            $(".edit-address-fields", container).addClass("hidden");
+            $(".address-display-name", container).addClass("hidden");
         },
 
 
@@ -189,10 +332,12 @@ define([
             address.defaultBilling = !address.defaultBilling;
 
             if (address.defaultBilling == true) {
-                $(".chk-default-billing", container)[0].checked = true;
+                this.contact.setDefaultBilling(addressId);
+                $(".chk-default-billing", this.el).prop("checked", false);
+                $(".chk-default-billing", container).prop("checked", true);
                 $(".btn-default-billing", container).addClass("default");
             } else {
-                $(".chk-default-billing", container)[0].checked = false;
+                $(".chk-default-billing", container).prop("checked", false);
                 $(".btn-default-billing", container).removeClass("default");
             }
 
@@ -208,10 +353,12 @@ define([
             address.defaultShipping = !address.defaultShipping;
 
             if (address.defaultShipping) {
-                $(".chk-default-shipping", container)[0].checked = true;
+                this.contact.setDefaultShipping(addressId);
+                $(".chk-default-shipping", this.el).prop("checked", false);
+                $(".chk-default-shipping", container).prop("checked", true);
                 $(".btn-default-shipping", container).addClass("default");
             } else {
-                $(".chk-default-shipping", container)[0].checked = false;
+                $(".chk-default-shipping", container).prop("checked", false);
                 $(".btn-default-shipping", container).removeClass("default");
             }
 
@@ -289,6 +436,7 @@ define([
         //endregion
 
 
+        //region DATA
         getContact: function() {
             this.contact = new Contact({
                 _id:this.contactId
@@ -296,17 +444,25 @@ define([
 
             return this.contact.fetch();
         },
+        //endregion
 
 
+        //region UTILS and CLEANUP
         startKeyTimers: function() {
             $("#input-fullname", self.el).startKeyTimer(1000);
             $(".input-edit-phone", self.el).startKeyTimer(1000);
+            $(".input-edit-email", this.el).startKeyTimer(500);
+            $(".input-address-string", self.el).startKeyTimer(1500);
+            $(".input-address-field", self.el).startKeyTimer(500);
         },
 
 
         stopKeyTimers: function() {
             $("#input-fullname", this.el).stopKeyTimer();
             $(".input-edit-phone", this.el).stopKeyTimer();
+            $(".input-edit-email", this.el).stopKeyTimer();
+            $(".input-address-string", this.el).stopKeyTimer();
+            $(".input-address-field", this.el).stopKeyTimer();
         },
 
 
@@ -315,6 +471,7 @@ define([
             this.vent.off("uploadcomplete");
             this.uploadView = null;
         }
+        //endregion
     });
 
     $$.v.account = $$.v.account || {};

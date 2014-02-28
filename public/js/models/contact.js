@@ -12,10 +12,11 @@ define([], function() {
             last:"",        //string,
             type:"",        //contact_types
             photo:"",       //string
-            cDate:null,     //Created Date
-            cBy:null,       //Created By
-            mDate:null,     //ModifiedDate
-            mBy:null,       //Modified By
+            created: {
+                date: "",        //Date created
+                strategy: "",    // lo|fb|tw|li|etc.  See $$.constants.user.credential_types
+                by: null        //this is a nullable ID value, if created by an existing user, this will be populated.
+            },
             siteActivity: [],
             notes: [],
             details: []
@@ -108,8 +109,69 @@ define([], function() {
                 defaultBilling:false
             };
 
+            detail.addresses = detail.addresses || [];
             detail.addresses.push(address);
             return address;
+        },
+
+
+        updateAddressDisplayName: function(addressId) {
+            var address = this.getOrCreateAddress(addressId);
+
+            var displayName = "";
+            if (!String.isNullOrEmpty(address.address)) { displayName += address.address; }
+            if (!String.isNullOrEmpty(address.address2)) { displayName += ", " + address.address2; }
+            if (!String.isNullOrEmpty(address.city)) {
+                if (!String.isNullOrEmpty(displayName)) {
+                    displayName += ", ";
+                }
+                displayName += address.city;
+            }
+            if (!String.isNullOrEmpty(address.state)) {
+                if (!String.isNullOrEmpty(displayName)) {
+                    if (!String.isNullOrEmpty(address.city)) {
+                        displayName += ", "
+                    } else {
+                        displayName += " ";
+                    }
+                }
+                displayName += address.state
+            }
+            if (!String.isNullOrEmpty(address.zip)) {
+                if (!String.isNullOrEmpty(displayName)) {
+                    displayName += ", ";
+                }
+                displayName += address.zip;
+            }
+
+            address.displayName = displayName;
+        },
+
+
+        setDefaultBilling: function(addressId) {
+            this._setDefaultBillingOrShipping(addressId, "defaultBilling");
+        },
+
+
+        setDefaultShipping: function(addressId) {
+            this._setDefaultBillingOrShipping(addressId, "defaultShipping");
+        },
+
+
+        _setDefaultBillingOrShipping: function(addressId, key) {
+            var details = this.get("details");
+            if (details == null) {
+                details = [];
+                this.set({details:details});
+            }
+
+            _.each(details, function(detail) {
+                if (detail.addresses != null) {
+                    _.each(detail.addresses, function(address) {
+                        address[key] = address._id == addressId;
+                    });
+                }
+            });
         },
 
 

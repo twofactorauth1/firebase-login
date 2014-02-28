@@ -2,6 +2,11 @@ define([
     'libs/misc/date.format'
 ], function(){
 
+    Handlebars.registerHelper("testEmail", function(obj) {
+        return obj.toString();
+    });
+
+
     //region Layout
     Handlebars.registerHelper( 'isMobile', function(options){
         if ($$.u.viewutils.isMobileLayout()){

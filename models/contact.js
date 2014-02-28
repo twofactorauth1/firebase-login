@@ -18,7 +18,7 @@ var contact = $$.m.ModelBase.extend({
             created: {
                 date: "",        //Date created
                 strategy: "",    // lo|fb|tw|li|etc.  See $$.constants.user.credential_types
-                by: null,        //this is a nullable ID value, if created by an existing user, this will be populated.
+                by: null        //this is a nullable ID value, if created by an existing user, this will be populated.
             },
 
 
@@ -62,7 +62,7 @@ var contact = $$.m.ModelBase.extend({
              * [{
              *   _id:""
              *   type:int
-             *   email:string
+             *   emails: []
              *   photo:string
              *   phones: [{
              *       _id:"",
@@ -78,10 +78,13 @@ var contact = $$.m.ModelBase.extend({
              *       state:string
              *       zip:string
              *       country:string,
+             *       countryCode:string
+             *       displayName:string,
              *       lat:"",
              *       lon:"",
              *       defaultShipping: false
              *       defaultBilling: false
+
              *   }]
              * }]
              */
@@ -105,6 +108,26 @@ var contact = $$.m.ModelBase.extend({
             json._first = this.get("first") ? this.get("first").toLowerCase() : null;
             json._last = this.get("last") ? this.get("last").toLowerCase() : null;
             json._full = json._first + " " + json._last;
+
+            //Clean out addresses
+            if (json.details != null && json.details.length > 0) {
+                json.details.forEach(function(details) {
+                    if (details.addresses != null && details.addresses.length > 0) {
+                        for (var i = details.addresses.length; i > 0; i--) {
+                            //check to see if address is empty, if so, remove it.
+                            var add = details.addresses[i];
+                            if (add != null) {
+                                if (String.isNullOrEmpty(add.address) && String.isNullOrEmpty(add.address2) &&
+                                    String.isNullOrEmpty(add.city) && String.isNullOrEmpty(add.state) && String.isNullOrEmpty(add.zip) &&
+                                    String.isNullOrEmpty(add.lat)) {
+
+                                    details.addresses.splice(i,1);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         }
     },
 
