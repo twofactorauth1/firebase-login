@@ -14,6 +14,7 @@ require.config({
         backboneExtended: 'libs/backbone/backboneExtended',
         handlebars: 'libs/handlebars/handlebars',
         handlebarsHelpers: 'libs/handlebars/handlebarshelpers',
+        indigenousHelpers: 'libs/handlebars/indigenoushelpers',
         bootstrap: 'libs/bootstrap/bootstrap',
         modernizr: 'libs/modernizr/modernizr',
         templates: '../templates',
@@ -63,6 +64,9 @@ require.config({
         },
         handlebarsHelpers: {
             deps: ['underscore', 'handlebars','commonutils']
+        },
+        indigenousHelpers: {
+            deps: ['underscore', 'handlebars', 'commonutils']
         },
         appsetup: {
             deps: ['commonutils']

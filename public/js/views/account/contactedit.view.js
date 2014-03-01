@@ -1,11 +1,12 @@
 define([
+    'views/base.view',
     'models/contact',
     'libs/jquery/jquery.keytimer',
     'services/geo.service'
 
-], function(Contact) {
+], function(BaseView, Contact) {
 
-    var view = Backbone.View.extend({
+    var view = BaseView.extend({
 
         templateKey: "account/contacts",
 
@@ -462,7 +463,7 @@ define([
                 p
                 .done(function() {
                     self.contactId = self.contact.id;
-                    $$.r.account.AdminRouter.navigateToEditContact(self.contact.id, this.currentLetter, false)
+                    $$.r.account.ContactRouter.navigateToEditContact(self.contact.id, this.currentLetter, false)
                 });
                 return p;
             } else {
@@ -473,7 +474,7 @@ define([
 
 
         viewContact: function() {
-            $$.r.account.AdminRouter.navigateToContactDetails(this.contactId, this.currentLetter);
+            $$.r.account.ContactRouter.navigateToContactDetails(this.contactId, this.currentLetter);
         },
 
 

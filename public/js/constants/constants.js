@@ -4,6 +4,16 @@ if (typeof define !== 'function') {
 
 define([], function () {
 
+    var _socialTypes = {
+        LOCAL: "lo",
+        FACEBOOK: "fb",
+        TWITTER: "tw",
+        LINKDIN: "li",
+        GOOGLE: "go",
+        FULL_CONTACT: "fc"
+    };
+
+
     var constants = {
         server_props: {
             USER_ID: "userId",
@@ -12,6 +22,12 @@ define([], function () {
             ROOT: "root",
             IS_LOGGED_IN: "isLoggedIn"
         },
+
+
+        social: {
+            types: _socialTypes
+        },
+
 
         account: {
             company_types: {
@@ -31,12 +47,12 @@ define([], function () {
 
         contact: {
             detail_types: {
-                LOCAL: "lo",
-                FACEBOOK: "fb",
-                TWITTER: "tw",
-                LINKDIN: "li",
-                GOOGLE: "go",
-                CONSTANT_CONTACT: "cc"
+                LOCAL: _socialTypes.LOCAL,
+                FACEBOOK: _socialTypes.FACEBOOK,
+                TWITTER: _socialTypes.TWITTER,
+                LINKDIN: _socialTypes.LINKDIN,
+                GOOGLE: _socialTypes.GOOGLE,
+                FULL_CONTACT: _socialTypes.FULL_CONTACT
             },
 
             contact_types: {
@@ -77,11 +93,11 @@ define([], function () {
 
         user: {
             credential_types: {
-                LOCAL: "lo",
-                FACEBOOK: "fb",
-                TWITTER: "tw",
-                LINKDIN: "li",
-                GOOGLE: "go"
+                LOCAL: _socialTypes.LOCAL,
+                FACEBOOK: _socialTypes.FACEBOOK,
+                TWITTER: _socialTypes.TWITTER,
+                LINKDIN: _socialTypes.LINKDIN,
+                GOOGLE: _socialTypes.GOOGLE
             }
         }
     };

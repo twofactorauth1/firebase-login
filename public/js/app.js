@@ -2,6 +2,7 @@ define([
     'namespaces',
     'commonutils',
     'handlebarsHelpers',
+    'indigenousHelpers',
     'viewManager',
     'appsetup',
     'pushStateUtils',

@@ -68,18 +68,18 @@ define([
                     self.renderContacts();
                 });
 
-            $$.r.account.AdminRouter.navigateToShowContactsForLetter(this.currentLetter);
+            $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
         },
 
 
         viewContactDetails: function(event) {
             var contactId = $(event.currentTarget).data("contactid");
-            $$.r.account.AdminRouter.navigateToContactDetails(contactId, this.currentLetter);
+            $$.r.account.ContactRouter.navigateToContactDetails(contactId, this.currentLetter);
         },
 
 
         createContact: function() {
-            $$.r.account.AdminRouter.navigateToCreateContact(this.currentLetter);
+            $$.r.account.ContactRouter.navigateToCreateContact(this.currentLetter);
         },
 
 

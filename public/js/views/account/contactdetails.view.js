@@ -1,8 +1,9 @@
 define([
+    'views/base.view',
     'models/contact'
-], function(Contact) {
+], function(BaseView, Contact) {
 
-    var view = Backbone.View.extend({
+    var view = BaseView.extend({
 
         templateKey: "account/contacts",
 
@@ -44,12 +45,12 @@ define([
 
 
         editContact: function() {
-            $$.r.account.AdminRouter.navigateToEditContact(this.contactId, this.currentLetter);
+            $$.r.account.ContactRouter.navigateToEditContact(this.contactId, this.currentLetter);
         },
 
 
         goBack: function() {
-            $$.r.account.AdminRouter.navigateToShowContactsForLetter(this.currentLetter, true);
+            $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter, true);
         }
     });
 

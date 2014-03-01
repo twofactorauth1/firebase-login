@@ -36,13 +36,6 @@ define([
                 .done(function (value) {
                     self.tmpAccount = value;
                     self.renderSignup();
-//                    if (self.place == 'start') {
-//                         self.renderStartSignup();
-//                    } else if (self.place == 'details') {
-//                         self.renderSignupDetails();
-//                    } else if (self.place == 'create') {
-//                         self.renderSignupCreate();
-//                    }
                 });
 
             return this;
