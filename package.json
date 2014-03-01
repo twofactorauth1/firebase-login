@@ -15,7 +15,7 @@
     "express": "3.4.8",
     "jade": "*",
     "jquery-deferred": "0.3.0",
-    "jsdom": "0.2.x",
+    "jsdom": "0.10.1",
     "json-gate": "0.8.21",
     "less-middleware": "*",
     "log4js": ">=0.6.10",
@@ -30,7 +30,7 @@
     "underscore": ">=1.6.0",
     "aws-sdk": "~2.0.0-rc9",
     "formidable": "~1.0.14",
-    "request": "~2.34.0"
+    "request": "2.34.0"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

@@ -44,12 +44,12 @@ define([
 
 
         editContact: function() {
-            $$.r.AccountAdminRouter.navigateToEditContact(this.contactId, this.currentLetter);
+            $$.r.account.AdminRouter.navigateToEditContact(this.contactId, this.currentLetter);
         },
 
 
         goBack: function() {
-            $$.r.AccountAdminRouter.navigateToShowContactsForLetter(this.currentLetter, true);
+            $$.r.account.AdminRouter.navigateToShowContactsForLetter(this.currentLetter, true);
         }
     });
 

@@ -8,7 +8,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
     show: function(root) {
         var data = {
-            router:"accountadmin",
+            router:"account/admin",
             root:root || "admin",
             location:"admin",
             includeHeader:true,

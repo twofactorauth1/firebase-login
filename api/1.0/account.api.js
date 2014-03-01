@@ -61,7 +61,7 @@ _.extend(api.prototype, BaseApi.prototype, {
 
         accountId = parseInt(accountId);
         AccountDao.getById(accountId, function(err, value) {
-            if (!err) {
+            if (!err && value != null) {
                 resp.send(value.toJSON("public"));
             } else {
                 self.wrapError(resp, 500, null, err, value);
@@ -129,7 +129,7 @@ _.extend(api.prototype, BaseApi.prototype, {
         var self = this;
         var account = new $$.m.Account(req.body);
         AccountDao.saveOrUpdateTmpAccount(account, function(err, value) {
-           if (!err) {
+           if (!err && value != null) {
                cookies.setAccountToken(resp, value.get("token"));
                resp.send(value.toJSON("public"));
            } else {

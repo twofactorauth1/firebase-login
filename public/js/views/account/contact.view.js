@@ -17,7 +17,8 @@ define([
 
         events: {
             "click .btn-letter":"showLetter",
-            "click .btn-view-contact-details":"viewContactDetails"
+            "click .btn-view-contact-details":"viewContactDetails",
+            "click .btn-create-contact":"createContact"
         },
 
 
@@ -67,13 +68,18 @@ define([
                     self.renderContacts();
                 });
 
-            $$.r.AccountAdminRouter.navigateToShowContactsForLetter(this.currentLetter);
+            $$.r.account.AdminRouter.navigateToShowContactsForLetter(this.currentLetter);
         },
 
 
         viewContactDetails: function(event) {
             var contactId = $(event.currentTarget).data("contactid");
-            $$.r.AccountAdminRouter.navigateToContactDetails(contactId, this.currentLetter);
+            $$.r.account.AdminRouter.navigateToContactDetails(contactId, this.currentLetter);
+        },
+
+
+        createContact: function() {
+            $$.r.account.AdminRouter.navigateToCreateContact(this.currentLetter);
         },
 
 
@@ -118,7 +124,7 @@ define([
     });
 
     $$.v.account = $$.v.account || {};
-    $$.v.account.AccountAdminView = view;
+    $$.v.account.ContactView = view;
 
     return view;
 });

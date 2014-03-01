@@ -104,7 +104,7 @@ define([
 
             data.alertType = alertType;
 
-            var templ = $$.templateManager.get("alert", "Alert");
+            var templ = $$.templateManager.get("alert", "alert");
             var html = templ(data);
 
             if (selector == null || selector === ""){
@@ -126,27 +126,23 @@ define([
 
 
         showProgressAlert : function(heading, alertType, selector) {
-            require(['text!templates/Alert.html'], function(template){
-                $$.templateManager.setFile(template, "Alert");
+            var data = {};
+            if ($$.u.stringutils.isNullOrEmpty(heading) === false){
+                data.heading = heading;
+            }
+            if ($$.u.stringutils.isNullOrEmpty(alertType) === true) {
+                alertType = "alert-success";
+            }
+            data.alertType = alertType;
 
-                var data = {};
-                if ($$.u.stringutils.isNullOrEmpty(heading) === false){
-                    data.heading = heading;
-                }
-                if ($$.u.stringutils.isNullOrEmpty(alertType) === true) {
-                    alertType = "alert-success";
-                }
-                data.alertType = alertType;
+            var templ = $$.templateManager.get("alert-progress", "alert");
+            var html = templ(data);
 
-                var templ = $$.templateManager.get("alert-progress", "Alert");
-                var html = templ(data);
-
-                if (selector == null || selector === ""){
-                    selector = "#container-alert";
-                }
-                $(selector).html(html);
-                $(selector).show();
-            });
+            if (selector == null || selector === ""){
+                selector = "#container-alert";
+            }
+            $(selector).html(html);
+            $(selector).show();
         },
 
 

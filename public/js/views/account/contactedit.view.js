@@ -13,6 +13,8 @@ define([
         currentLetter: null,
 
         events: {
+            "click #btn-back-to-contact":"viewContact",
+
             "keyup #input-fullname":"fullnameChanged",
             "change #input-fullname":"fullnameChanged",
             "onkeytimer #input-fullname":"fullnameKeyTimer",
@@ -78,7 +80,7 @@ define([
 
 
         fullnameKeyTimer: function(event) {
-            this.contact.save();
+            this.saveContact();
         },
 
 
@@ -102,7 +104,7 @@ define([
         contactTypeChanged: function(event) {
             var data = $("option:selected", event.currentTarget).data("contacttype");
             this.contact.set({type:data});
-            this.contact.save();
+            this.saveContact();
         },
         //endregion
 
@@ -135,7 +137,7 @@ define([
                 container.data('id', '');
             }
 
-            this.contact.save();
+            this.saveContact();
 
             //Check to see if we have a new phone container or not
             var hasNewContainer = false;
@@ -175,7 +177,7 @@ define([
             var phone = this.contact.getOrCreatePhone(phoneId);
             phone.type = phoneType;
 
-            this.contact.save();
+            this.saveContact();
         },
         //endregion
 
@@ -207,7 +209,7 @@ define([
                 }
             }
 
-            this.contact.save();
+            this.saveContact();
 
 
             //Check to see if we have a new email container or not
@@ -256,7 +258,7 @@ define([
                             $.extend(address, value.toJSON());
 
                             var _address = self.contact.getOrCreateAddress(addressId);
-                            self.contact.save();
+                            self.saveContact();
 
                             $(".input-address", addressContainer).val(_address.address);
                             $(".input-address2", addressContainer).val(_address.address2);
@@ -299,7 +301,7 @@ define([
             $(".input-address-string", container).val(addressObj.displayName);
 
             this._addressFieldChangedTimerId = window.setTimeout(function() {
-                self.contact.save();
+                self.saveContact();
             }, 2000);
         },
 
@@ -341,7 +343,7 @@ define([
                 $(".btn-default-billing", container).removeClass("default");
             }
 
-            this.contact.save();
+            this.saveContact();
         },
 
         toggleDefaultShipping: function(event) {
@@ -362,7 +364,7 @@ define([
                 $(".btn-default-shipping", container).removeClass("default");
             }
 
-            this.contact.save();
+            this.saveContact();
         },
         //endregion
 
@@ -417,7 +419,7 @@ define([
             var files = result.files;
             var url = files[0].url;
             this.contact.set({photo:url});
-            this.contact.save();
+            this.saveContact();
             $("#contact-photo").attr("src", url);
             $("#contact-photo-modal").attr("src", url);
         },
@@ -429,7 +431,7 @@ define([
 
             var url = "/assets/icons/blank-user.jpeg";
             this.contact.set({photo:url});
-            this.contact.save();
+            this.saveContact();
             $("#contact-photo").attr("src", url);
             $("#contact-photo-modal").attr("src", null);
         },
@@ -438,20 +440,49 @@ define([
 
         //region DATA
         getContact: function() {
+            if (this.contactId == null && this.isNew) {
+                this.contact = new Contact({});
+                var deferred = $.Deferred();
+                deferred.resolve(this.contact);
+                return deferred;
+            }
             this.contact = new Contact({
                 _id:this.contactId
             });
 
             return this.contact.fetch();
         },
+
+
+        saveContact: function() {
+            var self = this;
+            if (this.isNew) {
+                this.isNew = false;
+                var p = this.contact.save();
+                p
+                .done(function() {
+                    self.contactId = self.contact.id;
+                    $$.r.account.AdminRouter.navigateToEditContact(self.contact.id, this.currentLetter, false)
+                });
+                return p;
+            } else {
+                return this.contact.save();
+            }
+        },
         //endregion
+
+
+        viewContact: function() {
+            $$.r.account.AdminRouter.navigateToContactDetails(this.contactId, this.currentLetter);
+        },
 
 
         //region UTILS and CLEANUP
         startKeyTimers: function() {
+            var self = this;
             $("#input-fullname", self.el).startKeyTimer(1000);
             $(".input-edit-phone", self.el).startKeyTimer(1000);
-            $(".input-edit-email", this.el).startKeyTimer(500);
+            $(".input-edit-email", self.el).startKeyTimer(500);
             $(".input-address-string", self.el).startKeyTimer(1500);
             $(".input-address-field", self.el).startKeyTimer(500);
         },

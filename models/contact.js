@@ -8,9 +8,9 @@ var contact = $$.m.ModelBase.extend({
             _id: null,
 
             accountId: 0,   //int
-            first:"",       //string,
-            middle:"",      //string,
-            last:"",        //string,
+            first:null,       //string,
+            middle:null,      //string,
+            last:null,        //string,
             photo:"",       //string,
             type:"c",       //contact_types
             _v:"0.1",

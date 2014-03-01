@@ -78,7 +78,7 @@ module.exports = {
         var serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
         serverUrl += subdomain + "." + process.env.ROOT_HOST;
 
-        if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443) {
+        if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080) {
             serverUrl += ":" + process.env.PORT;
         }
 

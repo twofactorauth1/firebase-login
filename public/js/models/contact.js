@@ -7,9 +7,9 @@ define([], function() {
         defaults: {
             _id: null,
             accountId: 0,   //int
-            first:"",       //string,
-            middle:"",      //string,
-            last:"",        //string,
+            first:null,       //string,
+            middle:null,      //string,
+            last:null,        //string,
             type:"",        //contact_types
             photo:"",       //string
             created: {

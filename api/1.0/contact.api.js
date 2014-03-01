@@ -43,7 +43,7 @@ _.extend(api.prototype, BaseApi.prototype, {
 
         contactId = parseInt(contactId);
         ContactDao.getById(contactId, function(err, value) {
-            if (!err) {
+            if (!err && value != null) {
                 resp.send(value.toJSON("public"));
             } else {
                 self.wrapError(resp, 401, null, err, value);
@@ -53,19 +53,23 @@ _.extend(api.prototype, BaseApi.prototype, {
 
 
     createContact: function(req,resp) {
-        this._saveOrUpdateContact(req, resp);
+        this._saveOrUpdateContact(req, resp, true);
     },
 
 
     updateContact: function(req,resp) {
-        this._saveOrUpdateContact(req, resp);
+        this._saveOrUpdateContact(req, resp, false);
     },
 
 
-    _saveOrUpdateContact: function(req, resp) {
+    _saveOrUpdateContact: function(req, resp, isNew) {
         //TODO - add granular security
         var self = this;
         var contact = new $$.m.Contact(req.body);
+
+        if (isNew === true) {
+            contact.set("accountId", this.accountId(req));
+        }
         ContactDao.saveOrUpdate(contact, function(err, value) {
             if (!err) {
                 self.sendResult(resp, value);

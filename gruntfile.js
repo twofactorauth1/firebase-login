@@ -115,7 +115,7 @@ module.exports = function(grunt) {
                             ]
                         },
 
-                        { name: "routers/accountadmin.router",
+                        { name: "routers/account/admin.router",
                             excludeShallow:['utils/cachemixin'],
                             include: [
                                 'compiled/account/templates'
