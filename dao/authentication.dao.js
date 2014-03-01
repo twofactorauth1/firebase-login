@@ -8,13 +8,13 @@ var crypto = require('../utils/security/crypto');
 var dao = {
 
     options: {
-        name:"authentication.dao",
+        name: "authentication.dao",
         defaultModel: $$.m.User
     },
 
-    authenticateByUsernamePassword: function(req, username, password, fn) {
+    authenticateByUsernamePassword: function (req, username, password, fn) {
         var host = req.get("host");
-        AccountDao.getAccountByHost(host, function(err, value) {
+        AccountDao.getAccountByHost(host, function (err, value) {
             if (err) {
                 return fn(err, "An error occurred validating account");
             }
@@ -27,7 +27,7 @@ var dao = {
             //We are at the main indigenous level application, not at a custom subdomain
             else if (account === true) {
                 req.session.accountId = 0;
-                UserDao.getUserByUsername(username, function(err, value) {
+                UserDao.getUserByUsername(username, function (err, value) {
                     if (!err) {
                         if (value == null) {
                             return fn("User not found", "Incorrect username");
@@ -35,7 +35,7 @@ var dao = {
 
                         var user = value;
 
-                        user.verifyPassword(password, $$.constants.user.credential_types.LOCAL, function(err, value) {
+                        user.verifyPassword(password, $$.constants.user.credential_types.LOCAL, function (err, value) {
                             if (!err) {
                                 if (value === false) {
                                     return fn("Incorrect password", "Incorrect password");
@@ -52,7 +52,7 @@ var dao = {
                 });
             } else {
                 req.session.accountId = account.id();
-                UserDao.getUserForAccount(account.id(), username, function(err, value) {
+                UserDao.getUserForAccount(account.id(), username, function (err, value) {
                     if (err) {
                         return fn(err, "An error occurred retrieving user for account");
                     } else {
@@ -60,10 +60,10 @@ var dao = {
                             return fn("User not found for account", "Incorrect username");
                         } else {
                             var user = value;
-                            user.verifyPasswordForAccount(account.id(), password, $$.constants.user.credential_types.LOCAL, function(err, value) {
+                            user.verifyPasswordForAccount(account.id(), password, $$.constants.user.credential_types.LOCAL, function (err, value) {
                                 if (!err) {
                                     if (value === false) {
-                                        return fn("Incorrect password","Incorrect password");
+                                        return fn("Incorrect password", "Incorrect password");
                                     } else {
                                         return fn(null, user);
                                     }
@@ -79,10 +79,10 @@ var dao = {
     },
 
 
-    authenticateBySocialLogin: function(req, socialType, socialId, email, accessToken, fn) {
+    authenticateBySocialLogin: function (req, socialType, socialId, email, accessToken, fn) {
         var self = this;
         var host = req.get("host");
-        AccountDao.getAccountByHost(host, function(err, value) {
+        AccountDao.getAccountByHost(host, function (err, value) {
             if (err) {
                 return fn(err, "An error occurred validating account");
             }
@@ -96,14 +96,14 @@ var dao = {
             else if (account === true) {
                 req.session.accountId = 0;
                 //Lets look up the user by socialId
-                UserDao.getUserBySocialId(socialType, socialId, function(err, value) {
+                UserDao.getUserBySocialId(socialType, socialId, function (err, value) {
                     if (err) {
                         return fn(err, "An error occurred attempting to retrieve user by social profile");
                     }
 
                     if (value == null) {
                         //look up by email
-                        UserDao.getUserByUsername(email, function(err, value) {
+                        UserDao.getUserByUsername(email, function (err, value) {
                             if (err) {
                                 return fn(err, "An error occurred retrieving user by username");
                             }
@@ -122,14 +122,14 @@ var dao = {
                 });
             } else {
                 req.session.accountId = account.id();
-                UserDao.getUserForAccountBySocialProfile(account.id(), socialType, socialId, function(err, value) {
+                UserDao.getUserForAccountBySocialProfile(account.id(), socialType, socialId, function (err, value) {
                     if (err) {
                         return fn(err, "An error occurred retrieving user for account by social profile");
                     }
 
                     if (value == null) {
                         //Look for user by email
-                        UserDao.getUserForAccount(account.id(), email, function(err, value) {
+                        UserDao.getUserForAccount(account.id(), email, function (err, value) {
                             if (err) {
                                 return fn(err, "An error occurred retrieving user for account");
                             }
@@ -151,50 +151,50 @@ var dao = {
     },
 
 
-    sendForgotPasswordEmailByUsernameOrEmail: function(email, fn) {
+    sendForgotPasswordEmailByUsernameOrEmail: function (email, fn) {
         var _email = email;
-        UserDao.getUserByUsername(email)
-            .done(function(value) {
-                if (value == null) {
-                    fn("No user found with username or email: " + _email);
-                } else {
-                    var user = value;
+        UserDao.getUserByUsername(email, function (err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value == null) {
+                fn("No user found with username or email: " + _email);
+            } else {
+                var user = value;
 
 
-                    var isEmail = $$.u.validate(user.get("email"), {
-                        required:true,
-                        email:true
-                    }).success;
+                var isEmail = $$.u.validate(user.get("email"), {
+                    required: true,
+                    email: true
+                }).success;
 
-                    if (isEmail === false) {
-                        //lets at least try to see if the username is an email
-                        if ($$.u.validate(user.get("username"), {required:true, email:true}).success === false) {
-                            return fn("No email has been registered with the user: " + email);
-                        } else {
-                            email = user.get("username");
-                        }
+                if (isEmail === false) {
+                    //lets at least try to see if the username is an email
+                    if ($$.u.validate(user.get("username"), {required: true, email: true}).success === false) {
+                        return fn("No email has been registered with the user: " + email);
+                    } else {
+                        email = user.get("username");
                     }
-
-                    var token = user.setPasswordRecoverToken();
-
-                    UserDao.saveOrUpdate(user, function(err, value) {
-                        if (!err) {
-                            //Send Email based on the current token
-                            EmailTemplateUtil.resetPassword(token, value, email, fn);
-                        } else {
-                            return fn("An error occurred: " + err);
-                        }
-                    });
                 }
-            })
-            .fail(function(err) {
-                return fn(err);
-            });
+
+                var token = user.setPasswordRecoverToken();
+
+                UserDao.saveOrUpdate(user, function (err, value) {
+                    if (!err) {
+                        //Send Email based on the current token
+                        EmailTemplateUtil.resetPassword(token, value, email, fn);
+                    } else {
+                        return fn("An error occurred: " + err);
+                    }
+                });
+            }
+        });
     },
 
 
-    verifyPasswordResetToken: function(token, fn) {
-        UserDao.findOne({passRecover:token}, function(err, value) {
+    verifyPasswordResetToken: function (token, fn) {
+        UserDao.findOne({passRecover: token}, function (err, value) {
             if (!err) {
                 if (value == null) {
                     return fn("Invalid recovery token. Please ensure you have clicked the link directly from your email, or resubmit the form below.");
@@ -212,15 +212,15 @@ var dao = {
     },
 
 
-    updatePasswordByToken: function(passwordResetToken, password, fn) {
-        this.verifyPasswordResetToken(passwordResetToken, function(err, value) {
+    updatePasswordByToken: function (passwordResetToken, password, fn) {
+        this.verifyPasswordResetToken(passwordResetToken, function (err, value) {
             if (!err) {
                 var user = value;
                 user.clearPasswordRecoverToken();
 
                 user.createOrUpdateLocalCredentials(password);
 
-                UserDao.saveOrUpdate(user, function(err, value) {
+                UserDao.saveOrUpdate(user, function (err, value) {
                     if (!err) {
                         fn(null, value);
                     } else {
