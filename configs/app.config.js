@@ -50,7 +50,7 @@ process.env.GLOBAL_SUBDOMAINS = "www,home,app";
 var serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
 serverUrl += "app." + process.env.ROOT_HOST;
 
-if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443) {
+if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080) {
     serverUrl += ":" + process.env.PORT;
 }
 
@@ -81,7 +81,6 @@ module.exports = {
         if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080) {
             serverUrl += ":" + process.env.PORT;
         }
-
         return serverUrl;
     }
 };
