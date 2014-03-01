@@ -39,9 +39,10 @@ var user = $$.m.ModelBase.extend({
              *  password:string
              *  credentials: [
              *      type:int,
+             *      socialId:string
              *      username:string
              *      password:string,
-             *      authtoken:string
+             *      accessToken:string
              *  ],
              *  permissions: [ super, admin, member ]
              * }]
@@ -51,9 +52,10 @@ var user = $$.m.ModelBase.extend({
             /**
              * [{
              *  type:int,
-             *  username:string,
-             *  password:string,
-             *  authtoken:string
+             *  socialId:string
+             *  username:string, //Local only
+             *  password:string, //Local only
+             *  accessToken:string,
              * }]
              */
             credentials: []
@@ -80,7 +82,9 @@ var user = $$.m.ModelBase.extend({
             json._username = json.username.toLowerCase();
             for (var i = 0; i < json.accounts.length; i++) {
                 for (var j = 0; j < json.accounts[i].credentials.length; j++) {
-                    json.accounts[i].credentials[j]._username = json.accounts[i].credentials[i].username.toLowerCase();
+                    if (json.accounts[i].credentials[j].username != null) {
+                        json.accounts[i].credentials[j]._username = json.accounts[i].credentials[j].username.toLowerCase();
+                    }
                 }
             }
         }
@@ -115,12 +119,14 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    createOrUpdateOauthToken: function (token, type) {
-        var creds = this._getCredentials($$.constants.user.credential_types[type]);
+    createOrUpdateSocialCredentials: function(socialType, socialId, accessToken) {
+        var creds = this._getCredentials(socialType);
         if (creds == null) {
-            return this._createOauthCredentials(this.get('email'), token, type);
+            return this._createSocialCredentials(socialType, socialId, accessToken);
         } else {
-            creds.authtoken = token;
+            creds.type = socialType;
+            creds.socialId = socialId;
+            creds.accessToken = accessToken;
             return this._setCredentials(creds, false);
         }
     },
@@ -137,12 +143,13 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    _createOauthCredentials: function (email, token, type) {
+    _createSocialCredentials: function(socialType, socialId, accessToken) {
         var creds = {
-            username: email || this.get('email'),
-            authtoken: token,
-            type: $$.constants.user.credential_types[type]
+            type: socialType,
+            socialId: socialId,
+            accessToken: accessToken
         };
+
         return this._setCredentials(creds, false);
     },
 
@@ -162,18 +169,19 @@ var user = $$.m.ModelBase.extend({
         }
 
         creds = creds || {};
-        if (options.type == $$.constants.user.credential_types.LOCAL) {
-            creds.type = options.type;
+        creds.type = options.type;
+        if (options.username != null) {
             creds.username = options.username;
+        }
+        if (options.password != null) {
             creds.password = options.password;
         }
-        else {
-            creds.type = options.type;
-            creds.username = options.username;
-            creds.authtoken = options.authtoken;
-        }
 
-        if (creds != null && encryptPassword == true && creds.hasOwnProperty("password")) {
+        creds.socialId = options.socialId;
+        creds.accessToken = options.accessToken;
+
+
+        if (creds != null && encryptPassword == true && creds.password != null) {
             creds.password = crypto.hash(creds.password);
         }
         if (creds != null && isNew == true) {
@@ -260,12 +268,7 @@ var user = $$.m.ModelBase.extend({
 
     isAdminOfAccount: function (accountId) {
         var account = this.getUserAccount(accountId);
-        if (account != null &&
-            (account.permissions.indexOf("admin") > -1 || account.permissions.indexOf("super") > -1)) {
-
-            return true;
-        }
-        return false;
+        return (account != null && (account.permissions.indexOf("admin") > -1 || account.permissions.indexOf("super") > -1));
     },
 
 
@@ -283,11 +286,41 @@ var user = $$.m.ModelBase.extend({
             permissions: permissions
         };
 
+        return this._createUserAccount(userAccount, permissions);
+    },
+
+
+    createUserAccountFromSocialProfile: function(accountId, email, socialType, socialId, accessToken, permissions) {
+        var userAccount = {
+            accountId: accountId,
+            username:email,
+            credentials: [
+                {
+                    type:socialType,
+                    socialId:socialId,
+                    accessToken:accessToken
+                },
+                {
+                    type:$$.constants.user.credential_types.LOCAL,
+                    username:email
+                }
+            ],
+            permissions: permissions
+        };
+
+        return this._createUserAccount(userAccount, permissions);
+    },
+
+
+    _createUserAccount: function(userAccount, permissions) {
         var accounts = this.get("accounts");
         if (accounts == null) {
             accounts = [];
             this.set({accounts: accounts});
         }
+
+        var accountId = userAccount.accountId;
+        var username = userAccount.username;
 
         //if we have a user account with matching account id, merge it, do not create new
         var oldAccount = this.getUserAccount(accountId);
@@ -298,18 +331,28 @@ var user = $$.m.ModelBase.extend({
 
                 //Look to see if we already have creds of the same type, if so,
                 // we merge the new into the old
-                var oldCreds;
-                oldAccount.credentials.forEach(function (_oldCreds) {
-                    if (_oldCreds.type == $$.constants.user.credential_types.LOCAL) {
-                        oldCreds = _oldCreds;
-                    }
-                });
+                var newCredentials = userAccount.credentials;
 
-                if (oldCreds != null) {
-                    oldCreds.username = username;
-                    oldCreds.password = crypto.hash(password);
-                } else {
-                    oldAccount.credentials.push(userAccount.credentials);
+                for (var i = 0; i < newCredentials.length; i++) {
+                    var newCreds = newCredentials[i];
+
+                    var oldCreds = null;
+                    oldAccount.credentials.forEach(function(_oldCreds) {
+                        if (_oldCreds.type === newCred.type) {
+                            oldCreds = _oldCreds;
+                        }
+                    });
+
+                    if (oldCreds != null) {
+                        oldCreds.username = newCredentials.username;
+                        if (newCredentials.password != null) {
+                            oldCreds.password = crypto.hash(newCreds.password);
+                        }
+                        oldCreds.socialId = newCreds.socialId;
+                        oldCreds.accessToken = newCreds.accessToken;
+                    } else {
+                        oldAccount.credentials.push(newCreds);
+                    }
                 }
 
                 //Attempt to merge the permissions
@@ -327,62 +370,6 @@ var user = $$.m.ModelBase.extend({
         }
     },
     //endregion
-    
-    createUserOauthAccount: function (accountId, email, token, permissions, type) {
-        var userAccount = {
-            accountId: accountId,
-            username: email,
-            credentials: [
-                {
-                    username: email,
-                    type: type
-                }
-            ],
-            permissions: permissions
-        };
-
-        var accounts = this.get("accounts");
-        if (accounts == null) {
-            accounts = [];
-            this.set({accounts: accounts});
-        }
-
-        //if we have a user account with matching account id, merge it, do not create new
-        var oldAccount = this.getUserAccount(accountId);
-        if (oldAccount != null) {
-            if (oldAccount.username == null || oldAccount.username == email) {
-                //this is ok, lets merge them together
-                oldAccount.username = email;
-
-                //Look to see if we already have creds of the same type, if so,
-                // we merge the new into the old
-                var oldCreds;
-                oldAccount.credentials.forEach(function (_oldCreds) {
-                    if (_oldCreds.type == type) {
-                        oldCreds = _oldCreds;
-                    }
-                });
-
-                if (oldCreds != null) {
-                    oldCreds.username = email;
-                } else {
-                    oldAccount.credentials.push(userAccount.credentials);
-                }
-
-                //Attempt to merge the permissions
-                permissions.forEach(function (permission) {
-                    if (oldAccount.permissions.indexOf(permissions) == -1) {
-                        oldAccount.permissions.push(push);
-                    }
-                });
-            }
-            return oldAccount;
-        }
-        else {
-            accounts.push(userAccount);
-            return userAccount;
-        }
-    },
 
 
     //region PASSWORD RECOVERY

@@ -155,13 +155,26 @@ define([
 
 
         onAllRender: function() {
-            if ($("#status").css("display") === "none") {
+            if ($("#preloader").css("display") === "none") {
                 return;
             }
-            $('#status').delay(350).fadeOut();
             $('#preloader').delay(500).fadeOut(function(){
                 $('body').delay(350).css({'overflow':'visible'});
             });
+        },
+
+
+        showProcessing: function() {
+            if ($("#preloader").css("display") !== "none") {
+                return;
+            }
+
+            $("#preloader").addClass("processing").fadeIn('fast');
+        },
+
+
+        hideProcessing: function() {
+            $("#preloader").fadeOut();
         }
     });
 

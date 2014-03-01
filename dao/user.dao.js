@@ -13,13 +13,9 @@ var dao = {
     },
 
 
+    //Global LEVEL METHODS
     usernameExists: function(username, fn) {
         this.exists({'_username':username.toLowerCase()}, fn);
-    },
-
-
-    usernameExistsForAccount: function(accountId, username, fn) {
-        this.exists({"accounts.accountId" : accountId, "accounts.credentials._username" : username.toLowerCase() }, fn);
     },
 
 
@@ -28,56 +24,8 @@ var dao = {
     },
 
 
-    getUserByEmail: function(email, fn) {
-        this.findOne( {'email':email}, fn);
-    },
-
-
-    getUserByUsernameOrEmail: function(username, fn) {
-        var deferred = $.Deferred();
-        var self = this;
-        var fxn1, fxn2;
-
-        var isEmail = $$.u.validate(username, { required: true, email: true }).success;
-
-        if (isEmail) {
-            fxn1 = this.getUserByEmail;
-            fxn2 = this.getUserByUsername;
-        } else {
-            fxn1 = this.getUserByUsername;
-            fxn2 = this.getUserByEmail;
-        }
-
-        fxn1.call(self, username, function(err, value) {
-            if (err || value == null) {
-                fxn2.call(self, username, function(err, value) {
-                    if (!err) {
-                        deferred.resolve(value);
-                        if (fn) {
-                            fn(null, value);
-                        }
-                    } else {
-                        deferred.reject(err);
-                        if (fn) {
-                            fn(err, value);
-                        }
-                    }
-                });
-            } else {
-                deferred.resolve(value);
-                if (fn) {
-                    fn(null, value);
-                }
-            }
-        });
-
-        return deferred;
-    },
-
-
-    getUserForAccount: function(accountId, username, fn) {
-        var query = { "accounts.accountId" : accountId, username:username };
-        return this.findOne(query, fn);
+    getUserBySocialId: function(socialType, socialId, fn) {
+        this.findOne( { "credentials.type":socialType, "credentials.socialId":socialId }, fn);
     },
 
 
@@ -94,28 +42,14 @@ var dao = {
 
             var deferred = $.Deferred();
 
-            /*
-             If we don't have an account id yet, they are probably in the process
-             of creating one at startup, lets try to convert the account now that
-             they are actually signing up.
-             */
-            if (accountToken != null) {
-                AccountDao.convertTempAccount(accountToken, function(err, value) {
-                    if (!err) {
-                        deferred.resolve(value);
-                    } else {
-                        return fn(err, value);
-                    }
-                });
-            } else {
-                AccountDao.createAccount("", $$.constants.account.company_types.PROFESSIONAL, $$.constants.account.company_size.SINGLE, null, function(err, value) {
-                    if (!err) {
-                        deferred.resolve(value);
-                    } else {
-                        return fn(err, value);
-                    }
-                });
-            }
+            AccountDao.convertTempAccount(accountToken, function(err, value) {
+                if (!err) {
+                    deferred.resolve(value);
+                } else {
+                    deferred.reject();
+                    return fn(err, value);
+                }
+            });
 
             deferred
                 .done(function(account) {
@@ -146,94 +80,89 @@ var dao = {
                 });
         });
     },
-    
-    getOrCreateUserFromOauthProfile: function(token, profile, type, accountToken, fn) {
+
+
+    createUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, accessToken, accountToken, fn) {
         var self = this;
-        var email = profile.emails[0].value;
-        this.findOne({'credentials.authtoken': token, 'credentials.type':type}, function (err, user) {
+
+        this.getUserByUsername(email, function(err, value) {
             if (err) {
-                return fn({message: 'An error occurred searching for user by access token.'}, null);
+                return fn(err, value);
             }
-            else {
-                if (user) {
-                    return fn(null, user);
+
+            if (value != null) {
+                return fn(true, "An account with a matching email address of " + email + " already exists.");
+            }
+
+            self.getUserBySocialId(socialType, socialId, function(err, value) {
+                if (err) {
+                    return fn(err, value);
                 }
-                else {
-                    this.findOne({'email': email, 'credentials.type':type}, function (err, user) {
-                        if (err) {
-                            return fn({message: 'An error occurred searching for user by email ID.'}, null);
+
+                if (value != null) {
+                    return fn(true, "An account already exists with this social profile");
+                }
+
+                var deferred = $.Deferred();
+                AccountDao.convertTempAccount(accountToken, function(err, value) {
+                    if (!err) {
+                        deferred.resolve(value);
+                    } else {
+                        deferred.reject();
+                        return fn(err, value);
+                    }
+                });
+
+                deferred
+                    .done(function(account) {
+                        var accountId;
+                        if (account != null) {
+                            accountId = account.id();
                         }
-                        else {
-                            if (user) {
-                                return fn(null, user);
-                            }
-                            else {
-                                if (accountToken) {
-                                    AccountDao.convertTempAccount(accountToken, function (err, account) {
-                                        if (err) {
-                                            return fn({message: 'An error occurred coverting temporary account.'}, null);
-                                        }
-                                        else {
-                                            if (account) {
-                                                var user = new $$.m.User({
-                                                        email: profile.emails[0].value,
-                                                        first: profile.name.givenName,
-                                                        last: profile.name.familyName,
-                                                        created: {
-                                                            date: new Date().getTime(),
-                                                            strategy: $$.constants.user.credential_types.FACEBOOK,
-                                                            by: null,
-                                                            isNew: true
-                                                        }
-                                                });
-                                        
-                                                user.createOrUpdateOauthToken(token, type);
-                                                user.createUserOauthAccount(account.id(), email, token, ["super","admin","member"], type);
-                                                self.saveOrUpdate(user, fn);
-                                                return fn(null, user);
-                                            }
-                                            else {
-                                                return fn({message: 'Failed to convert temporary account.'}, null);
-                                            }
-                                        }
-                                    });
-                                }
-                                else {
-                                    AccountDao.createAccount("", $$.constants.account.company_types.PROFESSIONAL, $$.constants.account.company_size.SINGLE, null, function (err, account) {
-                                        if (err) {
-                                            return fn({message: 'Some error occurred while creating account.'}, null);
-                                        }
-                                        else {
-                                            if (account) {
-                                                var user = new $$.m.User({
-                                                        email: profile.emails[0].value,
-                                                        first: profile.name.givenName,
-                                                        last: profile.name.familyName,
-                                                        created: {
-                                                            date: new Date().getTime(),
-                                                            strategy: $$.constants.user.credential_types.FACEBOOK,
-                                                            by: null,
-                                                            isNew: true
-                                                        }
-                                                });
-                                        
-                                                user.createOrUpdateOauthToken(token, type);
-                                                user.createUserOauthAccount(account.id(), email, token, ["super","admin","member"], type);
-                                                self.saveOrUpdate(user, fn);
-                                                return fn(null, user);
-                                            }
-                                            else {
-                                                return fn({message: 'Failed to create account'}, null);
-                                            }
-                                        }
-                                    });
-                                }
-                            }
+
+                        if (accountId == null) {
+                            return fn(true, "Failed to create user, no account found");
                         }
+
+                        var user = new $$.m.User({
+                            username:email,
+                            email:email,
+                            first:firstName,
+                            last:lastName,
+                            created: {
+                                date: new Date().getTime(),
+                                strategy: socialType,
+                                by: null, //self-created
+                                isNew: true
+                            }
+                        });
+
+                        user.createOrUpdateLocalCredentials(null);
+                        user.createOrUpdateSocialCredentials(socialType, socialId, accessToken);
+                        user.createUserAccountFromSocialProfile(accountId, email, socialType, socialId, accessToken, ["super","admin","member"]);
+
+                        self.saveOrUpdate(user, fn);
                     });
-                }
-            }
-        });
+            });
+        })
+    },
+
+
+    //region SUBDOMAIN ACCOUNT LEVEL METHODS
+    usernameExistsForAccount: function(accountId, username, fn) {
+        this.exists({"accounts.accountId" : accountId, "accounts.credentials._username" : username.toLowerCase() }, fn);
+    },
+
+
+    getUserForAccount: function(accountId, username, fn) {
+        var query = { "accounts.accountId" : accountId, username:username };
+        return this.findOne(query, fn);
+    },
+
+
+    getUserForAccountBySocialProfile: function(accountId, socialType, socialId, fn) {
+        var query = { "accounts.accountId":accountId, "accounts.credentials.type":socialType, "accounts.credentials.socialId":socialId };
+        return this.findOne(query, fn);
     },
 
 

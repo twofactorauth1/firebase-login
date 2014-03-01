@@ -23,7 +23,6 @@ define([
             "onkeytimer #input-username": "onUsernameKeyTimer",
             "onkeytimer #input-password": "onPasswordKeyTimer",
             "onkeytimer #input-password2": "onPasswordKeyTimer",
-            "onkeytimer #input-email": "onEmailKeyTimer",
             "submit #form-create-account": "onCreateAccount",
             "click .right-nav": "nextPanel",
             "click .left-nav": "prevPanel"
@@ -63,6 +62,8 @@ define([
             var tmpl = $$.templateManager.get("signup-main", this.templateKey);
             var html = tmpl(data);
             this.show(html);
+
+            this.startKeyTimers();
             return this;
         },
 
@@ -110,16 +111,22 @@ define([
             var self = this;
             this.usernamevalid = false;
 
-            var username = $(event.currentTarget).val();
+            var username = $(event.currentTarget).validate({
+                required: true,
+                email: true
+            });
 
-            var helper = $("#help-username", this.el);
             var icon = $("#icon-username", this.el);
+            var helper = $("#help-username", this.el);
 
             helper.html("");
-            if (username.length < 5) {
-                helper.html("Username must be at least 5 characters long");
+            if (username === false) {
+                helper.html("A valid email address must be supplied");
+                icon.removeClass("glphyicon-ok").addClass("glyphicon-remove");
                 return;
             }
+
+            helper.html("");
             icon.removeClass("glyphicon-remove").removeClass("glyphicon").addClass("icon-loading");
             $$.services.UserService.usernameExists(username)
                 .done(function (exists) {
@@ -350,7 +357,6 @@ define([
             $("#input-username", this.el).startKeyTimer(400);
             $("#input-password", this.el).startKeyTimer(400);
             $("#input-password2", this.el).startKeyTimer(400);
-            $("#input-email", this.el).startKeyTimer(400);
         },
 
 
@@ -359,7 +365,6 @@ define([
             $("#input-username", this.el).stopKeyTimer();
             $("#input-password", this.el).stopKeyTimer();
             $("#input-password2", this.el).stopKeyTimer();
-            $("#input-email", this.el).stopKeyTimer();
         },
 
 

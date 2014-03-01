@@ -35,9 +35,12 @@ define([
                 if(!Modernizr.history) {
                     var rootLength = Backbone.history.options.root.length;
                     var fragment = window.location.pathname.substr(rootLength);
+                    fragment = fragment.replcae("_=_", "");
                     Backbone.history.navigate(fragment, { trigger: true });
                 } else {
-                    Backbone.history.loadUrl(Backbone.history.getFragment())
+                    var fragment = Backbone.history.getFragment();
+                    fragment = fragment.replace("_=_", "");
+                    Backbone.history.loadUrl(fragment)
                 }
             });
         }

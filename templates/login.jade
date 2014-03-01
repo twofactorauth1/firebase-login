@@ -17,6 +17,20 @@ block content
             form(role="form", action="/login" method="post")
                 h4.nomargin Sign In
                 p.mt5.mb20 Login to access your account&period;
+
+                .row.social
+                    a.btn.btn-large.btn-default(href="/login/facebook")
+                        i.fa.fa-facebook
+
+                    a.btn.btn-large.btn-default(href="/login/twitter")
+                        i.fa.fa-twitter
+
+                    a.btn.btn-large.btn-default(href="/login/google")
+                        i.fa.fa-google-plus
+
+                    a.btn.btn-large.btn-default(href="/login/linkedin")
+                        i.fa.fa-linkedin
+
                 .input-group
                   span.input-group-addon
                     i.fa.fa-user
@@ -36,9 +50,10 @@ block content
                         input(type="checkbox" name="rememberme" id="rememberme")
                         | Remember me on this computer
 
-                strong
-                    | Not a member&quest;
-                    a(href='/signup')  Sign Up
+                unless account
+                    strong
+                        | Not a member&quest;
+                        a(href='/signup')  Sign Up
         script.
           $(window).load(function() {
               $('#status').delay(350).fadeOut();

@@ -5,6 +5,7 @@
         "/login",
         "/logout",
         "/forgotpassword",
+        "/signup/facebook",
         "/",
         ""
     ];

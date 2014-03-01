@@ -1,9 +1,8 @@
 var BaseRouter = require('./base.server.router.js');
 var passport = require('passport');
 var UserDao = require('../dao/user.dao');
-var AccountDao = require('../dao/account.dao');
 var cookies = require("../utils/cookieutil");
-
+var FacebookConfig = require('../configs/facebook.config');
 var LoginView = require('../views/login.server.view');
 var ForgotPasswordView = require('../views/forgotpassword.server.view');
 var SignupView = require('../views/signup.server.view');
@@ -17,26 +16,37 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "login",
 
     initialize: function() {
+
+        //-------------------------------------------------
+        //  LOGIN
+        //-------------------------------------------------
         app.get("/login", this.setup, this.showLogin.bind(this));
+        app.post("/login",
+            passport.authenticate('local', { failureRedirect: "/login", failureFlash:true } ),
+            this.onLogin.bind(this));
         
-        //local login
-        app.post("/login", passport.authenticate('local', { failureRedirect: "/login", failureFlash:true } ), this.onLogin.bind(this));
-        
-        //facebook login
-        app.get('/login/facebook/:accountToken', this.facebookLogin.bind(this));
-        app.get('/login/facebook/callback/:accountToken', this.facebookLoginCallback.bind(this));
-        
-        
+
+        //-------------------------------------------------
+        // LOGOUT
+        //-------------------------------------------------
         app.get("/logout", this.setup, this.handleLogout.bind(this));
 
-        app.get("/signup", this.setup, this.showSignup.bind(this));
-        app.get("/signup/*", this.setup, this.showSignup.bind(this)); //catch all routed routes
-        app.post("/signup", this.setup, this.handleSignup.bind(this));
 
+        //-------------------------------------------------
+        // FORGOT PASSWORD
+        //-------------------------------------------------
         app.get("/forgotpassword", this.setup, this.showForgotPassword.bind(this));
         app.post("/forgotpassword", this.setup, this.handleForgotPassword.bind(this));
         app.get("/forgotpassword/reset/:token", this.setup, this.showResetPasswordByToken.bind(this));
         app.post("/forgotpassword/reset/:token", this.setup, this.handleResetPasswordByToken.bind(this));
+
+
+        //-------------------------------------------------
+        // SIGNUP
+        //-------------------------------------------------
+        app.get("/signup", this.setup, this.showSignup.bind(this));
+        app.get("/signup/*", this.setup, this.showSignup.bind(this)); //catch all routed routes
+        app.post("/signup", this.setup, this.handleSignup.bind(this));
 
         return this;
     },
@@ -67,21 +77,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
     //endregion
     
-    // facebook login
-    facebookLogin: function (req, res, next) {
-        passport.authenticate('facebook', {
-                                            callbackURL: '/login/facebook/callback/'+req.params.accountToken
-                                        })(req, res, next);
-    },
-    
-    facebookLoginCallback: function (req, res, next) {
-        passport.authenticate('facebook', {
-                                            callbackURL: '/login/facebook/callback/'+req.params.accountToken,
-                                            successRedirect: '/signup',
-                                            failureRedirect: '/login/facebook'
-                                        })(req, res, next);
-    },
-    //end region
+
     //region FORGOT PASSWORD
     showForgotPassword: function(req,resp) {
         if (req.isAuthenticated()) {
@@ -122,6 +118,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
     showSignup: function(req,resp) {
         if (req.isAuthenticated()) {
             return resp.redirect("/");
+        } else if(this.accountId(req) > 0) {
+            return resp.redirect("/login");
         }
 
         new SignupView(req,resp).show();
@@ -131,7 +129,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     handleSignup: function(req,resp) {
         var self = this, user, accountToken, deferred;
 
-        var username = req.body.username;
+        var username = req.body.email;
         var password1 = req.body.password;
         var password2 = req.body.password2;
         var email = req.body.email;
@@ -157,8 +155,6 @@ _.extend(router.prototype, BaseRouter.prototype, {
             req.flash("error", "You must enter a valid email");
             return resp.redirect("/signup/create");
         }
-
-
 
         //ensure we don't have another user with this username;
         var accountToken = cookies.getAccountToken(req);

@@ -13,9 +13,22 @@ define([
 
 
         render: function() {
-            var tmpl = $$.templateManager.get("account-main", this.templateKey);
-            var html = tmpl({});
-            this.show(html);
+            var self = this
+                , p1 = this.getAccount()
+                , p2 = this.getUser();
+
+            $.when(p1, p2)
+                .done(function() {
+                    var data = {
+                        account: self.account.toJSON(),
+                        user: self.user.toJSON()
+                    };
+
+                    var tmpl = $$.templateManager.get("account-main", self.templateKey);
+                    var html = tmpl(data);
+
+                    self.show(html);
+                });
         }
     });
 

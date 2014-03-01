@@ -1,5 +1,6 @@
 require('./base.dao');
 require('../models/account');
+var urlUtils = require('../utils/urlutils');
 
 var dao = {
 
@@ -44,55 +45,12 @@ var dao = {
 
 
     getAccountByHost: function(host, fn) {
-        var self = this
-            , defaultHost = process.env.ROOT_HOST || "indigenous"
-            , globalSubdomains = process.env.GLOBAL_SUBDOMAINS || "www"
-            , hosts
-            , subdomain
-            , domain;
-
-        globalSubdomains = globalSubdomains.split(",");
-
-        //If we're length one and hosts[0] == defaultHost, then it's ok
-        //If we're length two and hosts[0] == www and hosts[1] == defaultHost, then its ok
-        //If we're length two and hosts[1] == defaultHost, we need to check account.subdomain
-        //If we're length one, we need to check hosts[0] against our account.domain
-        //if we're length two+ and hosts[0] == www, we need to check hosts[1+] against our account.domain
-
-        host = host.replace("www", "");
-        var portIndex = host.indexOf(":");
-        if (portIndex > -1) {
-            host = host.substr(0, portIndex);
-        }
-
-
-        hosts = host.split(".");
-
-        if (hosts[0] == "localhost") {
+        var parsed = urlUtils.getSubdomainFromHost(host);
+        if (parsed.isMainApp) {
             return fn(null, true);
         }
-        if (hosts.length == 1 && hosts[0] == defaultHost) {
-            return fn(null, true);
-        } else if(hosts.length == 2 && hosts[0] == defaultHost) {
-            return fn(null, true);
-        } else if(hosts.join(".") == defaultHost) {
-            return fn(null, true);
-        } else if((hosts.length == 2 || hosts.length == 3)) {
-            if (hosts[1] == defaultHost) {
-                subdomain = hosts[0];
-            } else if(hosts.length == 3 && (hosts[1] + "." + hosts[2]) == defaultHost) {
-                subdomain = hosts[0];
-            }
-            if (subdomain != null && globalSubdomains.indexOf(subdomain) > -1) {
-                return fn(null, true);
-            } else if(subdomain == null) {
-                domain = hosts.join(".");
-            }
-        } else {
-            domain = hosts.join("."); //custom domain
-        }
 
-        if (subdomain != null || domain != null) {
+        if (parsed.subdomain != null || parsed.domain != null) {
             var cb = function(err, value) {
                 if (err) {
                     return fn(err, value);
@@ -101,12 +59,70 @@ var dao = {
                 }
             };
 
-            if (subdomain != null) {
-                this.getAccountBySubdomain(subdomain, cb);
-            } else if (domain != null) {
-                this.getAccountByDomain(domain, cb);
+            if (parsed.subdomain != null) {
+                this.getAccountBySubdomain(parsed.subdomain, cb);
+            } else if (parsed.domain != null) {
+                this.getAccountByDomain(parsed.domain, cb);
             }
         }
+    },
+
+
+    createAccount: function(companyType, companySize, fn) {
+        if (_.isFunction(companyType)) {
+            fn = companyType;
+            companyType = null;
+            companySize = null;
+        } else if(_.isFunction(companySize)) {
+            fn = companySize;
+            companySize = null;
+        }
+
+        if (companyType === null) {
+            companyType = $$.constants.account.company_types.PROFESSIONAL;
+        }
+        if (companySize === null) {
+            companySize = $$.constants.account.company_size.SMALL;
+        }
+
+        var account = new $$.m.Account({
+            company: {
+                type:companyType,
+                size:companySize
+            }
+        });
+
+        return this._createAccount(account, fn);
+    },
+
+
+    _createAccount: function(account, fn) {
+        var self = this;
+        //Test to see if subdomain is already taken
+        var p = $.Deferred();
+        var subdomain = account.getOrGenerateSubdomain();
+        if (String.isNullOrEmpty(account.get("subdomain")) == false) {
+            this.getAccountBySubdomain(account.get("subdomain"), function(err, value) {
+                if (!err) {
+                    if (value != null) {
+                        var subdomain = account.get("subdomain");
+                        subdomain = subdomain + "-" + Math.round(Math.random()*1000000);
+                        account.set({subdomain:subdomain});
+                    }
+                } else {
+                    p.reject();
+                    return fn(err, avlue);
+                }
+                p.resolve();
+            });
+        }
+
+        $.when(p)
+            .done(function() {
+                self.saveOrUpdate(account, function(err, value) {
+                    fn(err, value);
+                });
+            });
     },
 
 
@@ -124,41 +140,21 @@ var dao = {
 
 
     convertTempAccount: function(accountToken, fn) {
-        var self = this;
-        var account = $$.g.cache.get(accountToken, "accounts");
+        var self = this, account;
+
+        if (accountToken != null) {
+            account = $$.g.cache.get(accountToken, "accounts");
+        }
 
         if (account != null) {
-
-            //Test to see if subdomain is already taken
-            var p = $.Deferred();
-            var subdomain = account.getOrGenerateSubdomain();
-            if (account.get("subdomain") != null && account.get("subdomain") != "") {
-                this.getAccountBySubdomain(account.get("subdomain"), function(err, value) {
-                    if (!err) {
-                        if (value != null) {
-                            var subdomain = account.get("subdomain");
-                            subdomain = subdomain + "-" + Math.round(Math.random()*1000000);
-                            account.set({subdomain:subdomain});
-                        }
-                    } else {
-                        return fn(err, avlue);
-                    }
-                    p.resolve();
-                });
-            }
-
-            $.when(p)
-                .done(function() {
-                    self.saveOrUpdate(account, function(err, value) {
-                        if (!err) {
-                            $$.g.cache.remove(accountToken, "accounts");
-                        }
-                        fn(err, value);
-                    });
-                });
-
+            return this._createAccount(account, function(err, value) {
+                if (!err) {
+                    $$.g.cache.remove(accountToken, "accounts");
+                }
+                fn(err, value);
+            });
         } else {
-            fn(null, null);
+            return this.createAccount(fn);
         }
     }
     //endregion

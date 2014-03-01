@@ -1,125 +1,138 @@
 /* sign up */
 
 .signuppanel {
-   width: 90%;
-   margin: 0 10%;
-   position: absolute;  
+  width: 90%;
+  margin: 0 10%;
+  position: absolute;
 }
 
-.mainpanel .signuppanel/*:not(:first-of-type)*/ {
-   display: none;
+.mainpanel .signuppanel  {
+  display: none;
 }
 
 .mainpanel .logo {
-   padding: 15px;
-   margin: 15px auto;
-   display: block;
-   width: 100%;
-   max-width: 300px;
+  padding: 15px;
+  margin: 15px auto;
+  display: block;
+  width: 100%;
+  max-width: 300px;
 }
 
 .signuppanel .row {
-   margin-left: -5px;
-   margin-right: -5px;
+  margin-left: -5px;
+  margin-right: -5px;
 }
 
 .signuppanel h4 {
-   text-align: center;
+  text-align: center;
 }
 
 .signuppanel .logopanel {
-   float: none;
-   width: auto;
-   padding: 0;
-   background: none;
+  float: none;
+  width: auto;
+  padding: 0;
+  background: none;
+}
+
+
+.signuppanel .social {
+  .btn {
+    min-width:75px;
+  }
+  i.fa {
+    font-size:36px;
+  }
 }
 
 .signuppanel .col-sm-6,
 .signuppanel .col-sm-5,
 .signuppanel .col-sm-3,
 .signuppanel .col-sm-4 {
-   padding-left: 5px;
-   padding-right: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .signuppanel .signup-info {
-   padding-right: 20px;
+  padding-right: 20px;
 }
 
-.signuppanel .form{
-   background: rgba(255,255,255,0.2);
-   border: 1px solid #ccc;
-   -moz-box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
-   -webkit-box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
-   box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
-   -moz-border-radius: 3px;
-   -webkit-border-radius: 3px;
-   border-radius: 3px;
-   padding: 30px;
-   width: 90%;
-   margin: 0 auto;
-   position: absolute;
+.signuppanel .form {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid #ccc;
+  -moz-box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  padding: 30px;
+  width: 90%;
+  margin: 0 auto;
+  position: absolute;
 }
 
 .signup-footer {
-   border-top: 1px solid #ddd;
-   margin-top: 30px;
-   padding-top: 10px;
-   font-size: 12px;
+  border-top: 1px solid #ddd;
+  margin-top: 30px;
+  padding-top: 10px;
+  font-size: 12px;
 }
 
 .models {
-   margin: 0 auto;
+  margin: 0 auto;
 }
 
 .btn-bus-model {
-   width: 100px;
-   height: 100px;
-   margin-right: 10px;
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
 }
 
 #btn-enterprise {
-   margin-right: 0px;
+  margin-right: 0px;
 }
 
 .btn-bus-model .fa {
-   font-size: 65px;
-   text-align: center;
-   margin-top: 10px;
+  font-size: 65px;
+  text-align: center;
+  margin-top: 10px;
 }
 
-.termsOfuse {}
+.termsOfuse {
+}
 
-@media(max-width: @screen-sm-max) {
-   .signinpanel,
-      .signuppanel {
-         margin: 0 auto;
-         padding: 20px;
-      }
+@media (max-width: @screen-sm-max) {
+  .signinpanel,
+  .signuppanel {
+    margin: 0 auto;
+    padding: 20px;
+  }
 
-      .signinpanel form {
-         margin-top: 20px;
-      }
+  .signinpanel form {
+    margin-top: 20px;
+  }
 
-      .signup-footer {
-         margin-bottom: 10px;
-      }
+  .signup-footer {
+    margin-bottom: 10px;
+  }
 
-      .signuppanel .form-control {
-         margin-bottom: 10px;
-      }
+  .signuppanel .form-control {
+    margin-bottom: 10px;
+  }
 
-      .signup-footer .pull-left,
-      .signup-footer .pull-right {
-         float: none !important;
-         text-align: center;
-      }
-      .signup-footer {
-      margin-bottom: 10px;
-      }
-      .signup-footer .pull-left,
-   .signup-footer .pull-right {
-      float: none !important;
-      text-align: center;
-   }
+  .signup-footer .pull-left,
+  .signup-footer .pull-right {
+    float: none !important;
+    text-align: center;
+  }
+
+  .signup-footer {
+    margin-bottom: 10px;
+  }
+
+  .signup-footer .pull-left,
+  .signup-footer .pull-right {
+    float: none !important;
+    text-align: center;
+  }
 }

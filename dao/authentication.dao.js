@@ -1,5 +1,6 @@
 var User = require('../models/user');
 var UserDao = require('./user.dao');
+var AccountDao = require('./account.dao');
 var cookies = require('../utils/cookieutil');
 var EmailTemplateUtil = require('../utils/emailtemplateutil');
 var crypto = require('../utils/security/crypto');
@@ -11,9 +12,148 @@ var dao = {
         defaultModel: $$.m.User
     },
 
+    authenticateByUsernamePassword: function(req, username, password, fn) {
+        var host = req.get("host");
+        AccountDao.getAccountByHost(host, function(err, value) {
+            if (err) {
+                return fn(err, "An error occurred validating account");
+            }
+
+            var account = value;
+            if (account !== true && (account == null || account.id() == null || account.id() == 0)) {
+                return fn("Account not found", "No account found at this location");
+            }
+
+            //We are at the main indigenous level application, not at a custom subdomain
+            else if (account === true) {
+                req.session.accountId = 0;
+                UserDao.getUserByUsername(username, function(err, value) {
+                    if (!err) {
+                        if (value == null) {
+                            return fn("User not found", "Incorrect username");
+                        }
+
+                        var user = value;
+
+                        user.verifyPassword(password, $$.constants.user.credential_types.LOCAL, function(err, value) {
+                            if (!err) {
+                                if (value === false) {
+                                    return fn("Incorrect password", "Incorrect password");
+                                } else {
+                                    return fn(null, user);
+                                }
+                            } else {
+                                return fn(err, "An error occurred verifying password - " + err);
+                            }
+                        });
+                    } else {
+                        fn(err, value);
+                    }
+                });
+            } else {
+                req.session.accountId = account.id();
+                UserDao.getUserForAccount(account.id(), username, function(err, value) {
+                    if (err) {
+                        return fn(err, "An error occurred retrieving user for account");
+                    } else {
+                        if (value == null) {
+                            return fn("User not found for account", "Incorrect username");
+                        } else {
+                            var user = value;
+                            user.verifyPasswordForAccount(account.id(), password, $$.constants.user.credential_types.LOCAL, function(err, value) {
+                                if (!err) {
+                                    if (value === false) {
+                                        return fn("Incorrect password","Incorrect password");
+                                    } else {
+                                        return fn(null, user);
+                                    }
+                                } else {
+                                    return fn(err, "An error occurred verifying encrypted password");
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    },
+
+
+    authenticateBySocialLogin: function(req, socialType, socialId, email, accessToken, fn) {
+        var self = this;
+        var host = req.get("host");
+        AccountDao.getAccountByHost(host, function(err, value) {
+            if (err) {
+                return fn(err, "An error occurred validating account");
+            }
+
+            var account = value;
+            if (account !== true && (account == null || account.id() == null || account.id() == 0)) {
+                return fn("Account not found", "No account found at this location");
+            }
+
+            //We are at the main indigenous level application, not at a custom subdomain
+            else if (account === true) {
+                req.session.accountId = 0;
+                //Lets look up the user by socialId
+                UserDao.getUserBySocialId(socialType, socialId, function(err, value) {
+                    if (err) {
+                        return fn(err, "An error occurred attempting to retrieve user by social profile");
+                    }
+
+                    if (value == null) {
+                        //look up by email
+                        UserDao.getUserByUsername(email, function(err, value) {
+                            if (err) {
+                                return fn(err, "An error occurred retrieving user by username");
+                            }
+
+                            if (value == null) {
+                                return fn("User not found for social profile", "User not found");
+                            } else {
+                                value.createOrUpdateSocialCredentials(socialType, socialId, accessToken);
+                                return self.saveOrUpdate(value, fn);
+                            }
+                        });
+                    } else {
+                        value.createOrUpdateSocialCredentials(socialType, socialId, accessToken);
+                        return self.saveOrUpdate(value, fn);
+                    }
+                });
+            } else {
+                req.session.accountId = account.id();
+                UserDao.getUserForAccountBySocialProfile(account.id(), socialType, socialId, function(err, value) {
+                    if (err) {
+                        return fn(err, "An error occurred retrieving user for account by social profile");
+                    }
+
+                    if (value == null) {
+                        //Look for user by email
+                        UserDao.getUserForAccount(account.id(), email, function(err, value) {
+                            if (err) {
+                                return fn(err, "An error occurred retrieving user for account");
+                            }
+
+                            if (value == null) {
+                                return fn("User not found for account and social profile", "User not found");
+                            }
+
+                            value.createOrUpdateSocialCredentials(socialType, socialId, accessToken);
+                            return self.saveOrUpdate(value, fn);
+                        });
+                    } else {
+                        value.createOrUpdateSocialCredentials(socialType, socialId, accessToken);
+                        return self.saveOrUpdate(value, fn);
+                    }
+                });
+            }
+        });
+    },
+
+
     sendForgotPasswordEmailByUsernameOrEmail: function(email, fn) {
         var _email = email;
-        UserDao.getUserByUsernameOrEmail(email)
+        UserDao.getUserByUsername(email)
             .done(function(value) {
                 if (value == null) {
                     fn("No user found with username or email: " + _email);
