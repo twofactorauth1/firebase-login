@@ -10,7 +10,7 @@ var cookies = require("../utils/cookieutil");
 passport.use(new FacebookStrategy({
         clientID: FacebookConfig.CLIENT_ID,
         clientSecret: FacebookConfig.CLIENT_SECRET,
-        callbackURL: FacebookConfig.CALLBACK_URL_LOGIN,
+        callbackURL: FacebookConfig.CALLBACK_URL_SIGNUP,
         passReqToCallback: true
     },
 
