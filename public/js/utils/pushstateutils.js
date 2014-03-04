@@ -6,6 +6,9 @@
         "/logout",
         "/forgotpassword",
         "/signup/facebook",
+        "/signup/twitter",
+        "/signup/linkedin",
+        "/signup/google",
         "/",
         ""
     ];

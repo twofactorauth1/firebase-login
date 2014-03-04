@@ -33,6 +33,21 @@ define([
 
             stripHtml: function(str) {
                 return str.replace(/(<([^>]+)>)/ig,"");
+            },
+
+
+            splitFullname: function(fullname) {
+                var names = fullname.split(" "), first = "", last = "", middle = "";
+                first = names[0];
+
+                names.splice(0,1);
+                if (names.length > 1) {
+                    middle = names[0];
+                    names.splice(0,1);
+                }
+                last = names.join(" ");
+
+                return [first,middle,last];
             }
         },
 

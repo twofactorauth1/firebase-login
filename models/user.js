@@ -98,7 +98,10 @@ var user = $$.m.ModelBase.extend({
 
     serializers: {
         db: function (json) {
-            json._username = json.username.toLowerCase();
+            if (json.username != null) {
+                json._username = json.username.toLowerCase();
+            }
+
             for (var i = 0; i < json.accounts.length; i++) {
                 for (var j = 0; j < json.accounts[i].credentials.length; j++) {
                     if (json.accounts[i].credentials[j].username != null) {
@@ -128,10 +131,15 @@ var user = $$.m.ModelBase.extend({
 
     //region CREDENTIALS
     createOrUpdateLocalCredentials: function (password) {
+        var username = this.get("username");
+        if (username == null) {
+            return;
+        }
+
         var creds = this.getCredentials($$.constants.user.credential_types.LOCAL);
         if (creds == null) {
             creds = {
-                username: this.get("username"),
+                username: username,
                 password: password,
                 type: $$.constants.user.credential_types.LOCAL
             };

@@ -21,6 +21,9 @@ var dao = {
 
 
     getUserByUsername: function(username, fn) {
+        if (username == null) {
+            return fn(null, null);
+        }
         this.findOne( {'_username':username}, fn);
     },
 
@@ -157,10 +160,13 @@ var dao = {
                                 FacebookDao.refreshUserFromProfile(user, true, fxn);
                                 break;
                             case social.TWITTER:
+                                self.saveOrUpdate(user, fn);
                                 break;
                             case social.GOOGLE:
+                                self.saveOrUpdate(user, fn);
                                 break;
                             case social.LINKDIN:
+                                self.saveOrUpdate(user, fn);
                                 break;
                             default:
                                 self.saveOrUpdate(user, fn);
@@ -184,7 +190,7 @@ var dao = {
 
 
     getUserForAccountBySocialProfile: function(accountId, socialType, socialId, fn) {
-        var query = { "accounts.accountId":accountId, "accounts.credentials.type":socialType, "accounts.credentials.socialId":socialId };
+        var query = { "accounts.accountId":accountId, "credentials.type":socialType, "credentials.socialId":socialId };
         return this.findOne(query, fn);
     }
 };

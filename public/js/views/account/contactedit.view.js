@@ -70,7 +70,7 @@ define([
         //region FULLNAME
         fullnameChanged: function(event) {
             var fullname = $(event.currentTarget).val();
-            var nameParts = this.splitFullname(fullname);
+            var nameParts = $$.u.stringutils.splitFullname(fullname);
 
             $("#hint-first", this.el).html(nameParts[0]);
             $("#hint-middle", this.el).html(nameParts[1]);
@@ -82,21 +82,6 @@ define([
 
         fullnameKeyTimer: function(event) {
             this.saveContact();
-        },
-
-
-        splitFullname: function(fullname) {
-            var names = fullname.split(" "), first = "", last = "", middle = "";
-            first = names[0];
-
-            names.splice(0,1);
-            if (names.length > 1) {
-                middle = names[0];
-                names.splice(0,1);
-            }
-            last = names.join(" ");
-
-            return [first,middle,last];
         },
         //endregion
 
