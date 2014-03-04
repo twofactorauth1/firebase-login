@@ -13,9 +13,10 @@ define([], function() {
             type:"",        //contact_types
             photo:"",       //string
             created: {
-                date: "",        //Date created
-                strategy: "",    // lo|fb|tw|li|etc.  See $$.constants.user.credential_types
-                by: null        //this is a nullable ID value, if created by an existing user, this will be populated.
+                date: "",           //Date created
+                strategy: "",       // lo|fb|tw|li|etc.  See $$.constants.social.types
+                by: null,           //this is a nullable ID value, if created by an existing user, this will be populated.
+                socialId: null      //This socialID of the source of this contact, if applicable
             },
             siteActivity: [],
             notes: [],

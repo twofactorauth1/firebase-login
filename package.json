@@ -24,6 +24,7 @@
     "nodemailer": "0.6.0",
     "passport": "~0.2.0",
     "passport-facebook": "~1.0.2",
+    "passport-twitter": "~1.0.2",
     "passport-local": "~0.1.6",
     "requirejs": "2.1.10",
     "stripe": "~2.4.0",

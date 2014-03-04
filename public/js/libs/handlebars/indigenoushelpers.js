@@ -1,6 +1,19 @@
-define([], function() {
+define(function() {
 
-    Handlebars.registerHelper("iconFromType", function(type) {
+    Handlebars.registerHelper("labelFromSocialType", function(type) {
+        var p = $$.constants.social.types;
+        switch(type) {
+            case p.LOCAL: return "local";
+            case p.FACEBOOK: return "Facebook";
+            case p.TWITTER: return "Twitter";
+            case p.LINKDIN: return "LinkedIn";
+            case p.GOOGLE: return "Google+";
+        }
+        return "";
+    });
+
+
+    Handlebars.registerHelper("iconFromSocialType", function(type) {
         var p = $$.constants.social.types;
         switch(type) {
             case p.LOCAL: return "";

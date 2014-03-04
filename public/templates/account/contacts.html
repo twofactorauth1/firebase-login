@@ -149,7 +149,7 @@ CONTACT DETAILS VIEW
                 {{#each contact.details}}
                     {{#each phones}}
                         <div>
-                            <a href="tel:{{number}}">{{number}}</a> <small>{{phoneTypeLabel type}}</small> <i class="icon-social {{iconFromType ../type}}"/>
+                            <a href="tel:{{number}}">{{number}}</a> <small>{{phoneTypeLabel type}}</small> <i class="icon-social {{iconFromSocialType ../type}}"/>
                         </div>
                     {{/each}}
                 {{/each}}
@@ -168,7 +168,7 @@ CONTACT DETAILS VIEW
                             {{city}}
                             {{#if state}}, {{state}}{{/if}}
                             {{#if zip}}, {{zip}}{{/if}}
-                            {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromType ../type}}"/>
+                            {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromSocialType ../type}}"/>
                         </div>
 
                         <div>
@@ -187,7 +187,7 @@ CONTACT DETAILS VIEW
                 {{#each contact.details}}
                     {{#each emails}}
                         {{#if this}}
-                        <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromType ../../type}}"/>
+                        <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}"/>
                         {{/if}}
                     {{/each}}
                 {{/each}}
@@ -282,7 +282,7 @@ CONTACTS EDIT VIEW
                             {{else}}
                                 {{#each phones}}
                                 <div>
-                                    <a href="tel:+1{{number}}">+1 {{number}}</a> <small>{{phoneTypeLabel type}}</small> <i class="icon-social {{iconFromType ../type}}"/>
+                                    <a href="tel:+1{{number}}">+1 {{number}}</a> <small>{{phoneTypeLabel type}}</small> <i class="icon-social {{iconFromSocialType ../type}}"/>
                                 </div>
                                 {{/each}}
                             {{/canEditContactDetails}}
@@ -312,7 +312,7 @@ CONTACTS EDIT VIEW
                                         {{city}}
                                         {{#if state}}, {{state}}{{/if}}
                                         {{#if zip}}, {{zip}}{{/if}}
-                                        {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromType ../../type}}"/>
+                                        {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromSocialType ../../type}}"/>
                                     </div>
 
                                     {{> edit-default-shipping-billing}}
@@ -339,7 +339,7 @@ CONTACTS EDIT VIEW
                             {{else}}
                                 {{#each emails}}
                                     {{#if this}}
-                                        <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromType ../../type}}"/>
+                                        <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}"/>
                                     {{/if}}
                                 {{/each}}
                             {{/canEditContactDetails}}

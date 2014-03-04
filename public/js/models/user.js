@@ -18,8 +18,14 @@ define([], function() {
                     isNew: false     //If this is a brand new user, mark this as true, the application code will modify it later as necessary
                 },
                 profilePhotos: [],
-                accounts: []
+                accounts: [],
+                credentials: []
             }
+        },
+
+
+        getUserAccount: function(accountId) {
+
         },
 
 

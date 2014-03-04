@@ -1,5 +1,6 @@
 var baseDao = require('./base.dao');
 var AccountDao = require('./account.dao');
+var FacebookDao = require('./social/facebook.dao');
 var Constants = requirejs('constants/constants');
 var crypto = require('../utils/security/crypto');
 require('../models/user');
@@ -82,7 +83,7 @@ var dao = {
     },
 
 
-    createUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, accessToken, accountToken, fn) {
+    createUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, username, socialUrl, accessToken, accountToken, fn) {
         var self = this;
 
         this.getUserByUsername(email, function(err, value) {
@@ -131,17 +132,39 @@ var dao = {
                             last:lastName,
                             created: {
                                 date: new Date().getTime(),
-                                strategy: socialType,
                                 by: null, //self-created
+                                strategy: socialType,
                                 isNew: true
                             }
                         });
 
                         user.createOrUpdateLocalCredentials(null);
-                        user.createOrUpdateSocialCredentials(socialType, socialId, accessToken);
-                        user.createUserAccountFromSocialProfile(accountId, email, socialType, socialId, accessToken, ["super","admin","member"]);
+                        user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, username, socialUrl);
+                        user.createUserAccount(accountId, email, null, ["super","admin","member"]);
 
-                        self.saveOrUpdate(user, fn);
+                        var social = $$.constants.social.types;
+
+                        var fxn = function(err, value) {
+                            if (!err) {
+                                self.saveOrUpdate(value, fn);
+                            } else {
+                                self.saveOrUpdate(user, fn);
+                            }
+                        };
+
+                        switch(socialType) {
+                            case social.FACEBOOK:
+                                FacebookDao.refreshUserFromProfile(user, true, fxn);
+                                break;
+                            case social.TWITTER:
+                                break;
+                            case social.GOOGLE:
+                                break;
+                            case social.LINKDIN:
+                                break;
+                            default:
+                                self.saveOrUpdate(user, fn);
+                        }
                     });
             });
         })
@@ -163,25 +186,6 @@ var dao = {
     getUserForAccountBySocialProfile: function(accountId, socialType, socialId, fn) {
         var query = { "accounts.accountId":accountId, "accounts.credentials.type":socialType, "accounts.credentials.socialId":socialId };
         return this.findOne(query, fn);
-    },
-
-
-    //TODO - remove this after March 1, 2014
-    _onStartup: function() {
-        var query = {};
-        var self = this;
-        this.findMany(null, function(err, value) {
-            if (!err) {
-                if (value.length > 0) {
-                    value.forEach(function(user) {
-                        if (user.get("_v") < "0.2") {
-                            user.set({_v:"0.2"});
-                            self.saveOrUpdate(user);
-                        }
-                    });
-                }
-            }
-        });
     }
 };
 

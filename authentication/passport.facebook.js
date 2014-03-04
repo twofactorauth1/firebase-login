@@ -8,9 +8,9 @@ var cookies = require("../utils/cookieutil");
 
 
 passport.use(new FacebookStrategy({
-        clientID: facebookConfig.FACEBOOK_CLIENT_ID,
-        clientSecret: facebookConfig.FACEBOOK_CLIENT_SECRET,
-        callbackURL: facebookConfig.FACEBOOK_CALLBACK_URL_SIGNUP,
+        clientID: facebookConfig.CLIENT_ID,
+        clientSecret: facebookConfig.CLIENT_SECRET,
+        callbackURL: facebookConfig.CALLBACK_URL_SIGNUP,
         passReqToCallback: true
     },
 
@@ -20,6 +20,8 @@ passport.use(new FacebookStrategy({
         var firstName = profile.givenName;
         var lastName = profile.familyName;
         var socialId = profile.id;
+        var username = profile.username;
+        var profileUrl = profile.profileUrl;
 
         var authMode = req.session.authMode;
         delete req.session.authMode;
@@ -28,7 +30,7 @@ passport.use(new FacebookStrategy({
             // creating new account
             var accountToken = cookies.getAccountToken(req);
 
-            UserDao.createUserFromSocialProfile(socialType, socialId, email, firstName, lastName, accessToken, accountToken, function(err, value) {
+            UserDao.createUserFromSocialProfile(socialType, socialId, email, firstName, lastName, username, profileUrl, accessToken, accountToken, function(err, value) {
                 if (err) {
                     return done(null, false, err);
                 } else {
@@ -41,7 +43,7 @@ passport.use(new FacebookStrategy({
             });
         } else {
             //Logging in as usual.
-            AuthenticationDao.authenticateBySocialLogin(req, socialType, socialId, email, accessToken, function(err, value) {
+            AuthenticationDao.authenticateBySocialLogin(req, socialType, socialId, email, username, profileUrl, accessToken, function(err, value) {
                 if (err) {
                     return done(null, false, {message:value});
                 }

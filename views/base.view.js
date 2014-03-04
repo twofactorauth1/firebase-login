@@ -54,6 +54,7 @@ _.extend(baseView.prototype, {
             data.serverProps[$$.constants.server_props.IS_LOGGED_IN] = true;
             data.user = this.req.user.toJSON();
             data.isLoggedIn = true;
+            data.photo = this.req.user.getDefaultPhoto();
         } else {
             data.isLoggedIn = false;
         }

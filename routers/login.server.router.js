@@ -129,10 +129,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
     handleSignup: function(req,resp) {
         var self = this, user, accountToken, deferred;
 
-        var username = req.body.email;
+        var username = req.body.username;
         var password1 = req.body.password;
         var password2 = req.body.password2;
-        var email = req.body.email;
+        var email = req.body.username;
 
         if (username == null || username.trim() == "") {
             req.flash("error", "You must enter a valid username");

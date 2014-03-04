@@ -69,7 +69,9 @@ _.extend(api.prototype, BaseApi.prototype, {
 
         if (isNew === true) {
             contact.set("accountId", this.accountId(req));
+            contact.createdBy(this.userId(), $$.constants.social.types.LOCAL);
         }
+
         ContactDao.saveOrUpdate(contact, function(err, value) {
             if (!err) {
                 self.sendResult(resp, value);

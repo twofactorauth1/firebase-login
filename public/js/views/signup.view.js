@@ -200,7 +200,7 @@ define([
 
 
         onCreateAccount: function (event) {
-            if (!this.usernamevalid || !this.passwordsvalid || !this.emailvalid) {
+            if (!this.usernamevalid || !this.passwordsvalid) {
                 event.preventDefault();
                 return false;
             }

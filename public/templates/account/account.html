@@ -5,8 +5,21 @@
 
     <h4>My Social Networks</h4>
 
-    <ul>
+    <ul class="unstyled">
+        {{#each networks}}
+            <li>
+                <i class="{{iconFromSocialType type}}"/> {{labelFromSocialType type}} <a href="{{socialUrl}}" target="_blank">{{username}}</a>
+            </li>
+        {{/each}}
+    </ul>
 
+    <h4>Avaialble Networks</h4>
+    <ul class="unstyled">
+        {{#each otherNetworks}}
+        <li>
+            <i class="{{iconFromSocialType this}}"/> Connect now
+        </li>
+        {{/each}}
     </ul>
 
     <h4>My Linked Emails</h4>

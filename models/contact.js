@@ -7,18 +7,19 @@ var contact = $$.m.ModelBase.extend({
         return {
             _id: null,
 
-            accountId: 0,   //int
-            first:null,       //string,
-            middle:null,      //string,
-            last:null,        //string,
-            photo:"",       //string,
-            type:"c",       //contact_types
+            accountId: 0,           //int
+            first:null,             //string,
+            middle:null,            //string,
+            last:null,              //string,
+            photo:"",               //string,
+            type:"c",               //contact_types
             _v:"0.1",
 
             created: {
-                date: "",        //Date created
-                strategy: "",    // lo|fb|tw|li|etc.  See $$.constants.user.credential_types
-                by: null        //this is a nullable ID value, if created by an existing user, this will be populated.
+                date: "",           //Date created
+                by: null,           //this is a nullable ID value, if created by an existing user, this will be populated.
+                strategy: "",       // lo|fb|tw|li|etc.  See $$.constants.user.credential_types
+                socialId: null      //The socialId of the source of this contact, if applicable
             },
 
 
@@ -132,15 +133,31 @@ var contact = $$.m.ModelBase.extend({
     },
 
 
+    createdBy: function(userId, socialType, socialId) {
+        var created = {
+            date: new Date().getTime(),
+            by: userId,
+            strategy: socialType,
+            socialId: socialId
+        };
+
+        this.set({created:created});
+    },
+
+
     addNote: function(enteredBy, note) {
-        var note = {
+        var _note = {
             enteredBy: enteredBy,
             note: note,
             date: new Date().getTime()
-        }
+        };
 
-        this.notes = this.notes || [];
-        this.notes.push(note);
+        var notes = this.get("notes");
+        if (notes == null) {
+            notes = [];
+            this.set({notes:notes});
+        }
+        notes.push(_note);
     }
 
 }, {

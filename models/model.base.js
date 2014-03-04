@@ -130,8 +130,11 @@ _.extend(modelBase.prototype, {
      * @param transientMode - null|{empty}|public|db.  When public or db are passed in
      *      we will remove any properties marked as transient for the given mode.  See
      *      @transients
+     *
+     * @param options - set of options the model should understand, common options are
+     *      1) accountId - this accountId on the current request
      */
-    toJSON: function(transientMode) {
+    toJSON: function(transientMode, options) {
         var json;
         if (this.transients != null) {
             if (this.transients.deepCopy === true) {
@@ -146,7 +149,7 @@ _.extend(modelBase.prototype, {
             if (keys != null) {
                 for (var i = 0; i < keys.length; i++) {
                     if (_.isFunction(keys[i])) {
-                        keys[i].call(this, json);
+                        keys[i].call(this, json, options);
                     } else {
                         delete json[keys[i]];
                     }
@@ -156,9 +159,9 @@ _.extend(modelBase.prototype, {
 
         if (this.serializers != null) {
             if (transientMode == "public" && _.isFunction(this.serializers.public)) {
-                this.serializers.public.call(this, json);
+                this.serializers.public.call(this, json, options);
             } else if(transientMode == "db" && _.isFunction(this.serializers.db)) {
-                this.serializers.db.call(this,json);
+                this.serializers.db.call(this,json, options);
             }
         }
         return json;

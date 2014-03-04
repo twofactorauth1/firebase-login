@@ -90,21 +90,12 @@ _.extend(apiBase.prototype, {
     },
 
 
-    sendResult: function(resp, result) {
-        if (_.isArray(result)) {
-            var _arr = [];
-            result.forEach(function(item) {
-               if (typeof item.toJSON != undefined) {
-                   _arr.push(item.toJSON("public"));
-               } else {
-                   _arr.push(item);
-               }
-            });
-            result = _arr;
-        } else if (typeof result.toJSON != undefined) {
-            result = result.toJSON("public");
+    userId: function(req) {
+        try {
+            return req.user.id();
+        }catch(exception) {
+            return null;
         }
-        return resp.send(result);
     },
 
 
@@ -114,6 +105,24 @@ _.extend(apiBase.prototype, {
         }catch(exception) {
             return null;
         }
+    },
+
+
+    sendResult: function(resp, result) {
+        if (_.isArray(result)) {
+            var _arr = [];
+            result.forEach(function(item) {
+                if (typeof item.toJSON != undefined) {
+                    _arr.push(item.toJSON("public"));
+                } else {
+                    _arr.push(item);
+                }
+            });
+            result = _arr;
+        } else if (typeof result.toJSON != undefined) {
+            result = result.toJSON("public");
+        }
+        return resp.send(result);
     },
 
 

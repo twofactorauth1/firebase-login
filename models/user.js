@@ -15,7 +15,7 @@ var user = $$.m.ModelBase.extend({
 
             created: {
                 date: "",        //Date created
-                strategy: "",    // lo|fb|tw|li|etc.  See $$.constants.user.credential_types
+                strategy: "",    // lo|fb|tw|li|etc.  See $$.constants.social.types
                 by: null,        //this is a nullable ID value, if created by an existing user, this will be populated.
                 isNew: false     //If this is a brand new user, mark this as true, the application code will modify it later as necessary
             },
@@ -25,9 +25,9 @@ var user = $$.m.ModelBase.extend({
              * @profilePhotos
              *
              * [{
-             *  active:true|false,
+             *  default:true|false,
              *  url:"" //URL
-             *  source:"" //  lo|fb|tw|go|li|cc
+             *  type:"" //  lo|fb|tw|go|li|cc
              * }]
              */
             profilePhotos: [],
@@ -39,10 +39,8 @@ var user = $$.m.ModelBase.extend({
              *  password:string
              *  credentials: [
              *      type:int,
-             *      socialId:string
-             *      username:string
-             *      password:string,
-             *      accessToken:string
+             *      username:string     //Local only
+             *      password:string,    //Local only
              *  ],
              *  permissions: [ super, admin, member ]
              * }]
@@ -52,10 +50,11 @@ var user = $$.m.ModelBase.extend({
             /**
              * [{
              *  type:int,
-             *  socialId:string
-             *  username:string, //Local only
-             *  password:string, //Local only
-             *  accessToken:string,
+             *  username:string,
+             *  password:string,    //Local only
+             *  socialId:string,    //social only
+             *  accessToken:string, //social only
+             *  socialUrl:string    //social only
              * }]
              */
             credentials: []
@@ -65,12 +64,32 @@ var user = $$.m.ModelBase.extend({
 
     transients: {
         deepCopy: true,
-        public: ["credentials", function (json) {
+        public: [function (json, options) {
             var self = this;
+            if (json.credentials != null) {
+                json.credentials.forEach(function(creds) {
+                    delete creds.password;
+                    delete creds.accessToken;
+                });
+            }
+
             if (json.accounts != null) {
+
+                if (options && options.accountId) {
+                    //Remove all but this account
+                    var account = _.findWhere(json.accounts, {accountId:options.accountId});
+                    json.accounts = account != null ? [account] : [];
+                }
+
                 json.accounts.forEach(function (account) {
                     delete account.permissions;
-                    delete account.credentials;
+
+                    if (account.credentials != null) {
+                        account.credentials.forEach(function(creds) {
+                            delete creds.password;
+                            delete creds.accessToken;
+                        });
+                    }
                 });
             }
         }]
@@ -109,48 +128,42 @@ var user = $$.m.ModelBase.extend({
 
     //region CREDENTIALS
     createOrUpdateLocalCredentials: function (password) {
-        var creds = this._getCredentials($$.constants.user.credential_types.LOCAL);
+        var creds = this.getCredentials($$.constants.user.credential_types.LOCAL);
         if (creds == null) {
-            return this._createLocalCredentials(this.get("username"), password);
+            creds = {
+                username: this.get("username"),
+                password: password,
+                type: $$.constants.user.credential_types.LOCAL
+            };
         } else {
             creds.password = password;
-            return this._setCredentials(creds, true);
         }
-    },
-
-
-    createOrUpdateSocialCredentials: function(socialType, socialId, accessToken) {
-        var creds = this._getCredentials(socialType);
-        if (creds == null) {
-            return this._createSocialCredentials(socialType, socialId, accessToken);
-        } else {
-            creds.type = socialType;
-            creds.socialId = socialId;
-            creds.accessToken = accessToken;
-            return this._setCredentials(creds, false);
-        }
-    },
-
-
-    _createLocalCredentials: function (username, password) {
-        var creds = {
-            username: username || this.get("username"),
-            password: password,
-            type: $$.constants.user.credential_types.LOCAL
-        };
-
         return this._setCredentials(creds, true);
     },
 
 
-    _createSocialCredentials: function(socialType, socialId, accessToken) {
-        var creds = {
-            type: socialType,
-            socialId: socialId,
-            accessToken: accessToken
-        };
-
+    createOrUpdateSocialCredentials: function(socialType, socialId, accessToken, username, socialUrl) {
+        var creds = this.getCredentials(socialType);
+        if (creds == null) {
+            creds = {};
+        }
+        creds.type = socialType;
+        creds.socialId = socialId;
+        creds.accessToken = accessToken;
+        creds.username = username;
+        creds.socialUrl = socialUrl;
         return this._setCredentials(creds, false);
+    },
+
+
+    getCredentials: function (type) {
+        var credentials = this.get("credentials"), creds;
+        for (var i = 0; i < credentials.length; i++) {
+            if (credentials[i].type == type) {
+                return credentials[i];
+            }
+        }
+        return null;
     },
 
 
@@ -176,6 +189,9 @@ var user = $$.m.ModelBase.extend({
         if (options.password != null) {
             creds.password = options.password;
         }
+        if (options.socialUrl != null) {
+            creds.socialUrl = options.socialUrl;
+        }
 
         creds.socialId = options.socialId;
         creds.accessToken = options.accessToken;
@@ -190,33 +206,8 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    _getCredentials: function (type) {
-        var credentials = this.get("credentials"), creds;
-        for (var i = 0; i < credentials.length; i++) {
-            if (credentials[i].type == type) {
-                return credentials[i];
-            }
-        }
-        return null;
-    },
-
-
-    _getUserAccountCredentials: function (accountId, type) {
-        var userAccount = this.getUserAccount(accountId);
-        if (userAccount != null) {
-            var credentials = userAccount.credentials;
-            for (var i = 0; i < credentials.length; i++) {
-                if (credentials[i].type == type) {
-                    return credentials[i];
-                }
-            }
-        }
-        return null;
-    },
-
-
     verifyPassword: function (password, type, fn) {
-        var credentials = this._getCredentials(type);
+        var credentials = this.getCredentials(type);
         this._verifyPasswordForCredentials(credentials, password, fn);
     },
 
@@ -273,36 +264,19 @@ var user = $$.m.ModelBase.extend({
 
 
     createUserAccount: function (accountId, username, password, permissions) {
+        if (_.isArray(password)) {
+            permissions = password;
+            password = null;
+        }
+
         var userAccount = {
             accountId: accountId,
             username: username,
             credentials: [
                 {
                     username: username,
-                    password: crypto.hash(password),
+                    password: password == null ? null : crypto.hash(password),
                     type: $$.constants.user.credential_types.LOCAL
-                }
-            ],
-            permissions: permissions
-        };
-
-        return this._createUserAccount(userAccount, permissions);
-    },
-
-
-    createUserAccountFromSocialProfile: function(accountId, email, socialType, socialId, accessToken, permissions) {
-        var userAccount = {
-            accountId: accountId,
-            username:email,
-            credentials: [
-                {
-                    type:socialType,
-                    socialId:socialId,
-                    accessToken:accessToken
-                },
-                {
-                    type:$$.constants.user.credential_types.LOCAL,
-                    username:email
                 }
             ],
             permissions: permissions
@@ -367,6 +341,94 @@ var user = $$.m.ModelBase.extend({
         else {
             accounts.push(userAccount);
             return userAccount;
+        }
+    },
+
+
+    _getUserAccountCredentials: function (accountId, type) {
+        var userAccount = this.getUserAccount(accountId);
+        if (userAccount != null) {
+            var credentials = userAccount.credentials;
+            for (var i = 0; i < credentials.length; i++) {
+                if (credentials[i].type == type) {
+                    return credentials[i];
+                }
+            }
+        }
+        return null;
+    },
+    //endregion
+
+
+    //region PHOTO
+    addOrUpdatePhoto: function(socialType, url, isDefault) {
+        var photos = this.get("photos");
+        if (photos == null) {
+            photos = [];
+            this.set({photos:photos});
+        }
+
+        var photo = this.getPhoto(socialType);
+
+        if (photo != null) {
+            photo.url = url;
+            photo.default = isDefault;
+        } else {
+            photo = {
+                type: socialType,
+                url: url,
+                default: isDefault
+            }
+        }
+
+        this.setPhoto(photo);
+    },
+
+
+    getDefaultPhoto: function() {
+        var photos = this.get("photos");
+        if (photos == null || photos.length == 0) {
+            return null;
+        }
+
+        if (photos.length == 1) {
+            return photos[0];
+        }
+
+        var defaultPhoto = _.findWhere(photos, {default:true});
+        return defaultPhoto || photos[0];
+    },
+
+
+    getPhoto: function(socialType) {
+        var photos = this.get("photos");
+        if (photos == null || photos.length == 0) {
+            return null;
+        }
+
+        return _.findWhere(photos, {type:socialType}) || null;
+    },
+
+
+    setPhoto: function(photo) {
+        var photos = this.get("photos");
+        if (photos == null) {
+            photos = [];
+            this.set({photos:photos});
+        }
+
+        var photoSet = false;
+        for(var i = 0; i < photos.length; i++) {
+            if (photos[i].type == photo.type) {
+                photos[i] = photo;
+                photoSet = true;
+            } else if(photo.default == true) {
+                photos[i].default = false;
+            }
+        }
+
+        if (photoSet == false) {
+            photos.push(photo);
         }
     },
     //endregion

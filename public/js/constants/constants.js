@@ -10,7 +10,16 @@ define([], function () {
         TWITTER: "tw",
         LINKDIN: "li",
         GOOGLE: "go",
-        FULL_CONTACT: "fc"
+        FULL_CONTACT: "fc",
+
+        dp: [
+            {label:"Local", data:"lo"},
+            {label:"Facebook", data:"fb"},
+            {label:"Twitter", data:"tw"},
+            {label:"LinkedIn", data:"li"},
+            {label:"Google+", data:"go"}
+            //{label:"Full Contacnt", data:"fc"}
+        ]
     };
 
 

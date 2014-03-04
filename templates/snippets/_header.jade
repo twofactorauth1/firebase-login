@@ -20,7 +20,10 @@
 
                 p.navbar-text.navbar-right
                     if isLoggedIn
-                        |Signed in as &nbsp;
+                        if photo
+                            img.img-rounded(src="#{photo.url}")
+                        else
+                          |Signed in as &nbsp;
                         a(href="/myaccount") #{user.username}
                         |&nbsp;
                         a(href="/logout" title="Sign out")

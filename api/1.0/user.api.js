@@ -58,7 +58,7 @@ _.extend(api.prototype, BaseApi.prototype, {
                 if (value == null) {
                     return self.wrapError(resp, 404, null, "No User found with ID: [" + userId + "]");
                 }
-                return resp.send(value.toJSON("public"));
+                return resp.send(value.toJSON("public", {accountId:self.accountId(req)}));
             } else {
                 return self.wrapError(resp, 401, null, err, value);
             }

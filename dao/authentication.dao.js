@@ -79,7 +79,7 @@ var dao = {
     },
 
 
-    authenticateBySocialLogin: function (req, socialType, socialId, email, accessToken, fn) {
+    authenticateBySocialLogin: function (req, socialType, socialId, email, username, socialUrl, accessToken, fn) {
         var self = this;
         var host = req.get("host");
         AccountDao.getAccountByHost(host, function (err, value) {
@@ -111,12 +111,12 @@ var dao = {
                             if (value == null) {
                                 return fn("User not found for social profile", "User not found");
                             } else {
-                                value.createOrUpdateSocialCredentials(socialType, socialId, accessToken);
+                                value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, username, socialUrl);
                                 return self.saveOrUpdate(value, fn);
                             }
                         });
                     } else {
-                        value.createOrUpdateSocialCredentials(socialType, socialId, accessToken);
+                        value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, username, socialUrl);
                         return self.saveOrUpdate(value, fn);
                     }
                 });
@@ -138,11 +138,11 @@ var dao = {
                                 return fn("User not found for account and social profile", "User not found");
                             }
 
-                            value.createOrUpdateSocialCredentials(socialType, socialId, accessToken);
+                            value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, username, socialUrl);
                             return self.saveOrUpdate(value, fn);
                         });
                     } else {
-                        value.createOrUpdateSocialCredentials(socialType, socialId, accessToken);
+                        value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, username, socialUrl);
                         return self.saveOrUpdate(value, fn);
                     }
                 });
