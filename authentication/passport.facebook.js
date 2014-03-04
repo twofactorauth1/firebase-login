@@ -1,6 +1,6 @@
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
-var facebookConfig = require('../configs/facebook.config');
+var FacebookConfig = require('../configs/facebook.config');
 var UserDao = require('../dao/user.dao');
 var AuthenticationDao = require('../dao/authentication.dao');
 var constants = requirejs("constants/constants");
@@ -8,9 +8,9 @@ var cookies = require("../utils/cookieutil");
 
 
 passport.use(new FacebookStrategy({
-        clientID: facebookConfig.CLIENT_ID,
-        clientSecret: facebookConfig.CLIENT_SECRET,
-        callbackURL: facebookConfig.CALLBACK_URL_LOGIN,
+        clientID: FacebookConfig.CLIENT_ID,
+        clientSecret: FacebookConfig.CLIENT_SECRET,
+        callbackURL: FacebookConfig.CALLBACK_URL_LOGIN,
         passReqToCallback: true
     },
 
