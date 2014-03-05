@@ -127,7 +127,7 @@ var dao = {
             var _friends = value.data;
 
             var updateContactFromFacebookFriend = function(contact, facebookFriend) {
-                contact.updateContactInfo(facebookFriend.first_name, null, facebookFriend.last_name, facebookFriend.pic, facebookFriend.pic_square, facebookFriend.birthday);
+                contact.updateContactInfo(facebookFriend.first_name, null, facebookFriend.last_name, facebookFriend.pic_big || facebookFriend.pic, facebookFriend.pic_square, facebookFriend.birthday);
 
                 var websites;
                 if (!String.isNullOrEmpty(facebookFriend.website)) {
