@@ -1,4 +1,5 @@
 var appConfig = require('../configs/app.config');
+var AccountDao = require('../dao/account.dao');
 
 //region CLASS - TOKENIZABLE
 var Tokenizable = function(str) {
@@ -53,32 +54,48 @@ var emailTemplateUtil = {
 
 
     //region PUBLIC
-    resetPassword: function(resetPasswordToken, user, toEmail, fn) {
+    resetPassword: function(accountId, resetPasswordToken, user, toEmail, fn) {
         var self = this;
 
-        var tokens = {};
-        tokens[this.tokens.USER_EMAIL] = user.get("email") || toEmail;
-        tokens[this.tokens.RESET_PASSWORD_URL] = this.serverUrl + "/forgotpassword/reset/" + resetPasswordToken;
+        var serverUrl = this._getServerUrl(accountId, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
 
-        var options = {};
-        if (user != null) {
-            options.user = user;
-        }
+            var url = value;
+            var tokens = {};
+            tokens[self.tokens.USER_EMAIL] = user.get("email") || toEmail;
+            tokens[self.tokens.RESET_PASSWORD_URL] = url + "/forgotpassword/reset/" + resetPasswordToken;
 
-        this.log.info("Sending password recovery email");
+            var options = {};
+            if (user != null) {
+                options.user = user;
+            }
 
-        this._sendTemplate("emails/forgotpassword",
-            tokens,
-            toEmail,
-            "Reset your password",
-            options,
-            fn
-        );
+            self.log.info("Sending password recovery email");
+
+            self._sendTemplate("emails/forgotpassword",
+                tokens,
+                toEmail,
+                "Reset your password",
+                options,
+                fn
+            );
+        });
     },
     //endregion PUBLIC
 
 
     //region PRIVATE
+    _getServerUrl: function(accountId, fn) {
+        if (accountId > 0) {
+            return AccountDao.getServerUrlByAccount(accountId, fn);
+        } else {
+            return fn(null, this.serverUrl);
+        }
+    },
+
+
     _sendTemplate: function(template, tokens, to, subject, options, fn) {
         if (_.isFunction(options)) {
             fn = options;

@@ -20,7 +20,6 @@ module.exports = function(grunt) {
         var jsHelpersFile = process.cwd() + "/" + helpersPath;
         grunt.file.write(jsHelpersFile, "");
 
-
         var fileCount = 0;
         grunt.file.recurse(sourceDirectory, function(absPath, rootDir, subDir, filename) {
             fileCount = fileCount + 1;

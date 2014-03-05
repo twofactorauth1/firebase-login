@@ -22,7 +22,7 @@ _.extend(view.prototype, BaseView.prototype, {
     handleForgotPassword: function(username) {
         var self = this;
 
-        AuthenticationDao.sendForgotPasswordEmailByUsernameOrEmail(username, function(err, value) {
+        AuthenticationDao.sendForgotPasswordEmailByUsernameOrEmail(this.accountId(), username, function(err, value) {
             if (!err) {
                 var data = self.baseData({
                     infoMsg: "An email has been sent to the account associated with " + username + ".  Please check your email and follow " +
@@ -69,7 +69,8 @@ _.extend(view.prototype, BaseView.prototype, {
     handleResetByToken: function(token, password) {
         var self = this;
 
-        AuthenticationDao.updatePasswordByToken(token, password, function(err, value) {
+
+        AuthenticationDao.updatePasswordByToken(this.accountId(), token, password, function(err, value) {
             if (!err) {
                 self.req.login(value, function(err) {
                     if (err) {

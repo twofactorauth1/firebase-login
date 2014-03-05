@@ -1,6 +1,7 @@
 require('./base.dao');
 require('../models/account');
 var urlUtils = require('../utils/urlutils');
+var appConfig = require('../configs/app.config');
 
 var dao = {
 
@@ -22,6 +23,23 @@ var dao = {
 
     getAccountByDomain: function(domain, fn) {
         this.findOne( {'domain':domain}, fn);
+    },
+
+
+    getServerUrlByAccount: function(accountId, fn) {
+        this.getById(accountId, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value == null) {
+                return fn("No account found", "No account found");
+            }
+
+            var url = appConfig.getServerUrl(value.get("subdomain"), value.get("domain"));
+
+            fn(null, url);
+        });
     },
 
 

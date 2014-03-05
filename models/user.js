@@ -355,6 +355,34 @@ var user = $$.m.ModelBase.extend({
     },
 
 
+    createOrUpdateUserAccountCredentials: function(accountId, type, username, password, socialId, accessToken) {
+        var userAccount = this.getUserAccount(accountId);
+
+        if (userAccount != null) {
+            var creds = null;
+            var credentials = userAccount.credentials;
+            for (var i = 0; i < credentials.length; i++) {
+                if (credentials[i].type == type) {
+                    creds = credentials[i];
+                    break;
+                }
+            }
+
+            if (creds == null) {
+                creds = {
+                    type: type
+                };
+                credentials.push(creds);
+            }
+
+            if (username) creds.username = username;
+            if (password) creds.password = crypto.hash(password);
+            if (socialId) creds.socialId = socialId;
+            if (accessToken) creds.accessToken = accessToken;
+        }
+    },
+
+
     _getUserAccountCredentials: function (accountId, type) {
         var userAccount = this.getUserAccount(accountId);
         if (userAccount != null) {

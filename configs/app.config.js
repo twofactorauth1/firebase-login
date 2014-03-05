@@ -69,18 +69,21 @@ module.exports = {
     cluster:false,
     freeCpus:2,
 
-    getServerUrl: function(subdomain) {
-        if (subdomain == null) {
-            subdomain = "app";
+    getServerUrl: function(subdomain, domain) {
+        if (subdomain == null && domain == null) {
+            return serverUrl;
         }
 
-
-        var serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
-        serverUrl += subdomain + "." + process.env.ROOT_HOST;
+        var _serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
+        if (!String.isNullOrEmpty(domain)) {
+            _serverUrl += domain;
+        } else {
+            _serverUrl += subdomain + "." + process.env.ROOT_HOST;
+        }
 
         if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080) {
-            serverUrl += ":" + process.env.PORT;
+            _serverUrl += ":" + process.env.PORT;
         }
-        return serverUrl;
+        return _serverUrl;
     }
 };
