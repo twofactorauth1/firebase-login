@@ -1,5 +1,5 @@
-var BaseApi = require('../base.api');
-var AccountDao = require('../../dao/account.dao');
+var baseApi = require('../base.api');
+var accountDao = require('../../dao/account.dao');
 var cookies = require('../../utils/cookieutil');
 var Account = require('../../models/account');
 
@@ -7,11 +7,11 @@ var api = function() {
     this.init.apply(this, arguments);
 };
 
-_.extend(api.prototype, BaseApi.prototype, {
+_.extend(api.prototype, baseApi.prototype, {
 
     base: "account",
 
-    dao: AccountDao,
+    dao: accountDao,
 
     initialize: function() {
         //TMP Accont
@@ -35,7 +35,7 @@ _.extend(api.prototype, BaseApi.prototype, {
 
         var self = this;
 
-        AccountDao.getAccountByHost(req.get("host"), function(err, value) {
+        accountDao.getAccountByHost(req.get("host"), function(err, value) {
             if (!err) {
                 if (value == null) {
                     return resp.send({});
@@ -60,7 +60,7 @@ _.extend(api.prototype, BaseApi.prototype, {
         }
 
         accountId = parseInt(accountId);
-        AccountDao.getById(accountId, function(err, value) {
+        accountDao.getById(accountId, function(err, value) {
             if (!err && value != null) {
                 resp.send(value.toJSON("public"));
             } else {
@@ -82,7 +82,7 @@ _.extend(api.prototype, BaseApi.prototype, {
 
         userId = parseInt(userId);
 
-        AccountDao.getAllAccountsForUserId(userId, function(err, value) {
+        accountDao.getAllAccountsForUserId(userId, function(err, value) {
             if (!err) {
                 self.sendResult(resp, value);
             } else {
@@ -111,7 +111,7 @@ _.extend(api.prototype, BaseApi.prototype, {
         var self = this;
         var token = cookies.getAccountToken(req);
 
-        AccountDao.getTempAccount(token, function(err, value) {
+        accountDao.getTempAccount(token, function(err, value) {
             if (!err) {
                 if (value != null) {
                     resp.send(value.toJSON("public"));
@@ -128,7 +128,7 @@ _.extend(api.prototype, BaseApi.prototype, {
     saveOrUpdateTmpAccount: function(req,resp) {
         var self = this;
         var account = new $$.m.Account(req.body);
-        AccountDao.saveOrUpdateTmpAccount(account, function(err, value) {
+        accountDao.saveOrUpdateTmpAccount(account, function(err, value) {
            if (!err && value != null) {
                cookies.setAccountToken(resp, value.get("token"));
                resp.send(value.toJSON("public"));

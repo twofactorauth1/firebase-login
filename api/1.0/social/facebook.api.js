@@ -1,4 +1,4 @@
-var BaseApi = require('../../base.api');
+var baseApi = require('../../base.api');
 var FacebookDao = require('../../../dao/social/facebook.dao');
 
 
@@ -6,7 +6,7 @@ var api = function() {
     this.init.apply(this, arguments);
 };
 
-_.extend(api.prototype, BaseApi.prototype, {
+_.extend(api.prototype, baseApi.prototype, {
 
     base: "social/facebook",
 

@@ -1,5 +1,5 @@
 var appConfig = require('../configs/app.config');
-var AccountDao = require('../dao/account.dao');
+var accountDao = require('../dao/account.dao');
 
 //region CLASS - TOKENIZABLE
 var Tokenizable = function(str) {
@@ -89,7 +89,7 @@ var emailTemplateUtil = {
     //region PRIVATE
     _getServerUrl: function(accountId, fn) {
         if (accountId > 0) {
-            return AccountDao.getServerUrlByAccount(accountId, fn);
+            return accountDao.getServerUrlByAccount(accountId, fn);
         } else {
             return fn(null, this.serverUrl);
         }

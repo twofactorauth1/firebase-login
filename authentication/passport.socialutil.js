@@ -1,5 +1,5 @@
-var AuthenticationDao = require('../dao/authentication.dao');
-var UserDao = require('../dao/user.dao');
+var authenticationDao = require('../dao/authentication.dao');
+var userDao = require('../dao/user.dao');
 var cookies = require("../utils/cookieutil");
 
 module.exports = {
@@ -34,7 +34,7 @@ module.exports = {
             // creating new account
             var accountToken = cookies.getAccountToken(req);
 
-            UserDao.createUserFromSocialProfile(socialType, socialId, email, firstName, lastName, username, profileUrl, accessToken, accountToken, scope, function(err, value) {
+            userDao.createUserFromSocialProfile(socialType, socialId, email, firstName, lastName, username, profileUrl, accessToken, accountToken, scope, function(err, value) {
                 if (err) {
                     return done(null, false, err);
                 } else {
@@ -47,7 +47,7 @@ module.exports = {
             });
         } else {
             //Logging in as usual.
-            AuthenticationDao.authenticateBySocialLogin(req, socialType, socialId, email, username, profileUrl, accessToken, scope, function(err, value) {
+            authenticationDao.authenticateBySocialLogin(req, socialType, socialId, email, username, profileUrl, accessToken, scope, function(err, value) {
                 if (err) {
                     return done(null, false, {message:value});
                 }

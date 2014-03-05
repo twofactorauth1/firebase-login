@@ -1,6 +1,6 @@
 var BaseView = require('./base.view');
-var UserDao = require('../dao/user.dao');
-var AuthenticationDao = require('../dao/authentication.dao');
+var userDao = require('../dao/user.dao');
+var authenticationDao = require('../dao/authentication.dao');
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -22,7 +22,7 @@ _.extend(view.prototype, BaseView.prototype, {
     handleForgotPassword: function(username) {
         var self = this;
 
-        AuthenticationDao.sendForgotPasswordEmailByUsernameOrEmail(this.accountId(), username, function(err, value) {
+        authenticationDao.sendForgotPasswordEmailByUsernameOrEmail(this.accountId(), username, function(err, value) {
             if (!err) {
                 var data = self.baseData({
                     infoMsg: "An email has been sent to the account associated with " + username + ".  Please check your email and follow " +
@@ -44,7 +44,7 @@ _.extend(view.prototype, BaseView.prototype, {
     resetByToken: function(token) {
         var self = this;
 
-        AuthenticationDao.verifyPasswordResetToken(token, function(err, value) {
+        authenticationDao.verifyPasswordResetToken(token, function(err, value) {
             if (!err) {
                 //we have the user value, now lets load the
                 var data = self.baseData({
@@ -70,7 +70,7 @@ _.extend(view.prototype, BaseView.prototype, {
         var self = this;
 
 
-        AuthenticationDao.updatePasswordByToken(this.accountId(), token, password, function(err, value) {
+        authenticationDao.updatePasswordByToken(this.accountId(), token, password, function(err, value) {
             if (!err) {
                 self.req.login(value, function(err) {
                     if (err) {

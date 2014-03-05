@@ -1,5 +1,5 @@
 var baseDao = require('./base.dao');
-var AccountDao = require('./account.dao');
+var accountDao = require('./account.dao');
 var FacebookDao = require('./social/facebook.dao');
 var Constants = requirejs('constants/constants');
 var crypto = require('../utils/security/crypto');
@@ -46,7 +46,7 @@ var dao = {
 
             var deferred = $.Deferred();
 
-            AccountDao.convertTempAccount(accountToken, function(err, value) {
+            accountDao.convertTempAccount(accountToken, function(err, value) {
                 if (!err) {
                     deferred.resolve(value);
                 } else {
@@ -109,7 +109,7 @@ var dao = {
                 }
 
                 var deferred = $.Deferred();
-                AccountDao.convertTempAccount(accountToken, function(err, value) {
+                accountDao.convertTempAccount(accountToken, function(err, value) {
                     if (!err) {
                         deferred.resolve(value);
                     } else {

@@ -1,6 +1,6 @@
-var BaseApi = require('../base.api');
-var UserDao = require('../../dao/user.dao');
-var AccountDao = require('../../dao/account.dao');
+var baseApi = require('../base.api');
+var userDao = require('../../dao/user.dao');
+var accountDao = require('../../dao/account.dao');
 var passport = require('passport');
 var cookies = require('../../utils/cookieutil');
 
@@ -8,11 +8,11 @@ var api = function() {
     this.init.apply(this, arguments);
 };
 
-_.extend(api.prototype, BaseApi.prototype, {
+_.extend(api.prototype, baseApi.prototype, {
 
     base: "user",
 
-    dao: UserDao,
+    dao: userDao,
 
     initialize: function() {
         app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
@@ -31,7 +31,7 @@ _.extend(api.prototype, BaseApi.prototype, {
 
         var user = req.user;
 
-        UserDao.getById(user.id(), function(err, value) {
+        userDao.getById(user.id(), function(err, value) {
            if (!err) {
                return resp.send(value.toJSON("public"));
            } else {
@@ -53,7 +53,7 @@ _.extend(api.prototype, BaseApi.prototype, {
 
         userId = parseInt(userId);
 
-        UserDao.getById(userId, function(err, value) {
+        userDao.getById(userId, function(err, value) {
             if (!err) {
                 if (value == null) {
                     return self.wrapError(resp, 404, null, "No User found with ID: [" + userId + "]");
@@ -76,7 +76,7 @@ _.extend(api.prototype, BaseApi.prototype, {
             req.params.accountId = accountId;
             return this.userExistsForAccount(req, resp);
         }
-        UserDao.usernameExists(username, function(err, value) {
+        userDao.usernameExists(username, function(err, value) {
             if (err) {
                 return self.wrapError(resp, 500, "An error occurred checking username", err, value);
             }
@@ -92,7 +92,7 @@ _.extend(api.prototype, BaseApi.prototype, {
 
         accountId = parseInt(accountId);
 
-        UserDao.usernameExistsForAccount(accountId, username, function(err, value) {
+        userDao.usernameExistsForAccount(accountId, username, function(err, value) {
             if (err) {
                 return self.wrapError(resp, 500, "An error occurred checking username for account", err, value);
             }

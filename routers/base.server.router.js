@@ -29,8 +29,8 @@ _.extend(baseRouter.prototype, {
 
     setup: function(req,resp, next) {
         if (req["session"] != null && req.session["accountId"] == null) {
-            var AccountDao = require("../dao/account.dao");
-            AccountDao.getAccountByHost(req.get("host"), function(err, value) {
+            var accountDao = require("../dao/account.dao");
+            accountDao.getAccountByHost(req.get("host"), function(err, value) {
                 if (!err && value != null) {
                     if (value === true) {
                         req.session.accountId = 0;
@@ -53,8 +53,8 @@ _.extend(baseRouter.prototype, {
         }
 
         if (req["session"] != null && req.session["accountId"] == null) {
-            var AccountDao = require("../dao/account.dao");
-            AccountDao.getAccountByHost(req.get("host"), function(err, value) {
+            var accountDao = require("../dao/account.dao");
+            accountDao.getAccountByHost(req.get("host"), function(err, value) {
                 if (!err && value != null) {
                     if (value === true) {
                         req.session.accountId = 0;

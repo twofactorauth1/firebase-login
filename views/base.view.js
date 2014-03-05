@@ -1,6 +1,6 @@
 require('../utils/jadehelpers');
 var url = require('url');
-var AccountDao = require('../dao/account.dao');
+var accountDao = require('../dao/account.dao');
 var constants = requirejs("constants/constants");
 
 
@@ -105,7 +105,7 @@ _.extend(baseView.prototype, {
     getAccount: function(fn) {
         var accountId = this.accountId();
         if (accountId > 0) {
-            return AccountDao.getById(accountId, fn);
+            return accountDao.getById(accountId, fn);
         }
         fn();
     }

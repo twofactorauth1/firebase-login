@@ -45,8 +45,8 @@ var dao = {
 
     getAllAccountsForUserId: function(userId, fn) {
         var self = this;
-        var UserDao = require('./user.dao');
-        UserDao.getById(userId, function(err, value) {
+        var userDao = require('./user.dao');
+        userDao.getById(userId, function(err, value) {
             if (!err) {
                 var accounts = value.get("accounts");
                 var ids = [];

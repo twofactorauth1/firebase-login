@@ -1,6 +1,6 @@
-var BaseApi = require('../base.api');
-var ContactDao = require('../../dao/contact.dao');
-var ContactActivityDao = require('../../dao/contactactivity.dao');
+var baseApi = require('../base.api');
+var contactDao = require('../../dao/contact.dao');
+var contactActivityDao = require('../../dao/contactactivity.dao');
 var cookies = require('../../utils/cookieutil');
 var Contact = require('../../models/contact');
 
@@ -8,11 +8,11 @@ var api = function() {
     this.init.apply(this, arguments);
 };
 
-_.extend(api.prototype, BaseApi.prototype, {
+_.extend(api.prototype, baseApi.prototype, {
 
     base: "contact",
 
-    dao: ContactDao,
+    dao: contactDao,
 
     initialize: function() {
         //GET
@@ -42,7 +42,7 @@ _.extend(api.prototype, BaseApi.prototype, {
         }
 
         contactId = parseInt(contactId);
-        ContactDao.getById(contactId, function(err, value) {
+        contactDao.getById(contactId, function(err, value) {
             if (!err && value != null) {
                 resp.send(value.toJSON("public"));
             } else {
@@ -72,7 +72,7 @@ _.extend(api.prototype, BaseApi.prototype, {
             contact.createdBy(this.userId(), $$.constants.social.types.LOCAL);
         }
 
-        ContactDao.saveOrUpdate(contact, function(err, value) {
+        contactDao.saveOrUpdate(contact, function(err, value) {
             if (!err) {
                 self.sendResult(resp, value);
             } else {
@@ -108,7 +108,7 @@ _.extend(api.prototype, BaseApi.prototype, {
             return self.wrapError(resp, 401, null, "Invalid parameter for :letter");
         }
 
-        ContactDao.getContactsShort(accountId, letter, function(err, value) {
+        contactDao.getContactsShort(accountId, letter, function(err, value) {
             if (!err) {
                 return self.sendResult(resp, value);
             } else {
@@ -132,7 +132,7 @@ _.extend(api.prototype, BaseApi.prototype, {
         }
 
         contactId = parseInt(contactId);
-        ContactActivityDao.getByContactId(contactId, function(err, value) {
+        contactActivityDao.getByContactId(contactId, function(err, value) {
             if (!err) {
                 return self.sendResult(resp, value);
             } else {

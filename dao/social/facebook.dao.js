@@ -3,7 +3,7 @@ var request = require('request');
 var crypto = require('crypto');
 var facebookConfig = require('../../configs/facebook.config');
 var paging = require('../../utils/paging');
-var ContactDao = require('../contact.dao');
+var contactDao = require('../contact.dao');
 var Contact = require('../../models/contact');
 
 var dao = {
@@ -147,7 +147,7 @@ var dao = {
                     var items = paging.getItemsForCurrentPage(friends, page, numPerPage);
                     var socialIds = _.pluck(items, "uid");
 
-                    ContactDao.getContactsBySocialIds(accountId, socialType, socialIds, function(err, value) {
+                    contactDao.getContactsBySocialIds(accountId, socialType, socialIds, function(err, value) {
                         if (err) {
                             return fn(err, value);
                         }
@@ -161,7 +161,7 @@ var dao = {
                                 items = _.without(items, facebookFriend);
 
                                 updateContactFromFacebookFriend(contact, facebookFriend);
-                                ContactDao.saveOrUpdate(contact, function() {});
+                                contactDao.saveOrUpdate(contact, function() {});
                             });
                         }
 
@@ -175,7 +175,7 @@ var dao = {
 
                             contact.createdBy(user.id(), socialType, facebookId);
                             updateContactFromFacebookFriend(contact, facebookFriend);
-                            ContactDao.saveOrUpdate(contact, function() {});
+                            contactDao.saveOrUpdate(contact, function() {});
                         });
 
                         if (pagingInfo.nextPage > page) {
@@ -211,7 +211,7 @@ var dao = {
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
 $$.dao.social = $$.dao.social || {};
-$$.dao.social.ContactDao = dao;
+$$.dao.social.FacebookDao = dao;
 
 module.exports = dao;
 

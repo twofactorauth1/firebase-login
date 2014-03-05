@@ -19,6 +19,6 @@ var dao = {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.ContactDao = dao;
+$$.dao.ContactActivityDao = dao;
 
 module.exports = dao;

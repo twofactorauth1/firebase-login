@@ -1,5 +1,5 @@
 var passport = require('passport');
-var UserDao = require('../dao/user.dao');
+var userDao = require('../dao/user.dao');
 
 //  STRATEGIES IN USE
 require('./passport.local');
@@ -15,7 +15,7 @@ passport.serializeUser(function(user, done) {
 
 //  Retrieve the user via our standard DAO access
 passport.deserializeUser(function(id, done) {
-    UserDao.getById(id, function(err, value) {
+    userDao.getById(id, function(err, value) {
         return done(err, value);
     });
 });

@@ -1,15 +1,15 @@
-var BaseApi = require('../base.api');
-var S3Dao = require('../../dao/s3.dao');
+var baseApi = require('../base.api');
+var s3Dao = require('../../dao/s3.dao');
 
 var api = function () {
     this.init.apply(this, arguments);
 };
 
-_.extend(api.prototype, BaseApi.prototype, {
+_.extend(api.prototype, baseApi.prototype, {
 
     base: "aws",
 
-    dao: S3Dao,
+    dao: s3Dao,
 
     initialize: function () {
         //GET
@@ -22,7 +22,7 @@ _.extend(api.prototype, BaseApi.prototype, {
         var bucket = req.params.bucket;
         var resource = req.params.resource;
 
-        var url = S3Dao.getSignedRequest(bucket, resource);
+        var url = s3Dao.getSignedRequest(bucket, resource);
         resp.send(url);
     },
 
@@ -40,7 +40,7 @@ _.extend(api.prototype, BaseApi.prototype, {
             this.wrapError(resp, 400, null, "Invalid paramater for S3 Bucket");
         }
 
-        var credentials = S3Dao.getS3UploadCredentials(bucket, filename, redirect);
+        var credentials = s3Dao.getS3UploadCredentials(bucket, filename, redirect);
         resp.send(credentials)
     }
 });

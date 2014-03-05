@@ -1,6 +1,6 @@
 var BaseRouter = require('./base.server.router.js');
 var passport = require('passport');
-var UserDao = require('../dao/user.dao');
+var userDao = require('../dao/user.dao');
 var cookies = require("../utils/cookieutil");
 var FacebookConfig = require('../configs/facebook.config');
 var LoginView = require('../views/login.server.view');
@@ -159,7 +159,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //ensure we don't have another user with this username;
         var accountToken = cookies.getAccountToken(req);
 
-        UserDao.createUserFromUsernamePassword(username, password1, email, accountToken, function(err, value) {
+        userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function(err, value) {
             if (!err) {
                 req.login(value, function(err) {
                     if (err) {

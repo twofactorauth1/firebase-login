@@ -1,6 +1,6 @@
 var User = require('../models/user');
-var UserDao = require('./user.dao');
-var AccountDao = require('./account.dao');
+var userDao = require('./user.dao');
+var accountDao = require('./account.dao');
 var cookies = require('../utils/cookieutil');
 var EmailTemplateUtil = require('../utils/emailtemplateutil');
 var crypto = require('../utils/security/crypto');
@@ -16,7 +16,7 @@ var dao = {
         var log = this.log;
         log.error("Authenticating by username & password: " + username);
         var host = req.get("host");
-        AccountDao.getAccountByHost(host, function (err, value) {
+        accountDao.getAccountByHost(host, function (err, value) {
             if (err) {
                 return fn(err, "An error occurred validating account");
             }
@@ -31,7 +31,7 @@ var dao = {
             else if (account === true) {
                 log.error("Logging into main App");
                 req.session.accountId = 0;
-                UserDao.getUserByUsername(username, function (err, value) {
+                userDao.getUserByUsername(username, function (err, value) {
                     if (!err) {
                         if (value == null) {
                             log.error("No user found");
@@ -62,7 +62,7 @@ var dao = {
             } else {
                 log.error("logging into account with id: " + account.id());
                 req.session.accountId = account.id();
-                UserDao.getUserForAccount(account.id(), username, function (err, value) {
+                userDao.getUserForAccount(account.id(), username, function (err, value) {
                     if (err) {
                         log.error("An error occurred retrieving user for account: ", err);
                         return fn(err, "An error occurred retrieving user for account");
@@ -98,7 +98,7 @@ var dao = {
     authenticateBySocialLogin: function (req, socialType, socialId, email, username, socialUrl, accessToken, scope, fn) {
         var self = this;
         var host = req.get("host");
-        AccountDao.getAccountByHost(host, function (err, value) {
+        accountDao.getAccountByHost(host, function (err, value) {
             if (err) {
                 return fn(err, "An error occurred validating account");
             }
@@ -112,14 +112,14 @@ var dao = {
             else if (account === true) {
                 req.session.accountId = 0;
                 //Lets look up the user by socialId
-                UserDao.getUserBySocialId(socialType, socialId, function (err, value) {
+                userDao.getUserBySocialId(socialType, socialId, function (err, value) {
                     if (err) {
                         return fn(err, "An error occurred attempting to retrieve user by social profile");
                     }
 
                     if (value == null) {
                         //look up by email
-                        UserDao.getUserByUsername(email, function (err, value) {
+                        userDao.getUserByUsername(email, function (err, value) {
                             if (err) {
                                 return fn(err, "An error occurred retrieving user by username");
                             }
@@ -138,14 +138,14 @@ var dao = {
                 });
             } else {
                 req.session.accountId = account.id();
-                UserDao.getUserForAccountBySocialProfile(account.id(), socialType, socialId, function (err, value) {
+                userDao.getUserForAccountBySocialProfile(account.id(), socialType, socialId, function (err, value) {
                     if (err) {
                         return fn(err, "An error occurred retrieving user for account by social profile");
                     }
 
                     if (value == null) {
                         //Look for user by email
-                        UserDao.getUserForAccount(account.id(), email, function (err, value) {
+                        userDao.getUserForAccount(account.id(), email, function (err, value) {
                             if (err) {
                                 return fn(err, "An error occurred retrieving user for account");
                             }
@@ -171,14 +171,14 @@ var dao = {
         var _email = email, promise = $.Deferred();
 
         if (accountId > 0) {
-            UserDao.getUserForAccount(accountId, email, function(err, value) {
+            userDao.getUserForAccount(accountId, email, function(err, value) {
                 if (err) {
                     promise.reject();
                     return fn(err, value);
                 }
 
                 if (value == null) {
-                    UserDao.getUserByUsername(email, function(err, value) {
+                    userDao.getUserByUsername(email, function(err, value) {
                         if (err) {
                             promise.reject();
                             return fn(err, value);
@@ -201,7 +201,7 @@ var dao = {
                 }
             });
         } else {
-            UserDao.getUserByUsername(email, function(err, value) {
+            userDao.getUserByUsername(email, function(err, value) {
                 if (err) {
                     promise.reject();
                     return fn(err, value);
@@ -235,7 +235,7 @@ var dao = {
 
                 var token = user.setPasswordRecoverToken();
 
-                UserDao.saveOrUpdate(user, function (err, value) {
+                userDao.saveOrUpdate(user, function (err, value) {
                     if (!err) {
                         //Send Email based on the current token
                         EmailTemplateUtil.resetPassword(accountId, token, value, email, fn);
@@ -248,7 +248,7 @@ var dao = {
 
 
     verifyPasswordResetToken: function (token, fn) {
-        UserDao.findOne({passRecover: token}, function (err, value) {
+        userDao.findOne({passRecover: token}, function (err, value) {
             if (!err) {
                 if (value == null) {
                     return fn("Invalid recovery token. Please ensure you have clicked the link directly from your email, or resubmit the form below.");
@@ -278,7 +278,7 @@ var dao = {
                     user.createOrUpdateLocalCredentials(password);
                 }
 
-                UserDao.saveOrUpdate(user, function (err, value) {
+                userDao.saveOrUpdate(user, function (err, value) {
                     if (!err) {
                         fn(null, value);
                     } else {

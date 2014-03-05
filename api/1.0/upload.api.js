@@ -1,6 +1,6 @@
-var BaseApi = require('../base.api');
+var baseApi = require('../base.api');
 var formidable = require('formidable');
-var S3Dao = require('../../dao/s3.dao');
+var s3Dao = require('../../dao/s3.dao');
 var awsConfig = require('../../configs/aws.config');
 
 
@@ -8,7 +8,7 @@ var api = function () {
     this.init.apply(this, arguments);
 };
 
-_.extend(api.prototype, BaseApi.prototype, {
+_.extend(api.prototype, baseApi.prototype, {
 
     base: "upload",
 
@@ -40,7 +40,7 @@ _.extend(api.prototype, BaseApi.prototype, {
 
             var file = files["files[]"];
             //Lets send this up to s3
-            S3Dao.uploadToS3(bucket, directory, file, true, function (err, value) {
+            s3Dao.uploadToS3(bucket, directory, file, true, function (err, value) {
                 if (err) {
                     self.sendFileUploadResult(resp, err, file);
                 } else {

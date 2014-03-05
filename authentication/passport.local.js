@@ -1,8 +1,8 @@
 var passport = require('passport')
     , LocalStrategy = require('passport-local').Strategy
-    , UserDao = require('../dao/user.dao.js')
-    , AccountDao = require('../dao/account.dao')
-    , AuthenticationDao = require('../dao/authentication.dao')
+    , userDao = require('../dao/user.dao.js')
+    , accountDao = require('../dao/account.dao')
+    , authenticationDao = require('../dao/authentication.dao')
     , crypto = require('../utils/security/crypto')
     , os = require('os')
     , constants = requirejs("constants/constants");
@@ -13,7 +13,7 @@ passport.use(new LocalStrategy({
     function(req, username, password, done) {
         var self = this;
 
-        AuthenticationDao.authenticateByUsernamePassword(req, username, password, function(err, value) {
+        authenticationDao.authenticateByUsernamePassword(req, username, password, function(err, value) {
             if (err) {
                 return done(null, false, {message:value});
             } else if(value == null) {
