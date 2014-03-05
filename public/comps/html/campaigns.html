@@ -12,6 +12,7 @@
 
     <link href="../css/style.default.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.inverse.css" />
+    <link rel="stylesheet" href="../js/redactor/redactor.css" />
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -65,27 +66,44 @@
         <h5 class="sidebartitle">Navigation</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket">
             <li class="dash-li"><a href="index.html"><i class="fa fa-home"></i> <span> Dashboard</span></a></li>
-            <li class="nav-parent contacts-li">
-                <a href="contacts.html"><i class="fa fa-users"></i> <span> Contacts</span></a>
+            <li class="contacts-li">
+                <a href="contacts.html"><i class="fa fa-users"></i> <span> Customers</span></a>
+            </li>
+            <li class="activity-li nav-parent">
+                <a href="#"><i class="fa fa-calendar"></i> <span> Activity</span></a>
                 <ul class="children">
-                    <li><a href="contacts.html"><i class="fa fa-caret-right"></i> All Contacts</a></li>
-                    <li><a href="add_contact.html"><i class="fa fa-caret-right"></i> Add Contact</a></li>
+                    <li><a href="#"><i class="fa fa-caret-right"></i> All Activity</a></li>
+                    <li><a href="#"><i class="fa fa-caret-right"></i> Add Activity</a></li>
                 </ul>
             </li>
             <li class="marketing-li nav-parent">
                 <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
                 <ul class="children">
                     <li><a href="campaigns.html"><i class="fa fa-caret-right"></i> Campaigns</a></li>
-                    <li><a href="campaigns.html"><i class="fa fa-caret-right"></i> Social</a></li>
-                    <li><a href="campaigns.html"><i class="fa fa-caret-right"></i> Online</a></li>
-                    <li><a href="campaigns.html"><i class="fa fa-caret-right"></i> Print</a></li>
+                    <li><a href="#"><i class="fa fa-caret-right"></i> Social</a></li>
+                    <li><a href="#"><i class="fa fa-caret-right"></i> Online</a></li>
+                    <li><a href="#"><i class="fa fa-caret-right"></i> Print</a></li>
                 </ul>
             </li>
-            <li class="marketing-li">
-                <a href="campaigns.html"><i class="fa fa-sitemap"></i> <span> Content</span></a>
+            <li class="content-li nav-parent">
+                <a href="#"><i class="fa fa-files-o"></i> <span> Content</span></a>
+                <ul class="children">
+                    <li><a href="page_manager.html"><i class="fa fa-caret-right"></i> Page Manager</a></li>
+                    <li><a href="#"><i class="fa fa-caret-right"></i> Posts</a></li>
+                </ul>
             </li>
-            <li class="marketing-li">
-                <a href="campaigns.html"><i class="fa fa-money"></i> <span> Products</span></a>
+            <li class="store-li nav-parent">
+                <a href="#"><i class="fa fa-shopping-cart"></i> <span> Store</span></a>
+                <ul class="children">
+                    <li><a href="#"><i class="fa fa-caret-right"></i> Products</a></li>
+                    <li><a href="#"><i class="fa fa-caret-right"></i> Promotions</a></li>
+                </ul>
+            </li>
+            <li class="settings-li">
+                <a href="#"><i class="fa fa-wrench"></i> <span> Settings</span></a>
+            </li>
+            <li class="support-li">
+                <a href="#"><i class="fa fa-umbrella"></i> <span> Support</span></a>
             </li>
         </ul>
 
@@ -113,12 +131,8 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                        <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i> My Profile</a>
-                        </li>
-                        <li><a href="support.html"><i class="glyphicon glyphicon-question-sign"></i> Help</a>
-                        </li>
-                        <li><a href="signin.html"><i class="glyphicon glyphicon-log-out"></i> Log Out</a>
-                        </li>
+                        <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
+                        <li><a href="signin.html"><i class="glyphicon glyphicon-log-out"></i> Log Out</a></li>
                     </ul>
                 </div>
             </li>
@@ -473,6 +487,7 @@
 </section>
 
 <script src="../js/jquery-1.10.2.min.js"></script>
+<script src="../js/redactor/redactor.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 <script src="../js/modernizr.min.js"></script>
 <script src="../js/toggles.min.js"></script>
@@ -480,6 +495,9 @@
 <script src="../js/dropzone.min.js"></script>
 <script src="../js/jquery.maskedinput.min.js"></script>
 <script src="../js/jquery.tagsinput.min.js"></script>
+<script src="../js/jquery-ui.min.js"></script>
+<script src="../js/jquery.nestable.js"></script>
+<script src="../js/jquery.hoverIntent.minified.js"></script>
 
 <script src="../js/custom.js"></script>
 

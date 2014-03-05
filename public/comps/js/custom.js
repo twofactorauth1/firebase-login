@@ -10,6 +10,65 @@ jQuery(window).load(function() {
 
 jQuery(document).ready(function() {
 
+     $('#nestable').on('click', '.fa-pencil', function(e) {
+        window.location.href = 'page_edit.html';
+    });
+
+    $('#nestable-menu').on('click', 'a', function(e)
+    {
+        e.preventDefault();
+        var target = $(this),
+            action = target.data('action');
+            console.log('clicked'+action);
+        if (action === 'expand-all') {
+            $('.dd').nestable('expandAll');
+        }
+        if (action === 'collapse-all') {
+            $('.dd').nestable('collapseAll');
+        }
+    });
+
+
+    $('a#add-page').on('click', function(){
+        if ($('#nestable>ol>li.dd-last-item-added').length > 0) {
+            console.log($('#nestable>ol>li.dd-last-item-added').html());
+            if($('#nestable>ol>li.dd-last-item-added .dd3-content').text().length <= 0) {
+                $('#nestable .dd-list li').first().find('.dd3-content').trigger('click').addclass('test');
+                return false;
+            }
+        }
+        $('.dd-last-item-added').removeClass('dd-last-item-added');
+        var page = '<li class="dd-item dd-last-item-added dd3-item"><div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i></div><div class="dd3-content"></div><div class="dd3-actions" style="display: none;"><i class="fa fa-edit"></i><i class="fa fa-times"></i></div></li>';
+        var newPage = $(page).prependTo('#nestable ol');
+        $('#nestable .dd-list li').first().find('.dd3-content').trigger('click');
+    });
+
+    $('.dd3-item').hoverIntent(
+           function(){ $(this).find('.dd3-actions').first().show() },
+           function(){ $(this).find('.dd3-actions').first().hide() }
+    );
+
+    function divClicked() {
+        var divHtml = $(this).html();
+        var editableText = $("<input type='text' class='dd3-content'/>");
+        editableText.val(divHtml);
+        $(this).replaceWith(editableText);
+        editableText.focus();
+        // setup the blur event for this new textarea
+        editableText.blur(editableTextBlurred);
+    }
+
+    function editableTextBlurred() {
+        var html = $(this).val();
+        var viewableText = $("<div class='dd3-content'>");
+        viewableText.html(html);
+        $(this).replaceWith(viewableText);
+        // setup the click event for this new div
+        viewableText.click(divClicked);
+    }
+
+    $(".dd").on('click', '.dd3-content', divClicked);
+
     // Tags Input
     jQuery('#tags').tagsInput({width:'auto'});
 
