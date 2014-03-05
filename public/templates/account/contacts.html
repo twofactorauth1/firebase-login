@@ -43,7 +43,11 @@ CONTACTS MAIN VIEW
                         <div class="hidden-xs"><small>{{contactTypeLabel this}}</small></div>
 
                         <div class="contacts-photo-container">
-                            <img class="img-circle" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpeg{{/if}}">
+                            {{#if photoSquare}}
+                                <img class="img-rounded" src="{{photoSquare}}">
+                            {{else}}
+                                <img class="img-rounded" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpeg{{/if}}">
+                            {{/if}}
                         </div>
 
                         <div class="hidden-xs contact-thumbnail-details">

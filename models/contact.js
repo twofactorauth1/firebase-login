@@ -12,6 +12,7 @@ var contact = $$.m.ModelBase.extend({
             middle:null,            //string,
             last:null,              //string,
             photo:"",               //string,
+            photoSquare:"",          //string,
             birthday:null,          //string
             type:"c",               //contact_types
             _v:"0.1",
@@ -68,8 +69,13 @@ var contact = $$.m.ModelBase.extend({
              *   source: //  This will be the source of the contact.  For instance, if the contact was created from a Facebook import,
              *               the source is the Facebook ID of the user who's import originally created this contact
              *   emails: []
-             *   photo:string
-             *   website:string
+             *   photos: {
+             *      square: ""
+             *      small: ""
+             *      medium: ""
+             *      large: ""
+             *   }
+             *   websites:[]
              *   phones: [{
              *       _id:"",
              *       type: string "m|w|h" //mobile, work, home
@@ -159,13 +165,14 @@ var contact = $$.m.ModelBase.extend({
     },
 
 
-    updateContactInfo: function(first, middle, last, photo, birthday) {
+    updateContactInfo: function(first, middle, last, photo, photoSquare, birthday) {
         var o = {};
 
         if (first != null) o.first = first;
         if (middle != null) o.middle = middle;
         if (last != null) o.last = last;
         if (photo != null) o.photo = photo;
+        if (photoSquare != null) o.photoSquare = photoSquare;
         if (birthday != null) o.birthday = birthday;
 
         this.set(o);
@@ -208,7 +215,7 @@ var contact = $$.m.ModelBase.extend({
     },
 
 
-    createOrUpdateDetails: function(type, source, socialId, photo, emails, website) {
+    createOrUpdateDetails: function(type, source, socialId, photoSmall, photoMedium, photoLarge, photoSquare, emails, websites) {
         var details = this.getOrCreateDetails(type);
 
         if (source != null) {
@@ -219,13 +226,17 @@ var contact = $$.m.ModelBase.extend({
             details.socialId = socialId;
         }
 
-        if (photo != null) {
-            details.photo = photo;
+        var photos = details.photos;
+        if (photos == null) {
+            photos = {};
+            details.photos = photos;
         }
 
-        if (website != null) {
-            details.website = website;
-        }
+        if (photoSmall != null) { photos.photoSmall = photoSmall; }
+        if (photoMedium != null) { photos.photoMedium = photoMedium; }
+        if (photoLarge != null) { photos.photoLarge = photoLarge; }
+        if (photoSquare != null) { photos.photoSquare = photoSquare; }
+
 
         if (emails != null) {
             details.emails = details.emails || [];
@@ -236,6 +247,20 @@ var contact = $$.m.ModelBase.extend({
             } else {
                 for (var i = 0; i < emails.length; i++) {
                     if (details.emails.indexOf(emails[i]) == -1) { details.emails.push(emails[i]); }
+                }
+            }
+        }
+
+
+        if (websites != null) {
+            details.websites = details.websites || [];
+            if (_.isString(websites)) {
+                if (details.websites.indexOf(websites) == -1) {
+                    details.websites.push(websites);
+                }
+            } else {
+                for (var i = 0; i < websites.length; i++) {
+                    if (details.websites.indexOf(websites[i]) == -1) { details.websites.push(websites[i]); }
                 }
             }
         }
