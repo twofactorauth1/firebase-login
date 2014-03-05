@@ -14,6 +14,16 @@ module.exports = {
         }
         var url = appConfig.getServerUrl(subdomain) + "/login/twitter/callback";
         return url;
+    },
+
+
+    getScope: function() {
+        return null;
+    },
+
+
+    getState: function(subdomain) {
+        return null;
     }
 };
 

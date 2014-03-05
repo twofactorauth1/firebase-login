@@ -26,12 +26,14 @@
     "passport-facebook": "~1.0.2",
     "passport-twitter": "~1.0.2",
     "passport-local": "~0.1.6",
+    "passport-google-oauth": "~0.1.5",
     "requirejs": "2.1.10",
     "stripe": "~2.4.0",
     "underscore": ">=1.6.0",
     "aws-sdk": "~2.0.0-rc9",
     "formidable": "~1.0.14",
-    "request": "2.34.0"
+    "request": "2.34.0",
+    "passport-google": "~0.3.0"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

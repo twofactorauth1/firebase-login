@@ -5,7 +5,7 @@ var UserDao = require('../dao/user.dao');
 require('./passport.local');
 require('./passport.facebook');
 require('./passport.twitter');
-
+require('./passport.google');
 
 //  Store only the User Id in the session
 passport.serializeUser(function(user, done) {

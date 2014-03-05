@@ -108,7 +108,12 @@ app.use(express.cookieParser('mys3cr3tco00k13s'));
 app.use(express.session({
     store: mongoStore,
     secret: 'mys3cr3t',
-    cookie: {maxAge:24*60*60*1000} //stay open for 1 day of inactivity
+    cookie: {
+        maxAge:24*60*60*1000,
+        domain: "indigenous.local",
+        httpOnly: true,
+        path: "/"
+    } //stay open for 1 day of inactivity
 }));
 
 //Middle ware to refresh the session cookie expiration on every hit

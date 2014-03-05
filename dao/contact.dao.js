@@ -12,18 +12,18 @@ var dao = {
 
 
     getContactsShort: function(accountId, letter, fn) {
-        //TODO: optimize this so we're not using skip / limit. Instead, we want to cache a
-        //      range of all contactIds in the database in redis, for example, and then page
-        //      in redis, returning the paged contact Ids, and then querying the db on only
-        //      those IDs.
-
-
         var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
         var query = {accountId: accountId, _last: { $gte: letter, $lt: nextLetter } };
         var fields = {_id:1, accountId:1, first:1, last:1, photo:1, type:1, siteActivity:1};
 
         var obj = {query:query, fields:fields};
         this.findManyWithFields(query, fields, fn);
+    },
+
+
+    getContactsBySocialIds: function(accountId, socialType, socialIds, fn) {
+        var query = { accountId: accountId, "details.type":socialType, "details.socialId": { $in: socialIds} };
+        this.findMany(query, fn);
     }
 };
 

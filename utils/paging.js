@@ -36,7 +36,7 @@ var paging = {
             page = 1;
         }
 
-        var lastPage = Math.ceiling(totalCount/numPerPage);
+        var lastPage = Math.ceil(totalCount/numPerPage);
         if (totalCount % numPerPage != 0) {
             lastPage += 1;
         }

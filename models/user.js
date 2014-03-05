@@ -55,6 +55,7 @@ var user = $$.m.ModelBase.extend({
              *  socialId:string,    //social only
              *  accessToken:string, //social only
              *  socialUrl:string    //social only
+             *  scope:string
              * }]
              */
             credentials: []
@@ -150,7 +151,7 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    createOrUpdateSocialCredentials: function(socialType, socialId, accessToken, username, socialUrl) {
+    createOrUpdateSocialCredentials: function(socialType, socialId, accessToken, username, socialUrl, scope) {
         var creds = this.getCredentials(socialType);
         if (creds == null) {
             creds = {};
@@ -160,6 +161,7 @@ var user = $$.m.ModelBase.extend({
         creds.accessToken = accessToken;
         creds.username = username;
         creds.socialUrl = socialUrl;
+        creds.scope = scope;
         return this._setCredentials(creds, false);
     },
 

@@ -14,6 +14,16 @@ module.exports = {
         }
         var url = appConfig.getServerUrl(subdomain) + "/login/facebook/callback";
         return url;
+    },
+
+
+    getScope: function() {
+        return '["basic_info", "email", "friends_website", "friends_birthday"]';
+    },
+
+
+    getState: function(subdomain) {
+
     }
 };
 

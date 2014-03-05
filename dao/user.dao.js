@@ -86,7 +86,7 @@ var dao = {
     },
 
 
-    createUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, username, socialUrl, accessToken, accountToken, fn) {
+    createUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, username, socialUrl, accessToken, accountToken, scope, fn) {
         var self = this;
 
         this.getUserByUsername(email, function(err, value) {
@@ -143,7 +143,7 @@ var dao = {
                         });
 
                         user.createOrUpdateLocalCredentials(null);
-                        user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, username, socialUrl);
+                        user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, username, socialUrl, scope);
                         user.createUserAccount(accountId, email, null, ["super","admin","member"]);
 
                         var social = $$.constants.social.types;

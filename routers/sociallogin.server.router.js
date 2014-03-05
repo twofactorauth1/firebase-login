@@ -48,12 +48,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
     _socialLogin: function(req, resp, next) {
-        var type = req.params.socialtype;
+        var type = req.params.socialtype
+            , config = this._getSocialConfigFromType(type)
+            , subdomain = urlUtils.getSubdomainFromRequest(req)
+            , callbackUrl
+            , state;
 
-        var config = this._getSocialConfigFromType(type);
-
-        var subdomain = urlUtils.getSubdomainFromRequest(req);
-        var callbackUrl;
+        state = req.params.state;
+        if (state != null) {
+            state = JSON.parse(state);
+        }
 
         if (subdomain.isMainApp == true) {
             callbackUrl = config.CALLBACK_URL_LOGIN;
@@ -65,13 +69,25 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         var options = {
             callbackURL: callbackUrl,
+            returnURL: callbackUrl,
             successRedirect: "/",
             failureRedirect: "/login", failureFlash:true
         };
 
-        var scope = this._getScopeFromType(type);
+        var scope = config.getScope();
+
+        if (state == null) {
+            state = config.getState(subdomain.subdomain);
+        } else {
+            state = JSON.stringify(state);
+        }
+
         if (scope != null) {
             options.scope = scope;
+        }
+
+        if (state != null) {
+            options.state = state;
         }
 
         passport.authenticate(type, options)(req,resp,next);
@@ -87,15 +103,6 @@ _.extend(router.prototype, BaseRouter.prototype, {
             case "google":
                 return GoogleConfig;
         }
-    },
-
-
-    _getScopeFromType: function(type) {
-        switch(type) {
-            case "facebook":
-                return ["basic_info", "email"];
-        }
-        return null;
     }
 });
 

@@ -12,6 +12,7 @@ var contact = $$.m.ModelBase.extend({
             middle:null,            //string,
             last:null,              //string,
             photo:"",               //string,
+            birthday:null,          //string
             type:"c",               //contact_types
             _v:"0.1",
 
@@ -61,10 +62,14 @@ var contact = $$.m.ModelBase.extend({
              * stores an array of information collected from different sources,
              * either local or social.
              * [{
-             *   _id:""
+             *   _id:"",
+             *   socialId:"",  //The social Id from where these details came
              *   type:int
+             *   source: //  This will be the source of the contact.  For instance, if the contact was created from a Facebook import,
+             *               the source is the Facebook ID of the user who's import originally created this contact
              *   emails: []
              *   photo:string
+             *   website:string
              *   phones: [{
              *       _id:"",
              *       type: string "m|w|h" //mobile, work, home
@@ -133,6 +138,15 @@ var contact = $$.m.ModelBase.extend({
     },
 
 
+    getSocialId: function(socialType) {
+        var details = this.getDetails(socialType);
+        if (details != null) {
+            return details.socialId;
+        }
+        return null;
+    },
+
+
     createdBy: function(userId, socialType, socialId) {
         var created = {
             date: new Date().getTime(),
@@ -142,6 +156,111 @@ var contact = $$.m.ModelBase.extend({
         };
 
         this.set({created:created});
+    },
+
+
+    updateContactInfo: function(first, middle, last, photo, birthday) {
+        var o = {};
+
+        if (first != null) o.first = first;
+        if (middle != null) o.middle = middle;
+        if (last != null) o.last = last;
+        if (photo != null) o.photo = photo;
+        if (birthday != null) o.birthday = birthday;
+
+        this.set(o);
+    },
+
+
+    getDetails: function(type) {
+        var details = this.get("details");
+        if (details == null) {
+            details = [];
+            this.set({details:details});
+        }
+
+        return _.find(details, function(_detail) { return _detail.type === type });
+    },
+
+
+    getOrCreateDetails: function(type) {
+        var details = this.get("details");
+        if (details == null) {
+            details = [];
+            this.set({details:details});
+        }
+
+        var detail = _.find(details, function(_detail) { return _detail.type === type });
+        if (detail == null) {
+            detail = {
+                _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                type: type,
+                email:"",
+                photo:"",
+                phones: [],
+                address: null
+            };
+
+            details.push(detail);
+        }
+
+        return detail;
+    },
+
+
+    createOrUpdateDetails: function(type, source, socialId, photo, emails, website) {
+        var details = this.getOrCreateDetails(type);
+
+        if (source != null) {
+            details.source = source;
+        }
+
+        if (socialId != null) {
+            details.socialId = socialId;
+        }
+
+        if (photo != null) {
+            details.photo = photo;
+        }
+
+        if (website != null) {
+            details.website = website;
+        }
+
+        if (emails != null) {
+            details.emails = details.emails || [];
+            if (_.isString(emails)) {
+                if (details.emails.indexOf(emails) == -1) {
+                    details.emails.push(emails);
+                }
+            } else {
+                for (var i = 0; i < emails.length; i++) {
+                    if (details.emails.indexOf(emails[i]) == -1) { details.emails.push(emails[i]); }
+                }
+            }
+        }
+    },
+
+
+    createOrUpdatePhone: function(detailsType, phoneType, phoneNumber, isDefault) {
+        var details = this.getOrCreateDetails(detailsType);
+
+        var phones = details.phones || [];
+
+        var phone = _.findWhere(phones, {type:phoneType, number:phone});
+        if (phone == null) {
+            phone = {
+                _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                type: phoneType,
+                number: phoneNumber,
+                default: isDefault
+            };
+            phones.push(phone);
+        } else {
+            phone.default = isDefault;
+        }
+
+
     },
 
 
