@@ -95,7 +95,8 @@ var dao = {
             }
 
             if (value != null) {
-                return fn(true, "An account with a matching email address of " + email + " already exists.");
+                var msg = "An account with a matching email address of " + email + " already exists.";
+                return fn(msg,msg);
             }
 
             self.getUserBySocialId(socialType, socialId, function(err, value) {

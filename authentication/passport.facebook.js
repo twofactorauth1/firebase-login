@@ -10,7 +10,7 @@ var cookies = require("../utils/cookieutil");
 passport.use(new FacebookStrategy({
         clientID: FacebookConfig.CLIENT_ID,
         clientSecret: FacebookConfig.CLIENT_SECRET,
-        callbackURL: FacebookConfig.CALLBACK_URL_SIGNUP,
+        callbackURL: FacebookConfig.CALLBACK_URL_LOGIN,
         passReqToCallback: true
     },
 
@@ -32,7 +32,7 @@ passport.use(new FacebookStrategy({
 
             UserDao.createUserFromSocialProfile(socialType, socialId, email, firstName, lastName, username, profileUrl, accessToken, accountToken, function(err, value) {
                 if (err) {
-                    return done(null, false, err);
+                    return done(null, false, {message:value});
                 } else {
                     if (value != null) {
                         return done(null, value);

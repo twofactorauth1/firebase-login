@@ -10,7 +10,7 @@ var cookies = require("../utils/cookieutil");
 passport.use(new TwitterStrategy({
         consumerKey: twitterConfig.CLIENT_ID,
         consumerSecret: twitterConfig.CLIENT_SECRET,
-        callbackURL: twitterConfig.CALLBACK_URL_SIGNUP,
+        callbackURL: twitterConfig.CALLBACK_URL_LOGIN,
         passReqToCallback: true
     },
 
