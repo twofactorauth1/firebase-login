@@ -101,7 +101,7 @@ var dao = {
         }
 
         //var path = socialId + "/friends";
-        var query = "SELECT uid, name, first_name, last_name, email, pic_small, pic, pic_big, pic_square, website, birthday FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = " + socialId + ") ORDER BY name";
+        var query = "SELECT uid, name, first_name, last_name, email, pic, pic_big, pic_square, website, birthday FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = " + socialId + ") ORDER BY name";
         var path = "fql?q=" + query;
         var url = this.generateUrl(path, accessToken);
 
@@ -134,7 +134,7 @@ var dao = {
                     websites = facebookFriend.website.replace(" ", "").split(",");
                 }
                 //Update contact details
-                contact.createOrUpdateDetails($$.constants.social.types.FACEBOOK, facebookId, facebookFriend.uid, facebookFriend.pic_small, facebookFriend.pic, facebookFriend.pic_big, facebookFriend.pic_square, facebookFriend.email, websites);
+                contact.createOrUpdateDetails($$.constants.social.types.FACEBOOK, facebookId, facebookFriend.uid, facebookFriend.pic, facebookFriend.pic_big, facebookFriend.pic_square, facebookFriend.email, websites);
             };
 
 

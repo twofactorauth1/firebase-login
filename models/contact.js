@@ -215,7 +215,7 @@ var contact = $$.m.ModelBase.extend({
     },
 
 
-    createOrUpdateDetails: function(type, source, socialId, photoSmall, photoMedium, photoLarge, photoSquare, emails, websites) {
+    createOrUpdateDetails: function(type, source, socialId, photoMedium, photoLarge, photoSquare, emails, websites) {
         var details = this.getOrCreateDetails(type);
 
         if (source != null) {
@@ -232,7 +232,6 @@ var contact = $$.m.ModelBase.extend({
             details.photos = photos;
         }
 
-        if (photoSmall != null) { photos.photoSmall = photoSmall; }
         if (photoMedium != null) { photos.photoMedium = photoMedium; }
         if (photoLarge != null) { photos.photoLarge = photoLarge; }
         if (photoSquare != null) { photos.photoSquare = photoSquare; }
