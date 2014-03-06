@@ -28,25 +28,34 @@ _.extend(router.prototype, BaseRouter.prototype, {
             , promise = $.Deferred();
 
         if (req.isAuthenticated() == false) {
-            this.checkAuthToken(req, function(err, value) {
-                if (!err) {
-                    promise.resolve(true);
-                } else {
-                    promise.resolve(false);
-                }
-            })
+            if (req.query.authtoken != null) {
+                this.checkAuthToken(req, function(err, value) {
+                    if (!err) {
+                        promise.resolve(null, true);
+                    } else {
+                        promise.resolve(err, false);
+                    }
+                })
+            } else {
+                promise.resolve(null, false);
+            }
         } else {
-            promise.resolve(true);
+            promise.resolve(null, true);
         }
 
         promise
-            .done(function(isAuthenticated) {
+            .done(function(err, isAuthenticated) {
                 if (accountId > 0) {
                     var user = req.user;
                     if (isAuthenticated && self.sm.canManageAccount(req, accountId)) {
                         //TODO -- do not redirect to /admin, this should go to public website when such functionality is availble
                         resp.redirect("/admin");
                     } else {
+                        if (err) {
+                            req.flash("error", err);
+                        } else {
+                            req.flash = null;
+                        }
                         //TODO -- do not redirect to login, this should go to public website when such functionality is availble
                         resp.redirect("/login");
                     }
@@ -54,6 +63,11 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     if (isAuthenticated) {
                         self._showHome(req,resp);
                     } else {
+                        if (_.isString(err)) {
+                            req.flash("error", err);
+                        } else {
+                            req.flash = null;
+                        }
                         resp.redirect("/login");
                     }
                 }

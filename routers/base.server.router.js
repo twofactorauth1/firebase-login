@@ -31,7 +31,7 @@ _.extend(baseRouter.prototype, {
     },
 
 
-    setup: function(req,resp, next) {
+    setup: function(req, resp, next) {
         if (req["session"] != null && req.session["accountId"] == null) {
             var accountDao = require("../dao/account.dao");
             accountDao.getAccountByHost(req.get("host"), function(err, value) {

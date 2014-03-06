@@ -1,0 +1,1246 @@
+[2014-03-05 00:08:11.612] [ERROR] console - TypeError: Cannot read property 'CALLBACK_URL_LOGIN' of undefined
+    at _.extend._socialLogin (/Users/christophermina/Development/indigenous/bio/routers/sociallogin.server.router.js:63:33)
+    at _.extend.socialSignup (/Users/christophermina/Development/indigenous/bio/routers/sociallogin.server.router.js:41:14)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at param (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:138:11)
+    at param (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:135:11)
+    at pass (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:145:5)
+    at Router._dispatch (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:173:5)
+    at Object.router (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:33:10)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+    at Object.module.exports [as handle] (/Users/christophermina/Development/indigenous/bio/node_modules/connect-flash/lib/flash.js:21:5)
+[2014-03-05 00:21:57.630] [INFO] app - Log4js setup successfully
+[2014-03-05 00:21:59.433] [INFO] app - Global App Cache setup
+[2014-03-05 00:22:01.273] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:22:01.284] [INFO] app - Session store is ready for use
+[2014-03-05 00:24:02.034] [INFO] app - Log4js setup successfully
+[2014-03-05 00:24:03.643] [INFO] app - Global App Cache setup
+[2014-03-05 00:24:05.448] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:24:05.460] [INFO] app - Session store is ready for use
+[2014-03-05 00:24:29.299] [ERROR] console - ReferenceError: self is not defined
+    at _.extend.getFacebookProfile (/Users/christophermina/Development/indigenous/bio/api/1.0/social/facebook.api.js:27:17)
+    at Object.dao.getProfileForUser (/Users/christophermina/Development/indigenous/bio/dao/social/facebook.dao.js:39:20)
+    at _.extend.getFacebookProfile (/Users/christophermina/Development/indigenous/bio/api/1.0/social/facebook.api.js:23:21)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at _.extend.isAuthApi (/Users/christophermina/Development/indigenous/bio/api/base.api.js:79:20)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at param (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:138:11)
+    at pass (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:145:5)
+    at Router._dispatch (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:173:5)
+    at Object.router (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:33:10)
+[2014-03-05 00:24:46.658] [INFO] app - Log4js setup successfully
+[2014-03-05 00:24:48.210] [INFO] app - Global App Cache setup
+[2014-03-05 00:24:50.068] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:24:50.080] [INFO] app - Session store is ready for use
+[2014-03-05 00:25:57.312] [ERROR] console - ReferenceError: credentials is not defined
+    at Object.dao.getProfileForUser (/Users/christophermina/Development/indigenous/bio/dao/social/facebook.dao.js:42:32)
+    at _.extend.getFacebookProfile (/Users/christophermina/Development/indigenous/bio/api/1.0/social/facebook.api.js:24:21)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at _.extend.isAuthApi (/Users/christophermina/Development/indigenous/bio/api/base.api.js:79:20)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at param (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:138:11)
+    at pass (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:145:5)
+    at Router._dispatch (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:173:5)
+    at Object.router (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:33:10)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+[2014-03-05 00:27:09.370] [INFO] app - Log4js setup successfully
+[2014-03-05 00:27:11.012] [INFO] app - Global App Cache setup
+[2014-03-05 00:27:12.794] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:27:12.805] [INFO] app - Session store is ready for use
+[2014-03-05 00:27:46.365] [INFO] app - Log4js setup successfully
+[2014-03-05 00:27:47.994] [INFO] app - Global App Cache setup
+[2014-03-05 00:27:49.786] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:27:49.797] [INFO] app - Session store is ready for use
+[2014-03-05 00:28:59.670] [INFO] app - Log4js setup successfully
+[2014-03-05 00:29:01.215] [INFO] app - Global App Cache setup
+[2014-03-05 00:29:03.027] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:29:03.039] [INFO] app - Session store is ready for use
+[2014-03-05 00:36:07.206] [INFO] app - Log4js setup successfully
+[2014-03-05 00:36:07.472] [INFO] app - Global App Cache setup
+[2014-03-05 00:36:07.648] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:36:07.668] [INFO] app - Session store is ready for use
+[2014-03-05 00:37:45.897] [INFO] app - Log4js setup successfully
+[2014-03-05 00:37:46.168] [INFO] app - Global App Cache setup
+[2014-03-05 00:37:46.342] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:37:46.363] [INFO] app - Session store is ready for use
+[2014-03-05 00:42:13.758] [INFO] app - Log4js setup successfully
+[2014-03-05 00:42:14.025] [INFO] app - Global App Cache setup
+[2014-03-05 00:42:14.201] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:42:14.222] [INFO] app - Session store is ready for use
+[2014-03-05 00:44:22.779] [INFO] app - Log4js setup successfully
+[2014-03-05 00:44:23.063] [INFO] app - Global App Cache setup
+[2014-03-05 00:44:23.241] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:44:23.781] [INFO] app - Session store is ready for use
+[2014-03-05 00:44:35.232] [INFO] app - Log4js setup successfully
+[2014-03-05 00:44:35.532] [INFO] app - Global App Cache setup
+[2014-03-05 00:44:35.711] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:44:35.732] [INFO] app - Session store is ready for use
+[2014-03-05 00:47:31.105] [INFO] app - Log4js setup successfully
+[2014-03-05 00:47:31.371] [INFO] app - Global App Cache setup
+[2014-03-05 00:47:31.544] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:47:31.564] [INFO] app - Session store is ready for use
+[2014-03-05 00:48:44.099] [INFO] app - Log4js setup successfully
+[2014-03-05 00:48:44.369] [INFO] app - Global App Cache setup
+[2014-03-05 00:48:44.541] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:48:44.562] [INFO] app - Session store is ready for use
+[2014-03-05 00:49:59.918] [INFO] app - Log4js setup successfully
+[2014-03-05 00:50:00.187] [INFO] app - Global App Cache setup
+[2014-03-05 00:50:00.357] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:50:00.377] [INFO] app - Session store is ready for use
+[2014-03-05 00:52:12.187] [INFO] app - Log4js setup successfully
+[2014-03-05 00:52:12.454] [INFO] app - Global App Cache setup
+[2014-03-05 00:52:12.626] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:52:12.647] [INFO] app - Session store is ready for use
+[2014-03-05 00:56:29.111] [INFO] app - Log4js setup successfully
+[2014-03-05 00:56:29.375] [INFO] app - Global App Cache setup
+[2014-03-05 00:56:29.547] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:56:29.567] [INFO] app - Session store is ready for use
+[2014-03-05 00:57:55.096] [INFO] app - Log4js setup successfully
+[2014-03-05 00:57:55.360] [INFO] app - Global App Cache setup
+[2014-03-05 00:57:55.528] [INFO] app - Express server listening on port 3000
+[2014-03-05 00:57:55.548] [INFO] app - Session store is ready for use
+[2014-03-05 01:00:27.182] [INFO] app - Log4js setup successfully
+[2014-03-05 01:00:27.446] [INFO] app - Global App Cache setup
+[2014-03-05 01:00:27.617] [INFO] app - Express server listening on port 3000
+[2014-03-05 01:00:27.638] [INFO] app - Session store is ready for use
+[2014-03-05 03:10:20.500] [INFO] app - Log4js setup successfully
+[2014-03-05 03:10:22.275] [INFO] app - Global App Cache setup
+[2014-03-05 03:10:24.299] [INFO] app - Express server listening on port 3000
+[2014-03-05 03:10:24.312] [INFO] app - Session store is ready for use
+[2014-03-05 03:13:14.762] [INFO] app - Log4js setup successfully
+[2014-03-05 03:13:16.345] [INFO] app - Global App Cache setup
+[2014-03-05 03:13:18.170] [INFO] app - Express server listening on port 3000
+[2014-03-05 03:13:18.181] [INFO] app - Session store is ready for use
+[2014-03-05 03:18:22.607] [INFO] app - Log4js setup successfully
+[2014-03-05 03:18:24.272] [INFO] app - Global App Cache setup
+[2014-03-05 03:18:26.188] [INFO] app - Express server listening on port 3000
+[2014-03-05 03:18:26.199] [INFO] app - Session store is ready for use
+[2014-03-05 03:21:10.754] [INFO] app - Log4js setup successfully
+[2014-03-05 03:21:12.362] [INFO] app - Global App Cache setup
+[2014-03-05 03:21:14.214] [INFO] app - Express server listening on port 3000
+[2014-03-05 03:21:14.226] [INFO] app - Session store is ready for use
+[2014-03-05 03:25:15.880] [INFO] app - Log4js setup successfully
+[2014-03-05 03:25:17.606] [INFO] app - Global App Cache setup
+[2014-03-05 03:25:19.400] [INFO] app - Express server listening on port 3000
+[2014-03-05 03:25:19.411] [INFO] app - Session store is ready for use
+[2014-03-05 03:31:04.829] [INFO] console - Facebook import succeeded
+[2014-03-05 03:31:12.241] [INFO] console - Facebook import succeeded
+[2014-03-05 03:44:39.279] [INFO] app - Log4js setup successfully
+[2014-03-05 03:44:39.915] [INFO] app - Global App Cache setup
+[2014-03-05 03:44:40.087] [INFO] app - Express server listening on port 3000
+[2014-03-05 03:44:40.108] [INFO] app - Session store is ready for use
+[2014-03-05 03:51:46.851] [INFO] app - Log4js setup successfully
+[2014-03-05 03:51:47.116] [INFO] app - Global App Cache setup
+[2014-03-05 03:51:47.287] [INFO] app - Express server listening on port 3000
+[2014-03-05 03:51:47.308] [INFO] app - Session store is ready for use
+[2014-03-05 03:53:02.160] [INFO] app - Log4js setup successfully
+[2014-03-05 03:53:02.423] [INFO] app - Global App Cache setup
+[2014-03-05 03:53:02.592] [INFO] app - Express server listening on port 3000
+[2014-03-05 03:53:02.612] [INFO] app - Session store is ready for use
+[2014-03-05 03:53:34.842] [INFO] app - Log4js setup successfully
+[2014-03-05 03:53:35.115] [INFO] app - Global App Cache setup
+[2014-03-05 03:53:35.285] [INFO] app - Express server listening on port 3000
+[2014-03-05 03:53:35.305] [INFO] app - Session store is ready for use
+[2014-03-05 03:53:42.257] [INFO] console - Facebook import succeeded
+[2014-03-05 03:57:16.926] [INFO] app - Log4js setup successfully
+[2014-03-05 03:57:17.197] [INFO] app - Global App Cache setup
+[2014-03-05 03:57:17.370] [INFO] app - Express server listening on port 3000
+[2014-03-05 03:57:17.390] [INFO] app - Session store is ready for use
+[2014-03-05 04:07:17.681] [INFO] console - Facebook import succeeded
+[2014-03-05 04:08:00.164] [INFO] app - Log4js setup successfully
+[2014-03-05 04:08:00.460] [INFO] app - Global App Cache setup
+[2014-03-05 04:08:00.856] [INFO] app - Express server listening on port 3000
+[2014-03-05 04:08:00.877] [INFO] app - Session store is ready for use
+[2014-03-05 04:08:19.846] [INFO] console - Facebook import succeeded
+[2014-03-05 04:19:13.758] [INFO] app - Log4js setup successfully
+[2014-03-05 04:19:14.023] [INFO] app - Global App Cache setup
+[2014-03-05 04:19:14.195] [INFO] app - Express server listening on port 3000
+[2014-03-05 04:19:14.215] [INFO] app - Session store is ready for use
+[2014-03-05 04:19:39.365] [INFO] EmailTemplateUtil - Sending password recovery email
+[2014-03-05 04:19:39.385] [INFO] nodemailer.config - Sending Email.  Subject: Reset your password. To: christopher.mina@gmail.com
+[2014-03-05 04:19:41.881] [INFO] nodemailer.config - Message sent
+[2014-03-05 11:09:56.407] [INFO] app - Log4js setup successfully
+[2014-03-05 11:09:56.688] [INFO] app - Global App Cache setup
+[2014-03-05 11:09:56.865] [INFO] app - Express server listening on port 3000
+[2014-03-05 11:09:56.886] [INFO] app - Session store is ready for use
+[2014-03-05 11:11:59.416] [INFO] app - Log4js setup successfully
+[2014-03-05 11:12:01.005] [INFO] app - Global App Cache setup
+[2014-03-05 11:12:02.876] [INFO] app - Express server listening on port 3000
+[2014-03-05 11:12:02.888] [INFO] app - Session store is ready for use
+[2014-03-05 11:12:47.870] [INFO] app - Log4js setup successfully
+[2014-03-05 11:12:49.462] [INFO] app - Global App Cache setup
+[2014-03-05 11:12:51.291] [INFO] app - Express server listening on port 3000
+[2014-03-05 11:12:51.303] [INFO] app - Session store is ready for use
+[2014-03-05 11:13:35.861] [INFO] EmailTemplateUtil - Sending password recovery email
+[2014-03-05 11:13:35.874] [INFO] nodemailer.config - Sending Email.  Subject: Reset your password. To: christopher.mina@gmail.com
+[2014-03-05 11:13:39.912] [INFO] nodemailer.config - Message sent
+[2014-03-05 11:31:08.448] [INFO] app - Log4js setup successfully
+[2014-03-05 11:31:10.034] [INFO] app - Global App Cache setup
+[2014-03-05 11:31:11.830] [INFO] app - Express server listening on port 3000
+[2014-03-05 11:31:11.842] [INFO] app - Session store is ready for use
+[2014-03-05 13:04:12.812] [INFO] app - Log4js setup successfully
+[2014-03-05 13:04:13.084] [INFO] app - Global App Cache setup
+[2014-03-05 13:04:13.257] [INFO] app - Express server listening on port 3000
+[2014-03-05 13:04:13.278] [INFO] app - Session store is ready for use
+[2014-03-05 13:04:35.884] [ERROR] authentication.dao - Authenticating by username & password: christopher.mina@gmail.com
+[2014-03-05 13:04:35.885] [ERROR] authentication.dao - Logging into main App
+[2014-03-05 13:04:35.887] [ERROR] authentication.dao - Verifying password
+[2014-03-05 13:04:36.197] [ERROR] authentication.dao - Login successful
+[2014-03-05 13:06:17.900] [INFO] app - Log4js setup successfully
+[2014-03-05 13:06:18.164] [INFO] app - Global App Cache setup
+[2014-03-05 13:06:18.333] [INFO] app - Express server listening on port 3000
+[2014-03-05 13:06:18.354] [INFO] app - Session store is ready for use
+[2014-03-05 13:09:27.617] [INFO] app - Log4js setup successfully
+[2014-03-05 13:09:28.034] [INFO] app - Global App Cache setup
+[2014-03-05 13:09:28.321] [INFO] app - Express server listening on port 3000
+[2014-03-05 13:09:28.354] [INFO] app - Session store is ready for use
+[2014-03-05 13:35:38.733] [INFO] app - Log4js setup successfully
+[2014-03-05 13:35:39.023] [INFO] app - Global App Cache setup
+[2014-03-05 13:35:39.195] [INFO] app - Express server listening on port 3000
+[2014-03-05 13:35:39.215] [INFO] app - Session store is ready for use
+[2014-03-05 13:40:48.682] [INFO] app - Log4js setup successfully
+[2014-03-05 13:40:50.273] [INFO] app - Global App Cache setup
+[2014-03-05 13:40:52.830] [INFO] app - Express server listening on port 3000
+[2014-03-05 13:40:52.842] [INFO] app - Session store is ready for use
+[2014-03-05 13:41:08.143] [ERROR] authentication.dao - Authenticating by username & password: christopher.mina@gmail.com
+[2014-03-05 13:41:08.143] [ERROR] authentication.dao - Logging into main App
+[2014-03-05 13:41:08.144] [ERROR] authentication.dao - Verifying password
+[2014-03-05 13:41:08.456] [ERROR] authentication.dao - Login successful
+[2014-03-05 13:41:32.754] [ERROR] authentication.dao - Authenticating by username & password: christopher.mina@gmail.com
+[2014-03-05 13:41:32.755] [ERROR] authentication.dao - logging into account with id: 9
+[2014-03-05 13:41:32.755] [ERROR] authentication.dao - User found for account
+[2014-03-05 13:41:32.755] [ERROR] authentication.dao - An error occurred verifying password No password property found to verify password
+[2014-03-05 13:41:40.889] [INFO] EmailTemplateUtil - Sending password recovery email
+[2014-03-05 13:41:40.898] [INFO] nodemailer.config - Sending Email.  Subject: Reset your password. To: christopher.mina@gmail.com
+[2014-03-05 13:41:45.042] [INFO] nodemailer.config - Message sent
+[2014-03-05 13:42:27.560] [INFO] app - Log4js setup successfully
+[2014-03-05 13:42:29.165] [INFO] app - Global App Cache setup
+[2014-03-05 13:42:31.084] [INFO] app - Express server listening on port 3000
+[2014-03-05 13:42:31.100] [INFO] app - Session store is ready for use
+[2014-03-05 13:43:05.769] [ERROR] authentication.dao - Authenticating by username & password: christopher.mina@gmail.com
+[2014-03-05 13:43:05.769] [ERROR] authentication.dao - Logging into main App
+[2014-03-05 13:43:05.770] [ERROR] authentication.dao - Verifying password
+[2014-03-05 13:43:06.085] [ERROR] authentication.dao - Login successful
+[2014-03-05 13:43:21.700] [ERROR] authentication.dao - Authenticating by username & password: christopher.mina@gmail.com
+[2014-03-05 13:43:21.701] [ERROR] authentication.dao - logging into account with id: 9
+[2014-03-05 13:43:21.701] [ERROR] authentication.dao - User found for account
+[2014-03-05 13:43:21.701] [ERROR] authentication.dao - An error occurred verifying password No password property found to verify password
+[2014-03-05 14:19:59.638] [INFO] app - Log4js setup successfully
+[2014-03-05 14:19:59.906] [INFO] app - Global App Cache setup
+[2014-03-05 14:20:00.078] [INFO] app - Express server listening on port 3000
+[2014-03-05 14:20:00.099] [INFO] app - Session store is ready for use
+[2014-03-05 14:20:16.863] [INFO] EmailTemplateUtil - Sending password recovery email
+[2014-03-05 14:20:16.871] [INFO] nodemailer.config - Sending Email.  Subject: Reset your password. To: christopher.mina@gmail.com
+[2014-03-05 14:20:24.450] [INFO] nodemailer.config - Message sent
+[2014-03-05 14:21:01.804] [INFO] app - Log4js setup successfully
+[2014-03-05 14:21:12.667] [INFO] app - Global App Cache setup
+[2014-03-05 14:21:14.473] [INFO] app - Express server listening on port 3000
+[2014-03-05 14:21:14.486] [INFO] app - Session store is ready for use
+[2014-03-05 14:22:45.665] [INFO] EmailTemplateUtil - Sending password recovery email
+[2014-03-05 14:22:45.674] [INFO] nodemailer.config - Sending Email.  Subject: Reset your password. To: christopher.mina@gmail.com
+[2014-03-05 14:22:47.806] [INFO] app - Log4js setup successfully
+[2014-03-05 14:22:49.416] [INFO] app - Global App Cache setup
+[2014-03-05 14:22:51.247] [INFO] app - Express server listening on port 3000
+[2014-03-05 14:22:51.260] [INFO] app - Session store is ready for use
+[2014-03-05 14:23:47.860] [INFO] EmailTemplateUtil - Sending password recovery email
+[2014-03-05 14:23:47.869] [INFO] nodemailer.config - Sending Email.  Subject: Reset your password. To: christopher.mina@gmail.com
+[2014-03-05 14:24:09.376] [INFO] app - Log4js setup successfully
+[2014-03-05 14:24:09.640] [INFO] app - Global App Cache setup
+[2014-03-05 14:24:09.812] [INFO] app - Express server listening on port 3000
+[2014-03-05 14:24:09.832] [INFO] app - Session store is ready for use
+[2014-03-05 14:24:17.836] [INFO] EmailTemplateUtil - Sending password recovery email
+[2014-03-05 14:24:17.843] [INFO] nodemailer.config - Sending Email.  Subject: Reset your password. To: christopher.mina@gmail.com
+[2014-03-05 14:24:20.378] [INFO] nodemailer.config - Message sent
+[2014-03-05 14:25:29.155] [INFO] app - Log4js setup successfully
+[2014-03-05 14:25:30.791] [INFO] app - Global App Cache setup
+[2014-03-05 14:25:32.671] [INFO] app - Express server listening on port 3000
+[2014-03-05 14:25:32.684] [INFO] app - Session store is ready for use
+[2014-03-05 14:26:06.574] [INFO] EmailTemplateUtil - Sending password recovery email
+[2014-03-05 14:26:06.583] [INFO] nodemailer.config - Sending Email.  Subject: Reset your password. To: christopher.mina@gmail.com
+[2014-03-05 14:26:09.131] [INFO] nodemailer.config - Message sent
+[2014-03-05 14:27:16.973] [INFO] app - Log4js setup successfully
+[2014-03-05 14:27:17.249] [INFO] app - Global App Cache setup
+[2014-03-05 14:27:17.420] [INFO] app - Express server listening on port 3000
+[2014-03-05 14:27:17.440] [INFO] app - Session store is ready for use
+[2014-03-05 14:27:28.245] [ERROR] authentication.dao - Authenticating by username & password: christopher.mina@gmail.com
+[2014-03-05 14:27:28.261] [ERROR] authentication.dao - logging into account with id: 9
+[2014-03-05 14:27:28.262] [ERROR] authentication.dao - User found for account
+[2014-03-05 14:27:28.262] [ERROR] authentication.dao - An error occurred verifying password No password property found to verify password
+[2014-03-05 14:27:47.442] [INFO] EmailTemplateUtil - Sending password recovery email
+[2014-03-05 14:27:47.451] [INFO] nodemailer.config - Sending Email.  Subject: Reset your password. To: christopher.mina@gmail.com
+[2014-03-05 14:27:49.893] [INFO] nodemailer.config - Message sent
+[2014-03-05 14:28:56.191] [ERROR] authentication.dao - Authenticating by username & password: christopher.mina@gmail.com
+[2014-03-05 14:28:56.192] [ERROR] authentication.dao - logging into account with id: 9
+[2014-03-05 14:28:56.192] [ERROR] authentication.dao - User found for account
+[2014-03-05 14:28:56.192] [ERROR] authentication.dao - An error occurred verifying password No login credentials found
+[2014-03-05 14:29:04.980] [INFO] EmailTemplateUtil - Sending password recovery email
+[2014-03-05 14:29:04.989] [INFO] nodemailer.config - Sending Email.  Subject: Reset your password. To: christopher.mina@gmail.com
+[2014-03-05 14:29:06.692] [INFO] nodemailer.config - Message sent
+[2014-03-05 14:29:53.473] [ERROR] authentication.dao - Authenticating by username & password: christopher.mina@gmail.com
+[2014-03-05 14:29:53.474] [ERROR] authentication.dao - logging into account with id: 9
+[2014-03-05 14:29:53.475] [ERROR] authentication.dao - User found for account
+[2014-03-05 14:29:53.789] [ERROR] authentication.dao - Authentication succeeded
+[2014-03-05 16:04:00.735] [INFO] app - Log4js setup successfully
+[2014-03-05 16:04:01.758] [INFO] app - Global App Cache setup
+[2014-03-05 16:04:01.982] [INFO] app - Express server listening on port 3000
+[2014-03-05 16:04:02.000] [INFO] app - Session store is ready for use
+[2014-03-05 16:04:16.781] [ERROR] authentication.dao - Authenticating by username & password: christopher.mina@gmail.com
+[2014-03-05 16:04:16.782] [ERROR] authentication.dao - logging into account with id: 9
+[2014-03-05 16:04:16.783] [ERROR] authentication.dao - User found for account
+[2014-03-05 16:04:17.097] [ERROR] authentication.dao - Authentication succeeded
+[2014-03-05 16:05:10.531] [ERROR] console - TypeError: Object #<Object> has no method '_showHome'
+    at Object.<anonymous> (/Users/christophermina/Development/indigenous/bio/routers/home.server.router.js:54:30)
+    at fire (/Users/christophermina/Development/indigenous/bio/node_modules/jquery-deferred/lib/jquery-callbacks.js:78:30)
+    at Object.self.add [as done] (/Users/christophermina/Development/indigenous/bio/node_modules/jquery-deferred/lib/jquery-callbacks.js:124:7)
+    at _.extend.index (/Users/christophermina/Development/indigenous/bio/routers/home.server.router.js:42:14)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at _.extend.setup (/Users/christophermina/Development/indigenous/bio/routers/base.server.router.js:46:20)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at param (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:138:11)
+    at pass (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:145:5)
+    at Router._dispatch (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:173:5)
+[2014-03-05 16:05:59.990] [INFO] app - Log4js setup successfully
+[2014-03-05 16:06:00.260] [INFO] app - Global App Cache setup
+[2014-03-05 16:06:00.428] [INFO] app - Express server listening on port 3000
+[2014-03-05 16:06:00.449] [INFO] app - Session store is ready for use
+[2014-03-05 18:15:32.119] [INFO] app - Log4js setup successfully
+[2014-03-05 18:15:32.994] [INFO] app - Global App Cache setup
+[2014-03-05 18:15:33.335] [INFO] app - Express server listening on port 3000
+[2014-03-05 18:15:33.353] [INFO] app - Session store is ready for use
+[2014-03-05 18:16:19.252] [INFO] app - Log4js setup successfully
+[2014-03-05 18:16:19.516] [INFO] app - Global App Cache setup
+[2014-03-05 18:16:19.690] [INFO] app - Express server listening on port 3000
+[2014-03-05 18:16:19.711] [INFO] app - Session store is ready for use
+[2014-03-05 19:13:39.058] [INFO] console - Deserializing User!
+[2014-03-05 19:13:39.064] [ERROR] console - TypeError: Cannot call method 'canReadAccount' of undefined
+    at _.extend.getAuthenticatedUrlForAccount (/Users/christophermina/Development/indigenous/bio/api/1.0/authentication.api.js:28:17)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at _.extend.isAuthApi (/Users/christophermina/Development/indigenous/bio/api/base.api.js:79:20)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at param (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:138:11)
+    at param (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:135:11)
+    at pass (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:145:5)
+    at Router._dispatch (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:173:5)
+    at Object.router (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:33:10)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+[2014-03-05 19:14:33.977] [INFO] app - Log4js setup successfully
+[2014-03-05 19:14:34.875] [INFO] app - Global App Cache setup
+[2014-03-05 19:14:35.159] [INFO] app - Express server listening on port 3000
+[2014-03-05 19:14:35.180] [INFO] app - Session store is ready for use
+[2014-03-05 19:14:37.194] [INFO] console - Deserializing User!
+[2014-03-05 19:14:49.485] [INFO] app - Log4js setup successfully
+[2014-03-05 19:14:49.755] [INFO] app - Global App Cache setup
+[2014-03-05 19:14:49.929] [INFO] app - Express server listening on port 3000
+[2014-03-05 19:14:49.950] [INFO] app - Session store is ready for use
+[2014-03-05 19:14:51.447] [INFO] console - Deserializing User!
+[2014-03-05 19:20:02.847] [INFO] app - Log4js setup successfully
+[2014-03-05 19:20:14.737] [INFO] app - Global App Cache setup
+[2014-03-05 19:20:16.664] [INFO] app - Express server listening on port 3000
+[2014-03-05 19:20:16.680] [INFO] app - Session store is ready for use
+[2014-03-05 19:20:22.626] [INFO] console - Deserializing User!
+[2014-03-05 19:21:09.590] [INFO] app - Log4js setup successfully
+[2014-03-05 19:21:09.863] [INFO] app - Global App Cache setup
+[2014-03-05 19:21:10.038] [INFO] app - Express server listening on port 3000
+[2014-03-05 19:21:10.058] [INFO] app - Session store is ready for use
+[2014-03-05 19:21:12.019] [INFO] console - Deserializing User!
+[2014-03-05 20:49:35.103] [INFO] app - Log4js setup successfully
+[2014-03-05 20:49:35.533] [INFO] app - Global App Cache setup
+[2014-03-05 20:49:35.863] [INFO] app - Express server listening on port 3000
+[2014-03-05 20:49:35.889] [INFO] app - Session store is ready for use
+[2014-03-05 20:49:38.636] [INFO] console - Deserializing User!
+[2014-03-05 20:50:37.920] [INFO] app - Log4js setup successfully
+[2014-03-05 20:50:39.519] [INFO] app - Global App Cache setup
+[2014-03-05 20:50:41.399] [INFO] app - Express server listening on port 3000
+[2014-03-05 20:50:41.411] [INFO] app - Session store is ready for use
+[2014-03-05 20:50:44.958] [INFO] console - Deserializing User!
+[2014-03-05 20:51:30.382] [INFO] app - Log4js setup successfully
+[2014-03-05 20:51:30.658] [INFO] app - Global App Cache setup
+[2014-03-05 20:51:30.833] [INFO] app - Express server listening on port 3000
+[2014-03-05 20:51:30.854] [INFO] app - Session store is ready for use
+[2014-03-05 20:51:32.491] [INFO] console - Deserializing User!
+[2014-03-05 20:52:24.720] [INFO] console - Deserializing User!
+[2014-03-05 20:53:24.957] [INFO] app - Log4js setup successfully
+[2014-03-05 20:53:26.588] [INFO] app - Global App Cache setup
+[2014-03-05 20:53:28.476] [INFO] app - Express server listening on port 3000
+[2014-03-05 20:53:28.489] [INFO] app - Session store is ready for use
+[2014-03-05 20:53:49.794] [INFO] console - Deserializing User!
+[2014-03-05 20:56:15.792] [INFO] console - Deserializing User!
+[2014-03-05 21:02:20.186] [INFO] app - Log4js setup successfully
+[2014-03-05 21:02:20.460] [INFO] app - Global App Cache setup
+[2014-03-05 21:02:20.637] [INFO] app - Express server listening on port 3000
+[2014-03-05 21:02:20.658] [INFO] app - Session store is ready for use
+[2014-03-05 21:02:23.577] [INFO] console - Deserializing User!
+[2014-03-05 21:02:29.514] [INFO] console - Deserializing User!
+[2014-03-05 21:04:17.505] [INFO] app - Log4js setup successfully
+[2014-03-05 21:04:19.138] [INFO] app - Global App Cache setup
+[2014-03-05 21:04:21.080] [INFO] app - Express server listening on port 3000
+[2014-03-05 21:04:21.087] [ERROR] console - TypeError: Cannot call method 'findOne' of undefined
+    at MongoStore.module.exports.MongoStore.get (/Users/christophermina/Development/indigenous/bio/node_modules/connect-mongo-store/index.js:57:25)
+    at Object.session [as handle] (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/middleware/session.js:311:11)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+    at Object.cookieParser [as handle] (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/middleware/cookieParser.js:65:5)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+    at Object.methodOverride [as handle] (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/middleware/methodOverride.js:48:5)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+    at Object.urlencoded [as handle] (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/middleware/urlencoded.js:41:37)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+    at Object.json [as handle] (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/middleware/json.js:42:37)
+[2014-03-05 21:04:21.098] [INFO] app - Session store is ready for use
+[2014-03-05 21:04:23.003] [INFO] console - Deserializing User!
+[2014-03-05 21:34:58.707] [INFO] app - Log4js setup successfully
+[2014-03-05 21:34:59.006] [INFO] app - Global App Cache setup
+[2014-03-05 21:34:59.263] [INFO] app - Express server listening on port 3000
+[2014-03-05 21:34:59.286] [INFO] app - Session store is ready for use
+[2014-03-05 21:35:09.756] [INFO] app - Log4js setup successfully
+[2014-03-05 21:35:11.414] [INFO] app - Global App Cache setup
+[2014-03-05 21:35:13.424] [INFO] app - Express server listening on port 3000
+[2014-03-05 21:35:13.436] [INFO] app - Session store is ready for use
+[2014-03-05 21:37:53.297] [INFO] console - Deserializing User!
+[2014-03-05 21:38:51.335] [INFO] console - Deserializing User!
+[2014-03-05 21:39:02.776] [INFO] console - Deserializing User!
+[2014-03-05 21:39:02.779] [INFO] console - Deserializing User!
+[2014-03-05 21:39:02.780] [INFO] console - Deserializing User!
+[2014-03-05 21:39:02.780] [INFO] console - Deserializing User!
+[2014-03-05 21:39:02.783] [INFO] console - Deserializing User!
+[2014-03-05 21:39:02.795] [INFO] console - Deserializing User!
+[2014-03-05 21:39:02.956] [INFO] console - Deserializing User!
+[2014-03-05 21:39:02.956] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.024] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.031] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.038] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.051] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.150] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.150] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.151] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.151] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.234] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.264] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.281] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.295] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.296] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.307] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.319] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.319] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.368] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.382] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.396] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.396] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.397] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.424] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.444] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.458] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.459] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.460] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.490] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.492] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.493] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.494] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.495] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.497] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.502] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.662] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.664] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.665] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.666] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.727] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.728] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.750] [INFO] console - Deserializing User!
+[2014-03-05 21:39:03.773] [INFO] console - Deserializing User!
+[2014-03-05 21:39:13.700] [INFO] console - Deserializing User!
+[2014-03-05 21:39:13.943] [INFO] console - Deserializing User!
+[2014-03-05 21:39:13.943] [INFO] console - Deserializing User!
+[2014-03-05 21:39:13.944] [INFO] console - Deserializing User!
+[2014-03-05 21:39:13.946] [INFO] console - Deserializing User!
+[2014-03-05 21:39:13.947] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.091] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.108] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.156] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.164] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.169] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.173] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.279] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.280] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.280] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.281] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.363] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.388] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.410] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.424] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.425] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.434] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.444] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.445] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.471] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.472] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.497] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.498] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.498] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.524] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.542] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.556] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.556] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.556] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.587] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.588] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.588] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.591] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.592] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.592] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.599] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.652] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.652] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.653] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.653] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.718] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.719] [INFO] console - Deserializing User!
+[2014-03-05 21:39:14.742] [INFO] console - Deserializing User!
+[2014-03-05 21:39:20.592] [INFO] app - Log4js setup successfully
+[2014-03-05 21:39:20.875] [INFO] app - Global App Cache setup
+[2014-03-05 21:39:21.058] [INFO] app - Express server listening on port 3000
+[2014-03-05 21:39:21.080] [INFO] app - Session store is ready for use
+[2014-03-05 21:39:56.337] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.352] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.473] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.476] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.477] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.477] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.480] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.649] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.712] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.713] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.713] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.713] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.850] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.850] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.850] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.851] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.917] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.941] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.957] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.971] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.971] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.985] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.991] [INFO] console - Deserializing User!
+[2014-03-05 21:40:05.993] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.022] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.023] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.048] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.048] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.049] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.072] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.089] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.098] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.114] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.114] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.116] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.138] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.183] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.183] [INFO] console - Deserializing User!
+[2014-03-05 21:40:06.210] [INFO] console - Deserializing User!
+[2014-03-05 21:56:03.873] [INFO] app - Log4js setup successfully
+[2014-03-05 21:56:04.149] [INFO] app - Global App Cache setup
+[2014-03-05 21:56:04.328] [INFO] app - Express server listening on port 3000
+[2014-03-05 21:56:04.348] [INFO] app - Session store is ready for use
+[2014-03-05 21:56:40.321] [INFO] console - Deserializing User!
+[2014-03-05 21:56:54.564] [INFO] console - Deserializing User!
+[2014-03-05 21:57:13.938] [INFO] console - Deserializing User!
+[2014-03-05 21:57:14.415] [INFO] console - Deserializing User!
+[2014-03-05 21:57:14.419] [INFO] console - Deserializing User!
+[2014-03-05 21:57:14.419] [INFO] console - Deserializing User!
+[2014-03-05 21:57:14.420] [INFO] console - Deserializing User!
+[2014-03-05 21:57:14.423] [INFO] console - Deserializing User!
+[2014-03-05 21:57:14.595] [INFO] console - Deserializing User!
+[2014-03-05 21:57:14.907] [INFO] console - Deserializing User!
+[2014-03-05 21:57:14.917] [INFO] console - Deserializing User!
+[2014-03-05 21:57:14.918] [INFO] console - Deserializing User!
+[2014-03-05 21:57:14.926] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.044] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.044] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.045] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.046] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.145] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.174] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.198] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.218] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.218] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.239] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.246] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.250] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.289] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.290] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.321] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.321] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.322] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.352] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.372] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.383] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.402] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.402] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.406] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.429] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.475] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.481] [INFO] console - Deserializing User!
+[2014-03-05 21:57:15.510] [INFO] console - Deserializing User!
+[2014-03-05 21:57:20.255] [INFO] console - Deserializing User!
+[2014-03-05 21:57:41.017] [INFO] console - Deserializing User!
+[2014-03-05 21:58:13.219] [INFO] app - Log4js setup successfully
+[2014-03-05 21:58:13.492] [INFO] app - Global App Cache setup
+[2014-03-05 21:58:13.672] [INFO] app - Express server listening on port 3000
+[2014-03-05 21:58:13.695] [INFO] app - Session store is ready for use
+[2014-03-05 21:58:16.344] [INFO] console - Deserializing User!
+[2014-03-05 21:58:35.388] [INFO] console - Deserializing User!
+[2014-03-05 21:58:41.844] [INFO] console - Deserializing User!
+[2014-03-05 21:59:17.869] [ERROR] authentication.dao - Authenticating by username & password: christopher.mina@gmail.com
+[2014-03-05 21:59:17.870] [ERROR] authentication.dao - logging into account with id: 9
+[2014-03-05 21:59:17.872] [ERROR] authentication.dao - User found for account
+[2014-03-05 21:59:18.190] [ERROR] authentication.dao - Authentication succeeded
+[2014-03-05 21:59:18.205] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.215] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.385] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.390] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.391] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.392] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.395] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.542] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.567] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.567] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.918] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.929] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.934] [INFO] console - Deserializing User!
+[2014-03-05 21:59:18.939] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.088] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.089] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.089] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.089] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.185] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.213] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.236] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.257] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.257] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.271] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.289] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.290] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.328] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.328] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.361] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.361] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.362] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.394] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.417] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.441] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.441] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.441] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.482] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.483] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.483] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.489] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.490] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.493] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.498] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.554] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.557] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.558] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.563] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.624] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.624] [INFO] console - Deserializing User!
+[2014-03-05 21:59:19.659] [INFO] console - Deserializing User!
+[2014-03-05 21:59:22.796] [INFO] console - Deserializing User!
+[2014-03-05 21:59:22.797] [INFO] console - Deserializing User!
+[2014-03-05 21:59:22.799] [INFO] console - Deserializing User!
+[2014-03-05 21:59:22.842] [INFO] console - Deserializing User!
+[2014-03-05 21:59:30.193] [INFO] console - Deserializing User!
+[2014-03-05 21:59:33.936] [INFO] console - Deserializing User!
+[2014-03-05 21:59:44.497] [ERROR] console - TypeError: Object #<Object> has no method 'checkAuthToken'
+    at _.extend.isAuth (/Users/christophermina/Development/indigenous/bio/routers/base.server.router.js:81:18)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at param (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:138:11)
+    at pass (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:145:5)
+    at Router._dispatch (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:173:5)
+    at Object.router (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:33:10)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+    at Object.handle (/Users/christophermina/Development/indigenous/bio/node_modules/connect-flash/lib/flash.js:21:5)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+    at SessionStrategy.strategy.pass (/Users/christophermina/Development/indigenous/bio/node_modules/passport/lib/middleware/authenticate.js:314:9)
+[2014-03-05 22:01:24.603] [ERROR] console - TypeError: Object #<Object> has no method 'checkAuthToken'
+    at _.extend.isAuth (/Users/christophermina/Development/indigenous/bio/routers/base.server.router.js:81:18)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at param (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:138:11)
+    at pass (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:145:5)
+    at Router._dispatch (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:173:5)
+    at Object.router (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:33:10)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+    at Object.handle (/Users/christophermina/Development/indigenous/bio/node_modules/connect-flash/lib/flash.js:21:5)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+    at SessionStrategy.strategy.pass (/Users/christophermina/Development/indigenous/bio/node_modules/passport/lib/middleware/authenticate.js:314:9)
+[2014-03-05 22:01:26.022] [ERROR] console - TypeError: Object #<Object> has no method 'checkAuthToken'
+    at _.extend.isAuth (/Users/christophermina/Development/indigenous/bio/routers/base.server.router.js:81:18)
+    at callbacks (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:164:37)
+    at param (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:138:11)
+    at pass (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:145:5)
+    at Router._dispatch (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:173:5)
+    at Object.router (/Users/christophermina/Development/indigenous/bio/node_modules/express/lib/router/index.js:33:10)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+    at Object.handle (/Users/christophermina/Development/indigenous/bio/node_modules/connect-flash/lib/flash.js:21:5)
+    at next (/Users/christophermina/Development/indigenous/bio/node_modules/express/node_modules/connect/lib/proto.js:193:15)
+    at SessionStrategy.strategy.pass (/Users/christophermina/Development/indigenous/bio/node_modules/passport/lib/middleware/authenticate.js:314:9)
+[2014-03-05 22:01:34.395] [INFO] app - Log4js setup successfully
+[2014-03-05 22:01:36.010] [INFO] app - Global App Cache setup
+[2014-03-05 22:01:37.986] [INFO] app - Express server listening on port 3000
+[2014-03-05 22:01:37.997] [INFO] app - Session store is ready for use
+[2014-03-05 22:02:16.004] [INFO] app - Log4js setup successfully
+[2014-03-05 22:02:16.275] [INFO] app - Global App Cache setup
+[2014-03-05 22:02:16.459] [INFO] app - Express server listening on port 3000
+[2014-03-05 22:02:16.484] [INFO] app - Session store is ready for use
+[2014-03-05 22:02:39.775] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.349] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.480] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.480] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.480] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.481] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.485] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.640] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.659] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.660] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.719] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.720] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.733] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.742] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.867] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.867] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.869] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.869] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.940] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.971] [INFO] console - Deserializing User!
+[2014-03-05 22:02:46.991] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.005] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.006] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.015] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.026] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.035] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.040] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.069] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.069] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.070] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.070] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.107] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.128] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.142] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.144] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.145] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.186] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.186] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.187] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.188] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.188] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.191] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.197] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.245] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.245] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.248] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.249] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.314] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.315] [INFO] console - Deserializing User!
+[2014-03-05 22:02:47.337] [INFO] console - Deserializing User!
+[2014-03-05 22:06:36.391] [INFO] app - Log4js setup successfully
+[2014-03-05 22:06:36.658] [INFO] app - Global App Cache setup
+[2014-03-05 22:06:36.835] [INFO] app - Express server listening on port 3000
+[2014-03-05 22:06:36.855] [INFO] app - Session store is ready for use
+[2014-03-05 22:06:52.086] [INFO] console - Deserializing User!
+[2014-03-05 22:06:56.281] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.072] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.072] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.072] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.073] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.074] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.221] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.238] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.290] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.298] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.302] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.306] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.431] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.432] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.432] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.432] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.510] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.535] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.552] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.571] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.574] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.580] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.581] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.593] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.618] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.620] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.644] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.644] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.644] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.680] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.698] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.712] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.713] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.713] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.748] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.748] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.750] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.752] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.753] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.757] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.765] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.816] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.816] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.816] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.817] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.883] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.883] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.884] [INFO] console - Deserializing User!
+[2014-03-05 22:06:59.916] [INFO] console - Deserializing User!
+[2014-03-05 22:18:25.523] [INFO] console - Deserializing User!
+[2014-03-05 22:18:25.687] [INFO] console - Deserializing User!
+[2014-03-05 22:18:25.692] [INFO] console - Deserializing User!
+[2014-03-05 22:18:25.693] [INFO] console - Deserializing User!
+[2014-03-05 22:18:25.693] [INFO] console - Deserializing User!
+[2014-03-05 22:18:25.696] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.003] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.004] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.306] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.307] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.313] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.317] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.448] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.448] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.449] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.449] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.515] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.544] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.566] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.582] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.582] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.594] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.606] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.606] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.637] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.637] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.666] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.667] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.667] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.693] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.714] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.726] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.744] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.745] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.745] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.771] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.817] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.817] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.845] [INFO] console - Deserializing User!
+[2014-03-05 22:18:26.881] [INFO] console - Deserializing User!
+[2014-03-05 22:18:55.316] [INFO] app - Log4js setup successfully
+[2014-03-05 22:18:55.594] [INFO] app - Global App Cache setup
+[2014-03-05 22:18:55.771] [INFO] app - Express server listening on port 3000
+[2014-03-05 22:18:55.791] [INFO] app - Session store is ready for use
+[2014-03-05 22:18:59.672] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.132] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.137] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.138] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.138] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.142] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.302] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.601] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.601] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.610] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.616] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.741] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.741] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.741] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.742] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.814] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.841] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.862] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.879] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.880] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.894] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.906] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.906] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.936] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.936] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.968] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.968] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.968] [INFO] console - Deserializing User!
+[2014-03-05 22:19:00.994] [INFO] console - Deserializing User!
+[2014-03-05 22:19:01.011] [INFO] console - Deserializing User!
+[2014-03-05 22:19:01.027] [INFO] console - Deserializing User!
+[2014-03-05 22:19:01.043] [INFO] console - Deserializing User!
+[2014-03-05 22:19:01.044] [INFO] console - Deserializing User!
+[2014-03-05 22:19:01.044] [INFO] console - Deserializing User!
+[2014-03-05 22:19:01.071] [INFO] console - Deserializing User!
+[2014-03-05 22:19:01.119] [INFO] console - Deserializing User!
+[2014-03-05 22:19:01.119] [INFO] console - Deserializing User!
+[2014-03-05 22:19:01.152] [INFO] console - Deserializing User!
+[2014-03-05 22:19:05.002] [INFO] console - Deserializing User!
+[2014-03-05 22:19:09.506] [INFO] console - Deserializing User!
+[2014-03-05 22:19:09.534] [INFO] console - Deserializing User!
+[2014-03-05 22:19:37.330] [INFO] console - Deserializing User!
+[2014-03-05 22:20:14.978] [INFO] console - Deserializing User!
+[2014-03-05 22:20:58.040] [INFO] console - Deserializing User!
+[2014-03-05 22:23:19.853] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.055] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.058] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.058] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.059] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.061] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.227] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.524] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.525] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.535] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.546] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.697] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.697] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.699] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.699] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.769] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.799] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.818] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.836] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.837] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.939] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.940] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.940] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.979] [INFO] console - Deserializing User!
+[2014-03-05 22:23:20.979] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.010] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.011] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.011] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.051] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.068] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.082] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.101] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.101] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.102] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.123] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.174] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.175] [INFO] console - Deserializing User!
+[2014-03-05 22:23:21.206] [INFO] console - Deserializing User!
+[2014-03-05 22:23:22.374] [INFO] console - Deserializing User!
+[2014-03-05 22:23:24.905] [INFO] console - Deserializing User!
+[2014-03-05 22:26:03.928] [INFO] app - Log4js setup successfully
+[2014-03-05 22:26:04.202] [INFO] app - Global App Cache setup
+[2014-03-05 22:26:04.397] [INFO] app - Express server listening on port 3000
+[2014-03-05 22:26:04.421] [INFO] app - Session store is ready for use
+[2014-03-05 22:26:09.346] [INFO] console - Deserializing User!
+[2014-03-05 22:26:49.699] [INFO] app - Log4js setup successfully
+[2014-03-05 22:26:49.966] [INFO] app - Global App Cache setup
+[2014-03-05 22:26:50.146] [INFO] app - Express server listening on port 3000
+[2014-03-05 22:26:50.169] [INFO] app - Session store is ready for use
+[2014-03-05 22:26:55.351] [INFO] console - Deserializing User!
+[2014-03-05 22:26:56.086] [INFO] console - Deserializing User!
+[2014-03-05 22:27:00.434] [INFO] console - Deserializing User!
+[2014-03-05 22:27:00.541] [INFO] console - Deserializing User!
+[2014-03-05 22:27:00.545] [INFO] console - Deserializing User!
+[2014-03-05 22:27:00.545] [INFO] console - Deserializing User!
+[2014-03-05 22:27:00.545] [INFO] console - Deserializing User!
+[2014-03-05 22:27:00.548] [INFO] console - Deserializing User!
+[2014-03-05 22:27:00.704] [INFO] console - Deserializing User!
+[2014-03-05 22:27:00.964] [INFO] console - Deserializing User!
+[2014-03-05 22:27:00.965] [INFO] console - Deserializing User!
+[2014-03-05 22:27:00.991] [INFO] console - Deserializing User!
+[2014-03-05 22:27:00.992] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.134] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.175] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.175] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.175] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.247] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.300] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.319] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.339] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.341] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.362] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.367] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.367] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.401] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.404] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.507] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.507] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.508] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.539] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.559] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.570] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.585] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.586] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.586] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.609] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.669] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.669] [INFO] console - Deserializing User!
+[2014-03-05 22:27:01.701] [INFO] console - Deserializing User!
+[2014-03-05 22:27:03.485] [INFO] console - Deserializing User!
+[2014-03-05 22:27:03.512] [INFO] console - Deserializing User!
+[2014-03-05 22:27:06.883] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.042] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.043] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.047] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.048] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.049] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.220] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.248] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.248] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.530] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.538] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.585] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.664] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.715] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.716] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.716] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.716] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.864] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.945] [INFO] console - Deserializing User!
+[2014-03-05 22:27:07.984] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.005] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.005] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.015] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.027] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.039] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.067] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.080] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.097] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.098] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.098] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.131] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.166] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.183] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.183] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.183] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.216] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.216] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.216] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.220] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.221] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.224] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.227] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.282] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.282] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.283] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.283] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.365] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.365] [INFO] console - Deserializing User!
+[2014-03-05 22:27:08.391] [INFO] console - Deserializing User!
+[2014-03-05 22:27:17.749] [INFO] console - Deserializing User!
+[2014-03-05 22:27:22.947] [INFO] console - Deserializing User!
+[2014-03-05 22:27:22.963] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.085] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.086] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.086] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.086] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.087] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.253] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.305] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.305] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.317] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.326] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.453] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.453] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.454] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.454] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.523] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.548] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.564] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.577] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.578] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.587] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.597] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.597] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.619] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.627] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.643] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.644] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.644] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.671] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.688] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.699] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.717] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.717] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.718] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.743] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.783] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.784] [INFO] console - Deserializing User!
+[2014-03-05 22:27:23.806] [INFO] console - Deserializing User!
+[2014-03-05 22:27:28.135] [INFO] console - Deserializing User!
+[2014-03-05 22:27:28.175] [INFO] console - Deserializing User!
+[2014-03-05 22:27:35.409] [INFO] console - Deserializing User!
+[2014-03-05 22:27:35.842] [INFO] console - Deserializing User!
+[2014-03-05 22:27:35.935] [INFO] console - Deserializing User!
+[2014-03-05 22:27:35.936] [INFO] console - Deserializing User!
+[2014-03-05 22:27:35.936] [INFO] console - Deserializing User!
+[2014-03-05 22:27:35.937] [INFO] console - Deserializing User!
+[2014-03-05 22:27:35.937] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.082] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.104] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.335] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.336] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.346] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.445] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.467] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.468] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.468] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.469] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.553] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.595] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.614] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.629] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.630] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.643] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.656] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.657] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.692] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.695] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.729] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.729] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.729] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.764] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.794] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.811] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.811] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.812] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.852] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.853] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.853] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.854] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.854] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.854] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.870] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.917] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.917] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.921] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.921] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.997] [INFO] console - Deserializing User!
+[2014-03-05 22:27:36.997] [INFO] console - Deserializing User!
+[2014-03-05 22:27:37.023] [INFO] console - Deserializing User!
+[2014-03-05 22:27:39.760] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.239] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.254] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.371] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.372] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.372] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.372] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.373] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.531] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.583] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.591] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.595] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.598] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.720] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.720] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.721] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.721] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.787] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.810] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.825] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.840] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.853] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.857] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.858] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.859] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.893] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.893] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.918] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.928] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.928] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.957] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.974] [INFO] console - Deserializing User!
+[2014-03-05 22:27:49.984] [INFO] console - Deserializing User!
+[2014-03-05 22:27:50.000] [INFO] console - Deserializing User!
+[2014-03-05 22:27:50.001] [INFO] console - Deserializing User!
+[2014-03-05 22:27:50.001] [INFO] console - Deserializing User!
+[2014-03-05 22:27:50.032] [INFO] console - Deserializing User!
+[2014-03-05 22:27:50.079] [INFO] console - Deserializing User!
+[2014-03-05 22:27:50.080] [INFO] console - Deserializing User!
+[2014-03-05 22:27:50.101] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.098] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.110] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.210] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.210] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.210] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.211] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.211] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.363] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.405] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.405] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.424] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.499] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.517] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.517] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.517] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.518] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.609] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.634] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.650] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.664] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.664] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.673] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.684] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.685] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.709] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.720] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.738] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.738] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.739] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.766] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.782] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.791] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.803] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.804] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.804] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.823] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.864] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.865] [INFO] console - Deserializing User!
+[2014-03-05 22:28:04.885] [INFO] console - Deserializing User!
+[2014-03-05 22:28:05.919] [INFO] console - Deserializing User!
+[2014-03-05 22:28:05.934] [INFO] console - Deserializing User!
+[2014-03-05 22:28:05.958] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.076] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.076] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.077] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.077] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.077] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.231] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.249] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.289] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.298] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.303] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.304] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.407] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.407] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.408] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.408] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.490] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.515] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.532] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.546] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.546] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.558] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.565] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.566] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.592] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.592] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.614] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.615] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.615] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.641] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.657] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.669] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.669] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.669] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.708] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.708] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.709] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.709] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.709] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.710] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.718] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.759] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.760] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.784] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.785] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.830] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.830] [INFO] console - Deserializing User!
+[2014-03-05 22:28:06.851] [INFO] console - Deserializing User!
+[2014-03-05 22:28:15.980] [INFO] console - Deserializing User!

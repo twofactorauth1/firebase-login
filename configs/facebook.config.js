@@ -6,15 +6,7 @@ var facebookClientSecret = process.env.FACEBOOK_CLIENT_SECRET || 'baf33c08a8c2ce
 module.exports = {
     CLIENT_ID: facebookClientId,
     CLIENT_SECRET: facebookClientSecret,
-    CALLBACK_URL_LOGIN: appConfig.server_url + "/login/facebook/callback",
-
-    getDynamicCallbackUrlLogin: function(subdomain) {
-        if (subdomain == null) {
-            return appConfig.server_url + "/login/facebook/callback";
-        }
-        var url = appConfig.getServerUrl(subdomain) + "/login/facebook/callback";
-        return url;
-    },
+    CALLBACK_URL_LOGIN: appConfig.server_url + "/oauth2/callback",
 
 
     getScope: function() {

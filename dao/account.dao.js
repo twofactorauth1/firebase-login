@@ -27,19 +27,23 @@ var dao = {
 
 
     getServerUrlByAccount: function(accountId, fn) {
-        this.getById(accountId, function(err, value) {
-            if (err) {
-                return fn(err, value);
-            }
+        if (accountId > 0) {
+            this.getById(accountId, function(err, value) {
+                if (err) {
+                    return fn(err, value);
+                }
 
-            if (value == null) {
-                return fn("No account found", "No account found");
-            }
+                if (value == null) {
+                    return fn("No account found", "No account found");
+                }
 
-            var url = appConfig.getServerUrl(value.get("subdomain"), value.get("domain"));
+                var url = appConfig.getServerUrl(value.get("subdomain"), value.get("domain"));
 
-            fn(null, url);
-        });
+                fn(null, url);
+            });
+        } else {
+            fn(null, appConfig.getServerUrl(null, null));
+        }
     },
 
 

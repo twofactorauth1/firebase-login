@@ -301,7 +301,7 @@ var dao = {
 
 
     //region REMOTE AUTHENTICATION
-    setAuthenticationToken: function(userId, fn) {
+    setAuthenticationToken: function(userId, expirationSeconds, fn) {
         var self = this;
         this.getById(userId, function(err, value) {
             if (err) {
@@ -312,7 +312,7 @@ var dao = {
                 return fn("User not found", "User not found with ID: [" + userId + "]");
             }
 
-            var token = value.setAuthToken();
+            var token = value.setAuthToken(expirationSeconds);
             self.saveOrUpdate(value, function(err, value) {
                 if (err) {
                     return fn(err, value);
@@ -324,31 +324,37 @@ var dao = {
     },
 
 
-    getAuthenticatedUrlForAccount: function(accountId, userId, path, fn) {
-        var self = this, serverUrl;
+    constructAuthenticatedUrl: function(accountId, authToken, path, fn) {
         accountDao.getServerUrlByAccount(accountId, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
 
-            serverUrl = value;
-            self.setAuthenticationToken(userId, function(err, value) {
-                if (err) {
-                    return fn(err, value);
-                }
+            var serverUrl = value;
 
-                if (path != null && path.charAt(0) != "/") {
-                    path = "/" + path;
-                }
+            if (path != null && path.charAt(0) != "/") {
+                path = "/" + path;
+            }
 
-                if (path != null) {
-                    serverUrl += path;
-                }
+            if (path != null) {
+                serverUrl += path;
+            }
 
-                serverUrl += "?authtoken=" + value;
+            serverUrl += "?authtoken=" + authToken;
 
-                return fn(null, serverUrl);
-            });
+            fn(null, serverUrl);
+        });
+    },
+
+
+    getAuthenticatedUrlForAccount: function(accountId, userId, path, expirationSeconds, fn) {
+        var self = this;
+        this.setAuthenticationToken(userId, expirationSeconds, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            self.constructAuthenticatedUrl(accountId, value, path, fn);
         });
     },
 
