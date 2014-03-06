@@ -1,4 +1,6 @@
 var cookies = require('../utils/cookieutil');
+var authenticationDao = require('../dao/authentication.dao');
+var securityManager = require('../security/securitymanager');
 
 var baseRouter = function(options) {
     this.init.apply(this, arguments);
@@ -7,6 +9,8 @@ var baseRouter = function(options) {
 _.extend(baseRouter.prototype, {
 
     log: null,
+
+    sm: securityManager,
 
     init: function(options) {
         options = options || {};
@@ -48,9 +52,33 @@ _.extend(baseRouter.prototype, {
 
 
     isAuth: function(req, resp, next) {
+        var self = this;
         if (req.isAuthenticated()) {
             return next()
         }
+
+        var checkAuthToken = function(req, fn) {
+            if (req.query.authtoken != null) {
+                var accountId = 0;
+                if (req["session"] != null) {
+                    accountId = req.session.accountId;
+                }
+                authenticationDao.verifyAuthToken(accountId, req.query.authtoken, true, function(err, value) {
+                    if (err) {
+                        return fn(err);
+                    }
+
+                    req.login(value, function(err) {
+                        if (err) {
+                            return fn(err);
+                        }
+                        return fn(null, value);
+                    });
+                });
+            } else {
+                return fn("No auth token found");
+            }
+        };
 
         if (req["session"] != null && req.session["accountId"] == null) {
             var accountDao = require("../dao/account.dao");
@@ -63,12 +91,48 @@ _.extend(baseRouter.prototype, {
                     }
                 }
 
-                cookies.setRedirectUrl(req,resp);
-                resp.redirect("/login");
+                checkAuthToken(req, function(err, value) {
+                    if (!err) {
+                        return next();
+                    } else {
+                        cookies.setRedirectUrl(req, resp);
+                        return resp.redirect("/login");
+                    }
+                });
             });
         } else {
-            cookies.setRedirectUrl(req,resp);
-            resp.redirect("/login");
+            checkAuthToken(req, function(err, value) {
+                if (!err) {
+                    return next();
+                } else {
+                    cookies.setRedirectUrl(req, resp);
+                    return resp.redirect("/login");
+                }
+            });
+        }
+    },
+
+
+    checkAuthToken: function(req, fn) {
+        if (req.query.authtoken != null) {
+            var accountId = 0;
+            if (req["session"] != null) {
+                accountId = req.session.accountId;
+            }
+            authenticationDao.verifyAuthToken(accountId, req.query.authtoken, true, function(err, value) {
+                if (err) {
+                    return fn(err);
+                }
+
+                req.login(value, function(err) {
+                    if (err) {
+                        return fn(err);
+                    }
+                    return fn(null, value);
+                });
+            });
+        } else {
+            return fn("No auth token found");
         }
     },
 
@@ -83,5 +147,4 @@ _.extend(baseRouter.prototype, {
 });
 
 $$.r.BaseRouter = baseRouter;
-
 module.exports = baseRouter;

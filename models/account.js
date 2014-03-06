@@ -38,7 +38,7 @@ var account = $$.m.ModelBase.extend({
     serializers: {
         public: function(json) {
             if (this.get("subdomain") != null) {
-                json.accountUrl = appConfig.getServerUrl(this.get("subdomain"));
+                json.accountUrl = appConfig.getServerUrl(this.get("subdomain"), this.get("domain"));
             }
         }
     },

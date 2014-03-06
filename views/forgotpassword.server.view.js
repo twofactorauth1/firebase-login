@@ -44,7 +44,7 @@ _.extend(view.prototype, BaseView.prototype, {
     resetByToken: function(token) {
         var self = this;
 
-        authenticationDao.verifyPasswordResetToken(token, function(err, value) {
+        authenticationDao.verifyPasswordResetToken(this.accountId(), token, function(err, value) {
             if (!err) {
                 //we have the user value, now lets load the
                 var data = self.baseData({
@@ -68,7 +68,6 @@ _.extend(view.prototype, BaseView.prototype, {
 
     handleResetByToken: function(token, password) {
         var self = this;
-
 
         authenticationDao.updatePasswordByToken(this.accountId(), token, password, function(err, value) {
             if (!err) {

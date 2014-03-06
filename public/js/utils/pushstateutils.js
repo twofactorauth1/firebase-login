@@ -38,6 +38,24 @@
     });
 
 
+    $(document).on("click", "a.authenticated", function(event) {
+        var accountId = $(event.currentTarget).data("accountid");
+        var path = $(event.currentTarget).attr("href");
+
+        if (accountId != null) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+
+            require(['services/authentication.service'], function() {
+                $$.svc.AuthenticationService.getAuthenticatedUrl(accountId, path)
+                    .done(function(url) {
+                        window.location.href=url;
+                    });
+            })
+        }
+    });
+
+
     //# Globally capture clicks. If they are internal and not in the pass
     //# through list, route them through Backbone's navigate method.
     $(document).on("click", "a[href^='/']", function(event) {

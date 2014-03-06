@@ -13,8 +13,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
     initialize: function() {
         app.get("/", this.setup, this.index.bind(this));
 
-        app.get("/home", this.isAuth, this.showHome.bind(this));
-        app.get("/home/*", this.isAuth, this.showHome.bind(this));
+        app.get("/home", this.isAuth.bind(this), this.showHome.bind(this));
+        app.get("/home/*", this.isAuth.bind(this), this.showHome.bind(this));
 
         app.get("/admin", this.isAuth, this.showAdmin.bind(this));
         app.get("/admin/*", this.isAuth, this.showAdmin.bind(this));
@@ -23,24 +23,41 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
     index: function(req,resp) {
-        var accountId = this.accountId(req);
+        var self = this
+            , accountId = this.accountId(req)
+            , promise = $.Deferred();
 
-        if (accountId > 0) {
-            var user = req.user;
-            if (req.isAuthenticated() && user.isAdminOfAccount(accountId) == true) {
-                //TODO -- do not redirect to /admin, this should go to public website when such functionality is availble
-                resp.redirect("/admin");
-            } else {
-                //TODO -- do not redirect to login, this should go to public website when such functionality is availble
-                resp.redirect("/login");
-            }
+        if (req.isAuthenticated() == false) {
+            this.checkAuthToken(req, function(err, value) {
+                if (!err) {
+                    promise.resolve(true);
+                } else {
+                    promise.resolve(false);
+                }
+            })
         } else {
-            if (req.isAuthenticated()) {
-                this._showHome(req,resp);
-            } else {
-                resp.redirect("/login");
-            }
+            promise.resolve(true);
         }
+
+        promise
+            .done(function(isAuthenticated) {
+                if (accountId > 0) {
+                    var user = req.user;
+                    if (isAuthenticated && self.sm.canManageAccount(req, accountId)) {
+                        //TODO -- do not redirect to /admin, this should go to public website when such functionality is availble
+                        resp.redirect("/admin");
+                    } else {
+                        //TODO -- do not redirect to login, this should go to public website when such functionality is availble
+                        resp.redirect("/login");
+                    }
+                } else {
+                    if (isAuthenticated) {
+                        self._showHome(req,resp);
+                    } else {
+                        resp.redirect("/login");
+                    }
+                }
+            });
     },
 
 

@@ -15,6 +15,7 @@ passport.serializeUser(function(user, done) {
 
 //  Retrieve the user via our standard DAO access
 passport.deserializeUser(function(id, done) {
+    console.log("Deserializing User!");
     userDao.getById(id, function(err, value) {
         return done(err, value);
     });

@@ -247,12 +247,19 @@ var dao = {
     },
 
 
-    verifyPasswordResetToken: function (token, fn) {
+    verifyPasswordResetToken: function (accountId, token, fn) {
         userDao.findOne({passRecover: token}, function (err, value) {
             if (!err) {
                 if (value == null) {
                     return fn("Invalid recovery token. Please ensure you have clicked the link directly from your email, or resubmit the form below.");
                 }
+
+                if (accountId > 0) {
+                    if (value.getUserAccount(accountId) == null) {
+                        return fn("No user found for this account", "No user found for this account");
+                    }
+                }
+
                 var passRecoverExp = value.get("passRecoverExp");
                 if (new Date(passRecoverExp) < new Date()) {
                     return fn("Password recovery token is expired, please resubmit the form below.");
@@ -267,7 +274,7 @@ var dao = {
 
 
     updatePasswordByToken: function (accountId, passwordResetToken, password, fn) {
-        this.verifyPasswordResetToken(passwordResetToken, function (err, value) {
+        this.verifyPasswordResetToken(accountId, passwordResetToken, function (err, value) {
             if (!err) {
                 var user = value;
                 user.clearPasswordRecoverToken();
@@ -287,6 +294,95 @@ var dao = {
                 });
             } else {
                 fn(err, value);
+            }
+        });
+    },
+    //endregion
+
+
+    //region REMOTE AUTHENTICATION
+    setAuthenticationToken: function(userId, fn) {
+        var self = this;
+        this.getById(userId, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value == null) {
+                return fn("User not found", "User not found with ID: [" + userId + "]");
+            }
+
+            var token = value.setAuthToken();
+            self.saveOrUpdate(value, function(err, value) {
+                if (err) {
+                    return fn(err, value);
+                }
+
+                return fn(null, token);
+            });
+        });
+    },
+
+
+    getAuthenticatedUrlForAccount: function(accountId, userId, path, fn) {
+        var self = this, serverUrl;
+        accountDao.getServerUrlByAccount(accountId, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            serverUrl = value;
+            self.setAuthenticationToken(userId, function(err, value) {
+                if (err) {
+                    return fn(err, value);
+                }
+
+                if (path != null && path.charAt(0) != "/") {
+                    path = "/" + path;
+                }
+
+                if (path != null) {
+                    serverUrl += path;
+                }
+
+                serverUrl += "?authtoken=" + value;
+
+                return fn(null, serverUrl);
+            });
+        });
+    },
+
+
+    verifyAuthToken: function (accountId, token, remove, fn) {
+        if (_.isFunction(remove)) {
+            fn = remove;
+            remove = false;
+        }
+
+        userDao.findOne({authToken: token}, function (err, value) {
+            if (!err) {
+                if (value === null) {
+                    return fn("Invalid authentication token.");
+                }
+
+                if (accountId > 0) {
+                    if (value.getUserAccount(accountId) === null) {
+                        return fn("No user found for this account!", "No user found for this account");
+                    }
+                }
+
+                var authTokenExp = value.get("authTokenExp");
+                if (new Date(authTokenExp) < new Date()) {
+                    return fn("Authentication token is expired.");
+                }
+
+                if (remove === true) {
+                    value.clearAuthToken();
+                    userDao.saveOrUpdate(value, function(err, value) {});
+                }
+                return fn(null, value);
+            } else {
+                return fn(err, value);
             }
         });
     }

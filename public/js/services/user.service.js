@@ -6,7 +6,7 @@ define([], function() {
             var url = $$.api.getApiUrl("user", "exists/" + username);
 
             var deferred = $.Deferred();
-            $.getJSON(url, function(data, status) {
+            $.getJSON(url, null, function(data, status) {
                 if (data === true) {
                     return deferred.resolve(true);
                 }

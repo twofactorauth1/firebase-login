@@ -1,3 +1,6 @@
+var securityManager = require('../security/securitymanager');
+
+
 var apiBase = function(options) {
     this.init.apply(this, arguments);
 };
@@ -5,6 +8,8 @@ var apiBase = function(options) {
 _.extend(apiBase.prototype, {
 
     log: null,
+
+    sm: securityManager,
 
     init: function(options) {
         options = options || {};

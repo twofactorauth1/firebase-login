@@ -252,6 +252,16 @@ var user = $$.m.ModelBase.extend({
 
 
     //region User Accounts
+    getPermissionsForAccount: function(accountId) {
+        var userAccount = this.getUserAccount(accountId);
+        if (userAccount == null) {
+            return [];
+        }
+
+        return userAccount.permissions || [];
+    },
+
+
     getUserAccount: function (accountId) {
         var accounts = this.get("accounts");
         if (accounts == null) {
@@ -264,12 +274,6 @@ var user = $$.m.ModelBase.extend({
             }
         }
         return null;
-    },
-
-
-    isAdminOfAccount: function (accountId) {
-        var account = this.getUserAccount(accountId);
-        return (account != null && (account.permissions.indexOf("admin") > -1 || account.permissions.indexOf("super") > -1));
     },
 
 
@@ -483,6 +487,24 @@ var user = $$.m.ModelBase.extend({
     clearPasswordRecoverToken: function () {
         this.clear("passRecover");
         this.clear("passRecoverExp");
+    },
+    //endregion
+
+
+    //region TOKEN AUTHENTICATION
+    setAuthToken: function (expirationSeconds) {
+        if (expirationSeconds == null) {
+            expirationSeconds = 120;
+        }
+        var token = $$.u.idutils.generateUniqueAlphaNumeric();
+        this.set({authToken: token, authTokenExp: new Date().getTime() + expirationSeconds * 1000});
+        return token;
+    },
+
+
+    clearAuthToken: function () {
+        this.clear("authToken");
+        this.clear("authTokenExp");
     }
     //endregion
 
