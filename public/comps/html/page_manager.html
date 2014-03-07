@@ -69,12 +69,8 @@
             <li class="contacts-li">
                 <a href="contacts.html"><i class="fa fa-users"></i> <span> Customers</span></a>
             </li>
-            <li class="activity-li nav-parent">
+            <li class="activity-li">
                 <a href="#"><i class="fa fa-calendar"></i> <span> Activity</span></a>
-                <ul class="children">
-                    <li><a href="#"><i class="fa fa-caret-right"></i> All Activity</a></li>
-                    <li><a href="#"><i class="fa fa-caret-right"></i> Add Activity</a></li>
-                </ul>
             </li>
             <li class="marketing-li nav-parent">
                 <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
@@ -88,12 +84,13 @@
             <li class="content-li nav-parent">
                 <a href="#"><i class="fa fa-files-o"></i> <span> Content</span></a>
                 <ul class="children">
-                    <li><a href="page_manager.html"><i class="fa fa-caret-right"></i> Page Manager</a></li>
-                    <li><a href="#"><i class="fa fa-caret-right"></i> Posts</a></li>
+                    <li><a href="page_manager.html"><i class="fa fa-caret-right"></i> Pages</a></li>
+                    <li><a href="posts_manager.html"><i class="fa fa-caret-right"></i> Posts</a></li>
+                    <li><a href="media_manager.html"><i class="fa fa-caret-right"></i> Media</a></li>
                 </ul>
             </li>
             <li class="store-li nav-parent">
-                <a href="#"><i class="fa fa-shopping-cart"></i> <span> Store</span></a>
+                <a href="#"><i class="fa fa-shopping-cart"></i> <span> Commerce</span></a>
                 <ul class="children">
                     <li><a href="#"><i class="fa fa-caret-right"></i> Products</a></li>
                     <li><a href="#"><i class="fa fa-caret-right"></i> Promotions</a></li>
@@ -137,9 +134,7 @@
                 </div>
             </li>
             <li>
-                <button id="actiontoggle" class="btn btn-default tp-icon chat-icon">
-                    <i class="fa fa-cogs"></i>
-                </button>
+                <a class="menutoggle-right"><i class="fa fa-bars"></i></a>
             </li>
         </ul>
     </div>
@@ -151,7 +146,7 @@
 
     <div class="pageheader row">
     <div class="col-xs-9">
-        <h2><i class="fa fa-files-o"></i> Page Manager</h2>
+        <h2><i class="fa fa-files-o"></i> Pages</h2>
     </div>
     <div class="col-xs-3">
         <a id="add-page" class="btn btn-success pull-right" type="button">
@@ -161,6 +156,15 @@
     </div>
     <div class="clear"></div>
 </div>
+
+<div class="alert alert-info fade in">
+        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+        <h4>In Pages you can create and edit pages</h4>
+        <p>These are all the pages that your customers will see when the visit your website. They can be part of your mainmenu or a seperate landing page.</p>
+        <div class="mb20"></div>
+        <button class="btn btn-warning">Scan Existing Site</button>
+        <button class="btn btn-primary">Import XML</button>
+    </div>
 
 <div class="contentpanel">
     <ul id="nestable-menu" class="filemanager-options">
@@ -320,6 +324,7 @@
 <script src="../js/jquery.tagsinput.min.js"></script>
 <script src="../js/jquery-ui.min.js"></script>
 <script src="../js/jquery.nestable.js"></script>
+<script src="../js/masonry.pkgd.min.js"></script>
 <script src="../js/jquery.hoverIntent.minified.js"></script>
 
 <script src="../js/custom.js"></script>
@@ -330,9 +335,9 @@
 
 <script>
 
-$(document).ready(function()
-{
-
+$(document).ready(function() {
+	jQuery('.leftpanel .nav li.content-li').addClass('active nav-active').find('.children').show();
+	jQuery('.leftpanel .nav li.content-li').find('.children li:first-child').addClass('active');
     // activate Nestable for list 1
     $('#nestable').nestable();
     $('#nestable2').nestable();

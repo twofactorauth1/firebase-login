@@ -69,12 +69,8 @@
             <li class="contacts-li">
                 <a href="contacts.html"><i class="fa fa-users"></i> <span> Customers</span></a>
             </li>
-            <li class="activity-li nav-parent">
+            <li class="activity-li">
                 <a href="#"><i class="fa fa-calendar"></i> <span> Activity</span></a>
-                <ul class="children">
-                    <li><a href="#"><i class="fa fa-caret-right"></i> All Activity</a></li>
-                    <li><a href="#"><i class="fa fa-caret-right"></i> Add Activity</a></li>
-                </ul>
             </li>
             <li class="marketing-li nav-parent">
                 <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
@@ -88,12 +84,13 @@
             <li class="content-li nav-parent">
                 <a href="#"><i class="fa fa-files-o"></i> <span> Content</span></a>
                 <ul class="children">
-                    <li><a href="page_manager.html"><i class="fa fa-caret-right"></i> Page Manager</a></li>
-                    <li><a href="#"><i class="fa fa-caret-right"></i> Posts</a></li>
+                    <li><a href="page_manager.html"><i class="fa fa-caret-right"></i> Pages</a></li>
+                    <li><a href="posts_manager.html"><i class="fa fa-caret-right"></i> Posts</a></li>
+                    <li><a href="media_manager.html"><i class="fa fa-caret-right"></i> Media</a></li>
                 </ul>
             </li>
             <li class="store-li nav-parent">
-                <a href="#"><i class="fa fa-shopping-cart"></i> <span> Store</span></a>
+                <a href="#"><i class="fa fa-shopping-cart"></i> <span> Commerce</span></a>
                 <ul class="children">
                     <li><a href="#"><i class="fa fa-caret-right"></i> Products</a></li>
                     <li><a href="#"><i class="fa fa-caret-right"></i> Promotions</a></li>
@@ -137,9 +134,7 @@
                 </div>
             </li>
             <li>
-                <button id="actiontoggle" class="btn btn-default tp-icon chat-icon">
-                    <i class="fa fa-cogs"></i>
-                </button>
+                <a class="menutoggle-right"><i class="fa fa-bars"></i></a>
             </li>
         </ul>
     </div>
@@ -497,6 +492,7 @@
 <script src="../js/jquery.tagsinput.min.js"></script>
 <script src="../js/jquery-ui.min.js"></script>
 <script src="../js/jquery.nestable.js"></script>
+<script src="../js/masonry.pkgd.min.js"></script>
 <script src="../js/jquery.hoverIntent.minified.js"></script>
 
 <script src="../js/custom.js"></script>
@@ -508,7 +504,8 @@
 <script type="text/javascript">
 	jQuery(document).ready(function() {
 
-    	jQuery('.leftpanel .nav li.marketing-li').addClass('active');
+    	jQuery('.leftpanel .nav li.marketing-li').addClass('active').children().show();
+    	jQuery('.leftpanel .nav li.marketing-li').find('.children li:first-child').addClass('active');
 
     });
 </script>
