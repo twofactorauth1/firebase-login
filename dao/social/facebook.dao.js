@@ -5,6 +5,7 @@ var facebookConfig = require('../../configs/facebook.config');
 var paging = require('../../utils/paging');
 var contactDao = require('../contact.dao');
 var Contact = require('../../models/contact');
+var async = require('async');
 
 var dao = {
 
@@ -152,37 +153,69 @@ var dao = {
                             return fn(err, value);
                         }
 
-                        if (value != null && value.length > 0) {
-                            value.forEach(function(contact) {
-                                //Get reference to current friend
-                                var facebookFriend = _.findWhere(items, {uid:contact.getSocialId(socialType)});
+                        var contactValues = value;
+                        async.series([
+                            function(callback) {
+                                if (contactValues != null && contactValues.length > 0) {
+                                    async.each(contactValues, function(contact) {
 
-                                //remove the contact from the items array so we don't process again
-                                items = _.without(items, facebookFriend);
+                                        //Get reference to current friend
+                                        var facebookFriend = _.findWhere(items, {uid:contact.getSocialId(socialType)});
 
-                                updateContactFromFacebookFriend(contact, facebookFriend);
-                                contactDao.saveOrUpdate(contact, function() {});
-                            });
-                        }
+                                        //remove the contact from the items array so we don't process again
+                                        items = _.without(items, facebookFriend);
 
-                        //Iterate through remaining items
-                        items.forEach(function(facebookFriend) {
+                                        updateContactFromFacebookFriend(contact, facebookFriend);
 
-                            var contact = new Contact({
-                                accountId: accountId,
-                                type: $$.constants.contact.contact_types.FRIEND
-                            });
+                                        contactDao.saveOrUpdate(contact, function(err, value) {
+                                            if (err) {
+                                                self.log.error("An error occurred updating contact during Facebook import", err);;
+                                            }
+                                        });
 
-                            contact.createdBy(user.id(), socialType, facebookId);
-                            updateContactFromFacebookFriend(contact, facebookFriend);
-                            contactDao.saveOrUpdate(contact, function() {});
+                                    }, function(err) {
+                                       callback(err);
+                                    });
+                                } else {
+                                    callback(null);
+                                }
+                            },
+
+                            function(callback) {
+                                //Iterate through remaining items
+                                if (items != null && items.length > 0) {
+                                    async.each(items, function(facebookFriend) {
+
+                                        var contact = new Contact({
+                                            accountId: accountId,
+                                            type: $$.constants.contact.contact_types.FRIEND
+                                        });
+
+                                        contact.createdBy(user.id(), socialType, facebookId);
+                                        updateContactFromFacebookFriend(contact, facebookFriend);
+                                        contactDao.saveOrMerge(contact, function(err, value) {
+                                            if (err) {
+                                                self.log.error("An error occurred saving contact during Facebook import", err);
+                                            }
+                                        });
+
+                                    }, function(err) {
+                                        callback(err);
+                                    })
+                                } else {
+                                    callback(null);
+                                }
+                            }
+
+                        ], function(err, results) {
+                            if (pagingInfo.nextPage > page) {
+                                process.nextTick(function() {
+                                    importFriends(friends, pagingInfo.nextPage);
+                                });
+                            } else {
+                                fn(null);
+                            }
                         });
-
-                        if (pagingInfo.nextPage > page) {
-                            importFriends(friends, pagingInfo.nextPage);
-                        } else {
-                            fn(null);
-                        }
                     });
                 }
             })(_friends, 1);

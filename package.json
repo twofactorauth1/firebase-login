@@ -34,7 +34,8 @@
     "aws-sdk": "~2.0.0-rc9",
     "formidable": "~1.0.14",
     "request": "2.34.0",
-    "passport-google": "~0.3.0"
+    "passport-google": "~0.3.0",
+    "async": "~0.2.10"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

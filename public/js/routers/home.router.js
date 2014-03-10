@@ -11,7 +11,7 @@ define([
         },
 
         showHome: function() {
-            var view = new HomeView();
+                var view = new HomeView();
             $$.viewManager.replaceMain(view);
         }
     });
