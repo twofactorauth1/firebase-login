@@ -8,7 +8,7 @@ module.exports = function(grunt) {
             main: {
                 expand: true,
                 src: ['./**'],
-                dest: '../bio-release/'
+                dest: '../indigeweb-release/'
             }
         },
 
@@ -60,21 +60,21 @@ module.exports = function(grunt) {
             hbs: {
                 src: ["hbs"]
             },
-            biorelease: {
-                src: ["../bio-release"]
+            release: {
+                src: ["../indigeweb-release"]
             },
             prebuild: {
-                //src: ["../bio-release/public/css"] //don't remove css files
+                //src: ["../indigeweb-release/public/css"] //don't remove css files
             },
             postbuild: {
-                src: ["../bio-release/public/less", "../bio-release/public/js", "../bio-release/deploy",/*"../bio-release/node_modules",*/"../bio-release/Logs/*.log","../bio-release/Logs/*.log-*"]
+                src: ["../indigeweb-release/public/less", "../indigeweb-release/public/js", "../indigeweb-release/deploy",/*"../indigeweb-release/node_modules",*/"../indigeweb-release/Logs/*.log","../indigeweb-release/Logs/*.log-*"]
             }
         },
 
 
         less: {
             style: {
-                files: {"../bio-release/public/css/site.css":"public/less/site.less"}
+                files: {"../indigeweb-release/public/css/site.css":"public/less/site.less"}
             }
         },
 
@@ -86,7 +86,7 @@ module.exports = function(grunt) {
 
                     appDir: "",
 
-                    dir: "../bio-release/public/min",
+                    dir: "../indigeweb-release/public/min",
 
                     optimize: grunt.option('optimize') || 'none',
 
@@ -134,7 +134,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
-    grunt.registerTask('copyroot', ['clean:biorelease','copy:main']);
+    grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
     grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
 
