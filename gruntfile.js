@@ -67,7 +67,7 @@ module.exports = function(grunt) {
                 //src: ["../bio-release/public/css"] //don't remove css files
             },
             postbuild: {
-                src: ["../bio-release/public/less", "../bio-release/public/js", "../bio-release/deploy",/*"../bio-release/node_modules",*/"../bio-release/Logs/*.log"]
+                src: ["../bio-release/public/less", "../bio-release/public/js", "../bio-release/deploy",/*"../bio-release/node_modules",*/"../bio-release/Logs/*.log","../bio-release/Logs/*.log-*"]
             }
         },
 
@@ -98,7 +98,7 @@ module.exports = function(grunt) {
                             include: [
                                 'utils/cachemixin',
                                 'compiled/hbshelpers',
-                                'compiled/templates',
+                                'compiled/templates'
                                 /*'compiled/apps/templates'*/ //this is part of example from above in handlebars task
                             ]
                         },
