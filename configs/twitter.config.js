@@ -11,11 +11,6 @@ module.exports = {
 
     getScope: function() {
         return null;
-    },
-
-
-    getState: function(subdomain) {
-        return null;
     }
 };
 

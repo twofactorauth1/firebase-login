@@ -115,6 +115,9 @@ _.extend(router.prototype, baseRouter.prototype, {
             options.state = JSON.stringify(state);
         }
 
+        options.accessType = "offline";
+        options.approvalPrompt = "force"; //-- this causes you to have to reauthorize every time, instead of just logging in
+
         passport.authenticate(type, options)(req,resp,next);
     },
 

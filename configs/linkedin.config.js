@@ -11,11 +11,6 @@ module.exports = {
 
     getScope: function() {
         return ['r_emailaddress', 'r_basicprofile'];
-    },
-
-
-    getState: function(subdomain) {
-
     }
 };
 

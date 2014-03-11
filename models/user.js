@@ -11,6 +11,7 @@ var user = $$.m.ModelBase.extend({
             email: "",
             first: "",
             last: "",
+            gender: null, //m|f
             _v: "0.1",
 
             created: {
@@ -51,10 +52,11 @@ var user = $$.m.ModelBase.extend({
              * [{
              *  type:int,
              *  username:string,
-             *  password:string,    //Local only
-             *  socialId:string,    //social only
-             *  accessToken:string, //social only
-             *  socialUrl:string    //social only
+             *  password:string,     //Local only
+             *  socialId:string,     //social only
+             *  accessToken:string,  //social only
+             *  refreshToken:string, //social only
+             *  socialUrl:string     //social only
              *  scope:string
              * }]
              */
@@ -151,7 +153,7 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    createOrUpdateSocialCredentials: function(socialType, socialId, accessToken, username, socialUrl, scope) {
+    createOrUpdateSocialCredentials: function(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope) {
         var creds = this.getCredentials(socialType);
         if (creds == null) {
             creds = {};
@@ -159,6 +161,10 @@ var user = $$.m.ModelBase.extend({
         creds.type = socialType;
         creds.socialId = socialId;
         creds.accessToken = accessToken;
+        creds.refreshToken = refreshToken;
+        if (expires != null && expires > 0) {
+            creds.expires = new Date().getTime() + (expires*1000);
+        }
         creds.username = username;
         creds.socialUrl = socialUrl;
         creds.scope = scope;
@@ -205,11 +211,25 @@ var user = $$.m.ModelBase.extend({
 
         creds.socialId = options.socialId;
         creds.accessToken = options.accessToken;
+        if (options.refreshToken != null) {
+            creds.refreshToken = options.refreshToken;
+        }
 
+        if (options.expires != null && options.expires > 0) {
+            creds.expires = options.expires;
+        }
 
         if (creds != null && encryptPassword == true && creds.password != null) {
             creds.password = crypto.hash(creds.password);
         }
+
+        //Ensure any rogue options make it in
+        for (var key in options) {
+            if (creds.hasOwnProperty(key) == false) {
+                creds[key] = options[key];
+            }
+        }
+
         if (creds != null && isNew == true) {
             credentials.push(creds);
         }

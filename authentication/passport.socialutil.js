@@ -4,7 +4,7 @@ var cookies = require("../utils/cookieutil");
 
 module.exports = {
 
-    handleLoginCallback: function(socialType, req, accessToken, refreshToken, profile, scope, done) {
+    handleLoginCallback: function(socialType, req, accessToken, refreshToken, options, profile, scope, done) {
         var email, firstName, lastName, socialId, username, profileUrl, name;
 
         name = profile.displayName;
@@ -34,7 +34,7 @@ module.exports = {
             // creating new account
             var accountToken = cookies.getAccountToken(req);
 
-            userDao.createUserFromSocialProfile(socialType, socialId, email, firstName, lastName, username, profileUrl, accessToken, accountToken, scope, function(err, value) {
+            userDao.createUserFromSocialProfile(socialType, socialId, email, firstName, lastName, username, profileUrl, accessToken, refreshToken, options.expires, accountToken, scope, function(err, value) {
                 if (err) {
                     return done(null, false, err);
                 } else {
@@ -47,7 +47,7 @@ module.exports = {
             });
         } else {
             //Logging in as usual.
-            authenticationDao.authenticateBySocialLogin(req, socialType, socialId, email, username, profileUrl, accessToken, scope, function(err, value) {
+            authenticationDao.authenticateBySocialLogin(req, socialType, socialId, email, username, profileUrl, accessToken, refreshToken, options.expires, scope, function(err, value) {
                 if (err) {
                     return done(null, false, {message:value});
                 }

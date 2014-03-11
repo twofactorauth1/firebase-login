@@ -132,6 +132,21 @@ _.extend(apiBase.prototype, {
 
 
     wrapError: function(resp, code, status, message, detail) {
+        if (_.isObject(message)) {
+            if (message.error != null && _.isObject(message.error)) {
+                message = message.error;
+            }
+            if (message.code != null) {
+                code = message.code;
+            }
+            if (message.status != null) {
+                status = message.status;
+            }
+            if (message.message != null) {
+                message = message.message;
+            }
+
+        }
         var response = {
             code:code || 500,
             status:status || "fail",

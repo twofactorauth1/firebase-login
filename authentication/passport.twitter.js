@@ -11,7 +11,8 @@ passport.use(new TwitterStrategy({
         passReqToCallback: true
     },
 
-    function (req, accessToken, refreshToken, profile, done) {
-        passportUtil.handleLoginCallback($$.constants.user.credential_types.TWITTER, req, accessToken, refreshToken, profile, twitterConfig.getScope(),  done);
+    function (req, accessToken, refreshToken, params, profile, done) {
+        var options = {};
+        passportUtil.handleLoginCallback($$.constants.user.credential_types.TWITTER, req, accessToken, refreshToken, options, profile, twitterConfig.getScope(),  done);
     }
 ));

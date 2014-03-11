@@ -120,6 +120,20 @@ _.extend(baseDao.prototype, mongoBaseDao, {
             }
         }
         return this.defaultModel.db.idStrategy || "incrememnt";
+    },
+
+
+    _isAuthenticationError: function(obj, fn) {
+        if (_.isObject(obj)) {
+            if (obj.error != null && obj.error.code != null && obj.error.code == 401) {
+                return fn({error: {code:401, message: "Invalid Credentials", raw: obj}}, "Invalid Credentials");
+            }
+        } else if(_.isString(obj) && obj.charAt(0) == "<") {
+            if (obj.indexOf("401") > -1) {
+                return fn({error: {code:401, message: "Invalid Credentials", raw: obj}}, "Invalid Credentials");
+            }
+        }
+        return fn(null, obj);
     }
 });
 

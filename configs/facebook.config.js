@@ -10,12 +10,7 @@ module.exports = {
 
 
     getScope: function() {
-        return '["basic_info", "email", "friends_website", "friends_birthday"]';
-    },
-
-
-    getState: function(subdomain) {
-
+        return '["basic_info", "email", "friends_website", "friends_birthday", "offline_access"]';
     }
 };
 

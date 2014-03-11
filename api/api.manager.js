@@ -6,6 +6,7 @@ var awsApi = require('./1.0/aws.api');
 var uploadApi = require('./1.0/upload.api');
 var geoApi = require('./1.0/geo.api');
 var facebookApi = require('./1.0/social/facebook.api');
+var googleApi = require('./1.0/social/google.api');
 
 module.exports = {
     authenticationApi: authenticationApi,
@@ -15,5 +16,6 @@ module.exports = {
     awsApi:awsApi,
     uploadApi:uploadApi,
     geoApi:geoApi,
-    facebookApi: facebookApi
+    facebookApi: facebookApi,
+    googleApi: googleApi
 };

@@ -13,7 +13,9 @@ passport.use(new GoogleStrategy({
         passReqToCallback: true
     },
 
-    function (req, accessToken, refreshToken, profile, done) {
-        passportUtil.handleLoginCallback($$.constants.user.credential_types.GOOGLE, req, accessToken, refreshToken, profile, googleConfig.getScope(), done);
+    function (req, accessToken, refreshToken, params, profile, done) {
+        var options = {expires:params.expires_in};
+
+        passportUtil.handleLoginCallback($$.constants.user.credential_types.GOOGLE, req, accessToken, refreshToken, options, profile, googleConfig.getScope(), done);
     }
 ));

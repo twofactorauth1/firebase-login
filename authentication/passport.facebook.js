@@ -12,7 +12,10 @@ passport.use(new FacebookStrategy({
         passReqToCallback: true
     },
 
-    function (req, accessToken, refreshToken, profile, done) {
-        passportUtil.handleLoginCallback($$.constants.user.credential_types.FACEBOOK, req, accessToken, refreshToken, profile, facebookConfig.getScope(), done);
+    function (req, accessToken, refreshToken, params, profile, done) {
+        var options = {
+            expires:params.expires
+        };
+        passportUtil.handleLoginCallback($$.constants.user.credential_types.FACEBOOK, req, accessToken, refreshToken, options, profile, facebookConfig.getScope(), done);
     }
 ));

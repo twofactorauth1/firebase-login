@@ -1,7 +1,6 @@
 var baseDao = require('./base.dao');
 var accountDao = require('./account.dao');
-var FacebookDao = require('./social/facebook.dao');
-var Constants = requirejs('constants/constants');
+var constants = requirejs('constants/constants');
 var crypto = require('../utils/security/crypto');
 require('../models/user');
 
@@ -86,7 +85,7 @@ var dao = {
     },
 
 
-    createUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, username, socialUrl, accessToken, accountToken, scope, fn) {
+    createUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, username, socialUrl, accessToken, refreshToken, expires, accountToken, scope, fn) {
         var self = this;
 
         this.getUserByUsername(email, function(err, value) {
@@ -143,7 +142,7 @@ var dao = {
                         });
 
                         user.createOrUpdateLocalCredentials(null);
-                        user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, username, socialUrl, scope);
+                        user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                         user.createUserAccount(accountId, email, null, ["super","admin","member"]);
 
                         var social = $$.constants.social.types;
@@ -158,13 +157,15 @@ var dao = {
 
                         switch(socialType) {
                             case social.FACEBOOK:
-                                FacebookDao.refreshUserFromProfile(user, true, fxn);
+                                var facebookDao = require('./social/facebook.dao')
+                                facebookDao.refreshUserFromProfile(user, true, fxn);
                                 break;
                             case social.TWITTER:
                                 self.saveOrUpdate(user, fn);
                                 break;
                             case social.GOOGLE:
-                                self.saveOrUpdate(user, fn);
+                                var googleDao = require('./social/google.dao')
+                                googleDao.refreshUserFromProfile(user, true, fxn);
                                 break;
                             case social.LINKDIN:
                                 self.saveOrUpdate(user, fn);

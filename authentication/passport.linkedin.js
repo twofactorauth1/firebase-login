@@ -12,9 +12,12 @@ passport.use(new LinkedInStrategy({
         passReqToCallback: true
     },
 
-    function (req, accessToken, refreshToken, profile, done) {
+    function (req, accessToken, refreshToken, params, profile, done) {
         //Profile doesn't come stock with Email, so we need to get it...
-        //http://api.linkedin.com/v1/people/v1/people/~:(id,first-name,last-name,email-address)
+
+        var options = {
+            expires: params.expires_in
+        };
 
         var url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address)?format=json&oauth2_access_token=" + accessToken;
         request(url, function(err, resp, body) {
@@ -22,7 +25,7 @@ passport.use(new LinkedInStrategy({
             profile.emails = [{
                 value: profile2.emailAddress
             }];
-            passportUtil.handleLoginCallback($$.constants.user.credential_types.LINKDIN, req, accessToken, refreshToken, profile, linkedInConfig.getScope(), done);
+            passportUtil.handleLoginCallback($$.constants.user.credential_types.LINKDIN, req, accessToken, refreshToken, options, profile, linkedInConfig.getScope(), done);
         });
     }
 ));
