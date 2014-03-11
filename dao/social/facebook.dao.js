@@ -4,8 +4,10 @@ var crypto = require('crypto');
 var facebookConfig = require('../../configs/facebook.config');
 var paging = require('../../utils/paging');
 var contactDao = require('../contact.dao');
+var userDao = require('../user.dao');
 var Contact = require('../../models/contact');
 var async = require('async');
+var querystring = require('querystring');
 
 var dao = {
 
@@ -24,16 +26,59 @@ var dao = {
     },
 
 
-    generateUrl: function(path, accessToken) {
-        var url = this.GRAPH_API_URL + path;
-        if (url.indexOf("?") > -1) {
-            url += "&";
-        } else {
-            url += "?";
-        }
+    refreshAccessToken: function(user, fn) {
+        var creds = user.getCredentials($$.constants.user.credential_types.FACEBOOK);
+        if (creds != null) {
+            if (creds.expires != null && creds.expires < new Date().getTime()) {
+                //We are already expired!
+                return fn({error: {code:401, message: "Invalid Credentials"}}, "Invalid Credentials");
+            }
+            else if (creds.expires == null || (creds.expires - new Date().getTime()) < ($$.u.dateutils.DAY * 14)) {
+                //lets try to refresh the token
 
-        url += "access_token=" + accessToken;
-        return url;
+                var url = this.GRAPH_API_URL + "oauth/access_token?" +
+                    "grant_type=fb_exchange_token&" +
+                    "client_id=" + facebookConfig.CLIENT_ID + "&" +
+                    "client_secret=" + facebookConfig.CLIENT_SECRET + "&" +
+                    "fb_exchange_token=" + creds.accessToken;
+
+                request(url, function(err, resp, body) {
+                    if (err) {
+                        return fn({error: {code:401, message: "Invalid Credentials", raw: err}}, "Invalid Credentials")
+                    }
+
+                    body = querystring.parse(body);
+                    var accessToken = body.access_token;
+                    var expires = body.expires;
+
+                    if (accessToken != null) {
+                        creds.accessToken = accessToken;
+                    }
+
+                    if (expires != null) {
+                        creds.expires = new Date().getTime() + (expires * 1000);
+                    }
+
+                    userDao.saveOrUpdate(user, fn);
+                });
+            } else {
+                return fn(null, null);
+            }
+        } else {
+            return fn("No Facebook credentials found");
+        }
+    },
+
+
+    checkAccessToken: function(user, fn) {
+        var self = this;
+        this.refreshAccessToken(user, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            return self.getProfileForUser(user, fn);
+        });
     },
 
 
@@ -52,7 +97,7 @@ var dao = {
         var fields = "email,picture,first_name,last_name,middle_name,name,username";
 
         var path = profileId + "?fields=" + fields;
-        var url = this.generateUrl(path, accessToken);
+        var url = this._generateUrl(path, accessToken);
 
         request(url, function(err, resp, body) {
             if (!err) {
@@ -104,7 +149,7 @@ var dao = {
         //var path = socialId + "/friends";
         var query = "SELECT uid, name, first_name, last_name, email, pic, pic_big, pic_square, website, birthday FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = " + socialId + ") ORDER BY name";
         var path = "fql?q=" + query;
-        var url = this.generateUrl(path, accessToken);
+        var url = this._generateUrl(path, accessToken);
 
         request(url, function(err, resp, body) {
             if (!err) {
@@ -238,6 +283,20 @@ var dao = {
             return null;
         }
         return credentials.socialId;
+    },
+
+
+
+    _generateUrl: function(path, accessToken) {
+        var url = this.GRAPH_API_URL + path;
+        if (url.indexOf("?") > -1) {
+            url += "&";
+        } else {
+            url += "?";
+        }
+
+        url += "access_token=" + accessToken;
+        return url;
     }
 };
 

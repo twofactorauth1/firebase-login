@@ -1,5 +1,5 @@
 var baseApi = require('../../base.api');
-var FacebookDao = require('../../../dao/social/facebook.dao');
+var facebookDao = require('../../../dao/social/facebook.dao');
 
 
 var api = function() {
@@ -10,10 +10,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     base: "social/facebook",
 
-    dao: FacebookDao,
+    dao: facebookDao,
 
     initialize: function() {
         //GET
+        app.get(this.url('checkaccess'), this.isAuthApi, this.checkAccess.bind(this));
         app.get(this.url('profile'), this.isAuthApi, this.getFacebookProfile.bind(this));
         app.get(this.url('friends'), this.isAuthApi, this.getFacebookFriends.bind(this));
 
@@ -22,9 +23,21 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
+    checkAccess: function(req, resp) {
+        var self = this;
+        facebookDao.checkAccessToken(req.user, function(err, value) {
+            if (!err) {
+                resp.send(value);
+            } else {
+                self.wrapError(resp, 500, "Facebook API access not verified", err, value);
+            }
+        });
+    },
+
+
     getFacebookProfile: function(req, resp) {
         var self = this;
-        FacebookDao.getProfileForUser(req.user, function(err, value) {
+        facebookDao.getProfileForUser(req.user, function(err, value) {
             if (!err) {
                 resp.send(value);
             } else {
@@ -36,7 +49,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getFacebookFriends: function(req, resp) {
         var self = this;
-        FacebookDao.getFriendsForUser(req.user, function(err, value) {
+        facebookDao.getFriendsForUser(req.user, function(err, value) {
             if (!err) {
                 resp.send(value);
             } else {
@@ -51,7 +64,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = this.accountId(req);
 
         if (accountId > 0) {
-            FacebookDao.importFriendsAsContactsForUser(accountId, req.user, function(err, value) {
+            facebookDao.importFriendsAsContactsForUser(accountId, req.user, function(err, value) {
                 console.log("Facebook import succeeded");
             });
             resp.send("processing");
