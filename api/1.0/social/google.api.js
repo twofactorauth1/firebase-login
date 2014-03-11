@@ -49,8 +49,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getContacts: function(req, resp) {
         var self = this;
-        var properties = req.params.properties;
-        googleDao.getContactsForUser(req.user, properties, function(err, value) {
+        googleDao.getContactsForUser(req.user, function(err, value) {
             if (!err) {
                 resp.send(value);
             } else {

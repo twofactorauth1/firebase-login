@@ -25,7 +25,7 @@ var dao = {
 
     refreshAccessToken: function(user, fn) {
         var creds = user.getCredentials($$.constants.user.credential_types.GOOGLE);
-        if (creds != null && creds.refreshToken != null) {
+        if (creds != null && creds.refreshToken != null && (creds.expires == null || creds.expires < new Date().getTime())) {
 
             request.post({
                 url: this.REFRESH_TOKEN_URL,
@@ -127,12 +127,7 @@ var dao = {
     },
 
 
-    getContactsForUser: function(user, properties, fn) {
-        if (_.isFunction(properties)) {
-            fn = properties;
-            properties = "full";
-        }
-
+    getContactsForUser: function(user, fn) {
         var socialId = this._getGoogleId(user);
         var accessToken = this._getAccessToken(user);
 
@@ -140,11 +135,16 @@ var dao = {
             return fn("User is not linked to Google", "User is not linked to Google");
         }
 
-        var url = this.CONTACT_API_URL + "default/" + properties + "?alt=json&max-results=1000000&access_token=" + accessToken;
+        var url = this.CONTACT_API_URL + "default/full?alt=json&max-results=1000000&access_token=" + accessToken;
 
         this._makeAuthenticatedRequest(url, function(err, value) {
             if (!err) {
                 var list = value;
+                if (list.feed == null) {
+                    console.log("UNDEFINED!!");
+                } else {
+                    console.log("DEFINED!!");
+                }
                 var entries = list.feed.entry;
                 var updated = list.feed.updated.$t;
 
