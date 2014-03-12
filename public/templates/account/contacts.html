@@ -44,9 +44,17 @@ CONTACTS MAIN VIEW
 
                         <div class="contacts-photo-container">
                             {{#if photoSquare}}
-                                <img class="img-rounded square" src="{{photoSquare}}">
+                                {{#isGoogleImage photoSquare}}
+                                    <img src="/assets/icons/blank-user.jpg" class="img-rounded batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
+                                {{else}}
+                                    <img class="img-rounded square" src="{{photoSquare}}">
+                                {{/isGoogleImage}}
                             {{else}}
-                                <img class="img-rounded standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpeg{{/if}}">
+                                {{#isGoogleImage photo}}
+                                    <img src="/assets/icons/blank-user.jpg" class="img-rounded batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
+                                {{else}}
+                                    <img class="img-rounded standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                                {{/isGoogleImage}}
                             {{/if}}
                         </div>
 
@@ -77,7 +85,7 @@ CONTACTS MAIN VIEW
                         <strong>Create new Contact</strong>
 
                         <div class="contacts-photo-container">
-                            <img class="img-circle" src="/assets/icons/blank-user.jpeg">
+                            <img class="img-circle" src="/assets/icons/blank-user.jpg">
                         </div>
 
                         <div class="hidden-xs">
@@ -133,7 +141,7 @@ CONTACT DETAILS VIEW
     <div id="contact-type"><small>{{contactTypeLabel contact}}</small></div>
 
     <div class="contact-photo-container">
-        <img class="img-rounded" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpeg{{/if}}">
+        <img class="img-rounded" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
     </div>
 
     <div id="contact-summary">
@@ -256,7 +264,7 @@ CONTACTS EDIT VIEW
                             <div class="hidden-xs hidden-sm">
                                 <div class="btn-link btn-edit-photo">Change Photo</div>
                             </div>
-                            <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpeg{{/if}}">
+                            <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
                         </div>
 
                         <div class="col-xs-7 col-md-6">
@@ -595,6 +603,15 @@ HELPERS
             } else {
                 return options.inverse(this);
             }
+        } else {
+            return options.inverse(this);
+        }
+    });
+
+
+    Handlebars.registerHelper("isGoogleImage", function(photo, options) {
+        if (String.isNullOrEmpty(photo) == false && photo.indexOf("www.google.com/m8") > -1) {
+            return options.fn(this);
         } else {
             return options.inverse(this);
         }

@@ -71,6 +71,7 @@ define([], function () {
                 MEMBER: "mb",
                 FAMILY: "fa",
                 ADMIN: "ad",
+                OTHER: "ot",
 
                 dp: [
                     {label: "Customer", data: "cu"},
@@ -78,7 +79,8 @@ define([], function () {
                     {label: "Friend", data: "fr"},
                     {label: "Member", data: "mb"},
                     {label: "Family", data: "fa"},
-                    {label: "Admin", data: "ad"}
+                    {label: "Admin", data: "ad"},
+                    {label: "Other", data: "ot"}
                 ]
             },
 

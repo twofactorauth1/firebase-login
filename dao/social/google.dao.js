@@ -22,7 +22,7 @@ var dao = {
     PROFILE_API_URL: "https://www.googleapis.com/oauth2/v1/userinfo",
     CONTACT_API_URL: "https://www.google.com/m8/feeds/contacts/",
 
-
+//region ACCESS TOKEN
     refreshAccessToken: function(user, fn) {
         var creds = user.getCredentials($$.constants.user.credential_types.GOOGLE);
         if (creds != null && creds.refreshToken != null && (creds.expires == null || creds.expires < new Date().getTime())) {
@@ -36,7 +36,7 @@ var dao = {
                     grant_type:    'refresh_token'
                 }
             }, function (err, response, body) {
-                if(err) return fn(err);
+                if(err) { return fn(err); }
 
                 var currentToken = JSON.parse(body);
 
@@ -67,8 +67,10 @@ var dao = {
             }
         });
     },
+//endregion
 
 
+//region PROFILE
     getProfileForUser: function(user, fn) {
         var accessToken = this._getAccessToken(user);
         var socialId = this._getGoogleId(user);
@@ -104,7 +106,7 @@ var dao = {
 
                 var gender;
                 if (value.gender == "male") {
-                    gender = "m"
+                    gender = "m";
                 } else if(value.gender == "female") {
                     gender = "f";
                 }
@@ -125,9 +127,16 @@ var dao = {
             }
         });
     },
+//endregion
 
 
-    getContactsForUser: function(user, fn) {
+//region CONTACTS
+    getContactsForUser: function(user, lastUpdated, fn) {
+        if (_.isFunction(lastUpdated)) {
+            fn = lastUpdated;
+            lastUpdated = null;
+        }
+
         var socialId = this._getGoogleId(user);
         var accessToken = this._getAccessToken(user);
 
@@ -135,22 +144,22 @@ var dao = {
             return fn("User is not linked to Google", "User is not linked to Google");
         }
 
-        var url = this.CONTACT_API_URL + "default/full?alt=json&max-results=1000000&access_token=" + accessToken;
+        var url = this.CONTACT_API_URL + "default/full?alt=json&max-results=100000000&access_token=" + accessToken;
+        if (String.isNullOrEmpty(lastUpdated) === false) {
+            url += "&updated-min=" + lastUpdated;
+        }
 
         this._makeAuthenticatedRequest(url, function(err, value) {
             if (!err) {
                 var list = value;
-                if (list.feed == null) {
-                    console.log("UNDEFINED!!");
-                } else {
-                    console.log("DEFINED!!");
-                }
                 var entries = list.feed.entry;
                 var updated = list.feed.updated.$t;
 
                 var processEntry = function(entry) {
                     var obj = {}, i, l, item, itemType;
 
+                    obj.id = entry.id.$t;
+                    obj.id = obj.id.replace("http://www.google.com/m8/feeds/contacts/","");
                     if (entry.gd$email != null) {
                         obj.emails = [];
                         for(i = 0, l = entry.gd$email.length; i < l; i++) {
@@ -170,7 +179,8 @@ var dao = {
 
                     if (entry.link != null) {
                         for(i = 0, l = entry.link.length; i < l; i++) {
-                            if (entry.link[i].type == "image/*" && entry.link[i].rel == "http://schemas.google.com/contacts/2008/rel#edit-photo") {
+                            if (entry.link[i].type == "image/*" &&
+                                (entry.link[i].rel == "http://schemas.google.com/contacts/2008/rel#photo")) {
                                 obj.photos = obj.photos || [];
                                 obj.photos.push(entry.link[i].href);
                                 break;
@@ -180,28 +190,34 @@ var dao = {
 
                     if (entry.title != null) {
                         obj.name = entry.title.$t;
+                        var nameParts = $$.u.stringutils.splitFullname(obj.name);
+                        obj.first = nameParts[0];
+                        obj.middle = nameParts[1];
+                        obj.last = nameParts[2];
                     }
 
                     if (entry.gd$phoneNumber != null) {
                         obj.phones = [];
                         for(i = 0, l = entry.gd$phoneNumber.length; i < l; i++) {
                             item = entry.gd$phoneNumber[i];
-                            itemType = null;
-                            if (item.rel.indexOf("work")) {
-                                itemType = "work";
-                            } else if(item.rel.indexOf("mobile")) {
-                                itemType = "mobile";
-                            } else if(item.rel.indexOf("home")) {
-                                itemType = "home";
-                            } else {
-                                itemType = "other";
+                            itemType = "o";
+                            if (item.rel != null) {
+                                if (item.rel.indexOf("work")) {
+                                    itemType = "w";
+                                } else if(item.rel.indexOf("mobile")) {
+                                    itemType = "m";
+                                } else if(item.rel.indexOf("home")) {
+                                    itemType = "h";
+                                } else {
+                                    itemType = "o";
+                                }
                             }
 
                             obj.phones.push({
                                 type: itemType,
                                 number: item.$t,
-                                primary: item.primary == "true"
-                            })
+                                primary: item.primary === "true"
+                            });
                         }
                     }
 
@@ -209,12 +225,16 @@ var dao = {
                         obj.addresses = [];
                         for(i = 0, l = entry.gd$postalAddress.length; i < l; i++) {
                             item = entry.gd$postalAddress[i];
-                            if (item.rel.indexOf("work")) {
-                                itemType = "work";
-                            } else if(item.rel.indexOf("home")) {
-                                itemType = "home";
-                            } else {
-                                itemType = "other";
+                            itemType = "o";
+
+                            if (item.rel != null) {
+                                if (item.rel.indexOf("work")) {
+                                    itemType = "w";
+                                } else if(item.rel.indexOf("home")) {
+                                    itemType = "h";
+                                } else {
+                                    itemType = "o";
+                                }
                             }
                         }
 
@@ -229,10 +249,12 @@ var dao = {
                 };
 
                 var result = [];
-                async.each(entries, function(entry) {
+                var count = 0;
+                async.each(entries, function(entry, cb) {
                     result.push(processEntry(entry));
+                    cb();
                 }, function(err) {
-                    fn(err, result);
+                    fn(err, result, {updated: updated});
                 });
             } else {
                 return fn(err, value);
@@ -245,35 +267,59 @@ var dao = {
 
     importContactsForUser: function(accountId, user, fn) {
         var self = this;
-        this.getContactsForUser(user, function(err, value) {
+        var totalImported = 0;
+
+        var googleBaggage = user.getUserAccountBaggage(accountId, "google");
+        googleBaggage.contacts = googleBaggage.contacts || {};
+        var updated = googleBaggage.contacts.updated;
+
+        this.getContactsForUser(user, updated, function(err, value, params) {
             if (err) {
                 return fn(err, value);
             }
 
-            /*
+            googleBaggage.contacts.updated = params.updated;
+            userDao.saveOrUpdate(user);
+
+
             var googleId = self._getGoogleId(user);
-            var _friends = value.data;
+            var _contacts = value;
 
-            var updateContactFromFacebookFriend = function(contact, facebookFriend) {
-                contact.updateContactInfo(facebookFriend.first_name, null, facebookFriend.last_name, facebookFriend.pic_big || facebookFriend.pic, facebookFriend.pic_square, facebookFriend.birthday);
-
-                var websites;
-                if (!String.isNullOrEmpty(facebookFriend.website)) {
-                    websites = facebookFriend.website.replace(" ", "").split(",");
+            var updateContactFromContactObj = function(contact, contactObj) {
+                var photo = (contactObj.photos != null && contactObj.photos.length > 0) ? contactObj.photos[0] : null;
+                var emails = contactObj.emails;
+                if (emails != null) {
+                    emails = _.pluck(emails, "email");
                 }
+                contact.updateContactInfo(contactObj.first, contactObj.middle, contactObj.last, photo, photo, null);
+
                 //Update contact details
-                contact.createOrUpdateDetails($$.constants.social.types.FACEBOOK, facebookId, facebookFriend.uid, facebookFriend.pic, facebookFriend.pic_big, facebookFriend.pic_square, facebookFriend.email, websites);
+                contact.createOrUpdateDetails($$.constants.social.types.GOOGLE, googleId, contactObj.id, photo, photo, null, emails, null);
+
+                //Update addresses
+                if (contactObj.addresses != null && contactObj.addresses.length > 0) {
+                    contactObj.addresses.forEach(function(address) {
+                        contact.createAddress($$.constants.social.types.GOOGLE, address.type, null, null, null, null, null, null, null, address.address, null, null, false, false);
+                    });
+                }
+
+                //update phones
+                if (contactObj.phones != null && contactObj.phones.length > 0) {
+                    contactObj.phones.forEach(function(phone) {
+                        contact.createOrUpdatePhone($$.constants.social.types.GOOGLE, phone.type, phone.number, phone.primary);
+                    });
+                }
             };
 
 
-            (function importFriends(friends, page) {
-                if (friends != null) {
-                    var numPerPage = 50, socialType = $$.constants.social.types.FACEBOOK;
+            (function importContacts(contacts, page) {
+                if (contacts != null) {
+                    var numPerPage = 50, socialType = $$.constants.social.types.GOOGLE;
 
-                    var pagingInfo = paging.getPagingInfo(friends.length, numPerPage, page);
+                    var pagingInfo = paging.getPagingInfo(contacts.length, numPerPage, page);
 
-                    var items = paging.getItemsForCurrentPage(friends, page, numPerPage);
-                    var socialIds = _.pluck(items, "uid");
+                    var items = paging.getItemsForCurrentPage(contacts, page, numPerPage);
+                    var socialIds = _.pluck(items, "id");
 
                     contactDao.getContactsBySocialIds(accountId, socialType, socialIds, function(err, value) {
                         if (err) {
@@ -284,20 +330,22 @@ var dao = {
                         async.series([
                             function(callback) {
                                 if (contactValues != null && contactValues.length > 0) {
-                                    async.each(contactValues, function(contact) {
+                                    async.each(contactValues, function(contact, cb) {
 
-                                        //Get reference to current friend
-                                        var facebookFriend = _.findWhere(items, {uid:contact.getSocialId(socialType)});
+                                        //Get reference to current Google Contact
+                                        var googleContact = _.findWhere(items, {id:contact.getSocialId(socialType)});
 
                                         //remove the contact from the items array so we don't process again
-                                        items = _.without(items, facebookFriend);
+                                        items = _.without(items, googleContact);
 
-                                        updateContactFromFacebookFriend(contact, facebookFriend);
+                                        updateContactFromContactObj(contact, googleContact);
 
                                         contactDao.saveOrUpdate(contact, function(err, value) {
                                             if (err) {
-                                                self.log.error("An error occurred updating contact during Facebook import", err);;
+                                                self.log.error("An error occurred updating contact during Google import", err);
                                             }
+                                            totalImported++;
+                                            cb();
                                         });
 
                                     }, function(err) {
@@ -311,24 +359,26 @@ var dao = {
                             function(callback) {
                                 //Iterate through remaining items
                                 if (items != null && items.length > 0) {
-                                    async.each(items, function(facebookFriend) {
+                                    async.each(items, function(googleContact, cb) {
 
                                         var contact = new Contact({
                                             accountId: accountId,
-                                            type: $$.constants.contact.contact_types.FRIEND
+                                            type: $$.constants.contact.contact_types.OTHER
                                         });
 
-                                        contact.createdBy(user.id(), socialType, facebookId);
-                                        updateContactFromFacebookFriend(contact, facebookFriend);
+                                        contact.createdBy(user.id(), socialType, googleId);
+                                        updateContactFromContactObj(contact, googleContact);
                                         contactDao.saveOrMerge(contact, function(err, value) {
                                             if (err) {
-                                                self.log.error("An error occurred saving contact during Facebook import", err);
+                                                self.log.error("An error occurred saving contact during Google import", err);
                                             }
+                                            totalImported++;
+                                            cb();
                                         });
 
                                     }, function(err) {
                                         callback(err);
-                                    })
+                                    });
                                 } else {
                                     callback(null);
                                 }
@@ -337,20 +387,26 @@ var dao = {
                         ], function(err, results) {
                             if (pagingInfo.nextPage > page) {
                                 process.nextTick(function() {
-                                    importFriends(friends, pagingInfo.nextPage);
+                                    importContacts(contacts, pagingInfo.nextPage);
                                 });
                             } else {
+                                self.log.info("Google Contact Import Succeeded. " + totalImported + " imports");
                                 fn(null);
                             }
                         });
                     });
                 }
-            })(_friends, 1);
-            */
+            })(_contacts, 1);
         });
     },
+//---------------------------------------------------------
+//endregion
+//---------------------------------------------------------
 
 
+//---------------------------------------------------------
+//region PRIVATE
+//---------------------------------------------------------
     _getAccessToken: function(user) {
         var credentials = user.getCredentials($$.constants.user.credential_types.GOOGLE);
         if (credentials == null) {
@@ -372,18 +428,21 @@ var dao = {
     _makeAuthenticatedRequest: function(url, fn) {
         var self = this;
         request(url, function(err, resp, body) {
+            var profile;
             if (!err) {
                 try {
-                    var profile = JSON.parse(body);
-                    return self._isAuthenticationError(profile, fn);
-                }catch(exception) {
-                    return self._isAuthenticationError(body, fn);
+                    profile = JSON.parse(body);
+                } catch(exception) {
+                    profile = body;
                 }
+                return self._isAuthenticationError(profile, fn);
+
             } else {
                 fn(err, resp);
             }
         });
     }
+//endregion
 };
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();

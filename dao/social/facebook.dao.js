@@ -163,7 +163,8 @@ var dao = {
 
 
     importFriendsAsContactsForUser: function(accountId, user, fn) {
-        var self = this;
+        var self = this, totalImported = 0;
+
         this.getFriendsForUser(user, function(err, value) {
             if (err) {
                 return fn(err, value);
@@ -202,7 +203,7 @@ var dao = {
                         async.series([
                             function(callback) {
                                 if (contactValues != null && contactValues.length > 0) {
-                                    async.each(contactValues, function(contact) {
+                                    async.each(contactValues, function(contact, cb) {
 
                                         //Get reference to current friend
                                         var facebookFriend = _.findWhere(items, {uid:contact.getSocialId(socialType)});
@@ -216,6 +217,8 @@ var dao = {
                                             if (err) {
                                                 self.log.error("An error occurred updating contact during Facebook import", err);;
                                             }
+                                            totalImported++;
+                                            cb();
                                         });
 
                                     }, function(err) {
@@ -229,7 +232,7 @@ var dao = {
                             function(callback) {
                                 //Iterate through remaining items
                                 if (items != null && items.length > 0) {
-                                    async.each(items, function(facebookFriend) {
+                                    async.each(items, function(facebookFriend, cb) {
 
                                         var contact = new Contact({
                                             accountId: accountId,
@@ -242,6 +245,8 @@ var dao = {
                                             if (err) {
                                                 self.log.error("An error occurred saving contact during Facebook import", err);
                                             }
+                                            totalImported++;
+                                            cb();
                                         });
 
                                     }, function(err) {
@@ -258,6 +263,7 @@ var dao = {
                                     importFriends(friends, pagingInfo.nextPage);
                                 });
                             } else {
+                                self.log.info("Facebook friend import succeed. " + totalImported + " imports");
                                 fn(null);
                             }
                         });

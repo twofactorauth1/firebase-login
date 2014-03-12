@@ -15,11 +15,13 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function() {
         //GET
         app.get(this.url('checkaccess'), this.isAuthApi, this.checkAccess.bind(this));
+        app.get(this.url('accesstoken'), this.isAuthApi, this.getAccessToken.bind(this));
+
         app.get(this.url('profile'), this.isAuthApi, this.getProfile.bind(this));
         app.get(this.url('contacts'), this.isAuthApi, this.getContacts.bind(this));
 
-        app.get(this.url('friends/import'), this.isAuthApi, this.importContacts.bind(this));
-        app.post(this.url('friends/import'), this.isAuthApi, this.importContacts.bind(this));
+        app.get(this.url('contacts/import'), this.isAuthApi, this.importContacts.bind(this));
+        app.post(this.url('contacts/import'), this.isAuthApi, this.importContacts.bind(this));
     },
 
 
@@ -30,6 +32,23 @@ _.extend(api.prototype, baseApi.prototype, {
                 resp.send(value);
             } else {
                 self.wrapError(resp, 500, "Google API access not verified", err, value);
+            }
+        });
+    },
+
+
+    getAccessToken: function(req, resp) {
+        var self = this;
+        googleDao.checkAccessToken(req.user, function(err, value) {
+            if (!err) {
+                var googleCreds = req.user.getCredentials($$.constants.user.credential_types.GOOGLE);
+                if (googleCreds != null) {
+                    resp.send({data:googleCreds.accessToken});
+                } else {
+                    self.wrapError(resp, 500, "Cannot retrieve access token, Google API access not verified", err, value);
+                }
+            } else {
+                self.wrapError(resp, 500, "Cannot retrieve access token, Google API access not verified", err, value);
             }
         });
     },
@@ -65,7 +84,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         if (accountId > 0) {
             googleDao.importContactsForUser(accountId, req.user, function(err, value) {
-                console.log("Google Contacts import succeeded");
+                self.log.info("Google Contacts import succeeded");
             });
             resp.send("processing");
         } else {

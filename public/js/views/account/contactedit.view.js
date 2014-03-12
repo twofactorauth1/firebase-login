@@ -415,7 +415,7 @@ define([
             event.stopImmediatePropagation();
             event.preventDefault();
 
-            var url = "/assets/icons/blank-user.jpeg";
+            var url = "/assets/icons/blank-user.jpg";
             this.contact.set({photo:url});
             this.saveContact();
             $("#contact-photo").attr("src", url);

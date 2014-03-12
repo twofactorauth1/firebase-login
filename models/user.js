@@ -43,7 +43,8 @@ var user = $$.m.ModelBase.extend({
              *      username:string     //Local only
              *      password:string,    //Local only
              *  ],
-             *  permissions: [ super, admin, member ]
+             *  permissions: [ super, admin, member ],
+             *  baggage: {}
              * }]
              */
             accounts: [],
@@ -56,12 +57,13 @@ var user = $$.m.ModelBase.extend({
              *  socialId:string,     //social only
              *  accessToken:string,  //social only
              *  refreshToken:string, //social only
-             *  socialUrl:string     //social only
-             *  scope:string
+             *  socialUrl:string,     //social only
+             *  scope:string,
+             *  baggage: {}
              * }]
              */
             credentials: []
-        }
+        };
     },
 
 
@@ -219,18 +221,18 @@ var user = $$.m.ModelBase.extend({
             creds.expires = options.expires;
         }
 
-        if (creds != null && encryptPassword == true && creds.password != null) {
+        if (creds != null && encryptPassword === true && creds.password != null) {
             creds.password = crypto.hash(creds.password);
         }
 
         //Ensure any rogue options make it in
         for (var key in options) {
-            if (creds.hasOwnProperty(key) == false) {
+            if (creds.hasOwnProperty(key) === false) {
                 creds[key] = options[key];
             }
         }
 
-        if (creds != null && isNew == true) {
+        if (creds != null && isNew === true) {
             credentials.push(creds);
         }
     },
@@ -339,17 +341,20 @@ var user = $$.m.ModelBase.extend({
 
                 //Look to see if we already have creds of the same type, if so,
                 // we merge the new into the old
-                var newCredentials = userAccount.credentials;
+                var newCredentials = userAccount.credentials,
+                    newCreds,
+                    oldCreds;
+
+                var fxn = function(_oldCreds) {
+                    if (_oldCreds.type === newCreds.type) {
+                        oldCreds = _oldCreds;
+                    }
+                };
 
                 for (var i = 0; i < newCredentials.length; i++) {
-                    var newCreds = newCredentials[i];
-
-                    var oldCreds = null;
-                    oldAccount.credentials.forEach(function(_oldCreds) {
-                        if (_oldCreds.type === newCred.type) {
-                            oldCreds = _oldCreds;
-                        }
-                    });
+                    newCreds = newCredentials[i];
+                    oldCreds = null;
+                    oldAccount.credentials.forEach(fxn);
 
                     if (oldCreds != null) {
                         oldCreds.username = newCredentials.username;
@@ -366,7 +371,7 @@ var user = $$.m.ModelBase.extend({
                 //Attempt to merge the permissions
                 permissions.forEach(function (permission) {
                     if (oldAccount.permissions.indexOf(permissions) == -1) {
-                        oldAccount.permissions.push(push);
+                        oldAccount.permissions.push(permission);
                     }
                 });
             }
@@ -399,11 +404,26 @@ var user = $$.m.ModelBase.extend({
                 credentials.push(creds);
             }
 
-            if (username) creds.username = username;
-            if (password) creds.password = crypto.hash(password);
-            if (socialId) creds.socialId = socialId;
-            if (accessToken) creds.accessToken = accessToken;
+            if (username) { creds.username = username; }
+            if (password) { creds.password = crypto.hash(password); }
+            if (socialId) { creds.socialId = socialId; }
+            if (accessToken) { creds.accessToken = accessToken; }
         }
+    },
+
+
+    getUserAccountBaggage: function(accountId, key) {
+        var userAccount = this.getUserAccount(accountId);
+
+        userAccount.baggage = userAccount.baggage || {};
+
+        if (key != null) {
+            if (userAccount.baggage[key] == null) {
+                userAccount.baggage[key] = {};
+            }
+            return userAccount.baggage[key];
+        }
+        return userAccount.baggage;
     },
 
 
@@ -440,7 +460,7 @@ var user = $$.m.ModelBase.extend({
                 type: socialType,
                 url: url,
                 default: isDefault
-            }
+            };
         }
 
         this.setPhoto(photo);
@@ -449,7 +469,7 @@ var user = $$.m.ModelBase.extend({
 
     getDefaultPhoto: function() {
         var photos = this.get("photos");
-        if (photos == null || photos.length == 0) {
+        if (photos == null || photos.length === 0) {
             return null;
         }
 
@@ -464,7 +484,7 @@ var user = $$.m.ModelBase.extend({
 
     getPhoto: function(socialType) {
         var photos = this.get("photos");
-        if (photos == null || photos.length == 0) {
+        if (photos == null || photos.length === 0) {
             return null;
         }
 
@@ -484,12 +504,12 @@ var user = $$.m.ModelBase.extend({
             if (photos[i].type == photo.type) {
                 photos[i] = photo;
                 photoSet = true;
-            } else if(photo.default == true) {
+            } else if(photo.default === true) {
                 photos[i].default = false;
             }
         }
 
-        if (photoSet == false) {
+        if (photoSet === false) {
             photos.push(photo);
         }
     },

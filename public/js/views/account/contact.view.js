@@ -2,9 +2,11 @@ define([
     'models/user',
     'models/account',
     'models/contact',
-    'collections/contacts'
+    'collections/contacts',
+    'services/authentication.service',
+    'libs/jquery/jquery.batchedimageloader'
 
-], function(User, Account, Contact, Contacts) {
+], function(User, Account, Contact, Contacts, AuthenticationService) {
 
     var view = Backbone.View.extend({
 
@@ -26,11 +28,23 @@ define([
             var self = this
                 , p1 = this.getAccount()
                 , p2 = this.getUser()
-                , p3 = this.getContacts(this.currentLetter);
+                , p3 = this.getContacts(this.currentLetter)
+                , p4 = AuthenticationService.getGoogleAccessToken();
 
             $.when(p1, p2, p3)
                 .done(function() {
                     self.renderContacts();
+                });
+
+            $.when(p4)
+                .done(function(accessToken) {
+                    if (String.isNullOrEmpty(accessToken) == false) {
+                        self.googleAccessToken = accessToken;
+                        self.refreshGooglePhotos();
+                    }
+                })
+                .fail(function(resp) {
+                   alert("FAILED");
                 });
         },
 
@@ -51,6 +65,26 @@ define([
             var html = tmpl(data);
 
             self.show(html);
+
+            self.refreshGooglePhotos();
+        },
+
+
+        refreshGooglePhotos: function(contacts) {
+            var self = this;
+            if (this.googleAccessToken != null) {
+                var images = $(".batched-image-loader", this.el);
+                $(images).each(function() {
+                   var img = $(this);
+                    if ((img).attr("data-img-src").indexOf("www.google.com/m8")) {
+                        var url = img.attr("data-img-src");
+                        url += "?access_token=" + self.googleAccessToken;
+                        img.attr("data-img-src", url);
+                    }
+                });
+
+                $(".batched-image-loader").batchedImageLoader();
+            }
         },
 
 

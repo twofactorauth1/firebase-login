@@ -104,6 +104,7 @@ app.use(express.favicon());
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.cookieParser('mys3cr3tco00k13s'));
 app.use(express.session({
     store: mongoStore,
@@ -126,7 +127,6 @@ app.use(flash());
 app.use(app.router);
 app.use(connect.compress());
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.configure('development', function() {
     app.use(express.errorHandler());

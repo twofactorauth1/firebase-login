@@ -11,6 +11,17 @@ define([], function() {
             });
 
             return deferred;
+        },
+
+        getGoogleAccessToken: function() {
+            var url = $$.api.getApiUrl("social/google", "accesstoken");
+
+            var deferred = $.Deferred();
+            $.getJSON(url, null, function(result, data) {
+                deferred.resolve(result.data);
+            });
+
+            return deferred;
         }
     };
 

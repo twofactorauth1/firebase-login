@@ -78,12 +78,13 @@ var contact = $$.m.ModelBase.extend({
              *   websites:[]
              *   phones: [{
              *       _id:"",
-             *       type: string "m|w|h" //mobile, work, home
+             *       type: string "m|w|h|o" //mobile, work, home, other
              *       number: string,
              *       default: false
              *   }],
              *   addresses: [{
              *       _id:""
+             *       type: string "w|h|o"
              *       address:string
              *       address2:string
              *       city:string
@@ -335,7 +336,8 @@ var contact = $$.m.ModelBase.extend({
     createOrUpdatePhone: function(detailsType, phoneType, phoneNumber, isDefault) {
         var details = this.getOrCreateDetails(detailsType);
 
-        var phones = details.phones || [];
+        details.phones = details.phones || [];
+        var phones = details.phones;
 
         var phone = _.findWhere(phones, {type:phoneType, number:phone});
         if (phone == null) {
@@ -349,6 +351,31 @@ var contact = $$.m.ModelBase.extend({
         } else {
             phone.default = isDefault;
         }
+    },
+
+
+    createAddress: function(type, addressType, address, address2, city, state, zip, country, countryCode, displayName, lat, lon, defaulShipping, defaultBilling) {
+        var obj = {
+            _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+            type: addressType || "o",
+            address:address,
+            address2:address2,
+            city:city,
+            state:state,
+            zip:zip,
+            country:country,
+            countryCode:countryCode,
+            displayName:displayName,
+            lat:lat,
+            lon:lon,
+            defaultShipping:defaulShipping,
+            defaultBilling:defaultBilling
+        };
+
+        var details = this.getOrCreateDetails(type);
+        details.addresses = details.addresses || [];
+
+        details.addresses.push(obj);
     },
 
 
@@ -380,8 +407,14 @@ var contact = $$.m.ModelBase.extend({
                             detail.addresses.forEach(function(address) {
                                 //see if we already have an address with the same address
                                 var existing = null;
-                                if (!String.isNullOrEmpty(address.address)) {
-                                    existing = _.findWhere(oDetails.addresses, { address: address.address });
+
+                                //first check displayName, as that may be all we have
+                                existing = _.findWhere(oDetails.addresses, {displayName: address.displayName });
+
+                                if (existing != null || !String.isNullOrEmpty(address.address)) {
+                                    if (existing == null) {
+                                        existing = _.findWhere(oDetails.addresses, { address: address.address });
+                                    }
 
                                     if (existing != null) {
                                         //We already have it, lets try to merge in remainder of details only if current address is empty
