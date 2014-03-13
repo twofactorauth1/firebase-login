@@ -247,7 +247,7 @@ jQuery(document).ready(function() {
     });
 
     // Chat View
-    jQuery('#actiontoggle').click(function() {
+    jQuery('.menutoggle-right').click(function() {
 
         var body = jQuery('body');
         var bodypos = body.css('position');

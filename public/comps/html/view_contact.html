@@ -81,13 +81,8 @@
                     <li><a href="#"><i class="fa fa-caret-right"></i> Print</a></li>
                 </ul>
             </li>
-            <li class="content-li nav-parent">
-                <a href="#"><i class="fa fa-files-o"></i> <span> Content</span></a>
-                <ul class="children">
-                    <li><a href="page_manager.html"><i class="fa fa-caret-right"></i> Pages</a></li>
-                    <li><a href="posts_manager.html"><i class="fa fa-caret-right"></i> Posts</a></li>
-                    <li><a href="media_manager.html"><i class="fa fa-caret-right"></i> Media</a></li>
-                </ul>
+            <li class="website-li">
+                <a href="edit_website.html"><i class="fa fa-desktop"></i> <span> Website</span></a>
             </li>
             <li class="store-li nav-parent">
                 <a href="#"><i class="fa fa-shopping-cart"></i> <span> Commerce</span></a>
@@ -186,195 +181,189 @@
     <div class="customer-bottom">
 
         <!-- Profile Image -->
-        <div class="col-xs-12 col-sm-6">
-            <div class="col-xs-12 col-sm-5">
-                <img alt="" src="../images/photos/loggeduser.png" class="thumbnail thumb-lg img-circle media-object">
-            </div>
-            <div class="media-body col-xs-12 col-sm-7">
-                <h3 class="person-name">Ron Burgandy</h3>
-                <h4>
-                    <span class="label label-info">Customer</span>
-                </h4>
+        <div class="col-xs-12 col-sm-3">
+            <img alt="" src="../images/photos/loggeduser.png" class="thumbnail thumb-lg img-circle media-object">
+        </div>
+
+        <div class="col-xs-12 col-sm-9">
+            <div class="col-xs-12">
+                <div class="profile-header">
+                    <h2 class="profile-name">Ron Burgandy
+                        <span class="label label-info">Customer</span>
+                    </h2>
+                    <div class="clear mb10"></div>
+                    <div class="profile-location"><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy Drive San Diego, CA 92102</a>  <a href="#" class="label label-warning"> + 5 More</a>
+                    </div>
+                    <div class="profile-position"><i class="fa fa-briefcase"></i> Software Engineer at <a href="">SomeCompany, Inc.</a>
+                    </div>
+                    <div class="profile-phone"><i class="fa fa-phone"></i>  <a href=""><a href="tel:619-564-2827"> 619-564-2827</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
+                    </div>
+
+                    <div class="mb20"></div>
+
+                    <button class="btn btn-success mr5"><i class="fa fa-user"></i> Follow</button>
+                    <button class="btn btn-white"><i class="fa fa-envelope-o"></i> Message</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-xs-12 col-sm-6">
-        <div class="col-xs-12">
-            <h4>Contact Information</h4>
-            <span><i class="fa fa-phone"></i>  <a href="tel:619-564-2827">619-564-2827</a></span>
+        <!-- Key Performance Indicators -->
+        <div class="customer-status col-xs-12">
+            <div class="row">
+                <div class="col-xs-6 col-sm-2">
+                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="12 Days ago Ron visited your website.">
+                        <a href="#">
+                            <div class="circle-tile-heading dark-blue">
+                                <i class="fa fa-bolt fa-fw fa-2x"></i>
+                            </div>
+                        </a>
+                        <div class="circle-tile-content">
+                            <div class="circle-tile-description">
+                                Last Active
+                            </div>
+                            <div class="circle-tile-number">
+                                <p>12 days</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-2">
+                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Ron has purchased $384 of products/services from you.">
+                        <a href="#">
+                            <div class="circle-tile-heading green">
+                                <i class="fa fa-money fa-fw fa-2x"></i>
+                            </div>
+                        </a>
+                        <div class="circle-tile-content">
+                            <div class="circle-tile-description">
+                                Purchased
+                            </div>
+                            <div class="circle-tile-number">
+                                <p>$384</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <span><i class="fa fa-phone"></i>  <a href="tel:619-564-2827">619-564-2827</a></span>
+                <div class="visible-xs col-xs-12 mb30"></div>
 
-            <span><i class="fa fa-phone"></i>  <a href="tel:619-564-2827">619-564-2827</a></span>
+                <div class="col-xs-6 col-sm-2">
+                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Ron opened 3 out of the 5 emails you sent.">
+                        <a href="#">
+                            <div class="circle-tile-heading orange">
+                                <i class="fa fa-envelope fa-fw fa-2x"></i>
+                            </div>
+                        </a>
+                        <div class="circle-tile-content">
+                            <div class="circle-tile-description">
+                                Emails Opened
+                            </div>
+                            <div class="circle-tile-number">
+                                <p>3/5</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-2">
+                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="You have made 10  phonecalls to Ron.">
+                        <a href="#">
+                            <div class="circle-tile-heading blue">
+                                <i class="fa fa-phone fa-fw fa-2x"></i>
+                            </div>
+                        </a>
+                        <div class="circle-tile-content">
+                            <div class="circle-tile-description">
+                                Calls Made
+                            </div>
+                            <div class="circle-tile-number">
+                                <p>10</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <span><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy Drive <br>San Diego, CA 92102</a></span>
+                <div class="visible-xs col-xs-12 mb30"></div>
 
-            <span><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy Drive <br>San Diego, CA 92102</a></span>
+                <div class="col-xs-6 col-sm-2">
+                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Ron has been a customer since 24 January, 2014">
+                        <a href="#">
+                            <div class="circle-tile-heading red">
+                                <i class="fa fa-calendar fa-fw fa-2x"></i>
+                            </div>
+                        </a>
+                        <div class="circle-tile-content">
+                            <div class="circle-tile-description">
+                                Customer Since
+                            </div>
+                            <div class="circle-tile-number">
+                                <p>JAN 14</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-2">
+                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Ron has mentioned you 7 times on social networks">
+                        <a href="#">
+                            <div class="circle-tile-heading purple">
+                                <i class="fa fa-comments fa-fw fa-2x"></i>
+                            </div>
+                        </a>
+                        <div class="circle-tile-content">
+                            <div class="circle-tile-description">
+                                Mentions
+                            </div>
+                            <div class="circle-tile-number">
+                                <p>7</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <span><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy Drive <br>San Diego, CA 92102</a></span>
+                <div class="visible-xs col-xs-12 mb30"></div>
 
-            <span><i class="fa fa-envelope"></i>  <a href="mailto:bradly.risse@gmail.com">bradly.risse@gmail.com</a></span>
-
-            <span><i class="fa fa-envelope"></i>  <a href="mailto:bradly.risse@gmail.com">bradly.risse@gmail.com</a></span>
+            </div>
         </div>
-    </div>
 
-    <!-- Key Performance Indicators -->
-    <div class="customer-status col-xs-12">
-        <div class="row">
-            <div class="col-xs-6 col-sm-2">
-                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="12 Days ago Ron visited your website.">
-                    <a href="#">
-                        <div class="circle-tile-heading dark-blue">
-                            <i class="fa fa-bolt fa-fw fa-2x"></i>
+        <div class="contentpanel">
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="panel panel-dark panel-alt widget-quick-status-post">
+                    <div class="panel-heading">
+                        <div class="panel-btns">
+                            <a href="" class="panel-close">×</a>
+                            <a href="" class="minimize">−</a>
                         </div>
-                    </a>
-                    <div class="circle-tile-content">
-                        <div class="circle-tile-description">
-                            Last Active
-                        </div>
-                        <div class="circle-tile-number">
-                            <p>12 days</p>
-                        </div>
+                        <!-- panel-btns -->
+                        <h3 class="panel-title">Customer Actions</h3>
                     </div>
-                </div>
-            </div>
-            <div class="col-xs-6 col-sm-2">
-                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Ron has purchased $384 of products/services from you.">
-                    <a href="#">
-                        <div class="circle-tile-heading green">
-                            <i class="fa fa-money fa-fw fa-2x"></i>
+                    <div class="panel-body">
+                        <ul class="nav nav-tabs nav-justified">
+                            <li class="active"><a href="#post-status" data-toggle="tab"><i class="fa fa-pencil"></i> <strong>Write Note</strong></a>
+                            </li>
+                            <li class=""><a href="#post-photo" data-toggle="tab"><i class="fa fa-picture-o"></i> <strong>Send Email</strong></a>
+                            </li>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="post-status" class="tab-pane active">
+                                <input type="textarea" class="form-control" placeholder="What's your status?">
+                            </div>
+                            <div id="post-photo" class="tab-pane">
+                                <input type="text" class="form-control" placeholder="Subject">
+                                <div class="mb20"></div>
+                                <textarea class="form-control" rows="5"></textarea>
+                            </div>
+                            <button class="btn btn-primary btn-block mt10">Submit</button>
                         </div>
-                    </a>
-                    <div class="circle-tile-content">
-                        <div class="circle-tile-description">
-                            Purchased
-                        </div>
-                        <div class="circle-tile-number">
-                            <p>$384</p>
-                        </div>
+                        <!-- tab-content -->
+
                     </div>
+                    <!-- panel-body -->
                 </div>
+                <!-- panel -->
+
             </div>
-
-            <div class="visible-xs col-xs-12 mb30"></div>
-
-            <div class="col-xs-6 col-sm-2">
-                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Ron opened 3 out of the 5 emails you sent.">
-                    <a href="#">
-                        <div class="circle-tile-heading orange">
-                            <i class="fa fa-envelope fa-fw fa-2x"></i>
-                        </div>
-                    </a>
-                    <div class="circle-tile-content">
-                        <div class="circle-tile-description">
-                            Emails Opened
-                        </div>
-                        <div class="circle-tile-number">
-                            <p>3/5</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-6 col-sm-2">
-                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="You have made 10  phonecalls to Ron.">
-                    <a href="#">
-                        <div class="circle-tile-heading blue">
-                            <i class="fa fa-phone fa-fw fa-2x"></i>
-                        </div>
-                    </a>
-                    <div class="circle-tile-content">
-                        <div class="circle-tile-description">
-                            Calls Made
-                        </div>
-                        <div class="circle-tile-number">
-                            <p>10</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="visible-xs col-xs-12 mb30"></div>
-
-            <div class="col-xs-6 col-sm-2">
-                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Ron has been a customer since 24 January, 2014">
-                    <a href="#">
-                        <div class="circle-tile-heading red">
-                            <i class="fa fa-calendar fa-fw fa-2x"></i>
-                        </div>
-                    </a>
-                    <div class="circle-tile-content">
-                        <div class="circle-tile-description">
-                            Customer Since
-                        </div>
-                        <div class="circle-tile-number">
-                            <p>JAN 14</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-6 col-sm-2">
-                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Ron has mentioned you 7 times on social networks">
-                    <a href="#">
-                        <div class="circle-tile-heading purple">
-                            <i class="fa fa-comments fa-fw fa-2x"></i>
-                        </div>
-                    </a>
-                    <div class="circle-tile-content">
-                        <div class="circle-tile-description">
-                            Mentions
-                        </div>
-                        <div class="circle-tile-number">
-                            <p>7</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="visible-xs col-xs-12 mb30"></div>
-
         </div>
-    </div>
-
-    <div class="col-xs-12 col-sm-6">
-        <div class="panel panel-dark panel-alt widget-quick-status-post">
-            <div class="panel-heading">
-                <div class="panel-btns">
-                    <a href="" class="panel-close">×</a>
-                    <a href="" class="minimize">−</a>
-                </div>
-                <!-- panel-btns -->
-                <h3 class="panel-title">Customer Actions</h3>
-            </div>
-            <div class="panel-body">
-                <ul class="nav nav-tabs nav-justified">
-                    <li class="active"><a href="#post-status" data-toggle="tab"><i class="fa fa-pencil"></i> <strong>Write Note</strong></a>
-                    </li>
-                    <li class=""><a href="#post-photo" data-toggle="tab"><i class="fa fa-picture-o"></i> <strong>Send Email</strong></a>
-                    </li>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div id="post-status" class="tab-pane active">
-                        <input type="textarea" class="form-control" placeholder="What's your status?">
-                    </div>
-                    <div id="post-photo" class="tab-pane">
-                        <input type="text" class="form-control" placeholder="Subject">
-                        <div class="mb20"></div>
-                        <textarea class="form-control" rows="5"></textarea>
-                    </div>
-                    <button class="btn btn-primary btn-block mt10">Submit</button>
-                </div>
-                <!-- tab-content -->
-
-            </div>
-            <!-- panel-body -->
-        </div>
-        <!-- panel -->
-
-    </div>
-</div>
 
 
   </div><!-- mainpanel -->
@@ -407,7 +396,7 @@
 <script type="text/javascript">
   jQuery(document).ready(function() {
 
-      jQuery('.leftpanel .nav li.contacts-li').addClass('active nav-active').find('.children').show();
+      jQuery('.leftpanel .nav li.contacts-li').addClass('active');
 
 
         var map_marker = new GMaps({
