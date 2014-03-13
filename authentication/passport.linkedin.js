@@ -25,7 +25,7 @@ passport.use(new LinkedInStrategy({
             profile.emails = [{
                 value: profile2.emailAddress
             }];
-            passportUtil.handleLoginCallback($$.constants.user.credential_types.LINKDIN, req, accessToken, refreshToken, options, profile, linkedInConfig.getScope(), done);
+            passportUtil.handleLoginCallback($$.constants.user.credential_types.LINKEDIN, req, accessToken, refreshToken, options, profile, linkedInConfig.getScope(), done);
         });
     }
 ));

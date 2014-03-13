@@ -21,7 +21,7 @@
                 p.navbar-text.navbar-right
                     if isLoggedIn
                         if photo
-                            img.img-rounded(src="#{photo.url}")
+                            img.img-rounded(src="#{photo.url}" style="max-height:40px; max-width:60px;")
                         else
                           |Signed in as &nbsp;
                         a(href="/myaccount") #{user.username}

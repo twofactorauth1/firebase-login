@@ -1,4 +1,4 @@
-var BaseView = require('./base.view');
+var BaseView = require('./base.server.view');
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -16,6 +16,6 @@ _.extend(view.prototype, BaseView.prototype, {
     }
 });
 
-$$.v.HomeView = view;
+$$.v.SignupView = view;
 
 module.exports = view;

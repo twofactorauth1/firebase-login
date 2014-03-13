@@ -1,7 +1,6 @@
 var baseApi = require('../../base.api');
 var googleDao = require('../../../dao/social/google.dao');
 
-
 var api = function() {
     this.init.apply(this, arguments);
 };

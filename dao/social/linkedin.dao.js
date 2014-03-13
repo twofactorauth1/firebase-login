@@ -1,7 +1,7 @@
 var baseDao = require('../base.dao');
 var request = require('request');
 var crypto = require('crypto');
-var facebookConfig = require('../../configs/facebook.config');
+var linkedinConfig = require('../../configs/linkedin.config');
 var paging = require('../../utils/paging');
 var contactDao = require('../contact.dao');
 var userDao = require('../user.dao');
@@ -12,22 +12,16 @@ var querystring = require('querystring');
 var dao = {
 
     options: {
-        name:"social.facebook.dao",
+        name:"social.linkedin.dao",
         defaultModel:null
     },
 
 
-    GRAPH_API_URL: "https://graph.facebook.com/",
-
-
-    getAppSecretProof: function(accessToken) {
-        var proof = crypto.createHmac('sha256', facebookConfig.CLIENT_SECRET).update(accessToken).digest('hex');
-        return "app_secret=" + proof;
-    },
+    CONNECTIONS_API_URL: "http://api.linkedin.com/v1/people/",
 
 
     refreshAccessToken: function(user, fn) {
-        var creds = user.getCredentials($$.constants.user.credential_types.FACEBOOK);
+        var creds = user.getCredentials($$.constants.user.credential_types.LINKEDIN);
         if (creds != null) {
             if (creds.expires != null && creds.expires < new Date().getTime()) {
                 //We are already expired!
@@ -74,31 +68,34 @@ var dao = {
 
     checkAccessToken: function(user, fn) {
         var self = this;
-        this.refreshAccessToken(user, function(err, value) {
-            if (err) {
-                return fn(err, value);
+        var creds = user.getCredentials($$.constants.user.credential_types.LINKEDIN);
+        if (creds != null) {
+            if (creds.expires != null && creds.expires < new Date().getTime()) {
+                //We are already expired!
+                return fn($$.u.errors._401_INVALID_CREDENTIALS, "Invalid Credentials");
             }
-
-            return self.getProfileForUser(user, fn);
-        });
+            else {
+                //Pull profile and look for error response to determine validity
+            }
+        } else {
+            return fn("No Facebook credentials found");
+        }
     },
 
 
-    getProfileForUser: function(user, fn) {
+    getProfileForUser: function(user, basicOnly, fn) {
         var accessToken = this._getAccessToken(user);
-        var socialId = this._getFacebookId(user);
+        var socialId = this._getLinkedInId(user);
         if (accessToken == null || socialId == null) {
-            return fn("No Credentials Found", "No Facebook credentials found");
+            return fn("No Credentials Found", "No LinkedIn credentials found");
         }
 
         return this.getProfile(socialId, accessToken, fn);
     },
 
 
-    getProfile: function(profileId, accessToken, fn) {
-        var fields = "email,picture,first_name,last_name,middle_name,name,username";
-
-        var path = profileId + "?fields=" + fields;
+    getProfile: function(profileId, accessToken, basicOnly, fn) {
+        var path = "~:(email,first_name,last_name,email-address)";
         var url = this._generateUrl(path, accessToken);
 
         request(url, function(err, resp, body) {
@@ -224,7 +221,7 @@ var dao = {
                                         });
 
                                     }, function(err) {
-                                       callback(err);
+                                        callback(err);
                                     });
                                 } else {
                                     callback(null);
@@ -294,16 +291,15 @@ var dao = {
     },
 
 
-
     _generateUrl: function(path, accessToken) {
-        var url = this.GRAPH_API_URL + path;
-        if (url.indexOf("?") > -1) {
-            url += "&";
-        } else {
+        var url = this.CONNECTIONS_API_URL + path;
+        if (url.indexOf("?") == -1) {
             url += "?";
+        } else {
+            url += "&";
         }
 
-        url += "access_token=" + accessToken;
+        url += "format=json&oauth2_access_token=" + accessToken;
         return url;
     }
 };

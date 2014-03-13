@@ -6,7 +6,7 @@ define(function() {
             case p.LOCAL: return "local";
             case p.FACEBOOK: return "Facebook";
             case p.TWITTER: return "Twitter";
-            case p.LINKDIN: return "LinkedIn";
+            case p.LINKEDIN: return "LinkedIn";
             case p.GOOGLE: return "Google+";
         }
         return "";
@@ -19,7 +19,7 @@ define(function() {
             case p.LOCAL: return "";
             case p.FACEBOOK: return "fa fa-facebook";
             case p.TWITTER: return "fa fa-twitter";
-            case p.LINKDIN: return "fa fa-linkedin";
+            case p.LINKEDIN: return "fa fa-linkedin";
             case p.GOOGLE: return "fa fa-google-plus";
         }
         return "";

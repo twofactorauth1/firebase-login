@@ -444,10 +444,10 @@ var user = $$.m.ModelBase.extend({
 
     //region PHOTO
     addOrUpdatePhoto: function(socialType, url, isDefault) {
-        var photos = this.get("photos");
+        var photos = this.get("profilePhotos");
         if (photos == null) {
             photos = [];
-            this.set({photos:photos});
+            this.set({profilePhotos:photos});
         }
 
         var photo = this.getPhoto(socialType);
@@ -467,8 +467,18 @@ var user = $$.m.ModelBase.extend({
     },
 
 
+    getPhoto: function(socialType) {
+        var photos = this.get("profilePhotos");
+        if (photos == null || photos.length === 0) {
+            return null;
+        }
+
+        return _.findWhere(photos, {type:socialType}) || null;
+    },
+
+
     getDefaultPhoto: function() {
-        var photos = this.get("photos");
+        var photos = this.get("profilePhotos");
         if (photos == null || photos.length === 0) {
             return null;
         }
@@ -482,18 +492,8 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    getPhoto: function(socialType) {
-        var photos = this.get("photos");
-        if (photos == null || photos.length === 0) {
-            return null;
-        }
-
-        return _.findWhere(photos, {type:socialType}) || null;
-    },
-
-
     setPhoto: function(photo) {
-        var photos = this.get("photos");
+        var photos = this.get("profilePhotos");
         if (photos == null) {
             photos = [];
             this.set({photos:photos});

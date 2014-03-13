@@ -126,11 +126,13 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     _isAuthenticationError: function(obj, fn) {
         if (_.isObject(obj)) {
             if (obj.error != null && obj.error.code != null && obj.error.code == 401) {
-                return fn({error: {code:401, message: "Invalid Credentials", raw: obj}}, "Invalid Credentials");
+                return fn($$.u.errors._401_INVALID_CREDENTIALS, "Invalid Credentials");
             }
         } else if(_.isString(obj) && obj.charAt(0) == "<") {
             if (obj.indexOf("401") > -1) {
-                return fn({error: {code:401, message: "Invalid Credentials", raw: obj}}, "Invalid Credentials");
+                var error = _.clone($$.u.errors._401_INVALID_CREDENTIALS);
+                error.raw = obj;
+                return fn(error, "Invalid Credentials");
             }
         }
         return fn(null, obj);

@@ -167,7 +167,7 @@ var dao = {
                                 var googleDao = require('./social/google.dao')
                                 googleDao.refreshUserFromProfile(user, true, fxn);
                                 break;
-                            case social.LINKDIN:
+                            case social.LINKEDIN:
                                 self.saveOrUpdate(user, fn);
                                 break;
                             default:
