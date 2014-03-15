@@ -176,7 +176,7 @@ var mongodao = {
                 }
             } else {
                 if (fn != null) {
-                    fn(err, value);
+                    fn(err, result);
                 }
             }
         });

@@ -36,7 +36,7 @@ var dao = {
     },
 
 
-    getContextIOAccountByEmail: function(email, fn) {
+    getContextIOAccountsByEmail: function(email, fn) {
         this.contextIO.accounts().get({email:email}, function(err, resp) {
             if (err) {
                 return fn(err, resp);
@@ -81,10 +81,20 @@ var dao = {
             }
 
             var isSuccess = value.success;
-            if (!isSuccess) {
-                return fn("Account was not created", value);
+            if (isSuccess === false) {
+                var msg = "";
+                if (value.feedback_code) {
+                    msg += value.feedback_code + ": ";
+                }
+                if (value.connection_log) {
+                    msg += value.connection_log;
+                }
+
+                var error = $$.u.errors.createError(500, "Account not created", msg);
+                return fn(error);
             }
 
+            value = value.body;
             var id = value.id;
             var resourceUrl = value.resource_url;
 
@@ -110,9 +120,20 @@ var dao = {
     },
 
 
-    removeContextIOAccount: function(accountId, fn) {
-        this.contextIO.accounts(accountId).delete(function(err, value, request) {
-            fn(err, value);
+    removeContextIOAccount: function(user, contextIOAccountId, fn) {
+        this.contextIO.accounts(contextIOAccountId).delete(function(err, value, request) {
+            if (!err) {
+                user.removeEmailSource($$.constants.email_sources.CONTEXTIO, contextIOAccountId);
+                userDao.saveOrUpdate(user, function(err, value) {
+                   if (err) {
+                       return fn(err, value);
+                   } else {
+                       return fn(null);
+                   }
+                });
+            } else {
+                fn(err, value);
+            }
         });
     }
 

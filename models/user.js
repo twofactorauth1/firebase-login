@@ -843,6 +843,17 @@ var user = $$.m.ModelBase.extend({
     },
 
 
+    getMailboxForSource: function(type, sourceId, email) {
+        var emailSource = this.getEmailSourceByTypeAndSourceId(type, sourceId);
+
+        if (emailSource == null || emailSource.mailboxes == null || emailSource.mailboxes.length == 0) {
+            return;
+        }
+
+        return _.findWhere(emailSource.mailboxes, {email: email});
+    },
+
+
     createOrUpdateEmailSource: function(type, sourceId, label, primaryEmail) {
         var emailSources = this.get("emailSources");
         if (emailSources == null) {
@@ -904,6 +915,33 @@ var user = $$.m.ModelBase.extend({
         if (port != null) { mailbox.port = port; }
 
         return mailbox;
+    },
+
+
+    removeEmailSource: function(type, sourceId) {
+        var emailSources = this.get("emailSources");
+        if (emailSources == null) {
+            return null;
+        }
+
+        var source = _.findWhere(emailSources, {type:type, sourceId:sourceId});
+        if (source != null) {
+            emailSources = _.without(emailSources, [source]);
+        }
+    },
+
+
+    removeMailboxForSource: function(type, sourceId, email) {
+        var emailSource = this.getEmailSourceByTypeAndSourceId(type, sourceId);
+
+        if (emailSource == null || emailSource.mailboxes == null || emailSource.mailboxes.length == 0) {
+            return;
+        }
+
+        var mailbox = _.findWhere(emailSource.mailboxes, {email: email});
+        if (mailbox != null) {
+            emailSource.mailboxes = _.without(emailSource.mailboxes, [mailbox]);
+        }
     },
     //endregion
 

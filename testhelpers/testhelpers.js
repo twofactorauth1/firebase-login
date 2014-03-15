@@ -31,9 +31,15 @@ module.exports = {
         if (servers != null) {
             servers.forEach(function(server) {
                 console.log("Closing severs");
-                server.close();
+                server.close(function() {
+                    console.log("EXITING!");
+
+                    setTimeout(function() {
+                        console.log("STOPPING PROCESS");
+                        process.exit(1);
+                    }, 1000);
+                });
             })
         }
-        process.exit(1);
     }
 };

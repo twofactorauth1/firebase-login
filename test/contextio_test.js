@@ -30,37 +30,61 @@ module.exports.group = {
             self.user = null;
 
             //testHelpers.shutDown();
+
+            if (self.testsComplete === true) {
+                testHelpers.shutDown();
+            }
             cb();
         });
     },
 
     testForAccountExistence: function(test) {
-        console.log("TESTING ACCOUNT EXISTENCE");
-        emailDataDao.getContextIOAccountByEmail(this.emailAddress, function(err, value) {
-            test.equal(value.length, 0, "Expecting no ContextIO accounts");
-            test.done();
-        });
-    },
-
-    testCreateContextIOAccount: function(test) {
-        console.log("CREATING CONTEXTIO ACCOUNT");
         var self = this;
-        emailDataDao.createContextIOAccountAndMailboxForUser(this.user, null, this.emailAddress, this.emailAddress, this.emailPass, this.emailType, function(err, value) {
+        console.log("TESTING ACCOUNT EXISTENCE");
+        emailDataDao.getContextIOAccountsByEmail(this.emailAddress, function(err, value) {
             if (err) {
-               test.ok(false, "Failed to create ContextIO Account and Mailbox");
+                test.ok(false, "Could not retrieve ContextIO Accounts for email address: " + err.toString());
             } else {
-                self.contextIOAccount = value;
-                test.ok(true);
+                self.numContextIOAccounts = value.length;
+                test.ok(true, self.numContextIOAccounts + " accounts exist");
             }
 
             test.done();
         });
     },
 
-    testRemoveContextIOAccount: function(test) {
-        console.log("REMOVING CONTEXTIO ACCOUNT");
-        emailDataDao.removeContextIOAccount(this.contextIOAccount.id);
-        test.done();
-        testHelpers.shutDown();
+    testCreateAndRemoveContextIOAccount: function(test) {
+        this.testsComplete = true;
+        console.log("TESTING CONTEXTIO ACCOUNT CREATION");
+        var self = this;
+
+        var deferred = $.Deferred();
+        emailDataDao.createContextIOAccountAndMailboxForUser(this.user, null, this.emailAddress, this.emailAddress, this.emailPass, this.emailType, function(err, value) {
+            if (err) {
+                test.ok(false, "Failed to create ContextIO Account and Mailbox");
+                deferred.reject();
+            } else {
+                self.contextIOAccount = value;
+                test.ok(true, "Created ContextIO Account successfully");
+                deferred.resolve();
+            }
+        });
+
+        $.when(deferred)
+            .done(function() {
+                console.log("TESTING CONTEXTIO ACCOUNT REMOVAL");
+                emailDataDao.removeContextIOAccount(self.user, self.contextIOAccount.sourceId, function(err, value) {
+                    if (err) {
+                        test.ok(false, "Failed to remove ContextIO Account with id: " + self.contextIOAccount.sourceId);
+                        test.done();
+                    } else {
+                        test.ok(true, "ContextIO Account removed successfully");
+                    }
+                    test.done();
+                });
+            })
+            .fail(function() {
+                test.done();
+            });
     }
 }
