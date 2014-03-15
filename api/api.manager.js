@@ -5,19 +5,13 @@ var contactApi = require('./1.0/contact.api');
 var awsApi = require('./1.0/aws.api');
 var uploadApi = require('./1.0/upload.api');
 var geoApi = require('./1.0/geo.api');
+var emailDataApi = require('./1.0/emaildata.api');
+
+//Social
 var facebookApi = require('./1.0/social/facebook.api');
 var googleApi = require('./1.0/social/google.api');
 var linkedInApi = require('./1.0/social/linkedin.api');
 
 module.exports = {
-    authenticationApi: authenticationApi,
-    accountApi: accountApi,
-    userApi: userApi,
-    contactApi: contactApi,
-    awsApi:awsApi,
-    uploadApi:uploadApi,
-    geoApi:geoApi,
-    facebookApi: facebookApi,
-    googleApi: googleApi,
-    linkedInApi: linkedInApi
+
 };

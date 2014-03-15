@@ -33,6 +33,11 @@ var dao = {
 
 
     createUserFromUsernamePassword: function(username, password, email, accountToken, fn) {
+        if (_.isFunction(accountToken)) {
+            fn = accountToken;
+            accountToken = null;
+        }
+
         var self = this;
         this.getUserByUsername(username, function(err, value) {
             if (err) {

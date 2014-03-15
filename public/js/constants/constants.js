@@ -38,6 +38,11 @@ define([], function () {
         },
 
 
+        email_sources: {
+            CONTEXTIO: "ctxtio"
+        },
+
+
         account: {
             company_types: {
                 PROFESSIONAL: 1,

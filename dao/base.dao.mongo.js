@@ -2,11 +2,13 @@ var mongoConfig = require('../configs/mongodb.config');
 var mongoskin = require('mongoskin');
 var mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {safe:true});
 
+$$.g.mongos = $$.g.monogs || [];
 var mongodao = {
 
     mongodatabase: mongodb,
 
     initMongo: function() {
+        $$.g.mongos.push(this.mongodatabase);
         //ensure we have our ID counters set up for this collection
         if (this.defaultModel != null) {
             if (this.getStorage() == "mongo") {
@@ -178,6 +180,26 @@ var mongodao = {
                 }
             }
         });
+    },
+
+
+    _removeMongo: function(model, fn) {
+        var collection = this.getTable(model);
+
+        this.mongo(collection).removeById(model.id(), fn);
+    },
+
+
+    _removeByIdMongo: function(id, type, fn) {
+        var self = this;
+
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+        this.mongo(collection).removeById(id, fn);
     },
 
 

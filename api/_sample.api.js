@@ -1,5 +1,5 @@
 var baseApi = require('../base.api');
-var SampleDao = require('../dao/sample.dao');
+var sampleDao = require('../../dao/sample.dao');
 
 
 var api = function() {
@@ -10,7 +10,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     base: "sample",
 
-    dao: SampleDao,
+    dao: sampleDao,
 
     initialize: function() {
         //GET

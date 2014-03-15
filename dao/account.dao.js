@@ -137,6 +137,8 @@ var dao = {
                 }
                 p.resolve();
             });
+        } else {
+            p.resolve();
         }
 
         $.when(p)

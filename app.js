@@ -147,8 +147,9 @@ app.configure('production', function() {
 //-----------------------------------------------------
 //  START LISTENING
 //-----------------------------------------------------
+servers = [];  //global
 var setUpListener = function(app) {
-    app.listen(appConfig.port, function(){
+    var server = app.listen(appConfig.port, function(){
         log.info("Express server listening on port " + appConfig.port);
         if (cluster != null) {
             if (cluster.worker != null) {
@@ -156,6 +157,8 @@ var setUpListener = function(app) {
             }
         }
     });
+
+    servers.push(server);
 };
 
 

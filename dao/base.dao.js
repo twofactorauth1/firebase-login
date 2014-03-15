@@ -21,7 +21,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
 
 
     saveOrUpdate: function(model, fn) {
-        if ((model.id() == null || model.id() == 0)) {
+        if ((model.id() === null || model.id() === 0)) {
             var strategy = this.getIdStrategy(model);
             switch(strategy) {
                 case "uuid":
@@ -38,6 +38,30 @@ _.extend(baseDao.prototype, mongoBaseDao, {
             if (fn != null) {
                 fn("No storage medium available for this model");
             }
+        }
+    },
+
+
+    remove: function(model, fn) {
+        if (model.id() === null || model.id() === 0) {
+            return fn(null, null);
+        }
+
+        if (this.getStorage(model) === "mongo") {
+            this._removeMongo(model, fn);
+        } else {
+            if (fn != null) {
+                fn("NO storage medium avaialble for this model");
+            }
+        }
+    },
+
+
+    removeById: function(id, type, fn) {
+        if (this.getStorage(type) === "mongo") {
+            this._removeByIdMongo(id, type, fn);
+        } else {
+            fn("No storage medium available for this model");
         }
     },
 
