@@ -65,8 +65,13 @@ define([
             },
 
 
+            /**
+             * Deprecated, use generateUniqueAlphaNumeric()
+             *
+             * @returns {*}
+             */
             generateUniqueAlphaNumericShort: function () {
-                return new Date().getTime().toString(36);
+                return this.generateUniqueAlphaNumeric();
             },
 
 

@@ -32,7 +32,7 @@ var express = require('express')
 //---------------------------------------------------------
 _ = require('underscore');
 requirejs('utils/commonutils');
-require('utils/errors');
+require('./utils/errors');
 require('./utils/jsvalidate');
 var deferred = require("jquery-deferred");
 if (typeof $ == 'undefined') {

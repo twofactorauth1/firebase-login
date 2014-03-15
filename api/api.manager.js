@@ -7,6 +7,7 @@ var uploadApi = require('./1.0/upload.api');
 var geoApi = require('./1.0/geo.api');
 var facebookApi = require('./1.0/social/facebook.api');
 var googleApi = require('./1.0/social/google.api');
+var linkedInApi = require('./1.0/social/linkedin.api');
 
 module.exports = {
     authenticationApi: authenticationApi,
@@ -17,5 +18,6 @@ module.exports = {
     uploadApi:uploadApi,
     geoApi:geoApi,
     facebookApi: facebookApi,
-    googleApi: googleApi
+    googleApi: googleApi,
+    linkedInApi: linkedInApi
 };

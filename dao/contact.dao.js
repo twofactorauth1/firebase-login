@@ -2,14 +2,12 @@ var baseDao = require('./base.dao');
 requirejs('constants/constants');
 require('../models/contact');
 
-
 var dao = {
 
     options: {
         name:"contact.dao",
         defaultModel: $$.m.Contact
     },
-
 
     getContactsShort: function(accountId, letter, fn) {
         var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
@@ -53,7 +51,8 @@ var dao = {
         }
 
         if (String.isNullOrEmpty(_last) && emails.length == 0) {
-            //we have nothing...
+            //Just save, nothing to test against.
+            return self.saveOrUpdate(contact, fn);
         }
         else if (!String.isNullOrEmpty(_last) && emails.length > 0) {
             query = {
@@ -69,20 +68,28 @@ var dao = {
             query = nameQ;
         }
 
+        var dummyFxn = function() {
+
+        };
+
+
         this.findMany(query, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
 
             var matched = false;
+            var possibleDups = [];
             value.forEach(function(existing) {
                 if (matched !== false) {
+                    //We have already matched, so this immediately becomes a possible duplicate
+                    possibleDups.push(existing);
                     return;
                 }
 
                 //First check to see if we have a last name match
                 if (existing.get("_last") == _last) {
-                    //we have a matching last name...  do we have a matching first name
+                    //we have a matching last name...  do we have a matching email
                     if (emails.length > 0 && _.intersection(existing.getEmails(), emails).length > 0) {
                         matched = existing;
                     }
@@ -100,14 +107,46 @@ var dao = {
                         }
                     }
                 } else if (emails.length > 0 && _.intersection(existing.getEmails(), emails).length > 0) {
-                    //We only have an email match... what do we want to do?
+                    //We only have an email match... what do we want to do? -- not quite enough to go on?
+                }
+
+                if (matched === false) {
+                    possibleDups.push(existing);
                 }
             });
 
             if (matched === false) {
-                self.saveOrUpdate(contact, fn);
+                if (possibleDups && possibleDups.length > 0) {
+                    contact.setPossibleDuplicate(possibleDups);
+
+                    self.saveOrUpdate(contact, function(err, value) {
+                        if (err) {
+                            return fn(err, value);
+                        }
+
+                        possibleDups.forEach(function(dup) {
+                            dup.setPossibleDuplicate(value);
+                            self.saveOrUpdate(dup, dummyFxn);
+                        });
+
+                        return fn(err, value);
+                    }) ;
+                    return;
+                } else {
+                    self.saveOrUpdate(contact, fn);
+                    return;
+                }
             } else {
+                self.log.info("Merging contact with id: " + matched.id());
                 matched.mergeContact(contact);
+
+                if (possibleDups && possibleDups.length > 0) {
+                    possibleDups.forEach(function(dup) {
+                        matched.setPossibleDuplicate(dup);
+                        dup.setPossibleDuplicate(matched);
+                        self.saveOrUpdate(dup, dummyFxn);
+                    });
+                }
                 self.saveOrUpdate(matched, fn);
             }
         });

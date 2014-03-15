@@ -19,7 +19,7 @@ passport.use(new LinkedInStrategy({
             expires: params.expires_in
         };
 
-        var url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address)?format=json&oauth2_access_token=" + accessToken;
+        var url = "https://api.linkedin.com/v1/people/~:(id,email-address)?format=json&oauth2_access_token=" + accessToken;
         request(url, function(err, resp, body) {
             var profile2 = JSON.parse(body);
             profile.emails = [{

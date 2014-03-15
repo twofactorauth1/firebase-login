@@ -1,6 +1,6 @@
 var mongoConfig = require('../configs/mongodb.config');
 var mongoskin = require('mongoskin');
-var mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {w:1});
+var mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {safe:true});
 
 var mongodao = {
 
@@ -164,6 +164,9 @@ var mongodao = {
         }
 
         var self = this;
+        if (model.get("seq") != null) {
+            console.log("HAS SEQUENCE!");
+        }
         this.mongo(collection).save(model.toJSON("db"), function(err, result) {
             if (!err) {
                 if (fn != null) {
@@ -197,18 +200,21 @@ var mongodao = {
             return;
         }
 
+        this._lockCollection(collection);
         this.mongo(collection).findAndModify(
-            { _id: "counter" },
+            { _id: "__counter__" },
             [],
             { $inc: { seq:1 } },
             { new: true, upsert: true },
             function(err, value) {
+                self._unlockCollection(collection);
                 if (!err && value != null && value.hasOwnProperty('seq')) {
                     if (fn != null) {
                         fn(null, value.seq);
                     }
                 } else {
                     if (fn != null) {
+                        self.log.error("An error occurred retrieving sequence");
                         fn(err, value);
                     }
                 }
@@ -272,7 +278,7 @@ var mongodao = {
         this._lockCollection(collection);
 
         this.mongo(collection).findAndModify(
-            { _id: "counter" },
+            { _id: "__counter__" },
             [],
             { $inc: { seq:0 } },
             { new: true, upsert: true },

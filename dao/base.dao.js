@@ -139,6 +139,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     }
 });
 
+
 $$.dao = $$.dao || {};
 $$.dao.BaseDao = baseDao;
 
