@@ -29,17 +29,18 @@ module.exports = {
     shutDown: function() {
         this.closeDBConnections();
         if (servers != null) {
-            servers.forEach(function(server) {
-                console.log("Closing severs");
-                server.close(function() {
-                    console.log("EXITING!");
+            var async = require('async');
 
-                    setTimeout(function() {
-                        console.log("STOPPING PROCESS");
-                        process.exit(1);
-                    }, 1000);
-                });
-            })
+            async.eachSeries(servers, function(server, cb) {
+                console.log("Closing server after tests");
+                server.close();
+                cb();
+
+            }, function() {
+                setTimeout(function() {
+                    process.exit(1);
+                }, 1000);
+            });
         }
     }
 };
