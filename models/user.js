@@ -46,6 +46,24 @@ var user = $$.m.ModelBase.extend({
              *  }],
              *
              *  permissions: [ super, admin, member ],
+             *
+             *  emailSources: [{
+             *      _id:"",
+             *      type: ""  e.g. $$.constants.email_sources.CONTEXTIO
+             *      providerId: null,
+             *      label: null,
+             *      primaryEmail: "",
+             *
+             *      mailboxes: [{
+             *          _id:"",
+             *          email: "",
+             *          label: null,
+             *          emailType: null  //e.g. "gmail", "outlook", "yahoo", etc.
+             *          emailServer: ""
+             *          port: int,
+             *      }]
+             *  ]},
+             *
              *  baggage: {}
              * }]
              */
@@ -65,26 +83,6 @@ var user = $$.m.ModelBase.extend({
              * }]
              */
             credentials: [],
-
-            /**
-             * [{
-             *  type: ""  e.g. $$.constants.email_sources.CONTEXTIO
-             *  _id:"",
-             *  sourceId: null,
-             *  label: null,
-             *  primaryEmail: "",
-             *
-             *  mailboxes: [{
-             *      accountId: null //If this applies to all of the users accounts, leave null
-             *      label: null,
-             *      emailType: null  //e.g. "gmail", "outlook", "yahoo", etc.
-             *      emailServer: ""
-             *      port: int,
-             *      email: "",
-             *  }]
-             * }]
-             */
-            emailSources: [],
 
 
             /**
@@ -821,58 +819,66 @@ var user = $$.m.ModelBase.extend({
 
 
     //region EMAIL SOURCES
+    getAllEmailSources: function() {
+        var emailSources = [];
+
+        var userAccounts = this.get("accounts");
+        if (userAccounts == null || userAccounts.length == 0) {
+            return null;
+
+            for (var i = 0, l = userAccounts.length; i < l; i++) {
+                if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
+                    emailSources.concat(userAccounts[i].emailSources);
+                }
+            }
+        }
+        return emailSources;
+    },
+
+
     getEmailSource: function(id) {
-        var emailSources = this.get("emailSources");
-        if (emailSources == null) {
-            emailSources = [];
-            this.set({emailSources:emailSources});
-        }
-
-        return _.findWhere(emailSources, {_id: id} );
+        var emailSources = this.getAllEmailSources;
+        return _.findWhere(emailSources, { _id: id });
     },
 
 
-    getEmailSourceByTypeAndSourceId: function(type, sourceId) {
-        var emailSources = this.get("emailSources");
-        if (emailSources == null) {
-            emailSources = [];
-            this.set({emailSources:emailSources});
+    getEmailSourceByType: function(accountId, type) {
+        var emailSources = this.getAllEmailSources;
+        var userAccount = this.getUserAccount(accountId);
+        if (userAccount == null || userAccount.emailSources == null || userAccount.emailSources.length == 0) {
+            return null;
         }
 
-        return _.findWhere(emailSources, {type:type, sourceId:sourceId});
+        return _.findWhere(userAccount.emailSources, {type:type});
     },
 
 
-    getMailboxForSource: function(type, sourceId, email) {
-        var emailSource = this.getEmailSourceByTypeAndSourceId(type, sourceId);
-
-        if (emailSource == null || emailSource.mailboxes == null || emailSource.mailboxes.length == 0) {
-            return;
+    createOrUpdateEmailSource: function(accountId, type, providerId, label, primaryEmail) {
+        var userAccount = this.getUserAccount(accountId);
+        if (userAccount == null) {
+            throw Error("User account does not exist with AccountID: " + accountId + " for user: " + this.id());
         }
 
-        return _.findWhere(emailSource.mailboxes, {email: email});
-    },
-
-
-    createOrUpdateEmailSource: function(type, sourceId, label, primaryEmail) {
-        var emailSources = this.get("emailSources");
+        var emailSources = userAccount.emailSources;
         if (emailSources == null) {
             emailSources = [];
-            this.set({emailSources:emailSources});
+            userAccount.emailSources = emailSources;
         }
 
-        var emailSource = _.findWhere(emailSources, {type:type, sourceId:sourceId});
+        var emailSource = _.findWhere(emailSources, {type:type});
         if (emailSource == null) {
             emailSource = {
                 _id: $$.u.idutils.generateUniqueAlphaNumeric(),
+                accountId: accountId,
                 type: type,
-                sourceId: sourceId,
+                providerId: providerId,
                 label: label,
                 primaryEmail: primaryEmail
             };
 
             emailSources.push(emailSource);
         } else {
+            if (!String.isNullOrEmpty(providerId)) { emailSource.providerId = providerId; }
             if (!String.isNullOrEmpty(label)) { emailSource.labeel = label; }
             if (!String.isNullOrEmpty(primaryEmail)) { emailSource.primaryEmail = primaryEmail; }
         }
@@ -881,8 +887,8 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    createOrUpdateMailboxForSource: function(emailSourceId, accountId, email, emailType, label, emailServer, port) {
-        var emailSource = this.getEmailSource(emailSourceId);
+    createOrUpdateMailboxForSource: function(sourceId, email, emailType, label, emailServer, port) {
+        var emailSource = this.getEmailSource(sourceId);
         if (emailSource == null) {
             return null;
         }
@@ -893,17 +899,11 @@ var user = $$.m.ModelBase.extend({
             emailSource.mailboxes = mailboxes;
         }
 
-        var mailbox = null;
-        if (accountId != null) {
-            mailbox = _.findWhere(mailboxes, {accountId:accountId, email:email});
-        } else {
-            mailbox = _.findWhere(mailboxes, {email:email});
-        }
+        var mailbox = _.findWhere(mailboxes, {email:email});
 
         if (mailbox == null) {
             mailbox = {
                 _id: $$.u.idutils.generateUniqueAlphaNumeric(),
-                accountId: accountId,
                 email:email
             };
             mailboxes.push(mailbox);
@@ -912,27 +912,32 @@ var user = $$.m.ModelBase.extend({
         if (!String.isNullOrEmpty(label)) { mailbox.label = label; }
         if (!String.isNullOrEmpty(emailType)) { mailbox.emailType = emailType; }
         if (!String.isNullOrEmpty(emailServer)) { mailbox.emailServer = emailServer; }
-        if (port != null) { mailbox.port = port; }
+        if (port != null && port > 0) { mailbox.port = port; }
 
         return mailbox;
     },
 
 
-    removeEmailSource: function(type, sourceId) {
-        var emailSources = this.get("emailSources");
-        if (emailSources == null) {
+    removeEmailSource: function(id) {
+        var userAccounts = this.get("accounts");
+        if (userAccounts == null || userAccounts.length == 0) {
             return null;
         }
 
-        var source = _.findWhere(emailSources, {type:type, sourceId:sourceId});
-        if (source != null) {
-            emailSources = _.without(emailSources, [source]);
+        for (var i = 0, l = userAccounts.length; i < l; i++) {
+            if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
+                var emailSource = _.findWhere(userAccounts[i].emailSources, {_id:id});
+                if (emailSource != null) {
+                    userAccounts[i].emailSources = _.without(userAccounts[i].emailSources, emailSource);
+                    return;
+                }
+            }
         }
     },
 
 
-    removeMailboxForSource: function(type, sourceId, email) {
-        var emailSource = this.getEmailSourceByTypeAndSourceId(type, sourceId);
+    removeMailboxForSource: function(id, email) {
+        var emailSource = this.getEmailSource(id);
 
         if (emailSource == null || emailSource.mailboxes == null || emailSource.mailboxes.length == 0) {
             return;

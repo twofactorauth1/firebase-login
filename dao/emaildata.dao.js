@@ -1,10 +1,8 @@
 var baseDao = require('./base.dao');
 requirejs('constants/constants');
 var userDao = require('./user.dao');
-var contextioConfig = require('../configs/context.io.config');
+var contextioDao = require('./integrations/contextio.dao');
 var emailServerConfig = require('../configs/emailservers.config');
-
-var ContextIO = require('contextio');
 
 var dao = {
 
@@ -13,130 +11,39 @@ var dao = {
         defaultModel: null
     },
 
-    contextIO: new ContextIO.Client("2.0", contextioConfig.keys),
 
-
-    getAllContextIOAccounts: function(fn) {
-        this.contextIO.accounts().get(function(err, resp) {
-            if (err) {
-                return fn(err, resp);
-            }
-            fn(err, resp.body);
-        });
-    },
-
-
-    getContextIOAccountById: function(id, fn) {
-        this.contextIO.accounts(id).get(function(err, resp) {
-            if (err) {
-                return fn(err, resp);
-            }
-            fn(err, resp.body);
-        })
-    },
-
-
-    getContextIOAccountsByEmail: function(email, fn) {
-        this.contextIO.accounts().get({email:email}, function(err, resp) {
-            if (err) {
-                return fn(err, resp);
-            }
-            fn(err, resp.body);
-        });
-    },
-
-
-    createContextIOAccountAndMailboxForUser: function(user, accountId, email, username, password, emailType, imapServer, port, fn) {
-        if (_.isFunction(imapServer)) {
-            fn = imapServer;
-            imapServer = null;
-            port = null;
-
-            var emailSource = emailServerConfig.getByEmailType(emailType);
-            if (emailSource == null) {
-                return fn($$.u.errors.createError(403, "Error creating ContextIO Account", "Email type not recognized and no imap server or port provided"));
-            }
-            imapServer = emailServerConfig.getIMAPServer(emailType);
-            port = emailServerConfig.getIMAPPort(emailType);
+    removeEmailSource: function(user, id, fn) {
+        var emailSource = user.getEmailSource(id);
+        if (emailSource == null) {
+            process.nextTick(function() {
+               fn(null);
+            });
+            return;
         }
 
-
-        var postOptions = {
-            email: email,
-            username: username,
-            password: password,
-            first_name: user.get("first"),
-            last_name: user.get("last"),
-            server: imapServer,
-            port:port,
-            use_ssl: 1,
-            type: "IMAP",
-            expunge_on_deleted_flag: 1,
-            sync_flags: 1
-        };
-
-        this.contextIO.accounts().post(postOptions, function(err, value, request) {
-            if (err) {
-                return fn(err, value);
-            }
-
-            var isSuccess = value.success;
-            if (isSuccess === false) {
-                var msg = "";
-                if (value.feedback_code) {
-                    msg += value.feedback_code + ": ";
-                }
-                if (value.connection_log) {
-                    msg += value.connection_log;
-                }
-
-                var error = $$.u.errors.createError(500, "Account not created", msg);
-                return fn(error);
-            }
-
-            value = value.body;
-            var id = value.id;
-            var resourceUrl = value.resource_url;
-
-            var source = {};
-            if (value.source) {
-                source.label = value.source.label;
-                source.resourceUrl = value.source.resource_url;
-            }
-
-            var emailSource = user.createOrUpdateEmailSource($$.constants.email_sources.CONTEXTIO, id, null, email);
-            if (value.source != null) {
-                user.createOrUpdateMailboxForSource(emailSource._id, accountId, email, emailType, source.label, imapServer, port);
-            }
-
-            userDao.saveOrUpdate(user, function(err, value) {
-                if (!err) {
-                    return fn(null, emailSource);
-                } else {
-                    return fn(err, value);
-                }
-            })
-        });
-    },
-
-
-    removeContextIOAccount: function(user, contextIOAccountId, fn) {
-        this.contextIO.accounts(contextIOAccountId).delete(function(err, value, request) {
+        var fxn = function(err, value) {
             if (!err) {
-                user.removeEmailSource($$.constants.email_sources.CONTEXTIO, contextIOAccountId);
+                user.removeEmailSource(id);
                 userDao.saveOrUpdate(user, function(err, value) {
-                   if (err) {
-                       return fn(err, value);
-                   } else {
-                       return fn(null);
-                   }
+                    if (err) {
+                        return fn(err, value);
+                    } else {
+                        return fn(null);
+                    }
                 });
             } else {
                 fn(err, value);
             }
-        });
-    }
+        };
 
+        switch(emailSource.type) {
+            case $$.constants.email_sources.CONTEXTIO:
+                contextioDao.removeContextIOAccount(emailSource.providerId, fxn);
+                break;
+            default:
+                return process.nextTick(fn(null));
+        }
+    }
 };
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();

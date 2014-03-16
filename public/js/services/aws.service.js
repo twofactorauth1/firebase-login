@@ -5,7 +5,7 @@ define([], function () {
     var awsService = {
         getS3SignedRequest: function (bucket, resource) {
             var deferred = $.Deferred();
-            var url = $$.api.getApiUrl("s3", "credentials/download/" + bucket + "/" + resource, null, null);
+            var url = $$.api.getApiUrl("integrations/aws", "credentials/download/" + bucket + "/" + resource, null, null);
             $.get(url)
                 .done(function (data, status, jqhhr) {
                     deferred.resolve(data);

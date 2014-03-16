@@ -1,6 +1,7 @@
 var app = require('../app');
 var testHelpers = require('../testhelpers/testhelpers');
 var emailDataDao = require('../dao/emaildata.dao');
+var contextioDao = require('../dao/integrations/contextio.dao');
 
 module.exports.group = {
     setUp: function(cb) {
@@ -41,7 +42,7 @@ module.exports.group = {
     testForAccountExistence: function(test) {
         var self = this;
         console.log("TESTING ACCOUNT EXISTENCE");
-        emailDataDao.getContextIOAccountsByEmail(this.emailAddress, function(err, value) {
+        contextioDao.getContextIOAccountsByEmail(this.emailAddress, function(err, value) {
             if (err) {
                 test.ok(false, "Could not retrieve ContextIO Accounts for email address: " + err.toString());
             } else {
@@ -59,7 +60,9 @@ module.exports.group = {
         var self = this;
 
         var deferred = $.Deferred();
-        emailDataDao.createContextIOAccountAndMailboxForUser(this.user, null, this.emailAddress, this.emailAddress, this.emailPass, this.emailType, function(err, value) {
+        var userAccount = this.user.get("accounts")[0];
+
+        contextioDao.createContextIOAccountAndMailboxForUser(this.user, userAccount.accountId, this.emailAddress, this.emailAddress, this.emailPass, this.emailType, function(err, value) {
             if (err) {
                 test.ok(false, "Failed to create ContextIO Account and Mailbox");
                 deferred.reject();
@@ -73,7 +76,7 @@ module.exports.group = {
         $.when(deferred)
             .done(function() {
                 console.log("TESTING CONTEXTIO ACCOUNT REMOVAL");
-                emailDataDao.removeContextIOAccount(self.user, self.contextIOAccount.sourceId, function(err, value) {
+                emailDataDao.removeEmailSource(self.user, self.contextIOAccount._id, function(err, value) {
                     if (err) {
                         test.ok(false, "Failed to remove ContextIO Account with id: " + self.contextIOAccount.sourceId);
                         test.done();
