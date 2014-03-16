@@ -45,12 +45,8 @@ module.exports = function(grunt) {
                 files: { 'public/js/compiled/templates.js' : [ 'hbs/*/*.hbs'] } //compiled/templates.js
             },
             account: {
-                files: { 'public/js/compiled/account/templates.js' : [ 'hbs/account/**/*.hbs' ]}
+                files: { 'public/js/compiled/account/templates.js' : [ 'hbs/account/**/*.hbs' ]} //compiled/account/templates.js
             }
-            //This is how to comile other modules in any subdirectories of /templates
-            //apps: {
-            //    files: { 'public/js/compiled/apps/templates.js' : [ 'hbs/apps/**/*.hbs'] } //compiled/apps/templates/js
-            //}
         },
 
         clean: {
@@ -64,7 +60,7 @@ module.exports = function(grunt) {
                 src: ["../indigeweb-release"]
             },
             prebuild: {
-                //src: ["../indigeweb-release/public/css"] //don't remove css files
+
             },
             postbuild: {
                 src: ["../indigeweb-release/public/less", "../indigeweb-release/public/js", "../indigeweb-release/deploy",/*"../indigeweb-release/node_modules",*/"../indigeweb-release/Logs/*.log","../indigeweb-release/Logs/*.log-*"]
@@ -124,6 +120,13 @@ module.exports = function(grunt) {
                     ]
                 }
             }
+        },
+
+
+        //TESTING
+        nodeunit: {
+            all:['test/**/*_test.js'],
+            contextio:['test/contextio_test.js']
         }
     });
 
@@ -132,10 +135,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
+    grunt.loadNpmTasks('grunt-contrib-nodeunit');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
     grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
 
+    grunt.registerTask('tests', ['nodeunit:all']);
+    grunt.registerTask('testContextio', ['nodeunit:contextio']);
 };
