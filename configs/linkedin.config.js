@@ -10,7 +10,7 @@ module.exports = {
 
 
     getScope: function() {
-        return ['r_emailaddress', 'r_basicprofile'];
+        return ['r_emailaddress', 'r_basicprofile', 'r_network', 'r_contactinfo'];
     }
 };
 

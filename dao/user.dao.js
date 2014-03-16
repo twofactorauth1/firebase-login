@@ -33,6 +33,11 @@ var dao = {
 
 
     createUserFromUsernamePassword: function(username, password, email, accountToken, fn) {
+        if (_.isFunction(accountToken)) {
+            fn = accountToken;
+            accountToken = null;
+        }
+
         var self = this;
         this.getUserByUsername(username, function(err, value) {
             if (err) {
@@ -145,37 +150,47 @@ var dao = {
                         user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                         user.createUserAccount(accountId, email, null, ["super","admin","member"]);
 
-                        var social = $$.constants.social.types;
-
-                        var fxn = function(err, value) {
-                            if (!err) {
-                                self.saveOrUpdate(value, fn);
-                            } else {
-                                self.saveOrUpdate(user, fn);
-                            }
-                        };
-
-                        switch(socialType) {
-                            case social.FACEBOOK:
-                                var facebookDao = require('./social/facebook.dao')
-                                facebookDao.refreshUserFromProfile(user, true, fxn);
-                                break;
-                            case social.TWITTER:
-                                self.saveOrUpdate(user, fn);
-                                break;
-                            case social.GOOGLE:
-                                var googleDao = require('./social/google.dao')
-                                googleDao.refreshUserFromProfile(user, true, fxn);
-                                break;
-                            case social.LINKDIN:
-                                self.saveOrUpdate(user, fn);
-                                break;
-                            default:
-                                self.saveOrUpdate(user, fn);
-                        }
+                        self.refreshFromSocialProfile(user, socialType, true, fn);
                     });
             });
         })
+    },
+
+
+    refreshFromSocialProfile: function(user, socialType, defaultPhoto, fn) {
+        var self = this;
+        if (_.isFunction(defaultPhoto)) {
+            fn = defaultPhoto;
+            defaultPhoto = false;
+        }
+
+        var social = $$.constants.social.types;
+
+        var fxn = function(err, value) {
+            if (!err) {
+                self.saveOrUpdate(value, fn);
+            } else {
+                self.saveOrUpdate(user, fn);
+            }
+        };
+
+        switch(socialType) {
+            case social.FACEBOOK:
+                var facebookDao = require('./social/facebook.dao');
+                return facebookDao.refreshUserFromProfile(user, defaultPhoto, fxn);
+            case social.TWITTER:
+                return fxn(null, user);
+            case social.GOOGLE:
+                var googleDao = require('./social/google.dao');
+                return googleDao.refreshUserFromProfile(user, defaultPhoto, fxn);
+            case social.LINKEDIN:
+                var linkedInDao = require('./social/linkedin.dao');
+                return linkedInDao.refreshUserFromProfile(user, defaultPhoto, fxn);
+            default:
+                return process.nextTick(function() {
+                    return fxn(null, user);
+                });
+        }
     },
 
 

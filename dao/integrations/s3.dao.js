@@ -1,6 +1,7 @@
-var baseDao = require('./base.dao');
-var awsConfigs = require('../configs/aws.config');
+var baseDao = require('../base.dao.js');
+var awsConfigs = require('../../configs/aws.config.js');
 var crypto = require('crypto');
+var appConfig = require('../../configs/app.config');
 
 var dao = {
 
@@ -36,8 +37,7 @@ var dao = {
         if (!redirectUrl) {
             redirectUrl = awsConfigs.DEFAULT_REDIRECT_URL;
         } else if (redirectUrl.indexOf("/") == 0) {
-            var configs = global.noderequire("./configs/configs.js");
-            var serverUrl = configs.server_url;
+            var serverUrl = appConfig.server_url;
 
             redirectUrl = serverUrl + redirectUrl;
         }

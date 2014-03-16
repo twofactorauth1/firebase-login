@@ -46,7 +46,7 @@ var dao = {
                 userDao.saveOrUpdate(user, fn);
             });
         } else {
-            fn("No refresh token found");
+            fn($$.u.errors._401_INVALID_CREDENTIALS, "No refresh token found");
         }
     },
 
@@ -141,7 +141,7 @@ var dao = {
         var accessToken = this._getAccessToken(user);
 
         if (socialId == null || accessToken == null) {
-            return fn("User is not linked to Google", "User is not linked to Google");
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to Google");
         }
 
         var url = this.CONTACT_API_URL + "default/full?alt=json&max-results=100000000&access_token=" + accessToken;
@@ -152,7 +152,7 @@ var dao = {
         this._makeAuthenticatedRequest(url, function(err, value) {
             if (!err) {
                 var list = value;
-                var entries = list.feed.entry;
+                var entries = list.feed.entry || [];
                 var updated = list.feed.updated.$t;
 
                 var processEntry = function(entry) {
@@ -279,8 +279,6 @@ var dao = {
             }
 
             googleBaggage.contacts.updated = params.updated;
-            userDao.saveOrUpdate(user);
-
 
             var googleId = self._getGoogleId(user);
             var _contacts = value;
@@ -330,7 +328,7 @@ var dao = {
                         async.series([
                             function(callback) {
                                 if (contactValues != null && contactValues.length > 0) {
-                                    async.each(contactValues, function(contact, cb) {
+                                    async.eachSeries(contactValues, function(contact, cb) {
 
                                         //Get reference to current Google Contact
                                         var googleContact = _.findWhere(items, {id:contact.getSocialId(socialType)});
@@ -359,7 +357,7 @@ var dao = {
                             function(callback) {
                                 //Iterate through remaining items
                                 if (items != null && items.length > 0) {
-                                    async.each(items, function(googleContact, cb) {
+                                    async.eachSeries(items, function(googleContact, cb) {
 
                                         var contact = new Contact({
                                             accountId: accountId,
@@ -368,6 +366,7 @@ var dao = {
 
                                         contact.createdBy(user.id(), socialType, googleId);
                                         updateContactFromContactObj(contact, googleContact);
+
                                         contactDao.saveOrMerge(contact, function(err, value) {
                                             if (err) {
                                                 self.log.error("An error occurred saving contact during Google import", err);
@@ -391,6 +390,8 @@ var dao = {
                                 });
                             } else {
                                 self.log.info("Google Contact Import Succeeded. " + totalImported + " imports");
+                                //Last step, save the user
+                                userDao.saveOrUpdate(user, function() {});
                                 fn(null);
                             }
                         });

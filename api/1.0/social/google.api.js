@@ -1,7 +1,6 @@
 var baseApi = require('../../base.api');
 var googleDao = require('../../../dao/social/google.dao');
 
-
 var api = function() {
     this.init.apply(this, arguments);
 };
@@ -84,7 +83,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
         if (accountId > 0) {
             googleDao.importContactsForUser(accountId, req.user, function(err, value) {
-                self.log.info("Google Contacts import succeeded");
+                if (err) {
+                    self.log.error("Google contacts import failed:", err);
+                } else {
+                    self.log.info("Google Contacts import succeeded");
+                }
             });
             resp.send("processing");
         } else {

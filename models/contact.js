@@ -68,6 +68,7 @@ var contact = $$.m.ModelBase.extend({
              *   type:int
              *   source: //  This will be the source of the contact.  For instance, if the contact was created from a Facebook import,
              *               the source is the Facebook ID of the user who's import originally created this contact
+             *   location: ""  //Location string
              *   emails: []
              *   photos: {
              *      square: ""
@@ -232,7 +233,7 @@ var contact = $$.m.ModelBase.extend({
     },
 
 
-    updateContactInfo: function(first, middle, last, photo, photoSquare, birthday) {
+    updateContactInfo: function(first, middle, last, photo, photoSquare, birthday, location) {
         var o = {};
 
         if (first != null) o.first = first;
@@ -241,6 +242,7 @@ var contact = $$.m.ModelBase.extend({
         if (photo != null) o.photo = photo;
         if (photoSquare != null) o.photoSquare = photoSquare;
         if (birthday != null) o.birthday = birthday;
+        if (location != null) o.location = location;
 
         this.set(o);
     },
@@ -258,24 +260,19 @@ var contact = $$.m.ModelBase.extend({
 
 
     getOrCreateDetails: function(type) {
-        var details = this.get("details");
-        if (details == null) {
-            details = [];
-            this.set({details:details});
-        }
+        var detail = this.getDetails(type);
 
-        var detail = _.find(details, function(_detail) { return _detail.type === type });
         if (detail == null) {
             detail = {
                 _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
                 type: type,
                 emails:[],
-                photo:"",
+                photos:{},
                 phones: [],
                 addresses: []
             };
 
-            details.push(detail);
+            this.get("details").push(detail);
         }
 
         return detail;
@@ -333,11 +330,17 @@ var contact = $$.m.ModelBase.extend({
     },
 
 
-    createOrUpdatePhone: function(detailsType, phoneType, phoneNumber, isDefault) {
-        var details = this.getOrCreateDetails(detailsType);
+    createOrUpdatePhone: function(type, phoneType, phoneNumber, isDefault) {
+        var details = this.getOrCreateDetails(type);
 
         details.phones = details.phones || [];
         var phones = details.phones;
+
+        if (isDefault == true) {
+            phones.forEach(function(phone) {
+                phone.default = false;
+            })
+        }
 
         var phone = _.findWhere(phones, {type:phoneType, number:phone});
         if (phone == null) {
@@ -354,7 +357,7 @@ var contact = $$.m.ModelBase.extend({
     },
 
 
-    createAddress: function(type, addressType, address, address2, city, state, zip, country, countryCode, displayName, lat, lon, defaulShipping, defaultBilling) {
+    createAddress: function(type, addressType, address, address2, city, state, zip, country, countryCode, displayName, lat, lon, defaultShipping, defaultBilling) {
         var obj = {
             _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
             type: addressType || "o",
@@ -368,7 +371,7 @@ var contact = $$.m.ModelBase.extend({
             displayName:displayName,
             lat:lat,
             lon:lon,
-            defaultShipping:defaulShipping,
+            defaultShipping:defaultShipping,
             defaultBilling:defaultBilling
         };
 
@@ -376,6 +379,76 @@ var contact = $$.m.ModelBase.extend({
         details.addresses = details.addresses || [];
 
         details.addresses.push(obj);
+    },
+
+
+    createOrUpdateAddress: function(type, addressType, address, address2, city, state, zip, country, countryCode, displayName, lat, lon, defaultShipping, defaultBilling) {
+        var existing = null;
+
+        var details = this.getOrCreateDetails(type);
+
+        details.addresses = details.addresses || [];
+
+        //first check displayName, as that may be all we have
+        existing = _.findWhere(details.addresses, {displayName: displayName });
+
+        if (existing != null || !String.isNullOrEmpty(address)) {
+            if (existing == null) {
+                existing = _.findWhere(details.addresses, { address: address });
+            }
+
+            if (existing != null) {
+                //We already have it, lets try to merge in remainder of details only if current address is empty
+                existing.type = existing.type || "o";
+                existing.address2 = String.isNullOrEmpty(existing.address2) ? address2 : existing.address2;
+                existing.city = String.isNullOrEmpty(existing.city) ? city : existing.city;
+                existing.state = String.isNullOrEmpty(existing.state) ? state : existing.state;
+                existing.country = String.isNullOrEmpty(existing.country) ? country : existing.country;
+                existing.countryCode = String.isNullOrEmpty(existing.countryCode) ? countryCode : existing.countryCode;
+                existing.displayName = String.isNullOrEmpty(existing.displayName) ? displayName : existing.displayName;
+                existing.lat = String.isNullOrEmpty(existing.lat) ? lat : existing.lat;
+                existing.lon = String.isNullOrEmpty(existing.lon) ? lat : existing.lon;
+            }
+        }
+
+        if (existing == null) {
+            existing = _.findWhere(details.addresses, { zip: zip });
+
+            //We have matched on zip code, if we have no existing address, lets try to fill it in.
+            if (existing != null && String.isNullOrEmpty(existing.address)) {
+                existing.type = existing.type || "o";
+                existing.address = address;
+                existing.address2 = String.isNullOrEmpty(address2) ? existing.address2 : address2;
+                existing.city = String.isNullOrEmpty(city) ? existing.city : city;
+                existing.state = String.isNullOrEmpty(state) ? existing.state : state;
+                existing.country = String.isNullOrEmpty(country) ? existing.country : country;
+                existing.countryCode = String.isNullOrEmpty(countryCode) ? existing.countryCode : countryCode;
+                existing.displayName = String.isNullOrEmpty(displayName) ? existing.displayName : displayName;
+                existing.lat = String.isNullOrEmpty(lat) ? existing.lat : lat;
+                existing.lon = String.isNullOrEmpty(lon) ? existing.lat : lon;
+                if (defaultShipping) existing.defaultShipping = true;
+                if (defaultBilling) existing.defaultBilling = true;
+            }
+        }
+
+        if (existing == null) {
+            //we haven't found a matching address, lets add it
+            var addressObj = {};
+            addressObj.type = addressType || "o";
+            addressObj.address = address;
+            addressObj.address2 = address2;
+            addressObj.city = city;
+            addressObj.state = state;
+            addressObj.country = country;
+            addressObj.countryCode = countryCode;
+            addressObj.displayName = displayName;
+            addressObj.lat = lat;
+            addressObj.lon = lon;
+            addressObj.defaultShipping = defaultShipping;
+            addressObj.defaultBilling = defaultBilling;
+
+            details.addresses.push(addressObj);
+        }
     },
 
 
@@ -392,7 +465,8 @@ var contact = $$.m.ModelBase.extend({
                     self.get("details").push(detail);
                 } else {
                     detail.photos = detail.photos || {};
-                    self.createOrUpdateDetails(detail.type, detail.source, detail.socialId, detail.photoMedium, detail.photoLarge, detail.photoSquare, detail.emails, detail.websites);
+                    self.createOrUpdateDetails(detail.type, detail.source, detail.socialId, detail.photoMedium,
+                        detail.photoLarge, detail.photoSquare, detail.emails, detail.websites);
 
                     if (detail.phones != null && detail.phones.length > 0) {
                         detail.phones.forEach(function(phone) {
@@ -405,59 +479,41 @@ var contact = $$.m.ModelBase.extend({
                             oDetails.addresses = detail.addresses;
                         } else {
                             detail.addresses.forEach(function(address) {
-                                //see if we already have an address with the same address
-                                var existing = null;
-
-                                //first check displayName, as that may be all we have
-                                existing = _.findWhere(oDetails.addresses, {displayName: address.displayName });
-
-                                if (existing != null || !String.isNullOrEmpty(address.address)) {
-                                    if (existing == null) {
-                                        existing = _.findWhere(oDetails.addresses, { address: address.address });
-                                    }
-
-                                    if (existing != null) {
-                                        //We already have it, lets try to merge in remainder of details only if current address is empty
-                                        existing.address2 = String.isNullOrEmpty(existing.address2) ? address.address2 : existing.address2;
-                                        existing.city = String.isNullOrEmpty(existing.city) ? address.city : existing.city;
-                                        existing.state = String.isNullOrEmpty(existing.state) ? address.state : existing.state;
-                                        existing.country = String.isNullOrEmpty(existing.country) ? address.country : existing.country;
-                                        existing.countryCode = String.isNullOrEmpty(existing.countryCode) ? address.countryCode : existing.countryCode;
-                                        existing.displayName = String.isNullOrEmpty(existing.displayName) ? address.displayName : existing.displayName;
-                                        existing.lat = String.isNullOrEmpty(existing.lat) ? address.lat : existing.lat;
-                                        existing.lon = String.isNullOrEmpty(existing.lon) ? address.lat : existing.lon;
-                                    }
-                                }
-
-                                if (existing == null) {
-                                    existing = _.findWhere(oDetails.addresses, { zip: address.zip });
-
-                                    //We have matched on zip code, if we have no existing address, lets try to fill it in.
-                                    if (existing != null && String.isNullOrEmpty(existing.address)) {
-                                        existing.address = address.address;
-                                        existing.address2 = String.isNullOrEmpty(address.address2) ? existing.address2 : address.address2;
-                                        existing.city = String.isNullOrEmpty(address.city) ? existing.city : address.city;
-                                        existing.state = String.isNullOrEmpty(address.state) ? existing.state : address.state;
-                                        existing.country = String.isNullOrEmpty(address.country) ? existing.country : address.country;
-                                        existing.countryCode = String.isNullOrEmpty(address.countryCode) ? existing.countryCode : address.countryCode;
-                                        existing.displayName = String.isNullOrEmpty(address.displayName) ? existing.displayName : address.displayName;
-                                        existing.lat = String.isNullOrEmpty(address.lat) ? existing.lat : address.lat;
-                                        existing.lon = String.isNullOrEmpty(address.lon) ? existing.lat : address.lon;
-                                        if (address.defaultShipping) existing.defaultShipping = true;
-                                        if (address.defaultBilling) existing.defaultBilling = true;
-                                    }
-                                }
-
-                                if (existing == null) {
-                                    //we haven't found a matching address, lets add it
-                                    oDetails.addresses.push(address);
-                                }
+                                self.createOrUpdateAddress(detail.type, address.type, address.address, address.address2,
+                                    address.city, address.state, address.zip, address.country, address.countryCode,
+                                    address.displayName, address.lat, address.lon, address.defaultShipping,
+                                    address.defaultBilling);
                             });
                         }
                     }
                 }
             });
         }
+    },
+
+
+    setPossibleDuplicate: function(contact) {
+        var dups = this.get("dups");
+        if (dups == null) {
+            dups = [];
+            this.set({dups:dups});
+        }
+
+        var self = this;
+        if (_.isArray(contact)) {
+            contact.forEach(function(duplicateContact) {
+                if(dups.indexOf(duplicateContact.id()) == -1){
+                    dups.push(duplicateContact.id());
+                }
+            });
+        } else {
+            var id = contact.id();
+            if (dups.indexOf(id) == -1) {
+                dups.push(id);
+            }
+        }
+
+        return contact;
     },
 
 

@@ -1,6 +1,6 @@
 var baseApi = require('../base.api');
 var formidable = require('formidable');
-var s3Dao = require('../../dao/s3.dao');
+var s3Dao = require('../../dao/integrations/s3.dao');
 var awsConfig = require('../../configs/aws.config');
 
 

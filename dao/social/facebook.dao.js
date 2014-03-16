@@ -31,9 +31,9 @@ var dao = {
         if (creds != null) {
             if (creds.expires != null && creds.expires < new Date().getTime()) {
                 //We are already expired!
-                return fn({error: {code:401, message: "Invalid Credentials"}}, "Invalid Credentials");
+                return fn($$.u.errors._401_INVALID_CREDENTIALS, "Invalid Credentials");
             }
-            else if (creds.expires == null || (creds.expires - new Date().getTime()) < ($$.u.dateutils.DAY * 14)) {
+            else if (creds.expires == null || (creds.expires - new Date().getTime()) < ($$.u.dateutils.DAY * 30)) {
                 //lets try to refresh the token
 
                 var url = this.GRAPH_API_URL + "oauth/access_token?" +
@@ -44,7 +44,9 @@ var dao = {
 
                 request(url, function(err, resp, body) {
                     if (err) {
-                        return fn({error: {code:401, message: "Invalid Credentials", raw: err}}, "Invalid Credentials")
+                        var error = _.clone($$.u.errors._401_INVALID_CREDENTIALS);
+                        error.raw = err;
+                        return fn(error, "Invalid Credentials")
                     }
 
                     body = querystring.parse(body);
@@ -65,7 +67,7 @@ var dao = {
                 return fn(null, null);
             }
         } else {
-            return fn("No Facebook credentials found");
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "No Facebook credentials found");
         }
     },
 
@@ -86,7 +88,7 @@ var dao = {
         var accessToken = this._getAccessToken(user);
         var socialId = this._getFacebookId(user);
         if (accessToken == null || socialId == null) {
-            return fn("No Credentials Found", "No Facebook credentials found");
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "No Facebook credentials found");
         }
 
         return this.getProfile(socialId, accessToken, fn);
@@ -143,7 +145,7 @@ var dao = {
         var accessToken = this._getAccessToken(user);
 
         if (socialId == null || accessToken == null) {
-            return fn("User is not linked to facebook", "User is not linked to facebook");
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
         }
 
         //var path = socialId + "/friends";
@@ -203,10 +205,14 @@ var dao = {
                         async.series([
                             function(callback) {
                                 if (contactValues != null && contactValues.length > 0) {
-                                    async.each(contactValues, function(contact, cb) {
+                                    async.eachSeries(contactValues, function(contact, cb) {
 
                                         //Get reference to current friend
                                         var facebookFriend = _.findWhere(items, {uid:contact.getSocialId(socialType)});
+
+                                        if (facebookFriend == null) {
+                                            console.log("facebook friend is null");
+                                        }
 
                                         //remove the contact from the items array so we don't process again
                                         items = _.without(items, facebookFriend);
@@ -232,7 +238,7 @@ var dao = {
                             function(callback) {
                                 //Iterate through remaining items
                                 if (items != null && items.length > 0) {
-                                    async.each(items, function(facebookFriend, cb) {
+                                    async.eachSeries(items, function(facebookFriend, cb) {
 
                                         var contact = new Contact({
                                             accountId: accountId,

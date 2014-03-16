@@ -32,6 +32,7 @@ var express = require('express')
 //---------------------------------------------------------
 _ = require('underscore');
 requirejs('utils/commonutils');
+require('./utils/errors');
 require('./utils/jsvalidate');
 var deferred = require("jquery-deferred");
 if (typeof $ == 'undefined') {
@@ -146,8 +147,9 @@ app.configure('production', function() {
 //-----------------------------------------------------
 //  START LISTENING
 //-----------------------------------------------------
+servers = [];  //global
 var setUpListener = function(app) {
-    app.listen(appConfig.port, function(){
+    var server = app.listen(appConfig.port, function(){
         log.info("Express server listening on port " + appConfig.port);
         if (cluster != null) {
             if (cluster.worker != null) {
@@ -155,6 +157,8 @@ var setUpListener = function(app) {
             }
         }
     });
+
+    servers.push(server);
 };
 
 

@@ -47,5 +47,8 @@ grunt production
 # rename /min to /js directory
 mv public/min public/js
 
+# run tests
+grunt tests
+
 # deploy to modulus
 modulus deploy

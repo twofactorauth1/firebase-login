@@ -8,7 +8,7 @@ define([], function () {
         LOCAL: "lo",
         FACEBOOK: "fb",
         TWITTER: "tw",
-        LINKDIN: "li",
+        LINKEDIN: "li",
         GOOGLE: "go",
         FULL_CONTACT: "fc",
 
@@ -38,6 +38,11 @@ define([], function () {
         },
 
 
+        email_sources: {
+            CONTEXTIO: "ctxtio"
+        },
+
+
         account: {
             company_types: {
                 PROFESSIONAL: 1,
@@ -59,7 +64,7 @@ define([], function () {
                 LOCAL: _socialTypes.LOCAL,
                 FACEBOOK: _socialTypes.FACEBOOK,
                 TWITTER: _socialTypes.TWITTER,
-                LINKDIN: _socialTypes.LINKDIN,
+                LINKEDIN: _socialTypes.LINKEDIN,
                 GOOGLE: _socialTypes.GOOGLE,
                 FULL_CONTACT: _socialTypes.FULL_CONTACT
             },
@@ -107,7 +112,7 @@ define([], function () {
                 LOCAL: _socialTypes.LOCAL,
                 FACEBOOK: _socialTypes.FACEBOOK,
                 TWITTER: _socialTypes.TWITTER,
-                LINKDIN: _socialTypes.LINKDIN,
+                LINKEDIN: _socialTypes.LINKEDIN,
                 GOOGLE: _socialTypes.GOOGLE
             }
         }

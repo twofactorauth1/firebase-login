@@ -1,5 +1,5 @@
-var baseApi = require('../base.api');
-var s3Dao = require('../../dao/s3.dao');
+var baseApi = require('../../base.api.js');
+var s3Dao = require('../../../dao/integrations/s3.dao.js');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -7,7 +7,7 @@ var api = function () {
 
 _.extend(api.prototype, baseApi.prototype, {
 
-    base: "aws",
+    base: "integrations/aws",
 
     dao: s3Dao,
 

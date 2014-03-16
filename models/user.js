@@ -12,6 +12,7 @@ var user = $$.m.ModelBase.extend({
             first: "",
             last: "",
             gender: null, //m|f
+            birthday: "",
             _v: "0.1",
 
             created: {
@@ -38,12 +39,31 @@ var user = $$.m.ModelBase.extend({
              *  accountId:int,
              *  username:string,
              *  password:string
-             *  credentials: [
+             *  credentials: [{
              *      type:int,
              *      username:string     //Local only
              *      password:string,    //Local only
-             *  ],
+             *  }],
+             *
              *  permissions: [ super, admin, member ],
+             *
+             *  emailSources: [{
+             *      _id:"",
+             *      type: ""  e.g. $$.constants.email_sources.CONTEXTIO
+             *      providerId: null,
+             *      label: null,
+             *      primaryEmail: "",
+             *
+             *      mailboxes: [{
+             *          _id:"",
+             *          email: "",
+             *          label: null,
+             *          emailType: null  //e.g. "gmail", "outlook", "yahoo", etc.
+             *          emailServer: ""
+             *          port: int,
+             *      }]
+             *  ]},
+             *
              *  baggage: {}
              * }]
              */
@@ -62,7 +82,56 @@ var user = $$.m.ModelBase.extend({
              *  baggage: {}
              * }]
              */
-            credentials: []
+            credentials: [],
+
+
+            /**
+             * [{
+             *   _id:"",
+             *   socialId:"",  //The social Id from where these details came
+             *   type:int,     //The social network from where this information originated, or local
+             *
+             *   websites:[]
+             *
+             *   phones: [{
+             *       _id:"",
+             *       type: string "m|w|h|o" //mobile, work, home, other
+             *       number: string,
+             *       default: false
+             *   }],
+             *
+             *   addresses: [{
+             *       _id:""
+             *       type: string "w|h|o"
+             *       address:string
+             *       address2:string
+             *       city:string
+             *       state:string
+             *       zip:string
+             *       country:string,
+             *       countryCode:string
+             *       displayName:string,
+             *       lat:"",
+             *       lon:"",
+             *       defaultShipping: false
+             *       defaultBilling: false
+             *   }],
+             *
+             *   imAccounts: [{
+             *      _id:"",
+             *      type:"",        //the communication type (e.g. AOL, Skype, etc)
+             *      username:"",            the im account name
+             *   }]
+             *
+             *   socialNetworks: [{
+             *      _id:"",
+             *      type: the social network type (e.g.
+             *      socialId: "", //the social networks internal id
+             *      username: "", the social networks username
+             *   }]
+             * }]
+             */
+            details: []
         };
     },
 
@@ -129,6 +198,303 @@ var user = $$.m.ModelBase.extend({
             return this.get("first") + this.get("last") == null ? "" : (" " + this.get("last"));
         } else {
             return this.get("username");
+        }
+    },
+    //endregion
+
+
+    //region Profile
+    updateProfileInformation: function(email, firstName, lastName, gender, birthday, overwrite) {
+        var obj = {
+            email:email,
+            first:firstName,
+            last:lastName,
+            gender:gender,
+            birthday:birthday
+        };
+
+        for (var key in obj) {
+            if (!String.isNullOrEmpty(obj[key]) && (overwrite || String.isNullOrEmpty(this.get(key)))) {
+                this.set(key, obj[key]);
+            }
+        }
+    },
+    //endregion
+
+
+    //region DETAILS
+    getDetails: function(type) {
+        var details = this.get("details");
+        if (details == null) {
+            details = [];
+            this.set({details:details});
+        }
+
+        return _.find(details, function(_detail) { return _detail.type === type });
+    },
+
+
+    getOrCreateDetails: function(type) {
+        var detail = this.getDetails(type);
+
+        if (detail == null) {
+            detail = {
+                _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                type: type,
+                emails:[],
+                photo:"",
+                phones: [],
+                addresses: []
+            };
+
+            this.get("details").push(detail);
+        }
+
+        return detail;
+    },
+
+
+    updateDetails: function(type, socialId) {
+        if (String.isNullOrEmpty(socialId) == false) {
+            var detail = this.getOrCreateDetails(type);
+            detail.socialId = socialId;
+        }
+    },
+
+
+    updateWebsites: function(type, websites) {
+        var details = this.getOrCreateDetails(type);
+
+        if (websites != null) {
+            details.websites = details.websites || [];
+            if (_.isString(websites)) {
+                if (details.websites.indexOf(websites) == -1) {
+                    details.websites.push(websites);
+                }
+            } else {
+                for (var i = 0; i < websites.length; i++) {
+                    if (details.websites.indexOf(websites[i]) == -1) { details.websites.push(websites[i]); }
+                }
+            }
+        }
+    },
+
+
+    createOrUpdatePhone: function(type, phoneType, phoneNumber, isDefault) {
+        var details = this.getOrCreateDetails(type);
+
+        details.phones = details.phones || [];
+        var phones = details.phones;
+
+        if (isDefault == true) {
+            phone.forEach(function(phone) {
+                phone.default = false;
+            })
+        }
+
+        var phone = _.findWhere(phones, {type:phoneType, number:phone});
+        if (phone == null) {
+            phone = {
+                _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                type: phoneType,
+                number: phoneNumber,
+                default: isDefault
+            };
+            phones.push(phone);
+        } else {
+            phone.default = isDefault;
+        }
+    },
+
+
+    createOrUpdateAddress: function(type, addressType, address, address2, city, state, zip, country, countryCode, displayName, lat, lon, defaultShipping, defaultBilling) {
+        var existing = null;
+
+        var details = this.getOrCreateDetails(type);
+
+        details.addresses = details.addresses || [];
+
+        //first check displayName, as that may be all we have
+        existing = _.findWhere(details.addresses, {displayName: displayName });
+
+        if (existing != null || !String.isNullOrEmpty(address)) {
+            if (existing == null) {
+                existing = _.findWhere(details.addresses, { address: address });
+            }
+
+            if (existing != null) {
+                //We already have it, lets try to merge in remainder of details only if current address is empty
+                existing.type = existing.type || "o";
+                existing.address2 = String.isNullOrEmpty(existing.address2) ? address2 : existing.address2;
+                existing.city = String.isNullOrEmpty(existing.city) ? city : existing.city;
+                existing.state = String.isNullOrEmpty(existing.state) ? state : existing.state;
+                existing.country = String.isNullOrEmpty(existing.country) ? country : existing.country;
+                existing.countryCode = String.isNullOrEmpty(existing.countryCode) ? countryCode : existing.countryCode;
+                existing.displayName = String.isNullOrEmpty(existing.displayName) ? displayName : existing.displayName;
+                existing.lat = String.isNullOrEmpty(existing.lat) ? lat : existing.lat;
+                existing.lon = String.isNullOrEmpty(existing.lon) ? lat : existing.lon;
+            }
+        }
+
+        if (existing == null) {
+            existing = _.findWhere(details.addresses, { zip: zip, type: type });
+
+            //We have matched on zip code, if we have no existing address, lets try to fill it in.
+            if (existing != null && String.isNullOrEmpty(existing.address)) {
+                existing.type = existing.type || "o";
+                existing.address = address;
+                existing.address2 = String.isNullOrEmpty(address2) ? existing.address2 : address2;
+                existing.city = String.isNullOrEmpty(city) ? existing.city : city;
+                existing.state = String.isNullOrEmpty(state) ? existing.state : state;
+                existing.country = String.isNullOrEmpty(country) ? existing.country : country;
+                existing.countryCode = String.isNullOrEmpty(countryCode) ? existing.countryCode : countryCode;
+                existing.displayName = String.isNullOrEmpty(displayName) ? existing.displayName : displayName;
+                existing.lat = String.isNullOrEmpty(lat) ? existing.lat : lat;
+                existing.lon = String.isNullOrEmpty(lon) ? existing.lat : lon;
+                if (defaultShipping) existing.defaultShipping = true;
+                if (defaultBilling) existing.defaultBilling = true;
+            }
+        }
+
+        if (existing == null) {
+            //we haven't found a matching address, lets add it
+            var addressObj = {};
+            addressObj.type = addressType || "o";
+            addressObj.address = address;
+            addressObj.address2 = address2;
+            addressObj.city = city;
+            addressObj.state = state;
+            addressObj.country = country;
+            addressObj.countryCode = countryCode;
+            addressObj.displayName = displayName;
+            addressObj.lat = lat;
+            addressObj.lon = lon;
+            addressObj.defaultShipping = defaultShipping;
+            addressObj.defaultBilling = defaultBilling;
+
+            details.addresses.push(addressObj);
+        }
+    },
+
+    createOrUpdateImAccount: function(type, imAccountType, username) {
+        var details = this.getOrCreateDetails(type);
+
+        details.imAccounts = details.imAccounts || [];
+
+        var imAccount = _.findWhere(details.imAccounts, {type: imAccountType});
+        if (imAccount == null) {
+            imAccount = {
+                _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                type: imAccountType,
+                username: username
+            };
+
+            details.imAccounts.push(imAccount);
+        } else {
+            if (!String.isNullOrEmpty(username)) {
+                imAccount.username = username;
+            }
+        }
+    },
+
+
+    createOrUpdateSocialNetwork: function(type, socialNetworkType, socialId, username) {
+        var details = this.getOrCreateDetails(type);
+
+        details.socialNetworks = details.socialNetworks || [];
+
+        var network = _.findWhere(details.socialNetworks, {type: socialNetworkType});
+        if (network == null) {
+            network = {
+                _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                type: socialNetworkType,
+                socialId: socialId,
+                username: username
+            };
+
+            details.socialNetworks.push(network);
+        } else {
+            if (!String.isNullOrEmpty(socialId)) {
+                network.socialId = socialId;
+            }
+
+            if (!String.isNullOrEmpty(username)) {
+                network.username = username;
+            }
+        }
+    },
+    //endregion
+
+
+    //region PHOTO
+    addOrUpdatePhoto: function(socialType, url, isDefault) {
+        var photos = this.get("profilePhotos");
+        if (photos == null) {
+            photos = [];
+            this.set({profilePhotos:photos});
+        }
+
+        var photo = this.getPhoto(socialType);
+
+        if (photo != null) {
+            photo.url = url;
+            photo.default = isDefault;
+        } else {
+            photo = {
+                type: socialType,
+                url: url,
+                default: isDefault
+            };
+        }
+
+        this.setPhoto(photo);
+    },
+
+
+    getPhoto: function(socialType) {
+        var photos = this.get("profilePhotos");
+        if (photos == null || photos.length === 0) {
+            return null;
+        }
+
+        return _.findWhere(photos, {type:socialType}) || null;
+    },
+
+
+    getDefaultPhoto: function() {
+        var photos = this.get("profilePhotos");
+        if (photos == null || photos.length === 0) {
+            return null;
+        }
+
+        if (photos.length == 1) {
+            return photos[0];
+        }
+
+        var defaultPhoto = _.findWhere(photos, {default:true});
+        return defaultPhoto || photos[0];
+    },
+
+
+    setPhoto: function(photo) {
+        var photos = this.get("profilePhotos");
+        if (photos == null) {
+            photos = [];
+            this.set({photos:photos});
+        }
+
+        var photoSet = false;
+        for(var i = 0; i < photos.length; i++) {
+            if (photos[i].type == photo.type) {
+                photos[i] = photo;
+                photoSet = true;
+            } else if(photo.default === true) {
+                photos[i].default = false;
+            }
+        }
+
+        if (photoSet === false) {
+            photos.push(photo);
         }
     },
     //endregion
@@ -299,6 +665,16 @@ var user = $$.m.ModelBase.extend({
     },
 
 
+    getAllAccountIds: function() {
+        var accounts = this.get("accounts");
+        if (accounts == null) {
+            return [];
+        }
+
+        return _.pluck(accounts, "accountId");
+    },
+
+
     createUserAccount: function (accountId, username, password, permissions) {
         if (_.isArray(password)) {
             permissions = password;
@@ -442,75 +818,134 @@ var user = $$.m.ModelBase.extend({
     //endregion
 
 
-    //region PHOTO
-    addOrUpdatePhoto: function(socialType, url, isDefault) {
-        var photos = this.get("photos");
-        if (photos == null) {
-            photos = [];
-            this.set({photos:photos});
-        }
+    //region EMAIL SOURCES
+    getAllEmailSources: function() {
+        var emailSources = [];
 
-        var photo = this.getPhoto(socialType);
-
-        if (photo != null) {
-            photo.url = url;
-            photo.default = isDefault;
-        } else {
-            photo = {
-                type: socialType,
-                url: url,
-                default: isDefault
-            };
-        }
-
-        this.setPhoto(photo);
-    },
-
-
-    getDefaultPhoto: function() {
-        var photos = this.get("photos");
-        if (photos == null || photos.length === 0) {
+        var userAccounts = this.get("accounts");
+        if (userAccounts == null || userAccounts.length == 0) {
             return null;
-        }
 
-        if (photos.length == 1) {
-            return photos[0];
-        }
-
-        var defaultPhoto = _.findWhere(photos, {default:true});
-        return defaultPhoto || photos[0];
-    },
-
-
-    getPhoto: function(socialType) {
-        var photos = this.get("photos");
-        if (photos == null || photos.length === 0) {
-            return null;
-        }
-
-        return _.findWhere(photos, {type:socialType}) || null;
-    },
-
-
-    setPhoto: function(photo) {
-        var photos = this.get("photos");
-        if (photos == null) {
-            photos = [];
-            this.set({photos:photos});
-        }
-
-        var photoSet = false;
-        for(var i = 0; i < photos.length; i++) {
-            if (photos[i].type == photo.type) {
-                photos[i] = photo;
-                photoSet = true;
-            } else if(photo.default === true) {
-                photos[i].default = false;
+            for (var i = 0, l = userAccounts.length; i < l; i++) {
+                if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
+                    emailSources.concat(userAccounts[i].emailSources);
+                }
             }
         }
+        return emailSources;
+    },
 
-        if (photoSet === false) {
-            photos.push(photo);
+
+    getEmailSource: function(id) {
+        var emailSources = this.getAllEmailSources;
+        return _.findWhere(emailSources, { _id: id });
+    },
+
+
+    getEmailSourceByType: function(accountId, type) {
+        var emailSources = this.getAllEmailSources;
+        var userAccount = this.getUserAccount(accountId);
+        if (userAccount == null || userAccount.emailSources == null || userAccount.emailSources.length == 0) {
+            return null;
+        }
+
+        return _.findWhere(userAccount.emailSources, {type:type});
+    },
+
+
+    createOrUpdateEmailSource: function(accountId, type, providerId, label, primaryEmail) {
+        var userAccount = this.getUserAccount(accountId);
+        if (userAccount == null) {
+            throw Error("User account does not exist with AccountID: " + accountId + " for user: " + this.id());
+        }
+
+        var emailSources = userAccount.emailSources;
+        if (emailSources == null) {
+            emailSources = [];
+            userAccount.emailSources = emailSources;
+        }
+
+        var emailSource = _.findWhere(emailSources, {type:type});
+        if (emailSource == null) {
+            emailSource = {
+                _id: $$.u.idutils.generateUniqueAlphaNumeric(),
+                accountId: accountId,
+                type: type,
+                providerId: providerId,
+                label: label,
+                primaryEmail: primaryEmail
+            };
+
+            emailSources.push(emailSource);
+        } else {
+            if (!String.isNullOrEmpty(providerId)) { emailSource.providerId = providerId; }
+            if (!String.isNullOrEmpty(label)) { emailSource.labeel = label; }
+            if (!String.isNullOrEmpty(primaryEmail)) { emailSource.primaryEmail = primaryEmail; }
+        }
+
+        return emailSource;
+    },
+
+
+    createOrUpdateMailboxForSource: function(sourceId, email, emailType, label, emailServer, port) {
+        var emailSource = this.getEmailSource(sourceId);
+        if (emailSource == null) {
+            return null;
+        }
+
+        var mailboxes = emailSource.mailboxes;
+        if (mailboxes == null) {
+            mailboxes = [];
+            emailSource.mailboxes = mailboxes;
+        }
+
+        var mailbox = _.findWhere(mailboxes, {email:email});
+
+        if (mailbox == null) {
+            mailbox = {
+                _id: $$.u.idutils.generateUniqueAlphaNumeric(),
+                email:email
+            };
+            mailboxes.push(mailbox);
+        }
+
+        if (!String.isNullOrEmpty(label)) { mailbox.label = label; }
+        if (!String.isNullOrEmpty(emailType)) { mailbox.emailType = emailType; }
+        if (!String.isNullOrEmpty(emailServer)) { mailbox.emailServer = emailServer; }
+        if (port != null && port > 0) { mailbox.port = port; }
+
+        return mailbox;
+    },
+
+
+    removeEmailSource: function(id) {
+        var userAccounts = this.get("accounts");
+        if (userAccounts == null || userAccounts.length == 0) {
+            return null;
+        }
+
+        for (var i = 0, l = userAccounts.length; i < l; i++) {
+            if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
+                var emailSource = _.findWhere(userAccounts[i].emailSources, {_id:id});
+                if (emailSource != null) {
+                    userAccounts[i].emailSources = _.without(userAccounts[i].emailSources, emailSource);
+                    return;
+                }
+            }
+        }
+    },
+
+
+    removeMailboxForSource: function(id, email) {
+        var emailSource = this.getEmailSource(id);
+
+        if (emailSource == null || emailSource.mailboxes == null || emailSource.mailboxes.length == 0) {
+            return;
+        }
+
+        var mailbox = _.findWhere(emailSource.mailboxes, {email: email});
+        if (mailbox != null) {
+            emailSource.mailboxes = _.without(emailSource.mailboxes, [mailbox]);
         }
     },
     //endregion

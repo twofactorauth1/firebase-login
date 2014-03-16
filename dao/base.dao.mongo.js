@@ -1,12 +1,14 @@
 var mongoConfig = require('../configs/mongodb.config');
 var mongoskin = require('mongoskin');
-var mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {w:1});
+var mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {safe:true});
 
+$$.g.mongos = $$.g.monogs || [];
 var mongodao = {
 
     mongodatabase: mongodb,
 
     initMongo: function() {
+        $$.g.mongos.push(this.mongodatabase);
         //ensure we have our ID counters set up for this collection
         if (this.defaultModel != null) {
             if (this.getStorage() == "mongo") {
@@ -164,6 +166,9 @@ var mongodao = {
         }
 
         var self = this;
+        if (model.get("seq") != null) {
+            console.log("HAS SEQUENCE!");
+        }
         this.mongo(collection).save(model.toJSON("db"), function(err, result) {
             if (!err) {
                 if (fn != null) {
@@ -171,10 +176,30 @@ var mongodao = {
                 }
             } else {
                 if (fn != null) {
-                    fn(err, value);
+                    fn(err, result);
                 }
             }
         });
+    },
+
+
+    _removeMongo: function(model, fn) {
+        var collection = this.getTable(model);
+
+        this.mongo(collection).removeById(model.id(), fn);
+    },
+
+
+    _removeByIdMongo: function(id, type, fn) {
+        var self = this;
+
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+        this.mongo(collection).removeById(id, fn);
     },
 
 
@@ -197,18 +222,21 @@ var mongodao = {
             return;
         }
 
+        this._lockCollection(collection);
         this.mongo(collection).findAndModify(
-            { _id: "counter" },
+            { _id: "__counter__" },
             [],
             { $inc: { seq:1 } },
             { new: true, upsert: true },
             function(err, value) {
+                self._unlockCollection(collection);
                 if (!err && value != null && value.hasOwnProperty('seq')) {
                     if (fn != null) {
                         fn(null, value.seq);
                     }
                 } else {
                     if (fn != null) {
+                        self.log.error("An error occurred retrieving sequence");
                         fn(err, value);
                     }
                 }
@@ -272,7 +300,7 @@ var mongodao = {
         this._lockCollection(collection);
 
         this.mongo(collection).findAndModify(
-            { _id: "counter" },
+            { _id: "__counter__" },
             [],
             { $inc: { seq:0 } },
             { new: true, upsert: true },

@@ -1,4 +1,4 @@
-var BaseView = require('./base.view');
+var BaseView = require('./base.server.view');
 var userDao = require('../dao/user.dao');
 var authenticationDao = require('../dao/authentication.dao');
 

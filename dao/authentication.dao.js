@@ -128,7 +128,16 @@ var dao = {
                                 return fn("User not found for social profile", "User not found");
                             } else {
                                 value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
-                                return self.saveOrUpdate(value, fn);
+                                return self.saveOrUpdate(value, function(err, value) {
+                                    if (!err) {
+                                        userDao.refreshFromSocialProfile(value, socialType, function(err, value) {
+                                            //regardless of error, always return success
+                                            fn(null, value);
+                                        });
+                                    } else {
+                                        fn(err, value);
+                                    }
+                                });
                             }
                         });
                     } else {
@@ -155,7 +164,16 @@ var dao = {
                             }
 
                             value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
-                            return self.saveOrUpdate(value, fn);
+                            return self.saveOrUpdate(value, function(err, value) {
+                                if (!err) {
+                                    userDao.refreshFromSocialProfile(value, socialType, function(err, value) {
+                                        //regardless of error, always return success here.
+                                        fn(null, value);
+                                    });
+                                } else {
+                                    fn(err, value);
+                                }
+                            });
                         });
                     } else {
                         value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
