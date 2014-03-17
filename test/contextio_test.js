@@ -6,7 +6,7 @@ var contextioDao = require('../dao/integrations/contextio.dao');
 module.exports.group = {
     setUp: function(cb) {
 
-        console.log("SETTING UP");
+        console.log("SETTING UP CONTEXTIO_TEST");
         var self = this;
         this.emailAddress = "hostedlcr@gmail.com";
         this.emailPass = "JmiiooGWHWIU";
@@ -22,7 +22,7 @@ module.exports.group = {
     },
 
     tearDown: function(cb) {
-        console.log("TEARING DOWN");
+        console.log("TEARING DOWN CONTEXTIO_TEST");
         var self = this;
         testHelpers.destroyTestUser(this.user, function(err, value) {
             if (err) {
@@ -30,11 +30,6 @@ module.exports.group = {
             }
             self.user = null;
 
-            //testHelpers.shutDown();
-
-            if (self.testsComplete === true) {
-                testHelpers.shutDown();
-            }
             cb();
         });
     },
@@ -55,7 +50,6 @@ module.exports.group = {
     },
 
     testCreateAndRemoveContextIOAccount: function(test) {
-        this.testsComplete = true;
         console.log("TESTING CONTEXTIO ACCOUNT CREATION");
         var self = this;
 

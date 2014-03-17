@@ -27,6 +27,10 @@ module.exports = {
     },
 
     shutDown: function() {
+        return;
+
+        //This was only required when running from webstorm. When run from grunt or cmd line, it works
+        //and we don't need to close all the connections and shut down the server manually.
         this.closeDBConnections();
         if (servers != null) {
             var async = require('async');

@@ -819,26 +819,45 @@ var user = $$.m.ModelBase.extend({
 
 
     //region EMAIL SOURCES
-    getAllEmailSources: function() {
-        var emailSources = [];
-
-        var userAccounts = this.get("accounts");
-        if (userAccounts == null || userAccounts.length == 0) {
-            return null;
-
-            for (var i = 0, l = userAccounts.length; i < l; i++) {
-                if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
-                    emailSources.concat(userAccounts[i].emailSources);
-                }
-            }
-        }
-        return emailSources;
+    /**
+     * Retrieve Email Source By Id
+     *
+     * @param id
+     * @returns EmailSource object, or null
+     */
+    getEmailSource: function(id) {
+        var emailSources = this.getAllEmailSources();
+        return _.findWhere(emailSources, { _id: id });
     },
 
 
-    getEmailSource: function(id) {
-        var emailSources = this.getAllEmailSources;
-        return _.findWhere(emailSources, { _id: id });
+    /**
+     * @param accountId - optional paramater
+     *
+     * @returns Array of EmailSource objects.
+     */
+    getAllEmailSources: function(accountId) {
+        var emailSources = [];
+
+        var userAccounts = [];
+        if (accountId != null) {
+            var userAccount = this.getUserAccount(accountId);
+            if (userAccount != null) {
+                userAccounts.push(userAccount);
+            }
+        } else {
+            var userAccounts = this.get("accounts");
+        }
+
+        if (userAccounts == null || userAccounts.length == 0) {
+            return null;
+        }
+        for (var i = 0, l = userAccounts.length; i < l; i++) {
+            if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
+                emailSources = emailSources.concat(userAccounts[i].emailSources);
+            }
+        }
+        return emailSources;
     },
 
 

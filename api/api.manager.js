@@ -8,7 +8,6 @@ var emailDataApi = require('./1.0/emaildata.api');
 
 //Integrations
 var awsApi = require('./1.0//integrations/aws.api');
-var contextioApi = require('./1.0/integrations/contextio.api');
 
 //Social
 var facebookApi = require('./1.0/social/facebook.api');

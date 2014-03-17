@@ -113,7 +113,19 @@ _.extend(apiBase.prototype, {
     },
 
 
+    sendResultOrError: function(resp, err, value, errorMsg, errorCode) {
+        if (err) {
+            this.wrapError(resp, errorCode || 500, errorMsg, err, value);
+        } else {
+            this.sendResult(resp, value);
+        }
+    },
+
+
     sendResult: function(resp, result) {
+        if (result == null) {
+            result = {};
+        }
         if (_.isArray(result)) {
             var _arr = [];
             result.forEach(function(item) {
