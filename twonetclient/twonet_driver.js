@@ -1,5 +1,4 @@
 var uuid = require('node-uuid');
-_ = require('underscore');
 
 var twonetClient = require('../twonetclient');
 

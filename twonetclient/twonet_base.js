@@ -1,3 +1,5 @@
+_ = require('underscore');
+
 var twoNetBase = function() {
     this.init.apply(this, arguments);
 }

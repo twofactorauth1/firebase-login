@@ -12,6 +12,19 @@ _.extend(UserRegistration.prototype, TwoNetBase.prototype, {
 
     USER_UNREGISTER_ENDPOINT: String("/partner/user/delete/%s"),
 
+    /********************************************************************
+     * Registers a user with the 2net API
+     *
+     * Example Request:
+     * HTTP POST https://twonetcom.qualcomm.com/kernel/partner/register
+     * {"registerRequest":{"guid":"ca175c45-7112-4c69-af49-ab8f85abf75b"}}
+     *
+     * Example Response:
+     * {"trackGuidsResponse":{"status":{"code":1,"message":"OK"}}}
+     *
+     * @param user_guid uuid to register
+     * @param callback client callback
+     */
     register: function(user_guid, callback) {
 
         var body = JSON.stringify({registerRequest:{guid:user_guid}});
@@ -43,6 +56,19 @@ _.extend(UserRegistration.prototype, TwoNetBase.prototype, {
         req.end();
     },
 
+    /********************************************************************
+     * Un-registers a user with the 2net API
+     *
+     * Example Request (DELETE):
+     * HTTP DELETE: https://twonetcom.qualcomm.com/kernel/partner/user/delete/ca175c45-7112-4c69-af49-ab8f85abf75b
+     * (no data)
+     *
+     * Example Response:
+     * {"statusResponse":{"status":{"code":1,"message":"OK"}}}
+     *
+     * @param user_guid uuid to un-register
+     * @param callback client callback
+     */
     unregister: function(user_guid, callback) {
 
         var options = this.twonetOptions(this.HTTP_METHOD.DELETE,
