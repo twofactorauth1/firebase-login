@@ -23,55 +23,30 @@ var dao = {
 
 
     checkAccessToken: function(user, fn) {
-        var self = this;
-        var creds = user.getCredentials($$.constants.user.credential_types.TWITTER);
-        var accessToken = this._getAccessToken(user);
-        if (creds != null && accessToken != null) {
-            if (creds.expires != null && creds.expires < new Date().getTime()) {
-                //We are already expired!
-                return fn($$.u.errors._401_INVALID_CREDENTIALS, "Invalid Credentials");
-            }
-            else {
-                var path = "account/verify_credentials.json";
-                var url = this._generateUrl(path, accessToken);
-            }
-        } else {
-            return fn($$.u.errors._401_INVALID_CREDENTIALS, "No Twitter credentials found");
-        }
+        var path = "account/verify_credentials.json";
+        var url = this._generateUrl(path);
+
+        this._makeRequest(url, user, function(err, value) {
+            return fn(err, value);
+        });
     },
 
 
     getProfileForUser: function(user, fn) {
-        var accessToken = this._getAccessToken(user);
-        var socialId = this._getLInkedInId(user);
-        if (accessToken == null || socialId == null) {
-            return fn("No Credentials Found", "No LinkedIn credentials found");
-        }
+        var path = "users/show.json";
+        var params = {
+            user_id:this._getTwitterId(user)
+        };
 
-        return this.getProfile(socialId, accessToken, fn);
-    },
+        var url = this._generateUrl(path, params);
 
-
-    getProfile: function(profileId, accessToken, customFields, fn) {
-        if (_.isFunction(customFields)) {
-            fn = customFields;
-            customFields = null;
-        }
-
-        var fields = "first-name,last-name,email-address,picture-url,phone-numbers,main-address,twitter-accounts,im-accounts";
-        if (String.isNullOrEmpty(customFields) == false) {
-            fields = customFields;
-        }
-        var path = "~:(" + fields + ")";
-        var url = this._generateUrl(path, accessToken);
-
-        request(url, function(err, resp, body) {
-            if (!err) {
-                var profile = JSON.parse(body);
-                fn(null, profile);
-            } else {
-                fn(err, resp);
+        console.log(url);
+        this._makeRequest(url, user, function(err, value) {
+            if (err) {
+                return fn(err, value)p
             }
+            var profile = JSON.parse(value);
+            return fn(err, profile);
         });
     },
 
@@ -383,30 +358,51 @@ var dao = {
     },
 
 
-    _generateUrl: function(path, accessToken) {
+    _generateUrl: function(path, params) {
         var url = this.API_URL + path;
-        if (url.indexOf("?") == -1) {
-            url += "?";
-        } else {
-            url += "&";
+
+        if (params && _.isString(params) == false && Object.keys(params).length > 0) {
+            params = querystring.stringify(params);
         }
 
-        url += "format=json&oauth2_access_token=" + accessToken;
+        if (_.isObject(params)) {
+            params = "";
+        }
+        if (params != null && params.length > 0 && params.indexOf("?") == -1) {
+            url += "?";
+        }
+        url += params;
+
         return url;
     },
 
 
-    _makeRequest: function(url, accessToken) {
-        var consumerKey = twitterConfig.CLIENT_ID;
-        var nonce = $$.u.idutils.generateUUID().replace("-", "");
+    _makeRequest: function(url, user, fn) {
+        var oauth = new OAuth(
+            '',                      //REquest URL (not in use)
+            '',                      //Access URL (not in use)
+            twitterConfig.CLIENT_ID,
+            twitterConfig.CLIENT_SECRET,
+            '1.0',
+            '',                     //Callback URL, not in use
+            'HMAC-SHA1'
+        );
 
-        var method = "GET";
-        var baseUrl = url;
-        if (baseUrl.indexOf("?") > -1) {
-            baseUrl = baseUrl.substring(0, baseUrl.indexOf("?"));
+        var accessToken = this._getAccessToken(user);
+        var accessTokenSecret = this._getAccessTokenSecret(user);
+
+        if (accessToken == null || accessTokenSecret == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "Cannot make twitter request");
         }
 
-        var oauth = new OAuth()
+        oauth.get(url, accessToken, accessTokenSecret, function (err, body, response) {
+            console.log('URL [%s]', url);
+            if (!err && response.statusCode == 200) {
+                fn(null, body);
+            } else {
+                fn(err, response, body);
+            }
+        });
     }
 };
 
