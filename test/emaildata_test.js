@@ -1,13 +1,12 @@
 var app = require('../app');
 var testHelpers = require('../testhelpers/testhelpers');
-var testEmailConfig = require('../testhelpers/configs/test.email.config');
+var testEmailConfig = require('../testhelpers/configs/test.config.js').email;
 var emailDataDao = require('../dao/emaildata.dao');
 var contextioDao = require('../dao/integrations/contextio.dao');
 
 module.exports.group = {
     setUp: function(cb) {
 
-        console.log("SETTING UP EMAILDATA_TEST");
         var self = this;
         this.emailAddress = testEmailConfig.PRIMARY_EMAIL_ADDRESS;
         this.emailPass = testEmailConfig.PRIMARY_EMAIL_PASSWORD;
@@ -24,7 +23,6 @@ module.exports.group = {
     },
 
     tearDown: function(cb) {
-        console.log("TEARING DOWN EMAILDATA_TEST");
         var self = this;
         testHelpers.destroyTestUser(this.user, function(err, value) {
             if (err) {
@@ -71,7 +69,8 @@ module.exports.group = {
                 //Set timeout, otherwise ContextIO doesn't have enough time to index messages and a result with length 0 is returned.
                 setTimeout(function() {
                     var options = {
-                        email: testEmailConfig.PRIMARY_EMAIL_PARTNER
+                        email: testEmailConfig.PRIMARY_EMAIL_PARTNER,
+                        limit: 2
                     };
                     emailDataDao.getMessages(self.user, self.accountId, self.emailSource._id, options, function(err, value) {
                         if (err) {
@@ -80,6 +79,7 @@ module.exports.group = {
                         }
                         console.log("MESSAGES RETRIEVED: " + value.data.length);
                         if (value.data.length > 0) {
+                            test.equal(value.data.length, 2, "Single email message retrieved");
                             test.ok(true, "Retrieved one or more messages for email");
 
                             console.log("TESTING RETRIEVAL OF MESSAGE DETAILS");

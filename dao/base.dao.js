@@ -1,7 +1,7 @@
 var mongoBaseDao = require('./base.dao.mongo');
 var utils = requirejs("utils/commonutils");
 
-var baseDao = function() {
+var baseDao = function () {
 
 };
 
@@ -10,7 +10,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     name: "",
     model: null,
 
-    init: function() {
+    init: function () {
         this._log = $$.g.getLogger("base.dao");
         this.log = $$.g.getLogger(this.name || "base.dao");
 
@@ -20,10 +20,10 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    saveOrUpdate: function(model, fn) {
+    saveOrUpdate: function (model, fn) {
         if ((model.id() === null || model.id() === 0)) {
             var strategy = this.getIdStrategy(model);
-            switch(strategy) {
+            switch (strategy) {
                 case "uuid":
                     model.id($$.u.idutils.generateUUID());
                     break;
@@ -42,7 +42,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    remove: function(model, fn) {
+    remove: function (model, fn) {
         if (model.id() === null || model.id() === 0) {
             return fn(null, null);
         }
@@ -57,7 +57,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    removeById: function(id, type, fn) {
+    removeById: function (id, type, fn) {
         if (this.getStorage(type) === "mongo") {
             this._removeByIdMongo(id, type, fn);
         } else {
@@ -66,7 +66,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    getById: function(id, type, fn) {
+    getById: function (id, type, fn) {
         if (this.getStorage(type) === "mongo") {
             this._getByIdMongo(id, type, fn);
         } else {
@@ -75,7 +75,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    exists: function(query, type, fn) {
+    exists: function (query, type, fn) {
         if (this.getStorage(type) === "mongo") {
             this._existsMongo(query, type, fn);
         } else {
@@ -84,7 +84,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    findOne: function(query, type, fn) {
+    findOne: function (query, type, fn) {
         if (this.getStorage(type) === "mongo") {
             this._findOneMongo(query, type, fn);
         } else {
@@ -93,7 +93,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    findMany: function(query, type, fn) {
+    findMany: function (query, type, fn) {
         if (this.getStorage(type) === "mongo") {
             this._findManyMongo(query, type, fn);
         } else {
@@ -102,7 +102,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    findManyWithFields: function(query, fields, type, fn) {
+    findManyWithFields: function (query, fields, type, fn) {
         if (this.getStorage(type) === "mongo") {
             this._findManyWithFieldsMongo(query, fields, type, fn);
         } else {
@@ -111,11 +111,11 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    getStorage: function(type) {
+    getStorage: function (type) {
         if (type != null && type.hasOwnProperty != null) {
             if (type.hasOwnProperty("db")) {
                 return type.db.storage;
-            } else if(_.isFunction(type.db)) {
+            } else if (_.isFunction(type.db)) {
                 return type.storage();
             }
         }
@@ -123,11 +123,11 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    getTable: function(type) {
+    getTable: function (type) {
         if (type != null && type.hasOwnProperty != null) {
             if (type.hasOwnProperty("db")) {
                 return type.db.table;
-            } else if(_.isFunction(type.table)) {
+            } else if (_.isFunction(type.table)) {
                 return type.table();
             }
         }
@@ -135,11 +135,11 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    getIdStrategy: function(type) {
+    getIdStrategy: function (type) {
         if (type != null && type.hasOwnProperty != null) {
             if (type.hasOwnProperty("db")) {
                 return type.db.idStrategy || "increment";
-            } else if(_.isFunction(type.idStrategy)) {
+            } else if (_.isFunction(type.idStrategy)) {
                 return type.idStrategy();
             }
         }
@@ -147,18 +147,38 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     },
 
 
-    _isAuthenticationError: function(obj, fn) {
-        if (_.isObject(obj)) {
-            if (obj.error != null && obj.error.code != null && obj.error.code == 401) {
+    _isAuthenticationError: function (obj, fn) {
+        var error;
+
+        if (_.isString(obj) && obj.charAt(0) == "<") {
+            if (obj.indexOf("401") > -1) {
+                error = _.clone($$.u.errors._401_INVALID_CREDENTIALS);
+                error.raw = obj;
+                return fn(error, "Invalid Credentials");
+            }
+        } else if (_.isString(obj)) {
+            try {
+                obj = JSON.parse(obj);
+            } catch (exception) {
+            }
+        }
+
+        if (obj != null && _.isObject(obj)) {
+            var error;
+            if (_.isObject(obj.error)) {
+                obj = obj.error;
+            }
+            if (obj.code != null && obj.code == 401) {
                 return fn($$.u.errors._401_INVALID_CREDENTIALS, "Invalid Credentials");
             }
-        } else if(_.isString(obj) && obj.charAt(0) == "<") {
-            if (obj.indexOf("401") > -1) {
-                var error = _.clone($$.u.errors._401_INVALID_CREDENTIALS);
+
+            if (obj.type == "OAuthException" || obj.code == 401 || obj.code == "401" || obj.code == 190 || obj.code == "190") {
+                error = _.clone($$.u.errors._401_INVALID_CREDENTIALS);
                 error.raw = obj;
                 return fn(error, "Invalid Credentials");
             }
         }
+
         return fn(null, obj);
     }
 });

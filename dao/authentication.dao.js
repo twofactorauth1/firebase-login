@@ -14,7 +14,7 @@ var dao = {
 
     authenticateByUsernamePassword: function (req, username, password, fn) {
         var log = this.log;
-        log.error("Authenticating by username & password: " + username);
+        log.info("Authenticating by username & password: " + username);
         var host = req.get("host");
         accountDao.getAccountByHost(host, function (err, value) {
             if (err) {
@@ -23,35 +23,35 @@ var dao = {
 
             var account = value;
             if (account !== true && (account == null || account.id() == null || account.id() == 0)) {
-                log.error("No account found");
+                log.info("No account found with username: " + username);
                 return fn("Account not found", "No account found at this location");
             }
 
             //We are at the main indigenous level application, not at a custom subdomain
             else if (account === true) {
-                log.error("Logging into main App");
+                log.info("Logging into main App");
                 req.session.accountId = 0;
                 userDao.getUserByUsername(username, function (err, value) {
                     if (!err) {
                         if (value == null) {
-                            log.error("No user found");
+                            log.info("No user found");
                             return fn("User not found", "Incorrect username");
                         }
 
                         var user = value;
 
-                        log.error("Verifying password");
+                        log.info("Verifying password");
                         user.verifyPassword(password, $$.constants.user.credential_types.LOCAL, function (err, value) {
                             if (!err) {
                                 if (value === false) {
-                                    log.error("INcorrect password");
+                                    log.info("Incorrect password");
                                     return fn("Incorrect password", "Incorrect password");
                                 } else {
-                                    log.error("Login successful");
+                                    log.info("Login successful");
                                     return fn(null, user);
                                 }
                             } else {
-                                log.error("Error occurred verifying password");
+                                log.info("Error occurred verifying password");
                                 return fn(err, "An error occurred verifying password - " + err);
                             }
                         });
@@ -60,7 +60,7 @@ var dao = {
                     }
                 });
             } else {
-                log.error("logging into account with id: " + account.id());
+                log.info("logging into account with id: " + account.id());
                 req.session.accountId = account.id();
                 userDao.getUserForAccount(account.id(), username, function (err, value) {
                     if (err) {
@@ -68,22 +68,22 @@ var dao = {
                         return fn(err, "An error occurred retrieving user for account");
                     } else {
                         if (value == null) {
-                            log.error("User not found for account");
+                            log.info("User not found for account");
                             return fn("User not found for account", "Incorrect username");
                         } else {
-                            log.error("User found for account");
+                            log.info("User found for account");
                             var user = value;
                             user.verifyPasswordForAccount(account.id(), password, $$.constants.user.credential_types.LOCAL, function (err, value) {
                                 if (!err) {
                                     if (value === false) {
-                                        log.error("Incorrect password");
+                                        log.info("Incorrect password");
                                         return fn("Incorrect password", "Incorrect password");
                                     } else {
-                                        log.error("Authentication succeeded");
+                                        log.info("Authentication succeeded");
                                         return fn(null, user);
                                     }
                                 } else {
-                                    log.error("An error occurred verifying password", err);
+                                    log.info("An error occurred verifying password", err);
                                     return fn(err, "An error occurred verifying encrypted password");
                                 }
                             });

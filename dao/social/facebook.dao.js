@@ -20,6 +20,7 @@ var dao = {
     GRAPH_API_URL: "https://graph.facebook.com/",
 
 
+    //region ACCESS TOKEN
     getAppSecretProof: function(accessToken) {
         var proof = crypto.createHmac('sha256', facebookConfig.CLIENT_SECRET).update(accessToken).digest('hex');
         return "app_secret=" + proof;
@@ -82,8 +83,25 @@ var dao = {
             return self.getProfileForUser(user, fn);
         });
     },
+    //endregion
 
 
+    //region PERMISSIONS
+    getPermissions: function(user, fn) {
+        var accessToken = this._getAccessToken(user);
+        var socialId = this._getFacebookId(user);
+        if (accessToken == null || socialId == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "No Facebook credentials found");
+        }
+
+        var path = socialId + "/permissions";
+        var url = this._generateUrl(path, accessToken);
+        this._makeRequest(url, fn);
+    },
+    //endregion
+
+
+    //region PROFILE
     getProfileForUser: function(user, fn) {
         var accessToken = this._getAccessToken(user);
         var socialId = this._getFacebookId(user);
@@ -96,19 +114,12 @@ var dao = {
 
 
     getProfile: function(profileId, accessToken, fn) {
+        var self = this;
         var fields = "email,picture,first_name,last_name,middle_name,name,username";
 
         var path = profileId + "?fields=" + fields;
         var url = this._generateUrl(path, accessToken);
-
-        request(url, function(err, resp, body) {
-            if (!err) {
-                var profile = JSON.parse(body);
-                fn(null, profile);
-            } else {
-                fn(err, resp);
-            }
-        });
+        this._makeRequest(url, fn);
     },
 
 
@@ -138,8 +149,10 @@ var dao = {
             }
         });
     },
+    //endregion
 
 
+    //region FRIENDS & IMPORT
     getFriendsForUser: function(user, fn) {
         var socialId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
@@ -152,15 +165,7 @@ var dao = {
         var query = "SELECT uid, name, first_name, last_name, email, pic, pic_big, pic_square, website, birthday FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = " + socialId + ") ORDER BY name";
         var path = "fql?q=" + query;
         var url = this._generateUrl(path, accessToken);
-
-        request(url, function(err, resp, body) {
-            if (!err) {
-                var list = JSON.parse(body);
-                return fn(null, list);
-            } else {
-                return fn(err, resp);
-            }
-        });
+        this._makeRequest(url, fn);
     },
 
 
@@ -278,8 +283,114 @@ var dao = {
             })(_friends, 1);
         });
     },
+    //endregion
 
 
+    //region STREAM
+    getUserStream: function(user, socialId, fn) {
+        var key = "feed";
+        return this._getStreamPart(user, socialId, key, fn);
+    },
+
+
+    getUserPosts: function(user, socialId, fn) {
+        var key = "posts";
+        return this._getStreamPart(user, socialId, key, fn);
+    },
+
+
+    getUserStatuses: function(user, socialId, fn) {
+        var key = "statuses";
+        return this._getStreamPart(user, socialId, key, fn);
+    },
+
+
+    getUserTagged: function(user, socialId, fn) {
+        var key = "tagged";
+        return this._getStreamPart(user, socialId, key, fn);
+    },
+
+
+    _getStreamPart: function(user, socialId, key, fn) {
+        var self = this;
+        var accessToken = this._getAccessToken(user);
+
+        if (accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+
+        var path = socialId + "/" + key + "?limit=500";
+        var url = this._generateUrl(path, accessToken);
+
+        return this._makeRequest(url, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            return fn(null, value.data);
+        });
+    },
+
+
+    getMessagesWithFriend: function(user, socialId, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        if (accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+
+        var query1 = "SELECT author_id, thread_id, body, created_time FROM message WHERE thread_id IN (SELECT thread_id FROM thread WHERE folder_id = 1 AND (" + socialId + " IN (recipients) OR originator = " + socialId + ")) ORDER BY created_time DESC";
+        var query2 = "SELECT first_name, middle_name, last_name, uid from user where uid in (select author_id from message where thread_id IN (SELECT thread_id FROM thread WHERE folder_id = 1 AND (" + socialId + " IN (recipients) OR originator = " + socialId + ")))";
+
+        var path1 = "fql?q=" + query1;
+        var path2 = "fql?q=" + query2;
+
+        var url1 = this._generateUrl(path1, accessToken);
+        var url2 = this._generateUrl(path2, accessToken);
+
+        var async = require("async");
+
+        async.parallel([
+            function(cb) {
+                self._makeRequest(url1, function(err, value) {
+                    cb(err, value);
+                });
+            },
+
+            function(cb) {
+                self._makeRequest(url2, function(err, value) {
+                   cb(err, value);
+                });
+            }
+        ], function(err, results) {
+            if (err) {
+                return fn(err);
+            }
+
+            var messages = results[0].data;
+            var userNames = results[1].data;
+
+            var getName = function(uid) {
+                var obj = _.findWhere(userNames, {uid:uid});
+                if (obj != null) {
+                    return obj.first_name + " " + obj.last_name;
+                }
+                return "";
+            };
+
+            messages.forEach(function(message) {
+               message.name = getName(message.author_id);
+            });
+
+            fn(null, messages);
+        });
+    },
+    //region
+
+
+    //region PRIVATE
     _getAccessToken: function(user) {
         var credentials = user.getCredentials($$.constants.user.credential_types.FACEBOOK);
         if (credentials == null) {
@@ -298,7 +409,6 @@ var dao = {
     },
 
 
-
     _generateUrl: function(path, accessToken) {
         var url = this.GRAPH_API_URL + path;
         if (url.indexOf("?") > -1) {
@@ -309,7 +419,21 @@ var dao = {
 
         url += "access_token=" + accessToken;
         return url;
+    },
+
+
+    _makeRequest: function(url, fn) {
+        var self = this;
+        request(url, function(err, resp, body){
+            if (!err) {
+                var result = JSON.parse(body);
+                self._isAuthenticationError(result, fn);
+            } else {
+                fn(err, resp);
+            }
+        });
     }
+    //endregion
 };
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();

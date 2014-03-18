@@ -1,16 +1,16 @@
 var app = require('../app');
 var testHelpers = require('../testhelpers/testhelpers');
+var testEmailConfig = require('../testhelpers/configs/test.config.js').email;
 var emailDataDao = require('../dao/emaildata.dao');
 var contextioDao = require('../dao/integrations/contextio.dao');
 
 module.exports.group = {
     setUp: function(cb) {
 
-        console.log("SETTING UP CONTEXTIO_TEST");
         var self = this;
-        this.emailAddress = "hostedlcr@gmail.com";
-        this.emailPass = "JmiiooGWHWIU";
-        this.emailType = "gmail";
+        this.emailAddress = testEmailConfig.PRIMARY_EMAIL_ADDRESS;
+        this.emailPass = testEmailConfig.PRIMARY_EMAIL_PASSWORD;
+        this.emailType = testEmailConfig.PRIMARY_EMAIL_TYPE;
 
         testHelpers.createTestUser(function(err, value) {
             if (err) {
@@ -22,7 +22,6 @@ module.exports.group = {
     },
 
     tearDown: function(cb) {
-        console.log("TEARING DOWN CONTEXTIO_TEST");
         var self = this;
         testHelpers.destroyTestUser(this.user, function(err, value) {
             if (err) {

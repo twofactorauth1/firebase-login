@@ -34,7 +34,14 @@ define([], function () {
 
 
         social: {
-            types: _socialTypes
+            types: {
+                LOCAL: _socialTypes.LOCAL,
+                FACEBOOK: _socialTypes.FACEBOOK,
+                TWITTER: _socialTypes.TWITTER,
+                LINKEDIN: _socialTypes.LINKEDIN,
+                GOOGLE: _socialTypes.GOOGLE,
+                FULL_CONTACT: _socialTypes.FULL_CONTACT
+            }
         },
 
 

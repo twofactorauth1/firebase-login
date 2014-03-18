@@ -179,4 +179,3 @@ _.extend(router.prototype, BaseRouter.prototype, {
 });
 
 module.exports = new router();
-

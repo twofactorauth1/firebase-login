@@ -9,8 +9,15 @@ module.exports = {
     CALLBACK_URL_LOGIN: appConfig.server_url + "/oauth2/callback",
 
 
-    getScope: function() {
-        return '["basic_info", "email", "friends_website", "friends_birthday", "offline_access"]';
+    SCOPE_STREAM: "read_stream",
+    SCOPE_MAILBOX: "read_mailbox",
+
+    getScope: function(additions) {
+        var arr = ["basic_info", "email", "friends_website", "friends_birthday", "offline_access"]; //read_mailbox, read_stream
+        if (additions != null) {
+            arr = arr.concat(additions);
+        }
+        return JSON.stringify(arr);
     }
 };
 

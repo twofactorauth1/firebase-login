@@ -13,13 +13,11 @@ _.extend(api.prototype, baseApi.prototype, {
     dao: emailDataDao,
 
     initialize: function() {
-        //get
+        //EMAIL SOURCES
         app.get(this.url('sources'), this.isAuthApi, this.getEmailSources.bind(this));
-
-        //Create / Update
         app.post(this.url('source'), this.isAuthApi, this.createEmailSource.bind(this));
 
-        //Messages
+        //MESSAGES
         app.get(this.url(':sourceid/messages'), this.isAuthApi, this.getMessages.bind(this));
         app.get(this.url(':sourceid/message/:messageid'), this.isAuthApi, this.getMessageById.bind(this));
     },

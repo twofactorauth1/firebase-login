@@ -529,7 +529,11 @@ var user = $$.m.ModelBase.extend({
         creds.type = socialType;
         creds.socialId = socialId;
         creds.accessToken = accessToken;
-        creds.refreshToken = refreshToken;
+        if (socialType == $$.constants.social.types.TWITTER) {
+            creds.accessTokenSecret = refreshToken;
+        } else {
+            creds.refreshToken = refreshToken;
+        }
         if (expires != null && expires > 0) {
             creds.expires = new Date().getTime() + (expires*1000);
         }

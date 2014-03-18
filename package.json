@@ -36,7 +36,8 @@
     "request": "2.34.0",
     "passport-google": "~0.3.0",
     "async": "~0.2.10",
-    "contextio": "~0.4.0"
+    "contextio": "~0.4.0",
+    "oauth": "~0.9.11"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
