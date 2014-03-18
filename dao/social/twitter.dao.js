@@ -43,7 +43,7 @@ var dao = {
         console.log(url);
         this._makeRequest(url, user, function(err, value) {
             if (err) {
-                return fn(err, value)p
+                return fn(err, value);
             }
             var profile = JSON.parse(value);
             return fn(err, profile);
