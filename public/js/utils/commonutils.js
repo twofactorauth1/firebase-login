@@ -115,7 +115,6 @@ define([
                     }
                 }
 
-                console.log("HERE I AM!");
                 var str = "", rangeLength = range.length;
                 while(str.length != rangeLength) {
                     str += range[Math.round(Math.random()*rangeLength)];

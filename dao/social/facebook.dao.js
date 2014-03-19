@@ -5,9 +5,11 @@ var facebookConfig = require('../../configs/facebook.config');
 var paging = require('../../utils/paging');
 var contactDao = require('../contact.dao');
 var userDao = require('../user.dao');
-var Contact = require('../../models/contact');
 var async = require('async');
 var querystring = require('querystring');
+
+var Contact = require('../../models/contact');
+var Message = require('../../models/message');
 
 var dao = {
 
@@ -380,11 +382,13 @@ var dao = {
                 return "";
             };
 
+            var _messages = [];
             messages.forEach(function(message) {
-               message.name = getName(message.author_id);
+                message.name = getName(message.author_id);
+                _messages.push(new Message().convertFromFacebookMessage(message));
             });
 
-            fn(null, messages);
+            fn(null, _messages);
         });
     },
     //region
