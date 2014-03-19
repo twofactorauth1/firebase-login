@@ -31,6 +31,7 @@ module.exports.group = {
         });
     },
 
+
     tearDown: function(cb) {
         var self = this;
         testHelpers.destroyTestUser(this.user, function(err, value) {
@@ -47,24 +48,37 @@ module.exports.group = {
     testGetProfileForUser: function(test) {
         console.log("TESTING TWITTER RETRIEVE PROFILE");
 
-        twitterDao.getProfileForUser(this.user, function(err, value) {
-            test.equal(err, null, "Error retrieving Twitter Profile");
+        var self = this;
+        twitterDao.refreshUserFromProfile(this.user, true, function(err, value) {
+            if (err) {
+                test.ok(false, "Error retrieving twitter profile: " + err.toString());
+                test.done();
+            }
+
+            var details = self.user.getDetails($$.constants.social.types.TWITTER);
+            if (details == null) {
+                test.ok(false, "Error retrieving user Details for Twitter profile");
+                return test.done();
+            }
+
+            test.equal(details.username, testConfig.twitter.username, "Twitter username is set properly");
             test.done();
         });
     },
 
 
-    testGetFriendsForUser: function(test) {
-        test.done();
-    },
+    testGetTweetsForUser: function(test) {
+        console.log("TESTING RETRIEVE TWEETS FOR USER");
+        var self = this;
 
+        twitterDao.getTweetsForUser(this.user, function(err, value) {
+            if (err) {
+                test.ok(false, "Error retrieving tweets for user.");
+                return test.done()
+            }
 
-    testGetMessagesForUser: function(test) {
-        test.done();
-    },
-
-
-    testGetPostsForUser: function(test) {
-        test.done();
+            test.notEqual(value.length, 0, "Tweets retrieved");
+            test.done();
+        });
     }
 };

@@ -90,7 +90,7 @@ var user = $$.m.ModelBase.extend({
              *   _id:"",
              *   socialId:"",  //The social Id from where these details came
              *   type:int,     //The social network from where this information originated, or local
-             *
+             *   username,     //The username from the social network
              *   websites:[]
              *
              *   phones: [{
@@ -117,12 +117,18 @@ var user = $$.m.ModelBase.extend({
              *       defaultBilling: false
              *   }],
              *
+             *   numFriends: null,
+             *   numFollowers: null,
+             *   numFavorites: null,
+             *
+             *   //These are IM accounts we retrieved from the given social networks records
              *   imAccounts: [{
              *      _id:"",
-             *      type:"",        //the communication type (e.g. AOL, Skype, etc)
+             *      type:"",                //the communication type (e.g. AOL, Skype, etc)
              *      username:"",            the im account name
              *   }]
              *
+             *   //These are social accounts we retrieved from the given social networks records
              *   socialNetworks: [{
              *      _id:"",
              *      type: the social network type (e.g.
@@ -139,7 +145,6 @@ var user = $$.m.ModelBase.extend({
     transients: {
         deepCopy: true,
         public: [function (json, options) {
-            var self = this;
             if (json.credentials != null) {
                 json.credentials.forEach(function(creds) {
                     delete creds.password;
@@ -230,7 +235,7 @@ var user = $$.m.ModelBase.extend({
             this.set({details:details});
         }
 
-        return _.find(details, function(_detail) { return _detail.type === type });
+        return _.find(details, function(_detail) { return _detail.type === type; });
     },
 
 
@@ -251,14 +256,6 @@ var user = $$.m.ModelBase.extend({
         }
 
         return detail;
-    },
-
-
-    updateDetails: function(type, socialId) {
-        if (String.isNullOrEmpty(socialId) == false) {
-            var detail = this.getOrCreateDetails(type);
-            detail.socialId = socialId;
-        }
     },
 
 
@@ -286,14 +283,14 @@ var user = $$.m.ModelBase.extend({
         details.phones = details.phones || [];
         var phones = details.phones;
 
-        if (isDefault == true) {
-            phone.forEach(function(phone) {
+        if (isDefault === true) {
+            phones.forEach(function(phone) {
                 phone.default = false;
-            })
+            });
         }
 
-        var phone = _.findWhere(phones, {type:phoneType, number:phone});
-        if (phone == null) {
+        var phone = _.findWhere(phones, {type:phoneType, number:phoneNumber});
+        if (phone === null) {
             phone = {
                 _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
                 type: phoneType,
@@ -351,8 +348,8 @@ var user = $$.m.ModelBase.extend({
                 existing.displayName = String.isNullOrEmpty(displayName) ? existing.displayName : displayName;
                 existing.lat = String.isNullOrEmpty(lat) ? existing.lat : lat;
                 existing.lon = String.isNullOrEmpty(lon) ? existing.lat : lon;
-                if (defaultShipping) existing.defaultShipping = true;
-                if (defaultBilling) existing.defaultBilling = true;
+                if (defaultShipping) { existing.defaultShipping = true; }
+                if (defaultBilling) { existing.defaultBilling = true; }
             }
         }
 
@@ -375,6 +372,28 @@ var user = $$.m.ModelBase.extend({
             details.addresses.push(addressObj);
         }
     },
+
+
+    updateSocialInfo: function(type, username, numFriends, numFollowers, numFavorites) {
+        var details = this.getOrCreateDetails(type);
+
+        if (username != null) {
+            details.username = username;
+        }
+
+        if (numFriends != null) {
+            details.numFriends = numFriends;
+        }
+
+        if (numFollowers != null) {
+            details.numFollowers = numFollowers;
+        }
+
+        if (numFavorites != null) {
+            details.numFavorites = numFavorites;
+        }
+    },
+
 
     createOrUpdateImAccount: function(type, imAccountType, username) {
         var details = this.getOrCreateDetails(type);
@@ -850,10 +869,10 @@ var user = $$.m.ModelBase.extend({
                 userAccounts.push(userAccount);
             }
         } else {
-            var userAccounts = this.get("accounts");
+            userAccounts = this.get("accounts");
         }
 
-        if (userAccounts == null || userAccounts.length == 0) {
+        if (userAccounts === null || userAccounts.length === 0) {
             return null;
         }
         for (var i = 0, l = userAccounts.length; i < l; i++) {
@@ -868,7 +887,7 @@ var user = $$.m.ModelBase.extend({
     getEmailSourceByType: function(accountId, type) {
         var emailSources = this.getAllEmailSources;
         var userAccount = this.getUserAccount(accountId);
-        if (userAccount == null || userAccount.emailSources == null || userAccount.emailSources.length == 0) {
+        if (userAccount === null || userAccount.emailSources === null || userAccount.emailSources.length === 0) {
             return null;
         }
 
@@ -943,7 +962,7 @@ var user = $$.m.ModelBase.extend({
 
     removeEmailSource: function(id) {
         var userAccounts = this.get("accounts");
-        if (userAccounts == null || userAccounts.length == 0) {
+        if (userAccounts === null || userAccounts.length === 0) {
             return null;
         }
 
@@ -962,7 +981,7 @@ var user = $$.m.ModelBase.extend({
     removeMailboxForSource: function(id, email) {
         var emailSource = this.getEmailSource(id);
 
-        if (emailSource == null || emailSource.mailboxes == null || emailSource.mailboxes.length == 0) {
+        if (emailSource === null || emailSource.mailboxes === null || emailSource.mailboxes.length === 0) {
             return;
         }
 
