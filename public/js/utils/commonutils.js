@@ -76,7 +76,7 @@ define([
 
 
             generateUniqueAlphaNumeric: function (length, lettersOnly, lowerOnly) {
-                if (length === null || length === 0) {
+                if (length == null || length === 0) {
                     length = 10;
                 }
 
@@ -115,9 +115,11 @@ define([
                     }
                 }
 
-                var str = "", rangeLength = range.length;
-                while(str.length != rangeLength) {
-                    str += range[Math.round(Math.random()*rangeLength)];
+                var str = "", rangeLength = range.length, val = null;
+                while(str.length < length) {
+                    val = range[Math.round(Math.random()*rangeLength)];
+                    if (val == null) { continue; }
+                    str += val;
                 }
                 return str;
             },

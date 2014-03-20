@@ -29,7 +29,7 @@ var message = $$.m.ModelBase.extend({
      *      hasPreview: ""
      *      type: ""
      * ],
-     * flagged: true|false
+     * flagged: true|false,
      * seen: true|false,
      */
     defaults: {
@@ -137,18 +137,7 @@ var message = $$.m.ModelBase.extend({
 
         this.set(obj);
         return this;
-    },
-
-
-    convertFromFacebookPost: function(post) {
-
-    },
-
-
-    convertFromTwitterTweet: function(tweet) {
-
     }
-
 
 }, {
     db: {

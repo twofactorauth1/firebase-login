@@ -9,6 +9,8 @@ var async = require('async');
 var querystring = require('querystring');
 
 var Contact = require('../../models/contact');
+var Post = require('../../models/post');
+
 var OAuth = require('oauth').OAuth;
 
 var dao = {
@@ -112,8 +114,23 @@ var dao = {
             if (err) {
                 return fn(err, value);
             }
+
             var tweets = JSON.parse(value);
-            fn(null, tweets);
+
+            if (tweets.length > 0) {
+                var result = [];
+
+                var processTweet = function (tweet, cb) {
+                    result.push(new Post().convertFromTwitterTweet(tweet));
+                    cb();
+                };
+
+                async.eachLimit(tweets, 10, processTweet, function (cb) {
+                    return fn(null, result);
+                });
+            } else {
+                fn(null, tweets);
+            }
         });
     },
 
