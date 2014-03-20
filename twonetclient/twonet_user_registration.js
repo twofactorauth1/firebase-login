@@ -31,7 +31,7 @@ _.extend(UserRegistration.prototype, TwoNetBase.prototype, {
 
         var options = this.twonetOptions(this.HTTP_METHOD.POST, this.USER_REGISTER_ENDPOINT);
 
-        console.log(this.makeUrl(options));
+        this.logUrl(options);
         console.log("==> Request: " + body);
 
         var req = https.request(options, function(res) {
@@ -74,7 +74,7 @@ _.extend(UserRegistration.prototype, TwoNetBase.prototype, {
         var options = this.twonetOptions(this.HTTP_METHOD.DELETE,
             util.format(this.USER_UNREGISTER_ENDPOINT, user_guid));
 
-        console.log(this.makeUrl(options));
+        this.logUrl(options);
 
         var req = https.request(options, function(res) {
             console.log("==> Response status code: " + res.statusCode);

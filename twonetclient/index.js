@@ -1,5 +1,7 @@
-var userRegistration = require('./twonet_user_registration');
+var userRegistration = require('./twonet_user_registration'),
+    deviceRegistration = require('./twonet_device_registration');
 
 module.exports = {
-    userRegistration: userRegistration
+    userRegistration: userRegistration,
+    deviceRegistration: deviceRegistration
 };

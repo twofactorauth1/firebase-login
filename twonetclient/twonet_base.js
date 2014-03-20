@@ -20,26 +20,22 @@ _.extend(twoNetBase.prototype, {
         options = options || {};
     },
 
-    twonetHeaders: function() {
-        return {
-            "Authorization": "Basic " + new Buffer(this.KEY + ":" + this.SECRET).toString('base64'),
-            "Accept": "application/json",
-            "Content-type": "application/json"
-        };
-    },
-
-    twonetOptions: function(httpMethod, endpoint) {
+    twonetOptions: function (httpMethod, endpoint) {
         return {
             hostname: this.BASE_HOST,
             port: 443,
             path: this.BASE_PATH + endpoint,
             method: httpMethod,
-            headers: this.twonetHeaders()
+            headers: {
+                "Authorization": "Basic " + new Buffer(this.KEY + ":" + this.SECRET).toString('base64'),
+                "Accept": "application/json",
+                "Content-type": "application/json"
+            }
         };
     },
 
-    makeUrl: function(options) {
-        return options.method + ' https://' + options.hostname + options.path;
+    logUrl: function(options) {
+        console.log('\n' + options.method + ' https://' + options.hostname + options.path);
     }
 });
 
