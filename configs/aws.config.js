@@ -2,6 +2,7 @@ var appConfig = require('./app.config.js');
 
 var serverUrl = appConfig.server_url;
 
+//user: christopher.mina@gmail.com
 var AWS_ACCESS_KEY = "AKIAJ4G5SJJASTPBJPFA";
 var AWS_SECRET_ACCESS_KEY ="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";
 var AWS_REGION = "us-east-1";  //US Standard

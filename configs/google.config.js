@@ -1,5 +1,6 @@
 var appConfig =  require('./app.config');
 
+//user: christopher.mina@gmail.com
 var clientId = process.env.GOOGLE_CLIENT_ID || '800949752961.apps.googleusercontent.com';
 var clientSecret = process.env.GOOGLE_CLIENT_SECRET || 'AzTB-YSe4f8dXZxczQ0ISEIX';
 

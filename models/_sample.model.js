@@ -1,43 +1,23 @@
 require('./model.base');
 
-var account = $$.m.ModelBase.extend({
+var model = $$.m.ModelBase.extend({
 
-    defaults: function() {
-        return {
-            _id: null,
-            company: {
-                name:"",
-                type:0,
-                size:0
-            }, // { name:string, type:int, size:int }
-            subdomain:"",
-            domain:"",
-            token:""
-        }
+    defaults: {
     },
 
 
     initialize: function(options) {
-        if ($$.u.stringutils.isNullOrEmpty(this.get("token"))) {
-            var token = $$.u.idutils.generateUUID();
-            this.set({token:token});
-        }
 
-        if ($$.u.stringutils.isNullOrEmpty(this.get("subdomain"))) {
-            var subdomain = this.get("subdomain");
-            subdomain = subdomain.trim().replace(" ", "");
-            this.set({subdomain:subdomain});
-        }
     }
 
 
 }, {
     db: {
         storage: "mongo",
-        table: "accounts"
+        table: "models"
     }
 });
 
-$$.m.Account = account;
+$$.m.Model = model;
 
-module.exports = account;
+module.exports = model;

@@ -1,8 +1,8 @@
 var appConfig =  require('./app.config');
 
 //user:  cycleboy99
-var clientId = process.env.TWITTER_CLIENT_ID || 'n8xIukBuQ1GIpmDmCYiqkw';
-var clientSecret = process.env.TWITTER_CLIENT_SECRET || '1w2GyxTw0qFbVuW5V9dhGV1CchLmSZDI8Jd2ENx82YE';
+var clientId = process.env.FLICKR_CLIENT_ID || '4a3d0928798bef0296faeff98760e08c';
+var clientSecret = process.env.TWITTER_CLIENT_SECRET || '808edf9a90e639e1';
 
 module.exports = {
     CLIENT_ID: clientId,

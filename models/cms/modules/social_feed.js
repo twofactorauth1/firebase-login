@@ -1,0 +1,76 @@
+/**
+ * The Social Feed copmonent
+ *
+ * Stores data that represents a connection to a social feed
+ */
+require('./model.base');
+
+var component = $$.m.ModelBase.extend({
+
+    defaults: function() {
+        return {
+
+            /**
+             * The type of component this is
+             */
+            type: "social_feed",
+
+            /**
+             * The label for the component
+             * (optional)
+             */
+            label:"",
+
+            /**
+             * A description that appears at the top of the component
+             * (optional)
+             */
+            description:"",
+
+            /**
+             * The social feed type
+             *
+             * facebook | twitter | flickr | pinterest | instagram | blog
+             */
+            feedType: "",
+
+            /**
+             * The public URL to the feed if applicable
+             */
+            url: "",
+
+            /**
+             * Relevant credentials to access the given social feed
+             *
+             * {
+             *      username: "",
+             *      socialId: "",
+             * }
+             */
+            credentials: null,
+
+            /**
+             * Options used to determine what to pull
+             */
+            options: null
+        }
+    },
+
+
+    initialize: function(options) {
+
+    }
+
+
+}, {
+
+    validate: function() {
+
+    }
+});
+
+$$.m.cms = $$.m.cms || {};
+$$.m.cms.modules = $$.m.cms.modules || {};
+$$.m.cms.modules.FeatureList = component;
+
+module.exports = component;

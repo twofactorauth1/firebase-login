@@ -1,5 +1,6 @@
 var appConfig =  require('./app.config');
 
+//user: christopher.mina@gmail.com
 var clientId = process.env.LINKEDIN_CLIENT_ID || '77a3p9aub0j6by';
 var clientSecret = process.env.LINKEDIN_CLIENT_SECRET || 'B5Akbohq6q9L8a2G';
 

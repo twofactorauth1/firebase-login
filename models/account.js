@@ -15,6 +15,10 @@ var account = $$.m.ModelBase.extend({
             subdomain:"",
             domain:"",
             token:"",
+            website: {
+                templateId:"",      //The current Inidenous template being used
+                accountWebsiteId:"" //The current template data id being referenced (may have more than one)
+            },
             _v:"0.1"
         }
     },
