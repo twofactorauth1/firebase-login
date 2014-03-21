@@ -53,6 +53,9 @@ var component = $$.m.ModelBase.extend({
                 displayLabel: ""
             },
 
+            /**
+             * Email and phone
+             */
             contact: {
                 email: "",
                 phone: ""
