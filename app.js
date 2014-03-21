@@ -124,10 +124,8 @@ app.use(function(req, res, next) {
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-//app.use(subdomainAuthorize()); //TODO: enable it before final deployment.
 app.use(app.router);
 app.use(connect.compress());
-app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 
 app.configure('development', function() {
     app.use(express.errorHandler());
