@@ -9,6 +9,7 @@ define([
 
             routes: {
                 "contacts": "showContacts",
+                "contacts/": "showContacts",
                 "contacts/:letter": "showContacts",
 
                 "contacts/:letter/view/:contactId": "viewContactDetails",

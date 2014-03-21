@@ -30,11 +30,11 @@ var component = $$.m.ModelBase.extend({
 
             /**
              * The hours a business is open, array
-             *
-             * [{
-             *      label: ""
-             *      value: ""
-             * }]
+             *[
+             *  "mon-friday: 8-5",
+             *  "saturday: 9-4",
+             *  "sunday: "closed"
+             * ]
              */
             hours: [],
 
@@ -50,7 +50,7 @@ var component = $$.m.ModelBase.extend({
                 lat:"",
                 lon:"",
                 showMap: false,         // true | false
-                displayLabel: ""
+                addressDisplayLabel: ""
             },
 
             /**

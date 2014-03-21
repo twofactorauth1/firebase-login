@@ -1,8 +1,9 @@
 define([
     'routers/account/contact.router',
     'routers/account/account.router',
+    'routers/account/cms.router',
     'views/account/admin.view'
-], function (contactRouter, accountRouter, AdminView) {
+], function (contactRouter, accountRouter, cmsRouter, AdminView) {
 
     var router = Backbone.Router.extend({
 

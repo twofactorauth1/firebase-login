@@ -24,7 +24,8 @@ var express = require('express')
     , appConfig = require('./configs/app.config')
     , mongoConfig = require('./configs/mongodb.config')
     , MongoStore = require('connect-mongo-store')(express)
-    , mongoStore = new MongoStore(mongoConfig.MONGODB_CONNECT);
+    , mongoStore = new MongoStore(mongoConfig.MONGODB_CONNECT)
+    , consolidate= require('consolidate');
 
 
 //---------------------------------------------------------
@@ -34,6 +35,8 @@ _ = require('underscore');
 requirejs('utils/commonutils');
 require('./utils/errors');
 require('./utils/jsvalidate');
+
+//Load JQuery Deferred, ensure $ is available
 var deferred = require("jquery-deferred");
 if (typeof $ == 'undefined') {
     $ = {};
@@ -97,10 +100,18 @@ aws.config.update(awsConfigs);
 app = express();
 global.app = app;
 
-// all environments
-app.set('views', path.join(__dirname, appConfig.view_dir));
+// View engine
 app.set('view options', { layout:false });
-app.set('view engine', appConfig.view_engine);
+
+app.engine('html', consolidate.handlebars);
+app.engine('hbs', consolidate.handlebars);
+app.engine('handlebars', consolidate.handlebars);
+app.engine('dot', consolidate.dot);
+app.engine('jade', consolidate.jade);
+
+app.set('view engine', 'jade');
+app.set('views', path.join(__dirname, 'templates'));
+
 app.use(express.favicon());
 app.use(express.json());
 app.use(express.urlencoded());

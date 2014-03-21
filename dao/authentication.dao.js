@@ -350,6 +350,14 @@ var dao = {
 
             var serverUrl = value;
 
+            if (path == null || path == "" || path == "/") {
+                if (accountId > 0) {
+                    path = "admin";
+                } else {
+                    path = "home";
+                }
+            }
+
             if (path != null && path.charAt(0) != "/") {
                 path = "/" + path;
             }
