@@ -5,6 +5,8 @@
 
     "theme-description":"The default indigenous theme",
 
+    "tags":["default","awesome","basic"],
+
     "excluded-components": [
 
     ]

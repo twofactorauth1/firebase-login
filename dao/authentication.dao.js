@@ -40,7 +40,6 @@ var dao = {
 
                         var user = value;
 
-                        log.info("Verifying password");
                         user.verifyPassword(password, $$.constants.user.credential_types.LOCAL, function (err, value) {
                             if (!err) {
                                 if (value === false) {

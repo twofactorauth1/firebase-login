@@ -611,7 +611,7 @@ var user = $$.m.ModelBase.extend({
         }
 
         if (creds != null && encryptPassword === true && creds.password != null) {
-            creds.password = crypto.hash(creds.password);
+            creds.password = this._encryptPassword(creds.password);
         }
 
         //Ensure any rogue options make it in
@@ -646,7 +646,8 @@ var user = $$.m.ModelBase.extend({
 
         if (credentials.hasOwnProperty("password")) {
             var encryptedPass = credentials.password;
-            crypto.verify(password, encryptedPass, function (err, value) {
+
+            this._verifyPassword(password, encryptedPass, function(err, value) {
                 if (err) {
                     return fn(err, value);
                 } else if (value === false) {
@@ -710,7 +711,7 @@ var user = $$.m.ModelBase.extend({
             credentials: [
                 {
                     username: username,
-                    password: password == null ? null : crypto.hash(password),
+                    password: password == null ? null : this._encryptPassword(password),
                     type: $$.constants.user.credential_types.LOCAL
                 }
             ],
@@ -722,6 +723,7 @@ var user = $$.m.ModelBase.extend({
 
 
     _createUserAccount: function(userAccount, permissions) {
+        var self = this;
         var accounts = this.get("accounts");
         if (accounts == null) {
             accounts = [];
@@ -758,7 +760,7 @@ var user = $$.m.ModelBase.extend({
                     if (oldCreds != null) {
                         oldCreds.username = newCredentials.username;
                         if (newCredentials.password != null) {
-                            oldCreds.password = crypto.hash(newCreds.password);
+                            oldCreds.password = self._encryptPassword(newCreds.password);
                         }
                         oldCreds.socialId = newCreds.socialId;
                         oldCreds.accessToken = newCreds.accessToken;
@@ -804,7 +806,7 @@ var user = $$.m.ModelBase.extend({
             }
 
             if (username) { creds.username = username; }
-            if (password) { creds.password = crypto.hash(password); }
+            if (password) { creds.password = this._encryptPassword(password); }
             if (socialId) { creds.socialId = socialId; }
             if (accessToken) { creds.accessToken = accessToken; }
         }
@@ -1022,9 +1024,21 @@ var user = $$.m.ModelBase.extend({
     clearAuthToken: function () {
         this.clear("authToken");
         this.clear("authTokenExp");
-    }
+    },
     //endregion
 
+
+    //region Encryption
+    _encryptPassword: function(password) {
+        //TODO: Use Salt and BCrypt or similar
+        return crypto.hash(password);
+    },
+
+
+    _verifyPassword: function(password, encryptedPassword, fn) {
+        crypto.verify(password, encryptedPass, fn);
+    }
+    //endregion
 }, {
     db: {
         storage: "mongo",

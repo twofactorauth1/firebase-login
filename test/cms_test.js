@@ -32,39 +32,50 @@ module.exports.testThemeExists = function (test) {
 };
 
 
-module.exports.testGetAllThemes = function(test) {
+module.exports.testGetAllThemes = function (test) {
     console.log("TESTING GET ALL THEMES");
 
-    cmsDao.getAllThemes(function(err, value) {
+    cmsDao.getAllThemes(function (err, value) {
         if (err) {
             test.ok(false, "An error occurred getting all themes: " + err);
         } else {
             if (value != null && value.length > 0 && value[0].id != null) {
-               test.ok(true, "Parsing theme configuration files");
+                test.ok(true, "Parsing theme configuration files");
+
+                //Test Retrieve a Theme Config
+                cmsDao.getThemeConfigSigned(value[0].id, function(err, value) {
+                    if (err) {
+                        test.ok(false, "Get ThemeConfig Signed");
+                        return test.done();
+                    }
+
+                    test.notEqual(value, null, "Get Theme Config signed");
+                    test.done();
+                });
             } else {
                 test.ok(false, "Parsing theme configuration files failed");
+                return test.done();
             }
         }
-        test.done();
     });
 };
 
 
 module.exports.group = {
-    setUp: function(cb) {
+    setUp: function (cb) {
         testHelpers.createTestUser(this, cb);
     },
 
-    tearDown: function(cb) {
+    tearDown: function (cb) {
         testHelpers.destroyTestUser(this.user, cb);
     },
 
-    testCreateAndDestroyWebsiteForAccount: function(test) {
+    testCreateAndDestroyWebsiteForAccount: function (test) {
         console.log("TESTING CREATE AND DESTROY WEBSITE FOR ACCOUNT");
         var self = this;
 
         var p1 = $.Deferred(), p2 = $.Deferred(), p3 = $.Deferred();
-        cmsDao.getOrCreateWebsiteByAccountId(this.accountId, this.user.id(), function(err, value) {
+        cmsDao.getOrCreateWebsiteByAccountId(this.accountId, this.user.id(), function (err, value) {
             if (err) {
                 test.ok(false, "An error occurred");
                 return test.done();
@@ -85,9 +96,9 @@ module.exports.group = {
         });
 
         $.when(p1)
-            .done(function(websiteId) {
+            .done(function (websiteId) {
                 //Ensure the Account is set properly with the correct website
-                cmsDao.getOrCreateWebsiteByAccountId(self.accountId, self.userId, function(err, value) {
+                cmsDao.getOrCreateWebsiteByAccountId(self.accountId, self.userId, function (err, value) {
                     if (err) {
                         test.ok(false, "An error occurred");
                         return test.done();
@@ -103,16 +114,16 @@ module.exports.group = {
                         p2.reject(websiteId);
                     }
                 });
-             })
-            .fail(function() {
+            })
+            .fail(function () {
                 test.done();
             });
 
 
         $.when(p2)
-            .done(function(websiteId) {
+            .done(function (websiteId) {
                 //Create a new website for the account
-                cmsDao.createWebsiteForAccount(self.accountId, self.userId, function(err, value) {
+                cmsDao.createWebsiteForAccount(self.accountId, self.userId, function (err, value) {
                     if (err) {
                         test.ok(false, "An error occurred");
                         return test.done();
@@ -120,7 +131,7 @@ module.exports.group = {
 
                     var websiteId2 = value.id();
 
-                    cmsDao.switchDefaultWebsite(self.accountId, websiteId2, function(err, value) {
+                    cmsDao.switchDefaultWebsite(self.accountId, websiteId2, function (err, value) {
                         if (err) {
                             test.ok(false, "An error occurred");
                             return test.done();
@@ -129,22 +140,22 @@ module.exports.group = {
                         test.equal(value.get("websiteId"), websiteId2, "Website Switched properly on account");
 
                         async.parallel([
-                            function(cb) {
+                            function (cb) {
                                 cmsDao.deleteWebsite(websiteId, cb);
                             },
 
-                            function(cb) {
+                            function (cb) {
                                 cmsDao.deleteWebsite(websiteId2, cb);
                             }
-                        ], function() {
+                        ], function () {
                             console.log("TEST COMPLETE");
                             test.done();
                         });
                     });
                 });
             })
-            .fail(function(websiteId) {
-                cmsDao.deleteWebsite(websiteId, function(err, value) {
+            .fail(function (websiteId) {
+                cmsDao.deleteWebsite(websiteId, function (err, value) {
                     return test.done();
                 });
             });

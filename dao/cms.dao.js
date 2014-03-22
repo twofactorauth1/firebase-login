@@ -1,8 +1,10 @@
 var baseDao = require('./base.dao');
 var fs = require('fs');
 var async = require('async');
+var crypto = require('crypto');
+
 var accountDao = require('./account.dao');
-var themeConfig = require('../configs/themes.config');
+var themesConfig = require('../configs/themes.config');
 
 var Website = require('../models/cms/website');
 var Page = require('../models/cms/page');
@@ -26,7 +28,7 @@ var dao = {
      * @param fn
      */
     themeExists: function (themeId, fn) {
-        var pathToThemes = themeConfig.PATH_TO_THEMES;
+        var pathToThemes = themesConfig.PATH_TO_THEMES;
 
         var pathToTheme = pathToThemes + "/" + themeId;
 
@@ -38,35 +40,170 @@ var dao = {
         });
     },
 
+
+    /**
+     * Retrieves basic theme information for all themes in the system.
+     * @param fn
+     */
     getAllThemes: function (fn) {
+        //TODO - Cache this
+
         var self = this;
-        var pathToThemes = themeConfig.PATH_TO_THEMES;
+        var pathToThemes = themesConfig.PATH_TO_THEMES;
 
         var themes = [];
         fs.readdir(pathToThemes, function (err, files) {
-            async.eachLimit(files, 25, function (file, cb) {
-                fs.lstat(pathToThemes + "/" + file, function (err, stats) {
-                    if (!err && stats.isDirectory()) {
+            async.eachLimit(files, 25, function (directory, cb) {
+                fs.lstat(pathToThemes + "/" + directory, function (err, stats) {
+                    if (err) {
+                        return cb(err);
+                    }
+                    if (stats.isDirectory()) {
                         //Attempt to read config file from directory
-                        fs.readFile(pathToThemes + "/" + file + "/config.json", "utf8", function(err, data) {
+                        fs.readFile(pathToThemes + "/" + directory + "/config.json", "utf8", function(err, data) {
                             if (err) { return self.log.error("An error occurred reading Theme config File: " + err); }
 
                             data = JSON.parse(data);
 
-                            themes.push({
+                            var obj ={
                                 id: data['theme-id'],
                                 name: data['theme-name'],
-                                description: data['theme-description']
-                            });
+                                description: data['theme-description'],
+                                tags: data.tags || []
+                            };
 
+                            if (obj.id != directory) {
+                                self.log.error("Configuration ID does not match directory Id for: " + directory);
+                                return cb("Configuration ID does not match directory Id for: " + directory);
+                            }
+
+                            themes.push(obj);
                             cb();
                         });
+                    } else {
+                        cb();
                     }
                 })
             }, function (err) {
                 fn(err, themes);
             });
         });
+    },
+
+
+    /**
+     * Retrieves an unsigned copy of the theme config.  This is only suitable
+     * for internal or read-only use.
+     *
+     * @param themeId
+     * @param fn
+     * @returns {*}
+     */
+    getThemeConfig: function(themeId, fn) {
+        return this._getThemeConfig(themeId, false, fn);
+    },
+
+
+    /**
+     * Retrieves a signed copy of the theme config.  This is suitable for sending
+     * out to be modified and returned / updated
+     *
+     * @param themeId
+     * @param fn
+     * @returns {*}
+     */
+    getThemeConfigSigned: function(themeId, fn) {
+        return this._getThemeConfig(themeId, true, fn);
+    },
+
+
+    _getThemeConfig: function(themeId, signed, fn) {
+        var self = this;
+        var pathToThemeConfig = themesConfig.PATH_TO_THEMES + "/" + themeId + "/config.json";
+
+        var themeConfig, defaultConfig;
+        async.parallel([
+            function(cb) {
+                // Read theme config
+                fs.readFile(pathToThemeConfig, "utf8", function(err, data) {
+                    if (err) {
+                        self.log.error("An error occurred reading Theme config File: " + err);
+                        return cb("An error occurred reading theme config file: " + err);
+                    }
+
+                    var data = JSON.parse(data);
+
+                    if (data['theme-id'] != themeId) {
+                        self.log.error("Configuration ID does not match directory Id for: " + themeId);
+                        return cb("Configuration ID does not match directory Id for: " + themeId);
+                    }
+
+                    if (signed === true) {
+                        // This ensures the Theme ID has not changed if the user makes modifications and returns this file
+                        data.signature = self._getSignature(themeId);
+                    }
+
+                    themeConfig = data;
+
+                    cb();
+                });
+            },
+
+            function(cb) {
+                fs.readFile(themesConfig.PATH_TO_THEMES + "/config.json", "utf8", function(err, data) {
+                    if (err) {
+                        self.log.error("An error occurred reading Default theme config File: " + err);
+                        return cb("An error occurred reading default theme config file: " + err);
+                    }
+
+                    var data = JSON.parse(data);
+
+                    defaultConfig = data;
+
+                    cb();
+                });
+            }
+        ], function(err) {
+
+            if (err) {
+                return fn(err);
+            }
+
+            if (signed) {
+                themeConfig.signatures = {};
+            }
+
+            //We have both the theme config and the default config
+            for (var key in defaultConfig) {
+                if (themeConfig.hasOwnProperty(key) == false || themeConfig[key] == null) {
+                    themeConfig[key] = defaultConfig[key];
+
+                    if (signed) {
+                        themeConfig.signatures[key] = self._getSignature(defaultConfig[key]);
+                    }
+                }
+            }
+
+            fn(null, themeConfig);
+        });
+    },
+
+
+    _getSignature: function(obj) {
+        if (obj == null) {
+            obj = "";
+        }
+
+        if (_.isObject(obj)) {
+            obj = JSON.stringify(obj);
+        }
+
+        if (_.isString(obj) == false) {
+            obj = obj.toString();
+        }
+
+        var signature = crypto.createHmac("sha256", themesConfig.THEME_ID_SIGNATURE_SECRET).update(obj).digest('hex');
+        return signature;
     },
     //endregion
 

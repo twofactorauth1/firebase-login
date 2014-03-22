@@ -5,6 +5,9 @@
 
     "theme-description":"A basic example theme for Indigenous",
 
+    "tags":["awesome","example"],
+
+
     "excluded-components": [
 
     ]

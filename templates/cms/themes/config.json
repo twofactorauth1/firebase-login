@@ -1,5 +1,5 @@
 {
-    "defaultEngine": "dot",      // handlebars, jade, dot
+    "defaultEngine": "dot",
 
     "supported-components": [
         "contact-us",
