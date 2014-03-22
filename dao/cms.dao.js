@@ -1,6 +1,8 @@
 var baseDao = require('./base.dao');
-var accountDao = require('./account.dao');
 var fs = require('fs');
+var async = require('async');
+var accountDao = require('./account.dao');
+var themeConfig = require('../configs/themes.config');
 
 var Website = require('../models/cms/website');
 var Page = require('../models/cms/page');
@@ -19,12 +21,12 @@ var dao = {
      * Determines if a theme already exists.  This will be important when
      * end users can create new themes and store them here, we will need to
      * ensure the Theme ID is not already in use.
-     * 
+     *
      * @param themeId
      * @param fn
      */
     themeExists: function (themeId, fn) {
-        var pathToThemes = "templates/cms/themes";
+        var pathToThemes = themeConfig.PATH_TO_THEMES;
 
         var pathToTheme = pathToThemes + "/" + themeId;
 
@@ -33,6 +35,37 @@ var dao = {
                 return fn(null, true);
             }
             return fn(null, false);
+        });
+    },
+
+    getAllThemes: function (fn) {
+        var self = this;
+        var pathToThemes = themeConfig.PATH_TO_THEMES;
+
+        var themes = [];
+        fs.readdir(pathToThemes, function (err, files) {
+            async.eachLimit(files, 25, function (file, cb) {
+                fs.lstat(pathToThemes + "/" + file, function (err, stats) {
+                    if (!err && stats.isDirectory()) {
+                        //Attempt to read config file from directory
+                        fs.readFile(pathToThemes + "/" + file + "/config.json", "utf8", function(err, data) {
+                            if (err) { return self.log.error("An error occurred reading Theme config File: " + err); }
+
+                            data = JSON.parse(data);
+
+                            themes.push({
+                                id: data['theme-id'],
+                                name: data['theme-name'],
+                                description: data['theme-description']
+                            });
+
+                            cb();
+                        });
+                    }
+                })
+            }, function (err) {
+                fn(err, themes);
+            });
         });
     },
     //endregion
@@ -51,7 +84,9 @@ var dao = {
     getOrCreateWebsiteByAccountId: function (accountId, userId, fn) {
         var self = this;
         accountDao.getById(accountId, function (err, value) {
-            if (err) { return fn(err, value); }
+            if (err) {
+                return fn(err, value);
+            }
 
             var websiteId = value.get("websiteId");
             if (String.isNullOrEmpty(websiteId)) {
@@ -78,7 +113,7 @@ var dao = {
 
         website.created(userId);
 
-        this.saveOrUpdate(website, function(err, value) {
+        this.saveOrUpdate(website, function (err, value) {
             if (err) {
                 return fn(err, value);
             }
@@ -133,14 +168,18 @@ var dao = {
                 }
 
                 if (accountId > 0) {
-                    accountDao.getById(accountId, function(err, value) {
-                        if (err) { return fn(err, value); }
+                    accountDao.getById(accountId, function (err, value) {
+                        if (err) {
+                            return fn(err, value);
+                        }
 
                         if (value != null && value.get("websiteId") == websiteId) {
-                            value.set({websiteId:null});
+                            value.set({websiteId: null});
 
-                            accountDao.saveOrUpdate(value, function(err, value) {
-                                if (err) { return fn(err, value); }
+                            accountDao.saveOrUpdate(value, function (err, value) {
+                                if (err) {
+                                    return fn(err, value);
+                                }
 
                                 return fn(null);
                             });

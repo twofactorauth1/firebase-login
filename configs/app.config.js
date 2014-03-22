@@ -63,8 +63,6 @@ module.exports = {
     environments: environments,
     environment: process.env.NODE_ENV,
     port: process.env.PORT,
-    view_engine: 'jade',
-    view_dir: 'templates',
     server_url: serverUrl,
     support_email: "support@indigenous.com",
     cluster:false,

@@ -32,6 +32,24 @@ module.exports.testThemeExists = function (test) {
 };
 
 
+module.exports.testGetAllThemes = function(test) {
+    console.log("TESTING GET ALL THEMES");
+
+    cmsDao.getAllThemes(function(err, value) {
+        if (err) {
+            test.ok(false, "An error occurred getting all themes: " + err);
+        } else {
+            if (value != null && value.length > 0 && value[0].id != null) {
+               test.ok(true, "Parsing theme configuration files");
+            } else {
+                test.ok(false, "Parsing theme configuration files failed");
+            }
+        }
+        test.done();
+    });
+};
+
+
 module.exports.group = {
     setUp: function(cb) {
         testHelpers.createTestUser(this, cb);

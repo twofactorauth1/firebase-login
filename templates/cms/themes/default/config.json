@@ -1,0 +1,11 @@
+{
+    "theme-id":"default",
+
+    "theme-name":"Indigenous Default",
+
+    "theme-description":"The default indigenous theme",
+
+    "excluded-components": [
+
+    ]
+}
