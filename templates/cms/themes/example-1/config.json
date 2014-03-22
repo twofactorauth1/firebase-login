@@ -1,0 +1,9 @@
+{
+    "theme-id":"example-1",
+
+    "theme-name":"Example Theme 1",
+
+    "excluded-components": [
+
+    ]
+}

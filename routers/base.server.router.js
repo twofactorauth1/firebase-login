@@ -32,6 +32,7 @@ _.extend(baseRouter.prototype, {
 
 
     setup: function(req, resp, next) {
+        //TODO: Cache Account By Host
         if (req["session"] != null && req.session["accountId"] == null) {
             var accountDao = require("../dao/account.dao");
             accountDao.getAccountByHost(req.get("host"), function(err, value) {

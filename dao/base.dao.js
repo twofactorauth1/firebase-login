@@ -21,7 +21,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
 
 
     saveOrUpdate: function (model, fn) {
-        if ((model.id() === null || model.id() === 0)) {
+        if ((model.id() === null || model.id() === 0 || model.id() == "")) {
             var strategy = this.getIdStrategy(model);
             switch (strategy) {
                 case "uuid":
@@ -43,7 +43,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
 
 
     remove: function (model, fn) {
-        if (model.id() === null || model.id() === 0) {
+        if (model.id() === null || model.id() === 0 || model.id() == "") {
             return fn(null, null);
         }
 
@@ -115,6 +115,8 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         if (type != null && type.hasOwnProperty != null) {
             if (type.hasOwnProperty("db")) {
                 return type.db.storage;
+            } else if(type.constructor.db != null) {
+                return type.constructor.db.storage;
             } else if (_.isFunction(type.db)) {
                 return type.storage();
             }
@@ -124,14 +126,23 @@ _.extend(baseDao.prototype, mongoBaseDao, {
 
 
     getTable: function (type) {
+        var table;
         if (type != null && type.hasOwnProperty != null) {
             if (type.hasOwnProperty("db")) {
-                return type.db.table;
-            } else if (_.isFunction(type.table)) {
-                return type.table();
+                table = type.db.table;
+            } else if(type.constructor.db != null) {
+                table = type.constructor.db.table;
+            }
+            else if (_.isFunction(type.table)) {
+                table = type.table();
             }
         }
-        return this.defaultModel.db.table;
+        table = table || this.defaultModel.db.table;
+
+        if (process.env.NODE_ENV == "testing") {
+            table = table + "_testing";
+        }
+        return table;
     },
 
 
@@ -139,6 +150,8 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         if (type != null && type.hasOwnProperty != null) {
             if (type.hasOwnProperty("db")) {
                 return type.db.idStrategy || "increment";
+            } else if(type.constructor.db != null) {
+                return type.constructor.db.idStrategy || "increment";
             } else if (_.isFunction(type.idStrategy)) {
                 return type.idStrategy();
             }

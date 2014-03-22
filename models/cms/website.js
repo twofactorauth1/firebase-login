@@ -1,4 +1,4 @@
-require('./model.base');
+require('../model.base');
 
 var website = $$.m.ModelBase.extend({
 
@@ -122,7 +122,7 @@ var website = $$.m.ModelBase.extend({
              */
             created: {
                 date: "",
-                by: null,
+                by: null
             },
 
             /**
@@ -139,8 +139,14 @@ var website = $$.m.ModelBase.extend({
         }
     },
 
+
     initialize: function(options) {
 
+    },
+
+
+    validate: function() {
+        return true;
     }
 
 }, {

@@ -109,6 +109,30 @@ _.extend(modelBase.prototype, {
     },
 
 
+    created: function(userId) {
+        var created = this.get("created");
+        if (created == null) {
+            created = {};
+            this.set({created:created});
+        }
+
+        created.by = userId;
+        created.date = new Date().getTime();
+    },
+
+
+    modified: function(userId) {
+        var modified = this.get("modified");
+        if (modified == null) {
+            modified = {};
+            this.set({modified:modified});
+        }
+
+        modified.by = userId;
+        modified.date = new Date().getTime();
+    },
+
+
     storage: function() {
         Object.getPrototypeOf(this).constructor.db.storage;
     },

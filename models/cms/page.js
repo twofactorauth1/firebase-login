@@ -1,4 +1,4 @@
-require('./model.base');
+require('../model.base');
 
 /**
  * @class Page

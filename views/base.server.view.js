@@ -95,7 +95,7 @@ _.extend(baseView.prototype, {
 
     accountId: function() {
         try {
-            return (this.req.session.accountId == null || this.req.session.accountId == 0) ? 0 : this.req.session.accountId;
+            return this.req.session.accountId || 0;
         }catch(exception) {
             return null;
         }
