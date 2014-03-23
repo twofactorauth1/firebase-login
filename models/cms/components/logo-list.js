@@ -3,7 +3,7 @@
  *
  * Stores data that represents a list of logos used for marketing purposes.
  */
-require('./model.base');
+require('../../model.base');
 
 var component = $$.m.ModelBase.extend({
 
@@ -11,9 +11,20 @@ var component = $$.m.ModelBase.extend({
         return {
 
             /**
+             * The ID of this copmonent
+             */
+            _id: null,
+
+            /**
+             * Some themes may use this anchor to create
+             * navigation directly to thise component
+             */
+            anchor: null,
+
+            /**
              * The type of component this is
              */
-            type: "logo_list",
+            type: "logo-list",
 
             /**
              * The label for the component

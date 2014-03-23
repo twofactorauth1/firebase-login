@@ -4,7 +4,7 @@
  * Stores data that supports a list of images or a data source of images
  * to be displayed in a tiled fashion
  */
-require('./model.base');
+require('../../model.base');
 
 var component = $$.m.ModelBase.extend({
 
@@ -12,9 +12,20 @@ var component = $$.m.ModelBase.extend({
         return {
 
             /**
+             * The ID of this copmonent
+             */
+            _id: null,
+
+            /**
+             * Some themes may use this anchor to create
+             * navigation directly to thise component
+             */
+            anchor: null,
+
+            /**
              * The type of component this is
              */
-            type: "image_gallery",
+            type: "image-gallery",
 
             /**
              * The label for the component
@@ -50,11 +61,8 @@ var component = $$.m.ModelBase.extend({
             /**
              * An array of objects that contain image and caption data:
              * [{
-             *      caption: {
-             *          label: ""               // The caption that appears beneath or aside from the image
-             *          descpription: ""        // The description that appears beneath or aside from the image
-             *      },
-             *
+             *      label:                      // The caption that appears beneath or aside from the image
+             *      description,                // The description that appears beneath or aside from the image
              *      url:                        // The url of the image
              * }]
              */

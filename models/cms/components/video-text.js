@@ -4,7 +4,7 @@
  * Stores data that supports the display of a single video and optional
  * text.  If text is available, it is either to the right or th left of the video.
  */
-require('./model.base');
+require('../../model.base');
 
 var component = $$.m.ModelBase.extend({
 
@@ -12,9 +12,20 @@ var component = $$.m.ModelBase.extend({
         return {
 
             /**
+             * The ID of this copmonent
+             */
+            _id: null,
+
+            /**
+             * Some themes may use this anchor to create
+             * navigation directly to thise component
+             */
+            anchor: null,
+
+            /**
              * The type of component this is
              */
-            type: "video_text",
+            type: "video-text",
 
             /**
              * The label for the component
@@ -38,15 +49,10 @@ var component = $$.m.ModelBase.extend({
              *
              * @see $$.m.cms.modules.VideoText.VIDEO_POSITION
              */
-            videoPosition: "",
+            videoPosition: "center",
 
             /**
              * The caption to accompany the image (optional)
-             *
-             * {
-             *      label: "",              // The caption that appears beneath or aside from the image
-             *      description: ""         // The description that appears beneath or aside from the image
-             * }
              */
             caption: null,
 

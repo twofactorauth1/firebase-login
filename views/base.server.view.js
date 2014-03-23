@@ -93,6 +93,15 @@ _.extend(baseView.prototype, {
     },
 
 
+    userId: function() {
+        try {
+            return this.req.user.id();
+        }catch(exception) {
+            return null;
+        }
+    },
+
+
     accountId: function() {
         try {
             return this.req.session.accountId || 0;

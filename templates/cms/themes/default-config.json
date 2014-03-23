@@ -1,0 +1,360 @@
+{
+    "template-engine":"handlebars",
+    "supports-menu-lists":"false",
+
+    "linkLists": [
+        {
+            "name": "Head Menu",
+            "handle": "head-menu",
+            "links": [
+                {
+                    "label": "Home",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "home",
+                        "data": "index"
+                    }
+                },
+                {
+                    "label": "About us",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "page",
+                        "data": "about-us"
+                    }
+                },
+                {
+                    "label": "Indigenous",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "url",
+                        "data": "http://indigenous.io"
+                    }
+                }
+            ]
+        },
+
+        {
+            "name": "Main Menu",
+            "handle": "main-menu",
+            "links": [
+                {
+                    "label": "Top",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "section",
+                        "data": ""
+                    }
+                },
+                {
+                    "label": "Section 1",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "section",
+                        "data": "section1"
+                    }
+                },
+                {
+                    "label": "Section 2",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "section",
+                        "data": "section2"
+                    }
+                },
+                {
+                    "label": "Section 3",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "section",
+                        "data": "section3"
+                    }
+                },
+                {
+                    "label": "Contact Us",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "page",
+                        "data": "contact-us"
+                    }
+                }
+            ]
+        }
+    ],
+
+
+    "footer": {
+        "type": "thin",
+
+        "data": {
+            "textLeft":"Left Footer Text",
+            "textRight":"Right Footer Text",
+            "textCenter":"Center Footer Text"
+        }
+    },
+
+
+    "pages": [
+
+        {
+            "handle":"index",
+            "title":"Home",
+            "components": [
+
+            ]
+        },
+
+        {
+            "handle":"about-us",
+            "title":"About Us",
+            "components": [
+
+            ]
+        },
+
+        {
+            "handle":"contact-us",
+            "title":"Contact Us",
+            "components": [
+
+            ]
+        }
+    ],
+
+
+    "supported-components": [
+        "contact-us",
+        "facebook-comments",
+        "facebook-likes",
+        "feature-blocks",
+        "feature-list",
+        "feature-list-compare",
+        "freeform",
+        "image-gallery",
+        "image-slider",
+        "image-text",
+        "link-button-text",
+        "logo-list",
+        "social-feed",
+        "video-text"
+    ],
+
+
+    "excluded-components": [
+
+    ],
+
+
+    "components": [
+        {
+            "type": "contact-us",
+            "class": "component-contact-us",
+            "anchor": "contactus",
+            "classes": {
+                "label": "contact-us-label",
+                "description": "contact-us-description",
+
+                "location.address": "contact-us-address",
+                "location.address2": "contact-us-address2",
+                "location.city": "contact-us-city",
+                "location.state": "contact-us-state",
+                "location.zip": "contact-us-zip",
+                "location.lat": "contact-us-lat",
+                "location.lon": "contact-us-lon",
+                "location.showMap": "contact-us-show-map",
+                "location.displayLabel": "contact-us-address-display-label",
+
+                "contact.phone": "contact-us-phone",
+                "contact.email": "contact-us-email",
+
+                "contact.hours": "contact-us-hours",
+                "contact.hours.item":"contact-us-hour"
+            }
+        },
+
+        {
+            "type": "facebook-comments",
+            "class": "component-facebook-comments",
+            "anchor": "facebookcomments",
+            "classes": {
+                "label": "facebook-comments-label",
+                "description": "facebook-comments-description"
+            }
+        },
+
+        {
+            "type": "facebook-likes",
+            "class": "component-facebook-likes",
+            "anchor": "facebooklikes",
+            "classes": {
+                "label": "facebook-likes-label",
+                "description": "facebook-likes-description"
+            }
+        },
+
+        {
+            "type": "feature-blocks",
+            "class": "component-feature-blocks",
+            "anchor": "featureblocks",
+            "classes": {
+                "label": "feature-blocks-label",
+                "description": "feature-blocks-description",
+
+                "features": "feature-blocks-features",
+                "features.item":"feature-blocks-feature",
+                "features.item.label":"feature-blocks-feature-label",
+                "features.item.description":"feature-blocks-feature-description",
+                "features.item.iconUrl":"feature-blocks-feature-icon-url",
+                "features.item.iconClass":"features-blocks-feature-icon-class"
+            }
+        },
+
+
+        {
+            "type": "feature-list",
+            "class": "component-feature-list",
+            "anchor": "featurelist",
+            "classes": {
+                "label": "feature-list-label",
+                "description": "feature-list-description",
+
+                "features":"feature-list-features",
+                "features.item":"feature-list-feature",
+                "features.item.label":"feature-list-feature-label",
+                "features.item.description":"feature-list-feature-description",
+                "features.item.iconUrl":"feature-list-feature-icon-url",
+                "features.item.iconClass":"features-list-feature-icon-class"
+            }
+        },
+
+
+        {
+            "type": "feature-list-compare",
+            "class": "component-feature-list-compare",
+            "anchor": "featurelistcompare",
+            "classes": {
+                "label": "feature-list-compare-label",
+                "description": "feature-list-compare-description",
+
+                "products":"feature-list-compare-products",
+                "products.label":"feature-list-compare-product-label",
+
+                "features":"feature-list-compare-features",
+                "features.item":"feature-list-compare-feature",
+                "features.item.label":"feature-list-compare-feature-label",
+                "features.item.description":"feature-list-compare-feature-description",
+                "features.item.iconUrl":"feature-list-compare-feature-icon-url",
+                "features.item.iconClass":"features-list-compare-feature-icon-class",
+                "features.item.compare.value":"features-list-compare-feature-compare-value"
+            }
+        },
+
+        {
+            "type": "freeform",
+            "class": "component-freeform",
+            "anchor": "freeform",
+            "classes": {
+                "label": "freeform-label",
+                "description": "freeform-description",
+                "value": "freeform-value"
+            }
+        },
+
+        {
+            "type": "image-gallery",
+            "class": "component-image-gallery",
+            "anchor": "imagegallery",
+            "classes": {
+                "label": "image-gallery-label",
+                "description": "image-gallery-description",
+
+                "images":"image-gallery-images",
+                "images.item":"image-gallery-item",
+                "images.item.image":"image-gallery-item-image",
+                "images.item.label":"image-gallery-item-label",
+                "images.item.description":"images-gallery-item-description"
+            }
+        },
+
+        {
+            "type": "image-slider",
+            "class": "component-image-slider",
+            "anchor": "imageslider",
+            "classes": {
+                "label": "image-slider-label",
+                "description": "image-slider-description",
+
+                "images":"image-slider-images",
+                "images.item":"image-slider-item",
+                "images.item.image":"image-slider-item-image",
+                "images.item.overlay.label":"image-slider-item-overlay-label",
+                "images.item.overlay.description":"image-slider-item-overlay-description",
+                "images.item.label":"image-slider-item-label",
+                "images.item.description":"image-slider-item-description"
+            }
+        },
+
+        {
+            "type": "image-text",
+            "class": "component-image-text",
+            "anchor": "imagetext",
+            "classes": {
+                "label": "image-text-label",
+                "description": "image-text-description",
+                "caption": "image-text-caption",
+                "image":"image-text-image",
+                "text":"image-text-text"
+            }
+        },
+
+        {
+            "type": "link-button-text",
+            "class": "component-link-button-text",
+            "anchor": "linkbuttontext",
+            "classes": {
+                "label": "link-button-text-label",
+                "description": "link-button-text-description",
+                "button":"link-button-text-button",
+                "text":"link-button-text-text"
+            }
+        },
+
+        {
+            "type": "logo-list",
+            "class": "component-logo-list",
+            "anchor": "logolist",
+            "classes": {
+                "label": "logo-list-label",
+                "description": "logo-list-description",
+                "logos":"logo-list-logos",
+                "logos.item":"logo-list-logo",
+                "logos.item.label":"logo-list-logo-label",
+                "logos.item.description":"logo-list-logo-description",
+                "logos.item.iconUrl":"logo-list-logo-icon-url",
+                "logos.item.iconClass":"logo-list-logo-icon-class"
+            }
+        },
+
+        {
+            "type":"social-feed",
+            "class":"component-social-feed",
+            "anchor": "socialfeed",
+            "classes": {
+
+            }
+        },
+
+        {
+            "type": "video-text",
+            "class": "component-video-text",
+            "anchor": "videotext",
+            "classes": {
+                "label": "video-text-label",
+                "description": "video-text-description",
+                "caption": "video-text-caption",
+                "video":"video-text-video",
+                "text":"video-text-text"
+            }
+        }
+    ]
+}

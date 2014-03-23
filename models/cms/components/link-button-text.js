@@ -4,7 +4,7 @@
  * Stores data that supports the display of a single image and optional
  * text.  If text is available, it is either to the right or th left of the video.
  */
-require('./model.base');
+require('../../model.base');
 
 var component = $$.m.ModelBase.extend({
 
@@ -12,9 +12,20 @@ var component = $$.m.ModelBase.extend({
         return {
 
             /**
+             * The ID of this copmonent
+             */
+            _id: null,
+
+            /**
+             * Some themes may use this anchor to create
+             * navigation directly to thise component
+             */
+            anchor: null,
+
+            /**
              * The type of component this is
              */
-            type: "link_button_text",
+            type: "link-button-text",
 
             /**
              * The label for the component

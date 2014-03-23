@@ -54,18 +54,24 @@ var dao = {
         var themes = [];
         fs.readdir(pathToThemes, function (err, files) {
             async.eachLimit(files, 25, function (directory, cb) {
+                if (directory == "assets") {
+                    return cb();
+                }
                 fs.lstat(pathToThemes + "/" + directory, function (err, stats) {
                     if (err) {
                         return cb(err);
                     }
                     if (stats.isDirectory()) {
                         //Attempt to read config file from directory
-                        fs.readFile(pathToThemes + "/" + directory + "/config.json", "utf8", function(err, data) {
-                            if (err) { return self.log.error("An error occurred reading Theme config File: " + err); }
+                        fs.readFile(pathToThemes + "/" + directory + "/config.json", "utf8", function (err, data) {
+                            if (err) {
+                                self.log.error("An error occurred reading Theme config File: " + err);
+                                return cb();
+                            }
 
                             data = JSON.parse(data);
 
-                            var obj ={
+                            var obj = {
                                 id: data['theme-id'],
                                 name: data['theme-name'],
                                 description: data['theme-description'],
@@ -99,7 +105,7 @@ var dao = {
      * @param fn
      * @returns {*}
      */
-    getThemeConfig: function(themeId, fn) {
+    getThemeConfig: function (themeId, fn) {
         return this._getThemeConfig(themeId, false, fn);
     },
 
@@ -112,20 +118,20 @@ var dao = {
      * @param fn
      * @returns {*}
      */
-    getThemeConfigSigned: function(themeId, fn) {
+    getThemeConfigSigned: function (themeId, fn) {
         return this._getThemeConfig(themeId, true, fn);
     },
 
 
-    _getThemeConfig: function(themeId, signed, fn) {
+    _getThemeConfig: function (themeId, signed, fn) {
         var self = this;
         var pathToThemeConfig = themesConfig.PATH_TO_THEMES + "/" + themeId + "/config.json";
 
         var themeConfig, defaultConfig;
         async.parallel([
-            function(cb) {
+            function (cb) {
                 // Read theme config
-                fs.readFile(pathToThemeConfig, "utf8", function(err, data) {
+                fs.readFile(pathToThemeConfig, "utf8", function (err, data) {
                     if (err) {
                         self.log.error("An error occurred reading Theme config File: " + err);
                         return cb("An error occurred reading theme config file: " + err);
@@ -149,8 +155,8 @@ var dao = {
                 });
             },
 
-            function(cb) {
-                fs.readFile(themesConfig.PATH_TO_THEMES + "/config.json", "utf8", function(err, data) {
+            function (cb) {
+                fs.readFile(themesConfig.PATH_TO_THEMES + "/default-config.json", "utf8", function (err, data) {
                     if (err) {
                         self.log.error("An error occurred reading Default theme config File: " + err);
                         return cb("An error occurred reading default theme config file: " + err);
@@ -163,24 +169,40 @@ var dao = {
                     cb();
                 });
             }
-        ], function(err) {
+        ], function (err) {
 
             if (err) {
                 return fn(err);
             }
 
-            if (signed) {
-                themeConfig.signatures = {};
+            //Special case for merging theme components
+            var defaultComponents = defaultConfig.components;
+            var themeComponents = themeConfig.components;
+
+            if (themeComponents == null) {
+                themeComponents = [];
+                themeConfig.components = themeComponents;
             }
+            for (var i = 0, l = defaultComponents.length; i < l; i++) {
+                var defaultComponent = defaultComponents[i];
+                var componentType = defaultComponent.type;
 
-            //We have both the theme config and the default config
-            for (var key in defaultConfig) {
-                if (themeConfig.hasOwnProperty(key) == false || themeConfig[key] == null) {
-                    themeConfig[key] = defaultConfig[key];
+                //Get the theme component of same type
+                var themeComponent = _.findWhere(themeComponents, {type: componentType});
 
-                    if (signed) {
-                        themeConfig.signatures[key] = self._getSignature(defaultConfig[key]);
+                if (themeComponent == null) {
+                    //Do not add it if it is an excluded component from the theme
+                    if (themeConfig['excluded-components'].indexOf(componentType) == -1) {
+                        themeComponents.push(defaultComponent);
+                    } else {
+                        console.log("NOT ADDING: " + componentType);
                     }
+                } else {
+                    //Merge these together
+                    var index = themeComponents.indexOf(themeComponent);
+                    themeComponent = $$.u.objutils.extend(true, {}, defaultComponent, themeComponent);
+                    themeComponents[index] = themeComponent;
+
                 }
             }
 
@@ -189,7 +211,7 @@ var dao = {
     },
 
 
-    _getSignature: function(obj) {
+    _getSignature: function (obj) {
         if (obj == null) {
             obj = "";
         }
@@ -207,8 +229,15 @@ var dao = {
     },
     //endregion
 
+    //region PAGE
+    getPageForWebsite: function (websiteId, pageName, fn) {
+        var query = {websiteId: websiteId, handle: pageName};
 
-    //region Account Websites
+        this.findOne(query, Page, fn);
+    },
+    //endregion
+
+    //region WEBSITES
 
     /**
      * Retrieves the current website for an account, or creates a new one if
@@ -225,12 +254,16 @@ var dao = {
                 return fn(err, value);
             }
 
-            var websiteId = value.get("websiteId");
+            var website = value.get("website"), websiteId = null;
+
+            if (website != null) {
+                websiteId = website.websiteId;
+            }
             if (String.isNullOrEmpty(websiteId)) {
                 return self.createWebsiteForAccount(accountId, userId, fn);
             }
 
-            self.getById(websiteId, Website, fn);
+            return self.getById(websiteId, Website, fn);
         });
     },
 
@@ -263,10 +296,20 @@ var dao = {
                     return fn(err, value);
                 }
 
-                if (value.get("websiteId") == null) {
-                    value.set({websiteId: websiteId});
-
-
+                var websiteObj = value.get("website");
+                if (websiteObj == null || websiteObj.websiteId == null) {
+                    if (websiteObj == null) {
+                        websiteObj = {
+                            websiteId: websiteId,
+                            themeId: "default"
+                        };
+                        value.set({website: websiteObj});
+                    } else {
+                        websiteObj.websiteId = websiteId;
+                        if (websiteObj.themeId == null) {
+                            websiteObj.themeId = "default";
+                        }
+                    }
                     accountDao.saveOrUpdate(value, function () {
                         return fn(null, website);
                     });
@@ -310,8 +353,8 @@ var dao = {
                             return fn(err, value);
                         }
 
-                        if (value != null && value.get("websiteId") == websiteId) {
-                            value.set({websiteId: null});
+                        if (value != null && value.get("website") != null && value.get("website").websiteId == websiteId) {
+                            value.get("website").websiteId = null;
 
                             accountDao.saveOrUpdate(value, function (err, value) {
                                 if (err) {
@@ -360,11 +403,309 @@ var dao = {
                     return fn(err, value);
                 }
 
-                value.set({websiteId: websiteId});
+                var website = value.get("website");
+                if (website == null) {
+                    website = {
+                        websiteId: websiteId,
+                        themeId: "default"
+                    };
+                    value.set({website: website});
+                }
+                website.websiteId = websiteId;
 
                 accountDao.saveOrUpdate(value, fn);
             });
         });
+    },
+
+
+    getRenderedWebsitePageForAccount: function (accountId, pageName, fn) {
+        var self = this, account, website, page, themeId, themeConfig;
+
+        if (_.isFunction(pageName)) {
+            fn = pageName;
+            pageName = "index";
+        }
+
+        if (String.isNullOrEmpty(pageName)) {
+            pageName = "index";
+        }
+
+        var p1 = $.Deferred();
+        accountDao.getById(accountId, function (err, value) {
+            if (err) {
+                return p1.reject(err);
+            }
+
+            account = value;
+
+            var accountWebsite = account.get("website");
+            if (accountWebsite == null) {
+                themeId = "default";
+            } else {
+                themeId = accountWebsite.themeId || "default";
+            }
+
+            async.parallel([
+                function (cb) {
+
+                    //Get Website and page
+                    self.getOrCreateWebsiteByAccountId(accountId, null, function (err, value) {
+                        if (err) {
+                            return cb(err);
+                        }
+
+                        website = value;
+
+                        self.getPageForWebsite(website.id(), pageName, function (er, value) {
+                            if (err) {
+                                return cb(err);
+                            }
+
+                            page = value;
+
+                            cb();
+                        });
+                    });
+                },
+
+                function (cb) {
+
+                    //Load theme config
+                    self.getThemeConfig(themeId, function (err, value) {
+                        if (err) {
+                            return cb(err);
+                        }
+
+                        themeConfig = value;
+                        cb();
+                    });
+                }
+
+            ], function (err) {
+                if (err) {
+                    p1.reject();
+                    return fn(err);
+                }
+
+                p1.resolve();
+            })
+        });
+
+        $.when(p1)
+            .done(function () {
+                //We now have website, page, themeId, themeConfig, account
+
+                if (page == null || page.get("components") == null) {
+                    //Lets pull the default from the theme config
+                    var isNewPage = false;
+                    var defaultPage = _.findWhere(themeConfig.pages, {handle: pageName});
+                    if (page == null) {
+                        isNewPage = true;
+                        var page = new Page({
+                            title: defaultPage.title,
+                            handle: defaultPage.handle,
+                            websiteId: website.id(),
+                            accountId: accountId
+                        });
+                    }
+
+                    page.created(null);
+                    var pageComponents = page.get("components");
+                    if (pageComponents == null) {
+                        pageComponents = [];
+                        page.set({components: pageComponents});
+                    }
+
+                    var components = defaultPage.components;
+
+                    components.forEach(function (component) {
+                        var type = component;
+
+                        var component = require('../models/cms/components/' + type);
+                        if (component != null) {
+                            component = new component({
+                                _id: $$.u.idutils.generateUUID()
+                            });
+                            pageComponents.push(component.toJSON());
+                        }
+                    });
+                }
+
+                //We now have a proper page object
+
+                //Gather up all of our settings and other info.
+                var settings = $$.u.objutils.extend({}, account.get("settings"), website.get("settings"));
+
+                var seo = $$.u.objutils.extend({}, website.get("seo"), page.get("seo"));
+
+                var linklists = $$.u.objutils.extend({}, themeConfig.linkLists, website.get("linkLists"));
+
+                var footer = $$.u.objutils.extend({}, themeConfig.footer, website.get("footer"));
+
+                var title = page.get("title");
+                if (title == null) {
+                    title = website.get("title");
+                }
+                if (title == null && seo.title != null) {
+                    title = seo.title;
+                }
+
+                var data = {
+                    settings: settings,
+                    seo: seo,
+                    footer: footer,
+                    title: title,
+                    handle: pageName,
+                    linkLists: {}
+                };
+
+                if (linklists != null && linklists.length > 0) {
+                    for (var i =0; i < linklists.length; i++) {
+                        data.linkLists[linklists[i].handle] = linklists[i].links;
+                    }
+                }
+
+                var header, footer, body = "";
+                // render header, footer, and body
+                async.parallel([
+                    //render header
+                    function (cb) {
+                        self._renderItem(data, themeId, "header", themeConfig['template-engine'], "default-header", function (err, value) {
+                            if (err) {
+                                return cb(err);
+                            }
+
+                            header = value;
+                            cb();
+                        });
+                    },
+
+                    //render footer
+                    function (cb) {
+                        self._renderItem(data, themeId, "footer", themeConfig['template-engine'], "default-footer", function (err, value) {
+                            if (err) {
+                                return cb(err);
+                            }
+
+                            footer = value;
+                            cb();
+                        });
+                    },
+
+                    //render components in series
+                    function (cb) {
+
+                        if (page.isVisible() == false) {
+                            self._renderItem(data, themeId, "404", themeConfig['template-engine'], "default-404", function (err, value) {
+                                if (err) {
+                                    cb(err);
+                                }
+
+                                body = value;
+                                cb();
+                            });
+                            return;
+                        }
+
+                        var components = page.get("components");
+                        if (components == null || components.length == 0) {
+                            body = "";
+                            return cb();
+                        }
+
+                        async.eachSeries(components, function (component, _cb) {
+                            data.component = component;
+
+                            self._renderComponent(data, themeId, component.type, themeConfig['template-engine'], function (err, value) {
+                                if (err) {
+                                    return _cb(err);
+                                }
+
+                                body += value;
+                                _cb();
+                            })
+                        }, function (err) {
+                            cb();
+                        });
+                    }
+                ], function (err) {
+                    if (err) {
+                        return fn(err);
+                    }
+
+                    //render layout page
+                    data.component = null;
+
+                    data.header = header;
+                    data.footer = footer;
+                    data.body = body;
+
+                    self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {
+                        if (err) {
+                            return fn(err, value);
+                        }
+
+                        return fn(null, value);
+                    });
+                });
+            });
+    },
+
+
+    _renderComponent: function (data, themeId, component, engine, fn) {
+        return this._renderItem(data, themeId, "components/" + component, engine, null, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            return fn(err, value);
+        });
+    },
+
+
+    _renderItem: function (data, themeId, item, engine, defaultItem, fn) {
+        var self = this
+            , path = "cms/themes/"
+            , engine = engine || themesConfig.DEFAULT_ENGINE
+            , extension = this._getExtensionForEngine(engine);
+
+
+        if (_.isFunction(defaultItem)) {
+            fn = defaultItem;
+            defaultItem = null;
+        }
+
+        app.render(path + themeId + "/" + item + extension, data, function (err, value) {
+            if (err) {
+                console.log("ERROR: " + path + themeId + "/" + item + extension);
+                if (defaultItem != null) {
+                    if (engine != themesConfig.DEFAULT_ENGINE) {
+                        extension = self._getExtensionForEngine(themesConfig.DEFAULT_ENGINE);
+                    }
+                    app.render(path + defaultItem + extension, data, fn);
+                } else {
+                    fn(err, value);
+                }
+            } else {
+                fn(err, value);
+            }
+        });
+    },
+
+
+    _getExtensionForEngine: function (engine) {
+        if (engine == "handlebars" || engine == "hbs") {
+            return ".hbs";
+        } else if (engine == "jade") {
+            return ".jade";
+        } else if (engine == "dot") {
+            return ".dot";
+        } else if (engine == "html") {
+            return ".html";
+        } else {
+            return ".html";
+        }
     }
     //endregion
 };

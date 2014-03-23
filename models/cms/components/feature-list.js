@@ -4,7 +4,7 @@
  * Stores data that represents a feature list for a product
  * or service
  */
-require('./model.base');
+require('../../model.base');
 
 var component = $$.m.ModelBase.extend({
 
@@ -12,9 +12,20 @@ var component = $$.m.ModelBase.extend({
         return {
 
             /**
+             * The ID of this copmonent
+             */
+            _id: null,
+
+            /**
+             * Some themes may use this anchor to create
+             * navigation directly to thise component
+             */
+            anchor: null,
+
+            /**
              * The type of component this is
              */
-            type: "feature_list",
+            type: "feature-list",
 
             /**
              * The label for the component

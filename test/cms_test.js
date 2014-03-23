@@ -5,9 +5,10 @@ var testHelpers = require('../testhelpers/testhelpers');
 var cmsDao = require('../dao/cms.dao');
 
 var config = {
-    themeId: "example-1"
+    themeId: "default"
 };
 
+/*
 module.exports.testThemeExists = function (test) {
     console.log("TESTING IF THEME EXISTS");
 
@@ -59,7 +60,7 @@ module.exports.testGetAllThemes = function (test) {
         }
     });
 };
-
+*/
 
 module.exports.group = {
     setUp: function (cb) {
@@ -70,6 +71,7 @@ module.exports.group = {
         testHelpers.destroyTestUser(this.user, cb);
     },
 
+    /*
     testCreateAndDestroyWebsiteForAccount: function (test) {
         console.log("TESTING CREATE AND DESTROY WEBSITE FOR ACCOUNT");
         var self = this;
@@ -137,7 +139,8 @@ module.exports.group = {
                             return test.done();
                         }
 
-                        test.equal(value.get("websiteId"), websiteId2, "Website Switched properly on account");
+
+                        test.equal(value.get("website").websiteId, websiteId2, "Website Switched properly on account");
 
                         async.parallel([
                             function (cb) {
@@ -159,5 +162,15 @@ module.exports.group = {
                     return test.done();
                 });
             });
+    },
+    */
+
+    testRenderIndexPage: function(test) {
+        console.log("TESTING RENDER INDEX PAGE");
+
+        cmsDao.getRenderedWebsitePageForAccount(this.accountId, "index", function(err, value) {
+            test.equal(err, null, "No Error occurred getting rendered page");
+            test.done();
+        });
     }
 };

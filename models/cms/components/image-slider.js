@@ -4,7 +4,7 @@
  * Stores data that supports multiple images, captions, and overlays and eventually
  * are displayed in a slider like comonent, usually for marketing purposes.
  */
-require('./model.base');
+require('../../model.base');
 
 var component = $$.m.ModelBase.extend({
 
@@ -12,9 +12,20 @@ var component = $$.m.ModelBase.extend({
         return {
 
             /**
+             * The ID of this copmonent
+             */
+            _id: null,
+
+            /**
+             * Some themes may use this anchor to create
+             * navigation directly to thise component
+             */
+            anchor: null,
+
+            /**
              * The type of component this is
              */
-            type: "image_slider",
+            type: "image-slider",
 
             /**
              * The label for the component
@@ -31,15 +42,10 @@ var component = $$.m.ModelBase.extend({
             /**
              * An array of objects that contain image and caption data:
              * [{
-             *      overlay: {
-             *          label: "",              //label overlay, positioned atop the image in the center
-             *          description:""          //description overlay, positioned beneath the label
-             *      },
-             *
-             *      caption: {
-             *          label: ""               //The caption that appears beneath or aside from the image
-             *          descpription: ""        //The description that appears beneath or aside from the image
-             *      }
+             *      label:"",                   //The caption that appears beneath or aside from the image
+             *      description:""              //The description that appears beneath or aside from the image
+             *      overlayLabel:"",            //label overlay, positioned atop the image in the center
+             *      overlayDescription:""       //description overlay, positioned beneath the label
              *      url:                        //The url of the image
              * }]
              */

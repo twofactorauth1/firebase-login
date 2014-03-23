@@ -14,14 +14,64 @@ var website = $$.m.ModelBase.extend({
              */
             _id: "",
 
+
             /**
              * The account Id to whom this website belongs
              *
              * @property accountId
              * @type {Number}
-             * @default "0"
+             * @default null
              */
-            accountId:0,
+            accountId: null,
+
+
+            /**
+             * The settings for this website.  This overrides any similar settings stored
+             * at the Account level
+             *
+             * @type {Object}
+             * @default null
+             *
+             * @example
+             * {
+             *      title: "My Website Title",
+             *      bannerImage: {url}
+             *      bannerClickUrl: {url}
+             *      logoImage: {url}
+             *      logoClickUrl: {url}
+             *      backgroundImage: {url}
+             * }
+             */
+            settings: null,
+
+
+            /**
+             * The Title.  This works as a default title for any page that does not have a
+             * title.
+             *
+             * @type {String}
+             * @default: null
+             */
+            title: null,
+
+
+            /**
+             * Add a little bit of information to help Search engine optimization.
+             * This is the default, but can be overridden on a per page basis
+             *
+             * @property seo
+             * @type {Object}
+             * @default: null
+             *
+             * @example:
+             * {
+             *      title: "my title",
+             *      description: "This website is all about xyz",
+             *      keywords: "xyz, testing, cool"
+             * }
+             */
+            seo: null,
+
 
             /**
              * All of the various link lists associated with this website
@@ -40,32 +90,13 @@ var website = $$.m.ModelBase.extend({
              *      label:""
              *      type:""         // link | menu
              *      linkTo: {
-             *          type:       // page | product | collection | home | url
-             *          handle:     // The handle of the page that is being linked to. Combined with the type, we can generate URL
-             *          pageId:     // The _id of the page being linked to.  Redundant with handle
-             *          url:        // The url being linked to, in the case of a URL link
+             *          type:       // section | page | product | collection | home | url
+             *          data:       // This will be the anchor (section), handle (page, product, collection), or URL (url)
              *      }
              *  }]
              * }]
              */
-            linkLists: [],
-
-
-            /**
-             * The header object that will appear on every page.
-             *
-             * @property header
-             * @type {Object}
-             * @default null
-             */
-            header: {
-                label: "",
-                description: "",
-                logo: null,
-                image: null,
-                linkList1Id: null,
-                linkList2Id: null
-            },
+            linkLists: null,
 
 
             /**
@@ -74,44 +105,38 @@ var website = $$.m.ModelBase.extend({
              * @property footer
              * @type {Object}
              * @default {}
+             *
+             * {
+             *      type: "thin" | "fat"
+             *      data: {
+             *
+             *          // THIN FOOTER ONLY
+             *          textLeft: ""
+             *          textRight: ""
+             *          textCenter: ""
+             *
+             *
+             *          // FAT FOOTER ONLY
+             *          blocks: [
+             *              type: "",           // text | email_signup | social_links | tweets | blog
+             *              text: "",           // The text to display if this is a 'text' block
+             *              links: [{
+             *                type: ""          // facebook | twiter | linkedin | google+ | flickr | pinterest | etc
+             *                url
+             *              }],
+             *              blog: {
+             *                  label: "",      // The label or name of the blog
+             *                  url: ""         // The URL to the RSS feed of the blog
+             *              },
+             *              twitter: {
+             *                  username: ""    // The username of the twitter acct to display feeds for
+             *              }
+             *          ]
+             *      }
+             * }
              */
-            footer: {
-                type: "thin",       // thin | fat
+            footer: null,
 
-                /**
-                 * Properties relevant to a thin footer
-                 *
-                 * {
-                 *      textLeft:"",
-                 *      textCenter: "",
-                 *      textRight: ""
-                 * }
-                 */
-                thin: null,
-
-                /**
-                 * Properties relevant to a fat footer
-                 *
-                 * {
-                 *  blocks: [
-                 *      type: "",           // text | email_signup | social_links | tweets | blog
-                 *      text: "",           // The text to display if this is a 'text' block
-                 *      links: [{
-                 *          type: ""        // facebook | twiter | linkedin | google+ | flickr | pinterest | etc
-                 *          url
-                 *      }],
-                 *      blog: {
-                 *          label: "",      // The label or name of the blog
-                 *          url: ""         // The URL to the RSS feed of the blog
-                 *      },
-                 *      twitter: {
-                 *          username: ""    // The username of the twitter acct to display feeds for
-                 *      }
-                 *  ]
-                 * }
-                 */
-                fat: null
-            },
 
             /**
              * Created by data
@@ -124,6 +149,7 @@ var website = $$.m.ModelBase.extend({
                 date: "",
                 by: null
             },
+
 
             /**
              * Modified by data

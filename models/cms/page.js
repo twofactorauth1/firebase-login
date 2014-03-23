@@ -24,7 +24,7 @@ var page = $$.m.ModelBase.extend({
              * @type {Number}
              * @default 0
              */
-            accountId:0,
+            accountId:null,
 
             /**
              * The website Id to whom this page belongs
@@ -33,7 +33,7 @@ var page = $$.m.ModelBase.extend({
              * @type {Number}
              * @default 0
              */
-            websiteId:0,
+            websiteId:null,
 
             /**
              * The page handle, reserved handle is "index", for the main page
@@ -42,7 +42,7 @@ var page = $$.m.ModelBase.extend({
              * @type {String}
              * @default ""
              */
-            handle: "",
+            handle: null,
 
             /**
              * The page title that appears in the tab name
@@ -51,39 +51,41 @@ var page = $$.m.ModelBase.extend({
              * @type {String}
              * @default ""
              */
-            title: "",
+            title: null,
 
             /**
-             * Add a little bit of information to help Search engine optimization
+             * Add a little bit of information to help Search engine optimization.
+             * Overrides the seo options at the Website level
              *
              * @property seo
              * @type {Object}
-             * @default: "{title: "", metadescription: "", keywords: ""}"
+             * @default: null
+             *
+             * @example:
+             * {
+             *      title: "my title",
+             *      description: "This website is all about xyz",
+             *      keywords: "xyz, testing, cool"
+             * }
              */
-            seo: {
-                title: "",
-                metadescription: "",
-                keywords: ""
-            },
+            seo: null,
 
             /**
              * Determines if this page is visible or not
              */
             visibility: {
-                visible: false, //true | false
+                visible: true, //true | false
                 asOf: null,     //Timestamp, tracks the last time the visible flag was modified
                 displayOn: null //Timestamp, determines when this page becomes visible.  If null, it's ignored
             },
 
             /**
-             * The modules that make up the page
-             * [{
-             *  _id,
-             *  type,
-             *  data: {}        //The data specific for this module type
-             * ]}
+             * The components that make up the page
+             * [
+             *      array of data from each component
+             * ]
              */
-            modules: [],
+            components: null,
 
             /**
              * Created by data
@@ -94,7 +96,7 @@ var page = $$.m.ModelBase.extend({
              */
             created: {
                 date: "",
-                by: null,
+                by: null
             },
 
             /**
@@ -113,6 +115,16 @@ var page = $$.m.ModelBase.extend({
 
     initialize: function(options) {
 
+    },
+
+
+    isVisible: function() {
+        var visibility = this.get("visibility");
+        if (visibility.visible == true) {
+            return true;
+        }
+
+        return (visibility.displayOn != null && visibility.displayOn < new Date().getTime());
     }
 
 }, {

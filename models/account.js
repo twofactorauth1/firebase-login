@@ -6,19 +6,39 @@ var account = $$.m.ModelBase.extend({
     defaults: function() {
         return {
             _id: null,
+
             company: {
                 name:"",
                 type:0,
                 size:0,
                 logo:""
             },
+
             subdomain:"",
             domain:"",
             token:"",
+
             website: {
-                templateId:"",      //The current Inidenous template being used
-                websiteId:""        //The current template data id being referenced (may have more than one)
+
+                /**
+                 * The global settings for websites on this account.
+                 * This may be overridden at the Website level
+                 *
+                 * @type {Object}
+                 * @default null
+                 *
+                 * @example
+                 * {
+                 *      logoImage: {url}
+                 *      logoClickUrl: {url}
+                 *      favicon: null
+                 * }
+                 */
+                settings: null,
+                websiteId:null,             //The current Inidenous template being used, defaults to "default"
+                themeId:"default"           //The current template data id being referenced (may have more than one)
             },
+
             _v:"0.1"
         }
     },

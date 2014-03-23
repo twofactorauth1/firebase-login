@@ -1,5 +1,7 @@
 var BaseView = require('./base.server.view');
 
+var cmsDao = require('../dao/cms.dao');
+
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
 };
@@ -20,20 +22,20 @@ _.extend(view.prototype, BaseView.prototype, {
         var self = this;
 
         var cacheKey = "web-" + accountId + "-" + path;
-        $$.g.cache.get(cacheKey, function(err, value) {
+        $$.g.cache.get(cacheKey, "websites", function(err, value) {
             if (!err && value) {
                 self.resp.send(value);
             } else {
                 var data = {};
 
-                //TODO - Construct web page here.
+                var view = cmsDao.getRenderedWebsitePageForAccount(accountId, path, function(err, value) {
+                    if (err) {
+                        return self.resp.render('500.html');
+                    }
 
-                self.resp.render('page', data, function(err, content) {
-                    if (err) { return self.req.next(); }
+                    $$.g.cache.set(cacheKey, "websites", value, 30);
 
-                    $$.g.cache.set(cacheKey, content);
-
-                    self.resp.send(content);
+                    self.resp.send(value);
                 });
             }
         });

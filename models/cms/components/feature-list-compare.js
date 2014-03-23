@@ -5,7 +5,7 @@
  * between multiple products or services.  Maximum products
  * or services for comparison is 4.
  */
-require('./model.base');
+require('../../model.base');
 
 var component = $$.m.ModelBase.extend({
 
@@ -13,9 +13,20 @@ var component = $$.m.ModelBase.extend({
         return {
 
             /**
+             * The ID of this copmonent
+             */
+            _id: null,
+
+            /**
+             * Some themes may use this anchor to create
+             * navigation directly to thise component
+             */
+            anchor: null,
+
+            /**
              * The type of component this is
              */
-            type: "feature_list_compare",
+            type: "feature-list-compare",
 
             /**
              * The label for the component
@@ -50,7 +61,7 @@ var component = $$.m.ModelBase.extend({
              *          productId: ""       // The id of the product
              *          isPresent: false    // Whether or not the feature is present on that product
              *      }]
-             *      comparisons: []         // The actual comparisons, see above
+             *      compare: []         // The actual comparisons, see above
              * ]}
              */
             features: []
