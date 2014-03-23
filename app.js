@@ -1,5 +1,6 @@
 /*
 //Do not delete this
+//requires: "nodetime": "~0.8.15" to run
 require('nodetime').profile({
     accountKey: 'bdd766862005ebc9c88fc409cef27c60921f2774',
     appName: 'Node.js Application'
