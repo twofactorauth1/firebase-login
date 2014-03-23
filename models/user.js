@@ -305,9 +305,8 @@ var user = $$.m.ModelBase.extend({
 
 
     createOrUpdateAddress: function(type, addressType, address, address2, city, state, zip, country, countryCode, displayName, lat, lon, defaultShipping, defaultBilling) {
-        var existing = null;
-
-        var details = this.getOrCreateDetails(type);
+        var existing
+            , details = this.getOrCreateDetails(type);
 
         details.addresses = details.addresses || [];
 
@@ -564,7 +563,7 @@ var user = $$.m.ModelBase.extend({
 
 
     getCredentials: function (type) {
-        var credentials = this.get("credentials"), creds;
+        var credentials = this.get("credentials");
         for (var i = 0; i < credentials.length; i++) {
             if (credentials[i].type == type) {
                 return credentials[i];
@@ -1036,7 +1035,7 @@ var user = $$.m.ModelBase.extend({
 
 
     _verifyPassword: function(password, encryptedPassword, fn) {
-        crypto.verify(password, encryptedPass, fn);
+        crypto.verify(password, encryptedPassword, fn);
     }
     //endregion
 }, {

@@ -500,6 +500,9 @@ var dao = {
                     //Lets pull the default from the theme config
                     var isNewPage = false;
                     var defaultPage = _.findWhere(themeConfig.pages, {handle: pageName});
+                    if (defaultPage == null) {
+                        return fn($$.u.errors._404_PAGE_NOT_FOUND);
+                    }
                     if (page == null) {
                         isNewPage = true;
                         var page = new Page({

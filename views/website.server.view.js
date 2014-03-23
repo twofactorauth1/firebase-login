@@ -30,6 +30,9 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 var view = cmsDao.getRenderedWebsitePageForAccount(accountId, path, function(err, value) {
                     if (err) {
+                        if (err.error && err.error.code && err.error.code == 404) {
+                            return self.resp.render('404.html');
+                        }
                         return self.resp.render('500.html');
                     }
 

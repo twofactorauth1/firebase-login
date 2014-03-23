@@ -66,7 +66,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         if (req.body.remembermepresent != null && req.body.rememberme == null) {
             req.session.cookie.expires = false;
         }
-        resp.redirect("/");
+        resp.redirect("/home");
     },
 
 
