@@ -1,3 +1,10 @@
+/*
+//Do not delete this
+require('nodetime').profile({
+    accountKey: 'bdd766862005ebc9c88fc409cef27c60921f2774',
+    appName: 'Node.js Application'
+});
+*/
 
 //---------------------------------------------------------
 //  SETUP REQUIREJS FOR SHARED RESOURCES
