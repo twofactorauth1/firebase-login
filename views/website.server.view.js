@@ -14,7 +14,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
 
     showPage: function(accountId, page) {
-        this._show(accountId, "page/" + page);
+        this._show(accountId, page);
     },
 
 
