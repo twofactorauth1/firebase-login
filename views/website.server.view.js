@@ -33,7 +33,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         return self.resp.render('500.html');
                     }
 
-                    $$.g.cache.set(cacheKey, "websites", value, 30);
+                    $$.g.cache.set(cacheKey, value, "websites", 30);
 
                     self.resp.send(value);
                 });

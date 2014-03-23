@@ -8,7 +8,7 @@ var config = {
     themeId: "default"
 };
 
-/*
+
 module.exports.testThemeExists = function (test) {
     console.log("TESTING IF THEME EXISTS");
 
@@ -60,7 +60,7 @@ module.exports.testGetAllThemes = function (test) {
         }
     });
 };
-*/
+
 
 module.exports.group = {
     setUp: function (cb) {
@@ -71,7 +71,7 @@ module.exports.group = {
         testHelpers.destroyTestUser(this.user, cb);
     },
 
-    /*
+
     testCreateAndDestroyWebsiteForAccount: function (test) {
         console.log("TESTING CREATE AND DESTROY WEBSITE FOR ACCOUNT");
         var self = this;
@@ -163,7 +163,7 @@ module.exports.group = {
                 });
             });
     },
-    */
+
 
     testRenderIndexPage: function(test) {
         console.log("TESTING RENDER INDEX PAGE");

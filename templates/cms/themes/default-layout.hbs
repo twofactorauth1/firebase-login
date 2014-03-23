@@ -6,7 +6,12 @@
     <meta name="description" content="{{seo.description}}">
     <meta name="keywords" content="{{seo.keywords}}">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="{{settings.favicon}}">
+
+    {{#if settings.favicon}}
+        <link rel="shortcut icon" href="{{settings.favicon}}">
+    {{else}}
+        <link rel="shortcut icon" href="https://s3.amazonaws.com/indigenous-themes/assets/icons/favicon.ico"/>
+    {{/if}}
 
     <title>{{title}}</title>
 
