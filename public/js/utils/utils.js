@@ -2,6 +2,14 @@ define(function() {
 
     var utils = {
 
+        styleutils: {
+            loadCSS: function(href) {
+                var cssLink = $("<link rel='stylesheet' type='text/css' href='"+href+"'>");
+                $("head").append(cssLink);
+            }
+        },
+
+
         viewutils: {
             isMobileLayout:function () {
                 return (window.innerWidth || document.documentElement.clientWidth) < 768;

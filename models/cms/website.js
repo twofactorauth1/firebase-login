@@ -1,4 +1,5 @@
 require('../model.base');
+var cryptoUtil = require('../../utils/security/crypto');
 
 var website = $$.m.ModelBase.extend({
 
@@ -52,7 +53,7 @@ var website = $$.m.ModelBase.extend({
              * @type {String}
              * @default: null
              */
-            title: null,
+            title: "Default Website Title",
 
 
             /**
@@ -162,6 +163,16 @@ var website = $$.m.ModelBase.extend({
                 date: "",
                 by: null
             }
+        }
+    },
+
+    serializers: {
+        public: function(json) {
+            cryptoUtil.signDocument(json, {accountId: json.accountId, websiteId: json.websiteId});
+        },
+
+        db: function(json) {
+            delete json.__signature;
         }
     },
 

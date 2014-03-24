@@ -6,8 +6,11 @@ var uploadApi = require('./1.0/upload.api');
 var geoApi = require('./1.0/geo.api');
 var emailDataApi = require('./1.0/emaildata.api');
 
+//CME
+var cmsApi = require('./1.0/cms.api');
+
 //Integrations
-var awsApi = require('./1.0//integrations/aws.api');
+var awsApi = require('./1.0/integrations/aws.api');
 
 //Social
 var facebookApi = require('./1.0/social/facebook.api');

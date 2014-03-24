@@ -22,36 +22,48 @@ _.extend(view.prototype, BaseView.prototype, {
         var self = this;
 
         var cacheKey = "web-" + accountId + "-" + path;
+        if (this.req.query.editor== "true") {
+            self._renderWebsite(accountId, path, cacheKey, true);
+            return;
+        }
+
         $$.g.cache.get(cacheKey, "websites", function(err, value) {
             if (!err && value) {
                 self.resp.send(value);
 
                 self.cleanUp();
-                data = value = null;
+                value = null;
             } else {
-                var data = {};
-
-                var view = cmsDao.getRenderedWebsitePageForAccount(accountId, path, function(err, value) {
-                    if (err) {
-                        if (err.error && err.error.code && err.error.code == 404) {
-                            self.resp.render('404.html');
-                        } else {
-                            self.resp.render('500.html');
-                        }
-
-                        self.cleanUp();
-                        self = data = null;
-                        return;
-                    }
-
-                    $$.g.cache.set(cacheKey, value, "websites");
-
-                    self.resp.send(value);
-
-                    self.cleanUp();
-                    self = data = value = null;
-                });
+                self._renderWebsite(accountId, path, cacheKey);
             }
+        });
+    },
+
+
+    _renderWebsite: function(accountId, path, cacheKey, isEditor) {
+        var data = {}, self = this;
+
+        cmsDao.getRenderedWebsitePageForAccount(accountId, path, isEditor, function(err, value) {
+            if (err) {
+                if (err.error && err.error.code && err.error.code == 404) {
+                    self.resp.render('404.html');
+                } else {
+                    self.resp.render('500.html');
+                }
+
+                self.cleanUp();
+                self = data = null;
+                return;
+            }
+
+            if (isEditor !== true) {
+                $$.g.cache.set(cacheKey, value, "websites");
+            }
+
+            self.resp.send(value);
+
+            self.cleanUp();
+            self = data = value = null;
         });
     }
 });

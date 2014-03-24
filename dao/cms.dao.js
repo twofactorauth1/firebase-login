@@ -2,6 +2,7 @@ var baseDao = require('./base.dao');
 var fs = require('fs');
 var async = require('async');
 var crypto = require('crypto');
+var cryptoUtil = require('../utils/security/crypto');
 
 var accountDao = require('./account.dao');
 var themesConfig = require('../configs/themes.config');
@@ -129,6 +130,39 @@ var dao = {
     },
 
 
+    /**
+     * Retrieves a signed copy of the theme config by AccountId.  This is suitable
+     * for sending out to be modified and returned / updated
+     *
+     * @param accountId
+     * @param fn
+     * @private
+     */
+    getThemeConfigSignedByAccountId: function(accountId, fn) {
+        var self = this;
+        accountDao.getById(accountId, function(err, value) {
+            if (err) {
+                fn(err, value);
+                fn = null;
+            }
+
+            if (value == null) {
+                fn("No Account found with ID: [" + accountId + "]");
+                fn = value = null;
+            }
+
+            var website = value.get("website");
+            var themeId = "default";
+            if (website != null) {
+                themeId = website.themeId || "default";
+            }
+
+            self._getThemeConfig(themeId, true, fn);
+            value = website = themeId = fn = self = null;
+        });
+    },
+
+
     _getThemeConfig: function (themeId, signed, fn) {
         var self = this
             , pathToThemeConfig = themesConfig.PATH_TO_THEMES + "/" + themeId + "/config.json"
@@ -159,7 +193,7 @@ var dao = {
 
                     if (signed === true) {
                         // This ensures the Theme ID has not changed if the user makes modifications and returns this file
-                        data.signature = self._getSignature(themeId);
+                        cryptoUtil.signDocument(data, themeId);
                     }
 
                     themeConfig = data;
@@ -186,6 +220,9 @@ var dao = {
             if (err) {
                 return fn(err);
             }
+
+            //Merge the default into the Theme Specific configs
+            themeConfig = $$.u.objutils.extend({}, defaultConfig, themeConfig);
 
             //Special case for merging theme components
             defaultComponents = defaultConfig.components;
@@ -225,25 +262,8 @@ var dao = {
                 = themeId = signed = fn = null;
         });
     },
-
-
-    _getSignature: function (obj) {
-        if (obj == null) {
-            obj = "";
-        }
-
-        if (_.isObject(obj)) {
-            obj = JSON.stringify(obj);
-        }
-
-        if (_.isString(obj) == false) {
-            obj = obj.toString();
-        }
-
-        var signature = crypto.createHmac("sha256", themesConfig.THEME_ID_SIGNATURE_SECRET).update(obj).digest('hex');
-        return signature;
-    },
     //endregion
+
 
     //region PAGE
     getPageForWebsite: function (websiteId, pageName, fn) {
@@ -253,7 +273,19 @@ var dao = {
     },
     //endregion
 
+
     //region WEBSITES
+
+    /**
+     * Retrieves a Website By Id
+     *
+     * @param websiteId
+     * @param fn
+     */
+    getWebsiteById: function(websiteId, fn) {
+        return this.getById(websiteId, Website, fn);
+    },
+
 
     /**
      * Retrieves the current website for an account, or creates a new one if
@@ -263,30 +295,65 @@ var dao = {
      * @param userId
      * @param fn
      */
-    getOrCreateWebsiteByAccountId: function (accountId, userId, fn) {
+    getOrCreateWebsiteByAccountId: function (accountId, userId, populateDefaultsFromTheme, fn) {
+        if (_.isFunction(populateDefaultsFromTheme)) {
+            fn = populateDefaultsFromTheme;
+            populateDefaultsFromTheme = false;
+        }
         var self = this
             , website
-            , websiteId;
+            , websiteId
+            , account
+            , themeId
+            , themeConfig;
 
         accountDao.getById(accountId, function (err, value) {
             if (err) {
-                return fn(err, value);
+                fn(err, value);
+                self = value = null;
+                return;
             }
 
-            website = value.get("website");
+            if (value == null) {
+                fn("Account does not exist");
+                self = value = null;
+                return;
+            }
 
+            account = value;
+            website = account.get("website");
 
             if (website != null) {
                 websiteId = website.websiteId;
+                themeId = website.themeId || "default";
             }
+
             if (String.isNullOrEmpty(websiteId)) {
                 self.createWebsiteForAccount(accountId, userId, fn);
                 self = website = fn = null;
                 return;
             }
 
-            self.getById(websiteId, Website, fn);
-            self = website = fn = null;
+            self.getById(websiteId, Website, function (err, value) {
+                if (err) {
+                    fn(err, value);
+                    self = website = account = fn = null;
+                    return;
+                }
+
+                var websiteValue = value;
+                if (populateDefaultsFromTheme == true) {
+                    self._populateWebsiteDefaultsFromThemeConfig(websiteValue, themeId, function(err, value) {
+                        self._setLinkListUrlsForWebsite(websiteValue);
+                        fn(null, websiteValue);
+                        self = website = websiteValue = themeConfig = account = fn = null;
+                    });
+                } else {
+                    self._setLinkListUrlsForWebsite(websiteValue);
+                    fn(err, websiteValue);
+                    self = website = websiteValue = account = fn = null;
+                }
+            });
         });
     },
 
@@ -299,7 +366,7 @@ var dao = {
      * @param fn
      */
     createWebsiteForAccount: function (accountId, userId, fn) {
-        var self = this, website, websiteObj, websiteId;
+        var self = this, website, websiteObj, websiteId, account, themeId, p1;
 
         website = new Website({
             accountId: accountId
@@ -307,48 +374,104 @@ var dao = {
 
         website.created(userId);
 
-        this.saveOrUpdate(website, function (err, value) {
+        p1 = $.Deferred();
+        accountDao.getById(accountId, function(err, value) {
             if (err) {
                 fn(err, value);
-                self = website = websiteObj = websiteId = null;
+                self = website = websiteObj = websiteId = p1 = null;
                 return;
             }
 
-            website = value;
-            websiteId = website.id();
+            account = value;
 
-            accountDao.getById(accountId, function (err, value) {
-                if (err) {
-                    fn(err, value);
-                    self = website = websiteObj = websiteId = null;
-                    return;
-                }
+            websiteObj == account.get("website");
+            if (websiteObj != null) {
+                themeId = websiteObj.themeId || "default";
+            } else {
+                themeId = "default";
+            }
 
-                websiteObj = value.get("website");
+            self._populateWebsiteDefaultsFromThemeConfig(website, themeId, function(err, value) {
+                self.saveOrUpdate(website, function(err, value) {
+                    if (err) {
+                        fn(err, value);
+                        p1.reject();
+                        self = website = websiteObj = websiteId = p1 = account = null;
+                        return;
+                    }
+                    website = value;
+                    websiteId = website.id();
+                    p1.resolve();
+                });
+            });
+        });
+
+
+        $.when(p1)
+            .done(function() {
                 if (websiteObj == null || websiteObj.websiteId == null) {
                     if (websiteObj == null) {
                         websiteObj = {
                             websiteId: websiteId,
                             themeId: "default"
                         };
-                        value.set({website: websiteObj});
+                        account.set({website: websiteObj});
                     } else {
                         websiteObj.websiteId = websiteId;
                         if (websiteObj.themeId == null) {
                             websiteObj.themeId = "default";
                         }
                     }
-                    accountDao.saveOrUpdate(value, function () {
+                    accountDao.saveOrUpdate(account, function () {
+                        self._setLinkListUrlsForWebsite(website);
                         fn(null, website);
-                        self = website = websiteObj = websiteId = null;
+                        self = website = websiteObj = websiteId = p1 = account = null;
                         return;
                     });
                 } else {
+                    self._setLinkListUrlsForWebsite(website);
                     fn(null, website);
-                    self = website = websiteObj = websiteId = null;
+                    self = website = websiteObj = websiteId = p1 = account = null;
                     return;
                 }
             });
+    },
+
+
+    _populateWebsiteDefaultsFromThemeConfig: function(website, themeId, fn) {
+        if (website == null) {
+            fn("Website is null");
+            fn = null;
+            return;
+        }
+
+        if (website.get("linkLists") != null && website.get("footer") != null) {
+            return fn(null, website);
+            fn = null;
+            return;
+        }
+
+        this.getThemeConfig(themeId, function (err, value) {
+            if (err) {
+                fn(err, value);
+                fn = null;
+                return;
+            }
+            if (value != null) {
+                var themeConfig = value;
+
+                if (website.get("linkLists") == null) {
+                    website.set({linkLists:themeConfig.linkLists});
+                }
+
+                if (website.get("footer") == null) {
+                    var footer = $$.u.objutils.extend({}, themeConfig.footer, website.get("footer"));
+                    website.set({footer:footer});
+                }
+            }
+
+            fn(err, website);
+            fn = themeConfig = null;
         });
     },
 
@@ -390,7 +513,8 @@ var dao = {
                     accountDao.getById(accountId, function (err, value) {
                         if (err) {
                             fn(err, value);
-                            self = accountId = null; return;
+                            self = accountId = null;
+                            return;
                         }
 
                         if (value != null && value.get("website") != null && value.get("website").websiteId == websiteId) {
@@ -473,13 +597,19 @@ var dao = {
     },
 
 
-    getRenderedWebsitePageForAccount: function (accountId, pageName, fn) {
+    getRenderedWebsitePageForAccount: function (accountId, pageName, isEditor, fn) {
         var self = this, account, website, page, themeId, themeConfig;
 
         if (_.isFunction(pageName)) {
             fn = pageName;
             pageName = "index";
+            isEditor = false;
         }
+        else if (_.isFunction(isEditor)) {
+            fn = isEditor;
+            isEditor = false;
+        }
+
 
         if (String.isNullOrEmpty(pageName)) {
             pageName = "index";
@@ -563,6 +693,7 @@ var dao = {
                             = isNewPage = defaultPage = page = components = pageComponents
                             = settings = seo = linklists = footer = header = body = title = data
                             = accountId = pageName = fn = null;
+                        return;
                     }
                     if (page == null) {
                         isNewPage = true;
@@ -603,7 +734,10 @@ var dao = {
 
                 var seo = $$.u.objutils.extend({}, website.get("seo"), page.get("seo"));
 
-                var linklists = $$.u.objutils.extend({}, themeConfig.linkLists, website.get("linkLists"));
+                if (website.get("linkLists") == null) {
+                    website.set({linkLists:themeConfig.linkLists});
+                }
+                var linklists = website.get("linkLists");
 
                 var footer = $$.u.objutils.extend({}, themeConfig.footer, website.get("footer"));
 
@@ -625,12 +759,13 @@ var dao = {
                 };
 
                 if (linklists != null && linklists.length > 0) {
-                    for (var i =0; i < linklists.length; i++) {
+                    for (var i = 0; i < linklists.length; i++) {
+                        self._setLinkListUrls(linklists[i].links);
                         data.linkLists[linklists[i].handle] = linklists[i].links;
                     }
                 }
 
-                var header, footer, body = "";
+                var header, footer, editableCssScript, body = "";
                 // render header, footer, and body
                 async.parallel([
                     //render header
@@ -690,8 +825,20 @@ var dao = {
                                 _cb();
                             })
                         }, function (err) {
+                            data.component = null;
                             cb();
                         });
+                    },
+
+                    function(cb) {
+                        if (isEditor === true) {
+                            app.render("cms/editablehelper.hbs", {}, function(err, value) {
+                               editableCssScript = value;
+                                cb();
+                            });
+                        } else {
+                            cb();
+                        }
                     }
                 ], function (err) {
                     if (err) {
@@ -701,6 +848,8 @@ var dao = {
                             = isNewPage = defaultPage = page = components = pageComponents
                             = settings = seo = linklists = footer = header = body = title = data
                             = accountId = pageName = fn = null;
+
+                        return;
                     }
 
                     //render layout page
@@ -710,6 +859,14 @@ var dao = {
                     data.footer = footer;
                     data.body = body;
 
+                    if (isEditor) {
+                        if (data.footer == null) {
+                            data.footer = "";
+                        }
+                        data.footer = data.footer += editableCssScript;
+                    }
+
+
                     self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {
                         if (err) {
                             fn(err, value);
@@ -718,6 +875,8 @@ var dao = {
                                 = isNewPage = defaultPage = page = components = pageComponents
                                 = settings = seo = linklists = footer = header = body = title = data
                                 = accountId = pageName = fn = null;
+
+                            return;
                         }
 
                         fn(null, value);
@@ -733,7 +892,7 @@ var dao = {
 
 
     _renderComponent: function (data, themeId, component, engine, fn) {
-        return this._renderItem(data, themeId, "components/" + component, engine, null, function(err, value) {
+        return this._renderItem(data, themeId, "components/" + component, engine, null, function (err, value) {
             if (err) {
                 return fn(err, value);
             }
@@ -752,6 +911,8 @@ var dao = {
             , engine = engine || themesConfig.DEFAULT_ENGINE
             , extension = this._getExtensionForEngine(engine);
 
+        data.helpers = data.helpers || {};
+        data.helpers.link = this._hbsLinkAnchor;
 
         if (_.isFunction(defaultItem)) {
             fn = defaultItem;
@@ -760,17 +921,16 @@ var dao = {
 
         app.render(path + themeId + "/" + item + extension, data, function (err, value) {
             if (err) {
-                console.log("ERROR: " + path + themeId + "/" + item + extension);
+                console.log("ERROR: " + path + themeId + "/" + item + extension + ", " + err);
                 if (defaultItem != null) {
                     if (engine != themesConfig.DEFAULT_ENGINE) {
                         extension = self._getExtensionForEngine(themesConfig.DEFAULT_ENGINE);
                     }
                     app.render(path + defaultItem + extension, data, fn);
+                    data = themeId = item = engine = fn = null;
                 } else {
                     fn(err, value);
-
                     data = themeId = item = engine = fn = null;
-                    return;
                 }
             } else {
                 fn(err, value);
@@ -791,6 +951,70 @@ var dao = {
             return ".html";
         } else {
             return ".html";
+        }
+    },
+
+
+    _setLinkListUrlsForWebsite: function(website) {
+        var self = this;
+        if (website != null) {
+            var linkLists = website.get("linkLists");
+            if (linkLists == null) {
+                return;
+            }
+
+            for (var i = 0; i < linkLists.length; i++) {
+                self._setLinkListUrls(linkLists[i].links);
+            }
+        }
+    },
+
+
+    _setLinkListUrls: function(links) {
+        if (links != null) {
+            for(var i = 0; i < links.length; i++) {
+                links[i].url = this._getLinkListItemUrl(links[i].linkTo);
+            }
+        }
+    },
+
+
+    _getLinkListItemUrl: function(data) {
+        if (data == null) {
+            return "";
+        }
+
+        if (data.linkTo != null) {
+            data = data.linkTo;
+        }
+
+        switch(data.type) {
+            case "page":
+                return "/page/" + data.data;
+            case "home":
+                return "/";
+            case "url":
+                return data.data;
+            case "section":
+                return "#" + data.data;
+            case "product":
+                return "";  //Not yet implemented
+            case "collection":
+                return "";  //Not yet implemented
+            default:
+                return "#";
+        }
+    },
+
+
+    _hbsLinkAnchor: function(link) {
+        if (link == null || link.linkTo == null) {
+            return "";
+        }
+        if (link.linkTo.type == "url") {
+            return '<a href="' + link.url + '" target="_blank">' + (link.label || link.url) + '</a>';
+        } else {
+            return '<a href="' + link.url + '">' + (link.label || link.url) + '</a>';
         }
     }
     //endregion

@@ -28,7 +28,7 @@ _.extend(apiBase.prototype, {
 
         this.log = global.getLogger(this.base + ".api");
 
-        if (this.initialize != 'undefined') {
+        if (this.initialize != null && this.initialize != 'undefined') {
             this.initialize();
         }
     },
@@ -129,17 +129,19 @@ _.extend(apiBase.prototype, {
         if (_.isArray(result)) {
             var _arr = [];
             result.forEach(function(item) {
-                if (typeof item.toJSON != undefined) {
+                if (typeof item.toJSON != 'undefined') {
                     _arr.push(item.toJSON("public"));
                 } else {
                     _arr.push(item);
                 }
             });
             result = _arr;
-        } else if (typeof result.toJSON != undefined) {
+            arr = null;
+        } else if (typeof result.toJSON != 'undefined') {
             result = result.toJSON("public");
         }
         return resp.send(result);
+        result = null;
     },
 
 
@@ -172,6 +174,7 @@ _.extend(apiBase.prototype, {
             response.message = response.detail;
         }
         resp.send(response.code, response);
+        response = null;
     },
 
 

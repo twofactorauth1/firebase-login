@@ -1,0 +1,39 @@
+<script type="text/javascript">
+    var link = document.createElement("link");
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href='/js/libs/redactor/redactor.css';
+    document.getElementsByTagName("head")[0].appendChild(link);
+
+
+    var link = document.createElement("script");
+    link.type = "text/javascript";
+    link.src='/js/libs/jquery/jquery.js';
+    document.getElementsByTagName("head")[0].appendChild(link);
+
+
+    var link = document.createElement("script");
+    link.type = "text/javascript";
+    link.src='/js/libs/redactor/redactor.js';
+    document.getElementsByTagName("head")[0].appendChild(link);
+
+    var checkForJQuery= function() {
+        if (typeof($) !== 'undefined') {
+
+        } else {
+            setTimeout(checkForJQuery, 500);
+        }
+    };
+
+    //checkForJQuery();
+
+    setupRedactor = function(classNames) {
+        $(classNames).redactor({
+            convertDivs: false,
+            toolbarFixed: true,
+            air: true
+        })
+    };
+
+
+</script>

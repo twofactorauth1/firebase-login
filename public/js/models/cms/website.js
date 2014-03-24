@@ -6,7 +6,7 @@ define([
 
         defaults: {
 
-            _id: "",
+            _id: null,
 
             accountId: null,
 
@@ -29,11 +29,18 @@ define([
         url: function(method) {
             switch(method) {
                 case "GET":
+                    if (this.id == null) {
+                        return $$.api.getApiUrl("account", this.get("accountId") + "/cms/website");
+                    } else {
+                        return $$.api.getApiUrl("cms", "website/" + this.id);
+                    }
                     break;
                 case "PUT":
                 case "POST":
+                    return $$.api.getApiUrl("cms", "website");
                     break;
                 case "DELETE":
+                    return $$.api.getApiUrl("cms", "website/" + this.id);
                     break;
             }
         }

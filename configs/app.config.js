@@ -68,6 +68,8 @@ module.exports = {
     cluster:false,
     freeCpus:2,
 
+    SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
+
     getServerUrl: function(subdomain, domain) {
         if (subdomain == null && domain == null) {
             return serverUrl;

@@ -111,9 +111,10 @@ global.app = app;
 // View engine
 app.set('view options', { layout:false });
 
-app.engine('html', consolidate.handlebars);
-app.engine('hbs', consolidate.handlebars);
-app.engine('handlebars', consolidate.handlebars);
+var hbs = consolidate.handlebars;
+app.engine('html', hbs);
+app.engine('hbs', hbs);
+app.engine('handlebars', hbs);
 app.engine('dot', consolidate.dot);
 app.engine('jade', consolidate.jade);
 
@@ -234,3 +235,24 @@ require('./routers/router.manager');
 //  SETUP API
 //-----------------------------------------------------
 require('./api/api.manager');
+
+
+//-----------------------------------------------------
+//  SETUP RENDER HELPERS
+//-----------------------------------------------------
+Handlebars = require('handlebars');
+requirejs('libs/handlebars/handlebarshelpers');
+requirejs('libs/handlebars/indigenoushelpers');
+
+
+//-----------------------------------------------------
+//  CATCH UNCAUGH EXCEPTIONS - Log them and email the error
+//-----------------------------------------------------
+process.on('uncaughtException', function (err) {
+    log.error("Stack trace: " + err.stack);
+    log.error('Caught exception: ' + err);
+
+    $$.g.mailer.sendMail("errors@indigenous.io", 'christopher.mina@gmail.com', null, "Uncaught Error occurred - " + process.env.NODE_ENV, null, err + ":  " + err.stack, function(err, value) {
+        process.exit(1);
+    });
+});
