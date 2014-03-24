@@ -859,14 +859,6 @@ var dao = {
                     data.footer = footer;
                     data.body = body;
 
-                    if (isEditor) {
-                        if (data.footer == null) {
-                            data.footer = "";
-                        }
-                        data.footer = data.footer += editableCssScript;
-                    }
-
-
                     self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {
                         if (err) {
                             fn(err, value);
@@ -877,6 +869,12 @@ var dao = {
                                 = accountId = pageName = fn = null;
 
                             return;
+                        }
+
+                        if (isEditor) {
+                            //inject editable stuff here
+                            var endHeadReplacement = editableCssScript + " </head>";
+                            value = value.replace("</head>", endHeadReplacement);
                         }
 
                         fn(null, value);
