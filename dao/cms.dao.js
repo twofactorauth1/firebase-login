@@ -28,15 +28,18 @@ var dao = {
      * @param fn
      */
     themeExists: function (themeId, fn) {
-        var pathToThemes = themesConfig.PATH_TO_THEMES;
-
-        var pathToTheme = pathToThemes + "/" + themeId;
+        var pathToThemes = themesConfig.PATH_TO_THEMES
+            , pathToTheme = pathToThemes + "/" + themeId;
 
         fs.lstat(pathToTheme, function (err, stats) {
             if (!err && stats.isDirectory()) {
-                return fn(null, true);
+                fn(null, true);
+                pathToTheme = pathToThemes = themeId = fn = null;
+                return;
             }
-            return fn(null, false);
+            fn(null, false);
+            pathToTheme = pathToThemes = themeId = fn = null;
+            return;
         });
     },
 
@@ -48,10 +51,12 @@ var dao = {
     getAllThemes: function (fn) {
         //TODO - Cache this
 
-        var self = this;
-        var pathToThemes = themesConfig.PATH_TO_THEMES;
+        var self = this
+            , pathToThemes = themesConfig.PATH_TO_THEMES
+            , themes = []
+            , obj;
 
-        var themes = [];
+        themes = [];
         fs.readdir(pathToThemes, function (err, files) {
             async.eachLimit(files, 25, function (directory, cb) {
                 if (directory == "assets") {
@@ -92,6 +97,7 @@ var dao = {
                 })
             }, function (err) {
                 fn(err, themes);
+                self = pathToThemes = themes = obj = fn = null;
             });
         });
     },
@@ -124,10 +130,17 @@ var dao = {
 
 
     _getThemeConfig: function (themeId, signed, fn) {
-        var self = this;
-        var pathToThemeConfig = themesConfig.PATH_TO_THEMES + "/" + themeId + "/config.json";
+        var self = this
+            , pathToThemeConfig = themesConfig.PATH_TO_THEMES + "/" + themeId + "/config.json"
+            , themeConfig
+            , defaultConfig
+            , defaultComponents
+            , themeComponents
+            , defaultComponent
+            , componentType
+            , themeComponent
+            , index;
 
-        var themeConfig, defaultConfig;
         async.parallel([
             function (cb) {
                 // Read theme config
@@ -152,6 +165,7 @@ var dao = {
                     themeConfig = data;
 
                     cb();
+                    data = null;
                 });
             },
 
@@ -162,9 +176,7 @@ var dao = {
                         return cb("An error occurred reading default theme config file: " + err);
                     }
 
-                    var data = JSON.parse(data);
-
-                    defaultConfig = data;
+                    defaultConfig = JSON.parse(data);
 
                     cb();
                 });
@@ -176,16 +188,16 @@ var dao = {
             }
 
             //Special case for merging theme components
-            var defaultComponents = defaultConfig.components;
-            var themeComponents = themeConfig.components;
+            defaultComponents = defaultConfig.components;
+            themeComponents = themeConfig.components;
 
             if (themeComponents == null) {
                 themeComponents = [];
                 themeConfig.components = themeComponents;
             }
             for (var i = 0, l = defaultComponents.length; i < l; i++) {
-                var defaultComponent = defaultComponents[i];
-                var componentType = defaultComponent.type;
+                defaultComponent = defaultComponents[i];
+                componentType = defaultComponent.type;
 
                 //Get the theme component of same type
                 var themeComponent = _.findWhere(themeComponents, {type: componentType});
@@ -199,14 +211,18 @@ var dao = {
                     }
                 } else {
                     //Merge these together
-                    var index = themeComponents.indexOf(themeComponent);
+                    index = themeComponents.indexOf(themeComponent);
                     themeComponent = $$.u.objutils.extend(true, {}, defaultComponent, themeComponent);
                     themeComponents[index] = themeComponent;
-
                 }
             }
 
             fn(null, themeConfig);
+
+            self = pathToThemeConfig = themeConfig = defaultConfig
+                = defaultComponents = themeComponents = defaultComponent
+                = componentType = themeComponent = index
+                = themeId = signed = fn = null;
         });
     },
 
@@ -248,22 +264,29 @@ var dao = {
      * @param fn
      */
     getOrCreateWebsiteByAccountId: function (accountId, userId, fn) {
-        var self = this;
+        var self = this
+            , website
+            , websiteId;
+
         accountDao.getById(accountId, function (err, value) {
             if (err) {
                 return fn(err, value);
             }
 
-            var website = value.get("website"), websiteId = null;
+            website = value.get("website");
+
 
             if (website != null) {
                 websiteId = website.websiteId;
             }
             if (String.isNullOrEmpty(websiteId)) {
-                return self.createWebsiteForAccount(accountId, userId, fn);
+                self.createWebsiteForAccount(accountId, userId, fn);
+                self = website = fn = null;
+                return;
             }
 
-            return self.getById(websiteId, Website, fn);
+            self.getById(websiteId, Website, fn);
+            self = website = fn = null;
         });
     },
 
@@ -276,8 +299,9 @@ var dao = {
      * @param fn
      */
     createWebsiteForAccount: function (accountId, userId, fn) {
-        var self = this;
-        var website = new Website({
+        var self = this, website, websiteObj, websiteId;
+
+        website = new Website({
             accountId: accountId
         });
 
@@ -285,18 +309,22 @@ var dao = {
 
         this.saveOrUpdate(website, function (err, value) {
             if (err) {
-                return fn(err, value);
+                fn(err, value);
+                self = website = websiteObj = websiteId = null;
+                return;
             }
 
             website = value;
-            var websiteId = website.id();
+            websiteId = website.id();
 
             accountDao.getById(accountId, function (err, value) {
                 if (err) {
-                    return fn(err, value);
+                    fn(err, value);
+                    self = website = websiteObj = websiteId = null;
+                    return;
                 }
 
-                var websiteObj = value.get("website");
+                websiteObj = value.get("website");
                 if (websiteObj == null || websiteObj.websiteId == null) {
                     if (websiteObj == null) {
                         websiteObj = {
@@ -311,10 +339,14 @@ var dao = {
                         }
                     }
                     accountDao.saveOrUpdate(value, function () {
-                        return fn(null, website);
+                        fn(null, website);
+                        self = website = websiteObj = websiteId = null;
+                        return;
                     });
                 } else {
-                    return fn(null, website);
+                    fn(null, website);
+                    self = website = websiteObj = websiteId = null;
+                    return;
                 }
             });
         });
@@ -330,27 +362,35 @@ var dao = {
      * @param fn
      */
     deleteWebsite: function (websiteId, fn) {
-        var self = this;
+        var self = this, accountId;
+
         this.getById(websiteId, Website, function (err, value) {
             if (err) {
-                return fn(err, value);
+                fn(err, value);
+                self = accountId = null;
+                return;
             }
 
             if (value == null) {
-                return fn("Website [" + websiteId + "] does not exist");
+                fn("Website [" + websiteId + "] does not exist");
+                self = accountId = null;
+                return;
             }
 
-            var accountId = value.get("accountId");
+            accountId = value.get("accountId");
 
             self.remove(value, function (err, value) {
                 if (err) {
-                    return fn(err, value);
+                    fn(err, value);
+                    self = accountId = null;
+                    return;
                 }
 
                 if (accountId > 0) {
                     accountDao.getById(accountId, function (err, value) {
                         if (err) {
-                            return fn(err, value);
+                            fn(err, value);
+                            self = accountId = null; return;
                         }
 
                         if (value != null && value.get("website") != null && value.get("website").websiteId == websiteId) {
@@ -358,17 +398,21 @@ var dao = {
 
                             accountDao.saveOrUpdate(value, function (err, value) {
                                 if (err) {
-                                    return fn(err, value);
+                                    fn(err, value);
+                                    self = accountId = null;
                                 }
 
-                                return fn(null);
+                                fn(null);
+                                self = accountId = null;
                             });
                         } else {
-                            return fn(null);
+                            fn(null);
+                            self = accountId = null;
                         }
                     });
                 } else {
                     fn(null);
+                    self = accountId = null;
                 }
             });
         });
@@ -387,20 +431,28 @@ var dao = {
         //ensure website exists and belongs to this account
         this.getById(websiteId, Website, function (err, value) {
             if (err) {
-                return fn(err, value);
+                fn(err, value);
+                accountId = websiteId = fn = null;
+                return;
             }
 
             if (value == null) {
-                return fn("Website does not exist!");
+                fn("Website does not exist!");
+                accountId = websiteId = fn = null;
+                return;
             }
 
             if (value.get("accountId") != accountId) {
-                return fn("Website [" + websiteId + "] does not belong to account: " + accountId);
+                fn("Website [" + websiteId + "] does not belong to account: " + accountId);
+                accountId = websiteId = fn = null;
+                return;
             }
 
             accountDao.getById(accountId, function (err, value) {
                 if (err) {
-                    return fn(err, value);
+                    fn(err, value);
+                    accountId = websiteId = fn = null;
+                    return;
                 }
 
                 var website = value.get("website");
@@ -414,6 +466,8 @@ var dao = {
                 website.websiteId = websiteId;
 
                 accountDao.saveOrUpdate(value, fn);
+                accountId = websiteId = website = fn = null;
+                return;
             });
         });
     },
@@ -485,7 +539,9 @@ var dao = {
             ], function (err) {
                 if (err) {
                     p1.reject();
-                    return fn(err);
+                    fn(err);
+                    self = account = website = page = themeId = themeConfig = accountId = pageName = fn = null;
+                    return;
                 }
 
                 p1.resolve();
@@ -501,7 +557,12 @@ var dao = {
                     var isNewPage = false;
                     var defaultPage = _.findWhere(themeConfig.pages, {handle: pageName});
                     if (defaultPage == null) {
-                        return fn($$.u.errors._404_PAGE_NOT_FOUND);
+                        fn($$.u.errors._404_PAGE_NOT_FOUND);
+
+                        self = account = website = page = themeId = themeConfig
+                            = isNewPage = defaultPage = page = components = pageComponents
+                            = settings = seo = linklists = footer = header = body = title = data
+                            = accountId = pageName = fn = null;
                     }
                     if (page == null) {
                         isNewPage = true;
@@ -634,7 +695,12 @@ var dao = {
                     }
                 ], function (err) {
                     if (err) {
-                        return fn(err);
+                        fn(err);
+
+                        self = account = website = page = themeId = themeConfig
+                            = isNewPage = defaultPage = page = components = pageComponents
+                            = settings = seo = linklists = footer = header = body = title = data
+                            = accountId = pageName = fn = null;
                     }
 
                     //render layout page
@@ -646,10 +712,20 @@ var dao = {
 
                     self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {
                         if (err) {
-                            return fn(err, value);
+                            fn(err, value);
+
+                            self = account = website = page = themeId = themeConfig
+                                = isNewPage = defaultPage = page = components = pageComponents
+                                = settings = seo = linklists = footer = header = body = title = data
+                                = accountId = pageName = fn = null;
                         }
 
-                        return fn(null, value);
+                        fn(null, value);
+
+                        self = account = website = page = themeId = themeConfig
+                            = isNewPage = defaultPage = page = components = pageComponents
+                            = settings = seo = linklists = footer = header = body = title = data
+                            = accountId = pageName = fn = null;
                     });
                 });
             });
@@ -662,7 +738,10 @@ var dao = {
                 return fn(err, value);
             }
 
-            return fn(err, value);
+            fn(err, value);
+
+            data = themeId = component = engine = fn = null;
+            return;
         });
     },
 
@@ -689,9 +768,13 @@ var dao = {
                     app.render(path + defaultItem + extension, data, fn);
                 } else {
                     fn(err, value);
+
+                    data = themeId = item = engine = fn = null;
+                    return;
                 }
             } else {
                 fn(err, value);
+                data = themeId = item = engine = fn = null;
             }
         });
     },

@@ -38,10 +38,12 @@ _.extend(api.prototype, baseApi.prototype, {
 
         if (!bucket) {
             this.wrapError(resp, 400, null, "Invalid paramater for S3 Bucket");
+            self = req = resp = null;
         }
 
         var credentials = s3Dao.getS3UploadCredentials(bucket, filename, redirect);
         resp.send(credentials)
+        self = req = resp = null;
     }
 });
 

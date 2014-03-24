@@ -19,6 +19,8 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account = value.toJSON()
             }
             self.resp.render('login', data);
+            self.cleanUp();
+            data = self = null;
         });
 
     }

@@ -24,6 +24,8 @@ _.extend(view.prototype, BaseView.prototype, {
             data = self.baseData(data);
 
             self.resp.render('home', data);
+            self.cleanUp();
+            data = self = null;
         });
     }
 });

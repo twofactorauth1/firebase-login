@@ -13,6 +13,8 @@ _.extend(view.prototype, BaseView.prototype, {
         });
 
         this.resp.render('home', data);
+        this.cleanUp();
+        data = null;
     }
 });
 

@@ -117,6 +117,11 @@ _.extend(baseView.prototype, {
             return accountDao.getById(accountId, fn);
         }
         fn();
+    },
+
+
+    cleanUp: function() {
+        this.req = this.resp = null;
     }
 });
 

@@ -164,13 +164,13 @@ _.extend(apiBase.prototype, {
             status:status || "fail",
             message:message || "An error occurred",
             detail: detail || ""
-        }
+        };
 
         //override if we have a code in the message value
         if (_.isNumber(message)) {
             response.code = message;
             response.message = response.detail;
-        };
+        }
         resp.send(response.code, response);
     },
 

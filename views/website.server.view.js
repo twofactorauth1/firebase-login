@@ -25,20 +25,31 @@ _.extend(view.prototype, BaseView.prototype, {
         $$.g.cache.get(cacheKey, "websites", function(err, value) {
             if (!err && value) {
                 self.resp.send(value);
+
+                self.cleanUp();
+                data = value = null;
             } else {
                 var data = {};
 
                 var view = cmsDao.getRenderedWebsitePageForAccount(accountId, path, function(err, value) {
                     if (err) {
                         if (err.error && err.error.code && err.error.code == 404) {
-                            return self.resp.render('404.html');
+                            self.resp.render('404.html');
+                        } else {
+                            self.resp.render('500.html');
                         }
-                        return self.resp.render('500.html');
+
+                        self.cleanUp();
+                        self = data = null;
+                        return;
                     }
 
-                    $$.g.cache.set(cacheKey, value, "websites", 30);
+                    $$.g.cache.set(cacheKey, value, "websites");
 
                     self.resp.send(value);
+
+                    self.cleanUp();
+                    self = data = value = null;
                 });
             }
         });

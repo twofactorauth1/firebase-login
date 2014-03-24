@@ -18,7 +18,8 @@ define([
         render: function() {
             var self = this
                 , p1 = this.getAccount()
-                , p2 = this.getUser();
+                , p2 = this.getUser()
+                , p3 = this.getWebsiteConfig();
 
             $.when(p1, p2)
                 .done(function() {
@@ -54,6 +55,15 @@ define([
             });
 
             return this.account.fetch();
+        },
+
+
+        getWebsiteConfig: function() {
+            if (this.accountId == null) {
+                this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
+            }
+
+
         }
     });
 
