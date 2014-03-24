@@ -760,7 +760,7 @@ var dao = {
 
                 if (linklists != null && linklists.length > 0) {
                     for (var i = 0; i < linklists.length; i++) {
-                        self._setLinkListUrls(linklists[i].links);
+                        self._setLinkListUrls(linklists[i].links, isEditor);
                         data.linkLists[linklists[i].handle] = linklists[i].links;
                     }
                 }
@@ -859,6 +859,14 @@ var dao = {
                     data.footer = footer;
                     data.body = body;
 
+                    if (data.footer != null) {
+                        if (isEditor) {
+                            //inject editable stuff here
+                            //var endHeadReplacement = editableCssScript + " </head>";
+                            //value = value.replace("</head>", endHeadReplacement);
+                            data.footer = data.footer + " " + editableCssScript;
+                        }
+                    }
                     self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {
                         if (err) {
                             fn(err, value);
@@ -869,12 +877,6 @@ var dao = {
                                 = accountId = pageName = fn = null;
 
                             return;
-                        }
-
-                        if (isEditor) {
-                            //inject editable stuff here
-                            var endHeadReplacement = editableCssScript + " </head>";
-                            value = value.replace("</head>", endHeadReplacement);
                         }
 
                         fn(null, value);
@@ -953,7 +955,7 @@ var dao = {
     },
 
 
-    _setLinkListUrlsForWebsite: function(website) {
+    _setLinkListUrlsForWebsite: function(website, isEditor) {
         var self = this;
         if (website != null) {
             var linkLists = website.get("linkLists");
@@ -962,22 +964,22 @@ var dao = {
             }
 
             for (var i = 0; i < linkLists.length; i++) {
-                self._setLinkListUrls(linkLists[i].links);
+                self._setLinkListUrls(linkLists[i].links, isEditor);
             }
         }
     },
 
 
-    _setLinkListUrls: function(links) {
+    _setLinkListUrls: function(links, isEditor) {
         if (links != null) {
             for(var i = 0; i < links.length; i++) {
-                links[i].url = this._getLinkListItemUrl(links[i].linkTo);
+                links[i].url = this._getLinkListItemUrl(links[i].linkTo, isEditor);
             }
         }
     },
 
 
-    _getLinkListItemUrl: function(data) {
+    _getLinkListItemUrl: function(data, isEditor) {
         if (data == null) {
             return "";
         }
@@ -986,22 +988,35 @@ var dao = {
             data = data.linkTo;
         }
 
+        var _url;
         switch(data.type) {
             case "page":
-                return "/page/" + data.data;
+                _url = "/page/" + data.data;
+                break;
             case "home":
-                return "/";
+                _url = "/";
+                break;
             case "url":
                 return data.data;
             case "section":
                 return "#" + data.data;
             case "product":
-                return "";  //Not yet implemented
+                _url = "";  //Not yet implemented
+                break;
             case "collection":
-                return "";  //Not yet implemented
+                _url =  "";  //Not yet implemented
+                break;
             default:
                 return "#";
         }
+
+        if (_url != null && isEditor === true) {
+            if (_url.indexOf("?") == -1) {
+                _url = _url + "?";
+            }
+            _url += "&editor=true";
+        }
+        return _url;
     },
 
 
