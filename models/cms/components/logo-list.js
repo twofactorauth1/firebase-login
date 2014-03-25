@@ -1,4 +1,11 @@
 /**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
+/**
  * Logo list component
  *
  * Stores data that represents a list of logos used for marketing purposes.

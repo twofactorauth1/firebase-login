@@ -1,4 +1,11 @@
 /**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
+/**
  * The Social Feed copmonent
  *
  * Stores data that represents a connection to a social feed

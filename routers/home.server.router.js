@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var BaseRouter = require('./base.server.router.js');
 var HomeView = require('../views/home.server.view');
 var AdminView = require('../views/admin.server.view');

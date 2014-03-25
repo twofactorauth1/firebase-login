@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var baseDao = require('../base.dao.js');
 var userDao = require('../user.dao.js');
 var contextioConfig = require('../../configs/context.io.config.js');

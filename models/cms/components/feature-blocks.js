@@ -1,4 +1,11 @@
 /**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
+/**
  * The Feature Blocks component
  *
  * Stores data that represents the 3 or 4 features prominentyly

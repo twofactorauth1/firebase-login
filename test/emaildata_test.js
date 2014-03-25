@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var app = require('../app');
 var testHelpers = require('../testhelpers/testhelpers');
 var testEmailConfig = require('../testhelpers/configs/test.config.js').email;
