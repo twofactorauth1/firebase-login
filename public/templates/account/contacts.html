@@ -248,7 +248,7 @@ CONTACTS EDIT VIEW
                                 <label>Contact Type</label>
                                 <select id="select-contact-type" class="form-control">
                                     {{#contactTypeOptions}}
-                                    <option data-contacttype="{{data}}" {{#check data ../contact.type}}selected{{/equals}}>{{label}}</option>
+                                    <option data-contacttype="{{data}}" {{#equals data ../contact.type}}selected{{/equals}}>{{label}}</option>
                                     {{/contactTypeOptions}}
                                 </select>
                             </div>
