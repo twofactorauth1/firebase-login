@@ -144,6 +144,15 @@ _.extend(baseRouter.prototype, {
         }catch(exception) {
             return null;
         }
+    },
+
+
+    userId: function(req) {
+        try {
+            return req.user.id();
+        }catch(exception) {
+            return null;
+        }
     }
 });
 

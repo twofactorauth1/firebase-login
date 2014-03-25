@@ -107,7 +107,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     updateUser: function(req,resp) {
-
+        //TODO - ensure user accounts are not tampered with
     },
 
 

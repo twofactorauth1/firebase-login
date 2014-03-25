@@ -341,7 +341,83 @@ var dao = {
     },
 
 
-    constructAuthenticatedUrl: function(accountId, authToken, path, fn) {
+    getAuthenticatedUrl: function(userId, url, expirationSeconds, fn) {
+        if (_.isFunction(expirationSeconds)) {
+            fn = expirationSeconds;
+            expirationSeconds = null;
+        }
+
+        this.setAuthenticationToken(userId, expirationSeconds, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (url == null) {
+                return fn("URL Provided is null");
+            }
+
+            if (url.indexOf("?") == -1) {
+                url += "?";
+            }
+            url += "&authtoken=value";
+            fn(null, url);
+        });
+    },
+
+
+    getAuthenticatedUrlForAccount: function(accountId, userId, path, expirationSeconds, fn) {
+        var self = this;
+        if (_.isFunction(expirationSeconds)) {
+            fn = expirationSeconds;
+            expirationSeconds = null;
+        }
+
+        this.setAuthenticationToken(userId, expirationSeconds, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            self._constructAuthenticatedUrl(accountId, value, path, fn);
+        });
+    },
+
+
+    verifyAuthToken: function (accountId, token, remove, fn) {
+        if (_.isFunction(remove)) {
+            fn = remove;
+            remove = false;
+        }
+
+        userDao.findOne({authToken: token}, function (err, value) {
+            if (!err) {
+                if (value === null) {
+                    return fn("Invalid authentication token.");
+                }
+
+                if (accountId > 0) {
+                    if (value.getUserAccount(accountId) === null) {
+                        return fn("No user found for this account!", "User does not have access to this account");
+                    }
+                }
+
+                var authTokenExp = value.get("authTokenExp");
+                if (new Date(authTokenExp) < new Date()) {
+                    return fn("Authentication token is expired.");
+                }
+
+                if (remove === true) {
+                    value.clearAuthToken();
+                    userDao.saveOrUpdate(value, function(err, value) {});
+                }
+                return fn(null, value);
+            } else {
+                return fn(err, value);
+            }
+        });
+    },
+
+
+    _constructAuthenticatedUrl: function(accountId, authToken, path, fn) {
         accountDao.getServerUrlByAccount(accountId, function(err, value) {
             if (err) {
                 return fn(err, value);
@@ -368,53 +444,6 @@ var dao = {
             serverUrl += "?authtoken=" + authToken;
 
             fn(null, serverUrl);
-        });
-    },
-
-
-    getAuthenticatedUrlForAccount: function(accountId, userId, path, expirationSeconds, fn) {
-        var self = this;
-        this.setAuthenticationToken(userId, expirationSeconds, function(err, value) {
-            if (err) {
-                return fn(err, value);
-            }
-
-            self.constructAuthenticatedUrl(accountId, value, path, fn);
-        });
-    },
-
-
-    verifyAuthToken: function (accountId, token, remove, fn) {
-        if (_.isFunction(remove)) {
-            fn = remove;
-            remove = false;
-        }
-
-        userDao.findOne({authToken: token}, function (err, value) {
-            if (!err) {
-                if (value === null) {
-                    return fn("Invalid authentication token.");
-                }
-
-                if (accountId > 0) {
-                    if (value.getUserAccount(accountId) === null) {
-                        return fn("No user found for this account!", "No user found for this account");
-                    }
-                }
-
-                var authTokenExp = value.get("authTokenExp");
-                if (new Date(authTokenExp) < new Date()) {
-                    return fn("Authentication token is expired.");
-                }
-
-                if (remove === true) {
-                    value.clearAuthToken();
-                    userDao.saveOrUpdate(value, function(err, value) {});
-                }
-                return fn(null, value);
-            } else {
-                return fn(err, value);
-            }
         });
     }
     //endregion

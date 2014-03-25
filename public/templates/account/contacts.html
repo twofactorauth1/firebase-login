@@ -107,7 +107,7 @@ CONTACTS MAIN VIEW
 <script type="text/x-handlebars-template" name="contact-paginator" partial="true">
     <ul class="pagination hidden-sm hidden-xs">
         {{#eachLetter}}
-        <li class="{{#check currentLetter letter}}active{{/check}}"><a class="btn-letter" href="#">{{letter}}</a></li>
+        <li class="{{#equals currentLetter letter}}active{{/equals}}"><a class="btn-letter" href="#">{{letter}}</a></li>
         {{/eachLetter}}
     </ul>
 </script>
@@ -248,7 +248,7 @@ CONTACTS EDIT VIEW
                                 <label>Contact Type</label>
                                 <select id="select-contact-type" class="form-control">
                                     {{#contactTypeOptions}}
-                                    <option data-contacttype="{{data}}" {{#check data ../contact.type}}selected{{/check}}>{{label}}</option>
+                                    <option data-contacttype="{{data}}" {{#check data ../contact.type}}selected{{/equals}}>{{label}}</option>
                                     {{/contactTypeOptions}}
                                 </select>
                             </div>
