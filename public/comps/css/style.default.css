@@ -702,6 +702,9 @@ strong {
 .mt0 {
   margin-top: 0;
 }
+.chosen-select {
+  margin: 0;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -2151,6 +2154,11 @@ p {
 .dashboard-datatable .dataTables_filter {
   float: left;
 }
+.smart-timeline .chosen-select {
+  float: right;
+  width: 170px;
+  margin: -14px -14px 0 0;
+}
 .ckbox,
 .rdio {
   position: relative;
@@ -2401,6 +2409,19 @@ div.error label.error:before {
   clear: both;
   display: block;
   content: '';
+}
+.support-icon {
+  float: left;
+}
+.support-icon img {
+  border: 1px solid #3276b1;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+}
+.video-icon img {
+  margin-right: 10px;
 }
 .small-user-icon img {
   border-radius: 50%;
