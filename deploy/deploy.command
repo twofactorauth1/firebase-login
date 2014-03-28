@@ -16,6 +16,14 @@
 ##-- 5) If you want to test a production simulated environment with subdomains, alter your hosts file
 ##--    /etc/hosts or /private/etc/hosts, and add something "127.0.0.1 {subdomain}.indigenous.local"
 
+echo "Do you want to optimize the files (y/n)"
+read optimize
+
+if [ "$optimize" == "y" ];
+then optimizetype="uglify"
+else optimizetype="none"
+fi
+
 
 # Get current directory, should be root/deploy
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -42,7 +50,8 @@ mv public/js/mainforproduction.js public/js/main.js
 grunt compiletemplates
 
 # run grunt
-grunt production
+
+grunt production --optimize=$optimizetype
 
 # rename /min to /js directory
 mv public/min public/js
