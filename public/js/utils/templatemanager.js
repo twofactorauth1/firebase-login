@@ -80,7 +80,7 @@ define(function() {
                 hbs = {};
             }
 
-            filename = filename.replace("/", ".");
+            filename = filename.replace(/\//g, ".");
 
             var templateHome = hbs;
             var path = filename.split(".");
