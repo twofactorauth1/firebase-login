@@ -17,7 +17,7 @@ define(function() {
             if (typeof hbs === 'undefined') {
                 return null;
             }
-            filename = filename.replace("/", ".");
+            filename = filename.replace(/\//g, ".");
 
             var obj = hbs;
             var path = filename.split(".");
