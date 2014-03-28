@@ -23,6 +23,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:id'), this.isAuthApi, this.getWebsiteById.bind(this));
         app.get(this.url(':accountid/cms/website', "account"), this.isAuthApi, this.getWebsiteForAccountId.bind(this));
 
+        app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
+        app.get(this.url('page/:id'), this.getPageById.bind(this));
+
         app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
         app.get(this.url(':accountid/cms/theme', "account"), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
     },
@@ -48,6 +51,31 @@ _.extend(api.prototype, baseApi.prototype, {
         cmsDao.getOrCreateWebsiteByAccountId(accountId, req.user.id(), true, function(err, value) {
             self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
             self = value = null;
+        });
+    },
+
+
+    getPageByHandle: function(req, resp) {
+        //TODO: Add security
+        var self = this;
+        var websiteId = req.params.websiteid;
+        var pageHandle = req.params.handle;
+
+        cmsDao.getPageForWebsite(websiteId, pageHandle, function(err, value) {
+            self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website");
+            self = null;
+        });
+    },
+
+
+    getPageById: function(req, resp) {
+        //TODO: Add security
+        var self = this;
+        var pageId = req.params.id;
+
+        cmsDao.getPageById(pageId, function(err, value) {
+            self.sendResultOrError(resp, err, value, "Error Retrieving Page by Id");
+            self = null;
         });
     },
 

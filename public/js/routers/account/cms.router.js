@@ -12,13 +12,31 @@ define([
     var router = Backbone.Router.extend({
 
         routes: {
-            "website": "manageWebsite"
+            "website": "manageWebsite",
+            "website/page/:pageid": "manageWebsite",
+
+            "website/:websiteid": "manageWebsiteById",
+            "website/:websiteid/page/:pageid": "manageWebsiteById"
         },
 
 
-        manageWebsite: function() {
-            var view = new editWebsiteView();
+        manageWebsite: function(page) {
+            var view = new editWebsiteView({
+                page: page
+            });
             $$.viewManager.replaceMain(view);
+            console.log("Managing website");
+        },
+
+
+        manageWebsiteById: function(websiteid, page) {
+            var view = new editWebsiteView({
+                websiteId: websiteid,
+                page: page
+            });
+            $$.viewManager.replaceMain(view);
+
+            console.log("Managing website by id");
         }
     });
 

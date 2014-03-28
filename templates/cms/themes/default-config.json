@@ -148,196 +148,183 @@
     "components": [
         {
             "type": "contact-us",
-            "class": "component-contact-us",
             "anchor": "contactus",
             "classes": {
-                "label": "contact-us-label",
-                "description": "contact-us-description",
+                "label": "label",
+                "description": "description",
 
-                "location.address": "contact-us-address",
-                "location.address2": "contact-us-address2",
-                "location.city": "contact-us-city",
-                "location.state": "contact-us-state",
-                "location.zip": "contact-us-zip",
-                "location.lat": "contact-us-lat",
-                "location.lon": "contact-us-lon",
-                "location.showMap": "contact-us-show-map",
-                "location.displayLabel": "contact-us-address-display-label",
+                "location.address": "address",
+                "location.address2": "address2",
+                "location.city": "city",
+                "location.state": "state",
+                "location.zip": "zip",
+                "location.lat": "lat",
+                "location.lon": "lon",
+                "location.showMap": "show-map",
+                "location.displayLabel": "address-display-label",
 
-                "contact.phone": "contact-us-phone",
-                "contact.email": "contact-us-email",
+                "contact.phone": "phone",
+                "contact.email": "email",
 
-                "contact.hours": "contact-us-hours",
-                "contact.hours.item":"contact-us-hour"
+                "contact.hours": "hours",
+                "contact.hours.item":"hour"
             }
         },
 
         {
             "type": "facebook-comments",
-            "class": "component-facebook-comments",
             "anchor": "facebookcomments",
             "classes": {
-                "label": "facebook-comments-label",
-                "description": "facebook-comments-description"
+                "label": "label",
+                "description": "description"
             }
         },
 
         {
             "type": "facebook-likes",
-            "class": "component-facebook-likes",
             "anchor": "facebooklikes",
             "classes": {
-                "label": "facebook-likes-label",
-                "description": "facebook-likes-description"
+                "label": "label",
+                "description": "description"
             }
         },
 
         {
             "type": "feature-blocks",
-            "class": "component-feature-blocks",
             "anchor": "featureblocks",
             "classes": {
-                "label": "feature-blocks-label",
-                "description": "feature-blocks-description",
+                "label": "label",
+                "description": "description",
 
-                "features": "feature-blocks-features",
-                "features.item":"feature-blocks-feature",
-                "features.item.label":"feature-blocks-feature-label",
-                "features.item.description":"feature-blocks-feature-description",
-                "features.item.iconUrl":"feature-blocks-feature-icon-url",
-                "features.item.iconClass":"features-blocks-feature-icon-class"
+                "features": "features",
+                "features.item":"feature",
+                "features.item.label":"feature-label",
+                "features.item.description":"feature-description",
+                "features.item.iconUrl":"feature-icon-url",
+                "features.item.iconClass":"feature-icon-class"
             }
         },
 
 
         {
             "type": "feature-list",
-            "class": "component-feature-list",
             "anchor": "featurelist",
             "classes": {
-                "label": "feature-list-label",
-                "description": "feature-list-description",
+                "label": "label",
+                "description": "description",
 
-                "features":"feature-list-features",
-                "features.item":"feature-list-feature",
-                "features.item.label":"feature-list-feature-label",
-                "features.item.description":"feature-list-feature-description",
-                "features.item.iconUrl":"feature-list-feature-icon-url",
-                "features.item.iconClass":"features-list-feature-icon-class"
+                "features":"features",
+                "features.item":"feature",
+                "features.item.label":"feature-label",
+                "features.item.description":"feature-description",
+                "features.item.iconUrl":"feature-icon-url",
+                "features.item.iconClass":"feature-icon-class"
             }
         },
 
 
         {
             "type": "feature-list-compare",
-            "class": "component-feature-list-compare",
             "anchor": "featurelistcompare",
             "classes": {
-                "label": "feature-list-compare-label",
-                "description": "feature-list-compare-description",
+                "label": "label",
+                "description": "description",
 
-                "products":"feature-list-compare-products",
-                "products.label":"feature-list-compare-product-label",
+                "products":"products",
+                "products.label":"product-label",
 
-                "features":"feature-list-compare-features",
-                "features.item":"feature-list-compare-feature",
-                "features.item.label":"feature-list-compare-feature-label",
-                "features.item.description":"feature-list-compare-feature-description",
-                "features.item.iconUrl":"feature-list-compare-feature-icon-url",
-                "features.item.iconClass":"features-list-compare-feature-icon-class",
-                "features.item.compare.value":"features-list-compare-feature-compare-value"
+                "features":"features",
+                "features.item":"feature",
+                "features.item.label":"feature-label",
+                "features.item.description":"feature-description",
+                "features.item.iconUrl":"feature-icon-url",
+                "features.item.iconClass":"feature-icon-class",
+                "features.item.compare.value":"feature-compare-value"
             }
         },
 
         {
             "type": "freeform",
-            "class": "component-freeform",
             "anchor": "freeform",
             "classes": {
-                "label": "freeform-label",
-                "description": "freeform-description",
-                "value": "freeform-value"
+                "label": "label",
+                "description": "description",
+                "value": "value"
             }
         },
 
         {
             "type": "image-gallery",
-            "class": "component-image-gallery",
             "anchor": "imagegallery",
             "classes": {
-                "label": "image-gallery-label",
-                "description": "image-gallery-description",
+                "label": "label",
+                "description": "description",
 
-                "images":"image-gallery-images",
-                "images.item":"image-gallery-item",
-                "images.item.image":"image-gallery-item-image",
-                "images.item.label":"image-gallery-item-label",
-                "images.item.description":"images-gallery-item-description"
+                "images":"images",
+                "images.item":"item",
+                "images.item.image":"item-image",
+                "images.item.label":"item-label",
+                "images.item.description":"item-description"
             }
         },
 
         {
             "type": "image-slider",
-            "class": "component-image-slider",
             "anchor": "imageslider",
             "classes": {
-                "label": "image-slider-label",
-                "description": "image-slider-description",
+                "label": "label",
+                "description": "description",
 
-                "images":"image-slider-images",
-                "images.item":"image-slider-item",
-                "images.item.image":"image-slider-item-image",
-                "images.item.overlay.label":"image-slider-item-overlay-label",
-                "images.item.overlay.description":"image-slider-item-overlay-description",
-                "images.item.label":"image-slider-item-label",
-                "images.item.description":"image-slider-item-description"
+                "images":"iimages",
+                "images.item":"item",
+                "images.item.image":"item-image",
+                "images.item.overlay.label":"item-overlay-label",
+                "images.item.overlay.description":"item-overlay-description",
+                "images.item.label":"item-label",
+                "images.item.description":"item-description"
             }
         },
 
         {
             "type": "image-text",
-            "class": "component-image-text",
             "anchor": "imagetext",
             "classes": {
-                "label": "image-text-label",
-                "description": "image-text-description",
-                "caption": "image-text-caption",
-                "image":"image-text-image",
-                "text":"image-text-text"
+                "label": "label",
+                "description": "description",
+                "caption": "caption",
+                "image":"image",
+                "text":"text"
             }
         },
 
         {
             "type": "link-button-text",
-            "class": "component-link-button-text",
             "anchor": "linkbuttontext",
             "classes": {
-                "label": "link-button-text-label",
-                "description": "link-button-text-description",
-                "button":"link-button-text-button",
-                "text":"link-button-text-text"
+                "label": "label",
+                "description": "description",
+                "button":"button",
+                "text":"text"
             }
         },
 
         {
             "type": "logo-list",
-            "class": "component-logo-list",
             "anchor": "logolist",
             "classes": {
-                "label": "logo-list-label",
-                "description": "logo-list-description",
-                "logos":"logo-list-logos",
-                "logos.item":"logo-list-logo",
-                "logos.item.label":"logo-list-logo-label",
-                "logos.item.description":"logo-list-logo-description",
-                "logos.item.iconUrl":"logo-list-logo-icon-url",
-                "logos.item.iconClass":"logo-list-logo-icon-class"
+                "label": "label",
+                "description": "ldescription",
+                "logos":"logos",
+                "logos.item":"logo",
+                "logos.item.label":"logo-label",
+                "logos.item.description":"logo-description",
+                "logos.item.iconUrl":"logo-icon-url",
+                "logos.item.iconClass":"logo-icon-class"
             }
         },
 
         {
             "type":"social-feed",
-            "class":"component-social-feed",
             "anchor": "socialfeed",
             "classes": {
 
@@ -346,14 +333,13 @@
 
         {
             "type": "video-text",
-            "class": "component-video-text",
             "anchor": "videotext",
             "classes": {
-                "label": "video-text-label",
-                "description": "video-text-description",
-                "caption": "video-text-caption",
-                "video":"video-text-video",
-                "text":"video-text-text"
+                "label": "label",
+                "description": "description",
+                "caption": "caption",
+                "video":"video",
+                "text":"text"
             }
         }
     ]

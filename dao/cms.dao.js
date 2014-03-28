@@ -273,6 +273,11 @@ var dao = {
 
 
     //region PAGE
+    getPageById: function(pageId, fn) {
+        return this.getById(pageId, Page, fn);
+    },
+
+
     getPageForWebsite: function (websiteId, pageName, fn) {
         var query = {websiteId: websiteId, handle: pageName};
 
@@ -704,7 +709,7 @@ var dao = {
                     }
                     if (page == null) {
                         isNewPage = true;
-                        var page = new Page({
+                        page = new Page({
                             title: defaultPage.title,
                             handle: defaultPage.handle,
                             websiteId: website.id(),
@@ -730,6 +735,12 @@ var dao = {
                                 _id: $$.u.idutils.generateUUID()
                             });
                             pageComponents.push(component.toJSON());
+                        }
+                    });
+
+                    self.saveOrUpdate(page, function(err, page) {
+                        if (!err) {
+                            self.log.info("New page saved with ID: " + page.id());
                         }
                     });
                 }
@@ -899,11 +910,13 @@ var dao = {
 
 
     _renderComponent: function (data, themeId, component, engine, fn) {
-        return this._renderItem(data, themeId, "components/" + component, engine, null, function (err, value) {
+        this._renderItem(data, themeId, "components/" + component, engine, null, function (err, value) {
             if (err) {
                 return fn(err, value);
             }
 
+            var wrapper = '<div class="component" data-class="contact-us" data-id="' + data.component._id + '">';
+            value = wrapper + value + "</div>";
             fn(err, value);
 
             data = themeId = component = engine = fn = null;

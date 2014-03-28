@@ -7,26 +7,34 @@
 -->
 
 <!-- load the jQuery and require.js libraries -->
-<script type="text/javascript" src="http://cdn.aloha-editor.org/latest/lib/require.js"></script>
-<script type="text/javascript" src="http://cdn.aloha-editor.org/latest/lib/vendor/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="/js/libs/requirejs/require-min.js"></script>
+<!--<script type="text/javascript" src="/js/libs/jquery/jquery.min.js"></script>-->
+
+<script type="text/javascript">
+    define('jquery', [], function() {
+        return parent.window.jQuery;
+        //return window.jQuery;
+    });
+</script>
 
 <!-- load the Aloha Editor core and some plugins -->
-<script src="http://cdn.aloha-editor.org/latest/lib/aloha.js"
-        data-aloha-plugins="common/ui,
-									common/format,
-			                        common/table,
-			                        common/list,
-			                        common/link,
-			                        common/highlighteditables,
-			                        common/block,
-			                        common/undo,
-			                        common/image,
-			                        common/contenthandler,
-			                        common/paste,
-			                        common/characterpicker,
-			                        common/commands,
-			                        extra/flag-icons,
-			                        common/abbr"></script>
+<!--<script src="/js/libs/aloha/lib/aloha.js"-->
+ <script src="http://cdn.aloha-editor.org/latest/lib/aloha.js"
+        data-aloha-plugins="
+                        common/ui,
+                        common/format,
+                        common/table,
+                        common/list,
+                        common/link,
+                        common/highlighteditables,
+                        common/block,
+                        common/undo,
+                        common/image,
+                        common/contenthandler,
+                        common/paste,
+                        common/characterpicker,
+                        common/commands,
+                        common/abbr"></script>
 </script>
 
 <!-- load the Aloha Editor CSS styles -->
@@ -37,5 +45,25 @@
     Aloha.ready( function() {
         var $ = Aloha.jQuery;
         $('.editable').aloha();
+
+        Aloha.bind('aloha-editable-deactivated', function(){
+            var content = Aloha.activeEditable.getContents();
+            var contentId = Aloha.activeEditable.obj[0].id;
+            var pageId = window.location.pathname;
+
+            // textarea handling -- html id is "xy" and will be "xy-aloha" for the aloha editable
+            if ( contentId.match(/-aloha$/gi) ) {
+                contentId = contentId.replace( /-aloha/gi, '' );
+            }
+
+            parent.$('#edit-website-wrapper').trigger("websiteedit", {
+                content: content,
+                contentId: contentId,
+                pageId: pageId,
+                target: Aloha.activeEditable.obj[0],
+                dataClass: Aloha.activeEditable.obj[0].attributes['data-class']
+            });
+            return;
+        });
     });
 </script>

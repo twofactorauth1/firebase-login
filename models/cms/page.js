@@ -20,9 +20,9 @@ var page = $$.m.ModelBase.extend({
              *
              * @property _id
              * @type {String}
-             * @defeault ""
+             * @defeault null
              */
-            _id: "",
+            _id: null,
 
             /**
              * The account Id to whom this page belongs

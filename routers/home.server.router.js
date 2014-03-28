@@ -20,6 +20,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
         app.get("/", this.setup, this.index.bind(this));
+        app.get("/index", this.setup, this.index.bind(this));
         app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
 
         app.get("/home", this.isAuth.bind(this), this.showHome.bind(this));
