@@ -6,8 +6,10 @@
  */
 
 define([
-
-], function () {
+    //Components
+    'backboneAssoc',
+    'collections/cms/components'
+], function (backboneAssoc, Components) {
 
     var model = Backbone.Model.extend({
 
@@ -37,6 +39,28 @@ define([
 
                 modified: null
             }
+        },
+
+
+        parse: function(attrs) {
+            var components = attrs.components || [];
+            var typedComponents = new Components(components);
+            attrs.components = typedComponents;
+            return attrs;
+        },
+
+
+        toJSON: function() {
+            var json = _.clone(this.attributes);
+            var collection = json.components;
+            json.components = json.components.toJSON()
+            return json;
+        },
+
+
+        getComponentById: function(id) {
+            var components = this.get("components");
+            return components.get(id);
         },
 
 

@@ -11,9 +11,8 @@ define([
     'models/cms/website',
     'models/cms/page',
     'services/cms.service',
-    //'libs/redactor/redactor',
     'utils/utils'
-], function (User, Account, Website, Page, CmsService) {
+], function (User, Account, Website, Page, CmsService, utils) {
 
     var view = Backbone.View.extend({
 
@@ -32,7 +31,8 @@ define([
 
 
         events: {
-            "onLoad #iframe-website":"websiteLoaded"
+            "click .btn-save-page":"savePage",
+            "click .btn-cancel-page":"cancelPage"
         },
 
 
@@ -47,7 +47,7 @@ define([
             var self = this
                 , p1 = this.getAccount()
                 , p2 = this.getUser()
-                , p3 = this.getWebsiteConfig()
+                , p3 = this.getThemeConfig()
                 , p4 = this.getWebsite();
 
 
@@ -106,12 +106,43 @@ define([
         onWebsiteEdit: function(event) {
             var data = arguments[1];
             var target = data.target;
+
             var parent = $(target).parents(".component").eq(0);
-
             var componentType = $(parent).data("class");
+            var componentId = $(parent).attr("data-id");
+            var component = this.page.getComponentById(componentId);
 
-            var parentId = $(parent).attr("data-id");
-            alert(componentType + " " + parentId);
+            var dataClass = data.dataClass;
+            var content = data.content;
+            var page = data.pageId;
+
+            var configComponents = this.themeConfig.components;
+            var componentConfig = _.findWhere(configComponents, { type: componentType });
+
+            var configClasses = componentConfig.classes;
+            for(var key in configClasses) {
+                if (configClasses[key] == dataClass) {
+                    dataClass = key;
+                    break;
+                }
+            }
+            component.setContent(dataClass, content, target, componentConfig);
+        },
+
+
+        savePage: function() {
+            this.page.save()
+                .done(function() {
+                    $$.viewManager.showAlert("Page saved!");
+                })
+                .fail(function(resp) {
+                    alert("There was an error saving this page!");
+                });
+        },
+
+
+        cancelPage: function() {
+
         },
 
 
@@ -161,16 +192,16 @@ define([
 
 
         getPage: function() {
-            var page = new Page({
+            this.page = new Page({
                 websiteId: this.websiteId,
                 handle: this.pageHandle
             });
 
-            return page.fetch();
+            return this.page.fetch();
         },
 
 
-        getWebsiteConfig: function () {
+        getThemeConfig: function () {
             var self = this;
             if (this.accountId == null) {
                 this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);

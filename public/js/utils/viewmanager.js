@@ -117,8 +117,8 @@ define([
             if (selector == null || selector === ""){
                 selector = "#container-alert";
             }
-            $(selector).html(html);
-            $(selector).show();
+
+            $(selector).html(html).show().removeClass("hidden");
 
             if (alertType == "alert-success"){
                 if (self.alertTimerId != null){
@@ -127,7 +127,7 @@ define([
 
                 self.alertTimerId = setTimeout(function(){
                     $(selector).fadeOut();
-                }, 5000);
+                }, 3000);
             }
         },
 

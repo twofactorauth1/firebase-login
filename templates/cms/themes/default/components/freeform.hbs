@@ -7,15 +7,21 @@
 -->
 
 <div>
+    {{#with component}}
     <div class="component-header">
-        <div class="editable" data-class="label">This is my freeform label</div>
-        <div class="editable" data-class="description">I like to add a bit of description to my freeform pages, before the freeform starts </div>
-    </div>
+        <div class="editable" data-class="label">
+            {{{label}}}
+        </div>
 
-    <hr/>
-    <div class="component-body">
-        <div class="editable" data-class="value">
-            This is where my freeform value really goes
+        <div class="editable" data-class="description">
+            {{{description}}}
         </div>
     </div>
+
+    <div class="component-body">
+        <div class="editable" data-class="value">
+            {{{value}}}
+        </div>
+    </div>
+    {{/with}}
 </div>

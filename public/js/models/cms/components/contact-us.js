@@ -15,23 +15,35 @@ define([
             return {
 
                 _id: null,
-
                 anchor: null,
-
-                type: "freeform",
-
+                type: "contact-us",
                 label:"",
-
                 description:"",
-
-                value: ""
-            }
+                hours: [], //{value:""}
+                location: {
+                    address:"",
+                    address2:"",
+                    city:"",
+                    state:"",
+                    zip:"",
+                    lat:"",
+                    lon:"",
+                    showMap: false,
+                    addressDisplayLabel: ""
+                },
+                contact: {
+                    email: "",
+                    phone: ""
+                }
+            };
         }
     });
 
+
     $$.m.cms = $$.m.cms || {};
     $$.m.cms.components = $$.m.cms.components || {};
-    $$.m.cms.components.Freeform = model;
+    $$.m.cms.components.ContactUs = model;
 
     return model;
 });
+

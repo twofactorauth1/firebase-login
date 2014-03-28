@@ -7,24 +7,79 @@
 -->
 
 <div>
-    <label class="editable" data-class="label">
+    {{#with component}}
+    <h3 class="editable" data-class="label">
         {{#if label}}
-            {{label}}
+            {{{label}}}
         {{else}}
-            Sample Label
+            Contact us label
         {{/if}}
-    </label>
+    </h3>
 
     <div class="editable" data-class="description">
         {{#if description}}
-            {{description}}
+            {{{description}}}
         {{else}}
-            Enter multiline description here
+            <strong>Contact us description</strong>
         {{/if}}
     </div>
 
-    <h4>Edit details here</h4>
-    <form class="form">
+    <div>
+        <strong>Our location</strong>
 
-    </form>
+        <div class="editable" data-class="address-display-label">
+            {{#if location.displayLabel}}
+                {{{location.displayLabel}}}
+            {{else}}
+                Enter your Address here
+            {{/if}}
+        </div>
+
+        <div>
+            <span class="editable" data-class="address">
+            {{#if location.address}}
+                {{{location.address}}}
+            {{else}}
+                Address
+            {{/if}}
+            </span>
+
+            <span class="editable" data-class="address2">
+                {{#if location.address2}}
+                    {{{location.address2}}}
+                {{else}}
+                    Address Suite or Apartment
+                {{/if}}
+            </span>
+        </div>
+
+
+
+        <div>
+            <span class="editable" data-class="city">
+                {{#if location.city}}
+                    {{{location.city}}}
+                {{else}}
+                    City
+                {{/if}}
+            </span>
+
+            <span class="editable" data-class="state">
+                {{#if location.state}}
+                    {{{location.state}}}
+                {{else}}
+                    State
+                {{/if}}
+            </span>
+
+            <span class="editable" data-class="zip">
+                {{#if location.zip}}
+                    {{{location.zip}}}
+                {{else}}
+                    Zip Code
+                {{/if}}
+            </span>
+        </div>
+    </div>
+    {{/with}}
 </div>

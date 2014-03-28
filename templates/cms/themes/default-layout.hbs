@@ -29,7 +29,15 @@
 <body>
     <div id="header">{{{header}}}</div>
 
-    <div id="body">{{{body}}}</div>
+    <div id="body">
+        {{#foreach body.components}}
+            {{{value}}}
+            {{#notequals $last true}}
+                <hr/>
+            {{/notequals}}
+        {{/foreach}}
+    </div>
 
+    <br/><br/>
     <div id="footer">{{{footer}}}</div>
 </body>

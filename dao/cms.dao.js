@@ -783,7 +783,13 @@ var dao = {
                     }
                 }
 
-                var header, footer, editableCssScript, body = "";
+                var header
+                    , footer
+                    , editableCssScript
+                    , body = {
+                        components: []
+                    };
+
                 // render header, footer, and body
                 async.parallel([
                     //render header
@@ -839,7 +845,7 @@ var dao = {
                                     return _cb(err);
                                 }
 
-                                body += value;
+                                body.components.push({value:value});
                                 _cb();
                             })
                         }, function (err) {
@@ -915,7 +921,7 @@ var dao = {
                 return fn(err, value);
             }
 
-            var wrapper = '<div class="component" data-class="contact-us" data-id="' + data.component._id + '">';
+            var wrapper = '<div class="component" data-class="' + component + '" data-id="' + data.component._id + '">';
             value = wrapper + value + "</div>";
             fn(err, value);
 

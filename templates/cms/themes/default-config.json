@@ -166,8 +166,9 @@
                 "contact.phone": "phone",
                 "contact.email": "email",
 
-                "contact.hours": "hours",
-                "contact.hours.item":"hour"
+                "hours": "hours",
+                "hours.item":"hour",
+                "hours.item.value":"hour-value"
             }
         },
 
@@ -278,8 +279,8 @@
                 "images":"iimages",
                 "images.item":"item",
                 "images.item.image":"item-image",
-                "images.item.overlay.label":"item-overlay-label",
-                "images.item.overlay.description":"item-overlay-description",
+                "images.item.overlayLabel":"item-overlay-label",
+                "images.item.overlayDescription":"item-overlay-description",
                 "images.item.label":"item-label",
                 "images.item.description":"item-description"
             }

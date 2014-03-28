@@ -8,6 +8,8 @@
 var baseApi = require('../base.api.js');
 var cmsDao = require('../../dao/cms.dao');
 
+var Page = require('../../models/cms/page');
+
 var api = function() {
     this.init.apply(this, arguments);
 };
@@ -19,18 +21,23 @@ _.extend(api.prototype, baseApi.prototype, {
     dao: cmsDao,
 
     initialize: function() {
-        //GET
+        // WEBSITE
         app.get(this.url('website/:id'), this.isAuthApi, this.getWebsiteById.bind(this));
         app.get(this.url(':accountid/cms/website', "account"), this.isAuthApi, this.getWebsiteForAccountId.bind(this));
 
+        // PAGE
         app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
         app.get(this.url('page/:id'), this.getPageById.bind(this));
+        app.post(this.url('page'), this.saveOrUpdatePage.bind(this));
+        app.put(this.url('page'), this.saveOrUpdatePage.bind(this));
 
+        // THEME
         app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
         app.get(this.url(':accountid/cms/theme', "account"), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
     },
 
 
+    //region WEBSITE
     getWebsiteById: function(req, resp) {
         //TODO: Add security
         var self = this;
@@ -53,8 +60,10 @@ _.extend(api.prototype, baseApi.prototype, {
             self = value = null;
         });
     },
+    //endregion
 
 
+    //region PAGE
     getPageByHandle: function(req, resp) {
         //TODO: Add security
         var self = this;
@@ -80,6 +89,21 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
+    saveOrUpdatePage: function(req, resp) {
+        //TODO: Add Security
+        var self = this;
+        var _page = req.body;
+
+        var page = new Page(_page);
+        cmsDao.saveOrUpdate(page, function(err, value) {
+            self.sendResultOrError(resp, err, value, "Error saving website Page");
+            self = null;
+        });
+    },
+    //endregion
+
+
+    //region THEME
     getThemeConfigById: function(req, resp) {
         //TODO: Add Security
         var self = this;
@@ -109,6 +133,7 @@ _.extend(api.prototype, baseApi.prototype, {
             self = null;
         });
     }
+    //endregion
 });
 
 module.exports = new api();

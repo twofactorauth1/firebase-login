@@ -26,6 +26,8 @@ html
 
         #wrap
 
+            #container-alert.hidden
+
             .container
 
                 if errorMsg
@@ -45,8 +47,6 @@ html
                     #info-msg.alert.alert-info.hidden
                         button.close(type="button" aria-hidden="true") &times;
                         span.message #{infoMsg}
-
-                #container-alert.hidden
 
                 #main-viewport
                     block content
