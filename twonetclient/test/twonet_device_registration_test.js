@@ -28,6 +28,7 @@ exports.twonet_device_registration = {
                 test.ok(false, err);
             } else {
                 test.ok(response);
+                console.log(JSON.stringify(response, undefined, 2));
             }
             test.done();
         });
@@ -36,13 +37,13 @@ exports.twonet_device_registration = {
     register2netBPM: function(test) {
         test.expect(2);
         twonetClient.deviceRegistration.register2netDevice(user_guid, '5130651010', 'UA-767PBT', 'A&D',
-            function(err, response) {
+            function(err, device) {
                 if (err) {
                     test.ok(false, err);
                 } else {
-                    test.ok(response);
-                    bpm_guid = response['trackRegistrationResponse']['trackDetail']['guid'];
-                    console.log("bpm_guid " + bpm_guid);
+                    test.ok(device);
+                    console.log("Registered BPM " + JSON.stringify(device, undefined, 2));
+                    bpm_guid = device.guid;
                     test.ok(typeof bpm_guid == 'string' && bpm_guid);
                 }
                 test.done();
@@ -57,8 +58,8 @@ exports.twonet_device_registration = {
                     test.ok(false, err);
                 } else {
                     test.ok(response);
-                    scale_guid = response['trackRegistrationResponse']['trackDetail']['guid'];
-                    console.log("scale_guid " + scale_guid);
+                    console.log("Registered scale " + JSON.stringify(response, undefined, 2));
+                    scale_guid = response.guid;
                     test.ok(typeof scale_guid == 'string' && scale_guid);
                 }
                 test.done();
@@ -73,8 +74,8 @@ exports.twonet_device_registration = {
                     test.ok(false, err);
                 } else {
                     test.ok(response);
-                    pulseox_guid = response['trackRegistrationResponse']['trackDetail']['guid'];
-                    console.log("pulseox_guid " + pulseox_guid);
+                    console.log("Registered pulseox " + JSON.stringify(response, undefined, 2));
+                    pulseox_guid = response.guid;
                     test.ok(typeof pulseox_guid == 'string' && pulseox_guid);
                 }
                 test.done();
@@ -91,8 +92,8 @@ exports.twonet_device_registration = {
                     test.ok(false, err);
                 } else {
                     test.ok(response);
-                    earthermo_guid = response['trackRegistrationResponse']['trackDetail']['guid'];
-                    console.log("earthermo_guid " + earthermo_guid);
+                    console.log("Registered pulseox " + JSON.stringify(response, undefined, 2));
+                    earthermo_guid = response.guid;
                     test.ok(typeof earthermo_guid == 'string' && earthermo_guid);
                 }
                 test.done();
@@ -100,22 +101,21 @@ exports.twonet_device_registration = {
     },
 
     getUserDevices: function(test) {
-        test.expect(8);
+        test.expect();
 
-        twonetClient.deviceRegistration.getUserDevices(user_guid, function(err, response) {
+        twonetClient.deviceRegistration.getUserDevices(user_guid, function(err, deviceArray) {
             if (err) {
                 test.ok(false, err);
             } else {
-                test.ok(response);
-                this.deviceArray = response['trackDetailsResponse']['trackDetails']['trackDetail'];
-                test.ok(this.deviceArray instanceof Array);
-                test.equals(this.deviceArray.length, 4);
+                test.ok(deviceArray);
+                console.log("User devices retrieved " + JSON.stringify(deviceArray, undefined, 2));
+                test.equals(deviceArray.length, 4);
                 this.guidArray = [];
-                for(var i=0; i < this.deviceArray.length; i++) {
-                    console.log('in device array:' + this.deviceArray[i]['guid']);
-                    this.guidArray.push(this.deviceArray[i]['guid']);
+                for(var i=0; i < deviceArray.length; i++) {
+                    console.log('in device array:' + deviceArray[i]['guid']);
+                    this.guidArray.push(deviceArray[i]['guid']);
                 }
-                test.equals(this.guidArray.length, this.deviceArray.length);
+                test.equals(this.guidArray.length, deviceArray.length);
                 test.ok(_.contains(this.guidArray, scale_guid));
                 test.ok(_.contains(this.guidArray, pulseox_guid));
                 test.ok(_.contains(this.guidArray, bpm_guid));

@@ -1,3 +1,4 @@
+var https = require('https');
 _ = require('underscore');
 
 var twoNetBase = function() {
@@ -5,6 +6,8 @@ var twoNetBase = function() {
 }
 
 _.extend(twoNetBase.prototype, {
+
+    RESPONSE_STATUS: { OK: "OK" },
 
     KEY: "36ODKJ1HdJD1y29hk203",
 
@@ -32,6 +35,49 @@ _.extend(twoNetBase.prototype, {
                 "Content-type": "application/json"
             }
         };
+    },
+
+    httpRequest: function(method, url, body, callback) {
+
+        var options = this.twonetOptions(method, url);
+        this.logUrl(options);
+
+        var req = https.request(options, function(res) {
+            console.log("==> Response status code: " + res.statusCode);
+
+            res.on('data', function(data) {
+                var response = JSON.parse(data);
+                console.log("==> Response: " + JSON.stringify(response));
+                if (res.statusCode != 200) {
+                    return callback(new Error(JSON.stringify(response)), null);
+                }
+
+                return callback(null, response);
+            });
+        });
+
+        if (body) {
+            var bodyStr = JSON.stringify(body);
+            console.log("==> Request: " + bodyStr);
+            req.write(bodyStr);
+        }
+
+        req.end();
+    },
+
+    convertToArray: function(obj) {
+        if (obj instanceof Array) {
+            return obj;
+        }
+
+        var objArray = new Array();
+
+        if (!obj) {
+            return objArray;
+        }
+
+        objArray.push(obj);
+        return objArray;
     },
 
     logUrl: function(options) {

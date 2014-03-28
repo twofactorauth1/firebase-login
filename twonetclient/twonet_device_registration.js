@@ -24,31 +24,53 @@ _.extend(DeviceRegistration.prototype, TwoNetBase.prototype, {
      *
      * Example Response:
      *
+     * [
+     * {
+     *    "guid": "b64d7234-2398-021d-2b64-b5999a31aaff",
+     *    "type": "2net",
+     *    "properties": {
+     *        "property": [
+     *            {
+     *                "name": "make",
+     *                "value": "A&D"
+     *            },
+     *            {
+     *                "name": "model",
+     *                "value": "UC-321PBT"
+     *            }
+     *        ]
+     *    },
+     *    "authenticated": true,
+     *    "supportsBodyMeasures": true,
+     *    "supportsBloodMeasures": false,
+     *    "supportsActivity": false,
+     *    "supportsNutrition": false,
+     *    "supportsBreath": false,
+     *    "supportsSleep": false
+     * },
+     * {
+     * ...
+     * }
+     * ]
      *
      * @param user_guid uuid to register
      * @param callback client callback
      */
     getUserDevices: function(user_guid, callback) {
 
-        var options = this.twonetOptions(this.HTTP_METHOD.GET, util.format(this.GET_USER_DEVICES_ENDPOINT, user_guid));
-
-        this.logUrl(options);
-
-        var req = https.request(options, function(res) {
-            console.log("==> Response status code: " + res.statusCode);
-
-            res.on('data', function(data) {
-                var response = JSON.parse(data);
-                console.log("==> Response: " + JSON.stringify(response));
-                if (res.statusCode != 200) {
-                    return callback(new Error(JSON.stringify(response)), null);
+        var that = this;
+        this.httpRequest(this.HTTP_METHOD.GET, util.format(this.GET_USER_DEVICES_ENDPOINT, user_guid), null,
+            function(err, response) {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    if (response.trackDetailsResponse.status.message != that.RESPONSE_STATUS.OK) {
+                        callback(new Error("Unexpected status message"), response);
+                    } else {
+                        callback(null, that.convertToArray(response.trackDetailsResponse.trackDetails.trackDetail));
+                    }
                 }
-
-                return callback(null, response);
             });
-        });
-
-        req.end();
     },
 
     /******************************************************************************************************************
@@ -59,6 +81,33 @@ _.extend(DeviceRegistration.prototype, TwoNetBase.prototype, {
      *
      * Example Response:
      *
+     * {
+     *       "guid": "1053ea34-2398-a991-1105-b59070725aff",
+     *       "type": "2net",
+     *       "properties": {
+     *           "property": [
+     *               {
+     *                   "name": "make",
+     *                   "value": "A&D"
+     *               },
+     *               {
+     *                   "name": "model",
+     *                   "value": "UA-767PBT"
+     *               }
+     *           ]
+     *       },
+     *       "authenticated": true,
+     *       "supportsBodyMeasures": false,
+     *       "supportsBloodMeasures": true,
+     *       "supportsActivity": false,
+     *       "supportsNutrition": false,
+     *       "supportsBreath": false,
+     *       "supportsSleep": false
+     *   }
+     *
+     *   Of particular importance is the "guid", which is the device id of the device just registered for
+     *   this specific user.
+     *
      * @param user_guid user uuid
      * @param serial device serial number
      * @param model device model
@@ -67,7 +116,7 @@ _.extend(DeviceRegistration.prototype, TwoNetBase.prototype, {
      */
     register2netDevice: function(user_guid, serial, model, make, callback) {
 
-        var body = JSON.stringify({
+        var body = {
             "trackRegistrationRequest": {
                 "guid": user_guid,
                 "type": "2net",
@@ -89,33 +138,20 @@ _.extend(DeviceRegistration.prototype, TwoNetBase.prototype, {
                     ]
                 }
             }
-        });
+        };
 
-        var options = this.twonetOptions(this.HTTP_METHOD.POST, this.REGISTER_DEVICE_ENDPOINT);
-
-        this.logUrl(options);
-        console.log("==> Request: " + body);
-
-        var req = https.request(options, function(res) {
-            console.log("==> Response status code: " + res.statusCode);
-            //console.log("headers: ", res.headers);
-
-            res.on('data', function(d) {
-                var response = JSON.parse(d);
-                console.log("==> Response: " + JSON.stringify(response));
-                if (res.statusCode != 200) {
-                    //console.log("status:" + response['errorStatus']['status'])
-                    //console.log("code:" + response['errorStatus']['code'])
-                    //console.log("message:" + response['errorStatus']['message'])
-                    return callback(new Error(JSON.stringify(response)), null);
+        var that = this;
+        this.httpRequest(this.HTTP_METHOD.POST, this.REGISTER_DEVICE_ENDPOINT, body, function(err, response) {
+            if (err) {
+                callback(err, null);
+            } else {
+                if (response.trackRegistrationResponse.status.message != that.RESPONSE_STATUS.OK) {
+                    callback(new Error("Unexpected status message"), response);
+                } else {
+                    callback(null, response.trackRegistrationResponse.trackDetail);
                 }
-
-                return callback(null, response);
-            });
+            }
         });
-
-        req.write(body);
-        req.end();
     },
 
     /******************************************************************************************************************
@@ -135,26 +171,14 @@ _.extend(DeviceRegistration.prototype, TwoNetBase.prototype, {
      */
     getRegisterableDevices: function(user_guid, callback) {
 
-        var options = this.twonetOptions(this.HTTP_METHOD.GET,
-            util.format(this.GET_USER_REGISTRABLE_DEVICES_ENDPOINT, user_guid));
-
-        this.logUrl(options);
-
-        var req = https.request(options, function(res) {
-            console.log("==> Response status code: " + res.statusCode);
-
-            res.on('data', function(d) {
-                var response = JSON.parse(d);
-                console.log("==> Response: " + JSON.stringify(response));
-                if (res.statusCode != 200) {
-                    return callback(new Error(JSON.stringify(response)), null);
+        this.httpRequest(this.HTTP_METHOD.GET, util.format(this.GET_USER_REGISTRABLE_DEVICES_ENDPOINT, user_guid), null,
+            function(err, response) {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    callback(null, response.trackRegistrationTemplateResponse.trackRegistrationTemplates.trackRegistrationTemplate);
                 }
-
-                return callback(null, response);
             });
-        });
-
-        req.end();
     }
 });
 
