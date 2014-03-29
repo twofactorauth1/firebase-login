@@ -37,7 +37,7 @@ require.config({
         text: "libs/requirejs/plugins/text",
 
         //UI SPECIFIC
-        toggles: "libs/mics/toggles.min"
+        toggles: "libs/misc/toggles.min"
     },
 
     shim: {

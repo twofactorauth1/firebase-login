@@ -8,13 +8,14 @@
 var config = require('./app.config');
 
 var connectionString = "mongodb://localhost/bioindigenous";
+//var connectionString = "mongodb://indigenous:sLRxKmiG42sq@novus.modulusmongo.net:27017/H2inesux";
 
 if (process.env.MONGO_CONNECT != null) {
     connectionString = process.env.MONGO_CONNECT;
 }
 
 module.exports = {
-    MONGODB_CONNECT: connectionString,
+    MONGODB_CONNECT: connectionString   
 };
 
 
