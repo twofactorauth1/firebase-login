@@ -1,3 +1,18 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
+/*
+//Do not delete this
+//requires: "nodetime": "~0.8.15" to run
+require('nodetime').profile({
+    accountKey: 'bdd766862005ebc9c88fc409cef27c60921f2774',
+    appName: 'Node.js Application'
+});
+*/
 
 //---------------------------------------------------------
 //  SETUP REQUIREJS FOR SHARED RESOURCES
@@ -24,7 +39,8 @@ var express = require('express')
     , appConfig = require('./configs/app.config')
     , mongoConfig = require('./configs/mongodb.config')
     , MongoStore = require('connect-mongo-store')(express)
-    , mongoStore = new MongoStore(mongoConfig.MONGODB_CONNECT);
+    , mongoStore = new MongoStore(mongoConfig.MONGODB_CONNECT)
+    , consolidate= require('consolidate');
 
 
 //---------------------------------------------------------
@@ -34,6 +50,8 @@ _ = require('underscore');
 requirejs('utils/commonutils');
 require('./utils/errors');
 require('./utils/jsvalidate');
+
+//Load JQuery Deferred, ensure $ is available
 var deferred = require("jquery-deferred");
 if (typeof $ == 'undefined') {
     $ = {};
@@ -97,10 +115,19 @@ aws.config.update(awsConfigs);
 app = express();
 global.app = app;
 
-// all environments
-app.set('views', path.join(__dirname, appConfig.view_dir));
+// View engine
 app.set('view options', { layout:false });
-app.set('view engine', appConfig.view_engine);
+
+var hbs = consolidate.handlebars;
+app.engine('html', hbs);
+app.engine('hbs', hbs);
+app.engine('handlebars', hbs);
+app.engine('dot', consolidate.dot);
+app.engine('jade', consolidate.jade);
+
+app.set('view engine', 'jade');
+app.set('views', path.join(__dirname, 'templates'));
+
 app.use(express.favicon());
 app.use(express.json());
 app.use(express.urlencoded());
@@ -124,10 +151,8 @@ app.use(function(req, res, next) {
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-//app.use(subdomainAuthorize()); //TODO: enable it before final deployment.
 app.use(app.router);
 app.use(connect.compress());
-app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 
 app.configure('development', function() {
     app.use(express.errorHandler());
@@ -217,3 +242,24 @@ require('./routers/router.manager');
 //  SETUP API
 //-----------------------------------------------------
 require('./api/api.manager');
+
+
+//-----------------------------------------------------
+//  SETUP RENDER HELPERS
+//-----------------------------------------------------
+Handlebars = require('handlebars');
+requirejs('libs/handlebars/handlebarshelpers');
+requirejs('libs/handlebars/indigenoushelpers');
+
+
+//-----------------------------------------------------
+//  CATCH UNCAUGH EXCEPTIONS - Log them and email the error
+//-----------------------------------------------------
+process.on('uncaughtException', function (err) {
+    log.error("Stack trace: " + err.stack);
+    log.error('Caught exception: ' + err);
+
+    $$.g.mailer.sendMail("errors@indigenous.io", 'christopher.mina@gmail.com', null, "Uncaught Error occurred - " + process.env.NODE_ENV, null, err + ":  " + err.stack, function(err, value) {
+        process.exit(1);
+    });
+});

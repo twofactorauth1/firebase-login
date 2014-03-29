@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 define([
     'models/user',
     'models/account',
@@ -20,7 +27,8 @@ define([
         events: {
             "click .btn-letter":"showLetter",
             "click .btn-view-contact-details":"viewContactDetails",
-            "click .btn-create-contact":"createContact"
+            "click .btn-create-contact":"createContact",
+            "click .important-star":"toggleStarred"
         },
 
 
@@ -58,7 +66,7 @@ define([
                 currentLetter: self.currentLetter.toUpperCase()
             };
 
-            data.min = 10;
+            data.min = 6;
             data.count = data.contacts.length;
 
             var tmpl = $$.templateManager.get("contacts-main", self.templateKey);
@@ -67,6 +75,8 @@ define([
             self.show(html);
 
             self.refreshGooglePhotos();
+
+            self.updateTooltips();
         },
 
 
@@ -106,7 +116,30 @@ define([
         },
 
 
+        toggleStarred: function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            var contactId = $(event.currentTarget).parent('.contact-item').data("contactid");
+            var contact = this.contacts.get(contactId);
+
+            var starred = contact.get("starred");
+            contact.set({starred:!starred});
+            contact.save();
+
+            $("i", event.currentTarget).toggleClass("fa-star-o fa-star");
+        },
+
+
         viewContactDetails: function(event) {
+            var href = $(event.target).attr("href") || $(event.target).parent().attr("href");
+            if (href != null) {
+                if (href == "#") {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                }
+                return;
+            }
             var contactId = $(event.currentTarget).data("contactid");
             $$.r.account.ContactRouter.navigateToContactDetails(contactId, this.currentLetter);
         },

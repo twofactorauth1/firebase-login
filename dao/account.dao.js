@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 require('./base.dao');
 require('../models/account');
 var urlUtils = require('../utils/urlutils');
@@ -152,13 +159,12 @@ var dao = {
 
     //region TEMPORARILY STORE ACCOUNT INFO DURING CREATION
     getTempAccount: function(accountToken, fn) {
-        var account = $$.g.cache.get(accountToken, true, 3600*24, "accounts");
-        fn(null, account);
+        var account = $$.g.cache.get(accountToken, "accounts", true, 3600*24, fn);
     },
 
 
     saveOrUpdateTmpAccount: function(account, fn) {
-        $$.g.cache.set(account.get("token"), account, 3600*24, "accounts");
+        $$.g.cache.set(account.get("token"), account, "accounts", 3600*24);
         fn(null, account);
     },
 

@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var environments = {
     DEVELOPMENT: "development",
     PRODUCTION: "production",
@@ -63,12 +70,12 @@ module.exports = {
     environments: environments,
     environment: process.env.NODE_ENV,
     port: process.env.PORT,
-    view_engine: 'jade',
-    view_dir: 'templates',
     server_url: serverUrl,
     support_email: "support@indigenous.com",
     cluster:false,
     freeCpus:2,
+
+    SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
 
     getServerUrl: function(subdomain, domain) {
         if (subdomain == null && domain == null) {

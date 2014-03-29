@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var BaseView = require('./base.server.view');
 
 var view = function(req,resp,options) {
@@ -21,9 +28,12 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account = value.toJSON();
             }
 
+            data.includeJs = false;
             data = self.baseData(data);
 
-            self.resp.render('home', data);
+            self.resp.render('home_new', data);
+            self.cleanUp();
+            data = self = null;
         });
     }
 });

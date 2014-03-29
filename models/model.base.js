@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var _ = require("underscore");
 
 var modelBase = function(options) {
@@ -106,6 +113,30 @@ _.extend(modelBase.prototype, {
 
     clear: function(key) {
         delete this.attributes[key];
+    },
+
+
+    created: function(userId) {
+        var created = this.get("created");
+        if (created == null) {
+            created = {};
+            this.set({created:created});
+        }
+
+        created.by = userId;
+        created.date = new Date().getTime();
+    },
+
+
+    modified: function(userId) {
+        var modified = this.get("modified");
+        if (modified == null) {
+            modified = {};
+            this.set({modified:modified});
+        }
+
+        modified.by = userId;
+        modified.date = new Date().getTime();
     },
 
 

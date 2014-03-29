@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 require('../utils/jadehelpers');
 var url = require('url');
 var accountDao = require('../dao/account.dao');
@@ -42,7 +49,7 @@ _.extend(baseView.prototype, {
         delete options.root;
 
         var data = {
-            title: "indigenous",
+            title: "Indigenous.io",
             serverProps: serverProps,
             includeJs:true,
             includeHeader:false,
@@ -85,6 +92,7 @@ _.extend(baseView.prototype, {
             data.authenticated = false;
         }
 
+        //Override default options here
         for(var key in options) {
             data[key] = options[key];
         }
@@ -93,9 +101,18 @@ _.extend(baseView.prototype, {
     },
 
 
+    userId: function() {
+        try {
+            return this.req.user.id();
+        }catch(exception) {
+            return null;
+        }
+    },
+
+
     accountId: function() {
         try {
-            return (this.req.session.accountId == null || this.req.session.accountId == 0) ? 0 : this.req.session.accountId;
+            return this.req.session.accountId || 0;
         }catch(exception) {
             return null;
         }
@@ -108,6 +125,11 @@ _.extend(baseView.prototype, {
             return accountDao.getById(accountId, fn);
         }
         fn();
+    },
+
+
+    cleanUp: function() {
+        this.req = this.resp = null;
     }
 });
 

@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var baseDao = require('./base.dao');
 requirejs('constants/constants');
 require('../models/contact');
@@ -12,8 +19,8 @@ var dao = {
     getContactsShort: function(accountId, letter, fn) {
         var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
         var query = {accountId: accountId, _last: { $gte: letter, $lt: nextLetter } };
-        var fields = {_id:1, accountId:1, first:1, last:1, photo:1, photoSquare:1, type:1, siteActivity:1};
-
+        //var fields = {_id:1, accountId:1, first:1, last:1, photo:1, photoSquare:1, type:1, siteActivity:1, details:1};
+        var fields = null;
         var obj = {query:query, fields:fields};
         this.findManyWithFields(query, fields, fn);
     },

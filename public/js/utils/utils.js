@@ -1,6 +1,21 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 define(function() {
 
     var utils = {
+
+        styleutils: {
+            loadCSS: function(href) {
+                var cssLink = $("<link rel='stylesheet' type='text/css' href='"+href+"'>");
+                $("head").append(cssLink);
+            }
+        },
+
 
         viewutils: {
             isMobileLayout:function () {

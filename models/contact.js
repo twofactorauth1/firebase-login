@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 require('./model.base');
 
 
@@ -13,7 +20,8 @@ var contact = $$.m.ModelBase.extend({
             last:null,              //string,
             photo:"",               //string,
             photoSquare:"",          //string,
-            birthday:null,          //string
+            birthday:null,          //string,
+            starred:false,          //true|false
             type:"c",               //contact_types
             _v:"0.1",
 

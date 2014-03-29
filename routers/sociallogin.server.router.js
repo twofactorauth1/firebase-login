@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var baseRouter = require('./base.server.router.js');
 var passport = require('passport');
 var cookies = require("../utils/cookieutil");
@@ -126,9 +133,29 @@ _.extend(router.prototype, baseRouter.prototype, {
         var state = req.session.state;
         var user = req.user;
 
-        authenticationDao.getAuthenticatedUrlForAccount(state.accountId, user.id(), "/", null, function(err, value) {
+        var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
+        if (redirectUrl != null) {
+            authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function(err, value) {
+                return resp.redirect(redirectUrl);
+            });
+            return;
+        }
+
+        var accountId = null;
+        var path = "admin";
+        if (state.accountId > 0) {
+            accountId = state.accountId;
+        } else {
+            var accountIds = user.getAllAccountIds();
+            if (accountIds.length == 1) {
+                accountId = accountIds[0];
+            } else {
+                path = "/home";
+            }
+        }
+        authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), path, null, function(err, value) {
             if (err) {
-                resp.redirect("/");
+                resp.redirect("/home");
             } else {
                 resp.redirect(value);
             }

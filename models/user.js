@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 require('./model.base');
 var crypto = require('../utils/security/crypto');
 var constants = requirejs("constants/constants");
@@ -16,9 +23,9 @@ var user = $$.m.ModelBase.extend({
             _v: "0.1",
 
             created: {
+                by: null,        //this is a nullable ID value, if created by an existing user, this will be populated.
                 date: "",        //Date created
                 strategy: "",    // lo|fb|tw|li|etc.  See $$.constants.social.types
-                by: null,        //this is a nullable ID value, if created by an existing user, this will be populated.
                 isNew: false     //If this is a brand new user, mark this as true, the application code will modify it later as necessary
             },
 
@@ -90,7 +97,7 @@ var user = $$.m.ModelBase.extend({
              *   _id:"",
              *   socialId:"",  //The social Id from where these details came
              *   type:int,     //The social network from where this information originated, or local
-             *
+             *   username,     //The username from the social network
              *   websites:[]
              *
              *   phones: [{
@@ -117,12 +124,18 @@ var user = $$.m.ModelBase.extend({
              *       defaultBilling: false
              *   }],
              *
+             *   numFriends: null,
+             *   numFollowers: null,
+             *   numFavorites: null,
+             *
+             *   //These are IM accounts we retrieved from the given social networks records
              *   imAccounts: [{
              *      _id:"",
-             *      type:"",        //the communication type (e.g. AOL, Skype, etc)
+             *      type:"",                //the communication type (e.g. AOL, Skype, etc)
              *      username:"",            the im account name
              *   }]
              *
+             *   //These are social accounts we retrieved from the given social networks records
              *   socialNetworks: [{
              *      _id:"",
              *      type: the social network type (e.g.
@@ -139,7 +152,6 @@ var user = $$.m.ModelBase.extend({
     transients: {
         deepCopy: true,
         public: [function (json, options) {
-            var self = this;
             if (json.credentials != null) {
                 json.credentials.forEach(function(creds) {
                     delete creds.password;
@@ -230,7 +242,7 @@ var user = $$.m.ModelBase.extend({
             this.set({details:details});
         }
 
-        return _.find(details, function(_detail) { return _detail.type === type });
+        return _.find(details, function(_detail) { return _detail.type === type; });
     },
 
 
@@ -251,14 +263,6 @@ var user = $$.m.ModelBase.extend({
         }
 
         return detail;
-    },
-
-
-    updateDetails: function(type, socialId) {
-        if (String.isNullOrEmpty(socialId) == false) {
-            var detail = this.getOrCreateDetails(type);
-            detail.socialId = socialId;
-        }
     },
 
 
@@ -286,13 +290,13 @@ var user = $$.m.ModelBase.extend({
         details.phones = details.phones || [];
         var phones = details.phones;
 
-        if (isDefault == true) {
-            phone.forEach(function(phone) {
+        if (isDefault === true) {
+            phones.forEach(function(phone) {
                 phone.default = false;
-            })
+            });
         }
 
-        var phone = _.findWhere(phones, {type:phoneType, number:phone});
+        var phone = _.findWhere(phones, {type:phoneType, number:phoneNumber});
         if (phone == null) {
             phone = {
                 _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
@@ -308,9 +312,8 @@ var user = $$.m.ModelBase.extend({
 
 
     createOrUpdateAddress: function(type, addressType, address, address2, city, state, zip, country, countryCode, displayName, lat, lon, defaultShipping, defaultBilling) {
-        var existing = null;
-
-        var details = this.getOrCreateDetails(type);
+        var existing
+            , details = this.getOrCreateDetails(type);
 
         details.addresses = details.addresses || [];
 
@@ -351,8 +354,8 @@ var user = $$.m.ModelBase.extend({
                 existing.displayName = String.isNullOrEmpty(displayName) ? existing.displayName : displayName;
                 existing.lat = String.isNullOrEmpty(lat) ? existing.lat : lat;
                 existing.lon = String.isNullOrEmpty(lon) ? existing.lat : lon;
-                if (defaultShipping) existing.defaultShipping = true;
-                if (defaultBilling) existing.defaultBilling = true;
+                if (defaultShipping) { existing.defaultShipping = true; }
+                if (defaultBilling) { existing.defaultBilling = true; }
             }
         }
 
@@ -375,6 +378,28 @@ var user = $$.m.ModelBase.extend({
             details.addresses.push(addressObj);
         }
     },
+
+
+    updateSocialInfo: function(type, username, numFriends, numFollowers, numFavorites) {
+        var details = this.getOrCreateDetails(type);
+
+        if (username != null) {
+            details.username = username;
+        }
+
+        if (numFriends != null) {
+            details.numFriends = numFriends;
+        }
+
+        if (numFollowers != null) {
+            details.numFollowers = numFollowers;
+        }
+
+        if (numFavorites != null) {
+            details.numFavorites = numFavorites;
+        }
+    },
+
 
     createOrUpdateImAccount: function(type, imAccountType, username) {
         var details = this.getOrCreateDetails(type);
@@ -529,7 +554,11 @@ var user = $$.m.ModelBase.extend({
         creds.type = socialType;
         creds.socialId = socialId;
         creds.accessToken = accessToken;
-        creds.refreshToken = refreshToken;
+        if (socialType == $$.constants.social.types.TWITTER) {
+            creds.accessTokenSecret = refreshToken;
+        } else {
+            creds.refreshToken = refreshToken;
+        }
         if (expires != null && expires > 0) {
             creds.expires = new Date().getTime() + (expires*1000);
         }
@@ -541,7 +570,7 @@ var user = $$.m.ModelBase.extend({
 
 
     getCredentials: function (type) {
-        var credentials = this.get("credentials"), creds;
+        var credentials = this.get("credentials");
         for (var i = 0; i < credentials.length; i++) {
             if (credentials[i].type == type) {
                 return credentials[i];
@@ -588,7 +617,7 @@ var user = $$.m.ModelBase.extend({
         }
 
         if (creds != null && encryptPassword === true && creds.password != null) {
-            creds.password = crypto.hash(creds.password);
+            creds.password = this._encryptPassword(creds.password);
         }
 
         //Ensure any rogue options make it in
@@ -623,7 +652,8 @@ var user = $$.m.ModelBase.extend({
 
         if (credentials.hasOwnProperty("password")) {
             var encryptedPass = credentials.password;
-            crypto.verify(password, encryptedPass, function (err, value) {
+
+            this._verifyPassword(password, encryptedPass, function(err, value) {
                 if (err) {
                     return fn(err, value);
                 } else if (value === false) {
@@ -687,7 +717,7 @@ var user = $$.m.ModelBase.extend({
             credentials: [
                 {
                     username: username,
-                    password: password == null ? null : crypto.hash(password),
+                    password: password == null ? null : this._encryptPassword(password),
                     type: $$.constants.user.credential_types.LOCAL
                 }
             ],
@@ -699,6 +729,7 @@ var user = $$.m.ModelBase.extend({
 
 
     _createUserAccount: function(userAccount, permissions) {
+        var self = this;
         var accounts = this.get("accounts");
         if (accounts == null) {
             accounts = [];
@@ -735,7 +766,7 @@ var user = $$.m.ModelBase.extend({
                     if (oldCreds != null) {
                         oldCreds.username = newCredentials.username;
                         if (newCredentials.password != null) {
-                            oldCreds.password = crypto.hash(newCreds.password);
+                            oldCreds.password = self._encryptPassword(newCreds.password);
                         }
                         oldCreds.socialId = newCreds.socialId;
                         oldCreds.accessToken = newCreds.accessToken;
@@ -781,7 +812,7 @@ var user = $$.m.ModelBase.extend({
             }
 
             if (username) { creds.username = username; }
-            if (password) { creds.password = crypto.hash(password); }
+            if (password) { creds.password = this._encryptPassword(password); }
             if (socialId) { creds.socialId = socialId; }
             if (accessToken) { creds.accessToken = accessToken; }
         }
@@ -819,33 +850,52 @@ var user = $$.m.ModelBase.extend({
 
 
     //region EMAIL SOURCES
-    getAllEmailSources: function() {
+    /**
+     * Retrieve Email Source By Id
+     *
+     * @param id
+     * @returns EmailSource object, or null
+     */
+    getEmailSource: function(id) {
+        var emailSources = this.getAllEmailSources();
+        return _.findWhere(emailSources, { _id: id });
+    },
+
+
+    /**
+     * @param accountId - optional paramater
+     *
+     * @returns Array of EmailSource objects.
+     */
+    getAllEmailSources: function(accountId) {
         var emailSources = [];
 
-        var userAccounts = this.get("accounts");
-        if (userAccounts == null || userAccounts.length == 0) {
-            return null;
+        var userAccounts = [];
+        if (accountId != null) {
+            var userAccount = this.getUserAccount(accountId);
+            if (userAccount != null) {
+                userAccounts.push(userAccount);
+            }
+        } else {
+            userAccounts = this.get("accounts");
+        }
 
-            for (var i = 0, l = userAccounts.length; i < l; i++) {
-                if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
-                    emailSources.concat(userAccounts[i].emailSources);
-                }
+        if (userAccounts === null || userAccounts.length === 0) {
+            return null;
+        }
+        for (var i = 0, l = userAccounts.length; i < l; i++) {
+            if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
+                emailSources = emailSources.concat(userAccounts[i].emailSources);
             }
         }
         return emailSources;
     },
 
 
-    getEmailSource: function(id) {
-        var emailSources = this.getAllEmailSources;
-        return _.findWhere(emailSources, { _id: id });
-    },
-
-
     getEmailSourceByType: function(accountId, type) {
         var emailSources = this.getAllEmailSources;
         var userAccount = this.getUserAccount(accountId);
-        if (userAccount == null || userAccount.emailSources == null || userAccount.emailSources.length == 0) {
+        if (userAccount === null || userAccount.emailSources === null || userAccount.emailSources.length === 0) {
             return null;
         }
 
@@ -920,7 +970,7 @@ var user = $$.m.ModelBase.extend({
 
     removeEmailSource: function(id) {
         var userAccounts = this.get("accounts");
-        if (userAccounts == null || userAccounts.length == 0) {
+        if (userAccounts === null || userAccounts.length === 0) {
             return null;
         }
 
@@ -939,7 +989,7 @@ var user = $$.m.ModelBase.extend({
     removeMailboxForSource: function(id, email) {
         var emailSource = this.getEmailSource(id);
 
-        if (emailSource == null || emailSource.mailboxes == null || emailSource.mailboxes.length == 0) {
+        if (emailSource === null || emailSource.mailboxes === null || emailSource.mailboxes.length === 0) {
             return;
         }
 
@@ -980,9 +1030,21 @@ var user = $$.m.ModelBase.extend({
     clearAuthToken: function () {
         this.clear("authToken");
         this.clear("authTokenExp");
-    }
+    },
     //endregion
 
+
+    //region Encryption
+    _encryptPassword: function(password) {
+        //TODO: Use Salt and BCrypt or similar
+        return crypto.hash(password);
+    },
+
+
+    _verifyPassword: function(password, encryptedPassword, fn) {
+        crypto.verify(password, encryptedPassword, fn);
+    }
+    //endregion
 }, {
     db: {
         storage: "mongo",

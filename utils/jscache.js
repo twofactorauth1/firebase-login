@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 //Ensure we load underscore
 _ = require('underscore');
 
@@ -54,12 +61,7 @@ _.extend(JSCache.prototype, {
     },
 
 
-    set: function(key, value, ttl, region) {
-        if (_.isString(ttl)) {
-            region = ttl;
-            ttl = null;
-        }
-
+    set: function(key, value, region, ttl) {
         if (ttl) {
             ttl = ttl * 1000;
         }
@@ -71,12 +73,13 @@ _.extend(JSCache.prototype, {
     },
 
 
-    get: function(key, touch, ttl, region) {
-        if (_.isString(touch)) {
-            region = touch;
+    get: function(key, region, touch, ttl, fn) {
+        if (_.isFunction(touch)) {
+            fn = touch;
             touch = ttl = null;
-        } else if (_.isString(ttl)) {
-            region = ttl;
+        }
+        else if (_.isFunction(ttl)) {
+            fn = ttl;
             ttl = null;
         }
 
@@ -85,6 +88,10 @@ _.extend(JSCache.prototype, {
             var obj = cache[key];
             if (obj.exp < new Date().getTime()) {
                 delete cache[key];
+
+                if (fn) {
+                    fn(null, null);
+                }
                 return null;
             }
 
@@ -92,7 +99,14 @@ _.extend(JSCache.prototype, {
                 this.touch(key, ttl, region);
             }
 
-            return cache[key].value;
+            var val = cache[key].value;
+            if (fn) {
+                fn(null, val);
+            }
+            return val;
+        }
+        if (fn) {
+            fn(null, null);
         }
         return null;
     },

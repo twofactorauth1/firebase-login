@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 define(function() {
 
     //-------------------------------------------------
@@ -10,7 +17,7 @@ define(function() {
             if (typeof hbs === 'undefined') {
                 return null;
             }
-            filename = filename.replace("/", ".");
+            filename = filename.replace(/\//g, ".");
 
             var obj = hbs;
             var path = filename.split(".");
@@ -73,7 +80,7 @@ define(function() {
                 hbs = {};
             }
 
-            filename = filename.replace("/", ".");
+            filename = filename.replace(/\//g, ".");
 
             var templateHome = hbs;
             var path = filename.split(".");

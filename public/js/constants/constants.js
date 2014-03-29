@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -34,7 +41,14 @@ define([], function () {
 
 
         social: {
-            types: _socialTypes
+            types: {
+                LOCAL: _socialTypes.LOCAL,
+                FACEBOOK: _socialTypes.FACEBOOK,
+                TWITTER: _socialTypes.TWITTER,
+                LINKEDIN: _socialTypes.LINKEDIN,
+                GOOGLE: _socialTypes.GOOGLE,
+                FULL_CONTACT: _socialTypes.FULL_CONTACT
+            }
         },
 
 

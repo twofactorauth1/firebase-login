@@ -1,0 +1,347 @@
+{
+    "template-engine":"handlebars",
+    "supports-menu-lists":"false",
+
+    "linkLists": [
+        {
+            "name": "Head Menu",
+            "handle": "head-menu",
+            "links": [
+                {
+                    "label": "Home",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "home",
+                        "data": "index"
+                    }
+                },
+                {
+                    "label": "About us",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "page",
+                        "data": "about-us"
+                    }
+                },
+                {
+                    "label": "Indigenous",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "url",
+                        "data": "http://indigenous.io"
+                    }
+                }
+            ]
+        },
+
+        {
+            "name": "Main Menu",
+            "handle": "main-menu",
+            "links": [
+                {
+                    "label": "Top",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "section",
+                        "data": ""
+                    }
+                },
+                {
+                    "label": "Section 1",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "section",
+                        "data": "section1"
+                    }
+                },
+                {
+                    "label": "Section 2",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "section",
+                        "data": "section2"
+                    }
+                },
+                {
+                    "label": "Section 3",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "section",
+                        "data": "section3"
+                    }
+                },
+                {
+                    "label": "Contact Us",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "page",
+                        "data": "contact-us"
+                    }
+                }
+            ]
+        }
+    ],
+
+
+    "footer": {
+        "type": "thin",
+
+        "data": {
+            "textLeft":"Left Footer Text",
+            "textRight":"Right Footer Text",
+            "textCenter":"Center Footer Text"
+        }
+    },
+
+
+    "pages": [
+
+        {
+            "handle":"index",
+            "title":"Home",
+            "components": [
+
+            ]
+        },
+
+        {
+            "handle":"about-us",
+            "title":"About Us",
+            "components": [
+
+            ]
+        },
+
+        {
+            "handle":"contact-us",
+            "title":"Contact Us",
+            "components": [
+
+            ]
+        }
+    ],
+
+
+    "supported-components": [
+        "contact-us",
+        "facebook-comments",
+        "facebook-likes",
+        "feature-blocks",
+        "feature-list",
+        "feature-list-compare",
+        "freeform",
+        "image-gallery",
+        "image-slider",
+        "image-text",
+        "link-button-text",
+        "logo-list",
+        "social-feed",
+        "video-text"
+    ],
+
+
+    "excluded-components": [
+
+    ],
+
+
+    "components": [
+        {
+            "type": "contact-us",
+            "anchor": "contactus",
+            "classes": {
+                "label": "label",
+                "description": "description",
+
+                "location.address": "address",
+                "location.address2": "address2",
+                "location.city": "city",
+                "location.state": "state",
+                "location.zip": "zip",
+                "location.lat": "lat",
+                "location.lon": "lon",
+                "location.showMap": "show-map",
+                "location.displayLabel": "address-display-label",
+
+                "contact.phone": "phone",
+                "contact.email": "email",
+
+                "hours": "hours",
+                "hours.item":"hour",
+                "hours.item.value":"hour-value"
+            }
+        },
+
+        {
+            "type": "facebook-comments",
+            "anchor": "facebookcomments",
+            "classes": {
+                "label": "label",
+                "description": "description"
+            }
+        },
+
+        {
+            "type": "facebook-likes",
+            "anchor": "facebooklikes",
+            "classes": {
+                "label": "label",
+                "description": "description"
+            }
+        },
+
+        {
+            "type": "feature-blocks",
+            "anchor": "featureblocks",
+            "classes": {
+                "label": "label",
+                "description": "description",
+
+                "features": "features",
+                "features.item":"feature",
+                "features.item.label":"feature-label",
+                "features.item.description":"feature-description",
+                "features.item.iconUrl":"feature-icon-url",
+                "features.item.iconClass":"feature-icon-class"
+            }
+        },
+
+
+        {
+            "type": "feature-list",
+            "anchor": "featurelist",
+            "classes": {
+                "label": "label",
+                "description": "description",
+
+                "features":"features",
+                "features.item":"feature",
+                "features.item.label":"feature-label",
+                "features.item.description":"feature-description",
+                "features.item.iconUrl":"feature-icon-url",
+                "features.item.iconClass":"feature-icon-class"
+            }
+        },
+
+
+        {
+            "type": "feature-list-compare",
+            "anchor": "featurelistcompare",
+            "classes": {
+                "label": "label",
+                "description": "description",
+
+                "products":"products",
+                "products.label":"product-label",
+
+                "features":"features",
+                "features.item":"feature",
+                "features.item.label":"feature-label",
+                "features.item.description":"feature-description",
+                "features.item.iconUrl":"feature-icon-url",
+                "features.item.iconClass":"feature-icon-class",
+                "features.item.compare.value":"feature-compare-value"
+            }
+        },
+
+        {
+            "type": "freeform",
+            "anchor": "freeform",
+            "classes": {
+                "label": "label",
+                "description": "description",
+                "value": "value"
+            }
+        },
+
+        {
+            "type": "image-gallery",
+            "anchor": "imagegallery",
+            "classes": {
+                "label": "label",
+                "description": "description",
+
+                "images":"images",
+                "images.item":"item",
+                "images.item.image":"item-image",
+                "images.item.label":"item-label",
+                "images.item.description":"item-description"
+            }
+        },
+
+        {
+            "type": "image-slider",
+            "anchor": "imageslider",
+            "classes": {
+                "label": "label",
+                "description": "description",
+
+                "images":"iimages",
+                "images.item":"item",
+                "images.item.image":"item-image",
+                "images.item.overlayLabel":"item-overlay-label",
+                "images.item.overlayDescription":"item-overlay-description",
+                "images.item.label":"item-label",
+                "images.item.description":"item-description"
+            }
+        },
+
+        {
+            "type": "image-text",
+            "anchor": "imagetext",
+            "classes": {
+                "label": "label",
+                "description": "description",
+                "caption": "caption",
+                "image":"image",
+                "text":"text"
+            }
+        },
+
+        {
+            "type": "link-button-text",
+            "anchor": "linkbuttontext",
+            "classes": {
+                "label": "label",
+                "description": "description",
+                "button":"button",
+                "text":"text"
+            }
+        },
+
+        {
+            "type": "logo-list",
+            "anchor": "logolist",
+            "classes": {
+                "label": "label",
+                "description": "ldescription",
+                "logos":"logos",
+                "logos.item":"logo",
+                "logos.item.label":"logo-label",
+                "logos.item.description":"logo-description",
+                "logos.item.iconUrl":"logo-icon-url",
+                "logos.item.iconClass":"logo-icon-class"
+            }
+        },
+
+        {
+            "type":"social-feed",
+            "anchor": "socialfeed",
+            "classes": {
+
+            }
+        },
+
+        {
+            "type": "video-text",
+            "anchor": "videotext",
+            "classes": {
+                "label": "label",
+                "description": "description",
+                "caption": "caption",
+                "video":"video",
+                "text":"text"
+            }
+        }
+    ]
+}

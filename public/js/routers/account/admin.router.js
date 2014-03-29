@@ -1,19 +1,36 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 define([
     'routers/account/contact.router',
     'routers/account/account.router',
-    'views/account/admin.view'
-], function (contactRouter, accountRouter, AdminView) {
+    'routers/account/cms.router',
+    'views/account/admin.view',
+    'views/account/dashboard.view'
+], function (contactRouter, accountRouter, cmsRouter, AdminView, DashboardView) {
 
     var router = Backbone.Router.extend({
 
         routes: {
             "": "showMain",
-            "/": "showMain"
+            "/": "showMain",
+            "dashboard":"showDashboard",
+            "dashboard/":"showDashboard"
         },
 
 
         showMain: function () {
             var view = new AdminView();
+            $$.viewManager.replaceMain(view);
+        },
+
+
+        showDashboard: function() {
+            var view = new DashboardView();
             $$.viewManager.replaceMain(view);
         }
     });

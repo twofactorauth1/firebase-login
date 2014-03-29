@@ -1,0 +1,26 @@
+<!--
+* COPYRIGHT CMConsulting LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact christopher.mina@gmail.com for approval or questions.
+-->
+
+
+<script type="text/x-handlebars-template" name="edit-website">
+    <div id="">
+        <h4>
+            Edit your website
+            <div class="btn-group pull-right">
+                <div class="btn btn-default btn-save-page">Save Page</div>
+                <div class="btn btn-default btn-cancel-page">Cancel Changes</div>
+            </div>
+        </h4>
+
+        <iframe id="iframe-website" src="{{page}}?editor=true" style="width:100%; height:100%; min-height:800px; border:solid 1px; #ccc;"/>
+
+        <div class="btn-group pull-right">
+            <div class="btn btn-default btn-save-page">Save Page</div>
+            <div class="btn btn-default btn-cancel-page">Cancel Changes</div>
+        </div>
+    </div>
+</script>

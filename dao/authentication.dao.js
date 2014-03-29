@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var User = require('../models/user');
 var userDao = require('./user.dao');
 var accountDao = require('./account.dao');
@@ -14,7 +21,7 @@ var dao = {
 
     authenticateByUsernamePassword: function (req, username, password, fn) {
         var log = this.log;
-        log.error("Authenticating by username & password: " + username);
+        log.info("Authenticating by username & password: " + username);
         var host = req.get("host");
         accountDao.getAccountByHost(host, function (err, value) {
             if (err) {
@@ -23,35 +30,34 @@ var dao = {
 
             var account = value;
             if (account !== true && (account == null || account.id() == null || account.id() == 0)) {
-                log.error("No account found");
+                log.info("No account found with username: " + username);
                 return fn("Account not found", "No account found at this location");
             }
 
             //We are at the main indigenous level application, not at a custom subdomain
             else if (account === true) {
-                log.error("Logging into main App");
+                log.info("Logging into main App");
                 req.session.accountId = 0;
                 userDao.getUserByUsername(username, function (err, value) {
                     if (!err) {
                         if (value == null) {
-                            log.error("No user found");
+                            log.info("No user found");
                             return fn("User not found", "Incorrect username");
                         }
 
                         var user = value;
 
-                        log.error("Verifying password");
                         user.verifyPassword(password, $$.constants.user.credential_types.LOCAL, function (err, value) {
                             if (!err) {
                                 if (value === false) {
-                                    log.error("INcorrect password");
+                                    log.info("Incorrect password");
                                     return fn("Incorrect password", "Incorrect password");
                                 } else {
-                                    log.error("Login successful");
+                                    log.info("Login successful");
                                     return fn(null, user);
                                 }
                             } else {
-                                log.error("Error occurred verifying password");
+                                log.info("Error occurred verifying password");
                                 return fn(err, "An error occurred verifying password - " + err);
                             }
                         });
@@ -60,7 +66,7 @@ var dao = {
                     }
                 });
             } else {
-                log.error("logging into account with id: " + account.id());
+                log.info("logging into account with id: " + account.id());
                 req.session.accountId = account.id();
                 userDao.getUserForAccount(account.id(), username, function (err, value) {
                     if (err) {
@@ -68,22 +74,22 @@ var dao = {
                         return fn(err, "An error occurred retrieving user for account");
                     } else {
                         if (value == null) {
-                            log.error("User not found for account");
+                            log.info("User not found for account");
                             return fn("User not found for account", "Incorrect username");
                         } else {
-                            log.error("User found for account");
+                            log.info("User found for account");
                             var user = value;
                             user.verifyPasswordForAccount(account.id(), password, $$.constants.user.credential_types.LOCAL, function (err, value) {
                                 if (!err) {
                                     if (value === false) {
-                                        log.error("Incorrect password");
+                                        log.info("Incorrect password");
                                         return fn("Incorrect password", "Incorrect password");
                                     } else {
-                                        log.error("Authentication succeeded");
+                                        log.info("Authentication succeeded");
                                         return fn(null, user);
                                     }
                                 } else {
-                                    log.error("An error occurred verifying password", err);
+                                    log.info("An error occurred verifying password", err);
                                     return fn(err, "An error occurred verifying encrypted password");
                                 }
                             });
@@ -342,37 +348,43 @@ var dao = {
     },
 
 
-    constructAuthenticatedUrl: function(accountId, authToken, path, fn) {
-        accountDao.getServerUrlByAccount(accountId, function(err, value) {
+    getAuthenticatedUrl: function(userId, url, expirationSeconds, fn) {
+        if (_.isFunction(expirationSeconds)) {
+            fn = expirationSeconds;
+            expirationSeconds = null;
+        }
+
+        this.setAuthenticationToken(userId, expirationSeconds, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
 
-            var serverUrl = value;
-
-            if (path != null && path.charAt(0) != "/") {
-                path = "/" + path;
+            if (url == null) {
+                return fn("URL Provided is null");
             }
 
-            if (path != null) {
-                serverUrl += path;
+            if (url.indexOf("?") == -1) {
+                url += "?";
             }
-
-            serverUrl += "?authtoken=" + authToken;
-
-            fn(null, serverUrl);
+            url += "&authtoken=value";
+            fn(null, url);
         });
     },
 
 
     getAuthenticatedUrlForAccount: function(accountId, userId, path, expirationSeconds, fn) {
         var self = this;
+        if (_.isFunction(expirationSeconds)) {
+            fn = expirationSeconds;
+            expirationSeconds = null;
+        }
+
         this.setAuthenticationToken(userId, expirationSeconds, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
 
-            self.constructAuthenticatedUrl(accountId, value, path, fn);
+            self._constructAuthenticatedUrl(accountId, value, path, fn);
         });
     },
 
@@ -391,7 +403,7 @@ var dao = {
 
                 if (accountId > 0) {
                     if (value.getUserAccount(accountId) === null) {
-                        return fn("No user found for this account!", "No user found for this account");
+                        return fn("No user found for this account!", "User does not have access to this account");
                     }
                 }
 
@@ -408,6 +420,37 @@ var dao = {
             } else {
                 return fn(err, value);
             }
+        });
+    },
+
+
+    _constructAuthenticatedUrl: function(accountId, authToken, path, fn) {
+        accountDao.getServerUrlByAccount(accountId, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            var serverUrl = value;
+
+            if (path == null || path == "" || path == "/") {
+                if (accountId > 0) {
+                    path = "admin";
+                } else {
+                    path = "home";
+                }
+            }
+
+            if (path != null && path.charAt(0) != "/") {
+                path = "/" + path;
+            }
+
+            if (path != null) {
+                serverUrl += path;
+            }
+
+            serverUrl += "?authtoken=" + authToken;
+
+            fn(null, serverUrl);
         });
     }
     //endregion

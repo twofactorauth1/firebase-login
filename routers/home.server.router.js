@@ -1,6 +1,14 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var BaseRouter = require('./base.server.router.js');
 var HomeView = require('../views/home.server.view');
 var AdminView = require('../views/admin.server.view');
+var WebsiteView = require('../views/website.server.view');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -12,66 +20,41 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
         app.get("/", this.setup, this.index.bind(this));
+        app.get("/index", this.setup, this.index.bind(this));
+        app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
 
         app.get("/home", this.isAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isAuth.bind(this), this.showHome.bind(this));
 
         app.get("/admin", this.isAuth, this.showAdmin.bind(this));
         app.get("/admin/*", this.isAuth, this.showAdmin.bind(this));
+
         return this;
     },
 
 
     index: function(req,resp) {
         var self = this
-            , accountId = this.accountId(req)
-            , promise = $.Deferred();
+            , accountId = this.accountId(req);
 
-        if (req.isAuthenticated() == false) {
-            if (req.query.authtoken != null) {
-                this.checkAuthToken(req, function(err, value) {
-                    if (!err) {
-                        promise.resolve(null, true);
-                    } else {
-                        promise.resolve(err, false);
-                    }
-                })
-            } else {
-                promise.resolve(null, false);
-            }
+        if (accountId > 0)  {
+            new WebsiteView(req, resp).show(accountId);
         } else {
-            promise.resolve(null, true);
+            resp.redirect("/home");
         }
+    },
 
-        promise
-            .done(function(err, isAuthenticated) {
-                if (accountId > 0) {
-                    var user = req.user;
-                    if (isAuthenticated && self.sm.canManageAccount(req, accountId)) {
-                        //TODO -- do not redirect to /admin, this should go to public website when such functionality is availble
-                        resp.redirect("/admin");
-                    } else {
-                        if (err) {
-                            req.flash("error", err);
-                        } else {
-                            req.flash = null;
-                        }
-                        //TODO -- do not redirect to login, this should go to public website when such functionality is availble
-                        resp.redirect("/login");
-                    }
-                } else {
-                    if (isAuthenticated) {
-                        self._showHome(req,resp);
-                    } else {
-                        if (_.isString(err)) {
-                            req.flash("error", err);
-                        } else {
-                            req.flash = null;
-                        }
-                        resp.redirect("/login");
-                    }
-                }
-            });
+
+    showWebsitePage: function(req, resp) {
+        var self = this
+            , accountId = this.accountId(req);
+
+        var page = req.params.page;
+        if (accountId > 0)  {
+            new WebsiteView(req, resp).showPage(accountId, page);
+        } else {
+            resp.redirect("/home");
+        }
     },
 
 

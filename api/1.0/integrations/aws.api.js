@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var baseApi = require('../../base.api.js');
 var s3Dao = require('../../../dao/integrations/s3.dao.js');
 
@@ -38,10 +45,12 @@ _.extend(api.prototype, baseApi.prototype, {
 
         if (!bucket) {
             this.wrapError(resp, 400, null, "Invalid paramater for S3 Bucket");
+            self = req = resp = null;
         }
 
         var credentials = s3Dao.getS3UploadCredentials(bucket, filename, redirect);
         resp.send(credentials)
+        self = req = resp = null;
     }
 });
 

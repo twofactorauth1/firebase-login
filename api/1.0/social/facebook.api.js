@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var baseApi = require('../../base.api');
 var facebookDao = require('../../../dao/social/facebook.dao');
 
@@ -28,8 +35,10 @@ _.extend(api.prototype, baseApi.prototype, {
         facebookDao.checkAccessToken(req.user, function(err, value) {
             if (!err) {
                 resp.send(value);
+                self = null;
             } else {
                 self.wrapError(resp, 500, "Facebook API access not verified", err, value);
+                self = null;
             }
         });
     },
@@ -40,8 +49,10 @@ _.extend(api.prototype, baseApi.prototype, {
         facebookDao.getProfileForUser(req.user, function(err, value) {
             if (!err) {
                 resp.send(value);
+                self = null;
             } else {
                 self.wrapError(resp, 500, "Error retrieving facebook profile", err, value);
+                self = null;
             }
         });
     },
@@ -68,8 +79,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 console.log("Facebook import succeeded");
             });
             resp.send("processing");
+            self = null;
         } else {
             self.wrapError(resp, 500, "Unauthorized action", "Unauthorized action. Contacts may only be imported at the Account level");
+            self = null;
         }
     }
 });

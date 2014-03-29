@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var BaseView = require('./base.server.view');
 var userDao = require('../dao/user.dao');
 var authenticationDao = require('../dao/authentication.dao');
@@ -16,6 +23,9 @@ _.extend(view.prototype, BaseView.prototype, {
         });
 
         this.resp.render('forgotpassword', data);
+
+        this.cleanUp();
+        data = null;
     },
 
 
@@ -30,12 +40,18 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
 
                 self.resp.render('forgotpassword', data);
+
+                self.cleanUp();
+                data = self = null;
             } else {
                 var data = self.baseData({
                     errorMsg: "Recover password failed: " + err
                 });
 
                 self.resp.render('forgotpassword', data);
+
+                self.cleanUp();
+                data = self = null;
             }
         });
     },
@@ -54,13 +70,16 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
 
                 self.resp.render('forgotpassword', data);
-
+                self.cleanUp();
+                data = self = null;
             } else {
                 var data = self.baseData({
                     errorMsg: err
                 });
 
                 self.resp.render('forgotpassword', data);
+                self.cleanUp();
+                data = self = null;
             }
         });
     },
@@ -78,11 +97,14 @@ _.extend(view.prototype, BaseView.prototype, {
                             token:true,
                             errorMsg: "An error occurred changing your password"
                         });
-                        return self.resp.redirect("forgotpassword", data);
-
+                        self.resp.redirect("forgotpassword", data);
+                        self.cleanUp();
+                        data = self = null;
                     } else {
                         self.req.flash("info", "Password changed successfully");
-                        return self.resp.redirect("/home");
+                        self.resp.redirect("/home");
+                        self.cleanUp();
+                        data = self = null;
                     }
                 });
             } else {
@@ -93,6 +115,8 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
 
                 self.resp.render('forgotpassword', data);
+                self.cleanUp();
+                data = self = null;
             }
         });
     }

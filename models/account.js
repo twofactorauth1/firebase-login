@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 require('./model.base');
 var appConfig = require('../configs/app.config');
 
@@ -6,15 +13,39 @@ var account = $$.m.ModelBase.extend({
     defaults: function() {
         return {
             _id: null,
+
             company: {
                 name:"",
                 type:0,
                 size:0,
                 logo:""
             },
+
             subdomain:"",
             domain:"",
             token:"",
+
+            website: {
+
+                /**
+                 * The global settings for websites on this account.
+                 * This may be overridden at the Website level
+                 *
+                 * @type {Object}
+                 * @default null
+                 *
+                 * @example
+                 * {
+                 *      logoImage: {url}
+                 *      logoClickUrl: {url}
+                 *      favicon: null
+                 * }
+                 */
+                settings: null,
+                websiteId:null,             //The current Inidenous template being used, defaults to "default"
+                themeId:"default"           //The current template data id being referenced (may have more than one)
+            },
+
             _v:"0.1"
         }
     },

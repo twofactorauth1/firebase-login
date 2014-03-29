@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var BaseView = require('./base.server.view');
 
 var view = function(options) {
@@ -11,7 +18,8 @@ _.extend(view.prototype, BaseView.prototype, {
 
         var data = {
             user: user.toJSON(),
-            location: "home"
+            location: "home",
+            includeJs: false
         };
 
         this.resp.render('home', data);

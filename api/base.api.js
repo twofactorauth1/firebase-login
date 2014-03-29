@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var securityManager = require('../security/securitymanager');
 
 
@@ -28,7 +35,7 @@ _.extend(apiBase.prototype, {
 
         this.log = global.getLogger(this.base + ".api");
 
-        if (this.initialize != 'undefined') {
+        if (this.initialize != null && this.initialize != 'undefined') {
             this.initialize();
         }
     },
@@ -113,21 +120,35 @@ _.extend(apiBase.prototype, {
     },
 
 
+    sendResultOrError: function(resp, err, value, errorMsg, errorCode) {
+        if (err) {
+            this.wrapError(resp, errorCode || 500, errorMsg, err, value);
+        } else {
+            this.sendResult(resp, value);
+        }
+    },
+
+
     sendResult: function(resp, result) {
+        if (result == null) {
+            result = {};
+        }
         if (_.isArray(result)) {
             var _arr = [];
             result.forEach(function(item) {
-                if (typeof item.toJSON != undefined) {
+                if (typeof item.toJSON != 'undefined') {
                     _arr.push(item.toJSON("public"));
                 } else {
                     _arr.push(item);
                 }
             });
             result = _arr;
-        } else if (typeof result.toJSON != undefined) {
+            arr = null;
+        } else if (typeof result.toJSON != 'undefined') {
             result = result.toJSON("public");
         }
         return resp.send(result);
+        result = null;
     },
 
 
@@ -152,14 +173,15 @@ _.extend(apiBase.prototype, {
             status:status || "fail",
             message:message || "An error occurred",
             detail: detail || ""
-        }
+        };
 
         //override if we have a code in the message value
         if (_.isNumber(message)) {
             response.code = message;
             response.message = response.detail;
-        };
+        }
         resp.send(response.code, response);
+        response = null;
     },
 
 

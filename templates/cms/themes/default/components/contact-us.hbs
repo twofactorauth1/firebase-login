@@ -1,0 +1,85 @@
+<!--
+* COPYRIGHT CMConsulting LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact christopher.mina@gmail.com for approval or questions.
+*
+-->
+
+<div>
+    {{#with component}}
+    <h3 class="editable" data-class="label">
+        {{#if label}}
+            {{{label}}}
+        {{else}}
+            Contact us label
+        {{/if}}
+    </h3>
+
+    <div class="editable" data-class="description">
+        {{#if description}}
+            {{{description}}}
+        {{else}}
+            <strong>Contact us description</strong>
+        {{/if}}
+    </div>
+
+    <div>
+        <strong>Our location</strong>
+
+        <div class="editable" data-class="address-display-label">
+            {{#if location.displayLabel}}
+                {{{location.displayLabel}}}
+            {{else}}
+                Enter your Address here
+            {{/if}}
+        </div>
+
+        <div>
+            <span class="editable" data-class="address">
+            {{#if location.address}}
+                {{{location.address}}}
+            {{else}}
+                Address
+            {{/if}}
+            </span>
+
+            <span class="editable" data-class="address2">
+                {{#if location.address2}}
+                    {{{location.address2}}}
+                {{else}}
+                    Address Suite or Apartment
+                {{/if}}
+            </span>
+        </div>
+
+
+
+        <div>
+            <span class="editable" data-class="city">
+                {{#if location.city}}
+                    {{{location.city}}}
+                {{else}}
+                    City
+                {{/if}}
+            </span>
+
+            <span class="editable" data-class="state">
+                {{#if location.state}}
+                    {{{location.state}}}
+                {{else}}
+                    State
+                {{/if}}
+            </span>
+
+            <span class="editable" data-class="zip">
+                {{#if location.zip}}
+                    {{{location.zip}}}
+                {{else}}
+                    Zip Code
+                {{/if}}
+            </span>
+        </div>
+    </div>
+    {{/with}}
+</div>

@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var baseDao = require('../base.dao.js');
 var userDao = require('../user.dao.js');
 var contextioConfig = require('../../configs/context.io.config.js');
@@ -130,6 +137,63 @@ var dao = {
 
     removeContextIOAccount: function(providerId, fn) {
         this.contextIO.accounts(providerId).delete(fn);
+    },
+
+
+    /**
+     * Retrieves email messages between a user and a specific email address
+     *
+     * @param user
+     * @param accountId
+     * @param options: {email, limit, offset, includeBody, start, end}
+     * @param fn
+     * @returns {*}
+     */
+    getMessages: function(providerId, options, fn) {
+        var self = this;
+
+        var _options = {};
+        if (options.email) { _options.email = options.email; }
+        if (options.limit) { _options.limit = options.limit; }
+        if (options.offset) { _options.offset = options.offst; }
+        if (options.includeBody) { _options.include_body = options.includeBody; }
+        if (options.start) {
+            if (_.isDate(options.start)) {
+                _options.date_after = options.start.getTime();
+            } else {
+                _options.date_after = options.start;
+            }
+        }
+
+        if (options.end) {
+            if (_.isDate(options.end)) {
+                _options.date_before = options.end.getTime();
+            } else {
+                _options.date_before = options.end;
+            }
+        }
+
+        self.contextIO.accounts(providerId).messages().get(_options, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+            self.log.info(value.body.length + " messages retreived");
+            return fn(err, value.body);
+        });
+    },
+
+
+    getMessageById: function(providerId, messageId, includeBody, fn) {
+        var options ={};
+        if (includeBody == true) { options.include_body = 1; }
+
+        this.contextIO.accounts(providerId).messages(messageId).get(options, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            return fn(err, value.body);
+        });
     }
 };
 

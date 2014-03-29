@@ -1,0 +1,66 @@
+//-
+    * COPYRIGHT CMConsulting LLC 2014
+    *
+    * All use or reproduction of any or all of this content must be approved.
+    * Please contact christopher.mina@gmail.com for approval or questions.
+
+doctype html
+//if lt IE 7
+    html(class="no-js ie6 oldie", lang="en")
+//if IE 7
+    html(class="no-js ie7 oldie", lang="en")
+//if IE 8
+    html(class="no-js ie8 oldie", lang="en")
+// [if gt IE 8] <!
+html(class="no-js", lang="en")
+    // <![endif]
+    head
+        block head
+            //- override this to include a different head section (e.g. requirehead.jade)
+            block headattributes
+                include standardhead
+            title=title
+
+            link(rel='stylesheet', href='/css/style.default.css')
+            link(rel='stylesheet', href='/css/style.inverse.css')
+    body
+        section
+            include _leftnav
+
+            .mainpanel
+                include _headerbar
+
+                if errorMsg
+                    #error-msg.alert.alert-danger
+                        button.close(type="button" aria-hidden="true") &times;
+                        span.message #{errorMsg}
+                else
+                    #error-msg.alert.alert-danger.hidden
+                        button.close(type="button" aria-hidden="true") &times;
+                        span.message #{errorMsg}
+
+                if infoMsg
+                    #info-msg.alert.alert-info
+                        button.close(type="button" aria-hidden="true") &times;
+                        span.message #{infoMsg}
+                else
+                    #info-msg.alert.alert-info.hidden
+                        button.close(type="button" aria-hidden="true") &times;
+                        span.message #{infoMsg}
+
+                #main-viewport
+                    block content
+                        //- Anything here gets overwritten by sub views that extend "block content"
+
+
+                //- some common modals
+                #common-modal.modal.fade.hide
+                //- common progress modal
+                #common-progress.modal.fade.hide
+                    #common-progress-title.modal-header Progress...
+                    .modal-body
+                        .progress.progress-striped.active
+                            .bar(style="width:100%") Processing...
+                    #common-progress-label.modal-footer
+
+        include _serverprops

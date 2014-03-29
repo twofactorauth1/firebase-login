@@ -1,3 +1,10 @@
+<!--
+* COPYRIGHT CMConsulting LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact christopher.mina@gmail.com for approval or questions.
+-->
+
 <script type="text/x-handlebars-template" name="signup-main">
     <section class="mainpanel">
         {{> signup-controls }}
@@ -14,7 +21,7 @@
 </script>
 
 <script type="text/x-handlebars-template" name="signup-start" partial="true">
-    <div id="start" class="signuppanel" style="{{#check place 'start'}}display:block{{/check}}">
+    <div id="start" class="signuppanel" style="{{#equals place 'start'}}display:block{{/equals}}">
             <div class="form" style="">
             <ul id="progressbar">
                 <li class="active"></li>
@@ -43,7 +50,7 @@
 
 
 <script type="text/x-handlebars-template" name="signup-details" partial="true">
-    <div id="details" class="signuppanel" style="{{#check place 'details'}}display:block{{/check}}">
+    <div id="details" class="signuppanel" style="{{#equals place 'details'}}display:block{{/equals}}">
         <div class="form">
             <ul id="progressbar">
                 <li></li>
@@ -99,19 +106,19 @@
                             </label>
 
                             <div class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-default {{#check account.company.size 2}}active{{/check}}">
+                                <label class="btn btn-default {{#equals account.company.size 2}}active{{/equals}}">
                                     <input type="radio" name="radio-company-size" class="radio-company-size" data-size=2> Small (0-4)
                                 </label>
 
-                                <label class="btn btn-default {{#check account.company.size 3}}active{{/check}}">
+                                <label class="btn btn-default {{#equals account.company.size 3}}active{{/equals}}">
                                     <input type="radio" name="radio-company-size" class="radio-company-size" data-size=3> Medium (5-24)
                                 </label>
 
-                                <label class="btn btn-default {{#check account.company.size 4}}active{{/check}}">
+                                <label class="btn btn-default {{#equals account.company.size 4}}active{{/equals}}">
                                     <input type="radio" name="radio-company-size" class="radio-company-size" data-size=4> Large(25-99)
                                 </label>
 
-                                <label class="btn btn-default {{#check account.company.size 5}}active{{/check}}">
+                                <label class="btn btn-default {{#equals account.company.size 5}}active{{/equals}}">
                                     <input type="radio" name="radio-company-size" class="radio-company-size" data-size=5> Enterprise(100+)
                                 </label>
                             </div>
@@ -127,7 +134,7 @@
 
 
 <script type="text/x-handlebars-template" name="signup-create" partial="true">
-    <div id="create" class="signuppanel" style="{{#check place 'create'}}display:block{{/check}}">
+    <div id="create" class="signuppanel" style="{{#equals place 'create'}}display:block{{/equals}}">
         <div class="form">
             <ul id="progressbar">
         	<li></li>

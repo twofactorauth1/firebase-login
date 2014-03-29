@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var cookieUtil =  {
 
     setCookie: function(resp, key, value, signed, secondsToExpiration) {
@@ -58,8 +65,17 @@ var cookieUtil =  {
 
     //region REDIRECT ULR
     setRedirectUrl: function(req, resp) {
-        var url = req.url;
-        this.setCookie(resp, "ind-redirect", url, false, 3600);
+        if (req.url == "" || req.url == "/" || req.url == "/home" || req.url == "/admin") {
+            return;
+        }
+        var url = this.getCookie(req, "ind-redirect", false);
+        if (url != null) {
+            return;
+        }
+
+        var url = req.protocol + '://' + req.get('host') + req.url;
+
+        this.setCookie(resp, "ind-redirect", url, false, 600);
     },
 
     getRedirectUrl: function(req, resp, defaultValue, remove) {

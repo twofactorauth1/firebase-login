@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 if (typeof CACHEBUSTER === 'undefined') {
     CACHEBUSTER = '2014.02.25' //Modify this before a deploy to production.
 }
@@ -11,6 +18,7 @@ require.config({
         json2: 'libs/json/json2',
         backbone: 'libs/backbone/backbone',
         backboneAssoc: 'libs/backbone/backbone-associations',
+        backboneNested: 'libs/backbone/backbone-nested',
         backboneExtended: 'libs/backbone/backboneExtended',
         handlebars: 'libs/handlebars/handlebars.runtime',
         handlebarsHelpers: 'libs/handlebars/handlebarshelpers',
@@ -26,7 +34,10 @@ require.config({
         pushStateUtils: 'utils/pushstateutils',
         usersData: 'global/users.data',
         app: 'app',
-        text: "libs/requirejs/plugins/text"
+        text: "libs/requirejs/plugins/text",
+
+        //UI SPECIFIC
+        toggles: "libs/mics/toggles.min"
     },
 
     shim: {
@@ -48,7 +59,10 @@ require.config({
             exports: "Backbone"
         },
         backboneAssoc: {
-            deps: ['backbone']
+            deps: ['backbone', 'backboneExtended']
+        },
+        backboneNested: {
+            deps: ['backbone', 'backboneExtended']
         },
         backboneExtended: {
             deps: ['backbone']
@@ -74,6 +88,9 @@ require.config({
         pushStateUtils: {
             deps: []
         },
+        toggles: {
+            deps: ['jquery']
+        },
         app: {
             deps: [
                 'jquery',
@@ -85,7 +102,10 @@ require.config({
                 'handlebars',
                 'bootstrap',
                 'handlebars',
-                'modernizr'
+                'modernizr',
+
+                //UI SPECIFIC
+                'toggles'
             ]
         }
     },
@@ -109,7 +129,7 @@ require.config({
 
 
 define([
-    'app',
+    'app'
 ], function (app) {
     $(document).ready(function(){
         app.initialize();

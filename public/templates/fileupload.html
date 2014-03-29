@@ -1,3 +1,10 @@
+<!--
+* COPYRIGHT CMConsulting LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact christopher.mina@gmail.com for approval or questions.
+-->
+
 <script type="text/x-handlebars-template" name="jquery-file-upload">
     <form id="fileupload" action="//jquery-file-upload.appspot.com/" method="POST" enctype="multipart/form-data">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
@@ -8,7 +15,7 @@
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn btn-success fileinput-button">
                     <i class="glyphicon glyphicon-plus"></i>
-                    <span>{{#check maxNumberOfFiles 1}}Select file{{else}}Select files...{{/check}}</span>
+                    <span>{{#equals maxNumberOfFiles 1}}Select file{{else}}Select files...{{/equals}}</span>
                     <input type="file" name="files[]" multiple>
                 </span>
 
@@ -24,7 +31,7 @@
                 </button>
 
                 <!-- ONLY SHOW IF MAX NUMBER OF FILES > 1 -->
-                {{#checknot maxNumberOfFiles 1}}
+                {{#notequals maxNumberOfFiles 1}}
                 <button type="submit" class="btn btn-primary start visible-md visible-lg">
                     <i class="glyphicon glyphicon-upload"></i>
                     <span>Start upload</span>
@@ -40,7 +47,7 @@
                 </button>
                 <input type="checkbox" class="toggle">
                 -->
-                {{/checknot}}
+                {{/notequals}}
                 <!-- The global file processing state -->
                 <span class="fileupload-process"></span>
             </div>

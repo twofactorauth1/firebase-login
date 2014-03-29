@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var mongoConfig = require('../configs/mongodb.config');
 var mongoskin = require('mongoskin');
 var mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {safe:true});
@@ -55,8 +62,9 @@ var mongodao = {
         var collection = this.getTable(type);
         this.mongo(collection).findById(id, function(err, result) {
             if (!err) {
-                fn(err, self._createModel(result));
+                fn(err, self._createModel(result, type));
             } else {
+                self.log.error("An error occurred: #getByIdMongo()", err);
                 fn(err, result);
             }
         });
@@ -73,8 +81,9 @@ var mongodao = {
         var collection = this.getTable(type);
         this.mongo(collection).findOne(query, function(err, result) {
            if (!err) {
-               fn(null, self._createModel(result));
+               fn(null, self._createModel(result, type));
            } else {
+               self.log.error("An error occurred: #findOneMongo() with query: " + JSON.stringify(query), err);
                fn(err, result);
            }
         });
@@ -98,8 +107,9 @@ var mongodao = {
 
         var fxn = function(err, value) {
             if (!err) {
-                return self._wrapArrayMongo(value, fields, fn);
+                return self._wrapArrayMongo(value, fields, type, fn);
             } else {
+                self.log.error("An error occurred: #findManyWithFieldsMongo() with query: " + JSON.stringify(query), err);
                 fn(err, value);
             }
         };
@@ -114,11 +124,10 @@ var mongodao = {
     },
 
 
-    _wrapArrayMongo: function(value, fields, fn) {
-        var arr = [];
-        var self = this;
+    _wrapArrayMongo: function(value, fields, type, fn) {
+        var self = this, arr = [];
         value.forEach(function(item) {
-            arr.push(self._createModel(item, null, fields));
+            arr.push(self._createModel(item, type, fields));
         });
 
         fn(null, arr);
@@ -142,6 +151,7 @@ var mongodao = {
                     fn(null, false);
                 }
             } else {
+                self.log.error("An error occurred: #existsMongo() with query: " + JSON.stringify(query), err);
                 fn(err, result);
             }
         });
@@ -157,6 +167,7 @@ var mongodao = {
                     model.id(value);
                     self._saveOrUpdateMongo(model, fn);
                 } else {
+                    self.log.error("An error occurred: #saveOrUpdateMongo/GetNextSequence()", err);
                     if (fn != null) {
                         fn(err, value);
                     }
@@ -165,16 +176,13 @@ var mongodao = {
             return;
         }
 
-        var self = this;
-        if (model.get("seq") != null) {
-            console.log("HAS SEQUENCE!");
-        }
         this.mongo(collection).save(model.toJSON("db"), function(err, result) {
             if (!err) {
                 if (fn != null) {
                     fn(null, model);
                 }
             } else {
+                self.log.error("An error occurred: #saveOrUpdateMongo/save()", err);
                 if (fn != null) {
                     fn(err, result);
                 }
@@ -184,9 +192,16 @@ var mongodao = {
 
 
     _removeMongo: function(model, fn) {
+        var self = this;
         var collection = this.getTable(model);
 
-        this.mongo(collection).removeById(model.id(), fn);
+        this.mongo(collection).removeById(model.id(), function(err, value) {
+            if (err) {
+                self.log.error("An error occurred: #removeMongo. ", err);
+            }
+
+            fn(err, value);
+        });
     },
 
 
@@ -199,7 +214,13 @@ var mongodao = {
         }
 
         var collection = this.getTable(type);
-        this.mongo(collection).removeById(id, fn);
+        this.mongo(collection).removeById(id, function(err, value) {
+            if (err) {
+                self.log.error("An error occurred: #removeByIdMongo. ", err);
+            }
+
+            fn(err, value);
+        });
     },
 
 
@@ -235,8 +256,9 @@ var mongodao = {
                         fn(null, value.seq);
                     }
                 } else {
+                    self.log.error("An error occurred retrieving sequence", err);
                     if (fn != null) {
-                        self.log.error("An error occurred retrieving sequence");
+
                         fn(err, value);
                     }
                 }

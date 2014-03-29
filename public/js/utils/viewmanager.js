@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 define([
     'backboneExtended',
     'templateManager'
@@ -110,8 +117,8 @@ define([
             if (selector == null || selector === ""){
                 selector = "#container-alert";
             }
-            $(selector).html(html);
-            $(selector).show();
+
+            $(selector).html(html).show().removeClass("hidden");
 
             if (alertType == "alert-success"){
                 if (self.alertTimerId != null){
@@ -120,7 +127,7 @@ define([
 
                 self.alertTimerId = setTimeout(function(){
                     $(selector).fadeOut();
-                }, 5000);
+                }, 3000);
             }
         },
 

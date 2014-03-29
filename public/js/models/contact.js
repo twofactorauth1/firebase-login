@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 define([], function() {
 
     var model = Backbone.Model.extend({
@@ -6,20 +13,29 @@ define([], function() {
 
         defaults: {
             _id: null,
-            accountId: 0,   //int
-            first:null,       //string,
-            middle:null,      //string,
-            last:null,        //string,
-            type:"",        //contact_types
-            photo:"",       //string
+
+            accountId: 0,           //int
+            first:null,             //string,
+            middle:null,            //string,
+            last:null,              //string,
+            photo:"",               //string,
+            photoSquare:"",          //string,
+            birthday:null,          //string,
+            starred:false,          //true|false
+            type:"c",               //contact_types
+            _v:"0.1",
+
             created: {
                 date: "",           //Date created
-                strategy: "",       // lo|fb|tw|li|etc.  See $$.constants.social.types
                 by: null,           //this is a nullable ID value, if created by an existing user, this will be populated.
-                socialId: null      //This socialID of the source of this contact, if applicable
+                strategy: "",       // lo|fb|tw|li|etc.  See $$.constants.user.credential_types
+                socialId: null      //The socialId of the source of this contact, if applicable
             },
+
             siteActivity: [],
+
             notes: [],
+
             details: []
         },
 

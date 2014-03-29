@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var baseApi = require('../base.api');
 var userDao = require('../../dao/user.dao');
 var accountDao = require('../../dao/account.dao');
@@ -107,7 +114,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     updateUser: function(req,resp) {
-
+        //TODO - ensure user accounts are not tampered with
     },
 
 

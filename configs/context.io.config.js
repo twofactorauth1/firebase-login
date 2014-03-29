@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var appConfig =  require('./app.config');
 
 var contextioClientId = process.env.CONTEXTIO_CLIENT_ID || 'wqge49n8';

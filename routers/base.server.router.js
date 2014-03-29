@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT CMConsulting LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact christopher.mina@gmail.com for approval or questions.
+ */
+
 var cookies = require('../utils/cookieutil');
 var authenticationDao = require('../dao/authentication.dao');
 var securityManager = require('../security/securitymanager');
@@ -32,6 +39,7 @@ _.extend(baseRouter.prototype, {
 
 
     setup: function(req, resp, next) {
+        //TODO: Cache Account By Host
         if (req["session"] != null && req.session["accountId"] == null) {
             var accountDao = require("../dao/account.dao");
             accountDao.getAccountByHost(req.get("host"), function(err, value) {
@@ -140,6 +148,15 @@ _.extend(baseRouter.prototype, {
     accountId: function(req) {
         try {
             return (req.session.accountId == null || req.session.accountId == 0) ? 0 : req.session.accountId;
+        }catch(exception) {
+            return null;
+        }
+    },
+
+
+    userId: function(req) {
+        try {
+            return req.user.id();
         }catch(exception) {
             return null;
         }
