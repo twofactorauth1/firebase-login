@@ -34,7 +34,10 @@ require.config({
         pushStateUtils: 'utils/pushstateutils',
         usersData: 'global/users.data',
         app: 'app',
-        text: "libs/requirejs/plugins/text"
+        text: "libs/requirejs/plugins/text",
+
+        //UI SPECIFIC
+        toggles: 'libs/misc/toggles.min'
     },
 
     shim: {
@@ -56,10 +59,10 @@ require.config({
             exports: "Backbone"
         },
         backboneAssoc: {
-            deps: ['backbone']
+            deps: ['backbone', 'backboneExtended']
         },
         backboneNested: {
-            deps: ['backbone']
+            deps: ['backbone', 'backboneExtended']
         },
         backboneExtended: {
             deps: ['backbone']
@@ -85,6 +88,9 @@ require.config({
         pushStateUtils: {
             deps: []
         },
+        toggles: {
+            deps: ['jquery']
+        },
         app: {
             deps: [
                 'jquery',
@@ -95,7 +101,10 @@ require.config({
                 'backboneExtended',
                 'bootstrap',
                 'handlebars',
-                'modernizr'
+                'modernizr',
+
+                //UI SPECIFIC
+                'toggles'
             ]
         }
     },
@@ -119,7 +128,7 @@ require.config({
 
 
 define([
-    'app',
+    'app'
 ], function (app) {
     $(document).ready(function(){
         app.initialize();

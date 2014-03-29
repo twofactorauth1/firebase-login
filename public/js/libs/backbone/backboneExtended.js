@@ -389,7 +389,15 @@
             if (i > -1) {
                 this.subviews.splice(i, 1);
             }
+        },
+
+
+        updateTooltips: function() {
+            jQuery('.tooltips').tooltip({
+                container: this.$el
+            });
         }
+
     });
 
 

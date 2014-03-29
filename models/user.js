@@ -297,7 +297,7 @@ var user = $$.m.ModelBase.extend({
         }
 
         var phone = _.findWhere(phones, {type:phoneType, number:phoneNumber});
-        if (phone === null) {
+        if (phone == null) {
             phone = {
                 _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
                 type: phoneType,

@@ -13,7 +13,8 @@ define([
     'viewManager',
     'appsetup',
     'pushStateUtils',
-    'constants/constants'
+    'constants/constants',
+    'utils/uihelpers'
 ], function (ns, common, hb, vm, appsetup) {
 
     var app = {

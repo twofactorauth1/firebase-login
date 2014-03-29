@@ -5,16 +5,27 @@
     * Please contact christopher.mina@gmail.com for approval or questions.
 
 doctype html
-html
+//if lt IE 7
+    html(class="no-js ie6 oldie", lang="en")
+//if IE 7
+    html(class="no-js ie7 oldie", lang="en")
+//if IE 8
+    html(class="no-js ie8 oldie", lang="en")
+// [if gt IE 8] <!
+html(class="no-js", lang="en")
+    // <![endif]
     head
         block head
             //- override this to include a different head section (e.g. requirehead.jade)
             block headattributes
                 include standardhead
             title=title
+
             link(rel='stylesheet', href='/css/site.css')
             link(rel='stylesheet', href='/css/font-awesome.min.css')
+            //- link(rel='stylesheet', href='/css/style.inverse.css')
     body
+
         if showPreloader
             #preloader
                 #status

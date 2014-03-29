@@ -49,7 +49,7 @@ _.extend(baseView.prototype, {
         delete options.root;
 
         var data = {
-            title: "indigenous",
+            title: "Indigenous.io",
             serverProps: serverProps,
             includeJs:true,
             includeHeader:false,
@@ -92,6 +92,7 @@ _.extend(baseView.prototype, {
             data.authenticated = false;
         }
 
+        //Override default options here
         for(var key in options) {
             data[key] = options[key];
         }

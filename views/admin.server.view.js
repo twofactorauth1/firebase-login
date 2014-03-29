@@ -29,9 +29,10 @@ _.extend(view.prototype, BaseView.prototype, {
             }
 
             data.showPreloader = true;
+            data.includeJs = false;
             data = self.baseData(data);
 
-            self.resp.render('home', data);
+            self.resp.render('home_new', data);
             self.cleanUp();
             data = self = null;
         });

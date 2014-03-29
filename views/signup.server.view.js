@@ -16,7 +16,8 @@ _.extend(view.prototype, BaseView.prototype, {
     show: function() {
         var data = this.baseData({
             router:"signup",
-            root:"signup"
+            root:"signup",
+            includeJs: false
         });
 
         this.resp.render('home', data);

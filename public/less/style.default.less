@@ -1,5 +1,6 @@
 @import 'bootstrap/bootstrap.less';
 @import 'bootstrap-override.less';
+@import 'bootstrap-overrides.less';
 @import 'jquery-ui-1.10.3.less';
 @import 'jquery.tagsinput.less';
 @import 'font-awesome.min.less';
@@ -2930,77 +2931,177 @@ div.error label.error:before {
   margin-bottom: 0px;
 }
 
+
+/**********************************************************
+  CONTACTS LIST - PEOPLE ITEM
+**********************************************************/
 .people-item {
+
+  cursor: pointer;
   background: #fcfcfc;
   padding: 15px 5px;
   font-size: 13px;
   border-radius: 3px;
   .box-shadow(0 3px 0 rgba(12, 12, 12, 0.03));
   margin-bottom: 20px;
+
+  .media {
+    padding: 0px;
+  }
+
+  .contact-cat {
+    margin-right: 5px;
+  }
+
+  @media (max-width: @screen-xs-max) {
+    margin-bottom: 4px;
+    padding-bottom: 0px;
+
+    .thumbnail {
+      padding: 0px;
+    }
+
+    .contact-cat {
+      margin-right: 30px;
+      font-size: 13px;
+    }
+
+    .media-object {
+      border-radius: 3px;
+      width: 50px;
+      height: 50px;
+      display:inline;
+      float:left;
+      margin-right:15px;
+      margin-bottom: 0px;
+    }
+
+    .important-star {
+      top:23px;
+      margin-right:20px;
+
+      .fa.fa-star-o,
+      .fa.fa-star {
+        font-size:25px;
+      }
+    }
+  }
+
+  @media (min-width: @screen-sm-min) {
+    .media-object {
+      border-radius: 3px;
+      margin: 10px auto;
+      width: 110px;
+      height: 110px;
+    }
+  }
+
+  .fa {
+    margin-right: 5px;
+  }
+
+  .important-star {
+    position: absolute;
+    right: 0;
+    margin: 0px 13px;
+    font-size: 22px;
+    z-index: 99999;
+
+    .fa-star-o {
+      cursor: pointer;
+      &:hover {
+        color: #f1c40f;
+      }
+    }
+
+    .fa-star {
+      cursor: pointer;
+      color: #f1c40f;
+    }
+  }
+
+  &:hover {
+    background: #f3f3f3;
+    .box-shadow(0 3px 0 rgba(51, 51, 51, 0.2));
+  }
 }
-.people-item .media {
-  padding: 0;
-}
-.people-item .media-object {
-  border-radius: 3px;
-  margin: 10px auto;
-  width: 110px;
-  height: 110px;
-}
-.people-item .fa {
-  margin-right: 5px;
-}
-.people-item .important-star {
-  position: absolute;
-  right: 0;
-  margin: 0px 13px;
-  font-size: 22px;
-}
-.people-item:hover {
-  background: #f3f3f3;
-  .box-shadow(0 3px 0 rgba(51, 51, 51, 0.2));
-}
+
+
 .social-list {
-  margin: -10px 0 -4px 8px;
+  margin: 0px 0 -4px 8px;
   list-style: none;
   padding: 0;
+
+  li {
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+
+    a.disabled {
+      cursor: default;
+      background-color: #eeeeee;
+      color:#cccccc;
+
+      &:hover {
+        background-color: #eeeeee;
+        color:#cccccc;
+      }
+    }
+
+    @media(max-width: @screen-sm-max) {
+      a {
+        padding: 8px;
+        border-radius: 64px!important;
+      }
+    }
+
+    @media(min-width: @screen-md-min) and (max-width: 1361px) {
+      a {
+        padding: 8px;
+        width:36px;
+        border-radius: 64px!important;
+      }
+    }
+
+    @media(min-width: 1362px) {
+      a {
+        padding: 15px 5px;
+        width: 53px;
+        border-radius: 64px!important;
+      }
+    }
+
+    a {
+      font-size: 16px;
+      border: 1px solid #ddd;
+      display: block;
+      text-align: center;
+      border-radius:2px;
+      color: #666;
+
+      .fa {
+        margin-right: 0;
+      }
+
+      &:hover {
+        background-color: #00aeef;
+        color: #ffffff;
+      }
+    }
+  }
+
+  &::after {
+    clear: both;
+    display: block;
+    content: '';
+  }
 }
-.social-list li {
-  float: left;
-  margin-right: 5px;
-  margin-bottom: 5px;
-}
-.social-list li a {
-  font-size: 16px;
-  border: 1px solid #ddd;
-  padding: 15px 5px;
-  width: 53px;
-  border-radius: 64px!important;
-  display: block;
-  text-align: center;
-  border-radius:2px;
-  color: #666;
-}
-.social-list li a .fa {
-  margin-right: 0;
-}
-.social-list li a:hover {
-  background-color: #00aeef;
-  color: #ffffff;
-}
-.social-list::after {
-  clear: both;
-  display: block;
-  content: '';
-}
+
 .person-name {
   margin: 0 0 5px 0;
   color: #222;
 }
-.people-item .important-star:hover,
-.people-item .important-star .fa-star {
-  color: #f1c40f;
-}
+
 .notfoundpanel {
   text-align: center;
   margin-top: 10%;
@@ -3063,9 +3164,6 @@ div.error label.error:before {
 }
 .leaf-scale {
   color: #00aeef;
-}
-.contact-cat {
-  margin-right: 5px;
 }
 .strike {
   text-decoration: line-through;

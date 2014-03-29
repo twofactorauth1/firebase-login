@@ -9,19 +9,28 @@ define([
     'routers/account/contact.router',
     'routers/account/account.router',
     'routers/account/cms.router',
-    'views/account/admin.view'
-], function (contactRouter, accountRouter, cmsRouter, AdminView) {
+    'views/account/admin.view',
+    'views/account/dashboard.view'
+], function (contactRouter, accountRouter, cmsRouter, AdminView, DashboardView) {
 
     var router = Backbone.Router.extend({
 
         routes: {
             "": "showMain",
-            "/": "showMain"
+            "/": "showMain",
+            "dashboard":"showDashboard",
+            "dashboard/":"showDashboard"
         },
 
 
         showMain: function () {
             var view = new AdminView();
+            $$.viewManager.replaceMain(view);
+        },
+
+
+        showDashboard: function() {
+            var view = new DashboardView();
             $$.viewManager.replaceMain(view);
         }
     });

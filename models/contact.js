@@ -20,7 +20,8 @@ var contact = $$.m.ModelBase.extend({
             last:null,              //string,
             photo:"",               //string,
             photoSquare:"",          //string,
-            birthday:null,          //string
+            birthday:null,          //string,
+            starred:false,          //true|false
             type:"c",               //contact_types
             _v:"0.1",
 

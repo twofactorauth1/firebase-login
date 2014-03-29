@@ -18,7 +18,8 @@ _.extend(view.prototype, BaseView.prototype, {
 
         var data = {
             user: user.toJSON(),
-            location: "home"
+            location: "home",
+            includeJs: false
         };
 
         this.resp.render('home', data);

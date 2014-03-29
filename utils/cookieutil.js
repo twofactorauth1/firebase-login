@@ -65,6 +65,9 @@ var cookieUtil =  {
 
     //region REDIRECT ULR
     setRedirectUrl: function(req, resp) {
+        if (req.url == "" || req.url == "/" || req.url == "/home" || req.url == "/admin") {
+            return;
+        }
         var url = this.getCookie(req, "ind-redirect", false);
         if (url != null) {
             return;

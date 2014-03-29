@@ -6,7 +6,7 @@
  */
 
 define([
-    'views/account/cms/editwebsite.view'
+
 ], function(editWebsiteView) {
 
     var router = Backbone.Router.extend({
@@ -21,21 +21,24 @@ define([
 
 
         manageWebsite: function(page) {
-            var view = new editWebsiteView({
-                page: page
+            require(['views/account/cms/editwebsite.view'], function(editWebsiteView) {
+                var view = new editWebsiteView({
+                    page: page
+                });
+                $$.viewManager.replaceMain(view);
+                console.log("Managing website");
             });
-            $$.viewManager.replaceMain(view);
-            console.log("Managing website");
         },
 
 
         manageWebsiteById: function(websiteid, page) {
-            var view = new editWebsiteView({
-                websiteId: websiteid,
-                page: page
+            require(['views/account/cms/editwebsite.view'], function(editWebsiteView) {
+                var view = new editWebsiteView({
+                    websiteId: websiteid,
+                    page: page
+                });
+                $$.viewManager.replaceMain(view);
             });
-            $$.viewManager.replaceMain(view);
-
             console.log("Managing website by id");
         }
     });
