@@ -1,0 +1,39 @@
+<!-- @import "partials/header.html" -->
+
+<body>
+
+<section>
+
+
+  <div class="mainpanel edit-page">
+
+
+  <!-- @import "partials/theme-editor.html" -->
+    <!-- @import "pages/page_edit.html" -->
+
+
+  </div><!-- mainpanel -->
+
+
+</section>
+
+<!-- @import "partials/footer.html" -->
+
+<script>
+
+$(document).ready(function()
+{
+
+    // activate Nestable for list 1
+    $('#nestable').nestable();
+    $('#nestable2').nestable();
+
+    $(function()
+{
+	$('.redactor_content').redactor({
+		toolbarFixed: true
+	});
+});
+
+});
+</script>

@@ -1,0 +1,60 @@
+<div class="rightpanel">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active"><a href="#rp-settings" data-toggle="tab"><i class="fa fa-gear"></i></a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+
+    <div class="tab-content">
+        <div class="tab-pane pane-settings active" id="rp-settings">
+
+            <h5 class="sidebartitle mb20">Display Settings</h5>
+            <div class="form-group row">
+                <label class="col-xs-12 control-label">Contacts List Display</label>
+                <div class="col-xs-12">
+                    <select class=" form-control chosen-select" data-placeholder="Sort Contacts">
+                        <option value=""></option>
+                        <option value="United States">First Last</option>
+                        <option value="United Kingdom">Last, First</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-xs-12 control-label">Contacts List Ordering</label>
+                <div class="col-xs-12">
+                    <label for="default-areacode">Default Area Code</label>
+                    <input type="text" id="default-areacode" class="form-control input-lg">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-12 control-label">Show / Hide Attributes</label>
+                <div class="col-xs-12 ckbox ckbox-success">
+                    <input type="checkbox" id="last-active" checked="checked">
+                    <label for="last-active">Last Active</label>
+                </div>
+                <div class="col-xs-12 ckbox ckbox-success">
+                    <input type="checkbox" id="purchased" checked="checked">
+                    <label for="purchased">Purchased</label>
+                </div>
+                <div class="col-xs-12 ckbox ckbox-success">
+                    <input type="checkbox" id="emails-opened" checked="checked">
+                    <label for="emails-opened">Emails Opened</label>
+                </div>
+                <div class="col-xs-12 ckbox ckbox-success">
+                    <input type="checkbox" id="calls-made" checked="checked">
+                    <label for="calls-made">Calls Made</label>
+                </div>
+            </div>
+
+        </div>
+        <!-- tab-pane -->
+
+
+    </div>
+    <!-- tab-content -->
+</div>
+<!-- rightpanel -->

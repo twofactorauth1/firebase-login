@@ -1,0 +1,76 @@
+<!-- @import "partials/header.html" -->
+
+<body>
+
+<section>
+
+  <!-- @import "partials/leftpanel.html" -->
+
+  <div class="mainpanel">
+
+
+    <!-- @import "pages/edit_website_first.html" -->
+
+
+  </div><!-- mainpanel -->
+
+  <!-- @import "partials/rightpanel-website.html" -->
+
+</section>
+
+<!-- @import "partials/footer.html" -->
+
+<script type="text/javascript">
+	function scrollToAnchor(aid){
+    var aTag = $("#"+ aid);
+    $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+}
+
+  jQuery(document).ready(function() {
+      $('.menutoggle-right').trigger('click');
+
+      $('#current-url').on('click', function() {
+        if(!$('body').hasClass('chat-view')) {
+          $('.menutoggle-right').trigger('click');
+        }
+          $('#rp-domain-tab').trigger('click');
+      });
+
+      $('.leftpanel .nav li.website-li').addClass('active');
+      $('#nestable').nestable({'maxDepth': '2'});
+
+      $('#launch-success').click(function(){
+         $.gritter.add({
+            title: 'This is a regular notice!',
+            text: 'This will fade out after a certain amount of time.',
+            class_name: 'growl-success',
+           // sticky: false,
+            time: ''
+         });
+          return false;
+      });
+
+      $('.dd-list, .navbar-nav').on('click', 'li', function() {
+      	var section = $(this).data('section');
+      	if ($('#'+section).length > 0) {
+      		scrollToAnchor(section);
+      	}
+      });
+
+      $('.section').hover(
+       function(){ $('#nestable').find('.dd-list [data-section='+$(this).attr('id')+']').addClass('active'); },
+       function(){ $('#nestable').find('.dd-list [data-section='+$(this).attr('id')+']').removeClass('active'); }
+      );
+
+      $(window).bind('scroll', function() {
+         if ($(window).scrollTop() > 117) {
+             $('#nestable-menu').addClass('fixed');
+             //$('.theme-1').css('margin-top', '45px');
+         } else {
+             $('#nestable-menu').removeClass('fixed');
+             //$('.theme-1').css('margin-top', '0px');
+         }
+       });
+
+    });
+</script>

@@ -1,0 +1,261 @@
+<div class="headerbar">
+
+    <div class="header-left col-xs-1">
+        <a class="menutoggle"><i class="fa fa-bars"></i></a>
+    </div>
+    <div class="header-center col-xs-10">
+        <a href="contacts.html" class="btn btn-success pull-left" type="button">
+            <span class="fa fa-chevron-left"></span>
+            <span class="hidden-xs">Back</span>
+        </a>
+        <h2><i class="fa fa-users"></i> Add Contact</h2>
+       <a class="btn btn-success pull-right" type="button">
+            <span class="fa fa-save"></span>
+            <span class="hidden-xs">Save</span>
+        </a>
+    </div>
+    <div class="header-right col-xs-1">
+        <ul class="headermenu">
+            <li>
+                <a class="menutoggle-right pull-right"><i class="fa fa-cog"></i></a>
+            </li>
+        </ul>
+    </div>
+    <!-- header-right -->
+
+</div>
+<!-- headerbar -->
+
+<div class="contentpanel">
+    <!-- Profile Image -->
+    <div class="col-sm-4">
+        <h4>Profile Image</h4>
+        <hr>
+        <form action="/file/post" class="dropzone">
+            <div class="fallback">
+                <input name="file" type="file" multiple />
+            </div>
+        </form>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="col-sm-7 col-sm-offset-1">
+        <h4>Contact Information</h4>
+        <hr>
+        <form class="form-horizontal form-bordered row">
+
+            <!-- Name -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group mb15">
+                        <span class="input-group-addon lg"><i class="fa fa-user"></i>
+                        </span>
+                        <input type="text" placeholder="First Name" id="first-name" class="form-control input-lg">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="input-group mb15">
+                        <input type="text" placeholder="Last Name" id="last-name" class="form-control input-lg">
+                    </div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <hr>
+
+            <!-- Company -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group mb15">
+                        <span class="input-group-addon lg"><i class="fa fa-building-o"></i>
+                        </span>
+                        <input type="text" placeholder="Company" id="company" class="form-control input-lg">
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="mb15">
+                        <input type="text" placeholder="Title" id="title" class="form-control input-lg">
+                    </div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <hr>
+
+            <!-- Phone -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-7">
+                    <div class="input-group mb15">
+                        <span class="input-group-addon lg"><i class="fa fa-phone"></i>
+                        </span>
+                        <input type="text" placeholder="Phone" id="phone-1" class="form-control input-lg phone">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <select class="form-control input-lg">
+                        <option>Home</option>
+                        <option>Mobile</option>
+                        <option>Work</option>
+                    </select>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <a href="#" class="btn btn-success btn-lg btn-block">
+                        <span><i class="fa fa-plus"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+
+            <hr>
+
+
+            <!-- Address -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group mb15">
+                        <span class="input-group-addon lg"><i class="fa fa-map-marker"></i>
+                        </span>
+                        <input type="text" placeholder="Address" id="address-1" class="form-control input-lg">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="mb15">
+                        <input type="text" placeholder="City" id="city-1" class="form-control input-lg">
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-2">
+                    <div class="mb15">
+                        <select name="state" class="form-control input-lg">
+                            <option value="AL">AL</option>
+                            <option value="AK">AK</option>
+                            <option value="AZ">AZ</option>
+                            <option value="AR">AR</option>
+                            <option value="CA">CA</option>
+                            <option value="CO">CO</option>
+                            <option value="CT">CT</option>
+                            <option value="DE">DE</option>
+                            <option value="DC">DC</option>
+                            <option value="FL">FL</option>
+                            <option value="GA">GA</option>
+                            <option value="HI">HI</option>
+                            <option value="ID">ID</option>
+                            <option value="IL">IL</option>
+                            <option value="IN">IN</option>
+                            <option value="IA">IA</option>
+                            <option value="KS">KS</option>
+                            <option value="KY">KY</option>
+                            <option value="LA">LA</option>
+                            <option value="ME">ME</option>
+                            <option value="MD">MD</option>
+                            <option value="MA">MA</option>
+                            <option value="MI">MI</option>
+                            <option value="MN">MN</option>
+                            <option value="MS">MS</option>
+                            <option value="MO">MO</option>
+                            <option value="MT">MT</option>
+                            <option value="NE">NE</option>
+                            <option value="NV">NV</option>
+                            <option value="NH">NH</option>
+                            <option value="NJ">NJ</option>
+                            <option value="NM">NM</option>
+                            <option value="NY">NY</option>
+                            <option value="NC">NC</option>
+                            <option value="ND">ND</option>
+                            <option value="OH">OH</option>
+                            <option value="OK">OK</option>
+                            <option value="OR">OR</option>
+                            <option value="PA">PA</option>
+                            <option value="RI">RI</option>
+                            <option value="SC">SC</option>
+                            <option value="SD">SD</option>
+                            <option value="TN">TN</option>
+                            <option value="TX">TX</option>
+                            <option value="UT">UT</option>
+                            <option value="VT">VT</option>
+                            <option value="VA">VA</option>
+                            <option value="WA">WA</option>
+                            <option value="WV">WV</option>
+                            <option value="WI">WI</option>
+                            <option value="WY">WY</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4">
+                    <div class="mb15">
+                        <input type="text" placeholder="Zip Code" id="zip-1" class="form-control input-lg">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <a href="#" class="btn btn-success btn-lg btn-block">
+                        <span><i class="fa fa-plus"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <hr>
+
+            <!-- Email -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-10">
+                    <div class="input-group mb15">
+                        <span class="input-group-addon lg"><i class="fa fa-envelope"></i>
+                        </span>
+                        <input type="email" placeholder="Email" id="phone-1" class="form-control input-lg">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <a href="#" class="btn btn-success btn-lg btn-block">
+                        <span><i class="fa fa-plus"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+            <hr>
+
+
+            <!-- Social -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-7">
+                    <div class="input-group mb15">
+                        <span class="input-group-addon lg"><i class="fa fa-comment"></i>
+                        </span>
+                        <input type="text" placeholder="Social Url" id="social-1" class="form-control input-lg">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <select class="form-control input-lg">
+                        <option>Facebook</option>
+                        <option>Twitter</option>
+                        <option>Google Plus</option>
+                        <option>Linked In</option>
+                        <option>Instagram</option>
+                        <option>Pinterest</option>
+                    </select>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <a href="#" class="btn btn-success btn-lg btn-block">
+                        <span><i class="fa fa-plus"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <label class="control-label">Tags</label>
+                </div>
+                <div class="col-xs-12">
+                    <input name="tags" id="tags" class="form-control" value="foo,bar,baz" />
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

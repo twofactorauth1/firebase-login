@@ -1,0 +1,28 @@
+<!-- @import "partials/header.html" -->
+
+<body>
+
+<section>
+
+  <!-- @import "partials/leftpanel.html" -->
+
+  <div class="mainpanel">
+
+
+    <!-- @import "pages/view_order.html" -->
+
+
+  </div><!-- mainpanel -->
+
+</section>
+
+<!-- @import "partials/footer.html" -->
+
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+
+    	jQuery('.leftpanel .nav li.commerce-li').addClass('active').children().show();
+    	jQuery('.leftpanel .nav li.orders-li').addClass('active');
+
+    });
+</script>

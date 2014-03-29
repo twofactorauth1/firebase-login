@@ -1,0 +1,64 @@
+<!-- @import "partials/header.html" -->
+
+<body>
+
+<section>
+
+  <!-- @import "partials/leftpanel.html" -->
+
+  <div class="mainpanel">
+
+
+
+    <!-- @import "pages/view_contact.html" -->
+
+
+  </div><!-- mainpanel -->
+
+
+</section>
+
+<!-- @import "partials/footer.html" -->
+<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script src="../js/gmaps.js"></script>
+
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+
+      jQuery('.leftpanel .nav li.contacts-li').addClass('active');
+
+
+        var map_marker = new GMaps({
+            div: '#gmap-marker',
+            lat: 32.7150,
+            lng: -117.1625,
+            disableDefaultUI: true,
+            draggable: false,
+            scaleControl: false,
+            scrollwheel: false
+        });
+
+        map_marker.addMarker({
+            lat: 32.7150,
+            lng: -117.1625,
+            click: function(e) {
+              alert('You clicked in this marker');
+            }
+        });
+
+        jQuery('.profile-btn').on('click', function() {
+          $('.activity-btn').removeClass('active');
+          $('.profile-btn').addClass('active');
+          $('.activity-section').addClass('hidden-xs');
+          $('.profile-section').removeClass('hidden-xs');
+        });
+
+         jQuery('.activity-btn').on('click', function() {
+          $('.profile-btn').removeClass('active');
+          $('.activity-btn').addClass('active');
+          $('.profile-section').addClass('hidden-xs');
+          $('.activity-section').removeClass('hidden-xs');
+        });
+
+    });
+</script>
