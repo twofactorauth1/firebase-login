@@ -15,7 +15,7 @@ if (process.env.MONGO_CONNECT != null) {
 }
 
 module.exports = {
-    MONGODB_CONNECT: connectionString   
+    MONGODB_CONNECT: connectionString
 };
 
 
