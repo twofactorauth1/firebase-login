@@ -5,7 +5,7 @@
  * Please contact christopher.mina@gmail.com for approval or questions.
  */
 
-require('../model.base');
+require('../base.model.js');
 var cryptoUtil = require('../../utils/security/crypto');
 
 var website = $$.m.ModelBase.extend({

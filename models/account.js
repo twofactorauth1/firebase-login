@@ -5,7 +5,7 @@
  * Please contact christopher.mina@gmail.com for approval or questions.
  */
 
-require('./model.base');
+require('./base.model.js');
 var appConfig = require('../configs/app.config');
 
 var account = $$.m.ModelBase.extend({
@@ -93,7 +93,8 @@ var account = $$.m.ModelBase.extend({
     db: {
         storage: "mongo",
         table: "accounts",
-        idStrategy: "increment"
+        idStrategy: "increment",
+        cache: true
     }
 });
 

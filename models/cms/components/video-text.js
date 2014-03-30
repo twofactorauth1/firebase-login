@@ -11,7 +11,7 @@
  * Stores data that supports the display of a single video and optional
  * text.  If text is available, it is either to the right or th left of the video.
  */
-require('../../model.base');
+require('../../base.model.js');
 
 var component = $$.m.ModelBase.extend({
 

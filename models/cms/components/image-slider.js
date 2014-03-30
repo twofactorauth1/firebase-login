@@ -11,7 +11,7 @@
  * Stores data that supports multiple images, captions, and overlays and eventually
  * are displayed in a slider like comonent, usually for marketing purposes.
  */
-require('../../model.base');
+require('../../base.model.js');
 
 var component = $$.m.ModelBase.extend({
 

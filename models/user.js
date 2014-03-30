@@ -5,7 +5,7 @@
  * Please contact christopher.mina@gmail.com for approval or questions.
  */
 
-require('./model.base');
+require('./base.model.js');
 var crypto = require('../utils/security/crypto');
 var constants = requirejs("constants/constants");
 
@@ -1049,7 +1049,8 @@ var user = $$.m.ModelBase.extend({
     db: {
         storage: "mongo",
         table: "users",
-        idStrategy: "increment"
+        idStrategy: "increment",
+        cache: true
     }
 });
 

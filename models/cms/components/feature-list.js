@@ -11,7 +11,7 @@
  * Stores data that represents a feature list for a product
  * or service
  */
-require('../../model.base');
+require('../../base.model.js');
 
 var component = $$.m.ModelBase.extend({
 

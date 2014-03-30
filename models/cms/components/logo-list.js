@@ -10,7 +10,7 @@
  *
  * Stores data that represents a list of logos used for marketing purposes.
  */
-require('../../model.base');
+require('../../base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
