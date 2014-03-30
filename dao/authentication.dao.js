@@ -303,10 +303,28 @@ var dao = {
                 var user = value;
                 user.clearPasswordRecoverToken();
 
+                var localCredentials;
                 if (accountId > 0) {
                     user.createOrUpdateUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL, null, password);
+
+                    //Modify the main credentials if usernames are the same
+                    localCredentials = user.getCredentials($$.constants.user.credential_types.LOCAL);
+                    var socialCredentials = user.getUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL);
+                    if (localCredentials != null && socialCredentials != null && localCredentials.username == socialCredentials.username) {
+                        user.createOrUpdateLocalCredentials(password);
+                    }
                 } else {
                     user.createOrUpdateLocalCredentials(password);
+
+                    //See if we need to update social credentials as well
+                    localCredentials = user.getCredentials($$.constants.user.credential_types.LOCAL);
+                    var accountIds = user.getAllAccountIds();
+                    accountIds.forEach(function(acctId) {
+                        var _userAcctCreds = user.getUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL);
+                        if (_userAcctCreds != null && localCredentials != null && _userAcctCreds.username == localCredentials.username) {
+                            user.createOrUpdateUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL, null, password);
+                        }
+                    });
                 }
 
                 userDao.saveOrUpdate(user, function (err, value) {

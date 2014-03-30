@@ -102,7 +102,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data = self = null;
                     } else {
                         self.req.flash("info", "Password changed successfully");
-                        self.resp.redirect("/home");
+                        self.resp.redirect("/login");
                         self.cleanUp();
                         data = self = null;
                     }
