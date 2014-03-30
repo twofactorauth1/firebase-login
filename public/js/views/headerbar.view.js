@@ -1,5 +1,6 @@
 define([
-    'namespaces'
+    'utils/storageutils',
+    'namespaces',
 ], function () {
 
     var view = Backbone.View.extend({
@@ -12,34 +13,66 @@ define([
         },
 
 
-        toggleLeftMenu: function() {
+        initialize: function() {
+            var leftNavExpanded = storageutils.get("state_leftnav", "session");
+            if (leftNavExpanded === "open") {
+                this.openLeftMenu();
+            } else if (leftNavExpanded === "closed") {
+                this.closeLeftMenu();
+            }
+        },
+
+
+        toggleLeftMenu: function(state) {
             var body = jQuery('body');
             var bodypos = body.css('position');
-
             if (bodypos != 'relative') {
-
                 if (!body.hasClass('leftpanel-collapsed')) {
-                    body.addClass('leftpanel-collapsed');
-                    jQuery('.nav-bracket ul').attr('style', '');
-
-                    jQuery(this).addClass('menu-collapsed');
-
+                    this.closeLeftMenu();
                 } else {
-                    body.removeClass('leftpanel-collapsed rightmenu-open');
-                    jQuery('.nav-bracket li.active ul').css({
-                        display: 'block'
-                    });
-
-                    jQuery(this).removeClass('menu-collapsed');
-
+                    this.openLeftMenu();
                 }
             } else {
+                if (body.hasClass('leftpanel-show')) {
+                    this.closeLeftMenu();
+                }else {
+                    this.openLeftMenu()
+                }
+            }
+        },
 
-                if (body.hasClass('leftpanel-show'))
-                    body.removeClass('leftpanel-show');
-                else
-                    body.addClass('leftpanel-show');
 
+        openLeftMenu: function() {
+            var body = jQuery('body');
+            var bodypos = body.css('position');
+            if (bodypos != 'relative') {
+                body.removeClass('leftpanel-collapsed rightmenu-open');
+                $('.nav-bracket li.active ul').css({
+                    display: 'block'
+                });
+
+                $(this).removeClass('menu-collapsed');
+                storageutils.set("state_leftnav", "open", "session");
+            } else {
+                body.addClass('leftpanel-show');
+                storageutils.set("state_leftnav", "open", "session");
+                adjustmainpanelheight();
+            }
+        },
+
+
+        closeLeftMenu: function() {
+            var body = jQuery('body');
+            var bodypos = body.css('position');
+            if (bodypos != 'relative') {
+                body.addClass('leftpanel-collapsed');
+                $('.nav-bracket ul').attr('style', '');
+
+                $(this).addClass('menu-collapsed');
+                storageutils.set("state_leftnav", "closed", "session");
+            } else {
+                body.removeClass('leftpanel-show');
+                storageutils.set("state_leftnav", "closed", "session");
                 adjustmainpanelheight();
             }
         },
