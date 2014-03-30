@@ -4,7 +4,7 @@
     * All use or reproduction of any or all of this content must be approved.
     * Please contact christopher.mina@gmail.com for approval or questions.
 
-.leftpanel
+#leftnav.leftpanel
     .logopanel
         if account
             if account.company.logo
@@ -19,12 +19,12 @@
     // logopanel
     .leftpanelinner
         //This is only visible to small devices
-        .visible-xs.hidden-sm.hidden-md.hidden-lg
+        div
             .media.userlogged
                 if photo
                     img.media-object(alt="" src="#{photo.url}" style="max-height:40px; max-width:60px;")
                 .media-body
-                    h4 #{user.username}
+                    h4 #{user.first} #{user.last}
 
             h5.sidebartitle.actitle Account
             ul.nav.nav-pills.nav-stacked.nav-bracket.mb30
@@ -34,9 +34,6 @@
                 li(data-toggle="pill"): a(href="/account")
                     i.fa.fa-cog
                     span Account Settings
-                li(data-toggle="pill"): a(href="/help")
-                    i.fa.fa-question-circle
-                    span Help
                 li(data-toggle="pill"): a(href="/logout")
                     i.fa.fa-sign-out
                     span Sign Out
@@ -44,7 +41,7 @@
         h5.sidebartitle Navigation
         ul.nav.nav-pills.nav-stacked.nav-bracket
             li(data-toggle="pill").dashboard-li: a(href="/dashboard")
-                i.fa.fa-home
+                i.fa.fa-tachometer
                 span Dashboard
             li(data-toggle="pill").contacts-li: a(href="/contacts")
                 i.fa.fa-users
@@ -89,5 +86,5 @@
                 i.fa.fa-wrench
                 span Settings
             li(data-toggle="pill").support-li: a(href="#")
-                i.fa.fa-umbrella
+                i.fa.fa-question
                 span Support

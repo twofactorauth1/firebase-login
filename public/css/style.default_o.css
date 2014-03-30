@@ -14775,7 +14775,7 @@ strong {
 .stickyheader.leftpanel-collapsed .header-right {
   margin-right: 0;
 }
-.stickyheader.chat-view .headerbar {
+.stickyheader.rightmenu-open .headerbar {
   right: 240px;
   width: auto;
 }
@@ -15573,10 +15573,10 @@ strong {
 .leftpanel-collapsed .sticky-leftpanel {
   overflow-y: visible;
 }
-.chat-view {
+.rightmenu-open {
   margin-right: 240px;
 }
-.chat-view .rightpanel {
+.rightmenu-open .rightpanel {
   display: block;
   right: 0;
 }

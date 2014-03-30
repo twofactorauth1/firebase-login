@@ -27,7 +27,7 @@ define([
             },
 
             _onCall: function() {
-                setActiveNav("contacts");
+                $$.v.leftNav.updateActiveNav("contacts");
             },
 
 

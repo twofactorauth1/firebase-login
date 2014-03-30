@@ -14,12 +14,21 @@ define([
     'appsetup',
     'pushStateUtils',
     'constants/constants',
-    'utils/uihelpers'
+    'utils/uihelpers',
+    'views/leftnav.view',
+    'views/headerbar.view'
 ], function (ns, common, hb, vm, appsetup) {
 
     var app = {
 
         initialize: function () {
+            //Set up Left Nav
+            $$.v.leftNav = new $$.v.LeftNav();
+
+            //Set up Header
+            $$.v.headerBar = new $$.v.HeaderBar();
+
+            //Set up Router
             var accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
             if (accountId != null) {
                 $$.g.accountId = accountId;

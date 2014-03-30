@@ -14615,10 +14615,10 @@ strong {
   margin-top: 15px;
 }
 .signinpanel .uname {
-  background: #ffffff url(..images/user.png) no-repeat 95% center;
+  background: #ffffff url(/assets/images/user.png) no-repeat 95% center;
 }
 .signinpanel .pword {
-  background: #ffffff url(..images/locked.png) no-repeat 95% center;
+  background: #ffffff url(/assets/images/locked.png) no-repeat 95% center;
 }
 .signinpanel .btn {
   margin-top: 15px;
@@ -14723,7 +14723,7 @@ strong {
   background: #e4e7ea;
 }
 .chosen-container-single .chosen-single div b {
-  background: url(..images/dropdown-arrow.png) no-repeat 8px 15px;
+  background: url(/assets/images/dropdown-arrow.png) no-repeat 8px 15px;
 }
 .chosen-container-active.chosen-with-drop .chosen-single div {
   width: 30px;
@@ -14773,7 +14773,7 @@ strong {
 .stickyheader.leftpanel-collapsed .header-right {
   margin-right: 0;
 }
-.stickyheader.chat-view .headerbar {
+.stickyheader.rightmenu-open .headerbar {
   right: 240px;
   width: auto;
 }
@@ -15052,9 +15052,19 @@ strong {
   color: #1d2939;
   background-color: #f7f7f7;
 }
+#header-actions {
+  padding-top: 8px;
+  display: inline-block;
+}
+#header-actions > .btn {
+  margin-bottom: 0px;
+}
+#header-actions .btn-group {
+  margin-bottom: 0px;
+}
 .searchform input {
   width: 250px;
-  background: #ffffff url(..images/icon-search.png) no-repeat 95% center;
+  background: #ffffff url(/assets/images/icon-search.png) no-repeat 95% center;
   float: left;
   padding: 18px 20px;
   border: 0;
@@ -15567,10 +15577,10 @@ strong {
 .leftpanel-collapsed .sticky-leftpanel {
   overflow-y: visible;
 }
-.chat-view {
+.rightmenu-open {
   margin-right: 240px;
 }
-.chat-view .rightpanel {
+.rightmenu-open .rightpanel {
   display: block;
   right: 0;
 }

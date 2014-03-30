@@ -31,7 +31,7 @@ define([
 
 
         showDashboard: function() {
-            setActiveNav("dashboard");
+            $$.v.leftNav.updateActiveNav("dashboard");
             var view = new DashboardView();
             $$.viewManager.replaceMain(view);
         }
