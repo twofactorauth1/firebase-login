@@ -153,7 +153,7 @@ function reposition_searchform() {
 
 //Set dashboard LI to active
 jQuery(document).ready(function () {
-    jQuery('.leftpanel .nav li.dash-li').addClass('active');
+    //setActiveNav("dashboard");
 
     $(".nav.nav-pills li").click(function(event) {
         var parent = $(event.currentTarget).parents(".nav.nav-pills").eq(0);
@@ -161,3 +161,33 @@ jQuery(document).ready(function () {
         $(event.currentTarget).addClass("active");
     })
 });
+
+
+function setActiveNav(type) {
+    var nav;
+    switch(type) {
+        case "dashboard":
+            nav = "dashboard-li"; break;
+        case "contacts":
+            nav = "contacts-li"; break;
+        case "activity":
+            nav = "activity-li"; break;
+        case "marketing":
+            nav = "marketing-li"; break;
+        case "website":
+            nav = "website-li"; break;
+        case "store":
+        case "commerce":
+            nav = "store-li"; break;
+        case "settings":
+            nav = "settings-li"; break;
+        case "support":
+            nav = "support-li"; break;
+        default:
+            nav = type + "-li"; break;
+    }
+
+    jQuery('.leftpanel .nav li').removeClass("active");
+    var selector = ".leftpanel .nav li." + nav;
+    jQuery(selector).addClass("active");
+}

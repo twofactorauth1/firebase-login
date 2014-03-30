@@ -14155,6 +14155,7 @@ body {
   background-image: linear-gradient(to bottom, #fafafa 0%, #eeeeee 100%);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffafafa', endColorstr='#ffeeeeee', GradientType=0);
+  -webkit-border-radius: 3px;
   border-radius: 3px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -14615,10 +14616,10 @@ strong {
   margin-top: 15px;
 }
 .signinpanel .uname {
-  background: #ffffff url(..images/user.png) no-repeat 95% center;
+  background: #ffffff url(/assets/images/user.png) no-repeat 95% center;
 }
 .signinpanel .pword {
-  background: #ffffff url(..images/locked.png) no-repeat 95% center;
+  background: #ffffff url(/assets/images/locked.png) no-repeat 95% center;
 }
 .signinpanel .btn {
   margin-top: 15px;
@@ -14723,7 +14724,7 @@ strong {
   background: #e4e7ea;
 }
 .chosen-container-single .chosen-single div b {
-  background: url(..images/dropdown-arrow.png) no-repeat 8px 15px;
+  background: url(/assets/images/dropdown-arrow.png) no-repeat 8px 15px;
 }
 .chosen-container-active.chosen-with-drop .chosen-single div {
   width: 30px;
@@ -14759,6 +14760,7 @@ strong {
   left: 240px;
   width: 100%;
   z-index: 100;
+  -webkit-box-shadow: 0 1px rgba(0, 0, 0, 0.05);
   box-shadow: 0 1px rgba(0, 0, 0, 0.05);
 }
 .stickyheader .mainpanel {
@@ -14800,9 +14802,9 @@ strong {
 /* --------	Top Level --------- */
 /* ------------------------------------------------------------
 	NUMBER OF COLUMNS: Adjust #primaryNav li to set the number
-	of columns required in your site map. The default is 
-	4 columns (25%). 5 columns would be 20%, 6 columns would 
-	be 16.6%, etc. 
+	of columns required in your site map. The default is
+	4 columns (25%). 5 columns would be 20%, 6 columns would
+	be 16.6%, etc.
 ------------------------------------------------------------ */
 #primaryNav li {
   width: 25%;
@@ -14870,8 +14872,10 @@ strong {
   color: black;
   background: #c3eafb url('/assets/images/white-highlight.png') top left repeat-x;
   border: 2px solid #b5d9ea;
+  border-radius: 5px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
   box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+  /* FF 3.5+ */
 }
 #primaryNav li a:hover {
   background-color: #e2f4fd;
@@ -14972,6 +14976,7 @@ strong {
   border-radius: 5px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
   box-shadow: rgba(0, 0, 0, 0.5) 2px 2px 2px;
+  /* FF 3.5+ */
 }
 #utilityNav li a:hover {
   background-color: #fffce5;
@@ -15054,7 +15059,7 @@ strong {
 }
 .searchform input {
   width: 250px;
-  background: #ffffff url(..images/icon-search.png) no-repeat 95% center;
+  background: #ffffff url(/assets/images/icon-search.png) no-repeat 95% center;
   float: left;
   padding: 18px 20px;
   border: 0;
@@ -15290,7 +15295,8 @@ strong {
 .leftpanel .userlogged {
   margin: 0;
   padding: 0;
-  margin-top: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .leftpanel .userlogged .media-object {
@@ -15406,16 +15412,16 @@ strong {
   margin-left: 12px;
   border: 0;
 }
-.nav-bracket  > li  > a:hover,
-.nav-bracket  > li  > a:active {
+.nav-bracket > li > a:hover,
+.nav-bracket > li > a:active {
   background-color: #fff;
   color: #1d2939;
   -webkit-box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
 }
-.nav-bracket  > li.active  > a,
-.nav-bracket  > li.active  > a:hover,
-.nav-bracket  > li.active  > a:focus {
+.nav-bracket > li.active > a,
+.nav-bracket > li.active > a:hover,
+.nav-bracket > li.active > a:focus {
   background-color: #54C8E8;
   color: #fff;
 }
@@ -15427,9 +15433,9 @@ strong {
   width: 16px;
   text-align: center;
 }
-.nav-bracket .children  > li  > a:hover,
-.nav-bracket .children  > li  > a:active,
-.nav-bracket .children  > li  > a:focus {
+.nav-bracket .children > li > a:hover,
+.nav-bracket .children > li > a:active,
+.nav-bracket .children > li > a:focus {
   text-decoration: none;
   color: #54C8E8;
 }
@@ -15619,9 +15625,9 @@ strong {
 .rightpanel label {
   color: #999;
 }
-.rightpanel .nav-tabs  > .active  > a,
-.rightpanel .nav-tabs  > .active  > a:hover,
-.rightpanel .nav-tabs  > .active  > a:focus {
+.rightpanel .nav-tabs > .active > a,
+.rightpanel .nav-tabs > .active > a:hover,
+.rightpanel .nav-tabs > .active > a:focus {
   background: #1D2939;
   color: #fff;
 }
@@ -15893,8 +15899,6 @@ p {
 }
 .follower-list .media-object {
   margin-right: 10px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
   border-radius: 3px;
 }
 .follower-name {
@@ -15910,8 +15914,6 @@ p {
   margin-bottom: 20px;
 }
 .events .media-object {
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
   border-radius: 3px;
 }
 .events-list {
@@ -16016,10 +16018,7 @@ p {
 .profile {
   background: #fcfcfc;
   padding: 15px 5px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
   border-radius: 3px;
-  -moz-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
   -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
   box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
 }
@@ -16509,8 +16508,6 @@ div.error label.error:before {
   font-size: 11px;
   color: #fff;
   padding: 3px 10px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
   border-radius: 2px;
 }
 .jqstooltip {
@@ -16543,8 +16540,6 @@ div.error label.error:before {
   vertical-align: middle;
 }
 .widget-quick-status-post .nav-tabs > li > a {
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
   border-radius: 0;
 }
 .widget-quick-status-post .panel-body {
@@ -16620,8 +16615,6 @@ div.error label.error:before {
 .widget-photoday .photoday img {
   width: 100%;
   display: block;
-  -moz-border-radius: 3px 3px 0 0;
-  -webkit-border-radius: 3px 3px 0 0;
   border-radius: 3px 3px 0 0;
 }
 .widget-photoday .photo-details {
@@ -16724,8 +16717,6 @@ div.error label.error:before {
   left: 0;
   height: 105px;
   overflow: hidden;
-  -moz-border-radius: 3px 3px 0 0;
-  -webkit-border-radius: 3px 3px 0 0;
   border-radius: 3px 3px 0 0;
 }
 .widget-profile .cover img {
@@ -16759,14 +16750,10 @@ div.error label.error:before {
   color: #fff;
 }
 .widget-profile .row > div:first-child span {
-  -moz-border-radius: 0 0 0 3px;
-  -webkit-border-radius: 0 0 0 3px;
   border-radius: 0 0 0 3px;
 }
 .widget-profile .row > div:last-child span {
   border-right: 0;
-  -moz-border-radius: 0 0 3px 0;
-  -webkit-border-radius: 0 0 3px 0;
   border-radius: 0 0 3px 0;
 }
 .widget-profile-img {
@@ -17101,12 +17088,6 @@ div.error label.error:before {
   margin-top: 0px;
   margin-bottom: 0px;
 }
-@media (max-width: 1199px) {
-  .letter-list li > a,
-  .letter-list li > span {
-    padding: 6px 8px;
-  }
-}
 /**********************************************************
   CONTACTS LIST - PEOPLE ITEM
 **********************************************************/
@@ -17252,10 +17233,6 @@ div.error label.error:before {
   margin: 0 0 5px 0;
   color: #222;
 }
-.people-item .important-star:hover,
-.people-item .important-star .fa-star {
-  color: #f1c40f;
-}
 .notfoundpanel {
   text-align: center;
   margin-top: 10%;
@@ -17319,9 +17296,6 @@ div.error label.error:before {
 .leaf-scale {
   color: #00aeef;
 }
-.contact-cat {
-  margin-right: 5px;
-}
 .strike {
   text-decoration: line-through;
 }
@@ -17334,14 +17308,14 @@ div.error label.error:before {
 .table-invoice thead > tr > th {
   background: none;
 }
-.table-invoice thead  > tr  > th:last-child,
-.table-invoice thead  > tr  > th:nth-child(3),
-.table-invoice thead  > tr  > th:nth-child(2) {
+.table-invoice thead > tr > th:last-child,
+.table-invoice thead > tr > th:nth-child(3),
+.table-invoice thead > tr > th:nth-child(2) {
   text-align: right;
 }
-.table-invoice tbody  > tr  > td:last-child,
-.table-invoice tbody  > tr  > td:nth-child(3),
-.table-invoice tbody  > tr  > td:nth-child(2) {
+.table-invoice tbody > tr > td:last-child,
+.table-invoice tbody > tr > td:nth-child(3),
+.table-invoice tbody > tr > td:nth-child(2) {
   width: 15%;
   text-align: right;
 }
@@ -18538,8 +18512,8 @@ body {
   background: #ECF0F1;
   color: #7F8C8D;
   border: none;
-  box-shadow: none;
   -webkit-box-shadow: none;
+  box-shadow: none;
 }
 .theme-1 footer .input-group-btn .btn {
   height: 34px;

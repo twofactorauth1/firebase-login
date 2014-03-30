@@ -24,12 +24,14 @@ define([
 
 
         showMain: function () {
+            setActiveNav("");
             var view = new AdminView();
             $$.viewManager.replaceMain(view);
         },
 
 
         showDashboard: function() {
+            setActiveNav("dashboard");
             var view = new DashboardView();
             $$.viewManager.replaceMain(view);
         }
