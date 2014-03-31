@@ -6572,15 +6572,6 @@ h4,
   font-size: 13px;
   border-color: #ddd;
 }
-.modal-dialog {
-  border: 0;
-}
-.modal-content {
-  border-radius: 2px;
-  -webkit-box-shadow: 7px 7px 0 rgba(0, 0, 0, 0.4);
-  box-shadow: 7px 7px 0 rgba(0, 0, 0, 0.4);
-  border: 0;
-}
 .modal-title {
   font-size: 20px;
   color: #333;

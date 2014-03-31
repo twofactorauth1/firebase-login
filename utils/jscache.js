@@ -62,7 +62,6 @@ _.extend(JSCache.prototype, {
 
 
     set: function(key, value, region, ttl) {
-        console.log("SETTING TO CACHE: " + key);
         if (ttl) {
             ttl = ttl * 1000;
         }
@@ -75,7 +74,6 @@ _.extend(JSCache.prototype, {
 
 
     get: function(key, region, touch, ttl, fn) {
-        console.log("RETRIEVING FROM CACHE: " + key);
         if (_.isFunction(touch)) {
             fn = touch;
             touch = ttl = null;

@@ -64,16 +64,21 @@ var cookieUtil =  {
 
 
     //region REDIRECT ULR
-    setRedirectUrl: function(req, resp) {
-        if (req.url == "" || req.url == "/" || req.url == "/home" || req.url == "/admin") {
-            return;
-        }
-        var url = this.getCookie(req, "ind-redirect", false);
-        if (url != null) {
-            return;
-        }
+    setRedirectUrl: function(req, resp, urlOverride) {
+        var url;
+        if (urlOverride == null) {
+            if (req.url == "" || req.url == "/" || req.url == "/home" || req.url == "/admin") {
+                return;
+            }
+            url = this.getCookie(req, "ind-redirect", false);
+            if (url != null) {
+                return;
+            }
 
-        var url = req.protocol + '://' + req.get('host') + req.url;
+            url = req.protocol + '://' + req.get('host') + req.url;
+        } else {
+            url = urlOverride;
+        }
 
         this.setCookie(resp, "ind-redirect", url, false, 600);
     },

@@ -17,7 +17,7 @@ define([
         querystringutils: {
 
             getQueryStringValue: function(name, searchValue) {
-                if (searchValue === null || searchValue === "") {
+                if (searchValue == null || searchValue == "") {
                     searchValue = location.search;
                 }
                 name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");

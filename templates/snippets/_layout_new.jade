@@ -54,14 +54,28 @@ html(class="no-js", lang="en")
 
 
                 //- some common modals
-                #common-modal.modal.fade.hide
+                #common-modal.modal.fade(aria-labelledby="common modal" aria-hidden="true")
+                    .modal-dialog
+                        .modal-content
+
                 //- common progress modal
-                #common-progress.modal.fade.hide
-                    #common-progress-title.modal-header Progress...
-                    .modal-body
-                        .progress.progress-striped.active
-                            .bar(style="width:100%") Processing...
-                    #common-progress-label.modal-footer
+                #common-progress.modal.fade(aria-labelledby="common progress modal" aria-hidden="true")
+                    .modal-dialog
+                        .modal-content
+                            #common-progress-title.modal-header Progress...
+                            .modal-body
+                                .progress.progress-striped.active(style="height:40px;")
+                                    .progress-bar.progress-bar-success(style="width:100%; padding-top:10px;")
+                                        span(style="font-size:18px") Processing...
+                            #common-progress-label.modal-footer
+
+                #common-modal-iframe.modal.fade(aria-labelledby="common modal iframe" aria-hidden="true")
+                    .modal-dialog
+                        .modal-content
+                            .modal-header
+                            .modal-body
+                                iframe(id="common-modal-iframe-value" src="" style="width:100%; height:300px; border: 1px solid #ccc;")
+                            .modal-footer
 
             #rightpanel.rightpanel
 

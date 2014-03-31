@@ -24,7 +24,7 @@ define([
 
 
         showMain: function () {
-            setActiveNav("");
+            $$.v.leftNav.updateActiveNav("");
             var view = new AdminView();
             $$.viewManager.replaceMain(view);
         },
