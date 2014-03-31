@@ -8,7 +8,7 @@
 
   <div class="mainpanel">
 
-
+    <!-- @import "partials/headerbar.html" -->
     <!-- @import "pages/edit_website_first.html" -->
 
 
@@ -30,7 +30,7 @@
       $('.menutoggle-right').trigger('click');
 
       $('#current-url').on('click', function() {
-        if(!$('body').hasClass('rightmenu-open')) {
+        if(!$('body').hasClass('chat-view')) {
           $('.menutoggle-right').trigger('click');
         }
           $('#rp-domain-tab').trigger('click');

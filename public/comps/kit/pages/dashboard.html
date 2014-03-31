@@ -1,25 +1,21 @@
-<div class="headerbar">
-
-    <div class="header-left col-xs-1">
-        <a class="menutoggle"><i class="fa fa-bars"></i></a>
-    </div>
-    <div class="header-center col-xs-10">
+<div class="pageheader row">
+    <div class="col-xs-12">
         <h2><i class="fa fa-tachometer"></i> Dashboard</h2>
     </div>
-    <div class="header-right col-xs-1">
-        <ul class="headermenu">
-            <li>
-                <a class="menutoggle-right pull-right"><i class="fa fa-cog"></i></a>
-            </li>
-        </ul>
-    </div>
-    <!-- header-right -->
-
+    <div class="clear"></div>
 </div>
-<!-- headerbar -->
+
+<div class="visible-xs">
+    <div class="btn-group col-xs-12">
+        <button type="button" class="btn btn-info col-xs-6 stats-tasks-btn active">Stats & Tasks</button>
+        <button type="button" class="btn btn-info col-xs-6 activity-btn">Activity</button>
+    </div>
+</div>
+
+<div class="clearfix"></div>
 
 <div class="contentpanel">
-    <div class="col-xs-6">
+    <div class="col-sm-6 stats-tasks-section">
         <div class="col-xs-12 col-sm-6">
             <div class="panel panel-dark panel-stat">
                 <div class="panel-heading">
@@ -259,13 +255,13 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-6">
+    <div class="col-sm-6 activity-section hidden-xs">
         <div class="smart-timeline">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-btns">
                         <select class="form-control chosen-select input-lg ">
-                              <option value="">Filter Activity</option>
+                            <option value="">Filter Activity</option>
                         </select>
                     </div>
                     <!-- panel-btns -->

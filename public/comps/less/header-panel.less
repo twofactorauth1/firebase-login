@@ -48,6 +48,7 @@
 
 .menutoggle-right {
     float: right;
+    border-left: 1px solid #161616;
     i {
         color: white
     }
@@ -76,9 +77,6 @@
         box-shadow: none;
         border-color: #ddd;
     }
-}
-.header-right {
-    float: right;
 }
 .headermenu {
     list-style: none;
@@ -273,24 +271,54 @@
     }
 }
 
+.header-center {
+    float: left;
+    padding: 0;
+}
+
 .header-center h2 {
     margin: 7px 0 0 0;
     color: white;
     padding: 0;
-    float: left
+    float: left;
 }
 
 .header-right {
+    float: right;
     padding: 0;
+    min-width: 50px;
+}
+
+.header-right-menu {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
 }
 
 .header-left {
+    max-width: 60px;
     padding: 0;
+    min-width: 50px;
 }
 .header-center .btn:last-child, .header-center .btn:nth-last-child(2) {
     margin: 8px -40px 0 0;
 }
 
+.header-center .btn:last-child {
+    margin: 8px 35px 0 0;
+}
+
 .header-center .btn:first-child {
     margin: 10px 20px 0 -20px;
+}
+
+@media (max-width: 768px) {
+    .header-center h2 {
+        font-size: 20px;
+        margin: 15px 0 0 10px;
+    }
+
+    .header-center .btn:last-child {
+        margin: 8px 0 0 0;
+    }
 }

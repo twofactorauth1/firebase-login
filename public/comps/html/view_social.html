@@ -96,7 +96,7 @@
 
   <div class="mainpanel">
 
-    <div class="headerbar">
+  	<div class="headerbar">
 
     <div class="header-left">
         <a class="menutoggle"><i class="fa fa-bars"></i></a>
@@ -129,11 +129,7 @@
 
     <div class="pageheader row">
     <div class="col-xs-9">
-        <a href="contacts.html" class="btn btn-success pull-left" type="button">
-            <span class="fa fa-chevron-left"></span>
-            <span class="hidden-xs">Back</span>
-        </a>
-        <h2><i class="fa fa-files-o"></i> Fix Duplicates</h2>
+        <h2><i class="fa fa-facebook-square"></i> Facebook</h2>
     </div>
     <div class="col-xs-3">
     </div>
@@ -141,41 +137,7 @@
 </div>
 
 <div class="contentpanel">
-    <p>Click on a Contact to merge duplicate matches</p>
-    <div class="table-responsive">
-        <table class="table table-hover mb30">
-            <thead>
-                <tr>
-                    <th>Contacts</th>
-                    <th>Duplicate Matches</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr onclick="parent.location='merge_duplicates.html'">
-                    <td>
-                        <div class="small-user-icon">
-                            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
-                        </div>John Doe
-                    </td>
-                    <td>2 Similar</td>
-                </tr>
-                <tr onclick="parent.location='merge_duplicates.html'">
-                    <td>
-                        <div class="small-user-icon">
-                            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
-                        </div>Jane Doe</td>
-                    <td>1 Exact</td>
-                </tr>
-                <tr onclick="parent.location='merge_duplicates.html'">
-                    <td>
-                        <div class="small-user-icon">
-                            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
-                        </div>Jeremy Doe</td>
-                    <td>5 Similar</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
 </div>
 
 
@@ -523,7 +485,8 @@
 <script type="text/javascript">
 	jQuery(document).ready(function() {
 
-    	jQuery('.leftpanel .nav li.contacts-li').addClass('active').children().show();
+    	jQuery('.leftpanel .nav li.marketing-li').addClass('active').children().show();
+    	jQuery('.leftpanel .nav li.social-li').addClass('active');
 
     });
 </script>

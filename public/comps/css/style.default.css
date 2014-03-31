@@ -705,6 +705,18 @@ strong {
 .chosen-select {
   margin: 0;
 }
+.btn-group {
+  padding: 0;
+}
+.social-btns {
+  list-style-type: none;
+}
+.social-btns li {
+  display: inline-block;
+}
+.social-btns li h2 {
+  margin: 0;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -961,6 +973,7 @@ strong {
 }
 .menutoggle-right {
   float: right;
+  border-left: 1px solid #161616;
 }
 .menutoggle-right i {
   color: #ffffff;
@@ -987,9 +1000,6 @@ strong {
   -webkit-box-shadow: none;
   box-shadow: none;
   border-color: #ddd;
-}
-.header-right {
-  float: right;
 }
 .headermenu {
   list-style: none;
@@ -1179,6 +1189,10 @@ strong {
   color: #999;
   display: block;
 }
+.header-center {
+  float: left;
+  padding: 0;
+}
 .header-center h2 {
   margin: 7px 0 0 0;
   color: white;
@@ -1186,17 +1200,38 @@ strong {
   float: left;
 }
 .header-right {
+  float: right;
   padding: 0;
+  min-width: 50px;
+}
+.header-right-menu {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 .header-left {
+  max-width: 60px;
   padding: 0;
+  min-width: 50px;
 }
 .header-center .btn:last-child,
 .header-center .btn:nth-last-child(2) {
   margin: 8px -40px 0 0;
 }
+.header-center .btn:last-child {
+  margin: 8px 35px 0 0;
+}
 .header-center .btn:first-child {
   margin: 10px 20px 0 -20px;
+}
+@media (max-width: 768px) {
+  .header-center h2 {
+    font-size: 20px;
+    margin: 15px 0 0 10px;
+  }
+  .header-center .btn:last-child {
+    margin: 8px 0 0 0;
+  }
 }
 .leftpanel {
   width: 240px;
@@ -2175,6 +2210,9 @@ p {
   float: right;
   width: 170px;
   margin: -14px -14px 0 0;
+}
+#line-chart {
+  overflow: hidden;
 }
 .ckbox,
 .rdio {
@@ -3183,7 +3221,7 @@ div.error label.error:before {
   font-size: 16px;
   border: 1px solid #ddd;
   padding: 15px 5px;
-  width: 53px;
+  width: 50px;
   border-radius: 64px!important;
   display: block;
   text-align: center;

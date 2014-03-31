@@ -38,23 +38,13 @@
 
     <div class="leftpanelinner">
 
-        <div >
+        <div>
             <div class="media userlogged">
                 <img alt="" src="../images/photos/loggeduser.png" class="media-object">
                 <div class="media-body">
                     <h4>Ron Burgandy</h4>
                 </div>
             </div>
-
-            <h5 class="sidebartitle actitle">Account</h5>
-            <ul class="nav nav-pills nav-stacked nav-bracket mb30">
-                <li><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
-                </li>
-                <li><a href=""><i class="fa fa-cog"></i> <span>Account Settings</span></a>
-                </li>
-                <li><a href="signout.html"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a>
-                </li>
-            </ul>
         </div>
 
         <h5 class="sidebartitle">Navigation</h5>
@@ -87,6 +77,16 @@
             </li>
         </ul>
 
+        <h5 class="sidebartitle actitle">Account</h5>
+            <ul class="nav nav-pills nav-stacked nav-bracket mb30">
+                <li class="profile-li"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
+                </li>
+                <li class="account-settings-li"><a href="account_settings.html"><i class="fa fa-cog"></i> <span>Account Settings</span></a>
+                </li>
+                <li><a href="signout.html"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a>
+                </li>
+            </ul>
+
     </div>
     <!-- leftpanelinner -->
 </div>
@@ -94,16 +94,27 @@
 
   <div class="mainpanel">
 
-    <div class="headerbar">
+  <div class="headerbar">
 
-    <div class="header-left col-xs-1">
+    <div class="header-left">
         <a class="menutoggle"><i class="fa fa-bars"></i></a>
     </div>
-    <div class="header-center col-xs-10">
-        <h2><i class="fa fa-tachometer"></i> Dashboard</h2>
-    </div>
-    <div class="header-right col-xs-1">
+    <div class="header-right">
         <ul class="headermenu">
+            <li class="hidden">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <img src="../images/photos/loggeduser.png" alt="" />Ron Burgandy
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                        <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i> My Profile</a>
+                        </li>
+                        <li><a href="signin.html"><i class="glyphicon glyphicon-log-out"></i> Log Out</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
             <li>
                 <a class="menutoggle-right pull-right"><i class="fa fa-cog"></i></a>
             </li>
@@ -114,8 +125,24 @@
 </div>
 <!-- headerbar -->
 
+    <div class="pageheader row">
+    <div class="col-xs-12">
+        <h2><i class="fa fa-tachometer"></i> Dashboard</h2>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<div class="visible-xs">
+    <div class="btn-group col-xs-12">
+        <button type="button" class="btn btn-info col-xs-6 stats-tasks-btn active">Stats & Tasks</button>
+        <button type="button" class="btn btn-info col-xs-6 activity-btn">Activity</button>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
 <div class="contentpanel">
-    <div class="col-xs-6">
+    <div class="col-sm-6 stats-tasks-section">
         <div class="col-xs-12 col-sm-6">
             <div class="panel panel-dark panel-stat">
                 <div class="panel-heading">
@@ -355,13 +382,13 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-6">
+    <div class="col-sm-6 activity-section hidden-xs">
         <div class="smart-timeline">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-btns">
                         <select class="form-control chosen-select input-lg ">
-                              <option value="">Filter Activity</option>
+                            <option value="">Filter Activity</option>
                         </select>
                     </div>
                     <!-- panel-btns -->
@@ -522,6 +549,20 @@
                          '</li>');
         }
         return false;
+    });
+
+    jQuery('.stats-tasks-btn').on('click', function() {
+          $('.activity-btn').removeClass('active');
+          $('.stats-tasks-btn').addClass('active');
+          $('.activity-section').addClass('hidden-xs');
+          $('.stats-tasks-section').removeClass('hidden-xs');
+        });
+
+    jQuery('.activity-btn').on('click', function() {
+      $('.stats-tasks-btn').removeClass('active');
+      $('.activity-btn').addClass('active');
+      $('.stats-tasks-section').addClass('hidden-xs');
+      $('.activity-section').removeClass('hidden-xs');
     });
 
     });

@@ -1,26 +1,15 @@
-<div class="headerbar">
-
-    <div class="header-left col-xs-1">
-        <a class="menutoggle"><i class="fa fa-bars"></i></a>
+<div class="pageheader row">
+    <div class="col-xs-9">
+       <h2><i class="fa fa-bullhorn"></i> Online</h2>
     </div>
-    <div class="header-center col-xs-10">
-        <h2><i class="fa fa-bullhorn"></i> Online</h2>
-       <a class="btn btn-success pull-right" type="button">
+    <div class="col-xs-3">
+        <a class="btn btn-success pull-right" type="button">
             <span class="fa fa-plus"></span>
             <span class="hidden-xs">Create</span>
         </a>
     </div>
-    <div class="header-right col-xs-1">
-        <ul class="headermenu">
-            <li>
-                <a class="menutoggle-right pull-right"><i class="fa fa-cog"></i></a>
-            </li>
-        </ul>
-    </div>
-    <!-- header-right -->
-
+    <div class="clear"></div>
 </div>
-<!-- headerbar -->
 
 <div class="alert alert-info fade in">
         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
@@ -45,7 +34,162 @@
     </div>
 
 <div class="contentpanel">
-    <div class="alert alert-danger">
-        Just a little longer! The UI Designer will get to this shortly.
+    <div class="panel panel-default row">
+        <div class="panel-body">
+            <div class="col-sm-6">
+                <input type="text" placeholder="Search Orders" class="form-control input-lg">
+            </div>
+            <div class="col-sm-6 form-horizontal">
+                <div class="form-group row">
+                    <select class=" form-control chosen-select input-lg">
+                        <option value="">Filter Orders</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!-- panel-body -->
+    </div>
+    <ul class="filemanager-options">
+                <li>
+                    <div class="ckbox ckbox-default">
+                        <input type="checkbox" id="selectall" value="1">
+                        <label for="selectall">Select All</label>
+                    </div>
+                </li>
+                <li>
+                    <a href="" class="itemopt disabled"><i class="fa fa-envelope-o"></i> Export</a>
+                </li>
+                <li>
+                    <a href="" class="itemopt disabled"><i class="fa fa-download"></i> Download</a>
+                </li>
+                <li>
+                    <a href="" class="itemopt disabled"><i class="fa fa-pencil"></i> Edit</a>
+                </li>
+                <li>
+                    <a href="" class="itemopt disabled"><i class="fa fa-trash-o"></i> Delete</a>
+                </li>
+    d</ul>
+    <div class="table-responsive">
+        <table class="table table-hover mb30">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Status</th>
+                    <th>Invoice</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr onclick="parent.location='view_order.html'">
+                    <td>
+                        <div class="ckbox ckbox-success">
+                            <input type="checkbox" id="checkbox1">
+                            <label for="checkbox1"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <img src="" width="50px" height="50px">
+                    </td>
+                    <td>122343</td>
+                    <td>Awesome T-Shirt</td>
+                    <td>Physical</td>
+                    <td>$5.69</td>
+                </tr>
+                <tr onclick="parent.location='view_order.html'">
+                    <td>
+                        <div class="ckbox ckbox-success">
+                            <input type="checkbox" id="checkbox1">
+                            <label for="checkbox1"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <img src="" width="50px" height="50px">
+                    </td>
+                    <td>245543</td>
+                    <td>Pilates</td>
+                    <td>Virtual</td>
+                    <td>Varies</td>
+                </tr>
+                <tr onclick="parent.location='view_order.html'">
+                    <td>
+                        <div class="ckbox ckbox-success">
+                            <input type="checkbox" id="checkbox1">
+                            <label for="checkbox1"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <img src="" width="50px" height="50px">
+                    </td>
+                    <td>355654</td>
+                    <td>Yoga E-Book</td>
+                    <td>Downloadable</td>
+                    <td>$9.95</td>
+                </tr>
+                <tr onclick="parent.location='view_order.html'">
+                    <td>
+                        <div class="ckbox ckbox-success">
+                            <input type="checkbox" id="checkbox1">
+                            <label for="checkbox1"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <img src="" width="50px" height="50px">
+                    </td>
+                    <td>355654</td>
+                    <td>Yoga E-Book</td>
+                    <td>Downloadable</td>
+                    <td>$9.95</td>
+                </tr>
+                <tr onclick="parent.location='view_order.html'">
+                    <td>
+                        <div class="ckbox ckbox-success">
+                            <input type="checkbox" id="checkbox1">
+                            <label for="checkbox1"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <img src="" width="50px" height="50px">
+                    </td>
+                    <td>355654</td>
+                    <td>Yoga E-Book</td>
+                    <td>Downloadable</td>
+                    <td>$9.95</td>
+                </tr>
+                <tr onclick="parent.location='view_order.html'">
+                    <td>
+                        <div class="ckbox ckbox-success">
+                            <input type="checkbox" id="checkbox1">
+                            <label for="checkbox1"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <img src="" width="50px" height="50px">
+                    </td>
+                    <td>355654</td>
+                    <td>Yoga E-Book</td>
+                    <td>Downloadable</td>
+                    <td>$9.95</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ul class="pagination pagination-lg mb5 pull-right">
+            <li class="disabled"><a href="#"><i class="fa fa-angle-left"></i></a>
+            </li>
+            <li><a href="#">1</a>
+            </li>
+            <li class="active"><a href="#">2</a>
+            </li>
+            <li><a href="#">3</a>
+            </li>
+            <li><a href="#">4</a>
+            </li>
+            <li><a href="#">5</a>
+            </li>
+            <li><a href="#"><i class="fa fa-angle-right"></i></a>
+            </li>
+        </ul>
     </div>
 </div>

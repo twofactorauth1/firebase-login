@@ -226,7 +226,7 @@ jQuery(document).ready(function() {
                 jQuery(this).addClass('menu-collapsed');
 
             } else {
-                body.removeClass('leftpanel-collapsed rightmenu-open');
+                body.removeClass('leftpanel-collapsed chat-view');
                 jQuery('.nav-bracket li.active ul').css({
                     display: 'block'
                 });
@@ -254,13 +254,13 @@ jQuery(document).ready(function() {
 
         if (bodypos != 'relative') {
 
-            if (!body.hasClass('rightmenu-open')) {
-                body.addClass('leftpanel-collapsed rightmenu-open');
+            if (!body.hasClass('chat-view')) {
+                body.addClass('leftpanel-collapsed chat-view');
                 jQuery('.nav-bracket ul').attr('style', '');
 
             } else {
 
-                body.removeClass('rightmenu-open');
+                body.removeClass('chat-view');
 
                 if (!jQuery('.menutoggle').hasClass('menu-collapsed')) {
                     jQuery('body').removeClass('leftpanel-collapsed');
@@ -294,7 +294,7 @@ jQuery(document).ready(function() {
 
         if (jQuery('body').css('position') == 'relative') {
 
-            jQuery('body').removeClass('leftpanel-collapsed rightmenu-open');
+            jQuery('body').removeClass('leftpanel-collapsed chat-view');
 
         } else {
 

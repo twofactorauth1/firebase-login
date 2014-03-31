@@ -40,23 +40,13 @@
 
     <div class="leftpanelinner">
 
-        <div >
+        <div>
             <div class="media userlogged">
                 <img alt="" src="../images/photos/loggeduser.png" class="media-object">
                 <div class="media-body">
                     <h4>Ron Burgandy</h4>
                 </div>
             </div>
-
-            <h5 class="sidebartitle actitle">Account</h5>
-            <ul class="nav nav-pills nav-stacked nav-bracket mb30">
-                <li><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
-                </li>
-                <li><a href=""><i class="fa fa-cog"></i> <span>Account Settings</span></a>
-                </li>
-                <li><a href="signout.html"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a>
-                </li>
-            </ul>
         </div>
 
         <h5 class="sidebartitle">Navigation</h5>
@@ -89,6 +79,16 @@
             </li>
         </ul>
 
+        <h5 class="sidebartitle actitle">Account</h5>
+            <ul class="nav nav-pills nav-stacked nav-bracket mb30">
+                <li class="profile-li"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
+                </li>
+                <li class="account-settings-li"><a href="account_settings.html"><i class="fa fa-cog"></i> <span>Account Settings</span></a>
+                </li>
+                <li><a href="signout.html"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a>
+                </li>
+            </ul>
+
     </div>
     <!-- leftpanelinner -->
 </div>
@@ -96,26 +96,27 @@
 
   <div class="mainpanel">
 
-
-
     <div class="headerbar">
 
-    <div class="header-left col-xs-1">
+    <div class="header-left">
         <a class="menutoggle"><i class="fa fa-bars"></i></a>
     </div>
-    <div class="header-center col-xs-10">
-        <a href="contacts.html" class="btn btn-success pull-left" type="button">
-            <span class="fa fa-chevron-left"></span>
-            <span class="hidden-xs">Back</span>
-        </a>
-        <h2 class="center"> Ron Burgandy</h2>
-       <a href="edit_contact.html" class="btn btn-success pull-right" type="button">
-            <span class="fa fa-edit"></span>
-            <span class="hidden-xs">Edit</span>
-        </a>
-    </div>
-    <div class="header-right col-xs-1">
+    <div class="header-right">
         <ul class="headermenu">
+            <li class="hidden">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <img src="../images/photos/loggeduser.png" alt="" />Ron Burgandy
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                        <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i> My Profile</a>
+                        </li>
+                        <li><a href="signin.html"><i class="glyphicon glyphicon-log-out"></i> Log Out</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
             <li>
                 <a class="menutoggle-right pull-right"><i class="fa fa-cog"></i></a>
             </li>
@@ -125,6 +126,23 @@
 
 </div>
 <!-- headerbar -->
+
+    <div class="pageheader row">
+    <div class="col-xs-9">
+        <a href="contacts.html" class="btn btn-success pull-left" type="button">
+            <span class="fa fa-chevron-left"></span>
+            <span class="hidden-xs">Back</span>
+        </a>
+        <h2 class="center"> Ron Burgandy</h2>
+    </div>
+    <div class="col-xs-3">
+        <a href="edit_contact.html" class="btn btn-success pull-right" type="button">
+            <span class="fa fa-edit"></span>
+            <span class="hidden-xs">Edit</span>
+        </a>
+    </div>
+    <div class="clear"></div>
+</div>
 
 <div class="alert alert-info fade in">
         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
@@ -167,12 +185,14 @@
         <!-- panel-body -->
     </div>
 </div>
-<div class="row visible-xs">
+<div class="visible-xs">
     <div class="btn-group col-xs-12">
       <button type="button" class="btn btn-info col-xs-6 profile-btn active">Profile</button>
       <button type="button" class="btn btn-info col-xs-6 activity-btn">Activity</button>
     </div>
 </div>
+
+<div class="clearfix"></div>
 
 
 <div class="contentpanel">

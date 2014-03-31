@@ -6,6 +6,8 @@
 
   <div class="mainpanel">
 
+  <!-- @import "partials/headerbar.html" -->
+
     <!-- @import "pages/dashboard.html" -->
 
 
@@ -36,6 +38,20 @@
                          '</li>');
         }
         return false;
+    });
+
+    jQuery('.stats-tasks-btn').on('click', function() {
+          $('.activity-btn').removeClass('active');
+          $('.stats-tasks-btn').addClass('active');
+          $('.activity-section').addClass('hidden-xs');
+          $('.stats-tasks-section').removeClass('hidden-xs');
+        });
+
+    jQuery('.activity-btn').on('click', function() {
+      $('.stats-tasks-btn').removeClass('active');
+      $('.activity-btn').addClass('active');
+      $('.stats-tasks-section').addClass('hidden-xs');
+      $('.activity-section').removeClass('hidden-xs');
     });
 
     });
