@@ -96,7 +96,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.info("Google Contacts import succeeded");
                 }
             });
-            resp.send("processing");
+            resp.send({data:"Processing Import"});
         } else {
             self.wrapError(resp, 403, "Unauthorized action", "Unauthorized action. Contacts may only be imported at the Account level");
         }

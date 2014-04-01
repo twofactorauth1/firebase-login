@@ -104,11 +104,14 @@ CONTACTS MAIN VIEW
 
                                 <div class="clear"></div>
                                 <ul class="social-list hidden-xs">
-                                    {{#getBestEmail this}}
                                     <li>
+                                        {{#getBestEmail this}}
                                         <a href="mailto:{{$email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
+                                        {{else}}
+                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Email Address"><i class="fa fa-envelope-o"></i></a>
+                                        {{/getBestEmail}}
                                     </li>
-                                    {{/getBestEmail}}
+
 
                                     <li>
                                         {{#getFacebookId this}}
@@ -134,13 +137,11 @@ CONTACTS MAIN VIEW
                                         {{/getLinkedInId}}
                                     </li>
 
+                                    {{#getAddress this}}
                                     <li>
-                                        {{#getAddress this}}
                                         <a href="https://www.google.com/maps?q={{$this.address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-                                        {{else}}
-                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Location Available" target="_blank"><i class="fa fa-map-marker"></i></a>
-                                        {{/getAddress}}
                                     </li>
+                                    {{/getAddress}}
 
                                 </ul>
                             </div>

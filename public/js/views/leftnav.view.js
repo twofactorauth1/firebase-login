@@ -12,6 +12,16 @@ define([
         },
 
 
+        initialize: function() {
+            // Add class everytime a mouse pointer hover over it
+            $('.nav-bracket > li').hover(function() {
+                $(this).addClass('nav-hover');
+            }, function() {
+                $(this).removeClass('nav-hover');
+            });
+        },
+
+
         toggleLeftNavMenu: function(event) {
             var parent = $(event.currentTarget).parent();
             var sub = parent.find('> ul', event.currentTarget);

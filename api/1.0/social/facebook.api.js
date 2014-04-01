@@ -78,7 +78,7 @@ _.extend(api.prototype, baseApi.prototype, {
             facebookDao.importFriendsAsContactsForUser(accountId, req.user, function(err, value) {
                 console.log("Facebook import succeeded");
             });
-            resp.send("processing");
+            resp.send({data:"Processing Import"});
             self = null;
         } else {
             self.wrapError(resp, 500, "Unauthorized action", "Unauthorized action. Contacts may only be imported at the Account level");

@@ -26,30 +26,18 @@
                 .media-body
                     h4 #{user.first} #{user.last}
 
-            h5.sidebartitle.actitle Account
-            ul.nav.nav-pills.nav-stacked.nav-bracket.mb30
-                li(data-toggle="pill"): a(href="/profile")
-                    i.fa.fa-user
-                    span Profile
-                li(data-toggle="pill"): a(href="/account")
-                    i.fa.fa-cog
-                    span Account Settings
-                li(data-toggle="pill"): a(href="/logout")
-                    i.fa.fa-sign-out
-                    span Sign Out
-
         h5.sidebartitle Navigation
         ul.nav.nav-pills.nav-stacked.nav-bracket
             li(data-toggle="pill").dashboard-li: a(href="/dashboard")
-                i.fa.fa-tachometer
+                i.fa.fa-home
                 span Dashboard
             li(data-toggle="pill").contacts-li: a(href="/contacts")
                 i.fa.fa-users
                 span Customers
-            li(data-toggle="pill").activity-li: a(href="/activity")
-                i.fa.fa-calendar
-                span Activity
-            li(data-toggle="pill").marketing-li
+            li(data-toggle="pill").website-li: a(href="/website")
+                i.fa.fa-desktop
+                span Website
+            li(data-toggle="pill").marketing-li.nav-parent
                 a(href="/marketing/campaigns")
                     i.fa.fa-bullhorn
                     span Marketing
@@ -66,9 +54,6 @@
                     li: a(href="/marketing/print")
                         i.fa.fa-caret-right
                         |Print
-            li(data-toggle="pill").website-li: a(href="/website")
-                i.fa.fa-desktop
-                span Website
             li(data-toggle="pill").store-li.nav-parent
                 a(href="#")
                     i.fa.fa-shopping-cart
@@ -82,9 +67,19 @@
                         a(href='#')
                             i.fa.fa-caret-right
                             |Promotions
-            li(data-toggle="pill").settings-li: a(href="#")
-                i.fa.fa-wrench
-                span Settings
             li(data-toggle="pill").support-li: a(href="#")
                 i.fa.fa-question
                 span Support
+
+        div
+            h5.sidebartitle.actitle Account
+            ul.nav.nav-pills.nav-stacked.nav-bracket.mb30
+                li(data-toggle="pill"): a(href="/profile")
+                    i.fa.fa-user
+                    span Profile
+                li(data-toggle="pill"): a(href="/account")
+                    i.fa.fa-cog
+                    span Account Settings
+                li(data-toggle="pill"): a(href="/logout")
+                    i.fa.fa-sign-out
+                    span Sign Out
