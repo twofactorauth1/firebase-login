@@ -1,8 +1,22 @@
-var https = require('https');
+var request = require('request');
 _ = require('underscore');
 
 var twoNetBase = function() {
     this.init.apply(this, arguments);
+}
+
+var processHttpResponse = function(error, response, body, httpClientCallback) {
+    console.log("==> Response status code: " + response.statusCode);
+    if (error) {
+        httpClientCallback(error, null);
+    } else {
+        console.log("==> Response: " + JSON.stringify(body));
+        if (response.statusCode != 200) {
+            return httpClientCallback(new Error(JSON.stringify(body)), null);
+        }
+
+        return httpClientCallback(null, body);
+    };
 }
 
 _.extend(twoNetBase.prototype, {
@@ -13,56 +27,50 @@ _.extend(twoNetBase.prototype, {
 
     SECRET: "OMItCcxnrlI0db67HhPKkIM70ZhHZcJe",
 
-    BASE_HOST: "twonetcom.qualcomm.com",
-
-    BASE_PATH: "/kernel",
-
-    HTTP_METHOD: { GET: "GET", POST: "POST", DELETE: "DELETE"},
+    BASE_PATH: "https://twonetcom.qualcomm.com/kernel",
 
     init: function(options) {
         options = options || {};
     },
 
-    twonetOptions: function (httpMethod, endpoint) {
-        return {
-            hostname: this.BASE_HOST,
-            port: 443,
-            path: this.BASE_PATH + endpoint,
-            method: httpMethod,
-            headers: {
-                "Authorization": "Basic " + new Buffer(this.KEY + ":" + this.SECRET).toString('base64'),
-                "Accept": "application/json",
-                "Content-type": "application/json"
-            }
+    twonetOptions: function (endpoint, json) {
+        var options = {};
+
+        options.url = this.BASE_PATH + endpoint;
+        options.headers = {
+                'Authorization': "Basic " + new Buffer(this.KEY + ":" + this.SECRET).toString('base64'),
+                'Accept': "application/json",
+                'Content-type': "application/json"
         };
-    },
 
-    httpRequest: function(method, url, body, callback) {
+        console.log("\n" + options.url);
 
-        var options = this.twonetOptions(method, url);
-        this.logUrl(options);
-
-        var req = https.request(options, function(res) {
-            console.log("==> Response status code: " + res.statusCode);
-
-            res.on('data', function(data) {
-                var response = JSON.parse(data);
-                console.log("==> Response: " + JSON.stringify(response));
-                if (res.statusCode != 200) {
-                    return callback(new Error(JSON.stringify(response)), null);
-                }
-
-                return callback(null, response);
-            });
-        });
-
-        if (body) {
-            var bodyStr = JSON.stringify(body);
-            console.log("==> Request: " + bodyStr);
-            req.write(bodyStr);
+        if (json) {
+            console.log("==> Request Body: " + JSON.stringify(json));
+            options.json = json;
+        } else {
+            options.json = {};
         }
 
-        req.end();
+        return options;
+    },
+
+    httpGet: function(url, httpClientCallback) {
+        request.get(this.twonetOptions(url, null), function(error, response, body) {
+            processHttpResponse(error, response, body, httpClientCallback);
+        });
+    },
+
+    httpPost: function(url, body, httpClientCallback) {
+        request.post(this.twonetOptions(url, body), function(error, response, body) {
+            processHttpResponse(error, response, body, httpClientCallback);
+        });
+    },
+
+    httpDelete: function(url, httpClientCallback) {
+        request.del(this.twonetOptions(url, null), function(error, response, body) {
+            processHttpResponse(error, response, body, httpClientCallback);
+        });
     },
 
     convertToArray: function(obj) {
@@ -78,10 +86,6 @@ _.extend(twoNetBase.prototype, {
 
         objArray.push(obj);
         return objArray;
-    },
-
-    logUrl: function(options) {
-        console.log('\n' + options.method + ' https://' + options.hostname + options.path);
     }
 });
 

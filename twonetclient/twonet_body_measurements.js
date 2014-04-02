@@ -1,5 +1,3 @@
-var https = require('https');
-var util = require('util');
 var TwoNetBase = require('./twonet_base');
 
 var BodyMeasurements = function() {
@@ -43,7 +41,7 @@ _.extend(BodyMeasurements.prototype, TwoNetBase.prototype, {
         };
 
         var that = this;
-        this.httpRequest(this.HTTP_METHOD.POST, this.GET_LATEST_MEAS_ENDPOINT, body, function(err, response) {
+        this.httpPost(this.GET_LATEST_MEAS_ENDPOINT, body, function(err, response) {
             if (err) {
                 callback(err, null);
             } else {
@@ -107,7 +105,7 @@ _.extend(BodyMeasurements.prototype, TwoNetBase.prototype, {
         };
 
         var that = this;
-        this.httpRequest(this.HTTP_METHOD.POST, this.GET_MEAS_RANGE_ENDPOINT, body, function(err, response) {
+        this.httpPost(this.GET_MEAS_RANGE_ENDPOINT, body, function(err, response) {
             if (err) {
                 callback(err, null);
             } else {

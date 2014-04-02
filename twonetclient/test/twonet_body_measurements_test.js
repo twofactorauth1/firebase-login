@@ -12,7 +12,7 @@ exports.twonet_body = {
     /**
      * We need a user and a scale assigned
      */
-    setUp: function(callback) {
+    register: function(test) {
         /*
          *
          */
@@ -25,8 +25,7 @@ exports.twonet_body = {
 
                     scale_guid = response.guid;
                     if (typeof scale_guid == 'string' && scale_guid) {
-                        // run the test
-                        callback();
+                        test.done();
                     } else {
                         throw new Error("Unable to register device");
                     }
@@ -42,8 +41,11 @@ exports.twonet_body = {
                 test.ok(false, err);
             } else {
                 test.ok(reading);
-                test.ok(typeof reading.body.weight == 'number' && reading.body.weight);
-                test.ok(typeof reading.time == 'number' && reading.time);
+                // they suddenly changed everything to string
+                //test.equals(typeof reading.body.weight, 'number');
+                //test.equals(typeof reading.time, 'number');
+                test.ok(reading.body.weight);
+                test.ok(reading.time);
                 console.log("weight: " + reading.body.weight + " on " + new Date(reading.time * 1000));
                 test.done();
             }
@@ -78,14 +80,14 @@ exports.twonet_body = {
     /**
      * Unregister the user
      */
-    tearDown: function(callback) {
+    unregister: function(test) {
         /*
          * Unregister
          */
         twonetClient.userRegistration.unregister(user_guid, function(err, response) {
             if (err) throw err;
 
-            callback();
+            test.done();
         });
     }
 };

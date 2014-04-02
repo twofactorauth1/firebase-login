@@ -1,4 +1,3 @@
-var https = require('https');
 var util = require('util');
 var TwoNetBase = require('./twonet_base');
 
@@ -30,7 +29,7 @@ _.extend(UserRegistration.prototype, TwoNetBase.prototype, {
         var body = {registerRequest:{guid:user_guid}};
 
         var that = this;
-        this.httpRequest(this.HTTP_METHOD.POST, this.USER_REGISTER_ENDPOINT, body, function(err, response) {
+        this.httpPost(this.USER_REGISTER_ENDPOINT, body, function(err, response) {
             if (err) {
                 callback(err, null);
             } else {
@@ -59,18 +58,17 @@ _.extend(UserRegistration.prototype, TwoNetBase.prototype, {
     unregister: function(user_guid, callback) {
 
         var that = this;
-        this.httpRequest(this.HTTP_METHOD.DELETE, util.format(this.USER_UNREGISTER_ENDPOINT, user_guid), null,
-            function(err, response) {
-                if (err) {
-                    callback(err, null);
+        this.httpDelete(util.format(this.USER_UNREGISTER_ENDPOINT, user_guid), function(err, response) {
+            if (err) {
+                callback(err, null);
+            } else {
+                if (response.statusResponse.status.message != that.RESPONSE_STATUS.OK) {
+                    callback(new Error("Unexpected status message"), response);
                 } else {
-                    if (response.statusResponse.status.message != that.RESPONSE_STATUS.OK) {
-                        callback(new Error("Unexpected status message"), response);
-                    } else {
-                        callback(null, user_guid);
-                    }
+                    callback(null, user_guid);
                 }
-            });
+            }
+        });
     }
 });
 

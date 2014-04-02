@@ -1,4 +1,3 @@
-var https = require('https');
 var util = require('util');
 var TwoNetBase = require('./twonet_base');
 
@@ -59,18 +58,17 @@ _.extend(DeviceRegistration.prototype, TwoNetBase.prototype, {
     getUserDevices: function(user_guid, callback) {
 
         var that = this;
-        this.httpRequest(this.HTTP_METHOD.GET, util.format(this.GET_USER_DEVICES_ENDPOINT, user_guid), null,
-            function(err, response) {
-                if (err) {
-                    callback(err, null);
+        this.httpGet(util.format(this.GET_USER_DEVICES_ENDPOINT, user_guid), function(err, response) {
+            if (err) {
+                callback(err, null);
+            } else {
+                if (response.trackDetailsResponse.status.message != that.RESPONSE_STATUS.OK) {
+                    callback(new Error("Unexpected status message"), response);
                 } else {
-                    if (response.trackDetailsResponse.status.message != that.RESPONSE_STATUS.OK) {
-                        callback(new Error("Unexpected status message"), response);
-                    } else {
-                        callback(null, that.convertToArray(response.trackDetailsResponse.trackDetails.trackDetail));
-                    }
+                    callback(null, that.convertToArray(response.trackDetailsResponse.trackDetails.trackDetail));
                 }
-            });
+            }
+        });
     },
 
     /******************************************************************************************************************
@@ -141,7 +139,7 @@ _.extend(DeviceRegistration.prototype, TwoNetBase.prototype, {
         };
 
         var that = this;
-        this.httpRequest(this.HTTP_METHOD.POST, this.REGISTER_DEVICE_ENDPOINT, body, function(err, response) {
+        this.httpPost(this.REGISTER_DEVICE_ENDPOINT, body, function(err, response) {
             if (err) {
                 callback(err, null);
             } else {
@@ -171,14 +169,13 @@ _.extend(DeviceRegistration.prototype, TwoNetBase.prototype, {
      */
     getRegisterableDevices: function(user_guid, callback) {
 
-        this.httpRequest(this.HTTP_METHOD.GET, util.format(this.GET_USER_REGISTRABLE_DEVICES_ENDPOINT, user_guid), null,
-            function(err, response) {
-                if (err) {
-                    callback(err, null);
-                } else {
-                    callback(null, response.trackRegistrationTemplateResponse.trackRegistrationTemplates.trackRegistrationTemplate);
-                }
-            });
+        this.httpGet(util.format(this.GET_USER_REGISTRABLE_DEVICES_ENDPOINT, user_guid), function(err, response) {
+            if (err) {
+                callback(err, null);
+            } else {
+                callback(null, response.trackRegistrationTemplateResponse.trackRegistrationTemplates.trackRegistrationTemplate);
+            }
+        });
     }
 });
 
