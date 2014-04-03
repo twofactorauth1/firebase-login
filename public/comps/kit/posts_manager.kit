@@ -1,0 +1,56 @@
+<!-- @import "partials/header.html" -->
+
+<body>
+
+<section>
+
+  <!-- @import "partials/leftpanel.html" -->
+
+  <div class="mainpanel">
+
+    <!-- @import "partials/headerbar.html" -->
+
+
+    <!-- @import "pages/posts_manager.html" -->
+
+
+  </div><!-- mainpanel -->
+
+
+</section>
+
+<!-- @import "partials/footer.html" -->
+
+<script>
+
+  jQuery(document).ready(function(){
+    jQuery('.leftpanel .nav li.content-li').addClass('active nav-active').find('.children').show();
+    jQuery('.leftpanel .nav li.content-li').find('.children li:nth-child(2)').addClass('active');
+
+    $('.menutoggle').on('click', function(){
+      msnry.layout();
+    });
+
+    var container = document.querySelector('#bloglist');
+    var msnry = new Masonry( container, {
+      // options
+      columnWidth: '.col-xs-6',
+      itemSelector: '.col-xs-6'
+    });
+
+    // check on load
+    if(jQuery(window).width() <= 480 )
+        msnry.destroy();
+
+    // check on resize
+    jQuery(window).resize(function(){
+        if(jQuery(this).width() <= 480 )
+            msnry.destroy();
+
+        if(jQuery(this).width() >= 640 )
+            msnry.layout();
+    });
+
+  });
+
+</script>

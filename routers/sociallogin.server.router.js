@@ -37,6 +37,8 @@ _.extend(router.prototype, baseRouter.prototype, {
         app.get("/login/:socialtype", this.setup, this.socialLogin.bind(this));
         app.get("/signup/:socialtype", this.setup, this.socialSignup.bind(this));
 
+        app.get("/inapplogin/:socialtype", this.isAuth, this.inAppSocialLogin.bind(this));
+
         app.get("/oauth2/callback", this.socialLoginCallback.bind(this));
         app.get("/oauth2/postlogin", this.redirectAfterOauth.bind(this));
 
@@ -63,7 +65,18 @@ _.extend(router.prototype, baseRouter.prototype, {
     socialLogin: function(req, resp, next) {
         var state = this.getState(this.accountId(req), "login", req.params.socialtype);
         resp.redirect(this.getInternalAuthRedirect(state));
+    },
 
+
+    inAppSocialLogin: function(req, resp) {
+        var appState = req.query.state;
+        var state = this.getState(this.accountId(req), "in_app", req.params.socialtype);
+        state.userId = req.user.id();
+        state.appState = req.query.state;
+        state.appStateDetail = req.query.detail;
+        var referringUrl = req.headers['referer'];
+        state.redirectUrl = encodeURIComponent(referringUrl);
+        resp.redirect(this.getInternalAuthRedirect(state));
     },
 
 
@@ -84,8 +97,6 @@ _.extend(router.prototype, baseRouter.prototype, {
 
 
     socialLoginCallback: function (req, resp, next) {
-        //var state = req.query.state;
-        //req.session.state = state;
         this._socialLogin(req, resp, req.session.state, next);
     },
 
@@ -123,7 +134,7 @@ _.extend(router.prototype, baseRouter.prototype, {
         }
 
         options.accessType = "offline";
-        options.approvalPrompt = "force"; //-- this causes you to have to reauthorize every time, instead of just logging in
+        //options.approvalPrompt = "force"; //-- this causes you to have to reauthorize every time, instead of just logging in
 
         passport.authenticate(type, options)(req,resp,next);
     },
@@ -132,6 +143,28 @@ _.extend(router.prototype, baseRouter.prototype, {
     redirectAfterOauth: function(req, resp, next) {
         var state = req.session.state;
         var user = req.user;
+
+        var authMode = state.authMode;
+
+        if (state.redirectUrl != null) {
+            var redirectUrl = state.redirectUrl;
+            redirectUrl = decodeURIComponent(redirectUrl);
+
+            if (authMode == "in_app") {
+                if (redirectUrl.indexOf("?") == -1) {
+                    redirectUrl += "?";
+                }
+
+                if (state.appState != null) {
+                    redirectUrl += "&state=" + state.appState;
+                }
+                if (state.appStateDetail != null) {
+                    redirectUrl += "&detail=" + state.appStateDetail;
+                }
+            }
+
+            return resp.redirect(redirectUrl);
+        }
 
         var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
         if (redirectUrl != null) {

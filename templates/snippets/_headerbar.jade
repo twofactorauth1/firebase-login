@@ -4,34 +4,19 @@
     * All use or reproduction of any or all of this content must be approved.
     * Please contact christopher.mina@gmail.com for approval or questions.
 
-.headerbar
-    a.menutoggle: i.fa.fa-bars
+#headerbar.headerbar
+    .header-left
+        a.menutoggle.pull-left
+            i.fa.fa-bars
 
-    form.searchform(action="index.html" method="post")
-        input.form-control(type="text" name="keyword" placeholder="Search here...")
+    .header-center
+        //
+            h2
+                i.fa.fa-users
+                span(id="header-title" style="padding-left:8px;") Support
 
     .header-right
-        ul.headermenu
-            li.hidden-xs
-                .btn-group
-                    button.btn.btn-default.dropdown-toggle(type="button" data-toggle="dropdown")
-                        if photo
-                            img(alt="" src="#{photo.url}" style="max-height:40px; max-width:60px;")
-                            |#{user.username}
-                        else
-                            |#{user.username}
-                        span.caret
+        #header-actions
 
-                    ul.dropdown-menu.dropdown-menu-usermenu.pull-right
-                        li
-                            a(href="/profile")
-                                i.glyphicon.glyphicon-user
-                                | My Profile
-                        li
-                            a(href="/logout")
-                                i.glyphicon.glyphicon-log-out
-                                | Log Out
-
-            li
-                a.menutoggle-right
-                    i.fa.fa-bars
+        a.menutoggle-right
+            i.fa.fa-cog

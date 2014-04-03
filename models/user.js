@@ -5,7 +5,7 @@
  * Please contact christopher.mina@gmail.com for approval or questions.
  */
 
-require('./model.base');
+require('./base.model.js');
 var crypto = require('../utils/security/crypto');
 var constants = requirejs("constants/constants");
 
@@ -640,7 +640,7 @@ var user = $$.m.ModelBase.extend({
 
 
     verifyPasswordForAccount: function (accountId, password, type, fn) {
-        var credentials = this._getUserAccountCredentials(accountId, type);
+        var credentials = this.getUserAccountCredentials(accountId, type);
         return this._verifyPasswordForCredentials(credentials, password, fn);
     },
 
@@ -834,7 +834,7 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-    _getUserAccountCredentials: function (accountId, type) {
+    getUserAccountCredentials: function (accountId, type) {
         var userAccount = this.getUserAccount(accountId);
         if (userAccount != null) {
             var credentials = userAccount.credentials;
@@ -1049,7 +1049,8 @@ var user = $$.m.ModelBase.extend({
     db: {
         storage: "mongo",
         table: "users",
-        idStrategy: "increment"
+        idStrategy: "increment",
+        cache: true
     }
 });
 

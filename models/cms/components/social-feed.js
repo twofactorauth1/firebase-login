@@ -10,7 +10,7 @@
  *
  * Stores data that represents a connection to a social feed
  */
-require('../../model.base');
+require('../../base.model.js');
 
 var component = $$.m.ModelBase.extend({
 

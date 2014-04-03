@@ -1,0 +1,38 @@
+//-
+    COPYRIGHT CMConsulting LLC 2014
+
+    All use or reproduction of any or all of this content must be approved.
+    Please contact christopher.mina@gmail.com for approval or questions.
+
+
+doctype html
+//if lt IE 7
+    html(class="no-js ie6 oldie", lang="en")
+//if IE 7
+    html(class="no-js ie7 oldie", lang="en")
+//if IE 8
+    html(class="no-js ie8 oldie", lang="en")
+// [if gt IE 8] <!
+html(class="no-js", lang="en")
+    // <![endif]
+    head
+        meta(charset="utf-8")
+        title
+            if success
+                | Authentication Successful
+            else
+                | Authentication Failed
+
+    body(style="max-width:380px; padding:30px 20px 50px; margin: 0 auto; background: #fcfcfc;")
+        .container(style="max-width:380px; margin: 0 auto;")
+            h1(style="margin:0 10px; font-size:50px; text-align:center")
+                if success
+                    | Authentication successful!
+                else
+                    | Authentication failed!
+
+            p(style="margin: 1em 0;")
+                if success
+                    | have successfully authentication this external site. Please close this window to complete your action.
+                else
+                    | Authentication with this external site has failed. Please close this window and attempt to reauthorize.

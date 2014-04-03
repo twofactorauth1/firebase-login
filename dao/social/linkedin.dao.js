@@ -33,13 +33,31 @@ var dao = {
         if (creds != null) {
             if (creds.expires != null && creds.expires < new Date().getTime()) {
                 //We are already expired!
-                return fn($$.u.errors._401_INVALID_CREDENTIALS, "Invalid Credentials");
+                fn($$.u.errors._401_INVALID_CREDENTIALS, "Invalid Credentials");
+                self = fn = user = null;
             }
             else {
-                this.getProfile(creds.socialId, creds.accessToken, "email-address", fn)
+                this.getProfile(creds.socialId, creds.accessToken, "email-address", function(err, value) {
+                    if (err) {
+                        fn(err, value);
+                        self = fn = user = null;
+                        return;
+                    }
+
+                    if (value.status != null && value.status == 401) {
+                        fn($$.u.errors._401_INVALID_CREDENTIALS, "Invalid Credentials");
+                    } else {
+                        fn (err, value);
+                    }
+
+                    self = fn = user = null;
+                    return;
+                });
             }
         } else {
-            return fn($$.u.errors._401_INVALID_CREDENTIALS, "No LinkedIn credentials found");
+            fn($$.u.errors._401_INVALID_CREDENTIALS, "No LinkedIn credentials found");
+            self = fn = user = null;
+            retun;
         }
     },
 

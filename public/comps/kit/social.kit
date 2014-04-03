@@ -1,0 +1,31 @@
+<!-- @import "partials/header.html" -->
+
+<body>
+
+<section>
+
+  <!-- @import "partials/leftpanel.html" -->
+
+  <div class="mainpanel">
+
+  	<!-- @import "partials/headerbar.html" -->
+
+    <!-- @import "pages/social.html" -->
+
+
+  </div><!-- mainpanel -->
+
+  <!-- @import "partials/rightpanel.html" -->
+
+</section>
+
+<!-- @import "partials/footer.html" -->
+
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+
+    	jQuery('.leftpanel .nav li.marketing-li').addClass('active').children().show();
+    	jQuery('.leftpanel .nav li.social-li').addClass('active');
+
+    });
+</script>

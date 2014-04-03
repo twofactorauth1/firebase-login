@@ -138,6 +138,7 @@ _.extend(JSCache.prototype, {
 
 
     remove: function(key, region) {
+        console.log("REMOVING FROM CACHE: " + key);
         var cache = this.getRegion(region);
         delete cache[key];
     },

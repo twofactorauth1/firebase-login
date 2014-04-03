@@ -11,7 +11,7 @@
  * Stores data that represents information required
  * to dispaly Contact Us information
  */
-require('../../model.base');
+require('../../base.model.js');
 
 var component = $$.m.ModelBase.extend({
 

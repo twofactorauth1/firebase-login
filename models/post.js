@@ -5,7 +5,7 @@
  * Please contact christopher.mina@gmail.com for approval or questions.
  */
 
-require('./model.base');
+require('./base.model.js');
 
 var post = $$.m.ModelBase.extend({
 

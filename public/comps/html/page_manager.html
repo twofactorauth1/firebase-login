@@ -69,33 +69,28 @@
             <li class="contacts-li">
                 <a href="contacts.html"><i class="fa fa-users"></i> <span> Customers</span></a>
             </li>
-            <li class="activity-li">
-                <a href="#"><i class="fa fa-calendar"></i> <span> Activity</span></a>
+            <li class="website-li">
+                <a href="edit_website.html"><i class="fa fa-desktop"></i> <span> Website</span></a>
             </li>
             <li class="marketing-li nav-parent">
                 <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
                 <ul class="children">
-                    <li><a href="campaigns.html"><i class="fa fa-caret-right"></i> Campaigns</a></li>
-                    <li><a href="#"><i class="fa fa-caret-right"></i> Social</a></li>
-                    <li><a href="#"><i class="fa fa-caret-right"></i> Online</a></li>
-                    <li><a href="#"><i class="fa fa-caret-right"></i> Print</a></li>
+                    <li><a class="campaigns" href="campaigns.html"><i class="fa fa-caret-right"></i> Campaigns</a></li>
+                    <li><a class="social.html" href="social.html"><i class="fa fa-caret-right"></i> Social</a></li>
+                    <li><a class="online.html" href="online.html"><i class="fa fa-caret-right"></i> Online</a></li>
+                    <li><a class="print.html" href="print.html"><i class="fa fa-caret-right"></i> Print</a></li>
                 </ul>
             </li>
-            <li class="website-li">
-                <a href="edit_website.html"><i class="fa fa-desktop"></i> <span> Website</span></a>
-            </li>
-            <li class="store-li nav-parent">
-                <a href="#"><i class="fa fa-shopping-cart"></i> <span> Commerce</span></a>
+            <li class="commerce-li nav-parent">
+                <a href="products.html"><i class="fa fa-shopping-cart"></i> <span> Commerce</span></a>
                 <ul class="children">
-                    <li><a href="#"><i class="fa fa-caret-right"></i> Products</a></li>
-                    <li><a href="#"><i class="fa fa-caret-right"></i> Promotions</a></li>
+                    <li class="products-li"><a href="products.html"><i class="fa fa-caret-right"></i> Products</a></li>
+                    <li class="orders-li"><a href="orders.html"><i class="fa fa-caret-right"></i> Orders</a></li>
+                    <li class="promotions-li"><a href="promotions.html"><i class="fa fa-caret-right"></i> Promotions</a></li>
                 </ul>
-            </li>
-            <li class="settings-li">
-                <a href="#"><i class="fa fa-wrench"></i> <span> Settings</span></a>
             </li>
             <li class="support-li">
-                <a href="#"><i class="fa fa-umbrella"></i> <span> Support</span></a>
+                <a href="support.html"><i class="fa fa-umbrella"></i> <span> Support</span></a>
             </li>
         </ul>
 
@@ -108,12 +103,12 @@
 
     <div class="headerbar">
 
-    <a class="menutoggle"><i class="fa fa-bars"></i></a>
-
-    <form class="searchform" action="index.html" method="post">
-        <input type="text" class="form-control" name="keyword" placeholder="Search here..." />
-    </form>
-
+    <div class="header-left">
+        <a class="menutoggle"><i class="fa fa-bars"></i></a>
+        <div class="searchform">
+            <input type="text" class="form-control" name="keyword" placeholder="Search ..." />
+        </div>
+    </div>
     <div class="header-right">
         <ul class="headermenu">
             <li class="hidden-xs">
@@ -123,13 +118,15 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                        <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i> My Profile</a></li>
-                        <li><a href="signin.html"><i class="glyphicon glyphicon-log-out"></i> Log Out</a></li>
+                        <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i> My Profile</a>
+                        </li>
+                        <li><a href="signin.html"><i class="glyphicon glyphicon-log-out"></i> Log Out</a>
+                        </li>
                     </ul>
                 </div>
             </li>
             <li>
-                <a class="menutoggle-right"><i class="fa fa-bars"></i></a>
+                <a class="menutoggle-right pull-right"><i class="fa fa-cog"></i></a>
             </li>
         </ul>
     </div>
@@ -321,6 +318,7 @@
 <script src="../js/jquery.nestable.js"></script>
 <script src="../js/masonry.pkgd.min.js"></script>
 <script src="../js/jquery.hoverIntent.minified.js"></script>
+<script src="../js/jquery.gritter.min.js"></script>
 
 <script src="../js/custom.js"></script>
 

@@ -1,0 +1,114 @@
+.btn-compose-email {
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+.nav-email {
+    & > li {
+        & > a {
+            color: #444;
+            & > .badge {
+                margin-top: 2px;
+            }
+            & > i {
+                width: 16px;
+                text-align: center;
+                margin-right: 10px;
+            }
+        }
+        & > a:hover {
+            background-color: #d8dcdf;
+        }
+    }
+}
+.table-email {
+    .box-shadow(none);
+    border-bottom: 1px solid #eee;
+    margin: 0;
+    background-color: #f7f7f7;
+    tr.unread {
+        td {
+            background-color: #fff;
+        }
+    }
+    tbody {
+        & > tr {
+            & > td {
+                vertical-align: middle;
+            }
+        }
+    }
+    tr:hover {
+        background-color: #eee;
+        cursor: pointer;
+    }
+    tr.selected {
+        td {
+            background-color: #eee;
+        }
+    }
+    .ckbox {
+        width: 18px;
+        height: 19px;
+        input[type="checkbox"]:checked {
+                label:after {
+                    top: 2px;
+                }
+        }
+    }
+    .star {
+        color: #ccc;
+    }
+    .star-checked {
+        color: #F0AD4E;
+    }
+    td:first-child {
+        width: 30px;
+    }
+    td:nth-child(2) {
+        width: 30px;
+    }
+    .media {
+        margin: 0;
+        padding: 0;
+        h4 {
+            margin: 0;
+            font-size: 14px;
+            line-height: normal;
+            font-family:'LatoBold', sans-serif;
+        }
+    }
+    .media-object {
+        width: 35px;
+    }
+    .media-meta {
+        font-size: 11px;
+        color: #999;
+    }
+    .email-summary {
+        margin: 2px 0 0 0;
+        strong {
+            color: #333;
+        }
+    }
+}
+.read-panel {
+    margin-top: 10px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    .media-object {
+        width: 35px;
+    }
+    .media {
+        h4 {
+            margin: 2px 0 0 0;
+            font-size: 14px;
+            line-height: normal;
+        }
+    }
+    .media-meta {
+        font-size: 12px;
+    }
+}
+.email-subject {
+    color: #333;
+}

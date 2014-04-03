@@ -26,15 +26,21 @@ define([
                 "contacts/edit/:contactId": "editContact"
             },
 
+            _onCall: function() {
+                $$.v.leftNav.updateActiveNav("contacts");
+            },
+
 
             showContacts: function (letter) {
+                this._onCall();
                 var view = new ContactView();
                 view.currentLetter = letter;
                 $$.viewManager.replaceMain(view);
             },
 
 
-            viewContactDetails: function(letter, contactId) {
+            viewContactDetails: function (letter, contactId) {
+                this._onCall();
                 if (contactId == null) {
                     contactId = letter;
                 }
@@ -46,7 +52,8 @@ define([
             },
 
 
-            editContact: function(letter, contactId) {
+            editContact: function (letter, contactId) {
+                this._onCall();
                 if (contactId == null) {
                     contactId = letter;
                 }
@@ -71,33 +78,33 @@ define([
             },
 
 
-            navigateToContactDetails: function(contactId, letter) {
+            navigateToContactDetails: function (contactId, letter) {
                 if (letter != null) {
-                    $$.r.mainAppRouter.navigate("contacts/" + letter + "/view/" + contactId, {trigger:true});
+                    $$.r.mainAppRouter.navigate("contacts/" + letter + "/view/" + contactId, {trigger: true});
                 } else {
-                    $$.r.mainAppRouter.navigate("contacts/view/" + contactId, {trigger:true});
+                    $$.r.mainAppRouter.navigate("contacts/view/" + contactId, {trigger: true});
                 }
             },
 
 
-            navigateToEditContact: function(contactId, letter, trigger) {
+            navigateToEditContact: function (contactId, letter, trigger) {
                 if (trigger == null) {
                     trigger = true;
                 }
                 if (letter != null) {
-                    $$.r.mainAppRouter.navigate("contacts/" + letter + "/edit/" + contactId, {trigger:trigger});
+                    $$.r.mainAppRouter.navigate("contacts/" + letter + "/edit/" + contactId, {trigger: trigger});
                 } else {
-                    $$.r.mainAppRouter.navigate("contacts/edit/" + contactId, {trigger:trigger});
+                    $$.r.mainAppRouter.navigate("contacts/edit/" + contactId, {trigger: trigger});
                 }
             },
 
 
-            navigateToCreateContact: function(letter) {
+            navigateToCreateContact: function (letter) {
                 if (letter != null) {
                     $$.r.mainAppRouter
-                    $$.r.mainAppRouter.navigate("contacts/" + letter + "/edit/new", {trigger:true});
+                    $$.r.mainAppRouter.navigate("contacts/" + letter + "/edit/new", {trigger: true});
                 } else {
-                    $$.r.mainAppRouter.navigate("contacts/" + "edit/new", {trigger:true});
+                    $$.r.mainAppRouter.navigate("contacts/" + "edit/new", {trigger: true});
                 }
             }
         });

@@ -106,12 +106,14 @@ var dao = {
         var host = req.get("host");
         accountDao.getAccountByHost(host, function (err, value) {
             if (err) {
-                return fn(err, "An error occurred validating account");
+                fn(err, "An error occurred validating account");
+                fn = req = null; return;
             }
 
             var account = value;
             if (account !== true && (account == null || account.id() == null || account.id() == 0)) {
-                return fn("Account not found", "No account found at this location");
+                fn("Account not found", "No account found at this location");
+                fn = req = null;
             }
 
             //We are at the main indigenous level application, not at a custom subdomain
@@ -120,18 +122,22 @@ var dao = {
                 //Lets look up the user by socialId
                 userDao.getUserBySocialId(socialType, socialId, function (err, value) {
                     if (err) {
-                        return fn(err, "An error occurred attempting to retrieve user by social profile");
+                        fn(err, "An error occurred attempting to retrieve user by social profile");
+                        fn = req = null;
+                        return;
                     }
 
                     if (value == null) {
                         //look up by email
                         userDao.getUserByUsername(email, function (err, value) {
                             if (err) {
-                                return fn(err, "An error occurred retrieving user by username");
+                                fn(err, "An error occurred retrieving user by username");
+                                fn = req = null; return;
                             }
 
                             if (value == null) {
-                                return fn("User not found for social profile", "User not found");
+                                fn("User not found for social profile", "User not found");
+                                fn = req = null; return;
                             } else {
                                 value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                                 return self.saveOrUpdate(value, function(err, value) {
@@ -139,51 +145,91 @@ var dao = {
                                         userDao.refreshFromSocialProfile(value, socialType, function(err, value) {
                                             //regardless of error, always return success
                                             fn(null, value);
+                                            fn = req = null;
                                         });
                                     } else {
                                         fn(err, value);
+                                        fn = req = null;
                                     }
                                 });
                             }
                         });
                     } else {
                         value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
-                        return self.saveOrUpdate(value, fn);
+                        self.saveOrUpdate(value, fn);
+                        fn = req = null;
                     }
                 });
             } else {
                 req.session.accountId = account.id();
                 userDao.getUserForAccountBySocialProfile(account.id(), socialType, socialId, function (err, value) {
                     if (err) {
-                        return fn(err, "An error occurred retrieving user for account by social profile");
+                        fn(err, "An error occurred retrieving user for account by social profile");
+                        fn = req = null; return;
                     }
 
                     if (value == null) {
                         //Look for user by email
                         userDao.getUserForAccount(account.id(), email, function (err, value) {
                             if (err) {
-                                return fn(err, "An error occurred retrieving user for account");
+                                fn(err, "An error occurred retrieving user for account");
+                                fn = req = null; return;
                             }
 
                             if (value == null) {
-                                return fn("User not found for account and social profile", "User not found");
+                                fn("User not found for account and social profile", "User not found");
+                                fn = req = null; return;
                             }
 
                             value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
-                            return self.saveOrUpdate(value, function(err, value) {
+                            self.saveOrUpdate(value, function(err, value) {
                                 if (!err) {
                                     userDao.refreshFromSocialProfile(value, socialType, function(err, value) {
                                         //regardless of error, always return success here.
                                         fn(null, value);
+                                        fn = req = null;
                                     });
                                 } else {
                                     fn(err, value);
+                                    fn = req = null;
                                 }
                             });
                         });
                     } else {
                         value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
-                        return self.saveOrUpdate(value, fn);
+                        self.saveOrUpdate(value, fn);
+                        fn = req = null;
+                    }
+                });
+            }
+        });
+    },
+
+
+    linkSocialAccountToUser: function(userId, socialType, socialId, email, username, socialUrl, accessToken, refreshToken, expires, scope, fn) {
+        var self = this;
+        userDao.getById(userId, function(err, value) {
+            if (err) {
+                fn(err, "An error occurred retrieving user by Id");
+                fn = null;
+                return;
+            }
+
+            if (value == null) {
+                fn("User not found with by id", "User not found");
+                fn = null;
+            } else {
+                value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
+                self.saveOrUpdate(value, function(err, value) {
+                    if (!err) {
+                        userDao.refreshFromSocialProfile(value, socialType, function(err, value) {
+                            //regardless of error, always return success
+                            fn(null, value);
+                            fn = null;
+                        });
+                    } else {
+                        fn(err, value);
+                        fn = null;
                     }
                 });
             }
@@ -303,10 +349,28 @@ var dao = {
                 var user = value;
                 user.clearPasswordRecoverToken();
 
+                var localCredentials;
                 if (accountId > 0) {
                     user.createOrUpdateUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL, null, password);
+
+                    //Modify the main credentials if usernames are the same
+                    localCredentials = user.getCredentials($$.constants.user.credential_types.LOCAL);
+                    var socialCredentials = user.getUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL);
+                    if (localCredentials != null && socialCredentials != null && localCredentials.username == socialCredentials.username) {
+                        user.createOrUpdateLocalCredentials(password);
+                    }
                 } else {
                     user.createOrUpdateLocalCredentials(password);
+
+                    //See if we need to update social credentials as well
+                    localCredentials = user.getCredentials($$.constants.user.credential_types.LOCAL);
+                    var accountIds = user.getAllAccountIds();
+                    accountIds.forEach(function(acctId) {
+                        var _userAcctCreds = user.getUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL);
+                        if (_userAcctCreds != null && localCredentials != null && _userAcctCreds.username == localCredentials.username) {
+                            user.createOrUpdateUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL, null, password);
+                        }
+                    });
                 }
 
                 userDao.saveOrUpdate(user, function (err, value) {

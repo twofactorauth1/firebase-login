@@ -74,7 +74,7 @@ _.extend(api.prototype, baseApi.prototype, {
             linkedInDao.importConnectionsAsContactsForUser(accountId, req.user, function(err, value) {
                 console.log("LinkedIn import succeeded");
             });
-            resp.send("processing");
+            resp.send({data:"Processing Import"});
         } else {
             self.wrapError(resp, 500, "Unauthorized action", "Unauthorized action. Contacts may only be imported at the Account level");
         }

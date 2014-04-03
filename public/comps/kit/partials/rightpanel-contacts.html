@@ -1,0 +1,110 @@
+<div class="rightpanel">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active"><a href="#rp-settings" data-toggle="tab">Contact Settings</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+
+    <div class="tab-content">
+        <div class="tab-pane pane-settings active" id="rp-settings">
+
+            <div class="form-group">
+                <button class="btn btn-warning btn-block" data-toggle="modal" data-target="#importContactsModal"><i class="fa fa-cloud-upload"></i> Import Contacts</button>
+            </div>
+
+            <div class="form-group">
+                <a href="#" class="btn btn-success btn-block"><i class="fa fa-cloud-download"></i> Export Contacts</a>
+            </div>
+
+            <div class="form-group">
+                <a href="fix_duplicates.html" class="btn btn-primary btn-block"><i class="fa fa-files-o"></i> Fix Duplicates</a>
+            </div>
+
+            <h5 class="sidebartitle mb20">Display Settings</h5>
+            <div class="form-group row">
+                <label class="col-xs-12 control-label">Contacts List Display</label>
+                <div class="col-xs-12">
+                    <select class=" form-control chosen-select" data-placeholder="Sort Contacts">
+                        <option value=""></option>
+                        <option value="United States">First Last</option>
+                        <option value="United Kingdom">Last, First</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-xs-12 control-label">Contacts List Ordering</label>
+                <div class="col-xs-12">
+                    <select class=" form-control chosen-select" data-placeholder="Sort Contacts">
+                        <option value=""></option>
+                        <option value="United States">First Last</option>
+                        <option value="United Kingdom">Last, First</option>
+                        <option value="United Kingdom">Date Added</option>
+                        <option value="United Kingdom">Last Activity</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-12 control-label">Show / Hide Attributes</label>
+                <div class="col-xs-12 ckbox ckbox-success">
+                    <input type="checkbox" id="contact-cat" checked="checked">
+                    <label for="contact-cat">Category</label>
+                </div>
+                <div class="col-xs-12 ckbox ckbox-success">
+                    <input type="checkbox" id="last-active" checked="checked">
+                    <label for="last-active">Last Active</label>
+                </div>
+                <div class="col-xs-12 ckbox ckbox-success">
+                    <input type="checkbox" id="purchased" checked="checked">
+                    <label for="purchased">Purchased</label>
+                </div>
+                <div class="col-xs-12 ckbox ckbox-success">
+                    <input type="checkbox" id="emails-opened" checked="checked">
+                    <label for="emails-opened">Emails Opened</label>
+                </div>
+                <div class="col-xs-12 ckbox ckbox-success">
+                    <input type="checkbox" id="calls-made" checked="checked">
+                    <label for="calls-made">Calls Made</label>
+                </div>
+                <div class="col-xs-12 ckbox ckbox-success">
+                    <input type="checkbox" id="customer-since" checked="checked">
+                    <label for="customer-since">Customer Since</label>
+                </div>
+            </div>
+
+        </div>
+        <!-- tab-pane -->
+
+
+    </div>
+    <!-- tab-content -->
+</div>
+<!-- rightpanel -->
+
+<!-- Modal -->
+<div class="modal fade" id="importContactsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-cloud-upload"></i> Import Contacts</h4>
+            </div>
+            <div class="modal-body">
+                <p class="mb20">Import you contacts from other accounts</p>
+                <ul id="contacts-import">
+                    <li><img src="../images/fb-icon.png"> Facebook</li>
+                    <li><img src="../images/excel-icon.png"> Excel</li>
+                    <li><img src="../images/gmail-icon.png"> Gmail</li>
+                    <li><img src="../images/outlook-icon.png"> Outlook</li>
+                    <li><img src="../images/yahoo-icon.png"> Yahoo</li>
+                </ul>
+            </div>
+        </div>
+        <!-- modal-content -->
+    </div>
+    <!-- modal-dialog -->
+</div>
+<!-- modal -->

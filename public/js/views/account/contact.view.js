@@ -11,9 +11,10 @@ define([
     'models/contact',
     'collections/contacts',
     'services/authentication.service',
+    'services/contact.service',
     'libs/jquery/jquery.batchedimageloader'
 
-], function(User, Account, Contact, Contacts, AuthenticationService) {
+], function(User, Account, Contact, Contacts, AuthenticationService, ContactService) {
 
     var view = Backbone.View.extend({
 
@@ -28,7 +29,33 @@ define([
             "click .btn-letter":"showLetter",
             "click .btn-view-contact-details":"viewContactDetails",
             "click .btn-create-contact":"createContact",
-            "click .important-star":"toggleStarred"
+            "click .important-star":"toggleStarred",
+
+            "click .btn-import-facebook":"importFacebookFriends",
+            "click .btn-import-gmail":"importGmailContacts",
+            "click .btn-import-linkedin":"importLinkedInConnections"
+        },
+
+
+        initialize: function() {
+            var state = $$.u.querystringutils.getQueryStringValue("state");
+            var detail = $$.u.querystringutils.getQueryStringValue("detail");
+
+            if (state == "import") {
+                switch(detail) {
+                    case $$.constants.social.types.GOOGLE:
+                        this.importGmailContacts();
+                        break;
+                    case $$.constants.social.types.FACEBOOK:
+                        this.importFacebookFriends();
+                        break;
+                    case $$.constants.social.types.LINKEDIN:
+                        this.importLinkedInConnections();
+                        break;
+                    case $$.constants.social.types.TWITTER:
+                        break;
+                }
+            }
         },
 
 
@@ -148,6 +175,42 @@ define([
         createContact: function() {
             $$.r.account.ContactRouter.navigateToCreateContact(this.currentLetter);
         },
+
+
+        //region IMPORT
+        importFacebookFriends: function(event) {
+            this._importContacts($$.constants.social.types.FACEBOOK);
+        },
+
+
+        importGmailContacts: function(event) {
+            this._importContacts($$.constants.social.types.GOOGLE);
+        },
+
+
+        importLinkedInConnections: function(event) {
+            this._importContacts($$.constants.social.types.LINKEDIN);
+        },
+
+
+        _importContacts: function(socialType) {
+            var self = this;
+            AuthenticationService.checkSocialAccess(socialType)
+                .done(function(result) {
+                    if (result == true) {
+                        ContactService.importContacts(socialType)
+                            .done(function() {
+                                alert("Contacts are importing!")
+                            })
+                            .fail(function(resp) {
+                                alert("There was an error importing contacts");
+                            });
+                    } else {
+                        AuthenticationService.authenticateSocial(socialType, "import", socialType);
+                    }
+                });
+        },
+        //endregion
 
 
         getUser: function() {

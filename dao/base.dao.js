@@ -39,12 +39,28 @@ _.extend(baseDao.prototype, mongoBaseDao, {
             }
         }
 
+        var useCache = this.useCache(model);
+        var key;
+        if (useCache) {
+            key = this.getTable(model) + "_" + model.id();
+            $$.g.cache.remove(key);
+        }
+
         if (this.getStorage(model) === "mongo") {
-            this._saveOrUpdateMongo(model, fn);
+            this._saveOrUpdateMongo(model, function(err, value) {
+                if (useCache && !err && value != null) {
+                    $$.g.cache.set(key, value);
+                }
+
+                fn(err, value);
+                fn = model = null;
+            });
         } else {
             if (fn != null) {
                 fn("No storage medium available for this model");
             }
+
+            fn = model = null;
         }
     },
 
@@ -52,6 +68,11 @@ _.extend(baseDao.prototype, mongoBaseDao, {
     remove: function (model, fn) {
         if (model.id() === null || model.id() === 0 || model.id() == "") {
             return fn(null, null);
+        }
+
+        if (this.useCache(model)) {
+            var key = this.getTable(model) + "_" + model.id();
+            $$.g.cache.remove(key);
         }
 
         if (this.getStorage(model) === "mongo") {
@@ -65,6 +86,11 @@ _.extend(baseDao.prototype, mongoBaseDao, {
 
 
     removeById: function (id, type, fn) {
+        if (this.useCache(type)) {
+            var key = this.getTable(type) + "_" + id;
+            $$.g.cache.remove(key);
+        }
+
         if (this.getStorage(type) === "mongo") {
             this._removeByIdMongo(id, type, fn);
         } else {
@@ -74,10 +100,54 @@ _.extend(baseDao.prototype, mongoBaseDao, {
 
 
     getById: function (id, type, fn) {
-        if (this.getStorage(type) === "mongo") {
-            this._getByIdMongo(id, type, fn);
+        if (_.isFunction(type) && fn == null) {
+            fn = type;
+            type = null;
+        }
+        var self = this;
+
+        var useCache = this.useCache(type);
+        if (useCache) {
+            var key = this.getTable(type) + "_" + id;
+            $$.g.cache.get(key, null, null, null, function(err, value) {
+                if (!err && value != null) {
+                    console.log("FOUND IN CACHE: " + key);
+                    fn(null, value);
+                    fn = type = id = null;
+                    return;
+                }
+
+                self._getById(id, type, useCache, fn);
+                fn = type = id = null;
+            });
+        } else {
+            this._getById(id, type, false, fn);
+            fn = type = id = null;
+        }
+    },
+
+
+    _getById: function(id, type, useCache, fn) {
+        var self = this;
+        if (self.getStorage(type) === "mongo") {
+            self._getByIdMongo(id, type, function(err, value) {
+                if (err) {
+                    fn(err, value);
+                    fn = type = id = null;
+                    return;
+                }
+
+                if (useCache && value != null) {
+                    var key = self.getTable(type) + "_" + id;
+                    $$.g.cache.set(key, value);
+                }
+
+                fn(null, value);
+                fn = type = id = null;
+            });
         } else {
             fn("No storage medium available for this model");
+            fn = type = id = null;
         }
     },
 
@@ -164,6 +234,18 @@ _.extend(baseDao.prototype, mongoBaseDao, {
             }
         }
         return this.defaultModel.db.idStrategy || "incrememnt";
+    },
+
+
+    useCache: function (type) {
+        if (type != null && type.hasOwnProperty != null) {
+            if (type.hasOwnProperty("db")) {
+                return type.db.cache || false;
+            } else if(type.constructor.db != null) {
+                return type.constructor.db.cache || false;
+            }
+        }
+        return this.defaultModel.db.cache || false;
     },
 
 

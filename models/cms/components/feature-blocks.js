@@ -13,7 +13,7 @@
  * then a label and possibly a short description below.  These 3 or 4
  * features would be laid out horizontally and well-spaced.
  */
-require('../../model.base');
+require('../../base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
