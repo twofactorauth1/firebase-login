@@ -128,12 +128,12 @@
             <span class="fa fa-chevron-left"></span>
             <span class="hidden-xs">Back</span>
         </a>
-        <h2 class="center"> Order #6410</h2>
+        <h2 class="center"> Edit Order #6410</h2>
     </div>
     <div class="col-xs-3">
-        <a href="edit_order.html" class="btn btn-success pull-right" type="button">
-            <span class="fa fa-edit"></span>
-            <span class="hidden-xs">Edit</span>
+        <a href="#" class="btn btn-success pull-right" type="button">
+            <span class="fa fa-save"></span>
+            <span class="hidden-xs">Save</span>
         </a>
     </div>
     <div class="clear"></div>
@@ -156,15 +156,15 @@
                 </select>
                 <div class="mb20"></div>
                 <label>Completed on</label>
-                <h4>24 MARCH 2014</h4>
+                <input type="text" class="form-control mb15 input-lg" value="24 MARCH 2014"/>
 
                  <div class="mb20"></div>
                 <label>Shipping To</label>
-                <h4>1234 Sushine Road </br> San Diego, CA 92101</h4>
+                <input type="text" class="form-control mb15 input-lg" value="1234 Sushine Road San Diego, CA 92101"/>
 
                 <div class="mb20"></div>
                 <label>Billing To</label>
-                <h4>1234 Sushine Road </br> San Diego, CA 92101</h4>
+                <input type="text" class="form-control mb15 input-lg" value="1234 Sushine Road San Diego, CA 92101"/>
         </div>
     </div>
 
@@ -173,7 +173,7 @@
               <h3 class="panel-title">Order Items</h3>
             </div>
         <div class="panel-body">
-            <table class="table table-hover mb30">
+            <table class="table table-hover table-hidaction mb30">
             <thead>
                 <tr>
                     <th>Image</th>
@@ -181,6 +181,7 @@
                     <th>Variation</th>
                     <th>Qty</th>
                     <th>Total</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -190,6 +191,10 @@
                     <td>Variation #4</td>
                     <td>1</td>
                     <td>$45.78</td>
+                    <td class="table-action-hide">
+                      <a href="" style="opacity: 0;"><i class="fa fa-pencil"></i></a>
+                      <a href="" class="delete-row" style="opacity: 0;"><i class="fa fa-trash-o"></i></a>
+                    </td>
                 </tr>
                 <tr>
                     <td><img src="../images/bus-card-1"></td>
@@ -197,6 +202,10 @@
                     <td>Variation #4</td>
                     <td>1</td>
                     <td>$45.78</td>
+                    <td class="table-action-hide">
+                      <a href="" style="opacity: 0;"><i class="fa fa-pencil"></i></a>
+                      <a href="" class="delete-row" style="opacity: 0;"><i class="fa fa-trash-o"></i></a>
+                    </td>
                 </tr>
                 <tr>
                     <td><img src="../images/bus-card-1"></td>
@@ -204,6 +213,10 @@
                     <td>Variation #4</td>
                     <td>1</td>
                     <td>$45.78</td>
+                    <td class="table-action-hide">
+                      <a href="" style="opacity: 0;"><i class="fa fa-pencil"></i></a>
+                      <a href="" class="delete-row" style="opacity: 0;"><i class="fa fa-trash-o"></i></a>
+                    </td>
                 </tr>
                 <tr>
                     <td><img src="../images/bus-card-1"></td>
@@ -211,6 +224,10 @@
                     <td>Variation #4</td>
                     <td>1</td>
                     <td>$45.78</td>
+                    <td class="table-action-hide">
+                      <a href="" style="opacity: 0;"><i class="fa fa-pencil"></i></a>
+                      <a href="" class="delete-row" style="opacity: 0;"><i class="fa fa-trash-o"></i></a>
+                    </td>
                 </tr>
                 <tr>
                     <td><img src="../images/bus-card-1"></td>
@@ -218,33 +235,88 @@
                     <td>Variation #4</td>
                     <td>1</td>
                     <td>$45.78</td>
+                    <td class="table-action-hide">
+                      <a href="" style="opacity: 0;"><i class="fa fa-pencil"></i></a>
+                      <a href="" class="delete-row" style="opacity: 0;"><i class="fa fa-trash-o"></i></a>
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
-                     <td></td>
-                      <td></td>
-                       <td>SubTotal</td>
-                        <td>$167.54</td>
+                    <td></td>
+                    <td></td>
+                    <td>SubTotal</td>
+                    <td>$167.54</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td></td>
-                     <td></td>
-                      <td></td>
-                       <td>Tax</td>
-                        <td>$17.54</td>
+                    <td></td>
+                    <td></td>
+                    <td>Tax</td>
+                    <td>$17.54</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td></td>
-                     <td></td>
-                      <td></td>
-                       <td>Total</td>
-                        <td>$187.54</td>
+                    <td></td>
+                    <td></td>
+                    <td>Total</td>
+                    <td>$187.54</td>
+                    <td></td>
                 </tr>
             </tbody>
             </table>
         </div>
     </div>
 </div>
+
+
+
+
+
+<table class="table table-hidaction table-hover mb30">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td class="table-action-hide">
+                  <a href="" style="opacity: 0;"><i class="fa fa-pencil"></i></a>
+                  <a href="" class="delete-row" style="opacity: 0;"><i class="fa fa-trash-o"></i></a>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+                <td class="table-action-hide">
+                  <a href="" style="opacity: 0;"><i class="fa fa-pencil"></i></a>
+                  <a href="" class="delete-row" style="opacity: 0;"><i class="fa fa-trash-o"></i></a>
+                </td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+                <td class="table-action-hide">
+                  <a href="" style="opacity: 0;"><i class="fa fa-pencil"></i></a>
+                  <a href="" class="delete-row" style="opacity: 0;"><i class="fa fa-trash-o"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
 
   </div><!-- mainpanel -->
@@ -279,6 +351,13 @@
 
     	jQuery('.leftpanel .nav li.commerce-li').addClass('active').children().show();
     	jQuery('.leftpanel .nav li.orders-li').addClass('active');
+
+    	// Show aciton upon row hover
+    jQuery('.table-hidaction tbody tr').hover(function(){
+      jQuery(this).find('.table-action-hide a').animate({opacity: 1});
+    },function(){
+      jQuery(this).find('.table-action-hide a').animate({opacity: 0});
+    });
 
     });
 </script>

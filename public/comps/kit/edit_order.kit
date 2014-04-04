@@ -1,0 +1,37 @@
+<!-- @import "partials/header.html" -->
+
+<body>
+
+<section>
+
+  <!-- @import "partials/leftpanel.html" -->
+
+  <div class="mainpanel">
+
+  	<!-- @import "partials/headerbar.html" -->
+
+
+    <!-- @import "pages/edit_order.html" -->
+
+
+  </div><!-- mainpanel -->
+
+</section>
+
+<!-- @import "partials/footer.html" -->
+
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+
+    	jQuery('.leftpanel .nav li.commerce-li').addClass('active').children().show();
+    	jQuery('.leftpanel .nav li.orders-li').addClass('active');
+
+    	// Show aciton upon row hover
+    jQuery('.table-hidaction tbody tr').hover(function(){
+      jQuery(this).find('.table-action-hide a').animate({opacity: 1});
+    },function(){
+      jQuery(this).find('.table-action-hide a').animate({opacity: 0});
+    });
+
+    });
+</script>

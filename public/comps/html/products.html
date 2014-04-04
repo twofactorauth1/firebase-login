@@ -41,7 +41,7 @@
     <div class="leftpanelinner">
 
         <div>
-            <div class="media userlogged">
+            <div class="media userlogged hidden">
                 <img alt="" src="../images/photos/loggeduser.png" class="media-object">
                 <div class="media-body">
                     <h4>Ron Burgandy</h4>
@@ -49,14 +49,16 @@
             </div>
         </div>
 
-        <h5 class="sidebartitle">Navigation</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket">
-            <li class="dash-li"><a href="index.html"><i class="fa fa-home"></i> <span> Dashboard</span></a></li>
+            <li class="dash-li"><a href="index.html"><i class="fa fa-home"></i> <span> Overview</span></a></li>
             <li class="contacts-li">
                 <a href="contacts.html"><i class="fa fa-users"></i> <span> Customers</span></a>
             </li>
             <li class="website-li">
                 <a href="edit_website.html"><i class="fa fa-desktop"></i> <span> Website</span></a>
+            </li>
+            <li class="commerce-li">
+                <a href="products.html"><i class="fa fa-shopping-cart"></i> <span> Commerce</span></a>
             </li>
             <li class="marketing-li nav-parent">
                 <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
@@ -64,24 +66,16 @@
                     <li><a class="campaigns" href="campaigns.html"><i class="fa fa-caret-right"></i> Campaigns</a></li>
                     <li><a class="social.html" href="social.html"><i class="fa fa-caret-right"></i> Social</a></li>
                     <li><a class="online.html" href="online.html"><i class="fa fa-caret-right"></i> Online</a></li>
-                    <li><a class="print.html" href="print.html"><i class="fa fa-caret-right"></i> Print</a></li>
+                    <li class="hidden"><a class="print.html" href="print.html"><i class="fa fa-caret-right"></i> Print</a></li>
                 </ul>
             </li>
-            <li class="commerce-li nav-parent">
-                <a href="products.html"><i class="fa fa-shopping-cart"></i> <span> Commerce</span></a>
-                <ul class="children">
-                    <li class="products-li"><a href="products.html"><i class="fa fa-caret-right"></i> Products</a></li>
-                    <li class="orders-li"><a href="orders.html"><i class="fa fa-caret-right"></i> Orders</a></li>
-                </ul>
-            </li>
-            <li class="support-li">
+            <li class="support-li hidden">
                 <a href="support.html"><i class="fa fa-umbrella"></i> <span> Support</span></a>
             </li>
         </ul>
 
-        <h5 class="sidebartitle actitle">Account</h5>
             <ul class="nav nav-pills nav-stacked nav-bracket mb30">
-                <li class="profile-li"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
+                <li class="profile-li hidden"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
                 </li>
                 <li class="account-settings-li"><a href="account_settings.html"><i class="fa fa-cog"></i> <span>Account Settings</span></a>
                 </li>
@@ -118,7 +112,7 @@
                 </div>
             </li>
             <li>
-                <a class="menutoggle-right pull-right"><i class="fa fa-cog"></i></a>
+                <a class="menutoggle-right pull-right"><i class="fa fa-bars"></i></a>
             </li>
         </ul>
     </div>
@@ -129,7 +123,7 @@
 
     <div class="pageheader row">
     <div class="col-xs-9">
-        <h2><i class="fa fa-shopping"></i> Products</h2>
+        <h2><i class="fa fa-shopping-cart"></i> Commerce</h2>
     </div>
     <div class="col-xs-3">
         <a class="btn btn-success pull-right" type="button">
