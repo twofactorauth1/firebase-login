@@ -13,6 +13,8 @@
 
   </div><!-- mainpanel -->
 
+  <!-- @import "partials/rightpanel-dashboard.html" -->
+
 </section>
 
 <!-- @import "partials/footer.html" -->
@@ -24,7 +26,7 @@
 
       //Add New To-Do
     jQuery('#addnewtodo').click(function(){
-        
+
         var todo = jQuery(this).closest('.panel').find('.todo-list');
         if(todo.find('.todo-form').length == 0) {
             todo.prepend('<li class="todo-form">'+

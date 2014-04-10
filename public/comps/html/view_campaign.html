@@ -41,49 +41,37 @@
     <div class="leftpanelinner">
 
         <div>
-            <div class="media userlogged">
+            <div class="media userlogged hidden">
                 <img alt="" src="../images/photos/loggeduser.png" class="media-object">
                 <div class="media-body">
-                    <h4>Ron Burgandy</h4>
+                    <h4>Robin Burgandy</h4>
                 </div>
             </div>
         </div>
 
-        <h5 class="sidebartitle">Navigation</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket">
-            <li class="dash-li"><a href="index.html"><i class="fa fa-home"></i> <span> Dashboard</span></a></li>
+            <li class="dash-li"><a href="index.html"><i class="fa fa-home"></i> <span> Overview</span></a></li>
             <li class="contacts-li">
                 <a href="contacts.html"><i class="fa fa-users"></i> <span> Customers</span></a>
             </li>
             <li class="website-li">
                 <a href="edit_website.html"><i class="fa fa-desktop"></i> <span> Website</span></a>
             </li>
-            <li class="marketing-li nav-parent">
-                <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
-                <ul class="children">
-                    <li><a class="campaigns" href="campaigns.html"><i class="fa fa-caret-right"></i> Campaigns</a></li>
-                    <li><a class="social.html" href="social.html"><i class="fa fa-caret-right"></i> Social</a></li>
-                    <li><a class="online.html" href="online.html"><i class="fa fa-caret-right"></i> Online</a></li>
-                    <li><a class="print.html" href="print.html"><i class="fa fa-caret-right"></i> Print</a></li>
-                </ul>
-            </li>
-            <li class="commerce-li nav-parent">
+            <li class="commerce-li">
                 <a href="products.html"><i class="fa fa-shopping-cart"></i> <span> Commerce</span></a>
-                <ul class="children">
-                    <li class="products-li"><a href="products.html"><i class="fa fa-caret-right"></i> Products</a></li>
-                    <li class="orders-li"><a href="orders.html"><i class="fa fa-caret-right"></i> Orders</a></li>
-                </ul>
             </li>
-            <li class="support-li">
+            <li class="marketing-li">
+                <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
+            </li>
+            <li class="support-li hidden">
                 <a href="support.html"><i class="fa fa-umbrella"></i> <span> Support</span></a>
             </li>
         </ul>
 
-        <h5 class="sidebartitle actitle">Account</h5>
             <ul class="nav nav-pills nav-stacked nav-bracket mb30">
-                <li class="profile-li"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
+                <li class="profile-li hidden"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
                 </li>
-                <li class="account-settings-li"><a href="account_settings.html"><i class="fa fa-cog"></i> <span>Account Settings</span></a>
+                <li class="account-settings-li"><a href="account_settings.html"><i class="fa fa-cog"></i> <span>Account</span></a>
                 </li>
                 <li><a href="signout.html"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a>
                 </li>
@@ -106,7 +94,7 @@
             <li class="hidden">
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <img src="../images/photos/loggeduser.png" alt="" />Ron Burgandy
+                        <img src="../images/photos/loggeduser.png" alt="" />Robin Burgandy
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
@@ -118,7 +106,7 @@
                 </div>
             </li>
             <li>
-                <a class="menutoggle-right pull-right"><i class="fa fa-cog"></i></a>
+                <a class="menutoggle-right pull-right"><i class="fa fa-bars"></i></a>
             </li>
         </ul>
     </div>
@@ -133,7 +121,7 @@
             <span class="fa fa-chevron-left"></span>
             <span class="hidden-xs">Back</span>
         </a>
-        <h2>Campaign #1</h2>
+        <h2><i class="fa fa-bullhorn"></i> Campaign #1</h2>
     </div>
     <div class="col-xs-3">
     </div>
@@ -141,7 +129,215 @@
 </div>
 
 <div class="contentpanel">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h3>Human Readable Format</h3>
+            <p class="lead">If a user
+                <strong>signs up</strong> and
+                <strong>doesn't purchase a product</strong> and has
+                <strong>previously visited more then 2 times</strong> then
+                <strong>send an email after 7 days</strong>
+            </p>
+        </div>
+    </div>
 
+    <div class="col-sm-6 profile-section">
+        <div class="profile">
+            <div class="col-xs-12">
+                <div class="col-xs-12">
+                    <!-- Key Performance Indicators -->
+                    <div class="customer-status">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-4">
+                                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="The campaign is currently activs">
+                                    <a href="#">
+                                        <div class="circle-tile-heading dark-blue">
+                                            <i class="fa fa-check fa-fw fa-2x"></i>
+                                        </div>
+                                    </a>
+                                    <div class="circle-tile-content">
+                                        <div class="circle-tile-description">
+                                            Status
+                                        </div>
+                                        <div class="circle-tile-number">
+                                            <p>Active</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-4">
+                                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="The type of campaign is social.">
+                                    <a href="#">
+                                        <div class="circle-tile-heading green">
+                                            <i class="fa fa-facebook fa-fw fa-2x"></i>
+                                        </div>
+                                    </a>
+                                    <div class="circle-tile-content">
+                                        <div class="circle-tile-description">
+                                            Type
+                                        </div>
+                                        <div class="circle-tile-number">
+                                            <p>Facebook</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="visible-xs col-xs-12 mb30"></div>
+
+                            <div class="col-xs-6 col-sm-4">
+                                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="There have been 120 customer who opened your email.">
+                                    <a href="#">
+                                        <div class="circle-tile-heading orange">
+                                            <i class="fa fa-envelope fa-fw fa-2x"></i>
+                                        </div>
+                                    </a>
+                                    <div class="circle-tile-content">
+                                        <div class="circle-tile-description">
+                                            Emails Opened
+                                        </div>
+                                        <div class="circle-tile-number">
+                                            <p>120</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-4">
+                                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You have revceived 10 calls from this campaign">
+                                    <a href="#">
+                                        <div class="circle-tile-heading blue">
+                                            <i class="fa fa-phone fa-fw fa-2x"></i>
+                                        </div>
+                                    </a>
+                                    <div class="circle-tile-content">
+                                        <div class="circle-tile-description">
+                                            Calls Recieved
+                                        </div>
+                                        <div class="circle-tile-number">
+                                            <p>10</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="visible-xs col-xs-12 mb30"></div>
+
+                            <div class="col-xs-6 col-sm-4">
+                                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="The campaign started on Jan 14th">
+                                    <a href="#">
+                                        <div class="circle-tile-heading red">
+                                            <i class="fa fa-calendar fa-fw fa-2x"></i>
+                                        </div>
+                                    </a>
+                                    <div class="circle-tile-content">
+                                        <div class="circle-tile-description">
+                                            Started
+                                        </div>
+                                        <div class="circle-tile-number">
+                                            <p>JAN 14</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-4">
+                                <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="This campaign will end on June 20th">
+                                    <a href="#">
+                                        <div class="circle-tile-heading green">
+                                            <i class="fa fa-calendar fa-fw fa-2x"></i>
+                                        </div>
+                                    </a>
+                                    <div class="circle-tile-content">
+                                        <div class="circle-tile-description">
+                                            Ends
+                                        </div>
+                                        <div class="circle-tile-number">
+                                            <p>Jun 20</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="visible-xs col-xs-12 mb30"></div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="clearfix mb20"></div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <h4>Customers in Campaign</h4>
+        <ul class="customers-sm">
+            <li>
+                <a href="view_contact.html" class="col-xs-3">
+                    <img alt="" src="../images/photos/user-1.jpg" class="thumbnail img-circle media-object" width="100px">
+                </a>
+                <h4 class="col-xs-9">Henry Holmes
+                <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>">
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf text-muted"></i>
+                        <i class="fa fa-leaf text-muted"></i>
+                    </span></h4>
+            </li>
+            <li>
+                <a href="view_contact.html" class="col-xs-3">
+                    <img alt="" src="../images/photos/user-2.jpg" class="thumbnail img-circle media-object" width="100px">
+                </a>
+                <h4 class="col-xs-9">Henry Holmes
+                <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>">
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf text-muted"></i>
+                        <i class="fa fa-leaf text-muted"></i>
+                    </span></h4>
+            </li>
+            <li>
+                <a href="view_contact.html" class="col-xs-3">
+                    <img alt="" src="../images/photos/user-3.jpg" class="thumbnail img-circle media-object" width="100px">
+                </a>
+                <h4 class="col-xs-9">Henry Holmes
+                <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>">
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf text-muted"></i>
+                        <i class="fa fa-leaf text-muted"></i>
+                    </span></h4>
+            </li>
+            <li>
+                <a href="view_contact.html" class="col-xs-3">
+                    <img alt="" src="../images/photos/user-4.jpg" class="thumbnail img-circle media-object" width="100px">
+                </a>
+                <h4 class="col-xs-9">Henry Holmes
+                <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>">
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf text-muted"></i>
+                        <i class="fa fa-leaf text-muted"></i>
+                    </span></h4>
+            </li>
+            <li>
+                <a href="view_contact.html" class="col-xs-3">
+                    <img alt="" src="../images/photos/user-5.jpg" class="thumbnail img-circle media-object" width="100px">
+                </a>
+                <h4 class="col-xs-9">Henry Holmes
+                <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>">
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf"></i>
+                        <i class="fa fa-leaf text-muted"></i>
+                        <i class="fa fa-leaf text-muted"></i>
+                    </span></h4>
+            </li>
+        </ul>
+    </div>
 </div>
 
 

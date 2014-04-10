@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../images/favicon.png" type="image/png">
+
+    <title>Indigenous.io</title>
+
+    <link href="../css/style.default.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.inverse.css" />
+    <link rel="stylesheet" href="../js/redactor/redactor.css" />
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+  <script src="js/html5shiv.js"></script>
+  <script src="js/respond.min.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+    <!-- Preloader -->
+    <!-- <div id="preloader">
+    <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div> -->
+
+<body>
+
+<section>
+
+  <div class="leftpanel">
+    <div class="logopanel">
+        <h1>Yoga One</h1>
+    </div>
+    <!-- logopanel -->
+
+    <div class="leftpanelinner">
+
+        <div>
+            <div class="media userlogged hidden">
+                <img alt="" src="../images/photos/loggeduser.png" class="media-object">
+                <div class="media-body">
+                    <h4>Robin Burgandy</h4>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav nav-pills nav-stacked nav-bracket">
+            <li class="dash-li"><a href="index.html"><i class="fa fa-home"></i> <span> Overview</span></a></li>
+            <li class="contacts-li">
+                <a href="contacts.html"><i class="fa fa-users"></i> <span> Customers</span></a>
+            </li>
+            <li class="website-li">
+                <a href="edit_website.html"><i class="fa fa-desktop"></i> <span> Website</span></a>
+            </li>
+            <li class="commerce-li">
+                <a href="products.html"><i class="fa fa-shopping-cart"></i> <span> Commerce</span></a>
+            </li>
+            <li class="marketing-li">
+                <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
+            </li>
+            <li class="support-li hidden">
+                <a href="support.html"><i class="fa fa-umbrella"></i> <span> Support</span></a>
+            </li>
+        </ul>
+
+            <ul class="nav nav-pills nav-stacked nav-bracket mb30">
+                <li class="profile-li hidden"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
+                </li>
+                <li class="account-settings-li"><a href="account_settings.html"><i class="fa fa-cog"></i> <span>Account</span></a>
+                </li>
+                <li><a href="signout.html"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a>
+                </li>
+            </ul>
+
+    </div>
+    <!-- leftpanelinner -->
+</div>
+<!-- leftpanel -->
+
+  <div class="mainpanel">
+
+  	<div class="headerbar">
+
+    <div class="header-left">
+        <a class="menutoggle"><i class="fa fa-bars"></i></a>
+    </div>
+    <div class="header-right">
+        <ul class="headermenu">
+            <li class="hidden">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <img src="../images/photos/loggeduser.png" alt="" />Robin Burgandy
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                        <li><a href="profile.html"><i class="glyphicon glyphicon-user"></i> My Profile</a>
+                        </li>
+                        <li><a href="signin.html"><i class="glyphicon glyphicon-log-out"></i> Log Out</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a class="menutoggle-right pull-right"><i class="fa fa-bars"></i></a>
+            </li>
+        </ul>
+    </div>
+    <!-- header-right -->
+
+</div>
+<!-- headerbar -->
+
+    <div class="pageheader row">
+    <div class="col-xs-9">
+        <a href="campaigns.html" class="btn btn-success pull-left" type="button">
+            <span class="fa fa-chevron-left"></span>
+            <span class="hidden-xs">Back</span>
+        </a>
+        <h2><i class="fa fa-bullhorn"></i> Create a Campaign</h2>
+    </div>
+    <div class="col-xs-3">
+        <a class="btn btn-success pull-right" type="button">
+            <span class="fa fa-plus"></span>
+            <span class="hidden-xs">Save</span>
+        </a>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<div class="contentpanel">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-btns">
+                <a href="" class="panel-close">×</a>
+                <a href="" class="minimize">−</a>
+            </div>
+            <h4 class="panel-title">Campaign Set Up</h4>
+            <p>Easily set up your campaign with this simple wizard.</p>
+        </div>
+        <div class="panel-body panel-body-nopadding">
+
+            <!-- BASIC WIZARD -->
+            <div id="basicWizard" class="basic-wizard">
+
+                <ul class="nav nav-pills nav-justified">
+                    <li class="active">
+                        <a href="#tab1" data-toggle="tab">
+                            <span>Step 1:</span>Campaign Variables</a>
+                    </li>
+                    <li class="">
+                        <a href="#tab2" data-toggle="tab">
+                            <span>Step 2:</span>Email</a>
+                    </li>
+                    <li class="">
+                        <a href="#tab3" data-toggle="tab">
+                            <span>Step 3:</span>Timeframe</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab1">
+                        <form class="form">
+                            <h4>Campaign Name</h4>
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                            <h3>Human Readable Format</h3>
+                            <p class="lead">If a user
+                                <strong>signs up</strong>and
+                                <strong>doesn't purchase a product</strong>and has
+                                <strong>previously visited more then 2 times</strong>then
+                                <strong>send an email after 7 days</strong>
+                            </p>
+                    <!-- panel -->
+
+                    <hr></hr>
+
+                    <h3>Campaign Variables</h3>
+                    <h4>If a user</h4>
+                    <div class="row">
+                        <div class="col-sm-6 form-group">
+                            <select class=" form-control chosen-select input-lg">
+                                <option value="">Visits the Site</option>
+                                <option value="">Opens an Email</option>
+                                <option value="">Likes you on Facebook</option>
+                                <option value="">Rewteets</option>
+                                <option value="">Adds you to a Group</option>
+                                <option value="">Visits a Page</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="clearfix mb15"></div>
+                    <h4>and</h4>
+                    <div class="row form-group">
+                        <div class="col-xs-5">
+                            <select class=" form-control chosen-select input-lg">
+                                <option value="">does</option>
+                                <option value="">doesn't</option>
+                                <option value="">has previously</option>
+                                <option value="">hasn't previously</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-5">
+                            <select class=" form-control chosen-select input-lg">
+                                <option value="">Visits the Site</option>
+                                <option value="">Opens an Email</option>
+                                <option value="">Likes you on Facebook</option>
+                                <option value="">Rewteets</option>
+                                <option value="">Adds you to a Group</option>
+                                <option value="">Visits a Page</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-2">
+                            <button class="btn btn-lg btn-success"><i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn btn-lg btn-success"><i class="fa fa-plus"></i>
+                    </button>
+                    <div class="clearfix mb15"></div>
+                    <h4>then</h4>
+                    <div class="row form-group">
+                        <div class="col-xs-6">
+                            <select class=" form-control chosen-select input-lg">
+                                <option value="">send email</option>
+                                <option value="">send facebook message</option>
+                                <option value="">send tweet</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-lg btn-success"><i class="fa fa-plus"></i>
+                    </button>
+                    <div class="clearfix mb15"></div>
+                    <h4>after</h4>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <span class="ui-spinner ui-widget ui-widget-content ui-corner-all">
+                                <input type="text" id="spinner" class="ui-spinner-input" autocomplete="off" role="spinbutton" aria-valuenow="0">
+                                <a class="ui-spinner-button ui-spinner-up ui-corner-tr" tabindex="-1">
+                                    <span class="ui-icon ui-icon-triangle-1-n">▲</span>
+                                </a>
+                                <a class="ui-spinner-button ui-spinner-down ui-corner-br" tabindex="-1">
+                                    <span class="ui-icon ui-icon-triangle-1-s">▼</span>
+                                </a>
+                            </span>
+                        </div>
+                        <div class="col-xs-3">
+                            <select class=" form-control chosen-select input-lg">
+                                <option value="">minutes</option>
+                                <option value="">hours</option>
+                                <option value="">days</option>
+                                <option value="">weeks</option>
+                                <option value="">months</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="clearfix mb15">
+                        <hr></hr>
+                    </div>
+
+                    <h4>User Converts When</h4>
+                    <div class="row form-group">
+                        <div class="col-xs-6">
+                            <select class=" form-control chosen-select input-lg">
+                                <option value="">opens email</option>
+                                <option value="">purchases product</option>
+                                <option value="">retweets</option>
+                                <option value="">Adds you to a Group</option>
+                                <option value="">Visits a Page</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="tab2">
+                    <form class="form">
+                        <ul class="print-choices">
+
+    <li class="panel panel-default" onclick="parent.location='single-print.html'">
+        <div class="panel-body">
+            <div class="img-wrap">
+                <img src="../images/business-cards.png">
+            </div>
+            <h3>Business Cards</h3>
+        </div>
+    </li>
+
+    <li class="panel panel-default" onclick="parent.location='single-print.html'">
+        <div class="panel-body">
+            <div class="img-wrap">
+                <img src="../images/flyer.png">
+            </div>
+            <h3>Flyers</h3>
+        </div>
+    </li>
+
+    <li class="panel panel-default" onclick="parent.location='single-print.html'">
+        <div class="panel-body">
+            <div class="img-wrap">
+                <img src="../images/doorhangers.png">
+            </div>
+            <h3>Door Hangers</h3>
+        </div>
+    </li>
+
+    <li class="panel panel-default" onclick="parent.location='single-print.html'">
+        <div class="panel-body">
+            <div class="img-wrap">
+                <img src="../images/brochures.png">
+            </div>
+            <h3>Brochures</h3>
+        </div>
+    </li>
+
+    <li class="panel panel-default" onclick="parent.location='single-print.html'">
+        <div class="panel-body">
+            <div class="img-wrap">
+                <img src="../images/mediakit.png">
+            </div>
+            <h3>Media Kit</h3>
+        </div>
+    </li>
+
+    <li class="panel panel-default" onclick="parent.location='single-print.html'">
+        <div class="panel-body">
+            <div class="img-wrap">
+                <img src="../images/letterhead.png">
+            </div>
+            <h3>Letterhead</h3>
+        </div>
+    </li>
+
+    <li class="panel panel-default" onclick="parent.location='single-print.html'">
+        <div class="panel-body">
+            <div class="img-wrap">
+                <img src="../images/t-shirts.png">
+            </div>
+            <h3>T-Shirts</h3>
+        </div>
+    </li>
+
+    <li class="panel panel-default" onclick="parent.location='single-print.html'">
+        <div class="panel-body">
+            <div class="img-wrap">
+                <img src="../images/presentation-template.png">
+            </div>
+            <h3>Presentation Template</h3>
+        </div>
+    </li>
+
+</ul>
+
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab3">
+                    <form class="form">
+
+                        <div class="form-group">
+                            <label class="col-sm-4">Expiration</label>
+                            <div class="col-sm-4">
+                                <select class="form-control">
+                                    <option value="">Month</option>
+                                    <option value="">January</option>
+                                    <option value="">February</option>
+                                    <option value="">March</option>
+                                    <option value="">...</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <select class="form-control">
+                                    <option value="">Year</option>
+                                    <option value="">2013</option>
+                                    <option value="">2014</option>
+                                    <option value="">2015</option>
+                                    <option value="">...</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <!-- tab-content -->
+
+            <ul class="pager wizard">
+                <li class="previous disabled"><a href="javascript:void(0)">Previous</a>
+                </li>
+                <li class="next"><a href="javascript:void(0)">Next</a>
+                </li>
+            </ul>
+
+        </div>
+        <!-- #basicWizard -->
+
+    </div>
+    <!-- panel-body -->
+</div>
+
+
+  </div><!-- mainpanel -->
+
+  <div class="rightpanel rightpanel-website">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active"><a href="#rp-theme" data-toggle="tab" id="rp-domain-theme">Settings</a></li>
+        <li><a href="#" data-toggle="tab"></a></li>
+    </ul>
+
+    <!-- Tab panes -->
+
+    <div class="tab-content">
+        <div class="form-group row">
+                <label class="col-xs-12 control-label">Social Networks</label>
+                <div class="col-xs-12">
+                    <ol class="dd-list">
+                            <li class="dd-item dd3-item" data-id="13" data-section="myCarousel">
+                                <div class="dd-handle dd3-handle"><i class="fa fa-facebook"></i>
+                                </div>
+                                <div class="dd3-content">Facebook</div>
+                                <div class="dd3-actions" style="display: none;">
+                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                </div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="14" data-section="services">
+                                <div class="dd-handle dd3-handle"><i class="fa fa-twitter"></i>
+                                </div>
+                                <div class="dd3-content">Twitter</div>
+                                <div class="dd3-actions">
+                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                </div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="15" data-section="action-call">
+                                <div class="dd-handle dd3-handle"><i class="fa fa-google-plus"></i>
+                                </div>
+                                <div class="dd3-content">Google Plus</div>
+                                <div class="dd3-actions">
+                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                </div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="19" data-section="recent-projects">
+                                <div class="dd-handle dd3-handle"><i class="fa fa-linkedin"></i>
+                                </div>
+                                <div class="dd3-content">LinkedIn</div>
+                                <div class="dd3-actions">
+                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                </div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="19" data-section="clients">
+                                <div class="dd-handle dd3-handle"><i class="fa fa-yelp"></i>
+                                </div>
+                                <div class="dd3-content">Yelp</div>
+                                <div class="dd3-actions">
+                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                </div>
+                            </li>
+                        </ol>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-group row">
+                    <button class="btn btn-block btn-primary">Add Network</button>
+                </div>
+            </div>
+        </div>
+        <label class="col-xs-12 control-label">Analytics</label>
+        <p class="col-xs-12">Send all your marketing data to any of these services.</p>
+        <div class="col-xs-12">
+            <div class="form-group">
+                  <label class="col-sm-8 control-label">Google Analytics</label>
+                  <div class="col-sm-4 control-label">
+                    <div class="toggle toggle-default"></div>
+                  </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                  <label class="col-sm-8 control-label">Mixpanel</label>
+                  <div class="col-sm-4 control-label">
+                    <div class="toggle toggle-default"></div>
+                  </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                  <label class="col-sm-8 control-label">Pingdom</label>
+                  <div class="col-sm-4 control-label">
+                    <div class="toggle toggle-default"></div>
+                  </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                  <label class="col-sm-8 control-label">Kissmetrics</label>
+                  <div class="col-sm-4 control-label">
+                    <div class="toggle toggle-default"></div>
+                  </div>
+            </div>
+        </div>
+    <!-- leftpanel -->
+    </div>
+</div>
+
+</section>
+
+<script src="../js/jquery-1.10.2.min.js"></script>
+<script src="../js/redactor/redactor.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/modernizr.min.js"></script>
+<script src="../js/toggles.min.js"></script>
+<script src="../js/jquery.cookies.js"></script>
+<script src="../js/dropzone.min.js"></script>
+<script src="../js/jquery.maskedinput.min.js"></script>
+<script src="../js/jquery.tagsinput.min.js"></script>
+<script src="../js/jquery-ui.min.js"></script>
+<script src="../js/jquery.nestable.js"></script>
+<script src="../js/masonry.pkgd.min.js"></script>
+<script src="../js/jquery.hoverIntent.minified.js"></script>
+<script src="../js/jquery.gritter.min.js"></script>
+<script src="../js/mustache.js"></script>
+<script src="../js/color-thief.js"></script>
+
+<script src="../js/custom.js"></script>
+
+</body>
+
+</html>
+
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+
+    	jQuery('.leftpanel .nav li.marketing-li').addClass('active').children().show();
+    	jQuery('.leftpanel .nav li.marketing-li').find('.children li:first-child').addClass('active');
+
+    });
+</script>

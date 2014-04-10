@@ -41,49 +41,37 @@
     <div class="leftpanelinner">
 
         <div>
-            <div class="media userlogged">
+            <div class="media userlogged hidden">
                 <img alt="" src="../images/photos/loggeduser.png" class="media-object">
                 <div class="media-body">
-                    <h4>Ron Burgandy</h4>
+                    <h4>Robin Burgandy</h4>
                 </div>
             </div>
         </div>
 
-        <h5 class="sidebartitle">Navigation</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket">
-            <li class="dash-li"><a href="index.html"><i class="fa fa-home"></i> <span> Dashboard</span></a></li>
+            <li class="dash-li"><a href="index.html"><i class="fa fa-home"></i> <span> Overview</span></a></li>
             <li class="contacts-li">
                 <a href="contacts.html"><i class="fa fa-users"></i> <span> Customers</span></a>
             </li>
             <li class="website-li">
                 <a href="edit_website.html"><i class="fa fa-desktop"></i> <span> Website</span></a>
             </li>
-            <li class="marketing-li nav-parent">
-                <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
-                <ul class="children">
-                    <li><a class="campaigns" href="campaigns.html"><i class="fa fa-caret-right"></i> Campaigns</a></li>
-                    <li><a class="social.html" href="social.html"><i class="fa fa-caret-right"></i> Social</a></li>
-                    <li><a class="online.html" href="online.html"><i class="fa fa-caret-right"></i> Online</a></li>
-                    <li><a class="print.html" href="print.html"><i class="fa fa-caret-right"></i> Print</a></li>
-                </ul>
-            </li>
-            <li class="commerce-li nav-parent">
+            <li class="commerce-li">
                 <a href="products.html"><i class="fa fa-shopping-cart"></i> <span> Commerce</span></a>
-                <ul class="children">
-                    <li class="products-li"><a href="products.html"><i class="fa fa-caret-right"></i> Products</a></li>
-                    <li class="orders-li"><a href="orders.html"><i class="fa fa-caret-right"></i> Orders</a></li>
-                </ul>
             </li>
-            <li class="support-li">
+            <li class="marketing-li">
+                <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
+            </li>
+            <li class="support-li hidden">
                 <a href="support.html"><i class="fa fa-umbrella"></i> <span> Support</span></a>
             </li>
         </ul>
 
-        <h5 class="sidebartitle actitle">Account</h5>
             <ul class="nav nav-pills nav-stacked nav-bracket mb30">
-                <li class="profile-li"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
+                <li class="profile-li hidden"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
                 </li>
-                <li class="account-settings-li"><a href="account_settings.html"><i class="fa fa-cog"></i> <span>Account Settings</span></a>
+                <li class="account-settings-li"><a href="account_settings.html"><i class="fa fa-cog"></i> <span>Account</span></a>
                 </li>
                 <li><a href="signout.html"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a>
                 </li>
@@ -106,7 +94,7 @@
             <li class="hidden">
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <img src="../images/photos/loggeduser.png" alt="" />Ron Burgandy
+                        <img src="../images/photos/loggeduser.png" alt="" />Robin Burgandy
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
@@ -118,7 +106,7 @@
                 </div>
             </li>
             <li>
-                <a class="menutoggle-right pull-right"><i class="fa fa-cog"></i></a>
+                <a class="menutoggle-right pull-right"><i class="fa fa-bars"></i></a>
             </li>
         </ul>
     </div>
@@ -137,10 +125,141 @@
 </div>
 
 <div class="contentpanel">
+	<div class="col-sm-6 profile-section panel panel-default">
+        <div class="panel-heading">
+              <div class="panel-btns">
+                <a href="" class="panel-edit"><i class="fa fa-edit"></i></a>
+              </div><!-- panel-btns -->
+              <h3 class="panel-title">Owner Info</h3>
+            </div>
+
+        <div class="profile panel-body">
+            <div class="col-xs-12">
+                <img alt="" src="../images/photos/loggeduser.png" class="thumbnail thumb-lg img-circle media-object">
+            </div>
+            <div class="col-xs-12">
+                <div class="col-xs-12">
+                    <div class="mb20"></div>
+                    <h3 class="profile-name">Robin Shaw
+                    </h3>
+                    <div class="mb20"></div>
+                    <h4 class="center">
+                        <span class="label label-info contact-cat">Administrator</span>
+                    </h4>
+
+                </div>
+            </div>
+            <div class="clearfix mb20"></div>
+            <div class="col-xs-12">
+                <!-- <div class="profile-location"><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy DriveSan Diego, CA 92102</a>  <a href="#" class="label label-warning"> + 5 More</a>
+                </div>
+                <div class="profile-position"><i class="fa fa-briefcase"></i> News Anchor at <a href="">Channel 9 News</a>
+                </div>
+                <div class="profile-position"><i class="fa fa-briefcase"></i> Owner of <a href="">Burgandy Flutes</a>
+                </div>
+                <div class="profile-phone"><i class="fa fa-phone"></i>  <a href=""><a href="tel:619-564-2827"> 619-564-2827</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
+                </div>
+
+                <div class="profile-email"><i class="fa fa-envelope"></i>  <a href=""><a href="mailto:ronburgandy@gmail.com"> ronburgandy@gmail.com</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
+                </div> -->
+                <ul class="social-list right row">
+                    <li class="col-xs-12">
+                        <div class="col-xs-2">
+                            <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Password" target="_blank"><i class="fa fa-lock"></i></a>
+                        </div>
+                        <div class="col-xs-8">
+                            <p>•••••••••••</p>
+                        </div>
+                        <div class="col-xs-2">
+                        </div>
+                    </li>
+                    <li class="col-xs-12">
+                        <div class="col-xs-2">
+                            <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                        </div>
+                        <div class="col-xs-8">
+                            <p>123 Burgandy DriveSan Diego, CA 92102</p>
+                        </div>
+                        <div class="col-xs-2">
+                            <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i> 
+                                <span class="hidden-xs">5 More</span>
+                            </button>
+                        </div>
+                    </li>
+
+                    <li class="col-xs-12">
+                        <div class="col-xs-2">
+                            <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
+                        </div>
+                        <div class="col-xs-8">
+                            <p>619-675-2927</p>
+                        </div>
+                        <div class="col-xs-2">
+                            <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i> 
+                                <span class="hidden-xs">2 More</span>
+                            </button>
+                        </div>
+                        </a>
+                    </li>
+
+                    <li class="col-xs-12">
+                        <div class="col-xs-2">
+                            <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope"></i></a>
+                        </div>
+                        <div class="col-xs-8">
+                            <p>robinshaw@gmail.com</p>
+                        </div>
+                        <div class="col-xs-2">
+                            <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i> 
+                                <span class="hidden-xs">1 More</span>
+                            </button>
+                        </div>
+                        </a>
+                    </li>
+
+                    <li class="col-xs-12">
+                        <div class="col-xs-2">
+                            <a href="https://www.facebook.com/theronburgandy" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                        </div>
+                        <div class="col-xs-10">
+                            <p>robinshaw@gmail.com</p>
+                        </div>
+                    </li>
+
+                    <li class="col-xs-12">
+                        <div class="col-xs-2">
+                            <a href="https://twitter.com/RobinBurgundy" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                        </div>
+                        <div class="col-xs-10">
+                            <p>RobinShaw</p>
+                        </div>
+                    </li>
+
+                    <li class="col-xs-12">
+                        <div class="col-xs-2">
+                            <a href="http://www.linkedin.com/pub/ron-burgundy/74/415/b0b" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
+                        </div>
+                        <div class="col-xs-10">
+                            <p>robin-shaw</p>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="mb20"></div>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
 	<div class="col-sm-6">
 		<div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="panel-btns">
+                <a href="" class="panel-edit"><i class="fa fa-edit"></i></a>
+              </div><!-- panel-btns -->
+              <h3 class="panel-title">General Business Information</h3>
+            </div>
 			<div class="panel-body">
-				<h3 class="panel-title mb15">General Business Information</h3>
 				<p>Business Logo: img</p>
 				<p>Business Name: Yoga One</p>
 				<p>Business Phone: 000-000-0000</p>

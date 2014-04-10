@@ -41,49 +41,37 @@
     <div class="leftpanelinner">
 
         <div>
-            <div class="media userlogged">
+            <div class="media userlogged hidden">
                 <img alt="" src="../images/photos/loggeduser.png" class="media-object">
                 <div class="media-body">
-                    <h4>Ron Burgandy</h4>
+                    <h4>Robin Burgandy</h4>
                 </div>
             </div>
         </div>
 
-        <h5 class="sidebartitle">Navigation</h5>
         <ul class="nav nav-pills nav-stacked nav-bracket">
-            <li class="dash-li"><a href="index.html"><i class="fa fa-home"></i> <span> Dashboard</span></a></li>
+            <li class="dash-li"><a href="index.html"><i class="fa fa-home"></i> <span> Overview</span></a></li>
             <li class="contacts-li">
                 <a href="contacts.html"><i class="fa fa-users"></i> <span> Customers</span></a>
             </li>
             <li class="website-li">
                 <a href="edit_website.html"><i class="fa fa-desktop"></i> <span> Website</span></a>
             </li>
-            <li class="marketing-li nav-parent">
-                <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
-                <ul class="children">
-                    <li><a class="campaigns" href="campaigns.html"><i class="fa fa-caret-right"></i> Campaigns</a></li>
-                    <li><a class="social.html" href="social.html"><i class="fa fa-caret-right"></i> Social</a></li>
-                    <li><a class="online.html" href="online.html"><i class="fa fa-caret-right"></i> Online</a></li>
-                    <li><a class="print.html" href="print.html"><i class="fa fa-caret-right"></i> Print</a></li>
-                </ul>
-            </li>
-            <li class="commerce-li nav-parent">
+            <li class="commerce-li">
                 <a href="products.html"><i class="fa fa-shopping-cart"></i> <span> Commerce</span></a>
-                <ul class="children">
-                    <li class="products-li"><a href="products.html"><i class="fa fa-caret-right"></i> Products</a></li>
-                    <li class="orders-li"><a href="orders.html"><i class="fa fa-caret-right"></i> Orders</a></li>
-                </ul>
             </li>
-            <li class="support-li">
+            <li class="marketing-li">
+                <a href="campaigns.html"><i class="fa fa-bullhorn"></i> <span> Marketing</span></a>
+            </li>
+            <li class="support-li hidden">
                 <a href="support.html"><i class="fa fa-umbrella"></i> <span> Support</span></a>
             </li>
         </ul>
 
-        <h5 class="sidebartitle actitle">Account</h5>
             <ul class="nav nav-pills nav-stacked nav-bracket mb30">
-                <li class="profile-li"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
+                <li class="profile-li hidden"><a href="profile.html"><i class="fa fa-user"></i> <span>Profile</span></a>
                 </li>
-                <li class="account-settings-li"><a href="account_settings.html"><i class="fa fa-cog"></i> <span>Account Settings</span></a>
+                <li class="account-settings-li"><a href="account_settings.html"><i class="fa fa-cog"></i> <span>Account</span></a>
                 </li>
                 <li><a href="signout.html"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a>
                 </li>
@@ -106,7 +94,7 @@
             <li class="hidden">
                 <div class="btn-group">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <img src="../images/photos/loggeduser.png" alt="" />Ron Burgandy
+                        <img src="../images/photos/loggeduser.png" alt="" />Robin Burgandy
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
@@ -118,7 +106,7 @@
                 </div>
             </li>
             <li>
-                <a class="menutoggle-right pull-right"><i class="fa fa-cog"></i></a>
+                <a class="menutoggle-right pull-right"><i class="fa fa-bars"></i></a>
             </li>
         </ul>
     </div>
@@ -129,10 +117,10 @@
 
     <div class="pageheader row">
     <div class="col-xs-9">
-        <h2><i class="fa fa-bullhorn"></i> Campaigns</h2>
+        <h2><i class="fa fa-bullhorn"></i> Marketing</h2>
     </div>
     <div class="col-xs-3">
-        <a class="btn btn-success pull-right" type="button">
+        <a href="create_campaign.html" class="btn btn-success pull-right" type="button">
             <span class="fa fa-plus"></span>
             <span class="hidden-xs">Create</span>
         </a>
@@ -142,11 +130,11 @@
 
 <div class="alert alert-info fade in">
     <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-    <h4 class="center">Hi Ron, Welcome to Campaigns!</h4>
-    <p class="center">Okay, it's time to create a campaign to get more customers. If you need assitance use any of the three ways below.</p>
+    <h4 class="center">Hi Robin, Welcome to Marketing!</h4>
+    <p class="center">Okay, it's time to create campaigns to get more customers. If you need assitance use any of the three ways below.</p>
     <hr class="mb30"></hr>
     <div class="col-sm-6">
-        <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about campaigns.</h4>
+        <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about marketing.</h4>
         <img class="onboard-vid" src="../images/Customers.jpg">
     </div>
     <div class="mb30"></div>
@@ -171,6 +159,7 @@
     <div class="panel panel-default row">
         <div class="panel-body">
             <div class="col-sm-6">
+                <input type="text" placeholder="Search Campaigns" class="form-control input-lg">
             </div>
             <div class="col-sm-6 form-horizontal">
                 <div class="form-group row">
@@ -188,37 +177,53 @@
     <div class="mb30"></div>
     <div class="campaign-list">
         <div class="row">
-            <div class="col-xs-4 panel" onclick="parent.location='view_campaign.html'">
-                <h3>Name: Campaign #1</h3>
-                <p>Status: Active</p>
-                <p>Type: Social</p>
-                <p>Goal: Sell Product #1</p>
-                <p>Start: 2 days ago</p>
-                <p>End: 1 week</p>
+            <div class="col-xs-4" onclick="parent.location='view_campaign.html'">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3>Name: Campaign #1</h3>
+                        <p>Status: Active</p>
+                        <p>Type: Social</p>
+                        <p>Goal: Sell Product #1</p>
+                        <p>Start: 2 days ago</p>
+                        <p>End: 1 week</p>
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-4 panel" onclick="parent.location='view_campaign.html'">
-                <h3>Name: Campaign #2</h3>
-                <p>Status: Active</p>
-                <p>Type: Social</p>
-                <p>Goal: Sell Product #1</p>
-                <p>Start: 2 days ago</p>
-                <p>End: 1 week</p>
+            <div class="col-xs-4" onclick="parent.location='view_campaign.html'">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3>Name: Campaign #2</h3>
+                        <p>Status: Active</p>
+                        <p>Type: Social</p>
+                        <p>Goal: Sell Product #1</p>
+                        <p>Start: 2 days ago</p>
+                        <p>End: 1 week</p>
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-4 panel" onclick="parent.location='view_campaign.html'">
-                <h3>Name: Campaign #3</h3>
-                <p>Status: Active</p>
-                <p>Type: Social</p>
-                <p>Goal: Sell Product #1</p>
-                <p>Start: 2 days ago</p>
-                <p>End: 1 week</p>
+            <div class="col-xs-4" onclick="parent.location='view_campaign.html'">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3>Name: Campaign #3</h3>
+                        <p>Status: Active</p>
+                        <p>Type: Social</p>
+                        <p>Goal: Sell Product #1</p>
+                        <p>Start: 2 days ago</p>
+                        <p>End: 1 week</p>
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-4 panel" onclick="parent.location='view_campaign.html'">
-                <h3>Name: Campaign #4</h3>
-                <p>Status: Active</p>
-                <p>Type: Social</p>
-                <p>Goal: Sell Product #1</p>
-                <p>Start: 2 days ago</p>
-                <p>End: 1 week</p>
+            <div class="col-xs-4" onclick="parent.location='view_campaign.html'">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3>Name: Campaign #4</h3>
+                        <p>Status: Active</p>
+                        <p>Type: Social</p>
+                        <p>Goal: Sell Product #1</p>
+                        <p>Start: 2 days ago</p>
+                        <p>End: 1 week</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -227,321 +232,106 @@
 
   </div><!-- mainpanel -->
 
-  <div class="rightpanel">
+  <div class="rightpanel rightpanel-website">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs nav-justified">
-        <li class="active"><a href="#rp-alluser" data-toggle="tab"><i class="fa fa-users"></i></a>
-        </li>
-        <li><a href="#rp-favorites" data-toggle="tab"><i class="fa fa-heart"></i></a>
-        </li>
-        <li><a href="#rp-history" data-toggle="tab"><i class="fa fa-clock-o"></i></a>
-        </li>
-        <li><a href="#rp-settings" data-toggle="tab"><i class="fa fa-gear"></i></a>
-        </li>
+        <li class="active"><a href="#rp-theme" data-toggle="tab" id="rp-domain-theme">Settings</a></li>
+        <li><a href="#" data-toggle="tab"></a></li>
     </ul>
 
     <!-- Tab panes -->
+
     <div class="tab-content">
-        <div class="tab-pane active" id="rp-alluser">
-            <h5 class="sidebartitle">Online Users</h5>
-            <ul class="chatuserlist">
-                <li class="online">
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/userprofile.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Eileen Sideways</strong>
-                            <small>Los Angeles, CA</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li class="online">
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user1.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <span class="pull-right badge badge-danger">2</span>
-                            <strong>Zaham Sindilmaca</strong>
-                            <small>San Francisco, CA</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li class="online">
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user2.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Nusja Nawancali</strong>
-                            <small>Bangkok, Thailand</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li class="online">
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user3.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Renov Leongal</strong>
-                            <small>Cebu City, Philippines</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li class="online">
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user4.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Weno Carasbong</strong>
-                            <small>Tokyo, Japan</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-            </ul>
-
-            <div class="mb30"></div>
-
-            <h5 class="sidebartitle">Offline Users</h5>
-            <ul class="chatuserlist">
-                <li>
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user5.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Eileen Sideways</strong>
-                            <small>Los Angeles, CA</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li>
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user2.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Zaham Sindilmaca</strong>
-                            <small>San Francisco, CA</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li>
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user3.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Nusja Nawancali</strong>
-                            <small>Bangkok, Thailand</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li>
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user4.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Renov Leongal</strong>
-                            <small>Cebu City, Philippines</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li>
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user5.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Weno Carasbong</strong>
-                            <small>Tokyo, Japan</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li>
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user4.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Renov Leongal</strong>
-                            <small>Cebu City, Philippines</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li>
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user5.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Weno Carasbong</strong>
-                            <small>Tokyo, Japan</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-            </ul>
-        </div>
-        <div class="tab-pane" id="rp-favorites">
-            <h5 class="sidebartitle">Favorites</h5>
-            <ul class="chatuserlist">
-                <li class="online">
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user2.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Eileen Sideways</strong>
-                            <small>Los Angeles, CA</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li>
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user1.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Zaham Sindilmaca</strong>
-                            <small>San Francisco, CA</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li>
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user3.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Nusja Nawancali</strong>
-                            <small>Bangkok, Thailand</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li class="online">
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user4.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Renov Leongal</strong>
-                            <small>Cebu City, Philippines</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li class="online">
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user5.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Weno Carasbong</strong>
-                            <small>Tokyo, Japan</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-            </ul>
-        </div>
-        <div class="tab-pane" id="rp-history">
-            <h5 class="sidebartitle">History</h5>
-            <ul class="chatuserlist">
-                <li class="online">
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user4.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Eileen Sideways</strong>
-                            <small>Hi hello, ctc?... would you mind if I go to your...</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li>
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user2.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Zaham Sindilmaca</strong>
-                            <small>This is to inform you that your product that we...</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-                <li>
-                    <div class="media">
-                        <a href="#" class="pull-left media-thumb">
-                            <img alt="" src="../images/photos/user3.png" class="media-object">
-                        </a>
-                        <div class="media-body">
-                            <strong>Nusja Nawancali</strong>
-                            <small>Are you willing to have a long term relat...</small>
-                        </div>
-                    </div>
-                    <!-- media -->
-                </li>
-            </ul>
-        </div>
-        <div class="tab-pane pane-settings" id="rp-settings">
-
-            <h5 class="sidebartitle mb20">Settings</h5>
-            <div class="form-group">
-                <label class="col-xs-8 control-label">Show Offline Users</label>
-                <div class="col-xs-4 control-label">
-                    <div class="toggle toggle-success"></div>
+        <div class="form-group row">
+                <label class="col-xs-12 control-label">Social Networks</label>
+                <div class="col-xs-12">
+                    <ol class="dd-list">
+                            <li class="dd-item dd3-item" data-id="13" data-section="myCarousel">
+                                <div class="dd-handle dd3-handle"><i class="fa fa-facebook"></i>
+                                </div>
+                                <div class="dd3-content">Facebook</div>
+                                <div class="dd3-actions" style="display: none;">
+                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                </div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="14" data-section="services">
+                                <div class="dd-handle dd3-handle"><i class="fa fa-twitter"></i>
+                                </div>
+                                <div class="dd3-content">Twitter</div>
+                                <div class="dd3-actions">
+                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                </div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="15" data-section="action-call">
+                                <div class="dd-handle dd3-handle"><i class="fa fa-google-plus"></i>
+                                </div>
+                                <div class="dd3-content">Google Plus</div>
+                                <div class="dd3-actions">
+                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                </div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="19" data-section="recent-projects">
+                                <div class="dd-handle dd3-handle"><i class="fa fa-linkedin"></i>
+                                </div>
+                                <div class="dd3-content">LinkedIn</div>
+                                <div class="dd3-actions">
+                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                </div>
+                            </li>
+                            <li class="dd-item dd3-item" data-id="19" data-section="clients">
+                                <div class="dd-handle dd3-handle"><i class="fa fa-yelp"></i>
+                                </div>
+                                <div class="dd3-content">Yelp</div>
+                                <div class="dd3-actions">
+                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                </div>
+                            </li>
+                        </ol>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label class="col-xs-8 control-label">Enable History</label>
-                <div class="col-xs-4 control-label">
-                    <div class="toggle toggle-success"></div>
+            <div class="col-xs-12">
+                <div class="form-group row">
+                    <button class="btn btn-block btn-primary">Add Network</button>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label class="col-xs-8 control-label">Show Full Name</label>
-                <div class="col-xs-4 control-label">
-                    <div class="toggle-chat1 toggle-success"></div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-xs-8 control-label">Show Location</label>
-                <div class="col-xs-4 control-label">
-                    <div class="toggle toggle-success"></div>
-                </div>
-            </div>
-
         </div>
-        <!-- tab-pane -->
-
+        <label class="col-xs-12 control-label">Analytics</label>
+        <p class="col-xs-12">Send all your marketing data to any of these services.</p>
+        <div class="col-xs-12">
+            <div class="form-group">
+                  <label class="col-sm-8 control-label">Google Analytics</label>
+                  <div class="col-sm-4 control-label">
+                    <div class="toggle toggle-default"></div>
+                  </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                  <label class="col-sm-8 control-label">Mixpanel</label>
+                  <div class="col-sm-4 control-label">
+                    <div class="toggle toggle-default"></div>
+                  </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                  <label class="col-sm-8 control-label">Pingdom</label>
+                  <div class="col-sm-4 control-label">
+                    <div class="toggle toggle-default"></div>
+                  </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                  <label class="col-sm-8 control-label">Kissmetrics</label>
+                  <div class="col-sm-4 control-label">
+                    <div class="toggle toggle-default"></div>
+                  </div>
+            </div>
+        </div>
+    <!-- leftpanel -->
     </div>
-    <!-- tab-content -->
 </div>
-<!-- rightpanel -->
 
 </section>
 
