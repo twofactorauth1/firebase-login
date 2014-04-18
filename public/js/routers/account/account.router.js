@@ -15,7 +15,6 @@ define([
             "account":"showMain"
         },
 
-
         showMain: function() {
             var view = new AccountView();
             $$.viewManager.replaceMain(view);

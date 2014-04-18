@@ -13,7 +13,7 @@ define([
 
     var view = BaseView.extend({
 
-        templateKey: "account/dashboard",
+        templateKey: "account/commerce",
 
         accounts: null,
 
@@ -23,6 +23,7 @@ define([
 
 
         render: function() {
+            console.log('render commerce');
             var self = this
                 , p1 = this.getAccount()
                 , p2 = this.getUser();
@@ -34,7 +35,7 @@ define([
                         user: self.user.toJSON()
                     };
 
-                    var tmpl = $$.templateManager.get("dashboard-main", self.templateKey);
+                    var tmpl = $$.templateManager.get("commerce-main", self.templateKey);
                     var html = tmpl(data);
 
                     self.show(html);
@@ -52,7 +53,7 @@ define([
     });
 
     $$.v.account = $$.v.account || {};
-    $$.v.account.AdminView = view;
+    $$.v.account.CommerceView = view;
 
     return view;
 });

@@ -8,10 +8,12 @@
 define([
     'routers/account/contact.router',
     'routers/account/account.router',
+    'routers/account/marketing.router',
+    'routers/account/commerce.router',
     'routers/account/cms.router',
     'views/account/admin.view',
     'views/account/dashboard.view'
-], function (contactRouter, accountRouter, cmsRouter, AdminView, DashboardView) {
+], function (contactRouter, accountRouter, marketingRouter, commerceRouter, cmsRouter, AdminView, DashboardView) {
 
     var router = Backbone.Router.extend({
 
@@ -25,7 +27,8 @@ define([
 
         showMain: function () {
             $$.v.leftNav.updateActiveNav("");
-            var view = new AdminView();
+            //var view = new AdminView();
+            var view = new DashboardView();
             $$.viewManager.replaceMain(view);
         },
 
