@@ -1,17 +1,19 @@
 /**
- * COPYRIGHT CMConsulting LLC 2014
+ * COPYRIGHT INDIGENOUS.IO, LLC 2014
  *
  * All use or reproduction of any or all of this content must be approved.
- * Please contact christopher.mina@gmail.com for approval or questions.
+ * Please contact info@indigenous.io for approval or questions.
  */
 
 define([
     'routers/account/contact.router',
     'routers/account/account.router',
+    'routers/account/marketing.router',
+    'routers/account/commerce.router',
     'routers/account/cms.router',
     'views/account/admin.view',
     'views/account/dashboard.view'
-], function (contactRouter, accountRouter, cmsRouter, AdminView, DashboardView) {
+], function (contactRouter, accountRouter, marketingRouter, commerceRouter, cmsRouter, AdminView, DashboardView) {
 
     var router = Backbone.Router.extend({
 
@@ -25,7 +27,8 @@ define([
 
         showMain: function () {
             $$.v.leftNav.updateActiveNav("");
-            var view = new AdminView();
+            //var view = new AdminView();
+            var view = new DashboardView();
             $$.viewManager.replaceMain(view);
         },
 

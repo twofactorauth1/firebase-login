@@ -1,8 +1,8 @@
 /**
- * COPYRIGHT CMConsulting LLC 2014
+ * COPYRIGHT INDIGENOUS.IO, LLC 2014
  *
  * All use or reproduction of any or all of this content must be approved.
- * Please contact christopher.mina@gmail.com for approval or questions.
+ * Please contact info@indigenous.io for approval or questions.
  */
 
 define([
@@ -33,7 +33,9 @@ define([
 
             "click .btn-import-facebook":"importFacebookFriends",
             "click .btn-import-gmail":"importGmailContacts",
-            "click .btn-import-linkedin":"importLinkedInConnections"
+            "click .btn-import-linkedin":"importLinkedInConnections",
+
+            "click .close":"close_welcome"
         },
 
 
@@ -69,6 +71,7 @@ define([
             $.when(p1, p2, p3)
                 .done(function() {
                     self.renderContacts();
+                    self.check_welcome();
                 });
 
             $.when(p4)
@@ -250,6 +253,14 @@ define([
             }
             this.currentLetter = this.currentLetter.toLowerCase();
             return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
+        },
+        check_welcome: function() {
+            if( $.cookie('contact-alert') === 'closed' ){
+                $('.alert').hide();
+            }
+        },
+        close_welcome: function(e) {
+            $.cookie('contact-alert', 'closed', { path: '/' });
         }
     });
 

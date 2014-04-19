@@ -1,8 +1,8 @@
 //-
-    * COPYRIGHT CMConsulting LLC 2014
+    * COPYRIGHT INDIGENOUS.IO, LLC 2014
     *
     * All use or reproduction of any or all of this content must be approved.
-    * Please contact christopher.mina@gmail.com for approval or questions.
+    * Please contact info@indigenous.io for approval or questions.
 
 extends snippets/_layout
 
@@ -16,13 +16,15 @@ block content
                 if account.company.logo
                     img(src="#{account.company.logo}" style="max-width:300px; max-height:100px")
                 else
-                    span #{account.company.name}
+                    h1.center.company-title #{account.company.name}
             else
                 span.logo
 
             form(role="form", action="/login" method="post")
-                h4.nomargin Sign In
-                p.mt5.mb20 Login to access your account&period;
+
+                div.welcome-text
+                    h4.nomargin Sign In
+                    p.mt5.mb20 Login to access your account&period;
 
                 .row.social.btn-toolbar
                     a.btn.btn-large.btn-default(href="/login/facebook")
