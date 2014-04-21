@@ -9,8 +9,15 @@ require('./../base.model.js');
 
 var devicetype = $$.m.ModelBase.extend({
 
-    defaults: {
-
+    defaults: function() {
+        return {
+            _id: null,
+            description: null,
+            model: null,
+            manufacturer: null,
+            readingtypes: [],
+            _v:"0.1"
+        }
     },
 
 

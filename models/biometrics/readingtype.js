@@ -9,8 +9,13 @@ require('./../base.model.js');
 
 var readingtype = $$.m.ModelBase.extend({
 
-    defaults: {
-
+    defaults: function() {
+        return {
+            _id: null,
+            unit: null,
+            description: null,
+            _v:"0.1"
+        }
     },
 
 
