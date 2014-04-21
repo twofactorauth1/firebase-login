@@ -1,8 +1,8 @@
 process.env.NODE_ENV = "testing";
 var app = require('../../app');
 
-var readingTypeDao = require('../../dao/readingtype.dao.js');
-var deviceTypeDao = require('../../dao/devicetype.dao.js');
+var readingTypeDao = require('../../dao/biometrics/readingtype.dao.js');
+var deviceTypeDao = require('../../dao/biometrics/devicetype.dao.js');
 
 exports.devicetype_dao_test = {
     createBadDeviceType: function(test) {

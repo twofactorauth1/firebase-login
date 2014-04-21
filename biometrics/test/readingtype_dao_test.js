@@ -1,7 +1,7 @@
 process.env.NODE_ENV = "testing";
 var app = require('../../app');
 
-var readingTypeDao = require('../../dao/readingtype.dao.js');
+var readingTypeDao = require('../../dao/biometrics/readingtype.dao.js');
 
 exports.readingtype_dao_test = {
     createReadingType: function (test) {
