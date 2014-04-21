@@ -259,7 +259,7 @@ process.on('uncaughtException', function (err) {
     log.error("Stack trace: " + err.stack);
     log.error('Caught exception: ' + err);
 
-    $$.g.mailer.sendMail("errors@indigenous.io", 'christopher.mina@gmail.com', null, "Uncaught Error occurred - " + process.env.NODE_ENV, null, err + ":  " + err.stack, function(err, value) {
+    //$$.g.mailer.sendMail("errors@indigenous.io", "{ENTER YOUR EMAIL ADDRESS HERE}", null, "Uncaught Error occurred - " + process.env.NODE_ENV, null, err + ":  " + err.stack, function(err, value) {
         process.exit(1);
-    });
+    //});
 });
