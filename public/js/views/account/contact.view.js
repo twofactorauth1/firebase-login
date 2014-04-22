@@ -140,6 +140,7 @@ define([
             this.getContacts(this.currentLetter)
                 .done(function() {
                     self.renderContacts();
+                    self.check_welcome();
                 });
 
             $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
@@ -254,14 +255,23 @@ define([
             this.currentLetter = this.currentLetter.toLowerCase();
             return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
         },
+
+
         check_welcome: function() {
+            console.log('close welcome = '+$.cookie('contact-alert') );
             if( $.cookie('contact-alert') === 'closed' ){
-                $('.alert').hide();
+                console.log('closing alert');
+                $('.alert-info').remove();
             }
         },
+
+
         close_welcome: function(e) {
+            console.log('close welcome');
             $.cookie('contact-alert', 'closed', { path: '/' });
         }
+
+
     });
 
     $$.v.account = $$.v.account || {};

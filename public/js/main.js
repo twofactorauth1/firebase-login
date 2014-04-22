@@ -35,6 +35,7 @@ require.config({
         usersData: 'global/users.data',
         app: 'app',
         text: "libs/requirejs/plugins/text",
+        leaflet: 'libs/leaflet/leaflet',
 
         //UI SPECIFIC
         toggles: 'libs/misc/toggles.min'
@@ -104,7 +105,8 @@ require.config({
                 'modernizr',
 
                 //UI SPECIFIC
-                'toggles'
+                'toggles',
+                'leaflet'
             ]
         }
     },

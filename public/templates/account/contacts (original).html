@@ -1,8 +1,8 @@
 <!--
-* COPYRIGHT INDIGENOUS.IO, LLC 2014
+* COPYRIGHT CMConsulting LLC 2014
 *
 * All use or reproduction of any or all of this content must be approved.
-* Please contact info@indigenous.io for approval or questions.
+* Please contact christopher.mina@gmail.com for approval or questions.
 -->
 
 <!--
@@ -35,24 +35,9 @@ CONTACTS MAIN VIEW
 
     <div class="alert alert-info fade in">
         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-        <h4 class="center">Hi Robin, Welcome to Customers!</h4>
-        <p class="center">Okay, it&#39;s time to start managing your products. If you need assitance use any of the three ways below.</p>
-        <hr class="mb30"></hr>
-        <div class="col-sm-6">
-            <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about managing customers.</h4>
-            <img class="onboard-vid" src="/assets/images/video-holder.jpg">
-        </div>
-        <div class="mb30"></div>
-         <div class="col-sm-6">
-            <h4><i class="fa fa-compass"></i> Schedule a Demo</h4>
-            <p>Schedule a personal demo with one of our customer support representatives who can show you via screen share how to manage your contacts.</p>
-            <button class="btn btn-primary btn-lg">Schedule Now <i class="fa fa-caret-right"></i></button>
-            <hr class="mb30"></hr>
-            <h4><i class="fa fa-file-text-o"></i> Read the Documentation</h4>
-            <p>If you prefer a list of steps to read, then head over to our detailed documentation about all the aspects of managing your contacts.</p>
-            <button class="btn btn-primary btn-lg">View Docs <i class="fa fa-caret-right"></i></button>
-        </div>
-        <div class="clearfix mb30"></div>
+        <h4>Customers are the people you sell to and buy from.</h4>
+
+        <p>They include the person you met at a conference or the CEO of your best account.</p>
     </div>
 
     <div class="contentpanel">
@@ -88,14 +73,14 @@ CONTACTS MAIN VIEW
         <div class="people-list">
             <div class="row">
                 {{#each contacts}}
-                <div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-6">
                     <div class="people-item btn-view-contact-details contact-item" data-contactid="{{_id}}">
                         <span class="important-star tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Important Contact">
                             <i class="fa {{#if starred}}fa-star{{else}}fa-star-o{{/if}}"/>
                         </span>
 
                         <div class="media">
-                            <div class="col-xs-12f">
+                            <div class="col-xs-12 col-sm-6">
                                 {{#if photoSquare}}
                                     {{#isGoogleImage photoSquare}}
                                         <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
@@ -160,7 +145,7 @@ CONTACTS MAIN VIEW
 
                                 </ul>
                             </div>
-                            <div class="media-body col-xs-12 hidden-xs">
+                            <div class="media-body col-xs-12 col-sm-6 hidden-xs">
                                 <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
                                 <span class="label label-info contact-cat">{{contactTypeLabel this}}</span>
 
@@ -238,75 +223,15 @@ CONTACTS MAIN VIEW
                 {{/each}}
 
                 {{#iterateDifference min count 0}}
-                <div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-6">
                     <div class="people-item btn-view-contact-details" data-contactid="{{_id}}">
                         <div class="media">
-                            <span class="important-star"><i class="fa fa-star-o"></i>
-                            </span>
-                            <div class="media">
-                                <div class="col-xs-12">
-                                    {{#if photoSquare}}
-                                        {{#isGoogleImage photoSquare}}
-                                            <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                                        {{else}}
-                                            <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
-                                        {{/isGoogleImage}}
-                                    {{else}}
-                                        {{#isGoogleImage photo}}
-                                            <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                                        {{else}}
-                                            <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                                        {{/isGoogleImage}}
-                                    {{/if}}
-                                    <div class="clear"></div>
-                                </div>
-                                <div class="media-body col-xs-12">
-                                    <h4 class="person-name center">Henry Holmes
-                                        <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>">
-                                            <i class="fa fa-leaf"></i>
-                                            <i class="fa fa-leaf"></i>
-                                            <i class="fa fa-leaf"></i>
-                                            <i class="fa fa-leaf text-muted"></i>
-                                            <i class="fa fa-leaf text-muted"></i>
-                                        </span>
-                                    </h4>
-                                    <div class="center">
-                                        <span class="label label-info contact-cat">Customer</span>
-                                        <span class="label label-info contact-cat">Lead</span>
-                                    </div>
-                                    <hr class="clearfix mb15"></hr>
-                                    <div class="customer-stats">
-                                    <div class="last-active"><i class="fa fa-bolt"></i> Last Active:
-                                        <span class="data">2 days ago</span>
-                                    </div>
-                                    <div class="purchased"><i class="fa fa-money"></i> Purchased:
-                                        <span class="data">Yes</span>
-                                    </div>
-                                    <div class="emails-opened"><i class="fa fa-envelope"></i> Emails Opened:
-                                        <span class="data">3/5</span>
-                                    </div>
-                                    <div class="calls-made"><i class="fa fa-phone"></i> Calls Made:
-                                        <span class="data">5</span>
-                                    </div>
-                                    <div class="customer-since"><i class="fa fa-calendar"></i> Customer Since:
-                                        <span class="data">Jan 2013</span>
-                                    </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix mb15"></div>
-                                <hr></hr>
-                                <ul class="social-list">
-                                    <li><a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="700 E. Ocean Blvd" target="_blank"><i class="fa fa-map-marker"></i></a>
-                                    </li>
-                                    <li><a href="#" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="619-000-0000" target="_blank"><i class="fa fa-phone"></i></a>
-                                    </li>
-                                    <li><a href="mailto:ronburgandy@gmail.com" class="tooltips" data-toggle="tooltip" data-placement="top" title="ronburgandy@gmail.com" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
-                                    </li>
-                                    <li><a href="https://www.facebook.com/theronburgandy" class="tooltips" data-toggle="tooltip" data-placement="top" title="theronburgandy" data-original-title="theronburgandy" target="_blank"><i class="fa fa-facebook"></i></a>
-                                    </li>
-                                    <li><a href="https://twitter.com/RobinBurgundy" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="RobinBurgundy"><i class="fa fa-twitter"></i></a>
-                                    </li>
-                                </ul>
+                            <div class="col-xs-12 col-sm-6">
+                                <a href="view_contact.html">
+                                    <img alt="" src="/assets/icons/blank-user.jpg" class="thumbnail img-circle media-object">
+                                </a>
+
+                                <div class="clear"></div>
                             </div>
                         </div>
                     </div>
@@ -340,17 +265,17 @@ CONTACTS MAIN VIEW
 
                         <div class="contacts-photo-container">
                             {{#if photoSquare}}
-                                {{#isGoogleImage photoSquare}}
-                                    <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader thumb-lg" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                                {{else}}
-                                    <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
-                                {{/isGoogleImage}}
+                            {{#isGoogleImage photoSquare}}
+                            <img src="/assets/icons/blank-user.jpg" class="img-rounded batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
                             {{else}}
-                                {{#isGoogleImage photo}}
-                                    <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader thumb-lg" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                                {{else}}
-                                    <img class="img-circle media-object thumbnail standard thumb-lg" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                                {{/isGoogleImage}}
+                            <img class="img-rounded square" src="{{photoSquare}}">
+                            {{/isGoogleImage}}
+                            {{else}}
+                            {{#isGoogleImage photo}}
+                            <img src="/assets/icons/blank-user.jpg" class="img-rounded batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
+                            {{else}}
+                            <img class="img-rounded standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                            {{/isGoogleImage}}
                             {{/if}}
                         </div>
 
@@ -417,50 +342,7 @@ CONTACTS MAIN VIEW
 CONTACT DETAILS VIEW
 -->
 <script type="text/x-handlebars-template" name="contact-details-main">
-    <div class="pageheader row">
-        <div class="col-xs-8">
-            <button id="btn-back-to-contacts" class="btn btn-success pull-left" type="button">
-                <span class="fa fa-chevron-left"></span>
-                <span class="hidden-xs">Back</span>
-            </button>
-            <h2> {{contact.first}} {{contact.middle}} {{contact.last}} </h2>
-        </div>
-
-        <div class="col-xs-4">
-            <div class="btn btn-success pull-right btn-edit-contact" type="button">
-                <i class="fa fa-edit"/>
-                <span class="hidden-xs">Edit</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="map-wrap">
-        <div id="map-marker" style="height: 150px; width:100%"></div>
-        <div class="panel panel-default widget-weather col-sm-4 col-sm-offset-7 hidden-xs">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-xs-6 temp text-center">
-                        <h2>7:30pm</h>
-                            <h5><i class="fa fa-map-marker"></i> &nbsp; San Diego, CA</h5>
-                    </div>
-                    <div class="col-xs-6 weather text-center">
-                        <i class="fa fa-cloud weather-icon"></i>
-                        <div class="pull-left">96 &deg; F</div>
-                        <div class="pull-right"><i class="fa fa-flag"></i> 30mph</div>
-                    </div>
-                </div>
-            </div>
-            <!-- panel-body -->
-        </div>
-    </div>
-    <div class="visible-xs">
-        <div class="btn-group col-xs-12">
-          <button type="button" class="btn btn-info col-xs-6 profile-btn active">Profile</button>
-          <button type="button" class="btn btn-info col-xs-6 activity-btn">Activity</button>
-        </div>
-    </div>
-
-    <div id="contact-details-container" class="contentpanel">
+    <div id="contact-details-container">
         <div class="row">
             <div class="col-md-6">
                 {{> contact-details}}
@@ -476,452 +358,100 @@ CONTACT DETAILS VIEW
 
 
 <script type="text/x-handlebars-template" name="contact-details" partial="true">
-    <div class="old-contact hidden">
-        <div id="contact-type">
-            <small>{{contactTypeLabel contact}}</small>
-        </div>
+    <span id="btn-back-to-contacts" class="btn-link"><i class="fa fa-angle-left"/></span>
+    <span id="contact-name">{{contact.first}} {{contact.middle}} {{contact.last}}</span>
 
-        <div class="contact-photo-container">
-            <img class="img-rounded" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-        </div>
+    <div id="btn-edit-contact-primary" class="btn-edit-contact btn btn-xs btn-primary hidden-xs">Edit</div>
 
-        <div id="contact-summary">
-            <div>Last Active:</div>
-            <div>Purchased:</div>
-            <div>Emails Opened:</div>
-            <div>Calls Made:</div>
-        </div>
-
-        <div id="contact-information">
-            <h4>Contact Information</h4>
-            <hr/>
-
-            <div id="phone-row" class="row">
-                <div class="col-xs-1"><i class="icon-main fa fa-phone"/></div>
-                <div class="col-xs-10">
-                    {{#each contact.details}}
-                    {{#each phones}}
-                    <div>
-                        <a href="tel:{{number}}">{{number}}</a>
-                        <small>{{phoneTypeLabel type}}</small>
-                        <i class="icon-social {{iconFromSocialType ../type}}"/>
-                    </div>
-                    {{/each}}
-                    {{/each}}
-                </div>
-            </div>
-
-            <div id="address-row" class="row">
-                <div class="col-xs-1"><i class="icon-main fa fa-map-marker"/></div>
-                <div class="col-xs-10">
-                    {{#each contact.details}}
-                    {{#each addresses}}
-                    <div class="edit-address-container" data-id="{{_id}}">
-                        {{#if address}}
-                        <div><strong>{{address}}</strong></div>
-                        {{/if}}
-                        {{#if address2}}
-                        <div>{{address2}}</div>
-                        {{/if}}
-                        <div>
-                            {{city}}
-                            {{#if state}}, {{state}}{{/if}}
-                            {{#if zip}}, {{zip}}{{/if}}
-                            {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromSocialType ../type}}"/>
-                        </div>
-
-                        <div>
-                            {{#if defaultShipping}}
-                            <small>Shipping <i class="fa fa-check"/></small>
-                            {{/if}}
-                            {{#if defaultBilling}}
-                            <small>Billing <i class="fa fa-check"/></small>
-                            {{/if}}
-                        </div>
-                    </div>
-                    {{/each}}
-                    {{/each}}
-                </div>
-            </div>
-
-            <div id="email-row" class="row">
-                <div class="col-xs-1"><i class="icon-main fa fa-envelope"/></div>
-                <div class="col-xs-10">
-                    {{#each contact.details}}
-                        {{#each emails}}
-                            {{#if this}}
-                                <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}"/>
-                            {{/if}}
-                        {{/each}}
-                    {{/each}}
-                </div>
-            </div>
-
-            <div id="btn-edit-contact-mobile" class="btn-edit-contact visible-xs col-12-xs btn btn-primary">Edit Contact
-            </div>
-        </div>
+    <div id="contact-type">
+        <small>{{contactTypeLabel contact}}</small>
     </div>
 
-    <div class="clearfix"></div>
+    <div class="contact-photo-container">
+        <img class="img-rounded" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+    </div>
 
-    <div class="profile">
-                <div class="col-xs-12">
-                    {{#if photoSquare}}
-                        {{#isGoogleImage photoSquare}}
-                            <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader thumb-lg" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                        {{else}}
-                            <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
-                        {{/isGoogleImage}}
-                    {{else}}
-                        {{#isGoogleImage photo}}
-                            <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader thumb-lg" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                        {{else}}
-                            <img class="img-circle media-object thumbnail standard thumb-lg" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                        {{/isGoogleImage}}
+    <div id="contact-summary">
+        <div>Last Active:</div>
+        <div>Purchased:</div>
+        <div>Emails Opened:</div>
+        <div>Calls Made:</div>
+    </div>
+
+    <div id="contact-information">
+        <h4>Contact Information</h4>
+        <hr/>
+
+        <div id="phone-row" class="row">
+            <div class="col-xs-1"><i class="icon-main fa fa-phone"/></div>
+            <div class="col-xs-10">
+                {{#each contact.details}}
+                {{#each phones}}
+                <div>
+                    <a href="tel:{{number}}">{{number}}</a>
+                    <small>{{phoneTypeLabel type}}</small>
+                    <i class="icon-social {{iconFromSocialType ../type}}"/>
+                </div>
+                {{/each}}
+                {{/each}}
+            </div>
+        </div>
+
+        <div id="address-row" class="row">
+            <div class="col-xs-1"><i class="icon-main fa fa-map-marker"/></div>
+            <div class="col-xs-10">
+                {{#each contact.details}}
+                {{#each addresses}}
+                <div class="edit-address-container" data-id="{{_id}}">
+                    {{#if address}}
+                    <div><strong>{{address}}</strong></div>
                     {{/if}}
-                </div>
-                <div class="col-xs-12">
-                    <div class="col-xs-12">
-                        <div class="mb20"></div>
-                        <h3 class="profile-name">{{contact.first}} {{contact.middle}} {{contact.last}}
-                            <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>">
-                                <i class="fa fa-leaf"></i>
-                                <i class="fa fa-leaf"></i>
-                                <i class="fa fa-leaf"></i>
-                                <i class="fa fa-leaf text-muted"></i>
-                                <i class="fa fa-leaf text-muted"></i>
-                            </span>
-                        </h3>
-                        <div class="mb20"></div>
-                        <h4 class="center">
-                            <span class="label label-info contact-cat">{{contactTypeLabel contact}}</span>
-                        </h4>
-                        <hr class="clear mb20"></hr>
-                        <!-- Key Performance Indicators -->
-                        <div class="customer-status">
-                            <div class="row">
-                                <div class="col-xs-6 col-sm-4">
-                                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="12 Days ago Robin visited your website.">
-                                        <a href="#">
-                                            <div class="circle-tile-heading dark-blue">
-                                                <i class="fa fa-bolt fa-fw fa-2x"></i>
-                                            </div>
-                                        </a>
-                                        <div class="circle-tile-content">
-                                            <div class="circle-tile-description">
-                                                Last Active
-                                            </div>
-                                            <div class="circle-tile-number">
-                                                <p>12 days</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 col-sm-4">
-                                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Robin has purchased $384 of products/services from you.">
-                                        <a href="#">
-                                            <div class="circle-tile-heading green">
-                                                <i class="fa fa-money fa-fw fa-2x"></i>
-                                            </div>
-                                        </a>
-                                        <div class="circle-tile-content">
-                                            <div class="circle-tile-description">
-                                                Purchased
-                                            </div>
-                                            <div class="circle-tile-number">
-                                                <p>$384</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    {{#if address2}}
+                    <div>{{address2}}</div>
+                    {{/if}}
+                    <div>
+                        {{city}}
+                        {{#if state}}, {{state}}{{/if}}
+                        {{#if zip}}, {{zip}}{{/if}}
+                        {{#if country}}, {{country}}{{/if}} <i class="icon-social {{iconFromSocialType ../type}}"/>
+                    </div>
 
-                                <div class="visible-xs col-xs-12 mb30"></div>
-
-                                <div class="col-xs-6 col-sm-4">
-                                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Robin opened 3 out of the 5 emails you sent.">
-                                        <a href="#">
-                                            <div class="circle-tile-heading orange">
-                                                <i class="fa fa-envelope fa-fw fa-2x"></i>
-                                            </div>
-                                        </a>
-                                        <div class="circle-tile-content">
-                                            <div class="circle-tile-description">
-                                                Emails Opened
-                                            </div>
-                                            <div class="circle-tile-number">
-                                                <p>3/5</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 col-sm-4">
-                                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="You have made 10  phonecalls to Robin.">
-                                        <a href="#">
-                                            <div class="circle-tile-heading blue">
-                                                <i class="fa fa-phone fa-fw fa-2x"></i>
-                                            </div>
-                                        </a>
-                                        <div class="circle-tile-content">
-                                            <div class="circle-tile-description">
-                                                Calls Made
-                                            </div>
-                                            <div class="circle-tile-number">
-                                                <p>10</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="visible-xs col-xs-12 mb30"></div>
-
-                                <div class="col-xs-6 col-sm-4">
-                                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Robin has been a customer since 24 January, 2014">
-                                        <a href="#">
-                                            <div class="circle-tile-heading red">
-                                                <i class="fa fa-calendar fa-fw fa-2x"></i>
-                                            </div>
-                                        </a>
-                                        <div class="circle-tile-content">
-                                            <div class="circle-tile-description">
-                                                Customer Since
-                                            </div>
-                                            <div class="circle-tile-number">
-                                                <p>JAN 14</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 col-sm-4">
-                                    <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="Robin has mentioned you 7 times on social networks">
-                                        <a href="#">
-                                            <div class="circle-tile-heading purple">
-                                                <i class="fa fa-comments fa-fw fa-2x"></i>
-                                            </div>
-                                        </a>
-                                        <div class="circle-tile-content">
-                                            <div class="circle-tile-description">
-                                                Mentions
-                                            </div>
-                                            <div class="circle-tile-number">
-                                                <p>7</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="visible-xs col-xs-12 mb30"></div>
-
-                            </div>
-                        </div>
-
+                    <div>
+                        {{#if defaultShipping}}
+                        <small>Shipping <i class="fa fa-check"/></small>
+                        {{/if}}
+                        {{#if defaultBilling}}
+                        <small>Billing <i class="fa fa-check"/></small>
+                        {{/if}}
                     </div>
                 </div>
-                <div class="clearfix mb20"></div>
-                <div class="col-xs-12">
-                    <ul class="social-list right row">
-                        <li class="col-xs-12">
-                            <div class="col-xs-2">
-                                <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-                            </div>
-                            <div class="col-xs-8">
-                                <p>123 Burgandy Drive San Diego, CA 92102</p>
-                            </div>
-                            <div class="col-xs-2">
-                                <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i> <span class="hidden-xs"> 5 More</span></button>
-                            </div>
-                        </li>
+                {{/each}}
+                {{/each}}
+            </div>
+        </div>
 
-                        {{#each contact.details}}
-                            {{#each phones}}
-                                <li class="col-xs-12">
-                                    <div class="col-xs-2">
-                                        <a href="tel:{{number}}" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <p>{{number}}</p>
-                                        <small>{{phoneTypeLabel type}}</small>
-                                    </div>
-                                    <div class="col-xs-2">
-                                        <button href="#" class="btn btn-sm btn-warning btn-more-phones"><i class="fa fa-chevron-down"></i> <span class="hidden-xs"> 2 More</span></button>
-                                    </div>
-                                    </a>
-                                </li>
-                            {{/each}}
-                        {{/each}}
+        <div id="email-row" class="row">
+            <div class="col-xs-1"><i class="icon-main fa fa-envelope"/></div>
+            <div class="col-xs-10">
+                {{#each contact.details}}
+                {{#each emails}}
+                {{#if this}}
+                <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}"/>
+                {{/if}}
+                {{/each}}
+                {{/each}}
+            </div>
+        </div>
 
-                        {{#each contact.details}}
-                            {{#each emails}}
-                                    <li class="col-xs-12 li-email {{#if @first}}first{{/if}}">
-                                        <div class="col-xs-2">
-                                            <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope"></i></a>
-                                        </div>
-                                        <div class="col-xs-8">
-                                            <p>{{email}}</p>
-                                        </div>
-                                        <div class="col-xs-2">
-                                            {{#if @first}}
-                                            <button href="#" class="btn btn-sm btn-warning btn-more-emails"><i class="fa fa-chevron-down"></i> <span class="hidden-xs"> 1 More</span></button>
-                                            {{/if}}
-                                        </div>
-                                        </a>
-                                    </li>
-                            {{/each}}
-                        {{/each}}
-
-                        <li class="col-xs-12">
-                            <div class="col-xs-2">
-                                <a href="https://www.facebook.com/theronburgandy" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                            </div>
-                            <div class="col-xs-10">
-                                <p>henryholmes@gmail.com</p>
-                            </div>
-                        </li>
-
-                        <li class="col-xs-12">
-                            <div class="col-xs-2">
-                                <a href="https://twitter.com/RobinBurgundy" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
-                            </div>
-                            <div class="col-xs-10">
-                                <p>HenryHolmes</p>
-                            </div>
-                        </li>
-
-                        <li class="col-xs-12">
-                            <div class="col-xs-2">
-                                <a href="http://www.linkedin.com/pub/ron-burgundy/74/415/b0b" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
-                            </div>
-                            <div class="col-xs-10">
-                                <p>henry-holmes</p>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <div class="mb20"></div>
-
-                </div>
-                <div class="clearfix"></div>
+        <div id="btn-edit-contact-mobile" class="btn-edit-contact visible-xs col-12-xs btn btn-primary">Edit Contact
+        </div>
     </div>
+
 </script>
 
 
 <script type="text/x-handlebars-template" name="contact-activity" partial="true">
-    <h3 class="profile-name col-xs-6">Activity with {{contact.first}}</h3>
-            <div class="col-xs-6">
-                <select class="pull-right form-control chosen-select activity-select" data-placeholder="Activity Type">
-                    <option value=""></option>
-                    <option value="email">Email</option>
-                    <option value="phone">Phone</option>
-                    <option value="appointment">Appointment</option>
-                    <option value="form-entry">Form Entry</option>
-                    <option value="visits">Visits</option>
-                    <option value="twitter">Twitter</option>
-                    <option value="reviews">Reviews</option>
-                </select>
-            </div>
-            <hr class="clearfix mb30"></hr>
-            <div class="smart-timeline">
-                <ul class="smart-timeline-list">
-                    <li>
-                        <div class="smart-timeline-icon">
-                            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
-                        </div>
-                        <div class="smart-timeline-time">
-                            <small>just now</small>
-                        </div>
-                        <div class="smart-timeline-content">
-                            <p>
-                                <a href="javascript:void(0);">
-                                    <span class="label label-default">Email</span> from Sarah K.
-                                </a>
-                            </p>
-                            <p>
-                                Promotion email based on Henry&#39;s birthday.
-                            </p>
-                            <p>
-                                <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a>
-                            </p>
 
-
-
-                        </div>
-                    </li>
-                    <li>
-                        <div class="smart-timeline-icon">
-                            <img src="../images/photos/loggeduser.png" width="32" height="32">
-                        </div>
-                        <div class="smart-timeline-time">
-                            <small>12 Mar, 2013</small>
-                        </div>
-                        <div class="smart-timeline-content">
-                            <p>
-                                <span class="label label-default">Tweet</span> by Henry Holmes.
-                            </p>
-                            <p>
-                                I Love <strong>Yoga One</strong>!
-                            </p>
-                            <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Reply to Tweet</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="smart-timeline-icon">
-                            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
-                        </div>
-                        <div class="smart-timeline-time">
-                            <small>1 min ago</small>
-                        </div>
-                        <div class="smart-timeline-content">
-                            <p>
-                                <span class="label label-default">Call</span> from Sarah K.
-                            </p>
-
-                            <p>
-                                Successful Thank you call and get feedback on Customer Service.
-                            </p>
-                            <p>
-                                <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-phone-square"></i> Listen to the Call</a>
-                            </p>
-
-                        </div>
-                    </li>
-                    <li>
-                        <div class="smart-timeline-icon">
-                            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
-                        </div>
-                        <div class="smart-timeline-time">
-                            <small>5 hrs ago</small>
-                        </div>
-                        <div class="smart-timeline-content">
-                            <p>
-                                <span class="label label-default">Viewed</span> Profile</strong>
-                            </p>
-
-                            <br>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="smart-timeline-icon">
-                           <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
-                        </div>
-                        <div class="smart-timeline-time">
-                            <small>yesterday</small>
-                        </div>
-                        <div class="smart-timeline-content">
-                            <p>
-                                <a href="javascript:void(0);">
-                                   <span class="label label-default">Update</span> phone number
-                                </a>
-                            </p>
-                            <p>
-                                <span class="strike">619-568-4989</span></br>
-                                619-574-5849
-                            </p>
-                        </div>
-                    </li>
-                    <li class="text-center">
-                        <a href="javascript:void(0)" class="btn btn-sm btn-default"><i class="fa fa-arrow-down text-muted"></i> LOAD MORE</a>
-                    </li>
-                </ul>
-            </div>
 </script>
 <!-- END CONTACT DETAILS VIEW -->
 
@@ -930,29 +460,13 @@ CONTACT DETAILS VIEW
 CONTACTS EDIT VIEW
 -->
 <script type="text/x-handlebars-template" name="contact-edit-main">
-    <div class="pageheader row">
-        <div class="col-xs-8">
-            <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
-                <span class="fa fa-chevron-left"></span>
-                <span class="hidden-xs">Back</span>
-            </button>
-            <h2><i class="fa fa-users"></i> Add Contact </h2>
-        </div>
-
-        <div class="col-xs-4">
-            <div class="btn btn-success pull-right btn-save-contact" type="button">
-                <i class="fa fa-save"></i>
-                <span class="hidden-xs">Save</span>
-            </div>
-
-
-        </div>
-    </div>
-    <div id="contact-edit-container" class="contentpanel">
+    <div id="contact-edit-container">
         <div class="row">
             <div class="col-md-6">
                 <div class="hidden-xs hidden-sm">
                     <h4>
+                        <small><span id="btn-back-to-contact" class="btn-link"><i class="fa fa-angle-left"/></span>
+                        </small>
                         Name & Photo
                     </h4>
                     <hr/>
