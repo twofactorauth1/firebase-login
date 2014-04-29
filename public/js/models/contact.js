@@ -52,7 +52,7 @@ define([], function() {
                 detail = {
                     _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
                     type: $$.constants.contact.detail_types.LOCAL,
-                    email:"",
+                    emails:[],
                     photo:"",
                     phones: [],
                     address: null

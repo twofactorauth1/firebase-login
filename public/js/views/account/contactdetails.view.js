@@ -7,8 +7,9 @@
 
 define([
     'views/base.view',
-    'models/contact'
-], function(BaseView, Contact) {
+    'models/contact',
+    'services/geocode.service'
+], function(BaseView, Contact, GeocodeService) {
 
     var view = BaseView.extend({
 
@@ -19,7 +20,8 @@ define([
 
         events: {
             "click #btn-back-to-contacts":"goBack",
-            "click .btn-edit-contact":"editContact"
+            "click .btn-edit-contact":"editContact",
+            "click .btn-more-emails":"showEmails"
         },
 
 
@@ -34,6 +36,7 @@ define([
                     var tmpl = $$.templateManager.get("contact-details-main", self.templateKey);
                     var html = tmpl(data);
                     self.show(html);
+                    self.contactMap(data['contact']['address']);
                 })
                 .fail(function(resp) {
                     $$.viewManager.showAlert("There was an error retrieving this contact");
@@ -58,6 +61,45 @@ define([
 
         goBack: function() {
             $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter, true);
+        },
+
+        contactMap: function(address) {
+            console.log('initializing map '+address);
+
+            var zoom = 13;
+
+            if (!address) {
+                address = 'United States';
+                zoom = 2;
+            }
+
+            $$.svc.GeocodeService.addresstolatlng(address).done(function(value){
+                var map = L.map('map-marker', {
+                    center: [ value[0]['lat'], value[0]['lon']],
+                    zoom: zoom,
+                    zoomControl:false,
+                    autoPan: false,
+                    dragging: false,
+                    zooming: false,
+                    scrollWheelZoom: false,
+                });
+                var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+                var osmAttrib = '';
+
+                L.tileLayer(osmUrl, {
+                    maxZoom: 18,
+                    attribution: osmAttrib
+                }).addTo(map);
+
+                L.marker([value[0]['lat'], value[0]['lon']]).addTo(map);
+            });
+
+        },
+
+        showEmails: function() {
+            console.log('show phones');
+            $('.li-email').show();
+            $('.li-email.first .btn-more-emails i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
         }
     });
 
