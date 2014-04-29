@@ -21,7 +21,8 @@ define([
         events: {
             "click #btn-back-to-contacts":"goBack",
             "click .btn-edit-contact":"editContact",
-            "click .btn-more-emails":"showEmails"
+            "click .btn-more-emails":"showEmails",
+            "click .btn-less-emails":"hideEmails"
         },
 
 
@@ -100,6 +101,16 @@ define([
             console.log('show phones');
             $('.li-email').show();
             $('.li-email.first .btn-more-emails i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            $('.li-email.first .btn-more-emails span').text('less');
+            $('.li-email.first .btn-more-emails').removeClass('btn-more-emails').addClass('btn-less-emails');
+        },
+
+        hideEmails: function() {
+            console.log('hide phones');
+            $('.li-email:not(:first)').hide();
+            $('.li-email.first .btn-less-emails i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            $('.li-email.first .btn-less-emails span').text('more');
+            $('.li-email.first .btn-less-emails').removeClass('btn-less-emails').addClass('btn-more-emails');
         }
     });
 
