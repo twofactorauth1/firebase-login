@@ -1,4 +1,4 @@
-var twonetClient = require('../../twonetclient');
+var twonetClient = require('../index');
 
 // the user uuid we'll register/unregister
 var user_guid = "50f97bb9-a38d-46eb-8e5a-d1716aed1da3";

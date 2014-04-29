@@ -134,8 +134,9 @@ module.exports = function(grunt) {
         nodeunit: {
             all:['test/**/*_test.js'],
             contextio:['test/contextio_test.js'],
-            biometrics:['biometrics/test/**/*_test.js'],
-            twonetclient:['twonetclient/test/**/*_test.js']
+            biometrics:['biometrics/platform/test/**/*_test.js'],
+            twonetadapter:['biometrics/twonet/adapter/test/**/*_test.js'],
+            twonetclient:['biometrics/twonet/client/test/**/*_test.js']
         }
     });
 
@@ -154,5 +155,6 @@ module.exports = function(grunt) {
     grunt.registerTask('tests', ['nodeunit:all']);
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometrics', ['nodeunit:biometrics']);
-    grunt.registerTask('test2netclient', ['nodeunit:twonetclient']);
+    grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);
+    grunt.registerTask('testTwonetadapter', ['nodeunit:twonetadapter']);
 };

@@ -1,4 +1,4 @@
-var twonetClient = require('../../twonetclient');
+var twonetClient = require('../index');
 var uuid = require('node-uuid');
 
 // the user uuid we'll register/unregister

@@ -1,4 +1,4 @@
-var readingTypeDao = require('../dao/biometrics/readingtype.dao.js');
+var readingTypeDao = require('./dao/readingtype.dao.js');
 
 module.exports = {
 

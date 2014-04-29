@@ -1,9 +1,9 @@
 process.env.NODE_ENV = "testing";
-var app = require('../../app');
+var app = require('../../../app');
 
-var readingTypeDao = require('../../dao/biometrics/readingtype.dao.js');
-var deviceTypeDao = require('../../dao/biometrics/devicetype.dao.js');
-var deviceDao = require('../../dao/biometrics/device.dao.js');
+var readingTypeDao = require('../dao/readingtype.dao.js');
+var deviceTypeDao = require('../dao/devicetype.dao.js');
+var deviceDao = require('../dao/device.dao.js');
 
 var readingType1key = "device.dao.rt1:Weight";
 var deviceType1key = "device.dao.dt1:Scale";

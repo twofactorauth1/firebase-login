@@ -5,15 +5,13 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-require('./../base.model.js');
+require('../../../../models/base.model.js');
 
-var readingtype = $$.m.ModelBase.extend({
+var twonetuser = $$.m.ModelBase.extend({
 
     defaults: function() {
         return {
             _id: null,
-            unit: null,
-            description: null,
             _v:"0.1"
         }
     },
@@ -26,10 +24,11 @@ var readingtype = $$.m.ModelBase.extend({
 }, {
     db: {
         storage: "mongo",
-        table: "readingtypes"
+        table: "twonetuser",
+        idStrategy: "uuid"
     }
 });
 
-$$.m.ReadingType = readingtype;
+$$.m.TwonetUser = twonetuser;
 
-module.exports = readingtype;
+module.exports = twonetuser;

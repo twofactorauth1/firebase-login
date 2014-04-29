@@ -1,4 +1,4 @@
-var deviceTypeDao = require('../dao/biometrics/devicetype.dao.js');
+var deviceTypeDao = require('../../platform/dao/devicetype.dao.js');
 
 module.exports = {
 

@@ -1,11 +1,11 @@
 process.env.NODE_ENV = "testing";
-var app = require('../../app');
+var app = require('../../../app');
 
 var DeviceManager = require('../bio_device_manager.js');
 
-var readingTypeDao = require('../../dao/biometrics/readingtype.dao.js');
-var deviceTypeDao = require('../../dao/biometrics/devicetype.dao.js');
-var deviceDao = require('../../dao/biometrics/device.dao.js');
+var readingTypeDao = require('../dao/readingtype.dao.js');
+var deviceTypeDao = require('../dao/devicetype.dao.js');
+var deviceDao = require('../dao/device.dao.js');
 
 var readingType1key = "bio_device_manager_test.Weight";
 var deviceType1key = "bio_device_manager_test.Scale";

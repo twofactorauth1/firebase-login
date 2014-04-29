@@ -5,8 +5,8 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-require('../base.dao.js');
-require('../../models/biometrics/devicetype');
+require('../../../dao/base.dao.js');
+require('../model/devicetype');
 
 var readingTypeDao = require('./readingtype.dao.js');
 
