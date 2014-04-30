@@ -1,5 +1,8 @@
 var twonetClient = require('../client/index');
 var twonetUserDao = require('./dao/twonetuser.dao.js');
+var deviceTypeDao = require('../../platform/dao/devicetype.dao.js');
+var twonetDeviceTypes = require('./twonet_device_types.js');
+var deviceManager = require('../../platform/bio_device_manager.js');
 
 module.exports = {
 
@@ -47,6 +50,72 @@ module.exports = {
         })
     },
 
+    registerDevice: function(platformUserId, deviceTypeId, serialNumber, fn) {
+
+        if (!twonetDeviceTypes.isValidDeviceType(deviceTypeId)) {
+            return fn(new Error("Unrecognized device type " + deviceTypeId), null);
+        }
+
+        /**
+         * Validate user is registered
+         */
+        twonetUserDao.getById(platformUserId, function(err, user) {
+            if (err) {
+                return fn(err, null);
+            }
+
+            if (!user) {
+                return fn(new Error("User " + platformUserId + " has not been registered"), null);
+            }
+
+            /**
+             * Retrieve device type
+             */
+            deviceTypeDao.getById(deviceTypeId, function (err, deviceType) {
+                if (err) {
+                    return fn(err, null);
+                }
+
+                if (!deviceType) {
+                    return fn(new Error("No device type identified by " + deviceTypeId + " was found"), null);
+                }
+
+                twonetClient.deviceRegistration.register2netDevice(
+                    platformUserId,
+                    serialNumber,
+                    deviceType.attributes.model,
+                    deviceType.attributes.manufacturer,
+                    function (err, twonetDevice) {
+                        if (err) {
+                            return fn(err, null);
+                        }
+
+                        console.log("Registered 2net device " + JSON.stringify(twonetDevice));
+
+                        /**
+                         * Register device with our platform
+                         */
+                        deviceManager.createDevice(
+                            deviceTypeId,
+                            serialNumber,
+                            twonetDevice.guid,
+                            platformUserId,
+                            function(err, platformDevice) {
+                                if (err) {
+                                    // 2net has no api to unregister a device so not sure
+                                    // what happens to it
+                                    return fn(err, null);
+                                }
+
+                                console.log("Registered platform device " + JSON.stringify(platformDevice));
+
+                                return fn(null, platformDevice);
+                            })
+                    })
+            })
+        })
+    },
+
     unregisterUser: function(platformUserId, fn) {
 
         twonetClient.userRegistration.unregister(platformUserId, function (err, response) {
@@ -58,7 +127,7 @@ module.exports = {
             console.log("succesfully unregistered guid: " + response);
 
             /**
-             * Delete record
+             * Delete registration record
              */
             twonetUserDao.removeById(platformUserId, function(err, res) {
                 if (err) {

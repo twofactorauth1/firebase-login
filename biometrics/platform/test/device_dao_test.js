@@ -40,7 +40,7 @@ exports.device_dao_test = {
     },
 
     createDeviceNoDeviceType: function(test) {
-        deviceDao.createDevice("a device type", null, null, function(err, device) {
+        deviceDao.createDevice("a device type", null, null, null, function(err, device) {
             test.ok(err);
             test.ok(err.toString().indexOf("not found") > -1);
             test.ok(!device);
@@ -50,7 +50,7 @@ exports.device_dao_test = {
 
     createDevice: function(test) {
         test.expect(5);
-        deviceDao.createDevice(deviceType1key, "SN001", "EI001", function(err, device) {
+        deviceDao.createDevice(deviceType1key, "SN001", "EI001", null, function(err, device) {
             if (err) {
                 test.ok(false, err);
                 return test.done();
@@ -77,7 +77,7 @@ exports.device_dao_test = {
 
     createDeviceNoSerial: function(test) {
         test.expect(5);
-        deviceDao.createDevice(deviceType1key, null, null, function(err, device) {
+        deviceDao.createDevice(deviceType1key, null, null, null, function(err, device) {
             if (err) {
                 test.ok(false, err);
                 return test.done();

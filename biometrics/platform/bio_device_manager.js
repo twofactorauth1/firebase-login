@@ -2,8 +2,30 @@ var deviceDao = require('./dao/device.dao.js');
 
 module.exports = {
 
+    createDevice: function(deviceTypeId, serialNumber, externalId, userId, fn) {
+
+        deviceDao.createDevice(deviceTypeId, serialNumber, externalId, userId, function(err, device) {
+            if (err) {
+                return fn(err, null);
+            }
+
+            return fn(null, device);
+        })
+    },
+
+    getDeviceById: function(deviceId, fn) {
+
+        deviceDao.getById(deviceId, function(err, device) {
+            if (err) {
+                return fn(err, null);
+            }
+
+            return fn(null, device);
+        });
+    },
+
     assignDevice: function(deviceId, userId, fn) {
-        deviceDao.findOne({_id: deviceId}, function(err, device){
+        deviceDao.getById(deviceId, function(err, device){
             if (err) {
                 return fn(err, null);
             }
@@ -28,7 +50,7 @@ module.exports = {
     },
 
     unassignDevice: function(deviceId, fn) {
-        deviceDao.findOne({_id: deviceId}, function(err, device){
+        deviceDao.getById(deviceId, function(err, device){
             if (err) {
                 return fn(err, null);
             }

@@ -24,7 +24,7 @@ exports.bio_device_manager_test = {
                         throw err;
                     }
 
-                    deviceDao.createDevice(deviceType1key, "SN001", "EI001", function(err, device) {
+                    deviceDao.createDevice(deviceType1key, "SN001", "EI001", null, function(err, device) {
                         if (err) {
                             test.ok(false, err);
                             return test.done();

@@ -17,7 +17,7 @@ var dao = {
         defaultModel: $$.m.Device
     },
 
-    createDevice: function(deviceTypeId, serialNumber, externalId, fn) {
+    createDevice: function(deviceTypeId, serialNumber, externalId, userId, fn) {
 
         if ($$.u.stringutils.isNullOrEmpty(deviceTypeId)) {
             return fn(new Error("A device type was not specified"), null);
@@ -36,7 +36,8 @@ var dao = {
             var device = new $$.m.Device({
                 serialNumber: serialNumber,
                 externalId: externalId,
-                deviceTypeId: deviceTypeId
+                deviceTypeId: deviceTypeId,
+                userId: userId
             });
 
             self.saveOrUpdate(device, function (err, value) {
