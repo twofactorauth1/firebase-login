@@ -8,8 +8,8 @@
 var appConfig =  require('./app.config');
 
 //user: christopher.mina@gmail.com
-var clientId = process.env.GOOGLE_CLIENT_ID || '800949752961.apps.googleusercontent.com';
-var clientSecret = process.env.GOOGLE_CLIENT_SECRET || 'AzTB-YSe4f8dXZxczQ0ISEIX';
+var clientId = process.env.GOOGLE_CLIENT_ID || '277102651227.apps.googleusercontent.com';
+var clientSecret = process.env.GOOGLE_CLIENT_SECRET || 'AIzaSyCAkloYlXlZx_---WXevaNHv03ReYpnvLs';
 
 module.exports = {
     CLIENT_ID: clientId,

@@ -8,7 +8,7 @@
 
 This is  my theme header
 
-<div>
+<div class="hidden">
     <h4>Main Menu Links</h4>
     <ul class="list-main-menu">
         {{#each linkLists.main-menu}}
@@ -17,7 +17,7 @@ This is  my theme header
     </ul>
 </div>
 
-<div>
+<div class="hidden">
     <h4>Head Menu Links</h4>
     <ul class="list-head-menu">
         {{#each linkLists.head-menu}}
@@ -25,5 +25,31 @@ This is  my theme header
         {{/each}}
     </ul>
 </div>
+
+<nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" href="index.html">Banzhow</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    {{#each linkLists.head-menu}}
+                        <li>{{{link this}}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
 
 <br/><br/>

@@ -15,12 +15,13 @@ module.exports = {
     },
 
     facebook: {
-        facebookId: "9500891",
+        facebookId: "1184901135",
         friendId: "6903264",
-        username: "christopher.mina",
-        accessToken: "CAAD1S4kzawsBABjQpc7HRVguzPHAF1SOYvb9lWKXN1IENx9PkWg3ICO6pRlNxZCj7zAW9uwesnhXvZBrDF9OODUHL1se0tQNNucDut5ZB8HJveZBu1ryLXnD3lr40jVJqg2cCZAUaTZAtcTcwACGT1ehGvXqS3fG62WTbu8AD5W1ZCeGTUMQ5DCp8QUxw5EYpUZD",
+        username: "bradrisse",
+        accessToken: "CAAHbbwFi7WkBACZCFi5zulmZBDEjbcH1EnOBfLOnJdd8y1eLvKyGWqwZB01hQ9JCqS6TdN7IWoMixLn848hT91Lj2kJiVT2oqTeDuQh47BIKGHxDzDygewpv3dTUAWe8r3qZBpvjpI5EoeQ74fccOl4vLP9w6rVztFLvAgvVCZBvLBlpL4KnhuPU18YKtal0c7mOhoxeV6AZDZD",
         tokenScope: ["basic_info","email","friends_website","friends_birthday","offline_access","read_stream","read_mailbox"],
-        tokenExpires: 1400220990027
+        //tokenScope: ["basic_info","email"],
+        tokenExpires: 1398164400
     },
 
     twitter: {
