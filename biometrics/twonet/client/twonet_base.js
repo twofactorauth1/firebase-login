@@ -6,11 +6,11 @@ var twoNetBase = function() {
 }
 
 var processHttpResponse = function(error, response, body, httpClientCallback) {
-    console.log("==> Response status code: " + response.statusCode);
+    console.debug("==> Response status code: " + response.statusCode);
     if (error) {
         httpClientCallback(error, null);
     } else {
-        console.log("==> Response: " + JSON.stringify(body));
+        console.debug("==> Response: " + JSON.stringify(body));
         if (response.statusCode != 200) {
             return httpClientCallback(new Error(JSON.stringify(body)), null);
         }
@@ -43,10 +43,10 @@ _.extend(twoNetBase.prototype, {
                 'Content-type': "application/json"
         };
 
-        console.log("\n" + options.url);
+        console.debug(options.url);
 
         if (json) {
-            console.log("==> Request Body: " + JSON.stringify(json));
+            console.debug("==> Request Body: " + JSON.stringify(json));
             options.json = json;
         } else {
             options.json = {};

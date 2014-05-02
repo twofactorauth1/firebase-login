@@ -11,56 +11,43 @@ var platformUserId = "50f97bb9";
 
 exports.twonet_poll_test = {
 
-//    test_findUserDevice: function(test) {
-//        twonetAdapter._findUserDevice("50f97bb9-a38d-46eb-8e5a-d1716aed1da6", "SN001", "2net_scale", "2b6803b5-b464-16c1-12b6-b597399b7aff", function(err, device){
-//            if (err) {
-//                test.ok(false, err.message);
-//            }
-//            console.log(device);
-//            test.done();
-//        })
-//    }
-
     testPoll: function(test) {
-
-        /**
-         * Init reading types
-         */
         readingTypes.initDB(function (err, response) {
             if (err) {
                 console.error(err.message);
             }
-
-            /**
-             * Init device types
-             */
             twonetDeviceTypes.initDB(function (err, response) {
                 if (err) {
                     console.error(err.message);
                 }
-
-
                 twonetAdapter.registerUser(platformUserId, function (err, twonetUser) {
                     if (err) {
                         console.error(err.message);
                     }
-
-                    twonetAdapter.registerDevice(platformUserId, "2net_scale", "5130551101", function (err, platformDevice) {
+                    twonetAdapter.registerDevice(platformUserId, twonetDeviceTypes.DT_2NET_PULSEOX, "501465116", function (err, twonetPulseOxDevice) {
                         if (err) {
                             console.error(err.message);
                         }
-
-                        twonetAdapter.pollForReadings(15, function (err, response) {
+                        twonetAdapter.registerDevice(platformUserId, twonetDeviceTypes.DT_2NET_BPM, "5130651010", function (err, twonetScaleDevice) {
                             if (err) {
                                 console.error(err.message);
                             }
-
-                            twonetAdapter.unregisterUser(platformUserId, function (err, unregisteredUserId) {
+                            twonetAdapter.registerDevice(platformUserId, twonetDeviceTypes.DT_2NET_SCALE, "5130551101", function (err, twonetScaleDevice) {
                                 if (err) {
                                     console.error(err.message);
                                 }
-                                test.ok(true);
-                                test.done();
+                                twonetAdapter.pollForReadings(function (err) {
+                                    if (err) {
+                                        console.error(err.message);
+                                    }
+                                    twonetAdapter.unregisterUser(platformUserId, function (err, unregisteredUserId) {
+                                        if (err) {
+                                            console.error(err.message);
+                                        }
+                                        test.ok(true); // to avoid the warning
+                                        test.done();
+                                    })
+                                })
                             })
                         })
                     })

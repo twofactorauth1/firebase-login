@@ -29,15 +29,15 @@ module.exports = {
                     throw err;
                 }
 
-                console.log("succesfully registered user: " + response);
+                console.debug("succesfully registered user: " + response);
 
                 /**
                  * Persist registration record in the database
                  */
                 twonetUserDao.createUser(platformUserId, function (createUserError, createUserResponse) {
                     if (createUserError) {
-                        console.log("failed to persist twonet user");
-                        console.error(createUserError);
+                        console.error("failed to create twonet user");
+                        console.error(createUserError.message);
 
                         // rollback registration
                         twonetClient.userRegistration.unregister(platformUserId, function (err, response) {
@@ -93,7 +93,7 @@ module.exports = {
                             return fn(err, null);
                         }
 
-                        console.log("Registered 2net device " + JSON.stringify(twonetDevice));
+                        console.debug("Registered 2net device " + JSON.stringify(twonetDevice));
 
                         /**
                          * Register device with our platform
@@ -122,7 +122,7 @@ module.exports = {
                                         return fn(err, null);
                                     }
 
-                                    console.log("Registered platform device " + JSON.stringify(platformDevice));
+                                    console.debug("Registered platform device " + JSON.stringify(platformDevice));
 
                                     return fn(null, platformDevice);
                                 })
@@ -140,7 +140,7 @@ module.exports = {
                 return fn(err, null);
             }
 
-            console.log("succesfully unregistered user: " + response);
+            console.debug("succesfully unregistered user: " + response);
 
             /**
              * Delete registration record
@@ -156,23 +156,34 @@ module.exports = {
         })
     },
 
-    pollForReadings: function(period, fn) {
+    pollForReadings: function(callback) {
         var self = this;
+
+        console.info("2net adapter: polling...");
+
         twonetUserDao.findMany({ "_id": { $ne: "__counter__" } }, function(err, users) {
             if (err) {
-                console.log(err.message);
-                return fn(err, null);
+                console.error(err.message);
+                return callback(err);
+            }
+
+            if (users.length == 0) {
+                console.info("2net adapter: found no users to poll")
+                return callback();
             }
 
             // want to poll users sequentially (to avoid abusing the 2net api for now), hence this pattern
             function pollUser(user) {
                 if (!user) {
-                    return fn(null, null);
+                    console.info("2net adapter: no more users to poll");
+                    return callback();
                 }
+
+                console.debug("2net adapter: polling devices for user " + user.attributes._id);
 
                 deviceManager.findDevices({"userId": user.attributes._id}, function(err, devices) {
                     if (err) {
-                        console.log(err.message);
+                        console.error(err.message);
                         return pollUser(users.shift());
                     }
 
@@ -183,7 +194,21 @@ module.exports = {
                         }
 
                         if (device.attributes.deviceTypeId == twonetDeviceTypes.DT_2NET_SCALE) {
-                            self._poll2netScale(device, function(err, response) {
+                            self._recordLatestBodyMeasurement(device, function (err, response) {
+                                if (err) {
+                                    console.error(err.message);
+                                }
+                                pollDevice(devices.shift());
+                            })
+                        } else if (device.attributes.deviceTypeId == twonetDeviceTypes.DT_2NET_BPM) {
+                            self._recordLatestBloodMeasurement(device, self._makeBPMReadingValues, function (err, response) {
+                                if (err) {
+                                    console.error(err.message);
+                                }
+                                pollDevice(devices.shift());
+                            })
+                        } else if (device.attributes.deviceTypeId == twonetDeviceTypes.DT_2NET_PULSEOX) {
+                            self._recordLatestBloodMeasurement(device, self._makePulseOxReadingValues, function (err, response) {
                                 if (err) {
                                     console.error(err.message);
                                 }
@@ -202,10 +227,53 @@ module.exports = {
         })
     },
 
-    _poll2netScale: function(device, fn) {
+    _recordLatestBloodMeasurement: function(device, valuesProvider, fn) {
         var self = this;
 
-        console.debug("Fetching last reading for " + device.attributes.deviceTypeId + ": " + device.attributes._id);
+        console.debug("2net adapter: polling device " + device.attributes._id + " (" + device.attributes.deviceTypeId
+            + ") for user " + device.attributes.userId);
+
+        twonetClient.bloodMeasurements.getLatestMeasurement(device.attributes.userId, device.attributes.externalId,
+            function(err, twonetReading) {
+                if (err) {
+                    return fn(err, null);
+                }
+                console.debug(twonetReading);
+                deviceManager.findReadings(
+                    {
+                        externalId: twonetReading.guid,
+                        deviceId: device.attributes._id
+                    }, function(err, readings) {
+                        if (err) {
+                            return fn(err, null);
+                        }
+                        if (readings.length > 0) {
+                            return fn(null, null);
+                        }
+
+                        deviceManager.createReading(
+                            device.attributes._id,
+                            valuesProvider(twonetReading),
+                            twonetReading.guid,
+                            twonetReading.time,
+                            function(err, platformReading) {
+                                if (err) {
+                                    return fn(err, null);
+                                }
+                                return fn(null, null);
+                            }
+                        )
+                    })
+            }
+        )
+    },
+
+    _recordLatestBodyMeasurement: function(device, fn) {
+        var self = this;
+
+        console.debug("2net adapter: polling device " + device.attributes._id + " (" + device.attributes.deviceTypeId
+            + ") for user " + device.attributes.userId);
+
         twonetClient.bodyMeasurements.getLatestMeasurement(device.attributes.userId, device.attributes.externalId,
             function(err, twonetReading) {
                 if (err) {
@@ -221,7 +289,6 @@ module.exports = {
                             return fn(err, null);
                         }
                         if (readings.length > 0) {
-                            console.debug("Matching reading already in the database, won't record it again");
                             return fn(null, null);
                         }
 
@@ -245,6 +312,21 @@ module.exports = {
     _makeScaleReadingValues: function(twonetReading) {
         var value = {};
         value[readingTypes.RT_WEIGHT] = twonetReading.body.weight;
+        return [value];
+    },
+
+    _makeBPMReadingValues: function(twonetReading) {
+        var value = {};
+        value[readingTypes.RT_PULSE] = twonetReading.blood.pulse;
+        value[readingTypes.RT_DIASTOLIC] = twonetReading.blood.diastolic;
+        value[readingTypes.RT_SYSTOLIC] = twonetReading.blood.systolic;
+        return [value];
+    },
+
+    _makePulseOxReadingValues: function(twonetReading) {
+        var value = {};
+        value[readingTypes.RT_PULSE] = twonetReading.blood.pulse;
+        value[readingTypes.RT_SP02] = twonetReading.blood.spo2;
         return [value];
     },
 
