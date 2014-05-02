@@ -1,3 +1,6 @@
+process.env.NODE_ENV = "testing";
+var app = require('../../../../app');
+
 var TwonetBase = require('../twonet_base'),
     twoNetBase = new TwonetBase();
 

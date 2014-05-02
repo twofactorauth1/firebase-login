@@ -1,11 +1,11 @@
 var util = require('util');
 var TwoNetBase = require('./twonet_base');
 
-var DeviceRegistration = function() {
-    this.init.apply(this, arguments);
-}
+var deviceRegistration = {
 
-_.extend(DeviceRegistration.prototype, TwoNetBase.prototype, {
+    options: {
+        name: "twonet_device_registration"
+    },
 
     GET_USER_DEVICES_ENDPOINT: String("/partner/user/tracks/details/%s"),
 
@@ -177,6 +177,7 @@ _.extend(DeviceRegistration.prototype, TwoNetBase.prototype, {
             }
         });
     }
-});
+};
 
-module.exports = new DeviceRegistration();
+deviceRegistration = _.extend(deviceRegistration, TwoNetBase.prototype, deviceRegistration.options).init();
+module.exports = deviceRegistration;

@@ -15,7 +15,7 @@ exports.twonet_adapter_test = {
 
         twonetAdapter.registerUser(platformUserId, function (err, twonetUser) {
             if (err) {
-                test.ok(false, err);
+                test.ok(false, err.message);
                 return test.done();
             }
 
@@ -28,7 +28,7 @@ exports.twonet_adapter_test = {
              */
             twonetUserDao.getById(twonetUser.attributes._id, function (err, twonetUser) {
                 if (err) {
-                    test.ok(false, err);
+                    test.ok(false, err.message);
                     return test.done();
                 }
 
@@ -45,7 +45,7 @@ exports.twonet_adapter_test = {
 
         twonetAdapter.unregisterUser(platformUserId, function (err, unregisteredUserId) {
             if (err) {
-                test.ok(false, err);
+                test.ok(false, err.message);
                 test.done();
             }
 

@@ -1,9 +1,7 @@
 process.env.NODE_ENV = "testing";
 var app = require('../../../../app');
 
-var twonetUserDao = require('../dao/twonetuser.dao.js');
 var twonetAdapter = require('../twonet_adapter.js');
-var deviceManager = require('../../../platform/bio_device_manager.js');
 var readingTypes = require('../../../platform/bio_reading_types.js');
 var twonetDeviceTypes = require('../twonet_device_types.js');
 

@@ -1,3 +1,6 @@
+process.env.NODE_ENV = "testing";
+var app = require('../../../../app');
+
 var twonetClient = require('../index');
 var uuid = require('node-uuid');
 

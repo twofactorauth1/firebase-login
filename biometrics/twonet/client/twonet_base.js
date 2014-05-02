@@ -1,25 +1,11 @@
 var request = require('request');
 _ = require('underscore');
 
-var twoNetBase = function() {
-    this.init.apply(this, arguments);
+var twonetBase = function(){
+
 }
 
-var processHttpResponse = function(error, response, body, httpClientCallback) {
-    console.debug("==> Response status code: " + response.statusCode);
-    if (error) {
-        httpClientCallback(error, null);
-    } else {
-        console.debug("==> Response: " + JSON.stringify(body));
-        if (response.statusCode != 200) {
-            return httpClientCallback(new Error(JSON.stringify(body)), null);
-        }
-
-        return httpClientCallback(null, body);
-    };
-}
-
-_.extend(twoNetBase.prototype, {
+_.extend(twonetBase.prototype, {
 
     RESPONSE_STATUS: { OK: "OK" },
 
@@ -29,8 +15,9 @@ _.extend(twoNetBase.prototype, {
 
     BASE_PATH: "https://twonetcom.qualcomm.com/kernel",
 
-    init: function(options) {
-        options = options || {};
+    init: function() {
+        this.log = $$.g.getLogger(this.name || "twonet_base");
+        return this;
     },
 
     twonetOptions: function (endpoint, json) {
@@ -43,10 +30,10 @@ _.extend(twoNetBase.prototype, {
                 'Content-type': "application/json"
         };
 
-        console.debug(options.url);
+        this.log.debug(options.url);
 
         if (json) {
-            console.debug("==> Request Body: " + JSON.stringify(json));
+            this.log.debug("==> Request Body: " + JSON.stringify(json));
             options.json = json;
         } else {
             options.json = {};
@@ -56,20 +43,23 @@ _.extend(twoNetBase.prototype, {
     },
 
     httpGet: function(url, httpClientCallback) {
+        var self = this;
         request.get(this.twonetOptions(url, null), function(error, response, body) {
-            processHttpResponse(error, response, body, httpClientCallback);
+            self._processHttpResponse(error, response, body, httpClientCallback);
         });
     },
 
     httpPost: function(url, body, httpClientCallback) {
+        var self = this;
         request.post(this.twonetOptions(url, body), function(error, response, body) {
-            processHttpResponse(error, response, body, httpClientCallback);
+            self._processHttpResponse(error, response, body, httpClientCallback);
         });
     },
 
     httpDelete: function(url, httpClientCallback) {
+        var self = this;
         request.del(this.twonetOptions(url, null), function(error, response, body) {
-            processHttpResponse(error, response, body, httpClientCallback);
+            self._processHttpResponse(error, response, body, httpClientCallback);
         });
     },
 
@@ -86,7 +76,21 @@ _.extend(twoNetBase.prototype, {
 
         objArray.push(obj);
         return objArray;
+    },
+
+    _processHttpResponse: function(error, response, body, httpClientCallback) {
+        this.log.debug("==> Response status code: " + response.statusCode);
+        if (error) {
+            httpClientCallback(error, null);
+        } else {
+            this.log.debug("==> Response: " + JSON.stringify(body));
+            if (response.statusCode != 200) {
+                return httpClientCallback(new Error(JSON.stringify(body)), null);
+            }
+
+            return httpClientCallback(null, body);
+        }
     }
 });
 
-module.exports = twoNetBase;
+module.exports = twonetBase;

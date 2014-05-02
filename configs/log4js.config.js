@@ -29,6 +29,9 @@ switch(process.env.NODE_ENV) {
     case 'development':
         props.logLevel = log4js.levels.DEBUG;
         break;
+    case 'testing':
+        props.logLevel = log4js.levels.DEBUG;
+        break;
 }
 
 

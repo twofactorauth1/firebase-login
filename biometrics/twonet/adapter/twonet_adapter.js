@@ -7,7 +7,11 @@ var readingTypes = require('../../platform/bio_reading_types.js');
 
 module.exports = {
 
+    log: $$.g.getLogger("twonet_adapter"),
+
     registerUser: function(platformUserId, fn) {
+        var self = this;
+
         /**
          * Validate user hasn't been signed up already
          */
@@ -29,15 +33,15 @@ module.exports = {
                     throw err;
                 }
 
-                console.debug("succesfully registered user: " + response);
+                self.log.debug("succesfully registered user: " + response);
 
                 /**
                  * Persist registration record in the database
                  */
                 twonetUserDao.createUser(platformUserId, function (createUserError, createUserResponse) {
                     if (createUserError) {
-                        console.error("failed to create twonet user");
-                        console.error(createUserError.message);
+                        self.log.error("failed to create twonet user");
+                        self.log.error(createUserError.message);
 
                         // rollback registration
                         twonetClient.userRegistration.unregister(platformUserId, function (err, response) {
@@ -93,7 +97,7 @@ module.exports = {
                             return fn(err, null);
                         }
 
-                        console.debug("Registered 2net device " + JSON.stringify(twonetDevice));
+                        self.log.debug("Registered 2net device " + JSON.stringify(twonetDevice));
 
                         /**
                          * Register device with our platform
@@ -106,7 +110,7 @@ module.exports = {
                             }
 
                             if (device) {
-                                console.debug("Found a matching platform device. Won't create a new one");
+                                self.log.debug("Found a matching platform device. Won't create a new one");
                                 return fn(null, device);
                             }
 
@@ -122,7 +126,7 @@ module.exports = {
                                         return fn(err, null);
                                     }
 
-                                    console.debug("Registered platform device " + JSON.stringify(platformDevice));
+                                    self.log.debug("Registered platform device " + JSON.stringify(platformDevice));
 
                                     return fn(null, platformDevice);
                                 })
@@ -134,20 +138,22 @@ module.exports = {
 
     unregisterUser: function(platformUserId, fn) {
 
+        var self = this;
+
         twonetClient.userRegistration.unregister(platformUserId, function (err, response) {
             if (err) {
-                console.error(err);
+                self.log.error(err);
                 return fn(err, null);
             }
 
-            console.debug("succesfully unregistered user: " + response);
+            self.log.debug("succesfully unregistered user: " + response);
 
             /**
              * Delete registration record
              */
             twonetUserDao.removeById(platformUserId, function(err, res) {
                 if (err) {
-                    console.error(err);
+                    self.log.error(err);
                     return fn(err, null);
                 }
 
@@ -159,31 +165,31 @@ module.exports = {
     pollForReadings: function(callback) {
         var self = this;
 
-        console.info("2net adapter: polling...");
+        self.log.info("polling...");
 
         twonetUserDao.findMany({ "_id": { $ne: "__counter__" } }, function(err, users) {
             if (err) {
-                console.error(err.message);
+                self.log.error(err.message);
                 return callback(err);
             }
 
             if (users.length == 0) {
-                console.info("2net adapter: found no users to poll")
+                self.log.info("found no users to poll")
                 return callback();
             }
 
             // want to poll users sequentially (to avoid abusing the 2net api for now), hence this pattern
             function pollUser(user) {
                 if (!user) {
-                    console.info("2net adapter: no more users to poll");
+                    self.log.info("no more users to poll");
                     return callback();
                 }
 
-                console.debug("2net adapter: polling devices for user " + user.attributes._id);
+                self.log.debug("polling devices for user " + user.attributes._id);
 
                 deviceManager.findDevices({"userId": user.attributes._id}, function(err, devices) {
                     if (err) {
-                        console.error(err.message);
+                        self.log.error(err.message);
                         return pollUser(users.shift());
                     }
 
@@ -196,21 +202,21 @@ module.exports = {
                         if (device.attributes.deviceTypeId == twonetDeviceTypes.DT_2NET_SCALE) {
                             self._recordLatestBodyMeasurement(device, function (err, response) {
                                 if (err) {
-                                    console.error(err.message);
+                                    self.log.error(err.message);
                                 }
                                 pollDevice(devices.shift());
                             })
                         } else if (device.attributes.deviceTypeId == twonetDeviceTypes.DT_2NET_BPM) {
                             self._recordLatestBloodMeasurement(device, self._makeBPMReadingValues, function (err, response) {
                                 if (err) {
-                                    console.error(err.message);
+                                    self.log.error(err.message);
                                 }
                                 pollDevice(devices.shift());
                             })
                         } else if (device.attributes.deviceTypeId == twonetDeviceTypes.DT_2NET_PULSEOX) {
                             self._recordLatestBloodMeasurement(device, self._makePulseOxReadingValues, function (err, response) {
                                 if (err) {
-                                    console.error(err.message);
+                                    self.log.error(err.message);
                                 }
                                 pollDevice(devices.shift());
                             })
@@ -230,7 +236,7 @@ module.exports = {
     _recordLatestBloodMeasurement: function(device, valuesProvider, fn) {
         var self = this;
 
-        console.debug("2net adapter: polling device " + device.attributes._id + " (" + device.attributes.deviceTypeId
+        self.log.info("polling device " + device.attributes._id + " (" + device.attributes.deviceTypeId
             + ") for user " + device.attributes.userId);
 
         twonetClient.bloodMeasurements.getLatestMeasurement(device.attributes.userId, device.attributes.externalId,
@@ -238,7 +244,7 @@ module.exports = {
                 if (err) {
                     return fn(err, null);
                 }
-                console.debug(twonetReading);
+                self.log.debug(twonetReading);
                 deviceManager.findReadings(
                     {
                         externalId: twonetReading.guid,
@@ -271,7 +277,7 @@ module.exports = {
     _recordLatestBodyMeasurement: function(device, fn) {
         var self = this;
 
-        console.debug("2net adapter: polling device " + device.attributes._id + " (" + device.attributes.deviceTypeId
+        self.log.debug("polling device " + device.attributes._id + " (" + device.attributes.deviceTypeId
             + ") for user " + device.attributes.userId);
 
         twonetClient.bodyMeasurements.getLatestMeasurement(device.attributes.userId, device.attributes.externalId,
@@ -279,7 +285,7 @@ module.exports = {
                 if (err) {
                     return fn(err, null);
                 }
-                console.debug(twonetReading);
+                self.log.debug(twonetReading);
                 deviceManager.findReadings(
                     {
                         externalId: twonetReading.guid,

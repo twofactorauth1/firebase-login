@@ -1,10 +1,10 @@
 var TwoNetBase = require('./twonet_base');
 
-var BloodMeasurements = function() {
-    this.init.apply(this, arguments);
-}
+var bloodMeasurements = {
 
-_.extend(BloodMeasurements.prototype, TwoNetBase.prototype, {
+    options: {
+        name: "twonet_blood_measurements"
+    },
 
     GET_LATEST_MEAS_ENDPOINT: String("/partner/measure/blood/latest"),
 
@@ -127,6 +127,7 @@ _.extend(BloodMeasurements.prototype, TwoNetBase.prototype, {
             }
         });
     }
-});
+};
 
-module.exports = new BloodMeasurements();
+bloodMeasurements = _.extend(bloodMeasurements, TwoNetBase.prototype, bloodMeasurements.options).init();
+module.exports = bloodMeasurements;

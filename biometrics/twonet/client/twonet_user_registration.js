@@ -1,11 +1,11 @@
 var util = require('util');
 var TwoNetBase = require('./twonet_base');
 
-var UserRegistration = function() {
-    this.init.apply(this, arguments);
-}
+var userRegistration = {
 
-_.extend(UserRegistration.prototype, TwoNetBase.prototype, {
+    options: {
+        name: "twonet_user_registration"
+    },
 
     USER_REGISTER_ENDPOINT: "/partner/register",
 
@@ -70,6 +70,7 @@ _.extend(UserRegistration.prototype, TwoNetBase.prototype, {
             }
         });
     }
-});
+};
 
-module.exports = new UserRegistration();
+userRegistration = _.extend(userRegistration, TwoNetBase.prototype, userRegistration.options).init();
+module.exports = userRegistration;

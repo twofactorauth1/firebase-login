@@ -1,3 +1,6 @@
+process.env.NODE_ENV = "testing";
+var app = require('../../../../app');
+
 var twonetClient = require('../index');
 
 // the user uuid we'll register/unregister

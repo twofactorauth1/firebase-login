@@ -251,6 +251,34 @@ Handlebars = require('handlebars');
 requirejs('libs/handlebars/handlebarshelpers');
 requirejs('libs/handlebars/indigenoushelpers');
 
+//-----------------------------------------------------
+//  SETUP BIOMETRICS POLLING
+//-----------------------------------------------------
+if (process.env.NODE_ENV != "testing") {
+
+    ReadingTypes = require('./biometrics/platform/bio_reading_types.js');
+    TwonetDeviceTypes = require('./biometrics/twonet/adapter/twonet_device_types.js');
+    TwonetAdapter = require('./biometrics/twonet/adapter/twonet_adapter.js');
+
+    log.info(process.env.NODE_ENV);
+    log.info("Initializing Biometrics Reading Types...");
+    ReadingTypes.initDB(function (err) {
+        if (err) {
+            log.error("Failed to initialize biometrics reading types: " + err.message);
+        }
+        log.info("Initializing 2net Device Types...");
+        TwonetDeviceTypes.initDB(function (err) {
+            if (err) {
+                log.error("Failed to initialize 2net device types: " + err.message);
+            }
+            log.info("Biometrics 2net adapter will poll for readings every 15 minutes");
+            setInterval(function () {
+                TwonetAdapter.pollForReadings(function (err) {
+                })
+            }, 900000);
+        })
+    })
+}
 
 //-----------------------------------------------------
 //  CATCH UNCAUGH EXCEPTIONS - Log them and email the error
@@ -263,3 +291,4 @@ process.on('uncaughtException', function (err) {
         process.exit(1);
     //});
 });
+
