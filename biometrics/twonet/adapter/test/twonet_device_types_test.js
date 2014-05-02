@@ -2,23 +2,26 @@ process.env.NODE_ENV = "testing";
 var app = require('../../../../app');
 
 var twonetDeviceTypes = require('../twonet_device_types.js');
+var readingTypes = require('../../../platform/bio_reading_types.js');
 
 exports.init_test = {
     testInitDB: function (test) {
         test.expect(1);
-        twonetDeviceTypes.initDB(function(err, numDeviceTypes) {
-            if (err) {
-                test.ok(false, err);
-                return test.done();
-            }
+        readingTypes.initDB(function() {
+            twonetDeviceTypes.initDB(function (err, numDeviceTypes) {
+                if (err) {
+                    test.ok(false, err.message);
+                    return test.done();
+                }
 
-            test.equals(numDeviceTypes, 3);
-            return test.done();
+                test.equals(numDeviceTypes, 3);
+                return test.done();
+            })
         })
     },
 
     testDeviceTypeIds: function(test) {
-        test.equals(twonetDeviceTypes.deviceTypeIds.length, 3);
+        test.equals(twonetDeviceTypes._deviceTypeIds.length, 3);
         test.done();
     },
 

@@ -1,55 +1,51 @@
 var readingTypeDao = require('./dao/readingtype.dao.js');
 
-/**
- * Reading type keys
- */
-var _RT_WEIGHT = "weight";
-var _RT_PULSE = "pulse";
-var _RT_SP02 = "spo2";
-var _RT_SYSTOLIC = "systolic";
-var _RT_DIASTOLIC = "diastolic";
+var bioReadingTypes = {
 
-module.exports = {
+    RT_WEIGHT: "weight",
+    RT_PULSE: "pulse",
+    RT_SP02: "spo2",
+    RT_SYSTOLIC: "systolic",
+    RT_DIASTOLIC: "diastolic",
 
-    /**
-     * Export reading type keys
-     */
-    RT_WEIGHT: _RT_WEIGHT,
-    RT_PULSE: _RT_PULSE,
-    RT_SP02: _RT_SP02,
-    RT_SYSTOLIC: _RT_SYSTOLIC,
-    RT_DIASTOLIC: _RT_DIASTOLIC,
+    init: function() {
 
-    readingTypeIds: [
-        _RT_WEIGHT,
-        _RT_PULSE,
-        _RT_SP02,
-        _RT_SYSTOLIC,
-        _RT_DIASTOLIC
-    ],
+        this._readingTypeIds = [
+            this.RT_WEIGHT,
+            this.RT_PULSE,
+            this.RT_SP02,
+            this.RT_SYSTOLIC,
+            this.RT_DIASTOLIC
+        ];
 
-    /**
-     * Reading types are owned by the platform's biometrics component. They are meant to be shared among
-     * different device types. This is the reason why these are defined here.
-     */
-    readingTypes: [
-        [_RT_WEIGHT, "lb", "force on the body due to gravity"],
-        [_RT_PULSE, "count per minute", "arterial palpation of the heartbeat"],
-        [_RT_SP02, "%", "blood oxygen saturation"],
-        [_RT_SYSTOLIC, "mmHg", "pressure in the arteries when the heart beats"],
-        [_RT_DIASTOLIC, "mmHg", "pressure in the arteries between heart beats"]
-    ],
+        /**
+         * Reading types are owned by the platform's biometrics component. They are meant to be shared among
+         * different device types. This is the reason why these are defined here.
+         */
+        this._readingTypes = [
+            [this.RT_WEIGHT, "lb", "force on the body due to gravity"],
+            [this.RT_PULSE, "count per minute", "arterial palpation of the heartbeat"],
+            [this.RT_SP02, "%", "blood oxygen saturation"],
+            [this.RT_SYSTOLIC, "mmHg", "pressure in the arteries when the heart beats"],
+            [this.RT_DIASTOLIC, "mmHg", "pressure in the arteries between heart beats"]
+        ];
+
+        return this;
+    },
 
     isValidReadingType: function(readingTypeId) {
-        return _.contains(this.readingTypeIds, readingTypeId);
+        return _.contains(this._readingTypeIds, readingTypeId);
     },
 
     initDB: function(callback) {
         var results = [];
-        var localReadingTypes = this.readingTypes.slice(0);
+        var localReadingTypes = this._readingTypes.slice(0);
         function createReadingType(rt) {
             if (rt) {
                 readingTypeDao.createReadingType(rt[0], rt[1], rt[2], function(err, result) {
+                    if (err) {
+                        return callback(err, null);
+                    }
                     results.push(result);
                     return createReadingType(localReadingTypes.shift());
                 });
@@ -60,3 +56,6 @@ module.exports = {
         createReadingType(localReadingTypes.shift());
     }
 };
+
+bioReadingTypes = _.extend(bioReadingTypes).init();
+module.exports = bioReadingTypes;

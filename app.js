@@ -260,7 +260,6 @@ if (process.env.NODE_ENV != "testing") {
     TwonetDeviceTypes = require('./biometrics/twonet/adapter/twonet_device_types.js');
     TwonetAdapter = require('./biometrics/twonet/adapter/twonet_adapter.js');
 
-    log.info(process.env.NODE_ENV);
     log.info("Initializing Biometrics Reading Types...");
     ReadingTypes.initDB(function (err) {
         if (err) {

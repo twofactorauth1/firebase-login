@@ -5,10 +5,20 @@ var twonetUserDao = require('../dao/twonetuser.dao.js');
 var twonetAdapter = require('../twonet_adapter.js');
 var deviceManager = require('../../../platform/bio_device_manager.js');
 var twonetDeviceTypes = require('../twonet_device_types.js');
+var readingTypes = require('../../../platform/bio_reading_types.js');
 
 var platformUserId = "50f97bb9-a38d-46eb-8e5a-d1716aed1da6";
 
 exports.twonet_adapter_test = {
+
+    initDB: function (test) {
+        readingTypes.initDB(function() {
+            twonetDeviceTypes.initDB(function() {
+                test.ok(true);
+                return test.done();
+            })
+        })
+    },
 
     registerUser: function(test) {
         test.expect(4);
@@ -85,10 +95,13 @@ exports.twonet_adapter_test = {
              */
             twonetAdapter.registerDevice(platformUserId, twonetDeviceTypes.DT_2NET_SCALE, "SN001", function (err, platformDevice) {
                 if (err) {
+                    console.error(err.stack);
                     test.ok(false, err.message);
                     twonetAdapter.unregisterUser(platformUserId, function(err, response){
                         return test.done();
                     })
+
+                    return;
                 }
 
                 test.ok(platformDevice);
@@ -98,10 +111,13 @@ exports.twonet_adapter_test = {
                  */
                 deviceManager.getDeviceById(platformDevice.attributes._id, function (err, device) {
                     if (err) {
+                        console.error(err.stack);
                         test.ok(false, err.message);
                         twonetAdapter.unregisterUser(platformUserId, function(err, response){
                             return test.done();
                         })
+
+                        return;
                     }
 
                     test.ok(device);
@@ -116,6 +132,7 @@ exports.twonet_adapter_test = {
                      */
                     twonetAdapter.unregisterUser(platformUserId, function (err, unregisteredUserId) {
                         if (err) {
+                            console.error(err.stack);
                             test.ok(false, err);
                         }
                         return test.done();
