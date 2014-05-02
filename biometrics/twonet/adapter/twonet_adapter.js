@@ -3,6 +3,7 @@ var twonetUserDao = require('./dao/twonetuser.dao.js');
 var deviceTypeDao = require('../../platform/dao/devicetype.dao.js');
 var twonetDeviceTypes = require('./twonet_device_types.js');
 var deviceManager = require('../../platform/bio_device_manager.js');
+var readingTypes = require('../../platform/bio_reading_types.js');
 
 module.exports = {
 
@@ -28,7 +29,7 @@ module.exports = {
                     throw err;
                 }
 
-                console.log("succesfully registered guid: " + response);
+                console.log("succesfully registered user: " + response);
 
                 /**
                  * Persist registration record in the database
@@ -51,6 +52,8 @@ module.exports = {
     },
 
     registerDevice: function(platformUserId, deviceTypeId, serialNumber, fn) {
+
+        var self = this;
 
         if (!twonetDeviceTypes.isValidDeviceType(deviceTypeId)) {
             return fn(new Error("Unrecognized device type " + deviceTypeId), null);
@@ -95,22 +98,35 @@ module.exports = {
                         /**
                          * Register device with our platform
                          */
-                        deviceManager.createDevice(
-                            deviceTypeId,
-                            serialNumber,
-                            twonetDevice.guid,
-                            platformUserId,
-                            function(err, platformDevice) {
-                                if (err) {
-                                    // 2net has no api to unregister a device so not sure
-                                    // what happens to it
-                                    return fn(err, null);
-                                }
+                        self._findUserDevice(platformUserId, serialNumber, deviceTypeId, twonetDevice.guid, function (err, device) {
+                            if (err) {
+                                // 2net has no api to unregister a device so not sure
+                                // what happens to it
+                                return fn(err, null);
+                            }
 
-                                console.log("Registered platform device " + JSON.stringify(platformDevice));
+                            if (device) {
+                                console.debug("Found a matching platform device. Won't create a new one");
+                                return fn(null, device);
+                            }
 
-                                return fn(null, platformDevice);
-                            })
+                            deviceManager.createDevice(
+                                deviceTypeId,
+                                serialNumber,
+                                twonetDevice.guid,
+                                platformUserId,
+                                function (err, platformDevice) {
+                                    if (err) {
+                                        // 2net has no api to unregister a device so not sure
+                                        // what happens to it
+                                        return fn(err, null);
+                                    }
+
+                                    console.log("Registered platform device " + JSON.stringify(platformDevice));
+
+                                    return fn(null, platformDevice);
+                                })
+                        })
                     })
             })
         })
@@ -124,7 +140,7 @@ module.exports = {
                 return fn(err, null);
             }
 
-            console.log("succesfully unregistered guid: " + response);
+            console.log("succesfully unregistered user: " + response);
 
             /**
              * Delete registration record
@@ -138,5 +154,117 @@ module.exports = {
                 return fn(null, response);
             })
         })
+    },
+
+    pollForReadings: function(period, fn) {
+        var self = this;
+        twonetUserDao.findMany({ "_id": { $ne: "__counter__" } }, function(err, users) {
+            if (err) {
+                console.log(err.message);
+                return fn(err, null);
+            }
+
+            // want to poll users sequentially (to avoid abusing the 2net api for now), hence this pattern
+            function pollUser(user) {
+                if (!user) {
+                    return fn(null, null);
+                }
+
+                deviceManager.findDevices({"userId": user.attributes._id}, function(err, devices) {
+                    if (err) {
+                        console.log(err.message);
+                        return pollUser(users.shift());
+                    }
+
+                    function pollDevice(device) {
+                        if (!device) {
+                            // done with this user's devices, go on to next user
+                            return pollUser(users.shift());
+                        }
+
+                        if (device.attributes.deviceTypeId == twonetDeviceTypes.DT_2NET_SCALE) {
+                            self._poll2netScale(device, function(err, response) {
+                                if (err) {
+                                    console.error(err.message);
+                                }
+                                pollDevice(devices.shift());
+                            })
+                        } else {
+                            pollDevice(devices.shift());
+                        }
+                    }
+
+                    pollDevice(devices.shift());
+                })
+            }
+
+            pollUser(users.shift());
+        })
+    },
+
+    _poll2netScale: function(device, fn) {
+        var self = this;
+
+        console.debug("Fetching last reading for " + device.attributes.deviceTypeId + ": " + device.attributes._id);
+        twonetClient.bodyMeasurements.getLatestMeasurement(device.attributes.userId, device.attributes.externalId,
+            function(err, twonetReading) {
+                if (err) {
+                    return fn(err, null);
+                }
+                console.debug(twonetReading);
+                deviceManager.findReadings(
+                    {
+                        externalId: twonetReading.guid,
+                        deviceId: device.attributes._id
+                    }, function(err, readings) {
+                        if (err) {
+                            return fn(err, null);
+                        }
+                        if (readings.length > 0) {
+                            console.debug("Matching reading already in the database, won't record it again");
+                            return fn(null, null);
+                        }
+
+                        deviceManager.createReading(
+                            device.attributes._id,
+                            self._makeScaleReadingValues(twonetReading),
+                            twonetReading.guid,
+                            twonetReading.time,
+                            function(err, platformReading) {
+                                if (err) {
+                                    return fn(err, null);
+                                }
+                                return fn(null, null);
+                            }
+                        )
+                })
+            }
+        )
+    },
+
+    _makeScaleReadingValues: function(twonetReading) {
+        var value = {};
+        value[readingTypes.RT_WEIGHT] = twonetReading.body.weight;
+        return [value];
+    },
+
+    _findUserDevice: function(userId, serialNumber, deviceTypeId, externalId, fn) {
+        deviceManager.findDevices(
+            {
+                serialNumber: serialNumber,
+                deviceTypeId: deviceTypeId,
+                externalId: externalId,
+                userId: userId
+            }, function (err, devices) {
+                if (err) {
+                    return fn(err, null);
+                }
+
+                if (devices.length > 0) {
+                    return fn(null, devices[0]);
+                }
+
+                return fn(null, null);
+            })
     }
 };

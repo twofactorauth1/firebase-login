@@ -1,16 +1,22 @@
 var deviceDao = require('./dao/device.dao.js');
+var readingDao = require('./dao/reading.dao.js');
 
 module.exports = {
 
     createDevice: function(deviceTypeId, serialNumber, externalId, userId, fn) {
+        deviceDao.createDevice(deviceTypeId, serialNumber, externalId, userId, fn);
+    },
 
-        deviceDao.createDevice(deviceTypeId, serialNumber, externalId, userId, function(err, device) {
-            if (err) {
-                return fn(err, null);
-            }
+    createReading: function(deviceId, values, externalId, time, fn) {
+        readingDao.createReading(deviceId, values, externalId, time, fn);
+    },
 
-            return fn(null, device);
-        })
+    findDevices: function(query, fn) {
+        deviceDao.findMany(query, fn);
+    },
+
+    findReadings: function(query, fn) {
+        readingDao.findMany(query, fn);
     },
 
     getDeviceById: function(deviceId, fn) {

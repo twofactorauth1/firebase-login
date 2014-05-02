@@ -4,13 +4,14 @@ var app = require('../../../../app');
 var twonetUserDao = require('../dao/twonetuser.dao.js');
 var twonetAdapter = require('../twonet_adapter.js');
 var deviceManager = require('../../../platform/bio_device_manager.js');
+var twonetDeviceTypes = require('../twonet_device_types.js');
 
 var platformUserId = "50f97bb9-a38d-46eb-8e5a-d1716aed1da6";
 
 exports.twonet_adapter_test = {
 
     registerUser: function(test) {
-        test.expect(2);
+        test.expect(4);
 
         twonetAdapter.registerUser(platformUserId, function (err, twonetUser) {
             if (err) {
@@ -18,6 +19,7 @@ exports.twonet_adapter_test = {
                 return test.done();
             }
 
+            test.ok(twonetUser);
             console.log("registered user " + JSON.stringify(twonetUser));
             test.equals(twonetUser.attributes._id, platformUserId);
 
@@ -30,6 +32,7 @@ exports.twonet_adapter_test = {
                     return test.done();
                 }
 
+                test.ok(twonetUser);
                 test.equals(twonetUser.attributes._id, platformUserId);
                 return test.done();
             })
@@ -64,7 +67,7 @@ exports.twonet_adapter_test = {
     },
 
     registerDevice: function(test) {
-        test.expect(5);
+        test.expect(7);
 
         /**
          * Register User
@@ -80,13 +83,15 @@ exports.twonet_adapter_test = {
             /**
              * Register device for user
              */
-            twonetAdapter.registerDevice(platformUserId, "2net_scale", "SN001", function (err, platformDevice) {
+            twonetAdapter.registerDevice(platformUserId, twonetDeviceTypes.DT_2NET_SCALE, "SN001", function (err, platformDevice) {
                 if (err) {
                     test.ok(false, err.message);
                     twonetAdapter.unregisterUser(platformUserId, function(err, response){
                         return test.done();
                     })
                 }
+
+                test.ok(platformDevice);
 
                 /**
                  * Verify device was persisted
@@ -99,11 +104,12 @@ exports.twonet_adapter_test = {
                         })
                     }
 
+                    test.ok(device);
                     test.equals(device.attributes._id, platformDevice.attributes._id);
                     test.equals(device.attributes.userId, platformUserId);
                     test.ok(!$$.u.stringutils.isNullOrEmpty(device.attributes.externalId));
                     test.equals(device.attributes.serialNumber, "SN001");
-                    test.equals(device.attributes.deviceTypeId, "2net_scale");
+                    test.equals(device.attributes.deviceTypeId, twonetDeviceTypes.DT_2NET_SCALE);
 
                     /**
                      * We are done, unregister user

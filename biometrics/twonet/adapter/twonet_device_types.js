@@ -1,23 +1,32 @@
 var deviceTypeDao = require('../../platform/dao/devicetype.dao.js');
 
+var _DT_2NET_BPM = "2net_bpm";
+var _DT_2NET_SCALE = "2net_scale";
+var _DT_2NET_PULSEOX = "2net_pulseox";
+
 module.exports = {
 
-    deviceTypes: [
-        ["2net_bpm", "2net blood pressure monitor", "UA-767PBT", "A&D", ["pulse", "systolic", "diastolic"]],
-        ["2net_scale", "2net smart scale", "UC-321PBT", "A&D", ["weight"]],
-        ["2net_pulseox", "2net fancy pulse ox", "9560 Onyx II", "Nonin", ["pulse", "spo2"]]
+    /**
+     * Export 2net device types
+     */
+    DT_2NET_BPM: _DT_2NET_BPM,
+    DT_2NET_SCALE: _DT_2NET_SCALE,
+    DT_2NET_PULSEOX: _DT_2NET_PULSEOX,
+
+    deviceTypeIds: [
+        _DT_2NET_BPM,
+        _DT_2NET_SCALE,
+        _DT_2NET_PULSEOX
     ],
 
-    getDeviceTypeIds: function() {
-        var deviceTypeIds = [];
-        for (i = 0; i < this.deviceTypes.length; i++) {
-            deviceTypeIds.push(this.deviceTypes[i][0]);
-        }
-        return deviceTypeIds;
-    },
+    deviceTypes: [
+        [_DT_2NET_BPM, "2net blood pressure monitor", "UA-767PBT", "A&D", ["pulse", "systolic", "diastolic"]],
+        [_DT_2NET_SCALE, "2net smart scale", "UC-321PBT", "A&D", ["weight"]],
+        [_DT_2NET_PULSEOX, "2net fancy pulse ox", "9560 Onyx II", "Nonin", ["pulse", "spo2"]]
+    ],
 
     isValidDeviceType: function(deviceTypeId) {
-        return _.contains(this.getDeviceTypeIds(), deviceTypeId);
+        return _.contains(this.deviceTypeIds, deviceTypeId);
     },
 
     initDB: function(callback) {

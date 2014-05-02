@@ -18,14 +18,14 @@ exports.init_test = {
     },
 
     testDeviceTypeIds: function(test) {
-        test.equals(twonetDeviceTypes.getDeviceTypeIds().length, 3);
+        test.equals(twonetDeviceTypes.deviceTypeIds.length, 3);
         test.done();
     },
 
     testIsValidDeviceType: function(test) {
-        test.ok(twonetDeviceTypes.isValidDeviceType('2net_bpm'));
-        test.ok(twonetDeviceTypes.isValidDeviceType('2net_scale'));
-        test.ok(twonetDeviceTypes.isValidDeviceType('2net_pulseox'));
+        test.ok(twonetDeviceTypes.isValidDeviceType(twonetDeviceTypes.DT_2NET_BPM));
+        test.ok(twonetDeviceTypes.isValidDeviceType(twonetDeviceTypes.DT_2NET_SCALE));
+        test.ok(twonetDeviceTypes.isValidDeviceType(twonetDeviceTypes.DT_2NET_PULSEOX));
         test.ok(!twonetDeviceTypes.isValidDeviceType('bad_device_type'));
         test.done();
     }

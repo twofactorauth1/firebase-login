@@ -1,11 +1,11 @@
 process.env.NODE_ENV = "testing";
 var app = require('../../../app');
 
-var init = require('../bio_init_reading_types.js');
+var readingTypes = require('../bio_reading_types.js');
 
-exports.init_test = {
-    init: function (test) {
-        init.initialize(function(err, numReadingTypes) {
+exports.bio_reading_types_test = {
+    testInitDB: function (test) {
+        readingTypes.initDB(function(err, numReadingTypes) {
             if (err) {
                 test.ok(false, err);
                 return test.done();
