@@ -63,6 +63,14 @@ module.exports = {
             return fn(new Error("Unrecognized device type " + deviceTypeId), null);
         }
 
+        if ($$.u.stringutils.isNullOrEmpty(serialNumber)) {
+            return fn(new Error("Device serial number is required"), null);
+        }
+
+        if ($$.u.stringutils.isNullOrEmpty(contactId)) {
+            return fn(new Error("Device contact id is required"), null);
+        }
+
         /**
          * Validate user is registered
          */
