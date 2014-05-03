@@ -1,13 +1,13 @@
 process.env.NODE_ENV = "testing";
 var app = require('../../../../app');
 
-var twonetUserDao = require('../dao/twonetuser.dao.js');
+var twonetSubscriptionDao = require('../dao/twonetsubscription.dao.js');
 var twonetAdapter = require('../twonet_adapter.js');
 var deviceManager = require('../../../platform/bio_device_manager.js');
 var twonetDeviceTypes = require('../twonet_device_types.js');
 var readingTypes = require('../../../platform/bio_reading_types.js');
 
-var platformUserId = "50f97bb9-a38d-46eb-8e5a-d1716aed1da6";
+var contactId = "50f97bb9-a38d-46eb-8e5a-d1716aed1da6";
 
 exports.twonet_adapter_test = {
 
@@ -20,10 +20,10 @@ exports.twonet_adapter_test = {
         })
     },
 
-    registerUser: function(test) {
+    subscribeContact: function(test) {
         test.expect(4);
 
-        twonetAdapter.registerUser(platformUserId, function (err, twonetUser) {
+        twonetAdapter.subscribeContact(contactId, function (err, twonetUser) {
             if (err) {
                 test.ok(false, err.message);
                 return test.done();
@@ -31,40 +31,40 @@ exports.twonet_adapter_test = {
 
             test.ok(twonetUser);
             console.log("registered user " + JSON.stringify(twonetUser));
-            test.equals(twonetUser.attributes._id, platformUserId);
+            test.equals(twonetUser.attributes._id, contactId);
 
             /**
              * Validate user was created
              */
-            twonetUserDao.getById(twonetUser.attributes._id, function (err, twonetUser) {
+            twonetSubscriptionDao.getById(twonetUser.attributes._id, function (err, twonetUser) {
                 if (err) {
                     test.ok(false, err.message);
                     return test.done();
                 }
 
                 test.ok(twonetUser);
-                test.equals(twonetUser.attributes._id, platformUserId);
+                test.equals(twonetUser.attributes._id, contactId);
                 return test.done();
             })
         })
     },
 
-    unregisterUser: function(test) {
+    unsubscribeContact: function(test) {
 
         test.expect(2);
 
-        twonetAdapter.unregisterUser(platformUserId, function (err, unregisteredUserId) {
+        twonetAdapter.unsubscribeContact(contactId, function (err, unregisteredUserId) {
             if (err) {
                 test.ok(false, err.message);
                 test.done();
             }
 
-            test.equals(unregisteredUserId, platformUserId);
+            test.equals(unregisteredUserId, contactId);
 
             /**
              * Validate user is gone
              */
-            twonetUserDao.getById(platformUserId, function (err, twonetUser) {
+            twonetSubscriptionDao.getById(contactId, function (err, twonetUser) {
                 if (err) {
                     test.ok(false, err);
                     return test.done();
@@ -82,7 +82,7 @@ exports.twonet_adapter_test = {
         /**
          * Register User
          */
-        twonetAdapter.registerUser(platformUserId, function (err, twonetUser) {
+        twonetAdapter.subscribeContact(contactId, function (err, twonetUser) {
             if (err) {
                 test.ok(false, err);
                 return test.done();
@@ -93,11 +93,11 @@ exports.twonet_adapter_test = {
             /**
              * Register device for user
              */
-            twonetAdapter.registerDevice(platformUserId, twonetDeviceTypes.DT_2NET_SCALE, "SN001", function (err, platformDevice) {
+            twonetAdapter.registerDevice(contactId, twonetDeviceTypes.DT_2NET_SCALE, "SN001", function (err, platformDevice) {
                 if (err) {
                     console.error(err.stack);
                     test.ok(false, err.message);
-                    twonetAdapter.unregisterUser(platformUserId, function(err, response){
+                    twonetAdapter.unsubscribeContact(contactId, function(err, response){
                         return test.done();
                     })
 
@@ -113,7 +113,7 @@ exports.twonet_adapter_test = {
                     if (err) {
                         console.error(err.stack);
                         test.ok(false, err.message);
-                        twonetAdapter.unregisterUser(platformUserId, function(err, response){
+                        twonetAdapter.unsubscribeContact(contactId, function(err, response){
                             return test.done();
                         })
 
@@ -122,7 +122,7 @@ exports.twonet_adapter_test = {
 
                     test.ok(device);
                     test.equals(device.attributes._id, platformDevice.attributes._id);
-                    test.equals(device.attributes.userId, platformUserId);
+                    test.equals(device.attributes.userId, contactId);
                     test.ok(!$$.u.stringutils.isNullOrEmpty(device.attributes.externalId));
                     test.equals(device.attributes.serialNumber, "SN001");
                     test.equals(device.attributes.deviceTypeId, twonetDeviceTypes.DT_2NET_SCALE);
@@ -130,7 +130,7 @@ exports.twonet_adapter_test = {
                     /**
                      * We are done, unregister user
                      */
-                    twonetAdapter.unregisterUser(platformUserId, function (err, unregisteredUserId) {
+                    twonetAdapter.unsubscribeContact(contactId, function (err, unregisteredUserId) {
                         if (err) {
                             console.error(err.stack);
                             test.ok(false, err);

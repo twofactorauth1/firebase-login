@@ -7,7 +7,7 @@
 
 require('../../../../models/base.model.js');
 
-var twonetuser = $$.m.ModelBase.extend({
+var twonetsubscription = $$.m.ModelBase.extend({
 
     defaults: function() {
         return {
@@ -24,11 +24,11 @@ var twonetuser = $$.m.ModelBase.extend({
 }, {
     db: {
         storage: "mongo",
-        table: "twonetuser",
+        table: "twonetsubscriptions",
         idStrategy: "uuid"
     }
 });
 
-$$.m.TwonetUser = twonetuser;
+$$.m.TwonetSubscription = twonetsubscription;
 
-module.exports = twonetuser;
+module.exports = twonetsubscription;

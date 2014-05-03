@@ -1,5 +1,5 @@
 var twonetClient = require('../client/index');
-var twonetUserDao = require('./dao/twonetuser.dao.js');
+var twonetSubscriptionDao = require('./dao/twonetsubscription.dao.js');
 var deviceTypeDao = require('../../platform/dao/devicetype.dao.js');
 var twonetDeviceTypes = require('./twonet_device_types.js');
 var deviceManager = require('../../platform/bio_device_manager.js');
@@ -9,26 +9,26 @@ module.exports = {
 
     log: $$.g.getLogger("twonet_adapter"),
 
-    registerUser: function(platformUserId, fn) {
+    subscribeContact: function(contactId, fn) {
         var self = this;
 
         /**
          * Validate user hasn't been signed up already
          */
-        twonetUserDao.getById(platformUserId, function(err, user) {
+        twonetSubscriptionDao.getById(contactId, function(err, user) {
             if (err) {
                 return fn(err, null);
             }
 
             if (user) {
-                return fn(new Error("User " + platformUserId + " already exists"), null);
+                return fn(new Error("User " + contactId + " already exists"), null);
             }
 
             /**
              * Sign up the user. In the 2net world, we tell 2net what user id we want, so we'll just use our
              * Indigenous platform user id as the id.
              */
-            twonetClient.userRegistration.register(platformUserId, function (err, response) {
+            twonetClient.userRegistration.register(contactId, function (err, response) {
                 if (err) {
                     throw err;
                 }
@@ -38,13 +38,13 @@ module.exports = {
                 /**
                  * Persist registration record in the database
                  */
-                twonetUserDao.createUser(platformUserId, function (createUserError, createUserResponse) {
+                twonetSubscriptionDao.createSubscription(contactId, function (createUserError, createUserResponse) {
                     if (createUserError) {
                         self.log.error("failed to create twonet user");
                         self.log.error(createUserError.message);
 
                         // rollback registration
-                        twonetClient.userRegistration.unregister(platformUserId, function (err, response) {
+                        twonetClient.userRegistration.unregister(contactId, function (err, response) {
                             return fn(createUserError, null);
                         })
                     } else {
@@ -55,7 +55,7 @@ module.exports = {
         })
     },
 
-    registerDevice: function(platformUserId, deviceTypeId, serialNumber, fn) {
+    registerDevice: function(contactId, deviceTypeId, serialNumber, fn) {
 
         var self = this;
 
@@ -66,13 +66,13 @@ module.exports = {
         /**
          * Validate user is registered
          */
-        twonetUserDao.getById(platformUserId, function(err, user) {
+        twonetSubscriptionDao.getById(contactId, function(err, user) {
             if (err) {
                 return fn(err, null);
             }
 
             if (!user) {
-                return fn(new Error("User " + platformUserId + " has not been registered"), null);
+                return fn(new Error("User " + contactId + " has not been registered"), null);
             }
 
             /**
@@ -88,7 +88,7 @@ module.exports = {
                 }
 
                 twonetClient.deviceRegistration.register2netDevice(
-                    platformUserId,
+                    contactId,
                     serialNumber,
                     deviceType.attributes.model,
                     deviceType.attributes.manufacturer,
@@ -102,7 +102,7 @@ module.exports = {
                         /**
                          * Register device with our platform
                          */
-                        self._findUserDevice(platformUserId, serialNumber, deviceTypeId, twonetDevice.guid, function (err, device) {
+                        self._findUserDevice(contactId, serialNumber, deviceTypeId, twonetDevice.guid, function (err, device) {
                             if (err) {
                                 // 2net has no api to unregister a device so not sure
                                 // what happens to it
@@ -118,7 +118,7 @@ module.exports = {
                                 deviceTypeId,
                                 serialNumber,
                                 twonetDevice.guid,
-                                platformUserId,
+                                contactId,
                                 function (err, platformDevice) {
                                     if (err) {
                                         // 2net has no api to unregister a device so not sure
@@ -136,11 +136,11 @@ module.exports = {
         })
     },
 
-    unregisterUser: function(platformUserId, fn) {
+    unsubscribeContact: function(contactId, fn) {
 
         var self = this;
 
-        twonetClient.userRegistration.unregister(platformUserId, function (err, response) {
+        twonetClient.userRegistration.unregister(contactId, function (err, response) {
             if (err) {
                 self.log.error(err);
                 return fn(err, null);
@@ -151,7 +151,7 @@ module.exports = {
             /**
              * Delete registration record
              */
-            twonetUserDao.removeById(platformUserId, function(err, res) {
+            twonetSubscriptionDao.removeById(contactId, function(err, res) {
                 if (err) {
                     self.log.error(err);
                     return fn(err, null);
@@ -167,7 +167,7 @@ module.exports = {
 
         self.log.info("polling...");
 
-        twonetUserDao.findMany({ "_id": { $ne: "__counter__" } }, function(err, users) {
+        twonetSubscriptionDao.findMany({ "_id": { $ne: "__counter__" } }, function(err, users) {
             if (err) {
                 self.log.error(err.message);
                 return callback(err);

@@ -5,7 +5,7 @@ var twonetAdapter = require('../twonet_adapter.js');
 var readingTypes = require('../../../platform/bio_reading_types.js');
 var twonetDeviceTypes = require('../twonet_device_types.js');
 
-var platformUserId = "50f97bb9";
+var contactId = "50f97bb9";
 
 exports.twonet_poll_test = {
 
@@ -18,19 +18,19 @@ exports.twonet_poll_test = {
                 if (err) {
                     console.error(err.message);
                 }
-                twonetAdapter.registerUser(platformUserId, function (err, twonetUser) {
+                twonetAdapter.subscribeContact(contactId, function (err, twonetUser) {
                     if (err) {
                         console.error(err.message);
                     }
-                    twonetAdapter.registerDevice(platformUserId, twonetDeviceTypes.DT_2NET_PULSEOX, "501465116", function (err, twonetPulseOxDevice) {
+                    twonetAdapter.registerDevice(contactId, twonetDeviceTypes.DT_2NET_PULSEOX, "501465116", function (err, twonetPulseOxDevice) {
                         if (err) {
                             console.error(err.message);
                         }
-                        twonetAdapter.registerDevice(platformUserId, twonetDeviceTypes.DT_2NET_BPM, "5130651010", function (err, twonetScaleDevice) {
+                        twonetAdapter.registerDevice(contactId, twonetDeviceTypes.DT_2NET_BPM, "5130651010", function (err, twonetScaleDevice) {
                             if (err) {
                                 console.error(err.message);
                             }
-                            twonetAdapter.registerDevice(platformUserId, twonetDeviceTypes.DT_2NET_SCALE, "5130551101", function (err, twonetScaleDevice) {
+                            twonetAdapter.registerDevice(contactId, twonetDeviceTypes.DT_2NET_SCALE, "5130551101", function (err, twonetScaleDevice) {
                                 if (err) {
                                     console.error(err.message);
                                 }
@@ -38,7 +38,7 @@ exports.twonet_poll_test = {
                                     if (err) {
                                         console.error(err.message);
                                     }
-                                    twonetAdapter.unregisterUser(platformUserId, function (err, unregisteredUserId) {
+                                    twonetAdapter.unsubscribeContact(contactId, function (err, unregisteredUserId) {
                                         if (err) {
                                             console.error(err.message);
                                         }
