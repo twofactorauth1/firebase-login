@@ -22,7 +22,7 @@ define([
         user: null,
         account: null,
 
-        setup: false,
+        setup: null,
         websiteId: null,
         pageHandle: null,
 
@@ -36,6 +36,8 @@ define([
             "click .btn-cancel-page":"cancelPage",
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
+            "click #drop-zone":"drop_click",
+            "change #file":"upload_color_pic"
         },
 
 
@@ -146,12 +148,14 @@ define([
                 }
             }
             component.setContent(dataClass, content, target, componentConfig);
+            //this.savePage();
         },
 
 
         savePage: function() {
             this.page.save()
                 .done(function() {
+                    console.log('page saved');
                     $$.viewManager.showAlert("Page saved!");
                 })
                 .fail(function(resp) {
@@ -358,6 +362,7 @@ define([
               }
             }
         },
+
         check_welcome: function() {
             console.log('close welcome = '+$.cookie('website-alert') );
             if( $.cookie('website-alert') === 'closed' ){
@@ -365,14 +370,27 @@ define([
                 $('.alert-info').remove();
             }
         },
+
         close_welcome: function(e) {
             console.log('close welcome');
             $.cookie('website-alert', 'closed', { path: '/' });
         },
+
+        drop_click: function() {
+            $("input[type='file']").trigger('click');
+        },
+
         end_setup: function(e) {
             console.log('ending setup');
             this.setup = true;
             this.render();
+        },
+
+        upload_color_pic: function(event) {
+            var self = this;
+            console.log('upload color ');
+
+            self.handleFiles($("input[type=file]").get(0).files);
         }
 
 

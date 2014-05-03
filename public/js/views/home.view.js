@@ -37,6 +37,7 @@ define([
                     var html = tmpl(data);
 
                     self.show(html);
+                    self.contactMap();
                 });
         },
 
@@ -44,7 +45,42 @@ define([
         getAccounts: function() {
             this.accounts = new $$.c.AccountCollection();
             return this.accounts.getAccountsForUser(this.getUserId());
+        },
+
+        contactMap: function(address) {
+            console.log('initializing map '+address);
+
+            var zoom = 13;
+
+            if (!address) {
+                address = 'United States';
+                zoom = 2;
+            }
+
+            $$.svc.GeocodeService.addresstolatlng(address).done(function(value){
+                var map = L.map('map-marker', {
+                    center: [ value[0]['lat'], value[0]['lon']],
+                    zoom: zoom,
+                    zoomControl:false,
+                    autoPan: false,
+                    dragging: false,
+                    zooming: false,
+                    scrollWheelZoom: false,
+                });
+                var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+                var osmAttrib = '';
+
+                L.tileLayer(osmUrl, {
+                    maxZoom: 18,
+                    attribution: osmAttrib
+                }).addTo(map);
+
+                L.marker([value[0]['lat'], value[0]['lon']]).addTo(map);
+            });
+
         }
+
+
     });
 
     $$.v.HomeView = view;

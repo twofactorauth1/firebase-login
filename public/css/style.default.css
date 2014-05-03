@@ -18247,6 +18247,10 @@ div.error label.error:before {
   max-height: 85px;
   overflow: hidden;
 }
+#top-header {
+  height: 100px;
+  background: rgba(255, 255, 255, 0.3);
+}
 .panel-widget .panel-heading {
   padding: 20px 20px;
   padding: 10px 0;
@@ -18355,8 +18359,8 @@ body {
   border-radius: 0;
 }
 .theme-1 .navbar-inverse {
-  background-color: #1ABC9C;
-  border-color: #16A085;
+  background-color: #17b3ee;
+  border-color: #1b7ca0;
 }
 .theme-1 .navbar-inverse .navbar-brand {
   font-family: 'pacificoregular';
@@ -18374,27 +18378,33 @@ body {
   font-family: 'open_sansregular';
   -webkit-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
+  border-bottom: 5px solid #17b3ee;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
 }
 .theme-1 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
   color: #ffffff;
-  background-color: #16A085;
+  border-bottom: 5px solid white;
+  background: none;
 }
 .theme-1 .navbar-inverse .navbar-nav > .open > a,
 .navbar-inverse .navbar-nav > .open > a:hover,
 .navbar-inverse .navbar-nav > .open > a:focus {
   color: #ffffff;
-  background-color: #16A085;
+  border-bottom: 5px solid white;
 }
 .theme-1 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus {
   color: #ffffff;
-  background-color: #16A085;
+  border-bottom: 5px solid white;
 }
 .theme-1 .navbar-inverse .navbar-toggle:hover,
 .navbar-inverse .navbar-toggle:focus {
-  background-color: #16A085;
+  border-bottom: 5px solid white;
 }
 .theme-1 .navbar-inverse .navbar-toggle {
   border-color: #16A085;
@@ -18953,9 +18963,22 @@ body {
   height: 34px;
 }
 .theme-1 .footer-after {
-  background: #2c3e50;
-  padding: 20px 0;
+  background: #292929;
+  padding: 10px 0 0 0;
   font-size: 12px;
+  text-transform: uppercase;
+}
+.footer-logo {
+  float: right;
+  margin-top: -55px;
+}
+.powered-by {
+  line-height: 21px!important;
+}
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 .theme-1 .footer-after p {
   color: #fff;
@@ -19100,6 +19123,16 @@ body {
 }
 .target-image {
   max-height: 400px;
+}
+input[type='file'] {
+  opacity: 0;
+}
+#contact-us {
+  background: #f7f7f7;
+  padding: 15px 20px;
+}
+#contact-us .title {
+  text-align: center;
 }
 .blog-item {
   background: #fcfcfc;

@@ -17,7 +17,8 @@
             "title":"Home",
             "components": [
                 "freeform",
-                "contact-us"
+                "contact-us",
+                "feature-block"
             ]
         },
 
