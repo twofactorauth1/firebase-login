@@ -7,7 +7,7 @@
 
 var appConfig =  require('./app.config');
 
-//user:  bradrisse@gmail.com
+
 var facebookClientId = process.env.FACEBOOK_CLIENT_ID || '622171824473460';
 var facebookClientSecret = process.env.FACEBOOK_CLIENT_SECRET || 'bb266b72037221722c2fb0be3bd480f7';
 
