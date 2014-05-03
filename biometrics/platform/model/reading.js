@@ -16,6 +16,7 @@ var reading = $$.m.ModelBase.extend({
         return {
             _id: null,
             deviceId: null,
+            contactId: null,
             externalId: null,
             time: null,
             values: null,

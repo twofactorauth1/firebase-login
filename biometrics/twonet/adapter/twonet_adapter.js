@@ -259,6 +259,7 @@ module.exports = {
 
                         deviceManager.createReading(
                             device.attributes._id,
+                            device.attributes.userId,
                             valuesProvider(twonetReading),
                             twonetReading.guid,
                             twonetReading.time,
@@ -300,6 +301,7 @@ module.exports = {
 
                         deviceManager.createReading(
                             device.attributes._id,
+                            device.attributes.userId,
                             self._makeScaleReadingValues(twonetReading),
                             twonetReading.guid,
                             twonetReading.time,

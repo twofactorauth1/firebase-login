@@ -7,8 +7,8 @@ module.exports = {
         deviceDao.createDevice(deviceTypeId, serialNumber, externalId, userId, fn);
     },
 
-    createReading: function(deviceId, values, externalId, time, fn) {
-        readingDao.createReading(deviceId, values, externalId, time, fn);
+    createReading: function(deviceId, contactId, values, externalId, time, fn) {
+        readingDao.createReading(deviceId, contactId, values, externalId, time, fn);
     },
 
     findDevices: function(query, fn) {

@@ -19,10 +19,14 @@ var dao = {
         defaultModel: $$.m.Reading
     },
 
-    createReading: function(deviceId, values, externalId, time, fn) {
+    createReading: function(deviceId, contactId, values, externalId, time, fn) {
 
         if ($$.u.stringutils.isNullOrEmpty(deviceId)) {
             return fn(new Error("A device id was not specified"), null);
+        }
+
+        if ($$.u.stringutils.isNullOrEmpty(contactId)) {
+            return fn(new Error("A contact id was not specified"), null);
         }
 
         if (time == null) {
@@ -41,9 +45,12 @@ var dao = {
 
             //TODO: validate reading type ids in values against device type
 
+            //TODO: validate contact exists
+
             var reading = new $$.m.Reading({
                 deviceId: deviceId,
                 externalId: externalId,
+                contactId: contactId,
                 time: time,
                 values: values
             });

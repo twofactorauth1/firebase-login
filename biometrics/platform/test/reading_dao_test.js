@@ -55,7 +55,7 @@ exports.reading_dao_test = {
     },
 
     createReadingNoDevice: function(test) {
-        readingDao.createReading("bad device id", [], null, null, function(err, reading) {
+        readingDao.createReading("bad device id", "a contact id", [], null, null, function(err, reading) {
             test.ok(err);
             test.ok(err.toString().indexOf(" found ") > -1);
             test.ok(!reading);
@@ -69,7 +69,7 @@ exports.reading_dao_test = {
         var readingValue1 = {}
         readingValue1[readingType1key] = "213";
 
-        readingDao.createReading(device1key, [readingValue1], "EXTID1", null, function(err, reading) {
+        readingDao.createReading(device1key, "a contact id", [readingValue1], "EXTID1", null, function(err, reading) {
             if (err) {
                 test.ok(false, err.message);
                 return test.done();
