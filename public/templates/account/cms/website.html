@@ -8,23 +8,21 @@
 
 <script type="text/x-handlebars-template" name="edit-website">
     <div class="pageheader row">
-        <div class="col-xs-9">
+        <div class="col-xs-8">
             <h2><i class="fa fa-desktop"></i> Editing
                 <span id="current-url"><i class="fa fa-edit"></i></span></h2>
         </div>
-        <div class="col-xs-3">
-            <a id="launch-success" class="btn btn-success pull-right hidden" type="button">
-                <span class="fa fa-rocket"></span>
-                <span class="hidden-xs">Launch</span>
-            </a>
-            <a class="btn btn-warning pull-right hidden" type="button" style="margin-right:10px">
-                <span class="fa fa-eye"></span>
-                <span class="hidden-xs">Preview</span>
-            </a>
-            <div class="btn-group pull-right">
-                <div class="btn btn-default btn-save-page">Save Page</div>
-                <div class="btn btn-default btn-cancel-page">Cancel Changes</div>
-            </div>
+        <div class="col-xs-4">
+
+                <a class="btn btn-success pull-right btn-save-page" type="button">
+                    <span class="fa fa-save"></span>
+                    <span class="hidden-xs">Save</span>
+                </a>
+                <a class="btn btn-warning pull-right btn-cancel-page" type="button" style="margin-right:10px">
+                    <span class="fa fa-times"></span>
+                    <span class="hidden-xs">Cancel</span>
+                </a>
+
         </div>
         <div class="clear"></div>
     </div>
@@ -57,7 +55,7 @@
         <hr class="mb30"></hr>
         <div class="col-sm-6">
             <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video building your website.</h4>
-            <img class="onboard-vid" src="../images/Customers.jpg">
+            <img class="onboard-vid" src="/assets/images/video-holder.jpg">
         </div>
         <div class="mb30"></div>
         <div class="col-sm-6">
@@ -84,10 +82,10 @@
                 <h4>Image Based Color Palette</h4>
                 <p class="mb20">Choose a picture that best represents you and your business and a selection of color will be selected to create a color pallette. </p>
                 <section id="drag-drop" class="drag-drop col-xs-12" style="display: block;">
+                    <input type="file" name="file" id="file"/>
                     <div id="drop-zone" class="drop-zone col-xs-6">
                         <div class="drop-zone-label default-label">Drag or Click to upload image</div>
                         <div class="drop-zone-label dragging-label">Drop it here!</div>
-                        <input type="file" name="file" id="file"/>
                     </div>
                     <div id="dragged-images" class="dragged-images col-xs-6"></div>
                 </section>

@@ -377,7 +377,8 @@ define([
         },
 
         drop_click: function() {
-            $("input[type='file']").trigger('click');
+            $("#file").trigger('click');
+            return false;
         },
 
         end_setup: function(e) {

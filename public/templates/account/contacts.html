@@ -96,19 +96,19 @@ CONTACTS MAIN VIEW
 
                         <div class="media">
                             <div class="col-xs-12f">
-                                {{#if photoSquare}}
-                                    {{#isGoogleImage photoSquare}}
-                                        <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                                    {{else}}
-                                        <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
-                                    {{/isGoogleImage}}
-                                {{else}}
-                                    {{#isGoogleImage photo}}
-                                        <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                                    {{else}}
-                                        <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                                    {{/isGoogleImage}}
-                                {{/if}}
+                                // {{#if photoSquare}}
+                                //     {{#isGoogleImage photoSquare}}
+                                //         <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
+                                //     {{else}}
+                                //         <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
+                                //     {{/isGoogleImage}}
+                                // {{else}}
+                                //     {{#isGoogleImage photo}}
+                                //         <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
+                                //     {{else}}
+                                //         <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                                //     {{/isGoogleImage}}
+                                // {{/if}}
 
                                 <span class="name visible-xs">
                                     <h4>
