@@ -1,0 +1,44 @@
+<!--
+* COPYRIGHT INDIGENOUS.IO, LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div class="section feature-list">
+    {{#with component}}
+        <div class="component-body section-colored">
+            <div class="container">
+                <div class="component-header container">
+                    <div class="editable" data-class="label">
+                        <h2>{{{label}}}</h2>
+                    </div>
+
+                    <div class="editable" data-class="description">
+                        <p>{{{description}}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    {{#each features}}
+                        <div class="col-md-4 col-sm-4 feature">
+                            <div class="block-icon">
+                              <i class="fa fa-{{{icon}}}"></i>
+                            </div>
+
+                            <div class="block-body">
+                                <div class="editable" data-class="features.item.title">
+                                    <h2>{{{feature-title}}}</h2>
+                                </div>
+                              <div class="line-subtitle"></div>
+                              <div class="editable" data-class="features.item.subtitle">
+                                <p>{{{feature-subtitle}}}</p>
+                              </div>
+                            </div>
+                          </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    {{/with}}
+</div>

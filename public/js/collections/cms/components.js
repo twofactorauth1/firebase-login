@@ -8,13 +8,15 @@
 define([
     'models/cms/components/freeform',
     'models/cms/components/contact-us',
-    'models/cms/components/feature-block'
-], function(Freeform, ContactUs, FeatureBlock) {
+    'models/cms/components/feature-blocks',
+    'models/cms/components/feature-list'
+], function(Freeform, ContactUs, FeatureBlocks, FeatureList) {
 
     var components = {
         "freeform": Freeform,
         "contact-us": ContactUs,
-        "feature-block": FeatureBlock
+        "feature-blocks": FeatureBlocks,
+        "feature-list": FeatureList
     };
 
     var collection = Backbone.Collection.extend({

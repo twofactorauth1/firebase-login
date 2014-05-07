@@ -38,9 +38,9 @@ background: #fff!important;
   overflow: hidden;
 }
 
-#top-header {
+.theme-1 #top-header {
   height: 100px;
-background: rgba(255,255,255,0.3);
+background: rgba(255,255,255,0.9);
 }
 
 .panel-widget .panel-heading {
@@ -568,8 +568,53 @@ background: rgba(255,255,255,0.3);
   padding: 50px 0;
 }
 
+#blog-posts ul {
+  list-style-type: none;
+}
+
+.theme-1 .date {
+  color: #00aeef;
+  font-weight: bold;
+  padding: 2em 0;
+  text-align: left;
+}
+
+.theme-1 .post {
+  background: #fff;
+  padding: 20px;
+  text-align: left;
+}
+
+.theme-1 .post h4 {
+  color: #00aeef;
+font-weight: bold;
+}
+
 .theme-1 .section-colored {
-  background-color: #ECF0F1;
+  background-color: #f7f7f7;
+  text-align: center;
+  padding: 20px;
+}
+
+.theme-1 .blog-dot {
+  background: url(/assets/images/temp-theme/blog-dot.png) no-repeat;
+  width: 20px;
+  height: 20px;
+  display: block;
+  float: right;
+  margin-right: 40px;
+}
+
+.theme-1 .feature-block {
+  text-align: center;
+}
+
+.theme-1 .feature-block h2 {
+  font-weight: bold;
+}
+
+.theme-1 .block-icon i {
+  margin-top: 20px;
 }
 
 .theme-1 .section-colored.home{
@@ -585,6 +630,11 @@ background: rgba(255,255,255,0.3);
   background-color: #ECF0F1;
   padding: 0;
   margin-bottom: 20px;
+}
+
+.theme-1 #header {
+  z-index: 2;
+  position: relative;
 }
 
 .theme-1 .sidebar h4{
@@ -613,6 +663,7 @@ background: rgba(255,255,255,0.3);
 .theme-1 .carousel {
   height: 530px;
   background: #34495e;
+  margin-top: -205px;
 }
 
 .theme-1 .carousel-control.left, .carousel-control.right{
@@ -863,8 +914,7 @@ background: rgba(255,255,255,0.3);
   line-height: 21px!important;
 }
 
-#footer {
-  position: absolute;
+.theme-1 #footer {
   bottom: 0;
   width: 100%;
 }
@@ -881,6 +931,11 @@ background: rgba(255,255,255,0.3);
 .theme-1 .footer-after a:hover{
   color: #7f8c8d;
   text-decoration: none;
+}
+
+.theme-1 #top-header h1 {
+  margin: 0;
+  padding: 15px 0 0 20px;
 }
 
 @media (min-width: 1200px){
@@ -976,13 +1031,13 @@ background: rgba(255,255,255,0.3);
   position: relative;
 }
 
-.section:hover {
-  border: 2px dashed rgba(0,0,0,0.5);
-}
+// .section:hover {
+//   border: 2px dashed rgba(0,0,0,0.5);
+// }
 
-.section:hover .edit-section-btns {
-  display: block;
-}
+// .section:hover .edit-section-btns {
+//   display: block;
+// }
 
 .btn-black-o {
   background: rgba(0,0,0,0.5);

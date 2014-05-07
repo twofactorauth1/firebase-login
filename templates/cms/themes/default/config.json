@@ -18,7 +18,8 @@
             "components": [
                 "freeform",
                 "contact-us",
-                "feature-block"
+                "feature-blocks",
+                "feature-list"
             ]
         },
 

@@ -32,6 +32,105 @@
     <div id="header">{{{header}}}</div>
 
     <div id="body">
+
+        <!-- Temporary ... Will be replaced with components-->
+
+        <div id="myCarousel" class="carousel slide">
+          <!-- Indicators -->
+            <ol class="carousel-indicators">
+              <li data-target="#myCarousel" data-slide-to="0" class=""></li>
+              <li data-target="#myCarousel" data-slide-to="1"></li>
+              <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+              <div class="item">
+                <div class="fill" style="background-image:url('/assets/images/temp-theme/slider-1.jpg');"></div>
+                <div class="carousel-caption" style="display: none;">
+                  <h2>Yoga Instruction</h2>
+                  <a href="#" class="button">View Schedule</a>
+                </div>
+              </div>
+              <div class="item active">
+                <div class="fill" style="background-image:url('/assets/images/temp-theme/slider-1.jpg');"></div>
+                <div class="carousel-caption" style="display: none;">
+                  <h2>Nutrition Consultaion</h2>
+                  <a href="#" class="button">Sign Up</a>
+                </div>
+              </div>
+              <div class="item">
+                <div class="fill" style="background-image:url('/assets/images/temp-theme/slider-1.jpg');"></div>
+                <div class="carousel-caption" style="display: none;">
+                  <h2>Weighted Yoga</h2>
+                  <a href="#" class="button">View Schedule</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Controls -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+              <i class="fa fa-angle-left"></i>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+              <i class="fa fa-angle-right"></i>
+            </a>
+        </div>
+
+        <div id="blog-posts" class="section-colored">
+            <div class="container">
+                <ul>
+                    <li>
+                        <div class="col-xs-3 date">10 May 2013
+                        <span class="blog-dot"></span>
+                        </div>
+                        <div class="col-xs-9 post">
+                            <h4>Blog Post</h4>
+                            <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="col-xs-3 date">10 May 2013
+                        <span class="blog-dot"></span>
+                        </div>
+                        <div class="col-xs-9 post">
+                            <h4>Blog Post</h4>
+                            <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="col-xs-3 date">10 May 2013
+                        <span class="blog-dot"></span>
+                        </div>
+                        <div class="col-xs-9 post">
+                            <h4>Blog Post</h4>
+                            <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="col-xs-3 date">10 May 2013
+                        <span class="blog-dot"></span></div>
+                        <div class="col-xs-9 post">
+                            <h4>Blog Post</h4>
+                            <p>Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="team-members">
+            <div class="container">
+                <h3>Team</h3>
+                <div class="col-xs-6"></div>
+                <div class="col-xs-6"></div>
+            </div>
+        </div>
+
+        <!-- END Temporary ... Will be replaced with components-->
+
+        <div class="mb15 clearfix"></div>
+
         {{#foreach body.components}}
             {{{value}}}
             {{#notequals $last true}}
@@ -42,4 +141,35 @@
 
     <br/><br/>
     <div id="footer">{{{footer}}}</div>
+
+    <script type="text/javascript" src="/js/libs/jquery/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/js/libs/bootstrap/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        /* Carousel */
+        $('#myCarousel').carousel({
+            interval: 4000
+        });
+
+        $('#myCarousel').on('slide.bs.carousel', function() {
+            $('.carousel-caption').css('display', 'none');
+        });
+
+        $('#myCarousel').on('slid.bs.carousel', function() {
+            $('.carousel-inner > .item.active .carousel-caption').fadeIn("slow");
+        });
+
+        // $(".carousel-inner").swipe({
+        //     swipeLeft: function(event, direction, distance, duration, fingerCount) {
+        //         $(this).parent().carousel('next');
+        //     },
+        //     swipeRight: function() {
+        //         $(this).parent().carousel('prev');
+        //     },
+        //     threshold: 0
+        // });
+        /***********/
+
+    </script>
 </body>

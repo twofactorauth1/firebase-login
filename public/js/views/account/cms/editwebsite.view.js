@@ -30,7 +30,6 @@ define([
             id: "edit-website-wrapper"
         },
 
-
         events: {
             "click .btn-save-page":"savePage",
             "click .btn-cancel-page":"cancelPage",
@@ -40,7 +39,6 @@ define([
             "change #file":"upload_color_pic"
         },
 
-
         initialize: function(options) {
             console.log('Options: '+ JSON.stringify(options.websiteId));
             options = options || {};
@@ -48,7 +46,6 @@ define([
             this.websiteId = options.websiteId;
             this.setup = options.setup;
         },
-
 
         render: function () {
             var self = this
@@ -74,6 +71,8 @@ define([
                     } else {
                         data.page = "/page/" + self.pageHandle;
                     }
+
+                    self.check_setup();
 
                     console.log('Setup: '+self.setup);
                     if (!self.setup) {
@@ -248,10 +247,6 @@ define([
             this.proxiedOnWebsiteEdit = null;
         },
 
-        check_setup: function() {
-            console.log('checking setup');
-        },
-
         showColorsForImage: function($image, $imageSection ) {
             var self = this;
             console.log('showColorsForImage');
@@ -376,6 +371,14 @@ define([
             $.cookie('website-alert', 'closed', { path: '/' });
         },
 
+        check_setup: function() {
+            console.log('checking setup');
+            if( $.cookie('website-setup') === 'true' ){
+                console.log('closing setup');
+                this.setup = true;
+            }
+        },
+
         drop_click: function() {
             $("#file").trigger('click');
             return false;
@@ -384,6 +387,8 @@ define([
         end_setup: function(e) {
             console.log('ending setup');
             this.setup = true;
+            //tempoary until variable set up in mongo
+            $.cookie('website-setup', 'true', { path: '/' });
             this.render();
         },
 
@@ -393,8 +398,6 @@ define([
 
             self.handleFiles($("input[type=file]").get(0).files);
         }
-
-
     });
 
 

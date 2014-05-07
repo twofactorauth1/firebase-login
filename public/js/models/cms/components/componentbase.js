@@ -14,7 +14,9 @@ define([
         idAttribute: "_id",
 
         setContent: function(dataClass, content, targetData, config) {
+            console.log('setting content with Data Class: '+dataClass+' Content'+content+' Target Data: '+targetData+' Config:'+config);
             if (this.attributes.hasOwnProperty(dataClass)) {
+                console.log('has own property');
                 this.set(dataClass, content);
                 return;
             }
@@ -24,17 +26,24 @@ define([
             var itemClass = null;
             var itemIndex = null;
             if (dataClass.indexOf(".item.") > -1) {
+                console.log('has an item');
                 dataClass = dataClass.replace(".item.", ".");
+                console.log('Data Class: '+dataClass);
                 collection = dataClass.split(".")[0];
-                itemClass = config.classes["collection.item"];
+                console.log('Collection: '+collection);
+                itemClass = config.classes[collection+".item"];
+                console.log('Item Class: '+itemClass);
                 itemIndex = $(targetData).parent("." + itemClass).index();
+                console.log('Item Index: '+itemIndex+' Target Class'+$(targetData).parent().html());
                 isCollection = true;
             }
 
             if (isCollection === false) {
+                console.log('Data Class: '+dataClass);
                 this.set(dataClass, content);
             } else {
                 var setterKey = collection + "[" + itemIndex + "]." + dataClass.split(".")[1];
+                console.log('Setter Key: '+setterKey);
                 this.set(setterKey, content);
             }
         },

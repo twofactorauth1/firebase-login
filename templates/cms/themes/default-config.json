@@ -216,10 +216,8 @@
 
                 "features":"features",
                 "features.item":"feature",
-                "features.item.label":"feature-label",
-                "features.item.description":"feature-description",
-                "features.item.iconUrl":"feature-icon-url",
-                "features.item.iconClass":"feature-icon-class"
+                "features.item.title":"feature-title",
+                "features.item.subtitle":"feature-subtitle"
             }
         },
 
