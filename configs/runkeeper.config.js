@@ -41,5 +41,5 @@ module.exports = {
      * The page on our Indigenous site where the Health Graph API should redirect the user after accepting or denying
      * the access request
      */
-    REDIRECT_URL: 'http://localhost:3000/runkeeper'
+    REDIRECT_URL: 'http://localhost:3000/api/1.0/runkeeperadapter/subscription'
 }

@@ -30,9 +30,7 @@ var dao = {
             accessToken: accessToken
         });
 
-        this.saveOrUpdate(subscription, function (err, value) {
-            fn(err, value);
-        })
+        this.saveOrUpdate(subscription, fn);
     }
 };
 
