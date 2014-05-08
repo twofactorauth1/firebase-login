@@ -41,7 +41,9 @@ module.exports = {
         })
     },
 
-    deAuthorizeUser: function (accessToken, callback) {
+    deAuthorizeUser: function(accessToken, callback) {
+
+        var self = this;
 
         var requestDetails = {
             method: "POST",
@@ -53,6 +55,9 @@ module.exports = {
         this.log.debug(requestDetails);
 
         request(requestDetails, function (error, response, body) {
+
+            self.log.debug("Response HTTP status code: " + response.statusCode);
+
             if (error) {
                 return callback(error, null);
             }

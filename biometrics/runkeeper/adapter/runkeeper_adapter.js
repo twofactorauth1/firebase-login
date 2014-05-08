@@ -11,21 +11,31 @@ module.exports = {
 
     subscribe: function(contactId, authorizationCode, callback) {
 
+        var self = this;
+
         runkeeperClient.authorizeUser(authorizationCode, function(err, accessToken) {
             if (err) {
-                this.log.error("failed to retrieve access token from RunKeeper for contact " + contactId
+                self.log.error("failed to retrieve access token from RunKeeper for contact " + contactId
                     + " and authorizationCode " + authorizationCode);
-                this.log.error(err.message);
+                self.log.error(err.message);
                 return callback(err, null);
             }
 
+            self.log.debug("contact " + contactId + " successfully authorized by RunKeeper");
+
             subscriptionDao.createSubscription(contactId, accessToken, function(err, subscription) {
                 if (err) {
+                    self.log.error("failed to save subscription: " + err.message);
+                    self.log.info("de-authorizing contact " + contactId);
+
                     runkeeperClient.deAuthorizeUser(accessToken, function(err, value) {
+                        if (err) {
+                            self.log.error("failed to de-authorize user: " + err.message);
+                        }
                         return callback(err, null);
                     })
                 } else {
-                    this.log.debug("RunKeeper subscription created: " + JSON.stringify(subscription));
+                    self.log.debug("RunKeeper subscription created: " + JSON.stringify(subscription));
                     return callback(null, subscription);
                 }
             })
@@ -33,9 +43,11 @@ module.exports = {
     },
 
     unsubscribe: function(contactId, callback) {
+        var self = this;
+
         subscriptionDao.getById(contactId, function(error, subscription) {
             if (error) {
-                this.log.error(error.message);
+                self.log.error(error.message);
                 return callback(error, null);
             }
 
@@ -43,16 +55,19 @@ module.exports = {
                 return callback(new Error("No subscription was found for contact id " + contactId), null);
             }
 
-            runkeeperClient.deAuthorizeUser(subscription.accessToken, function(error, value) {
+            runkeeperClient.deAuthorizeUser(subscription.attributes.accessToken, function(error, value) {
                 if (error) {
-                    this.log.error("failed to deauthorize user: " + error.message);
+                    self.log.error("failed to deauthorize user: " + error.message);
                     return callback(error, null);
                 }
 
                 // remove subscription
-                subscriptionDao.removeById(subscription._id, function(error, value) {
-                    this.log.error("failed to remove subscription " + subscription._id + ": " + error.message);
-                    return callback(error, null);
+                subscriptionDao.removeById(subscription.attributes._id, function(error, value) {
+                    if (error) {
+                        self.log.error("failed to remove subscription " + subscription.attributes._id
+                            + ": " + error.message);
+                    }
+                    return callback(error, value);
                 })
             })
 

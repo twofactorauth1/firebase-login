@@ -25,8 +25,9 @@ var googleApi = require('./1.0/social/google.api');
 var linkedInApi = require('./1.0/social/linkedin.api');
 
 //Biometrics
-var twonetAdapterApi = require('./1.0/twonetadapter.api');
 var biometricsPlatform = require('./1.0/biometricsplatform.api');
+var twonetAdapterApi = require('./1.0/twonetadapter.api');
+var runkeeperApi = require('./1.0/runkeeperadapter.api');
 
 module.exports = {
 
