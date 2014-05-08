@@ -6,31 +6,29 @@
  */
 
 require('../../../dao/base.dao.js');
-require('../model/readingtype');
+require('../model/valuetype');
 
 var dao = {
 
     options: {
-        name:"readingtype.dao",
-        defaultModel: $$.m.ReadingType
+        name:"valuetype.dao",
+        defaultModel: $$.m.ValueType
     },
 
-    createReadingType: function(id, unit, description, fn) {
+    createValueType: function(id, unit, description, fn) {
 
-        var readingType = new $$.m.ReadingType({
+        var valueType = new $$.m.ValueType({
             _id: id,
             unit: unit,
             description: description
         });
 
-        this.saveOrUpdate(readingType, function(err, value) {
-            fn(err, value);
-        });
+        this.saveOrUpdate(valueType, fn);
     }
 };
 
 dao = _.extend(dao, $$.dao.BaseDao.prototype, dao.options).init();
 
-$$.dao.ReadingTypeDao = dao;
+$$.dao.ValueTypeDao = dao;
 
 module.exports = dao;

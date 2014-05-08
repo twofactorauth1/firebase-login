@@ -13,6 +13,14 @@ module.exports = {
             callback);
     },
 
+    getFitnessActivity: function(accessToken, activityId, callback) {
+        return this._apiCall(
+            accessToken,
+            "application/vnd.com.runkeeper.FitnessActivity+json",
+            "/fitnessActivities/" + activityId,
+            callback);
+    },
+
     getAuthorizationURL: function(state) {
         return runkeeperConfig.AUTHORIZATION_URL +
             "?client_id=" + runkeeperConfig.CLIENT_ID +
@@ -72,6 +80,8 @@ module.exports = {
 
     _apiCall: function(accessToken, media_type, endpoint, callback) {
 
+        var self = this;
+
         var options = {};
 
         options.url = runkeeperConfig.API_BASE_URL + endpoint;
@@ -83,12 +93,14 @@ module.exports = {
 
         options.json = {};
 
+        self.log.debug(JSON.stringify(options, undefined, 2));
+
         request.get(options, function (error, response, body) {
-            this.log.debug("RunKeeper Response status code: " + response.statusCode);
+            self.log.debug("RunKeeper Response status code: " + response.statusCode);
             if (error) {
                 callback(error, null);
             } else {
-                this.log.debug("RunKeeper Response: " + JSON.stringify(body));
+                self.log.debug("RunKeeper Response: " + JSON.stringify(body));
                 if (response.statusCode != 200) {
                     return callback(new Error(JSON.stringify(body)), null);
                 }

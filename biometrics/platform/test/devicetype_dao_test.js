@@ -1,7 +1,7 @@
 process.env.NODE_ENV = "testing";
 var app = require('../../../app');
 
-var readingTypeDao = require('../dao/readingtype.dao.js');
+var valueTypeDao = require('../dao/valuetype.dao.js');
 var deviceTypeDao = require('../dao/devicetype.dao.js');
 
 exports.devicetype_dao_test = {
@@ -32,7 +32,7 @@ exports.devicetype_dao_test = {
         var p1 = $.Deferred();
 
         // need to create reading type first
-        readingTypeDao.createReadingType(rt.id, rt.unit, rt.description, function(err, response) {
+        valueTypeDao.createValueType(rt.id, rt.unit, rt.description, function(err, response) {
             if (err) {
                 test.ok(false, err);
                 return test.done();
@@ -87,7 +87,7 @@ exports.devicetype_dao_test = {
                                     test.equals(value, null);
 
                                     // remove reading type
-                                    readingTypeDao.removeById(rt.id, function(err, value) {
+                                    valueTypeDao.removeById(rt.id, function(err, value) {
                                         if (err) {
                                             test.ok(false, err);
                                             return test.done();

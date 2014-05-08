@@ -9,7 +9,7 @@ require('../../../dao/base.dao.js');
 require('../model/reading');
 
 var deviceTypeDao = require('./devicetype.dao.js');
-var readingTypeDao = require('./readingtype.dao.js');
+var readingTypeDao = require('./valuetype.dao.js');
 var deviceDao = require('./device.dao.js');
 
 var dao = {
@@ -19,7 +19,7 @@ var dao = {
         defaultModel: $$.m.Reading
     },
 
-    createReading: function(deviceId, contactId, values, externalId, time, fn) {
+    createReading: function(deviceId, contactId, readingTypeId, values, externalId, time, fn) {
 
         if ($$.u.stringutils.isNullOrEmpty(deviceId)) {
             return fn(new Error("A device id was not specified"), null);
@@ -28,6 +28,11 @@ var dao = {
         if ($$.u.stringutils.isNullOrEmpty(contactId)) {
             return fn(new Error("A contact id was not specified"), null);
         }
+
+        //TODO: enable this
+        //if ($$.u.stringutils.isNullOrEmpty(readingTypeId)) {
+        //    return fn(new Error("A reading type id was not specified"), null);
+        //}
 
         if (time == null) {
             time = Math.floor(new Date().getTime() / 1000);
@@ -43,7 +48,11 @@ var dao = {
                 return fn(new Error("No device with id " + deviceId + " was found in the system"));
             }
 
-            //TODO: validate reading type ids in values against device type
+            // TODO: validate reading type id exists
+
+            // TODO: validate reading type id specified belongs to the device type in the device specified
+
+            //TODO: validate value type ids in values against reading type
 
             //TODO: validate contact exists
 
@@ -51,14 +60,12 @@ var dao = {
                 deviceId: deviceId,
                 externalId: externalId,
                 contactId: contactId,
+                readingTypeId: readingTypeId,
                 time: time,
                 values: values
             });
 
-            self.saveOrUpdate(reading, function (err, value) {
-                fn(err, value);
-            })
-
+            self.saveOrUpdate(reading, fn);
         })
     }
 };

@@ -49,6 +49,6 @@ var dao = {
 
 dao = _.extend(dao, $$.dao.BaseDao.prototype, dao.options).init();
 
-$$.dao.ReadingTypeDao = dao;
+$$.dao.DeviceDao = dao;
 
 module.exports = dao;

@@ -3,7 +3,7 @@ var twonetSubscriptionDao = require('./dao/twonetsubscription.dao.js');
 var deviceTypeDao = require('../../platform/dao/devicetype.dao.js');
 var twonetDeviceTypes = require('./twonet_device_types.js');
 var deviceManager = require('../../platform/bio_device_manager.js');
-var readingTypes = require('../../platform/bio_reading_types.js');
+var readingTypes = require('../../platform/bio_value_types.js');
 
 module.exports = {
 
@@ -268,6 +268,7 @@ module.exports = {
                         deviceManager.createReading(
                             device.attributes._id,
                             device.attributes.userId,
+                            null,
                             valuesProvider(twonetReading),
                             twonetReading.guid,
                             twonetReading.time,
@@ -310,6 +311,7 @@ module.exports = {
                         deviceManager.createReading(
                             device.attributes._id,
                             device.attributes.userId,
+                            null,
                             self._makeScaleReadingValues(twonetReading),
                             twonetReading.guid,
                             twonetReading.time,
@@ -327,22 +329,22 @@ module.exports = {
 
     _makeScaleReadingValues: function(twonetReading) {
         var value = {};
-        value[readingTypes.RT_WEIGHT] = twonetReading.body.weight;
+        value[readingTypes.VT_WEIGHT] = twonetReading.body.weight;
         return [value];
     },
 
     _makeBPMReadingValues: function(twonetReading) {
         var value = {};
-        value[readingTypes.RT_PULSE] = twonetReading.blood.pulse;
-        value[readingTypes.RT_DIASTOLIC] = twonetReading.blood.diastolic;
-        value[readingTypes.RT_SYSTOLIC] = twonetReading.blood.systolic;
+        value[readingTypes.VT_PULSE] = twonetReading.blood.pulse;
+        value[readingTypes.VT_DIASTOLIC] = twonetReading.blood.diastolic;
+        value[readingTypes.VT_SYSTOLIC] = twonetReading.blood.systolic;
         return [value];
     },
 
     _makePulseOxReadingValues: function(twonetReading) {
         var value = {};
-        value[readingTypes.RT_PULSE] = twonetReading.blood.pulse;
-        value[readingTypes.RT_SP02] = twonetReading.blood.spo2;
+        value[readingTypes.VT_PULSE] = twonetReading.blood.pulse;
+        value[readingTypes.VT_SP02] = twonetReading.blood.spo2;
         return [value];
     },
 

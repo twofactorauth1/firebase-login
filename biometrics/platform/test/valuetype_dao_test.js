@@ -1,7 +1,7 @@
 process.env.NODE_ENV = "testing";
 var app = require('../../../app');
 
-var readingTypeDao = require('../dao/readingtype.dao.js');
+var valueTypeDao = require('../dao/valuetype.dao.js');
 
 exports.readingtype_dao_test = {
     createReadingType: function (test) {
@@ -10,7 +10,7 @@ exports.readingtype_dao_test = {
         var rt = { _id: "weight", unit: "lb", description: "force on the body due to gravity"};
 
         // Create it
-        readingTypeDao.createReadingType(rt._id, rt.unit, rt.description, function(err, response) {
+        valueTypeDao.createValueType(rt._id, rt.unit, rt.description, function(err, response) {
             if (err) {
                 test.ok("false", err);
                 return test.done();
@@ -21,7 +21,7 @@ exports.readingtype_dao_test = {
             test.equals(response.attributes.description, rt.description);
 
             // Get it
-            readingTypeDao.getById(rt._id, function(err, value) {
+            valueTypeDao.getById(rt._id, function(err, value) {
                 if (err) {
                     test.ok(false, err);
                     return test.done();
@@ -32,7 +32,7 @@ exports.readingtype_dao_test = {
                 test.equals(value.attributes.description, rt.description);
 
                 // Remove it
-                readingTypeDao.removeById(rt._id, function(err, value) {
+                valueTypeDao.removeById(rt._id, function(err, value) {
                     if (err) {
                         test.ok(false, err);
                         return test.done();
@@ -40,7 +40,7 @@ exports.readingtype_dao_test = {
 
                     test.equals(value, 1);
 
-                    readingTypeDao.getById(rt._id, function(err, value) {
+                    valueTypeDao.getById(rt._id, function(err, value) {
                         if (err) {
                             test.ok(false, err);
                             return test.done();

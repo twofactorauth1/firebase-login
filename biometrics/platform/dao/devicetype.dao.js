@@ -8,7 +8,7 @@
 require('../../../dao/base.dao.js');
 require('../model/devicetype');
 
-var readingTypeDao = require('./readingtype.dao.js');
+var readingTypeDao = require('./valuetype.dao.js');
 
 var dao = {
 

@@ -2,7 +2,7 @@ process.env.NODE_ENV = "testing";
 var app = require('../../../../app');
 
 var twonetAdapter = require('../twonet_adapter.js');
-var readingTypes = require('../../../platform/bio_reading_types.js');
+var readingTypes = require('../../../platform/bio_value_types.js');
 var twonetDeviceTypes = require('../twonet_device_types.js');
 
 var contactId = "50f97bb9";

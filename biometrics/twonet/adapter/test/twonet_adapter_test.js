@@ -5,7 +5,7 @@ var twonetSubscriptionDao = require('../dao/twonetsubscription.dao.js');
 var twonetAdapter = require('../twonet_adapter.js');
 var deviceManager = require('../../../platform/bio_device_manager.js');
 var twonetDeviceTypes = require('../twonet_device_types.js');
-var readingTypes = require('../../../platform/bio_reading_types.js');
+var readingTypes = require('../../../platform/bio_value_types.js');
 
 var contactId = "50f97bb9-a38d-46eb-8e5a-d1716aed1da6";
 

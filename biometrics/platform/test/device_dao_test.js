@@ -1,7 +1,7 @@
 process.env.NODE_ENV = "testing";
 var app = require('../../../app');
 
-var readingTypeDao = require('../dao/readingtype.dao.js');
+var valueTypeDao = require('../dao/valuetype.dao.js');
 var deviceTypeDao = require('../dao/devicetype.dao.js');
 var deviceDao = require('../dao/device.dao.js');
 
@@ -10,7 +10,7 @@ var deviceType1key = "device.dao.dt1:Scale";
 
 exports.device_dao_test = {
     setUp: function(cb) {
-        readingTypeDao.createReadingType(readingType1key, "kg", "body weight", function(err, rt) {
+        valueTypeDao.createValueType(readingType1key, "kg", "body weight", function(err, rt) {
             if (err) {
                 throw err;
             }
@@ -30,7 +30,7 @@ exports.device_dao_test = {
             if (err) {
                 throw err;
             }
-            readingTypeDao.removeById(readingType1key, function(err, res){
+            valueTypeDao.removeById(readingType1key, function(err, res){
                 if (err) {
                     throw err;
                 }
