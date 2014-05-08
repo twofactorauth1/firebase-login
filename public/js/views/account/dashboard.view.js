@@ -8,8 +8,9 @@
 define([
     'views/base.view',
     'models/user',
-    'models/account'
-], function(BaseView, User, Account) {
+    'models/account',
+    'models/activity'
+], function(BaseView, User, Account, Activity) {
 
     var view = BaseView.extend({
 
@@ -25,13 +26,15 @@ define([
         render: function() {
             var self = this
                 , p1 = this.getAccount()
-                , p2 = this.getUser();
+                , p2 = this.getUser()
+                , p3 = this.getActivity();
 
-            $.when(p1, p2)
+            $.when(p1, p2, p3)
                 .done(function() {
                     var data = {
                         account: self.account.toJSON(),
-                        user: self.user.toJSON()
+                        user: self.user.toJSON(),
+                        //activity: self.activity.toJSON()
                     };
 
                     var tmpl = $$.templateManager.get("dashboard-main", self.templateKey);
@@ -48,7 +51,17 @@ define([
         },
         close_welcome: function(e) {
             $.cookie('dashboard-alert', 'closed', { path: '/' });
-        }
+        },
+        close_welcome: function(e) {
+            $.cookie('dashboard-alert', 'closed', { path: '/' });
+        },
+        getActivity: function() {
+            // if (this.accountId == null) {
+            //     this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
+            // }
+            // this.activity = new $$.c.Activity();
+            // return this.activity(this.accountId);
+        },
     });
 
     $$.v.account = $$.v.account || {};

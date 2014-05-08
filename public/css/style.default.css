@@ -18420,17 +18420,18 @@ body {
 .theme-1 .dropdown-menu > li > a {
   color: #fff;
 }
-.theme-1 .link-portfolio {
+.theme-1 .link-gallery-image {
   overflow: hidden;
   display: block;
   position: relative;
   margin-bottom: 30px;
+  max-height: 200px;
 }
-.theme-1 .link-portfolio img {
+.theme-1 .link-gallery-image img {
   display: block;
   position: relative;
 }
-.theme-1 .link-portfolio .overlay-portfolio {
+.theme-1 .link-gallery-image .overlay-gallery-image {
   background: rgba(0, 0, 0, 0.71);
   padding: 25px;
   position: absolute;
@@ -18443,7 +18444,7 @@ body {
   opacity: 0;
   filter: alpha(opacity=0);
 }
-.theme-1 .link-portfolio .overlay-portfolio h3 {
+.theme-1 .link-gallery-image .overlay-gallery-image h3 {
   font-size: 14px;
   font-family: 'open_sansbold';
   margin: 0 0 20px 0;

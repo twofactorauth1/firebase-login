@@ -160,6 +160,19 @@
             $('.carousel-inner > .item.active .carousel-caption').fadeIn("slow");
         });
 
+        $(".link-gallery-image").hover(
+            function() {
+                var opac = 1;
+                $(this).children('.overlay-gallery-image').animate({
+                    opacity: opac
+                }, 500);
+            }, function() {
+                $(this).children('.overlay-gallery-image').animate({
+                    opacity: 0
+                }, 500);
+            }
+        );
+
         // $(".carousel-inner").swipe({
         //     swipeLeft: function(event, direction, distance, duration, fingerCount) {
         //         $(this).parent().carousel('next');

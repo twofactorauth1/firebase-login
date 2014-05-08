@@ -19,7 +19,10 @@
                 "freeform",
                 "contact-us",
                 "feature-blocks",
-                "feature-list"
+                "feature-list",
+                "image-gallery",
+                "text-columns",
+                "image-slider"
             ]
         },
 

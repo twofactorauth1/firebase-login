@@ -1,0 +1,51 @@
+<!--
+* COPYRIGHT INDIGENOUS.IO, LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div class="section image-slider">
+    {{#with component}}
+    	<div class="component-header container">
+        <div class="editable" data-class="label">
+            <h2 class="section-title">{{{label}}}</h2>
+        </div>
+
+        <div class="editable" data-class="description">
+            <p>{{{description}}}</p>
+        </div>
+    </div>
+
+   <div id="myCarousel" class="carousel slide">
+      <!-- Indicators -->
+        <ol class="carousel-indicators">
+            {{#each images}}
+                <li data-target="#myCarousel" data-slide-to="{{this.key}}" class=""></li>
+            {{/each}}
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            {{#each images}}
+              <div class="item">
+                <div class="fill" style="background-image:url('{{{url}}}');"></div>
+                <div class="carousel-caption" style="display: none;">
+                  <h2>Yoga Instruction</h2>
+                  <a href="#" class="button">View Schedule</a>
+                </div>
+              </div>
+            {{/each}}
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+          <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+          <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+    {{/with}}
+</div>
