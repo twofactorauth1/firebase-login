@@ -215,14 +215,14 @@ module.exports = {
                                 pollDevice(devices.shift());
                             })
                         } else if (device.attributes.deviceTypeId == twonetDeviceTypes.DT_2NET_BPM) {
-                            self._recordLatestBloodMeasurement(device, self._makeBPMReadingValues, function (err, response) {
+                            self._recordLatestBloodMeasurement(device, twonetDeviceTypes.RT_2NET_BP, self._makeBPMReadingValues, function (err, response) {
                                 if (err) {
                                     self.log.error(err.message);
                                 }
                                 pollDevice(devices.shift());
                             })
                         } else if (device.attributes.deviceTypeId == twonetDeviceTypes.DT_2NET_PULSEOX) {
-                            self._recordLatestBloodMeasurement(device, self._makePulseOxReadingValues, function (err, response) {
+                            self._recordLatestBloodMeasurement(device, twonetDeviceTypes.RT_2NET_PULSEOX, self._makePulseOxReadingValues, function (err, response) {
                                 if (err) {
                                     self.log.error(err.message);
                                 }
@@ -241,7 +241,7 @@ module.exports = {
         })
     },
 
-    _recordLatestBloodMeasurement: function(device, valuesProvider, fn) {
+    _recordLatestBloodMeasurement: function(device, readingTypeId, valuesProvider, fn) {
         var self = this;
 
         self.log.info("polling device " + device.attributes._id + " (" + device.attributes.deviceTypeId
@@ -268,7 +268,7 @@ module.exports = {
                         deviceManager.createReading(
                             device.attributes._id,
                             device.attributes.userId,
-                            null,
+                            readingTypeId,
                             valuesProvider(twonetReading),
                             twonetReading.guid,
                             twonetReading.time,
@@ -311,7 +311,7 @@ module.exports = {
                         deviceManager.createReading(
                             device.attributes._id,
                             device.attributes.userId,
-                            null,
+                            twonetDeviceTypes.RT_2NET_WEIGHT,
                             self._makeScaleReadingValues(twonetReading),
                             twonetReading.guid,
                             twonetReading.time,
@@ -329,23 +329,37 @@ module.exports = {
 
     _makeScaleReadingValues: function(twonetReading) {
         var value = {};
-        value[readingTypes.VT_WEIGHT] = twonetReading.body.weight;
+        value.valueTypeId = readingTypes.VT_POUNDS;
+        value.value = twonetReading.body.weight;
         return [value];
     },
 
     _makeBPMReadingValues: function(twonetReading) {
-        var value = {};
-        value[readingTypes.VT_PULSE] = twonetReading.blood.pulse;
-        value[readingTypes.VT_DIASTOLIC] = twonetReading.blood.diastolic;
-        value[readingTypes.VT_SYSTOLIC] = twonetReading.blood.systolic;
-        return [value];
+        var value1 = {};
+        value1.valueTypeId = readingTypes.VT_PULSE;
+        value1.value = twonetReading.blood.pulse;
+
+        var value2 = {}
+        value2.valueTypeId = readingTypes.VT_DIASTOLIC;
+        value2.value = twonetReading.blood.diastolic;
+
+        var value3 = {}
+        value3.valueTypeId = readingTypes.VT_SYSTOLIC;
+        value3.value = twonetReading.blood.systolic;
+
+        return [value1, value2, value3];
     },
 
     _makePulseOxReadingValues: function(twonetReading) {
-        var value = {};
-        value[readingTypes.VT_PULSE] = twonetReading.blood.pulse;
-        value[readingTypes.VT_SP02] = twonetReading.blood.spo2;
-        return [value];
+        var value1 = {};
+        value1.valueTypeId = readingTypes.VT_PULSE;
+        value1.value = twonetReading.blood.pulse;
+
+        var value2 = {};
+        value2.valueTypeId = readingTypes.VT_SP02;
+        value2.value = twonetReading.blood.spo2;
+
+        return [value1, value2];
     },
 
     _findUserDevice: function(userId, serialNumber, deviceTypeId, externalId, fn) {

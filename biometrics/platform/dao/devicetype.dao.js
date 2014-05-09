@@ -8,7 +8,7 @@
 require('../../../dao/base.dao.js');
 require('../model/devicetype');
 
-var readingTypeDao = require('./valuetype.dao.js');
+var readingTypeDao = require('./readingtype.dao');
 
 var dao = {
 
@@ -43,7 +43,7 @@ var dao = {
                     description: description,
                     model: model,
                     manufacturer: manufacturer,
-                    readingtypes: readingtypes
+                    readingTypes: readingtypes
                 });
 
                 self.saveOrUpdate(deviceType, function(err, value) {
@@ -57,6 +57,6 @@ var dao = {
 
 dao = _.extend(dao, $$.dao.BaseDao.prototype, dao.options).init();
 
-$$.dao.ReadingTypeDao = dao;
+$$.dao.DeviceTypeDao = dao;
 
 module.exports = dao;

@@ -2,7 +2,7 @@ var valueTypeDao = require('./dao/valuetype.dao.js');
 
 var bioValueTypes = {
 
-    VT_WEIGHT: "weight",
+    VT_POUNDS: "pounds",
     VT_PULSE: "pulse",
     VT_SP02: "spo2",
     VT_SYSTOLIC: "systolic",
@@ -11,7 +11,7 @@ var bioValueTypes = {
     init: function() {
 
         this._valueTypeIds = [
-            this.VT_WEIGHT,
+            this.VT_POUNDS,
             this.VT_PULSE,
             this.VT_SP02,
             this.VT_SYSTOLIC,
@@ -23,7 +23,7 @@ var bioValueTypes = {
          * different reading types. That is the reason why these are defined here.
          */
         this._valueTypes = [
-            [this.VT_WEIGHT, "lb", "force on the body due to gravity"],
+            [this.VT_POUNDS, "lb", "force on the body due to gravity"],
             [this.VT_PULSE, "count per minute", "arterial palpation of the heartbeat"],
             [this.VT_SP02, "%", "blood oxygen saturation"],
             [this.VT_SYSTOLIC, "mmHg", "pressure in the arteries when the heart beats"],

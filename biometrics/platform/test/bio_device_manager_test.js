@@ -4,35 +4,44 @@ var app = require('../../../app');
 var DeviceManager = require('../bio_device_manager.js');
 
 var valueTypeDao = require('../dao/valuetype.dao.js');
+var readingTypeDao = require('../dao/readingtype.dao.js');
 var deviceTypeDao = require('../dao/devicetype.dao.js');
 var deviceDao = require('../dao/device.dao.js');
 
-var readingType1key = "bio_device_manager_test.Weight";
+var valueType1key = "bio_device_manager_test.Weight";
+var readingType1key = "bio_device_manager_test.Weight_rt";
 var deviceType1key = "bio_device_manager_test.Scale";
 var device1key;
 
 exports.bio_device_manager_test = {
     setUp: function(cb) {
-        valueTypeDao.createValueType(readingType1key, "kg", "body weight", function(err, rt) {
+        valueTypeDao.createValueType(valueType1key, "kg", "body weight", function(err, vt) {
             if (err) {
                 throw err;
             }
 
-            deviceTypeDao.createDeviceType(deviceType1key, "desc", "1", "acme", [rt.attributes._id],
-                function(err, dt) {
+            readingTypeDao.createReadingType(readingType1key, "weight rt", [vt.attributes._id],
+                function (err, rt) {
                     if (err) {
                         throw err;
                     }
 
-                    DeviceManager.createDevice(deviceType1key, "SN001", "EI001", null, function(err, device) {
-                        if (err) {
-                            throw err;
-                        }
-                        device1key = device.attributes._id;
-                        cb();
-                    });
-                });
-        });
+                    deviceTypeDao.createDeviceType(deviceType1key, "desc", "1", "acme", [rt.attributes._id],
+                        function (err, dt) {
+                            if (err) {
+                                throw err;
+                            }
+
+                            DeviceManager.createDevice(deviceType1key, "SN001", "EI001", null, function (err, device) {
+                                if (err) {
+                                    throw err;
+                                }
+                                device1key = device.attributes._id;
+                                cb();
+                            });
+                        });
+                })
+        })
     },
 
     tearDown: function(cb) {
@@ -44,14 +53,19 @@ exports.bio_device_manager_test = {
                 if (err) {
                     throw err;
                 }
-                valueTypeDao.removeById(readingType1key, function (err, res) {
+                readingTypeDao.removeById(readingType1key, function (err, res) {
                     if (err) {
                         throw err;
                     }
-                    cb();
+                    valueTypeDao.removeById(valueType1key, function (err, res) {
+                        if (err) {
+                            throw err;
+                        }
+                        cb();
+                    })
                 })
             })
-        });
+        })
     },
 
     testAssignUnassign: function(test) {

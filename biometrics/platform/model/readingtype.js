@@ -7,15 +7,13 @@
 
 require('./../../../models/base.model.js');
 
-var devicetype = $$.m.ModelBase.extend({
+var readingType = $$.m.ModelBase.extend({
 
     defaults: function() {
         return {
             _id: null,
             description: null,
-            model: null,
-            manufacturer: null,
-            readingTypes: [],
+            valueTypes: null,
             _v:"0.1"
         }
     },
@@ -28,10 +26,10 @@ var devicetype = $$.m.ModelBase.extend({
 }, {
     db: {
         storage: "mongo",
-        table: "devicetypes"
+        table: "readingtypes"
     }
 });
 
-$$.m.DeviceType = devicetype;
+$$.m.ReadingType = readingType;
 
-module.exports = devicetype;
+module.exports = readingType;

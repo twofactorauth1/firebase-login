@@ -9,7 +9,7 @@ require('../../../dao/base.dao.js');
 require('../model/reading');
 
 var deviceTypeDao = require('./devicetype.dao.js');
-var readingTypeDao = require('./valuetype.dao.js');
+var readingTypeDao = require('./readingtype.dao.js');
 var deviceDao = require('./device.dao.js');
 
 var dao = {
@@ -29,10 +29,9 @@ var dao = {
             return fn(new Error("A contact id was not specified"), null);
         }
 
-        //TODO: enable this
-        //if ($$.u.stringutils.isNullOrEmpty(readingTypeId)) {
-        //    return fn(new Error("A reading type id was not specified"), null);
-        //}
+        if ($$.u.stringutils.isNullOrEmpty(readingTypeId)) {
+            return fn(new Error("A reading type id was not specified"), null);
+        }
 
         if (time == null) {
             time = Math.floor(new Date().getTime() / 1000);
@@ -45,27 +44,58 @@ var dao = {
             }
 
             if (!device) {
-                return fn(new Error("No device with id " + deviceId + " was found in the system"));
+                return fn(new Error("No device with id " + deviceId + " was found in the system"), null);
             }
 
-            // TODO: validate reading type id exists
+            readingTypeDao.getById(readingTypeId, function (err, readingType) {
+                if (err) {
+                    return fn(error, null);
+                }
 
-            // TODO: validate reading type id specified belongs to the device type in the device specified
+                if (!readingType) {
+                    return fn(new Error("No reading type with id " + readingTypeId + " was found in the system"), null);
+                }
 
-            //TODO: validate value type ids in values against reading type
+                deviceTypeDao.getById(device.attributes.deviceTypeId, function (err, deviceType) {
+                    if (err) {
+                        return fn(error, null);
+                    }
 
-            //TODO: validate contact exists
+                    if (!deviceType) {
+                        return fn(new Error("Device type " + device.attributes.deviceTypeId + " in device " + deviceId
+                            + " does not exist"), null);
+                    }
 
-            var reading = new $$.m.Reading({
-                deviceId: deviceId,
-                externalId: externalId,
-                contactId: contactId,
-                readingTypeId: readingTypeId,
-                time: time,
-                values: values
-            });
+                    if (!_.contains(deviceType.attributes.readingTypes, readingTypeId)) {
+                        return fn(new Error("Specified reading type " + readingTypeId
+                            + " is not supported in device type " + device.attributes.deviceTypeId));
+                    }
 
-            self.saveOrUpdate(reading, fn);
+                    for (var i=0; i < values.length; i++) {
+                        if (!values[i].valueTypeId) {
+                            return fn(new Error("No value type id was provided for reading type " + readingTypeId));
+                        }
+
+                        if (!_.contains(readingType.attributes.valueTypes, values[i].valueTypeId)) {
+                            return fn(new Error("Specified value type " + values[i].valueTypeId
+                                + " is not supported in reading type " + readingTypeId));
+                        }
+                    }
+
+                    //TODO: validate contact exists
+
+                    var reading = new $$.m.Reading({
+                        deviceId: deviceId,
+                        externalId: externalId,
+                        contactId: contactId,
+                        readingTypeId: readingTypeId,
+                        time: time,
+                        values: values
+                    });
+
+                    self.saveOrUpdate(reading, fn);
+                })
+            })
         })
     }
 };
