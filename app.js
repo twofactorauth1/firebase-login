@@ -256,7 +256,7 @@ requirejs('libs/handlebars/indigenoushelpers');
 //-----------------------------------------------------
 if (process.env.NODE_ENV != "testing") {
 
-    ReadingTypes = require('./biometrics/platform/bio_reading_types.js');
+    ReadingTypes = require('./biometrics/platform/bio_value_types.js');
     TwonetDeviceTypes = require('./biometrics/twonet/adapter/twonet_device_types.js');
     TwonetAdapter = require('./biometrics/twonet/adapter/twonet_adapter.js');
 

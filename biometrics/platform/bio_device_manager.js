@@ -1,27 +1,27 @@
-var deviceDao = require('./dao/device.dao.js');
-var readingDao = require('./dao/reading.dao.js');
+require('./dao/device.dao.js');
+require('./dao/reading.dao.js');
 
 module.exports = {
 
     createDevice: function(deviceTypeId, serialNumber, externalId, userId, fn) {
-        deviceDao.createDevice(deviceTypeId, serialNumber, externalId, userId, fn);
+        $$.dao.DeviceDao.createDevice(deviceTypeId, serialNumber, externalId, userId, fn);
     },
 
-    createReading: function(deviceId, contactId, values, externalId, time, fn) {
-        readingDao.createReading(deviceId, contactId, values, externalId, time, fn);
+    createReading: function(deviceId, contactId, readingTypeId, values, externalId, time, fn) {
+        $$.dao.ReadingDao.createReading(deviceId, contactId, readingTypeId, values, externalId, time, fn);
     },
 
     findDevices: function(query, fn) {
-        deviceDao.findMany(query, fn);
+        $$.dao.DeviceDao.findMany(query, fn);
     },
 
     findReadings: function(query, fn) {
-        readingDao.findMany(query, fn);
+        $$.dao.ReadingDao.findMany(query, fn);
     },
 
     getDeviceById: function(deviceId, fn) {
 
-        deviceDao.getById(deviceId, function(err, device) {
+        $$.dao.DeviceDao.getById(deviceId, function(err, device) {
             if (err) {
                 return fn(err, null);
             }
@@ -31,7 +31,7 @@ module.exports = {
     },
 
     assignDevice: function(deviceId, userId, fn) {
-        deviceDao.getById(deviceId, function(err, device){
+        $$.dao.DeviceDao.getById(deviceId, function(err, device){
             if (err) {
                 return fn(err, null);
             }
@@ -49,14 +49,14 @@ module.exports = {
             }
 
             device.attributes.userId = userId;
-            deviceDao.saveOrUpdate(device, function (err, value) {
+            $$.dao.DeviceDao.saveOrUpdate(device, function (err, value) {
                 fn(err, value);
             })
         })
     },
 
     unassignDevice: function(deviceId, fn) {
-        deviceDao.getById(deviceId, function(err, device){
+        $$.dao.DeviceDao.getById(deviceId, function(err, device){
             if (err) {
                 return fn(err, null);
             }
@@ -66,7 +66,7 @@ module.exports = {
             }
 
             device.attributes.userId = null;
-            deviceDao.saveOrUpdate(device, function (err, value) {
+            $$.dao.DeviceDao.saveOrUpdate(device, function (err, value) {
                 fn(err, value);
             })
         })

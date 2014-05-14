@@ -1,27 +1,36 @@
 process.env.NODE_ENV = "testing";
 var app = require('../../../app');
 
+var valueTypeDao = require('../dao/valuetype.dao.js');
 var readingTypeDao = require('../dao/readingtype.dao.js');
 var deviceTypeDao = require('../dao/devicetype.dao.js');
 var deviceDao = require('../dao/device.dao.js');
 
-var readingType1key = "device.dao.rt1:Weight";
-var deviceType1key = "device.dao.dt1:Scale";
+var valueType1key = "kilograms";
+var readingType1key = "weight";
+var deviceType1key = "scale";
 
 exports.device_dao_test = {
     setUp: function(cb) {
-        readingTypeDao.createReadingType(readingType1key, "kg", "body weight", function(err, rt) {
+        valueTypeDao.createValueType(valueType1key, "kg", "body weight", function(err, vt) {
             if (err) {
+                console.log(err.stack);
                 throw err;
             }
-
-            deviceTypeDao.createDeviceType(deviceType1key, "desc", "1", "acme", [rt.attributes._id],
-                function(err, dt) {
-                    if (err) {
-                        throw err;
-                    }
-                    cb();
-                });
+            readingTypeDao.createReadingType(readingType1key, "weight_rt", [vt.attributes._id], function (err, rt) {
+                if (err) {
+                    console.log(err.stack);
+                    throw err;
+                }
+                deviceTypeDao.createDeviceType(deviceType1key, "desc", "1", "acme", [rt.attributes._id],
+                    function (err, dt) {
+                        if (err) {
+                            console.log(err.stack);
+                            throw err;
+                        }
+                        cb();
+                    });
+            });
         });
     },
 
@@ -30,11 +39,16 @@ exports.device_dao_test = {
             if (err) {
                 throw err;
             }
-            readingTypeDao.removeById(readingType1key, function(err, res){
+            readingTypeDao.removeById(readingType1key, function (err, res) {
                 if (err) {
                     throw err;
                 }
-                cb();
+                valueTypeDao.removeById(valueType1key, function (err, res) {
+                    if (err) {
+                        throw err;
+                    }
+                    cb();
+                })
             })
         })
     },

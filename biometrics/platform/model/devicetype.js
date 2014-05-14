@@ -15,7 +15,7 @@ var devicetype = $$.m.ModelBase.extend({
             description: null,
             model: null,
             manufacturer: null,
-            readingtypes: [],
+            readingTypes: [],
             _v:"0.1"
         }
     },

@@ -7,13 +7,13 @@
 
 require('./../../../models/base.model.js');
 
-var readingType = $$.m.ModelBase.extend({
+var valueType = $$.m.ModelBase.extend({
 
     defaults: function() {
         return {
             _id: null,
+            unit: null,
             description: null,
-            valueTypes: null,
             _v:"0.1"
         }
     },
@@ -26,10 +26,10 @@ var readingType = $$.m.ModelBase.extend({
 }, {
     db: {
         storage: "mongo",
-        table: "readingtypes"
+        table: "valuetypes"
     }
 });
 
-$$.m.ReadingType = readingType;
+$$.m.ValueType = valueType;
 
-module.exports = readingType;
+module.exports = valueType;

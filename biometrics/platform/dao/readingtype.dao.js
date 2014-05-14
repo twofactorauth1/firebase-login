@@ -8,6 +8,8 @@
 require('../../../dao/base.dao.js');
 require('../model/readingtype');
 
+var valueTypeDao = require('./valuetype.dao');
+
 var dao = {
 
     options: {
@@ -15,17 +17,37 @@ var dao = {
         defaultModel: $$.m.ReadingType
     },
 
-    createReadingType: function(id, unit, description, fn) {
+    createReadingType: function(id, description, valueTypes, fn) {
 
-        var readingType = new $$.m.ReadingType({
-            _id: id,
-            unit: unit,
-            description: description
-        });
+        if (!valueTypes || valueTypes.length == 0) {
+            return callback(new Error("No value types were provided for new reading type " + id));
+        }
 
-        this.saveOrUpdate(readingType, function(err, value) {
-            fn(err, value);
-        });
+        var self = this,
+            tempValueTypes = valueTypes.slice();
+
+        function validateValueType(vt) {
+            if (vt) {
+                valueTypeDao.getById(vt, function(err, value) {
+                    if (err) {
+                        return callback(err, null);
+                    }
+                    if (!value) {
+                        return callback(new Error("Value type " + vt + " not found", null));
+                    }
+                    return validateValueType(tempValueTypes.shift());
+                })
+            } else {
+                var readingType = new $$.m.ReadingType({
+                    _id: id,
+                    description: description,
+                    valueTypes: valueTypes
+                });
+
+                self.saveOrUpdate(readingType, fn);
+            }
+        }
+        validateValueType(tempValueTypes.shift());
     }
 };
 

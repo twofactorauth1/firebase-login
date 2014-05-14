@@ -1,0 +1,281 @@
+{
+    "items": [
+        {
+            "duration": 2843.474,
+            "total_distance": 9776.89753518464,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Thu, 8 May 2014 05:07:05",
+            "total_calories": 784,
+            "type": "Running",
+            "uri": "/fitnessActivities/350066819"
+        },
+        {
+            "duration": 0,
+            "total_distance": 0,
+            "has_path": false,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Tue, 6 May 2014 05:54:55",
+            "total_calories": 0,
+            "type": "Running",
+            "uri": "/fitnessActivities/348749607"
+        },
+        {
+            "duration": 3600,
+            "total_distance": 13277.088,
+            "has_path": false,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Tue, 6 May 2014 05:54:55",
+            "total_calories": 1067.46629294118,
+            "type": "Running",
+            "uri": "/fitnessActivities/348749601"
+        },
+        {
+            "duration": 3600,
+            "total_distance": 13035.687013916,
+            "has_path": false,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Mon, 5 May 2014 06:00:31",
+            "total_calories": 1060.08987385112,
+            "type": "Running",
+            "uri": "/fitnessActivities/348053769"
+        },
+        {
+            "duration": 3843.085,
+            "total_distance": 13381.8907521663,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Sun, 4 May 2014 10:04:08",
+            "total_calories": 1060,
+            "type": "Running",
+            "uri": "/fitnessActivities/347649323"
+        },
+        {
+            "duration": 4646.33,
+            "total_distance": 16086.6413908622,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Sat, 3 May 2014 09:30:21",
+            "total_calories": 1263,
+            "type": "Running",
+            "uri": "/fitnessActivities/346966734"
+        },
+        {
+            "duration": 3323.411,
+            "total_distance": 11266.862936796,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Fri, 2 May 2014 13:40:49",
+            "total_calories": 902,
+            "type": "Running",
+            "uri": "/fitnessActivities/346428110"
+        },
+        {
+            "duration": 2560.698,
+            "total_distance": 8510.89609210117,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Fri, 2 May 2014 05:05:57",
+            "total_calories": 673,
+            "type": "Running",
+            "uri": "/fitnessActivities/346182408"
+        },
+        {
+            "duration": 3298.629,
+            "total_distance": 10284.6966339308,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Wed, 30 Apr 2014 04:44:56",
+            "total_calories": 826,
+            "type": "Running",
+            "uri": "/fitnessActivities/344992303"
+        },
+        {
+            "duration": 2789.807,
+            "total_distance": 8643.40334112165,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Tue, 29 Apr 2014 11:43:54",
+            "total_calories": 731,
+            "type": "Running",
+            "uri": "/fitnessActivities/344637354"
+        },
+        {
+            "duration": 2820,
+            "total_distance": 10460.736,
+            "has_path": false,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Tue, 29 Apr 2014 06:04:25",
+            "total_calories": 842.701082794118,
+            "type": "Running",
+            "uri": "/fitnessActivities/344386185"
+        },
+        {
+            "duration": 3600,
+            "total_distance": 13679.424,
+            "has_path": false,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Tue, 29 Apr 2014 06:03:50",
+            "total_calories": 1089.63881352941,
+            "type": "Running",
+            "uri": "/fitnessActivities/344385792"
+        },
+        {
+            "duration": 5264.212,
+            "total_distance": 17204.0951367086,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Sun, 27 Apr 2014 09:13:11",
+            "total_calories": 1360,
+            "type": "Running",
+            "uri": "/fitnessActivities/343368944"
+        },
+        {
+            "duration": 3915.201,
+            "total_distance": 13536.8577230923,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Sat, 26 Apr 2014 12:04:28",
+            "total_calories": 1058,
+            "type": "Running",
+            "uri": "/fitnessActivities/342743053"
+        },
+        {
+            "duration": 3420,
+            "total_distance": 12472.416,
+            "has_path": false,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Fri, 25 Apr 2014 05:17:12",
+            "total_calories": 1008.80573397059,
+            "type": "Running",
+            "uri": "/fitnessActivities/341917877"
+        },
+        {
+            "duration": 3480,
+            "total_distance": 12874.752,
+            "has_path": false,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Wed, 23 Apr 2014 06:00:27",
+            "total_calories": 1039.86593735294,
+            "type": "Running",
+            "uri": "/fitnessActivities/340684124"
+        },
+        {
+            "duration": 3300,
+            "total_distance": 12070.08,
+            "has_path": false,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Tue, 22 Apr 2014 06:00:05",
+            "total_calories": 973.5908875,
+            "type": "Running",
+            "uri": "/fitnessActivities/340002777"
+        },
+        {
+            "duration": 3600,
+            "total_distance": 13035.687013916,
+            "has_path": false,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Mon, 21 Apr 2014 06:04:48",
+            "total_calories": 1070.0772616263,
+            "type": "Running",
+            "uri": "/fitnessActivities/339346197"
+        },
+        {
+            "duration": 3924.674,
+            "total_distance": 13357.3877784554,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Sun, 20 Apr 2014 10:37:22",
+            "total_calories": 1029,
+            "type": "Running",
+            "uri": "/fitnessActivities/338930707"
+        },
+        {
+            "duration": 3551.45,
+            "total_distance": 12136.1478297574,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Sat, 19 Apr 2014 10:00:57",
+            "total_calories": 977,
+            "type": "Running",
+            "uri": "/fitnessActivities/338315329"
+        },
+        {
+            "duration": 3300,
+            "total_distance": 12182.7343562622,
+            "has_path": false,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Fri, 18 Apr 2014 06:01:24",
+            "total_calories": 975.058626506949,
+            "type": "Running",
+            "uri": "/fitnessActivities/337536344"
+        },
+        {
+            "duration": 3120,
+            "total_distance": 11667.744,
+            "has_path": false,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Thu, 17 Apr 2014 06:08:08",
+            "total_calories": 920.009271176471,
+            "type": "Running",
+            "uri": "/fitnessActivities/336992897"
+        },
+        {
+            "duration": 617.631,
+            "total_distance": 2118.07033049443,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Wed, 16 Apr 2014 07:26:26",
+            "total_calories": 174,
+            "type": "Running",
+            "uri": "/fitnessActivities/336472611"
+        },
+        {
+            "duration": 2700.418,
+            "total_distance": 8898.89563962646,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Wed, 16 Apr 2014 05:57:18",
+            "total_calories": 647,
+            "type": "Running",
+            "uri": "/fitnessActivities/336446743"
+        },
+        {
+            "duration": 2016.248,
+            "total_distance": 7568.7078267335,
+            "has_path": true,
+            "entry_mode": "API",
+            "source": "RunKeeper",
+            "start_time": "Wed, 16 Apr 2014 05:21:21",
+            "total_calories": 539,
+            "type": "Running",
+            "uri": "/fitnessActivities/336425976"
+        }
+    ],
+    "next": "/fitnessActivities?page=1&pageSize=25&noEarlierThan=1970-01-01&noLaterThan=2014-05-10&modifiedNoEarlierThan=1970-01-01&modifiedNoLaterThan=2014-05-10",
+    "size": 714
+}
