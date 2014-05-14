@@ -21,7 +21,7 @@
         <link rel="shortcut icon" href="https://s3.amazonaws.com/indigenous-themes/assets/icons/favicon.ico"/>
     {{/if}}
 
-        <link rel="stylesheet" href="/css/style.default.css">
+        <link rel="stylesheet" href="theme.css">
 
     <title>{{title}}</title>
 
@@ -45,21 +45,21 @@
 
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
-              <div class="item">
+              <div class="item active">
                 <div class="fill" style="background-image:url('/assets/images/temp-theme/slider-1.jpg');"></div>
                 <div class="carousel-caption" style="display: none;">
                   <h2>Yoga Instruction</h2>
                   <a href="#" class="button">View Schedule</a>
                 </div>
               </div>
-              <div class="item active">
+              <div class="item ">
                 <div class="fill" style="background-image:url('/assets/images/temp-theme/slider-1.jpg');"></div>
                 <div class="carousel-caption" style="display: none;">
                   <h2>Nutrition Consultaion</h2>
                   <a href="#" class="button">Sign Up</a>
                 </div>
               </div>
-              <div class="item">
+              <div class="item ">
                 <div class="fill" style="background-image:url('/assets/images/temp-theme/slider-1.jpg');"></div>
                 <div class="carousel-caption" style="display: none;">
                   <h2>Weighted Yoga</h2>
@@ -148,15 +148,16 @@
 
     <script type="text/javascript">
         /* Carousel */
-        $('#myCarousel').carousel({
-            interval: 4000
+        $('.carousel').each(function() {
+            $(this).carousel({interval: 4000});
         });
+        //$('[id^="myCarousel"]').carousel({interval: 4000});
 
-        $('#myCarousel').on('slide.bs.carousel', function() {
+        $('[id^="myCarousel"]').on('slide.bs.carousel', function() {
             $('.carousel-caption').css('display', 'none');
         });
 
-        $('#myCarousel').on('slid.bs.carousel', function() {
+        $('[id^="myCarousel"]').on('slid.bs.carousel', function() {
             $('.carousel-inner > .item.active .carousel-caption').fadeIn("slow");
         });
 

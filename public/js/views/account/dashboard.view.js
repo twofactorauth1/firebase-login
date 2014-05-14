@@ -26,14 +26,14 @@ define([
         render: function() {
             var self = this
                 , p1 = this.getAccount()
-                , p2 = this.getUser()
-                , p3 = this.getActivity();
+                , p2 = this.getUser();
+                ///, p3 = this.getActivity();
 
-            $.when(p1, p2, p3)
+            $.when(p1, p2)
                 .done(function() {
                     var data = {
                         account: self.account.toJSON(),
-                        user: self.user.toJSON(),
+                        user: self.user.toJSON()
                         //activity: self.activity.toJSON()
                     };
 

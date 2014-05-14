@@ -1,0 +1,51 @@
+<!--
+* COPYRIGHT INDIGENOUS.IO, LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<nav class="navbar navbar-inverse hidden" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav navbar-left">
+                    {{#each linkLists.head-menu}}
+                        <li>{{{link this}}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+<nav class="navbar navbar-white" role="navigation">
+    <div class="navbar-container">
+      <div class="navbar-header pull-left">
+
+        <a class="navbar-brand editable" href="http://indigenous.io" data-name="{{account.company.name}}">
+          <span class="logo-1"> <img src="/assets/images/indimain/logo.png" scale="0"> </span>
+        </a>
+      </div>
+      <div class="facebook pull-right">
+      <nav class="pull-left">
+        <ul id="menu-main" class="nav sf-js-enabled">
+        {{#each linkLists.head-menu}}
+                <li>{{{link this}}}</li>
+        {{/each}}
+       </ul>
+       </nav>
+      </div>
+    </div><!-- /.navbar-container -->
+  </nav>

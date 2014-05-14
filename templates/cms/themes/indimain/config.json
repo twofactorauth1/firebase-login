@@ -1,0 +1,62 @@
+{
+    "template-engine": "handlebars",
+    "supports-menu-lists": "false",
+
+    "theme-id": "indimain",
+    "theme-name": "Indigenous Main Theme",
+    "theme-description": "The Indigenous theme for Indigenous.io",
+    "tags": ["default", "awesome", "basic"],
+
+    "linkLists": [
+        {
+            "name": "Head2 Menu",
+            "handle": "head2-menu",
+            "links": [
+                {
+                    "label": "Home",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "home",
+                        "data": "index"
+                    }
+                },
+                {
+                    "label": "Blog",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "page",
+                        "data": "blog"
+                    }
+                }
+            ]
+        }
+    ],
+
+    "pages": [
+        {
+            "handle":"index",
+            "title":"Home",
+            "components": [
+                "freeform",
+                "contact-us",
+                "feature-blocks",
+                "feature-list",
+                "image-gallery",
+                "text-columns",
+                "image-slider"
+            ]
+        },
+
+        {
+            "handle":"blog",
+            "title":"Blog",
+            "components": [
+                "freeform"
+            ]
+        }
+    ],
+
+    "excluded-components": [
+
+    ]
+}

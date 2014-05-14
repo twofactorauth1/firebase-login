@@ -24,6 +24,7 @@ define([
 
         setup: null,
         websiteId: null,
+        websiteTitle: null,
         pageHandle: null,
 
         attributes: {
@@ -40,11 +41,9 @@ define([
         },
 
         initialize: function(options) {
-            console.log('Options: '+ JSON.stringify(options.websiteId));
             options = options || {};
             this.pageHandle = options.page || "index";
             this.websiteId = options.websiteId;
-            this.setup = options.setup;
         },
 
         render: function () {
@@ -52,18 +51,26 @@ define([
                 , p1 = this.getAccount()
                 , p2 = this.getUser()
                 , p3 = this.getThemeConfig()
-                , p4 = this.getWebsite();
+                , p4 = this.getWebsite()
+                , p5 = this.apply_color_palette();
 
 
             $.when(p4)
                 .done(function() {
                     self.websiteId = self.website.id;
+                    self.websiteTitle = self.website.attributes.title;
+                    // console.log('Settings: '+self.website.get('title')+' or '+self.website.attributes.title);
+                    // var title = self.website.get("title");
+                    // self.website.set({title:'Testing8'});
+                    // console.log('Settings: '+self.website.get('title')+' or '+self.website.attributes.title);
+                    // self.website.save();
                 });
 
             $.when(p1, p2)
                 .done(function () {
                     var data = {
-                        websiteId: self.websiteId
+                        websiteId: self.websiteId,
+                        websiteTitle: self.websiteTitle
                     };
 
                     if (self.pageHandle == "index" || self.pageHandle == "null" || self.pageHandle == "/") {
@@ -74,7 +81,6 @@ define([
 
                     self.check_setup();
 
-                    console.log('Setup: '+self.setup);
                     if (!self.setup) {
 
                         var tmpl = $$.templateManager.get("setup-website", self.templateKey);
@@ -198,7 +204,6 @@ define([
                 this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
             }
 
-            console.log('Setup: '+this.setup);
             if (this.websiteId == null) {
                 this.website = new Website({
                     accountId: this.accountId
@@ -249,7 +254,6 @@ define([
 
         showColorsForImage: function($image, $imageSection ) {
             var self = this;
-            console.log('showColorsForImage');
             var colorThief = new ColorThief();
             var image                    = $image[0];
             var start                    = Date.now();
@@ -258,22 +262,21 @@ define([
             var palette                  = colorThief.getPalette(image);
             var elapsedTimeForGetPalette = Date.now() - start + elapsedTimeForGetColor;
 
-            console.log('Color: '+color);
             var colorThiefOutput = {
               color: color,
               palette: palette,
               elapsedTimeForGetColor: elapsedTimeForGetColor,
               elapsedTimeForGetPalette: elapsedTimeForGetPalette
             };
-            console.log('Color Theif continued');
+            console.log('Color Output: '+JSON.stringify(colorThiefOutput));
+
+            //send pallete to website settings
+
             var colorThiefOuputHTML = $$.templateManager.get("color-thief-output-template", self.templateKey);
             //var html = colorThiefOuputHTML(colorThiefOutput);
             $imageSection.addClass('with-color-thief-output');
-            console.log('Color Theif continued 1');
             $imageSection.find('.run-functions-button').addClass('hide');
-            console.log('Color Theif continued 2');
             $imageSection.find('.color-thief-output').append(colorThiefOuputHTML(colorThiefOutput)).slideDown();
-            console.log('Color Theif continued 3');
 
             // If the color-thief-output div is not in the viewport or cut off, scroll down.
             var windowHeight          = $(window).height();
@@ -285,28 +288,23 @@ define([
         },
 
         dragNdrop: function() {
-            console.log('drag n drop');
             var self = this;
             // Setup the drag and drop behavior if supported
             if (Modernizr.draganddrop) {
                 $('#drag-drop').show();
                 var dropZone = $('#drop-zone');
                 var handleDragEnter = function(event){
-                  console.log('drag enter');
                   dropZone.addClass('dragging');
                   return false;
                 };
                 var handleDragLeave = function(event){
-                  console.log('drag Leave');
                   dropZone.removeClass('dragging');
                   return false;
                 };
                 var handleDragOver = function(event){
-                  console.log('handle drag over');
                   return false;
                 };
                 var handleDrop = function(event){
-                  console.log('handle drop');
                   dropZone.removeClass('dragging');
                   self.handleFiles(event.originalEvent.dataTransfer.files);
                   return false;
@@ -317,6 +315,7 @@ define([
 
         handleFiles: function(files) {
             console.log('handleFiles'+files);
+            $('.dropped-image').remove();
             var self = this;
             var draggedImages = $('#dragged-images');
             var imageType      = /image.*/;
@@ -372,11 +371,11 @@ define([
         },
 
         check_setup: function() {
-            console.log('checking setup');
             if( $.cookie('website-setup') === 'true' ){
-                console.log('closing setup');
                 this.setup = true;
             }
+            // var website = this.getThemeConfig();
+            // console.log('Theme Config: '+JSON.stringify(website));
         },
 
         drop_click: function() {
@@ -385,18 +384,23 @@ define([
         },
 
         end_setup: function(e) {
-            console.log('ending setup');
+            var self = this;
             this.setup = true;
             //tempoary until variable set up in mongo
+
+
             $.cookie('website-setup', 'true', { path: '/' });
             this.render();
         },
 
         upload_color_pic: function(event) {
             var self = this;
-            console.log('upload color ');
 
             self.handleFiles($("input[type=file]").get(0).files);
+        },
+
+        apply_color_palette: function() {
+            console.log('applying color palette ');
         }
     });
 

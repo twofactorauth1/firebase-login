@@ -50,7 +50,8 @@ define([
                     return $$.api.getApiUrl("cms", "website/" + this.id);
                     break;
             }
-        }
+        },
+
     });
 
     $$.m.cms = $$.m.cms || {};
