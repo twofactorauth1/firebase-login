@@ -44,8 +44,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         }
     },
 
-
     showWebsitePage: function(req, resp) {
+        console.log('show');
         var self = this
             , accountId = this.accountId(req);
 

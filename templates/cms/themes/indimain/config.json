@@ -51,7 +51,7 @@
             "handle":"blog",
             "title":"Blog",
             "components": [
-                "freeform"
+                "blog"
             ]
         }
     ],

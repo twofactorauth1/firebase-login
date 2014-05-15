@@ -1,0 +1,41 @@
+<!--
+* COPYRIGHT INDIGENOUS.IO, LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div>
+    {{#with component}}
+    <div id="content-area">
+            <div class="container clearfix row-fluid">
+                <div id="main-area" class="col-sm-8 col-sm-offset-1">
+                    <article class="entry clearfix">
+                        {{#each posts}}
+                            <div id="et_pt_blog" class="responsive clearfix">
+
+                                    <div class="et_pt_blogentry clearfix">
+                                        <h2 class="et_pt_title"><a href="/page/blog/{{@index}}">{{title}}</a></h2>
+
+                                        <p class="et_pt_blogmeta">{{title}}</p>
+
+                                            <div class="et_pt_thumb alignleft">
+                                                <a href=""><span class="overlay"></span></a>
+                                            </div> <!-- end .thumb -->
+
+                                            <div class="entry-excerpt"><p>{{content}}</p></div>
+                                            <a href="" class="btn btn-orange pull-right"><span>READ MORE</span></a>
+                                    </div> <!-- end .et_pt_blogentry -->
+
+                            </div> <!-- end #et_pt_blog -->
+                        {{/each}}
+
+                    </article> <!-- .entry -->
+
+
+                </div> <!-- #main-area -->
+            </div> <!-- .container -->
+        </div> <!-- #content-area -->
+    {{/with}}
+</div>
