@@ -1,15 +1,26 @@
 var request = require('request'),
     runkeeperConfig = require('../../../configs/runkeeper.config');
+//,
+//    querystring = require('querystring');
 
 module.exports = {
 
     log: $$.g.getLogger("runkeeper_client"),
 
-    getFitnessActivityFeed: function(accessToken, callback) {
+    /**
+     * Params
+     */
+//    MODIFIED_NO_EARLIER_THAN: "modifiedNoEarlierThan", // YYYY-MM-DD
+//    MODIFIED_NO_LATER_THAN: "modifiedNoLaterThan", // YYYY-MM-DD
+//    PAGE_SIZE: "pageSize", // Defaults to 25 when not set
+
+    getFitnessActivityFeed: function(accessToken, sinceSeconds, untilSeconds, callback) {
         return this._apiCall(
             accessToken,
             "application/vnd.com.runkeeper.FitnessActivityFeed+json",
             "/fitnessActivities",
+            sinceSeconds,
+            untilSeconds,
             callback);
     },
 
@@ -18,6 +29,8 @@ module.exports = {
             accessToken,
             "application/vnd.com.runkeeper.FitnessActivity+json",
             "/fitnessActivities/" + activityId,
+            null,
+            null,
             callback);
     },
 
@@ -78,9 +91,11 @@ module.exports = {
         })
     },
 
-    _apiCall: function(accessToken, media_type, endpoint, callback) {
+    _apiCall: function(accessToken, media_type, endpoint, sinceSeconds, untilSeconds, callback) {
 
         var self = this;
+
+        var querystring = false;
 
         var options = {};
 
@@ -89,7 +104,19 @@ module.exports = {
         options.headers = {
             'Accept': media_type,
             'Authorization': 'Bearer ' + accessToken
-        };
+        }
+
+        if (sinceSeconds) {
+            var sinceDate = new Date(sinceSeconds*1000);
+            options.headers['If-Modified-Since'] = sinceDate.toGMTString();
+            options.url += "?modifiedNoEarlierThan=" + this._dateToYMD(sinceDate);
+            querystring = true;
+        }
+
+        if (untilSeconds) {
+            options.url += querystring ? "&" : "?";
+            options.url += "modifiedNoLaterThan=" + this._dateToYMD(new Date(untilSeconds*1000));
+        }
 
         options.json = {};
 
@@ -101,13 +128,20 @@ module.exports = {
                 callback(error, null);
             } else {
                 self.log.debug("RunKeeper Response: " + JSON.stringify(body));
-                if (response.statusCode != 200) {
+                if (response.statusCode != 200 && response.statusCode != 304) {
                     return callback(new Error(JSON.stringify(body)), null);
                 }
 
                 return callback(null, body);
             }
         })
+    },
+
+    _dateToYMD: function(date) {
+        var d = date.getDate();
+        var m = date.getMonth() + 1;
+        var y = date.getFullYear();
+        return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
     }
 };
 

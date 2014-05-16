@@ -8,6 +8,11 @@ var bioValueTypes = {
     VT_SYSTOLIC: "systolic",
     VT_DIASTOLIC: "diastolic",
 
+    VT_CALORIES: "calories",
+    VT_DISTANCE: "distance",
+    VT_ACTIVITY_TYPE: "activity_type",
+    VT_ACTIVITY_ID: "activity_id",
+
     init: function() {
 
         this._valueTypeIds = [
@@ -27,7 +32,12 @@ var bioValueTypes = {
             [this.VT_PULSE, "count per minute", "arterial palpation of the heartbeat"],
             [this.VT_SP02, "%", "blood oxygen saturation"],
             [this.VT_SYSTOLIC, "mmHg", "pressure in the arteries when the heart beats"],
-            [this.VT_DIASTOLIC, "mmHg", "pressure in the arteries between heart beats"]
+            [this.VT_DIASTOLIC, "mmHg", "pressure in the arteries between heart beats"],
+
+            [this.VT_CALORIES, "calories", "calories burned"],
+            [this.VT_DISTANCE, "distance", "distance traveled in meters"],
+            [this.VT_ACTIVITY_ID, "activity_id", "activity identifier"],
+            [this.VT_ACTIVITY_TYPE, "activity_type", "activity type"]
         ];
 
         return this;
