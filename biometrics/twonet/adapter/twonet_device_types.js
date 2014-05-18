@@ -6,12 +6,15 @@ var ValueTypes = require('../../platform/bio_value_types');
 var twonetDeviceTypes = {
 
     /**
-     * Reading types
+     * Reading type IDs
      */
     RT_2NET_BP: "2net_bp",
     RT_2NET_WEIGHT: "2net_weight",
     RT_2NET_PULSEOX: "2net_pulseox",
 
+    /**
+     * Device Type IDs
+     */
     DT_2NET_BPM: "2net_bpm",
     DT_2NET_SCALE: "2net_scale",
     DT_2NET_PULSEOX: "2net_pulseox",
