@@ -272,6 +272,7 @@ module.exports = {
                             valuesProvider(twonetReading),
                             twonetReading.guid,
                             twonetReading.time,
+                            twonetReading.time,
                             function(err, platformReading) {
                                 if (err) {
                                     return fn(err, null);
@@ -314,6 +315,7 @@ module.exports = {
                             twonetDeviceTypes.RT_2NET_WEIGHT,
                             self._makeScaleReadingValues(twonetReading),
                             twonetReading.guid,
+                            twonetReading.time,
                             twonetReading.time,
                             function(err, platformReading) {
                                 if (err) {

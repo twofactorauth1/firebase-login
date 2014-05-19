@@ -19,7 +19,7 @@ var dao = {
         defaultModel: $$.m.Reading
     },
 
-    createReading: function(deviceId, contactId, readingTypeId, values, externalId, time, fn) {
+    createReading: function(deviceId, contactId, readingTypeId, values, externalId, time, endTime, fn) {
 
         if ($$.u.stringutils.isNullOrEmpty(deviceId)) {
             return fn(new Error("A device id was not specified"), null);
@@ -35,6 +35,10 @@ var dao = {
 
         if (time == null) {
             time = Math.floor(new Date().getTime() / 1000);
+        }
+
+        if (endTime == null) {
+            endTime = time;
         }
 
         var self = this;
@@ -90,6 +94,7 @@ var dao = {
                         contactId: contactId,
                         readingTypeId: readingTypeId,
                         time: time,
+                        endTime: endTime,
                         values: values
                     });
 

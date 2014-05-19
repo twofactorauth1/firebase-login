@@ -20,6 +20,7 @@ var reading = $$.m.ModelBase.extend({
             externalId: null,
             readingTypeId: null,
             time: null,
+            endTime: null,
             values: null,
             _v:"0.1"
         }
