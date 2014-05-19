@@ -592,7 +592,7 @@ var dao = {
                 }
 
                 var website = value.get("website");
-                if (website == null) {
+                if (website.setup == null) {
                     website = {
                         websiteId: websiteId,
                         themeId: "default"
@@ -605,6 +605,50 @@ var dao = {
                 accountId = websiteId = website = fn = null;
                 return;
             });
+        });
+    },
+
+    updateWebsiteSettings: function (newSettings, accountId, websiteId,fn) {
+        var self = this, website;
+        console.log('New Settings: '+JSON.stringify(newSettings));
+        accountId = 1;
+        websiteId = '880a02a5-cbc2-4286-855f-228bbd533ac8';
+        //ensure website exists and belongs to this account
+        this.getById(websiteId, Website, function (err, value) {
+            if (err) {
+                fn(err, value);
+                accountId = websiteId = fn = null;
+                return;
+            }
+
+            if (value == null) {
+                fn("Website does not exist!");
+                accountId = websiteId = fn = null;
+                return;
+            }
+
+            if (value.get("accountId") != accountId) {
+                fn("Website [" + websiteId + "] does not belong to account: " + accountId);
+                accountId = websiteId = fn = null;
+                return;
+            }
+
+            var settings = value.get('settings');
+            console.log('Website Settings: '+JSON.stringify(settings));
+            if (settings == null) {
+                settings = newSettings;
+                value.set('settings', settings);
+                console.log('Website Settings2: '+JSON.stringify(value.get('settings')));
+            } else {
+                settings = newSettings;
+                value.set('settings', settings);
+            }
+
+             self.saveOrUpdate(value, function() {
+                console.log('saved');
+             });
+             accountId = website = null;
+             return;
         });
     },
 

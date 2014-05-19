@@ -24,6 +24,8 @@ _.extend(api.prototype, baseApi.prototype, {
         // WEBSITE
         app.get(this.url('website/:id'), this.isAuthApi, this.getWebsiteById.bind(this));
         app.get(this.url(':accountid/cms/website', "account"), this.isAuthApi, this.getWebsiteForAccountId.bind(this));
+        app.post(this.url('website'), this.saveOrUpdateWebsite.bind(this));
+        app.put(this.url('website'), this.saveOrUpdateWebsite.bind(this));
 
         // PAGE
         app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
@@ -47,6 +49,21 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, value, "Error Retrieving Website by Id");
             self = null;
         });
+    },
+
+    saveOrUpdateWebsite: function(req, resp) {
+        //TODO: Add Security
+        var self = this;
+        var settings = req.body.settings;
+
+        console.log('Settings: '+JSON.stringify(settings));
+
+        cmsDao.updateWebsiteSettings( settings, function(err, value) {
+            self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
+            self = value = null;
+        });
+
+        console.log('Settings: '+JSON.stringify(settings));
     },
 
 

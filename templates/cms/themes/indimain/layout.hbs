@@ -26,17 +26,42 @@
     <title>{{title}}</title>
 
     <!-- TODO add stylesheets and responsive fallback for IE -->
+    <style type="text/css">
+        .navbar-white {
+            color: rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }});
+            border-bottom: 3px solid rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }}) !important;
+        }
+        .color-1 {
+            background: rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }});
+            color: #ffffff;
+        }
+        .color-8 {
+            background: rgb({{ settings.color-palette.palette.[7].[0] }},{{ settings.color-palette.palette.[7].[1] }},{{ settings.color-palette.palette.[7].[2] }});
+        }
+        .btn-orange {
+            background: rgb({{ settings.color-palette.palette.[1].[0] }},{{ settings.color-palette.palette.[1].[1] }},{{ settings.color-palette.palette.[1].[2] }})!important;
+            border-bottom: 5px solid rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+            border-color: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }});
+        }
+        .btn-orange:hover {
+            background: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
+            border-bottom: 5px solid rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+            border-color: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }});
+        }
+    </style>
 </head>
 
 <body class="theme-main">
     <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=522744787823977";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=522744787823977";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
 
     <div id="header">{{{header}}}</div>
 
@@ -370,6 +395,6 @@
                  }
              })
          })(jQuery);
-
     </script>
 </body>
+

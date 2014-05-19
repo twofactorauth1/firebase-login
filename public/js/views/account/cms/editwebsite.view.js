@@ -25,6 +25,7 @@ define([
         setup: null,
         websiteId: null,
         websiteTitle: null,
+        websiteSettings: null,
         pageHandle: null,
 
         attributes: {
@@ -37,7 +38,8 @@ define([
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
             "click #drop-zone":"drop_click",
-            "change #file":"upload_color_pic"
+            "change #file":"upload_color_pic",
+            "click .btn-change-palette":"changePalette"
         },
 
         initialize: function(options) {
@@ -51,14 +53,17 @@ define([
                 , p1 = this.getAccount()
                 , p2 = this.getUser()
                 , p3 = this.getThemeConfig()
-                , p4 = this.getWebsite()
-                , p5 = this.apply_color_palette();
+                , p4 = this.getWebsite();
 
 
             $.when(p4)
                 .done(function() {
                     self.websiteId = self.website.id;
                     self.websiteTitle = self.website.attributes.title;
+                    console.log('Before: '+JSON.stringify(self.websiteSettings));
+                    self.websiteSettings = self.website.attributes.settings;
+                    console.log('After: '+JSON.stringify(self.websiteSettings));
+
                     // console.log('Settings: '+self.website.get('title')+' or '+self.website.attributes.title);
                     // var title = self.website.get("title");
                     // self.website.set({title:'Testing8'});
@@ -66,7 +71,7 @@ define([
                     // self.website.save();
                 });
 
-            $.when(p1, p2)
+            $.when(p1, p2, p4)
                 .done(function () {
                     var data = {
                         websiteId: self.websiteId,
@@ -97,6 +102,15 @@ define([
 
                         self.show(html);
                         self.check_welcome();
+
+                         var sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
+                        $('#rightpanel').append(sidetmpl);
+                        var colorPalette = self.websiteSettings;
+                         var colorPaletteTemplate = $$.templateManager.get("color-thief-output-template", self.templateKey);
+                        console.log('Color Palette: '+JSON.stringify(colorPalette['color-palette']));
+                         var html = colorPaletteTemplate(colorPalette['color-palette']);
+                         console.log('HTML: '+JSON.stringify(html));
+                         $('#color-palette-sidebar').append(html);
 
                         $("#iframe-website", this.el).load(function(pageLoadEvent) {
                             var doc = $(pageLoadEvent.currentTarget)[0].contentDocument ||
@@ -271,6 +285,8 @@ define([
             console.log('Color Output: '+JSON.stringify(colorThiefOutput));
 
             //send pallete to website settings
+             self.website.set('settings', {'color-palette': colorThiefOutput});
+             self.website.save();
 
             var colorThiefOuputHTML = $$.templateManager.get("color-thief-output-template", self.templateKey);
             //var html = colorThiefOuputHTML(colorThiefOutput);
@@ -371,11 +387,19 @@ define([
         },
 
         check_setup: function() {
+            var self = this;
             if( $.cookie('website-setup') === 'true' ){
                 this.setup = true;
             }
-            // var website = this.getThemeConfig();
-            // console.log('Theme Config: '+JSON.stringify(website));
+
+            //self.account.save();
+             // if (settings.setup = null) {
+             //    settings.setup = false
+             // }
+        },
+
+        changePalette: function() {
+            console.log('changing palette');
         },
 
         drop_click: function() {
@@ -397,10 +421,6 @@ define([
             var self = this;
 
             self.handleFiles($("input[type=file]").get(0).files);
-        },
-
-        apply_color_palette: function() {
-            console.log('applying color palette ');
         }
     });
 
