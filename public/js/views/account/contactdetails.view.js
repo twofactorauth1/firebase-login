@@ -123,7 +123,7 @@ define([
                     console.log('Success: '+JSON.stringify(result));
                     for (var i = 0; i < result.length; i++) {
                         console.log(JSON.stringify(result[i]));
-                        var tmpl = $$.templateManager.get("contact-activity", self.templateKey);
+                        var tmpl = $$.templateManager.get("contact-activity-default", self.templateKey);
                         var html = tmpl(result[i]);
                         $('.activity-section ul').append(html);
                     }

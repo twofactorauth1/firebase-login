@@ -50,7 +50,9 @@ define([
             "click #btn-upload-photo-modal":"uploadPhotoFromModal",
 
             "click #btn-new-device":"addNewDevice",
-            "onkeytimer .input-edit-device":"deviceChanged"
+            "onkeytimer .input-edit-device":"deviceChanged",
+
+            "click .btn-subscribe-two-net":"subscribeTwoNetUser",
         },
 
 
@@ -532,8 +534,6 @@ define([
 
             //save to the contact
             this.saveContact();
-
-            //this.subscribeTwoNetUser();
 
             var twoNetDeviceModel = Backbone.Model.extend({});
             var twoNetDeviceCollection = Backbone.Collection.extend({
