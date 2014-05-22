@@ -55,15 +55,16 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: Add Security
         var self = this;
         var settings = req.body.settings;
+        var accountId = req.body.accountId;
+        var websiteId = req.body._id;
+        //console.log('Other Data: '+JSON.stringify(req.body));
 
-        console.log('Settings: '+JSON.stringify(settings));
 
-        cmsDao.updateWebsiteSettings( settings, function(err, value) {
+        cmsDao.updateWebsiteSettings( settings, accountId, websiteId,function(err, value) {
             self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
             self = value = null;
         });
 
-        console.log('Settings: '+JSON.stringify(settings));
     },
 
 

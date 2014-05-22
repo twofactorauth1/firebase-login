@@ -24,16 +24,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     findReadings: function(req,resp) {
         var self = this;
-
-        deviceManager.findReadings(req.query, function(err, value) {
-            if (err) {
-                var errorMsg = "There was an error finding readings: " + err.message;
-                self.log.error(errorMsg);
-                self.log.error(err.stack);
-                self.wrapError(resp, 500, errorMsg, err, value);
-            } else {
-                self.sendResult(resp, value);
-            }
+        var contactId = req.query['contactId'];
+        deviceManager.findReadings(contactId, function(err, value) {
+            self.sendResultOrError(resp, err, value, "Error Retrieving Readings by contactId");
+            //self.sendResult(resp, value);
+            self = null;
         })
     }
 });

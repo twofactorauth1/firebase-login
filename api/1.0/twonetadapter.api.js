@@ -25,6 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     subscribeContact: function(req,resp) {
+        console.log('subscribing contact');
         var self = this;
 
         twonetAdapter.subscribeContact(req.body.contactId, function(err, value) {

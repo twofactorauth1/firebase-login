@@ -611,8 +611,6 @@ var dao = {
     updateWebsiteSettings: function (newSettings, accountId, websiteId,fn) {
         var self = this, website;
         console.log('New Settings: '+JSON.stringify(newSettings));
-        accountId = 1;
-        websiteId = '880a02a5-cbc2-4286-855f-228bbd533ac8';
         //ensure website exists and belongs to this account
         this.getById(websiteId, Website, function (err, value) {
             if (err) {

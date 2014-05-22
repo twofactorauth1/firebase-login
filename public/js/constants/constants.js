@@ -115,6 +115,18 @@ define([], function () {
                 ]
             },
 
+            device_types: {
+                scale: "2net_scale",
+                HOME: "h",
+                WORK: "w",
+
+                dp: [
+                    {label:"2net_scale", data:"2net_scale"},
+                    {label:"home", data:"h"},
+                    {label:"work", data:"w"}
+                ]
+            },
+
             activity_types: {
                 PHONE: "p",
                 EMAIL: "e"

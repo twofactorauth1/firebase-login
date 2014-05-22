@@ -32,6 +32,16 @@ define([], function() {
                 socialId: null      //The socialId of the source of this contact, if applicable
             },
 
+            /*
+            {
+                deviceTypeId: '2net_scale',
+                serialNumber: '0000000000',
+                showActivity: true
+            }
+            */
+
+            devices: [],
+
             siteActivity: [],
 
             notes: [],
@@ -211,6 +221,60 @@ define([], function() {
             }
         },
 
+        subscribetwoNetUser: function(userId) {
+            var data = {
+                "contactId": userId
+            }
+            // twonetadapter/subscription
+
+            var url = $$.api.getApiUrl("twonetadapter/subscription", userId);
+            return this.saveCustomUrl(url);
+        },
+
+        getContactReadings: function(userId) {
+            // var self = this;
+            //  var url = $$.api.getApiUrl("biometrics", "readings?contactId="+userId);
+            //  $.getJSON(url)
+            //     .done(function(result) {
+            //         console.log('Success: '+JSON.stringify(result));
+            //         return result;
+            //     })
+            //     .fail(function(resp) {
+            //         console.log('Fail: '+JSON.stringify(result));
+            //     });
+        },
+
+        getOrCreateDevice: function(type, serialNumber) {
+            console.log('adding new device '+type+' '+serialNumber);
+             var devices = this.get("devices");
+             console.log('Devices: '+JSON.stringify(devices));
+            if (devices === null) {
+                devices = [];
+                this.set({devices:devices});
+            }
+
+            for (var i = 0; i < devices.length; i++) {
+                var device = devices[i];
+                if (device != null) {
+                    var deviceId = device.serialNumber;
+                    console.log('Device ID: '+deviceId);
+                    if (deviceId === serialNumber) {
+                        return device;
+                    }
+                }
+            }
+
+            //Device = null;
+            var device = {
+                deviceTypeId: type,
+                serialNumber:serialNumber,
+                showActivity:true
+            };
+
+
+            devices.push(device);
+            return device;
+        },
 
 
         url: function(method) {

@@ -43,6 +43,8 @@ define([
                     $$.viewManager.showAlert("There was an error retrieving this contact");
                     self.goBack();
                 });
+
+            this.getReadings();
         },
 
 
@@ -111,6 +113,24 @@ define([
             $('.li-email.first .btn-less-emails i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
             $('.li-email.first .btn-less-emails span').text('more');
             $('.li-email.first .btn-less-emails').removeClass('btn-less-emails').addClass('btn-more-emails');
+        },
+
+        getReadings: function() {
+            var self = this;
+             var url = $$.api.getApiUrl("biometrics", "readings?contactId="+this.contactId);
+             $.getJSON(url)
+                .done(function(result) {
+                    console.log('Success: '+JSON.stringify(result));
+                    for (var i = 0; i < result.length; i++) {
+                        console.log(JSON.stringify(result[i]));
+                        var tmpl = $$.templateManager.get("contact-activity", self.templateKey);
+                        var html = tmpl(result[i]);
+                        $('.activity-section ul').append(html);
+                    }
+                })
+                .fail(function(resp) {
+                    console.log('Fail: '+JSON.stringify(result));
+                });
         }
     });
 

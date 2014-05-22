@@ -466,8 +466,25 @@ CONTACT DETAILS VIEW
                 {{> contact-details}}
             </div>
 
-            <div class="col-md-6">
-                {{> contact-activity}}
+            <div class="col-md-6 activity-section">
+                <h3 class="profile-name col-xs-6">Activity with {{contact.first}}</h3>
+                <div class="col-xs-6">
+                    <select class="pull-right form-control chosen-select activity-select" data-placeholder="Activity Type">
+                        <option value=""></option>
+                        <option value="email">Email</option>
+                        <option value="phone">Phone</option>
+                        <option value="appointment">Appointment</option>
+                        <option value="form-entry">Form Entry</option>
+                        <option value="visits">Visits</option>
+                        <option value="twitter">Twitter</option>
+                        <option value="reviews">Reviews</option>
+                    </select>
+                </div>
+                <hr class="clearfix mb30"></hr>
+                <div class="smart-timeline">
+                    <ul class="smart-timeline-list">
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -804,124 +821,86 @@ CONTACT DETAILS VIEW
 </script>
 
 
-<script type="text/x-handlebars-template" name="contact-activity" partial="true">
-    <h3 class="profile-name col-xs-6">Activity with {{contact.first}}</h3>
-            <div class="col-xs-6">
-                <select class="pull-right form-control chosen-select activity-select" data-placeholder="Activity Type">
-                    <option value=""></option>
-                    <option value="email">Email</option>
-                    <option value="phone">Phone</option>
-                    <option value="appointment">Appointment</option>
-                    <option value="form-entry">Form Entry</option>
-                    <option value="visits">Visits</option>
-                    <option value="twitter">Twitter</option>
-                    <option value="reviews">Reviews</option>
-                </select>
-            </div>
-            <hr class="clearfix mb30"></hr>
-            <div class="smart-timeline">
-                <ul class="smart-timeline-list">
-                    <li>
-                        <div class="smart-timeline-icon">
-                            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
-                        </div>
-                        <div class="smart-timeline-time">
-                            <small>just now</small>
-                        </div>
-                        <div class="smart-timeline-content">
-                            <p>
-                                <a href="javascript:void(0);">
-                                    <span class="label label-default">Email</span> from Sarah K.
-                                </a>
-                            </p>
-                            <p>
-                                Promotion email based on Henry&#39;s birthday.
-                            </p>
-                            <p>
-                                <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a>
-                            </p>
+<script type="text/x-handlebars-template" name="contact-activity-2net_weight">
+    <li>
+        <div class="smart-timeline-icon">
+            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
+        </div>
+        <div class="smart-timeline-time">
+            <small>{{time}}</small>
+        </div>
+        <div class="smart-timeline-content">
+            <p>
+                <a href="javascript:void(0);">
+                    <span class="label label-default">Biometric Data</span> from {{contact.first}} {{contact.middle}} {{contact.last}}
+                </a>
+            </p>
+            <p>
+                ID: {{_id}}
+                </br>
+                Device ID: {{deviceId}}
+                </br>
+                Contact ID: {{contactId}}
+                </br>
+                External ID: {{externalId}}
+                </br>
+                Reading Type: {{readingTypeId}}
+                </br>
+                Time: {{time}}
+                </br>
+                End Time: {{endTime}}
+                </br>
+                {{#each values}}
+                    Value Type: {{this.valueTypeId}} </br>
+                    Value: {{this.value}}
+                {{/each}}
+            </p>
+            <p>
+                <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> View Graph</a>
+            </p>
+        </div>
+    </li>
+</script>
 
-
-
-                        </div>
-                    </li>
-                    <li>
-                        <div class="smart-timeline-icon">
-                            <img src="../images/photos/loggeduser.png" width="32" height="32">
-                        </div>
-                        <div class="smart-timeline-time">
-                            <small>12 Mar, 2013</small>
-                        </div>
-                        <div class="smart-timeline-content">
-                            <p>
-                                <span class="label label-default">Tweet</span> by Henry Holmes.
-                            </p>
-                            <p>
-                                I Love <strong>Yoga One</strong>!
-                            </p>
-                            <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Reply to Tweet</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="smart-timeline-icon">
-                            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
-                        </div>
-                        <div class="smart-timeline-time">
-                            <small>1 min ago</small>
-                        </div>
-                        <div class="smart-timeline-content">
-                            <p>
-                                <span class="label label-default">Call</span> from Sarah K.
-                            </p>
-
-                            <p>
-                                Successful Thank you call and get feedback on Customer Service.
-                            </p>
-                            <p>
-                                <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-phone-square"></i> Listen to the Call</a>
-                            </p>
-
-                        </div>
-                    </li>
-                    <li>
-                        <div class="smart-timeline-icon">
-                            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
-                        </div>
-                        <div class="smart-timeline-time">
-                            <small>5 hrs ago</small>
-                        </div>
-                        <div class="smart-timeline-content">
-                            <p>
-                                <span class="label label-default">Viewed</span> Profile</strong>
-                            </p>
-
-                            <br>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="smart-timeline-icon">
-                           <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
-                        </div>
-                        <div class="smart-timeline-time">
-                            <small>yesterday</small>
-                        </div>
-                        <div class="smart-timeline-content">
-                            <p>
-                                <a href="javascript:void(0);">
-                                   <span class="label label-default">Update</span> phone number
-                                </a>
-                            </p>
-                            <p>
-                                <span class="strike">619-568-4989</span></br>
-                                619-574-5849
-                            </p>
-                        </div>
-                    </li>
-                    <li class="text-center">
-                        <a href="javascript:void(0)" class="btn btn-sm btn-default"><i class="fa fa-arrow-down text-muted"></i> LOAD MORE</a>
-                    </li>
-                </ul>
-            </div>
+<script type="text/x-handlebars-template" name="contact-activity-default">
+    <li>
+        <div class="smart-timeline-icon">
+            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
+        </div>
+        <div class="smart-timeline-time">
+            <small>{{time}}</small>
+        </div>
+        <div class="smart-timeline-content">
+            <p>
+                <a href="javascript:void(0);">
+                    <span class="label label-default">Biometric Data</span> from {{contact.first}} {{contact.middle}} {{contact.last}}
+                </a>
+            </p>
+            <p>
+                ID: {{_id}}
+                </br>
+                Device ID: {{deviceId}}
+                </br>
+                Contact ID: {{contactId}}
+                </br>
+                External ID: {{externalId}}
+                </br>
+                Reading Type: {{readingTypeId}}
+                </br>
+                Time: {{time}}
+                </br>
+                End Time: {{endTime}}
+                </br>
+                {{#each values}}
+                    Value Type: {{this.valueTypeId}} </br>
+                    Value: {{this.value}}
+                {{/each}}
+            </p>
+            <p>
+                <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> View Graph</a>
+            </p>
+        </div>
+    </li>
 </script>
 <!-- END CONTACT DETAILS VIEW -->
 
@@ -930,204 +909,202 @@ CONTACT DETAILS VIEW
 CONTACTS EDIT VIEW
 -->
 <script type="text/x-handlebars-template" name="contact-edit-main">
-    <div class="pageheader row">
-        <div class="col-xs-8">
-            <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
-                <span class="fa fa-chevron-left"></span>
-                <span class="hidden-xs">Back</span>
-            </button>
-            <h2><i class="fa fa-users"></i> Add Contact </h2>
-        </div>
-
-        <div class="col-xs-4">
-            <div class="btn btn-success pull-right btn-save-contact" type="button">
-                <i class="fa fa-save"></i>
-                <span class="hidden-xs">Save</span>
+   <div class="pageheader row">
+            <div class="col-xs-8">
+                <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
+                    <span class="fa fa-chevron-left"></span>
+                    <span class="hidden-xs">Back</span>
+                </button>
+                <h2><i class="fa fa-users"></i> Add Contact</h2>
             </div>
 
-
-        </div>
-    </div>
-    <div id="contact-edit-container" class="contentpanel">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="hidden-xs hidden-sm">
-                    <h4>
-                        Name & Photo
-                    </h4>
-                    <hr/>
-                </div>
-
-                <div class="row">
-                    <!-- UPDATE NAME -->
-                    <div class="col-xs-12 form" role="form">
-                        <div class="form-group">
-                            <label class="">Contact Name</label>
-                            <input id="input-fullname" type="text" class="form-control" value="{{contact.first}} {{contact.middle}} {{contact.last}}" placeholder="full name">
-                            <small style="margin-left:10px;">
-                                <strong>first:</strong> <code><span id="hint-first">{{contact.first}}</span></code>
-                                <strong>middle:</strong> <code><span id="hint-middle">{{contact.middle}}</span></code>
-                                <strong>last:</strong> <code><span id="hint-last">{{contact.last}}</span></code>
-                            </small>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-xs-6">
-                                <label>Contact Type</label>
-                                <select id="select-contact-type" class="form-control">
-                                    {{#contactTypeOptions}}
-                                    <option data-contacttype="{{data}}"
-                                    {{#equals data ../contact.type}}selected{{/equals}}>{{label}}</option>
-                                    {{/contactTypeOptions}}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-xs-4">
+                <div class="btn btn-success pull-right btn-save-contact" type="button">
+                    <i class="fa fa-save"></i>
+                    <span class="hidden-xs">Save</span>
                 </div>
 
 
-                <!-- UPDATE PHOTO -->
-                <div id="contact-photo-container" class="row">
-                    <row>
-                        <div class="col-xs-5 col-md-6">
-                            <div class="hidden-xs hidden-sm">
-                                <div class="btn-link btn-edit-photo">Change Photo</div>
-                            </div>
-                            <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                        </div>
-
-                        <div class="col-xs-7 col-md-6">
-                            <div class="btn-edit-photo-controls hidden-md hidden-lg">
-                                <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
-                                <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
-                            </div>
-                        </div>
-                    </row>
-                </div>
             </div>
-
-            <!-- CONTACT DETAILS -->
-            <div class="col-md-6">
-                <h4>Contact Information</h4>
-                <hr/>
-
-                <div id="phone-row" class="row">
-                    <div class="col-xs-1"><i class="icon-main fa fa-phone"/></div>
-                    <div class="col-xs-10">
-                        <div id="edit-phones-container">
-                            {{#each contact.details}}
-                            {{#canEditContactDetails this}}
-                            {{#each ../phones}}
-                            {{> edit-phone}}
-                            {{/each}}
-                            {{else}}
-                            {{#each phones}}
-                            <div>
-                                <a href="tel:+1{{number}}">+1 {{number}}</a>
-                                <small>{{phoneTypeLabel type}}</small>
-                                <i class="icon-social {{iconFromSocialType ../type}}"/>
-                            </div>
-                            {{/each}}
-                            {{/canEditContactDetails}}
-                            {{/each}}
-
-                            <!-- ADD NEW PHONE -->
-                            {{> edit-phone}}
-                        </div>
-                        <span style="margin-top:-15px;" class="col-xs-10"><small>e.g. (303-555-5555)</small></span>
+        </div>
+        <div id="contact-edit-container" class="contentpanel">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="hidden-xs hidden-sm">
+                        <h4>
+                            Name & Photo
+                        </h4>
+                        <hr/>
                     </div>
 
-                </div>
-
-                <div id="address-row" class="row">
-                    <div class="col-xs-1"><i class="icon-main fa fa-map-marker"/></div>
-                    <div class="col-xs-10">
-                        <div id="edit-addresses-container">
-                            {{#each contact.details}}
-                            {{#canEditContactDetails this}}
-                            {{> edit-addresses}}
-                            {{else}}
-                            {{#each addresses}}
-                            <div class="edit-address-container" id="{{_id}}">
-                                {{#if address}}
-                                <div>{{address}}</div>
-                                {{/if}}
-                                {{#if address2}}
-                            </div>
-                            {{address2}}
-                        </div>
-                        {{/if}}
-                        <div>
-                            {{city}}
-                            {{#if state}}, {{state}}{{/if}}
-                            {{#if zip}}, {{zip}}{{/if}}
-                            {{#if country}}, {{country}}{{/if}}
-                            <i class="icon-social {{iconFromSocialType ../../type}}"/>
-                        </div>
-
-                        {{> edit-default-shipping-billing}}
-                    </div>
-                    {{/each}}
-                    {{/canEditContactDetails}}
-                    {{/each}}
-                </div>
-
-                <br/>
-
-                <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
-            </div>
-        </div>
-
-        <div id="email-row" class="row">
-            <div class="col-xs-1"><i class="icon-main fa fa-envelope"/></div>
-            <div class="col-xs-10">
-                <div id="edit-emails-container">
-                    {{#each contact.details}}
-                    {{#canEditContactDetails this}}
-                    {{#each emails}}
-                    {{> edit-email}}
-                    {{/each}}
-                    {{else}}
-                    {{#each emails}}
-                    {{#if this}}
-                    <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}"/>
-                    {{/if}}
-                    {{/each}}
-                    {{/canEditContactDetails}}
-                    {{/each}}
-
-                    {{> new-email-partial}}
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-    </div>
-
-    <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header" data-dismiss="modal">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Add or Remove Photo</h4>
-                </div>
-
-                <div class="modal-body">
                     <div class="row">
-                        <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
+                        <!-- UPDATE NAME -->
+                        <div class="col-xs-12 form" role="form">
+                            <div class="form-group">
+                                <label class="">Contact Name</label>
+                                <input id="input-fullname" type="text" class="form-control" value="{{contact.first}} {{contact.middle}} {{contact.last}}" placeholder="full name">
+                                <small style="margin-left:10px;">
+                                    <strong>first:</strong>
+                                    <code>
+                                        <span id="hint-first">{{contact.first}}</span>
+                                    </code>
+                                    <strong>middle:</strong>
+                                    <code>
+                                        <span id="hint-middle">{{contact.middle}}</span>
+                                    </code>
+                                    <strong>last:</strong>
+                                    <code>
+                                        <span id="hint-last">{{contact.last}}</span>
+                                    </code>
+                                </small>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <label>Contact Type</label>
+                                    <select id="select-contact-type" class="form-control">
+                                        {{#contactTypeOptions}}
+                                        <option data-contacttype="{{data}}" {{#equals data ../contact.type}}selected{{/equals}}>{{label}}</option>
+                                        {{/contactTypeOptions}}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="row" style="margin-top:6px; margin-bottom:20px;">
-                        <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
+
+                    <!-- UPDATE PHOTO -->
+                    <div id="contact-photo-container" class="row">
+                        <row>
+                            <div class="col-xs-5 col-md-6">
+                                <div class="hidden-xs hidden-sm">
+                                    <div class="btn-link btn-edit-photo">Change Photo</div>
+                                </div>
+                                <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                            </div>
+
+                            <div class="col-xs-7 col-md-6">
+                                <div class="btn-edit-photo-controls hidden-md hidden-lg">
+                                    <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
+                                    <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+                                </div>
+                            </div>
+                        </row>
+                    </div>
+                </div>
+
+                <!-- CONTACT DETAILS -->
+                <div class="col-md-6">
+                    <h4>Contact Information</h4>
+                    <hr/>
+
+                    <div id="phone-row" class="row">
+                        <div class="col-xs-1"><i class="icon-main fa fa-phone" />
+                        </div>
+                        <div class="col-xs-10">
+                            <div id="edit-phones-container">
+                                {{#each contact.details}} {{#canEditContactDetails this}} {{#each ../phones}} {{> edit-phone}} {{/each}} {{else}} {{#each phones}}
+                                <div>
+                                    <a href="tel:+1{{number}}">+1 {{number}}</a>
+                                    <small>{{phoneTypeLabel type}}</small>
+                                    <i class="icon-social {{iconFromSocialType ../type}}" />
+                                </div>
+                                {{/each}} {{/canEditContactDetails}} {{/each}}
+
+                                <!-- ADD NEW PHONE -->
+                                {{> edit-phone}}
+                            </div>
+                            <span style="margin-top:-15px;" class="col-xs-10">
+                                <small>e.g. (303-555-5555)</small>
+                            </span>
+                        </div>
+
                     </div>
 
-                    <div id="upload-photo-container"/>
+                    <div id="address-row" class="row">
+                        <div class="col-xs-1"><i class="icon-main fa fa-map-marker" />
+                        </div>
+                        <div class="col-xs-10">
+                            <div id="edit-addresses-container">
+                                {{#each contact.details}} {{#canEditContactDetails this}} {{> edit-addresses}} {{else}} {{#each addresses}}
+                                <div class="edit-address-container" id="{{_id}}">
+                                    {{#if address}}
+                                    <div>{{address}}</div>
+                                    {{/if}} {{#if address2}}
+                                </div>
+                                {{address2}}
+                            </div>
+                            {{/if}}
+                            <div>
+                                {{city}} {{#if state}}, {{state}}{{/if}} {{#if zip}}, {{zip}}{{/if}} {{#if country}}, {{country}}{{/if}}
+                                <i class="icon-social {{iconFromSocialType ../../type}}" />
+                            </div>
 
-                    <img id="contact-photo-modal" src="{{contact.photo}}" style="max-width:100%; margin-top:20px;"/>
+                            {{> edit-default-shipping-billing}}
+                        </div>
+                        {{/each}} {{/canEditContactDetails}} {{/each}}
+                    </div>
+
+                    <br/>
+
+                    <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
+                </div>
+            </div>
+
+            <div id="email-row" class="row">
+                <div class="col-xs-1"><i class="icon-main fa fa-envelope" />
+                </div>
+                <div class="col-xs-10">
+                    <div id="edit-emails-container">
+                        {{#each contact.details}} {{#canEditContactDetails this}} {{#each emails}} {{> edit-email}} {{/each}} {{else}} {{#each emails}} {{#if this}}
+                        <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}" />{{/if}} {{/each}} {{/canEditContactDetails}} {{/each}} {{> new-email-partial}}
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- BioMetric Data -->
+        <div class="col-md-6">
+            <h4>BioMetric Information</h4>
+            <hr/>
+            <div id="edit-devices-container">
+                {{#each contact.devices}}
+                    {{serialNumber}}
+                    {{deviceTypeId}}
+                {{/each}}
+            </div>
+            <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
+        </div>
+        <!-- End BioMetric Data -->
+
+        </div>
+        </div>
+
+        <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" data-dismiss="modal">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Add or Remove Photo</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
+                        </div>
+
+                        <div class="row" style="margin-top:6px; margin-bottom:20px;">
+                            <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
+                        </div>
+
+                        <div id="upload-photo-container" />
+
+                        <img id="contact-photo-modal" src="{{contact.photo}}" style="max-width:100%; margin-top:20px;" />
+                    </div>
+                </div>
+            </div>
     </div>
+
 </script>
 <!-- END CONTACT EDIT VIEW -->
 
@@ -1259,6 +1236,35 @@ CONTACTS EDIT VIEW
             <i class="fa fa-check"/></div>
         <div class="btn-default-billing btn btn-md {{#if defaultBilling}}default{{/if}}">Default Billing
             <i class="fa fa-check"/></div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" name="new-device">
+    {{> edit-device}}
+</script>
+
+<script type="text/x-handlebars-template" name="edit-device" partial="true">
+    <div class="row edit-device-container">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" class="input-edit-device form-control" value="" placeholder="Enter Device Serial #">
+
+                <div class="input-group-btn">
+                    <button type="button" class="btn-edit-device-type btn btn-default dropdown-toggle" data-toggle="dropdown" data-type="2net_scale">
+                        <span class="edit-device-type-label">2Net Scale</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+
+                        <li class="li-edit-device-type" data-type="2net_scale"><a href="#">2Net Scale</a></li>
+
+                        <li class="li-edit-device-type" data-type="h"><a href="#">2</a></li>
+
+                        <li class="li-edit-device-type" data-type="w"><a href="#">3</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </script>
 

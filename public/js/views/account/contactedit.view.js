@@ -47,7 +47,10 @@ define([
             "click .btn-edit-photo":"changePhoto",
             "click .btn-upload-photo":"uploadPhoto",
             "click .btn-remove-photo":"removePhoto",
-            "click #btn-upload-photo-modal":"uploadPhotoFromModal"
+            "click #btn-upload-photo-modal":"uploadPhotoFromModal",
+
+            "click #btn-new-device":"addNewDevice",
+            "onkeytimer .input-edit-device":"deviceChanged"
         },
 
 
@@ -494,6 +497,61 @@ define([
             $("#input-fullname", this.el).stopKeyTimer();
             this.vent.off("uploadcomplete");
             this.uploadView = null;
+        },
+
+        subscribeTwoNetUser: function() {
+            //subscribe contact
+            var twoNetUserModel = Backbone.Model.extend({});
+            var twoNetUserCollection = Backbone.Collection.extend({
+              model: twoNetUserModel,
+              url: '/api/1.0/twonetadapter/subscription/'
+            });
+            var twonetusers = new twoNetUserCollection();
+            console.log('Contact Id: '+this.contact.id);
+            var num = this.contact.id;
+            var n = num.toString();
+            var newUser = twonetusers.create({'contactId':n});
+            console.log('2NetUser: '+JSON.stringify(newUser));
+        },
+
+        addNewDevice: function(event) {
+            console.log('add new device');
+            var address = this.contact.getOrCreateAddress();
+            var tmpl = $$.templateManager.get("new-device", this.templateKey);
+            //var html = tmpl(address);
+
+            $("#edit-devices-container").append(tmpl);
+            $(".input-edit-device").startKeyTimer(1500);
+        },
+
+        deviceChanged: function() {
+            //get device type
+            var deviceTypeId = $('.btn-edit-device-type').data('type');
+            var serialNumber = $('.input-edit-device').val();
+            var device = this.contact.getOrCreateDevice(deviceTypeId, serialNumber);
+
+            //save to the contact
+            this.saveContact();
+
+            //this.subscribeTwoNetUser();
+
+            var twoNetDeviceModel = Backbone.Model.extend({});
+            var twoNetDeviceCollection = Backbone.Collection.extend({
+              model: twoNetDeviceModel,
+              url: '/api/1.0/twonetadapter/device'
+            });
+            var twonetdevices = new twoNetDeviceCollection();
+            var num = this.contact.id;
+            var n = num.toString();
+            var data = {
+                'contactId': n,
+                "deviceTypeId": deviceTypeId.toString(),
+                "serialNumber": serialNumber.toString()
+            }
+
+            var newDevice = twonetdevices.create(data);
+            console.log('2NetDevice: '+JSON.stringify(newDevice));
+
         }
         //endregion
     });
