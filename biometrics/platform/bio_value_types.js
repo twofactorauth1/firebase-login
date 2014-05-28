@@ -11,7 +11,6 @@ var bioValueTypes = {
     VT_CALORIES: "calories",
     VT_DISTANCE: "distance",
     VT_ACTIVITY_TYPE: "activity_type",
-    VT_ACTIVITY_ID: "activity_id",
 
     init: function() {
 
@@ -36,7 +35,6 @@ var bioValueTypes = {
 
             [this.VT_CALORIES, "calories", "calories burned"],
             [this.VT_DISTANCE, "distance", "distance traveled in meters"],
-            [this.VT_ACTIVITY_ID, "activity_id", "activity identifier"],
             [this.VT_ACTIVITY_TYPE, "activity_type", "activity type"]
         ];
 

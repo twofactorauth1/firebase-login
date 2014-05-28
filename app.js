@@ -256,12 +256,12 @@ requirejs('libs/handlebars/indigenoushelpers');
 //-----------------------------------------------------
 if (process.env.NODE_ENV != "testing") {
 
-    ReadingTypes = require('./biometrics/platform/bio_value_types.js');
+    ValueTypes = require('./biometrics/platform/bio_value_types.js');
     TwonetDeviceTypes = require('./biometrics/twonet/adapter/twonet_device_types.js');
     TwonetAdapter = require('./biometrics/twonet/adapter/twonet_adapter.js');
 
     log.info("Initializing Biometrics Reading Types...");
-    ReadingTypes.initDB(function (err) {
+    ValueTypes.initDB(function (err) {
         if (err) {
             log.error("Failed to initialize biometrics reading types: " + err.message);
         }

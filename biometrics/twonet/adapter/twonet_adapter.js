@@ -3,7 +3,7 @@ var twonetSubscriptionDao = require('./dao/twonetsubscription.dao.js');
 var deviceTypeDao = require('../../platform/dao/devicetype.dao.js');
 var twonetDeviceTypes = require('./twonet_device_types.js');
 var deviceManager = require('../../platform/bio_device_manager.js');
-var readingTypes = require('../../platform/bio_value_types.js');
+var valueTypes = require('../../platform/bio_value_types.js');
 
 module.exports = {
 
@@ -331,22 +331,22 @@ module.exports = {
 
     _makeScaleReadingValues: function(twonetReading) {
         var value = {};
-        value.valueTypeId = readingTypes.VT_POUNDS;
+        value.valueTypeId = valueTypes.VT_POUNDS;
         value.value = twonetReading.body.weight;
         return [value];
     },
 
     _makeBPMReadingValues: function(twonetReading) {
         var value1 = {};
-        value1.valueTypeId = readingTypes.VT_PULSE;
+        value1.valueTypeId = valueTypes.VT_PULSE;
         value1.value = twonetReading.blood.pulse;
 
         var value2 = {}
-        value2.valueTypeId = readingTypes.VT_DIASTOLIC;
+        value2.valueTypeId = valueTypes.VT_DIASTOLIC;
         value2.value = twonetReading.blood.diastolic;
 
         var value3 = {}
-        value3.valueTypeId = readingTypes.VT_SYSTOLIC;
+        value3.valueTypeId = valueTypes.VT_SYSTOLIC;
         value3.value = twonetReading.blood.systolic;
 
         return [value1, value2, value3];
@@ -354,11 +354,11 @@ module.exports = {
 
     _makePulseOxReadingValues: function(twonetReading) {
         var value1 = {};
-        value1.valueTypeId = readingTypes.VT_PULSE;
+        value1.valueTypeId = valueTypes.VT_PULSE;
         value1.value = twonetReading.blood.pulse;
 
         var value2 = {};
-        value2.valueTypeId = readingTypes.VT_SP02;
+        value2.valueTypeId = valueTypes.VT_SP02;
         value2.value = twonetReading.blood.spo2;
 
         return [value1, value2];

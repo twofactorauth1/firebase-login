@@ -11,7 +11,7 @@ exports.bio_vaLue_types_test = {
                 return test.done();
             }
 
-            test.equals(numValueTypes, 9);
+            test.equals(numValueTypes, 8);
             return test.done();
         });
     }
