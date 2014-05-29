@@ -16,7 +16,7 @@ module.exports = {
 
         var self = this;
 
-        runkeeperClient.authorizeUser(authorizationCode, function(err, accessToken) {
+        self._authorizeUser(authorizationCode, function(err, accessToken) {
             if (err) {
                 self.log.error("failed to retrieve access token from RunKeeper for contact " + contactId
                     + " and authorizationCode " + authorizationCode);
@@ -95,6 +95,32 @@ module.exports = {
         })
     },
 
+    recordRunkeeperActivities: function(device, runkeeperActivities, callback) {
+        var self = this;
+
+        if (!runkeeperActivities) {
+            return callback(null, null);
+        }
+
+        var results = [];
+        var activities = runkeeperActivities.slice(0);
+
+        function recordActivity(activity) {
+            if (activity) {
+                self.recordRunkeeperActivity(device, activity, function(err, reading) {
+                    if (err) {
+                        return callback(err, null);
+                    }
+                    results.push(reading);
+                    return recordActivity(activities.shift());
+                });
+            } else {
+                return callback(null, results);
+            }
+        }
+        recordActivity(activities.shift());
+    },
+
     recordRunkeeperActivity: function(device, runkeeperActivity, fn) {
         var self = this;
 
@@ -128,6 +154,103 @@ module.exports = {
                     }
                 )
             })
+    },
+
+    pollForReadings: function(callback) {
+        var self = this;
+
+        self.log.info("runkeeper adapter polling...");
+
+        $$.dao.RunkeeperSubscriptionDao.findMany({ "_id": { $ne: "__counter__" } }, function(err, users) {
+            if (err) {
+                self.log.error(err.message);
+                return callback(err);
+            }
+
+            if (users.length == 0) {
+                self.log.info("found no runkeeper subscriptions to poll")
+                return callback();
+            }
+
+            // want to poll users sequentially (to avoid abusing the client api for now), hence this pattern
+            function pollUser(user) {
+                if (!user) {
+                    self.log.info("no more runkeeper subscriptions to poll");
+                    return callback();
+                }
+
+                var sinceSeconds = user.attributes.lastPollTime;
+                var untilSeconds = Math.floor(new Date().getTime() / 1000);
+
+                if (!sinceSeconds) {
+                    self.log.debug("No previous poll time found for subscription " + user.attributes._id);
+                    sinceSeconds = untilSeconds - 86400; // 24 hours
+                }
+
+                self.log.debug("polling runkeeper subscription " + user.attributes._id + " for activities between " +
+                    new Date(sinceSeconds*1000) + " and " + new Date(untilSeconds*1000));
+
+                user.attributes.lastPollTime = untilSeconds;
+                $$.dao.RunkeeperSubscriptionDao.saveOrUpdate(user, function(err, value) {
+                    if (err) {
+                        self.log.error(err.message);
+                        self.log.error("Failed to poll subscription " + user.attributes._id);
+                        return pollUser(users.shift());
+                    }
+
+                    self.log.debug("Successfully updated subscription last poll time to " + user.attributes.lastPollTime);
+
+                    deviceManager.findDevices(
+                        {
+                            "userId": user.attributes._id,
+                            "deviceTypeId": rkDeviceTypes.DT_RUNKEEPER
+                        },
+                        function (err, devices) {
+                            if (err) {
+                                self.log.error(err.message);
+                                return pollUser(users.shift());
+                            }
+
+                            if (!devices) {
+                                return pollUser(users.shift());
+                            }
+
+                            // there should be only one runkeeper device per user
+                            var device = devices.shift();
+                            if (!device) {
+                                return pollUser(users.shift());
+                            }
+
+                            self.log.debug("polling for runkeeper device " + device.attributes._id);
+
+                            runkeeperClient.getFitnessActivityFeed(
+                                user.attributes.accessToken,
+                                sinceSeconds,
+                                untilSeconds, function (err, value) {
+                                    if (err) {
+                                        self.log.error(err.message);
+                                        pollUser(users.shift());
+                                    } else if (value) {
+                                        self.recordRunkeeperActivities(device, value.items, function (err, readings) {
+                                            if (err) {
+                                                self.log.err(err.message);
+                                            }
+                                            if (readings) {
+                                                self.log.debug("Recorded " + readings.length + " runkeeper activity readings for device " + device.attributes._id);
+                                            }
+                                            pollUser(users.shift());
+                                        })
+                                    } else {
+                                        pollUser(users.shift());
+                                    }
+                                })
+                        })
+                })
+            } // end function pollUser
+
+            pollUser(users.shift());
+        })
+
     },
 
     /**
@@ -164,5 +287,15 @@ module.exports = {
         value3.value = runkeeperActivity.type;
 
         return [value1, value2, value3];
+    },
+
+    _authorizeUser: function(authorizationCode, callback) {
+        runkeeperClient.authorizeUser(authorizationCode, function(err, accessToken) {
+            if (err) {
+                self.log.error(err.message);
+                return callback(err, null);
+            }
+            callback(null, accessToken);
+        })
     }
 };

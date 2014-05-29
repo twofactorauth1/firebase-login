@@ -13,6 +13,7 @@ var runkeepersubscription = $$.m.ModelBase.extend({
         return {
             _id: null,
             accessToken: null,
+            lastPollTime: null,
             _v:"0.1"
         }
     },

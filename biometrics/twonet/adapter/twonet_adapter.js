@@ -173,7 +173,7 @@ module.exports = {
     pollForReadings: function(callback) {
         var self = this;
 
-        self.log.info("polling...");
+        self.log.info("2net adapter polling...");
 
         twonetSubscriptionDao.findMany({ "_id": { $ne: "__counter__" } }, function(err, users) {
             if (err) {
