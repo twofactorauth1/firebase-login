@@ -136,7 +136,9 @@
         "link-button-text",
         "logo-list",
         "social-feed",
-        "video-text"
+        "video-text",
+        "meet-team",
+        "single-post"
     ],
 
 
@@ -292,6 +294,31 @@
                 "caption": "caption",
                 "image":"image",
                 "text":"text"
+            }
+        },
+
+        {
+            "type": "meet-team",
+            "anchor": "meet-team",
+            "classes": {
+                "label": "label",
+                "description": "description",
+                "teamMembers.name": "name",
+                "teamMembers.position":"position",
+                "teamMembers.profilePic":"profilepic",
+                "teamMembers.bio":"bio"
+            }
+        },
+
+        {
+            "type": "single-post",
+            "anchor": "single-post",
+            "classes": {
+                "classes": {
+                "label": "label",
+                "description": "description",
+                "posts": "posts"
+            }
             }
         },
 

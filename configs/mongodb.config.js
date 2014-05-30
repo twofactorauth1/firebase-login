@@ -9,6 +9,7 @@ var config = require('./app.config');
 
 var connectionString = "mongodb://localhost/bioindigenous";
 //var connectionString = "mongodb://indigenous:sLRxKmiG42sq@novus.modulusmongo.net:27017/H2inesux";
+//var connectionString = "mongodb://indigenous:33e90274a9d44740f26e3c70341aebce@kahana.mongohq.com:10077/indigenous”;
 
 if (process.env.MONGO_CONNECT != null) {
     connectionString = process.env.MONGO_CONNECT;

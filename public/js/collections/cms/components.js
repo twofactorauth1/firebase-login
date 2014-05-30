@@ -11,8 +11,11 @@ define([
     'models/cms/components/feature-blocks',
     'models/cms/components/feature-list',
     'models/cms/components/image-gallery',
-    'models/cms/components/image-slider'
-], function(Freeform, ContactUs, FeatureBlocks, FeatureList, ImageGallery, ImageSlider) {
+    'models/cms/components/image-slider',
+    'models/cms/components/image-text',
+    'models/cms/components/meet-team',
+    'models/cms/components/single-post',
+], function(Freeform, ContactUs, FeatureBlocks, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost) {
 
     var components = {
         "freeform": Freeform,
@@ -20,7 +23,10 @@ define([
         "feature-blocks": FeatureBlocks,
         "feature-list": FeatureList,
         "image-gallery": ImageGallery,
-        "image-slider": ImageSlider
+        "image-slider": ImageSlider,
+        "image-text": ImageText,
+        "meet-team": MeetTeam,
+        "single-post": SinglePost
     };
 
     var collection = Backbone.Collection.extend({

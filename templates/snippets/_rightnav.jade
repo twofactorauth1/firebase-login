@@ -1,0 +1,90 @@
+//-
+    * COPYRIGHT INDIGENOUS.IO, LLC 2014
+    *
+    * All use or reproduction of any or all of this content must be approved.
+    * Please contact info@indigenous.io for approval or questions.
+
+.rightpanel.rightpanel-website
+
+      ul.nav.nav-tabs.nav-justified
+        li.active
+          a#rp-domain-theme(href='#rp-theme', data-toggle='tab') Theme
+        li
+          a#rp-domain-tab(href='#rp-domain', data-toggle='tab') Domain
+
+      .tab-content
+        #rp-theme.tab-pane.pane-settings.active
+          .leftpanelinner
+            #current-theme
+              h4 Current Theme
+              if website
+                {website.title}
+              .row
+                .col-xs-6
+                  img.theme-img(src='../images/theme-preview.jpg')
+                .col-xs-6
+                  button.btn.btn-primary.btn-block(type='button') Edit
+                  button.btn.btn-default.btn-block(type='button') Change
+              .mb20
+              #nestable
+                h4 Theme Sections
+                ol.dd-list
+                  li.dd-item.dd3-item(data-id='13', data-section='myCarousel')
+                    .dd-handle.dd3-handle
+                      i.fa.fa-arrows
+                    .dd3-content Home Slider
+                    .dd3-actions
+                      i.fa.fa-trash-o.tooltips(data-toggle='tooltip', data-placement='top', title='', data-original-title='Delete')
+                  li.dd-item.dd3-item(data-id='14', data-section='services')
+                    .dd-handle.dd3-handle
+                      i.fa.fa-arrows
+                    .dd3-content Services
+                    .dd3-actions
+                      i.fa.fa-trash-o.tooltips(data-toggle='tooltip', data-placement='top', title='', data-original-title='Delete')
+                  li.dd-item.dd3-item(data-id='15', data-section='action-call')
+                    .dd-handle.dd3-handle
+                      i.fa.fa-arrows
+                    .dd3-content Call to Action
+                    .dd3-actions
+                      i.fa.fa-trash-o.tooltips(data-toggle='tooltip', data-placement='top', title='', data-original-title='Delete')
+                  li.dd-item.dd3-item(data-id='19', data-section='recent-projects')
+                    .dd-handle.dd3-handle
+                      i.fa.fa-arrows
+                    .dd3-content Projects
+                    .dd3-actions
+                      i.fa.fa-trash-o.tooltips(data-toggle='tooltip', data-placement='top', title='', data-original-title='Delete')
+                  li.dd-item.dd3-item(data-id='19', data-section='clients')
+                    .dd-handle.dd3-handle
+                      i.fa.fa-arrows
+                    .dd3-content Clients
+                    .dd3-actions
+                      i.fa.fa-trash-o.tooltips(data-toggle='tooltip', data-placement='top', title='', data-original-title='Delete')
+                  li.dd-item.dd3-item(data-id='19', data-section='footer')
+                    .dd-handle.dd3-handle
+                      i.fa.fa-arrows
+                    .dd3-content Footer
+                    .dd3-actions
+                      i.fa.fa-trash-o.tooltips(data-toggle='tooltip', data-placement='top', title='', data-original-title='Delete')
+                .mb10
+                .add_section
+                  i.fa.fa-plus
+                  span   Add Section
+
+        #rp-domain.tab-pane.pane-settings
+          .leftpanelinner
+            .form-group
+              label.tooltips(for='current-domain', data-toggle='tooltip', data-placement='bottom', title='', data-original-title='This is the domain that was automatically created when you signed up.') Indigenous Domain
+              input#current-domain.form-control.input-lg(type='text', value='ronflutes@indigenous.io')
+            .form-group
+              label.tooltips.col-xs-7(for='current-domain', data-toggle='tooltip', data-placement='bottom', title='', data-original-title='You can turn on your custom domain.') Custom Domain
+              .col-xs-5.control-label
+                .toggle.toggle-success(style='height: 20px; width: 50px;')
+                  .toggle-slide.active
+                    .toggle-inner(style='width: 80px; margin-left: 0px;')
+                      .toggle-on.active(style='height: 20px; width: 40px; text-align: center; text-indent: -10px; line-height: 20px;') ON
+                      .toggle-blob(style='height: 20px; width: 20px; margin-left: -10px;')
+                      .toggle-off(style='height: 20px; width: 40px; margin-left: -10px; text-align: center; text-indent: 10px; line-height: 20px;') OFF
+            .mb15
+            label(for='current-domain') Custom Domain Name
+            input#current-domain.form-control.input-lg(type='text', value='ronflutes.com')
+

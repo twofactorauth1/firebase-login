@@ -22,7 +22,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/", this.setup, this.index.bind(this));
         app.get("/index", this.setup, this.index.bind(this));
         app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
-        app.get("/page/blog/:page", this.setup, this.showBlogPage.bind(this));
+        app.get("/page/blog/:postid", this.setup, this.showBlogPage.bind(this));
 
         app.get("/home", this.isAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isAuth.bind(this), this.showHome.bind(this));
@@ -51,7 +51,6 @@ _.extend(router.prototype, BaseRouter.prototype, {
             , accountId = this.accountId(req);
 
         var page = req.params.page;
-        console.log('showing page '+page);
         if (accountId > 0)  {
             new WebsiteView(req, resp).showPage(accountId, page);
         } else {
@@ -63,10 +62,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var self = this
             , accountId = this.accountId(req);
 
-        var page = req.params.page;
-        console.log('showing page '+page);
+        var postId = req.params.postid;
         if (accountId > 0)  {
-            new WebsiteView(req, resp).showPage(accountId, 'blog');
+            new WebsiteView(req, resp).showPost(accountId, postId);
         } else {
             resp.redirect("/home");
         }

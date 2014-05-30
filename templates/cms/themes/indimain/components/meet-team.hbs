@@ -1,0 +1,47 @@
+<!--
+* COPYRIGHT INDIGENOUS.IO, LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div>
+    {{#with component}}
+    <div class="component-header">
+        <div>
+            {{label}}
+        </div>
+
+        <div>
+            {{description}}
+        </div>
+    </div>
+
+    <div class="component-body">
+        <div class="inner-page">
+        <div class="editable" data-class="title">
+            <h3>{{title}}</h3>
+        </div>
+        <div class="mb30"></div>
+        {{#each teamMembers}}
+            <div class="col-xs-3 editable" data-class="profilepic">
+                <img src="{{profilepic}}" class="thumbnail img-circle"/>
+            </div>
+            <div class="col-xs-9">
+                <div class="editable" data-class="name">
+                    <h4>{{name}}</h4>
+                </div>
+                <div class="editable" data-class="position">
+                    <span>{{position}}</span>
+                </div>
+                <div class="editable" data-class="bio">
+                <p>{{bio}}</p>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        {{/each}}
+        </div>
+    </div>
+    {{/with}}
+</div>
