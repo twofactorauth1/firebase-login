@@ -120,10 +120,11 @@ define([
              var url = $$.api.getApiUrl("biometrics", "readings?contactId="+this.contactId);
              $.getJSON(url)
                 .done(function(result) {
-                    console.log('Success: '+JSON.stringify(result));
                     for (var i = 0; i < result.length; i++) {
-                        console.log(JSON.stringify(result[i]));
-                        var tmpl = $$.templateManager.get("contact-activity-default", self.templateKey);
+                        console.log(JSON.stringify(result[i].readingTypeId));
+                        //TODO variable templates based on type
+                        var template = 'contact-activity-2net_weight';
+                        var tmpl = $$.templateManager.get(template, self.templateKey);
                         var html = tmpl(result[i]);
                         $('.activity-section ul').append(html);
                     }

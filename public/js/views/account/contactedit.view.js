@@ -552,7 +552,29 @@ define([
             var newDevice = twonetdevices.create(data);
             console.log('2NetDevice: '+JSON.stringify(newDevice));
 
-        }
+        },
+
+        deviceTypeChanged: function(event) {
+            var container = $(event.currentTarget).parents(".edit-device-container").eq(0);
+            var deviceId = container.data("id");
+
+            var deviceType = $(event.currentTarget).data("type");
+            var deviceTypeLabel = _.find($$.constants.contact.device_types.dp, function(type) { return type.data == deviceType; }).label;
+
+            $(".edit-device-type-label", container).html(deviceTypeLabel);
+            $(".btn-edit-device-type", container).data('type', deviceType);
+
+            var deviceSerialNumber = $(".input-edit-serial", container).val();
+            if ($$.u.stringutils.isNullOrEmpty(deviceSerialNumber)) {
+                //Don't both continuing if they don't even have a phone number
+                return;
+            }
+
+            var phone = this.contact.getOrCreatePhone(phoneId);
+            phone.type = phoneType;
+
+            this.saveContact();
+        },
         //endregion
     });
 

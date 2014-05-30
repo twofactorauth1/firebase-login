@@ -824,35 +824,19 @@ CONTACT DETAILS VIEW
 <script type="text/x-handlebars-template" name="contact-activity-2net_weight">
     <li>
         <div class="smart-timeline-icon">
-            <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
+            <i class="fa fa-bar-chart-o"></i>
         </div>
         <div class="smart-timeline-time">
             <small>{{time}}</small>
         </div>
         <div class="smart-timeline-content">
             <p>
-                <a href="javascript:void(0);">
-                    <span class="label label-default">Biometric Data</span> from {{contact.first}} {{contact.middle}} {{contact.last}}
-                </a>
+                    <span class="label label-default">Biometric Data</span> from 2Net Scale
             </p>
             <p>
-                ID: {{_id}}
-                </br>
-                Device ID: {{deviceId}}
-                </br>
-                Contact ID: {{contactId}}
-                </br>
-                External ID: {{externalId}}
-                </br>
-                Reading Type: {{readingTypeId}}
-                </br>
-                Time: {{time}}
-                </br>
-                End Time: {{endTime}}
-                </br>
                 {{#each values}}
-                    Value Type: {{this.valueTypeId}} </br>
-                    Value: {{this.value}}
+                    <h3>{{this.value}}</h3>
+                    <span>{{this.valueTypeId}} </span>
                 {{/each}}
             </p>
             <p>
@@ -1124,7 +1108,7 @@ CONTACTS EDIT VIEW
                 <div class="input-group-addon">+1</div>
                 <input type="text" class="input-edit-phone form-control" value="{{number}}"/>
 
-                <div class="input-group-btn">
+                <div class="btn-group pull-right" style="margin-right:8px;">
                     <button type="button" class="btn-edit-phone-type btn btn-default dropdown-toggle" data-toggle="dropdown" data-type="{{type}}">
                         <span class="edit-phone-type-label">{{phoneTypeLabel this}}</span> <span class="caret"></span>
                     </button>
@@ -1247,23 +1231,20 @@ CONTACTS EDIT VIEW
 </script>
 
 <script type="text/x-handlebars-template" name="edit-device" partial="true">
-    <div class="row edit-device-container">
-        <div class="form-group">
-            <div class="input-group">
-                <input type="text" class="input-edit-device form-control" value="" placeholder="Enter Device Serial #">
 
-                <div class="input-group-btn">
-                    <button type="button" class="btn-edit-device-type btn btn-default dropdown-toggle" data-toggle="dropdown" data-type="2net_scale">
-                        <span class="edit-device-type-label">2Net Scale</span> <span class="caret"></span>
+    <div class="row edit-device-container" data-id="{{_id}}" style="margin-top:8px;">
+        <div class="form-group col-xs-12 col-sm-8 col-md-10">
+            <div class="input-group">
+                <input type="text" class="input-device-phone form-control" value="" placeholder="Enter Device Serial #"/>
+
+                <div class="btn-group pull-right" style="margin-right:8px;">
+                    <button type="button" class="btn-edit-device-type btn btn-default dropdown-toggle" data-toggle="dropdown" data-type="{{type}}">
+                        <span class="edit-device-type-label"> </span> <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu pull-right">
-
-                        <li class="li-edit-device-type" data-type="2net_scale"><a href="#">2Net Scale</a></li>
-
-                        <li class="li-edit-device-type" data-type="h"><a href="#">2</a></li>
-
-                        <li class="li-edit-device-type" data-type="w"><a href="#">3</a></li>
-
+                        {{#deviceTypeOptions}}
+                        <li class="li-edit-phone-type" data-type="{{data}}"><a href="#">{{label}}</a></li>
+                        {{/deviceTypeOptions}}
                     </ul>
                 </div>
             </div>
