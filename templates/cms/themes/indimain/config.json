@@ -42,7 +42,9 @@
                 "feature-blocks",
                 "feature-list",
                 "image-gallery",
-                "image-slider"
+                "image-slider",
+                "image-text",
+                "meet-team"
             ]
         },
 
@@ -51,6 +53,13 @@
             "title":"Blog",
             "components": [
                 "blog"
+            ]
+        },
+        {
+            "handle":"single-post",
+            "title":"Single Post",
+            "components": [
+                "single-post"
             ]
         }
     ],

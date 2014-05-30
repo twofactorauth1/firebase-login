@@ -27,6 +27,7 @@ define([
         websiteTitle: null,
         websiteSettings: null,
         pageHandle: null,
+        subdomain: null,
 
         attributes: {
             id: "edit-website-wrapper"
@@ -60,9 +61,8 @@ define([
                 .done(function() {
                     self.websiteId = self.website.id;
                     self.websiteTitle = self.website.attributes.title;
-                    console.log('Before: '+JSON.stringify(self.websiteSettings));
+                    self.subdomain = self.account.attributes.subdomain;
                     self.websiteSettings = self.website.attributes.settings;
-                    console.log('After: '+JSON.stringify(self.websiteSettings));
 
                     // console.log('Settings: '+self.website.get('title')+' or '+self.website.attributes.title);
                     // var title = self.website.get("title");
@@ -75,7 +75,8 @@ define([
                 .done(function () {
                     var data = {
                         websiteId: self.websiteId,
-                        websiteTitle: self.websiteTitle
+                        websiteTitle: self.websiteTitle,
+                        subdomain: self.subdomain
                     };
 
                     if (self.pageHandle == "index" || self.pageHandle == "null" || self.pageHandle == "/") {
@@ -106,11 +107,12 @@ define([
                          var sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
                         $('#rightpanel').append(sidetmpl);
                         var colorPalette = self.websiteSettings;
-                         var colorPaletteTemplate = $$.templateManager.get("color-thief-output-template", self.templateKey);
-                        console.log('Color Palette: '+JSON.stringify(colorPalette['color-palette']));
-                         var html = colorPaletteTemplate(colorPalette['color-palette']);
-                         console.log('HTML: '+JSON.stringify(html));
-                         $('#color-palette-sidebar').append(html);
+
+                        if (colorPalette != null) {
+                            var colorPaletteTemplate = $$.templateManager.get("color-thief-output-template", self.templateKey);
+                            var html = colorPaletteTemplate(colorPalette['color-palette']);
+                            $('#color-palette-sidebar').append(html);
+                         }
 
                         $("#iframe-website", this.el).load(function(pageLoadEvent) {
                             var doc = $(pageLoadEvent.currentTarget)[0].contentDocument ||
@@ -149,7 +151,9 @@ define([
 
             var parent = $(target).parents(".component").eq(0);
             var componentType = $(parent).data("class");
+            console.log('Component Type: '+componentType);
             var componentId = $(parent).attr("data-id");
+            console.log('Component Type: '+componentId);
             var component = this.page.getComponentById(componentId);
 
             var dataClass = data.dataClass;
@@ -157,8 +161,9 @@ define([
             var page = data.pageId;
 
             var configComponents = this.themeConfig.components;
+            console.log('Config Components: '+JSON.stringify(configComponents));
             var componentConfig = _.findWhere(configComponents, { type: componentType });
-
+            console.log('Component Config: '+JSON.stringify(componentConfig));
             var configClasses = componentConfig.classes;
             for(var key in configClasses) {
                 if (configClasses[key] == dataClass) {

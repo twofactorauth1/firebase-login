@@ -1,0 +1,43 @@
+<!--
+* COPYRIGHT INDIGENOUS.IO, LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div>
+    {{#with component}}
+    <div class="component-header">
+        <div>
+            {{label}}
+        </div>
+
+        <div>
+            {{description}}
+        </div>
+    </div>
+
+    <div class="component-body">
+        <div class="inner-page">
+            <div style="display:inline-block">
+                <div class="col-sm-6 col-xs-12">
+                    <h3 class="editable" data-class="title">{{title}}</h3>
+                    <div class="mb30"></div>
+                    <div class="editable" data-class="text">{{{text}}}</div>
+                </div>
+                <div class="clearfix mb30 visible-xs"></div>
+                <div class="image-{{imagePosition}} col-sm-6 col-xs-12">
+                    <div class="editable" data-class="url">
+                        <img src="{{url}}" class="img-responsive img-thumbnail">
+                    </div>
+                    <p class="center editable" data-class="caption">{{caption}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    {{/with}}
+</div>
+

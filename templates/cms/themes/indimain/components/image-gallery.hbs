@@ -18,24 +18,28 @@
         </div>
     </div>
 
-        <div class="component-body section-colored">
-            <div class="container">
-            	<div class="row">
-				{{#each images}}
-					<div class="col-lg-4 col-md-4 col-sm-6">
-			            <a href="portfolio-item.html" class="link-gallery-image">
-			              <div class="overlay-gallery-image" style="opacity: 0;">
-			                <h3 class="center">{{{image-label}}}</h3>
-			                <small class="text-muted center">
-			                  {{{image-description}}}
-			                </small>
-			              </div><!-- /.overlay-portfolio -->
-			              <img class="img-responsive img-home-portfolio" src="{{{image-url}}}" alt="portfolio 1">
-			            </a>
-			          </div>
-                {{/each}}
+    <div class="col-xs-12 pad0">
+        <div class="carousel slide" id="myCarousel">
+          <div class="carousel-inner">
+            {{#each images}}
+                <div class="item">
+                    <div class="col-md-4 pad0">
+                        <a href="#">
+                            <img src="{{{image-url}}}" class="img-responsive gallery-image">
+                        </a>
+                        <div class="overlay-gallery-image" style="opacity: 0;">
+                            <h3 class="center">{{{image-label}}}</h3>
+                            <small class="text-muted center">
+                                {{{image-description}}}
+                            </small>
+                        </div><!-- /.overlay-portfolio -->
+                    </div>
                 </div>
-            </div>
+            {{/each}}
+          </div>
+          <a class="left carousel-control hidden" href="#myCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+          <a class="right carousel-control hidden" href="#myCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
         </div>
+    </div>
     {{/with}}
 </div>

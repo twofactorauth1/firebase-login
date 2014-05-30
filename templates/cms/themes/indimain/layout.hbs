@@ -26,31 +26,6 @@
     <title>{{title}}</title>
 
     <!-- TODO add stylesheets and responsive fallback for IE -->
-    <style type="text/css">
-        .navbar-white {
-            color: rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }});
-            border-bottom: 3px solid rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }}) !important;
-        }
-        .color-1 {
-            background: rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }});
-            color: #ffffff;
-        }
-        .color-8 {
-            background: rgb({{ settings.color-palette.palette.[7].[0] }},{{ settings.color-palette.palette.[7].[1] }},{{ settings.color-palette.palette.[7].[2] }});
-        }
-        .btn-orange {
-            background: rgb({{ settings.color-palette.palette.[1].[0] }},{{ settings.color-palette.palette.[1].[1] }},{{ settings.color-palette.palette.[1].[2] }})!important;
-            border-bottom: 5px solid rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-            border-color: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }});
-        }
-        .btn-orange:hover {
-            background: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
-            border-bottom: 5px solid rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-            border-color: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }});
-        }
-    </style>
 </head>
 
 <body class="theme-main">
@@ -75,69 +50,45 @@
             {{/foreach}}
         </div>
 
-                <!-- Temporary ... Will be replaced with components-->
-
-          <!-- Home Page -->
-        <div id="home" class="page hidden">
-            <div class="row">
-                <!-- start -->
-                <section class="inside executive-team">
-                    <h4 class="center homeh4">Leverage your native skills</h4>
-                    <p class="center homep">Indigenous brings together everything you need to professionalize your passion.</p>
-                    <div id="line"></div>
-                    <div id="line_1"></div>
-                    <div id="line_2"></div>
-                    <div id="line_3"></div>
-                    <ul>
-                        <li class="executive sm" id="center-circle">
-                            <div class="exec-circle">
-                                <img src="http://indigenous.io/wp-content/themes/Vertex/images/center-circle.png">
-                            </div>
-                        </li>
-                        <li class="executive lg" id="circle-1">
-                            <div class="exec-circle">
-                                <img src="http://indigenous.io/wp-content/themes/Vertex/images/circle-1.png">
-                            </div>
-                        </li>
-                        <li class="executive lg" id="circle-2">
-                            <div class="exec-circle">
-                                <img src="http://indigenous.io/wp-content/themes/Vertex/images/circle-2.png">
-                            </div>
-                        </li>
-                        <li class="executive sm" id="circle-3">
-                            <div class="exec-circle">
-                                <img src="http://indigenous.io/wp-content/themes/Vertex/images/circle-3.png">
-                            </div>
-                        </li>
-                        <li class="executive sm" id="circle-4">
-                            <div class="exec-circle">
-                                <img src="http://indigenous.io/wp-content/themes/Vertex/images/circle-4.png">
-                            </div>
-                        </li>
-                    </ul>
-                </section>
-                <!-- end -->
-            </div>
-        </div>
-        <!-- /#home -->
-
-
-
-        <!-- END Temporary ... Will be replaced with components-->
     </div>
 
     <div id="footer">{{{footer}}}</div>
 
     <script type="text/javascript" src="/js/libs/jquery/jquery.min.js"></script>
 
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+
     <script type="text/javascript" src="/js/libs/bootstrap/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="/js/libs/jqueryrotate/jqueryrotate.js"></script>
+    <script type="text/javascript" src="/js/libs/jqueryThumbnailScroller/jquery.thumbnailScroller.js"></script>
 
 
     <script type="text/javascript" >
            (function($) {
              $(document).ready(function() {
+
+                $('#myCarousel .item:first-child').addClass('active');
+
+                $('#myCarousel').carousel({
+                  interval: 4000
+                });
+
+                $('.carousel .item').each(function(){
+                  var next = $(this).next();
+                  if (!next.length) {
+                    next = $(this).siblings(':first');
+                  }
+                  next.children(':first-child').clone().appendTo($(this));
+
+                  if (next.next().length>0) {
+                    next.next().children(':first-child').clone().appendTo($(this));
+                  }
+                  else {
+                    $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+                  }
+                });
+
                  var boxCenterXOffset = 50;
                  var boxCenterYOffset = 50;
                  $("#line, #line_1, #line_2, #line_3").css("opacity", 0);
