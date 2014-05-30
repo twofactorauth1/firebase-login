@@ -7,6 +7,13 @@
 -->
 
 <div>
+     <p>Blogposts</p>
+    {{blogposts}}
+    <p>Each Blogposts</p>
+    {{#each blogposts}}
+        {{post_title}}
+    {{/each}}
+
     {{#with component}}
     <div id="content-area">
             <div class="container clearfix row-fluid">

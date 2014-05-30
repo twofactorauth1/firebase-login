@@ -16,6 +16,7 @@ var themesConfig = require('../configs/themes.config');
 
 var Website = require('../models/cms/website');
 var Page = require('../models/cms/page');
+var BlogPost = require('../models/cms/blogpost');
 
 var dao = {
 
@@ -280,11 +281,25 @@ var dao = {
 
     getPageForWebsite: function (websiteId, pageName, fn) {
         var query = {websiteId: websiteId, handle: pageName};
-
         this.findOne(query, Page, fn);
     },
-    //endregion
 
+    getBlogPostForWebsite: function (accountId, blogPostId, fn) {
+        console.log('Post ID (getBlogPostForWebsite): ' +blogPostId+ ' Account ID: '+accountId);
+        var self = this;
+        accountId = accountId.toString();
+        blogPostId = blogPostId.toString();
+        console.log('Account ID: '+accountId+' Blog Post ID: '+JSON.stringify(blogPostId));
+        var query = {accountId: accountId, _id: blogPostId};
+        this.findOne(query, BlogPost, fn);
+    },
+
+    getAllBlogPostsForWebsite: function (accountId, fn) {
+        var self = this;
+        accountId = accountId.toString();
+        var query = {accountId: accountId};
+        this.findMany(query, BlogPost, fn);
+    },
 
     //region WEBSITES
 
@@ -650,8 +665,8 @@ var dao = {
         });
     },
 
-
-    getRenderedWebsitePageForAccount: function (accountId, pageName, isEditor, fn) {
+    getRenderedWebsitePagewithPostForAccount: function (accountId, pageName, blogpost, isEditor, fn) {
+        console.log('Post ID (getRenderedWebsitePagewithPostForAccount):'+blogpost);
         var self = this, account, website, page, themeId, themeConfig;
 
         if (_.isFunction(pageName)) {
@@ -703,6 +718,334 @@ var dao = {
                             page = value;
 
                             cb();
+
+                        });
+                    });
+                },
+
+                function (cb) {
+
+                    //Load theme config
+                    self.getThemeConfig(themeId, function (err, value) {
+                        if (err) {
+                            return cb(err);
+                        }
+
+                        themeConfig = value;
+                        cb();
+                    });
+                }
+
+            ], function (err) {
+                if (err) {
+                    p1.reject();
+                    fn(err);
+                    self = account = website = page = themeId = themeConfig = accountId = pageName = fn = null;
+                    return;
+                }
+
+                p1.resolve();
+            })
+        });
+
+        $.when(p1)
+            .done(function () {
+                //We now have website, page, themeId, themeConfig, account
+
+                if (page == null || page.get("components") == null) {
+                    //Lets pull the default from the theme config
+                    var isNewPage = false;
+                    var defaultPage = _.findWhere(themeConfig.pages, {handle: pageName});
+                    if (defaultPage == null) {
+                        fn($$.u.errors._404_PAGE_NOT_FOUND);
+
+                        self = account = website = page = themeId = themeConfig
+                            = isNewPage = defaultPage = page = components = pageComponents
+                            = settings = seo = linklists = footer = header = body = title = data
+                            = accountId = pageName = fn = null;
+                        return;
+                    }
+                    if (page == null) {
+                        isNewPage = true;
+                        page = new Page({
+                            title: defaultPage.title,
+                            handle: defaultPage.handle,
+                            websiteId: website.id(),
+                            accountId: accountId
+                        });
+                    }
+
+                    page.created(null);
+                    var pageComponents = page.get("components");
+                    if (pageComponents == null) {
+                        pageComponents = [];
+                        page.set({components: pageComponents});
+                    }
+
+                    var components = defaultPage.components;
+
+                    components.forEach(function (component) {
+                        var type = component;
+
+                        var component = require('../models/cms/components/' + type);
+                        if (component != null) {
+                            component = new component({
+                                _id: $$.u.idutils.generateUUID()
+                            });
+                            pageComponents.push(component.toJSON());
+                        }
+                    });
+
+                    self.saveOrUpdate(page, function(err, page) {
+                        if (!err) {
+                            self.log.info("New page saved with ID: " + page.id());
+                        }
+                    });
+                }
+
+                //We now have a proper page object
+
+                //Gather up all of our settings and other info.
+                var settings = $$.u.objutils.extend({}, account.get("settings"), website.get("settings"));
+
+                var seo = $$.u.objutils.extend({}, website.get("seo"), page.get("seo"));
+
+                if (website.get("linkLists") == null) {
+                    website.set({linkLists:themeConfig.linkLists});
+                }
+                var linklists = website.get("linkLists");
+
+                var footer = $$.u.objutils.extend({}, themeConfig.footer, website.get("footer"));
+
+                var title = page.get("title");
+                if (title == null) {
+                    title = website.get("title");
+                }
+                if (title == null && seo.title != null) {
+                    title = seo.title;
+                }
+
+                var data = {
+                    settings: settings,
+                    seo: seo,
+                    footer: footer,
+                    title: blogpost.get("post_title"),
+                    handle: pageName,
+                    linkLists: {},
+                    post_title: blogpost.get("post_title"),
+                    post_author: blogpost.get("post_author"),
+                    post_content: blogpost.get("post_content"),
+                    post_excerpt: blogpost.get("post_excerpt"),
+                    post_status: blogpost.get("post_status"),
+                    comment_status: blogpost.get("comment_status"),
+                    comment_count: blogpost.get("comment_count")
+                };
+
+
+                if (linklists != null && linklists.length > 0) {
+                    for (var i = 0; i < linklists.length; i++) {
+                        self._setLinkListUrls(linklists[i].links, isEditor);
+                        data.linkLists[linklists[i].handle] = linklists[i].links;
+                    }
+                }
+
+                var header
+                    , footer
+                    , editableCssScript
+                    , body = {
+                        components: []
+                    };
+
+                // render header, footer, and body
+                async.parallel([
+                    //render header
+                    function (cb) {
+                        self._renderItem(data, themeId, "header", themeConfig['template-engine'], "default-header", function (err, value) {
+                            if (err) {
+                                return cb(err);
+                            }
+
+                            header = value;
+                            cb();
+                        });
+                    },
+
+                    //render footer
+                    function (cb) {
+                        self._renderItem(data, themeId, "footer", themeConfig['template-engine'], "default-footer", function (err, value) {
+                            if (err) {
+                                return cb(err);
+                            }
+
+                            footer = value;
+                            cb();
+                        });
+                    },
+
+                    //render components in series
+                    function (cb) {
+
+                        if (page.isVisible() == false) {
+                            self._renderItem(data, themeId, "404", themeConfig['template-engine'], "default-404", function (err, value) {
+                                if (err) {
+                                    cb(err);
+                                }
+
+                                body = value;
+                                cb();
+                            });
+                            return;
+                        }
+
+                        var components = page.get("components");
+                        if (components == null || components.length == 0) {
+                            body = "";
+                            return cb();
+                        }
+
+                        async.eachSeries(components, function (component, _cb) {
+                            data.component = component;
+
+                            self._renderComponent(data, themeId, component.type, themeConfig['template-engine'], function (err, value) {
+                                if (err) {
+                                    return _cb(err);
+                                }
+
+                                body.components.push({value:value});
+                                _cb();
+                            })
+                        }, function (err) {
+                            data.component = null;
+                            cb();
+                        });
+                    },
+
+                    function(cb) {
+                        if (isEditor === true) {
+                            app.render("cms/editablehelper.hbs", {}, function(err, value) {
+                               editableCssScript = value;
+                                cb();
+                            });
+                        } else {
+                            cb();
+                        }
+                    }
+                ], function (err) {
+                    if (err) {
+                        fn(err);
+
+                        self = account = website = page = themeId = themeConfig
+                            = isNewPage = defaultPage = page = components = pageComponents
+                            = settings = seo = linklists = footer = header = body = title = data
+                            = accountId = pageName = fn = null;
+
+                        return;
+                    }
+
+                    //render layout page
+                    data.component = null;
+
+                    data.header = header;
+                    data.footer = footer;
+                    data.body = body;
+
+                    if (data.footer != null) {
+                        if (isEditor) {
+                            //inject editable stuff here
+                            //var endHeadReplacement = editableCssScript + " </head>";
+                            //value = value.replace("</head>", endHeadReplacement);
+                            data.footer = data.footer + " " + editableCssScript;
+                        }
+                    }
+                    self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {
+                        if (err) {
+                            fn(err, value);
+
+                            self = account = website = page = themeId = themeConfig
+                                = isNewPage = defaultPage = page = components = pageComponents
+                                = settings = seo = linklists = footer = header = body = title = data
+                                = accountId = pageName = fn = null;
+
+                            return;
+                        }
+
+                        fn(null, value);
+
+                        self = account = website = page = themeId = themeConfig
+                            = isNewPage = defaultPage = page = components = pageComponents
+                            = settings = seo = linklists = footer = header = body = title = data
+                            = accountId = pageName = fn = null;
+                    });
+                });
+            });
+    },
+
+
+    getRenderedWebsitePageForAccount: function (accountId, pageName, isEditor, fn) {
+        var self = this, account, website, page, blogposts, themeId, themeConfig;
+
+        if (_.isFunction(pageName)) {
+            fn = pageName;
+            pageName = "index";
+            isEditor = false;
+        }
+        else if (_.isFunction(isEditor)) {
+            fn = isEditor;
+            isEditor = false;
+        }
+
+
+        if (String.isNullOrEmpty(pageName)) {
+            pageName = "index";
+        }
+
+        var p1 = $.Deferred();
+        accountDao.getById(accountId, function (err, value) {
+            if (err) {
+                return p1.reject(err);
+            }
+
+            account = value;
+
+            var accountWebsite = account.get("website");
+            if (accountWebsite == null) {
+                themeId = "default";
+            } else {
+                themeId = accountWebsite.themeId || "default";
+            }
+
+            async.parallel([
+                function (cb) {
+
+                    //Get Website and page
+                    self.getOrCreateWebsiteByAccountId(accountId, null, function (err, value) {
+                        if (err) {
+                            return cb(err);
+                        }
+
+                        website = value;
+
+                        self.getPageForWebsite(website.id(), pageName, function (er, value) {
+                            if (err) {
+                                return cb(err);
+                            }
+
+                            page = value;
+
+                               if (pageName === 'blog') {
+                                    console.log('this is a blog');
+                                    self.getAllBlogPostsForWebsite(accountId, function (er, value) {
+                                        if (err) {
+                                            return cb(err);
+                                        }
+
+                                        blogposts = value;
+
+                                        cb();
+                                    });
+                               } else {
+                                    cb();
+                               }
                         });
                     });
                 },
@@ -815,13 +1158,22 @@ var dao = {
                     footer: footer,
                     title: title,
                     handle: pageName,
-                    linkLists: {}
+                    linkLists: {},
+                    blogposts: null
                 };
+
 
                 if (linklists != null && linklists.length > 0) {
                     for (var i = 0; i < linklists.length; i++) {
                         self._setLinkListUrls(linklists[i].links, isEditor);
                         data.linkLists[linklists[i].handle] = linklists[i].links;
+                    }
+                }
+
+                if(blogposts != null) {
+                    data.blogposts = new Array();
+                    for (var i = 0; i < blogposts.length; i++) {
+                        data.blogposts.push(blogposts[i]);
                     }
                 }
 
