@@ -22,7 +22,7 @@ var rkDeviceTypes = {
         ];
 
         this._readingTypes = [
-            [this.RT_RK_ACTIVITY, "RunKeeper activity reading", [ValueTypes.VT_CALORIES, ValueTypes.VT_DISTANCE, ValueTypes.VT_ACTIVITY_TYPE, ValueTypes.VT_ACTIVITY_ID]]
+            [this.RT_RK_ACTIVITY, "RunKeeper activity reading", [ValueTypes.VT_CALORIES, ValueTypes.VT_DISTANCE, ValueTypes.VT_ACTIVITY_TYPE]]
         ];
 
         this._deviceTypeIds = [
