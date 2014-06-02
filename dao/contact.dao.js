@@ -6,6 +6,7 @@
  */
 
 var baseDao = require('./base.dao');
+var accountDao = require('./account.dao');
 requirejs('constants/constants');
 require('../models/contact');
 
@@ -156,6 +157,70 @@ var dao = {
                 }
                 self.saveOrUpdate(matched, fn);
             }
+        });
+    },
+
+    getContactByEmail: function(email, fn) {
+        if (email == null) {
+            return fn(null, null);
+        }
+        this.findOne( {'emails':email}, fn);
+    },
+
+    createContactFromEmail: function(email, accountToken, fn) {
+        console.log('Email (createUserFromEmail): '+JSON.stringify(email));
+        if (_.isFunction(accountToken)) {
+            fn = accountToken;
+            accountToken = null;
+        }
+
+        var self = this;
+        this.getContactByEmail(email, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value != null) {
+                return fn(true, "An account with this username already exists");
+            }
+
+            var deferred = $.Deferred();
+
+            accountDao.convertTempAccount(accountToken, function(err, value) {
+                if (!err) {
+                    deferred.resolve(value);
+                } else {
+                    deferred.reject();
+                    return fn(err, value);
+                }
+            });
+
+            deferred
+                .done(function(account) {
+                    var accountId;
+                    if (account != null) {
+                        accountId = account.id();
+                    }
+
+                    if (accountId == null) {
+                        return fn(true, "Failed to create user, no account found");
+                    }
+
+                    var contact = new $$.m.Contact(req.body);
+
+                    if (isNew === true) {
+                        contact.set("accountId", this.accountId(req));
+                        contact.createdBy(this.userId(), $$.constants.social.types.LOCAL);
+                    }
+
+                    contactDao.saveOrUpdate(contact, function(err, value) {
+                        if (!err) {
+                            self.sendResult(resp, value);
+                        } else {
+                            self.wrapError(resp, 500, "There was an error updating contact", err, value);
+                        }
+                    });
+                });
         });
     }
 };

@@ -15,7 +15,8 @@ define([
     'models/cms/components/image-text',
     'models/cms/components/meet-team',
     'models/cms/components/single-post',
-], function(Freeform, ContactUs, FeatureBlocks, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost) {
+    'models/cms/components/signup-form',
+], function(Freeform, ContactUs, FeatureBlocks, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost, SignupForm) {
 
     var components = {
         "freeform": Freeform,
@@ -26,7 +27,8 @@ define([
         "image-slider": ImageSlider,
         "image-text": ImageText,
         "meet-team": MeetTeam,
-        "single-post": SinglePost
+        "single-post": SinglePost,
+        "signup-form": SignupForm
     };
 
     var collection = Backbone.Collection.extend({
