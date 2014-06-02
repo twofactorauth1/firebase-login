@@ -1,8 +1,8 @@
 /**
- * COPYRIGHT INDIGENOUS.IO, LLC 2014
+ * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
  *
  * All use or reproduction of any or all of this content must be approved.
- * Please contact info@indigenous.io for approval or questions.
+ * Please contact info@INDIGENOUS SOFTWARE, INC. for approval or questions.
  */
 
 var environments = {
@@ -24,8 +24,8 @@ if (process.env.PORT == null) {
 }
 
 /**
- * For local:  indigenous.local, localhost, etc.  -- modify hosts file to point 127.0.0.1 to app.indigenous.io
- * For production: indigenous.io
+ * For local:  indigenous.local, localhost, etc.  -- modify hosts file to point 127.0.0.1 to app.INDIGENOUS SOFTWARE, INC.
+ * For production: INDIGENOUS SOFTWARE, INC.
  */
 if (process.env.ROOT_HOST == null) {
     //process.env.ROOT_HOST = "indigenous.local";
@@ -46,7 +46,7 @@ if (process.env.IS_SECURE == null) {
 
 /**
  * A "whitelist" of subdomains that are never "account specific".
- * If a use hits one of these, they are at the main indigenous.io app.
+ * If a use hits one of these, they are at the main INDIGENOUS SOFTWARE, INC. app.
  */
 process.env.GLOBAL_SUBDOMAINS = "www,home,app";
 

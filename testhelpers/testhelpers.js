@@ -1,8 +1,8 @@
 /**
- * COPYRIGHT INDIGENOUS.IO, LLC 2014
+ * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
  *
  * All use or reproduction of any or all of this content must be approved.
- * Please contact info@indigenous.io for approval or questions.
+ * Please contact info@INDIGENOUS SOFTWARE, INC. for approval or questions.
  */
 
 var userDao = require('../dao/user.dao.js');
@@ -15,7 +15,7 @@ module.exports = {
             fn = testClass;
             testClass = null;
         }
-        userDao.createUserFromUsernamePassword("__test_user_" + $$.u.idutils.generateUniqueAlphaNumeric(), "password", "testuser@indigenous.io", function (err, value) {
+        userDao.createUserFromUsernamePassword("__test_user_" + $$.u.idutils.generateUniqueAlphaNumeric(), "password", "testuser@INDIGENOUS SOFTWARE, INC.", function (err, value) {
             if (err) {
                 throw Error("Failed to create test user: " + err.toString());
             }

@@ -1,8 +1,8 @@
 /**
- * COPYRIGHT INDIGENOUS.IO, LLC 2014
+ * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
  *
  * All use or reproduction of any or all of this content must be approved.
- * Please contact info@indigenous.io for approval or questions.
+ * Please contact info@INDIGENOUS SOFTWARE, INC. for approval or questions.
  */
 
 require('../utils/jadehelpers');
@@ -49,7 +49,7 @@ _.extend(baseView.prototype, {
         delete options.root;
 
         var data = {
-            title: "Indigenous.io",
+            title: "INDIGENOUS SOFTWARE, INC.",
             serverProps: serverProps,
             includeJs:true,
             includeHeader:false,
