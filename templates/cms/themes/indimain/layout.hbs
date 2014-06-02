@@ -74,6 +74,10 @@
                   interval: 4000
                 });
 
+                $('.goback').on('click', function() {
+                    window.history.back();
+                });
+
                 $('.carousel .item').each(function(){
                   var next = $(this).next();
                   if (!next.length) {

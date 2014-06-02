@@ -24,17 +24,17 @@ _.extend(view.prototype, BaseView.prototype, {
         this._show(accountId, page);
     },
 
-    showPost: function(accountId, blogPostId) {
-        console.log('showPost '+blogPostId+' Account ID:'+accountId);
-        this._showPost(accountId, blogPostId);
+    showPost: function(accountId, blogPostUrl) {
+        console.log('showPost '+blogPostUrl+' Account ID:'+accountId);
+        this._showPost(accountId, blogPostUrl);
     },
 
-    _showPost: function(accountId, blogPostId) {
-        console.log('Post ID:(_showPost) '+blogPostId+' Account ID: '+accountId);
+    _showPost: function(accountId, blogPostUrl) {
+        console.log('Post ID:(_showPost) '+blogPostUrl+' Account ID: '+accountId);
         var self = this;
 
-        cmsDao.getBlogPostForWebsite(accountId, blogPostId, function(err, blogPost) {
-            console.log('Blog Post :(_showPost) '+blogPost+' Post ID: '+blogPostId+' Account ID: '+accountId);
+        cmsDao.getBlogPostForWebsite(accountId, blogPostUrl, function(err, blogPost) {
+            console.log('Blog Post :(_showPost) '+blogPost+' Post Url: '+blogPostUrl+' Account ID: '+accountId);
 
             var path = 'single-post';
 

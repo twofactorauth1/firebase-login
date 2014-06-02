@@ -10,6 +10,9 @@ var HomeView = require('../views/home.server.view');
 var AdminView = require('../views/admin.server.view');
 var WebsiteView = require('../views/website.server.view');
 
+var contactDao = require('../dao/contact.dao');
+var cookies = require("../utils/cookieutil");
+
 var router = function() {
     this.init.apply(this, arguments);
 };
@@ -22,7 +25,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/", this.setup, this.index.bind(this));
         app.get("/index", this.setup, this.index.bind(this));
         app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
-        app.get("/page/blog/:postid", this.setup, this.showBlogPage.bind(this));
+        app.get("/page/blog/:posturl", this.setup, this.showBlogPage.bind(this));
+
+        app.post("/signupnews", this.signUpNews.bind(this));
 
         app.get("/home", this.isAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isAuth.bind(this), this.showHome.bind(this));
@@ -62,9 +67,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var self = this
             , accountId = this.accountId(req);
 
-        var postId = req.params.postid;
+        var postUrl = req.params.posturl;
+        console.log('Params: '+JSON.stringify(req.params));
         if (accountId > 0)  {
-            new WebsiteView(req, resp).showPost(accountId, postId);
+            new WebsiteView(req, resp).showPost(accountId, postUrl);
         } else {
             resp.redirect("/home");
         }
@@ -95,6 +101,32 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     _showHome: function(req,resp) {
         new HomeView(req,resp).show("home");
+    },
+
+    signUpNews: function(req, resp) {
+        var self = this, contact, accountToken, deferred;
+
+        var email = req.body.email;
+        console.log('Email: '+JSON.stringify(email));
+
+        var accountToken = cookies.getAccountToken(req);
+        console.log('Account Token: '+accountToken);
+
+        contactDao.createContactFromEmail(email, accountToken, function (err, value) {
+            if (!err) {
+                req.login(value, function (err) {
+                    if (err) {
+                        return resp.redirect("/");
+                    } else {
+                        req.flash("info", "Account created successfully");
+                        return resp.redirect("/");
+                    }
+                });
+            } else {
+                req.flash("error", value.toString());
+                return resp.redirect("/signup");
+            }
+        });
     }
 });
 

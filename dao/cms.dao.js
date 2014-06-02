@@ -284,13 +284,13 @@ var dao = {
         this.findOne(query, Page, fn);
     },
 
-    getBlogPostForWebsite: function (accountId, blogPostId, fn) {
-        console.log('Post ID (getBlogPostForWebsite): ' +blogPostId+ ' Account ID: '+accountId);
+    getBlogPostForWebsite: function (accountId, blogPostUrl, fn) {
+        console.log('Post ID (getBlogPostForWebsite): ' +blogPostUrl+ ' Account ID: '+accountId);
         var self = this;
         accountId = accountId.toString();
-        blogPostId = blogPostId.toString();
-        console.log('Account ID: '+accountId+' Blog Post ID: '+JSON.stringify(blogPostId));
-        var query = {accountId: accountId, _id: blogPostId};
+        blogPostUrl = blogPostUrl.toString();
+        console.log('Account ID: '+accountId+' Blog Post Url: '+JSON.stringify(blogPostUrl));
+        var query = {accountId: accountId, post_url: blogPostUrl};
         this.findOne(query, BlogPost, fn);
     },
 

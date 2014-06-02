@@ -6,12 +6,44 @@
 *
 -->
 
-<div>
-	    <h1>{{post_title}}</h1>
-    <p>{{post_author}}</p>
-    <p>{{post_content}}</p>
-    <p>{{post_excerpt}}</p>
-    <p>{{post_status}}</p>
-    <p>{{comment_status}}</p>
-    <p>{{comment_count}}</p>
-</div>
+<div id="content-area">
+    <div class="container clearfix row-fluid">
+        <div id="main-area" class="col-sm-9">
+            <article class="entry clearfix">
+                    <div id="et_pt_blog" class="responsive clearfix">
+
+                            <div class="et_pt_blogentry clearfix">
+                                <h2 class="et_pt_title"><a href="/page/blog/{{post_url}}">{{post_title}}</a></h2>
+
+								<p class="et_pt_blogmeta">
+	                                    {{#if post_author}}
+                                            Posted by {{post_author}}
+                                        {{/if}}
+                                        {{#if created.date}}
+                                            on {{created.date}}
+                                        {{/if}}
+                                        {{#if post_category}}
+                                            in {{post_category}}
+                                        {{/if}}
+                                        {{#if comment_count}}
+                                            Comments {{comment_count}}
+                                        {{/if}}
+	                                </p>
+
+                                    <div class="et_pt_thumb alignleft">
+                                        <a href=""><span class="overlay"></span></a>
+                                    </div> <!-- end .thumb -->
+
+                                    <div class="entry-content"><p>{{{post_content}}}</p></div>
+                            </div> <!-- end .et_pt_blogentry -->
+                    </div> <!-- end #et_pt_blog -->
+            </article> <!-- .entry -->
+        </div> <!-- #main-area -->
+    </div> <!-- .container -->
+    <div class="clearfix row-fluid">
+	    <div class="goback col-xs-9">
+	    	<p><span><i class="fa fa-arrow-circle-o-left"></i> Go Back</span><p>
+	    </span>
+	    <div class="col-xs-3"></div>
+    </div>
+</div> <!-- #content-area -->

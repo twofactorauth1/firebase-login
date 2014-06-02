@@ -7,39 +7,83 @@
 -->
 
 <div>
-     <p>Blogposts</p>
-    {{blogposts}}
-    <p>Each Blogposts</p>
-    {{#each blogposts}}
-        {{post_title}}
-    {{/each}}
-
-    {{#with component}}
-    <div id="content-area">
+        <div id="content-area">
             <div class="container clearfix row-fluid">
-                <div id="main-area" class="col-sm-8 col-sm-offset-1">
+                <div id="main-area" class="col-sm-8">
                     <article class="entry clearfix">
-                        {{#each posts}}
-                            <div id="et_pt_blog" class="responsive clearfix">
+                        {{#each blogposts}}
+                            <div class="single-blog responsive clearfix">
 
                                     <div class="et_pt_blogentry clearfix">
-                                        <h2 class="et_pt_title"><a href="/page/blog/{{@index}}">{{title}}</a></h2>
+                                        <h2 class="et_pt_title"><a href="/page/blog/{{this.attributes.post_url}}">{{this.attributes.post_title}}</a></h2>
 
-                                        <p class="et_pt_blogmeta">{{title}}</p>
+                                        <p class="et_pt_blogmeta">
+                                        {{#if this.attributes.post_author}}
+                                            Posted by {{this.attributes.post_author}}
+                                        {{/if}}
+                                        </p>
 
                                             <div class="et_pt_thumb alignleft">
                                                 <a href=""><span class="overlay"></span></a>
                                             </div> <!-- end .thumb -->
 
-                                            <div class="entry-excerpt"><p>{{content}}</p></div>
-                                            <a href="" class="btn btn-orange pull-right"><span>READ MORE</span></a>
+                                            <div class="entry-excerpt"><p>{{{this.attributes.post_excerpt}}}...</p></div>
+                                            <a href="/page/blog/{{this.attributes.post_url}}" class="btn btn-orange pull-right"><span>READ MORE</span></a>
                                     </div> <!-- end .et_pt_blogentry -->
 
                             </div> <!-- end #et_pt_blog -->
+                            <hr></hr>
                         {{/each}}
                     </article> <!-- .entry -->
                 </div> <!-- #main-area -->
+                <div id="sidebar" class="col-sm-4">
+                    <div class="searchbar">
+                        <input type="search" name="s" placeholder="Search">
+                    </div>
+                    <div class="clearfix mb30"></div>
+                        <div class="tags">
+                            <h4><i class="fa fa-tag"></i> Tags</h4>
+                            <ul class="tag-cloud">
+                                <li>Email Marketing</li>
+                                <li>Scheduling</li>
+                                <li>CRM Management</li>
+                                <li>design</li>
+                                <li>Social Media</li>
+                                <li>support</li>
+                                <li>Customer Service</li>
+                                <li>Indigenous</li>
+                                <li>Appointment</li>
+                            </ul>
+                        </div>
+                        <div class="clearfix mb30"></div>
+                        <div class="comments">
+                            <h4><i class="fa fa-comments"></i> Comments</h4>
+                            <ul>
+                                <li>Lauren M. on Social Media Design</li>
+                                <li>Lauren M. on Social Media Design</li>
+                                <li>Lauren M. on Social Media Design</li>
+                            </ul>
+                        </div>
+                        <div class="clearfix mb30"></div>
+                        <div class="posts">
+                            <h4><i class="fa fa-list-alt"></i> Posts</h4>
+                            <ul>
+                                <li>Hello Word by Donavon G.</li>
+                                <li>What is Indigenous? by Noel C.</li>
+                            </ul>
+                        </div>
+                        <div class="clearfix mb30"></div>
+                        <div class="categories">
+                            <h4><i class="fa fa-list-ul"></i> Categories</h4>
+                            <ul class="tag-cloud">
+                                <li>Email Marketing</li>
+                                <li>Scheduling</li>
+                                <li>CRM Management</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="clearfix mb30"></div>
+                </div>
             </div> <!-- .container -->
         </div> <!-- #content-area -->
-    {{/with}}
 </div>
