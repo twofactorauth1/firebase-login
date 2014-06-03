@@ -29,7 +29,7 @@ if (process.env.PORT == null) {
  */
 if (process.env.ROOT_HOST == null) {
     //process.env.ROOT_HOST = "indigenous.local";
-    process.env.ROOT_HOST = "indigenous.net";
+    process.env.ROOT_HOST = "indigenous.io";
 }
 
 
