@@ -23,6 +23,10 @@ if (process.env.PORT == null) {
     process.env.PORT = 3000;
 }
 
+if (process.env.IS_PROXIED == null){
+   process.env.IS_PROXIED = false;
+}
+
 /**
  * For local:  indigenous.local, localhost, etc.  -- modify hosts file to point 127.0.0.1 to app.INDIGENOUS SOFTWARE, INC.
  * For production: INDIGENOUS SOFTWARE, INC.
@@ -58,7 +62,8 @@ process.env.GLOBAL_SUBDOMAINS = "www,home,app";
 var serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
 serverUrl += "app." + process.env.ROOT_HOST;
 
-if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080) {
+
+if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080 && process.env.IS_PROXIED != "true") {
     serverUrl += ":" + process.env.PORT;
 }
 
@@ -89,8 +94,8 @@ module.exports = {
             _serverUrl += subdomain + "." + process.env.ROOT_HOST;
         }
 
-        if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080) {
-            _serverUrl += ":" + process.env.PORT;
+        if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080 && process.env.IS_PROXIED != "true") {
+           _serverUrl += ":" + process.env.PORT;
         }
         return _serverUrl;
     }
