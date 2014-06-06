@@ -52,7 +52,7 @@ if (process.env.IS_SECURE == null) {
  * A "whitelist" of subdomains that are never "account specific".
  * If a use hits one of these, they are at the main INDIGENOUS SOFTWARE, INC. app.
  */
-process.env.GLOBAL_SUBDOMAINS = "www,home,app,main";
+process.env.GLOBAL_SUBDOMAINS = "www,home,app";
 
 
 //---------------------------------------------------------
