@@ -14,16 +14,33 @@
                         {{#each blogposts}}
                             <div class="single-blog responsive clearfix">
 
-                                    <div class="et_pt_blogentry clearfix">
-                                        <h2 class="et_pt_title"><a href="/page/blog/{{this.attributes.post_url}}">{{this.attributes.post_title}}</a></h2>
+                                    <div class="blog-entry clearfix">
+                                        <h2 class="blog-title"><a href="/page/blog/{{this.attributes.post_url}}">{{this.attributes.post_title}}</a></h2>
 
-                                        <p class="et_pt_blogmeta">
-                                        {{#if this.attributes.post_author}}
-                                            Posted by {{this.attributes.post_author}}
+                                        <p class="blog-meta">
+                                        {{#if this.attributes.created.date}}
+                                             {{this.attributes.created.date}} • 
                                         {{/if}}
+                                        {{#if this.attributes.post_author}}
+                                            Posted by <a href="/page/author/{{this.attributes.post_author}}">{{this.attributes.post_author}}</a>
+                                        {{/if}}
+                                        {{#if this.attributes.post_category}}
+                                            in <a href="/page/category/{{this.attributes.post_category}}">{{this.attributes.post_category}}</a>
+                                        {{/if}}
+                                        {{!-- {{#if this.attributes.comment_count}}
+                                             • {{this.attributes.comment_count}} comments
+                                        {{/if}} --}}
                                         </p>
 
-                                            <div class="et_pt_thumb alignleft">
+                                        {{#if this.attributes.post_tags}}
+                                        <ul class="post_tags">
+                                            {{#each this.attributes.post_tags}}
+                                                <li><a href="/page/tag/{{this}}">{{this}}</a></li>
+                                            {{/each}}
+                                        </ul>
+                                        {{/if}}
+
+                                            <div class="blog-thumb alignleft">
                                                 <a href=""><span class="overlay"></span></a>
                                             </div> <!-- end .thumb -->
 
@@ -36,27 +53,21 @@
                         {{/each}}
                     </article> <!-- .entry -->
                 </div> <!-- #main-area -->
-                <div id="sidebar" class="col-sm-4">
-                    <div class="searchbar">
+                <div id="sidebar" class="col-sm-4 col-xs-12">
+                    <div class="searchbar hidden">
                         <input type="search" name="s" placeholder="Search">
                     </div>
-                    <div class="clearfix mb30"></div>
+                    <div class="clearfix mb30 hidden"></div>
                         <div class="tags">
                             <h4><i class="fa fa-tag"></i> Tags</h4>
                             <ul class="tag-cloud">
-                                <li>Email Marketing</li>
-                                <li>Scheduling</li>
-                                <li>CRM Management</li>
-                                <li>design</li>
-                                <li>Social Media</li>
-                                <li>support</li>
-                                <li>Customer Service</li>
-                                <li>Indigenous</li>
-                                <li>Appointment</li>
+                            {{#each tags}}
+                                <li><a href="/page/tag/{{this}}" >{{this}}</a></li>
+                            {{/each}}
                             </ul>
                         </div>
                         <div class="clearfix mb30"></div>
-                        <div class="comments">
+                        <div class="comments hidden">
                             <h4><i class="fa fa-comments"></i> Comments</h4>
                             <ul>
                                 <li>Lauren M. on Social Media Design</li>
@@ -64,21 +75,21 @@
                                 <li>Lauren M. on Social Media Design</li>
                             </ul>
                         </div>
-                        <div class="clearfix mb30"></div>
                         <div class="posts">
-                            <h4><i class="fa fa-list-alt"></i> Posts</h4>
+                            <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
                             <ul>
-                                <li>Hello Word by Donavon G.</li>
-                                <li>What is Indigenous? by Noel C.</li>
+                            {{#each blogposts}}
+                                <li><a href="/page/blog/{{this.attributes.post_url}}">{{this.attributes.post_title}}</a> by <a href="/page/author/{{this.attributes.post_author}}">{{this.attributes.post_author}}</a></li>
+                            {{/each}}
                             </ul>
                         </div>
                         <div class="clearfix mb30"></div>
                         <div class="categories">
                             <h4><i class="fa fa-list-ul"></i> Categories</h4>
                             <ul class="tag-cloud">
-                                <li>Email Marketing</li>
-                                <li>Scheduling</li>
-                                <li>CRM Management</li>
+                                {{#each categories}}
+                                    <li><a href="/page/category/{{this}}" >{{this}}</a></li>
+                                {{/each}}
                             </ul>
                         </div>
                     </div>

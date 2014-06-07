@@ -25,7 +25,11 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/", this.setup, this.index.bind(this));
         app.get("/index", this.setup, this.index.bind(this));
         app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
+
         app.get("/page/blog/:posturl", this.setup, this.showBlogPage.bind(this));
+        app.get("/page/tag/:tag", this.setup, this.showTagPage.bind(this));
+        app.get("/page/author/:author", this.setup, this.showAuthorPage.bind(this));
+        app.get("/page/category/:category", this.setup, this.showCategoryPage.bind(this));
 
         app.post("/signupnews", this.signUpNews.bind(this));
 
@@ -76,6 +80,47 @@ _.extend(router.prototype, BaseRouter.prototype, {
         }
     },
 
+    showTagPage: function(req, resp) {
+        console.log('Show tag page');
+        var self = this
+            , accountId = this.accountId(req);
+
+        var tag = req.params.tag;
+        console.log('Params: '+JSON.stringify(req.params));
+        if (accountId > 0)  {
+            new WebsiteView(req, resp).showTag(accountId, tag);
+        } else {
+            resp.redirect("/home");
+        }
+    },
+
+    showAuthorPage: function(req, resp) {
+        console.log('Show author page');
+        var self = this
+            , accountId = this.accountId(req);
+
+        var author = req.params.author;
+        console.log('Params: '+JSON.stringify(req.params));
+        if (accountId > 0)  {
+            new WebsiteView(req, resp).showAuthor(accountId, author);
+        } else {
+            resp.redirect("/home");
+        }
+    },
+
+    showCategoryPage: function(req, resp) {
+        console.log('Show category page');
+        var self = this
+            , accountId = this.accountId(req);
+
+        var category = req.params.category;
+        console.log('Params: '+JSON.stringify(req.params));
+        if (accountId > 0)  {
+            new WebsiteView(req, resp).showCategory(accountId, category);
+        } else {
+            resp.redirect("/home");
+        }
+    },
 
     showHome: function(req,resp) {
         var accountId = this.accountId(req);
@@ -87,7 +132,6 @@ _.extend(router.prototype, BaseRouter.prototype, {
         }
     },
 
-
     showAdmin: function(req,resp) {
         var accountId = this.accountId(req);
         if (accountId > 0) {
@@ -97,7 +141,6 @@ _.extend(router.prototype, BaseRouter.prototype, {
             resp.redirect("/home");
         }
     },
-
 
     _showHome: function(req,resp) {
         new HomeView(req,resp).show("home");

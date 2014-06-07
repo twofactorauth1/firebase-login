@@ -8,27 +8,35 @@
 
 <div id="content-area">
     <div class="container clearfix row-fluid">
-        <div id="main-area" class="col-sm-9">
+        <div id="main-area" class="col-xs-12">
             <article class="entry clearfix">
                     <div id="et_pt_blog" class="responsive clearfix">
 
                             <div class="et_pt_blogentry clearfix">
                                 <h2 class="et_pt_title"><a href="/page/blog/{{post_url}}">{{post_title}}</a></h2>
 
-								<p class="et_pt_blogmeta">
-	                                    {{#if post_author}}
-                                            Posted by {{post_author}}
-                                        {{/if}}
-                                        {{#if created.date}}
-                                            on {{created.date}}
-                                        {{/if}}
-                                        {{#if post_category}}
-                                            in {{post_category}}
-                                        {{/if}}
-                                        {{#if comment_count}}
-                                            Comments {{comment_count}}
-                                        {{/if}}
-	                                </p>
+								 <p class="blog-meta">
+                                {{#if created_date}}
+                                     {{created_date}} • 
+                                {{/if}}
+                                {{#if post_author}}
+                                    Posted by <a href="/page/author/{{post_author}}">{{post_author}}</a>
+                                {{/if}}
+                                {{#if post_category}}
+                                    in <a href="/page/category/{{post_category}}">{{post_category}}</a>
+                                {{/if}}
+                                {{!-- {{#if comment_count}}
+                                     • {{comment_count}} comments
+                                {{/if}} --}}
+                                </p>
+
+                                {{#if post_tags}}
+                                <ul class="post_tags">
+                                    {{#each post_tags}}
+                                        <li><a href="/page/tag/{{this}}">{{this}}</a></li>
+                                    {{/each}}
+                                </ul>
+                                {{/if}}
 
                                     <div class="et_pt_thumb alignleft">
                                         <a href=""><span class="overlay"></span></a>
@@ -41,7 +49,7 @@
         </div> <!-- #main-area -->
     </div> <!-- .container -->
     <div class="clearfix row-fluid">
-	    <div class="goback col-xs-9">
+	    <div class="goback col-xs-12">
 	    	<p><span><i class="fa fa-arrow-circle-o-left"></i> Go Back</span><p>
 	    </span>
 	    <div class="col-xs-3"></div>

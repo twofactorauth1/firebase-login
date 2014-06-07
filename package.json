@@ -23,6 +23,7 @@
     "json-gate": "0.8.21",
     "log4js": ">=0.6.10",
     "mongoskin": "0.6.1",
+    "moment":"2.6.0",
     "node-uuid": "1.4.1",
     "nodemailer": "0.6.0",
     "oauth": "~0.9.11",

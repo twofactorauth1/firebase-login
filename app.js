@@ -47,6 +47,7 @@ var express = require('express')
 //Load globally accessible libraries
 //---------------------------------------------------------
 _ = require('underscore');
+moment = require('moment');
 requirejs('utils/commonutils');
 require('./utils/errors');
 require('./utils/jsvalidate');

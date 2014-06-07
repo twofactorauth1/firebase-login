@@ -301,6 +301,75 @@ var dao = {
         this.findMany(query, BlogPost, fn);
     },
 
+    getBlogPostsWithTagsForWebsite: function (accountId, tag, fn) {
+        console.log('Getting Posts with tag: '+tag);
+        var self = this;
+        accountId = accountId.toString();
+        var query = {accountId: accountId, post_tags: tag};
+        this.findMany(query, BlogPost, fn);
+    },
+
+    getAllTagsFromPosts: function (blogposts, fn) {
+        var self = this;
+
+        var tags = new Array();
+
+        for (var i = blogposts.length - 1; i >= 0; i--) {
+            var pulledTags = blogposts[i].attributes.post_tags;
+            for (var i = pulledTags.length - 1; i >= 0; i--) {
+                tags.push(pulledTags[i]);
+            };
+        };
+
+        var scrubbedTags = self.eliminateDuplicates(tags);
+        fn(null, scrubbedTags);
+        return;
+    },
+
+    getAllCategoriesFromPosts: function (blogposts, fn) {
+        var self = this;
+
+        var categories = new Array();
+
+        for (var i = blogposts.length - 1; i >= 0; i--) {
+            categories.push(blogposts[i].attributes.post_category);
+        };
+
+        var scrubbedCategories = self.eliminateDuplicates(categories);
+        fn(null, scrubbedCategories);
+        return;
+    },
+
+    getBlogPostsWithAuthorForWebsite: function (accountId, author, fn) {
+        console.log('Getting Posts with author: '+author);
+        var self = this;
+        accountId = accountId.toString();
+        var query = {accountId: accountId, post_author: author};
+        this.findMany(query, BlogPost, fn);
+    },
+
+    getBlogPostsWithCategoryForWebsite: function (accountId, category, fn) {
+        console.log('Getting Posts with category: '+category);
+        var self = this;
+        accountId = accountId.toString();
+        var query = {accountId: accountId, post_category: category};
+        this.findMany(query, BlogPost, fn);
+    },
+
+    eliminateDuplicates: function (arr) {
+      var i,
+          len=arr.length,
+          out=[],
+          obj={};
+      for (i=0;i<len;i++) {
+        obj[arr[i]]=0;
+      }
+      for (i in obj) {
+        out.push(i);
+      }
+      return out;
+    },
+
     //region WEBSITES
 
     /**
@@ -837,8 +906,11 @@ var dao = {
                     post_content: blogpost.get("post_content"),
                     post_excerpt: blogpost.get("post_excerpt"),
                     post_status: blogpost.get("post_status"),
+                    post_tags: blogpost.get("post_tags"),
+                    post_category: blogpost.get("post_category"),
                     comment_status: blogpost.get("comment_status"),
-                    comment_count: blogpost.get("comment_count")
+                    comment_count: blogpost.get("comment_count"),
+                    created_date: moment(blogpost.get("created").date).format("DD.MM.YYYY")
                 };
 
 
@@ -981,9 +1053,9 @@ var dao = {
     },
 
 
-    getRenderedWebsitePageForAccount: function (accountId, pageName, isEditor, fn) {
-        var self = this, account, website, page, blogposts, themeId, themeConfig;
-
+    getRenderedWebsitePageForAccount: function (accountId, pageName, isEditor, tag, author, category, fn) {
+        var self = this, account, website, page, blogposts, tags, categories, themeId, themeConfig;
+        console.log('getRenderedWebsitePageForAccount: '+category);
         if (_.isFunction(pageName)) {
             fn = pageName;
             pageName = "index";
@@ -1025,7 +1097,7 @@ var dao = {
 
                         website = value;
 
-                        self.getPageForWebsite(website.id(), pageName, function (er, value) {
+                        self.getPageForWebsite(website.id(), pageName, function (err, value) {
                             if (err) {
                                 return cb(err);
                             }
@@ -1033,16 +1105,131 @@ var dao = {
                             page = value;
 
                                if (pageName === 'blog') {
-                                    console.log('this is a blog');
-                                    self.getAllBlogPostsForWebsite(accountId, function (er, value) {
-                                        if (err) {
-                                            return cb(err);
-                                        }
+                                    if (tag != null) {
+                                        //get the blog posts and use as variable "blogposts"
+                                        self.getBlogPostsWithTagsForWebsite(accountId, tag, function (err, value) {
+                                            if (err) {
+                                                return cb(err);
+                                            }
 
-                                        blogposts = value;
+                                            blogposts = value;
 
-                                        cb();
-                                    });
+                                            //strip the tags from the posts and get a list
+                                            self.getAllTagsFromPosts(blogposts, function (err, value) {
+                                                if (err) {
+                                                    return cb(err);
+                                                }
+                                                console.log('Tags (getRenderedWebsitePageForAccount): '+value);
+                                                tags = value;
+
+                                                self.getAllCategoriesFromPosts(blogposts, function (err, value) {
+                                                    if (err) {
+                                                        return cb(err);
+                                                    }
+                                                    console.log('Tags (getRenderedWebsitePageForAccount): '+value);
+                                                    categories = value;
+
+                                                    cb();
+
+                                                });
+
+                                            });
+
+                                        });
+                                   } else if (author != null) {
+                                        //get the blog posts and use as variable "blogposts"
+                                        self.getBlogPostsWithAuthorForWebsite(accountId, author, function (err, value) {
+                                            if (err) {
+                                                return cb(err);
+                                            }
+
+                                            blogposts = value;
+
+                                            //strip the tags from the posts and get a list
+                                            self.getAllTagsFromPosts(blogposts, function (err, value) {
+                                                if (err) {
+                                                    return cb(err);
+                                                }
+                                                console.log('Tags (getRenderedWebsitePageForAccount): '+value);
+                                                tags = value;
+
+                                                self.getAllCategoriesFromPosts(blogposts, function (err, value) {
+                                                    if (err) {
+                                                        return cb(err);
+                                                    }
+                                                    console.log('Tags (getRenderedWebsitePageForAccount): '+value);
+                                                    categories = value;
+
+                                                    cb();
+
+                                                });
+
+                                            });
+
+                                        });
+                                   } else if (category != null) {
+                                        //get the blog posts and use as variable "blogposts"
+                                        self.getBlogPostsWithCategoryForWebsite(accountId, category, function (err, value) {
+                                            if (err) {
+                                                return cb(err);
+                                            }
+
+                                            blogposts = value;
+
+                                            //strip the tags from the posts and get a list
+                                            self.getAllTagsFromPosts(blogposts, function (err, value) {
+                                                if (err) {
+                                                    return cb(err);
+                                                }
+                                                console.log('Tags (getRenderedWebsitePageForAccount): '+value);
+                                                tags = value;
+
+                                                    self.getAllCategoriesFromPosts(blogposts, function (err, value) {
+                                                        if (err) {
+                                                            return cb(err);
+                                                        }
+                                                        console.log('Tags (getRenderedWebsitePageForAccount): '+value);
+                                                        categories = value;
+
+                                                        cb();
+
+                                                    });
+
+                                            });
+
+                                        });
+                                   } else {
+                                        //get the blog posts and use as variable "blogposts"
+                                        self.getAllBlogPostsForWebsite(accountId, function (err, value) {
+                                            if (err) {
+                                                return cb(err);
+                                            }
+
+                                            blogposts = value;
+
+                                            //strip the tags from the posts and get a list
+                                            self.getAllTagsFromPosts(blogposts, function (err, value) {
+                                                if (err) {
+                                                    return cb(err);
+                                                }
+
+                                                tags = value;
+
+                                                self.getAllCategoriesFromPosts(blogposts, function (err, value) {
+                                                    if (err) {
+                                                        return cb(err);
+                                                    }
+                                                    console.log('Tags (getRenderedWebsitePageForAccount): '+value);
+                                                    categories = value;
+
+                                                    cb();
+
+                                                });
+
+                                            });
+
+                                        });
+                                    }
                                } else {
                                     cb();
                                }
@@ -1159,7 +1346,9 @@ var dao = {
                     title: title,
                     handle: pageName,
                     linkLists: {},
-                    blogposts: null
+                    blogposts: null,
+                    tags: null,
+                    categories: null,
                 };
 
 
@@ -1173,7 +1362,22 @@ var dao = {
                 if(blogposts != null) {
                     data.blogposts = new Array();
                     for (var i = 0; i < blogposts.length; i++) {
+                        blogposts[i].attributes.created.date = moment(blogposts[i].attributes.created.date).format("DD.MM.YYYY");
                         data.blogposts.push(blogposts[i]);
+                    }
+                }
+
+                if(tags != null) {
+                    data.tags = new Array();
+                    for (var i = 0; i < tags.length; i++) {
+                        data.tags.push(tags[i]);
+                    }
+                }
+
+                if(categories != null) {
+                    data.categories = new Array();
+                    for (var i = 0; i < categories.length; i++) {
+                        data.categories.push(categories[i]);
                     }
                 }
 

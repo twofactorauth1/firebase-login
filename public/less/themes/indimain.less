@@ -385,7 +385,7 @@ img {
   padding: 10px 40px;
 }
 
-p.et_pt_blogmeta {
+p.blog-meta {
   border-bottom: none!important;
   border-top: none!important;
   text-transform: none!important;
@@ -393,11 +393,11 @@ p.et_pt_blogmeta {
   font-family: Georgia,serif;
   font-size: 12px;
   font-style: italic;
-  margin-bottom: 11px;
-  padding: 8px 5px 7px 4px;
+  padding: 0 5px 7px 4px;
+  margin: 0;
 }
 
-h2.et_pt_title {
+h2.blog-title {
 padding-bottom: 0px!important;
 }
 
@@ -410,11 +410,11 @@ padding-bottom: 0px!important;
   -webkit-box-shadow: 3px 0px 7px 0px rgba(50, 50, 50, 0.15);
   -moz-box-shadow:    3px 0px 7px 0px rgba(50, 50, 50, 0.15);
   box-shadow:         3px 0px 7px 0px rgba(50, 50, 50, 0.15);
-  padding: 0 30px 30px 0;
+  padding: 30px;
 }
 .container {padding: 0;margin: 0 auto;}
 .alignleft {float: left;padding: 5px}
-div.et_pt_thumb span.overlay {
+div.blog-thumb span.overlay {
   background: none!important;
 }
 
@@ -624,9 +624,9 @@ div {
 }
 
 .tag-cloud li:nth-child(1) {font-weight: bold}
-.tag-cloud li:nth-child(2) {}
+.tag-cloud li:nth-child(2) {font-size: 2em;}
 .tag-cloud li:nth-child(3) {}
-.tag-cloud li:nth-child(4) {}
+.tag-cloud li:nth-child(4) {font-size: 3em;}
 .tag-cloud li:nth-child(5) {}
 
 input { font-family: 'FontAwesome'!important; } /* This is for the placeholder */
@@ -637,4 +637,21 @@ input { font-family: 'FontAwesome'!important; } /* This is for the placeholder *
     top: 23px;
     content: "\f002";
     right: -100px;
+}
+
+.post_tags {
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.post_tags li {
+  display: inline-block;
+  background: #47b1cc;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.post_tags li a {
+  color: #ffffff;
 }
