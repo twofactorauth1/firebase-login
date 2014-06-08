@@ -62,11 +62,51 @@
 
     <script type="text/javascript" src="/js/libs/jqueryrotate/jqueryrotate.js"></script>
     <script type="text/javascript" src="/js/libs/jqueryThumbnailScroller/jquery.thumbnailScroller.js"></script>
+    <script type="text/javascript" src="/js/libs/waypoints/waypoints.min.js"></script>
+    <script type="text/javascript" src="/js/libs/parallax/parallax.min.js"></script>
 
 
     <script type="text/javascript" >
            (function($) {
              $(document).ready(function() {
+
+                $('.parallax').parallax({
+                    scroll_factor: 0.5
+                  });
+
+                // $('div[data-type="background"]').each(function(){
+                //     var $bgobj = $(this);
+                //     $(window).scroll(function() {
+                //         var yPos = -($(window).scrollTop() / $bgobj.data('speed'));
+                //         var coords = '50% '+ yPos + 'px';
+                //         $bgobj.css({ backgroundPosition: coords });
+                //     });
+                // });
+
+                $(".feature-single-0").waypoint(function (direction) {
+                    $(this).addClass("animated fadeIn");
+                }, { offset: $.waypoints('viewportHeight') - 100,
+                    triggerOnce: true});
+
+                $(".feature-single-1").waypoint(function (direction) {
+                    $(this).addClass("animated fadeIn");
+                }, { offset: $.waypoints('viewportHeight') - 200,
+                    triggerOnce: true});
+
+                $(".feature-single-2").waypoint(function (direction) {
+                    $(this).addClass("animated fadeIn");
+                }, { offset: $.waypoints('viewportHeight') - 300,
+                    triggerOnce: true});
+
+                $("div[data-class=profilepic]").waypoint(function (direction) {
+                    $(this).addClass("animated fadeIn");
+                }, { offset: $.waypoints('viewportHeight') - 100,
+                    triggerOnce: true});
+
+                $(".btn-outline").waypoint(function (direction) {
+                    $(this).addClass("animated fadeIn");
+                }, { offset: $.waypoints('viewportHeight') - 100,
+                    triggerOnce: true});
 
                 $('#myCarousel .item:first-child').addClass('active');
 
@@ -92,252 +132,6 @@
                     $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
                   }
                 });
-
-                 var boxCenterXOffset = 50;
-                 var boxCenterYOffset = 50;
-                 $("#line, #line_1, #line_2, #line_3").css("opacity", 0);
-                 $("#center-circle").hide();
-                 setTimeout(function() {
-                     $("#center-circle").fadeTo("fast", 1)
-                 }, 1000);
-                 var center = 0;
-                 var center_1 = 0;
-                 var center_2 = 0;
-                 var center_3 = 0;
-                 var center_4 = 0;
-
-                 function resize_center() {
-                     var win = $(this);
-                     var width = win.width();
-                     var calc = (width - 93) / 2;
-                     center = calc;
-                     $("#center-circle").css("left", calc)
-                 }
-
-                 function resize_center_1() {
-                     var win = $(this);
-                     var width = win.width();
-                     var calc = ((width / 12) * 3) - $("#circle-1").width() / 2;
-                     center_1 = calc
-                 }
-
-                 function resize_center_2() {
-                     var win = $(this);
-                     var width = win.width();
-                     var calc = ((width / 12) * 9) - $("#circle-2").width() / 3;
-                     center_2 = calc
-                 }
-
-                 function resize_center_3() {
-                     var win = $(this);
-                     var width = win.width();
-                     var calc = ((width / 12) * 3) - $("#circle-3").width() / 3;
-                     center_3 = calc
-                 }
-
-                 function resize_center_4() {
-                     var win = $(this);
-                     var width = win.width();
-                     var calc = ((width / 12) * 8) - $("#circle-4").width() / 3;
-                     center_4 = calc
-                 }
-
-                 function window_resize() {
-                     var $circle1 = $("#circle-1");
-                     var $circle2 = $("#circle-2");
-                     var $circle3 = $("#circle-3");
-                     $("#circle-1").css("left", center_1);
-                     $("#circle-2").css("left", center_2);
-                     $("#circle-3").css("left", center_3 - ($circle3.width() / 2));
-                     $("#circle-4").css("left", center_4)
-                 }
-
-                 function adjust_line() {
-                     var c1y1, c1x1, c2y1, c2x1;
-                     var $center = $("#center-circle");
-                     var centeroffset = $center.offset();
-                     var centerwidth = $center.width();
-                     var centerheight = $center.height();
-                     var centerX = centeroffset.left + centerwidth / 2;
-                     var centerY = centeroffset.top + centerheight / 2;
-                     var c1x1 = centerX;
-                     var c1y1 = centerY;
-                     var c2x1 = centerX;
-                     var c2y1 = centerY;
-                     var c3x1 = centerX;
-                     var c3y1 = centerY;
-                     var c4x1 = centerX;
-                     var c4y1 = centerY;
-                     var $circle1 = $("#circle-1");
-                     var circle1offset = $circle1.offset();
-                     var circle1width = $circle1.width();
-                     var circle1height = $circle1.height();
-                     var circle1centerX = circle1offset.left + circle1width / 2;
-                     var circle1centerY = circle1offset.top + circle1height / 2;
-                     var c1x2 = circle1centerX;
-                     var c1y2 = circle1centerY;
-                     var c1hypotenuse = Math.sqrt((c1x1 - c1x2) * (c1x1 - c1x2) + (c1y1 - c1y2) * (c1y1 - c1y2));
-                     var c1angle = Math.atan2((c1y1 - c1y2), (c1x1 - c1x2)) * (180 / Math.PI);
-                     if (c1angle >= 90 && c1angle < 180) {
-                         c1y1 = c1y1 - (c1y1 - c1y2)
-                     }
-                     if (c1angle > 0 && c1angle < 90) {
-                         c1x1 = c1x1 - (c1x1 - c1x2);
-                         c1y1 = c1y1 - (c1y1 - c1y2)
-                     }
-                     if (c1angle <= 0 && c1angle > -90) {
-                         c1x1 = c1x1 - (c1x1 - c1x2)
-                     }
-                     var $circle2 = $("#circle-2");
-                     var circle2offset = $circle2.offset();
-                     var circle2width = $circle2.width();
-                     var circle2height = $circle2.height();
-                     var circle2centerX = circle2offset.left + circle2width / 2;
-                     var circle2centerY = circle2offset.top + circle2height / 2;
-                     var c2x2 = circle2centerX;
-                     var c2y2 = circle2centerY;
-                     var c2hypotenuse = Math.sqrt((c2x1 - c2x2) * (c2x1 - c2x2) + (c2y1 - c2y2) * (c2y1 - c2y2));
-                     var c2angle = Math.atan2((c2y1 - c2y2), (c2x1 - c2x2)) * (180 / Math.PI);
-                     if (c2angle >= 90 && c2angle < 180) {
-                         c2y1 = c2y1 - (c2y1 - c2y2)
-                     }
-                     if (c2angle > 0 && c2angle < 90) {
-                         c2x1 = c2x1 - (c2x1 - c2x2);
-                         c2y1 = c2y1 - (c2y1 - c2y2)
-                     }
-                     if (c2angle <= 0 && c2angle > -90) {
-                         c2x1 = c2x1 - (c2x1 - cx2)
-                     }
-                     var $circle3 = $("#circle-3");
-                     var circle3offset = $circle3.offset();
-                     var circle3width = $circle3.width();
-                     var circle3height = $circle3.height();
-                     var circle3centerX = circle3offset.left + circle3width / 2;
-                     var circle3centerY = circle3offset.top + circle3height / 2;
-                     var c3x2 = circle3centerX;
-                     var c3y2 = circle3centerY;
-                     var c3hypotenuse = Math.sqrt((c3x1 - c3x2) * (c3x1 - c3x2) + (c3y1 - c3y2) * (c3y1 - c3y2));
-                     var c3angle = Math.atan2((c3y1 - c3y2), (c3x1 - c3x2)) * (180 / Math.PI);
-                     if (c3angle >= 90 && c3angle < 180) {
-                         c3y1 = c3y1 - (c3y1 - c3y2)
-                     }
-                     if (c3angle > 0 && c3angle < 90) {
-                         c3x1 = c3x1 - (c3x1 - c3x2);
-                         c3y1 = c3y1 - (c3y1 - c3y2)
-                     }
-                     if (c3angle <= 0 && c3angle > -90) {
-                         c3x1 = c3x1 - (c3x1 - c3x2)
-                     }
-                     var $circle4 = $("#circle-4");
-                     var circle4offset = $circle4.offset();
-                     var circle4width = $circle4.width();
-                     var circle4height = $circle4.height();
-                     var circle4centerX = circle4offset.left + circle4width / 2;
-                     var circle4centerY = circle4offset.top + circle4height / 2;
-                     var c4x2 = circle4centerX;
-                     var c4y2 = circle4centerY;
-                     var c4hypotenuse = Math.sqrt((c4x1 - c4x2) * (c4x1 - c4x2) + (c4y1 - c4y2) * (c4y1 - c4y2));
-                     var c4angle = Math.atan2((c4y1 - c4y2), (c4x1 - c4x2)) * (180 / Math.PI);
-                     if (c4angle >= 90 && c4angle < 180) {
-                         c4y1 = c4y1 - (c4y1 - c4y2)
-                     }
-                     if (c4angle > 0 && c4angle < 90) {
-                         c4x1 = c4x1 - (c4x1 - c4x2);
-                         c4y1 = c4y1 - (c4y1 - c4y2)
-                     }
-                     if (c4angle <= 0 && c4angle > -90) {
-                         c4x1 = c4x1 - (c4x1 - c4x2)
-                     }
-                     $("#line").queue(function() {
-                         $(this).offset({
-                             top: c1y1,
-                             left: c1x1
-                         });
-                         $(this).dequeue()
-                     }).queue(function() {
-                         $(this).width(c1hypotenuse);
-                         $(this).dequeue()
-                     }).queue(function() {
-                         $(this).rotate(c1angle);
-                         $(this).dequeue()
-                     });
-                     $("#line_1").queue(function() {
-                         $(this).offset({
-                             top: c2y1,
-                             left: c2x1
-                         });
-                         $(this).dequeue()
-                     }).queue(function() {
-                         $(this).width(c2hypotenuse);
-                         $(this).dequeue()
-                     }).queue(function() {
-                         $(this).rotate(c2angle);
-                         $(this).dequeue()
-                     });
-                     $("#line_2").queue(function() {
-                         $(this).offset({
-                             top: c3y1,
-                             left: c3x1
-                         });
-                         $(this).dequeue()
-                     }).queue(function() {
-                         $(this).width(c3hypotenuse);
-                         $(this).dequeue()
-                     }).queue(function() {
-                         $(this).rotate(c3angle);
-                         $(this).dequeue()
-                     });
-                     $("#line_3").queue(function() {
-                         $(this).offset({
-                             top: c4y1,
-                             left: c4x1
-                         });
-                         $(this).dequeue()
-                     }).queue(function() {
-                         $(this).width(c4hypotenuse);
-                         $(this).dequeue()
-                     }).queue(function() {
-                         $(this).rotate(c4angle);
-                         $(this).dequeue()
-                     })
-                 }
-
-                 function show_line() {
-                     $("#line, #line_1, #line_2, #line_3").fadeTo("slow", 1)
-                 }
-                 resize_center();
-                 resize_center_1();
-                 resize_center_2();
-                 resize_center_3();
-                 resize_center_4();
-                 append_style();
-                 $(window).on("resize", function() {
-                     resize_center_1();
-                     resize_center_2();
-                     resize_center_3();
-                     resize_center_4();
-                     resize_center();
-                     window_resize();
-                     setTimeout(function() {
-                         adjust_line()
-                     }, 1000)
-                 });
-
-                 function dispersed() {
-                     setTimeout(function() {
-                         $(".executive-team").addClass("dispersed");
-                         setTimeout(function() {
-                             adjust_line();
-                             setTimeout(function() {
-                                 adjust_line();
-                                 setTimeout(function() {
-                                     show_line()
-                                 }, 100)
-                             }, 100)
-                         }, 500)
-                     }, 2000)
-                 }
-                 dispersed();
 
                  function append_style() {
                      $("head").append('<STYLE type="text/css"> \

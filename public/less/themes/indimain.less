@@ -234,9 +234,18 @@ ul #center-circle {
 }
 
 .newsletter {
-	background: rgba(0, 0, 0, 0.5);
+	background: #4bafca;
 	padding: 0px!important;
 	margin: 0px!important;
+}
+
+.newsletter h3 {
+  color: white;
+  padding: 0 0 20px 10px;
+  font-weight: 600;
+  font-family: Capita;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+  font-size: 28px;
 }
 
 .inner-page {
@@ -263,6 +272,19 @@ ul #center-circle {
   color: #ffffff;
 }
 
+.btn-outline {
+  background: none;
+  border: 2px solid #fff!important;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+}
+
+.btn-outline:hover {
+  background-color: #16778b!important;
+  border: 2px solid #fff!important;
+  color: #ffffff;
+}
+
 .newsletter .btn, .newsletter input {
 	height: 50px;
 	margin: 0;
@@ -276,63 +298,80 @@ ul #center-circle {
 	font-weight: 200;
 	line-height: 1.4;
 	color: #ffffff;
+  font-size: 16px;
 }
 
 #home {
 	margin-top: 0;
-	padding: 0;
-	background: url(/assets/images/indimain/home-top.jpg) center center no-repeat;
-	height: 600px;
-	background-size: cover;
-	min-width: 100%;
-	margin-bottom: -130px;
-	display: block;
-	overflow: hidden;
+	padding: 0 50px;
+	// background: url(/assets/images/indimain/home-top.jpg) 50% 0 no-repeat fixed;
+	height: 460px;
+  transition:none;
+}
+
+#home h1 {
+  color: white;
+}
+
+#home p {
+  color: white;
+}
+
+#home .btn {
+  width: 200px;
+height: 50px;
+margin-top: 30px;
 }
 
 #feature_three {
-	background: url(/assets/images/indimain/bottom-bg.png) center center no-repeat;
-	height: 400px;
+  background: #4bafca;
 	background-size: cover;
 	min-width: 100%;
-	padding: 50px 0;
+	padding: 50px;
+  text-align: center;
+}
+
+#feature_three .col-xs-4 {
+  text-align: center;
 }
 
 .feat-icon-1 {
-  background: url(/assets/images/indimain/center-icon-sprite.png) -178px 14px no-repeat;
+  background: url(/assets/images/indimain/center-icon-sprite.png) 0 0 no-repeat;
   width: 95px;
   height: 75px;
   display: block;
-  float: left;
   padding: 10px 35px;
   position: relative;
+  margin: 0 auto;
 }
 .feat-icon-2 {
-  background: url(/assets/images/indimain/center-icon-sprite.png) no-repeat;
+  background: url(/assets/images/indimain/center-icon-sprite.png) -100px 0 no-repeat;
   width: 55px;
   height: 75px;
   display: block;
-  float: left;
   padding: 10px 35px;
+  margin: 0 auto;
   position: relative;
 }
 .feat-icon-3 {
-  background: url(/assets/images/indimain/center-icon-sprite.png) -78px 0px no-repeat;
+  background: url(/assets/images/indimain/center-icon-sprite.png) -170px 0px no-repeat;
   width: 95px;
   height: 75px;
   display: block;
-  float: left;
+  margin: 0 auto;
   padding: 10px 35px;
   position: relative;
 }
 #feature_three h4 {
   font-family: Capita;
-  color: #444444;
+  color: #fff;
   font-weight: bold;
   margin-bottom: 2px;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+  font-size: 24px;
 }
 #feature_three p {
-  color: #999999;
+  color: #c7ecf6;
 }
 
 .social {
@@ -411,6 +450,7 @@ padding-bottom: 0px!important;
   -moz-box-shadow:    3px 0px 7px 0px rgba(50, 50, 50, 0.15);
   box-shadow:         3px 0px 7px 0px rgba(50, 50, 50, 0.15);
   padding: 30px;
+  margin-bottom: -30px;
 }
 .container {padding: 0;margin: 0 auto;}
 .alignleft {float: left;padding: 5px}
@@ -423,12 +463,19 @@ div.blog-thumb span.overlay {
 }
 
 .feature-block {
-  background: #4bb0cb url(/assets/images/indimain/feature-blocks.png) right no-repeat;
+  // background: #4bb0cb url(/assets/images/indimain/feature-blocks.png) right no-repeat fixed;
+  // background-size: 90%;
 }
 
 .feature-block h3 {
   color: #16778b;
   font-style: italic;
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+.feature-block .inner-page {
+  padding: 80px 0;
 }
 
 .image-right {
@@ -437,6 +484,10 @@ div.blog-thumb span.overlay {
 
 .image-right img, .image-left img {
   margin: 25px 0 0 25px;
+}
+
+.home-text {
+  padding-top:10%;
 }
 
 
@@ -588,7 +639,7 @@ div[data-class="single-post"] #main-area.col-sm-9 {
 }
 
 div {
-  transition: all 0.5s ease;
+  // transition: all 0.5s ease;
 }
 
 .single-blog {
@@ -623,6 +674,8 @@ div {
   margin-bottom: 30px;
 }
 
+
+
 .tag-cloud li:nth-child(1) {font-weight: bold}
 .tag-cloud li:nth-child(2) {font-size: 2em;}
 .tag-cloud li:nth-child(3) {}
@@ -655,3 +708,39 @@ input { font-family: 'FontAwesome'!important; } /* This is for the placeholder *
 .post_tags li a {
   color: #ffffff;
 }
+
+.left-inner-addon {
+    position: relative;
+    color: #d1d1d1;
+}
+.left-inner-addon input {
+    padding-left: 30px;    
+}
+.left-inner-addon i {
+    position: absolute;
+    padding: 17px 13px;
+    pointer-events: none;
+}
+
+.right-inner-addon {
+    position: relative;
+}
+.right-inner-addon input {
+    padding-right: 30px;    
+}
+.right-inner-addon i {
+    position: absolute;
+    right: 0px;
+    padding: 10px 12px;
+    pointer-events: none;
+}
+
+.feature-single {
+  transition: none!important
+}
+
+.fadeIn {
+  transition: opacity .5s ease-out;
+}
+
+.parallax-block{transition:none;position:fixed;top:0;left:0;overflow:hidden;z-index:-1;max-width:none!important;max-height:none!important;-webkit-backface-visibility:hidden;-moz-backface-visibility:hidden;-ms-backface-visibility:hidden;-o-backface-visibility:hidden;backface-visibility:hidden;-webkit-perspective:1000px;-moz-perspective:1000px;-ms-perspective:1000px;-o-perspective:1000px;perspective:1000px;}.parallax-image{position:absolute;top:0;left:0;max-width:none!important;max-height:none!important;-webkit-backface-visibility:hidden;-moz-backface-visibility:hidden;-ms-backface-visibility:hidden;-o-backface-visibility:hidden;backface-visibility:hidden;-webkit-perspective:1000px;-moz-perspective:1000px;-ms-perspective:1000px;-o-perspective:1000px;perspective:1000px;}

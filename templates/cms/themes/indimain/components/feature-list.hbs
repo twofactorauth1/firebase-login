@@ -19,22 +19,19 @@
                 </div>
             <!-- Feature Three -->
             <div id="feature_three" class="row inner-page">
-                <div class="col-sm-6"></div>
-                <div class="col-sm-6">
-                    <div class="row">
-                        {{#each features}}
-                            <div class="col-md-offset-3">
+                <div class="row">
+                    {{#each features}}
+                        <div class="col-sm-4 feature-single-{{@index}}" style="opacity:0">
                             <span class="{{{feature-icon}}}"></span>
-                            <div class="editable" data-class="features.item.title">
-                                <h4>{{{feature-title}}}</h4>
-                            </div>
-                            <div class="editable" data-class="features.item.subtitle">
-                                <p>{{{feature-subtitle}}}</p>
-                            </div>
+                        <div class="editable" data-class="features.item.title">
+                            <h4>{{{feature-title}}}</h4>
                         </div>
-                        <div class="pusher"></div>
-                        {{/each}}
+                        <div class="editable" data-class="features.item.subtitle">
+                            <p>{{{feature-subtitle}}}</p>
+                        </div>
                     </div>
+                    <div class="pusher visible-xs"></div>
+                    {{/each}}
                 </div>
             </div>
         {{/with}}
