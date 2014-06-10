@@ -19428,9 +19428,19 @@ footer a {
   border-bottom: 3px solid #5db8d0 !important;
   padding: 0 30px;
 }
+.navbar-default {
+  border-bottom: 3px solid #5db8d0 !important;
+}
 .navbar {
   margin-bottom: 0px;
   min-height: 90px;
+}
+.navbar-brand {
+  height: 80px;
+  max-width: 300px;
+}
+.navbar-toggle {
+  margin-top: 20px;
 }
 .navbar .nav > li > a {
   float: none;
@@ -19449,6 +19459,9 @@ footer a {
 }
 .navbar .nav > li {
   float: left;
+}
+ul.nav {
+  margin-top: 20px!important;
 }
 .facebook {
   margin-top: 24px!important;
@@ -19739,6 +19752,7 @@ ul #center-circle {
 }
 .copyright {
   margin-top: 10px;
+  text-align: right;
 }
 .twit {
   background-position: -33px 0;
@@ -19809,7 +19823,10 @@ div.blog-thumb span.overlay {
   background: none!important;
 }
 .fb-like {
-  padding: 14px 20px 0 0;
+  padding: 14px 20px 0 15px;
+}
+.feature-block {
+  padding: 0 20px;
 }
 .feature-block h3 {
   color: #16778b;
@@ -19853,7 +19870,7 @@ div[data-class='position'] span {
   font-weight: bold;
   text-transform: uppercase;
   font-size: 14px!important;
-  line-height: 0px;
+  line-height: 20px;
   margin-bottom: 25px;
   position: relative;
   display: block;
@@ -19895,7 +19912,7 @@ div[data-class='position'] span {
   text-decoration: none;
 }
 .footer-logo {
-  margin: -40px 70px 0 0;
+  margin: -70px 5px 0 0;
 }
 #assets {
   border-bottom: 3px solid #5db8d0 !important;
@@ -20040,6 +20057,13 @@ input {
 .fadeIn {
   transition: opacity 0.5s ease-out;
 }
+.image-text {
+  padding: 0 20px;
+  display: inline-block;
+}
+.meet-team {
+  padding: 30px 20px;
+}
 .parallax-block {
   transition: none;
   position: fixed;
@@ -20076,4 +20100,26 @@ input {
   -ms-perspective: 1000px;
   -o-perspective: 1000px;
   perspective: 1000px;
+}
+@media (max-width: 767px) {
+  .navbar .nav {
+    padding-bottom: 30px;
+  }
+  .navbar .nav > li {
+    float: none;
+  }
+  .navbar-default {
+    padding: 0 20px;
+  }
+  .navbar-brand {
+    max-width: 240px;
+  }
+  #main-area .btn-orange {
+    width: 100%;
+  }
+  .copyright,
+  .powered-by {
+    text-align: center;
+    padding: 0;
+  }
 }
