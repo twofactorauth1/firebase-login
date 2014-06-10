@@ -2,7 +2,7 @@
  * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
  *
  * All use or reproduction of any or all of this content must be approved.
- * Please contact info@INDIGENOUS SOFTWARE, INC. for approval or questions.
+ * Please contact info@indigenous.io for approval or questions.
  */
 
 var environments = {
@@ -29,7 +29,7 @@ if (process.env.IS_PROXIED == null){
 
 /**
  * For local:  indigenous.local, localhost, etc.  -- modify hosts file to point 127.0.0.1 to app.INDIGENOUS SOFTWARE, INC.
- * For production: INDIGENOUS SOFTWARE, INC.
+ * For production: indigenous.io
  */
 if (process.env.ROOT_HOST == null) {
     //process.env.ROOT_HOST = "indigenous.local";
@@ -50,7 +50,7 @@ if (process.env.IS_SECURE == null) {
 
 /**
  * A "whitelist" of subdomains that are never "account specific".
- * If a use hits one of these, they are at the main INDIGENOUS SOFTWARE, INC. app.
+ * If a use hits one of these, they are at the main indigenous.io app.
  */
 process.env.GLOBAL_SUBDOMAINS = "www,home,app";
 
@@ -76,7 +76,7 @@ module.exports = {
     environment: process.env.NODE_ENV,
     port: process.env.PORT,
     server_url: serverUrl,
-    support_email: "support@indigenous.com",
+    support_email: "support@indigenous.io",
     cluster:false,
     freeCpus:2,
 
