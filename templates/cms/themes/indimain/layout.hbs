@@ -70,6 +70,11 @@
            (function($) {
              $(document).ready(function() {
 
+                if ($('#sidebar').length) {
+                  var sidebarHeight = $('#sidebar').height();
+                  $('#main-area').css('min-height', sidebarHeight+50);
+                }
+
                 $('.parallax').parallax({
                     scroll_factor: 0.5
                   });
@@ -90,12 +95,12 @@
 
                 $(".feature-single-1").waypoint(function (direction) {
                     $(this).addClass("animated fadeIn");
-                }, { offset: $.waypoints('viewportHeight') - 200,
+                }, { offset: $.waypoints('viewportHeight') - 275,
                     triggerOnce: true});
 
                 $(".feature-single-2").waypoint(function (direction) {
                     $(this).addClass("animated fadeIn");
-                }, { offset: $.waypoints('viewportHeight') - 300,
+                }, { offset: $.waypoints('viewportHeight') - 400,
                     triggerOnce: true});
 
                 $("div[data-class=profilepic]").waypoint(function (direction) {

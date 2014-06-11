@@ -19752,7 +19752,7 @@ ul #center-circle {
 }
 .copyright {
   margin-top: 10px;
-  text-align: right;
+  text-align: left;
 }
 .twit {
   background-position: -33px 0;
@@ -19912,7 +19912,7 @@ div[data-class='position'] span {
   text-decoration: none;
 }
 .footer-logo {
-  margin: -70px 5px 0 0;
+  margin: -50px 5px 0 0;
 }
 #assets {
   border-bottom: 3px solid #5db8d0 !important;
@@ -20064,6 +20064,9 @@ input {
 .meet-team {
   padding: 30px 20px;
 }
+.powered-by {
+  text-align: right;
+}
 .parallax-block {
   transition: none;
   position: fixed;
@@ -20121,5 +20124,14 @@ input {
   .powered-by {
     text-align: center;
     padding: 0;
+  }
+  .footer-logo {
+    margin: -80px -9px 0 0;
+  }
+  #content-area {
+    background: #f7f7f7;
+  }
+  #sidebar {
+    padding: 50px 20px;
   }
 }
