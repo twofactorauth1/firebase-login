@@ -70,14 +70,26 @@
            (function($) {
              $(document).ready(function() {
 
-                if ($('#sidebar').length) {
+                function changeSidebarHeight() {
                   var sidebarHeight = $('#sidebar').height();
                   $('#main-area').css('min-height', sidebarHeight+50);
                 }
 
+                if ($('#sidebar').length) {
+                  changeSidebarHeight();
+                  $( window ).resize(function() {
+                    changeSidebarHeight();
+                  });
+                }
+
                 $('.parallax').parallax({
                     scroll_factor: 0.5
-                  });
+                });
+
+                if (window.top!=window.self)
+                {
+                  $('.feature-single-0, .feature-single-1, .feature-single-2, div[data-class=profilepic], .btn-outline').css('opacity', 1);
+                }
 
                 // $('div[data-type="background"]').each(function(){
                 //     var $bgobj = $(this);

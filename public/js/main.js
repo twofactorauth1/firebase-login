@@ -37,6 +37,7 @@ require.config({
         text: "libs/requirejs/plugins/text",
         leaflet: 'libs/leaflet/leaflet',
         colorthief: 'libs/colorthief/colorthief',
+        waypoints: 'libs/waypoints/waypoints.min',
 
         //UI SPECIFIC
         toggles: 'libs/misc/toggles.min'
@@ -108,7 +109,8 @@ require.config({
                 //UI SPECIFIC
                 'toggles',
                 'leaflet',
-                'colorthief'
+                'colorthief',
+                'waypoints',
             ]
         }
     },

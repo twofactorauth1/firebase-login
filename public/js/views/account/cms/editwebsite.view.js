@@ -144,7 +144,6 @@ define([
             return this;
         },
 
-
         onWebsiteEdit: function(event) {
             var data = arguments[1];
             var target = data.target;
