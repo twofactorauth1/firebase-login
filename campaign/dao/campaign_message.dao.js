@@ -1,5 +1,5 @@
 /**
- * COPYRIGHT INDIGENOUS.IO, LLC 2014
+ * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
  *
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
@@ -16,10 +16,7 @@ var dao = {
     },
 
     createCampaignMessage: function(
-        campaignId,
-        subject,
-        fromEmail,
-        fromName,
+        campaign,
         contactId,
         contactName,
         contactEmail,
@@ -31,19 +28,23 @@ var dao = {
 
         var self = this;
 
-        if ($$.u.stringutils.isNullOrEmpty(campaignId)) {
+        if (!campaign) {
+            return fn(new Error("A campaign was not specified"), null);
+        }
+
+        if ($$.u.stringutils.isNullOrEmpty(campaign.attributes._id)) {
             return fn(new Error("A campaign id was not specified"), null);
         }
 
-        if ($$.u.stringutils.isNullOrEmpty(subject)) {
+        if ($$.u.stringutils.isNullOrEmpty(campaign.attributes.subject)) {
             return fn(new Error("An email subject was not specified"), null);
         }
 
-        if ($$.u.stringutils.isNullOrEmpty(fromEmail)) {
+        if ($$.u.stringutils.isNullOrEmpty(campaign.attributes.fromEmail)) {
             return fn(new Error("A fromEmail was not specified"), null);
         }
 
-        if ($$.u.stringutils.isNullOrEmpty(fromName)) {
+        if ($$.u.stringutils.isNullOrEmpty(campaign.attributes.fromName)) {
             return fn(new Error("A fromName was not specified"), null);
         }
 
@@ -64,10 +65,10 @@ var dao = {
         }
 
         var campaignMessage = new $$.m.CampaignMessage({
-            campaignId: campaignId,
-            subject: subject,
-            fromEmail: fromEmail,
-            fromName: fromName,
+            campaignId: campaign.attributes._id,
+            subject: campaign.attributes.subject,
+            fromEmail: campaign.attributes.fromEmail,
+            fromName: campaign.attributes.fromName,
             contactId: contactId,
             contactName: contactName,
             contactEmail: contactEmail,

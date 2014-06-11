@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact info@indigenous.io for approval or questions.
+ */
+
 require('./dao/campaign.dao.js');
 require('./dao/campaign_message.dao.js');
 
@@ -115,101 +122,145 @@ module.exports = {
     addContactToMandrillCampaign: function(campaignId, contactId, arrayOfMessageVarArrays, callback) {
         var self = this;
 
-        self._getCampaign(campaignId, self.MANDRILL_CAMPAIGN, function (err, campaign) {
+        /**
+         * Make sure contact is not already in campaign
+         */
+        $$.dao.CampaignMessageDao.findOne({'campaignId': campaignId, 'contactId': contactId}, function(err, value) {
             if (err) {
+                self.log.error(err.message);
                 return callback(err, null);
             }
 
-            self.log.debug("Found campaign " + JSON.stringify(campaign, null, 2));
-
-            var messageDates = self._getMessageDates(campaign.attributes.numberOfMessages,
-                campaign.attributes.messageDeliveryFrequency);
-
-            if (messageDates.length < 1) {
-                return callback(new Error("Was unable to determine what messages to send"), null);
+            if (value) {
+                return callback(new Error("Contact " + contactId + " has already been added to campaign " + campaignId), null);
             }
 
-            self.log.debug("Will schedule " + messageDates.length + " messages");
-
-            if (arrayOfMessageVarArrays) {
-                if (!Array.isArray(arrayOfMessageVarArrays)) {
-                    return callback(new Error("arrayOfMessageVarArrays must be an array"), null);
-                }
-
-                if (messageDates.length != arrayOfMessageVarArrays.length) {
-                    return callback(new Error("Expected either null or " + messageDates.length
-                        + " arrays in arrayOfMessageVarArrays"), null);
-                }
-            }
-
-            self._getContactInfo(contactId, function(err, contactInfo) {
+            self._getCampaign(campaignId, self.MANDRILL_CAMPAIGN, function (err, campaign) {
                 if (err) {
                     return callback(err, null);
                 }
 
-                self.log.debug("Found contact " + JSON.stringify(contactInfo, null, 2));
+                self.log.debug("Found campaign " + JSON.stringify(campaign, null, 2));
 
-                var messages = [];
+                var messageDates = self._getMessageDates(campaign.attributes.numberOfMessages,
+                    campaign.attributes.messageDeliveryFrequency);
 
-                function sendMessage(sendAt) {
-                    if (!sendAt) {
-                        return callback(null, messages);
-                    }
-
-                    self._sendMessageToMandrill(
-                        campaignId,
-                        campaign.attributes.subject,
-                        campaign.attributes.fromEmail,
-                        campaign.attributes.fromName,
-                        contactId,
-                        contactInfo.name,
-                        contactInfo.email,
-                        sendAt,
-                        arrayOfMessageVarArrays ? arrayOfMessageVarArrays[i] : null,
-                        function (err, mandrillMessage) {
-                            if (err) {
-                                return callback(err, messages);
-                            }
-
-                            self.log.debug("Wrote to Mandrill: " + JSON.stringify(mandrillMessage, null, 2));
-
-                            /**
-                             * Write it to our database
-                             */
-                            $$.dao.CampaignMessageDao.createCampaignMessage(
-                                campaignId,
-                                campaign.attributes.subject,
-                                campaign.attributes.fromEmail,
-                                campaign.attributes.fromName,
-                                contactId,
-                                contactInfo.name,
-                                contactInfo.email,
-                                sendAt,
-                                arrayOfMessageVarArrays ? arrayOfMessageVarArrays[i] : null,
-                                mandrillMessage.status,
-                                mandrillMessage._id,
-                                function(err, message) {
-                                    if (err) {
-                                        return callback(err, null);
-                                    }
-                                    self.log.debug("Wrote dao message: " + JSON.stringify(message, null, 2));
-                                    messages.push(message);
-                                    return sendMessage(messageDates.shift());
-                                }
-                            )
-                        });
+                if (messageDates.length < 1) {
+                    return callback(new Error("Was unable to determine what messages to send"), null);
                 }
 
-                sendMessage(messageDates.shift());
+                self.log.debug("Will schedule " + messageDates.length + " messages");
+
+                if (arrayOfMessageVarArrays) {
+                    if (!Array.isArray(arrayOfMessageVarArrays)) {
+                        return callback(new Error("arrayOfMessageVarArrays must be an array"), null);
+                    }
+
+                    if (messageDates.length != arrayOfMessageVarArrays.length) {
+                        return callback(new Error("Expected either null or " + messageDates.length
+                            + " arrays in arrayOfMessageVarArrays"), null);
+                    }
+                }
+
+                self._getContactInfo(contactId, function (err, contactInfo) {
+                    if (err) {
+                        return callback(err, null);
+                    }
+
+                    self.log.debug("Found contact " + JSON.stringify(contactInfo, null, 2));
+
+                    var messages = [];
+
+                    function sendMessage(sendAt) {
+                        if (!sendAt) {
+                            return callback(null, messages);
+                        }
+
+                        var mergeVars = arrayOfMessageVarArrays ? arrayOfMessageVarArrays.shift() : null;
+
+                        self._sendMessageToMandrill(
+                            campaign,
+                            contactId,
+                            contactInfo.name,
+                            contactInfo.email,
+                            sendAt,
+                            mergeVars,
+                            function (err, mandrillMessage) {
+                                if (err) {
+                                    return callback(err, messages);
+                                }
+
+                                self.log.debug("Wrote to Mandrill: " + JSON.stringify(mandrillMessage, null, 2));
+
+                                /**
+                                 * Write it to our database
+                                 */
+                                $$.dao.CampaignMessageDao.createCampaignMessage(
+                                    campaign,
+                                    contactId,
+                                    contactInfo.name,
+                                    contactInfo.email,
+                                    sendAt,
+                                    mergeVars,
+                                    mandrillMessage.status,
+                                    mandrillMessage._id,
+                                    function (err, message) {
+                                        if (err) {
+                                            return callback(err, null);
+                                        }
+                                        self.log.debug("Wrote dao message: " + JSON.stringify(message, null, 2));
+                                        messages.push(message);
+                                        return sendMessage(messageDates.shift());
+                                    }
+                                )
+                            });
+                    }
+
+                    sendMessage(messageDates.shift());
+                })
             })
         })
     },
 
+    cancelMandrillCampaign: function(campaignId, callback) {
+        this._cancelMandrillCampaignMessages({'campaignId': campaignId }, callback);
+    },
+
+    removeContactFromMandrillCampaign: function(campaignId, contactId, callback) {
+        this._cancelMandrillCampaignMessages({'campaignId': campaignId, 'contactId': contactId}, callback);
+    },
+
+    _cancelMandrillCampaignMessages: function(query, callback) {
+        var self = this;
+
+        $$.dao.CampaignMessageDao.findMany(query, function (err, messages) {
+            if (err) {
+                self.log.error(err.message);
+                return callback(err, null);
+            }
+
+            self.log.debug("Will need to remove " + messages.length + " messages matching " + JSON.stringify(query));
+
+            function cancelMessage(message) {
+                if (!message) {
+                    return callback(null);
+                }
+
+                if (message.attributes.messageStatus == 'scheduled') {
+                    self.log.debug("need to cancel message " + message.attributes.externalId);
+                    //TODO: cancel with Mandrill
+                }
+
+                // TODO remove from DB
+                cancelMessage(messages.shift());
+            }
+
+            cancelMessage(messages.shift());
+        })
+    },
+
     _sendMessageToMandrill: function(
-        campaignId,
-        subject,
-        fromEmail,
-        fromName,
+        campaign,
         contactId,
         contactName,
         contactEmail,
@@ -220,16 +271,16 @@ module.exports = {
         var self = this;
 
         var message = {
-            "subject": subject,
-            "from_email": fromEmail,
-            "from_name": fromName,
+            "subject": campaign.attributes.subject,
+            "from_email": campaign.attributes.fromEmail,
+            "from_name": campaign.attributes.fromName,
             "to": [{
                 "email": contactEmail,
                 "name": contactName,
                 "type": "to"
             }],
             "headers": {
-                "Reply-To": fromEmail
+                "Reply-To": campaign.attributes.fromEmail
             },
             "important": false,
             "track_opens": true,
@@ -248,7 +299,7 @@ module.exports = {
             "global_merge_vars": mergeVarsArray,
             "merge_vars": null,
             "tags": [
-                campaignId
+                campaign.attributes._id
             ],
             "subaccount": null,
             "google_analytics_domains": [
@@ -256,7 +307,7 @@ module.exports = {
             ],
             "google_analytics_campaign": null,
             "metadata": {
-                "campaignId": campaignId
+                "campaignId": campaign.attributes._id
             },
             "recipient_metadata": [{
                 "rcpt": contactEmail,
@@ -268,36 +319,37 @@ module.exports = {
             "images": null
         }
 
-        self.log.debug("Sending message to Mandrill: " + JSON.stringify(message, null, 2));
+        self.log.debug("Sending to Mandrill => templateName: " +  campaign.attributes.templateName +
+            " on " + sendAt + " message: " + JSON.stringify(message, null, 2));
 
-        //TODO:
-        return callback(null, {
-            "status": "sent",
-            "_id": "92398321892314923409231"
+//        return callback(null, {
+//            "status": "scheduled",
+//            "_id": "abc123abc123abc123abc123abc123"
+//        })
+
+        mandrill_client.messages.sendTemplate(
+            {
+                "template_name": campaign.attributes.templateName,
+                "template_content": null,
+                "message": message,
+                "async": false,
+                "send_at": sendAt
+            }, function(result) {
+                self.log.debug(result);
+                /*
+                 [{
+                 "email": "recipient.email@example.com",
+                 "status": "sent",
+                 "reject_reason": "hard-bounce",
+                 "_id": "abc123abc123abc123abc123abc123"
+                 }]
+                 */
+                return callback(null, result[0]);
+        }, function(e) {
+            // Mandrill returns the error as an object with name and message keys
+            self.log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+            return callback(new Error('A mandrill error occurred: ' + e.name + ' - ' + e.message), null);
         });
-
-//        mandrill_client.messages.sendTemplate(
-//            {
-//                "template_name": campaign.attributes.templateName,
-//                "message": message,
-//                "async": async,
-//                "send_at": sendAt
-//            }, function(result) {
-//                self.log.debug(result);
-//                /*
-//                 [{
-//                 "email": "recipient.email@example.com",
-//                 "status": "sent",
-//                 "reject_reason": "hard-bounce",
-//                 "_id": "abc123abc123abc123abc123abc123"
-//                 }]
-//                 */
-//                return callback(null, result);
-//        }, function(e) {
-//            // Mandrill returns the error as an object with name and message keys
-//            self.log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-//            return callback(new Error('A mandrill error occurred: ' + e.name + ' - ' + e.message), null);
-//        });
     },
 
     _getCampaign: function(campaignId, campaignType, callback) {
