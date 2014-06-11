@@ -1,3 +1,10 @@
+/**
+ * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact info@indigenous.io for approval or questions.
+ */
+
 process.env.NODE_ENV = "testing";
 var app = require('../../app');
 
@@ -33,25 +40,25 @@ exports.campaign_manager_test = {
 //                test.done();
 //            })
 //    },
-//
-//    testAddCampaign: function(test) {
-//        CampaignManager.createMandrillCampaign(
-//            "testCampaign",
-//            "Dummy Campaign",
-//            "1.0",
-//            "test1template",
-//            3,
-//            CampaignManager.EVERY_OTHER_DAY,
-//            function(err, campaign) {
-//                if (err) {
-//                    test.ok(false, err.message);
-//                }
-//                test.ok(campaign);
-//                console.log(JSON.stringify(campaign));
-//                campaignId = campaign.attributes._id;
-//                test.done();
-//            })
-//    },
+
+    testAddCampaign: function(test) {
+        CampaignManager.createMandrillCampaign(
+            "testCampaign",
+            "Dummy Campaign",
+            "1.0",
+            "test1template",
+            2,
+            CampaignManager.EVERY_OTHER_DAY,
+            function(err, campaign) {
+                if (err) {
+                    test.ok(false, err.message);
+                }
+                test.ok(campaign.attributes._id);
+                console.log("Created campaign: " + JSON.stringify(campaign, null, 2));
+                campaignId = campaign.attributes._id;
+                test.done();
+            })
+    },
 
     testAddContactToMandrillCampaign: function(test) {
 
@@ -60,7 +67,7 @@ exports.campaign_manager_test = {
             last: "Lecter"
         })
 
-        contact.createOrUpdateDetails(null, null, null, null, null, null, ["cmelean@yahoo.com"], null);
+        contact.createOrUpdateDetails(null, null, null, null, null, null, ["calixto@melean.com"], null);
 
         contactDao.saveOrMerge(contact, function (err, contact) {
             if (err) {
@@ -68,18 +75,56 @@ exports.campaign_manager_test = {
                 return test.done();
             }
 
+            test.ok(contact);
+
             console.log("Created contact " + JSON.stringify(contact, null, 2));
 
-            //TODO: remove
-            campaignId = "50cf9b8c-ea36-452a-a66e-52a27fd6df74";
+            var mergeVars = [
+                [ // first message
+                    {
+                        "name": "balance",
+                        "content": "100"
+                    },
+                    {
+                        "name" : "dueDate",
+                        "content" : "01/01/2014"
+                    }
+                ],
+                [ // second message
+                    {
+                        "name": "balance",
+                        "content": "200"
+                    },
+                    {
+                        "name" : "dueDate",
+                        "content" : "02/01/2014"
+                    }
+                ]
+            ];
 
-            CampaignManager.addContactToMandrillCampaign(campaignId, contact.attributes._id, null, function (err, value) {
+            CampaignManager.addContactToMandrillCampaign(campaignId, contact.attributes._id, mergeVars, function (err, messages) {
                 if (err) {
                     test.ok(false, err.message);
                     return test.done();
                 }
 
-                console.log(JSON.stringify(value, null, 2));
+                test.equal(messages.length, 2);
+                console.log("Messages returned by addContactToMandrillCampaign: " + JSON.stringify(messages, null, 2));
+
+                CampaignManager.addContactToMandrillCampaign(campaignId, contact.attributes._id, mergeVars, function (err, messages) {
+                    if (!err) {
+                        test.ok(false, "should have failed because contact was already in campaign");
+                        return test.done();
+                    }
+
+                    console.log(err.message);
+                    CampaignManager.removeContactFromMandrillCampaign(campaignId, contact.attributes._id, function (err, response) {
+                        if (err) {
+                            test.ok(false, err.message);
+                        }
+                        return test.done();
+                    })
+                })
             })
         })
     }
