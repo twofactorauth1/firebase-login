@@ -8,6 +8,7 @@
 var cookies = require('../utils/cookieutil');
 var authenticationDao = require('../dao/authentication.dao');
 var securityManager = require('../security/securitymanager');
+var logger = $$.g.getLogger("baserouter");
 
 var baseRouter = function(options) {
     this.init.apply(this, arguments);
@@ -45,10 +46,14 @@ _.extend(baseRouter.prototype, {
             accountDao.getAccountByHost(req.get("host"), function(err, value) {
                 if (!err && value != null) {
                     if (value === true) {
+                        logger.debug("host: " + req.get("host") + " -> accountId:0");
                         req.session.accountId = 0;
                     } else {
+                        logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
                         req.session.accountId = value.id();
                     }
+                } else {
+                    logger.warn("Error from getAccountByHost");
                 }
 
                 return next();

@@ -32,7 +32,7 @@ var urlutils = {
         //if we're length two+ and hosts[0] == www, we need to check hosts[1+] against our account.domain
 
         var oHost = host;
-        host = host.replace("www", "");
+        host = host.replace("www.", "");
         var portIndex = host.indexOf(":");
         if (portIndex > -1) {
             host = host.substr(0, portIndex);

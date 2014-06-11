@@ -139,7 +139,8 @@ module.exports = function(grunt) {
             twonetclient:['biometrics/twonet/client/test/**/*_test.js'],
             twonetpoll:['biometrics/twonet/adapter/test/twonet_test_poll.js'],
             runkeeperadapter:['biometrics/runkeeper/adapter/test/**/*_test.js'],
-            runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js']
+            runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
+            utils:['utils/test/*_test.js']
         }
     });
 
@@ -164,4 +165,5 @@ module.exports = function(grunt) {
     grunt.registerTask('testRunkeeperadapter', ['nodeunit:runkeeperadapter']);
     grunt.registerTask('testRunkeeperpoll', ['nodeunit:runkeeperpoll']);
     grunt.registerTask('testBiometrics', ['nodeunit:twonetclient','nodeunit:biometricsPlatform','nodeunit:twonetadapter','nodeunit:twonetpoll','nodeunit:runkeeperadapter','nodeunit:runkeeperpoll']);
+    grunt.registerTask('testUtils', ['nodeunit:utils']);
 };

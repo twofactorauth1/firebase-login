@@ -8,7 +8,8 @@
 var environments = {
     DEVELOPMENT: "development",
     PRODUCTION: "production",
-    STAGING: "staging"
+    STAGING: "staging",
+    TESTING: "testing"
 };
 
 //---------------------------------------------------------
@@ -32,8 +33,12 @@ if (process.env.IS_PROXIED == null){
  * For production: indigenous.io
  */
 if (process.env.ROOT_HOST == null) {
-    //process.env.ROOT_HOST = "indigenous.local";
-    process.env.ROOT_HOST = "indigenous.io";
+    if(process.env.NODE_ENV == environments.DEVELOPMENT) {
+        process.env.ROOT_HOST = "indigenous.local";
+    } else {
+        process.env.ROOT_HOST = "indigenous.io";
+    }
+
 }
 
 
