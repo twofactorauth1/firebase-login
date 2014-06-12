@@ -15,31 +15,31 @@ var contactDao = require('../../dao/contact.dao');
 var campaignId;
 
 exports.campaign_manager_test = {
-//    testAddNonExistingCampaign: function(test) {
-//        test.expect(2);
-//        CampaignManager.addContactToMandrillCampaign("123", "123", [], function(err, value) {
-//            console.log(err.message);
-//            test.notEqual(err, null);
-//            test.equal(value, null);
-//            test.done();
-//        })
-//    },
-//
-//    testAddCampaignBadTemplate: function(test) {
-//        CampaignManager.createMandrillCampaign(
-//            "testCampaign",
-//            "Dummy Campaign",
-//            1,
-//            "bad_template_name",
-//            3,
-//            CampaignManager.EVERY_OTHER_DAY,
-//            function(err, campaign) {
-//                test.notEqual(err, null);
-//                test.equal(campaign, null);
-//                console.error(err.message);
-//                test.done();
-//            })
-//    },
+    testAddNonExistingCampaign: function(test) {
+        test.expect(2);
+        CampaignManager.addContactToMandrillCampaign("123", "123", [], function(err, value) {
+            console.log(err.message);
+            test.notEqual(err, null);
+            test.equal(value, null);
+            test.done();
+        })
+    },
+
+    testAddCampaignBadTemplate: function(test) {
+        CampaignManager.createMandrillCampaign(
+            "testCampaign",
+            "Dummy Campaign",
+            1,
+            "bad_template_name",
+            3,
+            CampaignManager.EVERY_OTHER_DAY,
+            function(err, campaign) {
+                test.notEqual(err, null);
+                test.equal(campaign, null);
+                console.error(err.message);
+                test.done();
+            })
+    },
 
     testAddCampaign: function(test) {
         CampaignManager.createMandrillCampaign(
@@ -67,7 +67,7 @@ exports.campaign_manager_test = {
             last: "Lecter"
         })
 
-        contact.createOrUpdateDetails(null, null, null, null, null, null, ["calixto@melean.com"], null);
+        contact.createOrUpdateDetails(null, null, null, null, null, null, ["kyle.miller@commitworks.com"], null);
 
         contactDao.saveOrMerge(contact, function (err, contact) {
             if (err) {
@@ -118,7 +118,7 @@ exports.campaign_manager_test = {
                     }
 
                     console.log(err.message);
-                    CampaignManager.removeContactFromMandrillCampaign(campaignId, contact.attributes._id, function (err, response) {
+                    CampaignManager.cancelContactMandrillCampaign(campaignId, contact.attributes._id, function (err, response) {
                         if (err) {
                             test.ok(false, err.message);
                         }

@@ -36,7 +36,7 @@ module.exports = {
     createMandrillCampaign: function(
         name,
         description,
-        version,
+        revision,
         templateName,
         numberOfMessages,
         messageDeliveryFrequency,
@@ -61,7 +61,7 @@ module.exports = {
             $$.dao.CampaignDao.createCampaign(
                 name,
                 description,
-                version,
+                revision,
                 templateName,
                 result.subject,
                 result.from_name,
@@ -226,7 +226,7 @@ module.exports = {
         this._cancelMandrillCampaignMessages({'campaignId': campaignId }, callback);
     },
 
-    removeContactFromMandrillCampaign: function(campaignId, contactId, callback) {
+    cancelContactMandrillCampaign: function(campaignId, contactId, callback) {
         this._cancelMandrillCampaignMessages({'campaignId': campaignId, 'contactId': contactId}, callback);
     },
 
@@ -246,13 +246,25 @@ module.exports = {
                     return callback(null);
                 }
 
-                if (message.attributes.messageStatus == 'scheduled') {
-                    self.log.debug("need to cancel message " + message.attributes.externalId);
-                    //TODO: cancel with Mandrill
-                }
+                $$.dao.CampaignMessageDao.removeById(message.attributes._id, function (err, value) {
+                    if (err) {
+                        self.log.error("Failed to remove campaign message " + message.attributes._id +
+                            ": " + err.message);
+                    }
 
-                // TODO remove from DB
-                cancelMessage(messages.shift());
+                    if (message.attributes.messageStatus == 'scheduled') {
+                        self.log.debug("need to cancel message " + message.attributes.externalId);
+                        mandrill_client.messages.cancelScheduled({"id": message.attributes.externalId}, function (result) {
+                            self.log.debug("Mandrill message " + message.attributes.externalId + " cancelled: " +
+                                JSON.stringify(result));
+                        }, function (e) {
+                            self.log.error("Failed to cancel mandrill message " + message.attributes.externalId + ": " +
+                                e.name + ' - ' + e.message);
+                        });
+                    }
+
+                    cancelMessage(messages.shift());
+                })
             }
 
             cancelMessage(messages.shift());
@@ -321,11 +333,6 @@ module.exports = {
 
         self.log.debug("Sending to Mandrill => templateName: " +  campaign.attributes.templateName +
             " on " + sendAt + " message: " + JSON.stringify(message, null, 2));
-
-//        return callback(null, {
-//            "status": "scheduled",
-//            "_id": "abc123abc123abc123abc123abc123"
-//        })
 
         mandrill_client.messages.sendTemplate(
             {

@@ -29,6 +29,9 @@ var biometricsPlatform = require('./1.0/biometricsplatform.api');
 var twonetAdapterApi = require('./1.0/twonetadapter.api');
 var runkeeperApi = require('./1.0/runkeeperadapter.api');
 
+// Campaigns
+var campaignManager = require('./1.0/campaignmanager.api');
+
 module.exports = {
 
 };

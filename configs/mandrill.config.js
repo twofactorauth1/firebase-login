@@ -9,6 +9,5 @@ module.exports = {
     /**
      * Client API Key
      */
-    CLIENT_API_KEY: 'Yh-J5BT-NPgbcYZ1TjyCiQ' // Test Key (no emails are attempted)
-    //CLIENT_API_KEY: 'BKNPtlu0JGZIBm-IEPoqFQ'
+    CLIENT_API_KEY: 'Yh-J5BT-NPgbcYZ1TjyCiQ'
 }
