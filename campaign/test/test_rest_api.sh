@@ -41,3 +41,14 @@ curl -X POST http://localhost:3000/api/1.0/campaignmanager/campaign/7b9c5fde-af4
 
 # cancel contact's campaign
 curl -X DELETE http://localhost:3000/api/1.0/campaignmanager/campaign/7b9c5fde-af4e-425c-bf91-e78f4df6f5f4/contact/2 --header "Content-Type:application/json"
+
+# Get campaign
+curl -X GET http://localhost:3000/api/1.0/campaignmanager/campaign/7b9c5fde-af4e-425c-bf91-e78f4df6f5f4
+
+# listing campaigns
+curl -X GET http://localhost:3000/api/1.0/campaignmanager/campaigns --header "Content-Type:application/json"
+curl -X GET "http://localhost:3000/api/1.0/campaignmanager/campaigns?name=Beer%20Campaign"
+
+# listing campaign messages
+curl -X GET http://localhost:3000/api/1.0/campaignmanager/campaign/7b9c5fde-af4e-425c-bf91-e78f4df6f5f4/messages
+curl -X GET http://localhost:3000/api/1.0/campaignmanager/campaign/7b9c5fde-af4e-425c-bf91-e78f4df6f5f4/messages?contactId=3

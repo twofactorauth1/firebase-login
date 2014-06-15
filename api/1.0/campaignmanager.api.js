@@ -23,6 +23,68 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('campaign/:id/contact/:contactid'), this.addContactToCampaign.bind(this));
         app.delete(this.url('campaign/:id'), this.cancelCampaign.bind(this));
         app.delete(this.url('campaign/:id/contact/:contactid'), this.cancelContactCampaign.bind(this));
+        app.get(this.url('campaigns'), this.findCampaigns.bind(this));
+        app.get(this.url('campaign/:id/messages'), this.findCampaignMessages.bind(this));
+        app.get(this.url('campaign/:id'), this.getCampaign.bind(this));
+    },
+
+    getCampaign: function(req,resp) {
+        var self = this;
+
+        campaignManager.getCampaign(req.params.id, function(err, value) {
+            if (err) {
+                var errorMsg = "There was an error getting campaign " + req.params.id + ": " + err.message;
+                self.log.error(errorMsg);
+                self.log.error(err.stack);
+                self.wrapError(resp, 500, errorMsg, err, value);
+            } else {
+                self.sendResult(resp, value);
+            }
+        })
+    },
+
+    findCampaigns: function(req,resp) {
+        var self = this;
+
+        if (!req.query._id) {
+            req.query._id = { $ne: "__counter__" };
+        }
+
+        campaignManager.findCampaigns(req.query, function(err, value) {
+            if (err) {
+                var errorMsg = "There was an error finding campaign: " + err.message;
+                self.log.error(errorMsg);
+                self.log.error(err.stack);
+                self.wrapError(resp, 500, errorMsg, err, value);
+            } else {
+                self.sendResult(resp, value);
+            }
+        })
+    },
+
+    findCampaignMessages: function(req,resp) {
+        var self = this;
+
+        req.query.campaignId = req.params.id;
+
+        if (!req.query._id) {
+            req.query._id = { $ne: "__counter__" };
+        }
+
+        if (req.query.contactId) {
+            req.query.contactId = parseInt(req.query.contactId);
+        }
+
+        campaignManager.findCampaignMessages(req.query, function(err, value) {
+            if (err) {
+                var errorMsg = "There was an error finding campaign messages: " + err.message;
+                self.log.error(errorMsg);
+                self.log.error(err.stack);
+                self.wrapError(resp, 500, errorMsg, err, value);
+            } else {
+                self.sendResult(resp, value);
+            }
+        })
     },
 
     cancelCampaign: function(req, resp) {

@@ -33,6 +33,18 @@ module.exports = {
 
     log: $$.g.getLogger("campaign_manager"),
 
+    getCampaign: function(campaignId, fn) {
+        $$.dao.CampaignDao.getById(campaignId, fn);
+    },
+
+    findCampaigns: function(query, fn) {
+        $$.dao.CampaignDao.findMany(query, fn);
+    },
+
+    findCampaignMessages: function(query, fn) {
+        $$.dao.CampaignMessageDao.findMany(query, fn);
+    },
+
     createMandrillCampaign: function(
         name,
         description,
