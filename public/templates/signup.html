@@ -7,22 +7,26 @@
 
 <script type="text/x-handlebars-template" name="signup-main">
     <section class="mainpanel">
-        {{> signup-controls }}
-        {{> signup-start }}
-        {{> signup-details }}
-        {{> signup-create }}
+        <span class="logo"></span>
+        <div class="signup-inner row">
+            <div class="col-xs-1">
+                <a class="left-nav"></a>
+            </div>
+            <div class="panels col-xs-10">
+                {{> signup-start }}
+                {{> signup-details }}
+                {{> signup-create }}
+            </div>
+            <div class="col-xs-1">
+                <a class="right-nav {{#superUnless "or" isProfessional isBusiness isEnterprise}}hidden{{/superUnless}}"></a>
+            </div>
+        </div>
     </section>
-</script>
-
-<script type="text/x-handlebars-template" name="signup-controls" partial="true">
-    <a class="left-nav"></a>
-    <a class="right-nav {{#superUnless "or" isProfessional isBusiness isEnterprise}}hidden{{/superUnless}}"></a>
-    <span class="logo"></span>
 </script>
 
 <script type="text/x-handlebars-template" name="signup-start" partial="true">
     <div id="start" class="signuppanel" style="{{#equals place 'start'}}display:block{{/equals}}">
-            <div class="form" style="">
+            <div class="form form-inner" style="">
             <ul id="progressbar">
                 <li class="active"></li>
                 <li></li>
@@ -51,7 +55,7 @@
 
 <script type="text/x-handlebars-template" name="signup-details" partial="true">
     <div id="details" class="signuppanel" style="{{#equals place 'details'}}display:block{{/equals}}">
-        <div class="form">
+        <div class="form form-inner">
             <ul id="progressbar">
                 <li></li>
                 <li class="active"></li>
@@ -135,14 +139,14 @@
 
 <script type="text/x-handlebars-template" name="signup-create" partial="true">
     <div id="create" class="signuppanel" style="{{#equals place 'create'}}display:block{{/equals}}">
-        <div class="form">
+        <div class="form form-inner">
             <ul id="progressbar">
         	<li></li>
         	<li></li>
         	<li class="active"></li>
             </ul>
-            <h3>Create an account</h3>
-
+            <h4>Create an account</h4>
+            <hr></hr>
             <div class="row social">
                 <a href="/signup/facebook" class="btn btn-large btn-default">
                     <i class="fa fa-facebook"/>

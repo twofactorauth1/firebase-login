@@ -1,9 +1,11 @@
 /* sign up */
 
 .signuppanel {
-  width: 90%;
-  margin: 0 10%;
-  position: absolute;
+  max-width: 450px;
+  margin: 50px auto;
+  text-align: center;
+  position: relative;
+  width: 100%;
 }
 
 .mainpanel .signuppanel  {
@@ -12,7 +14,7 @@
 
 .mainpanel .logo {
   padding: 15px;
-  margin: 15px auto;
+  margin: 15px auto 30px;
   display: block;
   width: 100%;
   max-width: 300px;
@@ -61,9 +63,9 @@
   border: 1px solid #ccc;
   .box-shadow(0 0 5px 1px rgba(0, 0, 0, 0.1));
   border-radius: 3px;
-  padding: 30px;
-  width: 90%;
-  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+  margin: 0 auto 50px;
   position: absolute;
 }
 
@@ -97,11 +99,96 @@
 .termsOfuse {
 }
 
+.left-nav {
+  background: url(../assets/images/left-nav.png) 0 0 no-repeat;
+  background-size: cover;
+  width: 60px;
+  height: 60px;
+  display: block;
+  position: absolute;
+  left: 0;
+  margin-top: 180px;
+}
+.right-nav {
+  background: url(../assets/images/right-nav.png) 0 0 no-repeat;
+  background-size: cover;
+  width: 60px;
+  height: 60px;
+  display: block;
+  position: absolute;
+  right: 0;
+  margin-top: 180px;
+}
+
+.signup-inner {
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.form-inner h3 {
+  margin-top: 0;
+}
+
+/*progressbar*/
+#progressbar {
+  margin-bottom: 15px;
+  overflow: hidden;
+  /*CSS counters to number the steps*/
+  counter-reset: step;
+  text-align: center;
+}
+#progressbar li {
+  list-style-type: none;
+  color: white;
+  text-transform: uppercase;
+  font-size: 9px;
+  width: 33.33%;
+  float: left;
+  position: relative;
+}
+
+#progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 40px;
+  line-height: 40px;
+  display: block;
+  font-size: 10px;
+  color: #333;
+  background: white;
+  border-radius: 30px;
+  margin: 0 auto 5px auto;
+  border: 1px solid #999999;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+  content: '';
+  width: 100%;
+  height: 2px;
+  background: white;
+  position: absolute;
+  left: -50%;
+  top: 20px;
+  z-index: -1;
+  /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+  /*connector not needed before the first step*/
+  content: none;
+}
+/*marking active/completed steps green*/
+/*The number of the step and the connector before it = green*/
+#progressbar li.active:before,
+#progressbar li.active:after {
+  background: #999999;
+  color: white;
+}
+
 @media (max-width: @screen-sm-max) {
   .signinpanel,
   .signuppanel {
     margin: 0 auto;
-    padding: 20px;
   }
 
   .signinpanel form {
