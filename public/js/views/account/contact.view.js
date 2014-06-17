@@ -35,7 +35,9 @@ define([
             "click .btn-import-gmail":"importGmailContacts",
             "click .btn-import-linkedin":"importLinkedInConnections",
 
-            "click .close":"close_welcome"
+            "click .close":"close_welcome",
+
+            "click .import-contacts": "importTest"
         },
 
 
@@ -86,6 +88,10 @@ define([
                 });
         },
 
+        importTest: function() {
+            console.log('import test');
+        },
+
 
         renderContacts: function() {
             var self = this;
@@ -103,6 +109,11 @@ define([
             var html = tmpl(data);
 
             self.show(html);
+
+            var sidetmpl = $$.templateManager.get("contact-sidebar", self.templateKey);
+            var rightPanel = $('#rightpanel');
+            rightPanel.html('');
+            rightPanel.append(sidetmpl(data));
 
             self.refreshGooglePhotos();
 

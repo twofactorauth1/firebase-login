@@ -1,0 +1,45 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+<div>
+    {{#with component}}
+    <div class="component-header hidden">
+        <div class="col-xs-6">
+            <div>
+                <div class="editable" data-class="label">
+                    {{{label}}}
+                </div>
+                <div class="editable" data-class="description">
+                    {{{description}}}
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="btn-group edit-section-btns">
+                <a href="products.html" class="btn btn-black-o">Manage</a>
+                 <button data-toggle="modal" data-target="#sectionOptions" class="btn btn-black-o">Options</button>
+            </div>
+        </div>
+    </div>
+    <div class="feature-blocks parallax" data-image="/assets/images/indimain/feature-blocks.jpg" data-width="800" data-height="200" >
+        <div class="inner-page">
+            <div class="editable" data-class="feature-label">
+                <h3 class="center centerh4">{{{title}}}</h3>
+            </div>
+            <div class="editable">
+                <p class="lead center" data-class="feature-description">{{{text}}}</p>
+            </div>
+        </div>
+
+        {{!-- <div class="component-body">
+            <div class="editable" data-class="value">
+                {{{value}}}
+            </div>
+        </div> --}}
+    </div>
+    {{/with}}
+</div>

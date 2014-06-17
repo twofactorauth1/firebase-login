@@ -38,6 +38,7 @@ require.config({
         leaflet: 'libs/leaflet/leaflet',
         colorthief: 'libs/colorthief/colorthief',
         waypoints: 'libs/waypoints/waypoints.min',
+        nestable: 'libs/nestable/jquery.nestable',
 
         //UI SPECIFIC
         toggles: 'libs/misc/toggles.min'
@@ -111,6 +112,7 @@ require.config({
                 'leaflet',
                 'colorthief',
                 'waypoints',
+                'nestable',
             ]
         }
     },

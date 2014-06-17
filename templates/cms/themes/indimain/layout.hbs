@@ -91,39 +91,32 @@
                   $('.feature-single-0, .feature-single-1, .feature-single-2, div[data-class=profilepic], .btn-outline').css('opacity', 1);
                 }
 
-                // $('div[data-type="background"]').each(function(){
-                //     var $bgobj = $(this);
-                //     $(window).scroll(function() {
-                //         var yPos = -($(window).scrollTop() / $bgobj.data('speed'));
-                //         var coords = '50% '+ yPos + 'px';
-                //         $bgobj.css({ backgroundPosition: coords });
-                //     });
-                // });
+                if (window.top===window.self) {
+                  $(".feature-single-0").waypoint(function (direction) {
+                      $(this).addClass("animated fadeIn");
+                  }, { offset: $.waypoints('viewportHeight') - 100,
+                      triggerOnce: true});
 
-                $(".feature-single-0").waypoint(function (direction) {
-                    $(this).addClass("animated fadeIn");
-                }, { offset: $.waypoints('viewportHeight') - 100,
-                    triggerOnce: true});
+                  $(".feature-single-1").waypoint(function (direction) {
+                      $(this).addClass("animated fadeIn");
+                  }, { offset: $.waypoints('viewportHeight') - 275,
+                      triggerOnce: true});
 
-                $(".feature-single-1").waypoint(function (direction) {
-                    $(this).addClass("animated fadeIn");
-                }, { offset: $.waypoints('viewportHeight') - 275,
-                    triggerOnce: true});
+                  $(".feature-single-2").waypoint(function (direction) {
+                      $(this).addClass("animated fadeIn");
+                  }, { offset: $.waypoints('viewportHeight') - 400,
+                      triggerOnce: true});
 
-                $(".feature-single-2").waypoint(function (direction) {
-                    $(this).addClass("animated fadeIn");
-                }, { offset: $.waypoints('viewportHeight') - 400,
-                    triggerOnce: true});
+                  $("div[data-class=profilepic]").waypoint(function (direction) {
+                      $(this).addClass("animated fadeIn");
+                  }, { offset: $.waypoints('viewportHeight') - 100,
+                      triggerOnce: true});
 
-                $("div[data-class=profilepic]").waypoint(function (direction) {
-                    $(this).addClass("animated fadeIn");
-                }, { offset: $.waypoints('viewportHeight') - 100,
-                    triggerOnce: true});
-
-                $(".btn-outline").waypoint(function (direction) {
-                    $(this).addClass("animated fadeIn");
-                }, { offset: $.waypoints('viewportHeight') - 100,
-                    triggerOnce: true});
+                  $(".btn-outline").waypoint(function (direction) {
+                      $(this).addClass("animated fadeIn");
+                  }, { offset: $.waypoints('viewportHeight') - 100,
+                      triggerOnce: true});
+                }
 
                 $('#myCarousel .item:first-child').addClass('active');
 

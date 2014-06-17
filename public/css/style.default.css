@@ -14666,8 +14666,8 @@ body {
 }
 @media only screen and (min-width: 700px) {
   .dd {
-    float: left;
-    width: 48%;
+    float: none;
+    width: 100%;
   }
   .dd + .dd {
     margin-left: 2%;
@@ -15957,6 +15957,7 @@ strong {
   background: #131d29;
   position: fixed;
   width: 240px;
+  margin-top: 0!important;
 }
 .rightpanel .nav-tabs > li {
   display: table-cell;

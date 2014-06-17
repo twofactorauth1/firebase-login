@@ -8,8 +8,8 @@
 define([
     //Posts
     'backboneAssoc',
-    'collections/posts'
-], function (backboneAssoc, Posts) {
+    'collections/cms/post'
+], function (backboneAssoc, Post) {
 
     var model = Backbone.Model.extend({
 
@@ -39,25 +39,25 @@ define([
 
 
         parse: function(attrs) {
-            var posts = attrs.posts || [];
-            var typedPosts = new Posts(posts);
-            attrs.posts = typedPosts;
+            var post = attrs.post || [];
+            var typedPost = new Post(post);
+            attrs.post = typedPost;
             return attrs;
         },
 
 
         toJSON: function() {
             var json = _.clone(this.attributes);
-            var collection = json.posts;
-            json.posts = json.posts.toJSON()
+            var collection = json.post;
+            json.post = json.post.toJSON()
             return json;
         },
 
 
         getPostById: function(id) {
             console.log('ID: '+id);
-            var posts = this.get("posts");
-            return posts.get(id);
+            var post = this.get("post");
+            return post.get(id);
         },
 
 

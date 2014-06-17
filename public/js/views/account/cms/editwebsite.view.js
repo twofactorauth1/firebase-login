@@ -10,9 +10,10 @@ define([
     'models/account',
     'models/cms/website',
     'models/cms/page',
+    'models/cms/post',
     'services/cms.service',
     'utils/utils'
-], function (User, Account, Website, Page, CmsService, utils) {
+], function (User, Account, Website, Page, Post, CmsService, utils) {
 
     var view = Backbone.View.extend({
 
@@ -22,8 +23,8 @@ define([
         user: null,
         account: null,
 
-        setup: null,
         websiteId: null,
+        postId: null,
         websiteTitle: null,
         websiteSettings: null,
         pageHandle: null,
@@ -38,9 +39,7 @@ define([
             "click .btn-cancel-page":"cancelPage",
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
-            "click #drop-zone":"drop_click",
-            "change #file":"upload_color_pic",
-            "click .btn-change-palette":"changePalette"
+            "click .add-post":"addBlankPost"
         },
 
         initialize: function(options) {
@@ -85,63 +84,75 @@ define([
                         data.page = "/page/" + self.pageHandle;
                     }
 
-                    self.check_setup();
 
-                    if (!self.setup) {
+                    var tmpl = $$.templateManager.get("edit-website", self.templateKey);
+                    var html = tmpl(data);
 
-                        var tmpl = $$.templateManager.get("setup-website", self.templateKey);
-                        var html = tmpl(data);
+                    self.show(html);
+                    self.check_welcome();
 
-                        self.show(html);
-                        self.dragNdrop();
-                        self.check_welcome();
+                    var colorPalette = self.websiteSettings;
 
-                    } else {
+                    if (colorPalette != null) {
+                        var colorPaletteTemplate = $$.templateManager.get("color-thief-output-template", self.templateKey);
+                        var html = colorPaletteTemplate(colorPalette['color-palette']);
+                        $('#color-palette-sidebar').append(html);
+                     }
 
-                        var tmpl = $$.templateManager.get("edit-website", self.templateKey);
-                        var html = tmpl(data);
+                    var sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
+                    var rightPanel = $('#rightpanel');
 
-                        self.show(html);
-                        self.check_welcome();
+                    $("#iframe-website", this.el).load(function(pageLoadEvent) {
+                        var doc = $(pageLoadEvent.currentTarget)[0].contentDocument ||
+                            $(pageLoadEvent.currentTarget)[0].documentWindow;
 
-                         var sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
-                        $('#rightpanel').append(sidetmpl);
-                        var colorPalette = self.websiteSettings;
-
-                        if (colorPalette != null) {
-                            var colorPaletteTemplate = $$.templateManager.get("color-thief-output-template", self.templateKey);
-                            var html = colorPaletteTemplate(colorPalette['color-palette']);
-                            $('#color-palette-sidebar').append(html);
-                         }
-
-                        $("#iframe-website", this.el).load(function(pageLoadEvent) {
-                            var doc = $(pageLoadEvent.currentTarget)[0].contentDocument ||
-                                $(pageLoadEvent.currentTarget)[0].documentWindow;
-
-                            var page = "index";
-                            if (doc != null) {
-                                var page = doc.location.pathname;
-                                if (page.indexOf("/") == 0) {
-                                    page = page.substr(1);
-                                }
-                                page = page.replace("page/", "");
-                                if (page == "" || page == "/") {
-                                    page = "index";
-                                }
-                                self.pageHandle = page;
+                        var page = "index";
+                        if (doc != null) {
+                            var page = doc.location.pathname;
+                            if (page.indexOf("/") == 0) {
+                                page = page.substr(1);
                             }
+                            page = page.replace("page/", "");
+                            if (page == "" || page == "/") {
+                                page = "index";
+                            }
+                            self.pageHandle = page;
+                        }
 
-                            $.when(p3, p4)
-                                .done(function() {
-                                    self.getPage();
+                        $.when(p3, p4)
+                            .done(function() {
+                                self.getPage().done(function(){
+                                    var componentsArray = [];
+                                    var rawComponents = self.page.attributes.components.models;
+                                    for (key in rawComponents) {
+                                        if (rawComponents.hasOwnProperty(key)) {
+                                            componentsArray.push(rawComponents[key]);
+                                        };
+                                    }
+                                    var data = {
+                                        components: componentsArray
+                                    };
+
+                                    self.setupSidebar(data, rightPanel, sidetmpl);
+
                                 });
                         });
-                    }
+                    });
+
                 });
 
             this.proxiedOnWebsiteEdit = $.proxy( this.onWebsiteEdit, this);
             this.$el.on("websiteedit", this.proxiedOnWebsiteEdit);
             return this;
+        },
+
+        setupSidebar: function(data, rightPanel, sidetmpl) {
+            var self = this;
+            rightPanel.html('');
+            var template = sidetmpl(data);
+            rightPanel.append(sidetmpl(data));
+            this.delegateEvents();
+            $('#nestable').nestable({'maxDepth': '2'});
         },
 
         onWebsiteEdit: function(event) {
@@ -172,6 +183,53 @@ define([
             }
             component.setContent(dataClass, content, target, componentConfig);
             //this.savePage();
+        },
+
+        addBlankPost: function() {
+            var self = this;
+            console.log('Adding Blank Post');
+            self.getPost().done(function () {
+                console.log('got the post');
+            });
+            //TODO if not blog page navigate there then continue
+            //add blank post
+            var blankPostHTML = $$.templateManager.get("blankPost", self.templateKey);
+            $('.blankPost').append(blankPostHTML);
+            var $iframe = $('#iframe-website');
+            $iframe.ready(function() {
+                $iframe.contents().find(".blank-post").append(blankPostHTML);
+            });
+            self.savePost();
+        },
+
+        getPost: function () {
+            console.log('Getting Post');
+            var self = this;
+
+            if (this.postId == null) {
+                console.log('No Post ID');
+                this.post = new Post({
+                    websiteId: this.websiteId
+                });
+            } else {
+                console.log('Post ID Found');
+                this.post = new Post({
+                    _id: this.postId
+                });
+            }
+
+            return this.post.fetch();
+        },
+
+        savePost: function() {
+            this.post.save()
+                .done(function() {
+                    console.log('post saved');
+                    $$.viewManager.showAlert("Post saved!");
+                })
+                .fail(function(resp) {
+                    alert("There was an error saving this post!");
+                });
         },
 
 
@@ -270,113 +328,6 @@ define([
             this.proxiedOnWebsiteEdit = null;
         },
 
-        showColorsForImage: function($image, $imageSection ) {
-            var self = this;
-            var colorThief = new ColorThief();
-            var image                    = $image[0];
-            var start                    = Date.now();
-            var color                    = colorThief.getColor(image);
-            var elapsedTimeForGetColor   = Date.now() - start;
-            var palette                  = colorThief.getPalette(image);
-            var elapsedTimeForGetPalette = Date.now() - start + elapsedTimeForGetColor;
-
-            var colorThiefOutput = {
-              color: color,
-              palette: palette,
-              elapsedTimeForGetColor: elapsedTimeForGetColor,
-              elapsedTimeForGetPalette: elapsedTimeForGetPalette
-            };
-            console.log('Color Output: '+JSON.stringify(colorThiefOutput));
-
-            //send pallete to website settings
-             self.website.set('settings', {'color-palette': colorThiefOutput});
-             self.website.save();
-
-            var colorThiefOuputHTML = $$.templateManager.get("color-thief-output-template", self.templateKey);
-            //var html = colorThiefOuputHTML(colorThiefOutput);
-            $imageSection.addClass('with-color-thief-output');
-            $imageSection.find('.run-functions-button').addClass('hide');
-            $imageSection.find('.color-thief-output').append(colorThiefOuputHTML(colorThiefOutput)).slideDown();
-
-            // If the color-thief-output div is not in the viewport or cut off, scroll down.
-            var windowHeight          = $(window).height();
-            var currentScrollPosition = $('body').scrollTop();
-            var outputOffsetTop       = $imageSection.find('.color-thief-output').offset().top;
-            if ((currentScrollPosition < outputOffsetTop) && (currentScrollPosition + windowHeight - 250 < outputOffsetTop)) {
-               $('body').animate({scrollTop: outputOffsetTop - windowHeight + 200 + "px"});
-            }
-        },
-
-        dragNdrop: function() {
-            var self = this;
-            // Setup the drag and drop behavior if supported
-            if (Modernizr.draganddrop) {
-                $('#drag-drop').show();
-                var dropZone = $('#drop-zone');
-                var handleDragEnter = function(event){
-                  dropZone.addClass('dragging');
-                  return false;
-                };
-                var handleDragLeave = function(event){
-                  dropZone.removeClass('dragging');
-                  return false;
-                };
-                var handleDragOver = function(event){
-                  return false;
-                };
-                var handleDrop = function(event){
-                  dropZone.removeClass('dragging');
-                  self.handleFiles(event.originalEvent.dataTransfer.files);
-                  return false;
-                };
-                dropZone.on('dragenter', handleDragEnter).on('dragleave', handleDragLeave).on('dragover', handleDragOver).on('drop', handleDrop);
-            }
-        },
-
-        handleFiles: function(files) {
-            console.log('handleFiles'+files);
-            $('.dropped-image').remove();
-            var self = this;
-            var draggedImages = $('#dragged-images');
-            var imageType      = /image.*/;
-            var fileCount      = files.length;
-            console.log('File Count:'+fileCount);
-
-            for (var i = 0; i < fileCount; i++) {
-              console.log('File #:'+i);
-              var file = files[i];
-
-              if (file.type.match(imageType)) {
-                var reader = new FileReader();
-                reader.onload = function(event) {
-                    console.log('reader');
-                    var imageInfo = { images: [
-                        {'class': 'dropped-image', file: event.target.result}
-                      ]};
-
-                    var tmpl = $$.templateManager.get("image-section-template", self.templateKey);
-                    var html = tmpl(imageInfo);
-
-                    console.log('Key: '+self.templateKey+' Template: '+tmpl);
-
-                    draggedImages.prepend(html);
-
-                    var imageSection = draggedImages.find('.image-section').first();
-                    var image        = $('.dropped-image .target-image');
-
-                    // Must wait for image to load in DOM, not just load from FileReader
-                    image.on('load', function() {
-                        console.log('image on load');
-                      self.showColorsForImage(image, imageSection);
-                    });
-                  };
-                reader.readAsDataURL(file);
-              } else {
-                alert('File must be a supported image type.');
-              }
-            }
-        },
-
         check_welcome: function() {
             console.log('close welcome = '+$.cookie('website-alert') );
             if( $.cookie('website-alert') === 'closed' ){
@@ -390,27 +341,6 @@ define([
             $.cookie('website-alert', 'closed', { path: '/' });
         },
 
-        check_setup: function() {
-            var self = this;
-            if( $.cookie('website-setup') === 'true' ){
-                this.setup = true;
-            }
-
-            //self.account.save();
-             // if (settings.setup = null) {
-             //    settings.setup = false
-             // }
-        },
-
-        changePalette: function() {
-            console.log('changing palette');
-        },
-
-        drop_click: function() {
-            $("#file").trigger('click');
-            return false;
-        },
-
         end_setup: function(e) {
             var self = this;
             this.setup = true;
@@ -419,12 +349,6 @@ define([
 
             $.cookie('website-setup', 'true', { path: '/' });
             this.render();
-        },
-
-        upload_color_pic: function(event) {
-            var self = this;
-
-            self.handleFiles($("input[type=file]").get(0).files);
         }
     });
 

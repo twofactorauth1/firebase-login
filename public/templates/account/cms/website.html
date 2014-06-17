@@ -23,10 +23,11 @@
                     <span class="hidden-xs">Cancel</span>
                 </a>
                 <div class="clearfix"></div>
-                <p class="pull-right">We&#39;ll autosave every 20 seconds</p>
+                <p class="pull-right autosave">We&#39;ll autosave every 20 seconds</p>
 
         </div>
         <div class="clear"></div>
+        <button class="add-post">ADD POST</button>
     </div>
 
     <iframe id="iframe-website" src="{{page}}?editor=true" style="width:100%; height:100%; min-height:800px; border:solid 1px; #ccc;"/>
@@ -155,120 +156,136 @@
   {{/images}}
 </script>
 
+<script type="text/x-handlebars-template" name="blankPost">
+  <div class="single-blog responsive clearfix">
+            <div class="blog-entry clearfix">
+                <h2 class="blog-title"><a href="/page/blog/post-title">Post Title</a></h2>
+                <p class="blog-meta">
+                     17.04.2014 •&nbsp;
+                    Posted by <a href="/page/author/Post Author">Post Author</a>
+                    in&nbsp;<a href="/page/category/Post Category">Post Category</a>
+                </p>
+
+                <ul class="post_tags">
+                        <li><a href="/page/tag/Post Tag">Post Tag</a></li>
+                </ul>
+
+                    <div class="blog-thumb alignleft">
+                        <a href=""><span class="overlay"></span></a>
+                    </div> <!-- end .thumb -->
+
+                    <div class="entry-excerpt editable"><p>This is the Post Excerpt</p></div>
+                    <a href="/page/blog/post-title" class="btn btn-orange pull-right"><span>READ MORE</span></a>
+            </div> <!-- end .et_pt_blogentry -->
+
+    </div>
+</script>
+
 <script type="text/x-handlebars-template" name="sidebar-edit-website">
   <div class="rightpanel rightpanel-website">
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs nav-justified">
-        <li class="active"><a href="#rp-theme" data-toggle="tab" id="rp-domain-theme">Theme</a>
-        </li>
-        <li><a href="#rp-domain" data-toggle="tab" id="rp-domain-tab">Domain</a>
-        </li>
-    </ul>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Page</a></li>
+            <li><a href="#rp-theme" data-toggle="tab" id="rp-domain-theme">Theme</a></li>
+        </ul>
 
-    <!-- Tab panes -->
+        <!-- Tab panes -->
 
-    <div class="tab-content">
-        <div class="tab-pane pane-settings active" id="rp-theme">
-            <div class="leftpanelinner">
-                <div id="color-palette-sidebar"></div>
-                <div class="mb15 clearfix"></div>
-                <a href="#" class="btn btn-primary btn-block btn-change-palette">Change Palette</a>
-                <div class="mb15"></div>
-                <div id="current-theme">
-                    <h4>Current Theme</h4>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <img class="theme-img" src="/assets/images/theme-preview.jpg">
+        <div class="tab-content">
+            <div class="tab-pane pane-settings active" id="rp-page">
+                <div class="leftpanelinner">
+                    <div id="nestable" class="dd">
+                            <h4>Page Components</h4>
+                            <ol class="dd-list">
+                            {{#each components}}
+                                <li class="dd-item dd3-item" data-id="{{this.id}}" data-section="myCarousel">
+                                    <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
+                                    </div>
+                                    <div class="dd3-content">{{this.attributes.type}}</div>
+                                    <div class="dd3-actions">
+                                        <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                    </div>
+                                </li>
+                            {{/each}}
+                            </ol>
+                            <div class="mb10"></div>
+                            <div class="add_section"><i class="fa fa-plus"></i>
+                                <span>&nbsp; Add Section</span>
+                            </div>
                         </div>
-                        <div class="col-xs-6">
-                            <button type="button" class="btn btn-primary btn-block">Edit</button>
-                            <button type="button" class="btn btn-default btn-block">Change</button>
-                        </div>
-                    </div>
-                    <div class="mb20"></div>
-                    <div id="nestable">
-                        <h4>Theme Sections</h4>
-                        <ol class="dd-list">
-                            <li class="dd-item dd3-item" data-id="13" data-section="myCarousel">
-                                <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
-                                </div>
-                                <div class="dd3-content">Home Slider</div>
-                                <div class="dd3-actions">
-                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
-                                </div>
-                            </li>
-                            <li class="dd-item dd3-item" data-id="14" data-section="services">
-                                <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
-                                </div>
-                                <div class="dd3-content">Services</div>
-                                <div class="dd3-actions">
-                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
-                                </div>
-                            </li>
-                            <li class="dd-item dd3-item" data-id="15" data-section="action-call">
-                                <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
-                                </div>
-                                <div class="dd3-content">Call to Action</div>
-                                <div class="dd3-actions">
-                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
-                                </div>
-                            </li>
-                            <li class="dd-item dd3-item" data-id="19" data-section="recent-projects">
-                                <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
-                                </div>
-                                <div class="dd3-content">Projects</div>
-                                <div class="dd3-actions">
-                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
-                                </div>
-                            </li>
-                            <li class="dd-item dd3-item" data-id="19" data-section="clients">
-                                <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
-                                </div>
-                                <div class="dd3-content">Clients</div>
-                                <div class="dd3-actions">
-                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
-                                </div>
-                            </li>
-                            <li class="dd-item dd3-item" data-id="19" data-section="footer">
-                                <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
-                                </div>
-                                <div class="dd3-content">Footer</div>
-                                <div class="dd3-actions">
-                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
-                                </div>
-                            </li>
-                        </ol>
-                        <div class="mb10"></div>
-                        <div class="add_section"><i class="fa fa-plus"></i>
-                            <span>&nbsp; Add Section</span>
-                        </div>
-                    </div>
-
                 </div>
-                <!-- leftpanelinner -->
             </div>
-            <!-- leftpanel -->
-        </div>
-        <div class="tab-pane pane-settings" id="rp-domain">
-            <div class="leftpanelinner">
-
-                <div class="form-group">
-                    <label for="current-domain" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="This is the domain that was automatically created when you signed up.">Indigenous Domain</label>
-                    <input id="current-domain" class="form-control input-lg" type="text" value="{{subdomain}}">
-                </div>
-                <div class="form-group">
-                    <label for="current-domain" class="tooltips col-xs-7" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can turn on your custom domain.">Custom Domain</label>
-                    <div class="col-xs-5 control-label">
-                        <div class="toggle toggle-success" style="height: 20px; width: 50px;"><div class="toggle-slide active"><div class="toggle-inner" style="width: 80px; margin-left: 0px;"><div class="toggle-on active" style="height: 20px; width: 40px; text-align: center; text-indent: -10px; line-height: 20px;">ON</div><div class="toggle-blob" style="height: 20px; width: 20px; margin-left: -10px;"></div><div class="toggle-off" style="height: 20px; width: 40px; margin-left: -10px; text-align: center; text-indent: 10px; line-height: 20px;">OFF</div></div></div></div>
+            <div class="tab-pane pane-settings" id="rp-theme">
+                <div class="leftpanelinner">
+                    <div id="color-palette-sidebar"></div>
+                    <div class="mb15 clearfix"></div>
+                    <a href="#" class="btn btn-primary btn-block btn-change-palette">Change Palette</a>
+                    <div class="mb15"></div>
+                    <div id="current-theme">
+                        <h4>Current Theme</h4>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <img class="theme-img" src="/assets/images/theme-preview.jpg">
+                            </div>
+                            <div class="col-xs-6">
+                                <button type="button" class="btn btn-primary btn-block">Edit</button>
+                                <button type="button" class="btn btn-default btn-block">Change</button>
+                            </div>
+                        </div>
+                        <div class="mb20"></div>
+                        <div class="form-group">
+                        <label for="current-domain" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="This is the domain that was automatically created when you signed up.">Indigenous Domain</label>
+                        <input id="current-domain" class="form-control input-lg" type="text" value="{{subdomain}}">
                     </div>
+                    <div class="form-group">
+                        <label for="current-domain" class="tooltips col-xs-7" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can turn on your custom domain.">Custom Domain</label>
+                        <div class="col-xs-5 control-label">
+                            <div class="toggle toggle-success" style="height: 20px; width: 50px;"><div class="toggle-slide active"><div class="toggle-inner" style="width: 80px; margin-left: 0px;"><div class="toggle-on active" style="height: 20px; width: 40px; text-align: center; text-indent: -10px; line-height: 20px;">ON</div><div class="toggle-blob" style="height: 20px; width: 20px; margin-left: -10px;"></div><div class="toggle-off" style="height: 20px; width: 40px; margin-left: -10px; text-align: center; text-indent: 10px; line-height: 20px;">OFF</div></div></div></div>
+                        </div>
+                    </div>
+                    <div class="mb15"></div>
+                    <label for="current-domain">Custom Domain Name</label>
+                    <input id="current-domain" class="form-control input-lg" type="text" value="ronflutes.com">
+
+                    </div>
+                    <!-- leftpanelinner -->
                 </div>
-                <div class="mb15"></div>
-                <label for="current-domain">Custom Domain Name</label>
-                <input id="current-domain" class="form-control input-lg" type="text" value="ronflutes.com">
+                <!-- leftpanel -->
             </div>
+            <!-- leftpanelinner -->
         </div>
-        <!-- leftpanelinner -->
-    </div>
-    <!-- leftpanel -->
-</div>>
+        <!-- leftpanel --></div>
+
+{{> color-palette-modal}}
+</script>
+
+<script type="text/x-handlebars-template" name="color-palette-modal" partial="true">
+    <div class="modal fade" id="color-palette-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Change Color Palette</h4>
+          </div>
+          <div class="modal-body">
+            <div id="palette_chooser">
+                <h4>Image Based Color Palette</h4>
+                <p class="mb20">Choose a picture that best represents you and your business and a selection of color will be selected to create a color pallette. </p>
+                <section id="drag-drop" class="drag-drop" style="display: block;">
+                    <input type="file" name="file" id="file"/>
+                    <div id="drop-zone" class="drop-zone col-xs-12">
+                        <div class="drop-zone-label default-label">Drag or Click to upload image</div>
+                        <div class="drop-zone-label dragging-label">Drop it here!</div>
+                    </div>
+                    <div id="dragged-images" class="dragged-images col-sm-6 col-xs-12"></div>
+                </section>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </script>
