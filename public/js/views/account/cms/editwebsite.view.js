@@ -143,7 +143,10 @@ define([
             var template = sidetmpl(data);
             rightPanel.append(sidetmpl(data));
             this.delegateEvents();
-            $('#nestable').nestable({'maxDepth': '2'});
+            var nestableItems = $('#nestable');
+            if (nestableItems.length > 0) {
+                nestableItems.nestable({'maxDepth': '2'});
+            }
             var colorPalette = self.websiteSettings;
             self.renderSidebarColor(colorPalette);
         },
@@ -164,9 +167,7 @@ define([
 
             var parent = $(target).parents(".component").eq(0);
             var componentType = $(parent).data("class");
-            console.log('Component Type: '+componentType);
             var componentId = $(parent).attr("data-id");
-            console.log('Component Type: '+componentId);
             var component = this.page.getComponentById(componentId);
 
             var dataClass = data.dataClass;
@@ -174,9 +175,7 @@ define([
             var page = data.pageId;
 
             var configComponents = this.themeConfig.components;
-            console.log('Config Components: '+JSON.stringify(configComponents));
             var componentConfig = _.findWhere(configComponents, { type: componentType });
-            console.log('Component Config: '+JSON.stringify(componentConfig));
             var configClasses = componentConfig.classes;
             for(var key in configClasses) {
                 if (configClasses[key] == dataClass) {

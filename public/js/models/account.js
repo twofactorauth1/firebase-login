@@ -54,6 +54,7 @@ define([], function() {
                 case "PUT":
                     break;
                 case "POST":
+                    return $$.api.getApiUrl("account", "");
                     break;
                 case "DELETE":
                     break;

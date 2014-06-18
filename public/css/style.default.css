@@ -19300,6 +19300,9 @@ input[type='file'] {
   border-color: #4eb1ca;
   cursor: pointer;
 }
+#change-theme-modal .thumbnail img {
+  max-width: 150px;
+}
 .check-theme {
   position: absolute;
   top: 0;

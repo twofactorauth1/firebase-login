@@ -7,6 +7,7 @@ define([
 
         subdomain: null,
         websiteSettings: null,
+        themeId: null,
 
         //temporary themes
         themes: [
@@ -19,7 +20,7 @@ define([
             },
             {
                 id: 2,
-                name: 'Indimain',
+                name: 'indimain',
                 description: 'this is the indimain description',
                 tags: ['tag1','tag2'],
                 preview: '/assets/images/theme-previews/indimain-preview.jpg'
@@ -54,6 +55,7 @@ define([
             $.when(p1)
                 .done(function () {
                     self.subdomain = self.account.attributes.subdomain;
+                    self.themeId = self.account.attributes.website.themeId;
             });
 
             $.when(p2)
@@ -88,12 +90,17 @@ define([
                     var html = tmpl(data);
                     $('#rightpanel').append(html);
                 }
+
+                console.log('Theme ID: '+self.themeId);
+
+                $('#change-theme-modal .thumbnail[data-themeid="'+self.themeId+'"]').addClass('selected').find('.check-theme').show();
                 $('#change-theme-modal').modal('show');
             },
 
             changeTheme: function() {
                 var self = this;
                 console.log('change theme');
+                $('#change-theme-modal').modal('hide');
                 var selectedTheme = $('.thumbnail.selected');
                 if (selectedTheme.length > 0) {
                     var themeId = selectedTheme.data('themeid');
@@ -102,11 +109,15 @@ define([
                     console.log('Current ThemeId: '+self.account.attributes.website.themeId);
 
                     //actual code when api works
-                        self.account.set('website', {'themeId': themeId});
-                        self.account.save();
+                    // self.account.set('website', {'themeId': themeId});
+                    // self.account.save();
 
                     //refresh theme
+                    document.getElementById('iframe-website').contentWindow.location.reload(true);
                     //replace preview
+                    //get theme by name
+                    var previewSrc = '/assets/images/theme-previews/indimain-preview.jpg';
+                    $('.theme-img').attr('src', previewSrc);
                 } else {
                     //show validate error
                     console.log('no theme selected ');
