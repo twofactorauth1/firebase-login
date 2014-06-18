@@ -61,7 +61,7 @@ define([
                 .done(function() {
                     self.websiteId = self.website.id;
                     self.websiteTitle = self.website.attributes.title;
-                    self.subdomain = self.account.attributes.subdomain;
+                    self.subdomain = self.attributes.subdomain;
                     self.websiteSettings = self.website.attributes.settings;
                 });
 
@@ -120,7 +120,8 @@ define([
                                     }
                                     var data = {
                                         components: componentsArray,
-                                        colorPalette: colorPalette
+                                        colorPalette: colorPalette,
+                                        account: self.account
                                     };
 
                                     self.setupSidebar(data, rightPanel, sidetmpl);

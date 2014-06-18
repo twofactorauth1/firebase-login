@@ -20,6 +20,10 @@ define([], function() {
                     size:0
                 },
                 subdomain:"",
+                website: {
+                    websiteId: null,
+                    themeId: null
+                },
                 domain:"",
                 token:""
             };
