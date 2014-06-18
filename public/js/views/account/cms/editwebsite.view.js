@@ -12,8 +12,9 @@ define([
     'models/cms/page',
     'models/cms/post',
     'services/cms.service',
-    'utils/utils'
-], function (User, Account, Website, Page, Post, CmsService, utils) {
+    'utils/utils',
+    'views/rightpanel.view'
+], function (User, Account, Website, Page, Post, CmsService, utils, RightPanel) {
 
     var view = Backbone.View.extend({
 
@@ -62,12 +63,6 @@ define([
                     self.websiteTitle = self.website.attributes.title;
                     self.subdomain = self.account.attributes.subdomain;
                     self.websiteSettings = self.website.attributes.settings;
-
-                    // console.log('Settings: '+self.website.get('title')+' or '+self.website.attributes.title);
-                    // var title = self.website.get("title");
-                    // self.website.set({title:'Testing8'});
-                    // console.log('Settings: '+self.website.get('title')+' or '+self.website.attributes.title);
-                    // self.website.save();
                 });
 
             $.when(p1, p2, p4)
@@ -88,16 +83,10 @@ define([
                     var tmpl = $$.templateManager.get("edit-website", self.templateKey);
                     var html = tmpl(data);
 
-                    self.show(html);
-                    self.check_welcome();
-
                     var colorPalette = self.websiteSettings;
 
-                    if (colorPalette != null) {
-                        var colorPaletteTemplate = $$.templateManager.get("color-thief-output-template", self.templateKey);
-                        var html = colorPaletteTemplate(colorPalette['color-palette']);
-                        $('#color-palette-sidebar').append(html);
-                     }
+                    self.show(html);
+                    self.check_welcome();
 
                     var sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
                     var rightPanel = $('#rightpanel');
@@ -130,7 +119,8 @@ define([
                                         };
                                     }
                                     var data = {
-                                        components: componentsArray
+                                        components: componentsArray,
+                                        colorPalette: colorPalette
                                     };
 
                                     self.setupSidebar(data, rightPanel, sidetmpl);
@@ -153,6 +143,18 @@ define([
             rightPanel.append(sidetmpl(data));
             this.delegateEvents();
             $('#nestable').nestable({'maxDepth': '2'});
+            var colorPalette = self.websiteSettings;
+            self.renderSidebarColor(colorPalette);
+        },
+
+        renderSidebarColor: function(colorPalette) {
+            var self = this;
+            console.log(colorPalette);
+            if (colorPalette != null) {
+                var colorPaletteTemplate = $$.templateManager.get("color-thief-output-template", self.templateKey);
+                var html = colorPaletteTemplate(colorPalette['color-palette']);
+                $('#color-palette-sidebar').append(html);
+             }
         },
 
         onWebsiteEdit: function(event) {

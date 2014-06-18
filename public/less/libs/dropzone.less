@@ -6,7 +6,6 @@
 /* line 255, ../sass/app.sass */
 .drop-zone {
   height: 400px;
-  margin-bottom: 80px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   -ms-border-radius: 4px;
@@ -31,9 +30,9 @@
 /* line 267, ../sass/app.sass */
 .drop-zone-label {
   position: relative;
-  top: 170px;
+  top: 40px;
   padding: 10px;
-  margin: 0 100px;
+  margin: 0;
   border: 4px solid #fdf485;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -214,12 +213,13 @@
 }
 #drop-zone {
   border: 1px solid #ccc;
-  min-height: 360px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   border-radius: 2px;
   background: #E4E7EA;
   padding: 23px;
+  overflow: hidden;
+  height: 180px;
 }
 #drop-zone .dz-default.dz-message {
   opacity: 1;

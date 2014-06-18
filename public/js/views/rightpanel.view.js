@@ -1,13 +1,11 @@
 define([
-    'namespaces',
-    'models/user',
-    'models/account',
-    'models/cms/website',
-    'models/cms/page',
-    'models/cms/post'
-], function () {
+    'views/account/cms/editwebsite.view'
+], function (EditWebsite) {
 
-    var view = Backbone.View.extend({
+    var view = EditWebsite.extend({
+
+        subdomain: null,
+        websiteSettings: null,
 
         el: "#rightpanel",
         templateKey: "account/cms/website",
@@ -19,15 +17,32 @@ define([
             "click .add_section": "addSection",
             "click #drop-zone": "drop_click",
             "change #file":"upload_color_pic",
-            "click .btn-change-palette":"changePalette"
+            "click .btn-change-palette":"changePalette",
+            "click .clear-image":"clearImage",
+            "click .save-palette":"savePalette"
         },
 
         changePalette: function() {
             var self = this;
             self.dragNdrop();
-            //console.log('templateKey: '+self.templateKey);
-            //var colorPaletteModal = $$.templateManager.get("color-palette-modal", self.templateKey);
             $('#color-palette-modal').modal('show');
+        },
+
+        initialize: function () {
+            console.log('rendering');
+            var self = this
+                , p1 = this.getAccount()
+                , p2 = this.getWebsite();
+
+            $.when(p1)
+                .done(function () {
+                    self.subdomain = self.account.attributes.subdomain;
+            });
+
+            $.when(p2)
+                .done(function () {
+                self.websiteSettings = self.website.attributes.settings;
+            });
         },
 
         renderHtml: function(html) {
@@ -38,8 +53,32 @@ define([
             console.log('show options');
         },
 
+        savePalette: function () {
+            var self = this;
+            $('#color-palette-modal').modal('hide');
+            $('#color-palette-sidebar').html('');
+            this.renderSidebarColor(self.websiteSettings);
+        },
+
+        clearImage: function () {
+            var self = this;
+            self.website.set('settings', {'color-palette': ''});
+            self.website.save();
+            $('.target-image').attr('src', '');
+            $('.color-thief-output').html('');
+            $('.clear-image').hide();
+            $('#drop-zone').show();
+        },
+
         addSection: function() {
-            console.log('adding section');
+            //initiate modal
+            $('#add-component-modal').modal('show');
+        },
+
+        renderSection: function() {
+            var self = this;
+            var componentItem = $$.templateManager.get("component-item", self.templateKey);
+            $('.dd-list').append(componentItem);
         },
 
         scrollToSection: function(event) {
@@ -85,14 +124,18 @@ define([
             console.log('Color Output: '+JSON.stringify(colorThiefOutput));
 
             //send pallete to website settings
-             self.website.set('settings', {'color-palette': colorThiefOutput});
-             self.website.save();
+            self.website.set('settings', {'color-palette': colorThiefOutput});
+            self.website.save();
+
+            self.websiteSettings = {'color-palette': colorThiefOutput};
 
             var colorThiefOuputHTML = $$.templateManager.get("color-thief-output-template", self.templateKey);
+            console.log('HTML: '+colorThiefOuputHTML);
             //var html = colorThiefOuputHTML(colorThiefOutput);
             $imageSection.addClass('with-color-thief-output');
             $imageSection.find('.run-functions-button').addClass('hide');
             $imageSection.find('.color-thief-output').append(colorThiefOuputHTML(colorThiefOutput)).slideDown();
+            $('.clear-image').show();
 
             // If the color-thief-output div is not in the viewport or cut off, scroll down.
             var windowHeight          = $(window).height();
@@ -181,6 +224,7 @@ define([
         upload_color_pic: function(event) {
             console.log('uploading color pic');
             var self = this;
+            $('#drop-zone').hide();
             self.handleFiles($("input[type=file]").get(0).files);
         },
 
