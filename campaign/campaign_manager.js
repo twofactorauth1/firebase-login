@@ -12,8 +12,8 @@ var contactDao = require('../dao/contact.dao');
 
 var mandrillConfig = require('../configs/mandrill.config');
 
-var mandrill = require('mandrill-api/mandrill');
-var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
+//var mandrill = require('mandrill-api/mandrill');
+//var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
 
 module.exports = {
 

@@ -29,7 +29,7 @@ if (process.env.IS_PROXIED == null){
 }
 
 /**
- * For local:  indigenous.local, localhost, etc.  -- modify hosts file to point 127.0.0.1 to app.INDIGENOUS SOFTWARE, INC.
+ * For local:  indigenous.local, localhost, etc.  -- modify hosts file to point 127.0.0.1 to app.indigenous.local.
  * For production: indigenous.io
  */
 if (process.env.ROOT_HOST == null) {
