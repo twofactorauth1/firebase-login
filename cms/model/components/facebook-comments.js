@@ -6,12 +6,12 @@
  */
 
 /**
- * The Image component.
+ * The Facebook Comments components
  *
- * Stores data that supports the display of a single image and optional
- * text.  If text is available, it is either to the right or th left of the video.
+ * Stores data that represents information required
+ * to dispaly facebook comments moduel on the page
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
@@ -23,16 +23,18 @@ var component = $$.m.ModelBase.extend({
              */
             _id: null,
 
+
             /**
              * Some themes may use this anchor to create
              * navigation directly to thise component
              */
             anchor: null,
 
+
             /**
              * The type of component this is
              */
-            type: "image-text",
+            type: "facebook-comments",
 
             /**
              * The label for the component
@@ -47,26 +49,19 @@ var component = $$.m.ModelBase.extend({
             description:"",
 
             /**
-             * The html formatted text to display, if applicable
-             */
-            text: null,
-
-            /**
-             * The position of the image relative to the text, left, right, center
+             * Relevant credentials to associate the facebook comments
              *
-             * @see $$.m.cms.modules.ImageText.IMAGE_POSITION
+             * {
+             *      username: "",
+             *      socialId: "",
+             * }
              */
-            imagePosition: "",
+            credentials: null,
 
             /**
-             * The caption to accompany the image (optional)
+             * Comment options
              */
-            caption: null,
-
-            /**
-             * The url of the image
-             */
-            url: ""
+            options: null
         }
     },
 
@@ -78,13 +73,6 @@ var component = $$.m.ModelBase.extend({
 
 }, {
 
-    IMAGE_POSITION: {
-        LEFT: "left",
-        RIGHT: "right",
-        CENTER: "center"
-    },
-
-
     validate: function() {
 
     }
@@ -92,6 +80,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.ImageText = component;
+$$.m.cms.modules.FacebookComments = component;
 
 module.exports = component;

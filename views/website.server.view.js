@@ -7,7 +7,7 @@
 
 var BaseView = require('./base.server.view');
 
-var cmsDao = require('../dao/cms.dao');
+var cmsDao = require('../cms/dao/cms.dao.js');
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);

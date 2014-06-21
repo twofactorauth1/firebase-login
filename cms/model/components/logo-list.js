@@ -6,14 +6,11 @@
  */
 
 /**
- * The Feature Blocks component
+ * Logo list component
  *
- * Stores data that represents the 3 or 4 features prominentyly
- * displayed on the website, usually in the for of an image or icon,
- * then a label and possibly a short description below.  These 3 or 4
- * features would be laid out horizontally and well-spaced.
+ * Stores data that represents a list of logos used for marketing purposes.
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
@@ -34,7 +31,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "feature-blocks",
+            type: "logo-list",
 
             /**
              * The label for the component
@@ -49,7 +46,7 @@ var component = $$.m.ModelBase.extend({
             description:"",
 
             /**
-             * An array of features of the form
+             * An array of logo objects of the form
              * [{
              *      label: "",              //The label to display beneat the icon
              *      description: "",        //The description to display beneath th elabel
@@ -57,7 +54,7 @@ var component = $$.m.ModelBase.extend({
              *      iconClass: null         //The classname of the icon to display
              * ]}
              */
-            features: []
+            logos: []
         }
     },
 
@@ -76,6 +73,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.FeatureBlocks = component;
+$$.m.cms.modules.LogoList = component;
 
 module.exports = component;

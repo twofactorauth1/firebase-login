@@ -6,10 +6,10 @@
  */
 
 process.env.NODE_ENV = "testing";
-var app = require('../app');
+var app = require('../../app');
 var async = require('async');
-var testHelpers = require('../testhelpers/testhelpers');
-var cmsDao = require('../dao/cms.dao');
+var testHelpers = require('../../testhelpers/testhelpers');
+var cmsDao = require('../dao/cms.dao.js');
 
 var config = {
     themeId: "default"

@@ -11,7 +11,7 @@
  * Stores data that supports a list of images or a data source of images
  * to be displayed in a tiled fashion
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 

@@ -6,11 +6,14 @@
  */
 
 /**
- * Freeform component
+ * The Feature Blocks component
  *
- * Stores data that represents a freeform HTML formatted region
+ * Stores data that represents the 3 or 4 features prominentyly
+ * displayed on the website, usually in the for of an image or icon,
+ * then a label and possibly a short description below.  These 3 or 4
+ * features would be laid out horizontally and well-spaced.
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
@@ -31,7 +34,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "freeform",
+            type: "feature-blocks",
 
             /**
              * The label for the component
@@ -46,9 +49,15 @@ var component = $$.m.ModelBase.extend({
             description:"",
 
             /**
-             * the HTML formatted value
+             * An array of features of the form
+             * [{
+             *      label: "",              //The label to display beneat the icon
+             *      description: "",        //The description to display beneath th elabel
+             *      url: null               //The URL of the icon / image
+             *      iconClass: null         //The classname of the icon to display
+             * ]}
              */
-            value: ""
+            features: []
         }
     },
 
@@ -67,6 +76,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.Freeform = component;
+$$.m.cms.modules.FeatureBlocks = component;
 
 module.exports = component;

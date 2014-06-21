@@ -6,12 +6,11 @@
  */
 
 /**
- * The Video component.
+ * Freeform component
  *
- * Stores data that supports the display of a single video and optional
- * text.  If text is available, it is either to the right or th left of the video.
+ * Stores data that represents a freeform HTML formatted region
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
@@ -32,7 +31,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "video-text",
+            type: "freeform",
 
             /**
              * The label for the component
@@ -47,31 +46,9 @@ var component = $$.m.ModelBase.extend({
             description:"",
 
             /**
-             * The html formatted text to display, if applicable
+             * the HTML formatted value
              */
-            text: null,
-
-            /**
-             * The position of the image relative to the text, left, right, center
-             *
-             * @see $$.m.cms.modules.VideoText.VIDEO_POSITION
-             */
-            videoPosition: "center",
-
-            /**
-             * The caption to accompany the image (optional)
-             */
-            caption: null,
-
-            /**
-             * The optional url of the image
-             */
-            url: null,
-
-            /**
-             * The optional embed code to embed the video (e.g. YouTube embed)
-             */
-            embed: null
+            value: ""
         }
     },
 
@@ -83,13 +60,6 @@ var component = $$.m.ModelBase.extend({
 
 }, {
 
-    VIDEO_POSITION: {
-        LEFT: "left",
-        RIGHT: "right",
-        CENTER: "center"
-    },
-
-
     validate: function() {
 
     }
@@ -97,6 +67,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.VideoText = component;
+$$.m.cms.modules.Freeform = component;
 
 module.exports = component;
