@@ -1117,6 +1117,10 @@ border-color: #4eb1ca;
   margin: 0 auto;
 }
 
+.ui-sortable {
+  padding: 0
+}
+
 input[type='file'] {
   text-indent: -99999px;
   color: transparent;
@@ -1153,4 +1157,11 @@ input[type='file'] {
   color: green;
   font-size: 29px;
   width: 25px;
+}
+
+.component.dragging {
+  overflow: hidden;
+  position: absolute;
+  z-index: 99999;
+  box-shadow: 0 0 12px -1px black;
 }

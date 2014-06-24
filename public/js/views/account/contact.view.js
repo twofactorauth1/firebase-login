@@ -45,6 +45,8 @@ define([
             var state = $$.u.querystringutils.getQueryStringValue("state");
             var detail = $$.u.querystringutils.getQueryStringValue("detail");
 
+            $('#main-viewport').css('max-height','none');
+
             if (state == "import") {
                 switch(detail) {
                     case $$.constants.social.types.GOOGLE:

@@ -1,7 +1,9 @@
 define([
     'views/account/cms/editwebsite.view',
-    'utils/utils'
-], function (EditWebsite, utils) {
+    'utils/utils',
+    'models/cms/components/blog',
+    'services/cms.service',
+], function (EditWebsite, utils, Blog, CmsService) {
 
     var view = EditWebsite.extend({
 
@@ -10,22 +12,7 @@ define([
         themeId: null,
 
         //temporary themes
-        themes: [
-            {
-                id: 1,
-                name: 'default',
-                description: 'this is the default description',
-                tags: ['tag1','tag2'],
-                preview: '/assets/images/theme-previews/indimain-preview.jpg'
-            },
-            {
-                id: 2,
-                name: 'indimain',
-                description: 'this is the indimain description',
-                tags: ['tag1','tag2'],
-                preview: '/assets/images/theme-previews/indimain-preview.jpg'
-            },
-        ],
+        themes: null,
 
         el: "#rightpanel",
         templateKey: "account/cms/website",
@@ -43,14 +30,19 @@ define([
             "click .btn-change-theme":"changeThemeModal",
             "click .btn-edit-theme":"editTheme",
             "click #change-theme-modal .thumbnail": "selectTheme",
-            "click .change-theme":"changeTheme"
+            "click .change-theme":"changeTheme",
+            "change .dd": "onComponentDrag",
+            "click .btn-add-component":"addComponent",
+            "click .add-post":"addBlankPost",
+            "click .add-page":"addBlankPage"
         },
 
         initialize: function () {
             console.log('rendering');
             var self = this
                 , p1 = this.getAccount()
-                , p2 = this.getWebsite();
+                , p2 = this.getWebsite()
+                , p3 = this.getAllThemes();
 
             $.when(p1)
                 .done(function () {
@@ -72,10 +64,85 @@ define([
          * Edit Website Sidebar
          * - Functions for Edit Website Sidebar
          */
+            addBlankPage: function() {
+                console.log('adding blank page');
+                $('#iframe-website').contents().find('ul.navbar-nav li:last-child').before('<li><a href="#">New Page</a></li>');
+            },
+
+            addBlankPost: function() {
+                var self = this;
+                console.log('Adding Blank Post');
+                // self.getPost().done(function () {
+                //     console.log('got the post');
+                // });
+                //TODO if not blog page navigate there then continue
+                //add blank post
+                var blankPostHTML = $$.templateManager.get("blankPost", self.templateKey);
+
+                var $iframe = $('#iframe-website');
+                $iframe.ready(function() {
+                    $iframe.contents().find("#main-area .entry").prepend(blankPostHTML);
+                });
+                //self.savePost();
+            },
+            // WORKING
+            addComponent: function () {
+                var self = this;
+                console.log('adding component');
+                //get component name
+                var componentName = $('#component-name').val();
+                //get component type
+                var componentType = $('#component-type').val();
+                //validate
+                //add to mongo
+                //get mongo id
+                var newComponent = self.getComponent();
+                console.log('New Component: '+JSON.stringify(newComponent));
+                //add to sidebar
+                var data = {
+                    "id": 1,
+                    "name": componentName,
+                    "type": componentType
+                };
+                var tmpl = $$.templateManager.get("draggable-component", self.templateKey);
+                var html = tmpl(data);
+                $('#sortable').append(html);
+                //add to site
+            },
+            // WORKING
+            getComponent: function() {
+                this.component = new Blog({});
+                var deferred = $.Deferred();
+                deferred.resolve(this.component);
+                return deferred;
+            },
+
+            onComponentDrag: function (event) {
+                var componentID = $(event.currentTarget).data('id');
+                console.log('Component Dragged '+componentID);
+            },
+
             selectTheme: function(e) {
                 $('#change-theme-modal .check-theme').hide();
                 $('#change-theme-modal .thumbnail').removeClass('selected');
                 $(e.currentTarget).addClass('selected').find('.check-theme').show();
+            },
+
+            getAllThemes: function() {
+                var self = this;
+
+                var promise = CmsService.getAllThemes();
+
+                promise
+                    .done(function (themes) {
+                        console.log('Themes: '+themes);
+                        self.themes = themes;
+                    })
+                    .fail(function (resp) {
+                        $$.viewManager.showAlert("An error occurred retreiving the Theme configuration for this website");
+                    });
+
+                return promise;
             },
 
             changeThemeModal: function() {

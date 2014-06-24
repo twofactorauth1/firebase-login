@@ -39,9 +39,14 @@ define([
                     var html = tmpl(data);
 
                     self.show(html);
+                    var sidetmpl = $$.templateManager.get("commerce-sidebar", self.templateKey);
+                    var rightPanel = $('#rightpanel');
+                    rightPanel.html('');
+                    rightPanel.append(sidetmpl);
                     self.check_welcome();
                 });
         },
+
         check_welcome: function() {
             if( $.cookie('dashboard-alert') === 'closed' ){
                 $('.alert').hide();
