@@ -35,7 +35,7 @@ mv public/min public/js
 ########################
 
 # zip the application
-zip -x *.git* -r "${APP_NAME}-${APP_VERSION}.zip" .
+zip -x *.git* node_modules/* -r "${APP_NAME}-${APP_VERSION}.zip" .
 
 # delete any version with the same name (based on the short revision)
 aws elasticbeanstalk delete-application-version --application-name "${APP_NAME}" --version-label "${APP_VERSION}"  --delete-source-bundle
