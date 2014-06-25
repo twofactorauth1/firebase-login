@@ -2,7 +2,7 @@
 
 export AWS_ACCESS_KEY_ID="AKIAIS2VFA3QL7JVKQQQ"
 export AWS_SECRET_ACCESS_KEY="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"
-export AWS_DEFAULT_REGION="US-EAST"
+export AWS_DEFAULT_REGION="us-east-1"
 export APP_NAME="indigeweb"
 export ENV_NAME=" indigeweb-develop-env"
 export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"

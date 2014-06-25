@@ -77,7 +77,7 @@ module.exports = function(grunt) {
 
         less: {
             style: {
-                files: {"../indigeweb-release/public/css/site.css":"public/less/site.less"}
+                files: {"./public/css/site.css":"public/less/site.less"}
             }
         },
 
