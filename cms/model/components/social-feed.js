@@ -6,11 +6,11 @@
  */
 
 /**
- * Logo list component
+ * The Social Feed copmonent
  *
- * Stores data that represents a list of logos used for marketing purposes.
+ * Stores data that represents a connection to a social feed
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
@@ -31,7 +31,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "single-post",
+            type: "social-feed",
 
             /**
              * The label for the component
@@ -45,9 +45,32 @@ var component = $$.m.ModelBase.extend({
              */
             description:"",
 
-            value:"",
+            /**
+             * The social feed type
+             *
+             * facebook | twitter | flickr | pinterest | instagram | blog
+             */
+            feedType: "",
 
-            posts: ""
+            /**
+             * The public URL to the feed if applicable
+             */
+            url: "",
+
+            /**
+             * Relevant credentials to access the given social feed
+             *
+             * {
+             *      username: "",
+             *      socialId: "",
+             * }
+             */
+            credentials: null,
+
+            /**
+             * Options used to determine what to pull
+             */
+            options: null
         }
     },
 
@@ -66,6 +89,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.SinglePost = component;
+$$.m.cms.modules.FeatureList = component;
 
 module.exports = component;

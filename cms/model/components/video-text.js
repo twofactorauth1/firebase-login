@@ -6,12 +6,12 @@
  */
 
 /**
- * The Contact Us Component
+ * The Video component.
  *
- * Stores data that represents information required
- * to dispaly Contact Us information
+ * Stores data that supports the display of a single video and optional
+ * text.  If text is available, it is either to the right or th left of the video.
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
@@ -23,19 +23,16 @@ var component = $$.m.ModelBase.extend({
              */
             _id: null,
 
-
             /**
              * Some themes may use this anchor to create
              * navigation directly to thise component
              */
             anchor: null,
 
-
             /**
              * The type of component this is
              */
-            type: "contact-us",
-
+            type: "video-text",
 
             /**
              * The label for the component
@@ -50,37 +47,31 @@ var component = $$.m.ModelBase.extend({
             description:"",
 
             /**
-             * The hours a business is open, array
-             *[
-             *  "mon-friday: 8-5",
-             *  "saturday: 9-4",
-             *  "sunday: "closed"
-             * ]
+             * The html formatted text to display, if applicable
              */
-            hours: [],
+            text: null,
 
             /**
-             * The location object
+             * The position of the image relative to the text, left, right, center
+             *
+             * @see $$.m.cms.modules.VideoText.VIDEO_POSITION
              */
-            location: {
-                address:"",
-                address2:"",
-                city:"",
-                state:"",
-                zip:"",
-                lat:"",
-                lon:"",
-                showMap: false,         // true | false
-                addressDisplayLabel: ""
-            },
+            videoPosition: "center",
 
             /**
-             * Email and phone
+             * The caption to accompany the image (optional)
              */
-            contact: {
-                email: "",
-                phone: ""
-            }
+            caption: null,
+
+            /**
+             * The optional url of the image
+             */
+            url: null,
+
+            /**
+             * The optional embed code to embed the video (e.g. YouTube embed)
+             */
+            embed: null
         }
     },
 
@@ -92,6 +83,13 @@ var component = $$.m.ModelBase.extend({
 
 }, {
 
+    VIDEO_POSITION: {
+        LEFT: "left",
+        RIGHT: "right",
+        CENTER: "center"
+    },
+
+
     validate: function() {
 
     }
@@ -99,6 +97,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.ContactUs = component;
+$$.m.cms.modules.VideoText = component;
 
 module.exports = component;

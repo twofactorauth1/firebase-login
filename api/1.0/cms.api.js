@@ -6,9 +6,15 @@
  */
 
 var baseApi = require('../base.api.js');
-var cmsDao = require('../../dao/cms.dao');
 
-var Page = require('../../models/cms/page');
+//TODO: there shouldn't be DAO references here
+
+var cmsDao = require('../../cms/dao/cms.dao.js');
+
+var Page = require('../../cms/model/page');
+
+
+var cmsManager = require('../../cms/cms_manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -36,6 +42,7 @@ _.extend(api.prototype, baseApi.prototype, {
         // THEME
         app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
         app.get(this.url(':accountid/cms/theme', "account"), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
+        app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
     },
 
 
@@ -133,6 +140,19 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    getAllThemes: function(req, res) {
+        var self = this;
+
+        cmsManager.getAllThemes(function(err, value) {
+            if (err) {
+                self.wrapError(res, 500, "Error retrieving all themes", err, value);
+            } else {
+                self.sendResult(res, value);
+            }
+        })
+
+
+    },
 
     getThemeConfigForAccountId: function(req, resp) {
         //TODO: Add Security
@@ -142,7 +162,7 @@ _.extend(api.prototype, baseApi.prototype, {
         accountId = parseInt(accountId);
 
         if (isNaN(accountId)) {
-            this.sendResultOnError(resp, "Account Id is not valid", "");
+            this.sendResultOrError(resp, "Account Id is not valid", "");
             self = null;
             return;
         }

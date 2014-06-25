@@ -6,12 +6,12 @@
  */
 
 /**
- * The Image slider component.
+ * The Facebook Likes components
  *
- * Stores data that supports multiple images, captions, and overlays and eventually
- * are displayed in a slider like comonent, usually for marketing purposes.
+ * Stores data that represents information required
+ * to allow user to like a page.
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
@@ -32,7 +32,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "image-slider",
+            type: "facebook-likes",
 
             /**
              * The label for the component
@@ -47,16 +47,19 @@ var component = $$.m.ModelBase.extend({
             description:"",
 
             /**
-             * An array of objects that contain image and caption data:
-             * [{
-             *      label:"",                   //The caption that appears beneath or aside from the image
-             *      description:""              //The description that appears beneath or aside from the image
-             *      overlayLabel:"",            //label overlay, positioned atop the image in the center
-             *      overlayDescription:""       //description overlay, positioned beneath the label
-             *      url:                        //The url of the image
-             * }]
+             * Relevant credentials to associate the facebook comments
+             *
+             * {
+             *      username: "",
+             *      socialId: "",
+             * }
              */
-            images: []
+            credentials: null,
+
+            /**
+             * Comment options
+             */
+            options: null
         }
     },
 
@@ -75,6 +78,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.ImageSlider = component;
+$$.m.cms.modules.FacebookLikes = component;
 
 module.exports = component;
