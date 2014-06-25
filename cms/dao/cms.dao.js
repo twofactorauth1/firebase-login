@@ -5,18 +5,18 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-var baseDao = require('./base.dao');
+var baseDao = require('./../../dao/base.dao.js');
 var fs = require('fs');
 var async = require('async');
 var crypto = require('crypto');
-var cryptoUtil = require('../utils/security/crypto');
+var cryptoUtil = require('../../utils/security/crypto');
 
-var accountDao = require('./account.dao');
-var themesConfig = require('../configs/themes.config');
+var accountDao = require('./../../dao/account.dao.js');
+var themesConfig = require('../../configs/themes.config.js');
 
-var Website = require('../models/cms/website');
-var Page = require('../models/cms/page');
-var BlogPost = require('../models/cms/blogpost');
+var Website = require('../model/website');
+var Page = require('../model/page');
+var BlogPost = require('../model/blogpost');
 
 var dao = {
 
@@ -856,7 +856,7 @@ var dao = {
                     components.forEach(function (component) {
                         var type = component;
 
-                        var component = require('../models/cms/components/' + type);
+                        var component = require('../model/components/' + type);
                         if (component != null) {
                             component = new component({
                                 _id: $$.u.idutils.generateUUID()
@@ -1301,7 +1301,7 @@ var dao = {
                     components.forEach(function (component) {
                         var type = component;
 
-                        var component = require('../models/cms/components/' + type);
+                        var component = require('../model/components/' + type);
                         if (component != null) {
                             component = new component({
                                 _id: $$.u.idutils.generateUUID()

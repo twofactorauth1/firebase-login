@@ -5,7 +5,7 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-require('../base.model.js');
+require('../../models/base.model.js');
 var cryptoUtil = require('../../utils/security/crypto');
 
 var website = $$.m.ModelBase.extend({

@@ -6,11 +6,12 @@
  */
 
 /**
- * The Social Feed copmonent
+ * The Feature List components
  *
- * Stores data that represents a connection to a social feed
+ * Stores data that represents a feature list for a product
+ * or service
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
@@ -31,7 +32,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "social-feed",
+            type: "feature-list",
 
             /**
              * The label for the component
@@ -46,31 +47,15 @@ var component = $$.m.ModelBase.extend({
             description:"",
 
             /**
-             * The social feed type
-             *
-             * facebook | twitter | flickr | pinterest | instagram | blog
+             * An array of features of the form
+             * [{
+             *      label: "",              //The label to display beneat the icon
+             *      description: "",        //The description to display beneath th elabel
+             *      url: null               //The URL of the icon / image
+             *      iconClass: null         //The classname of the icon to display
+             * ]}
              */
-            feedType: "",
-
-            /**
-             * The public URL to the feed if applicable
-             */
-            url: "",
-
-            /**
-             * Relevant credentials to access the given social feed
-             *
-             * {
-             *      username: "",
-             *      socialId: "",
-             * }
-             */
-            credentials: null,
-
-            /**
-             * Options used to determine what to pull
-             */
-            options: null
+            features: []
         }
     },
 

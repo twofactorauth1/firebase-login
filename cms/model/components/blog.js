@@ -10,7 +10,7 @@
  *
  * Stores data that represents a freeform HTML formatted region
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 

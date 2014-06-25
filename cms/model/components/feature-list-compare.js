@@ -12,7 +12,7 @@
  * between multiple products or services.  Maximum products
  * or services for comparison is 4.
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 

@@ -11,7 +11,7 @@
  * Stores data that supports the display of a single image and optional
  * text.  If text is available, it is either to the right or th left of the video.
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
@@ -32,7 +32,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "link-button-text",
+            type: "image-text",
 
             /**
              * The label for the component
@@ -52,19 +52,19 @@ var component = $$.m.ModelBase.extend({
             text: null,
 
             /**
-             * The position of the image relative to the text, left, right, center, none
+             * The position of the image relative to the text, left, right, center
              *
-             * @see $$.m.cms.modules.LinkButtonText.BUTTON_POSITION
+             * @see $$.m.cms.modules.ImageText.IMAGE_POSITION
              */
-            buttonPosition: "",
+            imagePosition: "",
 
             /**
-             * The label on the button
+             * The caption to accompany the image (optional)
              */
-            buttonLabel: "",
+            caption: null,
 
             /**
-             * The url the button links to
+             * The url of the image
              */
             url: ""
         }
@@ -78,7 +78,7 @@ var component = $$.m.ModelBase.extend({
 
 }, {
 
-    BUTTON_POSITION: {
+    IMAGE_POSITION: {
         LEFT: "left",
         RIGHT: "right",
         CENTER: "center"
@@ -92,6 +92,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.LinkButtonText = component;
+$$.m.cms.modules.ImageText = component;
 
 module.exports = component;

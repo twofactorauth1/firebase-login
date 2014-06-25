@@ -10,7 +10,7 @@
  *
  * Stores data that represents a list of logos used for marketing purposes.
  */
-require('../../base.model.js');
+require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
 
@@ -31,7 +31,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "logo-list",
+            type: "single-post",
 
             /**
              * The label for the component
@@ -45,16 +45,9 @@ var component = $$.m.ModelBase.extend({
              */
             description:"",
 
-            /**
-             * An array of logo objects of the form
-             * [{
-             *      label: "",              //The label to display beneat the icon
-             *      description: "",        //The description to display beneath th elabel
-             *      url: null               //The URL of the icon / image
-             *      iconClass: null         //The classname of the icon to display
-             * ]}
-             */
-            logos: []
+            value:"",
+
+            posts: ""
         }
     },
 
@@ -73,6 +66,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.LogoList = component;
+$$.m.cms.modules.SinglePost = component;
 
 module.exports = component;
