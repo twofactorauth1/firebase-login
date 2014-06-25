@@ -38,6 +38,7 @@
     "passport-google-oauth": "~0.1.5",
     "passport-linkedin-oauth2": "~1.1.1",
     "passport-local": "~0.1.6",
+    "passport-stripe": "~0.0.2",
     "passport-twitter": "~1.0.2",
     "request": "2.34.0",
     "requirejs": "2.1.10",
