@@ -7,7 +7,7 @@ export APP_NAME="indigeweb"
 export ENV_NAME="indigeweb-develop-env"
 export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
 
-# Kyle's creds
+# Kyle's creds -- can be removed
 #export AWS_ACCESS_KEY_ID="AKIAIZ67GOAMTI2C3IMA"
 #export AWS_SECRET_ACCESS_KEY="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"
 #export AWS_DEFAULT_REGION="us-west-2"
