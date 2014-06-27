@@ -12,6 +12,7 @@ var testHelpers = require('../../testhelpers/testhelpers.js');
 
 var stripeDao = require('../dao/stripe.dao.js');
 var _log = $$.g.getLogger("stripe.dao.test");
+var testContext = {};
 
 exports.device_dao_test = {
     setUp: function(cb) {
@@ -43,13 +44,70 @@ exports.device_dao_test = {
         var self = this;
         test.expect(1);
         _log.info('creating stripe customer.');
-        stripeDao.createStripeCustomer(null, self.contact, function(err, contact){
+        stripeDao.createStripeCustomer(null, self.contact, '0', function(err, contact){
             if (err) {
                 test.ok(false, err);
                 return test.done();
             }
+            console.dir(contact);
             test.notEqual(contact.stripeId, "", 'StripeId was not set.');
             test.done();
         });
+    },
+
+    testListStripeCustomers: function(test) {
+        var self = this;
+        stripeDao.listStripeCustomers('0', '10', function(err, customers){
+            if (err) {
+                test.ok(false, err);
+                return test.done();
+            }
+            _log.info('listing customers');
+            console.dir(customers);
+            testContext.customerId = customers.data[0].id;
+            test.done();
+        });
+    },
+
+    testGetStripeCustomer: function(test) {
+        var self = this;
+        stripeDao.getStripeCustomer(testContext.customerId, function(err, customer){
+            if (err) {
+                test.ok(false, err);
+                return test.done();
+            }
+            _log.info('get customer');
+            console.dir(customer);
+            test.done();
+        });
+    },
+
+    testUpdateStripeCustomer: function(test) {
+        var self = this;
+        test.expect(1);
+        stripeDao.getStripeCustomer(testContext.customerId, function(err, customer){
+            if (err) {
+                test.ok(false, err);
+                return test.done();
+            }
+            _log.info('get customer');
+            console.dir(customer);
+            var params = {};
+            params.description = 'New Description!';
+            stripeDao.updateStripeCustomer(testContext.customerId, params, function(err, customer){
+                if (err) {
+                    test.ok(false, err);
+                    return test.done();
+                }
+                _log.info('updated customer');
+                test.equals('New Description!', customer.description, "Description was not updated.");
+
+                test.done();
+            });
+        });
+    },
+
+    testDeleteStripeCustomer: function(test) {
+        //TODO
     }
 };
