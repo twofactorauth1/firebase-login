@@ -20,7 +20,8 @@ var Message = require('../../models/message');
 var Post = require('../../models/post');
 
 /*-- for facebook api--*/
-var FB = require('fb')
+var FB       = require('fb');
+var moment   = require('moment');
 
 var dao = {
 
@@ -416,46 +417,53 @@ var dao = {
             fn(null, _messages);
         });
     },
-    //region
 
-    getLikesPerDay: function (user, fn) {
+    //region
+    getLikesPerDay: function (user, options, fn) {
         var self = this;
         var myFacebookId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
+
+        if (accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+
         // default == last 7 days
-        var since = +new Date() || moment().utc().subtract('days', 7).startOf('day').toDate()
-            , until = +new Date() || moment().utc().startOf('day').toDate()
-
-        var url = '/' + myFacebookId + '/insights/page_fan_adds/day'
-
+        var since = +new Date(options.since) || moment().utc().subtract('days', 7).startOf('day').toDate()
+            , until = +new Date(options.until) || moment().utc().startOf('day').toDate();
+        var url = '/' + myFacebookId + '/insights/page_fan_adds/day';
         // make a call the facebook api through our fb package
         FB.api(url, 'get', {
             access_token: accessToken
             , since: since / 1000
             , until: until / 1000
-            , limit: 90
+            , limit: options.limit || 90
         }, function(res){
-            var data = res.data[0] && res.data[0].values
+            var data = res.data[0] && res.data[0].values;
             // no results
-            if (!data) return fn([])
+            if (!data) return fn([]);
 
             data = data.map(function(day, i){
-                var obj = { date: day.end_time.split('T')[0] }
-                obj[metric] = day.value
-                return obj
-            })
+                var obj = { date: day.end_time.split('T')[0] };
+                obj[metric] = day.value;
+                return obj;
+            });
 
-            fn(data)
+            fn(data);
         })
     },
 
-    getUnlikesPerDay:  function (user, fn) {
+    getUnlikesPerDay:  function (user, options, fn) {
         var self = this;
         var myFacebookId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
+
+        if (accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
         // default == last 7 days
-        var since = +new Date() || moment().utc().subtract('days', 7).startOf('day').toDate()
-            , until = +new Date() || moment().utc().startOf('day').toDate()
+        var since = +new Date(options.since) || moment().utc().subtract('days', 7).startOf('day').toDate()
+            , until = +new Date(options.until) || moment().utc().startOf('day').toDate()
 
         var url = '/' + myFacebookId + '/insights/page_fan_removes/day'
 
@@ -464,7 +472,7 @@ var dao = {
             access_token: accessToken
             , since: since / 1000
             , until: until / 1000
-            , limit: 90
+            , limit: options.limit || 90
         }, function(res){
             var data = res.data[0] && res.data[0].values
             // no results

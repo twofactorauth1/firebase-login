@@ -27,6 +27,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('friends/import'), this.isAuthApi, this.importFacebookFriends.bind(this));
         app.post(this.url('friends/import'), this.isAuthApi, this.importFacebookFriends.bind(this));
+
+        //facebook api
+        app.get(this.url('likesperday'), this.isAuthApi, this.getLikesPerDay.bind(this));
     },
 
 
@@ -90,7 +93,12 @@ _.extend(api.prototype, baseApi.prototype, {
     // Generate a function to get likes per day
     getLikesPerDay: function(req, resp) {
         var self = this;
-        facebookDao.getLikesPerDay(req.user, function(err, value) {
+        var options = {
+            since : req.query.since
+            , until : req.query.until
+            , limit : req.query.limit
+        };
+        facebookDao.getLikesPerDay(req.user, options, function(err, value) {
             if (!err) {
                 resp.send(value);
                 self = null;
@@ -105,7 +113,12 @@ _.extend(api.prototype, baseApi.prototype, {
     // Generate a function to get unlikes per day
     getUnlikesPerDay: function(req, resp) {
         var self = this;
-        facebookDao.getUnlikesPerDay(req.user, function(err, value) {
+        var options = {
+            since : req.query.since
+            , until : req.query.until
+            , limit : req.query.limit
+        };
+        facebookDao.getUnlikesPerDay(req.user, options, function(err, value) {
             if (!err) {
                 resp.send(value);
                 self = null;
