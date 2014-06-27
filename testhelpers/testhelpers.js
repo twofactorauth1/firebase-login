@@ -7,6 +7,7 @@
 
 var userDao = require('../dao/user.dao.js');
 var accountDao = require('../dao/account.dao.js');
+var contactDao = require('../dao/contact.dao.js');
 
 module.exports = {
 
@@ -50,6 +51,28 @@ module.exports = {
             fn(err, value);
         });
     },
+
+    createTestContact: function (fn) {
+        var _c = new $$.m.Contact({
+            first: 'Test',
+            last: 'Contact',
+            birthday: '01/01/1979',
+            details: [
+                {
+                    emails: ['test@example.com']
+                }
+            ]
+        });
+
+        contactDao.saveOrMerge(_c, function(err, value){
+            if(err) {
+                throw Error("Failed to create test contact: " + err.toString());
+            }
+            fn(err, value);
+        });
+    },
+
+
 
     closeDBConnections: function () {
         if ($$.g.mongos != null) {
