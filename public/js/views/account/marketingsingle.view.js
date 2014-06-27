@@ -13,20 +13,19 @@ define([
 
     var view = BaseView.extend({
 
-        templateKey: "account/commerce",
+        templateKey: "account/marketing",
 
         accounts: null,
 
         events: {
-            "click .close":"close_welcome"
+            "click .close":"close_welcome",
+            "click .campaign-list li":"getCampaign",
+            "click #btn-back-to-marketing":"viewMarketing"
         },
 
 
         render: function() {
-            console.log('render commerce');
-
-            $('#main-viewport').css('max-height','none');
-
+            console.log('render marketing single');
             var self = this
                 , p1 = this.getAccount()
                 , p2 = this.getUser();
@@ -38,16 +37,22 @@ define([
                         user: self.user.toJSON()
                     };
 
-                    var tmpl = $$.templateManager.get("commerce-main", self.templateKey);
-                    var html = tmpl(data);
+                    var tmpl = $$.templateManager.get("marketing-single", self.templateKey);
 
-                    self.show(html);
-                    var sidetmpl = $$.templateManager.get("commerce-sidebar", self.templateKey);
+                    self.show(tmpl);
+                    self.check_welcome();
+
+                    var sidetmpl = $$.templateManager.get("marketing-sidebar", self.templateKey);
                     var rightPanel = $('#rightpanel');
                     rightPanel.html('');
                     rightPanel.append(sidetmpl);
-                    self.check_welcome();
                 });
+        },
+
+        viewMarketing: function(event) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            $$.r.account.marketingRouter.showMarketing();
         },
 
         check_welcome: function() {
@@ -61,7 +66,7 @@ define([
     });
 
     $$.v.account = $$.v.account || {};
-    $$.v.account.CommerceView = view;
+    $$.v.account.MarketingSingleView = view;
 
     return view;
 });

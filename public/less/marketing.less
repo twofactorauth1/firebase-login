@@ -1,0 +1,80 @@
+.campaign-list {
+	padding: 0;
+
+	li {
+		border-radius: 3px;
+		background: #fcfcfc;
+		min-height: 75px;
+		line-height: 65px;
+		border-bottom: 1px solid #e4e7ea;
+	}
+
+	li:hover {
+		background-color: #e4e7ea;
+	    transition: background-color 1000ms linear;
+	}
+
+	.campaign-indicator, .campaign-name {
+		border-right: 1px solid #f3f3f3;
+		height: 75px;
+	}
+
+	.campaign-indicator {
+
+			i.active {
+				color:#47a865;
+			}
+
+			i.paused {
+				color:red;
+			}
+	}
+
+	.people-reached {
+		text-transform: uppercase;
+
+		.number {
+			color: #3cb878;
+			font-size: 30px;
+		}
+
+		p {
+			line-height: 15px;
+			margin: 15px 0 0 5px;
+		}
+	}
+
+	.timeframe {
+		p {
+			display: inline-block;
+			float: right;
+			color: #c2c2c2;
+		}
+
+		p:last-child {
+			margin-right: 30px;
+		}
+	}
+
+	.chevron {
+		font-size: 20px;
+	}
+}
+
+.marketing-single {
+	.campaign-details {
+		height: 100px;
+		background: white;
+		padding: 10px;
+	}
+
+	.campaign-performance {
+		padding: 10px;
+
+		h2 {
+			color: #444444;
+			text-shadow: 1px 1px 1px #c3c5c8;
+		}
+	}
+}
+

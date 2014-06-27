@@ -18,7 +18,8 @@ define([
         accounts: null,
 
         events: {
-            "click .close":"close_welcome"
+            "click .close":"close_welcome",
+            "click .campaign-list li":"viewSingleCampaign"
         },
 
 
@@ -40,8 +41,24 @@ define([
 
                     self.show(html);
                     self.check_welcome();
+
+                    var sidetmpl = $$.templateManager.get("marketing-sidebar", self.templateKey);
+                    var rightPanel = $('#rightpanel');
+                    rightPanel.html('');
+                    rightPanel.append(sidetmpl);
                 });
         },
+
+        viewSingleCampaign: function(event) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+
+            var self = this;
+            var campaignId = $(event.currentTarget).data("campaignid");
+            console.log('Campaign ID: '+campaignId);
+            $$.r.account.marketingRouter.showMarketingSingle(campaignId);
+        },
+
         check_welcome: function() {
             if( $.cookie('dashboard-alert') === 'closed' ){
                 $('.alert').hide();

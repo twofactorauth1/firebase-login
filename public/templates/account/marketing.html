@@ -7,117 +7,122 @@
 
 <script type="text/x-handlebars-template" name="marketing-main">
     <div class="pageheader row">
-    <div class="col-xs-9">
-        <h2><i class="fa fa-bullhorn"></i> Marketing</h2>
+        <div class="col-xs-9">
+            <h2><i class="fa fa-bullhorn"></i> Marketing</h2>
+        </div>
+        <div class="col-xs-3">
+            <a href="create_campaign.html" class="btn btn-success pull-right" type="button">
+                <span class="fa fa-plus"></span>
+                <span class="hidden-xs">Add Campaign</span>
+            </a>
+            <a href="create_campaign.html" class="btn btn-success pull-right" type="button">
+                <span class="hidden-xs">Templates</span>
+            </a>
+        </div>
+        <div class="clear"></div>
     </div>
-    <div class="col-xs-3">
-        <a href="create_campaign.html" class="btn btn-success pull-right" type="button">
-            <span class="fa fa-plus"></span>
-            <span class="hidden-xs">Create</span>
-        </a>
-    </div>
-    <div class="clear"></div>
-</div>
 
-<div class="alert alert-info fade in">
-    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-    <h4 class="center">Hi Robin, Welcome to Marketing!</h4>
-    <p class="center">Okay, it&#39;s time to create campaigns to get more customers. If you need assitance use any of the three ways below.</p>
-    <hr class="mb30"></hr>
-    <div class="col-sm-6">
-        <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about marketing.</h4>
-        <img class="onboard-vid" src="/assets/images/video-holder.jpg">
-    </div>
-    <div class="mb30"></div>
-    <div class="col-sm-6">
-        <h4><i class="fa fa-compass"></i> Schedule a Demo</h4>
-        <p>Schedule a personal demo with one of our customer support representatives who can show you via screen share how to create campaigns.</p>
-        <button class="btn btn-primary btn-lg">Schedule Now <i class="fa fa-caret-right"></i>
-        </button>
+    <div class="alert alert-info fade in">
+        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+        <h4 class="center">Hi Robin, Welcome to Marketing!</h4>
+        <p class="center">Okay, it&#39;s time to create campaigns to get more customers. If you need assitance use any of the three ways below.</p>
         <hr class="mb30"></hr>
-        <h4><i class="fa fa-file-text-o"></i> Read the Documentation</h4>
-        <p>If you prefer a list of steps to read, then head over to our detailed documentation about all the aspects of managing your campaigns.</p>
-        <button class="btn btn-primary btn-lg">View Docs <i class="fa fa-caret-right"></i>
-        </button>
+        <div class="col-sm-6">
+            <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about marketing.</h4>
+            <img class="onboard-vid" src="/assets/images/video-holder.jpg">
+        </div>
+        <div class="mb30"></div>
+        <div class="col-sm-6">
+            <h4><i class="fa fa-compass"></i> Schedule a Demo</h4>
+            <p>Schedule a personal demo with one of our customer support representatives who can show you via screen share how to create campaigns.</p>
+            <button class="btn btn-primary btn-lg">Schedule Now <i class="fa fa-caret-right"></i>
+            </button>
+            <hr class="mb30"></hr>
+            <h4><i class="fa fa-file-text-o"></i> Read the Documentation</h4>
+            <p>If you prefer a list of steps to read, then head over to our detailed documentation about all the aspects of managing your campaigns.</p>
+            <button class="btn btn-primary btn-lg">View Docs <i class="fa fa-caret-right"></i>
+            </button>
+        </div>
+        <div class="clearfix mb30"></div>
     </div>
-    <div class="clearfix mb30"></div>
-</div>
 
-<div class="contentpanel">
 
-    <div class="clearfix"></div>
+    <ul class="campaign-list">
+        <li class="row" data-campaignid="1">
+            <div class="col-xs-1 campaign-indicator"><p class="center"><i class="fa fa-circle active"></i></p></div>
+            <div class="col-xs-3 campaign-name"><h3>Yoga Newsletter</h3></div>
+            <div class="col-xs-2 people-reached"><span class="number pull-left">56</span><p class="pull-left">people </br> reached</p></div>
+            <div class="col-xs-5 timeframe"><p>Finish: August 5, 2014</p><p>Start: June 6, 2014</p></div>
+            <div class="col-xs-1 chevron"><p class="center"><i class="fa fa-chevron-right"></i></p></div>
+        </li>
+        <li class="row" data-campaignid="1">
+            <div class="col-xs-1 campaign-indicator"><p class="center"><i class="fa fa-circle active"></i></p></div>
+            <div class="col-xs-3 campaign-name"><h3>Yoga Newsletter</h3></div>
+            <div class="col-xs-2 people-reached"><span class="number pull-left">56</span><p class="pull-left">people </br> reached</p></div>
+            <div class="col-xs-5 timeframe"><p>Finish: August 5, 2014</p><p>Start: June 6, 2014</p></div>
+            <div class="col-xs-1 chevron"><p class="center"><i class="fa fa-chevron-right"></i></p></div>
+        </li>
+        <li class="row" data-campaignid="1">
+            <div class="col-xs-1 campaign-indicator"><p class="center"><i class="fa fa-circle active"></i></p></div>
+            <div class="col-xs-3 campaign-name"><h3>Yoga Newsletter</h3></div>
+            <div class="col-xs-2 people-reached"><span class="number pull-left">56</span><p class="pull-left">people </br> reached</p></div>
+            <div class="col-xs-5 timeframe"><p>Finish: August 5, 2014</p><p>Start: June 6, 2014</p></div>
+            <div class="col-xs-1 chevron"><p class="center"><i class="fa fa-chevron-right"></i></p></div>
+        </li>
+        <li class="row" data-campaignid="1">
+            <div class="col-xs-1 campaign-indicator"><p class="center"><i class="fa fa-circle active"></i></p></div>
+            <div class="col-xs-3 campaign-name"><h3>Yoga Newsletter</h3></div>
+            <div class="col-xs-2 people-reached"><span class="number pull-left">56</span><p class="pull-left">people </br> reached</p></div>
+            <div class="col-xs-5 timeframe"><p>Finish: August 5, 2014</p><p>Start: June 6, 2014</p></div>
+            <div class="col-xs-1 chevron"><p class="center"><i class="fa fa-chevron-right"></i></p></div>
+        </li>
+    </ul>
+</script>
 
-    <div class="panel panel-default row">
-        <div class="panel-body">
-            <div class="col-sm-6">
-                <input type="text" placeholder="Search Campaigns" class="form-control input-lg">
+<script type="text/x-handlebars-template" name="marketing-single">
+    <div class="marketing-single">
+        <div class="pageheader row">
+            <div class="col-xs-8">
+                <button id="btn-back-to-marketing" class="btn btn-success pull-left" type="button">
+                    <span class="fa fa-chevron-left"></span>
+                    <span class="hidden-xs">Back</span>
+                </button>
+                <h2><i class="fa fa-file-o"></i> Yoga Newsletter </h2>
             </div>
-            <div class="col-sm-6 form-horizontal">
-                <div class="form-group row">
-                    <select class=" form-control chosen-select input-lg">
-                        <option value="">Filter Campaigns</option>
-                        <option value="option1">Option1</option>
-                    </select>
+
+            <div class="col-xs-4">
+                <div class="btn btn-success pull-right btn-pause-campaign" type="button">
+                    <i class="fa fa-pause"/>
+                    <span class="hidden-xs">Pause Campaign</span>
                 </div>
             </div>
         </div>
-        <!-- panel-body -->
-    </div>
-    <!-- panel -->
-
-    <div class="mb30"></div>
-    <div class="campaign-list">
-        <div class="row">
-            <div class="col-xs-4" onclick="parent.location='view_campaign.html'">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h3>Name: Campaign #1</h3>
-                        <p>Status: Active</p>
-                        <p>Type: Social</p>
-                        <p>Goal: Sell Product #1</p>
-                        <p>Start: 2 days ago</p>
-                        <p>End: 1 week</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-4" onclick="parent.location='view_campaign.html'">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h3>Name: Campaign #2</h3>
-                        <p>Status: Active</p>
-                        <p>Type: Social</p>
-                        <p>Goal: Sell Product #1</p>
-                        <p>Start: 2 days ago</p>
-                        <p>End: 1 week</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-4" onclick="parent.location='view_campaign.html'">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h3>Name: Campaign #3</h3>
-                        <p>Status: Active</p>
-                        <p>Type: Social</p>
-                        <p>Goal: Sell Product #1</p>
-                        <p>Start: 2 days ago</p>
-                        <p>End: 1 week</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-4" onclick="parent.location='view_campaign.html'">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h3>Name: Campaign #4</h3>
-                        <p>Status: Active</p>
-                        <p>Type: Social</p>
-                        <p>Goal: Sell Product #1</p>
-                        <p>Start: 2 days ago</p>
-                        <p>End: 1 week</p>
-                    </div>
-                </div>
-            </div>
+        <div class="campaign-details">
+            <h4>Campaign Details</h4>
+        </div>
+        <div class="campaign-performance">
+            <h2 class="pull-left">Campaign Performance</h2>
+            <h2 class="pull-right">Campaign Performance</h2>
         </div>
     </div>
-</div>
+</script>
 
+<script type="text/x-handlebars-template" name="marketing-sidebar">
+    <div class="rightpanel rightpanel-marekting">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Page</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+
+            <div class="tab-content">
+                <div class="tab-pane pane-settings active" id="rp-page">
+                    <div class="leftpanelinner">
+                    </div>
+                </div>
+            </div>
+
+    </div><!-- rightpanel -->
 </script>
