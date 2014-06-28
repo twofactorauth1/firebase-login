@@ -13,6 +13,7 @@ var testHelpers = require('../../testhelpers/testhelpers.js');
 var stripeDao = require('../dao/stripe.dao.js');
 var _log = $$.g.getLogger("stripe.dao.test");
 var testContext = {};
+testContext.plans = [];
 
 exports.device_dao_test = {
     setUp: function(cb) {
@@ -137,10 +138,137 @@ exports.device_dao_test = {
     },
 
     testCreateStripePlan: function(test) {
-        test.done();
+        var self = this;
+        var planId = "plan_" + Date.now();
+        test.expect(8);
+        stripeDao.createStripePlan(planId, 100, "usd", "month", 1, "Plan ID", 0, {}, "Stmt Desc", null,
+            function(err, plan){
+                if(err) {
+                    test.ok(false, err);
+                    return test.done();
+                }
+                _log.info('received plan: ');
+                console.dir(plan);
+                test.equals(planId, plan.id);
+                test.equals(100, plan.amount);
+                test.equals('usd', plan.currency);
+                test.equals('month', plan.interval);
+                test.equals(1, plan.interval_count);
+                test.equals('Plan ID', plan.name);
+                test.equals(null, plan.trial_period_days);
+                test.equals('Stmt Desc', plan.statement_description);
+                testContext.plans.push(planId);
+                test.done();
+            });
+
     },
 
     testCreateStripePlanForAccount: function(test) {
+        /*
+            Skipping this test for now.  The call to Stripe with the accessID isn't behaving properly.
+         */
+        test.done();
+
+        /*
+        var self = this;
+        var planId = "plan_" + Date.now();
+        test.expect(8);
+        stripeDao.createStripePlan(planId, 100, "usd", "month", 1, "Plan ID", 0, {}, "Stmt Desc", 'test_access_id',
+            function(err, plan){
+                if(err) {
+                    test.ok(false, err);
+                    return test.done();
+                }
+                _log.info('received plan: ');
+                console.dir(plan);
+                test.equals(planId, plan.id);
+                test.equals(100, plan.amount);
+                test.equals('usd', plan.currency);
+                test.equals('month', plan.interval);
+                test.equals(1, plan.interval_count);
+                test.equals('Plan ID', plan.name);
+                test.equals(null, plan.trial_period_days);
+                test.equals('Stmt Desc', plan.statement_description);
+                testContext.plans.push(planId);
+                test.done();
+            });
+        */
+    },
+
+    testUpdateStripePlan : function(test) {
+        var self = this;
+        var planId = testContext.plans[0];
+        test.expect(2);
+        stripeDao.updateStripePlan(planId, 'New name', null, 'New DESC', null,  function(err, plan){
+            if(err) {
+                test.ok(false, err);
+                return test.done();
+            }
+            _log.info('updated plan: ');
+            test.equals('New name', plan.name);
+            test.equals('New DESC', plan.statement_description);
+            test.done();
+        });
+    },
+
+    testUpdateStripePlanForAccount : function(test) {
+        test.done();
+    },
+
+    testGetStripePlan: function(test) {
+        var self = this;
+        var planId = testContext.plans[0];
+        test.expect(1);
+        stripeDao.getStripePlan(planId, null, function(err, plan){
+            if(err) {
+                test.ok(false, err);
+                return test.done();
+            }
+            _log.info('got plan: ');
+            console.dir(plan);
+            test.equals(planId, plan.id);
+            test.done();
+        });
+    },
+
+    testGetStripePlanForAccount: function(test) {
+        test.done();
+    },
+
+    testListStripePlans: function(test) {
+        var self = this;
+        test.expect(1);
+        stripeDao.listStripePlans(null, function(err, plans){
+            if(err) {
+                test.ok(false, err);
+                return test.done();
+            }
+            _log.info('got plans: ');
+            console.dir(plans);
+            test.ok(plans.data.length > 0, "Did not retrieve any plans.");
+            test.done();
+        });
+    },
+
+    testListStripePlansForAccount: function(test) {
+        test.done();
+    },
+
+    testDeleteStripePlan: function(test) {
+        var self = this;
+        var planId = testContext.plans[0];
+        stripeDao.deleteStripePlan(planId, null, function(err, confirmation){
+            if(err) {
+                test.ok(false, err);
+                return test.done();
+            }
+            _log.info('delete plan.  Confirmation: ');
+            console.dir(confirmation);
+            test.done();
+        });
+    },
+
+    testDeleteStripePlanForAccount: function(test) {
         test.done();
     }
 };

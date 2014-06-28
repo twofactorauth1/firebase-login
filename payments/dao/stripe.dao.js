@@ -174,8 +174,8 @@ var dao = {
      *
      * @param id
      * @param amount
-     * @param currency
-     * @param interval
+     * @param currency (usd)
+     * @param interval (week, month, year)
      * @param interval_count
      * @param name
      * @param trial_period_days
@@ -203,17 +203,144 @@ var dao = {
          * If the accessToken is specified, we need to send it as the second argument.
          * Let's see what happens if it is null.
          */
+        if(accessToken && accessToken.length > 0) {
+            self.log.debug('creating plan for accessToken: ' + accessToken);
+            stripe.plans.create(params, accessToken, function(err, plan) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, plan);
 
-        stripe.plans.create(params, accessToken, function(err, plan) {
-            if(err) {
-                fn(err, contact);
-                fn = null;
-            }
-            self.log.debug('<< createStripePlan');
-            return fn(err, plan);
-        });
+                }
+                self.log.debug('<< createStripePlan');
+                return fn(err, plan);
+            });
+        } else {
+            self.log.debug('creating plan for main account');
+            stripe.plans.create(params, function(err, plan) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, plan);
 
+                }
+                self.log.debug('<< createStripePlan');
+                return fn(err, plan);
+            });
+        }
+    },
 
+    getStripePlan : function(planId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getStripePlan');
+        if(accessToken && accessToken.length > 0) {
+            stripe.plans.retrieve(planId, accessToken, function(err, plan) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, plan);
+                }
+                self.log.debug('<< getStripePlan');
+                return fn(err, plan);
+            });
+        } else {
+            stripe.plans.retrieve(planId, function(err, plan) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, plan);
+                }
+                self.log.debug('<< getStripePlan');
+                return fn(err, plan);
+            });
+        }
+    },
+
+    /**
+     * Updates name, metadata, or statment_description for the given planId.  PlanId and at least one
+     * of the following arguments must be specified.
+     * @param planId
+     * @param name
+     * @param metadata
+     * @param statement_description
+     * @param accessToken
+     * @param fn
+     */
+    updateStripePlan : function(planId, name, metadata, statement_description, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> updateStripePlan');
+        var params = {};
+        if(name && name.length > 0) {params.name = name;}
+        if(metadata) {params.metadata = metadata;}
+        if(statement_description && statement_description.length > 0) {params.statement_description = statement_description;}
+
+        if(accessToken && accessToken.length > 0) {
+            stripe.plans.update(planId, params, accessToken, function(err, plan) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, plan);
+                }
+                self.log.debug('<< updateStripePlan');
+                return fn(err, plan);
+            });
+        } else {
+            stripe.plans.update(planId, params, function(err, plan) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, plan);
+                }
+                self.log.debug('<< updateStripePlan');
+                return fn(err, plan);
+            });
+        }
+
+    },
+
+    deleteStripePlan: function(planId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> deleteStripePlan');
+        if(accessToken && accessToken.length > 0) {
+            stripe.plans.del(planId, accessToken, function(err, confirmation) {
+                    if(err) {
+                        self.log.error('error: ' + err);
+                        return fn(err, confirmation);
+                    }
+                    self.log.debug('<< deleteStripePlan');
+                    return fn(err, confirmation);
+                }
+            );
+        } else{
+            stripe.plans.del(planId, function(err, confirmation) {
+                    if(err) {
+                        self.log.error('error: ' + err);
+                        return fn(err, confirmation);
+                    }
+                    self.log.debug('<< deleteStripePlan');
+                    return fn(err, confirmation);
+                }
+            );
+        }
+
+    },
+
+    listStripePlans: function(accessToken, fn) {
+        var self = this;
+        self.log.debug('>> listStripePlans');
+        if(accessToken && accessToken.length > 0) {
+            stripe.plans.list(accessToken, function(err, plans) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, plans);
+                }
+                self.log.debug('<< listStripePlans');
+                return fn(err, plans);
+            });
+        } else {
+            stripe.plans.list(function(err, plans) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, plans);
+                }
+                self.log.debug('<< listStripePlans');
+                return fn(err, plans);
+            });
+        }
     }
 
 
