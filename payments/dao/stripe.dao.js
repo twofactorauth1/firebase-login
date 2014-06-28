@@ -21,6 +21,13 @@ var dao = {
         defaultModel: null//TODO: maybe make this a payment?
     },
 
+    /**
+     * Customers are created on the application account
+     * @param cardToken
+     * @param contact
+     * @param accountId
+     * @param fn
+     */
     createStripeCustomer: function(cardToken, contact, accountId, fn) {
         //TODO: check if this is already a customer and add accountId
         var self = this;
@@ -153,12 +160,60 @@ var dao = {
                             fn(err, contact);
                             fn = null;
                         }
-                        return fn(null, null);
+                        return fn(null, confirmation);
                     });
                 });
+            } else {
+                return fn(null, confirmation);
             }
 
         });
+    },
+
+    /**
+     *
+     * @param id
+     * @param amount
+     * @param currency
+     * @param interval
+     * @param interval_count
+     * @param name
+     * @param trial_period_days
+     * @param metadata
+     * @param statement_description
+     * @param accessToken
+     * @param fn
+     */
+    createStripePlan : function(id, amount, currency, interval, interval_count, name, trial_period_days, metadata,
+                                statement_description, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> createStripePlan');
+        var params = {};
+        if(id) {params.id = id;}
+        if(amount) {params.amount = amount;}
+        if(currency) {params.currency = currency;}
+        if(interval) {params.interval = interval;}
+        if(interval_count) {params.interval_count = interval_count;}
+        if(name) {params.name = name;}
+        if(trial_period_days) {params.trial_period_days = trial_period_days;}
+        if(metadata) {params.metadata = metadata;}
+        if(statement_description) {params.statement_description = statement_description};
+
+        /*
+         * If the accessToken is specified, we need to send it as the second argument.
+         * Let's see what happens if it is null.
+         */
+
+        stripe.plans.create(params, accessToken, function(err, plan) {
+            if(err) {
+                fn(err, contact);
+                fn = null;
+            }
+            self.log.debug('<< createStripePlan');
+            return fn(err, plan);
+        });
+
+
     }
 
 

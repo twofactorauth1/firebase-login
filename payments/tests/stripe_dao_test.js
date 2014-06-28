@@ -108,6 +108,39 @@ exports.device_dao_test = {
     },
 
     testDeleteStripeCustomer: function(test) {
-        //TODO
+        var self = this;
+        test.expect(1);
+        stripeDao.getStripeCustomer(testContext.customerId, function(err, customer) {
+            if (err) {
+                test.ok(false, err);
+                return test.done();
+            }
+            _log.info('got customer... now try to delete it.');
+            stripeDao.deleteStripeCustomer(testContext.customerId, null, function(err, confirmation){
+                if (err) {
+                    test.ok(false, err);
+                    return test.done();
+                }
+                console.dir(confirmation);
+                _log.info('deleted customer.  Make sure when we get customer again, it shows deleted.');
+                stripeDao.getStripeCustomer(testContext.customerId, function(err, customer) {
+                   if(err) {
+                       test.ok(false, err);
+                       return test.done();
+                   }
+                   console.dir(customer);
+                   test.ok(customer.deleted, "Deleted was not true");
+                   test.done();
+                });
+            });
+        });
+    },
+
+    testCreateStripePlan: function(test) {
+        test.done();
+    },
+
+    testCreateStripePlanForAccount: function(test) {
+        test.done();
     }
 };
