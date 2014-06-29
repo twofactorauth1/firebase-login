@@ -39,6 +39,8 @@ require.config({
         leaflet: 'libs/leaflet/leaflet',
         colorthief: 'libs/colorthief/colorthief',
         waypoints: 'libs/waypoints/waypoints.min',
+        moment: 'libs/moment/moment.min',
+        daterangepicker: 'libs/bootstrap/daterangepicker',
 
         //UI SPECIFIC
         toggles: 'libs/misc/toggles.min'
@@ -98,6 +100,12 @@ require.config({
         toggles: {
             deps: ['jquery']
         },
+        moment: {
+            deps: ['jquery']
+        },
+        daterangepicker: {
+            deps: ['jquery', 'moment']
+        },
         app: {
             deps: [
                 'jquery',
@@ -116,6 +124,8 @@ require.config({
                 'leaflet',
                 'colorthief',
                 'waypoints',
+                'moment',
+                'daterangepicker',
             ]
         }
     },

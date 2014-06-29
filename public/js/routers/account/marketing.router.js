@@ -7,15 +7,16 @@
 
 define([
     'views/account/marketing.view',
-    'views/account/marketingsingle.view'
-], function(MarketingView, MarketingSingleView) {
+    'views/account/marketingsingle.view',
+    'views/account/marketingtemplates.view',
+], function(MarketingView, MarketingSingleView, MarketingTemplatesView) {
 
     var router = Backbone.Router.extend({
 
         routes: {
             "marketing":"showMarketing",
-            "marketing/":"showMarketing",
-            "marketing/:campaignId":"showMarketingSingle"
+            "marketing/campaign/:campaignId":"showMarketingSingle",
+            "marketing/templates":"showMarketingTemplates",
         },
 
         showMarketing: function() {
@@ -32,7 +33,12 @@ define([
             var view = new MarketingSingleView();
             view.campaignId = campaignId;
             $$.viewManager.replaceMain(view);
-        }
+        },
+
+        showMarketingTemplates: function () {
+            var view = new MarketingTemplatesView();
+            $$.viewManager.replaceMain(view);
+        },
     });
 
 

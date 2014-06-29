@@ -17,29 +17,26 @@ define([
 
         accounts: null,
 
-        events: {
-            "click .close":"close_welcome",
-            "click .campaign-list li":"viewSingleCampaign",
-            "click .btn-view-templates":"viewTemplates"
+         events: {
+            "click #btn-back-to-marketing":"viewMarketing",
         },
 
-
         render: function() {
+            console.log('render templates');
             var self = this
                 , p1 = this.getAccount()
                 , p2 = this.getUser();
 
             $.when(p1, p2)
                 .done(function() {
-                    var data = {
-                        account: self.account.toJSON(),
-                        user: self.user.toJSON()
-                    };
+                    // var data = {
+                    //     account: self.account.toJSON(),
+                    //     user: self.user.toJSON()
+                    // };
 
-                    var tmpl = $$.templateManager.get("marketing-main", self.templateKey);
-                    var html = tmpl(data);
+                    var tmpl = $$.templateManager.get("marketing-templates", self.templateKey);
 
-                    self.show(html);
+                    self.show(tmpl);
                     self.check_welcome();
 
                     self.adjustWindowSize();
@@ -53,21 +50,18 @@ define([
                 });
         },
 
-        viewSingleCampaign: function(event) {
-            event.stopImmediatePropagation();
-            event.preventDefault();
-
-            var self = this;
-            var campaignId = $(event.currentTarget).data("campaignid");
-            $$.r.account.marketingRouter.showMarketingSingle(campaignId);
-        },
-
         adjustWindowSize: function() {
             $('#main-viewport').css('overflow', 'none');
             var headerBar = $('#headerbar').outerHeight();
             var pageHeader = $('.pageheader').outerHeight();
             var mainViewportHeight = $(window).height() - headerBar - pageHeader-10;
             $('ul.campaign-list').css('min-height', mainViewportHeight);
+        },
+
+        viewMarketing: function(event) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            $$.r.account.marketingRouter.showMarketing();
         },
 
         viewTemplates: function() {
@@ -85,7 +79,7 @@ define([
     });
 
     $$.v.account = $$.v.account || {};
-    $$.v.account.MarketingView = view;
+    $$.v.account.MarketingTemplatesView = view;
 
     return view;
 });
