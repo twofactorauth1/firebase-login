@@ -86,11 +86,19 @@ module.exports = function(grunt) {
         },
 
         watch: {
-            files: "../indigeweb/public/less/*",
-            tasks: ["less"],
+            less: {
+                files: "../indigeweb/public/less/*",
+                tasks: ["less"],
+            },
+            html: {
+                files: "../indigeweb/public/templates/**/*.html",
+            },
+            scripts: {
+              files: '../indigeweb/public/js/**/*.js',
+            },
             options: {
               livereload: true
-            }
+            },
         },
 
         requirejs: {
