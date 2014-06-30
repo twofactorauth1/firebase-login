@@ -1,0 +1,73 @@
+#social_dashboard {
+
+  #social_dashboard_rightbar {
+    padding: 0 15px 15px;
+    width: 190px;
+    position: fixed;
+    top: 50px;
+    right: 0;
+    bottom: 0;
+    border-right: 1px solid #d3d3d3;
+    box-shadow: 1px 0 0 #f7f7f7;
+    background: #e7e7e7;
+    .header {
+      font-size: 14px;
+      line-height: 20px;
+      #gradient > .vertical(#eee, #ccc);
+      width: 190px;
+      margin:0 0 0 -15px;
+      padding: 6px 15px;
+      border-bottom: 1px solid #aaa;
+      border-top: 1px solid #fafafa;
+      position: relative;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.9;
+      }
+      .arrow.open,
+      .arrow.closed {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        vertical-align: top;
+        border-left: 4px solid #444;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        content: "";
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        margin-top: -3px;
+      }
+      .arrow.open {
+        border-top: 4px solid #444;
+        border-right: 4px solid transparent;
+        border-left: 4px solid transparent;
+        margin-top: 0;
+      }
+    }
+    .accordion + .section {
+      max-height: 0;
+      overflow: hidden;
+      .transition(max-height .2s);
+      &.open {
+        max-height: 800px;
+      }
+    }
+    .section {
+      // padding: 10px 0 20px;
+      & > :first-child {
+        margin-top: 10px;
+      }
+      & > :last-child {
+        margin-bottom: 20px
+      }
+    }
+    .alert {
+      margin-top: 8px;
+      margin-bottom: 8px;
+      input { vertical-align: top; }
+      label { display: inline; }
+    }
+  }
+}

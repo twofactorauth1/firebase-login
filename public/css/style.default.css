@@ -19514,6 +19514,81 @@ input[type='file'] {
   line-height: normal;
   border-radius: 2px;
 }
+#social_dashboard #social_dashboard_rightbar {
+  padding: 0 15px 15px;
+  width: 190px;
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  border-right: 1px solid #d3d3d3;
+  box-shadow: 1px 0 0 #f7f7f7;
+  background: #e7e7e7;
+}
+#social_dashboard #social_dashboard_rightbar .header {
+  font-size: 14px;
+  line-height: 20px;
+  background-image: -webkit-linear-gradient(top, #eeeeee 0%, #cccccc 100%);
+  background-image: linear-gradient(to bottom, #eeeeee 0%, #cccccc 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffeeeeee', endColorstr='#ffcccccc', GradientType=0);
+  width: 190px;
+  margin: 0 0 0 -15px;
+  padding: 6px 15px;
+  border-bottom: 1px solid #aaa;
+  border-top: 1px solid #fafafa;
+  position: relative;
+  cursor: pointer;
+}
+#social_dashboard #social_dashboard_rightbar .header:hover {
+  opacity: 0.9;
+}
+#social_dashboard #social_dashboard_rightbar .header .arrow.open,
+#social_dashboard #social_dashboard_rightbar .header .arrow.closed {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  vertical-align: top;
+  border-left: 4px solid #444;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-top: -3px;
+}
+#social_dashboard #social_dashboard_rightbar .header .arrow.open {
+  border-top: 4px solid #444;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  margin-top: 0;
+}
+#social_dashboard #social_dashboard_rightbar .accordion + .section {
+  max-height: 0;
+  overflow: hidden;
+  -webkit-transition: max-height 0.2s;
+  transition: max-height 0.2s;
+}
+#social_dashboard #social_dashboard_rightbar .accordion + .section.open {
+  max-height: 800px;
+}
+#social_dashboard #social_dashboard_rightbar .section > :first-child {
+  margin-top: 10px;
+}
+#social_dashboard #social_dashboard_rightbar .section > :last-child {
+  margin-bottom: 20px;
+}
+#social_dashboard #social_dashboard_rightbar .alert {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+#social_dashboard #social_dashboard_rightbar .alert input {
+  vertical-align: top;
+}
+#social_dashboard #social_dashboard_rightbar .alert label {
+  display: inline;
+}
 ul {
   list-style: none;
 }
