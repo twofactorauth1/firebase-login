@@ -9,6 +9,7 @@ var baseDao = require('../../dao/base.dao.js');
 var stripeConfigs = require('../../configs/stripe.config.js');
 var appConfig = require('../../configs/app.config.js');
 var contactDao = require('../../dao/contact.dao.js');
+var subscriptionDao = require('./subscription.dao.js');
 
 /*-- for stripe api--*/
 var stripe = require("stripe")( stripeConfigs.KM_STRIPE_TEST_SECRET_KEY);//TODO: app config
@@ -341,9 +342,156 @@ var dao = {
                 return fn(err, plans);
             });
         }
+    },
+
+    /**
+     * The arguments customerId and planId are required.  Passing in a card will overwrite customer's current card settings.
+     * Passing an accessToken will create the subscription on behalf of the account to which it applies.  The metadata
+     * object allows for custom name/value pair properties.
+     * @param customerId
+     * @param planId
+     * @param coupon
+     * @param trial_end
+     * @param card
+     * @param quantity
+     * @param application_fee_percent
+     * @param metadata
+     * @param accessToken
+     * @param fn
+     *
+     * Returns Stripe Subscription object.  *Note* An internal subscription object has also been created.
+     */
+    createStripeSubscription: function(customerId, planId, coupon, trial_end, card, quantity, application_fee_percent,
+                                       metadata, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> createStripeSubscription');
+        var params = {};
+        params.planId = planId;
+        if(coupon && coupon.length>0) {params.coupon = coupon;}
+        if(trial_end && trial_end.length>0){params.trial_end = trial_end;}
+        if(card) {params.card = card;}
+        if(quantity && quantity.length > 0) {params.quantity = quantity;}
+        if(application_fee_percent && application_fee_percent.length>0) {params.application_fee_percent = application_fee_percent;}
+        if(metadata) {params.metadata = metadata;}
+
+        if(accessToken && accessToken.length > 0) {
+            stripe.customers.createSubscription(customerId, params, accessToken, function(err, subscription) {
+                    if(err) {
+                        self.log.error('error: ' + err);
+                        return fn(err, subscription);
+                    }
+                    //create subscription record...NEED accountId and contactId
+                    var sub = new $$.m.Subscription({
+                        accountId: null,
+                        contactId: null,
+                        stripeCustomerId: customerId,
+                        stripeSubscriptionId: subscription.id,
+                        stripePlanId: planId
+                    });
+                    subscriptionDao.saveOrUpdate(sub, function(err, _sub){
+                        if(err) {
+                            self.log.error('error: ' + err);
+                            return fn(err, subscription);
+                        }
+                        self.log.debug('<< createStripeSubscription');
+                        return fn(err, subscription);
+                    });
+                }
+            );
+        } else {
+            stripe.customers.createSubscription(customerId, params, function(err, subscription) {
+                    if(err) {
+                        self.log.error('error: ' + err);
+                        return fn(err, subscription);
+                    }
+                    //create subscription record...NEED accountId and contactId
+                    var sub = new $$.m.Subscription({
+                        accountId: null,
+                        contactId: null,
+                        stripeCustomerId: customerId,
+                        stripeSubscriptionId: subscription.id,
+                        stripePlanId: planId
+                    });
+                    subscriptionDao.saveOrUpdate(sub, function(err, _sub){
+                        if(err) {
+                            self.log.error('error: ' + err);
+                            return fn(err, subscription);
+                        }
+                        self.log.debug('<< createStripeSubscription');
+                        return fn(err, subscription);
+                    });
+                }
+            );
+        }
+    },
+
+    getStripeSubscription: function(customerId, subscriptionId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getStripeSubscription');
+        if(accessToken && accessToken.length>0) {
+            stripe.customers.retrieveSubscription( customerId, subscriptionId, accessToken,
+                function(err, subscription) {
+                    if(err) {
+                        self.log.error('error: ' + err);
+                        return fn(err, subscription);
+                    }
+                    self.log.debug('<< getStripeSubscription');
+                    return fn(err, subscription);
+                }
+            );
+        } else {
+            stripe.customers.retrieveSubscription( customerId, subscriptionId,
+                function(err, subscription) {
+                    if(err) {
+                        self.log.error('error: ' + err);
+                        return fn(err, subscription);
+                    }
+                    self.log.debug('<< getStripeSubscription');
+                    return fn(err, subscription);
+                }
+            );
+        }
+
+    },
+
+    updateStripeSubscription: function(customerId, subscriptionId, planId, coupon, prorate, trial_end, card, quantity,
+                                       application_fee_percent, metadata, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> updateStripeSubscription');
+        var params = {};
+        if(planId && planId.length>0){params.planId = planId;}
+        if(coupon && coupon.length>0) {params.coupon = coupon;}
+        if(trial_end && trial_end.length>0){params.trial_end = trial_end;}
+        if(card) {params.card = card;}
+        if(quantity && quantity.length > 0) {params.quantity = quantity;}
+        if(application_fee_percent && application_fee_percent.length>0) {params.application_fee_percent = application_fee_percent;}
+        if(metadata) {params.metadata = metadata;}
+
+        if(accessToken && accessToken.length>0) {
+            stripe.customers.updateSubscription( customerId, subscriptionId, params, accessToken,
+                function(err, subscription) {
+                    if(err) {
+                        self.log.error('error: ' + err);
+                        return fn(err, subscription);
+                    }
+                    self.log.debug('<< updateStripeSubscription');
+                    return fn(err, subscription);
+                }
+            );
+        } else {
+            stripe.customers.updateSubscription( customerId, subscriptionId, params,
+                function(err, subscription) {
+                    if(err) {
+                        self.log.error('error: ' + err);
+                        return fn(err, subscription);
+                    }
+                    self.log.debug('<< updateStripeSubscription');
+                    return fn(err, subscription);
+                }
+            );
+        }
+
     }
-
-
 
 };
 
