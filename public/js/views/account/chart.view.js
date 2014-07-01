@@ -33,6 +33,8 @@ define([
         setupElement: function(){
             this.$el.empty()
                 .addClass('grid' + this.options.gridWidth)
+                .addClass('module')
+                .addClass('chart-item')
                 .attr({
                     draggable: 'true'
                     , id: this.cid

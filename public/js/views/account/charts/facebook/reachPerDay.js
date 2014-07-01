@@ -31,18 +31,18 @@ define([
 
             // paid / organic / viral
 
-            $$.log("Rendering %s", this.id, data, options)
+            console.log("Rendering %s", this.id, data, options);
 
-            var parseDate = d3.time.format("%Y-%m-%d").parse
+            var parseDate = d3.time.format("%Y-%m-%d").parse;
 
             // Normalize data.
             // Make sure you don't modify the original data object,
             // otherwise this might fail on subsequent renders
             data = data.map(function(day){
 
-                var paid    = $$.util.toNumber(day.paid, 0)
-                    , organic = S$.util.toNumber(day.organic, 0)
-                    , viral   = $$.util.toNumber(day.viral, 0)
+                var paid    = $$.u.numberutils.toNumber(day.paid, 0)
+                    , organic = $$.u.numberutils.toNumber(day.organic, 0)
+                    , viral   = $$.u.numberutils.toNumber(day.viral, 0);
 
                 return {
                     date    : parseDate(day.date)
@@ -53,7 +53,7 @@ define([
                 }
             })
 
-            this.process(options)
+            this.process(options);
 
             var w = this.w
                 , h = this.h
@@ -75,23 +75,23 @@ define([
             var preview = h < 200
 
             var max = d3.max(data, function(d){ return d.total })
-                , barWidth = Math.floor((w - p.r) / data.length) - 3
+                , barWidth = Math.floor((w - p.r) / data.length) - 3;
 
             max = Math.floor(max * 1.55) // never allow bars to reach full height
 
             // Scales
             var x = d3.time.scale()
                 .range([p.l, w - p.r - barWidth]) // ends at X origin of the last bar, not the whole area
-                .domain(d3.extent(data, function(d){ return d.date }))
+                .domain(d3.extent(data, function(d){ return d.date }));
 
             var y = d3.scale.linear()
                 .rangeRound([0, h - p.b])
                 .domain([max, 0])
 
             var color = d3.scale.ordinal()
-                .range(["#7f7", "#99f", "#77f"])
+                .range(["#7f7", "#99f", "#77f"]);
 
-            color.domain(_.without(d3.keys(data[0]), 'date', 'total').reverse())
+            color.domain(_.without(d3.keys(data[0]), 'date', 'total').reverse());
 
             data.forEach(function(d) {
                 var y0 = 0
@@ -116,25 +116,25 @@ define([
 
             // X axis (date)
             var xFormat = (data.length <= 7) ? "%a %d" : "%d"
-                , xInterval = (data.length <= 7) ? 1 : (data.length <= 30) ? 2 : 5
+                , xInterval = (data.length <= 7) ? 1 : (data.length <= 30) ? 2 : 5;
 
             var xAxis = d3.svg.axis()
                 .scale(x)
                 .orient("bottom")
                 .ticks(d3.time.days, xInterval)
-                .tickFormat(d3.time.format(xFormat))
+                .tickFormat(d3.time.format(xFormat));
 
             root.append("g")
                 .attr("class", "x-axis")
                 .attr("transform", "translate(" + [Math.floor(barWidth / 2), h - p.b] + ")")
-                .call(xAxis)
+                .call(xAxis);
 
             var days = root.selectAll(".day")
                 .data(data)
                 .enter().append("g")
                 .attr("class", "g")
                 .attr("data-x", function(d){ return Math.floor(x(d.date)) })
-                .attr("transform", function(d) { return "translate(" + x(d.date) + ",0)" })
+                .attr("transform", function(d) { return "translate(" + x(d.date) + ",0)" });
 
             days.selectAll("rect")
                 .data(function(d) { return d.values })
@@ -146,7 +146,7 @@ define([
                 .transition(200)
                 .delay(function(d, i){ return i * 200 })
                 .attr("height", function(d) { return y(d.y0) - y(d.y1) })
-                .attr("y", function(d) { return y(d.y1) })
+                .attr("y", function(d) { return y(d.y1) });
 
             var chart = this
 
@@ -160,9 +160,9 @@ define([
 
                 var title = d.date.toLocaleDateString()
                     , content = [
-                        textline({ n: SR.util.format(d.paid)   , color: color('paid'), text: 'paid' })
-                        , textline({ n: SR.util.format(d.organic), color: color('organic'), text: 'organic' })
-                        , textline({ n: SR.util.format(d.viral)  , color: color('viral'), text: 'viral' })
+                        textline({ n: $$.u.formatutils.formatInteger(d.paid)   , color: color('paid'), text: 'paid' })
+                        , textline({ n: $$.u.formatutils.formatInteger(d.organic), color: color('organic'), text: 'organic' })
+                        , textline({ n: $$.u.formatutils.formatInteger(d.viral)  , color: color('viral'), text: 'viral' })
                     ].join("<br/>")
 
                 var pop = chart.createPopover('left', title, content)
@@ -176,7 +176,7 @@ define([
                 $(this)
                     .on('mouseenter', $.proxy(pop.show, pop, 0))
                     .on('mouseleave', $.proxy(pop.hide, pop, 0))
-            })
+            });
 
             // legend
             var legend = root.selectAll(".legend")

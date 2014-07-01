@@ -29,18 +29,18 @@ define([
         ]
         , render: function (data, options) {
 
-            $$.log("Rendering %s", this.id, data, options)
+            console.log("Rendering %s", this.id, data, options);
 
-            var parseDate = d3.time.format("%Y-%m-%d").parse
+            var parseDate = d3.time.format("%Y-%m-%d").parse;
 
             // Normalize data.
             // Make sure you don't modify the original data object,
             // otherwise this might fail on subsequent renders
             data = data.map(function(day){
 
-                var likes    = $$.util.toNumber(day.likes, 0)
-                    , shares   = $$.util.toNumber(day.shares, 0)
-                    , comments = $$.util.toNumber(day.comments, 0)
+                var likes    = $$.u.numberutils.toNumber(day.likes, 0)
+                    , shares   = $$.u.numberutils.toNumber(day.shares, 0)
+                    , comments = $$.u.numberutils.toNumber(day.comments, 0);
 
                 return {
                     date     : parseDate(day.date)
@@ -51,21 +51,21 @@ define([
                 }
             })
 
-            this.process(options)
+            this.process(options);
 
             var w = this.w
                 , h = this.h
-                , p = this.padding
+                , p = this.padding;
 
             // Base layer
-            var root = this.createSVG('graph-post-interactions')
+            var root = this.createSVG('graph-post-interactions');
 
             // Title
-            this.addTitle("Post interactions / day")
-            this.addRangeSelector(options.range)
+            this.addTitle("Post interactions / day");
+            this.addRangeSelector(options.range);
 
             if (data.length === 0) {
-                this.module.addClass('no-data')
+                this.module.addClass('no-data');
                 return
             }
 

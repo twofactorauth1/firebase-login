@@ -276,7 +276,7 @@ define([
             this.createModule(newRow.children().eq(0), {
                 type : data.type
                 , name : data.name
-            })
+            });
         },
 
         createModule: function (target, module) {

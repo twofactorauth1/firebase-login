@@ -21,17 +21,17 @@ define([
         ]
         , render: function (data, options) {
 
-            $$.log("Rendering %s", this.id, options)
+            console.log("Rendering %s", this.id, options);
 
-            var parseDate = d3.time.format("%Y-%m-%d").parse
+            var parseDate = d3.time.format("%Y-%m-%d").parse;
 
             // Calculate post engagement
             var posts = data.map(function(post){
 
-                var likes    = SR.util.toNumber(post.likes, 0)
-                    , shares   = SR.util.toNumber(post.shares, 0)
-                    , comments = SR.util.toNumber(post.comments, 0)
-                    , impact = likes + shares + comments
+                var likes    = $$.u.numberutils.toNumber(post.likes, 0)
+                    , shares   = $$.u.numberutils.toNumber(post.shares, 0)
+                    , comments = $$.u.numberutils.toNumber(post.comments, 0)
+                    , impact = likes + shares + comments;
 
                 return {
                     title    : post.title
@@ -43,7 +43,7 @@ define([
                 }
             })
 
-            this.process(options)
+            this.process(options);
 
             var w = this.w
                 , h = this.h
@@ -53,14 +53,15 @@ define([
             var preview = h < 200
 
             // Base layer
-            var root = this.createSVG('graph-post-timeline')
+            var root = this.createSVG('graph-post-timeline');
 
             // Title
             this.addTitle("All post activity")
-            this.addRangeSelector(options.range)
+            this.addRangeSelector(options.range);
 
             if (data.length === 0) {
-                this.module.addClass('no-data')
+                this.module.addClass('no-data');
+
                 return
             }
 
@@ -124,11 +125,11 @@ define([
 
             circles.each(function(post){
 
-                var title = d3.time.format('[%d/%m/%y] ')(post.date) + SR.util.ellipsis(post.title, 80)
+                var title = d3.time.format('[%d/%m/%y] ')(post.date) + $$.u.stringutils.ellipsis(post.title, 80)
                     , content = [
-                        SR.util.plural(post.likes, "like")
-                        , SR.util.plural(post.shares, "share")
-                        , SR.util.plural(post.comments, "comment")
+                        $$.u.stringutils.plural(post.likes, "like")
+                        , $$.u.stringutils.plural(post.shares, "share")
+                        , $$.u.stringutils.plural(post.comments, "comment")
                     ].join("<br/>")
                     , radius = impact(post.impact)
 

@@ -21,9 +21,9 @@ define([
         ]
         , render: function (data, options) {
 
-            $$.log("Rendering %s", this.id, data, options)
+            console.log("Rendering %s", this.id, data, options);
 
-            var parseDate = d3.time.format("%Y-%m-%d").parse
+            var parseDate = d3.time.format("%Y-%m-%d").parse;
 
             // Normalize data.
             // Make sure you don't modify the original data object,
@@ -31,26 +31,27 @@ define([
             data = data.map(function(item){
                 return {
                     date    : parseDate(item.date)
-                    , likes   : SR.util.toNumber(item.likes, 0)
-                    , unlikes : SR.util.toNumber(item.unlikes, 0)
+                    , likes   : $$.u.numberutils.toNumber(item.likes, 0)
+                    , unlikes : $$.u.numberutils.toNumber(item.unlikes, 0)
                 }
-            })
+            });
 
-            this.process(options)
+            this.process(options);
 
             var w = this.w
                 , h = this.h
-                , p = this.padding
+                , p = this.padding;
 
             // Base layer
-            var root = this.createSVG('graph-likes')
+            var root = this.createSVG('graph-likes');
 
             // Title
             this.addTitle("Likes / Unlikes")
-            this.addRangeSelector(options.range)
+            this.addRangeSelector(options.range);
 
             if (data.length === 0) {
-                this.module.addClass('no-data')
+                this.module.addClass('no-data');
+
                 return
             }
 
@@ -99,7 +100,7 @@ define([
                 .data(y.ticks(maxLikes))
                 .enter().append('svg:g')
                 .attr('transform', function(d){ return _.template("translate(0,{{y}})", { y: y(d) }) })
-                .attr('class', 'tick-y')
+                .attr('class', 'tick-y');
 
             // Add y axis tick marks
             // ticks.filter(":nth-child(odd)").append('svg:line')

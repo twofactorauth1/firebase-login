@@ -13,6 +13,7 @@ define([
         id: 'FB_topFans'
         , url: '/facebook/{{id}}/topFiveFans'
         , gridWidth: 2
+        , templateKey: 'account/charts/facebook/top_five_fans'
         , testData: [
             {
                 "id": "782909993"
@@ -67,9 +68,9 @@ define([
         ]
         , render: function (data, options) {
 
-            $$.log("Rendering %s", this.id, data, options)
+            console.log("Rendering %s", this.id, data, options);
 
-            var parseDate = d3.time.format("%Y-%m-%d").parse
+            var parseDate = d3.time.format("%Y-%m-%d").parse;
 
             // Normalize data.
             // Make sure you don't modify the original data object,
@@ -78,21 +79,21 @@ define([
 
             this.process(options)
 
-            this.addTitle("Top 5 fans")
-            this.addRangeSelector(options.range)
+            this.addTitle("Top 5 fans");
+            this.addRangeSelector(options.range);
 
             if (data.length === 0) {
-                this.module.addClass('no-data')
+                this.module.addClass('no-data');
                 return
             }
 
             var maxLikes    = d3.max(data, function(d){ return d.likes })
-                , maxComments = d3.max(data, function(d){ return d.comments })
+                , maxComments = d3.max(data, function(d){ return d.comments });
 
-            $(Handlebars.templates['top-fans']({
-                users: data
-            })).appendTo(this.module)
+            var tmpl = $$.templateManager.get("fb-top-five-fans", this.templateKey);
+            var html = tmpl({users: data});
 
+            this.module.html(html);
         }
     });
 });

@@ -41,6 +41,7 @@ require.config({
         nestable: 'libs/nestable/jquery.nestable',
         date: 'libs/date/date',
         daterangepicker: 'libs/jquerydatepicker/daterangepicker',
+        d3: 'libs/d3/d3',
 
         //UI SPECIFIC
         toggles: 'libs/misc/toggles.min'
@@ -120,6 +121,7 @@ require.config({
                 'nestable',
                 'date',
                 'daterangepicker',
+                'd3',
             ]
         }
     },

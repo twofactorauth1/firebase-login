@@ -55,6 +55,23 @@ define([
                 last = names.join(" ");
 
                 return [first,middle,last];
+            },
+
+            plural: function (n, zero, one, more) {
+                // plural(2, 'egg') => '2 eggs'
+                if (typeof one !== 'string') {
+                    one = zero
+                    return n + ' ' + (n == 1 ? one : (one + 's'))
+                }
+                // plural(5, singular, plural)
+                // plural(5, none, singular, plural)
+                if (typeof more !== 'string') one = zero, more = zero = one
+                return (n > 1 ? more : n === 1 ? one : zero).replace(/%[sd]/g, n)
+            },
+
+            ellipsis:  function (text, n) {
+                if (text.length > n) return text.slice(0, n) + '...';
+                return text;
             }
         },
 
