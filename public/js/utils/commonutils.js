@@ -256,7 +256,7 @@ define([
             },
 
 
-            formatMoney:function (value, places, symbol, thousand, decimal) {
+            formatMoney: function (value, places, symbol, thousand, decimal) {
                 // Extend the default Number object with a formatMoney() method:
                 // usage: someVar.formatMoney(decimalPlaces, symbol, thousandsSeparator, decimalSeparator)
                 // defaults: (2, "$", ",", ".")
@@ -269,6 +269,17 @@ define([
                     i = parseInt(number = Math.abs(+number || 0).toFixed(places), 10) + "",
                     j = (j = i.length) > 3 ? j % 3 : 0;
                 return symbol + negative + (j ? i.substr(0, j) + thousand : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousand) + (places ? decimal + Math.abs(number - i).toFixed(places).slice(2) : "");
+            },
+
+
+            formatInteger: function (n) {
+                var n = n.toString().split('')
+                    , parts = [];
+                while (n.length) {
+                    parts.unshift(n.splice(-3, 3).join(''))
+                }
+
+                return parts.join(',')
             }
         },
 
@@ -382,6 +393,12 @@ define([
                     }
                 }
                 return target;
+            }
+        },
+
+        numberutils: {
+            toNumber: function (n, _default) {
+                return isNaN(n) ? _default : +n;
             }
         }
     };

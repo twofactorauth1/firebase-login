@@ -1,36 +1,43 @@
+/**
+ * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact info@indigenous.io for approval or questions.
+ */
 
-// Charts constructor
-// ------------------
-(function(){
-
+define([
+], function() {
+    // Charts constructor
+    // ------------------
     function Chart(options){
-        this.id = options.id
-        this.url = options.url
-        this.render = options.render
-        this.testData = options.testData
+        this.id = options.id;
+        this.url = options.url;
+        this.render = options.render;
+        this.testData = options.testData;
+        this.templateKey = options.templateKey;
     }
 
     Chart.prototype.process = function (options) {
-        this.setSize(options)
-        this.target = $(options.target)
-        this.module = this.target.closest('.module').removeClass('no-data')
+        this.setSize(options);
+        this.target = $(options.target);
+        this.module = this.target.closest('.module').removeClass('no-data');
     }
 
     Chart.prototype.setSize = function (options) {
         var w = options.width
             , h = options.height
             , p = options.padding || {}
-            , size = {}
+            , size = {};
 
         // get dimensions from target element if not given
-        w = isNaN(w) ? $(options.target).width() : +w
-        h = isNaN(h) ? $(options.target).height() : +h
+        w = isNaN(w) ? $(options.target).width() : +w;
+        h = isNaN(h) ? $(options.target).height() : +h;
 
         p = {
-            t: SR.util.toNumber(p.t, 40)
-            , r: SR.util.toNumber(p.r, 20)
-            , b: SR.util.toNumber(p.b, 20)
-            , l: SR.util.toNumber(p.l, 20)
+            t: $$.u.numberutils.toNumber(p.t, 40)
+            , r: $$.u.numberutils.toNumber(p.r, 20)
+            , b: $$.u.numberutils.toNumber(p.b, 20)
+            , l: $$.u.numberutils.toNumber(p.l, 20)
         }
 
         p.w = p.l + p.r // sides
@@ -130,6 +137,7 @@
         })).appendTo(this.target).addClass(position)
     }
 
-    $$.Chart = Chart
+    $$.Chart = Chart;
 
-})();
+    return Chart;
+});

@@ -39,6 +39,8 @@ require.config({
         colorthief: 'libs/colorthief/colorthief',
         waypoints: 'libs/waypoints/waypoints.min',
         nestable: 'libs/nestable/jquery.nestable',
+        date: 'libs/date/date',
+        daterangepicker: 'libs/jquerydatepicker/daterangepicker',
 
         //UI SPECIFIC
         toggles: 'libs/misc/toggles.min'
@@ -95,6 +97,9 @@ require.config({
         toggles: {
             deps: ['jquery']
         },
+        daterangepicker: {
+            deps: ['jquery']
+        },
         app: {
             deps: [
                 'jquery',
@@ -113,6 +118,8 @@ require.config({
                 'colorthief',
                 'waypoints',
                 'nestable',
+                'date',
+                'daterangepicker',
             ]
         }
     },
