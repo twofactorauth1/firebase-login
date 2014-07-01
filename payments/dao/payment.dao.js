@@ -16,25 +16,11 @@ var dao = {
         defaultModel: $$.m.Payment
     },
 
-    getSubscriptionsByAccount: function(accountId, fn) {
-        var query = {accountId: accountId};
-        this.findMany(query, fn);
-    },
-
-    getSubscriptionsByContact: function(contactId, fn) {
-        var query = {contactId: contactId};
-        this.findMany(query, fn);
-    },
-
-    getSubscriptionsByAccountAndPlan: function(accountId, planId, fn) {
-        var query = {accountId: accountId, stripePlanId: planId};
-        this.findMany(query, fn);
-    },
-
-    getSubscriptionByAccountAndId: function(accountId, stripeSubscriptionId, fn) {
-        var query = {accountId: accountId, stripeSubscriptionId: stripeSubscriptionId};
+    getPaymentByChargeId: function(chargeId, fn) {
+        var query = {chargeId: chargeId};
         this.findOne(query, fn);
     }
+
 
 };
 

@@ -10,6 +10,7 @@ var stripeConfigs = require('../../configs/stripe.config.js');
 var appConfig = require('../../configs/app.config.js');
 var contactDao = require('../../dao/contact.dao.js');
 var subscriptionDao = require('./subscription.dao.js');
+var paymentDao = require('./payment.dao.js');
 
 /*-- for stripe api--*/
 var stripe = require("stripe")( stripeConfigs.KM_STRIPE_TEST_SECRET_KEY);//TODO: app config
@@ -574,7 +575,12 @@ var dao = {
         self.log.debug('>> listStripeSubscriptions');
         var params = {};
         if(limit) {
-            params.limit = params;
+            if(limit === 0) {
+                params.limit = 100;
+            } else {
+                params.limit = params;
+            }
+
         }
         stripe.customers.listSubscriptions(customerId, params, function(err, subscriptions) {
             if(err) {
@@ -615,7 +621,6 @@ var dao = {
             subs.push(subscriptions.data);
             if(subscriptions.has_more === true) {
                 params.starting_after = subscriptions.data[subscriptions.data.length-1].id;
-                subs.push(subscriptions.data);
                 self._getAllStripeSubscriptions(customerId, params, subs, p1);
             } else {
                 //we're done.
@@ -715,9 +720,317 @@ var dao = {
             self.log.debug('<< listStripeCards');
             return fn(err, cards);
         });
-    }
+    },
 
     //charges
+    /**
+     *
+     * @param amount                    required
+     * @param currency                  required (usd)
+     * @param card                      (must have card or customer)
+     * @param customerId                (must have card or customer)
+     * @param contactId
+     * @param description
+     * @param metadata
+     * @param capture
+     * @param statement_description
+     * @param receipt_email
+     * @param application_fee
+     * @param accessToken
+     * @param fn
+     *
+     * @return result object containing charge and payment objects
+     */
+    createStripeCharge: function(amount, currency, card, customerId, contactId, description, metadata, capture,
+                                 statement_description, receipt_email, application_fee, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> createStripeCharge');
+        var paymentId = $$.u.idutils.generateUUID();//create the id for the local object
+        var stripe_bkup = null;
+        var params = {};
+
+
+        params.amount = amount;
+        params.currency = currency;
+        if(card) {params.card = card;}
+        if(customerId) {params.customer = customerId;}
+        if(description && description.length>0) {params.description = description;}
+        if(!metadata) {
+            metadata = {};
+        }
+        metadata.paymentId = paymentId;
+        params.capture = capture || false;
+        if(statement_description && statement_description.length>0) {params.statement_description = statement_description;}
+        if(receipt_email && receipt_email.length>0) {params.receipt_email = receipt_email;}
+        if(application_fee && application_fee > 0) {params.application_fee = application_fee;}
+
+        if(accessToken && accessToken.length > 0) {
+            self.log.debug('delegating stripe to ' + accessToken);
+            stripe_bkup = stripe;
+            stripe = require("stripe")( accessToken);
+        }
+
+        stripe.charges.create(params, function(err, charge) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charge);
+            }
+            self.log.debug('created charge in Stripe.');
+            //create payment object
+            var payment = new $$.m.Payment({
+                chargeId: charge.id,
+                amount: amount,
+                isCaptured: charge.captured,
+                cardId: charge.card.id,
+                fingerprint: charge.card.fingerprint,
+                last4: charge.card.last4,
+                cvc_check: charge.card.cvc_check,
+                created: charge.created,
+                paid: charge.paid,
+                refunded: charge.refunded,
+                amount_refunded: charge.amount_refunded,
+                balance_transaction: charge.balance_transaction,
+                customerId: customerId,
+                contactId: contactId,
+                failure_code: charge.failure_code,
+                failure_message: charge.failure_message,
+                invoiceId: charge.invoice,
+                _id:paymentId
+
+            });
+            paymentDao.saveOrUpdate(payment, $$.m.Payment, function(err, payment){
+                if(err) {
+                    self.log.error('error creating payment record for charge: ' + err);
+                    return fn(err, charge);
+                }
+                self.log.debug('<< createStripeCharge');
+                var result = {charge: charge, payment: payment};
+                return fn(err, result);
+            });
+
+        });
+
+        if(stripe_bkup) {
+            self.log.debug('undelegating stripe');
+            stripe = stripe_bkup;
+            stripe_bkup = null;
+        }
+
+    },
+
+    getStripeCharge: function(chargeId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getStripeCharge');
+        var stripe_bkup = null;
+
+        if(accessToken && accessToken.length > 0) {
+            self.log.debug('delegating stripe to ' + accessToken);
+            stripe_bkup = stripe;
+            stripe = require("stripe")( accessToken);
+        }
+
+        stripe.charges.retrieve(chargeId, function(err, charge) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, charge);
+                }
+                self.log.debug('<< getStripeCharge');
+                return fn(err, charge);
+            }
+        );
+        if(stripe_bkup) {
+            self.log.debug('undelegating stripe');
+            stripe = stripe_bkup;
+            stripe_bkup = null;
+        }
+    },
+
+    updateStripeCharge: function(chargeId, description, metadata, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getStripeCharge');
+        var stripe_bkup = null;
+        var params = {};
+
+        if(description && description.length>0) {params.description = description;}
+        if(metadata) {params.metadata = metadata;}
+
+        if(accessToken && accessToken.length > 0) {
+            self.log.debug('delegating stripe to ' + accessToken);
+            stripe_bkup = stripe;
+            stripe = require("stripe")( accessToken);
+        }
+
+        stripe.charges.update( chargeId, params,  function(err, charge) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, charge);
+                }
+                self.log.debug('<< updateStripeCharge');
+                return fn(err, charge);
+            }
+        );
+
+        if(stripe_bkup) {
+            self.log.debug('undelegating stripe');
+            stripe = stripe_bkup;
+            stripe_bkup = null;
+        }
+    },
+
+    /**
+     *
+     * @param chargeId
+     * @param amount
+     * @param application_fee
+     * @param receipt_email
+     * @param accessToken
+     * @param fn
+     */
+    captureStripeCharge: function(chargeId, amount, application_fee, receipt_email, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> captureStripeCharge');
+        var stripe_bkup = null;
+        var params = {};
+        if(amount) {params.amount = amount;}
+        if(application_fee) {params.application_fee = application_fee;}
+        if(receipt_email && receipt_email.length>0) {params.receipt_email = receipt_email;}
+
+
+        if(accessToken && accessToken.length > 0) {
+            self.log.debug('delegating stripe to ' + accessToken);
+            stripe_bkup = stripe;
+            stripe = require("stripe")( accessToken);
+        }
+
+        stripe.charges.capture(chargeId, params, function(err, charge) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charge);
+            }
+            self.log.debug('Captured charge.  Updating payment record.');
+            paymentDao.getPaymentByChargeId(chargeId, function(err, payment){
+                if(err) {
+                    self.log.error('error retrieving payment for charge with id:' + chargeId + ": " + err);
+                    return fn(err, charge);
+                }
+                /*
+                    Capture properties that may have changed.
+                 */
+                payment.isCaptured = true;
+                payment.capture_date = Date.now();
+                payment.amount = charge.amount;
+                payment.paid=charge.paid;
+                payment.refunded=charge.refunded;
+                payment.amount_refunded=charge.amount_refunded;
+                paymentDao.saveOrUpdate(payment, function(err, payment){
+                    if(err) {
+                        self.log.error('error updating payment: ' + err);
+                        return fn(err, payment);
+                    }
+                    var result = {charge: charge, payment: payment};
+                    return fn(err, result);
+                });
+            });
+        });
+
+        if(stripe_bkup) {
+            self.log.debug('undelegating stripe');
+            stripe = stripe_bkup;
+            stripe_bkup = null;
+        }
+
+    },
+
+
+    /**
+     *
+     * @param created
+     * @param customerId
+     * @param ending_before
+     * @param limit
+     * @param starting_after
+     * @param accessToken
+     * @param fn
+     */
+    listStripeCharges: function(created, customerId, ending_before, limit, starting_after, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> listStripeCharges');
+        var stripe_bkup = null;
+        var params = {};
+
+        if(created) {params.created = created;}
+        if(customerId && customerId.length>0) {params.customer = customerId;}
+        if(ending_before) {params.ending_before = ending_before;}
+        if(limit) {
+            if(limit === 0) {
+                params.limit = 100;
+            } else {
+                params.limit = limit;
+            }
+        }
+        if(starting_after && starting_after.length>0) {params.starting_after = starting_after;}
+
+        if(accessToken && accessToken.length > 0) {
+            self.log.debug('delegating stripe to ' + accessToken);
+            stripe_bkup = stripe;
+            stripe = require("stripe")( accessToken);
+        }
+
+        stripe.charges.list(params, function(err, charges) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charges);
+            }
+            if(limit === 0 && charges.has_more === true) {
+                /*
+                 Get ALL the charges
+                 */
+                params.starting_after = charges.data[charges.data.length-1].id;
+
+                var _charges = [];
+                var p1 = $.Deferred();
+                _charges.push(charges.data);
+                self._getAllStripeCharges(params, _charges, require("stripe")( accessToken), p1);
+                $.when(p1).done(function() {
+                    charges.data = _charges;
+                    self.log.debug('<< listStripeCharges');
+                    return fn(err, charges);
+                });
+            } else {
+                self.log.debug('<< listStripeCharges');
+                return fn(err, charges);
+            }
+        });
+
+        if(stripe_bkup) {
+            self.log.debug('undelegating stripe');
+            stripe = stripe_bkup;
+            stripe_bkup = null;
+        }
+    },
+
+    _getAllStripeCharges: function(params, _charges, delegatedStripe, deferred) {
+        self.log.debug('>> _getAllStripeCharges ... adding more charges.');
+        delegatedStripe.charges.list(params, function(err, charges) {
+            if (err) {
+                self.log.error('error: ' + err);
+                deferred.reject();
+                return deferred.promise;
+            }
+
+            _charges.push(charges.data);
+            if(charges.has_more === true) {
+                params.starting_after = charges.data[charges.data.length-1].id;
+                self._getAllStripeCharges(params, _charges, delegatedStripe, deferred);
+            } else {
+                //we're done.
+                deferred.resolve();
+                self.log.debug('<< _getAllStripeCharges returning.');
+                return deferred.promise;
+            }
+        });
+        return deferred.promise;
+    }
 
     //invoice items
 

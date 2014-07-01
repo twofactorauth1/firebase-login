@@ -14,7 +14,7 @@ var payment = $$.m.ModelBase.extend({
     defaults: function() {
         return {
             _id: null,
-            stripeId: null,
+            chargeId: null,
             amount: null,
             isCaptured: true,
             cardId: false,
@@ -31,6 +31,7 @@ var payment = $$.m.ModelBase.extend({
             failure_code: null,
             failure_message: null,
             invoiceId: null,
+            capture_date: 0,
             _v:"0.1"
 
 
