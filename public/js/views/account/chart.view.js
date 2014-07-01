@@ -51,9 +51,9 @@ define([
         },
 
         changeDates: function(e, dates){
-            SR.log('Date range for', this.options.name, 'changed:', dates.start, dates.end)
-            this.setDateRange(dates.start, dates.end, dates.selected)
-            this.render()
+            console.log('Date range for', this.options.name, 'changed:', dates.start, dates.end);
+            this.setDateRange(dates.start, dates.end, dates.selected);
+            this.render();
         },
 
         render: function(){
@@ -97,7 +97,7 @@ define([
                 })
 
                 d3.json(data_url, function(data){
-                    self.$el.removeClass('loading')
+                    self.$el.removeClass('loading');
                     renderChart.call(self, data)
                 })
             }

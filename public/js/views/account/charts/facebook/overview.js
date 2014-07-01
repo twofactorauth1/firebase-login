@@ -4,13 +4,14 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
+
 define([
     'views/account/charts/chart'
-], function() {
+], function(Chart) {
     // Overview / FB at a glance
     // =========================
 
-    $$.Charts.FB_overview = new $$.Chart({
+    $$.Charts.FB_overview = new Chart({
         id: 'FB_overview'
         , url: '/facebook/{{id}}/overview'
         , templateKey: 'account/charts/facebook/overview'

@@ -4,12 +4,14 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
+
 define([
-], function() {
+    'views/account/charts/chart'
+], function(Chart) {
     // Facebook likes per day
     // ======================
 
-    $$.Charts.FB_likesPerDay = new $$.Chart({
+    $$.Charts.FB_likesPerDay = new Chart({
         id: 'FB_likesPerDay'
         , url: '/facebook/{{id}}/likesUnlikesPerDay'
         , testData: [

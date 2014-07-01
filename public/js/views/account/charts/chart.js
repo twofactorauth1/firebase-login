@@ -21,7 +21,7 @@ define([
         this.setSize(options);
         this.target = $(options.target);
         this.module = this.target.closest('.module').removeClass('no-data');
-    }
+    };
 
     Chart.prototype.setSize = function (options) {
         var w = options.width
@@ -38,20 +38,20 @@ define([
             , r: $$.u.numberutils.toNumber(p.r, 20)
             , b: $$.u.numberutils.toNumber(p.b, 20)
             , l: $$.u.numberutils.toNumber(p.l, 20)
-        }
+        };
 
-        p.w = p.l + p.r // sides
-        p.h = p.t + p.b // top + bottom
+        p.w = p.l + p.r;// sides
+        p.h = p.t + p.b; // top + bottom
 
-        size.padding = p
+        size.padding = p;
 
         // subtract padding
-        size.w = w - p.w
-        size.h = h - p.h
+        size.w = w - p.w;
+        size.h = h - p.h;
 
-        _.extend(this, size)
+        _.extend(this, size);
         return size
-    }
+    };
 
     Chart.prototype.createSVG = function(className){
         this.module.addClass(className)
@@ -60,18 +60,18 @@ define([
             .attr('height', this.h + this.padding.t + this.padding.b)
             .append('svg:g')
             .attr('transform', 'translate('+[this.padding.l, this.padding.t]+')')
-    }
+    };
 
     Chart.prototype.addTitle = function(text){
         // Title
         this.module
             .append('<h2 class="graph-title">' + text + '</h2>')
-    }
+    };
 
     Chart.prototype.addRangeSelector = function (defaultRange) {
 
         // do not add range selector in view mode
-        if (location.pathname.indexOf('/view') > 0) return
+        if (location.pathname.indexOf('/view') > 0) return;
 
         var ranges = {
                 'Last 7 Days': [Date.today().add({ days: -6 }), Date.today()]
@@ -79,16 +79,16 @@ define([
                 , 'This Month': [Date.today().moveToFirstDayOfMonth(), Date.today().moveToLastDayOfMonth()]
                 , 'Last Month': [Date.today().moveToFirstDayOfMonth().add({ months: -1 }), Date.today().moveToFirstDayOfMonth().add({ days: -1 })]
             }
-            , rangeText
+            , rangeText;
 
         if (typeof defaultRange === 'string') {
             rangeText = defaultRange
             defaultRange = ranges[defaultRange]
         } else if (defaultRange[0] && defaultRange[1]) {
             var start = new Date(defaultRange[0])
-                , end   = new Date(defaultRange[1])
+                , end   = new Date(defaultRange[1]);
             if (isFinite(start) && isFinite(end)) {
-                defaultRange = [start, end]
+                defaultRange = [start, end];
                 rangeText = 'Custom'
             }
         }
@@ -104,7 +104,7 @@ define([
             + '    <span>' + rangeText + '</span> <b class="caret"></b>'
             + '</div>'
 
-        var picker = $(rangeSelector)
+        var picker = $(rangeSelector);
 
         picker.data('selectedRange', defaultRange)
 
@@ -128,14 +128,24 @@ define([
                 picker.find('span').text(text || (start.toString('MM/dd/yyyy') + ' - ' + end.toString('MM/dd/yyyy')))
             }
         })
-    }
+    };
 
     Chart.prototype.createPopover = function(position, title, content) {
-        return $(Handlebars.templates.popover({
-            title: title
-            , content: content
-        })).appendTo(this.target).addClass(position)
-    }
+//        return $(Handlebars.templates.popover({
+//            title: title
+//            , content: content
+//        })).appendTo(this.target).addClass(position)
+//        var tmpl = $$.templateManager.get("popover", 'account/charts/facebook/popover');
+//        var html = tmpl({
+//            title: title
+//            , content: content
+//        });
+//
+//        html.appendTo(this.target).addClass(position);
+//        this.module.html(html);
+
+        return null;
+    };
 
     $$.Chart = Chart;
 

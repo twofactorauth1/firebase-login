@@ -4,12 +4,14 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
+
 define([
-], function() {
+    'views/account/charts/chart'
+], function(Chart) {
     // Top ten posts
     // ======================
 
-    $$.Charts.FB_topFans = new $$.Chart({
+    $$.Charts.FB_topFans = new Chart({
         id: 'FB_topFans'
         , url: '/facebook/{{id}}/topFiveFans'
         , gridWidth: 2
@@ -84,6 +86,7 @@ define([
 
             if (data.length === 0) {
                 this.module.addClass('no-data');
+
                 return
             }
 

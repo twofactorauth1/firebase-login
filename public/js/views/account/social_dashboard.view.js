@@ -19,27 +19,27 @@ define([
         dragData: [],
 
         events: {
-            'dragstart      .module'                : "dragStart"
-            , 'click        .module'                : "cancel"
-            , 'change       .ds-fb-source'        : "fbsourceChanged"
-            , 'change       .ds-tw-source'        : "twsourceChanged"
-            , 'change       #use-test-data'       : "toggleTestData"
-            , 'click        .header.accordion'     : "collapse"
-            , 'change       .ds-frequency-day'    : "changeWeekDay"
-            , 'click        .dashboard-delete'     : 'deleteDashboard'
+            'dragstart      .module_sidebar'        : "dragStart"
+            , 'click        .module_sidebar'        : "cancel"
+            , 'change       .ds-fb-source'          : "fbsourceChanged"
+            , 'change       .ds-tw-source'          : "twsourceChanged"
+            , 'change       #use-test-data'         : "toggleTestData"
+            , 'click        .header.accordion'      : "collapse"
+            , 'change       .ds-frequency-day'      : "changeWeekDay"
+            , 'click        .dashboard-delete'      : 'deleteDashboard'
 
-            , 'dragover     .grid-placeholder' : 'highlight'
-            , 'dragenter    .grid-placeholder' : 'highlight'
-            , 'dragleave    .grid-placeholder' : 'unhighlight'
-            , 'drop         .grid-placeholder' : 'dropChart'
-            , 'dragstart    .chart-item'       : 'dragChart'
-            , 'dragleave    .chart-item'       : 'unhighlightChart'
-            , 'dragover     .grid-new'         : 'dragOverNew'
-            , 'dragleave    .grid-new'         : 'unhighlight'
-            , 'drop         .grid-new'         : 'dropNew'
-            , 'mouseenter   .module'          : 'showRemoveButton'
-            , 'mouseleave   .module'          : 'hideRemoveButton'
-            , 'click        .delete-module'   : 'deleteModule'
+            , 'dragover     .grid-placeholder'      : 'highlight'
+            , 'dragenter    .grid-placeholder'      : 'highlight'
+            , 'dragleave    .grid-placeholder'      : 'unhighlight'
+            , 'drop         .grid-placeholder'      : 'dropChart'
+            , 'dragstart    .chart-item'            : 'dragChart'
+            , 'dragleave    .chart-item'            : 'unhighlightChart'
+            , 'dragover     .grid-new'              : 'dragOverNew'
+            , 'dragleave    .grid-new'              : 'unhighlight'
+            , 'drop         .grid-new'              : 'dropNew'
+            , 'mouseenter   .module'                : 'showRemoveButton'
+            , 'mouseleave   .module'                : 'hideRemoveButton'
+            , 'click        .delete-module'         : 'deleteModule'
         },
 
         initialize: function () {
@@ -357,17 +357,17 @@ define([
         deleteModule: function (e) {
             var module = $(e.target).closest('.module')
                 , id     = module.attr('id')
-                , module = SR.Modules[id]
-                , w      = module.options.gridWidth
+                , module = $$.modules[id]
+                , w      = module.options.gridWidth;
 
             // Remove entire row
             if (w == 2 || module.$el.siblings('.module').length < 1) {
-                module.$el.closest('.row').remove()
+                module.$el.closest('.row').remove();
                 // Replace with placeholder
             } else if (w == 1) {
                 module.$el.replaceWith($('<div class="grid-placeholder grid'+w+'" data-width="'+w+'" />'))
             }
-            module.remove()
+            module.remove();
         },
 
         render: function() {

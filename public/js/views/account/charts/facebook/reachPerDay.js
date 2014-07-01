@@ -4,12 +4,14 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
+
 define([
-], function() {
+    'views/account/charts/chart'
+], function(Chart) {
     // Daily Reach
     // ===========
 
-    $$.Charts.FB_reachPerDay = new $$.Chart({
+    $$.Charts.FB_reachPerDay = new Chart({
         id: 'FB_reachPerDay'
         , url: '/facebook/{{id}}/reachPerDay'
         , testData: [
@@ -51,28 +53,28 @@ define([
                     , viral   : viral
                     , total   : paid + organic + viral
                 }
-            })
+            });
 
             this.process(options);
 
             var w = this.w
                 , h = this.h
-                , p = this.padding
+                , p = this.padding;
 
             // Base layer
-            var root = this.createSVG('graph-daily-reach')
+            var root = this.createSVG('graph-daily-reach');
 
             // Title
             this.addTitle("Daily reach")
-            this.addRangeSelector(options.range)
+            this.addRangeSelector(options.range);
 
             if (data.length === 0) {
-                this.module.addClass('no-data')
+                this.module.addClass('no-data');
                 return
             }
 
             // Flag for preview graph
-            var preview = h < 200
+            var preview = h < 200;
 
             var max = d3.max(data, function(d){ return d.total })
                 , barWidth = Math.floor((w - p.r) / data.length) - 3;
@@ -183,13 +185,13 @@ define([
                 .data(color.domain().slice().reverse())
                 .enter().append("g")
                 .attr("class", "legend")
-                .attr("transform", function(d, i) { return "translate(" + [0, 10 + i * 14] + ")" })
+                .attr("transform", function(d, i) { return "translate(" + [0, 10 + i * 14] + ")" });
 
             legend.append("rect")
                 .attr("x", 20)
                 .attr("width", 10)
                 .attr("height", 10)
-                .style("fill", color)
+                .style("fill", color);
 
             legend.append("text")
                 .attr("x", 36)
