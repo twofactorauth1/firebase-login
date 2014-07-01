@@ -19,6 +19,7 @@ var subscription = $$.m.ModelBase.extend({
             stripeCustomerId:null,      //stripe customerId
             stripeSubscriptionId:null,  //stripe subscription Id
             stripePlanId:null,          //stripe plan Id
+            isActive:true,              //boolean
             _v:"0.1"
             /*
                 Additional details can go here.  The idea is to use this object to cache

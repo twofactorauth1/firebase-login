@@ -7,13 +7,13 @@
 
 var baseDao = require('../../dao/base.dao');
 requirejs('constants/constants');
-require('../model/subscription');
+require('../model/payment');
 
 var dao = {
 
     options: {
-        name:"subscription.dao",
-        defaultModel: $$.m.Subscription
+        name:"payment.dao",
+        defaultModel: $$.m.Payment
     },
 
     getSubscriptionsByAccount: function(accountId, fn) {
@@ -40,6 +40,6 @@ var dao = {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.SubscriptionDao = dao;
+$$.dao.PaymentDao = dao;
 
 module.exports = dao;

@@ -362,7 +362,7 @@ var dao = {
      * Returns Stripe Subscription object.  *Note* An internal subscription object has also been created.
      */
     createStripeSubscription: function(customerId, planId, coupon, trial_end, card, quantity, application_fee_percent,
-                                       metadata, accessToken, fn) {
+                                       metadata, accountId, contactId, accessToken, fn) {
         var self = this;
         self.log.debug('>> createStripeSubscription');
         var params = {};
@@ -372,7 +372,8 @@ var dao = {
         if(card) {params.card = card;}
         if(quantity && quantity.length > 0) {params.quantity = quantity;}
         if(application_fee_percent && application_fee_percent.length>0) {params.application_fee_percent = application_fee_percent;}
-        if(metadata) {params.metadata = metadata;}
+        if(metadata) {params.metadata = metadata;} else {params.metadata = {};}
+        params.metadata.accountId = accountId;
 
         if(accessToken && accessToken.length > 0) {
             stripe.customers.createSubscription(customerId, params, accessToken, function(err, subscription) {
@@ -382,8 +383,8 @@ var dao = {
                     }
                     //create subscription record...NEED accountId and contactId
                     var sub = new $$.m.Subscription({
-                        accountId: null,
-                        contactId: null,
+                        accountId: accountId,
+                        contactId: contactId,
                         stripeCustomerId: customerId,
                         stripeSubscriptionId: subscription.id,
                         stripePlanId: planId
@@ -406,8 +407,8 @@ var dao = {
                     }
                     //create subscription record...NEED accountId and contactId
                     var sub = new $$.m.Subscription({
-                        accountId: null,
-                        contactId: null,
+                        accountId: accountId,
+                        contactId: contactId,
                         stripeCustomerId: customerId,
                         stripeSubscriptionId: subscription.id,
                         stripePlanId: planId
@@ -459,7 +460,8 @@ var dao = {
         var self = this;
         self.log.debug('>> updateStripeSubscription');
         var params = {};
-        if(planId && planId.length>0){params.planId = planId;}
+        var updateLocal = false;
+        if(planId && planId.length>0){params.planId = planId; updateLocal=true;}
         if(coupon && coupon.length>0) {params.coupon = coupon;}
         if(trial_end && trial_end.length>0){params.trial_end = trial_end;}
         if(card) {params.card = card;}
@@ -474,8 +476,21 @@ var dao = {
                         self.log.error('error: ' + err);
                         return fn(err, subscription);
                     }
-                    self.log.debug('<< updateStripeSubscription');
-                    return fn(err, subscription);
+                    subscriptionDao.getSubscriptionByAccountAndId(accountId, subscriptionId, function(err, sub){
+                        if(err) {
+                            self.log.error('error: ' + err);
+                            return fn(err, subscription);
+                        }
+                        sub.set('planId', planId);
+                        subscriptionDao.saveOrUpdate(sub, function(err, sub){
+                            if(err) {
+                                self.log.error('error: ' + err);
+                                return fn(err, subscription);
+                            }
+                            self.log.debug('<< updateStripeSubscription');
+                            return fn(err, subscription);
+                        });
+                    });
                 }
             );
         } else {
@@ -491,7 +506,222 @@ var dao = {
             );
         }
 
+    },
+
+    /**
+     * Cancels the subscription in Stripe and updates the local record of it.
+     * Can be cancelled immediately or at the end of the the current period
+     * @param customerId
+     * @param subscriptionId
+     * @param at_period_end     Boolean defaults to false.
+     * @param accessToken
+     * @param fn
+     */
+    cancelStripeSubscription: function(customerId, subscriptionId, at_period_end, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> updateStripeSubscription');
+        var params = {};
+        if(at_period_end === true) {
+            params.at_period_end = true;
+        }
+        if(accessToken && accessToken.length > 0) {
+            //TODO: handle connect
+        } else {
+            stripe.customers.cancelSubscription(customerId, subscriptionId, params, function(err, confirmation) {
+                    if(err) {
+                        self.log.error('error: ' + err);
+                        return fn(err, confirmation);
+                    }
+                    /*
+                        If at_period_end then we leave the local sub active and change the status upon webhook.
+                     */
+                    if(at_period_end !== true) {
+                        subscriptionDao.getSubscriptionByAccountAndId(accountId, subscriptionId, function(err, sub){
+                            if(err) {
+                                self.log.error('error: ' + err);
+                                return fn(err, confirmation);
+                            }
+                            sub.set('isActive', false);
+                            subscriptionDao.saveOrUpdate(sub, function(err, sub){
+                                if(err) {
+                                    self.log.error('error: ' + err);
+                                    return fn(err, confirmation);
+                                }
+                                self.log.debug('<< cancelStripeSubscription');
+                                return fn(err, confirmation);
+                            });
+                        });
+                    } else {
+                        self.log.debug('<< cancelStripeSubscription');
+                        return fn(err, confirmation);
+                    }
+                }
+            );
+        }
+    },
+
+    /**
+     * Lists all subscriptions for a Stripe customer.  *Note* This may return subscriptions for multiple accounts.
+     * Care should be taken to filter out non-relevant subs.  Additionally, a limit may be applied to limit the number
+     * of results.  If it is not specified, the default (from Stripe) of 10 is applied.  If the limit is set to 0,
+     * all results will be returned.
+     * @param customerId
+     * @param limit
+     * @param fn
+     */
+    listStripeSubscriptions: function(customerId, limit, fn) {
+        var self = this;
+        self.log.debug('>> listStripeSubscriptions');
+        var params = {};
+        if(limit) {
+            params.limit = params;
+        }
+        stripe.customers.listSubscriptions(customerId, params, function(err, subscriptions) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, subscriptions);
+            }
+            if(limit === 0 && subscriptions.has_more === true) {
+                /*
+                    Get ALL the subscriptions
+                 */
+                params.starting_after = subscriptions.data[subscriptions.data.length-1].id;
+                params.limit = 100;
+                var subs = [];
+                var p1 = $.Deferred();
+                subs.push(subscriptions.data);
+                self._getAllStripeSubscriptions(customerId, params, subs, p1);
+                $.when(p1).done(function() {
+                   subscriptions.data = subs;
+                   self.log.debug('<< listStripeSubscriptions');
+                   return fn(err, subscriptions);
+                });
+            } else {
+                self.log.debug('<< listStripeSubscriptions');
+                return fn(err, subscriptions);
+            }
+        });
+    },
+
+    _getAllStripeSubscriptions: function(customerId, params, subs, deferred) {
+        self.log.debug('>> _getAllStripeSubscriptions ... adding more subscriptions.');
+        stripe.customers.listSubscriptions(customerId, params, function(err, subscriptions) {
+            if (err) {
+                self.log.error('error: ' + err);
+                deferred.reject();
+                return deferred.promise;
+            }
+
+            subs.push(subscriptions.data);
+            if(subscriptions.has_more === true) {
+                params.starting_after = subscriptions.data[subscriptions.data.length-1].id;
+                subs.push(subscriptions.data);
+                self._getAllStripeSubscriptions(customerId, params, subs, p1);
+            } else {
+                //we're done.
+                deferred.resolve();
+                self.log.debug('<< _getAllStripeSubscriptions returning.');
+                return deferred.promise;
+            }
+        });
+        return deferred.promise;
+    },
+
+    //cards
+    /**
+     * This is an operation on a customer.  No accessToken is needed, because customers are stored on the app account.
+     * @param customerId
+     * @param card - can be a token or a card object.
+     * @param fn
+     */
+    createStripeCard: function(customerId, card, fn) {
+        var self = this;
+        self.log.debug('>> createStripeCard');
+        var params = {};
+        params.card = card;
+        stripe.customers.createCard( customerId, params, function(err, card) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, card);
+                }
+                self.log.debug('<< createStripeCard');
+                return fn(err, card);
+            }
+        );
+    },
+
+    getStripeCard: function(customerId, cardId, fn) {
+        var self = this;
+        self.log.debug('>> getStripeCard');
+        stripe.customers.retrieveCard(customerId, cardId, function(err, card) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, card);
+                }
+                self.log.debug('<< getStripeCard');
+                return fn(err, card);
+            }
+        );
+    },
+
+    updateStripeCard: function(customerId, cardId, name, address_city, address_country, address_line1, address_line2,
+        address_state, address_zip, exp_month, exp_year, fn) {
+        var self = this;
+        self.log.debug('>> updateStripeCard');
+        var params = {};
+        if(name && name.length>0) {params.name = name;}
+        if(address_city && address_city.length>0){params.address_city = address_city;}
+        if(address_country && address_country.length>0) {params.address_country = address_country;}
+        if(address_line1 && address_line1.length>0) {params.address_line1 = address_line1;}
+        if(address_line2 && address_line2.length>0) {params.address_line2 = address_line2;}
+        if(address_state && address_state.length>0) {params.address_state = address_state;}
+        if(address_zip && address_zip.length>0) {params.address_zip = address_zip;}
+        if(exp_month && exp_month.length>0) {params.exp_month = exp_month;}
+        if(exp_year && exp_year.length>0) {params.exp_year = exp_year;}
+
+        stripe.customers.updateCard(customerId, cardId, params, function(err, card) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, card);
+                }
+                self.log.debug('<< updateStripeCard');
+                return fn(err, card);
+            }
+        );
+    },
+
+    deleteStripeCard: function(customerId, cardId, fn) {
+        var self = this;
+        self.log.debug('>> deleteStripeCard');
+        stripe.customers.deleteCard(customerId, cardId, function(err, confirmation) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, confirmation);
+                }
+                self.log.debug('<< deleteStripeCard');
+                return fn(err, confirmation);
+            }
+        );
+    },
+
+    listStripeCards: function(customerId, fn) {
+        var self = this;
+        self.log.debug('>> listStripeCards');
+        stripe.customers.listCards('cu_104IiK4tCaXTUYFG4OC3wcV2', function(err, cards) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, cards);
+            }
+            self.log.debug('<< listStripeCards');
+            return fn(err, cards);
+        });
     }
+
+    //charges
+
+    //invoice items
+
+    //invoices
 
 };
 
