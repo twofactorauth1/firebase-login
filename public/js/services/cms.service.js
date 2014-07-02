@@ -12,6 +12,11 @@ define([], function() {
         getThemeConfigForAccount: function(accountId) {
             var url = $$.api.getApiUrl("account", accountId + "/cms/theme");
             return $.getJSON(url);
+        },
+
+        getAllThemes: function(accountId) {
+            var url = $$.api.getApiUrl("cms", "themes");
+            return $.getJSON(url);
         }
     };
 

@@ -77,10 +77,29 @@ module.exports = function(grunt) {
 
         less: {
             style: {
-                files: {"./public/css/site.css":"public/less/site.less"}
+                files: {
+                    '../indigeweb/public/css/site.css': [ 'public/less/site.less' ],
+                    '../indigeweb/public/css/style.default.css': [ 'public/less/style.default.less' ],
+                    '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ]
+                }
             }
         },
 
+        watch: {
+            less: {
+                files: "../indigeweb/public/less/*",
+                tasks: ["less"],
+            },
+            html: {
+                files: "../indigeweb/public/templates/**/*.html",
+            },
+            scripts: {
+              files: '../indigeweb/public/js/**/*.js',
+            },
+            options: {
+              livereload: true
+            },
+        },
 
         requirejs: {
             compile: {
@@ -160,6 +179,7 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');

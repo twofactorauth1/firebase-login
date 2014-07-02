@@ -30,6 +30,7 @@ define([
         websiteSettings: null,
         pageHandle: null,
         subdomain: null,
+        is_dragging: false,
 
         attributes: {
             id: "edit-website-wrapper"
@@ -40,7 +41,8 @@ define([
             "click .btn-cancel-page":"cancelPage",
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
-            "click .add-post":"addBlankPost"
+            "click .add-post":"addBlankPost",
+            "mousemove #sortable":"draggingComponent"
         },
 
         initialize: function(options) {
@@ -86,10 +88,15 @@ define([
                     var colorPalette = self.websiteSettings;
 
                     self.show(html);
+
                     self.check_welcome();
 
                     var sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
                     var rightPanel = $('#rightpanel');
+
+                    //TODO: make main panel avaliable to all views
+
+                    self.adjustWindowSize();
 
                     $("#iframe-website", this.el).load(function(pageLoadEvent) {
                         var doc = $(pageLoadEvent.currentTarget)[0].contentDocument ||
@@ -126,6 +133,8 @@ define([
 
                                     self.setupSidebar(data, rightPanel, sidetmpl);
 
+                                    $(window).on("resize", self.adjustWindowSize);
+
                                 });
                         });
                     });
@@ -137,16 +146,70 @@ define([
             return this;
         },
 
+        draggingComponent: function (e) {
+            console.log('draggingComponent');
+            var self = this;
+            if(self.is_dragging) console.log('X:' + e.screenX + ' Y: '+e.screenY );
+        },
+
+        adjustWindowSize: function() {
+            var iframeHeight = $('#iframe-website').height();
+            var headerBar = $('#headerbar').height();
+            var pageHeader = $('.pageheader').height();
+            var mainViewportHeight = $(window).height() - headerBar - 5;
+            $('#main-viewport').css('max-height', mainViewportHeight);
+
+            var iframeCalc = $(window).height() - headerBar - pageHeader - 28;
+            $('#iframe-website').css('min-height', iframeCalc);
+        },
+
         setupSidebar: function(data, rightPanel, sidetmpl) {
             var self = this;
             rightPanel.html('');
             var template = sidetmpl(data);
             rightPanel.append(sidetmpl(data));
             this.delegateEvents();
-            var nestableItems = $('#nestable');
-            if (nestableItems.length > 0) {
-                nestableItems.nestable({'maxDepth': '2'});
-            }
+
+            var body = $("#body");
+
+            var componentID;
+
+            $("#sortable").sortable({
+                start: function(event, ui) {
+                    self.is_dragging = true;
+                },
+                stop: function(event, ui) {
+                    self.is_dragging = false;
+                    var topComponentID = $(ui.item).prev().data('id');
+                    var bottomComponentID = $(ui.item).next().data('id');
+                    var $iframe = $('#iframe-website').contents();
+                    $iframe.ready(function() {
+                        var component = $iframe.find(".component[data-id='"+componentID+"']");
+                        var cHeight = component.height();
+                        var cWidth = component.width();
+                        var detachedComponent = component.detach();
+                        if (topComponentID != null) {
+                            detachedComponent.insertAfter( $iframe.find(".component[data-id='"+topComponentID+"']") );
+                        } else {
+                            detachedComponent.insertBefore( $iframe.find(".component[data-id='"+bottomComponentID+"']") );
+                        }
+                        var newComponentLocation = $iframe.find(".component[data-id='"+componentID+"']");
+                        var aTag = $iframe.find('.component[data-id="'+componentID+'"]');
+                        console.log($iframe.find('.component').data('id'));
+                        if (aTag.length > 0) {
+                            $iframe.find('body').animate({scrollTop: aTag.offset().top},'slow');
+                            $(window).trigger('hwparallax.reconfigure');
+                        } else {
+                            console.error('Component Not found in iFrame');
+                        }
+                    });
+                },
+                change: function( e, ui ) {
+                    componentID = $(ui.item).data('id');
+                    if(self.is_dragging) console.log('X:' + e.screenX + ' Y: '+e.screenY );
+                },
+                handle: '.dd-handle'
+            });
             var colorPalette = self.websiteSettings;
             self.renderSidebarColor(colorPalette);
         },
@@ -185,23 +248,6 @@ define([
             }
             component.setContent(dataClass, content, target, componentConfig);
             //this.savePage();
-        },
-
-        addBlankPost: function() {
-            var self = this;
-            console.log('Adding Blank Post');
-            self.getPost().done(function () {
-                console.log('got the post');
-            });
-            //TODO if not blog page navigate there then continue
-            //add blank post
-            var blankPostHTML = $$.templateManager.get("blankPost", self.templateKey);
-            $('.blankPost').append(blankPostHTML);
-            var $iframe = $('#iframe-website');
-            $iframe.ready(function() {
-                $iframe.contents().find(".blank-post").append(blankPostHTML);
-            });
-            self.savePost();
         },
 
         getPost: function () {

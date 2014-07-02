@@ -7,216 +7,280 @@
 
 <script type="text/x-handlebars-template" name="commerce-main">
     <div class="pageheader row">
-    <div class="col-xs-9">
-        <h2><i class="fa fa-shopping-cart"></i> Commerce</h2>
+        <div class="col-xs-9">
+            <h2><i class="fa fa-shopping-cart"></i> Commerce</h2>
+        </div>
+        <div class="col-xs-3">
+            <a class="btn btn-success pull-right" type="button">
+                <span class="fa fa-plus"></span>
+                <span class="hidden-xs">Add</span>
+            </a>
+        </div>
+        <div class="clear"></div>
     </div>
-    <div class="col-xs-3">
-        <a class="btn btn-success pull-right" type="button">
-            <span class="fa fa-plus"></span>
-            <span class="hidden-xs">Create</span>
-        </a>
-    </div>
-    <div class="clear"></div>
-</div>
 
-<div class="alert alert-info fade in">
-    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-    <h4 class="center">Hi Robin, Welcome to Products!</h4>
-    <p class="center">Okay, it&#39;s time to start managing your products. If you need assitance use any of the three ways below.</p>
-    <hr class="mb30"></hr>
-    <div class="col-sm-6">
-        <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about manage your products.</h4>
-        <img class="onboard-vid" src="/assets/images/video-holder.jpg">
-    </div>
-    <div class="mb30"></div>
-    <div class="col-sm-6">
-        <h4><i class="fa fa-compass"></i> Schedule a Demo</h4>
-        <p>Schedule a personal demo with one of our customer support representatives who can show you via screen share how to manage your products.</p>
-        <button class="btn btn-primary btn-lg">Schedule Now <i class="fa fa-caret-right"></i>
-        </button>
+    <div class="alert alert-info fade in">
+        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+        <h4 class="center">Hi Robin, Welcome to Products!</h4>
+        <p class="center">Okay, it&#39;s time to start managing your products. If you need assitance use any of the three ways below.</p>
         <hr class="mb30"></hr>
-        <h4><i class="fa fa-file-text-o"></i> Read the Documentation</h4>
-        <p>If you prefer a list of steps to read, then head over to our detailed documentation about all the aspects of managing your products.</p>
-        <button class="btn btn-primary btn-lg">View Docs <i class="fa fa-caret-right"></i>
-        </button>
+        <div class="col-sm-6">
+            <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about manage your products.</h4>
+            <img class="onboard-vid" src="/assets/images/video-holder.jpg">
+        </div>
+        <div class="mb30"></div>
+        <div class="col-sm-6">
+            <h4><i class="fa fa-compass"></i> Schedule a Demo</h4>
+            <p>Schedule a personal demo with one of our customer support representatives who can show you via screen share how to manage your products.</p>
+            <button class="btn btn-primary btn-lg">Schedule Now <i class="fa fa-caret-right"></i>
+            </button>
+            <hr class="mb30"></hr>
+            <h4><i class="fa fa-file-text-o"></i> Read the Documentation</h4>
+            <p>If you prefer a list of steps to read, then head over to our detailed documentation about all the aspects of managing your products.</p>
+            <button class="btn btn-primary btn-lg">View Docs <i class="fa fa-caret-right"></i>
+            </button>
+        </div>
+        <div class="clearfix mb30"></div>
     </div>
-    <div class="clearfix mb30"></div>
-</div>
 
-<div class="contentpanel">
-    <div class="panel panel-default row">
-        <div class="panel-body">
-            <div class="col-sm-6">
-                <input type="text" placeholder="Search Products" class="form-control input-lg">
-            </div>
-            <div class="col-sm-6 form-horizontal">
-                <div class="form-group row">
-                    <select class=" form-control chosen-select input-lg">
-                        <option value="">Filter Products</option>
-                    </select>
+    <div class="contentpanel">
+        <div class="panel panel-default row">
+            <div class="panel-body">
+                <div class="col-sm-6">
+                    <input type="text" placeholder="Search Products" class="form-control input-lg">
+                </div>
+                <div class="col-sm-6 form-horizontal">
+                    <div class="form-group row">
+                        <select class=" form-control chosen-select input-lg">
+                            <option value="">Filter Products</option>
+                        </select>
+                    </div>
                 </div>
             </div>
+            <!-- panel-body -->
         </div>
-        <!-- panel-body -->
-    </div>
-    <ul class="filemanager-options">
-                <li>
-                    <div class="ckbox ckbox-default">
-                        <input type="checkbox" id="selectall" value="1">
-                        <label for="selectall">Select All</label>
+        <div class="products-list">
+            <div class="row">
+
+                <div class="visible-xs col-xs-10">
+                    <h3>No Products Available</h3>
+                </div>
+
+                <div class="visible-xs btn btn-success col-xs-12">Add a new contact</div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="commerce-item btn-view-product-details" data-contactid="">
+                        <div class="media">
+                            <span class="important-star"><i class="fa fa-star-o"></i>
+                            </span>
+                            <div class="media">
+                                <div class="col-xs-12">
+                                    <span class="icon">
+                                        <i class="fa fa-cutlery"></i>
+                                    </span>
+                                  <div class="clear"></div>
+                                </div>
+                                <div class="media-body col-xs-12">
+                                    <h4 class="person-name center">Nutrition Plan</h4>
+                                    <hr class="clearfix mb15">
+                                    <div class="customer-stats">
+                                    <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                        <span class="data">1234567</span>
+                                    </div>
+                                    <div class="purchased"><i class="fa fa-money"></i> Price:
+                                        <span class="data">$15.00</span>
+                                    </div>
+                                    <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                        <span class="data">this type</span>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </li>
-                <li>
-                    <a href="" class="itemopt disabled"><i class="fa fa-envelope-o"></i> Export</a>
-                </li>
-                <li>
-                    <a href="" class="itemopt disabled"><i class="fa fa-download"></i> Download</a>
-                </li>
-                <li>
-                    <a href="" class="itemopt disabled"><i class="fa fa-pencil"></i> Edit</a>
-                </li>
-                <li>
-                    <a href="" class="itemopt disabled"><i class="fa fa-trash-o"></i> Delete</a>
-                </li>
+                </div>
 
-            </ul>
-    <div class="table-responsive">
-        <table class="table table-hover mb30">
-            <tbody>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="commerce-item btn-view-product-details" data-contactid="">
+                        <div class="media">
+                            <span class="important-star"><i class="fa fa-star-o"></i>
+                            </span>
+                            <div class="media">
+                                <div class="col-xs-12">
+                                    <span class="icon">
+                                        <i class="fa fa-cutlery"></i>
+                                    </span>
+                                  <div class="clear"></div>
+                                </div>
+                                <div class="media-body col-xs-12">
+                                    <h4 class="person-name center">Nutrition Plan</h4>
+                                    <hr class="clearfix mb15">
+                                    <div class="customer-stats">
+                                    <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                        <span class="data">1234567</span>
+                                    </div>
+                                    <div class="purchased"><i class="fa fa-money"></i> Price:
+                                        <span class="data">$15.00</span>
+                                    </div>
+                                    <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                        <span class="data">this type</span>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    </div>
+                </div>
 
-        <ul class="pagination pagination-lg mb5 pull-right">
-            <li class="disabled"><a href="#"><i class="fa fa-angle-left"></i></a>
-            </li>
-            <li><a href="#">1</a>
-            </li>
-            <li class="active"><a href="#">2</a>
-            </li>
-            <li><a href="#">3</a>
-            </li>
-            <li><a href="#">4</a>
-            </li>
-            <li><a href="#">5</a>
-            </li>
-            <li><a href="#"><i class="fa fa-angle-right"></i></a>
-            </li>
-        </ul>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="commerce-item btn-view-product-details" data-contactid="">
+                        <div class="media">
+                            <span class="important-star"><i class="fa fa-star-o"></i>
+                            </span>
+                            <div class="media">
+                                <div class="col-xs-12">
+                                    <span class="icon">
+                                        <i class="fa fa-cutlery"></i>
+                                    </span>
+                                  <div class="clear"></div>
+                                </div>
+                                <div class="media-body col-xs-12">
+                                    <h4 class="person-name center">Nutrition Plan</h4>
+                                    <hr class="clearfix mb15">
+                                    <div class="customer-stats">
+                                    <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                        <span class="data">1234567</span>
+                                    </div>
+                                    <div class="purchased"><i class="fa fa-money"></i> Price:
+                                        <span class="data">$15.00</span>
+                                    </div>
+                                    <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                        <span class="data">this type</span>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="commerce-item btn-view-product-details" data-contactid="">
+                        <div class="media">
+                            <span class="important-star"><i class="fa fa-star-o"></i>
+                            </span>
+                            <div class="media">
+                                <div class="col-xs-12">
+                                    <span class="icon">
+                                        <i class="fa fa-cutlery"></i>
+                                    </span>
+                                  <div class="clear"></div>
+                                </div>
+                                <div class="media-body col-xs-12">
+                                    <h4 class="person-name center">Nutrition Plan</h4>
+                                    <hr class="clearfix mb15">
+                                    <div class="customer-stats">
+                                    <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                        <span class="data">1234567</span>
+                                    </div>
+                                    <div class="purchased"><i class="fa fa-money"></i> Price:
+                                        <span class="data">$15.00</span>
+                                    </div>
+                                    <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                        <span class="data">this type</span>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="commerce-item btn-view-product-details" data-contactid="">
+                        <div class="media">
+                            <span class="important-star"><i class="fa fa-star-o"></i>
+                            </span>
+                            <div class="media">
+                                <div class="col-xs-12">
+                                    <span class="icon">
+                                        <i class="fa fa-cutlery"></i>
+                                    </span>
+                                  <div class="clear"></div>
+                                </div>
+                                <div class="media-body col-xs-12">
+                                    <h4 class="person-name center">Nutrition Plan</h4>
+                                    <hr class="clearfix mb15">
+                                    <div class="customer-stats">
+                                    <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                        <span class="data">1234567</span>
+                                    </div>
+                                    <div class="purchased"><i class="fa fa-money"></i> Price:
+                                        <span class="data">$15.00</span>
+                                    </div>
+                                    <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                        <span class="data">this type</span>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="commerce-item btn-view-product-details" data-contactid="">
+                        <div class="media">
+                            <span class="important-star"><i class="fa fa-star-o"></i>
+                            </span>
+                            <div class="media">
+                                <div class="col-xs-12">
+                                    <span class="icon">
+                                        <i class="fa fa-cutlery"></i>
+                                    </span>
+                                  <div class="clear"></div>
+                                </div>
+                                <div class="media-body col-xs-12">
+                                    <h4 class="person-name center">Nutrition Plan</h4>
+                                    <hr class="clearfix mb15">
+                                    <div class="customer-stats">
+                                    <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                        <span class="data">1234567</span>
+                                    </div>
+                                    <div class="purchased"><i class="fa fa-money"></i> Price:
+                                        <span class="data">$15.00</span>
+                                    </div>
+                                    <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                        <span class="data">this type</span>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
-</div>
+</script>
 
+<script type="text/x-handlebars-template" name="commerce-sidebar">
+    <div class="rightpanel rightpanel-commerce">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Page</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+
+            <div class="tab-content">
+                <div class="tab-pane pane-settings active" id="rp-page">
+                    <div class="leftpanelinner">
+                    </div>
+                </div>
+            </div>
+
+    </div><!-- rightpanel -->
 </script>

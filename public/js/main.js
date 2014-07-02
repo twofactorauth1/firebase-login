@@ -14,6 +14,7 @@ require.config({
         jquery: 'libs/jquery/jquery',
         jqueryvalidate: 'libs/jquery/jquery.validate',
         jqueryeasing: 'libs/jquery/jquery.easing',
+        jqueryUI: 'libs/jquery/jquery-ui.min',
         underscore: 'libs/underscore/underscore',
         json2: 'libs/json/json2',
         backbone: 'libs/backbone/backbone',
@@ -38,7 +39,8 @@ require.config({
         leaflet: 'libs/leaflet/leaflet',
         colorthief: 'libs/colorthief/colorthief',
         waypoints: 'libs/waypoints/waypoints.min',
-        nestable: 'libs/nestable/jquery.nestable',
+        moment: 'libs/moment/moment.min',
+        daterangepicker: 'libs/bootstrap/daterangepicker',
 
         //UI SPECIFIC
         toggles: 'libs/misc/toggles.min'
@@ -49,6 +51,9 @@ require.config({
             deps: ['jquery']
         },
         jqueryeasing: {
+            deps: ['jquery']
+        },
+        jqueryUI: {
             deps: ['jquery']
         },
         underscore: {
@@ -95,11 +100,18 @@ require.config({
         toggles: {
             deps: ['jquery']
         },
+        moment: {
+            deps: ['jquery']
+        },
+        daterangepicker: {
+            deps: ['jquery', 'moment']
+        },
         app: {
             deps: [
                 'jquery',
                 'jqueryvalidate',
                 'jqueryeasing',
+                'jqueryUI',
                 'underscore',
                 'backbone',
                 'backboneExtended',
@@ -112,7 +124,8 @@ require.config({
                 'leaflet',
                 'colorthief',
                 'waypoints',
-                'nestable',
+                'moment',
+                'daterangepicker',
             ]
         }
     },

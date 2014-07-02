@@ -45,6 +45,10 @@
         var $ = Aloha.jQuery;
         $('.editable').aloha();
 
+        $('#main-area').on('click','.add-post',function() {
+            $('.editable').aloha();
+        });
+
         Aloha.bind('aloha-editable-deactivated', function(){
             var content = Aloha.activeEditable.getContents();
             var contentId = Aloha.activeEditable.obj[0].id;
