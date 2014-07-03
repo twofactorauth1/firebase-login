@@ -16,7 +16,7 @@ var testContext = {};
 testContext.plans = [];
 
 
-exports.device_dao_test = {
+exports.subscription_dao_test = {
     setUp: function (cb) {
         var self = this;
         var promiseAry = [];

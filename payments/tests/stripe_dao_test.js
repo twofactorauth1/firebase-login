@@ -15,7 +15,7 @@ var _log = $$.g.getLogger("stripe.dao.test");
 var testContext = {};
 testContext.plans = [];
 
-exports.device_dao_test = {
+exports.stripe_dao_test = {
     setUp: function(cb) {
         var self = this;
         _log.info('creating test contact.');
