@@ -8,6 +8,7 @@
 var userDao = require('../dao/user.dao.js');
 var accountDao = require('../dao/account.dao.js');
 var contactDao = require('../dao/contact.dao.js');
+var paymentDao = require('../payments/dao/payment.dao.js');
 
 module.exports = {
 
@@ -72,7 +73,26 @@ module.exports = {
         });
     },
 
-
+    createTestPayment: function(params, fn) {
+        var defaultParams = {
+            chargeId: 'charge_1',
+            amount: 100,
+            fingerprint: 'qwertyuiop',
+            last4: '0000',
+            cvc_check: 'pass',
+            created: Date.now(),
+            paid: true,
+            refunded: false,
+            balance_transaction: 'bal_txid_1',
+            customerId: 'cust_1',
+            contactId: 'contact_1',
+            invoiceId: 0,
+            capture_date: Date.now()
+        };
+        var payment = new $$.m.Payment(defaultParams);
+        payment.set(params);
+        paymentDao.saveOrUpdate(payment, fn);
+    },
 
     closeDBConnections: function () {
         if ($$.g.mongos != null) {
