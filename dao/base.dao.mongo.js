@@ -226,7 +226,7 @@ var mongodao = {
 
     _getNextSequence: function(collection, fn) {
         var self = this;
-
+        
         if (_.isFunction(collection)) {
             fn = collection;
             collection = null;
@@ -235,7 +235,7 @@ var mongodao = {
         collection = collection || this.collection;
 
         if (this._isLocked(collection)) {
-            (function(collection, fn) {
+           (function(collection, fn) {
                 self._registerUnlock(collection, function() {
                     self._getNextSequence(collection, fn);
                 });
@@ -277,8 +277,8 @@ var mongodao = {
 
     _unlockCollection: function(collection) {
         collection = collection || this.collection;
-        this._notifyUnlock(collection);
         delete this.locked[collection];
+        this._notifyUnlock(collection);
     },
 
 

@@ -17,8 +17,8 @@ var dao = {
     },
 
     getSubscriptionsByAccount: function(accountId, fn) {
-        var query = {accountId: accountId};
-        this.findMany(query, fn);
+        var query = {'accountId': accountId};
+        this.findMany(query, $$.m.Subscription, fn);
     },
 
     getSubscriptionsByContact: function(contactId, fn) {

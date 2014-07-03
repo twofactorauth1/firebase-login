@@ -1036,6 +1036,14 @@ var dao = {
 
     //invoices
 
+    //coupons
+
+    //discounts
+
+    //tokens
+
+    //events
+
 };
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
