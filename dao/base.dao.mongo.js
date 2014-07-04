@@ -277,8 +277,8 @@ var mongodao = {
 
     _unlockCollection: function(collection) {
         collection = collection || this.collection;
-        this._notifyUnlock(collection);
         delete this.locked[collection];
+        this._notifyUnlock(collection);
     },
 
 
@@ -300,11 +300,13 @@ var mongodao = {
 
     _notifyUnlock: function(collection) {
         if (this.unlockRegister && this.unlockRegister[collection] != null) {
-            var callbacks = this.unlockRegister[collection];
+            //var callbacks = this.unlockRegister[collection];
+            //do a deep copy of the array and delete it so it won't be modified by the callbacks
+            var callbacks = $.extend(true, [], this.unlockRegister[collection]);
+            delete this.unlockRegister[collection];
             for(var i = 0; i < callbacks.length; i++) {
                 callbacks[i]();
             }
-            delete this.unlockRegister[collection];
         }
     },
 

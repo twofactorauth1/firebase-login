@@ -36,15 +36,19 @@ require.config({
         usersData: 'global/users.data',
         app: 'app',
         text: "libs/requirejs/plugins/text",
+        leaflet: 'libs/leaflet/leaflet',
+        colorthief: 'libs/colorthief/colorthief',
+        waypoints: 'libs/waypoints/waypoints.min',
+        nestable: 'libs/nestable/jquery.nestable',
+        date: 'libs/date/date',
+        daterangepicker: 'libs/jquerydatepicker/daterangepicker',
+        d3: 'libs/d3/d3',
         moment: 'libs/moment/moment.min',
 
         //UI SPECIFIC
         toggles: 'libs/misc/toggles.min',
-        daterangepicker: 'libs/bootstrap/daterangepicker',
         datepicker: 'libs/bootstrap/bootstrap-datepicker',
         leaflet: 'libs/leaflet/leaflet',
-        colorthief: 'libs/colorthief/colorthief',
-        waypoints: 'libs/waypoints/waypoints.min',
         tagsinput: 'libs/jquery/jquery.tagsinput'
     },
 
@@ -108,12 +112,11 @@ require.config({
         daterangepicker: {
             deps: ['jquery', 'moment']
         },
-        daterangepicker: {
-            deps: ['jquery']
-        },
+
         tagsinput: {
             deps: ['jquery']
         },
+
         app: {
             deps: [
                 'jquery',
@@ -132,10 +135,13 @@ require.config({
                 'leaflet',
                 'colorthief',
                 'waypoints',
+                'nestable',
+                'date',
                 'moment',
                 'daterangepicker',
                 'datepicker',
                 'tagsinput',
+                'd3'
             ]
         }
     },
