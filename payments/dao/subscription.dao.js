@@ -17,21 +17,29 @@ var dao = {
     },
 
     getSubscriptionsByAccount: function(accountId, fn) {
+        var self = this;
+        self.log.debug(">> getSubscriptionsByAccount");
         var query = {'accountId': accountId};
         this.findMany(query, $$.m.Subscription, fn);
     },
 
     getSubscriptionsByContact: function(contactId, fn) {
+        var self = this;
+        self.log.debug(">> getSubscriptionsByContact");
         var query = {contactId: contactId};
         this.findMany(query, fn);
     },
 
     getSubscriptionsByAccountAndPlan: function(accountId, planId, fn) {
+        var self = this;
+        self.log.debug(">> getSubscriptionsByAccountAndPlan");
         var query = {accountId: accountId, stripePlanId: planId};
         this.findMany(query, fn);
     },
 
     getSubscriptionByAccountAndId: function(accountId, stripeSubscriptionId, fn) {
+        var self = this;
+        self.log.debug(">> getSubscriptionByAccountAndId");
         var query = {accountId: accountId, stripeSubscriptionId: stripeSubscriptionId};
         this.findOne(query, fn);
     }

@@ -17,6 +17,8 @@ var dao = {
     },
 
     getPaymentByChargeId: function(chargeId, fn) {
+        var self = this;
+        self.log.debug(">> getPaymentByChargeId");
         var query = {chargeId: chargeId};
         this.findOne(query, fn);
     }
