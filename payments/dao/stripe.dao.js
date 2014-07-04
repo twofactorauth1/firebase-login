@@ -1030,7 +1030,7 @@ var dao = {
             }
         });
         return deferred.promise;
-    }
+    },
 
     //invoice items
 
@@ -1042,7 +1042,120 @@ var dao = {
 
     //tokens
 
-    //events
+    /**
+     *
+     * @param cardId - Stripe cardId of a card already attached to a customer
+     * @param customerId - Stripe customerId
+     * @param accessToken - delegated access Token is REQUIRED
+     * @param fn
+     */
+    createToken: function(cardId, customerId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> createToken');
+        var stripe_bkup = null;
+        var params = {};
+        params.card = cardId;
+        params.customer = customerId;
+
+        if(accessToken && accessToken.length > 0) {
+            self.log.debug('delegating stripe to ' + accessToken);
+            stripe_bkup = stripe;
+            stripe = require("stripe")( accessToken);
+        }
+
+        stripe.tokens.create(params, function(err, token) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, token);
+            }
+            self.log.debug('<< createToken');
+            return fn(err, token);
+        });
+
+        if(stripe_bkup) {
+            self.log.debug('undelegating stripe');
+            stripe = stripe_bkup;
+            stripe_bkup = null;
+        }
+    },
+
+    //events - getEvent, listEvents
+    getEvent: function(eventId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getEvent');
+        var stripe_bkup = null;
+
+        if(accessToken && accessToken.length > 0) {
+            self.log.debug('delegating stripe to ' + accessToken);
+            stripe_bkup = stripe;
+            stripe = require("stripe")( accessToken);
+        }
+
+        stripe.events.retrieve(eventId, function(err, event) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charges);
+            }
+            self.log.debug('<< getEvent');
+            return fn(err, event);
+        });
+
+        if(stripe_bkup) {
+            self.log.debug('undelegating stripe');
+            stripe = stripe_bkup;
+            stripe_bkup = null;
+        }
+    },
+
+    /**
+     *
+     * @param created - value (unix timestamp) or object containing 1 of the following options:
+     *                          - gt: Return values where the created field is after this timestamp
+     *                          - gte: Return values where the created field is after or equal to this timestamp.
+     *                          - lt: Return values where the created field is before this timestamp.
+     *                          - lte: Return values where the created field is before or equal to this timestamp.
+     *
+     * @param ending_before - A cursor for use in pagination. ending_before is an object ID that defines your place in the list
+     * @param limit - between 1 and 100.  Default is 10
+     * @param starting_after - A cursor for use in pagination. starting_after is an object ID that defines your place in the list.
+     * @param type - A string containing a specific event name, or group of events using * as a wildcard.
+     * @param accessToken
+     * @param fn
+     */
+    listEvents: function(created, ending_before, limit, starting_after, type, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> listEvents');
+        var stripe_bkup = null;
+        var params = {};
+        if(created) {params.created = created;}
+        if(ending_before) {params.ending_before = ending_before;}
+        if(limit && (limit > 0 || limit <=100)) {params.limit = limit;}
+        if(starting_after) {params.starting_after = starting_after;}
+        if(type) {params.type = type;}
+
+        if(accessToken && accessToken.length > 0) {
+            self.log.debug('delegating stripe to ' + accessToken);
+            stripe_bkup = stripe;
+            stripe = require("stripe")( accessToken);
+        }
+
+        stripe.events.list(params, function(err, events) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charges);
+            }
+            self.log.debug('<< listEvents');
+            return fn(err, events);
+        });
+
+        if(stripe_bkup) {
+            self.log.debug('undelegating stripe');
+            stripe = stripe_bkup;
+            stripe_bkup = null;
+        }
+
+    }
+
 
 };
 
