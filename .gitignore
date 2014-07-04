@@ -15,3 +15,7 @@ bioindigenous.komodoproject
 *-ck.js
 .idea/
 Logs/
+#.elasticbeanstalk/
+.elasticbeanstalk/
+
+public/css/style.default.css

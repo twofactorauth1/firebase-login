@@ -1,0 +1,49 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+-->
+
+<script type="text/x-handlebars-template" name="fb-top-ten-posts">
+    <table class="graph-top-posts">
+        <colgroup>
+            <col width="10%" />
+            <col width="10%" />
+            <col width="30%" />
+            <col width="9%" />
+            <col width="9%" />
+            <col width="10%" />
+            <col width="12%" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Post</th>
+            <th>Reach</th>
+            <th>Clicks</th>
+            <th>Stories</th>
+            <th>Virality</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each posts}}
+        <tr>
+            <td>{{date}}</td>
+            <td>{{type}}</td>
+            <td><a href="{{url}}" rel="external">{{text}}</a></td>
+            <td>{{reach}}</td>
+            <td>{{engaged}}</td>
+            <td>{{talking}}</td>
+            <td class="virality">
+                <div>
+                    <span class="meter" style="width:{{vwidth}}px"></span>
+                    <span class="text">{{virality}}</span>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</script>
