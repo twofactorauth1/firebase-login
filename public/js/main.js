@@ -14,6 +14,7 @@ require.config({
         jquery: 'libs/jquery/jquery',
         jqueryvalidate: 'libs/jquery/jquery.validate',
         jqueryeasing: 'libs/jquery/jquery.easing',
+        jqueryUI: 'libs/jquery/jquery-ui.min',
         underscore: 'libs/underscore/underscore',
         json2: 'libs/json/json2',
         backbone: 'libs/backbone/backbone',
@@ -42,6 +43,7 @@ require.config({
         date: 'libs/date/date',
         daterangepicker: 'libs/jquerydatepicker/daterangepicker',
         d3: 'libs/d3/d3',
+        moment: 'libs/moment/moment.min',
 
         //UI SPECIFIC
         toggles: 'libs/misc/toggles.min'
@@ -52,6 +54,9 @@ require.config({
             deps: ['jquery']
         },
         jqueryeasing: {
+            deps: ['jquery']
+        },
+        jqueryUI: {
             deps: ['jquery']
         },
         underscore: {
@@ -98,14 +103,19 @@ require.config({
         toggles: {
             deps: ['jquery']
         },
-        daterangepicker: {
+        moment: {
             deps: ['jquery']
         },
+        daterangepicker: {
+            deps: ['jquery', 'moment']
+        },
+
         app: {
             deps: [
                 'jquery',
                 'jqueryvalidate',
                 'jqueryeasing',
+                'jqueryUI',
                 'underscore',
                 'backbone',
                 'backboneExtended',
@@ -120,8 +130,9 @@ require.config({
                 'waypoints',
                 'nestable',
                 'date',
+                'moment',
                 'daterangepicker',
-                'd3',
+                'd3'
             ]
         }
     },

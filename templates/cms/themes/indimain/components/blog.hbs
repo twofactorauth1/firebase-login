@@ -15,7 +15,13 @@
                             <div class="single-blog responsive clearfix">
 
                                     <div class="blog-entry clearfix">
-                                        <h2 class="blog-title"><a href="/page/blog/{{this.attributes.post_url}}">{{this.attributes.post_title}}</a></h2>
+                                        <h2 class="blog-title">
+                                            <a href="/page/blog/{{this.attributes.post_url}}">
+                                                <div class="editable" data-class="post-title">
+                                                    {{this.attributes.post_title}}
+                                                </div>
+                                            </a>
+                                        </h2>
 
                                         <p class="blog-meta">
                                         {{#if this.attributes.created.date}}
@@ -44,7 +50,11 @@
                                                 <a href=""><span class="overlay"></span></a>
                                             </div> <!-- end .thumb -->
 
-                                            <div class="entry-excerpt"><p>{{{this.attributes.post_excerpt}}}...</p></div>
+                                            <div class="entry-excerpt"><p>
+                                            <div class="editable" data-class="post-excerpt">
+                                                {{{this.attributes.post_excerpt}}}...
+                                            </div>
+                                            </p></div>
                                             <a href="/page/blog/{{this.attributes.post_url}}" class="btn btn-orange pull-right"><span>READ MORE</span></a>
                                     </div> <!-- end .et_pt_blogentry -->
 

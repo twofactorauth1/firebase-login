@@ -77,10 +77,29 @@ module.exports = function(grunt) {
 
         less: {
             style: {
-                files: {"../indigeweb-release/public/css/site.css":"public/less/site.less"}
+                files: {
+                    '../indigeweb/public/css/site.css': [ 'public/less/site.less' ],
+                    '../indigeweb/public/css/style.default.css': [ 'public/less/style.default.less' ],
+                    '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ]
+                }
             }
         },
 
+        watch: {
+            less: {
+                files: "../indigeweb/public/less/*",
+                tasks: ["less"],
+            },
+            html: {
+                files: "../indigeweb/public/templates/**/*.html",
+            },
+            scripts: {
+              files: '../indigeweb/public/js/**/*.js',
+            },
+            options: {
+              livereload: true
+            },
+        },
 
         requirejs: {
             compile: {
@@ -141,15 +160,33 @@ module.exports = function(grunt) {
             runkeeperadapter:['biometrics/runkeeper/adapter/test/**/*_test.js'],
             runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             utils:['utils/test/*_test.js']
+        },
+
+        //AWS Deploy
+        awsebtdeploy: {
+            demo: {
+                options: {
+                    region: 'us-west-2',
+                    applicationName: 'indigeweb-testing',
+                    environmentCNAME: 'indigewebtesting-env.elasticbeanstalk.com',
+                    sourceBundle: "latest.zip",
+                    // or via the AWS_ACCESS_KEY_ID environment variable
+                    accessKeyId: "AKIAIZ67GOAMTI2C3IMA",
+                    // or via the AWS_SECRET_ACCESS_KEY environment variable
+                    secretAccessKey: "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"
+                }
+            }
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
+    grunt.loadNpmTasks('grunt-awsebtdeploy');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);

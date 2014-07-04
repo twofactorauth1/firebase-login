@@ -1,0 +1,311 @@
+.campaign-list {
+	padding: 0;
+
+	li {
+		border-radius: 3px;
+		background: #fcfcfc;
+		min-height: 75px;
+		line-height: 65px;
+		border-bottom: 1px solid #e4e7ea;
+	}
+
+	li:hover {
+		background-color: #e4e7ea;
+	    transition: background-color 1000ms linear;
+	}
+
+	.campaign-indicator, .campaign-name {
+		border-right: 1px solid #f3f3f3;
+		height: 75px;
+	}
+
+	.campaign-indicator {
+
+			i.active {
+				color:#47a865;
+			}
+
+			i.paused {
+				color:red;
+			}
+	}
+
+	.people-reached {
+		text-transform: uppercase;
+
+		.number {
+			color: #3cb878;
+			font-size: 30px;
+		}
+
+		p {
+			line-height: 15px;
+			margin: 15px 0 0 5px;
+		}
+	}
+
+	.timeframe {
+		p {
+			display: inline-block;
+			float: right;
+			color: #c2c2c2;
+		}
+
+		p:last-child {
+			margin-right: 30px;
+		}
+	}
+
+	.chevron {
+		font-size: 20px;
+	}
+}
+
+.marketing-single {
+	.campaign-details {
+		min-height: 100px;
+		background: white;
+		padding: 10px;
+
+		h4 {
+			font-weight: bold;
+			color: black;
+		}
+	}
+
+	.campaign-performance {
+		padding: 10px;
+
+		h3 {
+			color: black;
+			font-weight: bold;
+			text-shadow: 1px 1px 1px #c3c5c8;
+		}
+
+		.quick-stats .panel{
+			padding: 25px 0;
+		}
+
+		.gender {
+
+			i {
+				font-size: 100px;
+				padding: 10px;
+				float: left;
+			}
+			p {
+				font-size: 24px;
+				color: black;
+				text-align: center;
+				margin: 40px 20px 0;
+				float: left;
+			}
+			span {
+				font-size: 14px;
+				color: #444;
+			}
+			.male {
+				display: block;
+				min-height: 110px;
+				i {
+					color:#54c8e8;
+				}
+
+				p {
+					margin: 40px 39px 0;
+				}
+			}
+
+			.female {
+				display: block;
+				min-height: 110px;
+				i {
+					color:#f26d7d;
+				}
+			}
+		}
+
+		.panel-campaign-header {
+			background: #eff6f9;
+			font-weight: bold;
+			color:#b9d2e0;
+			text-shadow: 1px 1px 1px white;
+		}
+
+	}
+}
+
+#reportrange {
+	background: #ffffff;
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
+	box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
+	color: #333333;
+	padding: 8px;
+	line-height: 18px;
+	cursor: pointer;
+	float: right;
+	margin-top: 16px;
+	min-width: 200px;
+
+	.caret {
+		margin-top: 8px;
+		margin-left: 2px;
+	}
+
+	span {
+		padding-left: 3px;
+	}
+}
+
+.demographics .panel {
+	padding: 20px;
+
+	h4 {
+		font-weight: bold;
+		color: black;
+	}
+}
+
+.social.fa {
+	font-size: 24px;
+	color: white;
+	width: 50px;
+	height: 50px;
+	border-radius: 40px;
+	text-align: center;
+	line-height: 50px;
+	margin-right: 10px;
+	background: #42c0fb;
+}
+
+.fa-facebook {
+	background: #245f9b!important;
+}
+
+.fa-twitter {
+	background: #5dd7fc!important;
+}
+
+.fa-google-plus {
+	background: #c1272d!important;
+}
+
+.minimize i {
+	margin-top: 15px;
+}
+
+.campaign-component-performance {
+	.stat {
+		text-align: center;
+		background: #eff6f9;
+		max-width: 100px;
+		height: 50px;
+		text-align: center;
+		line-height: 50px;
+		color: #afccdb;
+		font-size: 18px;
+		font-weight: bold;
+		text-shadow: 1px 1px 1px white;
+		border: 1px solid #d3e2ec;
+		border-radius: 10px;
+		margin: 0 auto;
+		text-transform: uppercase;
+	}
+}
+
+.days-left {
+	p {
+		font-size: 60px;
+		color: #54c8e8;
+		font-weight: bold;
+		margin-top: 40px;
+		text-align: center;
+	}
+
+	span {
+		font-size: 19px;
+		font-weight: normal;
+	}
+}
+
+.campaign-overview {
+	width: 90%;
+	p {
+		text-align: left;
+		float: left;
+		color: #c2c2c2;
+		font-weight: bold;
+	}
+
+	.subtle-gray {
+		text-align: right;
+		float: right;
+		color: #444444;
+		font-weight: bold;
+	}
+}
+
+.campaign-details {
+	.detail-single {
+		border-right: 1px solid #e7e7e7;
+	}
+}
+
+.btn-view-templates {
+	margin-right: 10px;
+}
+
+.template-messages {
+	padding-left: 0;
+	li {
+		display: inline-block;
+		position: relative;
+		span {
+			background: #39b54a;
+			border: 1px solid #239537;
+			color: white;
+			width: 25px;
+			height: 25px;
+			border-radius: 13px;
+			display: block;
+			text-align: center;
+			font-weight: bold;
+			position: absolute;
+			right: 0;
+			margin: -19px 0 0 0;
+			}
+		}
+}
+
+.template-details {
+	.title {
+		color: #54c8e8;
+		font-weight: bold;
+		text-transform: uppercase;
+	}
+	.created {
+		color: #c2c2c2;
+	}
+}
+
+// Small Device
+@media(max-width:767px){
+	.campaign-overview {
+		width: 100%;
+	}
+
+	.days-left p {
+		margin-top: 30px;
+	}
+
+	.marketing-single .campaign-performance .gender  {
+		.male p, .female p {
+			margin: 40px 0 0;
+		}
+	 }
+
+	 #reportrange {
+	 	float: none;
+	 }
+}//end sml device

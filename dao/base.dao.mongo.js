@@ -277,8 +277,8 @@ var mongodao = {
 
     _unlockCollection: function(collection) {
         collection = collection || this.collection;
-        this._notifyUnlock(collection);
         delete this.locked[collection];
+        this._notifyUnlock(collection);
     },
 
 
