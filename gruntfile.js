@@ -160,22 +160,6 @@ module.exports = function(grunt) {
             runkeeperadapter:['biometrics/runkeeper/adapter/test/**/*_test.js'],
             runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             utils:['utils/test/*_test.js']
-        },
-
-        //AWS Deploy
-        awsebtdeploy: {
-            demo: {
-                options: {
-                    region: 'us-west-2',
-                    applicationName: 'indigeweb-testing',
-                    environmentCNAME: 'indigewebtesting-env.elasticbeanstalk.com',
-                    sourceBundle: "latest.zip",
-                    // or via the AWS_ACCESS_KEY_ID environment variable
-                    accessKeyId: "AKIAIZ67GOAMTI2C3IMA",
-                    // or via the AWS_SECRET_ACCESS_KEY environment variable
-                    secretAccessKey: "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"
-                }
-            }
         }
     });
 
@@ -186,7 +170,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
-    grunt.loadNpmTasks('grunt-awsebtdeploy');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
