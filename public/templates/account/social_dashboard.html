@@ -6,56 +6,281 @@
 -->
 
 <script type="text/x-handlebars-template" name="social-dashboard-main">
-    <div id="social_dashboard">
-        <div id='social_dashboard_panel' class='dashboard-grid content'>
-            <div class="container-fluid">
-                <div class="row-fluid">
-                    <div class="span12 grid-rows">
-                        <div class="row row-new">
-                            <div class="grid-new grid2" data-width="2"></div>
+    <div class="pageheader row">
+        <div class="col-xs-6">
+            <h2><i class="fa fa-home"></i> Overview</h2>
+        </div>
+        <div class="col-xs-6 hidden">
+            <a class="btn btn-success pull-right" type="button">
+                <span class="fa fa-calendar"></span>
+                <span class="hidden-xs">Today</span>
+            </a>
+            <a class="btn btn-success pull-right" type="button" style="margin-right:10px" data-toggle="modal" data-target="#widgetSelection">
+                <span class="fa fa-plus"></span>
+                <span class="hidden-xs">Add Widget</span>
+            </a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div id="social_dashboard" class="contentpanel">
+        <div class="col-sm-6 col-xs-12">
+            <div id='social_dashboard_panel' class='dashboard-grid content'>
+                <div class="container-fluid">
+                    <div class="row-fluid">
+                        <div class="span12 grid-rows">
+                            <div class="row row-new">
+                                <div class="grid-new grid2" data-width="2"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-sm-6 col-xs-12">
+            <div class="smart-timeline">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-btns">
+                            <select class="form-control chosen-select input-lg ">
+                                <option value="">All Activity</option>
+                                <option value="">Filter Activity</option>
+                                <option value="">My Activity</option>
+                                <option value="">Orders</option>
+                                <option value="">FB Like</option>
+                                <option value="">Tweets</option>
+                                <option value="">Page View</option>
+                            </select>
+                        </div>
+                        <!-- panel-btns -->
+                        <h3 class="panel-title">Activity</h3>
+                    </div>
+                    <ul class="smart-timeline-list">
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <i class="fa fa-bar-chart-o"></i>
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>just now</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <a href="javascript:void(0);">
+                                        <span class="label label-default">Email</span>from Sarah K.
+                                    </a>
+                                </p>
+                                <p>
+                                    Promotion email based on Robin&#39;s birthday.
+                                </p>
+                                <p>
+                                    <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a>
+                                </p>
 
-        <div id='social_dashboard_rightbar' class='sidebar sidebar-nav'>
-            <h2 class="header accordion"><span class="icon-cog"></span> Settings <span class="arrow closed"></span></h2>
-            <div class="section">
-                <form id="dashboard-options" action=".">
 
-                    {{#with dashboard}}
-                    <input class="ds-title" type="text" placeholder="Title" value="{{title}}" />
-                    <textarea class="ds-description" placeholder="Description">{{description}}</textarea>
-                    {{/with}}
 
-                    <label for="source">Facebook Page:</label>
-                    <select class="ds-fb-source">
-                        {{#each facebookPages}}
-                        <option value="{{_id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
-                        {{/each}}
-                    </select>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>just now</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <a href="javascript:void(0);">
+                                        <span class="label label-default">Order from</span>from Sarah K.
+                                    </a>
+                                </p>
+                                <p>
+                                    Order #4231 3 items $141.54 PAID
+                                </p>
+                                <p>
+                                    <a href="view_order.html" class="btn btn-xs btn-green"><i class="fa fa-file"></i> View the Order</a>
+                                </p>
 
-                    <button class="btn btn-danger dashboard-delete">Delete dashboard</button>
-                </form>
-            </div>
 
-            <h2 class="header accordion"><b class="icon-th"></b> Facebook <span class="arrow closed"></span></h2>
-            <ul class="section nav nav-list">
-                <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_overview">Overview</a></li>
-                <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_likesPerDay">Likes per day</a></li>
-                <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_postTimeline">All post activity</a></li>
-                <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_postInteractionsPerDay">Post interactions / day</a></li>
-                <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_reachPerDay">Daily reach</a></li>
-                <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_topTenPosts" data-width="2">Top 10 posts</a></li>
-                <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_engagedDemographics">Engaged users by age/gender</a></li>
-                <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_topFans" data-width="2">Top 5 fans</a></li>
-            </ul>
 
-            <div class="test alert alert-info">
-                <input id="use-test-data" type="checkbox" {{#if testData}}checked="checked"{{/if}} />
-                <label for="use-test-data">Enable test mode</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>12 Mar, 2013</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <span class="label label-default">Tweet</span>by Robin Burgandy.
+                                </p>
+                                <p>
+                                    I Love
+                                    <strong>Yoga One</strong>!
+                                </p>
+                                <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Reply to Tweet</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>1 min ago</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <span class="label label-default">Call</span>from Sarah K.
+                                </p>
+
+                                <p>
+                                    Successful Thank you call and get feedback on Customer Service.
+                                </p>
+                                <p>
+                                    <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-phone-square"></i> Listen to the Call</a>
+                                </p>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>5 hrs ago</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <span class="label label-default">Biometric Reading</span>for Henry Holmes</strong>
+                                </p>
+                                <p>
+                                    Pulse Oximeter Reading “94% SpO2”
+                                </p>
+
+                                <br>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>yesterday</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <a href="javascript:void(0);">
+                                        <span class="label label-default">Update</span>phone number
+                                    </a>
+                                </p>
+                                <p>
+                                    <span class="strike">619-568-4989</span>
+                                    </br>
+                                    619-574-5849
+                                </p>
+                            </div>
+                        </li>
+                        <li class="text-center">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-default"><i class="fa fa-arrow-down text-muted"></i> LOAD MORE</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
+        {{> dashboard-sidebar}}
+    </div>
+
+</script>
+
+<script type="text/x-handlebars-template" name="dashboard-sidebar" partial="true">
+    <div class="rightpanel rightpanel-dashboard">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Page</a>
+            </li>
+            <li><a href="#rp-theme" data-toggle="tab" id="rp-domain-theme">Theme</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+
+        <div class="tab-content">
+            <div class="tab-pane pane-settings active" id="rp-page">
+                <div id='social_dashboard_rightbar' class='sidebar sidebar-nav'>
+                    <h2 class="header accordion"><span class="icon-cog"></span> Settings <span class="arrow closed"></span></h2>
+                    <div class="section">
+                        <form id="dashboard-options" action=".">
+
+                            {{#with dashboard}}
+                            <input class="ds-title" type="text" placeholder="Title" value="{{title}}" />
+                            <textarea class="ds-description" placeholder="Description">{{description}}</textarea>
+                            {{/with}}
+
+                            <label for="source">Facebook Page:</label>
+                            <select class="ds-fb-source">
+                                {{#each facebookPages}}
+                                <option value="{{_id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+                                {{/each}}
+                            </select>
+
+                            <button class="btn btn-danger dashboard-delete">Delete dashboard</button>
+                        </form>
+                    </div>
+
+                    <h2 class="header accordion"><b class="icon-th"></b> Facebook <span class="arrow closed"></span></h2>
+                    <ul class="section nav nav-list">
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_overview">Overview</a></li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_likesPerDay">Likes per day</a></li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_postTimeline">All post activity</a></li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_postInteractionsPerDay">Post interactions / day</a></li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_reachPerDay">Daily reach</a></li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_topTenPosts" data-width="2">Top 10 posts</a></li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_engagedDemographics">Engaged users by age/gender</a></li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_topFans" data-width="2">Top 5 fans</a></li>
+                    </ul>
+
+                    <div class="test alert alert-info">
+                        <input id="use-test-data" type="checkbox" {{#if testData}}checked="checked"{{/if}} />
+                        <label for="use-test-data">Enable test mode</label>
+                    </div>
+            </div>
+            </div>
+            <div class="tab-pane pane-settings" id="rp-theme">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="collapsed">
+                                    Facebook
+                                  </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse" style="height: 0px;">
+                            <div class="panel-body">
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseTwo">
+                                    Twitter
+                                  </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" style="height: 0px;">
+                            <div class="panel-body">
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably havent heard of them accusamus labore sustainable VHS.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- leftpanelinner -->
+        </div>
+        <!-- leftpanel -->
     </div>
 </script>
+

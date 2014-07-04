@@ -370,6 +370,12 @@ define([
             module.remove();
         },
 
+        moveSidebar: function() {
+            console.log('Main Viewport: '+$('#main-viewport').length+' Right Panel: '+$('#rightpanel').length+' Dashboard: '+$('.rightpanel-dashboard').length);
+            var moveIt = $("#main-viewport .rightpanel-dashboard").remove();
+            $('#rightPanel').append(moveIt);
+        },
+
         render: function() {
             var self = this
                 , p1 = this.getAccount()
@@ -379,6 +385,7 @@ define([
             var html = tmpl;
 
             self.show(html);
+
         }
     });
 
