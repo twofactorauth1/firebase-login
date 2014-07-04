@@ -39,8 +39,11 @@ require.config({
         leaflet: 'libs/leaflet/leaflet',
         colorthief: 'libs/colorthief/colorthief',
         waypoints: 'libs/waypoints/waypoints.min',
+        nestable: 'libs/nestable/jquery.nestable',
+        date: 'libs/date/date',
+        daterangepicker: 'libs/jquerydatepicker/daterangepicker',
+        d3: 'libs/d3/d3',
         moment: 'libs/moment/moment.min',
-        daterangepicker: 'libs/bootstrap/daterangepicker',
 
         //UI SPECIFIC
         toggles: 'libs/misc/toggles.min'
@@ -106,6 +109,7 @@ require.config({
         daterangepicker: {
             deps: ['jquery', 'moment']
         },
+
         app: {
             deps: [
                 'jquery',
@@ -124,8 +128,11 @@ require.config({
                 'leaflet',
                 'colorthief',
                 'waypoints',
+                'nestable',
+                'date',
                 'moment',
                 'daterangepicker',
+                'd3'
             ]
         }
     },
