@@ -916,6 +916,62 @@ var dao = {
 
     },
 
+    updateInvoiceItem: function(invoiceItemId, amount, description, metadata, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> updateInvoiceItem');
+        var _stripe = self.delegateStripe(accessToken);
+        var params = {};
+        if(amount) {params.amount = amount;}
+        if(description) {params.description=description;}
+        if(metadata) {params.metadata = metadata;}
+
+        _stripe.invoiceItems.update( invoiceItemId, params,  function(err, invoiceItem) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, invoiceItem);
+            }
+            self.log.debug('<< updateInvoiceItem');
+            return fn(err, invoiceItem);
+        });
+    },
+
+    deleteInvoiceItem: function(invoiceItemId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> deleteInvoiceItem');
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.invoiceItems.del(invoiceItemId, function(err, confirmation) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, confirmation);
+            }
+            self.log.debug('<< deleteInvoiceItem');
+            return fn(err, confirmation);
+        });
+    },
+
+    listInvoiceItems: function(created, customerId, ending_before, limit, starting_after, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> listInvoiceItems');
+        var _stripe = self.delegateStripe(accessToken);
+        var params = {};
+
+        if(created) {params.created = created;}
+        if(customerId) {params.customer = customerId;}
+        if(ending_before) {params.ending_before = ending_before;}
+        if(limit) {params.limit = limit;}
+        if(starting_after) {params.starting_after = starting_after;}
+
+        _stripe.invoiceItems.list(function(err, invoiceItems) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, invoiceItems);
+            }
+            self.log.debug('<< listInvoiceItems');
+            return fn(err, invoiceItems);
+        });
+    },
+
     //invoices
 
     //coupons
