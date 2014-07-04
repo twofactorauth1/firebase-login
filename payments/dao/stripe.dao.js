@@ -201,57 +201,34 @@ var dao = {
         if(metadata) {params.metadata = metadata;}
         if(statement_description) {params.statement_description = statement_description};
 
-        /*
-         * If the accessToken is specified, we need to send it as the second argument.
-         * Let's see what happens if it is null.
-         */
-        if(accessToken && accessToken.length > 0) {
-            self.log.debug('creating plan for accessToken: ' + accessToken);
-            stripe.plans.create(params, accessToken, function(err, plan) {
-                if(err) {
-                    self.log.error('error: ' + err);
-                    return fn(err, plan);
+        var _stripe = self.delegateStripe(accessToken);
 
-                }
-                self.log.debug('<< createStripePlan');
+        _stripe.plans.create(params, function(err, plan) {
+            if(err) {
+                self.log.error('error: ' + err);
                 return fn(err, plan);
-            });
-        } else {
-            self.log.debug('creating plan for main account');
-            stripe.plans.create(params, function(err, plan) {
-                if(err) {
-                    self.log.error('error: ' + err);
-                    return fn(err, plan);
 
-                }
-                self.log.debug('<< createStripePlan');
-                return fn(err, plan);
-            });
-        }
+            }
+            self.log.debug('<< createStripePlan');
+            return fn(err, plan);
+        });
+
     },
 
     getStripePlan : function(planId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getStripePlan');
-        if(accessToken && accessToken.length > 0) {
-            stripe.plans.retrieve(planId, accessToken, function(err, plan) {
-                if(err) {
-                    self.log.error('error: ' + err);
-                    return fn(err, plan);
-                }
-                self.log.debug('<< getStripePlan');
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.plans.retrieve(planId, function(err, plan) {
+            if(err) {
+                self.log.error('error: ' + err);
                 return fn(err, plan);
-            });
-        } else {
-            stripe.plans.retrieve(planId, function(err, plan) {
-                if(err) {
-                    self.log.error('error: ' + err);
-                    return fn(err, plan);
-                }
-                self.log.debug('<< getStripePlan');
-                return fn(err, plan);
-            });
-        }
+            }
+            self.log.debug('<< getStripePlan');
+            return fn(err, plan);
+        });
+
     },
 
     /**
@@ -272,77 +249,48 @@ var dao = {
         if(metadata) {params.metadata = metadata;}
         if(statement_description && statement_description.length > 0) {params.statement_description = statement_description;}
 
-        if(accessToken && accessToken.length > 0) {
-            stripe.plans.update(planId, params, accessToken, function(err, plan) {
-                if(err) {
-                    self.log.error('error: ' + err);
-                    return fn(err, plan);
-                }
-                self.log.debug('<< updateStripePlan');
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.plans.update(planId, params, function(err, plan) {
+            if(err) {
+                self.log.error('error: ' + err);
                 return fn(err, plan);
-            });
-        } else {
-            stripe.plans.update(planId, params, function(err, plan) {
-                if(err) {
-                    self.log.error('error: ' + err);
-                    return fn(err, plan);
-                }
-                self.log.debug('<< updateStripePlan');
-                return fn(err, plan);
-            });
-        }
+            }
+            self.log.debug('<< updateStripePlan');
+            return fn(err, plan);
+        });
 
     },
 
     deleteStripePlan: function(planId, accessToken, fn) {
         var self = this;
         self.log.debug('>> deleteStripePlan');
-        if(accessToken && accessToken.length > 0) {
-            stripe.plans.del(planId, accessToken, function(err, confirmation) {
-                    if(err) {
-                        self.log.error('error: ' + err);
-                        return fn(err, confirmation);
-                    }
-                    self.log.debug('<< deleteStripePlan');
-                    return fn(err, confirmation);
-                }
-            );
-        } else{
-            stripe.plans.del(planId, function(err, confirmation) {
-                    if(err) {
-                        self.log.error('error: ' + err);
-                        return fn(err, confirmation);
-                    }
-                    self.log.debug('<< deleteStripePlan');
-                    return fn(err, confirmation);
-                }
-            );
-        }
+        var _stripe = self.delegateStripe(accessToken);
 
+        _stripe.plans.del(planId, function(err, confirmation) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, confirmation);
+                }
+                self.log.debug('<< deleteStripePlan');
+                return fn(err, confirmation);
+            }
+        );
     },
 
     listStripePlans: function(accessToken, fn) {
         var self = this;
         self.log.debug('>> listStripePlans');
-        if(accessToken && accessToken.length > 0) {
-            stripe.plans.list(accessToken, function(err, plans) {
-                if(err) {
-                    self.log.error('error: ' + err);
-                    return fn(err, plans);
-                }
-                self.log.debug('<< listStripePlans');
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.plans.list(function(err, plans) {
+            if(err) {
+                self.log.error('error: ' + err);
                 return fn(err, plans);
-            });
-        } else {
-            stripe.plans.list(function(err, plans) {
-                if(err) {
-                    self.log.error('error: ' + err);
-                    return fn(err, plans);
-                }
-                self.log.debug('<< listStripePlans');
-                return fn(err, plans);
-            });
-        }
+            }
+            self.log.debug('<< listStripePlans');
+            return fn(err, plans);
+        });
     },
 
     /**
@@ -376,83 +324,49 @@ var dao = {
         if(metadata) {params.metadata = metadata;} else {params.metadata = {};}
         params.metadata.accountId = accountId;
 
-        if(accessToken && accessToken.length > 0) {
-            stripe.customers.createSubscription(customerId, params, accessToken, function(err, subscription) {
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.customers.createSubscription(customerId, params, function(err, subscription) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, subscription);
+                }
+                //create subscription record...NEED accountId and contactId
+                var sub = new $$.m.Subscription({
+                    accountId: accountId,
+                    contactId: contactId,
+                    stripeCustomerId: customerId,
+                    stripeSubscriptionId: subscription.id,
+                    stripePlanId: planId
+                });
+                subscriptionDao.saveOrUpdate(sub, function(err, _sub){
                     if(err) {
                         self.log.error('error: ' + err);
                         return fn(err, subscription);
                     }
-                    //create subscription record...NEED accountId and contactId
-                    var sub = new $$.m.Subscription({
-                        accountId: accountId,
-                        contactId: contactId,
-                        stripeCustomerId: customerId,
-                        stripeSubscriptionId: subscription.id,
-                        stripePlanId: planId
-                    });
-                    subscriptionDao.saveOrUpdate(sub, function(err, _sub){
-                        if(err) {
-                            self.log.error('error: ' + err);
-                            return fn(err, subscription);
-                        }
-                        self.log.debug('<< createStripeSubscription');
-                        return fn(err, subscription);
-                    });
-                }
-            );
-        } else {
-            stripe.customers.createSubscription(customerId, params, function(err, subscription) {
-                    if(err) {
-                        self.log.error('error: ' + err);
-                        return fn(err, subscription);
-                    }
-                    //create subscription record...NEED accountId and contactId
-                    var sub = new $$.m.Subscription({
-                        accountId: accountId,
-                        contactId: contactId,
-                        stripeCustomerId: customerId,
-                        stripeSubscriptionId: subscription.id,
-                        stripePlanId: planId
-                    });
-                    subscriptionDao.saveOrUpdate(sub, function(err, _sub){
-                        if(err) {
-                            self.log.error('error: ' + err);
-                            return fn(err, subscription);
-                        }
-                        self.log.debug('<< createStripeSubscription');
-                        return fn(err, subscription);
-                    });
-                }
-            );
-        }
+                    self.log.debug('<< createStripeSubscription');
+                    return fn(err, subscription);
+                });
+            }
+        );
+
     },
 
     getStripeSubscription: function(customerId, subscriptionId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getStripeSubscription');
-        if(accessToken && accessToken.length>0) {
-            stripe.customers.retrieveSubscription( customerId, subscriptionId, accessToken,
-                function(err, subscription) {
-                    if(err) {
-                        self.log.error('error: ' + err);
-                        return fn(err, subscription);
-                    }
-                    self.log.debug('<< getStripeSubscription');
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.customers.retrieveSubscription( customerId, subscriptionId,
+            function(err, subscription) {
+                if(err) {
+                    self.log.error('error: ' + err);
                     return fn(err, subscription);
                 }
-            );
-        } else {
-            stripe.customers.retrieveSubscription( customerId, subscriptionId,
-                function(err, subscription) {
-                    if(err) {
-                        self.log.error('error: ' + err);
-                        return fn(err, subscription);
-                    }
-                    self.log.debug('<< getStripeSubscription');
-                    return fn(err, subscription);
-                }
-            );
-        }
+                self.log.debug('<< getStripeSubscription');
+                return fn(err, subscription);
+            }
+        );
 
     },
 
@@ -470,42 +384,18 @@ var dao = {
         if(application_fee_percent && application_fee_percent.length>0) {params.application_fee_percent = application_fee_percent;}
         if(metadata) {params.metadata = metadata;}
 
-        if(accessToken && accessToken.length>0) {
-            stripe.customers.updateSubscription( customerId, subscriptionId, params, accessToken,
-                function(err, subscription) {
-                    if(err) {
-                        self.log.error('error: ' + err);
-                        return fn(err, subscription);
-                    }
-                    subscriptionDao.getSubscriptionByAccountAndId(accountId, subscriptionId, function(err, sub){
-                        if(err) {
-                            self.log.error('error: ' + err);
-                            return fn(err, subscription);
-                        }
-                        sub.set('planId', planId);
-                        subscriptionDao.saveOrUpdate(sub, function(err, sub){
-                            if(err) {
-                                self.log.error('error: ' + err);
-                                return fn(err, subscription);
-                            }
-                            self.log.debug('<< updateStripeSubscription');
-                            return fn(err, subscription);
-                        });
-                    });
-                }
-            );
-        } else {
-            stripe.customers.updateSubscription( customerId, subscriptionId, params,
-                function(err, subscription) {
-                    if(err) {
-                        self.log.error('error: ' + err);
-                        return fn(err, subscription);
-                    }
-                    self.log.debug('<< updateStripeSubscription');
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.customers.updateSubscription( customerId, subscriptionId, params,
+            function(err, subscription) {
+                if(err) {
+                    self.log.error('error: ' + err);
                     return fn(err, subscription);
                 }
-            );
-        }
+                self.log.debug('<< updateStripeSubscription');
+                return fn(err, subscription);
+            }
+        );
 
     },
 
@@ -525,40 +415,38 @@ var dao = {
         if(at_period_end === true) {
             params.at_period_end = true;
         }
-        if(accessToken && accessToken.length > 0) {
-            //TODO: handle connect
-        } else {
-            stripe.customers.cancelSubscription(customerId, subscriptionId, params, function(err, confirmation) {
-                    if(err) {
-                        self.log.error('error: ' + err);
-                        return fn(err, confirmation);
-                    }
-                    /*
-                        If at_period_end then we leave the local sub active and change the status upon webhook.
-                     */
-                    if(at_period_end !== true) {
-                        subscriptionDao.getSubscriptionByAccountAndId(accountId, subscriptionId, function(err, sub){
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.customers.cancelSubscription(customerId, subscriptionId, params, function(err, confirmation) {
+                if(err) {
+                    self.log.error('error: ' + err);
+                    return fn(err, confirmation);
+                }
+                /*
+                    If at_period_end then we leave the local sub active and change the status upon webhook.
+                 */
+                if(at_period_end !== true) {
+                    subscriptionDao.getSubscriptionByAccountAndId(accountId, subscriptionId, function(err, sub){
+                        if(err) {
+                            self.log.error('error: ' + err);
+                            return fn(err, confirmation);
+                        }
+                        sub.set('isActive', false);
+                        subscriptionDao.saveOrUpdate(sub, function(err, sub){
                             if(err) {
                                 self.log.error('error: ' + err);
                                 return fn(err, confirmation);
                             }
-                            sub.set('isActive', false);
-                            subscriptionDao.saveOrUpdate(sub, function(err, sub){
-                                if(err) {
-                                    self.log.error('error: ' + err);
-                                    return fn(err, confirmation);
-                                }
-                                self.log.debug('<< cancelStripeSubscription');
-                                return fn(err, confirmation);
-                            });
+                            self.log.debug('<< cancelStripeSubscription');
+                            return fn(err, confirmation);
                         });
-                    } else {
-                        self.log.debug('<< cancelStripeSubscription');
-                        return fn(err, confirmation);
-                    }
+                    });
+                } else {
+                    self.log.debug('<< cancelStripeSubscription');
+                    return fn(err, confirmation);
                 }
-            );
-        }
+            }
+        );
     },
 
     /**
@@ -712,7 +600,7 @@ var dao = {
     listStripeCards: function(customerId, fn) {
         var self = this;
         self.log.debug('>> listStripeCards');
-        stripe.customers.listCards('cu_104IiK4tCaXTUYFG4OC3wcV2', function(err, cards) {
+        stripe.customers.listCards(customerId, function(err, cards) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, cards);
@@ -746,7 +634,7 @@ var dao = {
         var self = this;
         self.log.debug('>> createStripeCharge');
         var paymentId = $$.u.idutils.generateUUID();//create the id for the local object
-        var stripe_bkup = null;
+        var _stripe = self.delegateStripe(accessToken);
         var params = {};
 
 
@@ -764,13 +652,7 @@ var dao = {
         if(receipt_email && receipt_email.length>0) {params.receipt_email = receipt_email;}
         if(application_fee && application_fee > 0) {params.application_fee = application_fee;}
 
-        if(accessToken && accessToken.length > 0) {
-            self.log.debug('delegating stripe to ' + accessToken);
-            stripe_bkup = stripe;
-            stripe = require("stripe")( accessToken);
-        }
-
-        stripe.charges.create(params, function(err, charge) {
+        _stripe.charges.create(params, function(err, charge) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, charge);
@@ -810,26 +692,14 @@ var dao = {
 
         });
 
-        if(stripe_bkup) {
-            self.log.debug('undelegating stripe');
-            stripe = stripe_bkup;
-            stripe_bkup = null;
-        }
-
     },
 
     getStripeCharge: function(chargeId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getStripeCharge');
-        var stripe_bkup = null;
+        var _stripe = self.delegateStripe(accessToken);
 
-        if(accessToken && accessToken.length > 0) {
-            self.log.debug('delegating stripe to ' + accessToken);
-            stripe_bkup = stripe;
-            stripe = require("stripe")( accessToken);
-        }
-
-        stripe.charges.retrieve(chargeId, function(err, charge) {
+        _stripe.charges.retrieve(chargeId, function(err, charge) {
                 if(err) {
                     self.log.error('error: ' + err);
                     return fn(err, charge);
@@ -838,29 +708,18 @@ var dao = {
                 return fn(err, charge);
             }
         );
-        if(stripe_bkup) {
-            self.log.debug('undelegating stripe');
-            stripe = stripe_bkup;
-            stripe_bkup = null;
-        }
     },
 
     updateStripeCharge: function(chargeId, description, metadata, accessToken, fn) {
         var self = this;
         self.log.debug('>> getStripeCharge');
-        var stripe_bkup = null;
+        var _stripe = self.delegateStripe(accessToken);
         var params = {};
 
         if(description && description.length>0) {params.description = description;}
         if(metadata) {params.metadata = metadata;}
 
-        if(accessToken && accessToken.length > 0) {
-            self.log.debug('delegating stripe to ' + accessToken);
-            stripe_bkup = stripe;
-            stripe = require("stripe")( accessToken);
-        }
-
-        stripe.charges.update( chargeId, params,  function(err, charge) {
+        _stripe.charges.update( chargeId, params,  function(err, charge) {
                 if(err) {
                     self.log.error('error: ' + err);
                     return fn(err, charge);
@@ -870,11 +729,6 @@ var dao = {
             }
         );
 
-        if(stripe_bkup) {
-            self.log.debug('undelegating stripe');
-            stripe = stripe_bkup;
-            stripe_bkup = null;
-        }
     },
 
     /**
@@ -889,20 +743,13 @@ var dao = {
     captureStripeCharge: function(chargeId, amount, application_fee, receipt_email, accessToken, fn) {
         var self = this;
         self.log.debug('>> captureStripeCharge');
-        var stripe_bkup = null;
+        var _stripe = self.delegateStripe(accessToken);
         var params = {};
         if(amount) {params.amount = amount;}
         if(application_fee) {params.application_fee = application_fee;}
         if(receipt_email && receipt_email.length>0) {params.receipt_email = receipt_email;}
 
-
-        if(accessToken && accessToken.length > 0) {
-            self.log.debug('delegating stripe to ' + accessToken);
-            stripe_bkup = stripe;
-            stripe = require("stripe")( accessToken);
-        }
-
-        stripe.charges.capture(chargeId, params, function(err, charge) {
+        _stripe.charges.capture(chargeId, params, function(err, charge) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, charge);
@@ -933,12 +780,6 @@ var dao = {
             });
         });
 
-        if(stripe_bkup) {
-            self.log.debug('undelegating stripe');
-            stripe = stripe_bkup;
-            stripe_bkup = null;
-        }
-
     },
 
 
@@ -955,7 +796,7 @@ var dao = {
     listStripeCharges: function(created, customerId, ending_before, limit, starting_after, accessToken, fn) {
         var self = this;
         self.log.debug('>> listStripeCharges');
-        var stripe_bkup = null;
+        var _stripe = self.delegateStripe(accessToken);
         var params = {};
 
         if(created) {params.created = created;}
@@ -970,13 +811,7 @@ var dao = {
         }
         if(starting_after && starting_after.length>0) {params.starting_after = starting_after;}
 
-        if(accessToken && accessToken.length > 0) {
-            self.log.debug('delegating stripe to ' + accessToken);
-            stripe_bkup = stripe;
-            stripe = require("stripe")( accessToken);
-        }
-
-        stripe.charges.list(params, function(err, charges) {
+        _stripe.charges.list(params, function(err, charges) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, charges);
@@ -990,7 +825,7 @@ var dao = {
                 var _charges = [];
                 var p1 = $.Deferred();
                 _charges.push(charges.data);
-                self._getAllStripeCharges(params, _charges, require("stripe")( accessToken), p1);
+                self._getAllStripeCharges(params, _charges, _stripe, p1);
                 $.when(p1).done(function() {
                     charges.data = _charges;
                     self.log.debug('<< listStripeCharges');
@@ -1002,11 +837,6 @@ var dao = {
             }
         });
 
-        if(stripe_bkup) {
-            self.log.debug('undelegating stripe');
-            stripe = stripe_bkup;
-            stripe_bkup = null;
-        }
     },
 
     _getAllStripeCharges: function(params, _charges, delegatedStripe, deferred) {
@@ -1033,6 +863,58 @@ var dao = {
     },
 
     //invoice items
+    /**
+     *
+     * @param customerId - REQUIRED
+     * @param amount - REQUIRED
+     * @param currency - 'usd' REQUIRED
+     * @param invoiceId
+     * @param subscriptionId
+     * @param description
+     * @param metadata
+     * @param accessToken
+     * @param fn
+     */
+    createInvoiceItem: function(customerId, amount, currency, invoiceId, subscriptionId, description, metadata, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> createInvoiceItem');
+        var _stripe = self.delegateStripe(accessToken);
+        var params = {};
+
+        params.customer = customerId;
+        params.amount = amount;
+        params.currency = currency;
+        if(invoiceId && invoiceId.length > 0) {params.invoice = invoiceId;}
+        if(subscriptionId && subscriptionId.length > 0) {params.subscription = subscriptionId;}
+        if(description && description.length > 0) {params.description = description;}
+        if(metadata) {params.metadata = metadata;}
+
+        _stripe.invoiceItems.create(params, function(err, invoiceItem) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, invoiceItem);
+            }
+            self.log.debug('<< createInvoiceItem');
+            return fn(err, invoiceItem);
+        });
+
+    },
+
+    getInvoiceItem: function(invoiceItemId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getInvoiceItem');
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.invoiceItems.retrieve(invoiceItemId, function(err, invoiceItem) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, invoiceItem);
+            }
+            self.log.debug('<< getInvoiceItem');
+            return fn(err, invoiceItem);
+        });
+
+    },
 
     //invoices
 
@@ -1052,18 +934,12 @@ var dao = {
     createToken: function(cardId, customerId, accessToken, fn) {
         var self = this;
         self.log.debug('>> createToken');
-        var stripe_bkup = null;
+        var _stripe = self.delegateStripe(accessToken);
         var params = {};
         params.card = cardId;
         params.customer = customerId;
 
-        if(accessToken && accessToken.length > 0) {
-            self.log.debug('delegating stripe to ' + accessToken);
-            stripe_bkup = stripe;
-            stripe = require("stripe")( accessToken);
-        }
-
-        stripe.tokens.create(params, function(err, token) {
+        _stripe.tokens.create(params, function(err, token) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, token);
@@ -1072,11 +948,6 @@ var dao = {
             return fn(err, token);
         });
 
-        if(stripe_bkup) {
-            self.log.debug('undelegating stripe');
-            stripe = stripe_bkup;
-            stripe_bkup = null;
-        }
     },
 
     getToken: function(tokenId, fn) {
@@ -1097,15 +968,9 @@ var dao = {
     getEvent: function(eventId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getEvent');
-        var stripe_bkup = null;
+        var _stripe = self.delegateStripe(accessToken);
 
-        if(accessToken && accessToken.length > 0) {
-            self.log.debug('delegating stripe to ' + accessToken);
-            stripe_bkup = stripe;
-            stripe = require("stripe")( accessToken);
-        }
-
-        stripe.events.retrieve(eventId, function(err, event) {
+        _stripe.events.retrieve(eventId, function(err, event) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, charges);
@@ -1114,11 +979,6 @@ var dao = {
             return fn(err, event);
         });
 
-        if(stripe_bkup) {
-            self.log.debug('undelegating stripe');
-            stripe = stripe_bkup;
-            stripe_bkup = null;
-        }
     },
 
     /**
@@ -1139,7 +999,7 @@ var dao = {
     listEvents: function(created, ending_before, limit, starting_after, type, accessToken, fn) {
         var self = this;
         self.log.debug('>> listEvents');
-        var stripe_bkup = null;
+        var _stripe = self.delegateStripe(accessToken);
         var params = {};
         if(created) {params.created = created;}
         if(ending_before) {params.ending_before = ending_before;}
@@ -1147,13 +1007,7 @@ var dao = {
         if(starting_after) {params.starting_after = starting_after;}
         if(type) {params.type = type;}
 
-        if(accessToken && accessToken.length > 0) {
-            self.log.debug('delegating stripe to ' + accessToken);
-            stripe_bkup = stripe;
-            stripe = require("stripe")( accessToken);
-        }
-
-        stripe.events.list(params, function(err, events) {
+        _stripe.events.list(params, function(err, events) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, charges);
@@ -1162,12 +1016,16 @@ var dao = {
             return fn(err, events);
         });
 
-        if(stripe_bkup) {
-            self.log.debug('undelegating stripe');
-            stripe = stripe_bkup;
-            stripe_bkup = null;
-        }
+    },
 
+    delegateStripe: function(accessToken) {
+        if(accessToken && accessToken.length > 0) {
+            self.log.debug('delegating stripe to ' + accessToken);
+            return require("stripe")( accessToken);
+        } else {
+            //no accessToken, no delegation.
+            return stripe;
+        }
     }
 
 
