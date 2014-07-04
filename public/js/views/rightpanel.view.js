@@ -38,7 +38,6 @@ define([
         },
 
         initialize: function () {
-            console.log('rendering');
             var self = this
                 , p1 = this.getAccount()
                 , p2 = this.getWebsite()
@@ -135,7 +134,6 @@ define([
 
                 promise
                     .done(function (themes) {
-                        console.log('Themes: '+themes);
                         self.themes = themes;
                     })
                     .fail(function (resp) {

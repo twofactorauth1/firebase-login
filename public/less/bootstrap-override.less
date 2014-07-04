@@ -271,6 +271,14 @@ h4, .h4 {
   color: #4eb1ca;
 }
 
+.btn-warning {
+  border-bottom: 4px solid #EEA236;
+}
+
+.btn-warning:hover {
+  border-bottom: 4px solid #ed9c28;
+}
+
 .btn-warning-alt {
   border: 2px solid #F0AD4E;
   color: #F0AD4E;
@@ -284,6 +292,22 @@ h4, .h4 {
 .btn-warning-alt:focus {
   border-color: #EEA236;
   color: #EEA236;
+}
+
+.btn-danger {
+  border-bottom: 4px solid #d42c2e;
+}
+
+.btn-danger:hover {
+  border-bottom: 4px solid #d2322d;
+}
+
+.btn-info, .btn-success {
+  border-bottom: 4px solid #2fb0de;
+}
+
+.btn-info:hover, .btn-success:hover {
+  border-bottom: 4px solid #39b3d7;
 }
 
 .btn-danger-alt {
@@ -847,14 +871,19 @@ h4, .h4 {
 }
 
 .modal-content {
-//  border-radius: 2px;
-//  .box-shadow(7px 7px 0 rgba(0, 0, 0, 0.4));
-//  border: 0;
+  box-shadow: 0 0px 7px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  background: #eeeeee;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 .modal-title {
   font-size: 20px;
   color: #333;
+  font-weight: bold;
 }
 
 .modal-header .close {
@@ -863,6 +892,16 @@ h4, .h4 {
 
 .modal-backdrop.in {
   opacity: 0.65;
+}
+
+.modal-footer {
+  background: #eeeeee;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+
+  .btn {
+    text-shadow: 1px 1px 1px #444;
+  }
 }
 
 .alert {

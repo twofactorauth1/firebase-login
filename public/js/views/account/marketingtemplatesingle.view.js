@@ -19,9 +19,6 @@ define([
 
          events: {
             "click #btn-back-to-marketing":"viewMarketing",
-            "click .btn-view-my-templates":"viewMyTemplates",
-            "click .btn-view-all-templates":"viewAllTemplates",
-            "click .template-list li":"viewSingleTemplate",
         },
 
         render: function() {
@@ -37,7 +34,7 @@ define([
                     //     user: self.user.toJSON()
                     // };
 
-                    var tmpl = $$.templateManager.get("marketing-templates", self.templateKey);
+                    var tmpl = $$.templateManager.get("marketing-template-single", self.templateKey);
 
                     self.show(tmpl);
                     self.check_welcome();
@@ -67,28 +64,6 @@ define([
             $$.r.account.marketingRouter.showMarketing();
         },
 
-        viewSingleTemplate: function(event) {
-            console.log('view single templates');
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            var templateId = $(event.currentTarget).data('templateid');
-            $$.r.account.marketingRouter.showMarketingTemplateSingle(templateId);
-        },
-
-        viewMyTemplates: function() {
-            console.log('view my templates');
-            $('.template-btns button').removeClass('active');
-            $('.template-list').removeClass('hidden');
-            $('.all-templates').addClass('hidden');
-        },
-
-        viewAllTemplates: function() {
-            console.log('view all templates');
-            $('.template-btns button').removeClass('active');
-            $('.template-list').removeClass('hidden');
-            $('.my-templates').addClass('hidden');
-        },
-
         check_welcome: function() {
             if( $.cookie('dashboard-alert') === 'closed' ){
                 $('.alert').hide();
@@ -100,7 +75,7 @@ define([
     });
 
     $$.v.account = $$.v.account || {};
-    $$.v.account.MarketingTemplatesView = view;
+    $$.v.account.MarketingTemplateSingleView = view;
 
     return view;
 });

@@ -36,14 +36,16 @@ require.config({
         usersData: 'global/users.data',
         app: 'app',
         text: "libs/requirejs/plugins/text",
+        moment: 'libs/moment/moment.min',
+
+        //UI SPECIFIC
+        toggles: 'libs/misc/toggles.min',
+        daterangepicker: 'libs/bootstrap/daterangepicker',
+        datepicker: 'libs/bootstrap/bootstrap-datepicker',
         leaflet: 'libs/leaflet/leaflet',
         colorthief: 'libs/colorthief/colorthief',
         waypoints: 'libs/waypoints/waypoints.min',
-        moment: 'libs/moment/moment.min',
-        daterangepicker: 'libs/bootstrap/daterangepicker',
-
-        //UI SPECIFIC
-        toggles: 'libs/misc/toggles.min'
+        tagsinput: 'libs/jquery/jquery.tagsinput'
     },
 
     shim: {
@@ -106,6 +108,12 @@ require.config({
         daterangepicker: {
             deps: ['jquery', 'moment']
         },
+        daterangepicker: {
+            deps: ['jquery']
+        },
+        tagsinput: {
+            deps: ['jquery']
+        },
         app: {
             deps: [
                 'jquery',
@@ -126,6 +134,8 @@ require.config({
                 'waypoints',
                 'moment',
                 'daterangepicker',
+                'datepicker',
+                'tagsinput',
             ]
         }
     },
