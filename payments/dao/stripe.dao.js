@@ -1079,6 +1079,20 @@ var dao = {
         }
     },
 
+    getToken: function(tokenId, fn) {
+        var self = this;
+        self.log.debug('>> getToken');
+
+        stripe.tokens.retrieve(tokenId, function(err, token) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, token);
+            }
+            self.log.debug('<< getToken');
+            return fn(err, token);
+        });
+    },
+
     //events - getEvent, listEvents
     getEvent: function(eventId, accessToken, fn) {
         var self = this;
