@@ -49,9 +49,14 @@ define([
 
 
         setActiveNav: function (event) {
-            var parent = $(event.currentTarget).parents(".nav.nav-pills").eq(0);
-            $("li", parent).removeClass("active");
-            $(event.currentTarget).addClass("active");
+            var liClass = $(event.currentTarget).attr('class').split(" ")[0];
+            if ( liClass === 'logout-li') {
+                window.location.href = '/logout';
+            } else {
+                var parent = $(event.currentTarget).parents(".nav.nav-pills").eq(0);
+                $("li", parent).removeClass("active");
+                $(event.currentTarget).addClass("active");
+            }
         },
 
 
