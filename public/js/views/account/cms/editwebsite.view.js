@@ -377,16 +377,17 @@ define([
         },
 
         check_welcome: function() {
-            console.log('close welcome = '+$.cookie('website-alert') );
-            if( $.cookie('website-alert') === 'closed' ){
-                console.log('closing alert');
-                $('.alert-info').remove();
+            if(!this.user.get('welcome_alert').editwebsite){
+                $('.alert').hide();
             }
         },
 
         close_welcome: function(e) {
-            console.log('close welcome');
-            $.cookie('website-alert', 'closed', { path: '/' });
+            var user = this.user;
+            var welcome = user.get("welcome_alert");
+            welcome.editwebsite = false;
+            user.set("welcome_alert", welcome);
+            user.save();
         },
 
         end_setup: function(e) {

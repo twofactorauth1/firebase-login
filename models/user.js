@@ -144,7 +144,15 @@ var user = $$.m.ModelBase.extend({
              *   }]
              * }]
              */
-            details: []
+            details: [],
+            welcome_alert: {
+                editwebsite: true,
+                commerce: true,
+                contact: true,
+                dashboard: true,
+                marketing: true,
+                marketingsingle: true
+            }
         };
     },
 

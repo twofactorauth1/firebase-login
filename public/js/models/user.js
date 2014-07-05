@@ -26,7 +26,15 @@ define([], function() {
                 },
                 profilePhotos: [],
                 accounts: [],
-                credentials: []
+                credentials: [],
+                welcome_alert: {
+                    editwebsite: true,
+                    commerce: true,
+                    contact: true,
+                    dashboard: true,
+                    marketing: true,
+                    marketingsingle: true
+                }
             }
         },
 
@@ -42,6 +50,8 @@ define([], function() {
                     return $$.api.getApiUrl("user", this.id);
                     break;
                 case "PUT":
+                    return $$.api.getApiUrl("user", this.id);
+                    break;
                 case "POST":
                     break;
                 case "DELETE":
