@@ -6,13 +6,14 @@
  */
 
 define([
-    'views/base.view'
+    'views/base.view',
+    'models/account',
+    'models/user'
 ], function(BaseView) {
 
     var view = BaseView.extend({
 
         templateKey: "account/account",
-
 
         events: {
 
@@ -31,19 +32,23 @@ define([
                         user: self.user.toJSON()
                     };
 
-                    var allNetworks = _.pluck($$.constants.social.types.dp.slice(0), "data");
+                    console.log('Account: '+JSON.stringify(data.user.accounts));
 
-                    var networks = [];
-                    self.user.get("credentials").forEach(function(creds) {
-                        if (creds.type != $$.constants.social.types.LOCAL) {
-                            networks.push(creds);
-                        }
-                        var index = allNetworks.indexOf(creds.type);
-                        if (index > -1) { allNetworks.splice(index, 1); }
-                    });
 
-                    data.networks = networks;
-                    data.otherNetworks = allNetworks;
+                    //Not Working
+                    // var allNetworks = _.pluck($$.constants.social.types.dp.slice(0), "data");
+
+                    // var networks = [];
+                    // self.user.get("credentials").forEach(function(creds) {
+                    //     if (creds.type != $$.constants.social.types.LOCAL) {
+                    //         networks.push(creds);
+                    //     }
+                    //     var index = allNetworks.indexOf(creds.type);
+                    //     if (index > -1) { allNetworks.splice(index, 1); }
+                    // });
+
+                    // data.networks = networks;
+                    // data.otherNetworks = allNetworks;
 
                     var tmpl = $$.templateManager.get("account-main", self.templateKey);
                     var html = tmpl(data);

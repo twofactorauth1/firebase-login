@@ -23,12 +23,20 @@
         <div class="clear"></div>
     </div>
 
+    <div class="visible-xs">
+        <div class="btn-group col-xs-12">
+            <button type="button" class="btn btn-info col-xs-6 stats-tasks-btn active">Metrics</button>
+            <button type="button" class="btn btn-info col-xs-6 activity-btn">Activity</button>
+        </div>
+    </div>
+
     <div id="social_dashboard" class="contentpanel">
         <div class="col-sm-6 col-xs-12">
             <div id='social_dashboard_panel' class='dashboard-grid content'>
                 <div class="container-fluid">
                     <div class="row-fluid">
                         <div class="span12 grid-rows">
+                            <div class="mb10"></div>
                             <div class="row row-new">
                                 <div class="grid-new grid2" data-width="2"></div>
                             </div>
@@ -199,7 +207,7 @@
         <ul class="nav nav-tabs nav-justified">
             <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Page</a>
             </li>
-            <li><a href="#rp-theme" data-toggle="tab" id="rp-domain-theme">Theme</a>
+            <li><a href="#rightpanel-modules-content" data-toggle="tab" id="rightpanel-modules">Modules</a>
             </li>
         </ul>
 
@@ -208,7 +216,10 @@
         <div class="tab-content">
             <div class="tab-pane pane-settings active" id="rp-page">
                 <div id='social_dashboard_rightbar' class='sidebar sidebar-nav'>
-                    <h2 class="header accordion"><span class="icon-cog"></span> Settings <span class="arrow closed"></span></h2>
+                    <h2 class="header accordion">
+                        <span class="icon-cog"></span>Settings
+                        <span class="arrow closed"></span>
+                    </h2>
                     <div class="section">
                         <form id="dashboard-options" action=".">
 
@@ -228,46 +239,72 @@
                         </form>
                     </div>
 
-                    <h2 class="header accordion"><b class="icon-th"></b> Facebook <span class="arrow closed"></span></h2>
+                    <h2 class="header accordion"><b class="icon-th"></b> Facebook
+                        <span class="arrow closed"></span>
+                    </h2>
                     <ul class="section nav nav-list">
-                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_overview">Overview</a></li>
-                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_likesPerDay">Likes per day</a></li>
-                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_postTimeline">All post activity</a></li>
-                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_postInteractionsPerDay">Post interactions / day</a></li>
-                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_reachPerDay">Daily reach</a></li>
-                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_topTenPosts" data-width="2">Top 10 posts</a></li>
-                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_engagedDemographics">Engaged users by age/gender</a></li>
-                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_topFans" data-width="2">Top 5 fans</a></li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_overview">Overview</a>
+                        </li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_likesPerDay">Likes per day</a>
+                        </li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_postTimeline">All post activity</a>
+                        </li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_postInteractionsPerDay">Post interactions / day</a>
+                        </li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_reachPerDay">Daily reach</a>
+                        </li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_topTenPosts" data-width="2">Top 10 posts</a>
+                        </li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_engagedDemographics">Engaged users by age/gender</a>
+                        </li>
+                        <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_topFans" data-width="2">Top 5 fans</a>
+                        </li>
                     </ul>
 
                     <div class="test alert alert-info">
-                        <input id="use-test-data" type="checkbox" {{#if testData}}checked="checked"{{/if}} />
+                        <input id="use-test-data" type="checkbox" {{#if testData}}checked="checked" {{/if}} />
                         <label for="use-test-data">Enable test mode</label>
                     </div>
+                </div>
             </div>
-            </div>
-            <div class="tab-pane pane-settings" id="rp-theme">
+            <div class="tab-pane pane-settings" id="rightpanel-modules-content">
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="collapsed">
-                                    Facebook
-                                  </a>
+                                        Facebook
+                                      </a>
                             </h4>
                         </div>
                         <div id="collapseOne" class="panel-collapse collapse" style="height: 0px;">
-                            <div class="panel-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
-                            </div>
+
+                                <ul class="section nav nav-list">
+                                    <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_overview"><div class="module_handle">Drag</div>Overview</a>
+                                    </li>
+                                    <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_likesPerDay">Likes per day</a>
+                                    </li>
+                                    <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_postTimeline">All post activity</a>
+                                    </li>
+                                    <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_postInteractionsPerDay">Post interactions / day</a>
+                                    </li>
+                                    <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_reachPerDay">Daily reach</a>
+                                    </li>
+                                    <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_topTenPosts" data-width="2">Top 10 posts</a>
+                                    </li>
+                                    <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_engagedDemographics">Engaged users by age/gender</a>
+                                    </li>
+                                    <li><a href="#" class="module_sidebar" data-type="chart" data-name="FB_topFans" data-width="2">Top 5 fans</a>
+                                    </li>
+                                </ul>
                         </div>
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" class="collapsed" data-parent="#accordion" href="#collapseTwo">
-                                    Twitter
-                                  </a>
+                                        Twitter
+                                      </a>
                             </h4>
                         </div>
                         <div id="collapseTwo" class="panel-collapse collapse" style="height: 0px;">
