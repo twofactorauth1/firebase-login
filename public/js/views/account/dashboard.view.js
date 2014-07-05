@@ -45,15 +45,16 @@ define([
                 });
         },
         check_welcome: function() {
-            if( $.cookie('dashboard-alert') === 'closed' ){
+            if(!this.user.get('welcome_alert').dashboard){
                 $('.alert').hide();
             }
         },
         close_welcome: function(e) {
-            $.cookie('dashboard-alert', 'closed', { path: '/' });
-        },
-        close_welcome: function(e) {
-            $.cookie('dashboard-alert', 'closed', { path: '/' });
+            var user = this.user;
+            var welcome = user.get("welcome_alert");
+            welcome.dashboard = false;
+            user.set("welcome_alert", welcome);
+            user.save();
         },
         getActivity: function() {
             // if (this.accountId == null) {
@@ -61,7 +62,7 @@ define([
             // }
             // this.activity = new $$.c.Activity();
             // return this.activity(this.accountId);
-        },
+        }
     });
 
     $$.v.account = $$.v.account || {};

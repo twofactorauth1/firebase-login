@@ -271,19 +271,19 @@ define([
 
 
         check_welcome: function() {
-            console.log('close welcome = '+$.cookie('contact-alert') );
-            if( $.cookie('contact-alert') === 'closed' ){
-                console.log('closing alert');
-                $('.alert-info').remove();
+            if(!this.user.get('welcome_alert').contact){
+                $('.alert').hide();
             }
         },
 
 
         close_welcome: function(e) {
-            console.log('close welcome');
-            $.cookie('contact-alert', 'closed', { path: '/' });
+            var user = this.user;
+            var welcome = user.get("welcome_alert");
+            welcome.contact = false;
+            user.set("welcome_alert", welcome);
+            user.save();
         }
-
 
     });
 

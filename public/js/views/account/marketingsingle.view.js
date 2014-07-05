@@ -97,12 +97,16 @@ define([
         },
 
         check_welcome: function() {
-            if( $.cookie('dashboard-alert') === 'closed' ){
+            if(!this.user.get('welcome_alert').marketingsingle){
                 $('.alert').hide();
             }
         },
         close_welcome: function(e) {
-            $.cookie('dashboard-alert', 'closed', { path: '/' });
+            var user = this.user;
+            var welcome = user.get("welcome_alert");
+            welcome.marketingsingle = false;
+            user.set("welcome_alert", welcome);
+            user.save();
         }
     });
 
