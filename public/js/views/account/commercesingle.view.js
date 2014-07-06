@@ -20,7 +20,9 @@ define([
         events: {
             "click .close":"close_welcome",
             "click .toggles":"minimizePanel",
-            "click .btn-create-attribute":"createAttribute"
+            "click .btn-create-attribute":"createAttribute",
+            "click #btn-back-to-commerce":"viewCommerce",
+            "click .btn-save-single-product":"saveProduct"
         },
 
 
@@ -51,6 +53,25 @@ define([
                     rightPanel.append(sidetmpl);
                     self.check_welcome();
                 });
+        },
+
+        saveProduct: function() {
+            jQuery.gritter.add({
+                title: 'Product Saved',
+                image: 'thumbs-up',
+                text: 'This product has been saved successfully.',
+                class_name: 'growl-success',
+                sticky: false,
+                time: 8000,
+                position: 'bottom-right'
+            });
+            return false;
+        },
+
+        viewCommerce: function(event) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            $$.r.account.commerceRouter.showCommerce();
         },
 
         initializeUIComponents: function() {

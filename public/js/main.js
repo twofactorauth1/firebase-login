@@ -49,7 +49,8 @@ require.config({
         toggles: 'libs/misc/toggles.min',
         datepicker: 'libs/bootstrap/bootstrap-datepicker',
         leaflet: 'libs/leaflet/leaflet',
-        tagsinput: 'libs/jquery/jquery.tagsinput'
+        tagsinput: 'libs/jquery/jquery.tagsinput',
+        gritter: 'libs/jquery/jquery.gritter.min'
     },
 
     shim: {
@@ -117,6 +118,10 @@ require.config({
             deps: ['jquery']
         },
 
+        gritter: {
+            deps: ['jquery']
+        },
+
         app: {
             deps: [
                 'jquery',
@@ -141,7 +146,8 @@ require.config({
                 'daterangepicker',
                 'datepicker',
                 'tagsinput',
-                'd3'
+                'd3',
+                'gritter'
             ]
         }
     },

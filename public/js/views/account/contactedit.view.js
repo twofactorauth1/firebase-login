@@ -53,6 +53,8 @@ define([
             "onkeytimer .input-edit-device":"deviceChanged",
 
             "click .btn-subscribe-two-net":"subscribeTwoNetUser",
+
+            "click .btn-save-contact":"saveContact"
         },
 
 
@@ -464,6 +466,16 @@ define([
                 });
                 return p;
             } else {
+                jQuery.gritter.add({
+                    title: 'Contact Saved',
+                    image: 'thumbs-up',
+                    text: 'This contact has been saved successfully.',
+                    class_name: 'growl-success',
+                    sticky: false,
+                    time: 8000,
+                    position: 'bottom-right'
+                });
+                return false;
                 return this.contact.save();
             }
         },
