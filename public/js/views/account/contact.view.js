@@ -76,6 +76,8 @@ define([
                 .done(function() {
                     self.renderContacts();
                     self.check_welcome();
+                    self.adjustWindowSize();
+                    $(window).on("resize", self.adjustWindowSize);
                 });
 
             $.when(p4)
@@ -269,6 +271,14 @@ define([
             return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
         },
 
+        adjustWindowSize: function() {
+            $('#main-viewport').css('overflow', 'none');
+            var headerBar = $('#headerbar').outerHeight();
+            var pageHeader = $('.pageheader').outerHeight();
+            var mainViewportHeight = $(window).height() - headerBar - pageHeader-10;
+            console.log('adjusting window size to '+$(window).height());
+            $('.people-list').css('min-height', mainViewportHeight);
+        },
 
         check_welcome: function() {
             if(!this.user.get('welcome_alert').contact){

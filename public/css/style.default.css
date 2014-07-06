@@ -14728,8 +14728,10 @@ input.dd3-content {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffdddddd', endColorstr='#ffbbbbbb', GradientType=0);
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  text-indent: -9999px;
 }
 .dd3-handle:before {
+  content: '\2261';
   display: block;
   position: absolute;
   left: 0;
@@ -15426,6 +15428,312 @@ strong {
   margin-bottom: 5px;
   word-wrap: break-word;
 }
+#contacts-main-container #contacts-list-container {
+  margin-top: 10px;
+}
+#contacts-main-container #contacts-current-letter {
+  background-color: #f0f0f0;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+#contacts-main-container .contact-thumbnail {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+#contacts-main-container .contact-thumbnail .inner {
+  cursor: pointer;
+}
+#contacts-main-container .contact-thumbnail .inner:hover {
+  background-color: #d9edf7;
+}
+#contacts-main-container .contact-thumbnail .btn-add-contact {
+  position: absolute;
+  top: 60px;
+  left: 10px;
+}
+#contacts-main-container .contact-thumbnail .contact-thumbnail-details {
+  font-size: small;
+  margin-top: 10px;
+}
+#contacts-main-container .contact-thumbnail .contact-thumbnail-actions {
+  font-size: 25px;
+  position: absolute;
+  bottom: 25px;
+  right: 40px;
+}
+#contacts-main-container .contact-thumbnail .contacts-photo-container img {
+  border: 1px solid #CCCCCC;
+  max-height: 80px;
+}
+@media (max-width: 767px) {
+  #contacts-main-container .contact-thumbnail .contacts-photo-container img {
+    height: 40px;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+  }
+}
+@media (min-width: 768px) {
+  #contacts-main-container .contact-thumbnail .contacts-photo-container img {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+  #contacts-main-container .contact-thumbnail .contacts-photo-container img.standard {
+    height: 80px;
+  }
+}
+@media (max-width: 767px) {
+  #contacts-main-container .contact-thumbnail:first-child {
+    margin-top: 20px;
+  }
+  #contacts-main-container .contact-thumbnail .inner {
+    width: 100%;
+    border-bottom: 1px solid #CCCCCC;
+    min-height: 40px;
+    margin-bottom: 5px;
+  }
+}
+@media (min-width: 768px) {
+  #contacts-main-container .contact-thumbnail .inner {
+    border: 1px solid #CCCCCC;
+    height: 150px;
+    margin-bottom: 15px;
+    padding: 8px;
+  }
+}
+#contact-details-container {
+  color: #676767;
+  position: relative;
+}
+#contact-details-container #contact-name {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+#contact-details-container #btn-back-to-contacts i {
+  font-weight: bold;
+  font-size: 2.0em;
+  margin-right: 15px;
+}
+#contact-details-container #btn-edit-contact-primary {
+  margin-left: 10px;
+  margin-top: -3px;
+}
+#contact-details-container #btn-edit-contact-mobile {
+  margin-top: 10px;
+}
+#contact-details-container #contact-type {
+  margin-left: 30px;
+}
+#contact-details-container .contact-photo-container {
+  margin-top: 20px;
+}
+#contact-details-container .contact-photo-container img {
+  height: 110px;
+}
+#contact-details-container #contact-summary {
+  position: absolute;
+  top: 70px;
+  left: 180px;
+}
+#contact-details-container #contact-information {
+  margin-top: 30px;
+}
+#contact-details-container #contact-information hr {
+  margin-top: 5px;
+}
+#contact-details-container #contact-information .icon-main.fa {
+  font-weight: bold;
+  font-size: 2em;
+  padding-top: 5px;
+}
+#contact-details-container #contact-information .icon-social.fa {
+  margin-left: 8px;
+}
+#contact-details-container #contact-information #address-row,
+#contact-details-container #contact-information #email-row {
+  margin-top: 25px;
+}
+#contact-details-container #contact-information .edit-address-container {
+  margin-bottom: 15px;
+}
+#contact-details-container #contact-information .edit-address-container:last-child {
+  margin-bottom: 0px;
+}
+#contact-edit-container #btn-back-to-contact i {
+  font-weight: bold;
+  font-size: 2.0em;
+  margin-right: 15px;
+  margin-top: -6px;
+}
+#contact-edit-container .icon-main.fa {
+  font-weight: bold;
+  font-size: 1.4em;
+  padding-top: 5px;
+  margin-top: 15px;
+}
+#contact-edit-container #address-row,
+#contact-edit-container #email-row {
+  margin-top: 25px;
+}
+#contact-edit-container .edit-email-container {
+  margin-top: 15px;
+}
+#contact-edit-container #contact-photo-container img:hover {
+  opacity: 0.8;
+}
+#contact-edit-container .btn.btn-default-shipping,
+#contact-edit-container .btn.btn-default-billing {
+  color: #333333;
+  background-color: #ffffff;
+  border-color: #cccccc;
+}
+#contact-edit-container .btn.btn-default-shipping:hover,
+#contact-edit-container .btn.btn-default-billing:hover,
+#contact-edit-container .btn.btn-default-shipping:focus,
+#contact-edit-container .btn.btn-default-billing:focus,
+#contact-edit-container .btn.btn-default-shipping:active,
+#contact-edit-container .btn.btn-default-billing:active,
+#contact-edit-container .btn.btn-default-shipping.active,
+#contact-edit-container .btn.btn-default-billing.active,
+.open .dropdown-toggle#contact-edit-container .btn.btn-default-shipping,
+.open .dropdown-toggle#contact-edit-container .btn.btn-default-billing {
+  color: #333333;
+  background-color: #ebebeb;
+  border-color: #adadad;
+}
+#contact-edit-container .btn.btn-default-shipping:active,
+#contact-edit-container .btn.btn-default-billing:active,
+#contact-edit-container .btn.btn-default-shipping.active,
+#contact-edit-container .btn.btn-default-billing.active,
+.open .dropdown-toggle#contact-edit-container .btn.btn-default-shipping,
+.open .dropdown-toggle#contact-edit-container .btn.btn-default-billing {
+  background-image: none;
+}
+#contact-edit-container .btn.btn-default-shipping.disabled,
+#contact-edit-container .btn.btn-default-billing.disabled,
+#contact-edit-container .btn.btn-default-shipping[disabled],
+#contact-edit-container .btn.btn-default-billing[disabled],
+fieldset[disabled] #contact-edit-container .btn.btn-default-shipping,
+fieldset[disabled] #contact-edit-container .btn.btn-default-billing,
+#contact-edit-container .btn.btn-default-shipping.disabled:hover,
+#contact-edit-container .btn.btn-default-billing.disabled:hover,
+#contact-edit-container .btn.btn-default-shipping[disabled]:hover,
+#contact-edit-container .btn.btn-default-billing[disabled]:hover,
+fieldset[disabled] #contact-edit-container .btn.btn-default-shipping:hover,
+fieldset[disabled] #contact-edit-container .btn.btn-default-billing:hover,
+#contact-edit-container .btn.btn-default-shipping.disabled:focus,
+#contact-edit-container .btn.btn-default-billing.disabled:focus,
+#contact-edit-container .btn.btn-default-shipping[disabled]:focus,
+#contact-edit-container .btn.btn-default-billing[disabled]:focus,
+fieldset[disabled] #contact-edit-container .btn.btn-default-shipping:focus,
+fieldset[disabled] #contact-edit-container .btn.btn-default-billing:focus,
+#contact-edit-container .btn.btn-default-shipping.disabled:active,
+#contact-edit-container .btn.btn-default-billing.disabled:active,
+#contact-edit-container .btn.btn-default-shipping[disabled]:active,
+#contact-edit-container .btn.btn-default-billing[disabled]:active,
+fieldset[disabled] #contact-edit-container .btn.btn-default-shipping:active,
+fieldset[disabled] #contact-edit-container .btn.btn-default-billing:active,
+#contact-edit-container .btn.btn-default-shipping.disabled.active,
+#contact-edit-container .btn.btn-default-billing.disabled.active,
+#contact-edit-container .btn.btn-default-shipping[disabled].active,
+#contact-edit-container .btn.btn-default-billing[disabled].active,
+fieldset[disabled] #contact-edit-container .btn.btn-default-shipping.active,
+fieldset[disabled] #contact-edit-container .btn.btn-default-billing.active {
+  background-color: #ffffff;
+  border-color: #cccccc;
+}
+#contact-edit-container .btn.btn-default-shipping .badge,
+#contact-edit-container .btn.btn-default-billing .badge {
+  color: #ffffff;
+  background-color: #333333;
+}
+#contact-edit-container .btn.btn-default-shipping i.fa,
+#contact-edit-container .btn.btn-default-billing i.fa {
+  visibility: hidden;
+}
+#contact-edit-container .btn.btn-default-shipping.default,
+#contact-edit-container .btn.btn-default-billing.default {
+  color: #ffffff;
+  background-color: #428bca;
+  border-color: #357ebd;
+}
+#contact-edit-container .btn.btn-default-shipping.default:hover,
+#contact-edit-container .btn.btn-default-billing.default:hover,
+#contact-edit-container .btn.btn-default-shipping.default:focus,
+#contact-edit-container .btn.btn-default-billing.default:focus,
+#contact-edit-container .btn.btn-default-shipping.default:active,
+#contact-edit-container .btn.btn-default-billing.default:active,
+#contact-edit-container .btn.btn-default-shipping.default.active,
+#contact-edit-container .btn.btn-default-billing.default.active,
+.open .dropdown-toggle#contact-edit-container .btn.btn-default-shipping.default,
+.open .dropdown-toggle#contact-edit-container .btn.btn-default-billing.default {
+  color: #ffffff;
+  background-color: #3276b1;
+  border-color: #285e8e;
+}
+#contact-edit-container .btn.btn-default-shipping.default:active,
+#contact-edit-container .btn.btn-default-billing.default:active,
+#contact-edit-container .btn.btn-default-shipping.default.active,
+#contact-edit-container .btn.btn-default-billing.default.active,
+.open .dropdown-toggle#contact-edit-container .btn.btn-default-shipping.default,
+.open .dropdown-toggle#contact-edit-container .btn.btn-default-billing.default {
+  background-image: none;
+}
+#contact-edit-container .btn.btn-default-shipping.default.disabled,
+#contact-edit-container .btn.btn-default-billing.default.disabled,
+#contact-edit-container .btn.btn-default-shipping.default[disabled],
+#contact-edit-container .btn.btn-default-billing.default[disabled],
+fieldset[disabled] #contact-edit-container .btn.btn-default-shipping.default,
+fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default,
+#contact-edit-container .btn.btn-default-shipping.default.disabled:hover,
+#contact-edit-container .btn.btn-default-billing.default.disabled:hover,
+#contact-edit-container .btn.btn-default-shipping.default[disabled]:hover,
+#contact-edit-container .btn.btn-default-billing.default[disabled]:hover,
+fieldset[disabled] #contact-edit-container .btn.btn-default-shipping.default:hover,
+fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default:hover,
+#contact-edit-container .btn.btn-default-shipping.default.disabled:focus,
+#contact-edit-container .btn.btn-default-billing.default.disabled:focus,
+#contact-edit-container .btn.btn-default-shipping.default[disabled]:focus,
+#contact-edit-container .btn.btn-default-billing.default[disabled]:focus,
+fieldset[disabled] #contact-edit-container .btn.btn-default-shipping.default:focus,
+fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default:focus,
+#contact-edit-container .btn.btn-default-shipping.default.disabled:active,
+#contact-edit-container .btn.btn-default-billing.default.disabled:active,
+#contact-edit-container .btn.btn-default-shipping.default[disabled]:active,
+#contact-edit-container .btn.btn-default-billing.default[disabled]:active,
+fieldset[disabled] #contact-edit-container .btn.btn-default-shipping.default:active,
+fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default:active,
+#contact-edit-container .btn.btn-default-shipping.default.disabled.active,
+#contact-edit-container .btn.btn-default-billing.default.disabled.active,
+#contact-edit-container .btn.btn-default-shipping.default[disabled].active,
+#contact-edit-container .btn.btn-default-billing.default[disabled].active,
+fieldset[disabled] #contact-edit-container .btn.btn-default-shipping.default.active,
+fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.active {
+  background-color: #428bca;
+  border-color: #357ebd;
+}
+#contact-edit-container .btn.btn-default-shipping.default .badge,
+#contact-edit-container .btn.btn-default-billing.default .badge {
+  color: #428bca;
+  background-color: #ffffff;
+}
+#contact-edit-container .btn.btn-default-shipping.default i.fa,
+#contact-edit-container .btn.btn-default-billing.default i.fa {
+  visibility: visible;
+}
+.empty {
+  width: 200px;
+  margin: 0 auto;
+  text-align: center;
+}
+.empty .fa {
+  font-size: 74px;
+  color: #bebebe;
+  text-shadow: 1px 1px 1px white;
+  padding: 15px;
+  text-align: center;
+}
 .headerbar {
   border-left: 1px solid #eee;
   background: #fff;
@@ -15776,6 +16084,7 @@ strong {
 }
 .leftpanelinner {
   padding: 5px 15px;
+  margin-top: 15px;
 }
 .sidebartitle {
   font-size: 11px;
@@ -16121,7 +16430,7 @@ strong {
   background: #f7f7f7;
   position: relative;
   margin: 0;
-  height: 75px;
+  height: 62px;
 }
 .pageheader h2 {
   font-size: 28px;
@@ -19490,9 +19799,6 @@ input[type='file'] {
   line-height: normal;
   border-radius: 2px;
 }
-#social_dashboard #social_dashboard_panel .row {
-  padding: 0 20px 20px;
-}
 #social_dashboard #social_dashboard_panel .grid1,
 #social_dashboard #social_dashboard_panel .grid2 {
   box-sizing: border-box;
@@ -19985,8 +20291,6 @@ path {
 }
 .graph-top-posts {
   width: 100%;
-  padding: 10px 20px;
-  margin-top: 25px;
 }
 .graph-top-posts th {
   text-align: left;
@@ -20001,6 +20305,14 @@ path {
   color: #55c;
   border-bottom: 1px dashed #eee;
   padding: 2px 0;
+}
+.graph-top-posts .title {
+  text-align: center;
+}
+.graph-top-posts .metric {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
 }
 .graph-top-posts .virality div {
   position: relative;
@@ -20944,6 +21256,77 @@ path {
 }
 .lightbg-orange .arrow {
   border-color: transparent transparent transparent #ea624a;
+}
+/* Generated by Font Squirrel (http://www.fontsquirrel.com) on January 26, 2013 07:16:15 AM America/New_York */
+@font-face {
+  font-family: 'LatoBlackItalic';
+  src: url('../fonts/lato/Lato-BlaIta-webfont.eot');
+  src: url('../fonts/lato/Lato-BlaIta-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/Lato-BlaIta-webfont.woff') format('woff'), url('../fonts/lato/Lato-BlaIta-webfont.ttf') format('truetype'), url('../fonts/lato/Lato-BlaIta-webfont.svg#LatoBlackItalic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'LatoBlack';
+  src: url('../fonts/lato/Lato-Bla-webfont.eot');
+  src: url('../fonts/lato/Lato-Bla-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/Lato-Bla-webfont.woff') format('woff'), url('../fonts/lato/Lato-Bla-webfont.ttf') format('truetype'), url('../fonts/lato/Lato-Bla-webfont.svg#LatoBlack') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'LatoBoldItalic';
+  src: url('../fonts/lato/Lato-BolIta-webfont.eot');
+  src: url('../fonts/lato/Lato-BolIta-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/Lato-BolIta-webfont.woff') format('woff'), url('../fonts/lato/Lato-BolIta-webfont.ttf') format('truetype'), url('../fonts/lato/Lato-BolIta-webfont.svg#LatoBoldItalic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'LatoBold';
+  src: url('../fonts/lato/Lato-Bol-webfont.eot');
+  src: url('../fonts/lato/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/Lato-Bol-webfont.woff') format('woff'), url('../fonts/lato/Lato-Bol-webfont.ttf') format('truetype'), url('../fonts/lato/Lato-Bol-webfont.svg#LatoBold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'LatoItalic';
+  src: url('../fonts/lato/Lato-RegIta-webfont.eot');
+  src: url('../fonts/lato/Lato-RegIta-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/Lato-RegIta-webfont.woff') format('woff'), url('../fonts/lato/Lato-RegIta-webfont.ttf') format('truetype'), url('../fonts/lato/Lato-RegIta-webfont.svg#LatoItalic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'LatoRegular';
+  src: url('../fonts/lato/Lato-Reg-webfont.eot');
+  src: url('../fonts/lato/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/Lato-Reg-webfont.woff') format('woff'), url('../fonts/lato/Lato-Reg-webfont.ttf') format('truetype'), url('../fonts/lato/Lato-Reg-webfont.svg#LatoRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'LatoLightItalic';
+  src: url('../fonts/lato/Lato-LigIta-webfont.eot');
+  src: url('../fonts/lato/Lato-LigIta-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/Lato-LigIta-webfont.woff') format('woff'), url('../fonts/lato/Lato-LigIta-webfont.ttf') format('truetype'), url('../fonts/lato/Lato-LigIta-webfont.svg#LatoLightItalic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'LatoLight';
+  src: url('../fonts/lato/Lato-Lig-webfont.eot');
+  src: url('../fonts/lato/Lato-Lig-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/Lato-Lig-webfont.woff') format('woff'), url('../fonts/lato/Lato-Lig-webfont.ttf') format('truetype'), url('../fonts/lato/Lato-Lig-webfont.svg#LatoLight') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'LatoHairlineItalic';
+  src: url('../fonts/lato/Lato-HaiIta-webfont.eot');
+  src: url('../fonts/lato/Lato-HaiIta-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/Lato-HaiIta-webfont.woff') format('woff'), url('../fonts/lato/Lato-HaiIta-webfont.ttf') format('truetype'), url('../fonts/lato/Lato-HaiIta-webfont.svg#LatoHairlineItalic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'LatoHairline';
+  src: url('../fonts/lato/Lato-Hai-webfont.eot');
+  src: url('../fonts/lato/Lato-Hai-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/lato/Lato-Hai-webfont.woff') format('woff'), url('../fonts/lato/Lato-Hai-webfont.ttf') format('truetype'), url('../fonts/lato/Lato-Hai-webfont.svg#LatoHairline') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 ul {
   list-style: none;
