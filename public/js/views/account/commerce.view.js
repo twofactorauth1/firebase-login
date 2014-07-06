@@ -18,7 +18,8 @@ define([
         accounts: null,
 
         events: {
-            "click .close":"close_welcome"
+            "click .close":"close_welcome",
+            "click .commerce-item":"showSingleProduct"
         },
 
 
@@ -48,6 +49,15 @@ define([
                     rightPanel.append(sidetmpl);
                     self.check_welcome();
                 });
+        },
+
+        showSingleProduct: function(event) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+
+            var self = this;
+            var singleProductId = $(event.currentTarget).data("productid");
+            $$.r.account.commerceRouter.showSingleProduct(singleProductId);
         },
 
         check_welcome: function() {

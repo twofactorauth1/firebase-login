@@ -16,7 +16,7 @@ define([
             "commerce":"showCommerce",
             "commerce/":"showCommerce",
 
-            "commerce/:productId":"showSingleCommerce"
+            "commerce/:productId":"showSingleProduct"
         },
 
         showCommerce: function() {
@@ -25,8 +25,8 @@ define([
             $$.viewManager.replaceMain(view);
         },
 
-        showSingleCommerce: function(productId) {
-            console.log('showing single commerce '+productId);
+        showSingleProduct: function(productId) {
+            console.log('showing single product '+productId);
             var view = new CommerceSingleView();
             $$.viewManager.replaceMain(view);
         }
