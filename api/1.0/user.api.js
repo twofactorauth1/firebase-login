@@ -116,14 +116,25 @@ _.extend(api.prototype, baseApi.prototype, {
     updateUser: function(req,resp) {
         //TODO - ensure user accounts are not tampered with
         var self = this;
-        var user = new $$.m.User(req.body);
-        userDao.saveOrUpdate(user, function(err, value) {
+
+        var userId=req.body._id;
+        userDao.getById(userId, function(err, value) {
             if (!err && value != null) {
-                resp.send(value.toJSON("public"));
+                value.set("welcome_alert",req.body.welcome_alert);
+                userDao.saveOrUpdate(value, function(err, value) {
+                    if (!err && value != null) {
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
+
             } else {
-                self.wrapError(resp, 500, null, err, value);
+                return self.wrapError(resp, 401, null, err, value);
             }
         });
+
+
     },
 
 
