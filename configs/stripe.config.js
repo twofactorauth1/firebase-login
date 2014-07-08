@@ -8,6 +8,7 @@
 module.exports = {
     STRIPE_SECRET_KEY: 'sk_test_iXKiJJ80BnXlAXnOqCX4FxjQ',
     STRIPE_PUBLISHABLE_KEY: 'pk_test_EuZhZHVourE3RaRxELJaYEya',
+    STRIPE_CLIENT_ID: 'ca_4BwvfmpoZxIz6vzaDgezIj9kWSKRn9Gh', //TESTING
 
 
     KM_STRIPE_TEST_SECRET_KEY: 'sk_test_HrvWk6U4oejdazs5iSMQCVMa',
