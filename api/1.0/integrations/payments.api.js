@@ -477,23 +477,101 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     createCard: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> createCard');
+        var accessToken = self._getAccessToken(req);
+        var customerId = req.params.id;
+        var cardToken = req.body.cardToken;
+        if(!cardToken || cardToken.length < 1) {
+            return self.wrapError(resp, 400, null, "Invalid cardToken parameter.");
+        }
+
+        stripeDao.createStripeCard(customerId, cardToken, function(err, value){
+            self.log.debug('<< createCard');
+            return self.sendResultOrError(resp, err, value, "Error creating card");
+            self = value = null;
+        });
     },
 
     getCard: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> getCard');
+        var accessToken = self._getAccessToken(req);
+        var customerId = req.params.id;
+        var cardId = req.params.cardId;
+
+        stripeDao.getStripeCard(customerId, cardId, function(err, value){
+            self.log.debug('<< getCard');
+            return self.sendResultOrError(resp, err, value, "Error creating card");
+            self = value = null;
+        });
     },
 
     updateCard: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> updateCard');
+        var accessToken = self._getAccessToken(req);
+        var customerId = req.params.id;
+        var cardId = req.params.cardId;
+
+        var isUpdated = false;
+        var name = req.body.name;
+        var address_city = req.body.address_city;
+        var address_country = req.body.address_country;
+        var address_line1 = req.body.address_line1;
+        var address_line2 = req.body.address_line2;
+        var address_state = req.body.address_state;
+        var address_zip = req.body.address_zip;
+        var exp_month = req.body.exp_month;
+        var exp_year = req.body.exp_year;
+
+        //check that we have at least one parameter to update
+        if(name || address_city || address_country || address_line1 || address_line2 || address_state || address_zip
+            || exp_month || exp_year) {
+            isUpdated = true;//in case we need to do anything else here
+        } else {
+            self.log.error('No parameters passed to updateCard.');
+            return self.wrapError(resp, 400, null, "Invalid card parameters.");
+        }
+
+        stripeDao.updateStripeCard(customerId, cardId, name, address_city, address_country, address_line1,
+            address_line2, address_state, address_zip, exp_month, exp_year, function(err, value){
+                self.log.debug('<< updateCard');
+                return self.sendResultOrError(resp, err, value, "Error updating card");
+                self = value = null;
+            });
     },
 
     listCards: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> listCards');
+        var accessToken = self._getAccessToken(req);
+        var customerId = req.params.id;
+
+        stripeDao.listStripeCards(customerId, function(err, value){
+            self.log.debug('<< listCards');
+            return self.sendResultOrError(resp, err, value, "Error listing cards");
+            self = value = null;
+        });
     },
 
     deleteCard: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> deleteCard');
+        var accessToken = self._getAccessToken(req);
+        var customerId = req.params.id;
+        var cardId = req.params.cardId;
+
+        stripeDao.deleteStripeCard(customerId, cardId, function(err, value){
+            self.log.debug('<< deleteCard');
+            return self.sendResultOrError(resp, err, value, "Error listing cards");
+            self = value = null;
+        });
     },
 
     //CHARGES
@@ -521,6 +599,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO
     },
 
+    //INVOICE ITEMS
+
     createInvoiceItem: function(req, resp) {
         //TODO
     },
@@ -540,6 +620,8 @@ _.extend(api.prototype, baseApi.prototype, {
     deleteInvoiceItem: function(req, resp) {
         //TODO
     },
+
+    //INVOICES
 
     createInvoice: function(req, resp) {
         //TODO
