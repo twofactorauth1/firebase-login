@@ -34,25 +34,17 @@ var dao = {
         //TODO: check if this is already a customer and add accountId
         var self = this;
         self.log.debug(">> createStripeCustomer");
-        var parms = {};
-        parms.email = contact.getEmails()[0];
-        parms.description = 'Customer for ' + contact.getEmails()[0];
-        parms.metadata = {};
-        parms.metadata.contactId = contact.get('id');
-        parms.metadata.accountId_0 = accountId;
+        var params = {};
+        params.email = contact.getEmails()[0];
+        params.description = 'Customer for ' + contact.getEmails()[0];
+        params.metadata = {};
+        params.metadata.contactId = contact.get('id');
+        params.metadata.accountId_0 = accountId;
         if(cardToken && cardToken.length > 0) {
-            parms.cardToken = cardToken;
+            params.cardToken = cardToken;
         }
-        /*stripe.customers.create({
-            description: 'Customer for ' + contact.getEmails()[0],
-            //card: cardToken, // obtained with Stripe.js
-            email: contact.getEmails()[0],
-            metadata: {
-                contactId: contact.get('id'),
-                accountId: accountId
-            }
-        }*/
-        stripe.customers.create(parms, function(err, customer) {
+
+        stripe.customers.create(params, function(err, customer) {
 
             if(err) {
                 fn(err, customer);
@@ -120,9 +112,19 @@ var dao = {
      * @param params
      * @param fn
      */
-    updateStripeCustomer: function(stripeCustomerId, params, fn) {
+    updateStripeCustomer: function(stripeCustomerId, account_balance, cardToken, coupon, default_card, description,
+                                   email, metadata, fn) {
         var self = this;
         self.log.debug('>> updateStripeCustomer');
+        var params = {};
+        if(account_balance) {params.account_balance = account_balance;}
+        if(cardToken) {params.card = cardToken;}
+        if(coupon) {params.coupon = coupon;}
+        if(default_card) {params.default_card = default_card;}
+        if(description) {params.description = description;}
+        if(email) {params.email = email;}
+        if(metadata) {params.metadata = metadata;}
+
         stripe.customers.update(stripeCustomerId, params, function(err, customer){
             if (err) {
                 fn(err, customer);
@@ -973,6 +975,97 @@ var dao = {
     },
 
     //invoices
+
+    createInvoice: function(customerId, application_fee, description, metadata, statement_description, subscriptionId,
+                            accessToken, fn) {
+        var self = this;
+        self.log.debug('>> createInvoice');
+        var _stripe = self.delegateStripe(accessToken);
+        var params = {};
+        params.customer = customerId;
+        if(application_fee) {params.application_fee = application_fee;}
+        if(description) {params.description = description;}
+        if(metadata) {params.metadata = metadata;}
+        if(statement_description) {params.statement_description = statement_description;}
+        if(subscriptionId) {params.subscription = subscriptionId;}
+
+        _stripe.invoices.create(params, function(err, invoice) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, invoice);
+            }
+            self.log.debug('<< createInvoice');
+            return fn(err, invoice);
+        });
+    },
+
+    getInvoice: function(invoiceId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getInvoice');
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.invoices.retrieve(invoiceId, function(err, invoice) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, invoice);
+            }
+            self.log.debug('<< getInvoice');
+            return fn(err, invoice);
+        });
+    },
+
+    getUpcomingInvoice: function(customerId, subscriptionId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getUpcomingInvoice');
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.invoices.retrieveUpcoming(customerId, subscriptionId, function(err, invoice) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, invoice);
+            }
+            self.log.debug('<< getUpcomingInvoice');
+            return fn(err, invoice);
+        });
+    },
+
+    payInvoice: function(invoiceId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> payInvoice');
+        var _stripe = self.delegateStripe(accessToken);
+
+        _stripe.invoices.pay(invoiceId, function(err, invoice) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, invoice);
+            }
+            self.log.debug('<< payInvoice');
+            return fn(err, invoice);
+        });
+    },
+
+    updateInvoice: function(invoiceId, application_fee, closed, description, forgiven, metadata, statement_description,
+                            accessToken, fn) {
+        var self = this;
+        self.log.debug('>> updateInvoice');
+        var _stripe = self.delegateStripe(accessToken);
+        var params = {};
+        if(application_fee) {params.application_fee = application_fee;}
+        if(closed !== null) {params.closed = closed;}
+        if(description) {params.description = description;}
+        if(forgiven !== null) {params.forgiven = forgiven;}
+        if(metadata) {params.metadata = metadata;}
+        if(statement_description) {params.statement_description = statement_description;}
+
+        _stripe.invoices.update(invoiceId, params, function(err, invoice) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, invoice);
+            }
+            self.log.debug('<< updateInvoice');
+            return fn(err, invoice);
+        });
+    },
 
     //coupons
 
