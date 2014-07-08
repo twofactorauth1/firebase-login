@@ -61,12 +61,32 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('customers/:id/charges/:chargeId/capture'), this.isAuthApi, this.captureCharge.bind(this));
         app.delete(this.url('customers/:id/charges/:chargeId'), this.isAuthApi, this.deleteCharge.bind(this));
 
-        //InvoiceItems
-        //Invoices
+        //InvoiceItems - CRUDL
+        app.post(this.url('customers/:id/invoiceItems'), this.isAuthApi, this.createInvoiceItem.bind(this));
+        app.get(this.url('customers/:id/invoiceItems'), this.isAuthApi, this.listInvoiceItems.bind(this));
+        app.get(this.url('customers/:id/invoiceItems/:itemId'), this.isAuthApi, this.getInvoiceItem.bind(this));
+        app.post(this.url('customers/:id/invoiceItems/:itemId'), this.isAuthApi, this.updateInvoiceItem.bind(this));
+        app.delete(this.url('customers/:id/invoiceItems/:itemId'), this.isAuthApi, this.deleteInvoiceItem.bind(this));
+
+        //Invoices - CRUL & getUpcoming & pay
+        app.post(this.url('customers/:id/invoices'), this.isAuthApi, this.createInvoice.bind(this));
+        app.get(this.url('customers/:id/invoices/:invoiceId'), this.isAuthApi, this.getInvoice.bind(this));
+        app.get(this.url('customers/:id/upcomingInvoice'), this.isAuthApi, this.getUpcomingInvoice.bind(this));
+        app.post(this.url('customers/:id/invoices/:invoiceId'), this.isAuthApi, this.updateInvoice.bind(this));
+        app.get(this.url('customers/:id/invoices'), this.isAuthApi, this.listInvoices.bind(this));
+        app.post(this.url('customers/:id/invoices/:invoiceId/pay'), this.isAuthApi, this.payInvoice.bind(this));
+
         //Coupons
         //Discounts
-        //Tokens
-        //Events
+
+        //Tokens - CG
+        app.post(this.url('customers/:id/cards/:cardId'), this.isAuthApi, this.createToken.bind(this));
+        app.get(this.url('tokens/:id'), this.isAuthApi, this.getToken.bind(this));
+
+        //Events - GL
+        app.get(this.url('events/:id'), this.isAuthApi, this.getEvent.bind(this));
+        app.get(this.url('events'), this.isAuthApi, this.listEvents.bind(this));
+
     },
 
     listCustomers: function(req, resp) {
@@ -501,6 +521,65 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO
     },
 
+    createInvoiceItem: function(req, resp) {
+        //TODO
+    },
+
+    listInvoiceItems: function(req, resp) {
+        //TODO
+    },
+
+    getInvoiceItem: function(req, resp) {
+        //TODO
+    },
+
+    updateInvoiceItem: function(req, resp) {
+        //TODO
+    },
+
+    deleteInvoiceItem: function(req, resp) {
+        //TODO
+    },
+
+    createInvoice: function(req, resp) {
+        //TODO
+    },
+
+    getInvoice: function(req, resp) {
+        //TODO
+    },
+
+    getUpcomingInvoice: function(req, resp) {
+        //TODO
+    },
+
+    updateInvoice: function(req, resp) {
+        //TODO
+    },
+
+    listInvoices: function(req, resp) {
+        //TODO
+    },
+
+    payInvoice: function(req, resp) {
+        //TODO
+    },
+
+    createToken: function(req, resp) {
+        //TODO
+    },
+
+    getToken: function(req, resp) {
+        //TODO
+    },
+
+    getEvent: function(req, resp) {
+        //TODO
+    },
+
+    listEvents: function(req, resp) {
+        //TODO
+    },
 
     _getAccessToken: function(req) {
         var self = this;

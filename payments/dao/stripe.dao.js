@@ -1083,6 +1083,10 @@ var dao = {
         });
     },
 
+    listInvoices: function() {
+        //TODO:
+    },
+
     //coupons
 
     //discounts
