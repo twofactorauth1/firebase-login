@@ -55,7 +55,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = req.params.id;
 
         if (!userId) {
-            return this.wrapError(resp, 400, null, "Invalid paramater for ID");
+            return this.wrapError(resp, 400, null, "Invalid parameter for ID");
         }
 
         userId = parseInt(userId);
