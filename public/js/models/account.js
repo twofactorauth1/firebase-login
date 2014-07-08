@@ -52,6 +52,7 @@ define([], function() {
                     }
                     break;
                 case "PUT":
+                    return $$.api.getApiUrl("account", this.id);
                     break;
                 case "POST":
                     return $$.api.getApiUrl("account", "");

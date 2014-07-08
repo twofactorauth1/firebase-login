@@ -174,8 +174,8 @@ define([
                     console.log('Current ThemeId: '+self.account.attributes.website.themeId);
 
                     //actual code when api works
-                    // self.account.set('website', {'themeId': themeId});
-                    // self.account.save();
+                     self.account.set('website', {'themeId': themeId});
+                     self.account.save();
 
                     //refresh theme
                     document.getElementById('iframe-website').contentWindow.location.reload(true);
