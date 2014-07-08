@@ -23,7 +23,7 @@ passport.use(new StripeStrategy({
            stripe_properties.stripe_publishable_key
            stripe_properties.stripe_user_id
          */
-        log.debug('>> callback(' + accessToken +',' + refreshToken + ',' + stripe_properties);
+        log.debug('>> stripeCallback(' + accessToken +',' + refreshToken + ',' + stripe_properties);
         userDao.getUserByUsername(req.user.id(), function(err, value) {
 
             if (value == null) {
@@ -50,18 +50,16 @@ passport.use(new StripeStrategy({
             stripeAccount.socialId = 'stripe';
             stripeAccount.accessToken = accessToken;
             stripeAccount.refreshToken = refreshToken;
-            user.accounts.push(stripeAccount);
+            user.credentials.push(stripeAccount);
             userDao.saveOrUpdate(user, function(err, value){
                 if(value==null) {
                     log.error("Error during saveOrUpdate of user: (" + err + ")");
                     return fn(err, "SaveOrUpdate Error");
                 }
+                log.debug('<< stripeCallback');
+                return done(err, value);
             });
 
-        });
-
-        User.findOrCreate({ stripeId: stripe_properties.stripe_user_id }, function (err, user) {
-            return done(err, user);
         });
     }
 ));
