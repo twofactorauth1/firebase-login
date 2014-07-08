@@ -320,6 +320,85 @@ exports.payment_dao_test = {
                 test.done();
             });
         });
+    },
+
+    testGetLinkByAccountAndCustomer :function(test) {
+        //TODO:
+        test.done();
+    },
+
+    testRemoveLinkByAccountAndCustomer: function(test) {
+        //TODO:
+        test.done();
+    },
+
+    testRemoveLinksByCustomer: function(test) {
+        test.expect(2);
+        _log.info('\n\n**** Running Test testRemoveLinksByCustomer ****\n');
+        var link = new $$.m.CustomerLink({
+            'accountId': 0,
+            'contactId': 'contactId',
+            'customerId': 'customerId'
+        });
+        var p1 = $.Deferred(), p2 = $.Deferred(), p3 = $.Deferred();
+
+        var link1 = new $$.m.CustomerLink({
+            'accountId': 0,
+            'contactId': 'contactId1',
+            'customerId': 'customerId1'
+        });
+
+        var link2 = new $$.m.CustomerLink({
+            'accountId': 1,
+            'contactId': 'contactId',
+            'customerId': 'customerId1'
+        });
+
+        linkDao.saveOrUpdate(link,  function(err, savedLink){
+            if(err) {
+                p1.reject();
+                test.ok(false, 'Error saving link: ' + err);
+                test.done();
+            }
+            _log.info('saved link with id of ' + savedLink.get('_id'));
+            p1.resolve();
+        });
+        linkDao.saveOrUpdate(link1,  function(err, savedLink){
+            if(err) {
+                p2.reject();
+                test.ok(false, 'Error saving link: ' + err);
+                test.done();
+            }
+            _log.info('saved link with id of ' + savedLink.get('_id'));
+            p2.resolve();
+        });
+        linkDao.saveOrUpdate(link2,  function(err, savedLink){
+            if(err) {
+                p3.reject();
+                test.ok(false, 'Error saving link: ' + err);
+                test.done();
+            }
+            _log.info('saved link with id of ' + savedLink.get('_id'));
+            p3.resolve();
+        });
+
+        $.when(p1,p2,p3).done(function(){
+            linkDao.removeLinksByCustomer('customerId1', function(err, value){
+                if(err) {
+                    test.ok(false, 'Error removing links: ' + err);
+                    test.done();
+                }
+                linkDao.findMany(null, $$.m.CustomerLink, function(err, links){
+                    if(err) {
+                        test.ok(false, 'Error removing links: ' + err);
+                        test.done();
+                    }
+                    test.equals(2, links.length);
+                    test.equals('customerId', links[1].get('customerId'));
+                    test.done();
+                });
+            });
+        });
     }
 
 }

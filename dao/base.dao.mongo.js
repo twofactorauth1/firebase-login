@@ -223,10 +223,28 @@ var mongodao = {
         });
     },
 
+    _removeByQueryMongo: function(query, type, fn) {
+        var self = this;
+
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+        this.mongo(collection).remove(query, function(err, value) {
+            if (err) {
+                self.log.error("An error occurred: #removeByQueryMongo. ", err);
+            }
+
+            fn(err, value);
+        });
+    },
+
 
     _getNextSequence: function(collection, fn) {
         var self = this;
-        
+        self.log.debug('>> _getNextSequence');
         if (_.isFunction(collection)) {
             fn = collection;
             collection = null;
@@ -235,8 +253,10 @@ var mongodao = {
         collection = collection || this.collection;
 
         if (this._isLocked(collection)) {
+            self.log.debug('collection is locked.');
            (function(collection, fn) {
                 self._registerUnlock(collection, function() {
+                    self.log.debug('upon unlock');
                     self._getNextSequence(collection, fn);
                 });
             })(collection, fn);
@@ -253,6 +273,7 @@ var mongodao = {
                 self._unlockCollection(collection);
                 if (!err && value != null && value.hasOwnProperty('seq')) {
                     if (fn != null) {
+                        self.log.debug('<< _getNextSequence');
                         fn(null, value.seq);
                     }
                 } else {
@@ -276,6 +297,8 @@ var mongodao = {
 
 
     _unlockCollection: function(collection) {
+        var self = this;
+        self.log.debug('>> unlock ' + collection);
         collection = collection || this.collection;
         delete this.locked[collection];
         this._notifyUnlock(collection);
@@ -299,13 +322,20 @@ var mongodao = {
 
 
     _notifyUnlock: function(collection) {
+        var self = this;
+        self.log.debug('>> notifyUnlock ' + collection);
         if (this.unlockRegister && this.unlockRegister[collection] != null) {
-            var callbacks = this.unlockRegister[collection];
+            //var callbacks = this.unlockRegister[collection];
+            //do a deep copy of the array and delete it so it won't be modified by the callbacks
+            var callbacks = $.extend(true, [], this.unlockRegister[collection]);
+            delete this.unlockRegister[collection];
             for(var i = 0; i < callbacks.length; i++) {
+                self.log.debug('callback ' + i + ' of ' + callbacks.length);
                 callbacks[i]();
             }
-            delete this.unlockRegister[collection];
+
         }
+        self.log.debug('<< notifyUnlock');
     },
 
 

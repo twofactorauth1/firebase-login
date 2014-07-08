@@ -11,6 +11,7 @@ var appConfig = require('../../configs/app.config.js');
 var contactDao = require('../../dao/contact.dao.js');
 var subscriptionDao = require('./subscription.dao.js');
 var paymentDao = require('./payment.dao.js');
+var customerLinkDao = require('./customer_link.dao.js');
 
 /*-- for stripe api--*/
 var stripe = require("stripe")( stripeConfigs.KM_STRIPE_TEST_SECRET_KEY);//TODO: app config
@@ -52,14 +53,29 @@ var dao = {
             }
             contact.set('stripeId', customer.id);
             self.log.debug('Setting contact stripeId to ' + contact.get('stripeId'));
+            var p1 = $.Deferred(), p2 = $.Deferred();
+            var savedCustomer = customer;
             contactDao.saveOrMerge(contact, function(err, value){
                 if (err) {
                     fn(err, value);
                     fn = null;
                 }
-                self.log.debug('<< createStripeCustomer');
-                return fn(err, value);
+                p1.resolve();
             });
+
+            customerLinkDao.safeCreate(accountId, contact.get('_id'), customer.id, function(err, value){
+                if (err) {
+                    fn(err, value);
+                    fn = null;
+                }
+                p2.resolve();
+            });
+
+            $.when(p1,p2).done(function(){
+                self.log.debug('<< createStripeCustomer');
+                return fn(err, savedCustomer);
+            });
+
         });
     },
 
@@ -152,7 +168,7 @@ var dao = {
                 fn = null;
             }
             if(contactId && contactId.length > 0) {
-                self.log.debug('removing stripId from contact.');
+                self.log.debug('removing stripeId from contact.');
                 contactDao.getById(contactId, $$.m.Contact, function(err, contact){
                     if(err) {
                         fn(err, contact);
@@ -176,12 +192,12 @@ var dao = {
 
     /**
      *
-     * @param id
-     * @param amount
-     * @param currency (usd)
-     * @param interval (week, month, year)
-     * @param interval_count
-     * @param name
+     * @param id - Unique Plan ID string (required)
+     * @param amount (required)
+     * @param currency (usd) (required)
+     * @param interval (week, month, year) (required)
+     * @param interval_count default is 1
+     * @param name Name of plan to be displayed on invoices. (required)
      * @param trial_period_days
      * @param metadata
      * @param statement_description

@@ -48,6 +48,42 @@ var dao = {
         this.findOne(query, $$.m.CustomerLink, fn);
     },
 
+    getLinkByAccountAndCustomer: function(accountId, customerId, fn) {
+        var self = this;
+        self.log.debug('>> getLinkByAccountAndCustomer');
+        var query = {
+            'accountId': accountId,
+            'customerId': customerId
+        };
+        this.findOne(query, $$.m.CustomerLink, fn);
+    },
+
+    removeLinkByAccountAndCustomer: function(accountId, customerId, fn) {
+        var self = this;
+        self.log.debug('>> removeLinkByAccountAndCustomer');
+        var p1 = $.Deferred();
+        var link = self.getLinkByAccountAndCustomer(accountId, customerId, function(err, link){
+            if(err) {
+                self.log.error('Error retrieving link: ' + err);
+                fn(err, null);
+            }
+            p1.resolve();
+            return link;
+        });
+        $.when(p1).done(function(){
+            self.log.debug('<< removeLinkByAccountAndCustomer');
+            self.remove(link, fn);
+        });
+
+    },
+
+    removeLinksByCustomer: function(customerId, fn) {
+        var self = this;
+        self.log.debug('>> removeLinksByCustomer');
+        var query = {'customerId': customerId};
+        self.removeByQuery(query, $$.m.CustomerLink, fn);
+    },
+
     safeCreate: function(accountId, contactId, customerId, fn) {
         var self = this;
         self.log.debug('>> safeCreate');
