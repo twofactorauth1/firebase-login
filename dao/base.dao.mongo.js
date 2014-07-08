@@ -223,6 +223,24 @@ var mongodao = {
         });
     },
 
+    _removeByQueryMongo: function(query, type, fn) {
+        var self = this;
+
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+        this.mongo(collection).remove(query, function(err, value) {
+            if (err) {
+                self.log.error("An error occurred: #removeByQueryMongo. ", err);
+            }
+
+            fn(err, value);
+        });
+    },
+
 
     _getNextSequence: function(collection, fn) {
         var self = this;

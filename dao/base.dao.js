@@ -98,6 +98,19 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    removeByQuery: function (query, type, fn) {
+        if (this.useCache(type)) {
+            var key = this.getTable(type) + "_" + id;
+            $$.g.cache.remove(key);
+        }
+
+        if (this.getStorage(type) === "mongo") {
+            this._removeByQueryMongo(query, type, fn);
+        } else {
+            fn("No storage medium available for this model");
+        }
+    },
+
 
     getById: function (id, type, fn) {
         if (_.isFunction(type) && fn == null) {
