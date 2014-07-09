@@ -1083,8 +1083,29 @@ var dao = {
         });
     },
 
-    listInvoices: function() {
-        //TODO:
+    listInvoices: function(customerId, dateFilter, ending_before, limit, starting_after, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> listInvoices');
+        var _stripe = self.delegateStripe(accessToken);
+        var params = {};
+
+        if(customerId) {params.customer = customerId;}
+        if(dateFilter) {params.date = dateFilter;}
+        if(ending_before) {params.ending_before = ending_before;}
+        if(limit) {params.limit = limit;}
+        if(starting_after) {params.starting_after = starting_after;}
+
+
+        _stripe.invoices.list(params, function(err, invoices){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, invoice);
+            }
+            self.log.debug('<< listInvoices');
+            return fn(err, invoice);
+        });
+
+
     },
 
     //coupons

@@ -73,6 +73,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('customers/:id/upcomingInvoice'), this.isAuthApi, this.getUpcomingInvoice.bind(this));
         app.post(this.url('customers/:id/invoices/:invoiceId'), this.isAuthApi, this.updateInvoice.bind(this));
         app.get(this.url('customers/:id/invoices'), this.isAuthApi, this.listInvoices.bind(this));
+        app.get(this.url('invoices'), this.isAuthApi, this.listAllInvoices.bind(this));
         app.post(this.url('customers/:id/invoices/:invoiceId/pay'), this.isAuthApi, this.payInvoice.bind(this));
 
         //Coupons
@@ -790,27 +791,129 @@ _.extend(api.prototype, baseApi.prototype, {
     //INVOICES
 
     createInvoice: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> createInvoice');
+        var accessToken = self._getAccessToken(req);
+        var customerId = req.params.id;
+        var application_fee = req.body.application_fee;
+        var description = req.body.description;
+        var metadata = req.body.metadata;
+        var statement_description = req.body.statement_description;
+        var subscriptionId = req.body.subscriptionId;
+
+        stripeDao.createInvoice(customerId, application_fee, description, metadata, statement_description,
+            subscriptionId, accessToken, function(err, value){
+                self.log.debug('<< createInvoice');
+                return self.sendResultOrError(resp, err, value, "Error creating invoice.");
+                self = value = null;
+            });
     },
 
     getInvoice: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> getInvoice');
+        var accessToken = self._getAccessToken(req);
+        var customerId = req.params.id;
+        var invoiceId = req.params.invoiceId;
+
+        stripeDao.getInvoice(invoiceId, accessToken, function(err, value){
+            self.log.debug('<< getInvoice');
+            return self.sendResultOrError(resp, err, value, "Error retrieving invoice.");
+            self = value = null;
+        });
     },
 
     getUpcomingInvoice: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> getUpcomingInvoice');
+        var accessToken = self._getAccessToken(req);
+        var customerId = req.params.id;
+        var subscriptionId = req.body.subscriptionId;
+
+        stripeDao.getUpcomingInvoice(customerId, subscriptionId, accessToken, function(err, value){
+            self.log.debug('<< getUpcomingInvoice');
+            return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.");
+            self = value = null;
+        });
     },
 
     updateInvoice: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> updateInvoice');
+        var accessToken = self._getAccessToken(req);
+        var customerId = req.params.id;
+        var invoiceId = req.params.invoiceId;
+
+        var application_fee = req.body.application_fee;
+        var closed = req.body.closed;
+        var description = req.body.description;
+        var forgiven = req.body.forgiven;
+        var metadata = req.body.metadata;
+        var statement_description = req.body.statement_description;
+
+        if(application_fee || closed || description || forgiven || metadata || statement_description) {
+            //at least one param was passed.  Careful about the booleans
+        } else {
+            return self.wrapError(resp, 400, null, "Missing invoice parameter.");
+        }
+
+        stripeDao.updateInvoice(invoiceId, application_fee, closed, description, forgiven, metadata,
+            statement_description, accessToken, function(err, value){
+                self.log.debug('<< updateInvoice');
+                return self.sendResultOrError(resp, err, value, "Error updating invoice.");
+                self = value = null;
+            });
     },
 
     listInvoices: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        var customerId = req.params.id;
+        return self._listInvoices(customerId, 'listInvoices', req, resp);
+
+    },
+
+    listAllInvoices: function(req, resp) {
+        //TODO - Security
+        var self = this;
+        self._listInvoices(null, 'listAllInvoices', req, resp);
+    },
+
+    _listInvoices: function(customerId, methodName, req, resp) {
+        var self = this;
+        self.log.debug('>> ' + methodName);
+        var accessToken = self._getAccessToken(req);
+
+        var dateFilter = req.body.dateFilter;
+        var ending_before = req.body.ending_before;
+        var limit = req.body.limit;
+        var starting_after = req.body.starting_after;
+
+        stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, accessToken,
+            function(err, value){
+                self.log.debug('<< ' + methodName);
+                return self.sendResultOrError(resp, err, value, "Error listing invoices.");
+                self = value = null;
+            });
     },
 
     payInvoice: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> payInvoice');
+        var accessToken = self._getAccessToken(req);
+        var customerId = req.params.id;
+        var invoiceId = req.params.invoiceId;
+
+        stripeDao.payInvoice(invoiceId, accessToken, function(err, value){
+            self.log.debug('<< payInvoice');
+            return self.sendResultOrError(resp, err, value, "Error paying invoice.");
+            self = value = null;
+        });
     },
 
     createToken: function(req, resp) {
