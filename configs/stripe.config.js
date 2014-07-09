@@ -7,5 +7,11 @@
 
 module.exports = {
     STRIPE_SECRET_KEY: 'sk_test_iXKiJJ80BnXlAXnOqCX4FxjQ',
-    STRIPE_PUBLISHABLE_KEY: 'pk_test_EuZhZHVourE3RaRxELJaYEya'
+    STRIPE_PUBLISHABLE_KEY: 'pk_test_EuZhZHVourE3RaRxELJaYEya',
+    STRIPE_CLIENT_ID: 'ca_4BwvfmpoZxIz6vzaDgezIj9kWSKRn9Gh', //TESTING
+
+
+    KM_STRIPE_TEST_SECRET_KEY: 'sk_test_HrvWk6U4oejdazs5iSMQCVMa',
+    KM_STRIPE_TEST_PUBLISH_KEY: 'pk_test_JG80mKROqTMgPBr3RSM1ehpT',
+    KM_STRIPE_TEST_CLIENT_ID: 'ca_4DR4NAINnxW3RxXGg1TzCxTLIr2XJkpS'
 }

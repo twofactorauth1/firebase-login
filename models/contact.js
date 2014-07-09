@@ -23,6 +23,7 @@ var contact = $$.m.ModelBase.extend({
             birthday:null,          //string,
             starred:false,          //true|false
             type:"c",               //contact_types
+            stripeId: "",           //stripe ID if available
             _v:"0.1",
 
             created: {
@@ -241,7 +242,7 @@ var contact = $$.m.ModelBase.extend({
     },
 
 
-    updateContactInfo: function(first, middle, last, photo, photoSquare, birthday, location) {
+    updateContactInfo: function(first, middle, last, photo, photoSquare, birthday, location, stripeId) {
         var o = {};
 
         if (first != null) o.first = first;
@@ -251,6 +252,7 @@ var contact = $$.m.ModelBase.extend({
         if (photoSquare != null) o.photoSquare = photoSquare;
         if (birthday != null) o.birthday = birthday;
         if (location != null) o.location = location;
+        if (stripeId != null) o.stripeId = stripeId;
 
         this.set(o);
     },
@@ -464,7 +466,7 @@ var contact = $$.m.ModelBase.extend({
         var self = this;
         contact = contact.toJSON();
 
-        this.updateContactInfo(contact.first, contact.middle, contact.last, contact.photo, contact.photoSquare, contact.birthday);
+        this.updateContactInfo(contact.first, contact.middle, contact.last, contact.photo, contact.photoSquare, contact.birthday, contact.location, contact.stripeId);
         var details = contact.details;
         if (details != null && details.length > 0) {
             details.forEach(function(detail) {
