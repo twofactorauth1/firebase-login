@@ -5,10 +5,19 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
+
+var appConfig =  require('./app.config');
+
+var stripeSecretKey = process.env.STRIPE_SECRET_KEY || 'sk_test_iXKiJJ80BnXlAXnOqCX4FxjQ';
+var stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY || 'pk_test_EuZhZHVourE3RaRxELJaYEya';
+var stripeClientId = process.env.STRIPE_CLIENT_ID || 'ca_4BwvfmpoZxIz6vzaDgezIj9kWSKRn9Gh';
+
 module.exports = {
-    STRIPE_SECRET_KEY: 'sk_test_iXKiJJ80BnXlAXnOqCX4FxjQ',
-    STRIPE_PUBLISHABLE_KEY: 'pk_test_EuZhZHVourE3RaRxELJaYEya',
-    STRIPE_CLIENT_ID: 'ca_4BwvfmpoZxIz6vzaDgezIj9kWSKRn9Gh', //TESTING
+    STRIPE_SECRET_KEY: stripeSecretKey,
+    STRIPE_PUBLISHABLE_KEY: stripePublishableKey,
+    STRIPE_CLIENT_ID: stripeClientId,
+    //CALLBACK_URL_LOGIN: appConfig.server_url + "/stripe/connect/callback",
+    CALLBACK_URL_LOGIN: 'http://stuff.indigenous.local:3000/stripe/connect/callback',
 
 
     KM_STRIPE_TEST_SECRET_KEY: 'sk_test_HrvWk6U4oejdazs5iSMQCVMa',
