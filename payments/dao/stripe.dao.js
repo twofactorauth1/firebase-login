@@ -980,7 +980,7 @@ var dao = {
         if(limit) {params.limit = limit;}
         if(starting_after) {params.starting_after = starting_after;}
 
-        _stripe.invoiceItems.list(function(err, invoiceItems) {
+        _stripe.invoiceItems.list(params, function(err, invoiceItems) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, invoiceItems);

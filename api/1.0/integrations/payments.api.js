@@ -53,13 +53,12 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('customers/:id/cards'), this.isAuthApi, this.listCards.bind(this));
         app.delete(this.url('customers/:id/cards/:cardId'), this.isAuthApi, this.deleteCard.bind(this));
 
-        //Charges - CRUDL & Capture
-        app.get(this.url('customers/:id/charges'), this.isAuthApi, this.listCharges.bind(this));
-        app.get(this.url('customers/:id/charges/:chargeId'), this.isAuthApi, this.getCharge.bind(this));
-        app.post(this.url('customers/:id/charges'), this.isAuthApi, this.createCharge.bind(this));
-        app.post(this.url('customers/:id/charges/:chargeId'), this.isAuthApi, this.updateCharge.bind(this));
-        app.post(this.url('customers/:id/charges/:chargeId/capture'), this.isAuthApi, this.captureCharge.bind(this));
-        app.delete(this.url('customers/:id/charges/:chargeId'), this.isAuthApi, this.deleteCharge.bind(this));
+        //Charges - CRUL & Capture
+        app.get(this.url('charges'), this.isAuthApi, this.listCharges.bind(this));
+        app.get(this.url('charges/:chargeId'), this.isAuthApi, this.getCharge.bind(this));
+        app.post(this.url('charges'), this.isAuthApi, this.createCharge.bind(this));
+        app.post(this.url('charges/:chargeId'), this.isAuthApi, this.updateCharge.bind(this));
+        app.post(this.url('charges/:chargeId/capture'), this.isAuthApi, this.captureCharge.bind(this));
 
         //InvoiceItems - CRUDL
         app.post(this.url('customers/:id/invoiceItems'), this.isAuthApi, this.createInvoiceItem.bind(this));
@@ -576,49 +575,216 @@ _.extend(api.prototype, baseApi.prototype, {
 
     //CHARGES
     listCharges: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> listCharges');
+        var accessToken = self._getAccessToken(req);
+
+        var created = req.body.created;
+        var customerId = req.body.customerId;
+        var ending_before = req.body.ending_before;
+        var limit = req.body.limit;
+        var starting_after = req.body.starting_after;
+
+        stripeDao.listStripeCharges(created, customerId, ending_before, limit, starting_after, accessToken,
+            function(err, value){
+                self.log.debug('<< listCharges');
+                return self.sendResultOrError(resp, err, value, "Error listing charges");
+                self = value = null;
+            });
     },
 
     createCharge: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> createCharge');
+        var accessToken = self._getAccessToken(req);
+        var amount = req.body.amount;//REQUIRED
+        var currency = req.body.currency || 'usd';//REQUIRED
+        var card = req.body.card; //card or customer REQUIRED
+        var customerId = req.body.customerId; //card or customer REQUIRED
+        var contactId = req.body.contactId;//REQUIRED
+        var description = req.body.description;
+        var metadata = req.body.metadata;
+        var capture = req.body.capture;
+        var statement_description = req.body.statement_description;
+        var receipt_email = req.body.receipt_email;
+        var application_fee = req.body.application_fee;
+
+        //validate params
+        if(!amount) {
+            return self.wrapError(resp, 400, null, "Invalid amount parameter.");
+        }
+        if(!currency) {
+            return self.wrapError(resp, 400, null, "Invalid currency parameter.");
+        }
+        if(!card && !customerId) {
+            return self.wrapError(resp, 400, null, "Missing card or customer parameter.");
+        }
+        if(!contactId) {
+            return self.wrapError(resp, 400, null, "Invalid contact parameter.");
+        }
+
+        stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata, capture,
+            statement_description, receipt_email, application_fee, accessToken, function(err, value){
+                self.log.debug('<< createCharge');
+                return self.sendResultOrError(resp, err, value, "Error creating a charge.");
+                self = value = null;
+            });
     },
 
     getCharge: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> getCharge');
+        var accessToken = self._getAccessToken(req);
+
+        var chargeId = req.params.chargeId;
+
+        stripeDao.getStripeCharge(chargeId, accessToken, function(err, value){
+            self.log.debug('<< getCharge');
+            return self.sendResultOrError(resp, err, value, "Error retrieving a charge.");
+            self = value = null;
+        });
+
+
     },
 
     updateCharge: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> updateCharge');
+        var accessToken = self._getAccessToken(req);
+
+        var chargeId = req.params.chargeId;
+        var description = req.body.description;
+        var metadata = req.body.metadata;
+        if(!description && !metadata) {
+            return self.wrapError(resp, 400, null, "Missing update parameter.");
+        }
+
+        stripeDao.updateStripeCharge(chargeId, description, metadata, accessToken, function(err, value){
+            self.log.debug('<< updateCharge');
+            return self.sendResultOrError(resp, err, value, "Error updating a charge.");
+            self = value = null;
+        });
     },
 
     captureCharge: function(req, resp) {
-        //TODO
-    },
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> captureCharge');
+        var accessToken = self._getAccessToken(req);
 
-    deleteCharge: function(req, resp) {
-        //TODO
+        var chargeId = req.params.chargeId;
+        var amount = req.body.amount;
+        var application_fee = req.body.application_fee;
+        var receipt_email = req.body.receipt_email;
+
+        stripeDao.captureStripeCharge(chargeId, amount, application_fee, receipt_email, accessToken,
+            function(err, value){
+                self.log.debug('<< captureCharge');
+                return self.sendResultOrError(resp, err, value, "Error capturing a charge.");
+                self = value = null;
+            });
     },
 
     //INVOICE ITEMS
 
     createInvoiceItem: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> createInvoiceItem');
+        var accessToken = self._getAccessToken(req);
+
+        var customerId = req.params.id;
+        var amount = req.body.amount;//REQUIRED
+        var currency = req.body.currency || 'usd';//REQUIRED
+        var invoiceId = req.body.invoiceId;
+        var subscriptionId = req.body.subscriptionId;
+        var description = req.body.description;
+        var metadata = req.body.metaata;
+
+        if(!amount) {
+            return self.wrapError(resp, 400, null, "Missing amount parameter.");
+        }
+        if(!currency) {
+            return self.wrapError(resp, 400, null, "Missing currency parameter.");
+        }
+
+        stripeDao.createInvoiceItem(customerId, amount, currency, invoiceId, subscriptionId, description, metadata,
+            accessToken, function(err, value){
+                self.log.debug('<< createInvoiceItem');
+                return self.sendResultOrError(resp, err, value, "Error creating an invoice item.");
+                self = value = null;
+            });
     },
 
     listInvoiceItems: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> listInvoiceItems');
+        var accessToken = self._getAccessToken(req);
+
+        var created = req.body.created;
+        var customerId = req.body.customerId;
+        var ending_before = req.body.ending_before;
+        var limit = req.body.limit;
+        var starting_after = req.body.starting_after;
+
+        stripeDao.listInvoiceItems(created, customerId, ending_before, limit, starting_after, accessToken,
+            function(err, value){
+                self.log.debug('<< listInvoiceItems');
+                return self.sendResultOrError(resp, err, value, "Error listing invoice items.");
+                self = value = null;
+            });
     },
 
     getInvoiceItem: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> getInvoiceItem');
+        var accessToken = self._getAccessToken(req);
+        var invoiceItemId = req.params.itemId;
+
+        stripeDao.getInvoiceItem(invoiceItemId, accessToken, function(err, value){
+            self.log.debug('<< getInvoiceItem');
+            return self.sendResultOrError(resp, err, value, "Error retrieving invoice item.");
+            self = value = null;
+        });
     },
 
     updateInvoiceItem: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> getInvoiceItem');
+        var accessToken = self._getAccessToken(req);
+        var invoiceItemId = req.params.itemId;
+
+        var amount = req.body.amount;
+        var description = req.body.description;
+        var metadata = req.body.metadata;
+
+
+        stripeDao.updateInvoiceItem(invoiceItemId, amount, description, metadata, accessToken, function(err, value){
+            self.log.debug('<< getInvoiceItem');
+            return self.sendResultOrError(resp, err, value, "Error retrieving invoice item.");
+            self = value = null;
+        });
     },
 
     deleteInvoiceItem: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> deleteInvoiceItem');
+        var accessToken = self._getAccessToken(req);
+        var invoiceItemId = req.params.itemId;
+
+        stripeDao.deleteInvoiceItem(invoiceItemId, accessToken, function(err, value){
+            self.log.debug('<< deleteInvoiceItem');
+            return self.sendResultOrError(resp, err, value, "Error deleting invoice item.");
+            self = value = null;
+        });
     },
 
     //INVOICES
