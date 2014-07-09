@@ -106,7 +106,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     //verify customer/account relationship
                     var customerIDs = _.map(accounts, function(account){return account.get('customerId');});
                     var results = [];
-                    _.each(customers.data, function(elem, key, list){
+                    _.each(customers.data, function(elem){
                         if(_.contains(customerIDs, elem.id)) {
                             results.push(elem);
                         }
@@ -224,9 +224,8 @@ _.extend(api.prototype, baseApi.prototype, {
             params.description, params.email, params.metadata, function(err, value){
                 self.log.debug('<< updateCustomer');
                 return self.sendResultOrError(resp, err, value, "Error updating Stripe Customer");
-                self = value = params = null;
             });
-
+        self = params = null;
 
     },
 
@@ -917,23 +916,69 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     createToken: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> createToken');
+        var accessToken = self._getAccessToken(req);
+        var customerId = req.params.id;
+        var cardId = req.params.cardId;
+
+        stripeDao.createToken(cardId, customerId, accessToken, function(err, value){
+            self.log.debug('<< createToken');
+            return self.sendResultOrError(resp, err, value, "Error creating token.");
+            self = value = null;
+        });
     },
 
     getToken: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> getToken');
+        var accessToken = self._getAccessToken(req);
+        var tokenId = req.params.id;
+
+        stripeDao.getToken(tokenId, function(err, value){
+            self.log.debug('<< getToken');
+            return self.sendResultOrError(resp, err, value, "Error retrieving token.");
+        });
+        self = accessToken = null;
     },
 
     getEvent: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> getEvent');
+        var accessToken = self._getAccessToken(req);
+        var eventId = req.params.id;
+
+        stripeDao.getEvent(eventId, accessToken, function(err, value){
+            self.log.debug('<< getEvent');
+            return self.sendResultOrError(resp, err, value, "Error retrieving event.");
+        });
+        self = accessToken = eventId = null;
     },
 
     listEvents: function(req, resp) {
-        //TODO
+        //TODO - Security
+        var self = this;
+        self.log.debug('>> listEvents');
+        var accessToken = self._getAccessToken(req);
+
+        var created = req.body.created;
+        var ending_before = req.body.ending_before;
+        var limit = req.body.limit;
+        var starting_after = req.body.starting_after;
+        var type = req.body.type;
+
+        stripeDao.listEvents(created, ending_before, limit, starting_after, type, accessToken, function(err, value){
+            self.log.debug('<< listEvents');
+            return self.sendResultOrError(resp, err, value, "Error listing events.");
+        });
+        self = accessToken = null;
     },
 
     _getAccessToken: function(req) {
-        var self = this;
+
         var token = null;
         if(req.session.stripeAccessToken) {
             token = req.session.stripeAccessToken;
