@@ -1,8 +1,17 @@
 #!/bin/sh
 
-[ "x${AWS_ACCESS_KEY_ID}" == "x" ] && echo "No AWS_ACCESS_KEY_ID defined, exiting." && exit 99
-[ "x${AWS_SECRET_ACCESS_KEY}" == "x" ] && echo "No AWS_SECRET_ACCESS_KEY defined, exiting." && exit 98
-[ "x${APP_NAME}" == "x" ] && echo "No APP_NAME defined, exiting." && exit 97
+if [ "x$AWS_ACCESS_KEY_ID" == "x" ]; then 
+	echo "No AWS_ACCESS_KEY_ID defined, exiting.";
+	exit 99;
+fi
+if [ "x$AWS_SECRET_ACCESS_KEY" == "x" ]; then
+	echo "No AWS_SECRET_ACCESS_KEY defined, exiting.";
+	exit 98;
+fi
+if [ "x$APP_NAME" == "x" ]; then 
+	echo "No APP_NAME defined, exiting."; 
+	exit 97;
+fi
 
 if [ "$1" == "develop" ]; then
 	export AWS_DEFAULT_REGION="us-east-1"
