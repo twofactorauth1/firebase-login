@@ -106,11 +106,14 @@ _.extend(api.prototype, baseApi.prototype, {
                     //verify customer/account relationship
                     var customerIDs = _.map(accounts, function(account){return account.get('customerId');});
                     var results = [];
-                    _.each(customers.data, function(elem){
-                        if(_.contains(customerIDs, elem.id)) {
-                            results.push(elem);
-                        }
-                    });
+                    if(customers && customers.data) {
+                        _.each(customers.data, function(elem){
+                            if(_.contains(customerIDs, elem.id)) {
+                                results.push(elem);
+                            }
+                        });
+                    }
+
                     self.log.debug('<< listCustomers');
                     self.sendResultOrError(resp, err, results, "Error listing Stripe Customers");
                 });
@@ -121,7 +124,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.sendResultOrError(resp, err, customers.data, "Error listing Stripe Customers");
             }
 
-            self = customers = null;
         });
 
     },
