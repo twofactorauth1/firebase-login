@@ -148,26 +148,20 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     signUpNews: function(req, resp) {
         var self = this, contact, accountToken, deferred;
-
+        console.log(req.body);
         var email = req.body.email;
         console.log('Email: '+JSON.stringify(email));
 
         var accountToken = cookies.getAccountToken(req);
         console.log('Account Token: '+accountToken);
 
-        contactDao.createContactFromEmail(email, accountToken, function (err, value) {
+        contactDao.createContactFromData(req.body, accountToken, function (err, value) {
             if (!err) {
-                req.login(value, function (err) {
-                    if (err) {
-                        return resp.redirect("/");
-                    } else {
-                        req.flash("info", "Account created successfully");
-                        return resp.redirect("/");
-                    }
-                });
+                req.flash("info", "Account created successfully");
+                return resp.redirect("/");
             } else {
                 req.flash("error", value.toString());
-                return resp.redirect("/signup");
+                return resp.redirect("/");
             }
         });
     }
