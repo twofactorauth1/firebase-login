@@ -24,4 +24,8 @@ define(function() {
         }
         return "";
     });
+
+    Handlebars.registerHelper('lengthMinusOne', function(length) {
+        return length - 1;
+    });
 });
