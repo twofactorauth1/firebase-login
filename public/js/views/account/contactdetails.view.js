@@ -22,7 +22,11 @@ define([
             "click #btn-back-to-contacts":"goBack",
             "click .btn-edit-contact":"editContact",
             "click .btn-more-emails":"showEmails",
-            "click .btn-less-emails":"hideEmails"
+            "click .btn-less-emails":"hideEmails",
+            "click .btn-more-phones":"showPhones",
+            "click .btn-less-phones":"hidePhones",
+            "click .btn-more-address":"showAddress",
+            "click .btn-less-address":"hideAddress"
         },
 
 
@@ -103,7 +107,7 @@ define([
             console.log('show phones');
             $('.li-email').show();
             $('.li-email.first .btn-more-emails i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-            $('.li-email.first .btn-more-emails span').text('less');
+            $('.li-email.first .btn-more-emails span').text(($('.li-email').length - 1)+ ' Less');
             $('.li-email.first .btn-more-emails').removeClass('btn-more-emails').addClass('btn-less-emails');
         },
 
@@ -111,8 +115,34 @@ define([
             console.log('hide phones');
             $('.li-email:not(:first)').hide();
             $('.li-email.first .btn-less-emails i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-            $('.li-email.first .btn-less-emails span').text('more');
+            $('.li-email.first .btn-less-emails span').text(($('.li-email').length - 1) + ' More');
             $('.li-email.first .btn-less-emails').removeClass('btn-less-emails').addClass('btn-more-emails');
+        },
+
+        showPhones: function() {
+            $('.li-phone').show();
+            $('.li-phone.first .btn-more-phones i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            $('.li-phone.first .btn-more-phones span').text(($('.li-phone').length - 1) + ' Less ');
+            $('.li-phone.first .btn-more-phones').removeClass('btn-more-phones').addClass('btn-less-phones');
+        },
+        hidePhones: function() {
+            $('.li-phone:not(:first)').hide();
+            $('.li-phone.first .btn-less-phones i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            $('.li-phone.first .btn-less-phones span').text(($('.li-phone').length - 1) + ' More');
+            $('.li-phone.first .btn-less-phones').removeClass('btn-less-phones').addClass('btn-more-phones');
+        },
+
+        showAddress: function() {
+            $('.li-address').show();
+            $('.li-address.first .btn-more-addresses i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            $('.li-address.first .btn-more-addresses span').text(($('.li-address').length  - 1) + ' Less ');
+            $('.li-address.first .btn-more-addresses').removeClass('btn-more-addresses').addClass('btn-less-addresses');
+        },
+        hideAddress: function() {
+            $('.li-address:not(:first)').hide();
+            $('.li-address.first .btn-less-addresses i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            $('.li-address.first .btn-less-addresses span').text(($('.li-address').length - 1) + ' More');
+            $('.li-address.first .btn-less-addresses').removeClass('btn-less-addresses').addClass('btn-more-addresses');
         },
 
         getReadings: function() {

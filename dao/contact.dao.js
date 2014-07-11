@@ -164,10 +164,11 @@ var dao = {
         if (email == null) {
             return fn(null, null);
         }
-        this.findOne( {'emails':email}, fn);
+        this.findOne( {'email':email}, fn);
     },
 
     createContactFromEmail: function(email, accountToken, fn) {
+       var self=this;
         console.log('Email (createUserFromEmail): '+JSON.stringify(email));
         if (_.isFunction(accountToken)) {
             fn = accountToken;
@@ -176,6 +177,7 @@ var dao = {
 
         var self = this;
         this.getContactByEmail(email, function(err, value) {
+
             if (err) {
                 return fn(err, value);
             }
@@ -198,6 +200,7 @@ var dao = {
             deferred
                 .done(function(account) {
                     var accountId;
+
                     if (account != null) {
                         accountId = account.id();
                     }
@@ -208,16 +211,77 @@ var dao = {
 
                     var contact = new $$.m.Contact(req.body);
 
+
                     if (isNew === true) {
                         contact.set("accountId", this.accountId(req));
                         contact.createdBy(this.userId(), $$.constants.social.types.LOCAL);
                     }
 
-                    contactDao.saveOrUpdate(contact, function(err, value) {
+                   self.saveOrUpdate(contact, function(err, value) {
                         if (!err) {
-                            self.sendResult(resp, value);
+                            self.sendResult(err, value);
+                         } else {
+                            self.wrapError(err, 500, "There was an error updating contact", err, value);
+
+                        }
+                    });
+                });
+        });
+    },
+    createContactFromData: function(data, accountToken, fn) {
+        var self=this;
+        var email=data.email
+        console.log('Email (createUserFromEmail): '+JSON.stringify(email));
+        if (_.isFunction(accountToken)) {
+            fn = accountToken;
+            accountToken = null;
+        }
+
+        var self = this;
+        this.getContactByEmail(email, function(err, value) {
+
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value != null) {
+                return fn(true, "An account with this username already exists");
+            }
+
+            var deferred = $.Deferred();
+
+            accountDao.convertTempAccount(accountToken, function(err, value) {
+                if (!err) {
+                    deferred.resolve(value);
+                } else {
+                    deferred.reject();
+                    return fn(err, value);
+                }
+            });
+
+            deferred
+                .done(function(account) {
+                    var accountId;
+
+                    if (account != null) {
+                        accountId = account.id();
+                    }
+
+                    if (accountId == null) {
+                        return fn(true, "Failed to create user, no account found");
+                    }
+                    data.type="potential";
+                    var contact = new $$.m.Contact(data);
+
+
+
+                    self.saveOrUpdate(contact, function(err, value) {
+                        if (!err) {
+
+                            fn(err, value);
                         } else {
-                            self.wrapError(resp, 500, "There was an error updating contact", err, value);
+
+                            fn(err, value);
                         }
                     });
                 });
