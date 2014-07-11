@@ -94,8 +94,16 @@ var mongodao = {
         this._findManyWithFieldsMongo(query, null, type, fn);
     },
 
+    _findManyWithLimitMongo: function(query, limit, type, fn) {
+        this._findManyWithFieldsAndLimitMongo(query, null, limit, type, fn);
+    },
+
 
     _findManyWithFieldsMongo: function(query, fields, type, fn) {
+        this._findManyWithFieldsAndLimitMongo(query, fields, null, type, fn);
+    },
+
+    _findManyWithFieldsAndLimitMongo: function(query, fields, limit, type,  fn) {
         var self = this;
         if (fn == null) {
             fn = type;
@@ -114,13 +122,24 @@ var mongodao = {
             }
         };
 
-        if (query == null && fields == null) {
-            mongoColl.find().toArray(fxn);
-        } else if (query != null) {
-            mongoColl.find(query).toArray(fxn);
-        } else if(fields != null) {
-            mongoColl.find(null, fields).toArray(fxn);
+        if(limit == null) {
+            if (query == null && fields == null) {
+                mongoColl.find().toArray(fxn);
+            } else if (query != null) {
+                mongoColl.find(query).toArray(fxn);
+            } else if(fields != null) {
+                mongoColl.find(null, fields).toArray(fxn);
+            }
+        } else {
+            if (query == null && fields == null) {
+                mongoColl.find().limit(limit).toArray(fxn);
+            } else if (query != null) {
+                mongoColl.find(query).limit(limit).toArray(fxn);
+            } else if(fields != null) {
+                mongoColl.find(null, fields).limit(limit).toArray(fxn);
+            }
         }
+
     },
 
 
@@ -217,6 +236,24 @@ var mongodao = {
         this.mongo(collection).removeById(id, function(err, value) {
             if (err) {
                 self.log.error("An error occurred: #removeByIdMongo. ", err);
+            }
+
+            fn(err, value);
+        });
+    },
+
+    _removeByQueryMongo: function(query, type, fn) {
+        var self = this;
+
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+        this.mongo(collection).remove(query, function(err, value) {
+            if (err) {
+                self.log.error("An error occurred: #removeByQueryMongo. ", err);
             }
 
             fn(err, value);

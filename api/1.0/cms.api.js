@@ -43,6 +43,19 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
         app.get(this.url(':accountid/cms/theme', "account"), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
         app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
+
+        // BLOG POSTS
+        app.post(this.url('website/:id/blog'), this.isAuthApi, this.createBlogPost.bind(this));
+        app.get(this.url('website/:id/blog'), this.isAuthApi, this.listBlogPosts.bind(this));
+        app.get(this.url('website/:id/blog/:postId'), this.isAuthApi, this.getBlogPost.bind(this));
+        app.post(this.url('website/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
+        app.delete(this.url('website/:id/blog/:postId'), this.isAuthApi, this.deleteBlogPost.bind(this));
+        app.get(this.url('website/:id/blog/author/:author'), this.isAuthApi, this.getPostsByAuthor.bind(this));
+        app.get(this.url('website/:id/blog/title/:title'), this.isAuthApi, this.getPostsByTitle.bind(this));
+        app.get(this.url('website/:id/blog/content/:content'), this.isAuthApi, this.getPostsByContent.bind(this));
+        app.get(this.url('website/:id/blog/category/:category'), this.isAuthApi, this.getPostsByCategory.bind(this));
+        app.get(this.url('website/:id/blog/tag/:tag'), this.isAuthApi, this.getPostsByTag.bind(this));
+
     },
 
 
@@ -170,8 +183,159 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, value, "Error retrieving Theme Config for AccountId: [" + accountId + "]");
             self = null;
         });
-    }
+    },
     //endregion
+
+
+    //BLOG POSTS
+    createBlogPost: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> createBlogPost');
+        var blogPost = new $$.m.BlogPost(req.body.blogPost);
+        var websiteId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        blogPost.set('accountId', accountId);
+        blogPost.set('websiteId', websiteId);
+
+        cmsManager.createBlogPost(accountId, blogPost, function(err, value){
+            self.log.debug('<< createBlogPost');
+            self.sendResultOrError(res, err, value, "Error creating Blog Post");
+            self = null;
+        });
+    },
+
+    getBlogPost: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getBlogPost');
+        var accountId = parseInt(self.accountId(req));
+        var blogPostId = req.params.postId;
+        cmsManager.getBlogPost(accountId, blogPostId, function(err, value){
+            self.log.debug('<< getBlogPost');
+            self.sendResultOrError(res, err, value, "Error getting Blog Post");
+            self = null;
+        });
+    },
+
+    updateBlogPost: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> updateBlogPost');
+        var blogPost = new $$.m.BlogPost(req.body.blogPost);
+        var websiteId = req.params.id;
+        var accountId = self.accountId(req);
+        blogPost.set('accountId', accountId);
+        blogPost.set('websiteId', websiteId);
+
+        cmsManager.updateBlogPost(blogPost, function(err, value){
+            self.log.debug('<< updateBlogPost');
+            self.sendResultOrError(res, err, value, "Error updating Blog Post");
+            self = null;
+        });
+    },
+
+    deleteBlogPost: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> deleteBlogPost');
+
+        var blogPostId = req.params.postId;
+
+        cmsManager.deleteBlogPost(blogPostId, function(err, value){
+            self.log.debug('<< deleteBlogPost');
+            self.sendResultOrError(res, err, value, "Error deleting Blog Post");
+            self = null;
+        });
+    },
+
+    listBlogPosts: function(req, res) {
+        //TODO: Add Security
+        //TODO: Need to find a way to iterate through posts
+        var self = this;
+        self.log.debug('>> listBlogPosts');
+        var accountId = self.accountId(req);
+        var limit = parseInt(req.query['limit'] || 10);//suitable default?
+
+        cmsManager.listBlogPosts(accountId, limit, function(err, value){
+            self.log.debug('<< listBlogPosts');
+            self.sendResultOrError(res, err, value, "Error listing Blog Posts");
+            self = null;
+        });
+    },
+
+    getPostsByAuthor: function(req, res){
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getPostsByAuthor');
+        var accountId = self.accountId(req);
+        var author = req.params.author;
+
+        cmsManager.getPostsByAuthor(accountId, author, function(err, value){
+            self.log.debug('<< getPostsByAuthor');
+            self.sendResultOrError(res, err, value, "Error getting Blog Posts by author");
+            self = null;
+        });
+
+    },
+
+    getPostsByTitle: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getPostsByTitle');
+        var accountId = self.accountId(req);
+        var title = req.params.title;
+
+        cmsManager.getPostsByTitle(accountId, title, function(err, value){
+            self.log.debug('<< getPostsByTitle');
+            self.sendResultOrError(res, err, value, "Error getting Blog Posts by title");
+            self = null;
+        });
+    },
+
+    getPostsByContent: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getPostsByContent');
+        var accountId = self.accountId(req);
+        var content = req.params.content;
+
+        cmsManager.getPostsByData(accountId, content, function(err, value){
+            self.log.debug('<< getPostsByContent');
+            self.sendResultOrError(res, err, value, "Error getting Blog Posts by content");
+            self = null;
+        });
+    },
+
+    getPostsByCategory: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getPostsByCategory');
+        var accountId = self.accountId(req);
+        var category = req.params.category;
+
+        cmsManager.getPostsByCategory(accountId, category, function(err, value){
+            self.log.debug('<< getPostsByCategory');
+            self.sendResultOrError(res, err, value, "Error getting Blog Posts by category");
+            self = null;
+        });
+    },
+
+    getPostsByTag: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getPostsByTag');
+        var accountId = self.accountId(req);
+        var tag = req.params.tag;
+
+        cmsManager.getPostsByTag(accountId, tag, function(err, value){
+            self.log.debug('<< getPostsByTag');
+            self.sendResultOrError(res, err, value, "Error getting Blog Posts by tag");
+            self = null;
+        });
+    }
+
 });
 
 module.exports = new api();
