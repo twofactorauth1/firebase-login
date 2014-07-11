@@ -1348,7 +1348,7 @@ var dao = {
                     linkLists: {},
                     blogposts: null,
                     tags: null,
-                    categories: null,
+                    categories: null
                 };
 
 

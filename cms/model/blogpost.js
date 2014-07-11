@@ -20,7 +20,7 @@ var blogpost = $$.m.ModelBase.extend({
              *
              * @property _id
              * @type {String}
-             * @defeault null
+             * @default null
              */
             _id: null,
 
@@ -51,6 +51,10 @@ var blogpost = $$.m.ModelBase.extend({
             post_excerpt: null,
 
             post_status: null,
+
+            post_category: null,
+
+            post_tags: [],
 
             comment_status: null,
 
