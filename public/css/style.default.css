@@ -15309,6 +15309,60 @@ strong {
   border-color: #D43F3A;
   background-color: #D9534F;
 }
+.gray-bg {
+  background: #f9f9f9;
+}
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+  float: left;
+}
+.text-right {
+  text-align: right;
+}
+.continue-shopping {
+  z-index: 999;
+  position: relative;
+  margin: 0 0 10px 20px;
+}
+.billing-shipping .information {
+  padding: 0!important;
+}
+.billing-shipping .tab-content {
+  max-height: 325px;
+  height: 100%;
+  margin-bottom: 0;
+}
+.billing-shipping .nav-tabs {
+  margin-top: 0!important;
+  padding: 0;
+}
+.scrollbox {
+  position: relative;
+  z-index: 1;
+  max-height: 339px;
+  background: #ffffff no-repeat;
+  background-image: -webkit-radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), -webkit-radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+  background-image: -moz-radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), -moz-radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+  background-image: radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+  background-position: 0 0, 0 100%;
+  background-size: 100% 14px;
+  height: 100%;
+}
+.scrollbox:before,
+.scrollbox:after {
+  content: "";
+  position: relative;
+  z-index: -1;
+  display: block;
+  height: 30px;
+  margin: 0 0 -30px;
+  background: -webkit-linear-gradient(top, #ffffff, #ffffff 30%, rgba(255, 255, 255, 0));
+  background: -moz-linear-gradient(top, #ffffff, #ffffff 30%, rgba(255, 255, 255, 0));
+  background: linear-gradient(to bottom, #ffffff, #ffffff 30%, rgba(255, 255, 255, 0));
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -22108,6 +22162,113 @@ input {
 .powered-by {
   text-align: right;
 }
+.products {
+  padding: 15px;
+}
+#cart-checkout-modal .modal-footer {
+  margin-top: 0;
+}
+#cart-checkout-modal .modal-body {
+  padding: 0 10px;
+}
+.gray-bg {
+  border-left: 1px solid #efefef;
+}
+.order-summary {
+  padding: 1px 15px;
+  min-height: 376px;
+}
+.order-summary h4 {
+  margin: 30px 0;
+  font-weight: bold;
+  text-decoration: underline;
+}
+.order-summary ul {
+  padding-left: 0;
+}
+.order-summary li {
+  padding: 5px 0;
+  border-bottom: 1px solid #f2f2f2;
+}
+.order-summary .product-name {
+  font-weight: bold;
+  color: #606060;
+}
+.order-summary .product-price {
+  color: #aaaaaa;
+}
+.order-summary .scrollbox {
+  max-height: 100px!important;
+  content: "";
+  background: -webkit-linear-gradient(top, #f9f9f9, #f9f9f9 30%, rgba(255, 255, 255, 0));
+  background: -moz-linear-gradient(top, #f9f9f9, #f9f9f9 30%, rgba(255, 255, 255, 0));
+  background: linear-gradient(to bottom, #f9f9f9, #f9f9f9 30%, rgba(255, 255, 255, 0));
+}
+.order-summary .scrollbox ul {
+  max-height: 100px!important;
+  overflow-y: auto;
+}
+.order-line-items {
+  padding: 0;
+}
+.order-line-items .line-item-header .price {
+  line-height: 35px;
+  margin-bottom: 0;
+  text-align: center;
+}
+.order-line-items .close {
+  position: absolute;
+  right: 0;
+  margin: 0 10px 0 0;
+}
+.order-line-items ul {
+  padding-left: 0;
+}
+.order-line-items ul li {
+  padding: 20px;
+  border-bottom: 1px solid #f3f3f3;
+  position: relative;
+}
+.card-details {
+  padding: 20px;
+}
+.footer-cart-checkout {
+  padding: 15px;
+  position: relative;
+  display: block;
+}
+.thank-you {
+  padding: 20px;
+}
+.thank-you .social-connected {
+  margin: 0 auto;
+  display: block;
+  width: 157px;
+  padding: 0;
+}
+.thank-you .social-connected li {
+  display: inline-block;
+}
+.thank-you .social-connected li i {
+  width: 50px;
+  height: 50px;
+  display: block;
+  position: relative;
+  text-align: center;
+  line-height: 51px;
+  border-radius: 35px;
+  color: white;
+  font-size: 30px;
+}
+.thank-you .btn-orange {
+  margin: 0 auto;
+  display: block;
+  width: 200px;
+}
+.thank-you h3 {
+  text-align: center;
+  margin: 30px 0;
+}
 .parallax-block {
   transition: none;
   position: fixed;
@@ -22174,5 +22335,8 @@ input {
   }
   #sidebar {
     padding: 50px 20px;
+  }
+  .billing-shipping .tab-content {
+    max-height: 100%;
   }
 }
