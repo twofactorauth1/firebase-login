@@ -21049,3 +21049,37 @@ input {
         padding: 50px 20px;
     }
 }
+
+
+.accountTitle{
+    margin:20px 0 0 15px;
+}
+.accountInfo{
+    height:100px;
+}
+.userInfo{
+    height:100px;
+}
+.accountInfoSubhead{
+    font-weight:bold;
+    margin: 10px 0 0 20px !important;
+}
+.userInfoSubhead{
+    font-weight:bold;
+}
+.maData{
+    margin-left: 30px;
+}
+.madataAlign{
+    margin-top: 10px;
+}
+.socialNetwork{
+    margin: 15px 0 0 20px !important;
+}
+.socailNetworkList,.avaialbleNetwork,.myLinkedEmails{
+    margin: 15px 0 0 20px !important;
+}
+/*.userInfoTable,.accountInfoTable{*/
+    /*border-collapse:separate;*/
+    /*border-spacing:10px 0 ;*/
+/*}*/

@@ -6,21 +6,63 @@
 -->
 
 <script type="text/x-handlebars-template" name="account-main">
-    <h3>Manage my account</h3>
-
+    <h3 class="accountTitle">Manage my account</h3>
     <hr/>
+    <div class="row">
+        <div class="col-md-6 accountInfo">
+            <h4 class="accountInfoSubhead">Account Information</h4>
+            <table class="maData madataAlign accountInfoTable">
+                <tr>
+                    <td>Account Name</td>
+                    <td>:</td>
+                    <td>{{account.company.name}}</td>
+                </tr>
+                <tr>
+                    <td>Account Url</td>
+                    <td>:</td>
+                    <td>{{account.accountUrl}}</td>
+                </tr>
+                <tr>
+                    <td>Account Sub-domain</td>
+                    <td>:</td>
+                    <td>{{account.subdomain}}</td>
+                </tr>
+            </table>
 
-    <h4>My Social Networks</h4>
+        </div>
+        <div class="col-md-6 userInfo">
+            <h4 class="userInfoSubhead">User Information</h4>
+            <table class="userInfoTable">
+                <tr>
+                    <td>User Name</td>
+                    <td>:</td>
+                    <td>{{user.username}}</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>:</td>
+                    <td>{{user.email}}</td>
+                </tr>
+            </table>
+
+
+        </div>
+    </div>
+
+
+
+
+    <h4 class="socialNetwork">My Social Networks</h4>
 
     <ul class="unstyled">
         {{#each networks}}
-            <li>
-                <i class="{{iconFromSocialType type}}"/> {{labelFromSocialType type}} <a href="{{socialUrl}}" target="_blank">{{username}}</a>
-            </li>
+        <li>
+            <i class="{{iconFromSocialType type}}"/> {{labelFromSocialType type}} <a href="{{socialUrl}}" target="_blank">{{username}}</a>
+        </li>
         {{/each}}
     </ul>
 
-    <h4>Avaialble Networks</h4>
+    <h4 class="avaialbleNetwork">Avaialble Networks</h4>
     <ul class="unstyled">
         {{#each otherNetworks}}
         <li>
@@ -29,7 +71,7 @@
         {{/each}}
     </ul>
 
-    <h4>My Linked Emails</h4>
+    <h4 class="myLinkedEmails">My Linked Emails</h4>
 
     <ul>
 
