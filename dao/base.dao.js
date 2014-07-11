@@ -191,6 +191,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    findManyWithLimit: function(query, limit, type, fn) {
+        if (this.getStorage(type) === "mongo") {
+            this._findManyWithLimitMongo(query, limit, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
 
     findManyWithFields: function (query, fields, type, fn) {
         if (this.getStorage(type) === "mongo") {
