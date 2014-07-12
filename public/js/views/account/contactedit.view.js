@@ -54,7 +54,7 @@ define([
 
             "click .btn-subscribe-two-net":"subscribeTwoNetUser",
 
-            "click .btn-save-contact":"saveContact"
+            "click .btn-save-contact":"saveContactBtnPress"
         },
 
 
@@ -80,6 +80,19 @@ define([
                 });
         },
 
+        saveContactBtnPress: function() {
+            var self = this;
+            jQuery.gritter.add({
+                    title: 'Contact Saved',
+                    image: 'thumbs-up',
+                    text: 'This contact has been saved successfully.',
+                    class_name: 'growl-success',
+                    sticky: false,
+                    time: 8000,
+                    position: 'bottom-right'
+            });
+            this.saveContact();
+        },
 
         //region FULLNAME
         fullnameChanged: function(event) {
@@ -455,6 +468,7 @@ define([
 
 
         saveContact: function() {
+            console.log('save contact');
             var self = this;
             if (this.isNew) {
                 this.isNew = false;
@@ -466,16 +480,6 @@ define([
                 });
                 return p;
             } else {
-                jQuery.gritter.add({
-                    title: 'Contact Saved',
-                    image: 'thumbs-up',
-                    text: 'This contact has been saved successfully.',
-                    class_name: 'growl-success',
-                    sticky: false,
-                    time: 8000,
-                    position: 'bottom-right'
-                });
-                return false;
                 return this.contact.save();
             }
         },

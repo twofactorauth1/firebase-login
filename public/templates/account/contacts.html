@@ -988,39 +988,42 @@ CONTACTS EDIT VIEW
 -->
 <script type="text/x-handlebars-template" name="contact-edit-main">
    <div class="pageheader row">
-            <div class="col-xs-8">
-                <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
-                    <span class="fa fa-chevron-left"></span>
-                    <span class="hidden-xs">Back</span>
-                </button>
-                <h2><i class="fa fa-users"></i> Add Contact</h2>
-            </div>
+    <div class="col-xs-8">
+        <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
+            <span class="fa fa-chevron-left"></span>
+            <span class="hidden-xs">Back</span>
+        </button>
+        <h2><i class="fa fa-users"></i> Edit Contact</h2>
+    </div>
 
-            <div class="col-xs-4">
-                <div class="btn btn-success pull-right btn-save-contact" type="button">
-                    <i class="fa fa-save"></i>
-                    <span class="hidden-xs">Save</span>
-                </div>
-
-
-            </div>
+    <div class="col-xs-4">
+        <div class="btn btn-success pull-right btn-save-contact" type="button">
+            <i class="fa fa-save"></i>
+            <span class="hidden-xs">Save</span>
         </div>
-        <div id="contact-edit-container" class="contentpanel">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="hidden-xs hidden-sm">
-                        <h4>
-                            Name & Photo
-                        </h4>
-                        <hr/>
-                    </div>
+
+    </div>
+</div>
+<!-- End Page Header -->
+
+<div id="contact-edit-container" class="contentpanel">
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <!-- Name & Photo -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Name & Photo</h3>
+                </div>
+                <div class="panel-body">
 
                     <div class="row">
                         <!-- UPDATE NAME -->
                         <div class="col-xs-12 form" role="form">
                             <div class="form-group">
                                 <label class="">Contact Name</label>
-                                <input id="input-fullname" type="text" class="form-control" value="{{contact.first}} {{contact.middle}} {{contact.last}}" placeholder="full name">
+                                <input id="input-fullname" type="text" class="form-control input-lg" value="{{contact.first}} {{contact.middle}} {{contact.last}}" placeholder="full name">
                                 <small style="margin-left:10px;">
                                     <strong>first:</strong>
                                     <code>
@@ -1040,7 +1043,7 @@ CONTACTS EDIT VIEW
                             <div class="row">
                                 <div class="form-group col-xs-6">
                                     <label>Contact Type</label>
-                                    <select id="select-contact-type" class="form-control">
+                                    <select id="select-contact-type" class="form-control input-lg">
                                         {{#contactTypeOptions}}
                                         <option data-contacttype="{{data}}" {{#equals data ../contact.type}}selected{{/equals}}>{{label}}</option>
                                         {{/contactTypeOptions}}
@@ -1070,24 +1073,57 @@ CONTACTS EDIT VIEW
                         </row>
                     </div>
                 </div>
+            </div>
+            <!-- END Name & Photo -->
 
-                <!-- CONTACT DETAILS -->
-                <div class="col-md-6">
-                    <h4>Contact Information</h4>
+            <!-- BioMetric Data -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">BioMetric Information</h3>
+                </div>
+                <div class="panel-body">
+                    {{#unless contact.devices.length}}
+                    <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
+                    {{/unless}}
                     <hr/>
+                    <div id="edit-devices-container">
+                        {{#each contact.devices}} {{serialNumber}} {{deviceTypeId}} {{/each}}
+                    </div>
+                    <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
+                </div>
+                <!-- End Panel Body -->
+            </div>
+            <!-- End BioMetric Data -->
+        </div>
+
+        <!-- Contact Information -->
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Contact Information</h3>
+                </div>
+                <div class="panel-body">
 
                     <div id="phone-row" class="row">
                         <div class="col-xs-1"><i class="icon-main fa fa-phone" />
                         </div>
                         <div class="col-xs-10">
                             <div id="edit-phones-container">
-                                {{#each contact.details}} {{#canEditContactDetails this}} {{#each ../phones}} {{> edit-phone}} {{/each}} {{else}} {{#each phones}}
-                                <div>
-                                    <a href="tel:+1{{number}}">+1 {{number}}</a>
-                                    <small>{{phoneTypeLabel type}}</small>
-                                    <i class="icon-social {{iconFromSocialType ../type}}" />
-                                </div>
-                                {{/each}} {{/canEditContactDetails}} {{/each}}
+                                {{#each contact.details}}
+                                    {{#canEditContactDetails this}}
+                                        {{#each ../phones}}
+                                            {{> edit-phone}}
+                                        {{/each}}
+                                    {{else}}
+                                        {{#each phones}}
+                                            <div>
+                                                <a href="tel:+1{{number}}">+1 {{number}}</a>
+                                                <small>{{phoneTypeLabel type}}</small>
+                                                <i class="icon-social {{iconFromSocialType ../type}}" />
+                                            </div>
+                                        {{/each}}
+                                    {{/canEditContactDetails}}
+                                {{/each}}
 
                                 <!-- ADD NEW PHONE -->
                                 {{> edit-phone}}
@@ -1096,95 +1132,96 @@ CONTACTS EDIT VIEW
                                 <small>e.g. (303-555-5555)</small>
                             </span>
                         </div>
-
                     </div>
+
+                    <hr></hr>
 
                     <div id="address-row" class="row">
                         <div class="col-xs-1"><i class="icon-main fa fa-map-marker" />
                         </div>
                         <div class="col-xs-10">
                             <div id="edit-addresses-container">
-                                {{#each contact.details}} {{#canEditContactDetails this}} {{> edit-addresses}} {{else}} {{#each addresses}}
-                                <div class="edit-address-container" id="{{_id}}">
-                                    {{#if address}}
-                                    <div>{{address}}</div>
-                                    {{/if}} {{#if address2}}
-                                </div>
-                                {{address2}}
+                                {{#each contact.details}}
+                                    {{#canEditContactDetails this}} 
+                                        {{> edit-addresses}} 
+                                    {{else}} 
+                                        {{#each addresses}}
+                                            <div class="edit-address-container" id="{{_id}}">
+                                                {{#if address}}
+                                                <div>{{address}}</div>
+                                                {{/if}}
+                                                {{#if address2}}
+                                                </div>
+                                                    {{address2}}
+                                                </div>
+                                                {{/if}}
+                                                <div>
+                                                    {{city}} {{#if state}}, {{state}}{{/if}} {{#if zip}}, {{zip}}{{/if}} {{#if country}}, {{country}}{{/if}}
+                                                    <i class="icon-social {{iconFromSocialType ../../type}}" />
+                                                </div>
+                                                {{> edit-default-shipping-billing}}
+                                                </div>
+                                        {{/each}} 
+                                    {{/canEditContactDetails}} 
+                                {{/each}}
                             </div>
-                            {{/if}}
-                            <div>
-                                {{city}} {{#if state}}, {{state}}{{/if}} {{#if zip}}, {{zip}}{{/if}} {{#if country}}, {{country}}{{/if}}
-                                <i class="icon-social {{iconFromSocialType ../../type}}" />
+
+                            <br/>
+
+                            <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
+
+                        </div>
+                    </div>
+
+                    <hr></hr>
+
+                    <div id="email-row" class="row">
+                        <div class="col-xs-1"><i class="icon-main fa fa-envelope" />
+                        </div>
+                        <div class="col-xs-10">
+                            <div id="edit-emails-container">
+                                {{#each contact.details}} {{#canEditContactDetails this}} {{#each emails}} {{> edit-email}} {{/each}} {{else}} {{#each emails}} {{#if this}}
+                                <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}" />{{/if}} {{/each}} {{/canEditContactDetails}} {{/each}} {{> new-email-partial}}
                             </div>
-
-                            {{> edit-default-shipping-billing}}
                         </div>
-                        {{/each}} {{/canEditContactDetails}} {{/each}}
                     </div>
 
-                    <br/>
-
-                    <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
                 </div>
+                <!-- End Panel Body -->
             </div>
-
-            <div id="email-row" class="row">
-                <div class="col-xs-1"><i class="icon-main fa fa-envelope" />
-                </div>
-                <div class="col-xs-10">
-                    <div id="edit-emails-container">
-                        {{#each contact.details}} {{#canEditContactDetails this}} {{#each emails}} {{> edit-email}} {{/each}} {{else}} {{#each emails}} {{#if this}}
-                        <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}" />{{/if}} {{/each}} {{/canEditContactDetails}} {{/each}} {{> new-email-partial}}
-                    </div>
-                </div>
-            </div>
+            <!-- End Panel Default -->
         </div>
 
-        <!-- BioMetric Data -->
-        <div class="col-md-6">
-            <h4>BioMetric Information</h4>
-            {{#unless contact.devices.length}}
-             <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
-            {{/unless}}
-            <hr/>
-            <div id="edit-devices-container">
-                {{#each contact.devices}}
-                    {{serialNumber}}
-                    {{deviceTypeId}}
-                {{/each}}
-            </div>
-            <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
-        </div>
-        <!-- End BioMetric Data -->
-
-        </div>
-        </div>
-
-        <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header" data-dismiss="modal">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Add or Remove Photo</h4>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
-                        </div>
-
-                        <div class="row" style="margin-top:6px; margin-bottom:20px;">
-                            <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
-                        </div>
-
-                        <div id="upload-photo-container" />
-
-                        <img id="contact-photo-modal" src="{{contact.photo}}" style="max-width:100%; margin-top:20px;" />
-                    </div>
-                </div>
-            </div>
     </div>
+</div>
+<!-- End Contact Edit -->
+
+
+<div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" data-dismiss="modal">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add or Remove Photo</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
+                </div>
+
+                <div class="row" style="margin-top:6px; margin-bottom:20px;">
+                    <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
+                </div>
+
+                <div id="upload-photo-container" />
+
+                <img id="contact-photo-modal" src="{{contact.photo}}" style="max-width:100%; margin-top:20px;" />
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Change Photo Modal -->
 
 </script>
 <!-- END CONTACT EDIT VIEW -->
@@ -1198,16 +1235,14 @@ CONTACTS EDIT VIEW
 <script type="text/x-handlebars-template" name="edit-phone" partial="true">
     <div class="row edit-phone-container" data-id="{{_id}}" style="margin-top:8px;">
         <div class="form-group col-xs-12 col-sm-8 col-md-10">
-            <div class="input-group">
+            <div class="input-group input-group-lg">
                 <div class="input-group-addon">+1</div>
-                <input type="text" class="input-edit-phone form-control" value="{{number}}"/>
+                <input type="text" class="input-edit-phone form-control input-lg" value="{{number}}"/>
 
-                <div class="btn-group pull-right" style="margin-right:8px;">
-                    <button type="button" class="btn-edit-phone-type btn btn-default dropdown-toggle" data-toggle="dropdown" data-type="{{type}}">
-                        <span class="edit-phone-type-label">{{phoneTypeLabel this}}</span> <span class="caret"></span>
-                    </button>
+                <div class="input-group-btn">
+                    <button data-toggle="dropdown" class="btn btn-default btn-edit-phone-type dropdown-toggle" data-type="{{type}}" type="button"><span class="edit-phone-type-label">{{phoneTypeLabel this}}</span> <span class="caret"></span></button>
                     <ul class="dropdown-menu pull-right">
-                        {{#phoneTypeOptions}}
+                      {{#phoneTypeOptions}}
                         <li class="li-edit-phone-type" data-type="{{data}}"><a href="#">{{label}}</a></li>
                         {{/phoneTypeOptions}}
                     </ul>
@@ -1226,7 +1261,7 @@ CONTACTS EDIT VIEW
 <script type="text/x-handlebars-template" name="edit-email" partial="true">
     <div class="row edit-email-container">
         <div class="form-group">
-            <input type="email" class="form-control input-edit-email" placeholder="new email" value="{{this}}" data-email="{{this}}"/>
+            <input type="email" class="form-control input-edit-email input-lg" placeholder="new email" value="{{this}}" data-email="{{this}}"/>
         </div>
     </div>
 </script>
@@ -1235,7 +1270,7 @@ CONTACTS EDIT VIEW
 <script type="text/x-handlebars-template" name="new-email-partial" partial="true">
     <div class="row edit-email-container">
         <div class="form-group">
-            <input type="email" class="form-control input-edit-email" placeholder="new email" value="" data-email=""/>
+            <input type="email" class="form-control input-edit-email input-lg" placeholder="new email" value="" data-email=""/>
         </div>
     </div>
 </script>
@@ -1257,8 +1292,7 @@ CONTACTS EDIT VIEW
     <div class="edit-address-container" data-id="{{_id}}">
         <div class="form form-horizontal">
             <div class="fg-address-string form-group">
-                <label>Address</label>
-                <input type="text" class="form-control input-address-string" value="{{displayName}}">
+                <input type="text" class="form-control input-address-string input-lg" value="{{displayName}}">
                 <small>
                     <span class="address-display-name hidden">{{displayName}}</span>
 
