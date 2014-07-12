@@ -479,7 +479,10 @@ CONTACT DETAILS VIEW
                 <span class="fa fa-chevron-left"></span>
                 <span class="hidden-xs">Back</span>
             </button>
-            <h2> {{contact.first}} {{contact.middle}} {{contact.last}} </h2>
+            <h2>
+                {{contact.first}} {{contact.middle}} {{contact.last}}
+            </h2>
+
         </div>
 
         <div class="col-xs-4">
@@ -492,14 +495,14 @@ CONTACT DETAILS VIEW
 
     <div class="map-wrap">
         <div id="map-marker" style="height: 150px; width:100%"></div>
-        <div class="panel panel-default widget-weather col-sm-4 col-sm-offset-7 hidden-xs">
+        <div class="panel panel-default widget-weather col-sm-2 col-sm-offset-9 hidden-xs">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-xs-6 temp text-center">
-                        <h2>7:30pm</h>
-                            <h5><i class="fa fa-map-marker"></i> &nbsp; San Diego, CA</h5>
+                    <div class="col-xs-12 temp text-center">
+                        <h2>{{currentTime}}</h2>
+                        <h5><i class="fa fa-map-marker"></i> &nbsp; <span>{{contact.details.[0].addresses.[0].city}}</span>, <span>{{contact.details.[0].addresses.[0].state}}</span></h5>
                     </div>
-                    <div class="col-xs-6 weather text-center">
+                    <div class="col-xs-0 weather text-center" style="display: none">
                         <i class="fa fa-cloud weather-icon"></i>
                         <div class="pull-left">96 &deg; F</div>
                         <div class="pull-right"><i class="fa fa-flag"></i> 30mph</div>
@@ -508,6 +511,25 @@ CONTACT DETAILS VIEW
             </div>
             <!-- panel-body -->
         </div>
+
+        <!-- weather widget backup
+            <div class="panel panel-default widget-weather col-sm-4 col-sm-offset-7 hidden-xs">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-6 temp text-center">
+                        <h2>7:30pm</h2>
+                            <h5><i class="fa fa-map-marker"></i> &nbsp; <span>San Diego</span>, CA</h5>
+                    </div>
+                    <div class="col-xs-6 weather text-center" style="display: none">
+                        <i class="fa fa-cloud weather-icon"></i>
+                        <div class="pull-left">96 &deg; F</div>
+                        <div class="pull-right"><i class="fa fa-flag"></i> 30mph</div>
+                    </div>
+                </div>
+            </div>
+            -->
+            <!-- panel-body -->
+    </div>
     </div>
     <div class="visible-xs">
         <div class="btn-group col-xs-12">
@@ -657,7 +679,7 @@ CONTACT DETAILS VIEW
                     <div class="col-xs-12">
                         <div class="mb20"></div>
                         <h3 class="profile-name">{{contact.first}} {{contact.middle}} {{contact.last}}
-                            <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>">
+                            <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>" style="display: none;">
                                 <i class="fa fa-leaf"></i>
                                 <i class="fa fa-leaf"></i>
                                 <i class="fa fa-leaf"></i>
@@ -807,25 +829,27 @@ CONTACT DETAILS VIEW
                         }}
 
                         {{#each contact.details}}
-                        {{#each addresses}}
-                            <li class="col-xs-12 li-address {{#if @first}}first{{/if}}"  style="{{#unless @first}} display: none;{{/unless}}">
-                                <div class="col-xs-2">
-                                    <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-                                </div>
-                                <div class="col-xs-8">
-                                    <p> {{address}} {{address2}}, {{state}} {{zip}}</p>
-                                </div>
-                                <div class="col-xs-2">
-                                    {{#if @first}}
-                                    <button href="#" class="btn btn-sm btn-warning  btn-more-addresses">
-                                        <i class="fa fa-chevron-down"></i>
-                                        <span class="hidden-xs"> {{lengthMinusOne ../../addresses.length}} More</span>
-                                    </button>
-                                    {{/if}}
-                                </div>
-                                </a>
-                            </li>
-                        {{/each}}
+                            {{#each addresses}}
+                                <li class="col-xs-12 li-address {{#if @first}}first{{/if}}"  style="{{#unless @first}} display: none;{{/unless}}">
+                                    <div class="col-xs-2">
+                                        <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <p> {{address}} {{address2}}, {{state}} {{zip}}</p>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        {{#if @first}}
+                                            {{#moreThenOne ../../addresses.length}}
+                                                <button href="#" class="btn btn-sm btn-warning  btn-more-addresses">
+                                                    <i class="fa fa-chevron-down"></i>
+                                                    <span class="hidden-xs"> {{lengthMinusOne ../../../addresses.length}} More</span>
+                                                </button>
+                                            {{/moreThenOne}}
+                                        {{/if}}
+                                    </div>
+                                    </a>
+                                </li>
+                            {{/each}}
                         {{/each}}
 
 
@@ -841,11 +865,12 @@ CONTACT DETAILS VIEW
                                     </div>
                                     <div class="col-xs-2">
                                         {{#if @first}}
-
-                                        <button href="#" class="btn btn-sm btn-warning btn-more-phones">
-                                            <i class="fa fa-chevron-down"></i>
-                                            <span class="hidden-xs"> {{lengthMinusOne ../../phones.length}} More</span>
-                                        </button>
+                                            {{#moreThenOne ../../phones.length}}
+                                                <button href="#" class="btn btn-sm btn-warning btn-more-phones">
+                                                    <i class="fa fa-chevron-down"></i>
+                                                    <span class="hidden-xs"> {{lengthMinusOne ../../../phones.length}} More</span>
+                                                </button>
+                                            {{/moreThenOne}}
                                         {{/if}}
                                     </div>
                                     </a>
@@ -867,11 +892,12 @@ CONTACT DETAILS VIEW
                                     </div>
                                     <div class="col-xs-2">
                                         {{#if @first}}
-
-                                        <button href="#" class="btn btn-sm btn-warning btn-more-emails">
-                                            <i class="fa fa-chevron-down"></i>
-                                            <span class="hidden-xs"> {{lengthMinusOne ../../emails.length}} More</span>
-                                        </button>
+                                            {{#moreThenOne ../../emails.length}}
+                                                <button href="#" class="btn btn-sm btn-warning btn-more-emails">
+                                                    <i class="fa fa-chevron-down"></i>
+                                                    <span class="hidden-xs"> {{lengthMinusOne ../../../emails.length}} More</span>
+                                                </button>
+                                            {{/moreThenOne}}
                                         {{/if}}
                                     </div>
                                     </a>
@@ -879,6 +905,31 @@ CONTACT DETAILS VIEW
                             {{/each}}
                         {{/each}}
 
+                        {{#each contact.details}}
+                            {{#each socials}}
+                                {{#if ../socials.length}}
+                                    <li class="col-xs-12">
+                                        <div class="col-xs-2">
+                                            <a
+                                                    href="{{URL}}"
+                                                    class="tooltips"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title=""
+                                                    data-original-title="{{type}}"
+                                                    target="_blank">
+                                                <i class="fa fa-{{type}}"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <p>{{nick}}</p>
+                                        </div>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                            {{/each}}
+                        {{/each}}
+                        <!--
                         <li class="col-xs-12">
                             <div class="col-xs-2">
                                 <a href="https://www.facebook.com/theronburgandy" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
@@ -905,6 +956,7 @@ CONTACT DETAILS VIEW
                                 <p>henry-holmes</p>
                             </div>
                         </li>
+                        -->
                     </ul>
 
                     <div class="mb20"></div>
