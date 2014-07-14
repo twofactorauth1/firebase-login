@@ -52,13 +52,15 @@ module.exports = {
         });
     },
 
-    createTestPosts: function(testcontext, cb) {
+    createTestPosts: function(testcontext, accountId, websiteId, cb) {
         var post1, post2, post3;
         var p1 = $.Deferred(), p2 = $.Deferred(), p3 = $.Deferred();
+        var _accountId = accountId || 0;
+        var _websiteId = websiteId || 0;
 
         post1 = new $$.m.BlogPost({
-            'accountId': 0,
-            'websiteId': 0,
+            'accountId': _accountId,
+            'websiteId': _websiteId,
             'post_author': 'author1',
             'post_content': 'some content',
             'post_title': 'title1',
@@ -67,8 +69,8 @@ module.exports = {
         });
 
         post2 = new $$.m.BlogPost({
-            'accountId': 0,
-            'websiteId': 0,
+            'accountId': _accountId,
+            'websiteId': _websiteId,
             'post_author': 'author2',
             'post_content': 'some more content',
             'post_title': 'title2',
@@ -77,8 +79,8 @@ module.exports = {
         });
 
         post3 = new $$.m.BlogPost({
-            'accountId': 0,
-            'websiteId': 0,
+            'accountId': _accountId,
+            'websiteId': _websiteId,
             'post_author': 'author1',
             'post_content': 'completely different stuff here.  totally unrelated.',
             'post_title': 'title3',

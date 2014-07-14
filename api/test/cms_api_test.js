@@ -20,6 +20,7 @@ var testPassword = 'password';
 var accountURL = null;
 var cookie = null;
 var _log = global.getLogger('cms_api_test');
+var blogDAO = require('../../cms/dao/blogpost.dao.js');
 
 module.exports.group = {
     setUp: function(cb) {
@@ -175,27 +176,108 @@ module.exports.group = {
     },
 
     testGetPostsByAuthor: function(test) {
-        test.done();
+        var p1 = $.Deferred();
+        testHelpers.createTestPosts(testcontext, testcontext.accountId, 10, function(err, posts){
+            _log.info('created test posts');
+            p1.resolve();
+        });
+        $.when(p1).done(function(){
+            var req = request(accountURL).get('/api/1.0/cms/website/10/blog/author/author1')
+                .set('cookie', cookie);
+
+            req.expect(200, function(err, res){
+                if(err) {
+                    test.ok(false, 'Error getting posts by author: ' + err);
+                    test.done();
+                }
+                console.dir(res.body);
+                test.equals(2, res.body.length);
+                test.done();
+            });
+        });
+
+
     },
 
     testGetPostsByTitle: function(test) {
-        test.done();
+        //website/:id/blog/title/:title
+        var req = request(accountURL).get('/api/1.0/cms/website/10/blog/title/title1')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error getting posts by title: ' + err);
+                test.done();
+            }
+            console.dir(res.body);
+            test.equals(1, res.body.length);
+            test.done();
+        });
     },
 
     testGetPostsByContent: function(test) {
-        test.done();
+        //website/:id/blog/content/:content
+        var req = request(accountURL).get('/api/1.0/cms/website/10/blog/content/some')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error getting posts by content: ' + err);
+                test.done();
+            }
+            console.dir(res.body);
+            test.equals(2, res.body.length);
+            test.done();
+        });
+
     },
 
     testGetPostsByCategory: function(test) {
-        test.done();
+        //category1
+        //website/:id/blog/category/category1
+        var req = request(accountURL).get('/api/1.0/cms/website/10/blog/category/category1')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error getting posts by category: ' + err);
+                test.done();
+            }
+            console.dir(res.body);
+            test.equals(2, res.body.length);
+            test.done();
+        });
     },
 
     testGetPostsByTag: function(test) {
-        test.done();
+        //tag2
+        //website/:id/blog/tag/tag2
+        var req = request(accountURL).get('/api/1.0/cms/website/10/blog/tag/tag2')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error getting posts by tag: ' + err);
+                test.done();
+            }
+            console.dir(res.body);
+            test.equals(2, res.body.length);
+            test.done();
+        });
     },
 
     cleanupTestPosts: function(test) {
-        test.done();
+        var promiseAry = [];
+        testHelpers.destroyTestPosts(testcontext, function(err, posts){
+            for(var i=0; i<testcontext.blogposts.length; i++) {
+                var p1 = $.Deferred();
+                promiseAry.push(p1);
+                blogDAO.removeById(testcontext.blogposts._id, $$.m.BlogPost, function(err, val){
+                    p1.resolve();
+                });
+
+            }
+            $.when(promiseAry).done(function(){
+                test.done();
+            });
+        });
+
     }
 
 

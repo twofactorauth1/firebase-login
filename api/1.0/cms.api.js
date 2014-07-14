@@ -332,7 +332,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = self.accountId(req);
         var tag = req.params.tag;
 
-        cmsManager.getPostsByTag(accountId, tag, function(err, value){
+        cmsManager.getPostsByTag(accountId, [tag], function(err, value){
             self.log.debug('<< getPostsByTag');
             self.sendResultOrError(res, err, value, "Error getting Blog Posts by tag");
             self = null;
