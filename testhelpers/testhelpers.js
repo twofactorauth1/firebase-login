@@ -52,13 +52,15 @@ module.exports = {
         });
     },
 
-    createTestPosts: function(testcontext, cb) {
+    createTestPosts: function(testcontext, accountId, websiteId, cb) {
         var post1, post2, post3;
         var p1 = $.Deferred(), p2 = $.Deferred(), p3 = $.Deferred();
+        var _accountId = accountId || 0;
+        var _websiteId = websiteId || 0;
 
         post1 = new $$.m.BlogPost({
-            'accountId': 0,
-            'websiteId': 0,
+            'accountId': _accountId,
+            'websiteId': _websiteId,
             'post_author': 'author1',
             'post_content': 'some content',
             'post_title': 'title1',
@@ -67,8 +69,8 @@ module.exports = {
         });
 
         post2 = new $$.m.BlogPost({
-            'accountId': 0,
-            'websiteId': 0,
+            'accountId': _accountId,
+            'websiteId': _websiteId,
             'post_author': 'author2',
             'post_content': 'some more content',
             'post_title': 'title2',
@@ -77,8 +79,8 @@ module.exports = {
         });
 
         post3 = new $$.m.BlogPost({
-            'accountId': 0,
-            'websiteId': 0,
+            'accountId': _accountId,
+            'websiteId': _websiteId,
             'post_author': 'author1',
             'post_content': 'completely different stuff here.  totally unrelated.',
             'post_title': 'title3',
@@ -134,6 +136,98 @@ module.exports = {
             console.log('done cleaning up.');
             cb();
         });
+    },
+
+    getOrCreateAPITestingAccount: function(testcontext, fn) {
+        var account = new $$.m.Account({
+            company: {
+                name:"apitest",
+                type:0,
+                size:0,
+                logo:""
+            },
+
+            subdomain:"apitest",
+            domain:""
+        });
+        accountDao.getAccountBySubdomain('apitest', function(err, value){
+            if(err || !value) {
+                //it doesn't exist yet.  Let's create it.
+                accountDao.saveOrUpdate(account, function(err, value){
+                    testcontext.accountId = value.get('id');
+                    fn(null, value);
+                });
+            } else {
+                console.log('setting accountId to ' + value.id());
+                testcontext.accountId = value.id();
+                fn(null, value);
+            }
+        });
+
+
+    },
+
+    getOrCreateAPITestingUser: function(testcontext, fn) {
+        var testUser = new $$.m.User({
+
+            "username" : "apitest@example.com",
+            "email" : "apitest@example.com",
+            "first" : "API",
+            "last" : "Test",
+            "gender" : 'm',
+            "birthday" : "",
+            "_v" : "0.1",
+            "created" : {
+            "date" : 1404743468927,
+                "strategy" : "lo",
+                "by" : null,
+                "isNew" : true
+        },
+            "profilePhotos" : [],
+            "accounts" : [
+            {
+                "accountId" : testcontext.accountId,
+                "username" : "apitest@example.com",
+                "credentials" : [
+                    {
+                        "username" : "apitest@example.com",
+                        "password" : "$2a$12$KcrG/UNpNZmSQ7LpfAnxVO9Wc4gb31LfB9DSa3.oytZi7493AJV.O",
+                        "type" : "lo",
+                        "_username" : "apitest@example.com"
+                    }
+                ],
+                "permissions" : [
+                    "super",
+                    "admin",
+                    "member"
+                ]
+            }
+        ],
+            "credentials" : [
+            {
+                "type" : "lo",
+                "username" : "apitest@example.com",
+                "password" : "$2a$12$A2JZ2ZXBBkZqtz7X7qLyNeOC3ZuctPQ.7jNdwHDWo8oYKEMSkcnq6"
+            }
+        ],
+            "details" : [],
+            "_username" : "apitest@example.com"
+
+        });
+
+        userDao.getUserByUsername('apitest@example.com', function(err, user){
+            if(err || !user) {
+                //need to create it
+                userDao.saveOrUpdate(testUser, function(err, user){
+                    testcontext.userId = user.id();
+                    fn(null, user);
+                });
+            } else {
+                testcontext.userId = user.id();
+                fn(null, user);
+            }
+        });
+
     },
 
     closeDBConnections: function () {

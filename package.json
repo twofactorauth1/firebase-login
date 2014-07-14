@@ -55,7 +55,8 @@
     "grunt-contrib-nodeunit": "~0.3.3",
     "grunt-contrib-requirejs": "~0.4.1",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-copy-to": "0.0.10"
+    "grunt-copy-to": "0.0.10",
+    "superagent": "0.18.1"
   },
   "main": "./app.js"
 }

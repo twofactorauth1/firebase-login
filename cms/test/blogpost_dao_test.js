@@ -19,7 +19,7 @@ module.exports.group =  {
 
     setUp: function (cb) {
         _log.debug('>> setup');
-        testHelpers.createTestPosts(testcontext, cb);
+        testHelpers.createTestPosts(testcontext, null, null, cb);
         _log.debug('<< setup');
     },
 
