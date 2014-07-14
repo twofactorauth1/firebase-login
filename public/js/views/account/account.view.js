@@ -58,16 +58,16 @@ define([
 
 
                     //Not Working
-                    // var allNetworks = _.pluck($$.constants.social.types.dp.slice(0), "data");
+                    var allNetworks = _.pluck($$.constants.social.types.dp.slice(0), "data");
 
-                    // var networks = [];
-                    // self.user.get("credentials").forEach(function(creds) {
-                    //     if (creds.type != $$.constants.social.types.LOCAL) {
-                    //         networks.push(creds);
-                    //     }
-                    //     var index = allNetworks.indexOf(creds.type);
-                    //     if (index > -1) { allNetworks.splice(index, 1); }
-                    // });
+                    var networks = [];
+                    self.user.get("credentials").forEach(function(creds) {
+                        if (creds.type != $$.constants.social.types.LOCAL) {
+                            networks.push(creds);
+                        }
+                        var index = allNetworks.indexOf(creds.type);
+                        if (index > -1) { allNetworks.splice(index, 1); }
+                    });
 
                     data.networks = networks;
                     data.otherNetworks = allNetworks;
