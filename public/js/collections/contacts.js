@@ -26,6 +26,10 @@ define([
             var url = $$.api.getApiUrl("account", accountId + "/contacts/" + letter);
             return this.fetchCustomUrl(url);
         },
+        getContactsAll: function(accountId, letter,skip) {
+            var url = $$.api.getApiUrl("account", accountId + "/contacts/" + letter+"/"+skip);
+            return this.fetchCustomUrl(url);
+        },
 
 
         url: function() {

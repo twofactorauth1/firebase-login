@@ -28,6 +28,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url(''), this.isAuthApi, this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteContact.bind(this));
 
+
+        app.get(this.url(':accountId/contacts/:letter/:skip', "account"), this.isAuthApi, this.getContactsForAccountByLetter.bind(this));
+
         app.get(this.url(':accountId/contacts/:letter', "account"), this.isAuthApi, this.getContactsForAccountByLetter.bind(this));
 
         app.get(this.url(':id/activity'), this.isAuthApi, this.getActivityByContactId.bind(this));
@@ -100,6 +103,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = req.params.accountId;
         var letter = req.params.letter;
+        var skip = req.params.skip || 0;
 
         if (!accountId) {
             return self.wrapError(resp, 400, null, "Invalid parameter for account id");
@@ -111,18 +115,27 @@ _.extend(api.prototype, baseApi.prototype, {
             letter = "a";
         }
 
-        if (letter.length > 1) {
+        if (!(letter == "all") && letter.length > 1) {
             return self.wrapError(resp, 401, null, "Invalid parameter for :letter");
         }
 
-        contactDao.getContactsShort(accountId, letter, function(err, value) {
-            if (!err) {
-                return self.sendResult(resp, value);
-            } else {
-                return self.wrapError(resp, 500, "failed to retrieve contacts by letter", err, value);
-            }
-        });
-
+        if(letter == "all" ) {
+            contactDao.getContactsAll(accountId,skip, function(err, value) {
+                if (!err) {
+                    return self.sendResult(resp, value);
+                } else {
+                    return self.wrapError(resp, 500, "failed to retrieve contacts by letter", err, value);
+                }
+            });
+        } else {
+            contactDao.getContactsShort(accountId, letter, function (err, value) {
+                if (!err) {
+                    return self.sendResult(resp, value);
+                } else {
+                    return self.wrapError(resp, 500, "failed to retrieve contacts by letter", err, value);
+                }
+            });
+        }
     },
     //endregion CONTACT
 

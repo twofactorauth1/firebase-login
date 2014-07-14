@@ -18007,6 +18007,7 @@ div.error label.error:before {
   width: 1%;
 }
 .letter-list li a {
+<<<<<<< HEAD
   display: block;
   padding: 8px 0;
   text-align: center;
@@ -18016,6 +18017,17 @@ div.error label.error:before {
   -webkit-transition: all 0.2s ease-out 0s;
   transition: all 0.2s ease-out 0s;
   width: 100%;
+=======
+    display: block;
+    padding: 8px 0;
+    text-align: center;
+    text-transform: uppercase;
+    background: #f7f7f7;
+    -moz-transition: all 0.2s ease-out 0s;
+    -webkit-transition: all 0.2s ease-out 0s;
+    transition: all 0.2s ease-out 0s;
+    width: 100%;
+>>>>>>> zeeshan_dev
 }
 .letter-list li a:hover {
   color: #fff;

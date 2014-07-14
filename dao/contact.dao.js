@@ -26,6 +26,15 @@ var dao = {
         this.findManyWithFields(query, fields, fn);
     },
 
+    getContactsAll: function(accountId,skip, fn) {
+        //var query = {accountId: accountId, _last: { $gte: "a", $lt: "z" } };
+        var query = {accountId: accountId };
+        var fields = null;
+        var obj = {query:query, fields:fields};
+        this.findAllWithFields(query,skip, fields, fn);
+    },
+
+
 
     getContactsBySocialIds: function(accountId, socialType, socialIds, fn) {
         var query = { accountId: accountId, "details.type":socialType, "details.socialId": { $in: socialIds} };
