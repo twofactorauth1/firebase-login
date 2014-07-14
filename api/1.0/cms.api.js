@@ -192,7 +192,9 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: Add Security
         var self = this;
         self.log.debug('>> createBlogPost');
-        var blogPost = new $$.m.BlogPost(req.body.blogPost);
+        var blogPost = new $$.m.BlogPost(req.body);
+        self.log.debug('got a blogPost:');
+        console.dir(blogPost);
         var websiteId = req.params.id;
         var accountId = parseInt(self.accountId(req));
 
@@ -223,13 +225,13 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: Add Security
         var self = this;
         self.log.debug('>> updateBlogPost');
-        var blogPost = new $$.m.BlogPost(req.body.blogPost);
-        var websiteId = req.params.id;
+        var blogPost = new $$.m.BlogPost(req.body);
+        var postId = req.params.postId;
         var accountId = self.accountId(req);
         blogPost.set('accountId', accountId);
-        blogPost.set('websiteId', websiteId);
+        blogPost.set('_id', postId);
 
-        cmsManager.updateBlogPost(blogPost, function(err, value){
+        cmsManager.updateBlogPost(accountId, blogPost, function(err, value){
             self.log.debug('<< updateBlogPost');
             self.sendResultOrError(res, err, value, "Error updating Blog Post");
             self = null;
@@ -240,10 +242,11 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: Add Security
         var self = this;
         self.log.debug('>> deleteBlogPost');
-
+        var accountId = self.accountId(req);
         var blogPostId = req.params.postId;
+        self.log.debug('deleting post with id: ' + blogPostId);
 
-        cmsManager.deleteBlogPost(blogPostId, function(err, value){
+        cmsManager.deleteBlogPost(accountId, blogPostId, function(err, value){
             self.log.debug('<< deleteBlogPost');
             self.sendResultOrError(res, err, value, "Error deleting Blog Post");
             self = null;
@@ -329,7 +332,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = self.accountId(req);
         var tag = req.params.tag;
 
-        cmsManager.getPostsByTag(accountId, tag, function(err, value){
+        cmsManager.getPostsByTag(accountId, [tag], function(err, value){
             self.log.debug('<< getPostsByTag');
             self.sendResultOrError(res, err, value, "Error getting Blog Posts by tag");
             self = null;

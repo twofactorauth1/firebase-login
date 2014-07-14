@@ -33,7 +33,7 @@ if (process.env.IS_PROXIED == null){
  * For production: indigenous.io
  */
 if (process.env.ROOT_HOST == null) {
-    if(process.env.NODE_ENV == environments.DEVELOPMENT) {
+    if(process.env.NODE_ENV == environments.DEVELOPMENT || process.env.NODE_ENV == environments.TESTING) {
         process.env.ROOT_HOST = "indigenous.local";
     } else {
         process.env.ROOT_HOST = "indigenous.io";
