@@ -37,7 +37,8 @@ define([
 
             "click .close":"close_welcome",
 
-            "click .import-contacts": "importTest"
+            "click .import-contacts": "importTest",
+            "scroll body": "check_height"
         },
 
 
@@ -62,6 +63,9 @@ define([
                         break;
                 }
             }
+
+            _.bindAll(this, 'check_height');
+            $(window).scroll(this.check_height);
         },
 
 
@@ -155,8 +159,11 @@ define([
                     self.renderContacts();
                     self.check_welcome();
                 });
-
-            $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
+            this.skip=0;
+            if(this.currentLetter=="all")
+                $$.r.account.ContactRouter.navigateToShowContactsForAll(this.currentLetter,this.skip);
+            else
+                $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
         },
 
 
@@ -266,7 +273,11 @@ define([
                 this.currentLetter = "a";
             }
             this.currentLetter = this.currentLetter.toLowerCase();
-            return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
+            this.skip=this.skip||0;
+            if(this.currentLetter=='all')
+                return this.contacts.getContactsAll(this.accountId, this.currentLetter, this.skip);
+            else
+                return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
         },
 
 
@@ -283,6 +294,27 @@ define([
             welcome.contact = false;
             user.set("welcome_alert", welcome);
             user.save();
+        },
+
+        check_height : function (e){
+            var self = this;
+            if(window.innerHeight + document.body.scrollTop >= document.body.offsetHeight){
+
+                this.getContacts(this.currentLetter)
+                    .done(function() {
+                        self.renderContacts();
+                        self.check_welcome();
+                    });
+
+                if(this.currentLetter=="all")
+                    $$.r.account.ContactRouter.navigateToShowContactsForAll(this.currentLetter,this.skip);
+                else
+                    $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
+                console.log("loadData");
+            } else{
+                console.log("dont load");
+            }
+
         }
 
     });

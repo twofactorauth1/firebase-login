@@ -123,7 +123,33 @@ var mongodao = {
         }
     },
 
+    _findAllWithFieldsMongo: function(query, skip,fields, type, fn) {
+        var self = this;
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
 
+        var collection = this.getTable(type);
+        var mongoColl = this.mongo(collection);
+
+        var fxn = function(err, value) {
+            if (!err) {
+                return self._wrapArrayMongo(value, fields, type, fn);
+            } else {
+                self.log.error("An error occurred: #findManyWithFieldsMongo() with query: " + JSON.stringify(query), err);
+                fn(err, value);
+            }
+        };
+
+        if (query == null && fields == null) {
+            mongoColl.find().skip(skip).limit(20).toArray(fxn);
+        } else if (query != null) {
+            mongoColl.find(query).skip(skip).limit(20).toArray(fxn);
+        } else if(fields != null) {
+            mongoColl.find(null, fields).skip(skip).limit(20).toArray(fxn);
+        }
+    },
     _wrapArrayMongo: function(value, fields, type, fn) {
         var self = this, arr = [];
         value.forEach(function(item) {

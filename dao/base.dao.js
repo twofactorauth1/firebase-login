@@ -187,7 +187,13 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
-
+    findAllWithFields: function (query, skip,fields, type, fn) {
+        if (this.getStorage(type) === "mongo") {
+            this._findAllWithFieldsMongo(query, skip, fields, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
     getStorage: function (type) {
         if (type != null && type.hasOwnProperty != null) {
             if (type.hasOwnProperty("db")) {

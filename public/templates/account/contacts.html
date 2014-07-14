@@ -1438,6 +1438,8 @@ HELPERS
     Handlebars.registerHelper("eachLetter", function (options) {
         var charCode = "A".charCodeAt();
         var str = "";
+        this.letter = "all";
+        str += options.fn(this);
         for (var i = 0; i < 26; i++) {
             this.letter = String.fromCharCode(charCode);
             str += options.fn(this);
