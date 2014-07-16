@@ -31,7 +31,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/page/author/:author", this.setup, this.showAuthorPage.bind(this));
         app.get("/page/category/:category", this.setup, this.showCategoryPage.bind(this));
 
-        app.post("/signupnews", this.signUpNews.bind(this));
+//        app.post("/signupnews", this.signUpNews.bind(this));
 
         app.get("/home", this.isAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isAuth.bind(this), this.showHome.bind(this));
