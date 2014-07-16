@@ -24,6 +24,7 @@ define([
         user: null,
         accounts: null,
         currentLetter: "a",
+        loadMore : true,
 
         events: {
             "click .btn-letter":"showLetter",
@@ -155,7 +156,9 @@ define([
             this.currentLetter = letter.toLowerCase();
 
             this.getContacts(this.currentLetter)
-                .done(function() {
+                .done(function(err, res) {
+                    console.log(res);
+                    console.log(err);
                     self.renderContacts();
                     self.check_welcome();
                 });
@@ -270,12 +273,15 @@ define([
             this.contacts = new $$.c.Contacts();
 
             if (this.currentLetter == null) {
-                this.currentLetter = "a";
+                this.currentLetter = "all";
             }
             this.currentLetter = this.currentLetter.toLowerCase();
             this.skip=this.skip||0;
-            if(this.currentLetter=='all')
+            if(this.currentLetter=='all') {
+
                 return this.contacts.getContactsAll(this.accountId, this.currentLetter, this.skip);
+
+            }
             else
                 return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
         },
@@ -300,16 +306,33 @@ define([
             var self = this;
             if(window.innerHeight + document.body.scrollTop >= document.body.offsetHeight){
 
-                this.getContacts(this.currentLetter)
-                    .done(function() {
-                        self.renderContacts();
-                        self.check_welcome();
-                    });
 
-                if(this.currentLetter=="all")
-                    $$.r.account.ContactRouter.navigateToShowContactsForAll(this.currentLetter,this.skip);
-                else
-                    $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
+               /* console.log(Backbone.history.fragment);
+                var params=Backbone.history.fragment;
+                    params=params.split('/');
+                if(params.length==3) {
+                    var skipindex = params[params.length - 1];
+                    console.log(this.skip);
+                //        this.skip=parseInt(skipindex)+3;
+                 //   this.skip+=3;
+                }*/
+                this.skip+=3;
+
+                if(self.loadMore) {
+                    this.getContacts(this.currentLetter)
+                        .done(function (res, msg) {
+
+                            if (res.length < self.skip+3) {
+                                self.loadMore = false;
+                            }
+                            self.renderContacts();
+                            self.check_welcome();
+                        });
+                    if (this.currentLetter == "all")
+                        $$.r.account.ContactRouter.navigateToShowContactsForAll(this.currentLetter, this.skip);
+                    else
+                        $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
+                }
                 console.log("loadData");
             } else{
                 console.log("dont load");

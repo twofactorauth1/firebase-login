@@ -143,11 +143,12 @@ var mongodao = {
         };
 
         if (query == null && fields == null) {
-            mongoColl.find().skip(skip).limit(20).toArray(fxn);
+            mongoColl.find().skip(skip).limit(6).toArray(fxn);
         } else if (query != null) {
-            mongoColl.find(query).skip(skip).limit(20).toArray(fxn);
+            mongoColl.find(query).limit(3+skip).toArray(fxn);
+           // mongoColl.find(query).skip(skip).limit(6).toArray(fxn);
         } else if(fields != null) {
-            mongoColl.find(null, fields).skip(skip).limit(20).toArray(fxn);
+            mongoColl.find(null, fields).skip(skip).limit(6).toArray(fxn);
         }
     },
     _wrapArrayMongo: function(value, fields, type, fn) {
