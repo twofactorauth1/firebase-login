@@ -96,6 +96,25 @@ _.extend(api.prototype, baseApi.prototype, {
 
     deleteContact: function(req,resp) {
 
+        //TODO - add granular security
+        var self = this;
+        var contactId = req.params.id;
+
+        if (!contactId) {
+            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+        }
+
+        contactId = parseInt(contactId);
+        contactDao.removeById(contactId, function(err, value) {
+            if (!err && value != null) {
+                self.sendResult(resp, value);
+            } else {
+                self.wrapError(resp, 401, null, err, value);
+            }
+        });
+
+
+
     },
 
 

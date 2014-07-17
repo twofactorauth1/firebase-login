@@ -24,7 +24,8 @@ define([
                 "contacts/view/:contactId": "viewContactDetails",
 
                 "contacts/:letter/edit/:contactId": "editContact",
-                "contacts/edit/:contactId": "editContact"
+                "contacts/edit/:contactId": "editContact",
+                "contacts/delete/:contactId": "deleteContact"
             },
 
             _onCall: function() {

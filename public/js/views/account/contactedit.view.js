@@ -53,6 +53,7 @@ define([
             "onkeytimer .input-edit-device":"deviceChanged",
 
             "click .btn-subscribe-two-net":"subscribeTwoNetUser",
+            "click .btn-delete-contact-ok": "deleteContact"
         },
 
 
@@ -450,7 +451,21 @@ define([
 
             return this.contact.fetch();
         },
+        deleteContact: function() {
+            var self = this;
 
+            var p = this.contact.destroy();
+            p.done(function() {
+                self.contactId = self.contact.id;
+
+                  //  $$.r.account.ContactRouter.navigateToShowContactsForLetter(null,false);
+                  //  $$.r.account.ContactRouter.navigateToEditContact(self.contact.id, this.currentLetter, false)
+                });
+            console.log(this.currentLetter);
+            $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter,true);
+            return p;
+
+        },
 
         saveContact: function() {
             var self = this;

@@ -522,7 +522,6 @@ CONTACT DETAILS VIEW
             </h2>
 
         </div>
-
         <div class="col-xs-4">
             <div class="btn btn-success pull-right btn-edit-contact" type="button">
                 <i class="fa fa-edit"/>
@@ -1246,10 +1245,34 @@ CONTACTS EDIT VIEW
             </div>
             <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
         </div>
+        <div class="col-md-12">
+            <div class="btn btn-danger pull-right btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
+               <i class="fa fa-warning"/>
+               <span class="hidden-xs">Delete</span>
+           </div>
+        </div>
+
         <!-- End BioMetric Data -->
 
         </div>
         </div>
+
+        <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+           <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header">
+                       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                       <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
+                   </div>
+                   <div class="modal-footer">
+                       <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
+                       <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
+                   </div>
+               </div>
+           </div>
+        </div>
+   </div>
+
 
         <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
             <div class="modal-dialog">
@@ -1510,7 +1533,15 @@ HELPERS
             return options.inverse(this);
         }
     });
-
+    Handlebars.registerHelper("canDeleteContact", function (contact, options) {
+        console.log(contact);
+        console.log(this);
+        if (contact.accountId == this) {
+            return options.fn(this);
+        } else {
+            return options.inverse(this);
+        }
+    });
 
     Handlebars.registerHelper("unlessHasLocalPhone", function (contact, options) {
         if (contact && contact.details != null) {
