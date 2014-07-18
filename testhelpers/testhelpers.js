@@ -8,6 +8,7 @@
 var userDao = require('../dao/user.dao.js');
 var accountDao = require('../dao/account.dao.js');
 var blogPostDao = require('../cms/dao/blogpost.dao.js');
+var _log = $$.g.getLogger("testhelpers");
 
 module.exports = {
 
@@ -52,15 +53,16 @@ module.exports = {
         });
     },
 
-    createTestPosts: function(testcontext, accountId, websiteId, cb) {
+    createTestPosts: function(testcontext, accountId, pageId, cb) {
         var post1, post2, post3;
         var p1 = $.Deferred(), p2 = $.Deferred(), p3 = $.Deferred();
         var _accountId = accountId || 0;
-        var _websiteId = websiteId || 0;
+        var _pageId = pageId || 0;
+        testcontext.posts = testcontext.posts || [];
 
         post1 = new $$.m.BlogPost({
             'accountId': _accountId,
-            'websiteId': _websiteId,
+            'pageId': _pageId,
             'post_author': 'author1',
             'post_content': 'some content',
             'post_title': 'title1',
@@ -70,7 +72,7 @@ module.exports = {
 
         post2 = new $$.m.BlogPost({
             'accountId': _accountId,
-            'websiteId': _websiteId,
+            'pageId': _pageId,
             'post_author': 'author2',
             'post_content': 'some more content',
             'post_title': 'title2',
@@ -80,7 +82,7 @@ module.exports = {
 
         post3 = new $$.m.BlogPost({
             'accountId': _accountId,
-            'websiteId': _websiteId,
+            'pageId': _pageId,
             'post_author': 'author1',
             'post_content': 'completely different stuff here.  totally unrelated.',
             'post_title': 'title3',
@@ -89,24 +91,27 @@ module.exports = {
         });
         console.log('about to saveOrUpdate');
 
-        blogPostDao.saveOrUpdate(post1, function(err, value){
+        blogPostDao.createPost(post1, function(err, value){
             if(err) {
+                _log.error(err);
                 p1.reject();
             }
             testcontext.posts = testcontext.posts || [];
             testcontext.posts.push(value.get('_id'));
             p1.resolve();
         });
-        blogPostDao.saveOrUpdate(post2, function(err, value){
+        blogPostDao.createPost(post2, function(err, value){
             if(err) {
+                _log.error(err);
                 p2.reject();
             }
             testcontext.posts = testcontext.posts || [];
             testcontext.posts.push(value.get('_id'));
             p2.resolve();
         });
-        blogPostDao.saveOrUpdate(post3, function(err, value){
+        blogPostDao.createPost(post3, function(err, value){
             if(err) {
+                _log.error(err);
                 p3.reject();
             }
             testcontext.posts = testcontext.posts || [];

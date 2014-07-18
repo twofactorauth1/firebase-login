@@ -42,6 +42,8 @@ var blogpost = $$.m.ModelBase.extend({
              */
             websiteId:null,
 
+            pageId: null,
+
             post_author: null,
 
             post_title: null,
