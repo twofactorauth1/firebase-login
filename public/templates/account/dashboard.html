@@ -8,7 +8,7 @@
 <script type="text/x-handlebars-template" name="dashboard-main">
     <div class="pageheader row">
         <div class="col-xs-6">
-            <h2><i class="fa fa-home"></i> Overview</h2>
+            <h2><i class="fa fa-home"></i> Dashboard</h2>
         </div>
         <div class="col-xs-6 hidden">
             <a class="btn btn-success pull-right" type="button">
@@ -464,4 +464,35 @@
         <!-- modal-dialog -->
     </div>
     <!-- modal -->
+</script>
+
+<script type="text/x-handlebars-template" name="dashboard-sidebar">
+    <div class="rightpanel rightpanel-dashboard">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-justified">
+
+            <li><a href="#rightpanel-modules-content" data-toggle="tab" id="rightpanel-modules">Modules</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+
+        <div class="tab-content">
+
+            <div class="tab-pane pane-settings active" id="rightpanel-modules-content">
+                <ul class="dashboard-modules">
+                    <li><i class="fa fa-money"></i><p>Overview</p></li>
+                    <li><i class="fa fa-thumbs-o-up"></i><p>Likes Per Day</p></li>
+                    <li><i class="fa fa-thumbs-o-up"></i><p>All Post Activity</p></li>
+                    <li><i class="fa fa-thumbs-o-up"></i><p>Post Interactions</p></li>
+                    <li><i class="fa fa-thumbs-o-up"></i><p>Daily Reach</p></li>
+                    <li><i class="fa fa-thumbs-o-up"></i><p>Top 10 Posts</p></li>
+                    <li><i class="fa fa-thumbs-o-up"></i><p>Engaged Users</p></li>
+                    <li><i class="fa fa-thumbs-o-up"></i><p>Top 5 Fans</p></li>
+                </ul>
+            </div>
+            <!-- leftpanelinner -->
+        </div>
+        <!-- leftpanel -->
+    </div>
 </script>
