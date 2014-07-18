@@ -3,13 +3,15 @@ define([
     'utils/utils',
     'models/cms/components/blog',
     'services/cms.service',
-], function (EditWebsite, utils, Blog, CmsService) {
+    'models/cms/post',
+], function (EditWebsite, utils, Blog, CmsService, Post) {
 
     var view = EditWebsite.extend({
 
         subdomain: null,
         websiteSettings: null,
         themeId: null,
+        websiteId: null,
 
         //temporary themes
         themes: null,
@@ -52,6 +54,7 @@ define([
             $.when(p2)
                 .done(function () {
                 self.websiteSettings = self.website.attributes.settings;
+                self.websiteId = self.website.attributes._id;
             });
         },
 
@@ -71,18 +74,19 @@ define([
             addBlankPost: function() {
                 var self = this;
                 console.log('Adding Blank Post');
-                // self.getPost().done(function () {
-                //     console.log('got the post');
-                // });
-                //TODO if not blog page navigate there then continue
-                //add blank post
+
                 var blankPostHTML = $$.templateManager.get("blankPost", self.templateKey);
 
                 var $iframe = $('#iframe-website');
                 $iframe.ready(function() {
                     $iframe.contents().find("#main-area .entry").prepend(blankPostHTML);
                 });
-                //self.savePost();
+
+                self.post = new Post({
+                    websiteId:self.websiteId
+                });
+
+                self.post.save();
             },
             // WORKING
             addComponent: function () {

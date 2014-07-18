@@ -11,14 +11,17 @@
             <div class="container clearfix row-fluid">
                 <div id="main-area" class="col-sm-8">
                     <article class="entry clearfix">
+                    {{#if blogposts}}
                         {{#each blogposts}}
                             <div class="single-blog responsive clearfix">
 
                                     <div class="blog-entry clearfix">
                                         <h2 class="blog-title">
-                                            <a href="/page/blog/{{this.attributes.post_url}}">
+                                            <a href="/page/blog/{{#if this.attributes.post_url}}{{this.attributes.post_url}}{{/if}}">
                                                 <div class="editable" data-class="post-title">
+                                                {{#if this.attributes.post_title}}
                                                     {{this.attributes.post_title}}
+                                                {{/if}}
                                                 </div>
                                             </a>
                                         </h2>
@@ -52,15 +55,18 @@
 
                                             <div class="entry-excerpt"><p>
                                             <div class="editable" data-class="post-excerpt">
+                                            {{#if this.attributes.post_excerpt}}
                                                 {{{this.attributes.post_excerpt}}}...
+                                            {{/if}}
                                             </div>
                                             </p></div>
-                                            <a href="/page/blog/{{this.attributes.post_url}}" class="btn btn-orange pull-right"><span>READ MORE</span></a>
+                                            <a href="/page/blog/{{#if this.attributes.post_url}}{{this.attributes.post_url}}{{/if}}" class="btn btn-orange pull-right"><span>READ MORE</span></a>
                                     </div> <!-- end .et_pt_blogentry -->
 
                             </div> <!-- end #et_pt_blog -->
                             <hr></hr>
                         {{/each}}
+                    {{/if}}
                     </article> <!-- .entry -->
                 </div> <!-- #main-area -->
                 <div id="sidebar" class="col-sm-4 col-xs-12">
@@ -71,9 +77,11 @@
                         <div class="tags">
                             <h4><i class="fa fa-tag"></i> Tags</h4>
                             <ul class="tag-cloud">
-                            {{#each tags}}
-                                <li><a href="/page/tag/{{this}}" >{{this}}</a></li>
-                            {{/each}}
+                            {{#if tags}}
+                                {{#each tags}}
+                                    <li><a href="/page/tag/{{this}}" >{{this}}</a></li>
+                                {{/each}}
+                            {{/if}}
                             </ul>
                         </div>
                         <div class="clearfix mb30"></div>
@@ -88,18 +96,22 @@
                         <div class="posts">
                             <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
                             <ul>
-                            {{#each blogposts}}
-                                <li><a href="/page/blog/{{this.attributes.post_url}}">{{this.attributes.post_title}}</a> by <a href="/page/author/{{this.attributes.post_author}}">{{this.attributes.post_author}}</a></li>
-                            {{/each}}
+                            {{#if blogposts}}
+                                {{#each blogposts}}
+                                    <li><a href="/page/blog/{{#if this.attributes.post_url}}{{this.attributes.post_url}}{{/if}}">{{#if this.attributes.post_title}}{{this.attributes.post_title}}{{/if}}</a> by <a href="/page/author/{{#if this.attributes.post_author}}{{this.attributes.post_author}}{{/if}}">{{#if this.attributes.post_author}}{{this.attributes.post_author}}{{/if}}</a></li>
+                                {{/each}}
+                            {{/if}}
                             </ul>
                         </div>
                         <div class="clearfix mb30"></div>
                         <div class="categories">
                             <h4><i class="fa fa-list-ul"></i> Categories</h4>
                             <ul class="tag-cloud">
+                            {{#if categories}}
                                 {{#each categories}}
                                     <li><a href="/page/category/{{this}}" >{{this}}</a></li>
                                 {{/each}}
+                            {{/if}}
                             </ul>
                         </div>
                     </div>

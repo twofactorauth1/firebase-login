@@ -17,6 +17,10 @@ define([
             return {
                 _id: null,
 
+                accountId: null,
+
+                websiteId: null,
+
                 post_author: null,
 
                 post_date: null,
@@ -38,22 +42,6 @@ define([
         },
 
 
-        parse: function(attrs) {
-            var post = attrs.post || [];
-            var typedPost = new Post(post);
-            attrs.post = typedPost;
-            return attrs;
-        },
-
-
-        toJSON: function() {
-            var json = _.clone(this.attributes);
-            var collection = json.post;
-            json.post = json.post.toJSON()
-            return json;
-        },
-
-
         getPostById: function(id) {
             console.log('ID: '+id);
             var post = this.get("post");
@@ -64,14 +52,17 @@ define([
         url: function(method) {
             switch(method) {
                 case "GET":
-                    console.log('getting');
                     if (this.id == null) {
                         return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/post/" + this.get("handle"));
                     }
                     return $$.api.getApiUrl("cms", "post/" + this.id);
                 case "PUT":
                 case "POST":
-                    return $$.api.getApiUrl("cms", "post");
+                    if (this.get("postId") != null) {
+                        return $$.api.getApiUrl("cms", "website/"+ this.get("websiteId") +"/blog/"+this.get("postId"));
+                    } else {
+                        return $$.api.getApiUrl("cms", "website/"+ this.get("websiteId") +"/blog");
+                    }
                     break;
                 case "DELETE":
                     return $$.api.getApiUrl("cms", "post/" + this.id);

@@ -196,9 +196,12 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('got a blogPost:');
         console.dir(blogPost);
         var websiteId = req.params.id;
+
+        //accountID needs to be a number for authentication
         var accountId = parseInt(self.accountId(req));
 
-        blogPost.set('accountId', accountId);
+        //accountID needs to be a string for blog post
+        blogPost.set('accountId', accountId.toString());
         blogPost.set('websiteId', websiteId);
 
         cmsManager.createBlogPost(accountId, blogPost, function(err, value){

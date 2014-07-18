@@ -41,8 +41,8 @@ define([
             "click .btn-cancel-page":"cancelPage",
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
-            "click .add-post":"addBlankPost",
-            "mousemove #sortable":"draggingComponent"
+            "mousemove #sortable":"draggingComponent",
+            "click .blog-title .editable":"updateTitle",
         },
 
         initialize: function(options) {
@@ -146,6 +146,10 @@ define([
             return this;
         },
 
+        updateTitle: function () {
+            console.log('update title');
+        },
+
         draggingComponent: function (e) {
             console.log('draggingComponent');
             var self = this;
@@ -225,6 +229,7 @@ define([
         },
 
         onWebsiteEdit: function(event) {
+            console.log('editing website');
             var data = arguments[1];
             var target = data.target;
 
@@ -280,7 +285,6 @@ define([
                 });
         },
 
-
         savePage: function() {
             this.page.save()
                 .done(function() {
@@ -292,10 +296,8 @@ define([
                 });
         },
 
-
         cancelPage: function() {
         },
-
 
         getUser: function () {
             if (this.userId == null) {
@@ -309,7 +311,6 @@ define([
             return this.user.fetch();
         },
 
-
         getAccount: function () {
             if (this.accountId == null) {
                 this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
@@ -321,7 +322,6 @@ define([
 
             return this.account.fetch();
         },
-
 
         getWebsite: function () {
             if (this.accountId == null) {
@@ -341,7 +341,6 @@ define([
             return this.website.fetch();
         },
 
-
         getPage: function() {
             this.page = new Page({
                 websiteId: this.websiteId,
@@ -350,7 +349,6 @@ define([
 
             return this.page.fetch();
         },
-
 
         getThemeConfig: function () {
             var self = this;
