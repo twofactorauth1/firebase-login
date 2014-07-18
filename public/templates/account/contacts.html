@@ -19,22 +19,6 @@ CONTACTS MAIN VIEW
                 <span class="hidden-xs">Add</span>
             </div>
 
-            <div class="btn-group pull-right" style="margin-right:8px;">
-                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                    Import
-                    <span class="caret" />
-                </button>
-
-                <ul class="dropdown-menu" role="menu">
-                    <li class="btn-import-facebook"><a href="#">Import Facebook friends</a>
-                    </li>
-                    <li class="btn-import-gmail"><a href="#">Import Gmail contacts</a>
-                    </li>
-                    <li class="btn-import-linkedin"><a href="#">Import LinkedIn connections</a>
-                    </li>
-                </ul>
-            </div>
-
         </div>
     </div>
 
@@ -65,10 +49,10 @@ CONTACTS MAIN VIEW
     <div class="contentpanel">
         <div class="panel panel-default row">
             <div class="panel-body">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <input type="text" placeholder="Search Customers" class="form-control mb15 input-lg">
                 </div>
-                <div class="col-sm-6 form-horizontal">
+                <div class="col-sm-6 form-horizontal hidden">
                     <div class="form-group row">
                         <select class=" form-control chosen-select input-lg">
                             <option value="">Filter Customers</option>
@@ -103,11 +87,13 @@ CONTACTS MAIN VIEW
 
                         <div class="media">
                             <div class="col-xs-12f">
-                                // {{#if photoSquare}} // {{#isGoogleImage photoSquare}} //
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />// {{else}} //
-                                <img class="img-circle media-object thumbnail" src="{{photoSquare}}">// {{/isGoogleImage}} // {{else}} // {{#isGoogleImage photo}} //
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />// {{else}} //
-                                <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">// {{/isGoogleImage}} // {{/if}}
+                                <!--// {{#if photoSquare}} // {{#isGoogleImage photoSquare}} //-->
+                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" /><!-- // {{else}} // -->
+                                <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
+                                <!--// {{/isGoogleImage}} // {{else}} // {{#isGoogleImage photo}} // -->
+                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />// <!-- {{else}} // -->
+                                <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                                <!-- // {{/isGoogleImage}} // {{/if}} -->
 
                                 <span class="name visible-xs">
                                     <h4>
@@ -160,10 +146,10 @@ CONTACTS MAIN VIEW
                                 </ul>
                             </div>
                             <div class="media-body col-xs-12 hidden-xs">
-                                <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
+                                <h4 class="person-name center">{{first}} {{middle}} {{last}}</h4>
                                 <span class="label label-info contact-cat">{{contactTypeLabel this}}</span>
 
-                                <div class="hidden-xs">
+                                <div class="hidden">
                                     <div class="last-active text-muted">Last Active: {{#if lastActive}} {{lastActive}} days ago {{else}} n/a {{/if}}
                                     </div>
 
@@ -189,7 +175,7 @@ CONTACTS MAIN VIEW
                                     type: {{contactTypeLabel this}} |
                                 </span>
 
-                                <span class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sources where this contact information came from">sources:</span>
+                                <span class="tooltips hidden" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sources where this contact information came from">sources:</span>
                                 {{#each details}}
                                 <span><i class="{{iconFromSocialType type}}" />
                                 </span>
@@ -382,16 +368,33 @@ CONTACTS MAIN VIEW
     <div class="tab-content">
         <div class="tab-pane pane-settings active" id="rp-settings">
 
-            <div class="form-group">
-                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#importContactsModal"><i class="fa fa-cloud-upload"></i> Import Contacts</button>
+            <div class="form-group mb20">
+                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#importContactsModal"><i class="fa fa-cloud-upload"></i> Import FB Contacts</button>
             </div>
 
-            <div class="form-group">
+
+            <div class="form-group hidden">
                 <a href="#" class="btn btn-success btn-block"><i class="fa fa-cloud-download"></i> Export Contacts</a>
             </div>
 
-            <div class="form-group">
+            <div class="form-group hidden">
                 <a href="#" class="btn btn-primary btn-block"><i class="fa fa-files-o"></i> Fix Duplicates</a>
+            </div>
+
+            <div class="btn-group pull-right hidden" style="margin-right:8px;">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    Import
+                    <span class="caret" />
+                </button>
+
+                <ul class="dropdown-menu " role="menu">
+                    <li class="btn-import-facebook"><a href="#">Import Facebook friends</a>
+                    </li>
+                    <li class="btn-import-gmail hidden"><a href="#">Import Gmail contacts</a>
+                    </li>
+                    <li class="btn-import-linkedin hidden"><a href="#">Import LinkedIn connections</a>
+                    </li>
+                </ul>
             </div>
 
             <h5 class="sidebartitle mb20">Display Settings</h5>
@@ -419,7 +422,7 @@ CONTACTS MAIN VIEW
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group hidden">
                 <label class="col-xs-12 control-label">Show / Hide Attributes</label>
                 <div class="col-xs-12 ckbox ckbox-success">
                     <input type="checkbox" id="contact-cat" checked="checked">
@@ -689,11 +692,11 @@ CONTACT DETAILS VIEW
                         </h3>
                         <div class="mb20"></div>
                         <h4 class="center">
-                            <span class="label label-info contact-cat">{{contactTypeLabel contact}}</span>
+                            <span class="label label-info contact-cat center">{{contactTypeLabel contact}}</span>
                         </h4>
                         <hr class="clear mb20"></hr>
                         <!-- Key Performance Indicators -->
-                        <div class="customer-status">
+                        <div class="customer-status hidden">
                             <div class="row">
                                 <div class="col-xs-6 col-sm-4">
                                     <div class="circle-tile tooltips" data-toggle="tooltip" data-placement="bottom" title="12 Days ago Robin visited your website.">
