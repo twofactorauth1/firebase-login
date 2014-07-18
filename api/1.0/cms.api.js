@@ -45,17 +45,18 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
 
         // BLOG POSTS
-        app.post(this.url('website/:id/blog'), this.isAuthApi, this.createBlogPost.bind(this));
-        app.get(this.url('website/:id/blog'), this.isAuthApi, this.listBlogPosts.bind(this));
-        app.get(this.url('website/:id/blog/:postId'), this.isAuthApi, this.getBlogPost.bind(this));
-        app.post(this.url('website/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
-        app.delete(this.url('website/:id/blog/:postId'), this.isAuthApi, this.deleteBlogPost.bind(this));
-        app.get(this.url('website/:id/blog/author/:author'), this.isAuthApi, this.getPostsByAuthor.bind(this));
-        app.get(this.url('website/:id/blog/title/:title'), this.isAuthApi, this.getPostsByTitle.bind(this));
-        app.get(this.url('website/:id/blog/content/:content'), this.isAuthApi, this.getPostsByContent.bind(this));
-        app.get(this.url('website/:id/blog/category/:category'), this.isAuthApi, this.getPostsByCategory.bind(this));
-        app.get(this.url('website/:id/blog/tag/:tag'), this.isAuthApi, this.getPostsByTag.bind(this));
-
+        app.post(this.url('page/:id/blog'), this.isAuthApi, this.createBlogPost.bind(this));
+        app.get(this.url('page/:id/blog'), this.isAuthApi, this.listBlogPosts.bind(this));
+        app.get(this.url('page/:id/blog/:postId'), this.isAuthApi, this.getBlogPost.bind(this));
+        app.post(this.url('page/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
+        app.delete(this.url('page/:id/blog/:postId'), this.isAuthApi, this.deleteBlogPost.bind(this));
+        app.get(this.url('page/:id/blog/author/:author'), this.isAuthApi, this.getPostsByAuthor.bind(this));
+        app.get(this.url('page/:id/blog/title/:title'), this.isAuthApi, this.getPostsByTitle.bind(this));
+        app.get(this.url('page/:id/blog/content/:content'), this.isAuthApi, this.getPostsByContent.bind(this));
+        app.get(this.url('page/:id/blog/category/:category'), this.isAuthApi, this.getPostsByCategory.bind(this));
+        app.get(this.url('page/:id/blog/tag/:tag'), this.isAuthApi, this.getPostsByTag.bind(this));
+        app.post(this.url('page/:id/blog/posts/reorder'), this.isAuthApi, this.reorderPosts.bind(this));
+        app.post(this.url('page/:id/blog/:postId/reorder/:newOrder'), this.isAuthApi, this.reorderBlogPost.bind(this));
     },
 
 
@@ -191,18 +192,13 @@ _.extend(api.prototype, baseApi.prototype, {
     createBlogPost: function(req, res) {
         //TODO: Add Security
         var self = this;
-        self.log.debug('>> createBlogPost');
         var blogPost = new $$.m.BlogPost(req.body);
-        self.log.debug('got a blogPost:');
         console.dir(blogPost);
-        var websiteId = req.params.id;
-
-        //accountID needs to be a number for authentication
+        var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
 
-        //accountID needs to be a string for blog post
         blogPost.set('accountId', accountId.toString());
-        blogPost.set('websiteId', websiteId);
+        blogPost.set('pageId', pageId);
 
         cmsManager.createBlogPost(accountId, blogPost, function(err, value){
             self.log.debug('<< createBlogPost');
@@ -247,9 +243,10 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> deleteBlogPost');
         var accountId = self.accountId(req);
         var blogPostId = req.params.postId;
+        var pageId = req.params.id;
         self.log.debug('deleting post with id: ' + blogPostId);
 
-        cmsManager.deleteBlogPost(accountId, blogPostId, function(err, value){
+        cmsManager.deleteBlogPost(accountId, pageId, blogPostId, function(err, value){
             self.log.debug('<< deleteBlogPost');
             self.sendResultOrError(res, err, value, "Error deleting Blog Post");
             self = null;
@@ -338,6 +335,39 @@ _.extend(api.prototype, baseApi.prototype, {
         cmsManager.getPostsByTag(accountId, [tag], function(err, value){
             self.log.debug('<< getPostsByTag');
             self.sendResultOrError(res, err, value, "Error getting Blog Posts by tag");
+            self = null;
+        });
+    },
+
+    reorderPosts: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> reorderPosts');
+        var accountId = self.accountId(req);
+        var pageId = req.params.id;
+
+        var blogComponent = new $$.m.cms.components.Blog(req.body);
+
+        cmsManager.updatePageComponent(pageId,  blogComponent, function(err, value){
+            self.log.debug('<< reorderPosts');
+            self.sendResultOrError(res, err, value, "Error reordering Blog Posts");
+            self = null;
+        });
+
+    },
+
+    reorderBlogPost: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> reorderBlogPost');
+        var accountId = self.accountId(req);
+        var pageId = req.params.id;
+        var postId = "" + req.params.postId;
+        var newOrder = req.params.newOrder;
+
+        cmsManager.modifyPostOrder(accountId, postId, pageId, newOrder, function(err, value){
+            self.log.debug('<< reorderBlogPost');
+            self.sendResultOrError(res, err, value, "Error reordering Blog Posts");
             self = null;
         });
     }

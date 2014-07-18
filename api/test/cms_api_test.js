@@ -17,16 +17,22 @@ var testcontext = {};
 var sessionInitialized = false;
 var testUsername = 'apitest@example.com';
 var testPassword = 'password';
+var testPageId = '10';
 var accountURL = null;
 var cookie = null;
 var _log = global.getLogger('cms_api_test');
 var blogDAO = require('../../cms/dao/blogpost.dao.js');
+var cmsDAO = require('../../cms/dao/cms.dao.js');
+var Blog = require('../../cms/model/components/blog.js');
+var Page = require('../../cms/model/page.js');
+var cmsManager = require('../../cms/cms_manager.js');
 
 module.exports.group = {
     setUp: function(cb) {
         //TODO: create test account if needed.
         if(sessionInitialized !== true) {
             var p1 = $.Deferred();
+            var p2 = $.Deferred();
             _log.info('getting test account');
             testHelpers.getOrCreateAPITestingAccount(testcontext, function(err, account){
                 if(err) {
@@ -43,7 +49,28 @@ module.exports.group = {
                     p1.resolve();
                 });
             });
-            $.when(p1).done(function(){
+            //create page for blog posts
+            var blogComponent = new $$.m.cms.modules.Blog({
+
+            });
+
+            var page = new $$.m.cms.Page({
+                _id: testPageId,
+                'accountId':1,
+                'websiteId':1,
+                handle: 'Page Handle',
+                title: 'Page Title',
+                components: [blogComponent]
+            });
+
+
+            cmsDAO.saveOrUpdate(page, function(err, page){
+                if(err) {
+                    test.ok(false, 'error in testCreate');
+                }
+                p2.resolve();
+            });
+            $.when(p1,p2).done(function(){
                 var loginURL = appConfig.server_url + '/login';
                 _log.info('loginURL: ' + loginURL);
                 superAgent
@@ -80,27 +107,41 @@ module.exports.group = {
 
 
     testCreateBlogPost: function(test) {
-        test.expect(1);
+        test.expect(2);
         var blogPost = new $$.m.BlogPost({
             'post_author': 'Kyle',
             'post_title' : 'Post Title',
             'post_content': 'some content here.'
         });
-        _log.info('connecting to: ' + accountURL + ' with cookie: ' + cookie);
-        var req = request(accountURL).post('/api/1.0/cms/website/10/blog')
+
+        var req = request(accountURL).post('/api/1.0/cms/page/10/blog')
             .set('cookie', cookie)
             .send(blogPost);
-        //agent.attachCookies(req);
+
+        req.expect(200, function(err, res){
+            test.ok(true);
+        });
+        var blogPost2 = new $$.m.BlogPost({
+            'post_author': 'Kyle',
+            'post_title' : 'Post #2 Title',
+            'post_content': 'more content here.'
+        });
+
+        var req = request(accountURL).post('/api/1.0/cms/page/10/blog')
+            .set('cookie', cookie)
+            .send(blogPost2);
+
         req.expect(200, function(err, res){
 
             test.ok(true);
             test.done();
         });
+
     },
     testListBlogPosts: function(test) {
         test.expect(1);
 
-        var req = request(accountURL).get('/api/1.0/cms/website/10/blog').set('cookie', cookie);
+        var req = request(accountURL).get('/api/1.0/cms/page/10/blog').set('cookie', cookie);
         //agent.attachCookies(req);
         req.expect(200, function(err, res){
 
@@ -108,7 +149,7 @@ module.exports.group = {
             for(var i=0; i<res.body.length; i++) {
                 testcontext.blogposts.push(res.body[i]);
             }
-            test.ok(true);
+            test.equals(2, res.body.length);
             test.done();
         });
     },
@@ -118,7 +159,7 @@ module.exports.group = {
         post.set('post_content', 'updated content');
         var postId = post.id();
         _log.info('connecting to: ' + accountURL + ' with cookie: ' + cookie);
-        var req = request(accountURL).post('/api/1.0/cms/website/10/blog/' + postId)
+        var req = request(accountURL).post('/api/1.0/cms/page/10/blog/' + postId)
             .set('cookie', cookie)
             .send(post);
         req.expect(200, function(err, res){
@@ -135,14 +176,13 @@ module.exports.group = {
         test.expect(1);
         var post = new $$.m.BlogPost(testcontext.blogposts[0]);
         var postId = post.id();
-        var req = request(accountURL).get('/api/1.0/cms/website/10/blog/' + postId)
+        var req = request(accountURL).get('/api/1.0/cms/page/10/blog/' + postId)
             .set('cookie', cookie);
 
         req.expect(200, function(err, res){
-            //console.dir(err);
-            //console.dir(res);
+
             _log.info('retrieved blog post with id: ' + postId);
-            console.dir(res.body);
+            //console.dir(res.body);
             var blogPost = new $$.m.BlogPost(res.body);
             test.equals(postId, blogPost.id());
 
@@ -154,16 +194,16 @@ module.exports.group = {
         var post = new $$.m.BlogPost(testcontext.blogposts[0]);
         var postId = post.id();
 
-        var req = request(accountURL).delete('/api/1.0/cms/website/10/blog/' + postId)
+        var req = request(accountURL).delete('/api/1.0/cms/page/10/blog/' + postId)
             .set('cookie', cookie);
 
         req.expect(200, function(err, res){
             //console.dir(err);
             //console.dir(res);
             _log.info('deleted blog post with id: ' + postId);
-            console.dir(res.body);
+            //console.dir(res.body);
 
-            var req2 = request(accountURL).get('/api/1.0/cms/website/10/blog/' + postId)
+            var req2 = request(accountURL).get('/api/1.0/cms/page/10/blog/' + postId)
                 .set('cookie', cookie);
 
             req2.expect(404, function(err, res){
@@ -182,7 +222,7 @@ module.exports.group = {
             p1.resolve();
         });
         $.when(p1).done(function(){
-            var req = request(accountURL).get('/api/1.0/cms/website/10/blog/author/author1')
+            var req = request(accountURL).get('/api/1.0/cms/page/10/blog/author/author1')
                 .set('cookie', cookie);
 
             req.expect(200, function(err, res){
@@ -190,7 +230,7 @@ module.exports.group = {
                     test.ok(false, 'Error getting posts by author: ' + err);
                     test.done();
                 }
-                console.dir(res.body);
+                //console.dir(res.body);
                 test.equals(2, res.body.length);
                 test.done();
             });
@@ -201,14 +241,14 @@ module.exports.group = {
 
     testGetPostsByTitle: function(test) {
         //website/:id/blog/title/:title
-        var req = request(accountURL).get('/api/1.0/cms/website/10/blog/title/title1')
+        var req = request(accountURL).get('/api/1.0/cms/page/10/blog/title/title1')
             .set('cookie', cookie);
         req.expect(200, function(err, res){
             if(err) {
                 test.ok(false, 'Error getting posts by title: ' + err);
                 test.done();
             }
-            console.dir(res.body);
+            //console.dir(res.body);
             test.equals(1, res.body.length);
             test.done();
         });
@@ -216,14 +256,14 @@ module.exports.group = {
 
     testGetPostsByContent: function(test) {
         //website/:id/blog/content/:content
-        var req = request(accountURL).get('/api/1.0/cms/website/10/blog/content/some')
+        var req = request(accountURL).get('/api/1.0/cms/page/10/blog/content/some')
             .set('cookie', cookie);
         req.expect(200, function(err, res){
             if(err) {
                 test.ok(false, 'Error getting posts by content: ' + err);
                 test.done();
             }
-            console.dir(res.body);
+            //console.dir(res.body);
             test.equals(2, res.body.length);
             test.done();
         });
@@ -233,14 +273,14 @@ module.exports.group = {
     testGetPostsByCategory: function(test) {
         //category1
         //website/:id/blog/category/category1
-        var req = request(accountURL).get('/api/1.0/cms/website/10/blog/category/category1')
+        var req = request(accountURL).get('/api/1.0/cms/page/10/blog/category/category1')
             .set('cookie', cookie);
         req.expect(200, function(err, res){
             if(err) {
                 test.ok(false, 'Error getting posts by category: ' + err);
                 test.done();
             }
-            console.dir(res.body);
+            //console.dir(res.body);
             test.equals(2, res.body.length);
             test.done();
         });
@@ -249,17 +289,109 @@ module.exports.group = {
     testGetPostsByTag: function(test) {
         //tag2
         //website/:id/blog/tag/tag2
-        var req = request(accountURL).get('/api/1.0/cms/website/10/blog/tag/tag2')
+        var req = request(accountURL).get('/api/1.0/cms/page/10/blog/tag/tag2')
             .set('cookie', cookie);
         req.expect(200, function(err, res){
             if(err) {
                 test.ok(false, 'Error getting posts by tag: ' + err);
                 test.done();
             }
-            console.dir(res.body);
+            //console.dir(res.body);
             test.equals(2, res.body.length);
             test.done();
         });
+    },
+
+    testReorderBlogPost: function(test) {
+        //page/:id/blog/:postId/reorder/:newOrder
+        /*
+         * Create 3 posts.  Move 2 to last.  Check order
+         */
+        test.expect(2);
+        var accountId = testcontext.accountId;
+        var post1 = new $$.m.BlogPost({
+            'accountId': accountId,
+            'pageId': testPageId,
+            'post_author': 'Kyle',
+            'post_title' : 'Post Order #1',
+            'post_content': 'some content here.'
+
+        });
+        var post2 = new $$.m.BlogPost({
+            'accountId': accountId,
+            'pageId': testPageId,
+            'post_author': 'Kyle',
+            'post_title' : 'Post Order #2',
+            'post_content': 'some content here.'
+
+        });
+        var post3 = new $$.m.BlogPost({
+            'accountId': accountId,
+            'pageId': testPageId,
+            'post_author': 'Kyle',
+            'post_title' : 'Post Order #3',
+            'post_content': 'some content here.'
+
+        });
+        var p1 = $.Deferred();
+        cmsManager.createBlogPost(accountId, post1, function(err, post){
+            if(err) {
+                test.ok(false, 'Error in testReorderBlogPost setup.');
+                test.done();
+            }
+
+            testcontext.blogposts.push(post.toJSON("public"));
+
+            cmsManager.createBlogPost(accountId, post2, function(err, post){
+                if(err) {
+                    test.ok(false, 'Error in testReorderBlogPost setup.');
+                    test.done();
+                }
+                testcontext.blogposts.push(post.toJSON("public"));
+                cmsManager.createBlogPost(accountId, post3, function(err, post){
+                    if(err) {
+                        test.ok(false, 'Error in testReorderBlogPost setup.');
+                        test.done();
+                    }
+                    testcontext.blogposts.push(post.toJSON("public"));
+                    p1.resolve();
+                });
+            });
+        });
+
+        $.when(p1).done(function(){
+            //verify order; modify order; verify order
+            cmsManager.listPostIdsByPage(accountId, testPageId, function(err, posts){
+                if(err) {
+                    test.ok(false, 'Error in testReorderBlogPost verifying post order.');
+                    test.done();
+                }
+
+                var initialAry = posts.slice(0);
+                //move 1 -> 2
+                var _postId = posts[1];
+                var req = request(accountURL).post('/api/1.0/cms/page/10/blog/' + _postId + '/reorder/2')
+                    .set('cookie', cookie);
+                req.expect(200, function(err, res){
+                    if(err) {
+                        test.ok(false, 'Error reordering posts: ' + err);
+                        test.done();
+                    }
+
+                    cmsManager.listPostIdsByPage(accountId, testPageId, function(err, posts){
+                        if(err) {
+                            test.ok(false, 'Error in testReorderBlogPost verifying post order.');
+                            test.done();
+                        }
+                        test.equals(initialAry.length, posts.length);
+                        test.equals(initialAry[1], posts[2]);
+                        test.done();
+                    });
+
+                });
+            });
+        });
+
     },
 
     cleanupTestPosts: function(test) {
@@ -268,7 +400,9 @@ module.exports.group = {
             for(var i=0; i<testcontext.blogposts.length; i++) {
                 var p1 = $.Deferred();
                 promiseAry.push(p1);
-                blogDAO.removeById(testcontext.blogposts._id, $$.m.BlogPost, function(err, val){
+                var blogPost = new $$.m.BlogPost(testcontext.blogposts[i]);
+                _log.debug('removing: ' + blogPost.id());
+                blogDAO.removeById(blogPost.id(), $$.m.BlogPost, function(err, val){
                     p1.resolve();
                 });
 

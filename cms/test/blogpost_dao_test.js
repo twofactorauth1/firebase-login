@@ -26,7 +26,7 @@ module.exports.group =  {
     tearDown: function (cb) {
         _log.debug('>> tearDown');
         testHelpers.destroyTestPosts(testcontext, cb);
-        _log.debug('>> tearDown');
+        _log.debug('<< tearDown');
     },
 
 
@@ -79,6 +79,51 @@ module.exports.group =  {
             test.equals('title2', posts[0].get('post_title'));
             test.done();
         });
+    },
+
+    testCreate: function(test) {
+        test.expect(1);
+
+
+        var post1 = new $$.m.BlogPost({
+            'accountId': 1,
+            'pageId': 1,
+            'post_author': 'author1',
+            'post_content': 'completely different stuff here.  totally unrelated.',
+            'post_title': 'title3',
+            'post_category': 'category1',
+            'post_tags': ['tag1', 'tag3']
+        });
+
+        var post2 = new $$.m.BlogPost({
+            'accountId': 1,
+            'pageId': 1,
+            'post_author': 'author1',
+            'post_content': 'completely different stuff here.  totally unrelated.',
+            'post_title': 'title4',
+            'post_category': 'category2',
+            'post_tags': ['tag1', 'tag3']
+        });
+
+        blogPostDao.createPost(post1, function(err, savedPost1){
+            if(err) {
+                test.ok(false, 'error in testCreate');
+            }
+            _log.debug('saved post1');
+            console.dir(savedPost1);
+            testcontext.posts.push(savedPost1.get('_id'));
+            blogPostDao.createPost(post2, function(err, savedPost2){
+                if(err) {
+                    test.ok(false, 'error in testCreate');
+                }
+                _log.debug('saved post2');
+                testcontext.posts.push(savedPost2.get('_id'));
+                console.dir(savedPost2);
+                test.ok(true);
+                test.done();
+            });
+        });
+
     }
 
 

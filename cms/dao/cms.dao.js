@@ -275,7 +275,7 @@ var dao = {
 
     //region PAGE
     getPageById: function(pageId, fn) {
-        return this.getById(pageId, Page, fn);
+        return this.getById(pageId, $$.m.cms.Page, fn);
     },
 
 

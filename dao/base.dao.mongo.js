@@ -142,12 +142,35 @@ var mongodao = {
 
     },
 
-    _findAllWithFieldsMongo: function(query, skip,fields, type, fn) {
+
+    _findAndOrderMongo: function(query, fields, type, order_by, order_dir, fn) {
         var self = this;
         if (fn == null) {
             fn = type;
             type = null;
         }
+
+        //ascending === 1 (default)
+        //descending === -1
+        if(order_dir !== -1) {
+            order_dir = 1;
+        }
+
+        var collection = this.getTable(type);
+        var mongoColl = this.mongo(collection);
+
+        var fxn = function(err, value) {
+            if (!err) {
+                return self._wrapArrayMongo(value, fields, type, fn);
+            } else {
+                self.log.error("An error occurred: #findAndOrderMongo() with query: " + JSON.stringify(query), err);
+                fn(err, value);
+            }
+        };
+        this.mongo(collection).find(query).sort({order_by : order_dir}).toArray(fxn);
+
+    },
+
 
         var collection = this.getTable(type);
         var mongoColl = this.mongo(collection);
@@ -284,6 +307,50 @@ var mongodao = {
 
             fn(err, value);
         });
+    },
+
+    _getMaxValueMongo: function(query, fieldName, type, fn) {
+        //db.thiscollection.find().sort({"thisfieldname":-1}).limit(1)
+        var self = this;
+        var collection = this.getTable(type);
+        this.mongo(collection).find(query).sort({fieldName : -1}).limit(1).toArray(function(err, values){
+            if(err) {
+                self.log.error('An error occurred: #getMaxValueMongo. ', err);
+                fn(err, null);
+            } else {
+                var result = values[0] || {};
+                self.log.info('result: ');
+                console.dir(result);
+                fn(null, result[fieldName]);
+            }
+        });
+    },
+
+    _findAndModify: function(params, fieldName, type, fn) {
+        var self = this;
+
+        var collection = this.getTable(type);
+
+        this.mongo(collection).findAndModify(params,
+            function(err, value) {
+                if (!err && value != null) {
+                    if (fn != null) {
+                        fn(null, value.fieldName);
+                    }
+                } else if(!err){
+                   //we could not find anything.  Insert maybe?
+                    params.seq = 0;
+                    var postOrder = new $$.m.PostOrder(params);
+                    self.mongo(collection).insert(postOrder, null, fn);
+
+                } else {
+                    self.log.error("An error occurred retrieving sequence: ", err);
+                    if (fn != null) {
+                        fn(err, value);
+                    }
+                }
+            }
+        );
     },
 
 

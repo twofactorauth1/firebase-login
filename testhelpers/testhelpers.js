@@ -7,8 +7,13 @@
 
 var userDao = require('../dao/user.dao.js');
 var accountDao = require('../dao/account.dao.js');
+<<<<<<< HEAD
 var contactDao = require('../dao/contact.dao.js');
 var paymentDao = require('../payments/dao/payment.dao.js');
+=======
+var blogPostDao = require('../cms/dao/blogpost.dao.js');
+var _log = $$.g.getLogger("testhelpers");
+>>>>>>> develop
 
 module.exports = {
 
@@ -53,21 +58,120 @@ module.exports = {
         });
     },
 
-    createTestContact: function (fn) {
-        var _c = new $$.m.Contact({
-            first: 'Test',
-            last: 'Contact',
-            birthday: '01/01/1979',
-            details: [
-                {
-                    emails: ['test@example.com']
-                }
-            ]
+    createTestPosts: function(testcontext, accountId, pageId, cb) {
+        var post1, post2, post3;
+        var p1 = $.Deferred(), p2 = $.Deferred(), p3 = $.Deferred();
+        var _accountId = accountId || 0;
+        var _pageId = pageId || 0;
+        testcontext.posts = testcontext.posts || [];
+
+        post1 = new $$.m.BlogPost({
+            'accountId': _accountId,
+            'pageId': _pageId,
+            'post_author': 'author1',
+            'post_content': 'some content',
+            'post_title': 'title1',
+            'post_category': 'category1',
+            'post_tags': ['tag1', 'tag2','tag3']
         });
 
-        contactDao.saveOrMerge(_c, function(err, value){
+        post2 = new $$.m.BlogPost({
+            'accountId': _accountId,
+            'pageId': _pageId,
+            'post_author': 'author2',
+            'post_content': 'some more content',
+            'post_title': 'title2',
+            'post_category': 'category2',
+            'post_tags': ['tag2']
+        });
+
+        post3 = new $$.m.BlogPost({
+            'accountId': _accountId,
+            'pageId': _pageId,
+            'post_author': 'author1',
+            'post_content': 'completely different stuff here.  totally unrelated.',
+            'post_title': 'title3',
+            'post_category': 'category1',
+            'post_tags': ['tag1', 'tag3']
+
+        });
+
+
+        blogPostDao.createPost(post1, function(err, value){
             if(err) {
-                throw Error("Failed to create test contact: " + err.toString());
+                _log.error(err);
+                p1.reject();
+            }
+            testcontext.posts = testcontext.posts || [];
+            testcontext.posts.push(value.get('_id'));
+            p1.resolve();
+        });
+        blogPostDao.createPost(post2, function(err, value){
+            if(err) {
+                _log.error(err);
+                p2.reject();
+            }
+            testcontext.posts = testcontext.posts || [];
+            testcontext.posts.push(value.get('_id'));
+            p2.resolve();
+        });
+        blogPostDao.createPost(post3, function(err, value){
+            if(err) {
+                _log.error(err);
+                p3.reject();
+            }
+            testcontext.posts = testcontext.posts || [];
+            testcontext.posts.push(value.get('_id'));
+            p3.resolve();
+        });
+        console.log('waiting');
+        $.when(p1,p2,p3).done(function(){
+            console.log('done waiting');
+            cb();
+        });
+    },
+
+    destroyTestPosts: function(testcontext, cb) {
+
+        var promiseAry = [];
+        while(testcontext.posts.length > 0) {
+            var id = testcontext.posts.pop();
+            var p1 = $.Deferred();
+            blogPostDao.removeById(id, function(err, value){
+                console.log('value: ' + value + '; err:' + err);
+                p1.resolve();
+            });
+            promiseAry.push(p1);
+        }
+        $.when(promiseAry).done(function() {
+            console.log('done cleaning up.');
+            cb();
+        });
+    },
+
+    getOrCreateAPITestingAccount: function(testcontext, fn) {
+        var account = new $$.m.Account({
+            company: {
+                name:"apitest",
+                type:0,
+                size:0,
+                logo:""
+            },
+
+            subdomain:"apitest",
+            domain:""
+        });
+        accountDao.getAccountBySubdomain('apitest', function(err, value){
+            if(err || !value) {
+                //it doesn't exist yet.  Let's create it.
+                accountDao.saveOrUpdate(account, function(err, value){
+                    testcontext.accountId = value.get('id');
+                    fn(null, value);
+                });
+            } else {
+                console.log('setting accountId to ' + value.id());
+                testcontext.accountId = value.id();
+                fn(null, value);
             }
             fn(err, value);
         });
