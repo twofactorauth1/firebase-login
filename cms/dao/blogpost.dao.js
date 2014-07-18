@@ -15,6 +15,28 @@ var dao = {
         defaultModel: $$.m.BlogPost
     },
 
+    createPost: function(post, fn) {
+        var self = this;
+        self.log.debug(">> createPost");
+        self.saveOrUpdate(post, function(err, savedPost){
+            if(err) {
+                self.log.error('Error getting order: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< createPost');
+                fn(null, savedPost);
+            }
+        });
+    },
+
+    getOrderedPosts: function(starting_order, fn) {
+        var self = this;
+        self.log.debug(">> getOrderedPosts");
+        starting_order = starting_order || 0;
+        var query = {'post_order' : {$gte: starting_order}};
+        //TODO: here
+    },
+
     getPostsByAuthor: function(author, fn) {
         var self = this;
         self.log.debug(">> getPostsByAuthor");
