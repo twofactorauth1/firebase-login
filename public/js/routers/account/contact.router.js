@@ -71,7 +71,7 @@ define([
             }
         },
         {
-            navigateToShowContactsForAll: function (letter, skip,trigger) {
+            navigateToShowContactsForAll: function (letter,trigger) {
                 if (letter != null) {
 
                     $$.r.mainAppRouter.navigate("contacts/" + letter, {trigger: trigger});

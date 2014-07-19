@@ -3,7 +3,8 @@ define([
     'utils/utils',
     'models/cms/components/blog',
     'services/cms.service',
-], function (EditWebsite, utils, Blog, CmsService) {
+    'events/events'
+], function (EditWebsite, utils, Blog, CmsService,events) {
 
     var view = EditWebsite.extend({
 
@@ -34,7 +35,8 @@ define([
             "change .dd": "onComponentDrag",
             "click .btn-add-component":"addComponent",
             "click .add-post":"addBlankPost",
-            "click .add-page":"addBlankPage"
+            "click .add-page":"addBlankPage",
+            "change .sort-ordering": "sort_contact"
         },
 
         initialize: function () {
@@ -59,6 +61,11 @@ define([
         renderHtml: function(html) {
             this.show(html);
         },
+
+        sort_contact: function (e){
+            $$.e.ContactSortingEvent.trigger("sortContact", {sort_type: e.target.value});
+        },
+
 
         /*
          * Edit Website Sidebar
@@ -176,7 +183,8 @@ define([
                     console.log('Current ThemeId: '+self.account.attributes.website.themeId);
 
                     //actual code when api works
-                     self.account.set('website', {'themeId': themeId});
+                    self.account.set("updateType","website");
+                    self.account.set('website', {'themeId': themeId});
                      self.account.save();
 
                     //refresh theme

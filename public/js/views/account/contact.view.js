@@ -12,9 +12,9 @@ define([
     'collections/contacts',
     'services/authentication.service',
     'services/contact.service',
+    'events/events',
     'libs/jquery/jquery.batchedimageloader'
-
-], function(User, Account, Contact, Contacts, AuthenticationService, ContactService) {
+], function(User, Account, Contact, Contacts, AuthenticationService, ContactService,events) {
 
     var view = Backbone.View.extend({
 
@@ -42,7 +42,6 @@ define([
             "scroll body": "check_height"
         },
 
-
         initialize: function() {
             var state = $$.u.querystringutils.getQueryStringValue("state");
             var detail = $$.u.querystringutils.getQueryStringValue("detail");
@@ -66,6 +65,7 @@ define([
             }
 
             _.bindAll(this, 'check_height');
+            $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
             $(window).scroll(this.check_height);
         },
 
@@ -99,6 +99,46 @@ define([
             console.log('import test');
         },
 
+        sort_contacts : function (sort_type) {
+            var self = this;
+            var p1 = this.getAccount();
+            this.skip=0;
+            this.loadMore=true;
+
+            $.when(p1)
+                .done(function(){
+                 self.account.set("updateType","setting");
+                 self.account.save({"sort_type": sort_type})
+                     .done(function(){
+
+                     self.getContacts(self.currentLetter)
+                         .done(function (res, msg) {
+
+                             /* if (res.length < self.skip+3) {
+                              self.loadMore = false;
+                              }*/
+                             self.renderContacts();
+                             self.check_welcome();
+                         });
+
+
+                    });
+
+                });
+
+
+
+
+         //   self.renderContacts();
+         //   self.check_welcome();
+            $$.r.account.ContactRouter.navigateToShowContactsForLetter("all",true);
+            /*if (this.currentLetter == "all") {
+                $$.r.account.ContactRouter.navigateToShowContactsForAll(this.currentLetter, this.skip);
+            }
+            else
+                $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);*/
+        //    this.render();
+        },
 
         renderContacts: function() {
             var self = this;
@@ -108,7 +148,6 @@ define([
                 contacts: self.contacts.toJSON(),
                 currentLetter: self.currentLetter.toUpperCase()
             };
-
             data.min = 6;
             data.count = data.contacts.length;
 
