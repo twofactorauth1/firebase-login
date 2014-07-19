@@ -26,76 +26,89 @@ var cmsDAO = require('../../cms/dao/cms.dao.js');
 var Blog = require('../../cms/model/components/blog.js');
 var Page = require('../../cms/model/page.js');
 var cmsManager = require('../../cms/cms_manager.js');
+var freeForm = require('../../cms/model/components/freeform.js');
 
 module.exports.group = {
     setUp: function(cb) {
-        //TODO: create test account if needed.
         if(sessionInitialized !== true) {
-            var p1 = $.Deferred();
-            var p2 = $.Deferred();
-            _log.info('getting test account');
-            testHelpers.getOrCreateAPITestingAccount(testcontext, function(err, account){
-                if(err) {
-                    _log.error('Error getting test account');
-                    test.done();
+            //delete blogplosts
+            var promiseAry = [];
+            var outerPromise = $.Deferred();
+            promiseAry.push(outerPromise);
+            blogDAO.findMany({}, $$.m.BlogPost, function(err, posts){
+
+                for(var i =0; i<posts.length; i++) {
+                    var p1 = $.Deferred();
+                    promiseAry.push(p1);
+                    blogDAO.removeById(posts[i].id(), $$.m.BlogPost, function(err, value){
+                        p1.resolve();
+                    });
                 }
-                _log.info('getting test user');
-                testHelpers.getOrCreateAPITestingUser(testcontext, function(err, user){
+                outerPromise.resolve();
+            });
+            $.when(promiseAry).done(function(){
+                var p1 = $.Deferred();
+                var p2 = $.Deferred();
+                _log.info('getting test account');
+                testHelpers.getOrCreateAPITestingAccount(testcontext, function(err, account){
                     if(err) {
-                        _log.error('Error getting test user');
+                        _log.error('Error getting test account');
                         test.done();
                     }
-                    _log.info('got user.');
-                    p1.resolve();
+                    _log.info('getting test user');
+                    testHelpers.getOrCreateAPITestingUser(testcontext, function(err, user){
+                        if(err) {
+                            _log.error('Error getting test user');
+                            test.done();
+                        }
+                        _log.info('got user.');
+                        p1.resolve();
+                    });
+                });
+                //create page for blog posts
+                var blogComponent = new $$.m.cms.modules.Blog({
+                    _id: $$.u.idutils.generateUUID()
+                });
+
+                var page = new $$.m.cms.Page({
+                    _id: testPageId,
+                    'accountId':1,
+                    'websiteId':1,
+                    handle: 'Page Handle',
+                    title: 'Page Title',
+                    components: [blogComponent.toJSON('public')]
+                });
+
+
+                cmsDAO.saveOrUpdate(page, function(err, page){
+                    if(err) {
+                        test.ok(false, 'error in testCreate');
+                    }
+                    p2.resolve();
+                });
+                $.when(p1,p2).done(function(){
+                    var loginURL = appConfig.server_url + '/login';
+                    _log.info('loginURL: ' + loginURL);
+                    superAgent
+                        .post(loginURL)
+                        .send({'username': testUsername, 'password': testPassword})
+                        .end(function(err, res){
+                            console.dir(err);
+                            agent.saveCookies(res);
+                            sessionInitialized = true;
+                            //TODO: establish accountURL
+                            accountURL = 'http://apitest.indigenous.local:3000';
+                            cookie = res.headers['set-cookie'];
+                            cb();
+                        });
                 });
             });
-            //create page for blog posts
-            var blogComponent = new $$.m.cms.modules.Blog({
-
-            });
-
-            var page = new $$.m.cms.Page({
-                _id: testPageId,
-                'accountId':1,
-                'websiteId':1,
-                handle: 'Page Handle',
-                title: 'Page Title',
-                components: [blogComponent]
-            });
-
-
-            cmsDAO.saveOrUpdate(page, function(err, page){
-                if(err) {
-                    test.ok(false, 'error in testCreate');
-                }
-                p2.resolve();
-            });
-            $.when(p1,p2).done(function(){
-                var loginURL = appConfig.server_url + '/login';
-                _log.info('loginURL: ' + loginURL);
-                superAgent
-                    .post(loginURL)
-                    .send({'username': testUsername, 'password': testPassword})
-                    .end(function(err, res){
-                        console.dir(err);
-                        agent.saveCookies(res);
-                        sessionInitialized = true;
-                        //TODO: establish accountURL
-                        accountURL = 'http://apitest.indigenous.local:3000';
-                        cookie = res.headers['set-cookie'];
-                        cb();
-                    });
-            });
-
-
 
         } else {
             //anything else?
             _log.debug('already initialized...');
             cb();
         }
-
-
 
     },
 
@@ -392,6 +405,138 @@ module.exports.group = {
             });
         });
 
+    },
+
+
+    testGetComponentsByPage: function(test) {
+        test.expect(1);
+        var req = request(accountURL).get('/api/1.0/cms/page/10/components')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error getting posts by tag: ' + err);
+                test.done();
+            }
+            console.dir(res.body);
+            test.equals(1, res.body.length);
+            test.done();
+        });
+    },
+
+    testGetComponentsByType: function(test) {
+        test.expect(1);
+        var req = request(accountURL).get('/api/1.0/cms/page/10/components/type/blog')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error getting posts by tag: ' + err);
+                test.done();
+            }
+            console.dir(res.body);
+            test.equals(1, res.body.length);
+            test.done();
+        });
+    },
+
+    testAddComponentToPage: function(test) {
+        var component = new $$.m.cms.modules.Freeform({
+            _id: $$.u.idutils.generateUUID(),
+            label:"FreeForm Component",
+            description:"The free form component",
+            value: "<p>HTML is neat</p>"
+        });
+        testcontext.componentId = component.id();
+        var req = request(accountURL).post('/api/1.0/cms/page/10/components')
+            .set('cookie', cookie)
+            .send(component);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error getting posts by tag: ' + err);
+                test.done();
+            }
+            console.dir(res.body);
+            test.equals(2, res.body['components'].length);
+            test.done();
+        });
+
+    },
+
+    testUpdateComponent: function(test) {
+        //app.post(this.url('page/:id/components/:componentId'), this.isAuthApi, this.updateComponent.bind(this));
+        cmsManager.getPageComponentsByType('10', 'freeform', function(err, component) {
+            if(err) {
+                test.ok(false, 'Error updating component: ' + err);
+                test.done();
+            }
+
+            component['label'] =  'Updated Label';
+            var req = request(accountURL).post('/api/1.0/cms/page/10/components/' + testcontext.componentId)
+                .set('cookie', cookie)
+                .send(component);
+
+            req.expect(200, function(err, res){
+                if(err) {
+                    test.ok(false, 'Error getting posts by tag: ' + err);
+                    test.done();
+                }
+                console.dir(res.body);
+                test.equals(2, res.body['components'].length);
+                test.done();
+            });
+
+        });
+
+    },
+
+    testUpdateAllComponents: function(test) {
+        test.expect(2);
+        //app.post(this.url('page/:id/components/all'), this.isAuthApi, this.updateAllComponents.bind(this));
+        cmsManager.getPageComponents(testPageId, function(err, components){
+            for(var i=0; i<components.length; i++) {
+                components[i]['anchor'] = 'updated';
+            }
+            var req = request(accountURL).post('/api/1.0/cms/page/10/components/all')
+                .set('cookie', cookie)
+                .send(components);
+            req.expect(200, function(err, res) {
+                if (err) {
+                    test.ok(false, 'Error updating post order: ' + err);
+                    test.done();
+                }
+                console.dir(res.body);
+                test.equals(2, res.body['components'].length);
+                test.equals('updated', res.body['components'][0]['anchor']);
+                test.done();
+            });
+        });
+
+    },
+
+    testUpdateComponentOrder: function(test) {
+        //app.post(this.url('page/:id/components/:componentId/order/:newOrder'), this.isAuthApi, this.updateComponentOrder.bind(this));
+        var req = request(accountURL).post('/api/1.0/cms/page/10/components/' + testcontext.componentId + '/order/0')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error updating post order: ' + err);
+                test.done();
+            }
+            console.dir(res.body);
+            test.done();
+        });
+    },
+
+    testDeleteComponent: function(test) {
+        var req = request(accountURL).delete('/api/1.0/cms/page/10/components/' + testcontext.componentId)
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error getting posts by tag: ' + err);
+                test.done();
+            }
+            console.dir(res.body);
+            test.done();
+        });
     },
 
     cleanupTestPosts: function(test) {
