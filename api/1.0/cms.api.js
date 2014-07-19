@@ -48,8 +48,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id/components'), this.isAuthApi, this.getComponentsByPage.bind(this));
         app.get(this.url('page/:id/components/type/:type'), this.isAuthApi, this.getComponentsByType.bind(this));
         app.post(this.url('page/:id/components'), this.isAuthApi, this.addComponentToPage.bind(this));
-        app.post(this.url('page/:id/components/:componentId'), this.isAuthApi, this.updateComponent.bind(this));
         app.post(this.url('page/:id/components/all'), this.isAuthApi, this.updateAllComponents.bind(this));
+        app.post(this.url('page/:id/components/:componentId'), this.isAuthApi, this.updateComponent.bind(this));
         app.delete(this.url('page/:id/components/:componentId'), this.isAuthApi, this.deleteComponent.bind(this));
         app.post(this.url('page/:id/components/:componentId/order/:newOrder'), this.isAuthApi, this.updateComponentOrder.bind(this));
 

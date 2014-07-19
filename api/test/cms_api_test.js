@@ -109,7 +109,7 @@ module.exports.group = {
             _log.debug('already initialized...');
             cb();
         }
-        
+
     },
 
     tearDown: function(cb) {
@@ -407,13 +407,6 @@ module.exports.group = {
 
     },
 
-    /*
-
-     app.post(this.url('page/:id/components/:componentId'), this.isAuthApi, this.updateComponent.bind(this));
-     app.post(this.url('page/:id/components/all'), this.isAuthApi, this.updateAllComponents.bind(this));
-     app.delete(this.url('page/:id/components/:componentId'), this.isAuthApi, this.deleteComponent.bind(this));
-     app.post(this.url('page/:id/components/:componentId/order/:newOrder'), this.isAuthApi, this.updateComponentOrder.bind(this));
-     */
 
     testGetComponentsByPage: function(test) {
         test.expect(1);
@@ -496,7 +489,41 @@ module.exports.group = {
     },
 
     testUpdateAllComponents: function(test) {
-        test.done();
+        test.expect(2);
+        //app.post(this.url('page/:id/components/all'), this.isAuthApi, this.updateAllComponents.bind(this));
+        cmsManager.getPageComponents(testPageId, function(err, components){
+            for(var i=0; i<components.length; i++) {
+                components[i]['anchor'] = 'updated';
+            }
+            var req = request(accountURL).post('/api/1.0/cms/page/10/components/all')
+                .set('cookie', cookie)
+                .send(components);
+            req.expect(200, function(err, res) {
+                if (err) {
+                    test.ok(false, 'Error updating post order: ' + err);
+                    test.done();
+                }
+                console.dir(res.body);
+                test.equals(2, res.body['components'].length);
+                test.equals('updated', res.body['components'][0]['anchor']);
+                test.done();
+            });
+        });
+
+    },
+
+    testUpdateComponentOrder: function(test) {
+        //app.post(this.url('page/:id/components/:componentId/order/:newOrder'), this.isAuthApi, this.updateComponentOrder.bind(this));
+        var req = request(accountURL).post('/api/1.0/cms/page/10/components/' + testcontext.componentId + '/order/0')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error updating post order: ' + err);
+                test.done();
+            }
+            console.dir(res.body);
+            test.done();
+        });
     },
 
     testDeleteComponent: function(test) {
@@ -510,10 +537,6 @@ module.exports.group = {
             console.dir(res.body);
             test.done();
         });
-    },
-
-    testUpdateComponentOrder: function(test) {
-        test.done();
     },
 
     cleanupTestPosts: function(test) {
