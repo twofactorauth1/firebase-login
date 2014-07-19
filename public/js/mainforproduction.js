@@ -18,7 +18,7 @@ require.config({
         json2: 'libs/json2/json2',
         backbone: 'libs/backbone/backbone',
         backboneAssoc: 'libs/backbone-associations/backbone-associations',
-        backboneNested: 'libs/backbone-nested/backbone-nested',
+        backboneNested: 'libs/backbone-nested-model/backbone-nested',
         backboneExtended: 'libs_misc/backbone/backboneExtended',
         handlebars: 'libs/handlebars/handlebars',
         handlebarsHelpers: 'libs/handlebars-helpers/src/helpers',

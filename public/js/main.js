@@ -19,7 +19,7 @@ require.config({
         json2: 'libs/json2/json2',
         backbone: 'libs/backbone/backbone',
         backboneAssoc: 'libs/backbone-associations/backbone-associations',
-        backboneNested: 'libs/backbone-nested/backbone-nested',
+        backboneNested: 'libs/backbone-nested-model/backbone-nested',
         backboneExtended: 'libs_misc/backbone/backboneExtended',
         handlebars: 'libs/handlebars/handlebars',
         handlebarsHelpers: 'libs/handlebars-helpers/src/helpers',
@@ -43,7 +43,7 @@ require.config({
         date: 'libs/datejs/build/production/date.min',
         daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
         d3: 'libs/d3/d3',
-        moment: 'libs/moment/moment.min',
+        moment: 'libs/moment/min/moment.min',
 
         //UI SPECIFIC
         toggles: 'libs_misc/toggles.min'
