@@ -172,9 +172,8 @@ module.exports = {
 
                 var postsAry = [];
                 for (var i = 0; i < componentAry.length; i++) {
-                    var attributes = componentAry[i]['attributes'];
-                    if (attributes['type'] === 'blog') {
-                        postsAry = attributes['posts'];
+                    if (componentAry[i]['type'] === 'blog') {
+                        postsAry = componentAry[i]['posts'];
                         break;
                     }
                 }
@@ -219,8 +218,7 @@ module.exports = {
                 var targetComponents = [];
                 var componentAry = page.get('components') || [];
                 for(var i=0; i<componentAry.length; i++) {
-                    var attributes = componentAry[i]['attributes'];
-                    if (attributes['type'] === type) {
+                    if (componentAry[i]['type'] === type) {
                         targetComponents.push(componentAry[i]);
                     }
                 }
@@ -270,8 +268,7 @@ module.exports = {
                     componentAry.push(component);
                 } else {
                     for(var i=0; i<componentAry.length; i++) {
-                        var attributes = componentAry[i]['attributes'];
-                        if(attributes['type'] === component['attributes']['type']) {
+                        if(componentAry[i]['type'] === component['type']) {
                             componentAry[i] = component;
                             break;
                         }
@@ -315,8 +312,7 @@ module.exports = {
                 var componentAry = page.get('components') || [];
                 var spliceIndex = -1;
                 for(var i=0; i<componentAry.length; i++) {
-                    var attributes = componentAry[i]['attributes'];
-                    if(attributes['_id'] === componentId) {
+                    if(componentAry[i]['_id'] === componentId) {
                         spliceIndex = i;
                         break;
                     }
@@ -350,8 +346,7 @@ module.exports = {
                 var component = null;
                 var spliceIndex = -1;
                 for(var i=0; i<componentAry.length; i++) {
-                    var attributes = componentAry[i]['attributes'];
-                    if(attributes['_id'] === componentId) {
+                    if(componentAry[i]['_id'] === componentId) {
                         spliceIndex = i;
                         component = componentAry[i];
                         break;
@@ -370,7 +365,20 @@ module.exports = {
 
     _addPostIdToBlogComponentPage: function(postId, page) {
         var componentAry = page.get('components') || [];
+        var blogComponent = null;
+        for(var i=0; i<componentAry.length; i++) {
+            if(componentAry[i]['type']==='blog') {
+                blogComponent = new $$.m.cms.modules.Blog(componentAry[i]);
+            }
+        }
+        if(!blogComponent) {
+            return null;
+        }
 
+        var postsAry = blogComponent.get('posts') || [];
+        postsAry.push(postId);
+        return postsAry;
+        /*
         var blogComponentAttrs = null;
         for(var i=0; i<componentAry.length; i++) {
             var attributes = componentAry[i]['attributes'];
@@ -386,11 +394,37 @@ module.exports = {
 
         postsAry.push(postId);
         return postsAry;
+        */
+
     },
 
     _removePostIdFromBlogComponentPage: function(postId, page) {
         var componentAry = page.get('components') || [];
 
+        var blogComponent = null;
+        for(var i=0; i<componentAry.length; i++) {
+            if(componentAry[i]['type']==='blog') {
+                blogComponent = new $$.m.cms.modules.Blog(componentAry[i]);
+            }
+        }
+        if(!blogComponent) {
+            return null;
+        }
+        var postsAry = blogComponent.get('posts') || [];
+        var spliceIndex = -1;
+        for(var i = 0; i<postsAry.length; i++) {
+            if(postsAry[i] === postId) {
+                spliceIndex = i;
+            }
+        }
+
+        if(spliceIndex > 0) {
+            postsAry.splice(spliceIndex, 1);
+        }
+
+        return postsAry;
+
+        /*
         var blogComponentAttrs = null;
         for(var i=0; i<componentAry.length; i++) {
             var attributes = componentAry[i]['attributes'];
@@ -417,5 +451,6 @@ module.exports = {
         }
 
         return postsAry;
+        */
     }
 };
