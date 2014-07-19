@@ -183,6 +183,76 @@ module.exports = {
         });
     },
 
+    getPageComponents: function(pageId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPageComponents');
+        cmsDao.getPageById(pageId, function(err, page) {
+            if (err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if (!page) {
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                var componentAry = page.get('components') || [];
+                self.log.debug('<< getPageComponents');
+                fn(null, componentAry);
+            }
+        });
+    },
+
+    getPageComponentsByType: function(pageId, type, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPageComponentsByType');
+        cmsDao.getPageById(pageId, function(err, page) {
+            if (err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if (!page) {
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                var targetComponents = [];
+                var componentAry = page.get('components') || [];
+                for(var i=0; i<componentAry.length; i++) {
+                    var attributes = componentAry[i]['attributes'];
+                    if (attributes['type'] === type) {
+                        targetComponents.push(componentAry[i]);
+                    }
+                }
+                self.log.debug('<< getPageComponentsByType');
+                fn(null, targetComponents);
+            }
+        });
+    },
+
+    addPageComponent: function(pageId, component, fn){
+        var self = this;
+        self.log = log;
+        self.log.debug('>> addPageComponent');
+
+        cmsDao.getPageById(pageId, function(err, page){
+            if (err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if (!page) {
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                var componentAry = page.get('components') || [];
+                componentAry.push(component);
+                self.log.debug('<< addPageComponent');
+                cmsDao.saveOrUpdate(page, fn);
+            }
+        });
+
+    },
+
     updatePageComponent: function(pageId, component, fn) {
         var self = this;
         self.log = log;
@@ -208,6 +278,92 @@ module.exports = {
                     }
                 }
                 cmsDao.saveOrUpdate(page, fn);
+            }
+        });
+    },
+
+    updateAllPageComponents: function(pageId, componentAry, fn) {
+        var self = this;
+        self.log = log;
+        cmsDao.getPageById(pageId, function(err, page){
+            if(err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if(!page){
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                page.set('components', componentAry);
+                cmsDao.saveOrUpdate(page, fn);
+            }
+        });
+    },
+
+    deleteComponent: function(pageId, componentId, fn) {
+        var self = this;
+        self.log = log;
+        cmsDao.getPageById(pageId, function(err, page) {
+            if (err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if (!page) {
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                var componentAry = page.get('components') || [];
+                var spliceIndex = -1;
+                for(var i=0; i<componentAry.length; i++) {
+                    var attributes = componentAry[i]['attributes'];
+                    if(attributes['_id'] === componentId) {
+                        spliceIndex = i;
+                        break;
+                    }
+                }
+                if(spliceIndex !==-1) {
+                    componentAry.splice(spliceIndex, 1);
+                    cmsDao.saveOrUpdate(page, fn);
+                } else {
+                    var msg = 'Referenced componentId [' + componentId + '] was not found on page [' + pageId + '].';
+                    self.log.error(msg);
+                    fn(msg, null);
+                }
+            }
+        });
+    },
+
+    modifyComponentOrder: function(pageId, componentId, newOrder, fn) {
+        var self = this;
+        self.log = log;
+
+        cmsDao.getPageById(pageId, function(err, page) {
+            if (err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if (!page) {
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                var componentAry = page.get('components') || [];
+                var component = null;
+                var spliceIndex = -1;
+                for(var i=0; i<componentAry.length; i++) {
+                    var attributes = componentAry[i]['attributes'];
+                    if(attributes['_id'] === componentId) {
+                        spliceIndex = i;
+                        component = componentAry[i];
+                        break;
+                    }
+                }
+                if(spliceIndex === -1) {
+                    fn('Referenced component [' + componentId + '] was not found on page [' + pageId + '].', null);
+                } else {
+                    componentAry.splice(spliceIndex, 1);
+                    componentAry.splice(newOrder, 0, component);
+                    cmsDao.saveOrUpdate(page, fn);
+                }
             }
         });
     },
