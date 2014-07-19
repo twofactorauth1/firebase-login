@@ -1,6 +1,6 @@
 define([
     "text!libs/jqueryfileupload/templates.html",
-    "./vendor/jquery.ui.widget",         //required
+    "./vendor/jquery.ui.widget.js",         //required
     "./tmpl",                         //small templating engine used by this lib
     "./load-image",                  //photo previews and image resizing
     "./canvas-to-blob",              //required for image resizing

@@ -11,7 +11,7 @@
 var fs = require('fs')
     , path = require('path')
     , jsdom = require('jsdom')
-    , jquery = fs.readFileSync(path.join(__dirname, '../libs/jquery/jquery.js'), 'utf8');
+    , jquery = fs.readFileSync(path.join(__dirname, '../libs/jquery/dist/jquery.js'), 'utf8');
 
 module.exports = function(grunt) {
 

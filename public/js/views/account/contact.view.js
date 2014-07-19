@@ -12,7 +12,7 @@ define([
     'collections/contacts',
     'services/authentication.service',
     'services/contact.service',
-    'libs/jquery/jquery.batchedimageloader'
+    'libs_misc/jquery/jquery.batchedimageloader'
 
 ], function(User, Account, Contact, Contacts, AuthenticationService, ContactService) {
 
