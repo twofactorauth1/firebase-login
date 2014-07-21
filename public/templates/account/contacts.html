@@ -114,6 +114,7 @@ CONTACTS MAIN VIEW
                                 // {{/if}}
 
                                 <span class="name visible-xs">
+
                                     <h4>
                                         {{first}} {{middle}} {{last}}
                                         <span class="label label-info contact-cat pull-right hidden-xs">{{contactTypeLabel this}}</span>
@@ -164,7 +165,13 @@ CONTACTS MAIN VIEW
                                 </ul>
                             </div>
                             <div class="media-body col-xs-12 hidden-xs">
+                                {{#ifCond ../currentDisplay}}
                                 <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
+                                {{else}}
+                                <h4 class="person-name">{{last}} {{middle}} {{first}}</h4>
+                                {{/ifCond}}
+
+                               <!-- <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>-->
                                 <span class="label label-info contact-cat">{{contactTypeLabel this}}</span>
 
                                 <div class="hidden-xs">
@@ -436,10 +443,10 @@ CONTACTS MAIN VIEW
             <div class="form-group row">
                 <label class="col-xs-12 control-label">Contacts List Display</label>
                 <div class="col-xs-12">
-                    <select class=" form-control chosen-select" data-placeholder="Sort Contacts">
+                    <select class=" form-control chosen-select sort-display" data-placeholder="Sort Contacts">
                         <option value=""></option>
-                        <option value="United States">First Last</option>
-                        <option value="United Kingdom">Last, First</option>
+                        <option value="first">First Last</option>
+                        <option value="last">Last, First</option>
                     </select>
                 </div>
             </div>
@@ -451,7 +458,7 @@ CONTACTS MAIN VIEW
                         <option value=""></option>
                         <option value="first">First Last</option>
                         <option value="last">Last, First</option>
-                        <option value="dateAdded">Date Added</option>
+                        <option value="created.date">Date Added</option>
                         <option value="lastActiviy">Last Activity</option>
                     </select>
                 </div>
@@ -1705,4 +1712,12 @@ HELPERS
             return options.inverse(this);
         }
     });
+
+    Handlebars.registerHelper('ifCond', function(v1, options) {
+        if(v1 === 'FIRST') {
+            return options.fn(this);
+        }
+        return options.inverse(this);
+    });
+
 </script>

@@ -36,7 +36,8 @@ define([
             "click .btn-add-component":"addComponent",
             "click .add-post":"addBlankPost",
             "click .add-page":"addBlankPage",
-            "change .sort-ordering": "sort_contact"
+            "change .sort-ordering": "sort_contact",
+            "change .sort-display": "sort_display"
         },
 
         initialize: function () {
@@ -63,7 +64,10 @@ define([
         },
 
         sort_contact: function (e){
-            $$.e.ContactSortingEvent.trigger("sortContact", {sort_type: e.target.value});
+            $$.e.ContactSortingEvent.trigger("sortContact", {sort_type: e.target.value}); // generating events
+        },
+        sort_display: function (e){
+            $$.e.ContactSortingEvent.trigger("displayContact", {display_type: e.target.value}); // generating events
         },
 
 

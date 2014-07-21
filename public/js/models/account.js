@@ -64,6 +64,9 @@ define([], function() {
                     else if(this.get("updateType")=="setting") {
                         return $$.api.getApiUrl("account", this.id+"/setting");
                     }
+                    else if(this.get("updateType")=="displaysetting") {
+                        return $$.api.getApiUrl("account", this.id+"/displaysetting");
+                    }
                     break;
                 case "POST":
                     return $$.api.getApiUrl("account", "");

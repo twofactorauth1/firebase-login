@@ -25,6 +25,7 @@ define([
         accounts: null,
         currentLetter: "a",
         loadMore : true,
+        currentDisplay:'first',
 
         events: {
             "click .btn-letter":"showLetter",
@@ -66,6 +67,7 @@ define([
 
             _.bindAll(this, 'check_height');
             $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
+            $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
             $(window).scroll(this.check_height);
         },
 
@@ -139,6 +141,26 @@ define([
                 $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);*/
         //    this.render();
         },
+        display_contacts : function (data) {
+            var self = this;
+            var p1 = this.getAccount();
+            this.skip=0;
+            this.loadMore=true;
+
+            $.when(p1)
+                .done(function(){
+                    self.account.set("updateType","displaysetting");
+                    self.account.save({"display_type": data})
+                        .done(function(err,res){
+
+                            self.currentDisplay=data.display_type;
+                            self.renderContacts();
+                            self.check_welcome();
+                        });
+
+                });
+            $$.r.account.ContactRouter.navigateToShowContactsForLetter("all",true);
+        },
 
         renderContacts: function() {
             var self = this;
@@ -146,8 +168,10 @@ define([
                 account: self.account.toJSON(),
                 user: self.user.toJSON(),
                 contacts: self.contacts.toJSON(),
-                currentLetter: self.currentLetter.toUpperCase()
+                currentLetter: self.currentLetter.toUpperCase(),
+                currentDisplay:self.currentDisplay.toUpperCase()
             };
+
             data.min = 6;
             data.count = data.contacts.length;
 
