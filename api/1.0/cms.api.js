@@ -44,6 +44,15 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':accountid/cms/theme', "account"), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
         app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
 
+        // COMPONENTS
+        app.get(this.url('page/:id/components'), this.isAuthApi, this.getComponentsByPage.bind(this));
+        app.get(this.url('page/:id/components/type/:type'), this.isAuthApi, this.getComponentsByType.bind(this));
+        app.post(this.url('page/:id/components'), this.isAuthApi, this.addComponentToPage.bind(this));
+        app.post(this.url('page/:id/components/all'), this.isAuthApi, this.updateAllComponents.bind(this));
+        app.post(this.url('page/:id/components/:componentId'), this.isAuthApi, this.updateComponent.bind(this));
+        app.delete(this.url('page/:id/components/:componentId'), this.isAuthApi, this.deleteComponent.bind(this));
+        app.post(this.url('page/:id/components/:componentId/order/:newOrder'), this.isAuthApi, this.updateComponentOrder.bind(this));
+
         // BLOG POSTS
         app.post(this.url('page/:id/blog'), this.isAuthApi, this.createBlogPost.bind(this));
         app.get(this.url('page/:id/blog'), this.isAuthApi, this.listBlogPosts.bind(this));
@@ -187,13 +196,134 @@ _.extend(api.prototype, baseApi.prototype, {
     },
     //endregion
 
+    //COMPONENTS
+
+    getComponentsByPage: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getComponentsByPage');
+        var accountId = req.params.accountid;
+        var pageId = req.params.id;
+
+        accountId = parseInt(accountId);
+
+        cmsManager.getPageComponents(pageId, function(err, value){
+            self.log.debug('<< getComponentsByPage');
+            self.sendResultOrError(res, err, value, "Error retrieving components");
+            self = null;
+        });
+    },
+
+    getComponentsByType: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getComponentsByType');
+        var accountId = req.params.accountid;
+        var pageId = req.params.id;
+        var type = req.params.type;
+
+        accountId = parseInt(accountId);
+
+        cmsManager.getPageComponentsByType(pageId, type, function(err, value){
+            self.log.debug('<< getComponentsByType');
+            self.sendResultOrError(res, err, value, "Error retrieving components by type");
+            self = null;
+        });
+    },
+
+    addComponentToPage: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> addComponentToPage');
+        var componentObj = req.body;
+
+        var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.addPageComponent(pageId, componentObj, function(err, value){
+            self.log.debug('<< addComponentToPage');
+            self.sendResultOrError(res, err, value, "Error adding components to page");
+            self = null;
+        });
+    },
+
+    updateComponent: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> updateComponent');
+        var componentObj = req.body;
+
+        var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var componentId = req.params.componentId;
+
+        cmsManager.updatePageComponent(pageId, componentObj, function(err, value){
+            self.log.debug('<< updateComponent');
+            self.sendResultOrError(res, err, value, "Error updating a component on a page");
+            self = null;
+        });
+
+    },
+
+    updateAllComponents: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> updateAllComponents');
+        var componentAry = req.body;
+
+        var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.updateAllPageComponents(pageId, componentAry, function(err, value){
+            self.log.debug('<< updateAllComponents');
+            self.sendResultOrError(res, err, value, "Error updating components");
+            self = null;
+        });
+    },
+
+    deleteComponent: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> deleteComponent');
+
+        var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var componentId = req.params.componentId;
+
+        cmsManager.deleteComponent(pageId, componentId, function(err, value){
+            self.log.debug('<< deleteComponent');
+            self.sendResultOrError(res, err, value, "Error deleting component");
+            self = null;
+        });
+
+    },
+
+    updateComponentOrder: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> updateComponentOrder');
+
+        var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var componentId = req.params.componentId;
+        var newOrder = req.params.newOrder;
+
+        cmsManager.modifyComponentOrder(pageId, componentId, newOrder, function(err, value){
+            self.log.debug('<< updateComponentOrder');
+            self.sendResultOrError(res, err, value, "Error deleting component");
+            self = null;
+        });
+
+    },
+
 
     //BLOG POSTS
     createBlogPost: function(req, res) {
         //TODO: Add Security
         var self = this;
+        self.log.debug('>> createBlogPost');
         var blogPost = new $$.m.BlogPost(req.body);
-        console.dir(blogPost);
+
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
 
