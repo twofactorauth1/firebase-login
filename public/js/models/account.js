@@ -25,9 +25,12 @@ define([], function() {
                     themeId: null
                 },
                 domain:"",
-                token:""
+                token:"",
+                updateType:""
+
             };
         },
+
 
 
         getTmpAccount: function() {
@@ -52,7 +55,18 @@ define([], function() {
                     }
                     break;
                 case "PUT":
-                    return $$.api.getApiUrl("account", this.id);
+                    if(this.get("updateType")==null) {
+                        return $$.api.getApiUrl("account", this.id);
+                    }
+                    else if(this.get("updateType")=="website") {
+                        return $$.api.getApiUrl("account", this.id+"/website");
+                    }
+                    else if(this.get("updateType")=="setting") {
+                        return $$.api.getApiUrl("account", this.id+"/setting");
+                    }
+                    else if(this.get("updateType")=="displaysetting") {
+                        return $$.api.getApiUrl("account", this.id+"/displaysetting");
+                    }
                     break;
                 case "POST":
                     return $$.api.getApiUrl("account", "");

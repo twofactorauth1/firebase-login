@@ -18027,6 +18027,9 @@ div.error label.error:before {
     -webkit-transition: all 0.2s ease-out 0s;
     transition: all 0.2s ease-out 0s;
     width: 100%;
+<<<<<<< HEAD
+>>>>>>> zeeshan_dev
+=======
 >>>>>>> zeeshan_dev
 }
 .letter-list li a:hover {
@@ -22353,3 +22356,18 @@ input {
     max-height: 100%;
   }
 }
+<<<<<<< HEAD
+=======
+.customErrorMsgBox{
+    text-align: center;
+    width: 51%;
+    position: absolute;
+    left: 26%;
+    top: 156%;
+    height: 16%;
+}
+/*.userInfoTable,.accountInfoTable{*/
+    /*border-collapse:separate;*/
+    /*border-spacing:10px 0 ;*/
+/*}*/
+>>>>>>> zeeshan_dev

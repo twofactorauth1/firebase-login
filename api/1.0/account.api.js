@@ -31,6 +31,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id'), this.isAuthApi, this.getAccountById.bind(this));
         app.post(this.url(''), this.isAuthApi, this.createAccount.bind(this));
         app.put(this.url(':id'), this.isAuthApi, this.updateAccount.bind(this));
+        app.put(this.url(':id/displaysetting'), this.isAuthApi, this.updateAccountDisplaySetting.bind(this));
+        app.put(this.url(':id/setting'), this.isAuthApi, this.updateAccountSetting.bind(this));
+        app.put(this.url(':id/website'), this.isAuthApi, this.updateAccountWebsiteInfo.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteAccount.bind(this));
 
         app.get(this.url(':userid/accounts', 'user'), this.isAuthApi, this.getAllAccountsForUserId.bind(this));
@@ -106,7 +109,12 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
+
     updateAccount: function(req,resp) {
+        console.log("test");
+    },
+
+    updateAccountDisplaySetting: function(req,resp) {
         console.log(req.body);
         var account=req.body;
         var self = this;
@@ -118,10 +126,72 @@ _.extend(api.prototype, baseApi.prototype, {
 
         accountId = parseInt(accountId);
         accountDao.getById(accountId, function(err, value) {
-           console.log(value);
+
             if (!err && value != null) {
-               // value.attributes.website.themeId=req.body.account.attributes.website.themeId;
-               // value.attributes.website.themeId=account.website.themeId;
+
+//                value.set("settings", account.sort_type );
+                value.set("displaysettings", account.display_type );
+
+                accountDao.saveOrUpdate(value, function(err, value) {
+                    console.log(value);
+                    if (!err && value != null) {
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
+                resp.send(value.toJSON("public"));
+            } else {
+                self.wrapError(resp, 500, null, err, value);
+            }
+        });
+    },
+    updateAccountSetting: function(req,resp) {
+        console.log(req.body);
+        var account=req.body;
+        var self = this;
+        var accountId = req.params.id;
+
+        if (!accountId) {
+            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+        }
+
+        accountId = parseInt(accountId);
+        accountDao.getById(accountId, function(err, value) {
+
+            if (!err && value != null) {
+
+                value.set("settings", account.sort_type );
+                accountDao.saveOrUpdate(value, function(err, value) {
+                    console.log(value);
+                    if (!err && value != null) {
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
+                resp.send(value.toJSON("public"));
+            } else {
+                self.wrapError(resp, 500, null, err, value);
+            }
+        });
+    },
+
+    updateAccountWebsiteInfo: function(req,resp) {
+        console.log(req.body);
+        var account=req.body;
+        var self = this;
+        var accountId = req.params.id;
+
+        if (!accountId) {
+            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+        }
+
+        accountId = parseInt(accountId);
+        accountDao.getById(accountId, function(err, value) {
+
+            if (!err && value != null) {
+
                 value.set("website",{themeId:account.website.themeId, websiteId:value.get("website").websiteId});
                 accountDao.saveOrUpdate(value, function(err, value) {
                     console.log(value);
@@ -131,13 +201,11 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.wrapError(resp, 500, null, err, value);
                     }
                 });
-
                 resp.send(value.toJSON("public"));
             } else {
                 self.wrapError(resp, 500, null, err, value);
             }
         });
-
     },
 
 

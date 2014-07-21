@@ -28,10 +28,24 @@ var dao = {
 
     getContactsAll: function(accountId,skip, fn) {
         //var query = {accountId: accountId, _last: { $gte: "a", $lt: "z" } };
+       var self=this;
         var query = {accountId: accountId };
         var fields = null;
         var obj = {query:query, fields:fields};
-        this.findAllWithFields(query,skip, fields, fn);
+        accountDao.getAccountByID(accountId,function(err,res){
+
+            var sort=res.get('settings')
+
+            if(sort)
+                sort=sort.sort_type;
+            else
+                sort='last';
+
+                //['sort_type'] || 'last';
+
+            self.findAllWithFields(query,skip,sort, fields, fn);
+        })
+
     },
 
 

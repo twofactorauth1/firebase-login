@@ -17,6 +17,12 @@ var dao = {
         defaultModel: $$.m.Account
     },
 
+    getAccountByID:function(id,fn){
+
+        this.findOne({_id:id},fn);
+
+    },
+
 
     getAccountByToken: function(token, fn) {
         this.findOne( {'token':token}, fn);

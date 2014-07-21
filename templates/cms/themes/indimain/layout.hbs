@@ -78,7 +78,7 @@
     </div>
 
     <div id="footer">{{{footer}}}</div>
-
+    <script type="text/javascript" src="/js/libs/underscore/underscore-min.js"></script>
     <script type="text/javascript" src="/js/libs/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/js/libs/jquery/jquery-ui.min.js"></script>
 
@@ -216,6 +216,43 @@
                     $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
                   }
                 });
+
+                 $('#form-subscribe').click(function() {
+                     $('#InputEmail').val($('#emailSub').val());
+                 });
+
+                 $('#subscribelist').click(function(){
+
+                     $.ajax({
+                         type: "POST",
+                         url: '/api/1.0/contact/signupnews',
+                         data: _.object(_.map($('#form1').serializeArray(), _.values)),
+                         success: function(data,textStatus){
+                             console.log("Called success")
+                             $("#error-msg").removeClass("hidden").html("sucessfully subscribed");
+                             setTimeout(function(){
+                                 $("#error-msg").addClass('hidden');
+                             },2500);
+
+
+                         },
+                         error:function(qXHR, textStatus, errorThrown){
+                             console.log("called Error")
+
+                             var response=JSON.parse(qXHR.responseText);
+
+                             $("#error-msg").removeClass("hidden").html(response.status);
+                             setTimeout(function(){
+                                 $("#error-msg").addClass('hidden');
+                             },2500);
+
+
+                         }
+
+                     });
+
+                 })
+
 
                  function append_style() {
                      $("head").append('<STYLE type="text/css"> \
