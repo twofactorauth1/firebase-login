@@ -41,8 +41,20 @@ _.extend(api.prototype, baseApi.prototype, {
 
         // THEME
         app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
-        app.get(this.url(':accountid/cms/theme', "account"), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
+        app.get(this.url(':accountId/cms/theme', "account"), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
         app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
+        app.get(this.url('theme/:id/preview'), this.isAuthApi, this.getThemePreview.bind(this));
+        app.post(this.url('theme/:id'), this.isAuthApi, this.setTheme.bind(this));
+        /*
+        What it should be:
+         */
+        app.get(this.url('themeconfig/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
+        app.get(this.url('themeconfig/account/:accountId'), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
+        app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
+        app.get(this.url('themes/:id/preview'), this.isAuthApi, this.getThemePreview.bind(this));
+        app.post(this.url('themes/:id'), this.isAuthApi, this.modifyTheme.bind(this));
+        app.post(this.url('website/:websiteId/theme/:themeId'), this.isAuthApi, this.setTheme.bind(this));
+
 
         // COMPONENTS
         app.get(this.url('page/:id/components'), this.isAuthApi, this.getComponentsByPage.bind(this));
@@ -173,14 +185,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.sendResult(res, value);
             }
         })
-
-
     },
 
     getThemeConfigForAccountId: function(req, resp) {
         //TODO: Add Security
         var self = this;
-        var accountId = req.params.accountid;
+        var accountId = req.params.accountId;
 
         accountId = parseInt(accountId);
 
@@ -194,6 +204,40 @@ _.extend(api.prototype, baseApi.prototype, {
             self = null;
         });
     },
+
+    getThemePreview: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getThemePreview');
+        var accountId = parseInt(self.accountId(req));
+        var themeId = req.params.id;
+
+        cmsManager.getThemePreview(themeId, function(err, value){
+            self.sendResultOrError(res, err, value, "Error retrieving Theme Preview for ThemeId: [" + themeId + "]");
+            self = null;
+        });
+
+    },
+
+    setTheme: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> setTheme');
+        var accountId = parseInt(self.accountId(req));
+        var themeId = req.params.themeId;
+        var websiteId = req.params.websiteId;
+
+        cmsManager.setThemeForAccount(accountId, themeId, function(err, value){
+            self.sendResultOrError(res, err, value, "Error setting theme for account.");
+            self = null;
+        });
+
+    },
+
+    modifyTheme: function(req, res) {
+      //TODO: implement if necessary
+    },
+
     //endregion
 
     //COMPONENTS
