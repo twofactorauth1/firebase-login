@@ -25,6 +25,7 @@ define([
         account: null,
 
         websiteId: null,
+        pageId: null,
         postId: null,
         websiteTitle: null,
         websiteSettings: null,
@@ -118,6 +119,7 @@ define([
                         $.when(p3, p4)
                             .done(function() {
                                 self.getPage().done(function(){
+                                    self.pageId = self.page.attributes._id;
                                     var componentsArray = [];
                                     var rawComponents = self.page.attributes.components.models;
                                     for (key in rawComponents) {
@@ -229,6 +231,7 @@ define([
         },
 
         onWebsiteEdit: function(event) {
+            var self = this;
             console.log('editing website');
             var data = arguments[1];
             var target = data.target;
@@ -242,46 +245,80 @@ define([
             var content = data.content;
             var page = data.pageId;
 
-            var configComponents = this.themeConfig.components;
-            var componentConfig = _.findWhere(configComponents, { type: componentType });
-            var configClasses = componentConfig.classes;
-            for(var key in configClasses) {
-                if (configClasses[key] == dataClass) {
-                    dataClass = key;
-                    break;
-                }
-            }
-            component.setContent(dataClass, content, target, componentConfig);
-            //this.savePage();
-        },
+            console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
 
-        getPost: function () {
-            console.log('Getting Post');
-            var self = this;
-
-            if (this.postId == null) {
-                console.log('No Post ID');
-                this.post = new Post({
-                    websiteId: this.websiteId
+            if (componentType == 'blog') {
+                console.log('this is a blog');
+                var postId = $(parent).find('.single-blog').attr("data-postid");
+                console.log('Post ID: '+postId);
+                self.postId = postId;
+                self.getPost().done(function(){
+                    console.log('saved post');
+                    self.post.set({
+                        post_excerpt: content
+                    });
+                    self.savePost();
                 });
             } else {
-                console.log('Post ID Found');
-                this.post = new Post({
-                    _id: this.postId
-                });
+                var configComponents = this.themeConfig.components;
+                var componentConfig = _.findWhere(configComponents, { type: componentType });
+                var configClasses = componentConfig.classes;
+                for(var key in configClasses) {
+                    if (configClasses[key] == dataClass) {
+                        dataClass = key;
+                        break;
+                    }
+                }
+                component.setContent(dataClass, content, target, componentConfig);
+                //this.savePage();
             }
+        },
+
+        // getPost: function () {
+        //     console.log('Getting Post');
+        //     var self = this;
+
+        //     if (this.postId == null) {
+        //         console.log('No Post ID');
+        //         this.post = new Post({
+        //             pageId: this.pageId
+        //         });
+        //     } else {
+        //         console.log('Post ID Found');
+        //         this.post = new Post({
+        //             _id: self.postId,
+        //             pageId: self.pageId
+        //         });
+        //     }
+
+        //     return this.post.fetch();
+        // },
+
+        getPost: function() {
+            if (this.postId == null ) {
+                this.post = new Post({});
+                var deferred = $.Deferred();
+                deferred.resolve(this.post);
+                return deferred;
+            }
+            this.post = new Post({
+                _id:this.postId,
+                pageId: this.pageId
+            });
 
             return this.post.fetch();
         },
 
+
         savePost: function() {
-            this.post.save()
+            var self = this;
+            self.post.save()
                 .done(function() {
                     console.log('post saved');
-                    $$.viewManager.showAlert("Post saved!");
+                    //$$.viewManager.showAlert("Post saved!");
                 })
                 .fail(function(resp) {
-                    alert("There was an error saving this post!");
+                    alert("There was an error saving this post!"+JSON.stringify(resp));
                 });
         },
 

@@ -48,20 +48,28 @@ define([
             return post.get(id);
         },
 
+        parse: function(attrs) {
+            console.log('Attrs: '+JSON.stringify(attrs));
+            return attrs;
+        },
 
         url: function(method) {
             switch(method) {
                 case "GET":
-                    if (this.id == null) {
-                        return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/post/" + this.get("handle"));
+                    if (this.get("pageId") != null) {
+                        return $$.api.getApiUrl("cms", "page/" + this.get("pageId") + "/blog/" + this.get("postId"));
                     }
                     return $$.api.getApiUrl("cms", "post/" + this.id);
                 case "PUT":
-                case "POST":
                     if (this.get("postId") != null) {
-                        return $$.api.getApiUrl("cms", "website/"+ this.get("websiteId") +"/blog/"+this.get("postId"));
+                        return $$.api.getApiUrl("cms", "page/"+ this.get("pageId") +"/blog/"+this.get("postId"));
+                    }
+                    break;
+                case "POST":
+                    if (this.get("_id") != null) {
+                        return $$.api.getApiUrl("cms", "page/"+ this.get("pageId") +"/blog/"+this.get("_id"));
                     } else {
-                        return $$.api.getApiUrl("cms", "website/"+ this.get("websiteId") +"/blog");
+                        return $$.api.getApiUrl("cms", "page/"+ this.get("pageId") +"/blog");
                     }
                     break;
                 case "DELETE":

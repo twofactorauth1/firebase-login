@@ -226,9 +226,13 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updateBlogPost');
         var blogPost = new $$.m.BlogPost(req.body);
         var postId = req.params.postId;
+        var pageId = req.params.id;
         var accountId = self.accountId(req);
-        blogPost.set('accountId', accountId);
+        blogPost.set('accountId', accountId.toString());
         blogPost.set('_id', postId);
+        blogPost.set('pageId', pageId);
+
+        console.dir(req.body);
 
         cmsManager.updateBlogPost(accountId, blogPost, function(err, value){
             self.log.debug('<< updateBlogPost');

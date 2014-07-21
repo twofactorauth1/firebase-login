@@ -4,7 +4,8 @@ define([
     'models/cms/components/blog',
     'services/cms.service',
     'models/cms/post',
-], function (EditWebsite, utils, Blog, CmsService, Post) {
+    'models/cms/page',
+], function (EditWebsite, utils, Blog, CmsService, Post, Page) {
 
     var view = EditWebsite.extend({
 
@@ -12,6 +13,7 @@ define([
         websiteSettings: null,
         themeId: null,
         websiteId: null,
+        pageId: null,
 
         //temporary themes
         themes: null,
@@ -55,6 +57,9 @@ define([
                 .done(function () {
                 self.websiteSettings = self.website.attributes.settings;
                 self.websiteId = self.website.attributes._id;
+                self.getPage().done(function(){
+                    self.pageId = '45b9072c-eb76-4c23-a792-822135554543';
+                });
             });
         },
 
@@ -67,7 +72,8 @@ define([
          * - Functions for Edit Website Sidebar
          */
             addBlankPage: function() {
-                console.log('adding blank page');
+                var self = this;
+                console.log('adding blank page'+self.is_dragging);
                 $('#iframe-website').contents().find('ul.navbar-nav li:last-child').before('<li><a href="#">New Page</a></li>');
             },
 
@@ -82,8 +88,9 @@ define([
                     $iframe.contents().find("#main-area .entry").prepend(blankPostHTML);
                 });
 
+                console.log('Page ID: '+self.pageId);
                 self.post = new Post({
-                    websiteId:self.websiteId
+                    pageId:self.pageId
                 });
 
                 self.post.save();

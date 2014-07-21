@@ -28,7 +28,6 @@ module.exports = {
                 fn(err, null);
             } else {
                 //store the id in the page component's array
-                self.log.debug('getting post page');
                 cmsDao.getPageById(savedPost.get('pageId'), function(err, page){
                     if(err) {
                         self.log.error('Error getting page for post: ' + err);
@@ -66,6 +65,8 @@ module.exports = {
     },
 
     updateBlogPost: function(accountId, blogPost, fn) {
+        var self = this;
+        console.dir('blogPost '+JSON.stringify(blogPost));
         blogPostDao.saveOrUpdate(blogPost, fn);
     },
 
@@ -213,13 +214,14 @@ module.exports = {
     },
 
     _addPostIdToBlogComponentPage: function(postId, page) {
+        var self = this;
         var componentAry = page.get('components') || [];
 
         var blogComponentAttrs = null;
         for(var i=0; i<componentAry.length; i++) {
             var attributes = componentAry[i]['attributes'];
-            if(attributes['type'] === 'blog') {
-                blogComponentAttrs = componentAry[i]['attributes'];
+            if(componentAry[i].type === 'blog') {
+                blogComponentAttrs = componentAry[i];
             }
         }
 
