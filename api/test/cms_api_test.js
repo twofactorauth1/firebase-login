@@ -556,7 +556,67 @@ module.exports.group = {
                 test.done();
             });
         });
+    },
 
+    //api/1.0/cms/themes
+    testGetAllThemes: function(test) {
+        test.expect(1);
+        var req = request(accountURL).get('/api/1.0/cms/themes')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error getting all themes: ' + err);
+                test.done();
+            }
+            console.dir(res.body);
+            test.equals(2, res.body.length);
+            test.done();
+        });
+
+    },
+
+    //api/1.0/cms/themes/:id/preview
+    testGetThemePreview: function(test) {
+        //test.expect(1);
+        var req = request(accountURL).get('/api/1.0/cms/themes/indimain/preview')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error getting posts by tag: ' + err);
+                test.done();
+            }
+            //console.dir(res.body);
+            //test.equals(2, res.body.length);
+            test.done();
+        });
+    },
+
+    //api/1.0/cms/website/:websiteId/theme/:themeId
+    //themeconfig/account/:accountId
+    testSetThemeForAccount: function(test) {
+        test.expect(1);
+        //default -> indimain
+        var req = request(accountURL).post('/api/1.0/cms/website/whatever/theme/indimain')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            if(err) {
+                test.ok(false, 'Error setting theme for account: ' + err);
+                test.done();
+            }
+            var req2 = request(accountURL).get('/api/1.0/cms/themeconfig/account/' + testcontext.accountId)
+                .set('cookie', cookie);
+            req2.expect(200, function(err, res){
+                console.dir(res.body);
+                test.equals('indimain', res.body['theme-id']);
+                //set it back.
+                cmsManager.setThemeForAccount(testcontext.accountId, 'default', function(err, value){
+                    test.done();
+                });
+
+            });
+
+        });
+        
     }
 
 
