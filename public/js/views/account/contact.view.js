@@ -41,8 +41,8 @@ define([
             "click .close":"close_welcome",
 
             "click .import-contacts": "importTest",
-            "scroll body": "check_height"
-       //     "keyup .search-contacts": "filter_contacts"
+            "scroll body": "check_height",
+            "keyup .search-contacts": "filter_contacts"
         },
 
         initialize: function() {
@@ -424,6 +424,56 @@ define([
                 console.log("dont load");
             }
 
+        },
+        filter_contacts: function(e) {
+            var self = this, contacts;
+            var searchExpression = e.target.value.toLowerCase();
+            var charCodeStartUpperCase = "A".charCodeAt(0);
+            var charCodeStartLowerCase = "a".charCodeAt(0);
+
+            if ((e.keyCode >= charCodeStartUpperCase && e.keyCode <= charCodeStartUpperCase + 25) || (e.keyCode >= charCodeStartLowerCase && e.keyCode <= charCodeStartLowerCase + 25) || e.keyCode === 8) {
+
+                contacts = self.contacts.toJSON();
+                contacts = _.filter( contacts, function(value) {
+                    return value.first.toLowerCase().indexOf(searchExpression) == 0 || value.last.toLowerCase().indexOf(searchExpression) == 0
+                });
+
+                self.reRenderContacts(contacts, function(){
+                    $(".search-contacts").val(e.target.value).focus();
+                });
+                self.check_welcome();
+
+            }
+
+        },
+        reRenderContacts: function(contacts, cb) {
+            var self = this;
+            var data = {
+                account: self.account.toJSON(),
+                user: self.user.toJSON(),
+                contacts: self.contacts.toJSON(),
+                currentLetter: self.currentLetter.toLowerCase(),
+                currentDisplay:self.currentDisplay.toLowerCase()
+            };
+
+            data.contacts = contacts
+            data.min = 6;
+            data.count = data.contacts.length;
+
+            var tmpl = $$.templateManager.get("contacts-main", self.templateKey);
+            var html = tmpl(data);
+
+            self.show(html);
+
+            var sidetmpl = $$.templateManager.get("contact-sidebar", self.templateKey);
+            var rightPanel = $('#rightpanel');
+            rightPanel.html('');
+            rightPanel.append(sidetmpl(data));
+
+            self.refreshGooglePhotos();
+
+            self.updateTooltips();
+            cb && cb();
         }
 
     });
