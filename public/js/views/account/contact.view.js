@@ -26,6 +26,7 @@ define([
         currentLetter: "a",
         loadMore : true,
         currentDisplay:'first',
+        currentOrder:'first',
 
         events: {
             "click .btn-letter":"showLetter",
@@ -41,6 +42,7 @@ define([
 
             "click .import-contacts": "importTest",
             "scroll body": "check_height"
+       //     "keyup .search-contacts": "filter_contacts"
         },
 
         initialize: function() {
@@ -65,19 +67,29 @@ define([
                 }
             }
 
-            _.bindAll(this, 'check_height');
             $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
             $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
-            $(window).scroll(this.check_height);
+            _.bindAll(this, 'check_height');
+
+
         },
 
+        remove: function () {
+            $(window).unbind('scroll');
+            this.trigger('view:unload');
+            Backbone.View.prototype.remove.call(this);
+        },
 
         render: function() {
+            $(window).bind('scroll' ,this.check_height);
+
             var self = this
                 , p1 = this.getAccount()
                 , p2 = this.getUser()
                 , p3 = this.getContacts(this.currentLetter)
                 , p4 = AuthenticationService.getGoogleAccessToken();
+
+            //_.bindAll(self, 'check_height');
 
             $.when(p1, p2, p3)
                 .done(function() {
@@ -95,6 +107,11 @@ define([
                 .fail(function(resp) {
                    alert("FAILED");
                 });
+
+            $.when(p1)
+                .done(function(){
+                    console.log(this);
+                })
         },
 
         importTest: function() {
@@ -115,7 +132,7 @@ define([
 
                      self.getContacts(self.currentLetter)
                          .done(function (res, msg) {
-
+                             self.currentOrder=sort_type.sort_type;
                              /* if (res.length < self.skip+3) {
                               self.loadMore = false;
                               }*/
@@ -168,8 +185,8 @@ define([
                 account: self.account.toJSON(),
                 user: self.user.toJSON(),
                 contacts: self.contacts.toJSON(),
-                currentLetter: self.currentLetter.toUpperCase(),
-                currentDisplay:self.currentDisplay.toUpperCase()
+                currentLetter: self.currentLetter.toLowerCase(),
+                currentDisplay:self.currentDisplay.toLowerCase()
             };
 
             data.min = 6;
@@ -214,7 +231,7 @@ define([
             event.preventDefault();
 
             var self = this;
-
+            self.loadMore=true;
             var letter = $(event.currentTarget).html();
             this.currentLetter = letter.toLowerCase();
 
@@ -222,12 +239,14 @@ define([
                 .done(function(err, res) {
                     console.log(res);
                     console.log(err);
+                    self.skip=self.contacts.length;
                     self.renderContacts();
                     self.check_welcome();
+
                 });
-            this.skip=0;
+
             if(this.currentLetter=="all")
-                $$.r.account.ContactRouter.navigateToShowContactsForAll(this.currentLetter,this.skip);
+                $$.r.account.ContactRouter.navigateToShowContactsForAll(this.currentLetter);
             else
                 $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
         },
@@ -339,14 +358,16 @@ define([
                 this.currentLetter = "all";
             }
             this.currentLetter = this.currentLetter.toLowerCase();
-            this.skip=this.skip||0;
+
+            this.skip = this.skip || 0;
+
             if(this.currentLetter=='all') {
-
                 return this.contacts.getContactsAll(this.accountId, this.currentLetter, this.skip);
-
             }
-            else
+            else {
                 return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
+            }
+
         },
 
 
@@ -379,10 +400,11 @@ define([
                 //        this.skip=parseInt(skipindex)+3;
                  //   this.skip+=3;
                 }*/
-                this.skip+=3;
 
+                console.log(self.loadMore);
+                console.log(self.skip);
                 if(self.loadMore) {
-                    this.getContacts(this.currentLetter)
+                    this.getContacts(self.currentLetter)
                         .done(function (res, msg) {
 
                             if (res.length < self.skip+3) {
@@ -390,11 +412,12 @@ define([
                             }
                             self.renderContacts();
                             self.check_welcome();
+                            self.skip=self.contacts.length;
                         });
-                    if (this.currentLetter == "all")
-                        $$.r.account.ContactRouter.navigateToShowContactsForAll(this.currentLetter, this.skip);
+                    if (self.currentLetter == "all")
+                        $$.r.account.ContactRouter.navigateToShowContactsForAll(self.currentLetter, self.skip);
                     else
-                        $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
+                        $$.r.account.ContactRouter.navigateToShowContactsForLetter(self.currentLetter);
                 }
                 console.log("loadData");
             } else{

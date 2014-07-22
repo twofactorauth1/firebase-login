@@ -462,6 +462,7 @@ define([
                   //  $$.r.account.ContactRouter.navigateToEditContact(self.contact.id, this.currentLetter, false)
                 });
             console.log(this.currentLetter);
+
             $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter,true);
             return p;
 
