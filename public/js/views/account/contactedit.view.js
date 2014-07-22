@@ -53,6 +53,8 @@ define([
             "onkeytimer .input-edit-device":"deviceChanged",
 
             "click .btn-subscribe-two-net":"subscribeTwoNetUser",
+            "click .btn-delete-contact-ok": "deleteContact"
+
         },
 
 
@@ -78,6 +80,19 @@ define([
                 });
         },
 
+        saveContactBtnPress: function() {
+            var self = this;
+            jQuery.gritter.add({
+                    title: 'Contact Saved',
+                    image: 'thumbs-up',
+                    text: 'This contact has been saved successfully.',
+                    class_name: 'growl-success',
+                    sticky: false,
+                    time: 8000,
+                    position: 'bottom-right'
+            });
+            this.saveContact();
+        },
 
         //region FULLNAME
         fullnameChanged: function(event) {
@@ -450,9 +465,24 @@ define([
 
             return this.contact.fetch();
         },
+        deleteContact: function() {
+            var self = this;
 
+            var p = this.contact.destroy();
+            p.done(function() {
+                self.contactId = self.contact.id;
+
+                  //  $$.r.account.ContactRouter.navigateToShowContactsForLetter(null,false);
+                  //  $$.r.account.ContactRouter.navigateToEditContact(self.contact.id, this.currentLetter, false)
+                });
+            console.log(this.currentLetter);
+            $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter,true);
+            return p;
+
+        },
 
         saveContact: function() {
+            console.log('save contact');
             var self = this;
             if (this.isNew) {
                 this.isNew = false;

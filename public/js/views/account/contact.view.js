@@ -12,9 +12,9 @@ define([
     'collections/contacts',
     'services/authentication.service',
     'services/contact.service',
+    'events/events',
     'libs/jquery/jquery.batchedimageloader'
-
-], function(User, Account, Contact, Contacts, AuthenticationService, ContactService) {
+], function(User, Account, Contact, Contacts, AuthenticationService, ContactService,events) {
 
     var view = Backbone.View.extend({
 
@@ -24,6 +24,8 @@ define([
         user: null,
         accounts: null,
         currentLetter: "a",
+        loadMore : true,
+        currentDisplay:'first',
 
         events: {
             "click .btn-letter":"showLetter",
@@ -37,9 +39,9 @@ define([
 
             "click .close":"close_welcome",
 
-            "click .import-contacts": "importTest"
+            "click .import-contacts": "importTest",
+            "scroll body": "check_height"
         },
-
 
         initialize: function() {
             var state = $$.u.querystringutils.getQueryStringValue("state");
@@ -62,6 +64,13 @@ define([
                         break;
                 }
             }
+
+            _.bindAll(this, 'check_height');
+
+            $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
+            $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
+
+            $(window).scroll(this.check_height);
         },
 
 
@@ -76,6 +85,8 @@ define([
                 .done(function() {
                     self.renderContacts();
                     self.check_welcome();
+                    self.adjustWindowSize();
+                    $(window).on("resize", self.adjustWindowSize);
                 });
 
             $.when(p4)
@@ -94,6 +105,66 @@ define([
             console.log('import test');
         },
 
+        sort_contacts : function (sort_type) {
+            var self = this;
+            var p1 = this.getAccount();
+            this.skip=0;
+            this.loadMore=true;
+
+            $.when(p1)
+                .done(function(){
+                 self.account.set("updateType","setting");
+                 self.account.save({"sort_type": sort_type})
+                     .done(function(){
+
+                     self.getContacts(self.currentLetter)
+                         .done(function (res, msg) {
+
+                             /* if (res.length < self.skip+3) {
+                              self.loadMore = false;
+                              }*/
+                             self.renderContacts();
+                             self.check_welcome();
+                         });
+
+
+                    });
+
+                });
+
+
+
+
+         //   self.renderContacts();
+         //   self.check_welcome();
+            $$.r.account.ContactRouter.navigateToShowContactsForLetter("all",true);
+            /*if (this.currentLetter == "all") {
+                $$.r.account.ContactRouter.navigateToShowContactsForAll(this.currentLetter, this.skip);
+            }
+            else
+                $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);*/
+        //    this.render();
+        },
+        display_contacts : function (data) {
+            var self = this;
+            var p1 = this.getAccount();
+            this.skip=0;
+            this.loadMore=true;
+
+            $.when(p1)
+                .done(function(){
+                    self.account.set("updateType","displaysetting");
+                    self.account.save({"display_type": data})
+                        .done(function(err,res){
+
+                            self.currentDisplay=data.display_type;
+                            self.renderContacts();
+                            self.check_welcome();
+                        });
+
+                });
+            $$.r.account.ContactRouter.navigateToShowContactsForLetter("all",true);
+        },
 
         renderContacts: function() {
             var self = this;
@@ -101,7 +172,8 @@ define([
                 account: self.account.toJSON(),
                 user: self.user.toJSON(),
                 contacts: self.contacts.toJSON(),
-                currentLetter: self.currentLetter.toUpperCase()
+                currentLetter: self.currentLetter.toUpperCase(),
+                currentDisplay:self.currentDisplay.toUpperCase()
             };
 
             data.min = 6;
@@ -151,12 +223,17 @@ define([
             this.currentLetter = letter.toLowerCase();
 
             this.getContacts(this.currentLetter)
-                .done(function() {
+                .done(function(err, res) {
+                    console.log(res);
+                    console.log(err);
                     self.renderContacts();
                     self.check_welcome();
                 });
-
-            $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
+            this.skip=0;
+            if(this.currentLetter=="all")
+                $$.r.account.ContactRouter.navigateToShowContactsForAll(this.currentLetter,this.skip);
+            else
+                $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
         },
 
 
@@ -263,27 +340,83 @@ define([
             this.contacts = new $$.c.Contacts();
 
             if (this.currentLetter == null) {
-                this.currentLetter = "a";
+                this.currentLetter = "all";
             }
             this.currentLetter = this.currentLetter.toLowerCase();
-            return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
+            this.skip=this.skip||0;
+
+            if(this.currentLetter=='all') {
+
+                return this.contacts.getContactsAll(this.accountId, this.currentLetter, this.skip);
+
+            }
+
+            else
+                return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
         },
 
+        adjustWindowSize: function() {
+            $('#main-viewport').css('overflow', 'none');
+            var headerBar = $('#headerbar').outerHeight();
+            var pageHeader = $('.pageheader').outerHeight();
+            var mainViewportHeight = $(window).height() - headerBar - pageHeader-10;
+            console.log('adjusting window size to '+$(window).height());
+            $('.people-list').css('min-height', mainViewportHeight);
+        },
 
         check_welcome: function() {
-            console.log('close welcome = '+$.cookie('contact-alert') );
-            if( $.cookie('contact-alert') === 'closed' ){
-                console.log('closing alert');
-                $('.alert-info').remove();
+            if(!this.user.get('welcome_alert').contact){
+                $('.alert').hide();
             }
         },
 
 
         close_welcome: function(e) {
-            console.log('close welcome');
-            $.cookie('contact-alert', 'closed', { path: '/' });
-        }
+            var user = this.user;
+            var welcome = user.get("welcome_alert");
+            welcome.contact = false;
+            user.set("welcome_alert", welcome);
+            user.save();
+        },
 
+        check_height : function (e){
+            var self = this;
+            if(window.innerHeight + document.body.scrollTop >= document.body.offsetHeight){
+
+
+               /* console.log(Backbone.history.fragment);
+                var params=Backbone.history.fragment;
+                    params=params.split('/');
+                if(params.length==3) {
+                    var skipindex = params[params.length - 1];
+                    console.log(this.skip);
+                //        this.skip=parseInt(skipindex)+3;
+                 //   this.skip+=3;
+                }*/
+                this.skip+=3;
+
+                if(self.loadMore) {
+                    this.getContacts(this.currentLetter)
+                        .done(function (res, msg) {
+
+                            if (res.length < self.skip+3) {
+                                self.loadMore = false;
+                            }
+                            self.renderContacts();
+                            self.check_welcome();
+                        });
+                    if (this.currentLetter == "all")
+                        $$.r.account.ContactRouter.navigateToShowContactsForAll(this.currentLetter, this.skip);
+                    else
+                        $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter);
+                }
+
+                console.log("loadData");
+            } else{
+                console.log("dont load");
+            }
+
+        }
 
     });
 

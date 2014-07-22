@@ -46,7 +46,11 @@ require.config({
         moment: 'libs/moment/moment.min',
 
         //UI SPECIFIC
-        toggles: 'libs/misc/toggles.min'
+        toggles: 'libs/misc/toggles.min',
+        datepicker: 'libs/bootstrap/bootstrap-datepicker',
+        leaflet: 'libs/leaflet/leaflet',
+        tagsinput: 'libs/jquery/jquery.tagsinput',
+        gritter: 'libs/jquery/jquery.gritter.min'
     },
 
     shim: {
@@ -110,6 +114,14 @@ require.config({
             deps: ['jquery', 'moment']
         },
 
+        tagsinput: {
+            deps: ['jquery']
+        },
+
+        gritter: {
+            deps: ['jquery']
+        },
+
         app: {
             deps: [
                 'jquery',
@@ -132,7 +144,10 @@ require.config({
                 'date',
                 'moment',
                 'daterangepicker',
-                'd3'
+                'datepicker',
+                'tagsinput',
+                'd3',
+                'gritter'
             ]
         }
     },

@@ -24,4 +24,25 @@ define(function() {
         }
         return "";
     });
+
+    Handlebars.registerHelper('lengthMinusOne', function(length) {
+        return length - 1;
+    });
+
+    Handlebars.registerHelper('plusOne', function(length) {
+        return length + 1;
+    });
+
+    Handlebars.registerHelper('moreThenOne', function(length, options) {
+        if(length > 1) {
+            return options.fn(this);
+        }
+    });
+
+    Handlebars.registerHelper('currencySymbol', function(currency) {
+        switch(currency) {
+            case "us/dollar":
+                return "$";
+        }
+    });
 });

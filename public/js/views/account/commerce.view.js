@@ -18,7 +18,8 @@ define([
         accounts: null,
 
         events: {
-            "click .close":"close_welcome"
+            "click .close":"close_welcome",
+            "click .commerce-item":"showSingleProduct"
         },
 
 
@@ -50,13 +51,26 @@ define([
                 });
         },
 
+        showSingleProduct: function(event) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+
+            var self = this;
+            var singleProductId = $(event.currentTarget).data("productid");
+            $$.r.account.commerceRouter.showSingleProduct(singleProductId);
+        },
+
         check_welcome: function() {
-            if( $.cookie('dashboard-alert') === 'closed' ){
+            if(!this.user.get('welcome_alert').commerce) {
                 $('.alert').hide();
             }
         },
         close_welcome: function(e) {
-            $.cookie('dashboard-alert', 'closed', { path: '/' });
+            var user = this.user;
+            var welcome = user.get("welcome_alert");
+            welcome.commerce = false;
+            user.set("welcome_alert", welcome);
+            user.save();
         }
     });
 

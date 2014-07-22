@@ -1,19 +1,29 @@
 #!/bin/sh
 
-export AWS_ACCESS_KEY_ID="AKIAIS2VFA3QL7JVKQQQ"
-export AWS_SECRET_ACCESS_KEY="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"
-export AWS_DEFAULT_REGION="us-east-1"
-export APP_NAME="indigeweb"
-export ENV_NAME="indigeweb-develop-env"
-export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
+if [ "x$AWS_ACCESS_KEY_ID" = "x" ]; then 
+	echo "No AWS_ACCESS_KEY_ID defined, exiting.";
+	exit 99;
+fi
+if [ "x$AWS_SECRET_ACCESS_KEY" = "x" ]; then
+	echo "No AWS_SECRET_ACCESS_KEY defined, exiting.";
+	exit 98;
+fi
+if [ "x$APP_NAME" = "x" ]; then 
+	echo "No APP_NAME defined, exiting."; 
+	exit 97;
+fi
 
-# Kyle's creds -- can be removed
-#export AWS_ACCESS_KEY_ID="AKIAIZ67GOAMTI2C3IMA"
-#export AWS_SECRET_ACCESS_KEY="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"
-#export AWS_DEFAULT_REGION="us-west-2"
-#export APP_NAME="indigeweb-testing"
-#export ENV_NAME="indigewebtesting-env"
-#export S3_BUCKET="indigeweb-deployments"
+if [ "$1" = "develop" ]; then
+	export AWS_DEFAULT_REGION="us-east-1"
+	export ENV_NAME="indigeweb-develop-env"
+	export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
+elif [ "$1" = "master" ]; then
+	echo "Not implemented yet"
+	exit 9
+else
+	echo "No environment specified, exiting"
+	exit 80
+fi
 
 export APP_VERSION=`git rev-parse --short HEAD`
 

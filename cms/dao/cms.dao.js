@@ -275,7 +275,7 @@ var dao = {
 
     //region PAGE
     getPageById: function(pageId, fn) {
-        return this.getById(pageId, Page, fn);
+        return this.getById(pageId, $$.m.cms.Page, fn);
     },
 
 
@@ -369,6 +369,25 @@ var dao = {
       }
       return out;
     },
+
+    //COMPONENTS
+
+    getComponentsByPage: function(pageId, fn) {
+        var self = this;
+        self.log.debug('>> getComponentsByPage');
+        this.getById(pageId, $$.m.cms.Page, function(err, page){
+            if(err) {
+                self.log.error('Error getting components: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< getComponentsByPage');
+                fn(null, page.get('components'));
+            }
+
+        });
+    },
+
+
 
     //region WEBSITES
 
@@ -1348,7 +1367,7 @@ var dao = {
                     linkLists: {},
                     blogposts: null,
                     tags: null,
-                    categories: null,
+                    categories: null
                 };
 
 

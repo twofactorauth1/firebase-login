@@ -10,6 +10,22 @@ define([
     'models/contact',
     'services/geocode.service'
 ], function(BaseView, Contact, GeocodeService) {
+    /*var showDetails = function(type, typePlural){
+            return function () {
+                $('.li-' + type).show();
+                $('.li-' + type + '.first .btn-more-' + typePlural + ' i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                $('.li-' + type + '.first .btn-more-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' Less ');
+                $('.li-' + type + '.first .btn-more-' + typePlural).removeClass('btn-more-' + typePlural).addClass('btn-less-' + typePlural);
+            }
+        },
+        hideDetails =  function(type, typePlural) {
+            return function () {
+                $('.li-' + type + ':not(:first)').hide();
+                $('.li-' + type + '.first .btn-less-' + typePlural + ' i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                $('.li-' + type + '.first .btn-less-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' More');
+                $('.li-' + type + '.first .btn-less-' + typePlural).removeClass('btn-less-' + typePlural).addClass('btn-more-' + typePlural);
+            }
+        };*/
 
     var view = BaseView.extend({
 
@@ -22,7 +38,11 @@ define([
             "click #btn-back-to-contacts":"goBack",
             "click .btn-edit-contact":"editContact",
             "click .btn-more-emails":"showEmails",
-            "click .btn-less-emails":"hideEmails"
+            "click .btn-less-emails":"hideEmails",
+            "click .btn-more-phones":"showPhones",
+            "click .btn-less-phones":"hidePhones",
+            "click .btn-more-address":"showAddress",
+            "click .btn-less-address":"hideAddress"
         },
 
 
@@ -31,9 +51,9 @@ define([
             this.getContact()
                 .done(function() {
                     var data = {
-                        contact:self.contact.toJSON()
+                        contact:self.contact.toJSON(),
+                        currentTime: moment().format('h:mm a')
                     };
-
                     var tmpl = $$.templateManager.get("contact-details-main", self.templateKey);
                     var html = tmpl(data);
                     self.show(html);
@@ -84,7 +104,7 @@ define([
                     autoPan: false,
                     dragging: false,
                     zooming: false,
-                    scrollWheelZoom: false,
+                    scrollWheelZoom: false
                 });
                 var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
                 var osmAttrib = '';
@@ -99,20 +119,25 @@ define([
 
         },
 
-        showEmails: function() {
-            console.log('show phones');
-            $('.li-email').show();
-            $('.li-email.first .btn-more-emails i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-            $('.li-email.first .btn-more-emails span').text('less');
-            $('.li-email.first .btn-more-emails').removeClass('btn-more-emails').addClass('btn-less-emails');
+        showEmails: function (){
+            this.showDetails("email","emails");
         },
 
-        hideEmails: function() {
-            console.log('hide phones');
-            $('.li-email:not(:first)').hide();
-            $('.li-email.first .btn-less-emails i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-            $('.li-email.first .btn-less-emails span').text('more');
-            $('.li-email.first .btn-less-emails').removeClass('btn-less-emails').addClass('btn-more-emails');
+        hideEmails: function () {
+            this.hideDetails("email", "emails");
+        },
+
+        showPhones : function () {
+            this.showDetails("phone", "phones")
+        },
+        hidePhones: function (){
+            this.hideDetails("phone","phones");
+        },
+        showAddress: function () {
+            this.showDetails("address", "addresses");
+        },
+        hideAddress : function (){
+            this.hideDetails("address", "addresses");
         },
 
         getReadings: function() {
@@ -132,7 +157,23 @@ define([
                 .fail(function(resp) {
                     console.log('Fail: '+JSON.stringify(result));
                 });
+        },
+
+
+        showDetails : function(type, typePlural){
+            $('.li-' + type).show();
+            $('.li-' + type + '.first .btn-more-' + typePlural + ' i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            $('.li-' + type + '.first .btn-more-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' Less ');
+            $('.li-' + type + '.first .btn-more-' + typePlural).removeClass('btn-more-' + typePlural).addClass('btn-less-' + typePlural);
+
+        },
+        hideDetails : function(type, typePlural) {
+            $('.li-' + type + ':not(:first)').hide();
+            $('.li-' + type + '.first .btn-less-' + typePlural + ' i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            $('.li-' + type + '.first .btn-less-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' More');
+            $('.li-' + type + '.first .btn-less-' + typePlural).removeClass('btn-less-' + typePlural).addClass('btn-more-' + typePlural);
         }
+
     });
 
     $$.v.account = $$.v.account || {};
