@@ -54,7 +54,10 @@ define([
     };
 
     Chart.prototype.createSVG = function(className){
-        this.module.addClass(className)
+        if(typeof this.module != 'undefined') {
+            this.module.addClass(className);
+        }
+
         return this.root = d3.select(this.target.get(0)).append('svg:svg')
             .attr('width', this.w + this.padding.l + this.padding.r)
             .attr('height', this.h + this.padding.t + this.padding.b)
@@ -94,7 +97,7 @@ define([
         }
 
         if (!rangeText) {
-            rangeText = 'Last 7 Days'
+            rangeText = 'Last 7 Days';
             defaultRange = ranges[rangeText]
         }
 
@@ -106,7 +109,7 @@ define([
 
         var picker = $(rangeSelector);
 
-        picker.data('selectedRange', defaultRange)
+        picker.data('selectedRange', defaultRange);
 
         picker.appendTo(this.module).daterangepicker({
             ranges    : ranges
@@ -124,7 +127,7 @@ define([
             }
 
             if (picker.data('selectedRange').join() !== joined) {
-                picker.trigger('rangeChange', { start: start, end: end, selected: text })
+                picker.trigger('rangeChange', { start: start, end: end, selected: text });
                 picker.find('span').text(text || (start.toString('MM/dd/yyyy') + ' - ' + end.toString('MM/dd/yyyy')))
             }
         })

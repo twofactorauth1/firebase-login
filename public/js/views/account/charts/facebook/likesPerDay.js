@@ -48,7 +48,7 @@ define([
             var root = this.createSVG('graph-likes');
 
             // Title
-            this.addTitle("Likes / Unlikes")
+            this.addTitle("Likes / Unlikes");
             this.addRangeSelector(options.range);
 
             if (data.length === 0) {
@@ -69,7 +69,7 @@ define([
                 .range([p.l, w - p.r])
                 .nice(d3.time.day)
                 .clamp(true)
-                .domain(d3.extent(data, function(d){ return d.date }))
+                .domain(d3.extent(data, function(d){ return d.date }));
 
             var y = d3.scale.linear()
                 .range([h - p.b, 0])

@@ -77,9 +77,9 @@ define([
             // Normalize data.
             // Make sure you don't modify the original data object,
             // otherwise this might fail on subsequent renders
-            data = data.slice(0, 5)
+            data = data.slice(0, 5);
 
-            this.process(options)
+            this.process(options);
 
             this.addTitle("Top 5 fans");
             this.addRangeSelector(options.range);
