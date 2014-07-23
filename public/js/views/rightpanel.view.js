@@ -60,8 +60,10 @@ define([
                 .done(function () {
                 self.websiteSettings = self.website.attributes.settings;
                 self.websiteId = self.website.attributes._id;
+                console.log('getting pages');
                 self.getPage().done(function(){
-                    self.pageId = '45b9072c-eb76-4c23-a792-822135554543';
+                    console.log('Page Attributes: '+self.page.attributes);
+                    self.pageId = self.page.attributes._id;
                 });
             });
         },
@@ -101,7 +103,10 @@ define([
 
                 console.log('Page ID: '+self.pageId);
                 self.post = new Post({
-                    pageId:self.pageId
+                    pageId:self.pageId,
+                    created: {
+                        by: 'me'
+                    },
                 });
 
                 self.post.save();

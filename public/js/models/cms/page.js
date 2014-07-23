@@ -67,8 +67,8 @@ define([
         url: function(method) {
             switch(method) {
                 case "GET":
-                    if (this.id == null) {
-                        return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page/" + this.get("handle"));
+                    if (this.get("pageId") == null) {
+                        return $$.api.getApiUrl("cms", "page/" + this.get("pageId") + "/page/" + this.get("handle"));
                     }
                     return $$.api.getApiUrl("cms", "page/" + this.id);
                 case "PUT":

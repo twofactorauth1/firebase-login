@@ -136,6 +136,7 @@ define([
                                     self.setupSidebar(data, rightPanel, sidetmpl);
 
                                     $(window).on("resize", self.adjustWindowSize);
+                                    self.disableClickableTitles();
 
                                 });
                         });
@@ -248,15 +249,21 @@ define([
             console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
 
             if (componentType == 'blog') {
-                console.log('this is a blog');
-                var postId = $(parent).find('.single-blog').attr("data-postid");
+                var postId = $(target).closest(".single-blog").attr("data-postid");
                 console.log('Post ID: '+postId);
                 self.postId = postId;
                 self.getPost().done(function(){
-                    console.log('saved post');
-                    self.post.set({
-                        post_excerpt: content
-                    });
+                    //post excerpt
+                    if (dataClass == 'post_excerpt') { 
+                        var replaced =  content.replace(/^\s+|\s+$/g, '')
+                        self.post.set({ post_excerpt: replaced });
+                    }
+                    //post title
+                    if (dataClass == 'post_title') {
+                        var replacedTitle = content.replace(/^\s+|\s+$/g, '');
+                        var replacedUrl = content.replace(/^\s+|\s+$/g, '').toLowerCase().replace(/ /g,'-');
+                        self.post.set({ post_title: replacedTitle, post_url: replacedUrl });
+                    }
                     self.savePost();
                 });
             } else {
@@ -274,28 +281,20 @@ define([
             }
         },
 
-        // getPost: function () {
-        //     console.log('Getting Post');
-        //     var self = this;
-
-        //     if (this.postId == null) {
-        //         console.log('No Post ID');
-        //         this.post = new Post({
-        //             pageId: this.pageId
-        //         });
-        //     } else {
-        //         console.log('Post ID Found');
-        //         this.post = new Post({
-        //             _id: self.postId,
-        //             pageId: self.pageId
-        //         });
-        //     }
-
-        //     return this.post.fetch();
-        // },
+        disableClickableTitles: function() {
+            console.log('disabling');
+            var $iframe = $('#iframe-website');
+                $iframe.ready(function() {
+                    $iframe.contents().find(".blog-title a").on('click', function(e) {
+                        console.log('click');
+                        e.preventDefault();
+                    });
+                });
+        },
 
         getPost: function() {
-            if (this.postId == null ) {
+            console.log('Getting Post: '+this.postId);
+            if (this.postId == null) {
                 this.post = new Post({});
                 var deferred = $.Deferred();
                 deferred.resolve(this.post);
@@ -303,7 +302,7 @@ define([
             }
             this.post = new Post({
                 _id:this.postId,
-                pageId: this.pageId
+                pageId:this.pageId
             });
 
             return this.post.fetch();
@@ -312,13 +311,13 @@ define([
 
         savePost: function() {
             var self = this;
-            self.post.save()
+            this.post.save()
                 .done(function() {
                     console.log('post saved');
-                    //$$.viewManager.showAlert("Post saved!");
+                    self.postID = null;
                 })
                 .fail(function(resp) {
-                    alert("There was an error saving this post!"+JSON.stringify(resp));
+                    alert("There was an error saving this post! "+JSON.stringify(resp));
                 });
         },
 
@@ -381,6 +380,7 @@ define([
         getPage: function() {
             this.page = new Page({
                 websiteId: this.websiteId,
+                _id: this.pageId,
                 handle: this.pageHandle
             });
 
