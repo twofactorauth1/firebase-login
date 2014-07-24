@@ -556,23 +556,66 @@ exports.stripe_dao_test = {
     },
 
     testCreateInvoiceItem: function(test) {
-        test.done();
+        var customerId = testContext.customerId;
+        var amount = 500;
+        var currency = 'usd';
+        var description = 'Setup Fee';
+
+        stripeDao.createInvoiceItem(customerId, amount, currency, null, null, description, null, null,
+            function(err, item){
+                if(err) {
+                    test.ok(false, err);
+                    test.done();
+                } else {
+                    _log.debug('created invoiceItem');
+                    console.dir(item);
+                    testContext.invoiceItem = item.id;
+                    test.done();
+                }
+            });
     },
 
     testGetInvoiceItem: function(test) {
-        test.done();
+        test.expect(1);
+        stripeDao.getInvoiceItem(testContext.invoiceItem, null, function(err, item){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('retrieved invoiceItem');
+                console.dir(item);
+                test.equals(500, item.amount);
+                test.done();
+            }
+        });
     },
 
     testUpdateInvoiceItem: function(test) {
-        test.done();
-    },
-
-    testDeleteInvoiceItem: function(test) {
-        test.done();
+        test.expect(1);
+        stripeDao.updateInvoiceItem(testContext.invoiceItem, 750, null, null, null, function(err, item){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('retrieved invoiceItem');
+                console.dir(item);
+                test.equals(750, item.amount);
+                test.done();
+            }
+        });
     },
 
     testListInvoiceItems: function(test) {
-        test.done();
+        stripeDao.listInvoiceItems(null,  null, null, null, null, null, function(err, items){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('listing invoiceItems');
+                console.dir(items);
+                test.done();
+            }
+        });
     },
 
     testCreateInvoice: function(test) {
@@ -612,6 +655,10 @@ exports.stripe_dao_test = {
     },
 
     testListEvents: function(test) {
+        test.done();
+    },
+
+    testDeleteInvoiceItem: function(test) {
         test.done();
     },
 
