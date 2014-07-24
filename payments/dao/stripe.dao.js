@@ -1151,11 +1151,11 @@ var dao = {
 
     },
 
-    getToken: function(tokenId, fn) {
+    getToken: function(tokenId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getToken');
-
-        stripe.tokens.retrieve(tokenId, function(err, token) {
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.tokens.retrieve(tokenId, apiToken, function(err, token) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, token);

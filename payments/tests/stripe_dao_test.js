@@ -715,23 +715,92 @@ exports.stripe_dao_test = {
     },
 
     testCreateToken: function(test) {
-        test.done();
+
+        stripeDao.createToken(testContext.cardId, testContext.customerId, testAccessToken, function(err, token){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('created token');
+                console.dir(token);
+                testContext.tokenId = token.id;
+                test.done();
+            }
+        });
     },
 
     testGetToken: function(test) {
-        test.done();
-    },
-
-    testGetEvent: function(test) {
-        test.done();
+        stripeDao.getToken(testContext.tokenId, testAccessToken, function(err, token){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('retrieved token');
+                console.dir(token);
+                test.done();
+            }
+        });
     },
 
     testListEvents: function(test) {
-        test.done();
+        stripeDao.listEvents(null, null, null, null, null, null, function(err, events){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('listing events');
+                console.dir(events);
+                testContext.eventId = events.data[0].id;
+                test.done();
+            }
+        });
     },
 
+    testGetEvent: function(test) {
+        stripeDao.getEvent(testContext.eventId, null, function(err, event){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('retrieved event');
+                console.dir(event);
+                test.done();
+            }
+        });
+    },
+
+
+
     testDeleteInvoiceItem: function(test) {
-        test.done();
+        //create a new invoiceItem to delete
+        test.expect(1);
+        var customerId = testContext.customerId;
+        var amount = 500;
+        var currency = 'usd';
+        var description = 'Setup Fee';
+
+        stripeDao.createInvoiceItem(customerId, amount, currency, null, null, description, null, null,
+            function(err, item){
+                if(err) {
+                    test.ok(false, err);
+                    test.done();
+                } else {
+                    _log.debug('created invoiceItem');
+                    stripeDao.deleteInvoiceItem(item.id, null, function(err, result){
+                        if(err) {
+                            test.ok(false, err);
+                            test.done();
+                        } else {
+                            _log.debug('deleted invoice item');
+                            console.dir(result);
+                            test.ok(result);
+                            test.done();
+                        }
+                    });
+
+                }
+            });
+
     },
 
     testDeleteStripeCard: function(test) {
