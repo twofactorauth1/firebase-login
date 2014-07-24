@@ -705,7 +705,7 @@ var dao = {
                 _id:paymentId
 
             });
-            paymentDao.saveOrUpdate(payment, $$.m.Payment, function(err, payment){
+            paymentDao.saveOrUpdate(payment, function(err, payment){
                 if(err) {
                     self.log.error('error creating payment record for charge: ' + err);
                     return fn(err, charge);

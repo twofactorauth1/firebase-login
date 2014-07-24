@@ -440,38 +440,119 @@ exports.stripe_dao_test = {
         });
     },
 
-    testDeleteStripeCard: function(test) {
+    testCreateStripeChargeWithCustomerId: function(test) {
+        var self = this;
+        test.expect(1);
+        var amount = 100;
+        var currency = 'usd';
+        var customerId = testContext.customerId;
+        var contactId = testContext.contact.id();
+        var description = 'test charge';
+        var metadata = null;
+        var capture = true;
+        var statement_description = 'Test Charge';
 
-        stripeDao.deleteStripeCard(testContext.customerId, testContext.cardId, function(err, value){
+        stripeDao.createStripeCharge(amount, currency, null, customerId, contactId, description, metadata, capture,
+            statement_description, null, null, null, function(err, charge){
+                if(err) {
+                    test.ok(false, err);
+                    test.done();
+                } else {
+                    _log.debug('created charge');
+                    console.dir(charge);
+                    test.ok(charge.charge.paid);
+                    testContext.capturedChargeId= charge.charge.id;
+                    test.done();
+                }
+            });
+    },
+
+    testCreateStripeChargeWithCustomerAndCardId: function(test) {
+        var self = this;
+        var amount = 100;
+        var currency = 'usd';
+        var customerId = testContext.customerId;
+        var card = testContext.cardId;
+        var contactId = testContext.contact.id();
+        var description = 'test charge';
+        var metadata = null;
+        var capture = false;
+        var statement_description = 'Test Charge';
+
+        stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata, capture,
+            statement_description, null, null, null, function(err, charge){
+                if(err) {
+                    test.ok(false, err);
+                    test.done();
+                } else {
+                    _log.debug('created uncaptured charge');
+                    console.dir(charge);
+                    testContext.uncapturedChargeId = charge.charge.id;
+                    test.done();
+                }
+            });
+    },
+
+    testGetStripeCharge: function(test) {
+        test.expect(1);
+        stripeDao.getStripeCharge(testContext.capturedChargeId, null, function(err, charge){
             if(err) {
                 test.ok(false, err);
                 test.done();
             } else {
-                _log.debug('deleted card');
-                console.dir(value);
+                _log.debug('retrieved charge');
+                console.dir(charge);
+                test.ok(charge);
+                test.done();
+            }
+        });
+
+    },
+
+    testUpdateStripeCharge: function(test) {
+        test.expect(1);
+        stripeDao.updateStripeCharge(testContext.uncapturedChargeId, 'updatedDesc', null, null, function(err, charge){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('updated charge');
+                console.dir(charge);
+                test.equals('updatedDesc', charge.description);
                 test.done();
             }
         });
     },
 
-    testCreateStripeCharge: function(test) {
-        test.done();
-    },
-
-    testGetStripeCharge: function(test) {
-        test.done();
-    },
-
-    testUpdateStripeCharge: function(test) {
-        test.done();
-    },
-
     testCaptureStripeCharge: function(test) {
-        test.done();
+
+        test.expect(1);
+        stripeDao.captureStripeCharge(testContext.uncapturedChargeId, 75, null, null, null, function(err, charge){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('captured charge');
+                console.dir(charge);
+                test.equals(25, charge.charge.amount_refunded);//updated from 100
+                test.done();
+            }
+        });
+
     },
 
     testListStripeCharges: function(test) {
-        test.done();
+
+        stripeDao.listStripeCharges(null, testContext.customerId, null, 10, null, null, function(err, charges){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('listing charges');
+                console.dir(charges);
+                test.done();
+            }
+        });
     },
 
     testCreateInvoiceItem: function(test) {
