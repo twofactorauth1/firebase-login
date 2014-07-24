@@ -2,6 +2,7 @@ require('./dao/cms.dao.js');
 
 var blogPostDao = require('./dao/blogpost.dao.js');
 var cmsDao = require('./dao/cms.dao.js');
+var accountDao = require('../dao/account.dao.js');
 
 var log = $$.g.getLogger("cms_manager");
 var Blog = require('./model/components/blog');
@@ -12,6 +13,42 @@ module.exports = {
 
     getAllThemes: function(fn) {
         $$.dao.CmsDao.getAllThemes(fn);
+    },
+
+    getThemePreview: function(themeId, fn) {
+        cmsDao.getThemePreview(themeId, fn);
+    },
+
+    setThemeForAccount: function(accountId, themeId, fn) {
+        //validateThemeId
+        var p1 = $.Deferred();
+        cmsDao.themeExists(themeId, function(err, value){
+            if(err) {
+                p1.reject();
+                fn(err, null);
+            } else if(value === false) {
+                p1.reject();
+                fn('Theme with id [' + themeId + '] does not exist.');
+            } else {
+                p1.resolve();
+            }
+        });
+        $.when(p1).done(function(){
+            accountDao.getById(accountId, $$.m.Account, function(err, account){
+                if(err) {
+                    fn(err, null);
+                }
+                var website = account.get('website');
+                website.themeId = themeId;
+                accountDao.saveOrUpdate(account, function(err, value){
+                    if(err) {
+                        fn(err, null);
+                    }
+                    fn(null, 'SUCCESS');
+                });
+            });
+        });
+
     },
 
     _createBlogPost: function(accountId, blogPost, fn) {
@@ -28,7 +65,6 @@ module.exports = {
                 fn(err, null);
             } else {
                 //store the id in the page component's array
-                self.log.debug('getting post page');
                 cmsDao.getPageById(savedPost.get('pageId'), function(err, page){
                     if(err) {
                         self.log.error('Error getting page for post: ' + err);
@@ -66,6 +102,8 @@ module.exports = {
     },
 
     updateBlogPost: function(accountId, blogPost, fn) {
+        var self = this;
+        console.dir('blogPost '+JSON.stringify(blogPost));
         blogPostDao.saveOrUpdate(blogPost, fn);
     },
 
@@ -172,15 +210,83 @@ module.exports = {
 
                 var postsAry = [];
                 for (var i = 0; i < componentAry.length; i++) {
-                    var attributes = componentAry[i]['attributes'];
-                    if (attributes['type'] === 'blog') {
-                        postsAry = attributes['posts'];
+                    if (componentAry[i]['type'] === 'blog') {
+                        postsAry = componentAry[i]['posts'];
                         break;
                     }
                 }
                 fn(null, postsAry);
             }
         });
+    },
+
+    getPageComponents: function(pageId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPageComponents');
+        cmsDao.getPageById(pageId, function(err, page) {
+            if (err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if (!page) {
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                var componentAry = page.get('components') || [];
+                self.log.debug('<< getPageComponents');
+                fn(null, componentAry);
+            }
+        });
+    },
+
+    getPageComponentsByType: function(pageId, type, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPageComponentsByType');
+        cmsDao.getPageById(pageId, function(err, page) {
+            if (err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if (!page) {
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                var targetComponents = [];
+                var componentAry = page.get('components') || [];
+                for(var i=0; i<componentAry.length; i++) {
+                    if (componentAry[i]['type'] === type) {
+                        targetComponents.push(componentAry[i]);
+                    }
+                }
+                self.log.debug('<< getPageComponentsByType');
+                fn(null, targetComponents);
+            }
+        });
+    },
+
+    addPageComponent: function(pageId, component, fn){
+        var self = this;
+        self.log = log;
+        self.log.debug('>> addPageComponent');
+
+        cmsDao.getPageById(pageId, function(err, page){
+            if (err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if (!page) {
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                var componentAry = page.get('components') || [];
+                componentAry.push(component);
+                self.log.debug('<< addPageComponent');
+                cmsDao.saveOrUpdate(page, fn);
+            }
+        });
+
     },
 
     updatePageComponent: function(pageId, component, fn) {
@@ -200,8 +306,7 @@ module.exports = {
                     componentAry.push(component);
                 } else {
                     for(var i=0; i<componentAry.length; i++) {
-                        var attributes = componentAry[i]['attributes'];
-                        if(attributes['type'] === component['attributes']['type']) {
+                        if(componentAry[i]['type'] === component['type']) {
                             componentAry[i] = component;
                             break;
                         }
@@ -212,47 +317,126 @@ module.exports = {
         });
     },
 
-    _addPostIdToBlogComponentPage: function(postId, page) {
-        var componentAry = page.get('components') || [];
+    updateAllPageComponents: function(pageId, componentAry, fn) {
+        var self = this;
+        self.log = log;
+        cmsDao.getPageById(pageId, function(err, page){
+            if(err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if(!page){
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                page.set('components', componentAry);
+                cmsDao.saveOrUpdate(page, fn);
+            }
+        });
+    },
 
-        var blogComponentAttrs = null;
+    deleteComponent: function(pageId, componentId, fn) {
+        var self = this;
+        self.log = log;
+        cmsDao.getPageById(pageId, function(err, page) {
+            if (err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if (!page) {
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                var componentAry = page.get('components') || [];
+                var spliceIndex = -1;
+                for(var i=0; i<componentAry.length; i++) {
+                    if(componentAry[i]['_id'] === componentId) {
+                        spliceIndex = i;
+                        break;
+                    }
+                }
+                if(spliceIndex !==-1) {
+                    componentAry.splice(spliceIndex, 1);
+                    cmsDao.saveOrUpdate(page, fn);
+                } else {
+                    var msg = 'Referenced componentId [' + componentId + '] was not found on page [' + pageId + '].';
+                    self.log.error(msg);
+                    fn(msg, null);
+                }
+            }
+        });
+    },
+
+    modifyComponentOrder: function(pageId, componentId, newOrder, fn) {
+        var self = this;
+        self.log = log;
+
+        cmsDao.getPageById(pageId, function(err, page) {
+            if (err) {
+                self.log.error('Error getting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else if (!page) {
+                var msg = 'Referenced page [' + pageId + '] does not exist:';
+                self.log.error(msg);
+                fn(msg, null);
+            } else {
+                var componentAry = page.get('components') || [];
+                var component = null;
+                var spliceIndex = -1;
+                for(var i=0; i<componentAry.length; i++) {
+                    if(componentAry[i]['_id'] === componentId) {
+                        spliceIndex = i;
+                        component = componentAry[i];
+                        break;
+                    }
+                }
+                if(spliceIndex === -1) {
+                    fn('Referenced component [' + componentId + '] was not found on page [' + pageId + '].', null);
+                } else {
+                    componentAry.splice(spliceIndex, 1);
+                    componentAry.splice(newOrder, 0, component);
+                    cmsDao.saveOrUpdate(page, fn);
+                }
+            }
+        });
+    },
+
+    _addPostIdToBlogComponentPage: function(postId, page) {
+        var self = this;
+        var componentAry = page.get('components') || [];
+        var blogComponent = null;
         for(var i=0; i<componentAry.length; i++) {
-            var attributes = componentAry[i]['attributes'];
-            if(attributes['type'] === 'blog') {
-                blogComponentAttrs = componentAry[i]['attributes'];
+            if(componentAry[i]['type']==='blog') {
+                blogComponent = new $$.m.cms.modules.Blog(componentAry[i]);
             }
         }
-
-        if(!blogComponentAttrs) {
+        if(!blogComponent) {
             return null;
         }
-        var postsAry = blogComponentAttrs['posts'] || [];
 
+        var postsAry = blogComponent.get('posts') || [];
         postsAry.push(postId);
         return postsAry;
+
     },
 
     _removePostIdFromBlogComponentPage: function(postId, page) {
         var componentAry = page.get('components') || [];
 
-        var blogComponentAttrs = null;
+        var blogComponent = null;
         for(var i=0; i<componentAry.length; i++) {
-            var attributes = componentAry[i]['attributes'];
-            if(attributes['type'] === 'blog') {
-                blogComponentAttrs = componentAry[i]['attributes'];
+            if(componentAry[i]['type']==='blog') {
+                blogComponent = new $$.m.cms.modules.Blog(componentAry[i]);
             }
         }
-
-        if(!blogComponentAttrs) {
+        if(!blogComponent) {
             return null;
         }
-        var postsAry = blogComponentAttrs['posts'] || [];
+        var postsAry = blogComponent.get('posts') || [];
         var spliceIndex = -1;
         for(var i = 0; i<postsAry.length; i++) {
             if(postsAry[i] === postId) {
                 spliceIndex = i;
-            } else {
-                //console.log(postsAry[i] + ' does not equal ' + postId);
             }
         }
 
@@ -261,5 +445,6 @@ module.exports = {
         }
 
         return postsAry;
+
     }
 };

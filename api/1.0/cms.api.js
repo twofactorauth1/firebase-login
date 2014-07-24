@@ -41,8 +41,29 @@ _.extend(api.prototype, baseApi.prototype, {
 
         // THEME
         app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
-        app.get(this.url(':accountid/cms/theme', "account"), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
+        app.get(this.url(':accountId/cms/theme', "account"), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
         app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
+        app.get(this.url('theme/:id/preview'), this.isAuthApi, this.getThemePreview.bind(this));
+        app.post(this.url('theme/:id'), this.isAuthApi, this.setTheme.bind(this));
+        /*
+        What it should be:
+         */
+        app.get(this.url('themeconfig/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
+        app.get(this.url('themeconfig/account/:accountId'), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
+        app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
+        app.get(this.url('themes/:id/preview'), this.isAuthApi, this.getThemePreview.bind(this));
+        app.post(this.url('themes/:id'), this.isAuthApi, this.modifyTheme.bind(this));
+        app.post(this.url('website/:websiteId/theme/:themeId'), this.isAuthApi, this.setTheme.bind(this));
+
+
+        // COMPONENTS
+        app.get(this.url('page/:id/components'), this.isAuthApi, this.getComponentsByPage.bind(this));
+        app.get(this.url('page/:id/components/type/:type'), this.isAuthApi, this.getComponentsByType.bind(this));
+        app.post(this.url('page/:id/components'), this.isAuthApi, this.addComponentToPage.bind(this));
+        app.post(this.url('page/:id/components/all'), this.isAuthApi, this.updateAllComponents.bind(this));
+        app.post(this.url('page/:id/components/:componentId'), this.isAuthApi, this.updateComponent.bind(this));
+        app.delete(this.url('page/:id/components/:componentId'), this.isAuthApi, this.deleteComponent.bind(this));
+        app.post(this.url('page/:id/components/:componentId/order/:newOrder'), this.isAuthApi, this.updateComponentOrder.bind(this));
 
         // BLOG POSTS
         app.post(this.url('page/:id/blog'), this.isAuthApi, this.createBlogPost.bind(this));
@@ -164,14 +185,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.sendResult(res, value);
             }
         })
-
-
     },
 
     getThemeConfigForAccountId: function(req, resp) {
         //TODO: Add Security
         var self = this;
-        var accountId = req.params.accountid;
+        var accountId = req.params.accountId;
 
         accountId = parseInt(accountId);
 
@@ -185,19 +204,174 @@ _.extend(api.prototype, baseApi.prototype, {
             self = null;
         });
     },
+
+    getThemePreview: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getThemePreview');
+        var accountId = parseInt(self.accountId(req));
+        var themeId = req.params.id;
+
+        cmsManager.getThemePreview(themeId, function(err, value){
+            self.sendResultOrError(res, err, value, "Error retrieving Theme Preview for ThemeId: [" + themeId + "]");
+            self = null;
+        });
+
+    },
+
+    setTheme: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> setTheme');
+        var accountId = parseInt(self.accountId(req));
+        var themeId = req.params.themeId;
+        var websiteId = req.params.websiteId;
+
+        cmsManager.setThemeForAccount(accountId, themeId, function(err, value){
+            self.sendResultOrError(res, err, value, "Error setting theme for account.");
+            self = null;
+        });
+
+    },
+
+    modifyTheme: function(req, res) {
+      //TODO: implement if necessary
+    },
+
     //endregion
+
+    //COMPONENTS
+
+    getComponentsByPage: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getComponentsByPage');
+        var accountId = req.params.accountid;
+        var pageId = req.params.id;
+
+        accountId = parseInt(accountId);
+
+        cmsManager.getPageComponents(pageId, function(err, value){
+            self.log.debug('<< getComponentsByPage');
+            self.sendResultOrError(res, err, value, "Error retrieving components");
+            self = null;
+        });
+    },
+
+    getComponentsByType: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getComponentsByType');
+        var accountId = req.params.accountid;
+        var pageId = req.params.id;
+        var type = req.params.type;
+
+        accountId = parseInt(accountId);
+
+        cmsManager.getPageComponentsByType(pageId, type, function(err, value){
+            self.log.debug('<< getComponentsByType');
+            self.sendResultOrError(res, err, value, "Error retrieving components by type");
+            self = null;
+        });
+    },
+
+    addComponentToPage: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> addComponentToPage');
+        var componentObj = req.body;
+
+        var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.addPageComponent(pageId, componentObj, function(err, value){
+            self.log.debug('<< addComponentToPage');
+            self.sendResultOrError(res, err, value, "Error adding components to page");
+            self = null;
+        });
+    },
+
+    updateComponent: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> updateComponent');
+        var componentObj = req.body;
+
+        var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var componentId = req.params.componentId;
+
+        cmsManager.updatePageComponent(pageId, componentObj, function(err, value){
+            self.log.debug('<< updateComponent');
+            self.sendResultOrError(res, err, value, "Error updating a component on a page");
+            self = null;
+        });
+
+    },
+
+    updateAllComponents: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> updateAllComponents');
+        var componentAry = req.body;
+
+        var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.updateAllPageComponents(pageId, componentAry, function(err, value){
+            self.log.debug('<< updateAllComponents');
+            self.sendResultOrError(res, err, value, "Error updating components");
+            self = null;
+        });
+    },
+
+    deleteComponent: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> deleteComponent');
+
+        var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var componentId = req.params.componentId;
+
+        cmsManager.deleteComponent(pageId, componentId, function(err, value){
+            self.log.debug('<< deleteComponent');
+            self.sendResultOrError(res, err, value, "Error deleting component");
+            self = null;
+        });
+
+    },
+
+    updateComponentOrder: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> updateComponentOrder');
+
+        var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var componentId = req.params.componentId;
+        var newOrder = req.params.newOrder;
+
+        cmsManager.modifyComponentOrder(pageId, componentId, newOrder, function(err, value){
+            self.log.debug('<< updateComponentOrder');
+            self.sendResultOrError(res, err, value, "Error deleting component");
+            self = null;
+        });
+
+    },
 
 
     //BLOG POSTS
     createBlogPost: function(req, res) {
         //TODO: Add Security
         var self = this;
+        self.log.debug('>> createBlogPost');
         var blogPost = new $$.m.BlogPost(req.body);
-        console.dir(blogPost);
+
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
 
-        blogPost.set('accountId', accountId);
+        blogPost.set('accountId', accountId.toString());
         blogPost.set('pageId', pageId);
 
         cmsManager.createBlogPost(accountId, blogPost, function(err, value){
@@ -226,9 +400,13 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updateBlogPost');
         var blogPost = new $$.m.BlogPost(req.body);
         var postId = req.params.postId;
+        var pageId = req.params.id;
         var accountId = self.accountId(req);
-        blogPost.set('accountId', accountId);
+        blogPost.set('accountId', accountId.toString());
         blogPost.set('_id', postId);
+        blogPost.set('pageId', pageId);
+
+        console.dir(req.body);
 
         cmsManager.updateBlogPost(accountId, blogPost, function(err, value){
             self.log.debug('<< updateBlogPost');

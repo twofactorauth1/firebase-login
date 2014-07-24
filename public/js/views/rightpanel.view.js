@@ -3,13 +3,18 @@ define([
     'utils/utils',
     'models/cms/components/blog',
     'services/cms.service',
-], function (EditWebsite, utils, Blog, CmsService) {
+    'models/cms/post',
+    'models/cms/page',
+    'events/events'
+], function (EditWebsite, utils, Blog, CmsService, Post, Page, events) {
 
     var view = EditWebsite.extend({
 
         subdomain: null,
         websiteSettings: null,
         themeId: null,
+        websiteId: null,
+        pageId: null,
 
         //temporary themes
         themes: null,
@@ -34,11 +39,12 @@ define([
             "change .dd": "onComponentDrag",
             "click .btn-add-component":"addComponent",
             "click .add-post":"addBlankPost",
-            "click .add-page":"addBlankPage"
+            "click .add-page":"addBlankPage",
+            "change .sort-ordering": "sort_contact",
+            "change .sort-display": "sort_display"
         },
 
         initialize: function () {
-            console.log('rendering');
             var self = this
                 , p1 = this.getAccount()
                 , p2 = this.getWebsite()
@@ -53,6 +59,10 @@ define([
             $.when(p2)
                 .done(function () {
                 self.websiteSettings = self.website.attributes.settings;
+                self.websiteId = self.website.attributes._id;
+                self.getPage().done(function(){
+                    self.pageId = '45b9072c-eb76-4c23-a792-822135554543';
+                });
             });
         },
 
@@ -60,30 +70,41 @@ define([
             this.show(html);
         },
 
+        sort_contact: function (e){
+            $$.e.ContactSortingEvent.trigger("sortContact", {sort_type: e.target.value}); // generating events
+        },
+        sort_display: function (e){
+            $$.e.ContactSortingEvent.trigger("displayContact", {display_type: e.target.value}); // generating events
+        },
+
+
         /*
          * Edit Website Sidebar
          * - Functions for Edit Website Sidebar
          */
             addBlankPage: function() {
-                console.log('adding blank page');
+                var self = this;
+                console.log('adding blank page'+self.is_dragging);
                 $('#iframe-website').contents().find('ul.navbar-nav li:last-child').before('<li><a href="#">New Page</a></li>');
             },
 
             addBlankPost: function() {
                 var self = this;
                 console.log('Adding Blank Post');
-                // self.getPost().done(function () {
-                //     console.log('got the post');
-                // });
-                //TODO if not blog page navigate there then continue
-                //add blank post
+
                 var blankPostHTML = $$.templateManager.get("blankPost", self.templateKey);
 
                 var $iframe = $('#iframe-website');
                 $iframe.ready(function() {
                     $iframe.contents().find("#main-area .entry").prepend(blankPostHTML);
                 });
-                //self.savePost();
+
+                console.log('Page ID: '+self.pageId);
+                self.post = new Post({
+                    pageId:self.pageId
+                });
+
+                self.post.save();
             },
             // WORKING
             addComponent: function () {
@@ -135,7 +156,6 @@ define([
 
                 promise
                     .done(function (themes) {
-                        console.log('Themes: '+themes);
                         self.themes = themes;
                     })
                     .fail(function (resp) {
@@ -176,8 +196,9 @@ define([
                     console.log('Current ThemeId: '+self.account.attributes.website.themeId);
 
                     //actual code when api works
-                    // self.account.set('website', {'themeId': themeId});
-                    // self.account.save();
+                    self.account.set("updateType","website");
+                    self.account.set('website', {'themeId': themeId});
+                     self.account.save();
 
                     //refresh theme
                     document.getElementById('iframe-website').contentWindow.location.reload(true);

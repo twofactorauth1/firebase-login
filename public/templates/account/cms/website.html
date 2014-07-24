@@ -153,7 +153,7 @@
 </script>
 
 <script type="text/x-handlebars-template" name="blankPost">
-  <div class="single-blog responsive clearfix">
+  <div class="single-blog responsive clearfix" data-postId="">
             <div class="blog-entry clearfix">
                 <h2 class="blog-title"><a href="/page/blog/post-title">
                     <div class="editable" data-class="post-title">
@@ -352,6 +352,7 @@
                         <option value="video-text">Video Text</option>
                         <option value="video-text-left">Video Text Left</option>
                         <option value="video-text-right">Video Text Right</option>
+                        <option value="video-text-right">Sign Up Form</option>
                     </select>
             </div>
             <div class="clearfix"></div>
@@ -386,7 +387,7 @@
             <div class="row">
             {{#each themes}}
               <div class="col-sm-6 col-md-4">
-                <div class="thumbnail" data-themeid="{{this.name}}">
+                <div class="thumbnail" data-themeid="{{this.id}}">
                   <div class="check-theme" style="display:none"><i class="fa fa-check-circle"></i></div>
                   <img src="{{this.preview}}">
                   <div class="caption">

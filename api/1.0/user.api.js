@@ -25,7 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.post(this.url(''), this.createUser.bind(this));
-        app.put(this.url(''), this.isAuthApi, this.updateUser.bind(this));
+        app.put(this.url(':id'), this.isAuthApi, this.updateUser.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteUser.bind(this));
 
         app.get(this.url('exists/:username'), this.setup, this.userExists.bind(this));
@@ -55,7 +55,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = req.params.id;
 
         if (!userId) {
-            return this.wrapError(resp, 400, null, "Invalid paramater for ID");
+            return this.wrapError(resp, 400, null, "Invalid parameter for ID");
         }
 
         userId = parseInt(userId);
@@ -115,6 +115,26 @@ _.extend(api.prototype, baseApi.prototype, {
 
     updateUser: function(req,resp) {
         //TODO - ensure user accounts are not tampered with
+        var self = this;
+
+        var userId=req.body._id;
+        userDao.getById(userId, function(err, value) {
+            if (!err && value != null) {
+                value.set("welcome_alert",req.body.welcome_alert);
+                userDao.saveOrUpdate(value, function(err, value) {
+                    if (!err && value != null) {
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
+
+            } else {
+                return self.wrapError(resp, 401, null, err, value);
+            }
+        });
+
+
     },
 
 

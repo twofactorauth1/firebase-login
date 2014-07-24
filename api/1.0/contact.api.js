@@ -28,6 +28,12 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url(''), this.isAuthApi, this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteContact.bind(this));
 
+      //  app.post("/signupnews", this.signUpNews.bind(this));
+        app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
+
+
+        app.get(this.url(':accountId/contacts/:letter/:skip', "account"), this.isAuthApi, this.getContactsForAccountByLetter.bind(this));
+
         app.get(this.url(':accountId/contacts/:letter', "account"), this.isAuthApi, this.getContactsForAccountByLetter.bind(this));
 
         app.get(this.url(':id/activity'), this.isAuthApi, this.getActivityByContactId.bind(this));
@@ -91,6 +97,25 @@ _.extend(api.prototype, baseApi.prototype, {
 
     deleteContact: function(req,resp) {
 
+        //TODO - add granular security
+        var self = this;
+        var contactId = req.params.id;
+
+        if (!contactId) {
+            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+        }
+
+        contactId = parseInt(contactId);
+        contactDao.removeById(contactId, function(err, value) {
+            if (!err && value != null) {
+                self.sendResult(resp, value);
+            } else {
+                self.wrapError(resp, 401, null, err, value);
+            }
+        });
+
+
+
     },
 
 
@@ -100,6 +125,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = req.params.accountId;
         var letter = req.params.letter;
+        var skip = req.params.skip || 0;
 
         if (!accountId) {
             return self.wrapError(resp, 400, null, "Invalid parameter for account id");
@@ -111,20 +137,53 @@ _.extend(api.prototype, baseApi.prototype, {
             letter = "a";
         }
 
-        if (letter.length > 1) {
+        if (!(letter == "all") && letter.length > 1) {
             return self.wrapError(resp, 401, null, "Invalid parameter for :letter");
         }
 
-        contactDao.getContactsShort(accountId, letter, function(err, value) {
-            if (!err) {
-                return self.sendResult(resp, value);
-            } else {
-                return self.wrapError(resp, 500, "failed to retrieve contacts by letter", err, value);
-            }
-        });
+        if(letter == "all" ) {
+            contactDao.getContactsAll(accountId,skip, function(err, value) {
+                if (!err) {
+                    return self.sendResult(resp, value);
+                } else {
+                    return self.wrapError(resp, 500, "failed to retrieve contacts by letter", err, value);
+                }
+            });
+        } else {
+            contactDao.getContactsShort(accountId, letter, function (err, value) {
+                if (!err) {
+                    return self.sendResult(resp, value);
+                } else {
+                    return self.wrapError(resp, 500, "failed to retrieve contacts by letter", err, value);
+                }
+            });
+        }
 
     },
     //endregion CONTACT
+
+    signUpNews: function(req, resp) {
+        var self = this, contact, accountToken, deferred;
+        console.log(req.body);
+        var email = req.body.email;
+        console.log('Email: '+JSON.stringify(email));
+
+        var accountToken = cookies.getAccountToken(req);
+        console.log('Account Token: '+accountToken);
+
+        contactDao.createContactFromData(req.body, accountToken, function (err, value) {
+            if (!err) {
+                req.flash("info", "Account created successfully");
+            return self.sendResult(resp, value);
+         //       return resp.redirect("/");
+            } else {
+                req.flash("error", value.toString());
+            return self.wrapError(resp, 500, "account already Exists", err, value);
+           //     return resp.redirect("/");
+            }
+        });
+    },
+
 
 
     //region CONTACT ACTIVITY

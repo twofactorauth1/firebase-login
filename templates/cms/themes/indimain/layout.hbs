@@ -79,7 +79,9 @@
 
     <div id="footer">{{{footer}}}</div>
 
-    <script type="text/javascript" src="/js/libs/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/libs/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="/js/libs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/libs/jquery/jquery-ui.min.js"></script>
 
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
 
@@ -91,7 +93,7 @@
 
 
     <script type="text/javascript" >
-           (function($) {
+          (function($) {
              $(document).ready(function() {
 
                 function changeSidebarHeight() {
@@ -99,12 +101,61 @@
                   $('#main-area').css('min-height', sidebarHeight+50);
                 }
 
+                // var spinner = $('.spinner-input').spinner();
+                // spinner.spinner('value', 0);
+
                 if ($('#sidebar').length) {
                   changeSidebarHeight();
                   $( window ).resize(function() {
                     changeSidebarHeight();
                   });
                 }
+
+                $('.continue-shopping').on('click touchstart', function() {
+                  $('#cart-checkout-modal').modal('hide');
+                });
+
+                var cart = $('.shopping-cart, .cart-footer');
+                var billing = $('.billing-shipping, .billing-footer');
+                var payment = $('.payment, .payment-footer');
+                var modalTitle = $('#cart-checkout-modal .modal-title');
+
+                $('.btn-checkout').on('click touchstart', function() {
+                  modalTitle.html('<i class="fa fa-credit-card"></i> Checkout');
+                  cart.addClass('hidden fadeOut');
+                  billing.removeClass('hidden fadeIn');
+                });
+
+                $('.back-to-shopping-cart').on('click touchstart', function() {
+                  modalTitle.html('<i class="fa fa-shopping-cart"></i> My Cart');
+                  cart.removeClass('hidden fadeIn');
+                  billing.addClass('hidden fadeOut');
+                });
+
+                $('.back-to-billing-shipping').on('click touchstart', function() {
+                  billing.removeClass('hidden fadeIn');
+                  payment.addClass('hidden fadeOut');
+                });
+
+                $('.btn-payment').on('click touchstart', function() {
+                  payment.removeClass('hidden fadeIn');
+                  billing.addClass('hidden fadeOut');
+                });
+
+                $('.btn-confirm-payment').on('click touchstart', function() {
+                  modalTitle.html('<i class="fa fa-check-circle-o"></i> Order Placed!');
+                  $('.thank-you').removeClass('hidden fadeIn');
+                  payment.addClass('hidden fadeOut');
+                });
+
+                $('.checkbox').on('change', function() {
+                  var shipTab = $('.shipping-tab');
+                  if (shipTab.hasClass('hidden')) {
+                    shipTab.removeClass('hidden');
+                  } else {
+                    shipTab.addClass('hidden');
+                  }
+                });
 
                 $('.parallax').parallax({
                     scroll_factor: 0.5
@@ -167,6 +218,43 @@
                   }
                 });
 
+                 $('#form-subscribe').click(function() {
+                     $('#InputEmail').val($('#emailSub').val());
+                 });
+
+                 $('#subscribelist').click(function(){
+
+                     $.ajax({
+                         type: "POST",
+                         url: '/api/1.0/contact/signupnews',
+                         data: _.object(_.map($('#form1').serializeArray(), _.values)),
+                         success: function(data,textStatus){
+                             console.log("Called success")
+                             $("#error-msg").removeClass("hidden").html("sucessfully subscribed");
+                             setTimeout(function(){
+                                 $("#error-msg").addClass('hidden');
+                             },2500);
+
+
+                         },
+                         error:function(qXHR, textStatus, errorThrown){
+                             console.log("called Error")
+
+                             var response=JSON.parse(qXHR.responseText);
+
+                             $("#error-msg").removeClass("hidden").html(response.status);
+                             setTimeout(function(){
+                                 $("#error-msg").addClass('hidden');
+                             },2500);
+
+
+                         }
+
+                     });
+
+                 })
+
+
                  function append_style() {
                      $("head").append('<STYLE type="text/css"> \
                           .dispersed #center-circle { left: ' + center + 'px;top: 293px; margin: 0;} \
@@ -177,7 +265,7 @@
                           </STYLE>')
                  }
              })
-         })(jQuery);
+          })(jQuery);
     </script>
 </body>
 

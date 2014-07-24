@@ -47,7 +47,8 @@ define([], function () {
                 TWITTER: _socialTypes.TWITTER,
                 LINKEDIN: _socialTypes.LINKEDIN,
                 GOOGLE: _socialTypes.GOOGLE,
-                FULL_CONTACT: _socialTypes.FULL_CONTACT
+                FULL_CONTACT: _socialTypes.FULL_CONTACT,
+                dp:_socialTypes.dp
             }
         },
 

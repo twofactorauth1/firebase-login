@@ -7,8 +7,13 @@
 
 var userDao = require('../dao/user.dao.js');
 var accountDao = require('../dao/account.dao.js');
+<<<<<<< HEAD
+var contactDao = require('../dao/contact.dao.js');
+var paymentDao = require('../payments/dao/payment.dao.js');
+=======
 var blogPostDao = require('../cms/dao/blogpost.dao.js');
 var _log = $$.g.getLogger("testhelpers");
+>>>>>>> develop
 
 module.exports = {
 
@@ -88,8 +93,9 @@ module.exports = {
             'post_title': 'title3',
             'post_category': 'category1',
             'post_tags': ['tag1', 'tag3']
+
         });
-        console.log('about to saveOrUpdate');
+
 
         blogPostDao.createPost(post1, function(err, value){
             if(err) {
@@ -167,72 +173,29 @@ module.exports = {
                 testcontext.accountId = value.id();
                 fn(null, value);
             }
+            fn(err, value);
         });
-
-
     },
 
-    getOrCreateAPITestingUser: function(testcontext, fn) {
-        var testUser = new $$.m.User({
-
-            "username" : "apitest@example.com",
-            "email" : "apitest@example.com",
-            "first" : "API",
-            "last" : "Test",
-            "gender" : 'm',
-            "birthday" : "",
-            "_v" : "0.1",
-            "created" : {
-            "date" : 1404743468927,
-                "strategy" : "lo",
-                "by" : null,
-                "isNew" : true
-        },
-            "profilePhotos" : [],
-            "accounts" : [
-            {
-                "accountId" : testcontext.accountId,
-                "username" : "apitest@example.com",
-                "credentials" : [
-                    {
-                        "username" : "apitest@example.com",
-                        "password" : "$2a$12$KcrG/UNpNZmSQ7LpfAnxVO9Wc4gb31LfB9DSa3.oytZi7493AJV.O",
-                        "type" : "lo",
-                        "_username" : "apitest@example.com"
-                    }
-                ],
-                "permissions" : [
-                    "super",
-                    "admin",
-                    "member"
-                ]
-            }
-        ],
-            "credentials" : [
-            {
-                "type" : "lo",
-                "username" : "apitest@example.com",
-                "password" : "$2a$12$A2JZ2ZXBBkZqtz7X7qLyNeOC3ZuctPQ.7jNdwHDWo8oYKEMSkcnq6"
-            }
-        ],
-            "details" : [],
-            "_username" : "apitest@example.com"
-
-        });
-
-        userDao.getUserByUsername('apitest@example.com', function(err, user){
-            if(err || !user) {
-                //need to create it
-                userDao.saveOrUpdate(testUser, function(err, user){
-                    testcontext.userId = user.id();
-                    fn(null, user);
-                });
-            } else {
-                testcontext.userId = user.id();
-                fn(null, user);
-            }
-        });
-
+    createTestPayment: function(params, fn) {
+        var defaultParams = {
+            chargeId: 'charge_1',
+            amount: 100,
+            fingerprint: 'qwertyuiop',
+            last4: '0000',
+            cvc_check: 'pass',
+            created: Date.now(),
+            paid: true,
+            refunded: false,
+            balance_transaction: 'bal_txid_1',
+            customerId: 'cust_1',
+            contactId: 'contact_1',
+            invoiceId: 0,
+            capture_date: Date.now()
+        };
+        var payment = new $$.m.Payment(defaultParams);
+        payment.set(params);
+        paymentDao.saveOrUpdate(payment, fn);
     },
 
     closeDBConnections: function () {
