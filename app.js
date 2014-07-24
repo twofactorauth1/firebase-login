@@ -249,8 +249,8 @@ require('./api/api.manager');
 //  SETUP RENDER HELPERS
 //-----------------------------------------------------
 Handlebars = require('handlebars');
-requirejs('libs/handlebars-helpers/src/helpers');
-requirejs('libs_misc/indigenoushelpers');
+requirejs('libs_misc/handlebars/handlebarshelpers');
+requirejs('libs_misc/handlebars/indigenoushelpers');
 
 //-----------------------------------------------------
 //  SETUP BIOMETRICS POLLING
