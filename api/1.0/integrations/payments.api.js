@@ -469,8 +469,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var customerId = req.params.id;
         var subscriptionId = req.params.subId;
         var at_period_end = req.body.at_period_end;
+        var accountId = self.accountId(req);
 
-        stripeDao.cancelStripeSubscription(customerId, subscriptionId, at_period_end, accessToken, function(err, value){
+        stripeDao.cancelStripeSubscription(accountId, customerId, subscriptionId, at_period_end, accessToken, function(err, value){
             self.log.debug('<< cancelSubscription');
             return self.sendResultOrError(resp, err, value, "Error cancelling subscription");
             self = value = null;
