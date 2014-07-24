@@ -35,9 +35,5 @@
     "jquery-cookie": "~1.4.1",
     "require-css": "~0.1.5",
     "backbone-nested-model": "~2.0.0"
-  },
-  "resolutions": {
-    "underscore": "~1.6.0",
-    "backbone": "~1.1.2"
   }
 }

@@ -36,7 +36,6 @@ require.config({
         usersData: 'global/users.data',
         app: 'app',
         text: "libs/requirejs-plugins/lib/text",
-        leaflet: 'libs/leaflet/dist/leaflet',
         colorthief: 'libs/color-thief/dist/color-thief.min',
         waypoints: 'libs/jquery-waypoints/waypoints.min',
         nestable: 'libs/nestable/jquery.nestable',
@@ -47,9 +46,9 @@ require.config({
 
         //UI SPECIFIC
         toggles: 'libs/misc/toggles.min',
-        datepicker: 'libs/bootstrap/bootstrap-datepicker',
-        leaflet: 'libs/leaflet/leaflet',
-        tagsinput: 'libs/jquery/jquery.tagsinput',
+        datepicker: 'libs/bootstrap-datepicker/bootstrap-datepicker',
+        leaflet: 'libs/leaflet/dist/leaflet',
+        tagsinput: 'libs/jquery.tagsinput/jquery.tagsinput',
         gritter: 'libs/jquery/jquery.gritter.min'
     },
 

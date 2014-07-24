@@ -12,10 +12,9 @@ define([
     'collections/contacts',
     'services/authentication.service',
     'services/contact.service',
-    'libs_misc/jquery/jquery.batchedimageloader',
 
     'events/events',
-    'libs/jquery/jquery.batchedimageloader'
+    'libs_misc/jquery/jquery.batchedimageloader',
     ], function(User, Account, Contact, Contacts, AuthenticationService, ContactService,events) {
 
     var view = Backbone.View.extend({
