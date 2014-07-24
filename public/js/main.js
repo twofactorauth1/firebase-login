@@ -45,11 +45,11 @@ require.config({
         moment: 'libs/moment/min/moment.min',
 
         //UI SPECIFIC
-        toggles: 'libs/misc/toggles.min',
-        datepicker: 'libs/bootstrap-datepicker/bootstrap-datepicker',
+        toggles: 'libs_misc/toggles.min',
+        datepicker: 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         leaflet: 'libs/leaflet/dist/leaflet',
-        tagsinput: 'libs/jquery.tagsinput/jquery.tagsinput',
-        gritter: 'libs/jquery/jquery.gritter.min'
+        tagsinput: 'libs/jquery.tagsinput/jquery.tagsinput.min',
+        gritter: 'libs/jquery.gritter/js/jquery.gritter.min'
     },
 
     shim: {
