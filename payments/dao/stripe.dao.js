@@ -1041,8 +1041,12 @@ var dao = {
         var self = this;
         self.log.debug('>> getUpcomingInvoice');
         var apiToken = self.delegateStripe(accessToken);
+        var params = {};
+        if(subscriptionId) {
+            params.subscription = subscriptionId;
+        }
 
-        stripe.invoices.retrieveUpcoming(customerId, subscriptionId, apiToken, function(err, invoice) {
+        stripe.invoices.retrieveUpcoming(customerId, params, apiToken, function(err, invoice) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, invoice);
@@ -1106,10 +1110,10 @@ var dao = {
         stripe.invoices.list(params, apiToken, function(err, invoices){
             if(err) {
                 self.log.error('error: ' + err);
-                return fn(err, invoice);
+                return fn(err, invoices);
             }
             self.log.debug('<< listInvoices');
-            return fn(err, invoice);
+            return fn(err, invoices);
         });
 
 

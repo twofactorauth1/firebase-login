@@ -619,27 +619,99 @@ exports.stripe_dao_test = {
     },
 
     testCreateInvoice: function(test) {
-        test.done();
+        var self = this;
+        var customerId = testContext.customerId;
+        var description = 'description';
+        var statement_description = 'statement';
+
+        stripeDao.createInvoice(customerId, null, description, null, statement_description, null, null,
+            function(err, invoice){
+                if(err) {
+                    test.ok(false, err);
+                    test.done();
+                } else {
+                    _log.debug('created invoice');
+                    console.dir(invoice);
+                    testContext.invoiceId = invoice.id;
+                    test.done();
+                }
+            });
     },
 
     testGetInvoice: function(test) {
-        test.done();
+        test.expect(1);
+        stripeDao.getInvoice(testContext.invoiceId, null, function(err, invoice){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('retrieved invoice');
+                console.dir(invoice);
+                test.equals(testContext.invoiceId, invoice.id);
+                test.done();
+            }
+        });
     },
 
     testGetUpcomingInvoice: function(test) {
-        test.done();
+        stripeDao.getUpcomingInvoice(testContext.customerId, null, null, function(err, invoices){
+            if(err) {
+                if(err.toString().indexOf('No upcoming invoices for customer') !=-1) {
+                    //that's an OK error message.
+                    _log.info('The previous error was expected.');
+                    test.done();
+                } else {
+                    test.ok(false, err);
+                    test.done();
+                }
+            } else {
+                _log.debug('retrieved upcoming invoice');
+                console.dir(invoices);
+                test.done();
+            }
+        });
     },
 
     testPayInvoice: function(test) {
-        test.done();
+
+        stripeDao.payInvoice(testContext.invoiceId, null, function(err, invoice){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('paid invoice');
+                console.dir(invoice);
+                test.done();
+            }
+        });
     },
 
     testUpdateInvoice: function(test) {
-        test.done();
+
+        stripeDao.updateInvoice(testContext.invoiceId, null, null, 'Updated description', null, null, null, null,
+            function(err, invoice){
+                if(err) {
+                    test.ok(false, err);
+                    test.done();
+                } else {
+                    _log.debug('updated invoice');
+                    console.dir(invoice);
+                    test.done();
+                }
+            });
     },
 
     testListInvoices: function(test) {
-        test.done();
+        stripeDao.listInvoices(testContext.customerId, null, null, 10, null, null, function(err, invoices){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('listing invoices');
+                console.dir(invoices);
+                test.done();
+            }
+        });
     },
 
     testCreateToken: function(test) {
