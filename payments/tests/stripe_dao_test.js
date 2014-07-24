@@ -345,27 +345,113 @@ exports.stripe_dao_test = {
     },
 
     testListStripeSubscriptions: function(test) {
-        test.done();
+
+        stripeDao.listStripeSubscriptions(testContext.customerId, 0, function(err, subs){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('listing subscriptions.');
+                console.dir(subs);
+                test.done();
+            }
+        });
+
     },
 
     testCreateStripeCard: function(test) {
-        test.done();
+        var self = this;
+        test.expect(1);
+        var customerId = testContext.customerId;
+        var card = {
+            'number': '5555555555554444',
+            'exp_month': '12',
+            'exp_year':'2015',
+            'cvc': '111'
+        };
+
+        stripeDao.createStripeCard(customerId, card, function(err, _card){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('added card.');
+                console.dir(_card);
+                testContext.cardId = _card['id'];
+                test.ok(testContext.cardId);
+                test.done();
+            }
+        });
     },
 
     testGetStripeCard: function(test) {
-        test.done();
+        test.expect(1);
+        stripeDao.getStripeCard(testContext.customerId, testContext.cardId, function(err, card){
+                if(err) {
+                    test.ok(false, err);
+                    test.done();
+                } else {
+                    _log.debug('retrieved card');
+                    console.dir(card);
+                    test.equals(testContext.cardId, card['id']);
+                    _log.debug('testContext is now: ');
+                    console.dir(testContext);
+                    test.done();
+                }
+        });
     },
 
     testUpdateStripeCard: function(test) {
-        test.done();
-    },
+        var self = this;
+        test.expect(4);
+        var customerId = testContext.customerId;
+        var cardId = testContext.cardId;
+        var name = 'New Name';
+        var newMonth = '12';
+        var newYear = '2017';
 
-    testDeleteStripeCard: function(test) {
-        test.done();
+        stripeDao.updateStripeCard(customerId, cardId, name, null, null, null, null, null, null,newMonth, newYear,
+            function(err, card){
+                if(err) {
+                    test.ok(false, err);
+                    test.done();
+                } else {
+                    _log.debug('updated card');
+                    test.equals(name, card.name);
+                    test.equals(newMonth, card.exp_month);
+                    test.equals(newYear, card.exp_year);
+                    test.equals('4444', card.last4);
+                    test.done();
+                }
+            });
+
     },
 
     testListStripeCards: function(test) {
-        test.done();
+        stripeDao.listStripeCards(testContext.customerId, function(err, cards){
+                if(err) {
+                    test.ok(false, err);
+                    test.done();
+                } else {
+                    _log.debug('listing cards');
+                    console.dir(cards);
+                    test.done();
+                }
+        });
+    },
+
+    testDeleteStripeCard: function(test) {
+
+        stripeDao.deleteStripeCard(testContext.customerId, testContext.cardId, function(err, value){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('deleted card');
+                console.dir(value);
+                test.done();
+            }
+        });
     },
 
     testCreateStripeCharge: function(test) {
@@ -446,6 +532,20 @@ exports.stripe_dao_test = {
 
     testListEvents: function(test) {
         test.done();
+    },
+
+    testDeleteStripeCard: function(test) {
+
+        stripeDao.deleteStripeCard(testContext.customerId, testContext.cardId, function(err, value){
+            if(err) {
+                test.ok(false, err);
+                test.done();
+            } else {
+                _log.debug('deleted card');
+                console.dir(value);
+                test.done();
+            }
+        });
     },
 
     testDeleteStripeCustomer: function(test) {
