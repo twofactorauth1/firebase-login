@@ -9,7 +9,7 @@ define([
     'views/base.view'
 ], function(BaseView) {
 
-    var showDetails = function(type, typePlural){
+   /* var showDetails = function(type, typePlural){
             return function () {
                 $('.li-' + type).show();
                 $('.li-' + type + '.first .btn-more-' + typePlural + ' i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
@@ -24,7 +24,7 @@ define([
                 $('.li-' + type + '.first .btn-less-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' More');
                 $('.li-' + type + '.first .btn-less-' + typePlural).removeClass('btn-less-' + typePlural).addClass('btn-more-' + typePlural);
             }
-        };
+        };*/
 
     var view = BaseView.extend({
 
@@ -37,7 +37,8 @@ define([
             "click .btn-more-phones":"showPhones",
             "click .btn-less-phones":"hidePhones",
             "click .btn-more-address":"showAddress",
-            "click .btn-less-address":"hideAddress"
+            "click .btn-less-address":"hideAddress",
+            "click .btn-edit-account":"editAccount"
         },
 
 
@@ -73,14 +74,44 @@ define([
                     self.show(html);
                 });
         },
-        showEmails: showDetails("email","emails"),
-        hideEmails: hideDetails("email","emails"),
 
-        showPhones: showDetails("phone","phones"),
-        hidePhones: hideDetails("phone","phones"),
+        editAccount: function() {
+            $$.r.account.AccountRouter.navigateToEditAccount(this.accountId);
+        },
 
-        showAddress: showDetails("address", "addresses"),
-        hideAddress: hideDetails("address", "addresses")
+        showDetails:function(type, typePlural){
+
+                $('.li-' + type).show();
+                $('.li-' + type + '.first .btn-more-' + typePlural + ' i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+                $('.li-' + type + '.first .btn-more-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' Less ');
+                $('.li-' + type + '.first .btn-more-' + typePlural).removeClass('btn-more-' + typePlural).addClass('btn-less-' + typePlural);
+
+        },
+        hideDetails: function(type, typePlural) {
+
+                $('.li-' + type + ':not(:first)').hide();
+                $('.li-' + type + '.first .btn-less-' + typePlural + ' i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+                $('.li-' + type + '.first .btn-less-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' More');
+                $('.li-' + type + '.first .btn-less-' + typePlural).removeClass('btn-less-' + typePlural).addClass('btn-more-' + typePlural);
+
+        },
+
+        showEmails: function() {
+            this.showDetails("email","emails")
+            },
+        hideEmails:function() {
+            this.hideDetails("email","emails")
+            },
+
+        showPhones: function() {
+            this.showDetails("phone","phones")
+            },
+        hidePhones: function(){
+            this.hideDetails("phone","phones")},
+
+        showAddress: function(){this.showDetails("address", "addresses")},
+        hideAddress: function() {this.hideDetails("address", "addresses")}
+
 
     });
 

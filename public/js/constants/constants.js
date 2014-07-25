@@ -72,6 +72,7 @@ define([], function () {
                 LARGE: 4,
                 ENTERPRISE: 5
             }
+
         },
 
         contact: {
@@ -141,6 +142,64 @@ define([], function () {
                 TWITTER: _socialTypes.TWITTER,
                 LINKEDIN: _socialTypes.LINKEDIN,
                 GOOGLE: _socialTypes.GOOGLE
+            },
+
+            detail_types: {
+                LOCAL: _socialTypes.LOCAL,
+                FACEBOOK: _socialTypes.FACEBOOK,
+                TWITTER: _socialTypes.TWITTER,
+                LINKEDIN: _socialTypes.LINKEDIN,
+                GOOGLE: _socialTypes.GOOGLE,
+                FULL_CONTACT: _socialTypes.FULL_CONTACT
+            },
+
+            contact_types: {
+                CUSTOMER: "cu",
+                COLLEAGUE: "co",
+                FRIEND: "fr",
+                MEMBER: "mb",
+                FAMILY: "fa",
+                ADMIN: "ad",
+                OTHER: "ot",
+
+                dp: [
+                    {label: "Customer", data: "cu"},
+                    {label: "Colleague", data: "co"},
+                    {label: "Friend", data: "fr"},
+                    {label: "Member", data: "mb"},
+                    {label: "Family", data: "fa"},
+                    {label: "Admin", data: "ad"},
+                    {label: "Other", data: "ot"}
+                ]
+            },
+
+            phone_types: {
+                MOBILE: "m",
+                HOME: "h",
+                WORK: "w",
+
+                dp: [
+                    {label:"mobile", data:"m"},
+                    {label:"home", data:"h"},
+                    {label:"work", data:"w"}
+                ]
+            },
+
+            device_types: {
+                scale: "2net_scale",
+                HOME: "h",
+                WORK: "w",
+
+                dp: [
+                    {label:"2net_scale", data:"2net_scale"},
+                    {label:"home", data:"h"},
+                    {label:"work", data:"w"}
+                ]
+            },
+
+            activity_types: {
+                PHONE: "p",
+                EMAIL: "e"
             }
         }
     };

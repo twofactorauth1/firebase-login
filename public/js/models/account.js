@@ -75,7 +75,11 @@ define([], function() {
                     break;
             }
 
-        }
+        },
+
+
+
+
     });
 
     $$.m.Account = model;

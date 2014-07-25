@@ -116,12 +116,24 @@ _.extend(api.prototype, baseApi.prototype, {
     updateUser: function(req,resp) {
         //TODO - ensure user accounts are not tampered with
         var self = this;
-
+        var user = new $$.m.User(req.body);
         var userId=req.body._id;
+
+  /*      userDao.saveOrUpdate(user, function(err, value) {
+            if (!err) {
+                self.sendResult(resp, value);
+            } else {
+                self.wrapError(resp, 500, "There was an error updating contact", err, value);
+            }
+        });*/
+
         userDao.getById(userId, function(err, value) {
             if (!err && value != null) {
                 value.set("welcome_alert",req.body.welcome_alert);
-                userDao.saveOrUpdate(value, function(err, value) {
+                console.log(value);
+                user.set("credentials",value.get("credentials"))
+
+                userDao.saveOrUpdate(user, function(err, value) {
                     if (!err && value != null) {
                         resp.send(value.toJSON("public"));
                     } else {
