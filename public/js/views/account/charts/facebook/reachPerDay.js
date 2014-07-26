@@ -79,7 +79,7 @@ define([
             var max = d3.max(data, function(d){ return d.total })
                 , barWidth = Math.floor((w - p.r) / data.length) - 3;
 
-            max = Math.floor(max * 1.55) // never allow bars to reach full height
+            max = Math.floor(max * 1.55); // never allow bars to reach full height
 
             // Scales
             var x = d3.time.scale()
@@ -96,11 +96,11 @@ define([
             color.domain(_.without(d3.keys(data[0]), 'date', 'total').reverse());
 
             data.forEach(function(d) {
-                var y0 = 0
+                var y0 = 0;
                 // offset bar position by value/height
                 d.values = color.domain().map(function(key) {
                     return { key: key, y0: y0, y1: y0 += +d[key] }
-                })
+                });
                 // total height for this data point
                 d.total = d.values[d.values.length - 1].y1
             })
@@ -150,7 +150,7 @@ define([
                 .attr("height", function(d) { return y(d.y0) - y(d.y1) })
                 .attr("y", function(d) { return y(d.y1) });
 
-            var chart = this
+            var chart = this;
 
             days.each(function(d){
 
@@ -158,7 +158,7 @@ define([
                         '<span class="color-index" style="border-left-color:{{color}};">'
                         + '{{n}} {{text}}'
                         + '</span>'
-                )
+                );
 
                 var title = d.date.toLocaleDateString()
                     , content = [
@@ -167,17 +167,17 @@ define([
                         , textline({ n: $$.u.formatutils.formatInteger(d.viral)  , color: color('viral'), text: 'viral' })
                     ].join("<br/>")
 
-                var pop = chart.createPopover('left', title, content)
+//                var pop = chart.createPopover('left', title, content)
+//
+//                pop.css({
+//                    width : 120
+//                    , left  : Math.floor(+this.getAttribute('data-x') - 120)
+//                    , top   : Math.floor(y(d.total))
+//                })
 
-                pop.css({
-                    width : 120
-                    , left  : Math.floor(+this.getAttribute('data-x') - 120)
-                    , top   : Math.floor(y(d.total))
-                })
-
-                $(this)
-                    .on('mouseenter', $.proxy(pop.show, pop, 0))
-                    .on('mouseleave', $.proxy(pop.hide, pop, 0))
+//                $(this)
+//                    .on('mouseenter', $.proxy(pop.show, pop, 0))
+//                    .on('mouseleave', $.proxy(pop.hide, pop, 0))
             });
 
             // legend
