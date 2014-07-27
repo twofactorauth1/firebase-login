@@ -52,11 +52,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         courseId = parseInt(courseId);
 
-        courseDao.getById(courseId, function (err, course) {
-            var videos = course.get("videos");
-            if (course.userId != req.user.id()) {
-                _.forEach(videos, clearVideoFieldsForUnauthorizedUser);
-            }
+        courseDao.getCourseById(courseId, req.user.id(), function (err, course) {
             self.sendResultOrError(resp, err, course, "Error getting course");
         });
     },

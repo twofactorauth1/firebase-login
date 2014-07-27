@@ -17,103 +17,53 @@ var dao = {
             defaultModel: $$.m.Course
         },
 
-        updateCourse: function (playlistId, playlistToUpdate) {
-            this.findByIdAndUpdate(playlistId,
-                {$set: {"title": playlistToUpdate.title,
-                    "template": playlistToUpdate.template,
-                    "subtitle": playlistToUpdate.subtitle,
-                    "body": playlistToUpdate.body,
-                    "description": playlistToUpdate.description,
-                    "subdomain": playlistToUpdate.subdomain,
-                    "price": playlistToUpdate.price}},
-                {safe: true},
-                function (error, updatedPlaylist) {
-                    if (error) {
-                        return res.json({success: false, error: error.message});
-                    } else {
-                        return res.json({success: true, result: updatedPlaylist});
+        getCourseById: function (courseId, curUserId, fn) {
+            this.getById(courseId, function (err, course) {
+                if (!err && course) {
+                    var videos = course.get("videos");
+                    if (course.userId != curUserId) {
+                        _.forEach(videos, clearVideoFieldsForUnauthorizedUser);
                     }
                 }
-            );
-        },
-
-        deleteCourse: function (playlistToRemoveId) {
-
-            return this.remove({_id: playlistToRemoveId});
-        },
-
-        getCoursesList: function (userId) {
-            return this.find({userId: userId});
-        },
-
-        addVideoToCourse: function (req, res) {
-            var playlistId = req.params.id;
-            var videoToAdd = req.body;
-            Playlist.findByIdAndUpdate(
-                playlistId,
-                {$push: {videos: videoToAdd}},
-                {safe: true, upsert: true},
-                function (error, playlist) {
-                    if (error) {
-                        return res.json({success: false, error: error.message});
-                    } else {
-                        return res.json({success: true, result: {}});
-                    }
-                }
-            );
-        },
-
-        updateVideoInPlaylist: function (req, res) {
-            var playlistId = req.params.id;
-            var videoToUpdate = req.body;
-            Playlist.findOneAndUpdate(
-                { _id: playlistId, videos: { $elemMatch: { videoId: videoToUpdate.videoId} } },
-                {$set: {"videos.$.videoTitle": videoToUpdate.videoTitle,
-                    "videos.$.videoSubtitle": videoToUpdate.videoSubtitle,
-                    "videos.$.videoBody": videoToUpdate.videoBody,
-                    "videos.$.scheduledHour": videoToUpdate.scheduledHour,
-                    "videos.$.scheduledMinute": videoToUpdate.scheduledMinute,
-                    "videos.$.scheduledDay": videoToUpdate.scheduledDay,
-                    "videos.$.subject": videoToUpdate.subject,
-                    "videos.$.isPremium": videoToUpdate.isPremium}},
-                {safe: true},
-                function (error, updatedPlaylist) {
-                    if (error) {
-                        return res.json({success: false, error: error.message});
-                    } else {
-                        return res.json({success: true, result: videoToUpdate});
-                    }
-                }
-            );
-        },
-
-        deleteVideoFromPlaylist: function (req, res) {
-            var playlistId = req.params.id;
-            var videoToRemoveId = req.params.videoId;
-            this.findByIdAndUpdate(playlistId, {$pull: {videos: {videoId: videoToRemoveId}}}, function (error, playlist) {
-                if (error) {
-                    return res.json({success: false, error: error.message});
-                } else {
-                    return res.json({success: true, result: {}});
-                }
+                return fn(err, course);
             });
         },
 
-        isSubdomainFree: function (req, res) {
-            this.findOne({subdomain: req.query.subdomain}, function (error, playlist) {
-                if (error) {
-                    res.json({success: false, error: error.message});
-                } else {
-                    if (playlist == null) {
-                        res.json({success: true, result: true});
-                    } else {
-                        res.json({success: true, result: false});
+        findCourseBySubdomain: function (subdomain, curUserId, fn) {
+            var query = { "subdomain": subdomain};
+            this.findOne(query, function (err, course) {
+                if (!err && course) {
+                    var videos = course.get("videos");
+                    if (course.userId != curUserId) {
+                        _.forEach(videos, clearVideoFieldsForUnauthorizedUser);
                     }
                 }
+                return fn(err, course);
+            });
+        },
+
+        findVideoByCourseSubdomainAndId: function (subdomain, videoId, curUserId, fn) {
+            var query = { "subdomain": subdomain};
+            this.findOne(query, function (err, course) {
+                if (!err && course) {
+                    var videos = course.get("videos");
+                    var video = _.findWhere(videos, {_id: videoId});
+                    if (video && course.userId != curUserId) {
+                        clearVideoFieldsForUnauthorizedUser(video);
+                    }
+                }
+                return fn(err || !video, video);
             });
         }
+
+
     }
     ;
+
+function clearVideoFieldsForUnauthorizedUser(video) {
+    //todo: check if some other params should be removed
+    video.videoUrl = null;
+}
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
