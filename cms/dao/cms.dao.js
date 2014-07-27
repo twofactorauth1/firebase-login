@@ -111,6 +111,21 @@ var dao = {
         });
     },
 
+    getThemePreview: function(themeId, fn) {
+        //TODO: this
+        var self = this;
+        self.log.debug('>> getThemePreview');
+        var path = themesConfig.PATH_TO_THEMES + '/' + themeId + '/' + themesConfig.SUBPATH_TO_PREVIEW;
+        fs.readFile(path, function(err, data){
+            if(err) {
+                self.log.error("Error reading file: " + err);
+                fn(err, null);
+            }
+            self.log.debug('<< getThemePreview');
+            fn(null, data);
+        });
+    },
+
 
     /**
      * Retrieves an unsigned copy of the theme config.  This is only suitable
