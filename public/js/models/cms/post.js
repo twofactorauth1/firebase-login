@@ -78,6 +78,7 @@ define([
                     }
                     break;
                 case "POST":
+                console.log('posting '+this.get("pageId"));
                     if (this.get("_id") != null) {
                         return $$.api.getApiUrl("cms", "page/"+ this.get("pageId") +"/blog/"+this.get("_id"));
                     } else {

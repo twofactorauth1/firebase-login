@@ -60,6 +60,7 @@ define([
 
         getComponentById: function(id) {
             var components = this.get("components");
+            console.log('Components: '+JSON.stringify(components));
             return components.get(id);
         },
 
@@ -67,8 +68,9 @@ define([
         url: function(method) {
             switch(method) {
                 case "GET":
-                    if (this.get("pageId") == null) {
-                        return $$.api.getApiUrl("cms", "page/" + this.get("pageId") + "/page/" + this.get("handle"));
+                console.log('Website ID: '+this.get("websiteId")+' Handle: '+this.get("handle"));
+                    if (this.get("websiteId") != null) {
+                        return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page/" + this.get("handle"));
                     }
                     return $$.api.getApiUrl("cms", "page/" + this.id);
                 case "PUT":

@@ -113,6 +113,11 @@ define([
                             if (page == "" || page == "/") {
                                 page = "index";
                             }
+
+                            if (page.indexOf("blog/") > -1) {
+                                console.log('editing single blog');
+                                page = "single-post";
+                            }
                             self.pageHandle = page;
                         }
 
@@ -120,6 +125,10 @@ define([
                             .done(function() {
                                 self.getPage().done(function(){
                                     self.pageId = self.page.attributes._id;
+                                    console.log('This Page ID: '+self.pageId);
+
+                                    // $("#iframe-website").contents().find('#body').data("pageid", self.pageId);
+                                    // console.log('Body Tag: '+$("#iframe-website").contents().find('#body').data("pageid"));
                                     var componentsArray = [];
                                     var rawComponents = self.page.attributes.components.models;
                                     for (key in rawComponents) {
@@ -135,9 +144,9 @@ define([
 
                                     self.setupSidebar(data, rightPanel, sidetmpl);
 
+
                                     $(window).on("resize", self.adjustWindowSize);
                                     self.disableClickableTitles();
-
                                 });
                         });
                     });
@@ -233,7 +242,6 @@ define([
 
         onWebsiteEdit: function(event) {
             var self = this;
-            console.log('editing website');
             var data = arguments[1];
             var target = data.target;
 
@@ -248,13 +256,12 @@ define([
 
             console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
 
-            if (componentType == 'blog') {
+            if (componentType == 'blog' || componentType == 'single-post') {
                 var postId = $(target).closest(".single-blog").attr("data-postid");
-                console.log('Post ID: '+postId);
                 self.postId = postId;
                 self.getPost().done(function(){
                     //post excerpt
-                    if (dataClass == 'post_excerpt') { 
+                    if (dataClass == 'post_excerpt') {
                         var replaced =  content.replace(/^\s+|\s+$/g, '')
                         self.post.set({ post_excerpt: replaced });
                     }
@@ -263,6 +270,10 @@ define([
                         var replacedTitle = content.replace(/^\s+|\s+$/g, '');
                         var replacedUrl = content.replace(/^\s+|\s+$/g, '').toLowerCase().replace(/ /g,'-');
                         self.post.set({ post_title: replacedTitle, post_url: replacedUrl });
+                    }
+                    //post content
+                    if (dataClass == 'post_content') {
+                        self.post.set({ post_content: content });
                     }
                     self.savePost();
                 });
@@ -282,7 +293,6 @@ define([
         },
 
         disableClickableTitles: function() {
-            console.log('disabling');
             var $iframe = $('#iframe-website');
                 $iframe.ready(function() {
                     $iframe.contents().find(".blog-title a").on('click', function(e) {
@@ -307,7 +317,6 @@ define([
 
             return this.post.fetch();
         },
-
 
         savePost: function() {
             var self = this;
@@ -378,9 +387,9 @@ define([
         },
 
         getPage: function() {
+            console.log('Website ID: '+this.websiteId+' Page Handle: '+this.pageHandle);
             this.page = new Page({
                 websiteId: this.websiteId,
-                _id: this.pageId,
                 handle: this.pageHandle
             });
 

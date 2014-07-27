@@ -74,46 +74,55 @@
                         <input type="search" name="s" placeholder="Search">
                     </div>
                     <div class="clearfix mb30 hidden"></div>
-                        <div class="tags">
-                            <h4><i class="fa fa-tag"></i> Tags</h4>
-                            <ul class="tag-cloud">
-                            {{#if tags}}
-                                {{#each tags}}
-                                    <li><a href="/page/tag/{{this}}" >{{this}}</a></li>
-                                {{/each}}
-                            {{/if}}
-                            </ul>
-                        </div>
-                        <div class="clearfix mb30"></div>
-                        <div class="comments hidden">
-                            <h4><i class="fa fa-comments"></i> Comments</h4>
-                            <ul>
-                                <li>Lauren M. on Social Media Design</li>
-                                <li>Lauren M. on Social Media Design</li>
-                                <li>Lauren M. on Social Media Design</li>
-                            </ul>
-                        </div>
-                        <div class="posts">
-                            <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
-                            <ul>
-                            {{#if blogposts}}
-                                {{#each blogposts}}
-                                    <li><a href="/page/blog/{{#if this.attributes.post_url}}{{this.attributes.post_url}}{{/if}}">{{#if this.attributes.post_title}}{{this.attributes.post_title}}{{/if}}</a> by <a href="/page/author/{{#if this.attributes.post_author}}{{this.attributes.post_author}}{{/if}}">{{#if this.attributes.post_author}}{{this.attributes.post_author}}{{/if}}</a></li>
-                                {{/each}}
-                            {{/if}}
-                            </ul>
-                        </div>
-                        <div class="clearfix mb30"></div>
-                        <div class="categories">
-                            <h4><i class="fa fa-list-ul"></i> Categories</h4>
-                            <ul class="tag-cloud">
-                            {{#if categories}}
-                                {{#each categories}}
-                                    <li><a href="/page/category/{{this}}" >{{this}}</a></li>
-                                {{/each}}
-                            {{/if}}
-                            </ul>
-                        </div>
+
+                        {{#if tags}}
+                            <div class="tags">
+                                <h4><i class="fa fa-tag"></i> Tags</h4>
+                                <ul class="tag-cloud">
+                                    {{#each tags}}
+                                        <li><a href="/page/tag/{{this}}" >{{this}}</a></li>
+                                    {{/each}}
+                                </ul>
+                            </div>
+                        {{/if}}
+
+                        {{#if comments}}
+                            <div class="clearfix mb30"></div>
+                            <div class="comments hidden">
+                                <h4><i class="fa fa-comments"></i> Comments</h4>
+                                <ul>
+                                    <li>Lauren M. on Social Media Design</li>
+                                    <li>Lauren M. on Social Media Design</li>
+                                    <li>Lauren M. on Social Media Design</li>
+                                </ul>
+                            </div>
+                        {{/if}}
+
+
+                        {{#if blogposts}}
+                            <div class="posts">
+                                <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
+                                <ul>
+                                    {{#each blogposts}}
+                                        <li><a href="/page/blog/{{#if this.attributes.post_url}}{{this.attributes.post_url}}{{/if}}">{{#if this.attributes.post_title}}{{this.attributes.post_title}}{{/if}}</a> {{#if this.attributes.post_author}} by <a href="/page/author/{{this.attributes.post_author}}">{{this.attributes.post_author}}</a>{{/if}}</li>
+                                    {{/each}}
+
+                                </ul>
+                            </div>
+                        {{/if}}
+
+                        {{#if categories}}
+                            <div class="clearfix mb30"></div>
+                            <div class="categories">
+                                <h4><i class="fa fa-list-ul"></i> Categories</h4>
+                                <ul class="tag-cloud">
+                                    {{#each categories}}
+                                        <li><a href="/page/category/{{this}}" >{{this}}</a></li>
+                                    {{/each}}
+                                </ul>
+                            </div>
+                        {{/if}}
+
                     </div>
                 </div>
             </div> <!-- .container -->

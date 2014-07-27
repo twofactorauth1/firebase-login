@@ -5,8 +5,9 @@ define([
     'services/cms.service',
     'models/cms/post',
     'models/cms/page',
+    'models/user',
     'events/events'
-], function (EditWebsite, utils, Blog, CmsService, Post, Page, events) {
+], function (EditWebsite, utils, Blog, CmsService, Post, Page, User, events) {
 
     var view = EditWebsite.extend({
 
@@ -15,6 +16,7 @@ define([
         themeId: null,
         websiteId: null,
         pageId: null,
+        postId: null,
 
         //temporary themes
         themes: null,
@@ -38,17 +40,22 @@ define([
             "click .change-theme":"changeTheme",
             "change .dd": "onComponentDrag",
             "click .btn-add-component":"addComponent",
-            "click .add-post":"addBlankPost",
             "click .add-page":"addBlankPage",
             "change .sort-ordering": "sort_contact",
-            "change .sort-display": "sort_display"
+            "change .sort-display": "sort_display",
+            "click .add-post":"newPostModal",
+            "click .create-post":"addBlankPost",
+
+            "input #post-title":"urlCreator",
+            "input #post-url":"urlCreator"
         },
 
         initialize: function () {
             var self = this
                 , p1 = this.getAccount()
                 , p2 = this.getWebsite()
-                , p3 = this.getAllThemes();
+                , p3 = this.getAllThemes()
+                , p4 = this.getUser();
 
             $.when(p1)
                 .done(function () {
@@ -60,9 +67,9 @@ define([
                 .done(function () {
                 self.websiteSettings = self.website.attributes.settings;
                 self.websiteId = self.website.attributes._id;
-                console.log('getting pages');
-                self.getPage().done(function(){
-                    console.log('Page Attributes: '+self.page.attributes);
+                console.log('Getting Page on rightpanel');
+                self.getPage().done(function(page){
+                    console.log('Page ID: '+JSON.stringify(page.attributes));
                     self.pageId = self.page.attributes._id;
                 });
             });
@@ -84,32 +91,107 @@ define([
          * Edit Website Sidebar
          * - Functions for Edit Website Sidebar
          */
+            getPage: function() {
+                console.log('getPage rightpanel');
+                this.page = new Page({
+                    websiteId: this.websiteId,
+                    handle: 'blog'
+                });
+
+                return this.page.fetch();
+            },
             addBlankPage: function() {
                 var self = this;
                 console.log('adding blank page'+self.is_dragging);
                 $('#iframe-website').contents().find('ul.navbar-nav li:last-child').before('<li><a href="#">New Page</a></li>');
             },
 
+            urlCreator: function(e) {
+                var postUrl = $(e.currentTarget).val();
+                var scrubbed = postUrl.toLowerCase().replace(/ /g,'-');
+                $('#post-url').val(scrubbed);
+            },
+
+            newPostModal: function() {
+                $('#new-post-modal').modal('show');
+            },
+
             addBlankPost: function() {
                 var self = this;
-                console.log('Adding Blank Post');
+                console.log('User: '+JSON.stringify(self.user.attributes));
 
-                var blankPostHTML = $$.templateManager.get("blankPost", self.templateKey);
+                $('#new-post-modal').modal('hide');
 
-                var $iframe = $('#iframe-website');
-                $iframe.ready(function() {
-                    $iframe.contents().find("#main-area .entry").prepend(blankPostHTML);
-                });
+                var tmpl = $$.templateManager.get("blankPost", self.templateKey);
 
-                console.log('Page ID: '+self.pageId);
-                self.post = new Post({
-                    pageId:self.pageId,
+                //get title
+                var postTitle = $('#new-post-modal #post-title').val();
+
+                //get url
+                var postUrl = $('#new-post-modal #post-url').val();
+
+                var postAuthor = self.user.attributes.first+' '+self.user.attributes.last;
+
+                var postDate = new Date().getTime();
+
+                var data = {
+                    postTitle: postTitle,
+                    postUrl: postUrl,
+                    postAuthor: postAuthor,
+                    postDate: moment(postDate).format('DD.MM.YYYY')
+                };
+
+                var html = tmpl(data);
+
+                this.post = new Post({
+                    pageId:this.pageId,
+                    post_title: postTitle,
+                    post_author: postAuthor,
+                    post_url: postUrl,
                     created: {
-                        by: 'me'
-                    },
+                        date: new Date().getTime(),
+                        by: self.user.attributes._id
+                    }
                 });
 
-                self.post.save();
+                this.post.save().done( function() {
+                    self.postId = self.post.attributes._id;
+                    var $iframe = $('#iframe-website');
+                    $iframe.ready(function() {
+                        $iframe.contents().find("#main-area .entry").prepend(html);
+                        console.log('Blank Post ID: '+self.postId);
+                        $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                        $iframe.contents().find("#main-area").trigger("click");
+                    });
+                });
+            },
+
+            getPost: function() {
+                console.log('Getting Post: '+this.postId);
+                if (this.postId == null) {
+                    this.post = new Post({});
+                    var deferred = $.Deferred();
+                    deferred.resolve(this.post);
+                    console.log('Deferred: '+JSON.stringify(deferred));
+                    return deferred;
+                }
+                this.post = new Post({
+                    _id:this.postId,
+                    pageId:this.pageId
+                });
+
+                return this.post.fetch();
+            },
+            getUser: function () {
+                if (this.userId == null) {
+                    this.userId = $$.server.get($$.constants.server_props.USER_ID);
+                }
+
+                this.user = new User({
+                    _id: this.userId
+                });
+
+                return this.user.fetch();
             },
             // WORKING
             addComponent: function () {

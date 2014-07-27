@@ -119,6 +119,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var websiteId = req.params.websiteid;
         var pageHandle = req.params.handle;
 
+        self.log.debug('>> getPageByHandle Website Id: '+websiteId+' HAndle: '+pageHandle);
+
         cmsDao.getPageForWebsite(websiteId, pageHandle, function(err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website");
             self = null;
@@ -130,6 +132,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: Add security
         var self = this;
         var pageId = req.params.id;
+
+        self.log.debug('>> getPageById');
 
         cmsDao.getPageById(pageId, function(err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page by Id");
@@ -332,7 +336,7 @@ _.extend(api.prototype, baseApi.prototype, {
         blogPost.set('pageId', pageId);
 
         cmsManager.createBlogPost(accountId, blogPost, function(err, value){
-            self.log.debug('<< createBlogPost');
+            self.log.debug('<< createBlogPost'+JSON.stringify(blogPost));
             self.sendResultOrError(res, err, value, "Error creating Blog Post");
             self = null;
         });
