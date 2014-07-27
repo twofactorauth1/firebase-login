@@ -54,7 +54,7 @@ define([
     };
 
     Chart.prototype.createSVG = function(className){
-        this.module.addClass(className)
+        this.module.addClass(className);
         return this.root = d3.select(this.target.get(0)).append('svg:svg')
             .attr('width', this.w + this.padding.l + this.padding.r)
             .attr('height', this.h + this.padding.t + this.padding.b)
@@ -82,7 +82,7 @@ define([
             , rangeText;
 
         if (typeof defaultRange === 'string') {
-            rangeText = defaultRange
+            rangeText = defaultRange;
             defaultRange = ranges[defaultRange]
         } else if (defaultRange[0] && defaultRange[1]) {
             var start = new Date(defaultRange[0])
@@ -94,7 +94,7 @@ define([
         }
 
         if (!rangeText) {
-            rangeText = 'Last 7 Days'
+            rangeText = 'Last 7 Days';
             defaultRange = ranges[rangeText]
         }
 
