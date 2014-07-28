@@ -8,7 +8,7 @@
 define([
     'services/user.service',
     'models/account',
-    'libs/jquery/jquery.keytimer'
+    'libs_misc/jquery/jquery.keytimer'
 ], function (UserServices) {
 
     var view = Backbone.View.extend({

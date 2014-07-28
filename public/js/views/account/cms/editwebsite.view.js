@@ -113,6 +113,11 @@ define([
                             if (page == "" || page == "/") {
                                 page = "index";
                             }
+
+                            if (page.indexOf("blog/") > -1) {
+                                console.log('editing single blog');
+                                page = "single-post";
+                            }
                             self.pageHandle = page;
                         }
 
@@ -120,6 +125,10 @@ define([
                             .done(function() {
                                 self.getPage().done(function(){
                                     self.pageId = self.page.attributes._id;
+                                    console.log('This Page ID: '+self.pageId);
+
+                                    // $("#iframe-website").contents().find('#body').data("pageid", self.pageId);
+                                    // console.log('Body Tag: '+$("#iframe-website").contents().find('#body').data("pageid"));
                                     var componentsArray = [];
                                     var rawComponents = self.page.attributes.components.models;
                                     for (key in rawComponents) {
@@ -135,8 +144,9 @@ define([
 
                                     self.setupSidebar(data, rightPanel, sidetmpl);
 
-                                    $(window).on("resize", self.adjustWindowSize);
 
+                                    $(window).on("resize", self.adjustWindowSize);
+                                    self.disableClickableTitles();
                                 });
                         });
                     });
@@ -232,7 +242,6 @@ define([
 
         onWebsiteEdit: function(event) {
             var self = this;
-            console.log('editing website');
             var data = arguments[1];
             var target = data.target;
 
@@ -247,16 +256,25 @@ define([
 
             console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
 
-            if (componentType == 'blog') {
-                console.log('this is a blog');
-                var postId = $(parent).find('.single-blog').attr("data-postid");
-                console.log('Post ID: '+postId);
+            if (componentType == 'blog' || componentType == 'single-post') {
+                var postId = $(target).closest(".single-blog").attr("data-postid");
                 self.postId = postId;
                 self.getPost().done(function(){
-                    console.log('saved post');
-                    self.post.set({
-                        post_excerpt: content
-                    });
+                    //post excerpt
+                    if (dataClass == 'post_excerpt') {
+                        var replaced =  content.replace(/^\s+|\s+$/g, '')
+                        self.post.set({ post_excerpt: replaced });
+                    }
+                    //post title
+                    if (dataClass == 'post_title') {
+                        var replacedTitle = content.replace(/^\s+|\s+$/g, '');
+                        var replacedUrl = content.replace(/^\s+|\s+$/g, '').toLowerCase().replace(/ /g,'-');
+                        self.post.set({ post_title: replacedTitle, post_url: replacedUrl });
+                    }
+                    //post content
+                    if (dataClass == 'post_content') {
+                        self.post.set({ post_content: content });
+                    }
                     self.savePost();
                 });
             } else {
@@ -274,28 +292,19 @@ define([
             }
         },
 
-        // getPost: function () {
-        //     console.log('Getting Post');
-        //     var self = this;
-
-        //     if (this.postId == null) {
-        //         console.log('No Post ID');
-        //         this.post = new Post({
-        //             pageId: this.pageId
-        //         });
-        //     } else {
-        //         console.log('Post ID Found');
-        //         this.post = new Post({
-        //             _id: self.postId,
-        //             pageId: self.pageId
-        //         });
-        //     }
-
-        //     return this.post.fetch();
-        // },
+        disableClickableTitles: function() {
+            var $iframe = $('#iframe-website');
+                $iframe.ready(function() {
+                    $iframe.contents().find(".blog-title a").on('click', function(e) {
+                        console.log('click');
+                        e.preventDefault();
+                    });
+                });
+        },
 
         getPost: function() {
-            if (this.postId == null ) {
+            console.log('Getting Post: '+this.postId);
+            if (this.postId == null) {
                 this.post = new Post({});
                 var deferred = $.Deferred();
                 deferred.resolve(this.post);
@@ -303,22 +312,21 @@ define([
             }
             this.post = new Post({
                 _id:this.postId,
-                pageId: this.pageId
+                pageId:this.pageId
             });
 
             return this.post.fetch();
         },
 
-
         savePost: function() {
             var self = this;
-            self.post.save()
+            this.post.save()
                 .done(function() {
                     console.log('post saved');
-                    //$$.viewManager.showAlert("Post saved!");
+                    self.postID = null;
                 })
                 .fail(function(resp) {
-                    alert("There was an error saving this post!"+JSON.stringify(resp));
+                    alert("There was an error saving this post! "+JSON.stringify(resp));
                 });
         },
 
@@ -379,6 +387,7 @@ define([
         },
 
         getPage: function() {
+            console.log('Website ID: '+this.websiteId+' Page Handle: '+this.pageHandle);
             this.page = new Page({
                 websiteId: this.websiteId,
                 handle: this.pageHandle
