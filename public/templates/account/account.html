@@ -1328,10 +1328,16 @@ Handlebars.registerHelper("businessSizeOptions", function (options) {
     }
     return str;
 });
-Handlebars.registerHelper("getBusinessSize", function(BusinessSize, options) {
-    return $$.constants.account.company_size.dp[BusinessSize - 1].label;
+Handlebars.registerHelper("getBusinessSize", function(businessSize, options) {
+    var BusinessSize = $$.constants.account.company_size.dp;
+    if(businessSize > 0 && businessSize <= BusinessSize.length ) {
+        return BusinessSize[businessSize - 1].label;
+    }
 });
-Handlebars.registerHelper("getBusinessType", function(BusinessType, options) {
-    return $$.constants.account.company_types.dp[BusinessType - 1].label;
+Handlebars.registerHelper("getBusinessType", function(businessType, options) {
+    var BusinessType = $$.constants.account.company_types.dp;
+    if(businessType > 0 && businessType <= BusinessType.length ) {
+        return BusinessType[businessType - 1].label;
+    }
 });
 </script>

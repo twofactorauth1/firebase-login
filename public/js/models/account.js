@@ -26,8 +26,17 @@ define([], function() {
                 },
                 domain:"",
                 token:"",
-                updateType:""
-
+                updateType:"",
+                "business" : {
+                    "logo" : '',
+                    "name" : '',
+                    "description" : '',
+                    "category" : '',
+                    "size" : '',
+                    "phones" : [],
+                    "addresses" : [],
+                    "type" :''
+                }
             };
         },
 
