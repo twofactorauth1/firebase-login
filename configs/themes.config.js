@@ -12,6 +12,7 @@ module.exports = {
     THEME_ID_SIGNATURE_SECRET: "my#super!signature$secret&",
 
     PATH_TO_THEMES: "templates/cms/themes",
+    SUBPATH_TO_PREVIEW: "assets/images/theme-preview.jpg",
 
     DEFAULT_ENGINE: "handlebars",
 

@@ -12,6 +12,21 @@ var environments = {
     TESTING: "testing"
 };
 
+/**
+ * Allowed hosts for cross-domain access.
+ */
+var XDHosts = [];
+
+//This contains the testing server for Charles Szymanski
+var DEFAULT_XDHOSTS = ['107.170.183.176'];
+
+if(process.env.XDHOSTS == null) {
+    XDHosts = DEFAULT_XDHOSTS;
+} else {
+    XDHosts = process.env.XDHOSTS.split(',');
+}
+
+
 //---------------------------------------------------------
 //  CONFIGURE THESE
 //---------------------------------------------------------
@@ -84,6 +99,7 @@ module.exports = {
     support_email: "support@indigenous.io",
     cluster:false,
     freeCpus:2,
+    xdhost_whitelist: XDHosts,
 
     SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
 

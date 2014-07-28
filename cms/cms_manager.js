@@ -2,6 +2,7 @@ require('./dao/cms.dao.js');
 
 var blogPostDao = require('./dao/blogpost.dao.js');
 var cmsDao = require('./dao/cms.dao.js');
+var accountDao = require('../dao/account.dao.js');
 
 var log = $$.g.getLogger("cms_manager");
 var Blog = require('./model/components/blog');
@@ -12,6 +13,42 @@ module.exports = {
 
     getAllThemes: function(fn) {
         $$.dao.CmsDao.getAllThemes(fn);
+    },
+
+    getThemePreview: function(themeId, fn) {
+        cmsDao.getThemePreview(themeId, fn);
+    },
+
+    setThemeForAccount: function(accountId, themeId, fn) {
+        //validateThemeId
+        var p1 = $.Deferred();
+        cmsDao.themeExists(themeId, function(err, value){
+            if(err) {
+                p1.reject();
+                fn(err, null);
+            } else if(value === false) {
+                p1.reject();
+                fn('Theme with id [' + themeId + '] does not exist.');
+            } else {
+                p1.resolve();
+            }
+        });
+        $.when(p1).done(function(){
+            accountDao.getById(accountId, $$.m.Account, function(err, account){
+                if(err) {
+                    fn(err, null);
+                }
+                var website = account.get('website');
+                website.themeId = themeId;
+                accountDao.saveOrUpdate(account, function(err, value){
+                    if(err) {
+                        fn(err, null);
+                    }
+                    fn(null, 'SUCCESS');
+                });
+            });
+        });
+
     },
 
     _createBlogPost: function(accountId, blogPost, fn) {
@@ -380,23 +417,6 @@ module.exports = {
         var postsAry = blogComponent.get('posts') || [];
         postsAry.push(postId);
         return postsAry;
-        /*
-        var blogComponentAttrs = null;
-        for(var i=0; i<componentAry.length; i++) {
-            var attributes = componentAry[i]['attributes'];
-            if(componentAry[i].type === 'blog') {
-                blogComponentAttrs = componentAry[i];
-            }
-        }
-
-        if(!blogComponentAttrs) {
-            return null;
-        }
-        var postsAry = blogComponentAttrs['posts'] || [];
-
-        postsAry.push(postId);
-        return postsAry;
-        */
 
     },
 
@@ -426,33 +446,5 @@ module.exports = {
 
         return postsAry;
 
-        /*
-        var blogComponentAttrs = null;
-        for(var i=0; i<componentAry.length; i++) {
-            var attributes = componentAry[i]['attributes'];
-            if(attributes['type'] === 'blog') {
-                blogComponentAttrs = componentAry[i]['attributes'];
-            }
-        }
-
-        if(!blogComponentAttrs) {
-            return null;
-        }
-        var postsAry = blogComponentAttrs['posts'] || [];
-        var spliceIndex = -1;
-        for(var i = 0; i<postsAry.length; i++) {
-            if(postsAry[i] === postId) {
-                spliceIndex = i;
-            } else {
-                //console.log(postsAry[i] + ' does not equal ' + postId);
-            }
-        }
-
-        if(spliceIndex > 0) {
-            postsAry.splice(spliceIndex, 1);
-        }
-
-        return postsAry;
-        */
     }
 };

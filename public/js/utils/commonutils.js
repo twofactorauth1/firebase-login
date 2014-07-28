@@ -10,7 +10,7 @@ if (typeof define !== 'function') {
 }
 
 define([
-    'libs/misc/uuid'
+    'libs_misc/uuid'
 ], function(uuid) {
     var utils = {
 
