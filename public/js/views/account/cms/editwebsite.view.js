@@ -196,8 +196,8 @@ define([
                 },
                 stop: function(event, ui) {
                     self.is_dragging = false;
-                    var topComponentID = $(ui.item).prev().data('id');
-                    var bottomComponentID = $(ui.item).next().data('id');
+                    var topComponentID = $(ui.item).prev().data('component-id');
+                    var bottomComponentID = $(ui.item).next().data('component-id');
                     var $iframe = $('#iframe-website').contents();
                     $iframe.ready(function() {
                         var component = $iframe.find(".component[data-id='"+componentID+"']");
@@ -221,13 +221,23 @@ define([
                     });
                 },
                 change: function( e, ui ) {
-                    componentID = $(ui.item).data('id');
+                    console.log('sortable changed');
+                    componentID = $(ui.item).data('component-id');
                     if(self.is_dragging) console.log('X:' + e.screenX + ' Y: '+e.screenY );
+                    var serialize = $("#sortable").sortable('toArray', {attribute: 'data-component-id'});
+                    console.log('Serialize: ' +JSON.stringify(serialize));
                 },
                 handle: '.dd-handle'
             });
             var colorPalette = self.websiteSettings;
             self.renderSidebarColor(colorPalette);
+        },
+
+        updateOrder: function (e) {
+            var self = this;
+            console.log('update order');
+            var serialize = $('#sortable').sortable('serialize');
+            console.log('Serialize: ' +JSON.stringify(serialize));
         },
 
         renderSidebarColor: function(colorPalette) {

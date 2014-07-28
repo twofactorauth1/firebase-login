@@ -25,29 +25,42 @@ define([
         templateKey: "account/cms/website",
 
         events: {
+
+            //components
             "click .dd-item":"scrollToSection",
-            "change #nestable": "updateOrder",
             "hover .component": "showComponentOptions",
             "click .add_section": "addSection",
+            "change .dd": "onComponentDrag",
+            "click .btn-add-component":"addComponent",
+
+            //color palette
             "click #drop-zone": "drop_click",
             "change #file":"upload_color_pic",
             "click .btn-change-palette":"changePalette",
             "click .clear-image":"clearImage",
             "click .save-palette":"savePalette",
+
+            //change theme
             "click .btn-change-theme":"changeThemeModal",
             "click .btn-edit-theme":"editTheme",
             "click #change-theme-modal .thumbnail": "selectTheme",
             "click .change-theme":"changeTheme",
-            "change .dd": "onComponentDrag",
-            "click .btn-add-component":"addComponent",
-            "click .add-page":"addBlankPage",
+
+            //page settings
             "change .sort-ordering": "sort_contact",
             "change .sort-display": "sort_display",
+
+            //add blog post
             "click .add-post":"newPostModal",
             "click .create-post":"addBlankPost",
-
             "input #post-title":"urlCreator",
-            "input #post-url":"urlCreator"
+            "input #post-url":"urlCreator",
+
+            //add page
+            "click .add-page":"newPageModal",
+            "click .create-page":"addBlankPage",
+            "input #page-title":"urlCreator",
+            "input #page-url":"urlCreator"
         },
 
         initialize: function () {
@@ -100,10 +113,58 @@ define([
 
                 return this.page.fetch();
             },
+
             addBlankPage: function() {
                 var self = this;
                 console.log('adding blank page'+self.is_dragging);
                 $('#iframe-website').contents().find('ul.navbar-nav li:last-child').before('<li><a href="#">New Page</a></li>');
+                $('#new-post-modal').modal('hide');
+
+
+                //get title
+                var pageTitle = $('#new-page-modal #page-title').val();
+
+                //get url
+                var pageUrl = $('#new-page-modal #page-url').val();
+
+                var pageAuthor = self.user.attributes.first+' '+self.user.attributes.last;
+
+                var pageDate = new Date().getTime();
+
+                var data = {
+                    pageTitle: pageTitle,
+                    pageUrl: pageUrl,
+                    pageAuthor: pageAuthor,
+                    pageDate: moment(pageDate).format('DD.MM.YYYY')
+                };
+
+                //waiting for API
+
+                // this.page = new Page({
+                //     pageId:this.pageId,
+                //     post_title: postTitle,
+                //     post_author: postAuthor,
+                //     post_url: postUrl,
+                //     created: {
+                //         date: new Date().getTime(),
+                //         by: self.user.attributes._id
+                //     }
+                // });
+
+                // this.post.save().done( function() {
+                //     self.postId = self.post.attributes._id;
+                //     var $iframe = $('#iframe-website');
+                //     $iframe.ready(function() {
+                //         $iframe.contents().find("#main-area .entry").prepend(html);
+                //         console.log('Blank Post ID: '+self.postId);
+                //         $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                //         $iframe.contents().find("#main-area").trigger("click");
+                //     });
+                // });
+            },
+
+            newPageModal: function() {
+                $('#new-page-modal').modal('show');
             },
 
             urlCreator: function(e) {
@@ -164,6 +225,9 @@ define([
                         $iframe.contents().find("#main-area").trigger("click");
                     });
                 });
+
+                //navigate to new single post
+                $$.r.account.cmsRouter.viewSinglePost(postTitle, self.postId);
             },
 
             getPost: function() {
@@ -216,6 +280,7 @@ define([
                 var html = tmpl(data);
                 $('#sortable').append(html);
                 //add to site
+                self.updateOrder();
             },
             // WORKING
             getComponent: function() {
@@ -297,7 +362,6 @@ define([
                     //show validate error
                     console.log('no theme selected ');
                 }
-
             },
 
             editTheme: function() {
@@ -352,13 +416,6 @@ define([
                 if (iframe.find('.component[data-id="'+section+'"]').length > 0) {
                     self.scrollToAnchor(section);
                 }
-            },
-
-            updateOrder: function (e) {
-                var self = this;
-                console.log('update order');
-                var serialize = $('.dd').nestable('serialize');
-                console.log('Serialize: ' +JSON.stringify(serialize));
             },
 
             scrollToAnchor: function(aid){
