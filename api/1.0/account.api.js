@@ -34,6 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url(':id/displaysetting'), this.isAuthApi, this.updateAccountDisplaySetting.bind(this));
         app.put(this.url(':id/setting'), this.isAuthApi, this.updateAccountSetting.bind(this));
         app.put(this.url(':id/website'), this.isAuthApi, this.updateAccountWebsiteInfo.bind(this));
+
         app.delete(this.url(':id'), this.isAuthApi, this.deleteAccount.bind(this));
 
         app.get(this.url(':userid/accounts', 'user'), this.isAuthApi, this.getAllAccountsForUserId.bind(this));
@@ -109,7 +110,33 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     updateAccount: function(req,resp) {
-        console.log("test");
+        var account = new $$.m.Account(req.body);
+        accountDao.saveOrUpdate(account, function(err, value){
+            if(!err &&value != null){
+                resp.send(value.toJSON("public"));
+            } else {
+                self.wrapError(resp, 500, null, err, value);
+            }
+        });
+/*
+        var self = this;
+        var account = new $$.m.Account(req.body);
+        var accountId= req.body._id;
+
+        accountDao.getById(accountId, function(err, value) {
+            if (!err && value != null) {
+                accountDao.saveOrUpdate(account, function(){
+                    if(!err &&value != null){
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
+            } else {
+                return self.wrapError(resp, 401, null, err, value);
+            }
+        });
+        */
     },
 
     updateAccountDisplaySetting: function(req,resp) {

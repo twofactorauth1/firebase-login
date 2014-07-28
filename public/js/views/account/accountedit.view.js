@@ -21,10 +21,6 @@ define([
 
             "click #btn-back-to-contact":"viewUser",
 
-            "click .btn-save-account":"editAccountSave",
-            "click .btn-edit-address-fields":"editAddressFields",
-            "click .btn-cancel-edit-address-fields":"cancelEditAddressFields",
-
             "keyup #input-fullname":"fullnameChanged",
             "change #input-fullname":"fullnameChanged",
             "onkeytimer #input-fullname":"fullnameKeyTimer",

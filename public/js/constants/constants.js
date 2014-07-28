@@ -62,7 +62,12 @@ define([], function () {
             company_types: {
                 PROFESSIONAL: 1,
                 BUSINESS: 2,
-                ENTERPRISE: 3
+                ENTERPRISE: 3,
+                dp: [
+                    {label: "Professional", data: "1"},
+                    {label: "Business", data: "2"},
+                    {label: "Enterprise", data: "3"}
+                ]
             },
 
             company_size: {
@@ -70,9 +75,15 @@ define([], function () {
                 SMALL: 2,
                 MEDIUM: 3,
                 LARGE: 4,
-                ENTERPRISE: 5
+                ENTERPRISE: 5,
+                dp: [
+                    {label: "Single", data: "1"},
+                    {label: "Small", data: "2"},
+                    {label: "Medium", data: "3"},
+                    {label: "Large", data: "4"},
+                    {label: "Enterprise", data: "5"}
+                ]
             }
-
         },
 
         contact: {
