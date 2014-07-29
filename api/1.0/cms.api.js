@@ -36,8 +36,13 @@ _.extend(api.prototype, baseApi.prototype, {
         // PAGE
         app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
         app.get(this.url('page/:id'), this.getPageById.bind(this));
-        app.post(this.url('page'), this.saveOrUpdatePage.bind(this));
         app.put(this.url('page'), this.saveOrUpdatePage.bind(this));
+
+        //consistent URLs
+        app.get(this.url('website/:websiteId/page/:id'), this.getPageById.bind(this));
+        app.post(this.url('website/:websiteId/page'), this.createPage.bind(this));
+        app.post(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
+        app.delete(this.url('website/:websiteId/page/:id'), this.deletePage.bind(this));
 
         // THEME
         app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
@@ -164,6 +169,53 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, value, "Error saving website Page");
             self = null;
         });
+    },
+
+    createPage: function(req, res) {
+        var self = this;
+        self.log.debug('>> createPage');
+
+        var websiteId = req.params.websiteId;
+        var accountId = parseInt(self.accountId(req));
+        var _page = req.body;
+        var pageObj = new Page(_page);
+        pageObj.set('websiteId', websiteId);
+        pageObj.set('accountId', accountId);
+        cmsManager.createPage(pageObj, function(err, value){
+            self.log.debug('<< createPage');
+            self.sendResultOrError(res, err, value, "Error creating Page");
+            self = null;
+        });
+    },
+
+    updatePage: function(req, res) {
+        var self = this;
+        self.log.debug('>> updatePage');
+
+
+        var pageId = req.params.id;
+        var _page = req.body;
+        var pageObj = new Page(_page);
+        cmsManager.updatePage(pageId, pageObj, function(err, value){
+            self.log.debug('<< updatePage');
+            self.sendResultOrError(res, err, value, "Error updating Page");
+            self = null;
+        });
+    },
+
+    deletePage: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> deletePage');
+
+        var pageId = req.params.id;
+
+        cmsManager.deletePage(pageId, function(err, value){
+            self.log.debug('<< deletePage');
+            self.sendResultOrError(res, err, value, "Error deleting Page");
+            self = null;
+        });
+
     },
     //endregion
 
@@ -376,7 +428,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
 
-        blogPost.set('accountId', accountId.toString());
+        blogPost.set('accountId', accountId);
         blogPost.set('pageId', pageId);
 
         cmsManager.createBlogPost(accountId, blogPost, function(err, value){
