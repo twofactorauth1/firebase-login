@@ -21,6 +21,8 @@ define([
 
                 websiteId: null,
 
+                pageId: null,
+
                 post_author: null,
 
                 post_date: null,
@@ -35,9 +37,18 @@ define([
 
                 comment_status: null,
 
-                post_modified: null,
+                comment_count: null,
 
-                comment_count: null
+                created: {
+                    date: "",
+                    by: null,
+                },
+
+                modified: {
+                    date: "",
+                    by: null,
+                },
+
             }
         },
 
@@ -49,23 +60,25 @@ define([
         },
 
         parse: function(attrs) {
-            console.log('Attrs: '+JSON.stringify(attrs));
             return attrs;
         },
 
         url: function(method) {
+            console.log('Method: '+method);
             switch(method) {
                 case "GET":
                     if (this.get("pageId") != null) {
-                        return $$.api.getApiUrl("cms", "page/" + this.get("pageId") + "/blog/" + this.get("postId"));
+                        console.log('Page ID: '+this.get("pageId")+' Blog Post ID: '+this.get("_id"));
+                        return $$.api.getApiUrl("cms", "page/" + this.get("pageId") + "/blog/" + this.get("_id"));
                     }
                     return $$.api.getApiUrl("cms", "post/" + this.id);
                 case "PUT":
-                    if (this.get("postId") != null) {
-                        return $$.api.getApiUrl("cms", "page/"+ this.get("pageId") +"/blog/"+this.get("postId"));
+                    if (this.get("_id") != null) {
+                        return $$.api.getApiUrl("cms", "page/"+ this.get("pageId") +"/blog/"+this.get("_id"));
                     }
                     break;
                 case "POST":
+                console.log('posting '+this.get("pageId"));
                     if (this.get("_id") != null) {
                         return $$.api.getApiUrl("cms", "page/"+ this.get("pageId") +"/blog/"+this.get("_id"));
                     } else {

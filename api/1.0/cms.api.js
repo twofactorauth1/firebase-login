@@ -70,6 +70,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id/blog'), this.isAuthApi, this.listBlogPosts.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.isAuthApi, this.getBlogPost.bind(this));
         app.post(this.url('page/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
+        app.put(this.url('page/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
         app.delete(this.url('page/:id/blog/:postId'), this.isAuthApi, this.deleteBlogPost.bind(this));
         app.get(this.url('page/:id/blog/author/:author'), this.isAuthApi, this.getPostsByAuthor.bind(this));
         app.get(this.url('page/:id/blog/title/:title'), this.isAuthApi, this.getPostsByTitle.bind(this));
@@ -130,6 +131,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var websiteId = req.params.websiteid;
         var pageHandle = req.params.handle;
 
+        self.log.debug('>> getPageByHandle Website Id: '+websiteId+' HAndle: '+pageHandle);
+
         cmsDao.getPageForWebsite(websiteId, pageHandle, function(err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website");
             self = null;
@@ -141,6 +144,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: Add security
         var self = this;
         var pageId = req.params.id;
+
+        self.log.debug('>> getPageById');
 
         cmsDao.getPageById(pageId, function(err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page by Id");
@@ -375,7 +380,7 @@ _.extend(api.prototype, baseApi.prototype, {
         blogPost.set('pageId', pageId);
 
         cmsManager.createBlogPost(accountId, blogPost, function(err, value){
-            self.log.debug('<< createBlogPost');
+            self.log.debug('<< createBlogPost'+JSON.stringify(blogPost));
             self.sendResultOrError(res, err, value, "Error creating Blog Post");
             self = null;
         });
@@ -387,6 +392,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getBlogPost');
         var accountId = parseInt(self.accountId(req));
         var blogPostId = req.params.postId;
+        self.log.debug('Account ID: '+accountId+' Blog Post ID: '+blogPostId);
         cmsManager.getBlogPost(accountId, blogPostId, function(err, value){
             self.log.debug('<< getBlogPost');
             self.sendResultOrError(res, err, value, "Error getting Blog Post");
