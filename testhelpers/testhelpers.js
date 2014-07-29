@@ -7,13 +7,11 @@
 
 var userDao = require('../dao/user.dao.js');
 var accountDao = require('../dao/account.dao.js');
-<<<<<<< HEAD
+
 var contactDao = require('../dao/contact.dao.js');
 var paymentDao = require('../payments/dao/payment.dao.js');
-=======
 var blogPostDao = require('../cms/dao/blogpost.dao.js');
 var _log = $$.g.getLogger("testhelpers");
->>>>>>> develop
 
 module.exports = {
 
