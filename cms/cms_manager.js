@@ -401,6 +401,59 @@ module.exports = {
         });
     },
 
+    createPage: function(page, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> createPage');
+        cmsDao.saveOrUpdate(page, function(err, value){
+            if(err) {
+                self.log.error('Error creating page: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< createPage');
+                fn(null, value);
+            }
+        });
+    },
+
+    updatePage: function(pageId, page, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> updatePage');
+        //make sure the ID is set.
+        page.set('_id', pageId);
+
+        cmsDao.saveOrUpdate(page, function(err, value){
+            if(err) {
+                self.log.error('Error updating page: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< udpatePage');
+                fn(null, value);
+            }
+        });
+
+    },
+
+    deletePage: function(pageId, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> deletePage');
+        cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value){
+            if (err) {
+                self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< deletePage');
+                fn(null, value);
+            }
+        });
+
+    },
+
     _addPostIdToBlogComponentPage: function(postId, page) {
         var self = this;
         var componentAry = page.get('components') || [];
