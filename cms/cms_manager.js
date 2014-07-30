@@ -9,8 +9,6 @@ var Blog = require('./model/components/blog');
 
 module.exports = {
 
-
-
     getAllThemes: function(fn) {
         $$.dao.CmsDao.getAllThemes(fn);
     },

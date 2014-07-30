@@ -675,6 +675,86 @@ module.exports.group = {
             test.done();
         });
 
+    },
+
+    /*
+     get website/:id/linklists
+     get website/:id/linklists/:handle
+     post website/:id/linklists
+     post website/:id/linklists/:handle
+     delete website/:id/linklists/:handle
+
+     */
+    testGetWebsiteLinklists: function(test) {
+        var p1 = $.Deferred();
+        cmsDAO.getOrCreateWebsiteByAccountId(testcontext.accountId, testcontext.userId, false, function(err, value){
+            if(err) {
+                p1.reject();
+                test.ok(false, 'Error setting up website');
+                test.done();
+            } else {
+                console.dir(value);
+                testcontext.websiteId = value.id();
+                p1.resolve();
+            }
+        });
+
+        $.when(p1).done(function(){
+            var req = request(accountURL).get('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists')
+                .set('cookie', cookie);
+            req.expect(200, function(err, res){
+                console.dir(res.body);
+                test.ok(true);
+                test.done();
+            });
+        });
+    },
+
+    testGetWebsiteLinklistsByHandle: function(test) {
+        //main-menu
+        var req = request(accountURL).get('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists/main-menu')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            console.dir(res.body);
+            test.ok(true);
+            test.done();
+        });
+
+    },
+
+    testAddWebsiteLinklist: function(test) {
+
+        var linkListObj = {'name': 'Test Name', 'handle': 'test-name', 'links': []};
+        var req = request(accountURL).post('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists/')
+            .set('cookie', cookie)
+            .send(linkListObj);
+        req.expect(200, function(err, res){
+            console.dir(res.body);
+            test.ok(true);
+            test.done();
+        });
+    },
+
+    testUpdateWebsiteLinklist: function(test) {
+        var linkListObj = {'name': 'Updated Name', 'handle': 'test-name', 'links': []};
+        var req = request(accountURL).post('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists/test-name')
+            .set('cookie', cookie)
+            .send(linkListObj);
+        req.expect(200, function(err, res){
+            console.dir(res.body);
+            test.ok(true);
+            test.done();
+        });
+    },
+
+    testDeleteWebsiteLinklist: function(test) {
+        var req = request(accountURL).delete('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists/test-name')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            console.dir(res.body);
+            test.ok(true);
+            test.done();
+        });
     }
 
 
