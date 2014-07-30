@@ -1,4 +1,4 @@
-angular.module('app.services').factory('courseService', ['$resource', 'host', function ($resource, host) {
+angular.module('app.services').factory('Course', ['$resource', 'host', function ($resource, host) {
     var Course = $resource(host + "/api/courses/:id", {
         id: '@id'
     }, {

@@ -1,5 +1,5 @@
-angular.module('app.services').factory('courseVideoService', ['$resource', 'host', function ($resource, host) {
-    var Course = $resource(host + "/api/courses/:courseId/video/:videoId", {
+angular.module('app.services').factory('CourseVideo', ['$resource', 'host', function ($resource, host) {
+    var CourseVideo = $resource(host + "/api/courses/:courseId/video/:videoId", {
         courseId: '@courseId',
         videoId: '@id'
     }, {
