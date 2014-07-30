@@ -23,9 +23,9 @@ var app = angular.module('app', ['ngRoute',
 app.run(['$rootScope', '$location', 'security', 'editableOptions', function ($rootScope, $location, security, editableOptions) {
     // Get the current user when the application starts
     // (in case they are still logged in from a previous session)
-   // security.requestCurrentUser();
+    security.requestCurrentUser();
     //
     editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 }]);
 
-app.constant('host', 'http://localhost:3000');
+app.constant('host', 'http://nik.indigenous.local:3000');
