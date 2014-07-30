@@ -10,7 +10,7 @@
                 ngDisabled: '=',
                 videoSort: '='
             },
-            templateUrl: "/views/video/playlist.html",
+            templateUrl: "/views/video/course.html",
             controller: function ($scope) {
                 $scope.getScheduledTime = function (video) {
                     var scheduledTime = new Date();

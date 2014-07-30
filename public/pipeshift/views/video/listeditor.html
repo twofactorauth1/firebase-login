@@ -26,23 +26,23 @@
             <div class="col-md-5 playlist-col">
                 <div class="row">
                     <button class="btn btn-info btn-primary btn-square"
-                            ng-click="!playlistBlocked && showPlaylistInfoModal(playlist)"><span
+                            ng-click="!courseBlocked && showCourseInfoModal(course)"><span
                             class="glyphicon glyphicon-info-sign"></span></button>
-                    <button class="btn btn-add btn-square" ng-click="!playlistBlocked && showAddPlaylistModal()"><span
+                    <button class="btn btn-add btn-square" ng-click="!courseBlocked && showAddCourseModal()"><span
                             class="glyphicon glyphicon-plus"></span></button>
                     <div class="fullwidth-input-wrapper">
-                        <input disabled class="playlist-selector" placeholder="Add Course" ng-if="playlists.length==0"/>
-                        <select ng-model="ui.selectedPlaylistId" class="playlist-selector"
-                                ng-change="playlistSelected()" ng-if="playlists.length>0" ng-disabled="playlistBlocked"
-                                ng-options="playlist._id as playlist.title for playlist in playlists | orderBy:'title'">
+                        <input disabled class="playlist-selector" placeholder="Add Course" ng-if="courses.length==0"/>
+                        <select ng-model="ui.selectedCourseId" class="playlist-selector"
+                                ng-change="courseSelected()" ng-if="courses.length>0" ng-disabled="courseBlocked"
+                                ng-options="course._id as course.title for course in courses | orderBy:'title'">
                         </select>
                     </div>
                 </div>
 
-                <!--TODO: show loading animation until saved(!playlistBlocked)-->
+                <!--TODO: show loading animation until saved(!courseBlocked)-->
                 <div class="row">
-                    <div class="playlist timeline" video-drop from="videos" ng-disabled="playlistBlocked"
-                         to="playlist.videos" videos="playlist.videos" remove-video="showRemoveVideoModal"
+                    <div class="playlist timeline" video-drop from="videos" ng-disabled="courseBlocked"
+                         to="course.videos" videos="course.videos" remove-video="showRemoveVideoModal"
                          add-video="addVideo"
                          video-sort="dayTimeSort">
                     </div>

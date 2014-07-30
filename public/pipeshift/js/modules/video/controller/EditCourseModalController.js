@@ -1,4 +1,4 @@
-angular.module('app.modules.video').controller('EditPlaylistModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'playlist', 'templates', 'playlistService', function ($scope, $modal, $http, $location, $timeout, $modalInstance, playlist, templates, playlistService) {
+angular.module('app.modules.video').controller('EditCourseModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'course', 'templates', 'Course', function ($scope, $modal, $http, $location, $timeout, $modalInstance, course, templates, Course) {
     $scope.modal = {};
     $scope.isSubdomainChecked = true;
     $scope.isSubdomainFree = true;
@@ -11,26 +11,26 @@ angular.module('app.modules.video').controller('EditPlaylistModalController', ['
     $scope.domain = host + ":" + $location.port();
     $scope.isAdd = false;
     $scope.title = "Course info"
-    $scope.playlist = {_id: playlist._id, title: playlist.title, description: playlist.description, template: playlist.template, videos: playlist.videos, subtitle: playlist.subtitle, body: playlist.body, userId: playlist.userId, subdomain: playlist.subdomain, price: playlist.price};
+    $scope.course = {_id: course._id, title: course.title, description: course.description, template: course.template, videos: course.videos, subtitle: course.subtitle, body: course.body, userId: course.userId, subdomain: course.subdomain, price: course.price};
     $scope.templates = templates;
     $scope.close = function () {
         $modalInstance.dismiss();
     }
     $scope.submit = function () {
-        $modalInstance.close({playlist: $scope.playlist, isRemove: false});
+        $modalInstance.close({course: $scope.course, isRemove: false});
     }
-    $scope.removePlaylist = function () {
+    $scope.removeCourse = function () {
         var modalInstance = $modal.open({
             templateUrl: '/views/modal/removeModal.html',
             controller: 'RemoveModalController',
             resolve: {
                 message: function () {
-                    return "Are you sure you want to remove this playlist?";
+                    return "Are you sure you want to remove this course?";
                 }
             }
         });
         modalInstance.result.then(function () {
-            $modalInstance.close({playlist: $scope.playlist, isRemove: true});
+            $modalInstance.close({course: $scope.course, isRemove: true});
         }, function () {
         });
     }
@@ -42,19 +42,19 @@ angular.module('app.modules.video').controller('EditPlaylistModalController', ['
             $timeout.cancel(subdomainChangeTimeout);
         }
         subdomainChangeTimeout = $timeout(function () {
-            if ($scope.playlist.subdomain == playlist.subdomain) {
+            if ($scope.course.subdomain == course.subdomain) {
                 $scope.isSubdomainChecked = true;
                 $scope.isSubdomainFree = true;
             } else {
-                playlistService.isSubdomainFree({subdomain: $scope.playlist.subdomain}).success(function (response) {
+                Course.isSubdomainFree({subdomain: $scope.course.subdomain}).success(function (response) {
                     $scope.isSubdomainChecked = true;
                     if (response.success) {
                         $scope.isSubdomainFree = response.result;
                     }
                     if ($scope.isSubdomainFree) {
-                        $scope.playlistForm.subdomain.$setValidity("isNotFree", true);
+                        $scope.courseForm.subdomain.$setValidity("isNotFree", true);
                     } else {
-                        $scope.playlistForm.subdomain.$setValidity("isNotFree", false);
+                        $scope.courseForm.subdomain.$setValidity("isNotFree", false);
                     }
                 });
             }

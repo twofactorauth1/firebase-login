@@ -1,4 +1,4 @@
-angular.module('app.directives').directive('playlistPreview', function () {
+angular.module('app.directives').directive('coursePreview', function () {
     function getTimezoneOffset() {
         return (new Date()).getTimezoneOffset();
     }
@@ -6,22 +6,22 @@ angular.module('app.directives').directive('playlistPreview', function () {
     return {
         scope: {
             editMode: "=",
-            playlist: "=",
+            course: "=",
             minHeight: "="
         },
         controller: function ($scope, $http, host) {
-            var playlist = $scope.playlist;
+            var course = $scope.course;
             $scope.modal = {};
             $scope.subscribe = function () {
-                if (playlist.subdomain == null || playlist.subdomain.trim() == "") {
+                if (course.subdomain == null || course.subdomain.trim() == "") {
                     alert("Please define course subdomain first.");
                 } else {
                     $scope.modal.submited = true;
                     if ($scope.modal.emailForm.$valid) {
-                        if (playlist.videos.length == 0) {
-                            alert("Error: empty playlist");
+                        if (course.videos.length == 0) {
+                            alert("Error: empty course");
                         } else {
-                            $http.post(host + '/api/playlists/' + playlist._id + '/subscribe/', {email: $scope.modal.email, playlist: playlist, timezoneOffset: getTimezoneOffset()}).success(function (data) {
+                            $http.post(host + '/api/courses/' + course._id + '/subscribe/', {email: $scope.modal.email, course: course, timezoneOffset: getTimezoneOffset()}).success(function (data) {
                                 if (data.success) {
                                     alert("Course has been scheduled for " + $scope.modal.email);
                                 } else {
@@ -37,6 +37,6 @@ angular.module('app.directives').directive('playlistPreview', function () {
         },
         replace: true,
         restrict: 'E',
-        templateUrl: '/views/directives/playlistPreview.html'
+        templateUrl: '/views/directives/coursePreview.html'
     }
 });

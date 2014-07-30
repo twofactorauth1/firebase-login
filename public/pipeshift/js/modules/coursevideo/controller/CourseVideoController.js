@@ -1,5 +1,5 @@
 /**
- * The controller used when editing video playlists
+ * The controller used when editing video courses videos
  */
 angular.module('app.modules.coursevideo', []).controller('CourseVideoController', ['$scope', function ($scope) {
     var body = document.body,
