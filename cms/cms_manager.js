@@ -401,6 +401,58 @@ module.exports = {
         });
     },
 
+    updatePage: function(pageId, page, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> updatePage');
+        //make sure the ID is set.
+        page.set('_id', pageId);
+
+        cmsDao.saveOrUpdate(page, function(err, value){
+            if(err) {
+                self.log.error('Error updating page: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< udpatePage');
+                fn(null, value);
+            }
+        });
+
+    },
+
+    deletePage: function(pageId, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> deletePage');
+        cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value){
+            if (err) {
+                self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< deletePage');
+                fn(null, value);
+            }
+        });
+    },
+
+    createPage: function(page, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> createPage');
+        cmsDao.saveOrUpdate(page, function(err, value){
+            if(err) {
+                self.log.error('Error creating page: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< createPage');
+                fn(null, value);
+            }
+        });
+    },
+
     getWebsiteLinklists: function(websiteId, fn) {
         var self = this;
         self.log = log;
@@ -519,37 +571,37 @@ module.exports = {
         self.log = log;
         self.log.debug('>> deleteWebsiteLinklists');
 
-        cmsDao.getWebsiteById(websiteId, function(err, website){
-                if(err) {
-                    self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
-                    fn(err, null);
-                } else {
+        cmsDao.getWebsiteById(websiteId, function (err, website) {
+            if (err) {
+                self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
+                fn(err, null);
+            } else {
 
-                    var linkListAry = website.get('linkLists');
-                    var targetListIndex = -1;
-                    for (var i = 0; i < linkListAry.length; i++) {
-                        if (linkListAry[i].handle === handle) {
-                            targetListIndex = i;
-                            break;
-                        }
-                    }
-
-                    if(targetListIndex !== -1) {
-                        linkListAry.splice(targetListIndex, 1);
-                        cmsDao.saveOrUpdate(website, function(err, value){
-                            if(err) {
-                                self.log.error('Error updating website: ' + err);
-                                fn(err, null);
-                            } else {
-                                self.log.debug('<< deleteWebsiteLinklists');
-                                fn(null, value.get('linkLists'));
-                            }
-                        });
-                    } else {
-                        self.log.error('linklist with handle [' + handle + '] was not found');
-                        fn('linklist with handle [' + handle + '] was not found', null);
+                var linkListAry = website.get('linkLists');
+                var targetListIndex = -1;
+                for (var i = 0; i < linkListAry.length; i++) {
+                    if (linkListAry[i].handle === handle) {
+                        targetListIndex = i;
+                        break;
                     }
                 }
+
+                if (targetListIndex !== -1) {
+                    linkListAry.splice(targetListIndex, 1);
+                    cmsDao.saveOrUpdate(website, function (err, value) {
+                        if (err) {
+                            self.log.error('Error updating website: ' + err);
+                            fn(err, null);
+                        } else {
+                            self.log.debug('<< deleteWebsiteLinklists');
+                            fn(null, value.get('linkLists'));
+                        }
+                    });
+                } else {
+                    self.log.error('linklist with handle [' + handle + '] was not found');
+                    fn('linklist with handle [' + handle + '] was not found', null);
+                }
+            }
         });
     },
 

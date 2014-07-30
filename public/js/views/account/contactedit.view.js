@@ -63,6 +63,7 @@ define([
             var self = this;
             this.getContact()
                 .done(function() {
+                    console.log('Getting Contact: '+JSON.stringify(self.contact.attributes));
                     var data = {
                         contact:self.contact.toJSON()
                     };
