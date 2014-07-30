@@ -33,6 +33,13 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('website'), this.saveOrUpdateWebsite.bind(this));
         app.put(this.url('website'), this.saveOrUpdateWebsite.bind(this));
 
+        // WEBSITE LINKS
+        app.get(this.url('website/:id/linklists'), this.isAuthApi, this.getWebsiteLinklists.bind(this));
+        app.get(this.url('website/:id/linklists/:handle'), this.isAuthApi, this.getWebsiteLinklistsByHandle.bind(this));
+        app.post(this.url('website/:id/linklists'), this.isAuthApi, this.addWebsiteLinklists.bind(this));
+        app.post(this.url('website/:id/linklists/:handle'), this.isAuthApi, this.updateWebsiteLinklists.bind(this));
+        app.delete(this.url('website/:id/linklists/:handle'), this.isAuthApi, this.deleteWebsiteLinklists.bind(this));
+
         // PAGE
         app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
         app.get(this.url('page/:id'), this.getPageById.bind(this));
@@ -126,6 +133,77 @@ _.extend(api.prototype, baseApi.prototype, {
             self = value = null;
         });
     },
+
+    getWebsiteLinklists: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getWebsiteLinklists');
+
+        var websiteId = req.params.id;
+        cmsManager.getWebsiteLinklists(websiteId, function(err, value){
+            self.log.debug('<< getWebsiteLinklists');
+            self.sendResultOrError(res, err, value, "Error retrieving website Linklists");
+            self = value = null;
+        });
+
+    },
+
+    getWebsiteLinklistsByHandle: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getWebsiteLinklistsByHandle');
+        var websiteId = req.params.id;
+        var handle = req.params.handle;
+        cmsManager.getWebsiteLinklistsByHandle(websiteId, handle, function(err, value){
+            self.log.debug('<< getWebsiteLinklistsByHandle');
+            self.sendResultOrError(res, err, value, "Error retrieving website Linklists");
+            self = value = null;
+        });
+    },
+
+    addWebsiteLinklists: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> addWebsiteLinklists');
+        var websiteId = req.params.id;
+        var linkLists = req.body;
+
+        cmsManager.addWebsiteLinklists(websiteId, linkLists, function(err, value){
+            self.log.debug('<< addWebsiteLinklists');
+            self.sendResultOrError(res, err, value, "Error adding website Linklists");
+            self = value = null;
+        });
+    },
+
+    updateWebsiteLinklists: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> updateWebsiteLinklists');
+        var websiteId = req.params.id;
+        var handle = req.params.handle;
+        var linkLists = req.body;
+
+        cmsManager.updateWebsiteLinklists(websiteId, handle, linkLists, function(err, value){
+            self.log.debug('<< updateWebsiteLinklists');
+            self.sendResultOrError(res, err, value, "Error adding website Linklists");
+            self = value = null;
+        });
+    },
+
+    deleteWebsiteLinklists: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> deleteWebsiteLinklists');
+        var websiteId = req.params.id;
+        var handle = req.params.handle;
+
+        cmsManager.deleteWebsiteLinklists(websiteId, handle, function(err, value){
+            self.log.debug('<< deleteWebsiteLinklists');
+            self.sendResultOrError(res, err, value, "Error adding website Linklists");
+            self = value = null;
+        });
+    },
+
     //endregion
 
 
