@@ -52,7 +52,6 @@ require.config({
         angularResourse: "libs/angular-resource/angular-resource.min",
         angularStepper: "libs/angular-stepper/src/angular-stepper",
         angularMoney: "libs/angular-money-directive/angular-money-directive",
-        uiBootstrapTpls: "libs/angular-bootstrap/ui-bootstrap-tpls",
         xEditable: "libs/angular-xeditable/dist/js/xeditable",
 
         //UI SPECIFIC
@@ -141,7 +140,6 @@ require.config({
         angularResourse: {deps: ['angular']},
         angularStepper: {deps: ['angular']},
         angularMoney: {deps: ['angular']},
-        uiBootstrapTpls: {deps: ['angular']},
         xEditable: {deps: ['angular']},
 
         waypoints: {

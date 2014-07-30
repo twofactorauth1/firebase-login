@@ -128,7 +128,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
 
     $scope.showVideo = function (video) {
         var modalInstance = $modal.open({
-            templateUrl: '/views/video/modal/view.html',
+            templateUrl: '/pipeshift/views/video/modal/view.html',
             controller: 'VideoViewModalController',
             size: 'lg',
             resolve: {
@@ -141,7 +141,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
 
     $scope.showAddPlaylistModal = function () {
         var modalInstance = $modal.open({
-            templateUrl: '/views/video/modal/playlistEdit.html',
+            templateUrl: '/pipeshift/views/video/modal/playlistEdit.html',
             controller: 'AddPlaylistModalController',
             resolve: {
                 templates: function () {
@@ -168,7 +168,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
 
     $scope.showPlaylistInfoModal = function (playlist) {
         var modalInstance = $modal.open({
-            templateUrl: '/views/video/modal/playlistEdit.html',
+            templateUrl: '/pipeshift/views/video/modal/playlistEdit.html',
             controller: 'EditPlaylistModalController',
             size: 'lg',
             resolve: {
@@ -223,7 +223,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
     };
     $scope.showRemoveVideoModal = function (video) {
         var modalInstance = $modal.open({
-            templateUrl: '/views/modal/removeModal.html',
+            templateUrl: '/pipeshift/views/modal/removeModal.html',
             controller: 'RemoveModalController',
             resolve: {
                 video: function () {
@@ -270,7 +270,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
 
     $scope.showSearchOptionsModal = function () {
         var modalInstance = $modal.open({
-            templateUrl: '/views/video/modal/searchOptions.html',
+            templateUrl: '/pipeshift/views/video/modal/searchOptions.html',
             controller: 'SearchOptionsModalController',
             resolve: {
                 searchOptions: function () {
@@ -286,7 +286,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
     }
     $scope.showTimelineItemModal = function (video) {
         var modalInstance = $modal.open({
-            templateUrl: '/views/video/modal/timelineItem.html',
+            templateUrl: '/pipeshift/views/video/modal/timelineItem.html',
             controller: 'TimelineItemModalController',
             size: 'lg',
             resolve: {
