@@ -1,0 +1,53 @@
+<div class="jumbotron jumbotron-video">
+    <div class="fus-bg"></div>
+    <div class="fus-overlay"></div>
+    <div class="fus-section col-md-12 pscontainer video-container">
+        <div class="playlist-editor">
+            <div class="col-md-7 row videos-search-col">
+                <div class="search-form-div">
+                    <button href="" class="btn btn-primary btn-square btn-search-options"
+                            ng-click="showSearchOptionsModal()"><span
+                            class="glyphicon glyphicon-asterisk"></span>
+                    </button>
+                    <form class="search-form" ng-submit="findVideo(query)">
+                        <div class="fullwidth-input-wrapper">
+                            <input ng-model="query" type="text" placeholder="Search">
+                        </div>
+                        <button class="btn btn-search btn-primary btn-square" type="submit"><span
+                                class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </form>
+                </div>
+
+                <div when-ui-scrolled="loadMore()" class="col-md-12 video-list">
+                    <div ng-include src="'/views/video/videos.html'"></div>
+                </div>
+            </div>
+            <div class="col-md-5 playlist-col">
+                <div class="row">
+                    <button class="btn btn-info btn-primary btn-square"
+                            ng-click="!playlistBlocked && showPlaylistInfoModal(playlist)"><span
+                            class="glyphicon glyphicon-info-sign"></span></button>
+                    <button class="btn btn-add btn-square" ng-click="!playlistBlocked && showAddPlaylistModal()"><span
+                            class="glyphicon glyphicon-plus"></span></button>
+                    <div class="fullwidth-input-wrapper">
+                        <input disabled class="playlist-selector" placeholder="Add Course" ng-if="playlists.length==0"/>
+                        <select ng-model="ui.selectedPlaylistId" class="playlist-selector"
+                                ng-change="playlistSelected()" ng-if="playlists.length>0" ng-disabled="playlistBlocked"
+                                ng-options="playlist._id as playlist.title for playlist in playlists | orderBy:'title'">
+                        </select>
+                    </div>
+                </div>
+
+                <!--TODO: show loading animation until saved(!playlistBlocked)-->
+                <div class="row">
+                    <div class="playlist timeline" video-drop from="videos" ng-disabled="playlistBlocked"
+                         to="playlist.videos" videos="playlist.videos" remove-video="showRemoveVideoModal"
+                         add-video="addVideo"
+                         video-sort="dayTimeSort">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
