@@ -21,6 +21,7 @@ var urlutils = {
         var self = this
             , defaultHost = process.env.ROOT_HOST || "indigenous"
             , globalSubdomains = process.env.GLOBAL_SUBDOMAINS || "www"
+            , globalEnvironments = process.env.GLOBAL_ENVIRONMENTS || 'test'
             , hosts
             , subdomain
             , domain
@@ -34,18 +35,46 @@ var urlutils = {
             //tldtools wants a fully-qualified domain... we need to add http.
             var obj = tldtools.extract('http://' + host);
 
-            subdomain = obj.subdomain.replace('www.', '');
+            //replace 'www' (and a trailing '.' if its there) from the beginning of the string with an empty string
+            subdomain = obj.subdomain.replace(/^www\.?/gi, '');
             if(subdomain === '') {
                 subdomain = null;
                 isMainApp = true;
+            } else {
+                /*
+                 * Check if we have an environment modifier in the subdomain.
+                 * In case the subdomain IS an environment modifier, we need
+                 * to handle that as well.
+                 */
+                var modifier = '';
+                if(subdomain.indexOf('.') > -1) {
+                    var ary = subdomain.split('.');
+                    modifier = ary[ary.length-1];
+                } else {
+                    modifier = subdomain;
+                }
+
+                var matchedEnvironment = _.filter(globalEnvironments.split(','), function(_env){return modifier === _env});
+                if(matchedEnvironment && matchedEnvironment.length > 0) {
+                    _log.debug('environment: ' + matchedEnvironment);
+                    var regexp = new RegExp('.?' + matchedEnvironment[0], 'gi');
+                    subdomain = subdomain.replace(regexp, '');
+                }
+                /*
+                 * After checking for environment... check for empty subdomain again.
+                 */
+                if(subdomain === '') {
+                    subdomain = null;
+                    isMainApp = true;
+                }
             }
 
             domain = obj.domain;
             tld = obj.tld;
-            console.dir(obj);
         }
 
-        if (subdomain != null && globalSubdomains.indexOf(subdomain) > -1) {
+        //check if the subdomain matches a list of globalSubdomains that indicate mainApp
+        if(subdomain != null && _.contains(globalSubdomains.toString().split(','), subdomain)){
             isMainApp = true;
         }
         var returnObj = {
