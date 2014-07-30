@@ -5,6 +5,9 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
+var tldtools = require('tldtools').init();
+var _log = $$.g.getLogger("urlutils");
+
 var urlutils = {
 
     getSubdomainFromRequest: function (req) {
@@ -13,8 +16,54 @@ var urlutils = {
         return this.getSubdomainFromHost(host);
     },
 
+    getSubdomainFromHost: function(host) {
+        _log.debug('>> getSubdomainFromHost(' + host + ')');
+        var self = this
+            , defaultHost = process.env.ROOT_HOST || "indigenous"
+            , globalSubdomains = process.env.GLOBAL_SUBDOMAINS || "www"
+            , hosts
+            , subdomain
+            , domain
+            , tld
+            , isMainApp = false;
 
-    getSubdomainFromHost: function (host) {
+        globalSubdomains = globalSubdomains.split(",");
+
+
+        if(host) {
+            //tldtools wants a fully-qualified domain... we need to add http.
+            var obj = tldtools.extract('http://' + host);
+
+            subdomain = obj.subdomain.replace('www.', '');
+            if(subdomain === '') {
+                subdomain = null;
+                isMainApp = true;
+            }
+
+            domain = obj.domain;
+            tld = obj.tld;
+            console.dir(obj);
+        }
+
+        if (subdomain != null && globalSubdomains.indexOf(subdomain) > -1) {
+            isMainApp = true;
+        }
+        var returnObj = {
+            'isMainApp': isMainApp,
+            'subdomain': subdomain,
+            'domain': domain
+        };
+        _log.debug('isMainApp:' + returnObj.isMainApp + ', subdomain:' + returnObj.subdomain + ', domain:' + returnObj.domain );
+        return returnObj;
+    },
+
+    /**
+     * Deprecated.
+     * @param host
+     * @returns {{isMainApp: boolean, subdomain: *, domain: *}}
+     * @private
+     */
+    _getSubdomainFromHost: function (host) {
         var self = this
             , defaultHost = process.env.ROOT_HOST || "indigenous"
             , globalSubdomains = process.env.GLOBAL_SUBDOMAINS || "www"
@@ -40,6 +89,10 @@ var urlutils = {
 
 
         hosts = host.split(".");
+
+
+
+
 
         if (hosts[0] == "localhost") {
             isMainApp = true;
