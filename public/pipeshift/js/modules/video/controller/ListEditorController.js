@@ -1,29 +1,29 @@
 /**
- * The controller used when editing video playlists
+ * The controller used when editing video courses
  */
-angular.module('app.modules.video').controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'playlistService', 'playlistVideoService', 'host', function ($scope, $routeParams, $location, $modal, $http, youtube, playlistService, playlistVideoService, host) {
+angular.module('app.modules.video').controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', 'host', function ($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo, host) {
     $scope.location = $location;
-    $scope.playlistBlocked = false;
+    $scope.courseBlocked = false;
     $scope.searchsort = $location.search()['searchsort'] || false;
     $scope.searchduration = $location.search()['searchduration'] || false;
     $scope.searchtime = $location.search()['searchtime'] || false;
     $scope.section = $location.path().split('/')[2];
-    $scope.playlistBlocked = true;
+    $scope.courseBlocked = true;
     //todo: might need to replace this with only certain template get, when needed - for example on popup open(if a lot of templates will be used)
     $http.post(host + "/api/email/templates").success(function (result) {
-        $scope.playlistBlocked = false;
+        $scope.courseBlocked = false;
         $scope.templates = result;
     }).error(function (data) {
         alert("Error on templates get.")
     });
     $scope.ui = {};
-    $scope.playlists = [];
-    playlistService.query({}, function (resp) {
+    $scope.courses = [];
+    Course.query({}, function (resp) {
         if (resp.success) {
-            $scope.playlists = resp.result;
-            if ($scope.playlists.length > 0) {
-                $scope.ui.selectedPlaylistId = $scope.playlists[0]._id;
-                $scope.playlistSelected();
+            $scope.courses = resp.result;
+            if ($scope.courses.length > 0) {
+                $scope.ui.selectedCoursetId = $scope.courses[0]._id;
+                $scope.courseSelected();
             }
         } else {
             alert(resp.error);
@@ -54,16 +54,16 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
         return '/video/view/' + youtube.urlToID(video.media$group.yt$videoid.$t);
     }
 
-    $scope.playlistSelected = function () {
+    $scope.courseSelected = function () {
         var result = null;
-        var playlists = $scope.playlists;
-        for (var i = 0; i < playlists.length; i++) {
-            if (playlists[i]._id == $scope.ui.selectedPlaylistId) {
-                result = playlists[i];
+        var courses = $scope.courses;
+        for (var i = 0; i < courses.length; i++) {
+            if (courses[i]._id == $scope.ui.selectedCourseId) {
+                result = courses[i];
                 break;
             }
         }
-        $scope.playlist = result;
+        $scope.course = result;
     }
 
     $scope.page = 0;
@@ -139,23 +139,23 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
         });
     };
 
-    $scope.showAddPlaylistModal = function () {
+    $scope.showAddCourseModal = function () {
         var modalInstance = $modal.open({
-            templateUrl: '/pipeshift/views/video/modal/playlistEdit.html',
-            controller: 'AddPlaylistModalController',
+            templateUrl: '/pipeshift/views/video/modal/courseEdit.html',
+            controller: 'AddCourseModalController',
             resolve: {
                 templates: function () {
                     return $scope.templates;
                 }
             }
         });
-        modalInstance.result.then(function (newPlaylist) {
-            playlistService.save({}, newPlaylist, function (resp) {
+        modalInstance.result.then(function (newCourse) {
+            Course.save({}, newCourse, function (resp) {
                 if (resp.success) {
-                    var createPlaylist = resp.result;
-                    $scope.playlists.push(createPlaylist);
-                    $scope.ui.selectedPlaylistId = createPlaylist._id;
-                    $scope.playlistSelected();
+                    var createdCourse = resp.result;
+                    $scope.courses.push(createdCourse);
+                    $scope.ui.selectedCourseId = createdCourse._id;
+                    $scope.courseSelected();
                 } else {
                     alert(resp.error);
                 }
@@ -166,14 +166,14 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
         });
     };
 
-    $scope.showPlaylistInfoModal = function (playlist) {
+    $scope.showCourseInfoModal = function (course) {
         var modalInstance = $modal.open({
-            templateUrl: '/pipeshift/views/video/modal/playlistEdit.html',
-            controller: 'EditPlaylistModalController',
+            templateUrl: '/pipeshift/views/video/modal/courseEdit.html',
+            controller: 'EditCourseModalController',
             size: 'lg',
             resolve: {
-                playlist: function () {
-                    return playlist;
+                course: function () {
+                    return course;
                 }, templates: function () {
                     return $scope.templates;
                 }
@@ -181,18 +181,18 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
         });
         modalInstance.result.then(function (result) {
             if (result.isRemove) {
-                playlistService.delete({id: playlist._id}, {}, function (resp) {
+                Course.delete({id: course._id}, {}, function (resp) {
                     if (resp.success) {
-                        var playlists = $scope.playlists;
-                        var index = playlists.indexOf(playlist);
+                        var courses = $scope.courses;
+                        var index = courses.indexOf(course);
                         if (index > -1) {
-                            playlists.splice(index, 1);
+                            courses.splice(index, 1);
                         }
-                        var indexToSelect = Math.min($scope.playlists.length - 1, index);
+                        var indexToSelect = Math.min($scope.courses.length - 1, index);
                         if (indexToSelect >= 0) {
-                            var playlistToSelect = $scope.playlists[indexToSelect];
-                            $scope.ui.selectedPlaylistId = playlistToSelect._id;
-                            $scope.playlistSelected();
+                            var coursesToSelect = $scope.courses[indexToSelect];
+                            $scope.ui.selectedCourseId = coursesToSelect._id;
+                            $scope.courseSelected();
                         }
                     } else {
                         alert(resp.error);
@@ -201,16 +201,16 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
                     alert("Some error happened");
                 });
             } else {
-                var updatedPlaylist = result.playlist;
-                playlistService.save({id: updatedPlaylist._id}, updatedPlaylist, function (resp) {
+                var updatedCourse = result.course;
+                Course.save({id: updatedCourse._id}, updatedCourse, function (resp) {
                     if (resp.success) {
-                        playlist.template.name = updatedPlaylist.template.name;
-                        playlist.title = updatedPlaylist.title;
-                        playlist.subtitle = updatedPlaylist.subtitle;
-                        playlist.body = updatedPlaylist.body;
-                        playlist.description = updatedPlaylist.description;
-                        playlist.subdomain = updatedPlaylist.subdomain;
-                        playlist.price = updatedPlaylist.price;
+                        course.template.name = updatedCourse.template.name;
+                        course.title = updatedCourse.title;
+                        course.subtitle = updatedCourse.subtitle;
+                        course.body = updatedCourse.body;
+                        course.description = updatedCourse.description;
+                        course.subdomain = updatedCourse.subdomain;
+                        course.price = updatedCourse.price;
                     } else {
                         alert(resp.error);
                     }
@@ -229,16 +229,16 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
                 video: function () {
                     return video;
                 }, message: function () {
-                    return "Are you sure you want to remove this video from playlist?";
+                    return "Are you sure you want to remove this video from course?";
                 }
             }
         });
         modalInstance.result.then(function () {
-            $scope.playlistBlocked = true;
-            playlistVideoService.delete({playlistId: $scope.playlist._id, videoId: video.videoId}, {}, function (resp) {
-                $scope.playlistBlocked = false;
+            $scope.courseBlocked = true;
+            CourseVideo.delete({courseId: $scope.course._id, videoId: video.videoId}, {}, function (resp) {
+                $scope.courseBlocked = false;
                 if (resp.success) {
-                    var videos = $scope.playlist.videos;
+                    var videos = $scope.course.videos;
                     var index = videos.indexOf(video);
                     if (index > -1) {
                         videos.splice(index, 1);
@@ -247,23 +247,23 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
                     alert(resp.error);
                 }
             }, function (error) {
-                $scope.playlistBlocked = false;
+                $scope.courseBlocked = false;
                 alert("Some error happened");
             })
         }, function () {
         });
     }
     $scope.addVideo = function (video) {
-        $scope.playlistBlocked = true;
-        playlistVideoService.save({playlistId: $scope.playlist._id}, video, function (resp) {
-            $scope.playlistBlocked = false;
+        $scope.courseBlocked = true;
+        CourseVideo.save({courseId: $scope.course._id}, video, function (resp) {
+            $scope.courseBlocked = false;
             if (resp.success) {
-                $scope.playlist.videos.push(video);
+                $scope.course.videos.push(video);
             } else {
                 alert(resp.error);
             }
         }, function (error) {
-            $scope.playlistBlocked = false;
+            $scope.courseBlocked = false;
             alert("Some error happened");
         })
     }
@@ -293,14 +293,14 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
                 video: function () {
                     return video;
                 }, template: function () {
-                    return findTemplateByName($scope.playlist.template.name);
+                    return findTemplateByName($scope.course.template.name);
                 }
             }
         });
         modalInstance.result.then(function (updatedVideo) {
-            $scope.playlistBlocked = true;
-            playlistVideoService.save({playlistId: $scope.playlist._id, videoId: video.videoId}, updatedVideo, function (resp) {
-                $scope.playlistBlocked = false;
+            $scope.courseBlocked = true;
+            CourseVideo.save({courseId: $scope.course._id, videoId: video.videoId}, updatedVideo, function (resp) {
+                $scope.courseBlocked = false;
                 if (resp.success) {
                     video.subject = updatedVideo.subject;
                     video.videoTitle = updatedVideo.videoTitle
@@ -314,7 +314,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
                     alert(resp.error);
                 }
             }, function (error) {
-                $scope.playlistBlocked = false;
+                $scope.courseBlocked = false;
                 alert("Some error happened");
             })
         }, function () {

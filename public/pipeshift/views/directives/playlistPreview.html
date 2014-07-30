@@ -15,9 +15,9 @@
                     <td style="border-bottom: 2px dotted #bfbfbf; background: #f7f7f7;" bgcolor="#f7f7f7" height="75"
                         align="center">
                         <h1 style="color: #000000; font: normal 33px Georgia, serif; margin: 0; padding: 0; line-height: 33px;"
-                            e-style="width:440px" ps-editable="playlist.title" ps-editable-type="text"
+                            e-style="width:440px" ps-editable="course.title" ps-editable-type="text"
                             edit-mode="editMode">
-                            {{playlist.title}}</h1>
+                            {{course.title}}</h1>
                     </td>
                 </tr>
                 <tr>
@@ -53,12 +53,12 @@
                                 <td width="100%" valign="top">
                                     <h3 style="color: #434343;"
                                         e-style="width:440px; margin-bottom: 10px; margin-top: 20px;"
-                                        ps-editable="playlist.subtitle" ps-editable-type="text" edit-mode="editMode">
-                                        {{playlist.subtitle}}</h3>
+                                        ps-editable="course.subtitle" ps-editable-type="text" edit-mode="editMode">
+                                        {{course.subtitle}}</h3>
 
-                                    <p style="padding-right: 12px;" e-style="width:440px" ps-editable="playlist.body"
+                                    <p style="padding-right: 12px;" e-style="width:440px" ps-editable="course.body"
                                        ps-editable-type="textarea" edit-mode="editMode"
-                                            >{{playlist.body}}</p>
+                                            >{{course.body}}</p>
                                 </td>
                             </tr>
                         </table>
@@ -69,36 +69,36 @@
                         <table width="520" cellpadding="0" cellspacing="0" border="0" align="center" bgcolor="#f7f7f7"
                                style="font-size: 13px;">
                             <tr>
-                                <td valign="top" width="180" ng-show="playlist.videos.length>0">
-                                    <p><img ng-src="{{playlist.videos[0].videoPreviewUrl}}"
+                                <td valign="top" width="180" ng-show="course.videos.length>0">
+                                    <p><img ng-src="{{course.videos[0].videoPreviewUrl}}"
                                             width="160" border="0"/>
                                     </p>
                                     <h4 style="color:#326c94;">
-                                        <video-title width="160px" video="playlist.videos[0]"></video-title>
+                                        <video-title width="160px" video="course.videos[0]"></video-title>
                                     </h4>
 
-                                    <p style="color:#6c6c6c; padding-right: 12px;">{{playlist.videos[0].videoTitle}}</p>
+                                    <p style="color:#6c6c6c; padding-right: 12px;">{{course.videos[0].videoTitle}}</p>
                                 </td>
-                                <td valign="top" width="180" ng-show="playlist.videos.length>1">
-                                    <p><img ng-src="{{playlist.videos[1].videoPreviewUrl}}"
+                                <td valign="top" width="180" ng-show="course.videos.length>1">
+                                    <p><img ng-src="{{course.videos[1].videoPreviewUrl}}"
                                             width="160" border="0"/>
                                     </p>
                                     <h4 style="color:#326c94;">
-                                        <video-title width="160px" video="playlist.videos[1]"></video-title>
+                                        <video-title width="160px" video="course.videos[1]"></video-title>
                                     </h4>
 
-                                    <p style="color:#6c6c6c; padding-right: 12px;">{{playlist.videos[1].videoTitle |
+                                    <p style="color:#6c6c6c; padding-right: 12px;">{{course.videos[1].videoTitle |
                                         limitTo:50}}</p>
                                 </td>
-                                <td valign="top" width="160px" ng-show="playlist.videos.length>2">
-                                    <p><img ng-src="{{playlist.videos[2].videoPreviewUrl}}"
+                                <td valign="top" width="160px" ng-show="course.videos.length>2">
+                                    <p><img ng-src="{{course.videos[2].videoPreviewUrl}}"
                                             width="160" border="0"/>
                                     </p>
                                     <h4 style="color:#326c94;">
-                                        <video-title width="160px" video="playlist.videos[2]"></video-title>
+                                        <video-title width="160px" video="course.videos[2]"></video-title>
                                     </h4>
 
-                                    <p style="color:#6c6c6c; padding-right: 12px;">{{playlist.videos[2].videoTitle |
+                                    <p style="color:#6c6c6c; padding-right: 12px;">{{course.videos[2].videoTitle |
                                         limitTo:50}}</p>
                                 </td>
                             </tr>

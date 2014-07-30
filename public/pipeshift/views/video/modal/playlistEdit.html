@@ -2,53 +2,53 @@
     <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body modal-edit-playlist row">
-    <form name="$parent.playlistForm" class="col-md-12">
+    <form name="$parent.courseForm" class="col-md-12">
         <div class="form-group">
             <label class="control-label" for="template">Template:</label>
-            <select id="template" class="form-control" ng-model="playlist.template.name"
+            <select id="template" class="form-control" ng-model="course.template.name"
                     ng-options="template.name as template.name for template in templates">
             </select>
         </div>
         <div class="form-group"
-             ng-class="{'has-error':playlistForm.subdomain.$invalid&&(playlistForm.subdomain.$dirty)}">
+             ng-class="{'has-error':courseForm.subdomain.$invalid&&(courseForm.subdomain.$dirty)}">
             <label class="control-label" for="subdomain">Subdomain:</label>
-            <input name="subdomain" id="subdomain" class="form-control " type="text" ng-model="playlist.subdomain"
+            <input name="subdomain" id="subdomain" class="form-control " type="text" ng-model="course.subdomain"
                    ng-change="onSubdomainChange()" tooltip="{{isSubdomainFree?'':'Subdomain is already taken'}}">
             <!--ng-href="{{protocol+(hostHasWWW?'www.':'')+playlist.subdomain+'.'+domain}}"-->
-            <a ng-href="{{protocol + domain + '/courses/' + playlist.subdomain }}" target="_blank"
+            <a ng-href="{{protocol + domain + '/courses/' + course.subdomain }}" target="_blank"
                class="btn btn-primary form-control"
-               ng-disabled="!isSubdomainChecked || !isSubdomainFree || playlist.subdomain==null || playlist.subdomain.trim().length==0">Course
+               ng-disabled="!isSubdomainChecked || !isSubdomainFree || course.subdomain==null || course.subdomain.trim().length==0">Course
                 Link</a>
         </div>
         <div class="form-group">
-            <label class="control-label" for="title">Price:</label>
-            <input id="title" class="form-control" ng-model="playlist.price" money>
+            <label class="control-label" for="price">Price:</label>
+            <input id="price" class="form-control" ng-model="course.price" money>
         </div>
         <div class="form-group" ng-show="isAdd">
             <label class="control-label" for="title">Title:</label>
-            <input id="title" class="form-control" type="text" ng-model="playlist.title">
+            <input id="title" class="form-control" type="text" ng-model="course.title">
         </div>
         <div class="form-group" ng-show="isAdd">
             <label class="control-label" for="subtitle">Sub Title:</label>
-            <input id="subtitle" class="form-control" type="text" ng-model="playlist.subtitle">
+            <input id="subtitle" class="form-control" type="text" ng-model="course.subtitle">
         </div>
         <div class="form-group">
             <label class="control-label" for="description">Description:</label>
-            <textarea id="description" class="form-control" ng-model="playlist.description"></textarea>
+            <textarea id="description" class="form-control" ng-model="course.description"></textarea>
         </div>
         <div class="form-group" ng-show="isAdd">
             <label class="control-label" for="body">Body:</label>
-            <textarea id="body" class="form-control" ng-model="playlist.body"></textarea>
+            <textarea id="body" class="form-control" ng-model="course.body"></textarea>
         </div>
     </form>
     <div class="col-md-12" ng-hide="isAdd">
         <button type="button" class="btn btn-primary" ng-click="editMode=!editMode" data-toggle="button">Edit template
         </button>
-        <playlist-preview playlist="playlist" edit-mode="editMode"></playlist-preview>
+        <course-preview course="course" edit-mode="editMode"></course-preview>
     </div>
 </div>
 <div class="modal-footer">
-    <button type="submit" class="btn btn-remove pull-left" ng-show="!isAdd" ng-click="removePlaylist()">Remove</button>
+    <button type="submit" class="btn btn-remove pull-left" ng-show="!isAdd" ng-click="removeCourse()">Remove</button>
     <button class="btn btn-primary" ng-click="close()">Close</button>
     <div class="h-spacer-15"></div>
     <button type="submit" class="btn btn-add" ng-show="isAdd" ng-click="submit()"

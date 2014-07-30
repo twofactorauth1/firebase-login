@@ -10,7 +10,7 @@ angular.module('app.directives').directive('videoPlayer', function () {
                 return $sce.trustAsResourceUrl(src);
             }
             $scope.onPreviewImageClick = function () {
-                var details = { playlistId: $scope.courseDetails.playlistId};
+                var details = { courseId: $scope.courseDetails.courseId};
 
                 var handler = StripeCheckout.configure({
                     key: 'pk_test_6pRNASCoBOKtIshFeQd4XMUh',

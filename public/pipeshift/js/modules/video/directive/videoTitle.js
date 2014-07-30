@@ -1,4 +1,4 @@
-//use only for items which were dropped to playlist
+//use only for items which were dropped to course
 angular.module('app.directives').directive('videoTitle', function () {
     return {
         scope: {
