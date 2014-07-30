@@ -1,0 +1,34 @@
+<script type="text/x-handlebars-template" name="pipeshift-main">
+    <div id="pipeshiftDiv" class="col-md-12" ng-controller="MainController">
+        <div role="navigation" class="navbar">
+            <div class="col-md-12">
+                <div class="navbar-header"><a href="#home" class="navbar-brand"><img src="/pipeshift/img/logo.png"></a></div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li ng-class="navClass('/admin/pipeshift/',view)"><a ng-click="changeView('/admin/pipeshift/')">Home</a></li>
+                        <li ng-class="navClass('/admin/pipeshift/#feature',view)">
+                            <a ng-click="changeView('/admin/pipeshift/#feature')">Features</a>
+                        </li>
+                        <li ng-class="navClass('/admin/pipeshift/#pricing',view)">
+                            <a ng-click="changeView('/admin/pipeshift/#pricing')">Pricing</a>
+                        </li>
+                        <li ng-class="navClass('/admin/pipeshift/video/listeditor',view)" ng-show="isAuthenticated()">
+                            <a ng-click="changeView('/admin/pipeshift/video/listeditor')">Editor</a>
+                        </li>
+                        <li ng-class="navClass('/admin/pipeshift/profile',view)" ng-show="isAuthenticated()">
+                            <a ng-click="changeView('/admin/pipeshift/profile')">Account</a>
+                        </li>
+                        <li>
+                            <a href="/logout" target="_self" ng-show="isAuthenticated()">Logout</a>
+                        </li>
+                        <li>
+                            <a ng-click="global.showLoginModal()" ng-hide="isAuthenticated()">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div ng-view="ng-view">
+        </div>
+    </div>
+</script>

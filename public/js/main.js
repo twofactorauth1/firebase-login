@@ -44,6 +44,17 @@ require.config({
         d3: 'libs/d3/d3',
         moment: 'libs/moment/min/moment.min',
 
+        //PIPESHIFT
+        angular: 'libs/angular/angular',
+        angularBootstrap: "libs/angular-bootstrap/ui-bootstrap-tpls",
+        angularRoute: "libs/angular-route/angular-route",
+        angularSanitize: "libs/angular-sanitize/angular-sanitize.min",
+        angularResourse: "libs/angular-resource/angular-resource.min",
+        angularStepper: "libs/angular-stepper/src/angular-stepper",
+        angularMoney: "libs/angular-money-directive/angular-money-directive",
+        uiBootstrapTpls: "libs/angular-bootstrap/ui-bootstrap-tpls",
+        xEditable: "libs/angular-xeditable/dist/js/xeditable",
+
         //UI SPECIFIC
         toggles: 'libs_misc/toggles.min',
         datepicker: 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
@@ -70,7 +81,7 @@ require.config({
             exports: "Handlebars"
         },
         backbone: {
-            deps: ['jquery','underscore', 'json2'],
+            deps: ['jquery', 'underscore', 'json2'],
             exports: "Backbone"
         },
         backboneAssoc: {
@@ -89,10 +100,10 @@ require.config({
             deps: ['underscore']
         },
         viewManager: {
-            deps: ['backbone','backboneExtended']
+            deps: ['backbone', 'backboneExtended']
         },
         handlebarsHelpers: {
-            deps: ['underscore', 'handlebars','commonutils']
+            deps: ['underscore', 'handlebars', 'commonutils']
         },
         indigenousHelpers: {
             deps: ['underscore', 'handlebars', 'commonutils']
@@ -120,6 +131,18 @@ require.config({
         gritter: {
             deps: ['jquery']
         },
+        angular: {
+            exports: "angular"
+        },
+
+        angularBootstrap: {deps: ['angular']},
+        angularRoute: {deps: ['angular']},
+        angularSanitize: {deps: ['angular']},
+        angularResourse: {deps: ['angular']},
+        angularStepper: {deps: ['angular']},
+        angularMoney: {deps: ['angular']},
+        uiBootstrapTpls: {deps: ['angular']},
+        xEditable: {deps: ['angular']},
 
         waypoints: {
             deps: ['jquery']
@@ -137,6 +160,16 @@ require.config({
                 'bootstrap',
                 'handlebars',
                 'modernizr',
+
+                //PIPESHIFT
+                'angular',
+                'angularBootstrap',
+                'angularRoute',
+                'angularSanitize',
+                'angularResourse',
+                'angularStepper',
+                'angularMoney',
+                'xEditable',
 
                 //UI SPECIFIC
                 'toggles',
@@ -176,7 +209,7 @@ require.config({
 define([
     'app'
 ], function (app) {
-    $(document).ready(function(){
+    $(document).ready(function () {
         app.initialize();
         // Page Preloader
     });
