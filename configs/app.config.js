@@ -74,6 +74,12 @@ if (process.env.IS_SECURE == null) {
  */
 process.env.GLOBAL_SUBDOMAINS = "www,home,app";
 
+/**
+ * A comma separated list of strings that represent different environments.
+ * These MUST come right before the host.
+ * If none are present, production is assumed.
+ */
+process.env.GLOBAL_ENVIRONMENTS = "test,prod";
 
 //---------------------------------------------------------
 //  SET UP SERVER_URL
