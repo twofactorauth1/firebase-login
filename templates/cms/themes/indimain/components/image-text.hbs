@@ -18,19 +18,19 @@
         </div>
     </div>
 
-    <div class="component-body">
+    <div class="component-body {{bgcolor}}">
         <div class="inner-page">
             <div class="image-text">
-                <div class="{{#if url}}col-sm-6{{/if}} col-xs-12">
+                <div class="{{#if url}}col-sm-6{{/if}} col-xs-12 pull-left">
                     <h3 class="editable" data-class="title">{{title}}</h3>
                     <div class="mb30"></div>
                     <div class="editable" data-class="text">{{{text}}}</div>
                 </div>
-                <div class="clearfix mb30 visible-xs"></div>
+                <div class="clearfix mb10 visible-xs"></div>
                 {{#if url}}
-                <div class="image-{{imagePosition}} col-sm-6 col-xs-12">
+                <div class="pull-{{imagePosition}} col-sm-6 col-xs-12">
                     <div class="editable" data-class="url">
-                        <img src="{{url}}" class="img-responsive img-thumbnail">
+                        <img src="{{url}}" class="img-responsive">
                     </div>
                     <p class="center editable" data-class="caption">{{caption}}</p>
                 </div>

@@ -1,5 +1,5 @@
 define([
-    "text!libs/jqueryfileupload/templates.html",
+    "text!libs_misc/jqueryfileupload/templates.html",
     "./vendor/jquery.ui.widget.js",         //required
     "./tmpl",                         //small templating engine used by this lib
     "./load-image",                  //photo previews and image resizing
@@ -13,8 +13,8 @@ define([
     "./jquery.fileupload-validate",    //validation plugin
     "./jquery.fileupload-ui",           //user interface plugin
     './cors/jquery.xdr-transport',       //cross domain for IE 8/9
-    "css!libs/jqueryfileupload/css/jquery.fileupload.css",
-    "css!libs/jqueryfileupload/css/jquery.fileupload-ui.css"
+    "css!libs_misc/jqueryfileupload/css/jquery.fileupload.css",
+    "css!libs_misc/jqueryfileupload/css/jquery.fileupload-ui.css"
 ], function (templates) {
 
     //Setup Templates

@@ -357,12 +357,13 @@ define([
         },
 
         adjustWindowSize: function() {
+            console.log('resizing');
             $('#main-viewport').css('overflow', 'none');
             var headerBar = $('#headerbar').outerHeight();
             var pageHeader = $('.pageheader').outerHeight();
             var mainViewportHeight = $(window).height() - headerBar - pageHeader-10;
-            console.log('adjusting window size to '+$(window).height());
-            $('.people-list').css('min-height', mainViewportHeight);
+            console.log('adjusting window size to '+$(window).height()+' Headerbar: '+headerBar+' Page Herder: '+pageHeader);
+            $('.contentpanel').css('min-height', $(window).height());
         },
 
         check_welcome: function() {

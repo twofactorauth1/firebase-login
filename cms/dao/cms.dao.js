@@ -1090,7 +1090,8 @@ var dao = {
 
     getRenderedWebsitePageForAccount: function (accountId, pageName, isEditor, tag, author, category, fn) {
         var self = this, account, website, page, blogposts, tags, categories, themeId, themeConfig;
-        console.log('getRenderedWebsitePageForAccount: '+category);
+        //console.log('getRenderedWebsitePageForAccount: '+category);
+        self.log.debug('>> getRenderedWebsitePageForAccount(' + accountId + ')');
         if (_.isFunction(pageName)) {
             fn = pageName;
             pageName = "index";
