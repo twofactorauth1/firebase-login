@@ -223,21 +223,68 @@ define([
                 change: function( e, ui ) {
                     console.log('sortable changed');
                     componentID = $(ui.item).data('component-id');
+                    var start_pos = ui.item.data('start_pos');
                     if(self.is_dragging) console.log('X:' + e.screenX + ' Y: '+e.screenY );
                     var serialize = $("#sortable").sortable('toArray', {attribute: 'data-component-id'});
                     console.log('Serialize: ' +JSON.stringify(serialize));
                 },
                 handle: '.dd-handle'
             });
+
             var colorPalette = self.websiteSettings;
             self.renderSidebarColor(colorPalette);
+            self.componentHover();
         },
 
-        updateOrder: function (e) {
+        componentHover: function() {
+                var $iframe = $('#iframe-website').contents();
+                $iframe.ready(function() {
+                    var components = $iframe.find(".component");
+                    components.hover(
+                        function() {
+                            var componentId = $(this).data('id');
+                            $("#sortable").find('.dd-item[data-component-id="'+componentId+'"]').addClass('active');
+                        },
+                        function() {
+                            var componentId = $(this).data('id');
+                            $("#sortable").find('.dd-item[data-component-id="'+componentId+'"]').removeClass('active');
+                        }
+                    );
+                });
+            },
+
+        updateOrder: function (componentID, start_pos) {
             var self = this;
             console.log('update order');
             var serialize = $('#sortable').sortable('serialize');
             console.log('Serialize: ' +JSON.stringify(serialize));
+            this.page = new Page({
+                websiteId:this.websiteId,
+                title: pageTitle,
+                handle: pageUrl,
+                components: [
+                    {
+                        "anchor" : null,
+                        "type" : "single-page"
+                    }
+                ],
+                created: {
+                    date: new Date().getTime(),
+                    by: self.user.attributes._id
+                }
+            });
+
+            this.page.save().done( function() {
+                console.log('page sved');
+                self.pageId = self.page.attributes._id;
+                // var $iframe = $('#iframe-website');
+                // $iframe.ready(function() {
+                //     $iframe.contents().find("#main-area .entry").prepend(html);
+                //     console.log('Blank Post ID: '+self.postId);
+                //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                //     $iframe.contents().find("#main-area").trigger("click");
+                // });
+            });
         },
 
         renderSidebarColor: function(colorPalette) {

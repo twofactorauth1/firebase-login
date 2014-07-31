@@ -51,9 +51,13 @@ define([
 
 
         toJSON: function() {
+            console.log('Attributes: '+JSON.stringify(this.attributes));
             var json = _.clone(this.attributes);
             var collection = json.components;
-            json.components = json.components.toJSON()
+            console.log('Collection: '+JSON.stringify(collection));
+            if (collection) {
+                //json.components = json.components.toJSON();
+            }
             return json;
         },
 
@@ -75,6 +79,23 @@ define([
                     return $$.api.getApiUrl("cms", "page/" + this.id);
                 case "PUT":
                 case "POST":
+                    //website/:websiteId/page
+                    console.log('Website ID: '+this.get("websiteId"));
+                    if (this.get("websiteId") != null) {
+                        return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page");
+                    }
+
+                    //page/:id/components/:componentId/order/:newOrder
+                    if (this.get("newOrder") != null ) {
+                        return $$.api.getApiUrl("cms", "page/" + this.get("pageId") + "/components/" + this.get("componentId") + "/order/" + this.get("newOrder"));
+                    }
+
+                    //page/:id/components
+                    if (this.get("pageId") != null) {
+                        return $$.api.getApiUrl("cms", "page/" + this.get("pageId") + "/components");
+                    }
+
+
                     return $$.api.getApiUrl("cms", "page");
                     break;
                 case "DELETE":

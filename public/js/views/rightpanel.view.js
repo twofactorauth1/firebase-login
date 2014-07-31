@@ -104,6 +104,7 @@ define([
          * Edit Website Sidebar
          * - Functions for Edit Website Sidebar
          */
+
             getPage: function() {
                 console.log('getPage rightpanel');
                 this.page = new Page({
@@ -118,7 +119,7 @@ define([
                 var self = this;
                 console.log('adding blank page'+self.is_dragging);
                 $('#iframe-website').contents().find('ul.navbar-nav li:last-child').before('<li><a href="#">New Page</a></li>');
-                $('#new-post-modal').modal('hide');
+                $('#new-page-modal').modal('hide');
 
 
                 //get title
@@ -138,29 +139,36 @@ define([
                     pageDate: moment(pageDate).format('DD.MM.YYYY')
                 };
 
-                //waiting for API
+                console.log('page data: '+data);
 
-                // this.page = new Page({
-                //     pageId:this.pageId,
-                //     post_title: postTitle,
-                //     post_author: postAuthor,
-                //     post_url: postUrl,
-                //     created: {
-                //         date: new Date().getTime(),
-                //         by: self.user.attributes._id
-                //     }
-                // });
 
-                // this.post.save().done( function() {
-                //     self.postId = self.post.attributes._id;
-                //     var $iframe = $('#iframe-website');
-                //     $iframe.ready(function() {
-                //         $iframe.contents().find("#main-area .entry").prepend(html);
-                //         console.log('Blank Post ID: '+self.postId);
-                //         $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
-                //         $iframe.contents().find("#main-area").trigger("click");
-                //     });
-                // });
+                this.page = new Page({
+                    websiteId:this.websiteId,
+                    title: pageTitle,
+                    handle: pageUrl,
+                    components: [
+                        {
+                            "anchor" : null,
+                            "type" : "single-page"
+                        }
+                    ],
+                    created: {
+                        date: new Date().getTime(),
+                        by: self.user.attributes._id
+                    }
+                });
+
+                this.page.save().done( function() {
+                    console.log('page sved');
+                    self.pageId = self.page.attributes._id;
+                    // var $iframe = $('#iframe-website');
+                    // $iframe.ready(function() {
+                    //     $iframe.contents().find("#main-area .entry").prepend(html);
+                    //     console.log('Blank Post ID: '+self.postId);
+                    //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                    //     $iframe.contents().find("#main-area").trigger("click");
+                    // });
+                });
             },
 
             newPageModal: function() {
@@ -227,7 +235,7 @@ define([
                 });
 
                 //navigate to new single post
-                $$.r.account.cmsRouter.viewSinglePost(postTitle, self.postId);
+                //$$.r.account.cmsRouter.viewSinglePost(postTitle, self.postId);
             },
 
             getPost: function() {
@@ -246,6 +254,7 @@ define([
 
                 return this.post.fetch();
             },
+
             getUser: function () {
                 if (this.userId == null) {
                     this.userId = $$.server.get($$.constants.server_props.USER_ID);
@@ -411,7 +420,8 @@ define([
             scrollToSection: function(event) {
                 var self = this;
                 // var section = $(this).data('id');
-                var section = $(event.currentTarget).data('id');
+                var section = $(event.currentTarget).data('component-id');
+                console.log('Section ID: '+section);
                 var iframe = $('#iframe-website').contents();
                 if (iframe.find('.component[data-id="'+section+'"]').length > 0) {
                     self.scrollToAnchor(section);
