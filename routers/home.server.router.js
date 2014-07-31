@@ -12,6 +12,7 @@ var WebsiteView = require('../views/website.server.view');
 
 var contactDao = require('../dao/contact.dao');
 var cookies = require("../utils/cookieutil");
+var appConfig = require('../configs/app.config.js');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -50,12 +51,13 @@ _.extend(router.prototype, BaseRouter.prototype, {
         if (accountId > 0)  {
             new WebsiteView(req, resp).show(accountId);
         } else {
-            resp.redirect("/home");
+            //resp.redirect("/home");
+            new WebsiteView(req, resp).show(appConfig.mainAccountID);
         }
     },
 
     showWebsitePage: function(req, resp) {
-        console.log('show page');
+
         var self = this
             , accountId = this.accountId(req);
 
@@ -123,6 +125,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
 
     showHome: function(req,resp) {
+        var self = this;
         var accountId = this.accountId(req);
         if (accountId > 0) {
             //This is an account based url, there is no /home

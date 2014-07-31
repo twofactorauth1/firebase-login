@@ -53,7 +53,7 @@ _.extend(baseRouter.prototype, {
                         req.session.accountId = value.id();
                     }
                 } else {
-                    logger.warn("Error from getAccountByHost");
+                    logger.warn("No account found from getAccountByHost");
                 }
 
                 return next();
@@ -66,6 +66,7 @@ _.extend(baseRouter.prototype, {
 
     isAuth: function(req, resp, next) {
         var self = this;
+        self.log.debug('>> isAuth');
         if (req.isAuthenticated()) {
             return next()
         }
