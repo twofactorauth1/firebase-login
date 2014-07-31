@@ -10,7 +10,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
     $scope.section = $location.path().split('/')[2];
     $scope.courseBlocked = true;
     //todo: might need to replace this with only certain template get, when needed - for example on popup open(if a lot of templates will be used)
-    $http.post(host + "/api/email/templates").success(function (result) {
+    $http.get(host + "/api/1.0/campaignmanager/pipeshift/templates").success(function (result) {
         $scope.courseBlocked = false;
         $scope.templates = result;
     }).error(function (data) {
@@ -19,14 +19,10 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
     $scope.ui = {};
     $scope.courses = [];
     Course.query({}, function (resp) {
-        if (resp.success) {
-            $scope.courses = resp.result;
-            if ($scope.courses.length > 0) {
-                $scope.ui.selectedCoursetId = $scope.courses[0]._id;
-                $scope.courseSelected();
-            }
-        } else {
-            alert(resp.error);
+        $scope.courses = resp;
+        if ($scope.courses.length > 0) {
+            $scope.ui.selectedCourseId = $scope.courses[0]._id;
+            $scope.courseSelected();
         }
     }, function (error) {
         alert("Some error happened");
@@ -151,14 +147,10 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
         });
         modalInstance.result.then(function (newCourse) {
             Course.save({}, newCourse, function (resp) {
-                if (resp.success) {
-                    var createdCourse = resp.result;
-                    $scope.courses.push(createdCourse);
-                    $scope.ui.selectedCourseId = createdCourse._id;
-                    $scope.courseSelected();
-                } else {
-                    alert(resp.error);
-                }
+                var createdCourse = resp;
+                $scope.courses.push(createdCourse);
+                $scope.ui.selectedCourseId = createdCourse._id;
+                $scope.courseSelected();
             }, function (error) {
                 alert("Some error happened");
             });
@@ -182,38 +174,30 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
         modalInstance.result.then(function (result) {
             if (result.isRemove) {
                 Course.delete({id: course._id}, {}, function (resp) {
-                    if (resp.success) {
-                        var courses = $scope.courses;
-                        var index = courses.indexOf(course);
-                        if (index > -1) {
-                            courses.splice(index, 1);
-                        }
-                        var indexToSelect = Math.min($scope.courses.length - 1, index);
-                        if (indexToSelect >= 0) {
-                            var coursesToSelect = $scope.courses[indexToSelect];
-                            $scope.ui.selectedCourseId = coursesToSelect._id;
-                            $scope.courseSelected();
-                        }
-                    } else {
-                        alert(resp.error);
+                    var courses = $scope.courses;
+                    var index = courses.indexOf(course);
+                    if (index > -1) {
+                        courses.splice(index, 1);
+                    }
+                    var indexToSelect = Math.min($scope.courses.length - 1, index);
+                    if (indexToSelect >= 0) {
+                        var coursesToSelect = $scope.courses[indexToSelect];
+                        $scope.ui.selectedCourseId = coursesToSelect._id;
+                        $scope.courseSelected();
                     }
                 }, function (error) {
                     alert("Some error happened");
                 });
             } else {
                 var updatedCourse = result.course;
-                Course.save({id: updatedCourse._id}, updatedCourse, function (resp) {
-                    if (resp.success) {
-                        course.template.name = updatedCourse.template.name;
-                        course.title = updatedCourse.title;
-                        course.subtitle = updatedCourse.subtitle;
-                        course.body = updatedCourse.body;
-                        course.description = updatedCourse.description;
-                        course.subdomain = updatedCourse.subdomain;
-                        course.price = updatedCourse.price;
-                    } else {
-                        alert(resp.error);
-                    }
+                Course.update({id: updatedCourse._id}, updatedCourse, function (resp) {
+                    course.template.name = updatedCourse.template.name;
+                    course.title = updatedCourse.title;
+                    course.subtitle = updatedCourse.subtitle;
+                    course.body = updatedCourse.body;
+                    course.description = updatedCourse.description;
+                    course.subdomain = updatedCourse.subdomain;
+                    course.price = updatedCourse.price;
                 }, function (error) {
                     alert("Some error happened");
                 });
@@ -237,14 +221,10 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
             $scope.courseBlocked = true;
             CourseVideo.delete({courseId: $scope.course._id, videoId: video.videoId}, {}, function (resp) {
                 $scope.courseBlocked = false;
-                if (resp.success) {
-                    var videos = $scope.course.videos;
-                    var index = videos.indexOf(video);
-                    if (index > -1) {
-                        videos.splice(index, 1);
-                    }
-                } else {
-                    alert(resp.error);
+                var videos = $scope.course.videos;
+                var index = videos.indexOf(video);
+                if (index > -1) {
+                    videos.splice(index, 1);
                 }
             }, function (error) {
                 $scope.courseBlocked = false;
@@ -257,11 +237,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
         $scope.courseBlocked = true;
         CourseVideo.save({courseId: $scope.course._id}, video, function (resp) {
             $scope.courseBlocked = false;
-            if (resp.success) {
-                $scope.course.videos.push(video);
-            } else {
-                alert(resp.error);
-            }
+            $scope.course.videos.push(video);
         }, function (error) {
             $scope.courseBlocked = false;
             alert("Some error happened");
@@ -299,20 +275,16 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
         });
         modalInstance.result.then(function (updatedVideo) {
             $scope.courseBlocked = true;
-            CourseVideo.save({courseId: $scope.course._id, videoId: video.videoId}, updatedVideo, function (resp) {
+            CourseVideo.update({courseId: $scope.course._id, videoId: video.videoId}, updatedVideo, function (resp) {
                 $scope.courseBlocked = false;
-                if (resp.success) {
-                    video.subject = updatedVideo.subject;
-                    video.videoTitle = updatedVideo.videoTitle
-                    video.videoSubtitle = updatedVideo.videoSubtitle
-                    video.videoBody = updatedVideo.videoBody
-                    video.scheduledHour = updatedVideo.scheduledHour;
-                    video.scheduledMinute = updatedVideo.scheduledMinute;
-                    video.scheduledDay = updatedVideo.scheduledDay;
-                    video.isPremium = updatedVideo.isPremium;
-                } else {
-                    alert(resp.error);
-                }
+                video.subject = updatedVideo.subject;
+                video.videoTitle = updatedVideo.videoTitle
+                video.videoSubtitle = updatedVideo.videoSubtitle
+                video.videoBody = updatedVideo.videoBody
+                video.scheduledHour = updatedVideo.scheduledHour;
+                video.scheduledMinute = updatedVideo.scheduledMinute;
+                video.scheduledDay = updatedVideo.scheduledDay;
+                video.isPremium = updatedVideo.isPremium;
             }, function (error) {
                 $scope.courseBlocked = false;
                 alert("Some error happened");

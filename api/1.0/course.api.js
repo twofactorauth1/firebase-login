@@ -37,7 +37,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listCourses: function (req, resp) {
         var self = this;
-        courseDao.findMany({userId: req.user.id()}, function (err, value) {
+        courseDao.findMany({userId: self.userId(req), _id: { $ne: "__counter__" }}, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error getting courses");
         });
     },
@@ -52,16 +52,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
         courseId = parseInt(courseId);
 
-        courseDao.getCourseById(courseId, req.user.id(), function (err, course) {
+        courseDao.getCourseById(courseId, self.userId(), function (err, course) {
             self.sendResultOrError(resp, err, course, "Error getting course");
         });
     },
 
     createCourse: function (req, resp) {
         var self = this;
-        var newCourse = req.body;
-        newCourse._id = null;
-        newCourse.userId = req.user.id();
+        var newCourse = new $$.m.Course(req.body);
+        newCourse.set('_id', null);
+        newCourse.set('userId', self.userId(req));
         courseDao.saveOrUpdate(newCourse, function (err, createdCourse) {
             self.sendResultOrError(resp, err, createdCourse, "Error creating course");
         });
@@ -71,18 +71,25 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var newCourseValues = req.body;
         var courseId = req.params.id;
+
+        if (!courseId) {
+            return this.wrapError(resp, 400, null, "Invalid parameter for ID");
+        }
+
+        courseId = parseInt(courseId);
+
         courseDao.getById(courseId, function (err, course) {
-            if (!err && value != null) {
-                if (course.userId != req.user.id()) {
+            if (!err && course != null) {
+                if (course.get('userId') != self.userId(req)) {
                     return self.wrapError(resp, 403, null, null, "Not allowed");
                 } else {
-                    course.title = newCourseValues.title;
-                    course.template = newCourseValues.template;
-                    course.subtitle = newCourseValues.subtitle;
-                    course.body = newCourseValues.body;
-                    course.description = newCourseValues.description;
-                    course.subdomain = newCourseValues.subdomain;
-                    course.price = newCourseValues.price;
+                    course.set('title', newCourseValues.title);
+                    course.set('template', newCourseValues.template);
+                    course.set('subtitle', newCourseValues.subtitle);
+                    course.set('body', newCourseValues.body);
+                    course.set('description', newCourseValues.description);
+                    course.set('subdomain', newCourseValues.subdomain);
+                    course.set('price', newCourseValues.price);
                     courseDao.saveOrUpdate(course, function (err, updatedCourse) {
                         self.sendResultOrError(resp, err, updatedCourse, "Error updating course");
                     });
@@ -95,9 +102,16 @@ _.extend(api.prototype, baseApi.prototype, {
     deleteCourse: function (req, resp) {
         var self = this;
         var courseId = req.params.id;
+
+        if (!courseId) {
+            return this.wrapError(resp, 400, null, "Invalid parameter for ID");
+        }
+
+        courseId = parseInt(courseId);
+
         courseDao.getById(courseId, function (err, course) {
-            if (!err && value != null) {
-                if (course.userId != req.user.id()) {
+            if (!err && course != null) {
+                if (course.get('userId') != self.userId(req)) {
                     return self.wrapError(resp, 403, null, null, "Not allowed");
                 } else {
                     courseDao.remove(course, function (err, removedCourse) {
@@ -124,7 +138,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         courseDao.getById(courseId, function (err, course) {
             var videos = course.get("videos");
-            if (course.userId != req.user.id()) {
+            if (course.get('userId') != self.userId(req)) {
                 _.forEach(videos, clearVideoFieldsForUnauthorizedUser);
             }
             self.sendResultOrError(resp, err, course.get("videos"), "Error getting course videos");
@@ -143,15 +157,14 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         courseId = parseInt(courseId);
-        videoId = parseInt(videoId);
 
         courseDao.getById(courseId, function (err, course) {
             var videos = course.get("videos");
-            var video = _.findWhere(videos, {_id: videoId});
+            var video = _.findWhere(videos, {videoId: videoId});
             if (video == null) {
                 return self.wrapError(resp, 400, null, "Can't find video");
             } else {
-                if (course.userId != req.user.id() && !isUserPaidForCourse(req.user, course)) {
+                if (course.get('userId') != self.userId(req) && !isUserPaidForCourse(req.user, course)) {
                     clearVideoFieldsForUnauthorizedUser(video);
                 }
                 self.sendResultOrError(resp, err, video, "Error getting course videos");
@@ -175,7 +188,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         courseDao.getById(courseId, function (err, course) {
-            if (course.userId != req.user.id()) {
+            if (course.get('userId') != self.userId(req)) {
                 return self.wrapError(resp, 403, null, null, "Not allowed");
             } else {
                 var videos = course.get("videos");
@@ -200,14 +213,13 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         courseId = parseInt(courseId);
-        videoId = parseInt(videoId);
 
         courseDao.getById(courseId, function (err, course) {
-            if (course.userId != req.user.id()) {
+            if (course.get('userId') != self.userId(req)) {
                 return self.wrapError(resp, 403, null, null, "Not allowed");
             } else {
                 var videos = course.get("videos");
-                var video = _.findWhere(videos, {_id: videoId});
+                var video = _.findWhere(videos, {videoId: videoId});
                 if (video == null) {
                     return self.wrapError(resp, 400, null, "Can't find video");
                 } else {
@@ -240,14 +252,13 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         courseId = parseInt(courseId);
-        videoId = parseInt(videoId);
 
         courseDao.getById(courseId, function (err, course) {
-            if (course.userId != req.user.id()) {
+            if (course.get('userId') != self.userId(req)) {
                 return self.wrapError(resp, 403, null, null, "Not allowed");
             } else {
                 var videos = course.get("videos");
-                var video = _.findWhere(videos, {_id: videoId});
+                var video = _.findWhere(videos, {videoId: videoId});
                 if (video == null) {
                     return self.wrapError(resp, 400, null, "Can't find video");
                 } else {

@@ -373,7 +373,7 @@ body .btn-square-sm span {
 .video-title {
     /*color: #292929;*/
     color: #fff;
-    width: 250px;
+    width: 180px;
     font-size: 20px;
     height: 24px;
     overflow: hidden;
@@ -499,7 +499,7 @@ body .btn-square-sm span {
 }
 
 .video-list, .playlist {
-    height: 650px;
+    height: 520px;
     overflow-y: scroll;
     overflow-x: hidden;
     padding-bottom: 20px;
@@ -712,6 +712,10 @@ div[rn-stepper] button {
 
 div[rn-stepper] button:active {
     background: white;
+}
+
+div[rn-stepper] * {
+    color: #292929;
 }
 
 .search-form {

@@ -11,6 +11,6 @@ angular.module('app.directives').directive('videoPlayer', function () {
         },
         replace: true,
         restrict: 'A',
-        templateUrl: '/views/directives/videoPlayer.html'
+        templateUrl: '/pipeshift/views/directives/videoPlayer.html'
     }
 });

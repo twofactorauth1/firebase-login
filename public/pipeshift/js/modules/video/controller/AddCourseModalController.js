@@ -28,7 +28,7 @@ angular.module('app.modules.video').controller('AddCourseModalController', ['$sc
             $timeout.cancel(subdomainChangeTimeout);
         }
         subdomainChangeTimeout = $timeout(function () {
-            Course.isSubdomainFree({subdomain: $scope.course.subdomain}).success(function (response) {
+            Course.isSubdomainFree({subdomain: $scope.course.subdomain}, function (response) {
 
                 $scope.isSubdomainChecked = true;
                 if (response.success) {

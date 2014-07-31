@@ -10,7 +10,7 @@
                 ngDisabled: '=',
                 videoSort: '='
             },
-            templateUrl: "/views/video/course.html",
+            templateUrl: "/pipeshift/views/video/course.html",
             controller: function ($scope) {
                 $scope.getScheduledTime = function (video) {
                     var scheduledTime = new Date();
@@ -31,7 +31,7 @@
                         event.preventDefault();
                         if (scope.to != null) {
                            
-                            var videoIndex = event.dataTransfer.getData("videoIndex");
+                            var videoIndex = event.originalEvent.dataTransfer.getData("videoIndex");
                             if (videoIndex != null && videoIndex != "") {
                                 var video = scope.from[videoIndex];
                                 var toList = scope.to;
