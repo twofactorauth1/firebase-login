@@ -66,7 +66,7 @@ _.extend(baseRouter.prototype, {
 
     isAuth: function(req, resp, next) {
         var self = this;
-        self.log.debug('>> isAuth');
+        
         if (req.isAuthenticated()) {
             return next()
         }
