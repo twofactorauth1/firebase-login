@@ -1,9 +1,9 @@
 angular.module('app.services').factory('Course', ['$resource', 'host', function ($resource, host) {
-    var Course = $resource(host + "/api/courses/:id", {
+    var Course = $resource(host + "/api/1.0/courses/:id", {
         id: '@id'
     }, {
-        'query': {method: 'GET', isArray: false},
-        'isSubdomainFree': {url: host + "/api/courses/free/:subdomain", method: 'GET'}
+        'update': {method: 'PUT'},
+        'isSubdomainFree': {url: host + "/api/1.0/courses/free/:subdomain", method: 'GET'}
     });
     return Course;
 }]);

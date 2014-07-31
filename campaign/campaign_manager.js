@@ -12,8 +12,18 @@ var contactDao = require('../dao/contact.dao');
 
 var mandrillConfig = require('../configs/mandrill.config');
 
-//var mandrill = require('mandrill-api/mandrill');
-//var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
+var mandrill = require('mandrill-api/mandrill');
+var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
+
+/**
+ * Constants for pipeshift
+ * */
+
+var LINK_VAR_NAME = "link";
+var PREVIEW_IMAGE_VAR_NAME = "preview_image";
+var TITLE_VAR_NAME = "title";
+var SUBTITLE_VAR_NAME = "subtitle";
+var BODY_VAR_NAME = "body";
 
 module.exports = {
 
@@ -33,26 +43,19 @@ module.exports = {
 
     log: $$.g.getLogger("campaign_manager"),
 
-    getCampaign: function(campaignId, fn) {
+    getCampaign: function (campaignId, fn) {
         $$.dao.CampaignDao.getById(campaignId, fn);
     },
 
-    findCampaigns: function(query, fn) {
+    findCampaigns: function (query, fn) {
         $$.dao.CampaignDao.findMany(query, fn);
     },
 
-    findCampaignMessages: function(query, fn) {
+    findCampaignMessages: function (query, fn) {
         $$.dao.CampaignMessageDao.findMany(query, fn);
     },
 
-    createMandrillCampaign: function(
-        name,
-        description,
-        revision,
-        templateName,
-        numberOfMessages,
-        messageDeliveryFrequency,
-        callback) {
+    createMandrillCampaign: function (name, description, revision, templateName, numberOfMessages, messageDeliveryFrequency, callback) {
 
         var self = this;
 
@@ -66,7 +69,7 @@ module.exports = {
         /**
          * Validate template exists in Mandrill
          */
-        mandrill_client.templates.info({"name": templateName}, function(result) {
+        mandrill_client.templates.info({"name": templateName}, function (result) {
             self.log.debug("Successfully fetched template from Mandrill");
             self.log.debug(result);
 
@@ -83,7 +86,7 @@ module.exports = {
                 self.MANDRILL_CAMPAIGN,
                 callback);
 
-        }, function(e) {
+        }, function (e) {
             return callback(new Error("Unable to retrieve template " + templateName + " from Mandrill. ("
                 + e.name + ": " + e.message + ")"), null);
         });
@@ -97,47 +100,47 @@ module.exports = {
      * in the campaign that this message refers to. Each entry in the array is itself an array of message vars.
      * For example, the array below is for a campaign that will send two messages.
      [
-        // variables in the first message
-        [
-            {
-                "name": "header",
-                "content": "This is your first campaign message"
-            },
-            {
-                "name": "dueDate",
-                "content": "Your payment due date is 2014-06-14"
-            },
-            {
-                "name": "footer",
-                "content": "We look forward to your payment"
-            },
-        ],
-         // variables in the second message
-         [
-             {
-                 "name": "header",
-                 "content": "This is your second campaign message"
-             },
-             {
-                 "name": "dueDate",
-                 "content": "Your payment due date is 2014-06-14"
-             },
-             {
-                 "name": "footer",
-                 "content": "This is our last communication"
-             },
-         ]
+     // variables in the first message
+     [
+     {
+         "name": "header",
+         "content": "This is your first campaign message"
+     },
+     {
+         "name": "dueDate",
+         "content": "Your payment due date is 2014-06-14"
+     },
+     {
+         "name": "footer",
+         "content": "We look forward to your payment"
+     },
+     ],
+     // variables in the second message
+     [
+     {
+         "name": "header",
+         "content": "This is your second campaign message"
+     },
+     {
+         "name": "dueDate",
+         "content": "Your payment due date is 2014-06-14"
+     },
+     {
+         "name": "footer",
+         "content": "This is our last communication"
+     },
+     ]
      ]
 
      * @param callback callback
      */
-    addContactToMandrillCampaign: function(campaignId, contactId, arrayOfMessageVarArrays, callback) {
+    addContactToMandrillCampaign: function (campaignId, contactId, arrayOfMessageVarArrays, callback) {
         var self = this;
 
         /**
          * Make sure contact is not already in campaign
          */
-        $$.dao.CampaignMessageDao.findOne({'campaignId': campaignId, 'contactId': contactId}, function(err, value) {
+        $$.dao.CampaignMessageDao.findOne({'campaignId': campaignId, 'contactId': contactId}, function (err, value) {
             if (err) {
                 self.log.error(err.message);
                 return callback(err, null);
@@ -234,15 +237,64 @@ module.exports = {
         })
     },
 
-    cancelMandrillCampaign: function(campaignId, callback) {
+    cancelMandrillCampaign: function (campaignId, callback) {
         this._cancelMandrillCampaignMessages({'campaignId': campaignId }, callback);
     },
 
-    cancelContactMandrillCampaign: function(campaignId, contactId, callback) {
+    cancelContactMandrillCampaign: function (campaignId, contactId, callback) {
         this._cancelMandrillCampaignMessages({'campaignId': campaignId, 'contactId': contactId}, callback);
     },
 
-    _cancelMandrillCampaignMessages: function(query, callback) {
+    schedulePipeshiftEmails: function (toEmail, course, timeZoneOffset, callback) {
+        // ToDo: might need a check if course is identical to persisted one(now using values from client side)
+        var self = this;
+        var templateName = course.template.name;
+        //base message
+        var message = self._initPipeshiftMessage(toEmail);
+        var async = false;
+        var successItemsCounter = 0;
+        //loop through course videos
+        for (var i = 0; i < course.videos.length; i++) {
+            var video = course.videos[i];
+            message.subject = video.subject || course.title;
+            // adjust values for current video
+            self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/courses/" + course.subdomain + "/video/" + video.videoId);
+            self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
+            self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
+            self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
+            self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
+            var sendObj = self._initVideoTemplateSendObject(templateName, message, async);
+            // schedule email
+            // if time is in the past mandrill sends email immediately
+            sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
+            // send template
+            mandrill_client.messages.sendTemplate(sendObj, function (result) {
+                self.log.debug(result);
+                //
+                successItemsCounter++;
+                if (successItemsCounter == course.videos.length) {
+                    callback(null, {});
+                }
+            }, function (e) {
+                self.log.warn('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                callback(e, null);
+            });
+        }
+        //error for empty course
+        if (course.videos.length == 0) {
+            callback({message: 'Error: empty course'}, null);
+        }
+    },
+
+    getPipeshiftTemplates: function (callback) {
+        mandrill_client.templates.list({}, function (result) {
+            callback(null, result);
+        }, function (err) {
+            callback(err, null);
+        });
+    },
+
+    _cancelMandrillCampaignMessages: function (query, callback) {
         var self = this;
 
         $$.dao.CampaignMessageDao.findMany(query, function (err, messages) {
@@ -283,14 +335,7 @@ module.exports = {
         })
     },
 
-    _sendMessageToMandrill: function(
-        campaign,
-        contactId,
-        contactName,
-        contactEmail,
-        sendAt,
-        mergeVarsArray,
-        callback) {
+    _sendMessageToMandrill: function (campaign, contactId, contactName, contactEmail, sendAt, mergeVarsArray, callback) {
 
         var self = this;
 
@@ -298,11 +343,13 @@ module.exports = {
             "subject": campaign.attributes.subject,
             "from_email": campaign.attributes.fromEmail,
             "from_name": campaign.attributes.fromName,
-            "to": [{
-                "email": contactEmail,
-                "name": contactName,
-                "type": "to"
-            }],
+            "to": [
+                {
+                    "email": contactEmail,
+                    "name": contactName,
+                    "type": "to"
+                }
+            ],
             "headers": {
                 "Reply-To": campaign.attributes.fromEmail
             },
@@ -333,17 +380,19 @@ module.exports = {
             "metadata": {
                 "campaignId": campaign.attributes._id
             },
-            "recipient_metadata": [{
-                "rcpt": contactEmail,
-                "values": {
-                    "contactId": contactId
+            "recipient_metadata": [
+                {
+                    "rcpt": contactEmail,
+                    "values": {
+                        "contactId": contactId
+                    }
                 }
-            }],
+            ],
             "attachments": null,
             "images": null
         }
 
-        self.log.debug("Sending to Mandrill => templateName: " +  campaign.attributes.templateName +
+        self.log.debug("Sending to Mandrill => templateName: " + campaign.attributes.templateName +
             " on " + sendAt + " message: " + JSON.stringify(message, null, 2));
 
         mandrill_client.messages.sendTemplate(
@@ -353,7 +402,7 @@ module.exports = {
                 "message": message,
                 "async": false,
                 "send_at": sendAt
-            }, function(result) {
+            }, function (result) {
                 self.log.debug(result);
                 /*
                  [{
@@ -364,14 +413,14 @@ module.exports = {
                  }]
                  */
                 return callback(null, result[0]);
-        }, function(e) {
-            // Mandrill returns the error as an object with name and message keys
-            self.log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-            return callback(new Error('A mandrill error occurred: ' + e.name + ' - ' + e.message), null);
-        });
+            }, function (e) {
+                // Mandrill returns the error as an object with name and message keys
+                self.log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                return callback(new Error('A mandrill error occurred: ' + e.name + ' - ' + e.message), null);
+            });
     },
 
-    _getCampaign: function(campaignId, campaignType, callback) {
+    _getCampaign: function (campaignId, campaignType, callback) {
         $$.dao.CampaignDao.getById(campaignId, function (err, campaign) {
             if (err) {
                 return callback(err, null);
@@ -389,16 +438,16 @@ module.exports = {
         })
     },
 
-    _getMessageDates: function(numberOfMessages, messageDeliveryFrequency) {
+    _getMessageDates: function (numberOfMessages, messageDeliveryFrequency) {
         var self = this;
 
         var messageDates = [];
         var twentyfour_hours = 86400000;
         var sendAtDate = new Date();
 
-        for (var i=0; i < numberOfMessages; i++) {
+        for (var i = 0; i < numberOfMessages; i++) {
             if (messageDeliveryFrequency == self.EVERY_OTHER_DAY) {
-                sendAtDate = new Date(sendAtDate.getTime() + (2*twentyfour_hours));
+                sendAtDate = new Date(sendAtDate.getTime() + (2 * twentyfour_hours));
                 messageDates.push(self._toMandrillDate(sendAtDate));
             } else if (messageDeliveryFrequency == self.EVERY_DAY) {
                 sendAtDate = new Date(sendAtDate.getTime() + twentyfour_hours);
@@ -409,8 +458,8 @@ module.exports = {
         return messageDates;
     },
 
-    _getContactInfo: function(contactId, callback) {
-        contactDao.getById(contactId, function(err, contact) {
+    _getContactInfo: function (contactId, callback) {
+        contactDao.getById(contactId, function (err, contact) {
             if (err) {
                 return callback(err, null)
             }
@@ -438,11 +487,11 @@ module.exports = {
         })
     },
 
-    _toTwoDigit: function(val) {
+    _toTwoDigit: function (val) {
         return val <= 9 ? '0' + val : val;
     },
 
-    _toMandrillDate: function(aDate) {
+    _toMandrillDate: function (aDate) {
         var d = aDate.getDate();
         var m = aDate.getMonth() + 1;
         var y = aDate.getFullYear();
@@ -451,5 +500,82 @@ module.exports = {
         var ss = aDate.getSeconds();
         return '' + y + '-' + this._toTwoDigit(m) + '-' + this._toTwoDigit(d)
             + ' ' + this._toTwoDigit(hh) + ":" + this._toTwoDigit(mm) + ":" + this._toTwoDigit(ss);
+    },
+
+    _getUtcDateIsoString: function () {
+        var now = new Date();
+        var nowUtc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+        return nowUtc.toISOString();
+    },
+    _getScheduleUtcDateTimeIsoString: function (daysShift, hoursValue, minutesValue, timezoneOffset) {
+        var now = new Date();
+        var shiftedUtcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysShift, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+        shiftedUtcDate.setUTCHours(hoursValue);
+        shiftedUtcDate.setUTCMinutes(minutesValue + timezoneOffset);
+        shiftedUtcDate.setUTCSeconds(0);
+        return shiftedUtcDate.toISOString();
+    },
+    _initVideoTemplateSendObject: function (templateName, message, async) {
+        return {template_name: templateName,
+            template_content: [
+
+            ],
+            "message": message,
+            "async": async}
+    },
+    _initPipeshiftMessage: function (toEmail) {
+        return {
+            "html": "<p>Empty</p>",
+            "subject": "example subject",
+            "from_email": "info@pipeshift.com",
+            "from_name": "Pipeshift",
+            "to": [
+                {
+                    "email": toEmail,
+                    "name": "User",
+                    "type": "to"
+                }
+            ],
+            "global_merge_vars": [
+                {
+                    "name": LINK_VAR_NAME,
+                    "content": "http://pipeshift.herokuapp.com"
+                },
+                {
+                    "name": PREVIEW_IMAGE_VAR_NAME,
+                    "content": "http://img.brightcove.com/player-template-chromeless.jpg"
+                },
+                {
+                    "name": TITLE_VAR_NAME,
+                    "content": "Title"
+                },
+                {
+                    "name": SUBTITLE_VAR_NAME,
+                    "content": ""
+                },
+                {
+                    "name": BODY_VAR_NAME,
+                    "content": ""
+                }
+            ]
+        };
+    },
+
+    _setGlobalVarValue: function (message, varName, value) {
+        var globalVar = this._findGlobalVarByName(message, varName);
+        globalVar.content = value;
+    },
+
+    _findGlobalVarByName: function (message, varName) {
+        var result = null;
+        for (var i = 0; i < message.global_merge_vars.length; i++) {
+            var globalVar = message.global_merge_vars[i];
+            if (globalVar.name == varName) {
+                result = globalVar;
+            }
+        }
+        return result;
     }
-};
+
+}
+;

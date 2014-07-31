@@ -41,6 +41,6 @@ angular.module('app.directives').directive('videoPlayer', function () {
         },
         replace: true,
         restrict: 'A',
-        templateUrl: '/views/directives/videoPlayerVG.html'
+        templateUrl: '/pipeshift/views/directives/videoPlayerVG.html'
     }
 });

@@ -21,7 +21,7 @@ angular.module('app.modules.video').controller('EditCourseModalController', ['$s
     }
     $scope.removeCourse = function () {
         var modalInstance = $modal.open({
-            templateUrl: '/views/modal/removeModal.html',
+            templateUrl: '/pipeshift/views/modal/removeModal.html',
             controller: 'RemoveModalController',
             resolve: {
                 message: function () {
@@ -46,7 +46,7 @@ angular.module('app.modules.video').controller('EditCourseModalController', ['$s
                 $scope.isSubdomainChecked = true;
                 $scope.isSubdomainFree = true;
             } else {
-                Course.isSubdomainFree({subdomain: $scope.course.subdomain}).success(function (response) {
+                Course.isSubdomainFree({subdomain: $scope.course.subdomain}, function (response) {
                     $scope.isSubdomainChecked = true;
                     if (response.success) {
                         $scope.isSubdomainFree = response.result;

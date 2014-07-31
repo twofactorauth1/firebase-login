@@ -21,12 +21,8 @@ angular.module('app.directives').directive('coursePreview', function () {
                         if (course.videos.length == 0) {
                             alert("Error: empty course");
                         } else {
-                            $http.post(host + '/api/courses/' + course._id + '/subscribe/', {email: $scope.modal.email, course: course, timezoneOffset: getTimezoneOffset()}).success(function (data) {
-                                if (data.success) {
-                                    alert("Course has been scheduled for " + $scope.modal.email);
-                                } else {
-                                    alert(data.error);
-                                }
+                            $http.post(host + '/api/1.0/courses/' + course._id + '/subscribe/', {email: $scope.modal.email, course: course, timezoneOffset: getTimezoneOffset()}).success(function (data) {
+                                alert("Course has been scheduled for " + $scope.modal.email);
                             }).error(function (data) {
                                 alert("Some error happened.");
                             });
@@ -37,6 +33,6 @@ angular.module('app.directives').directive('coursePreview', function () {
         },
         replace: true,
         restrict: 'E',
-        templateUrl: '/views/directives/coursePreview.html'
+        templateUrl: '/pipeshift/views/directives/coursePreview.html'
     }
 });

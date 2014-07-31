@@ -10,7 +10,7 @@ angular.module('app').controller('MainController', ['$scope', '$rootScope', '$lo
     $scope.$root.global = global;
     global.showLoginModal = function () {
         var modalInstance = $modal.open({
-            templateUrl: '/views/modal/loginModal.html',
+            templateUrl: '/pipeshift/views/modal/loginModal.html',
             controller: 'LoginModalController',
             resolve: {
             }
@@ -21,7 +21,7 @@ angular.module('app').controller('MainController', ['$scope', '$rootScope', '$lo
     }
     global.showSignupModal = function () {
         var modalInstance = $modal.open({
-            templateUrl: '/views/modal/signupModal.html',
+            templateUrl: '/pipeshift/views/modal/signupModal.html',
             controller: 'SignupModalController',
             resolve: {
             }
@@ -36,7 +36,7 @@ angular.module('app').controller('MainController', ['$scope', '$rootScope', '$lo
     var singUpButtonsModal;
     global.showSignupButtonsModal = function () {
         singUpButtonsModal = $modal.open({
-            templateUrl: '/views/modal/signupButtonsModal.html',
+            templateUrl: '/pipeshift/views/modal/signupButtonsModal.html',
             controller: 'SignupModalController',
             resolve: {
             }

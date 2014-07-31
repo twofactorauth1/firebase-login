@@ -256,15 +256,11 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
 
     _filterUser: function (user) {
-        if (user) {
+        if (user && user.attributes) {
             return {
                 user: {
-                    id: user._id,
-                    email: user.email,
-                    profile: user.profile,
-                    google: user.google,
-                    facebook: user.facebook,
-                    twitter: user.twitter,
+                    id: user.attributes._id,
+                    email: user.attributes.email,
                     admin: false
                 }
             };
