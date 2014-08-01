@@ -8,6 +8,7 @@
 define([
     'views/base.view',
     '/pipeshift/js/theme.js',
+    '/pipeshift/js/constants.js',
     '/pipeshift/js/app.js',
     '/pipeshift/js/config.js',
     "/pipeshift/js/controller/RemoveModalController.js",

@@ -16,6 +16,7 @@ var app = angular.module('app', ['ngRoute',
     'app.services',
     'app.directives',
     'app.filters',
+    'app.constants',
     'ui.bootstrap',
     'xeditable',
     'revolunet.stepper', 'fiestah.money']);
@@ -27,5 +28,3 @@ app.run(['$rootScope', '$location', 'security', 'editableOptions', function ($ro
     //
     editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 }]);
-
-app.constant('host', 'http://nik.indigenous.local:3000');

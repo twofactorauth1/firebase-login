@@ -21,8 +21,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         //  COURSE
         //-------------------------------------------------
-        app.get("/:course_subdomain", this.setup, this.showCourse.bind(this));
-        app.get("/:course_subdomain/video/:videoId", this.setup, this.showVideo.bind(this));
+        app.get("/course/:course_subdomain", this.setup, this.showCourse.bind(this));
+        app.get("/course/:course_subdomain/video/:videoId", this.setup, this.showVideo.bind(this));
 
         return this;
     },
@@ -32,7 +32,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         //todo: implement method
 
-        new CourseView(req, resp).show();
+        new CourseView(req, resp).show(req.params.course_subdomain);
     },
     showVideo: function (req, resp) {
         var self = this;
