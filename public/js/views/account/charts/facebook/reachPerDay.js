@@ -15,6 +15,8 @@ define([
         id: 'FB_reachPerDay'
         , url: '/facebook/{{id}}/reachPerDay'
         , templateKey: 'account/charts/facebook/reach_per_day'
+        , templateWrapper: 'fb-reach-per-day'
+        , targetIndicator: '.graph-reach-per-day'
         , testData: [
             { date: '2014-06-21', paid: 5000, organic: 2000, viral: 1000 }
             , { date: '2014-06-22', paid: 8000, organic: 1000, viral: 200 }
@@ -66,7 +68,7 @@ define([
             var root = this.createSVG('graph-daily-reach');
 
             // Title
-            this.addTitle("Daily reach")
+//            this.addTitle("Daily reach");
             this.addRangeSelector(options.range);
 
             if (data.length === 0) {
@@ -200,11 +202,6 @@ define([
                 .attr("dy", ".35em")
                 .style("text-anchor", "start")
                 .text(function(d) { return d });
-
-            var tmpl = $$.templateManager.get("fb-reach-per-day", this.templateKey);
-            var html = tmpl();
-
-            this.module.html(html);
         }
     });
 });

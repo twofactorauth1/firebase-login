@@ -14,6 +14,9 @@ define([
     $$.Charts.FB_engagedDemographics = new Chart({
         id: 'FB_engagedDemographics'
         , url: '/facebook/{{id}}/engagedDemographics'
+        , templateKey: 'account/charts/facebook/engaged_by_age_gender'
+        , templateWrapper: 'fb-engaged-by-age-gender'
+        , targetIndicator: '.graph-engaged-by-age-gender'
         , testData: [
             { gender: 'F', range: '25-34', frequency: 16 }
             , { gender: 'M', range: '25-34', frequency: 14 }

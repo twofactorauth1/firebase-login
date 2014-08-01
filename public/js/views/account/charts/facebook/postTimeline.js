@@ -14,6 +14,9 @@ define([
     $$.Charts.FB_postTimeline = new Chart({
         id: 'FB_postTimeline'
         , url: '/facebook/{{id}}/postInteractions'
+        , templateKey: 'account/charts/facebook/post_timeline'
+        , templateWrapper: 'fb-post-timeline'
+        , targetIndicator: '.graph-post-timeline'
         , testData: [
             { date: '2014-06-21', likes: '2', shares: '2', comments: '1', title: 'Post title' }
             , { date: '2014-06-22', likes: '4', shares: '1', comments: '1', title: 'Post title' }

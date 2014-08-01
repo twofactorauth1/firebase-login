@@ -14,6 +14,9 @@ define([
     $$.Charts.FB_postInteractionsPerDay = new Chart({
         id: 'FB_postInteractionsPerDay'
         , url: '/facebook/{{id}}/postInteractions'
+        , templateKey: 'account/charts/facebook/post_interactions_per_day'
+        , templateWrapper: 'fb-post-interactions-per-day'
+        , targetIndicator: '.graph-post-interactions-per-day'
         , testData: [
             { date: '2014-06-21', likes: 2, shares: 2, comments: 1 }
             , { date: '2014-06-22', likes: 4, shares: 1, comments: 2 }

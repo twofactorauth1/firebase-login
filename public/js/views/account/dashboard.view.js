@@ -10,7 +10,16 @@ define([
     'models/user',
     'models/account',
     'models/activity',
-    'views/account/chart.view'
+    'views/account/chart.view',
+    'views/account/charts/chart',
+    'views/account/charts/facebook/engagedByAgeGender',
+    'views/account/charts/facebook/likesPerDay',
+    'views/account/charts/facebook/overview',
+    'views/account/charts/facebook/postInteractionsPerDay',
+    'views/account/charts/facebook/postTimeline',
+    'views/account/charts/facebook/reachPerDay',
+    'views/account/charts/facebook/topFans',
+    'views/account/charts/facebook/topTenPosts'
 ], function(BaseView, User, Account, Activity, ChartView) {
 
     var view = BaseView.extend({
@@ -193,7 +202,7 @@ define([
                 , name    = element.data('name')
                 , width   = element.data('width');
 
-            this.dragging = element
+            this.dragging = element;
 
             SR.log('Dragging module:', type, name, width);
 
@@ -294,6 +303,12 @@ define([
 
         createChart: function (target, chart) {
             target = $(target);
+            var chart_obj = $$.Charts[chart.name];
+            var tmpl = $$.templateManager.get(chart_obj.templateWrapper, chart_obj.templateKey);
+            var html = tmpl();
+            target.html(html);
+
+            target = $(chart_obj.targetIndicator);
 
             var range = chart.range || [];
             var chart = new ChartView({

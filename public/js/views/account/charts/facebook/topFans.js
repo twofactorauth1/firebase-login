@@ -16,6 +16,8 @@ define([
         , url: '/facebook/{{id}}/topFiveFans'
         , gridWidth: 2
         , templateKey: 'account/charts/facebook/top_five_fans'
+        , templateWrapper: 'fb-reach-per-day'
+        , targetIndicator: '.graph-top-fans'
         , testData: [
             {
                 "id": "782909993"
