@@ -39,7 +39,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //form.hash = "md5";
         form.parse(req, function (er, fields, files) {
             var bucket = awsConfig.BUCKETS.CONTACT_PHOTOS;
-            var accountId = self.accountId();
+            var accountId = self.accountId(req);
             var directory = "acct_indigenous";
             if (accountId > 0) {
                 directory = "acct_" + accountId;
