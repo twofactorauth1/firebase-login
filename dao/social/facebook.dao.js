@@ -129,7 +129,7 @@ var dao = {
 
     getProfile: function (profileId, accessToken, fn) {
         var self = this;
-        var fields = "email,picture,first_name,last_name,middle_name,name,username";
+        var fields = "email,picture,first_name,last_name,middle_name,name";
 
         var path = profileId + "?fields=" + fields;
         var url = this._generateUrl(path, accessToken);

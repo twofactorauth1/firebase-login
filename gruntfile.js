@@ -153,8 +153,9 @@ module.exports = function(grunt) {
         nodeunit: {
             all:['test/**/*_test.js'],
             api:['api/test/*_test.js'],
-            contextio:['test/contextio_test.js'],
             biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
+            contextio:['test/contextio_test.js'],
+            facebook: ['test/facebook_test.js'],
             twonetadapter:['biometrics/twonet/adapter/test/**/*_test.js'],
             twonetclient:['biometrics/twonet/client/test/**/*_test.js'],
             twonetpoll:['biometrics/twonet/adapter/test/twonet_test_poll.js'],
@@ -191,4 +192,5 @@ module.exports = function(grunt) {
     grunt.registerTask('testBiometrics', ['nodeunit:twonetclient','nodeunit:biometricsPlatform','nodeunit:twonetadapter','nodeunit:twonetpoll','nodeunit:runkeeperadapter','nodeunit:runkeeperpoll']);
     grunt.registerTask('testUtils', ['nodeunit:utils']);
     grunt.registerTask('testApi', ['nodeunit:api']);
+    grunt.registerTask('testFacebook', ['nodeunit:facebook']);
 };

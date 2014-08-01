@@ -6,8 +6,9 @@
  */
 
 define([
+    'views/account/post.view'
 
-], function(editWebsiteView) {
+], function(PostView, editWebsiteView) {
 
     var router = Backbone.Router.extend({
 
@@ -40,7 +41,20 @@ define([
                 $$.viewManager.replaceMain(view);
             });
             console.log("Managing website by id");
-        }
+        },
+
+
+        viewSinglePost: function (postTitle, postId) {
+            console.log('routing to single post -> Post title: '+postTitle+' Post Id:'+postId);
+            if (postId == null) {
+                postId = postTitle;
+            }
+
+            var view = new PostView();
+            view.postId = postId;
+            view.postTitle = postTitle;
+            $$.viewManager.replaceMain(view);
+        },
     });
 
 

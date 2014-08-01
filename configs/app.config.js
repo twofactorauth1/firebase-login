@@ -74,6 +74,20 @@ if (process.env.IS_SECURE == null) {
  */
 process.env.GLOBAL_SUBDOMAINS = "www,home,app";
 
+/**
+ * A comma separated list of strings that represent different environments.
+ * These MUST come right before the host.
+ * If none are present, production is assumed.
+ */
+process.env.GLOBAL_ENVIRONMENTS = "test,prod";
+
+/**
+ * A configuration for the db ID of the main account.  This can be useful
+ * in edge case redirections
+ * @type {string}
+ */
+var MAIN_ACCOUNT_ID = process.env.MAIN_ACCOUNT_ID || 6;
+
 
 //---------------------------------------------------------
 //  SET UP SERVER_URL
@@ -100,6 +114,7 @@ module.exports = {
     cluster:false,
     freeCpus:2,
     xdhost_whitelist: XDHosts,
+    mainAccountID: MAIN_ACCOUNT_ID,
 
     SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
 

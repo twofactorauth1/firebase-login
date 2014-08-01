@@ -37,7 +37,7 @@ require.config({
         app: 'app',
         text: "libs/requirejs-plugins/lib/text",
         colorthief: 'libs/color-thief/dist/color-thief.min',
-        waypoints: 'libs/jquery-waypoints/waypoints.min',
+        waypoints: 'libs/jquery-waypoints/waypoints',
         nestable: 'libs/nestable/jquery.nestable',
         date: 'libs/datejs/build/production/date.min',
         daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
@@ -118,6 +118,10 @@ require.config({
         },
 
         gritter: {
+            deps: ['jquery']
+        },
+
+        waypoints: {
             deps: ['jquery']
         },
 
