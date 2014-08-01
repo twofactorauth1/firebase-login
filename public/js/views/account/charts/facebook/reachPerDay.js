@@ -14,6 +14,7 @@ define([
     $$.Charts.FB_reachPerDay = new Chart({
         id: 'FB_reachPerDay'
         , url: '/facebook/{{id}}/reachPerDay'
+        , templateKey: 'account/charts/facebook/reach_per_day'
         , testData: [
             { date: '2014-06-21', paid: 5000, organic: 2000, viral: 1000 }
             , { date: '2014-06-22', paid: 8000, organic: 1000, viral: 200 }
@@ -88,7 +89,7 @@ define([
 
             var y = d3.scale.linear()
                 .rangeRound([0, h - p.b])
-                .domain([max, 0])
+                .domain([max, 0]);
 
             var color = d3.scale.ordinal()
                 .range(["#7f7", "#99f", "#77f"]);
@@ -165,7 +166,7 @@ define([
                         textline({ n: $$.u.formatutils.formatInteger(d.paid)   , color: color('paid'), text: 'paid' })
                         , textline({ n: $$.u.formatutils.formatInteger(d.organic), color: color('organic'), text: 'organic' })
                         , textline({ n: $$.u.formatutils.formatInteger(d.viral)  , color: color('viral'), text: 'viral' })
-                    ].join("<br/>")
+                    ].join("<br/>");
 
 //                var pop = chart.createPopover('left', title, content)
 //
@@ -198,7 +199,12 @@ define([
                 .attr("y", 4)
                 .attr("dy", ".35em")
                 .style("text-anchor", "start")
-                .text(function(d) { return d })
+                .text(function(d) { return d });
+
+            var tmpl = $$.templateManager.get("fb-reach-per-day", this.templateKey);
+            var html = tmpl();
+
+            this.module.html(html);
         }
     });
 });
