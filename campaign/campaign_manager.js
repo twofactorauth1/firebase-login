@@ -254,52 +254,57 @@ module.exports = {
     subscribeToPipeshiftCourse: function (toEmail, courseMock, timezoneOffset, curUserId, callback) {
         var self = this;
 
-        courseDao.getCourseById(courseMock._id, curUserId, function (err, course) {
-                if (err || !course) {
-                    callback(err, null);
-                } else {
-                    accountDao.getFirstAccountForUserId(course.get('userId'), function (err, account) {
-                        if (err || !account) {
-                            callback(err, null);
-                        } else {
-                            var host = "http://" + account.get('subdomain') + "." + hostSuffix;
-                            var templateName = course.get('template').name;
-                            //base message
-                            var message = self._initPipeshiftMessage(toEmail);
-                            var async = false;
-                            var successItemsCounter = 0;
-                            //loop through course videos
-                            for (var i = 0; i < course.get('videos').length; i++) {
-                                var video = course.get('videos')[i];
-                                message.subject = video.subject || course.get('title');
-                                // adjust values for current video
-                                self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/courses/" + course.get('subdomain') + "/video/" + video.videoId);
-                                self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
-                                self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
-                                self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
-                                self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
-                                var sendObj = self._initVideoTemplateSendObject(templateName, message, async);
-                                // schedule email
-                                // if time is in the past mandrill sends email immediately
-                                sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
-                                // send template
-                                mandrill_client.messages.sendTemplate(sendObj, function (result) {
-                                    self.log.debug(result);
-                                    //
-                                    successItemsCounter++;
-                                    if (successItemsCounter == course.get('videos').length) {
-                                        callback(null, {});
-                                    }
-                                }, function (e) {
-                                    self.log.warn('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-                                    callback(e, null);
-                                });
-                            }
-                        }
-                    });
-                }
+        userDao.createUserFromUsernamePassword(toEmail, "pass", toEmail, null, function (err, value) {
+            if (err) {
+                self.log.warn("Error creating user: " + "\t" + JSON.stringify(value, null, 2) + JSON.stringify(value, null, 2));
             }
-        );
+            courseDao.getCourseById(courseMock._id, curUserId, function (err, course) {
+                    if (err || !course) {
+                        callback(err, null);
+                    } else {
+                        accountDao.getFirstAccountForUserId(course.get('userId'), function (err, account) {
+                            if (err || !account) {
+                                callback(err, null);
+                            } else {
+                                var host = "http://" + account.get('subdomain') + "." + hostSuffix;
+                                var templateName = course.get('template').name;
+                                //base message
+                                var message = self._initPipeshiftMessage(toEmail);
+                                var async = false;
+                                var successItemsCounter = 0;
+                                //loop through course videos
+                                for (var i = 0; i < course.get('videos').length; i++) {
+                                    var video = course.get('videos')[i];
+                                    message.subject = video.subject || course.get('title');
+                                    // adjust values for current video
+                                    self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/courses/" + course.get('subdomain') + "/video/" + video.videoId);
+                                    self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
+                                    self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
+                                    self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
+                                    self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
+                                    var sendObj = self._initVideoTemplateSendObject(templateName, message, async);
+                                    // schedule email
+                                    // if time is in the past mandrill sends email immediately
+                                    sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
+                                    // send template
+                                    mandrill_client.messages.sendTemplate(sendObj, function (result) {
+                                        self.log.debug(result);
+                                        //
+                                        successItemsCounter++;
+                                        if (successItemsCounter == course.get('videos').length) {
+                                            callback(null, {});
+                                        }
+                                    }, function (e) {
+                                        self.log.warn('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                                        callback(e, null);
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+            );
+        });
 
     },
 
