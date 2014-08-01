@@ -28,15 +28,16 @@ _.extend(view.prototype, BaseView.prototype, {
         var self = this;
         courseDao.findCourseBySubdomain(courseSubdomain, this.userId(), function (err, course) {
             if (!err && course != null) {
-                data.course = course.toJSON();
+                data.course = JSON.stringify(course);
+                data.includeJs = false;
+                data = self.baseData(data);
+
+                self.resp.render('courses/course', data);
+                self.cleanUp();
+                data = self = null;
+            } else {
+                self.resp.redirect("/");
             }
-
-            data.includeJs = false;
-            data = self.baseData(data);
-
-            self.resp.render('courses/course', data);
-            self.cleanUp();
-            data = self = null;
         });
     },
 

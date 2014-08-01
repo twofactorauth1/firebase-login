@@ -8,12 +8,18 @@
 require('./dao/campaign.dao.js');
 require('./dao/campaign_message.dao.js');
 
+var accountDao = require('../dao/account.dao');
 var contactDao = require('../dao/contact.dao');
+var courseDao = require('../dao/course.dao');
+var userDao = require('../dao/user.dao');
 
 var mandrillConfig = require('../configs/mandrill.config');
 
 var mandrill = require('mandrill-api/mandrill');
 var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
+
+//todo: change it to dynamic resolution depending on env
+var hostSuffix = 'indigenous.local:3000';
 
 /**
  * Constants for pipeshift
@@ -245,45 +251,56 @@ module.exports = {
         this._cancelMandrillCampaignMessages({'campaignId': campaignId, 'contactId': contactId}, callback);
     },
 
-    schedulePipeshiftEmails: function (toEmail, course, timeZoneOffset, callback) {
-        // ToDo: might need a check if course is identical to persisted one(now using values from client side)
+    subscribeToPipeshiftCourse: function (toEmail, courseMock, timezoneOffset, curUserId, callback) {
         var self = this;
-        var templateName = course.template.name;
-        //base message
-        var message = self._initPipeshiftMessage(toEmail);
-        var async = false;
-        var successItemsCounter = 0;
-        //loop through course videos
-        for (var i = 0; i < course.videos.length; i++) {
-            var video = course.videos[i];
-            message.subject = video.subject || course.title;
-            // adjust values for current video
-            self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/courses/" + course.subdomain + "/video/" + video.videoId);
-            self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
-            self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
-            self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
-            self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
-            var sendObj = self._initVideoTemplateSendObject(templateName, message, async);
-            // schedule email
-            // if time is in the past mandrill sends email immediately
-            sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
-            // send template
-            mandrill_client.messages.sendTemplate(sendObj, function (result) {
-                self.log.debug(result);
-                //
-                successItemsCounter++;
-                if (successItemsCounter == course.videos.length) {
-                    callback(null, {});
+
+        courseDao.getCourseById(courseMock._id, curUserId, function (err, course) {
+                if (err || !course) {
+                    callback(err, null);
+                } else {
+                    accountDao.getFirstAccountForUserId(course.get('userId'), function (err, account) {
+                        if (err || !account) {
+                            callback(err, null);
+                        } else {
+                            var host = "http://" + account.get('subdomain') + "." + hostSuffix;
+                            var templateName = course.get('template').name;
+                            //base message
+                            var message = self._initPipeshiftMessage(toEmail);
+                            var async = false;
+                            var successItemsCounter = 0;
+                            //loop through course videos
+                            for (var i = 0; i < course.get('videos').length; i++) {
+                                var video = course.get('videos')[i];
+                                message.subject = video.subject || course.get('title');
+                                // adjust values for current video
+                                self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/courses/" + course.get('subdomain') + "/video/" + video.videoId);
+                                self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
+                                self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
+                                self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
+                                self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
+                                var sendObj = self._initVideoTemplateSendObject(templateName, message, async);
+                                // schedule email
+                                // if time is in the past mandrill sends email immediately
+                                sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
+                                // send template
+                                mandrill_client.messages.sendTemplate(sendObj, function (result) {
+                                    self.log.debug(result);
+                                    //
+                                    successItemsCounter++;
+                                    if (successItemsCounter == course.get('videos').length) {
+                                        callback(null, {});
+                                    }
+                                }, function (e) {
+                                    self.log.warn('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                                    callback(e, null);
+                                });
+                            }
+                        }
+                    });
                 }
-            }, function (e) {
-                self.log.warn('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-                callback(e, null);
-            });
-        }
-        //error for empty course
-        if (course.videos.length == 0) {
-            callback({message: 'Error: empty course'}, null);
-        }
+            }
+        );
+
     },
 
     getPipeshiftTemplates: function (callback) {
