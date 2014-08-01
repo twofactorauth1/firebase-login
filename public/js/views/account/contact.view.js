@@ -12,7 +12,6 @@ define([
     'collections/contacts',
     'services/authentication.service',
     'services/contact.service',
-
     'events/events',
     'libs_misc/jquery/jquery.batchedimageloader',
     ], function(User, Account, Contact, Contacts, AuthenticationService, ContactService,events) {
@@ -114,7 +113,7 @@ define([
             $.when(p1)
                 .done(function(){
                     console.log(this);
-                })
+                });
         },
 
         importTest: function() {
@@ -361,12 +360,6 @@ define([
                 this.currentLetter = "all";
             }
             this.currentLetter = this.currentLetter.toLowerCase();
-<<<<<<< HEAD
-            this.skip=this.skip||0;
-
-            if(this.currentLetter=='all') {
-=======
->>>>>>> zeeshan_dev
 
             this.skip = this.skip || 0;
 
