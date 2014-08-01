@@ -21736,16 +21736,16 @@ a {
   transition: color 0.4s ease-out, background 0.7s ease-in;
 }
 body.theme-main {
-  font-family: Open Sans, Source Sans Pro, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans' !important;
   font-size: 17px;
   line-height: 1.6;
 }
 img.blur {
-  -webkit-filter: blur(3px);
-  -moz-filter: blur(3px);
-  -o-filter: blur(3px);
-  -ms-filter: blur(3px);
-  filter: blur(3px);
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
 }
 .primary {
   background: #4bb0cb;
@@ -21759,6 +21759,18 @@ img.blur {
 }
 .primary p {
   color: #fff!important;
+}
+.navbar-nav li.social a {
+  padding: 0!important;
+}
+.navbar-nav .fa-twitter {
+  background: none!important;
+  padding: 10px 10px 10px;
+  margin-left: 20px;
+}
+.navbar-nav .fa-facebook {
+  background: none!important;
+  padding: 10px 10px 10px;
 }
 #body {
   overflow: hidden;
@@ -21809,6 +21821,9 @@ footer a {
 .navbar {
   margin-bottom: 0px;
   min-height: 90px;
+  -webkit-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
 }
 .navbar-brand {
   height: 80px;
@@ -21819,10 +21834,12 @@ footer a {
 }
 .navbar .nav > li > a {
   float: none;
-  padding: 10px 15px 10px;
-  color: #777;
+  padding: 10px 25px 10px;
+  color: #58585b;
   text-decoration: none;
-  text-shadow: 0 1px 0 #fff;
+  text-shadow: -2px 1px 0 #dbdbdb;
+  font-size: 15px;
+  text-transform: uppercase;
 }
 .navbar .nav {
   position: relative;
@@ -21836,7 +21853,7 @@ footer a {
   float: left;
 }
 ul.nav {
-  margin-top: 20px!important;
+  margin-top: 25px!important;
 }
 .facebook {
   margin-top: 24px!important;
@@ -22000,8 +22017,7 @@ ul #center-circle {
   font-size: 28px;
 }
 .inner-page {
-  padding-top: 30px;
-  padding-bottom: 50px;
+  padding: 50px 0;
   max-width: 1100px;
   margin: 0 auto;
 }
@@ -22063,11 +22079,8 @@ ul #center-circle {
   margin-top: 30px;
 }
 #feature_three {
-  background: #4bafca;
-  background-size: cover;
-  min-width: 100%;
-  padding: 50px;
-  text-align: center;
+  padding: 50px 0;
+  text-align: left;
 }
 #feature_three .col-xs-4 {
   text-align: center;
@@ -22101,14 +22114,12 @@ ul #center-circle {
 }
 #feature_three h4 {
   font-family: Capita;
-  color: #fff;
   font-weight: bold;
   margin-bottom: 2px;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
   font-size: 24px;
 }
-#feature_three p {
-  color: #c7ecf6;
+.feature-blocks {
+  min-height: 400px;
 }
 .social {
   padding: 0;
@@ -22208,6 +22219,10 @@ div.blog-thumb span.overlay {
   font-size: 36px;
   margin-bottom: 30px;
 }
+.feature-blocks h1 {
+  color: white;
+  text-shadow: 1px 1px 1px black;
+}
 .feature-block .inner-page {
   padding: 80px 0;
 }
@@ -22222,6 +22237,8 @@ div.blog-thumb span.overlay {
   color: white;
   text-align: center;
   text-shadow: 1px 1px 1px black;
+  list-style-type: circle;
+  list-style-position: inside;
 }
 .image-right {
   float: right;
@@ -22233,7 +22250,15 @@ div.blog-thumb span.overlay {
 .home-text {
   padding: 30px;
   background: rgba(0, 0, 0, 0.3);
-  margin-top: 150px;
+  margin-top: 60px;
+  text-shadow: 2px 1px 0px rgba(62, 92, 111, 0.8);
+  text-align: center;
+}
+.btn-wrap {
+  margin: 0 auto;
+  display: block;
+  position: relative;
+  width: 200px;
 }
 .component-container {
   padding: 0;
@@ -22303,8 +22328,9 @@ div[data-class='position'] span {
   margin: -50px 5px 0 0;
 }
 #assets {
-  border-bottom: 3px solid #5db8d0 !important;
-  border-top: 3px solid #5db8d0 !important;
+  background: url('../assets/images/indimain/bottom-bg.png') no-repeat;
+  background-size: cover;
+  background-position: -130px;
 }
 .pad0 {
   padding: 0;
@@ -22450,9 +22476,20 @@ input {
 .image-text {
   padding: 0 20px;
   display: inline-block;
+  text-align: center;
+}
+.image-text .img-responsive {
+  margin: 0 auto;
 }
 .meet-team {
   padding: 30px 20px;
+}
+div[data-class="image-text"] {
+  background: url('../assets/images/indimain/wave-bg.jpg');
+  background-size: 15% auto;
+}
+div[data-class="image-text"] .inner-page {
+  border-bottom: 1px solid #e5e5e5;
 }
 .powered-by {
   text-align: right;
