@@ -15440,9 +15440,6 @@ strong {
 .stickyheader .header-right {
   margin-right: 240px;
 }
-#main-viewport {
-  overflow: hidden;
-}
 .stickyheader.leftpanel-collapsed .headerbar {
   left: 51px;
 }
