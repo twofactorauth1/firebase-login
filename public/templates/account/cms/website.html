@@ -153,16 +153,16 @@
 </script>
 
 <script type="text/x-handlebars-template" name="blankPost">
-  <div class="single-blog responsive clearfix">
+  <div class="single-blog responsive clearfix" data-postId="">
             <div class="blog-entry clearfix">
-                <h2 class="blog-title"><a href="/page/blog/post-title">
-                    <div class="editable" data-class="post-title">
-                        Post Title
+                <h2 class="blog-title"><a href="/page/blog/{{postUrl}}">
+                    <div class="editable" data-class="post_title">
+                        {{postTitle}}
                     </div>
                 </a></h2>
                 <p class="blog-meta">
-                     17.04.2014 •&nbsp;
-                    Posted by <a href="/page/author/Post Author">Post Author</a>
+                     {{postDate}} •&nbsp;
+                    Posted by <a href="/page/author/{{postAuthor}}">{{postAuthor}}</a>
                     in&nbsp;<a href="/page/category/Post Category">Post Category</a>
                 </p>
 
@@ -174,11 +174,41 @@
                         <a href=""><span class="overlay"></span></a>
                     </div> <!-- end .thumb -->
 
-                    <div class="entry-excerpt editable"><p>This is the Post Excerpt</p></div>
-                    <a href="/page/blog/post-title" class="btn btn-orange pull-right"><span>READ MORE</span></a>
+                    <div class="entry-excerpt editable" data-class="post_excerpt"><p>This is the Post Excerpt</p></div>
+                    <a href="/page/blog/{{postUrl}}" class="btn btn-orange pull-right"><span>READ MORE</span></a>
             </div> <!-- end .et_pt_blogentry -->
 
     </div>
+</script>
+
+<script type="text/x-handlebars-template" name="newPost-modal" partial="true">
+  <div class="modal fade" id="new-post-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">New Post</h4>
+          </div>
+          <div class="modal-body">
+            <div id="new_post">
+                <div class="form-group">
+                    <label for="post-title" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Provide the title of the post you want to create">Post Title</label>
+                    <input id="post-title" class="form-control input-lg" type="text" value="">
+                </div>
+                <div class="form-group">
+                    <label for="component-name" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Modify the url where your post will be reached">Post Url</label>
+                    <input id="post-url" class="form-control input-lg" type="text" value="">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary create-post">Create Post</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </script>
 
 <script type="text/x-handlebars-template" name="sidebar-edit-website">
@@ -201,7 +231,7 @@
                             <h4>Page Components</h4>
                             <ul id="sortable">
                             {{#each components}}
-                                <li class="ui-state-default dd-item dd3-item" data-id="{{this.id}}" data-section="myCarousel">
+                                <li class="ui-state-default dd-item dd3-item" data-component-id="{{this.id}}" id="component_{{@index}}" data-section="myCarousel">
                                     <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
                                     </div>
                                     <div class="dd3-content">{{this.attributes.type}}</div>
@@ -257,6 +287,8 @@
 
     {{> color-palette-modal}}
     {{> add-component-modal}}
+    {{> newPost-modal}}
+    {{> newPage-modal}}
     {{> edit-theme-modal}}
 </script>
 
@@ -426,6 +458,36 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             <button type="button" class="btn btn-primary">Change</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</script>
+
+<script type="text/x-handlebars-template" name="newPage-modal" partial="true">
+  <div class="modal fade" id="new-page-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">New Page</h4>
+          </div>
+          <div class="modal-body">
+            <div id="new_page">
+                <div class="form-group">
+                    <label for="page-title" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Provide the title of the page you want to create">Page Title</label>
+                    <input id="page-title" class="form-control input-lg" type="text" value="">
+                </div>
+                <div class="form-group">
+                    <label for="page-url" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Modify the url where your page will be reached">Page Url</label>
+                    <input id="page-url" class="form-control input-lg" type="text" value="">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary create-page">Create Page</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

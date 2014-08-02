@@ -46,8 +46,6 @@ var dao = {
             self.findAllWithFields(query,skip,sort, fields, fn);
         })
 
-
-
     },
 
 

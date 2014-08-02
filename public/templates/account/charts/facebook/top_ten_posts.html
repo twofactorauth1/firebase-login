@@ -6,7 +6,7 @@
 -->
 
 <script type="text/x-handlebars-template" name="fb-top-ten-posts">
-    <table class="graph-top-posts">
+    <table class="graph-top-posts hidden">
         <colgroup>
             <col width="10%" />
             <col width="10%" />
@@ -46,4 +46,40 @@
         {{/each}}
         </tbody>
     </table>
+
+    <div class="panel panel-default panel-alt widget-messaging graph-top-posts">
+        <div class="panel-heading">
+            <div class="panel-btns">
+                <a href="" class="panel-edit"><i class="fa fa-edit"></i></a>
+            </div>
+            <!-- panel-btns -->
+            <h3 class="panel-title">Top Ten Posts</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+                {{#each posts}}
+                <li>
+                    <div class="post-header">
+                        <small class="pull-right">{{date}}</small>
+                        <h4 class="sender">{{text}}</h4>
+                    </div>
+                    <small class="row">
+                        <div class="col-sm-3"><p class="metric">{{reach}}</p><div class="clearfix"></div><p class="title">Reach</p></div>
+                        <div class="col-sm-3"><p class="metric">{{engaged}}</p><div class="clearfix"></div><p class="title">Engaged</p></div>
+                        <div class="col-sm-3"><p class="metric">{{talking}}</p><div class="clearfix"></div><p class="title">Talking</p></div>
+                        <div class="col-sm-3 virality">
+                            <div>
+                                <span class="meter" style="width:{{vwidth}}px"></span>
+                                <span class="text">{{virality}}</span>
+                                <div class="clearfix"></div><p class="title">Virality</p>
+                            </div>
+                        </div>
+                    </small>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+        <!-- panel-body -->
+    </div>
+
 </script>

@@ -6,19 +6,28 @@
  */
 
 define([
-    'views/account/commerce.view'
-], function(CommerceView) {
+    'views/account/commerce.view',
+    'views/account/commercesingle.view'
+], function(CommerceView, CommerceSingleView) {
 
     var router = Backbone.Router.extend({
 
         routes: {
             "commerce":"showCommerce",
-            "commerce/":"showCommerce"
+            "commerce/":"showCommerce",
+
+            "commerce/:productId":"showSingleProduct"
         },
 
         showCommerce: function() {
             console.log('showing commerce');
             var view = new CommerceView();
+            $$.viewManager.replaceMain(view);
+        },
+
+        showSingleProduct: function(productId) {
+            console.log('showing single product '+productId);
+            var view = new CommerceSingleView();
             $$.viewManager.replaceMain(view);
         }
     });

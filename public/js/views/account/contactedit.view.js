@@ -8,7 +8,7 @@
 define([
     'views/base.view',
     'models/contact',
-    'libs/jquery/jquery.keytimer',
+    'libs_misc/jquery/jquery.keytimer',
     'services/geo.service'
 
 ], function(BaseView, Contact) {
@@ -54,6 +54,7 @@ define([
 
             "click .btn-subscribe-two-net":"subscribeTwoNetUser",
             "click .btn-delete-contact-ok": "deleteContact"
+
         },
 
 
@@ -62,6 +63,7 @@ define([
             var self = this;
             this.getContact()
                 .done(function() {
+                    console.log('Getting Contact: '+JSON.stringify(self.contact.attributes));
                     var data = {
                         contact:self.contact.toJSON()
                     };
@@ -79,6 +81,19 @@ define([
                 });
         },
 
+        saveContactBtnPress: function() {
+            var self = this;
+            jQuery.gritter.add({
+                    title: 'Contact Saved',
+                    image: 'thumbs-up',
+                    text: 'This contact has been saved successfully.',
+                    class_name: 'growl-success',
+                    sticky: false,
+                    time: 8000,
+                    position: 'bottom-right'
+            });
+            this.saveContact();
+        },
 
         //region FULLNAME
         fullnameChanged: function(event) {
@@ -401,7 +416,7 @@ define([
 
         _showUploadForm: function() {
             var self = this;
-            require(['libs/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
+            require(['./libs_misc/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
                 self.uploadView = new uploadView();
                 self.uploadView.maxNumberOfFiles = 1;
                 self.uploadView.uploadType = "contact-photo";
@@ -469,6 +484,7 @@ define([
         },
 
         saveContact: function() {
+            console.log('save contact');
             var self = this;
             if (this.isNew) {
                 this.isNew = false;

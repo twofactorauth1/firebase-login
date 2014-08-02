@@ -71,6 +71,7 @@ define([
             }
         },
         {
+
             navigateToShowContactsForAll: function (letter,trigger) {
                 if (letter != null) {
 

@@ -98,6 +98,19 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    removeByQuery: function (query, type, fn) {
+        if (this.useCache(type)) {
+            var key = this.getTable(type) + "_" + id;
+            $$.g.cache.remove(key);
+        }
+
+        if (this.getStorage(type) === "mongo") {
+            this._removeByQueryMongo(query, type, fn);
+        } else {
+            fn("No storage medium available for this model");
+        }
+    },
+
 
     getById: function (id, type, fn) {
         if (_.isFunction(type) && fn == null) {
@@ -178,6 +191,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    findManyWithLimit: function(query, limit, type, fn) {
+        if (this.getStorage(type) === "mongo") {
+            this._findManyWithLimitMongo(query, limit, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
 
     findManyWithFields: function (query, fields, type, fn) {
         if (this.getStorage(type) === "mongo") {
@@ -194,6 +215,38 @@ _.extend(baseDao.prototype, mongoBaseDao, {
             fn("No storage medium available for this model type");
         }
     },
+
+    findAndOrder: function(query, fields, type, order_by, order_dir, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._findAndOrderMongo(query, fields, type, order_by, order_dir, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
+    getMaxValue: function(query, fieldName, type, fn) {
+      if(this.getStorage(type) === 'mongo') {
+          this._getMaxValueMongo(query, fieldName, type, fn);
+      } else {
+          fn("No storage medium available for this model type");
+      }
+    },
+
+    getNextValue: function(query, fieldName, mod, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            //TODO: handle decrement
+            var params = {
+                'query': query,
+                'update': { $inc: { seq: mod } },
+                'new': true,
+                'upsert':true
+            };
+            this._findAndModify(params, fieldName, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
 
     getStorage: function (type) {
         if (type != null && type.hasOwnProperty != null) {

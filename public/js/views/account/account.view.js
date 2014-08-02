@@ -6,7 +6,9 @@
  */
 
 define([
-    'views/base.view'
+    'views/base.view',
+    'models/account',
+    'models/user'
 ], function(BaseView) {
 
    /* var showDetails = function(type, typePlural){
@@ -29,7 +31,6 @@ define([
     var view = BaseView.extend({
 
         templateKey: "account/account",
-
 
         events: {
             "click .btn-more-emails"    :   "showEmails",
@@ -55,6 +56,10 @@ define([
                         user: self.user.toJSON()
                     };
 
+                    console.log('Account: '+JSON.stringify(data.user.accounts));
+
+
+                    //Not Working
                     var allNetworks = _.pluck($$.constants.social.types.dp.slice(0), "data");
 
                     var networks = [];

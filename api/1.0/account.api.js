@@ -45,12 +45,14 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO - add granular security
 
         var self = this;
-
+        self.log.debug('>> getCurrentAccount');
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
             if (!err) {
                 if (value == null) {
+                    self.log.debug('<< getCurrentAccount');
                     return resp.send({});
                 } else {
+                    self.log.debug('<< getCurrentAccount');
                     return resp.send(value.toJSON("public"));
                 }
             } else {
@@ -67,7 +69,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = req.params.id;
 
         if (!accountId) {
-            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+            this.wrapError(resp, 400, null, "Invalid parameter for ID");
         }
 
         accountId = parseInt(accountId);

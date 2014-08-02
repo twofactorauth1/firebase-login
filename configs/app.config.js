@@ -12,6 +12,21 @@ var environments = {
     TESTING: "testing"
 };
 
+/**
+ * Allowed hosts for cross-domain access.
+ */
+var XDHosts = [];
+
+//This contains the testing server for Charles Szymanski
+var DEFAULT_XDHOSTS = ['107.170.183.176'];
+
+if(process.env.XDHOSTS == null) {
+    XDHosts = DEFAULT_XDHOSTS;
+} else {
+    XDHosts = process.env.XDHOSTS.split(',');
+}
+
+
 //---------------------------------------------------------
 //  CONFIGURE THESE
 //---------------------------------------------------------
@@ -33,7 +48,7 @@ if (process.env.IS_PROXIED == null){
  * For production: indigenous.io
  */
 if (process.env.ROOT_HOST == null) {
-    if(process.env.NODE_ENV == environments.DEVELOPMENT) {
+    if(process.env.NODE_ENV == environments.DEVELOPMENT || process.env.NODE_ENV == environments.TESTING) {
         process.env.ROOT_HOST = "indigenous.local";
     } else {
         process.env.ROOT_HOST = "indigenous.io";
@@ -58,6 +73,20 @@ if (process.env.IS_SECURE == null) {
  * If a use hits one of these, they are at the main indigenous.io app.
  */
 process.env.GLOBAL_SUBDOMAINS = "www,home,app";
+
+/**
+ * A comma separated list of strings that represent different environments.
+ * These MUST come right before the host.
+ * If none are present, production is assumed.
+ */
+process.env.GLOBAL_ENVIRONMENTS = "test,prod";
+
+/**
+ * A configuration for the db ID of the main account.  This can be useful
+ * in edge case redirections
+ * @type {string}
+ */
+var MAIN_ACCOUNT_ID = process.env.MAIN_ACCOUNT_ID || 6;
 
 
 //---------------------------------------------------------
@@ -84,6 +113,8 @@ module.exports = {
     support_email: "support@indigenous.io",
     cluster:false,
     freeCpus:2,
+    xdhost_whitelist: XDHosts,
+    mainAccountID: MAIN_ACCOUNT_ID,
 
     SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
 

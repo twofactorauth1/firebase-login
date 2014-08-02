@@ -96,13 +96,13 @@
 
 <div class="contentpanel">
 <div class="col-sm-6 profile-section panel panel-default">
-    <div class="panel-heading">
-        <div class="panel-btns btn-edit-account">
-            <a href="" class="panel-edit"><i class="fa fa-edit"></i></a>
-        </div>
-        <!-- panel-btns -->
-        <h3 class="panel-title">Owner Info</h3>
+<div class="panel-heading">
+    <div class="panel-btns btn-edit-account">
+        <a href="" class="panel-edit"><i class="fa fa-edit"></i></a>
     </div>
+    <!-- panel-btns -->
+    <h3 class="panel-title">Owner Info</h3>
+</div>
 
 <div class="profile panel-body">
 <!--
@@ -110,216 +110,6 @@
     <img alt="" src="../images/photos/loggeduser.png" class="thumbnail thumb-lg img-circle media-object">
 </div>
 -->
-    <div class="col-xs-12">
-        <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-        <div class="clear"></div>
-    </div>
-    <div class="col-xs-12">
-        <div class="col-xs-12">
-            <div class="mb20"></div>
-            <!--
-            <h3 class="profile-name">{{user.first}} {{user.last}}</h3>
-            -->
-            <!--
-            <h4 class="center">
-                <span class="label label-info contact-cat">{{user.last}}</span>
-            </h4>
-            -->
-            <h3 class="profile-name">
-                {{user.first}} {{user.middle}} {{user.last}}
-            </h3>
-            <div class="mb20"></div>
-
-        </div>
-    </div>
-    <div class="clearfix mb20"></div>
-<div class="col-xs-12">
-<!-- <div class="profile-location"><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy DriveSan Diego, CA 92102</a>  <a href="#" class="label label-warning"> + 5 More</a>
-    </div>
-    <div class="profile-position"><i class="fa fa-briefcase"></i> News Anchor at <a href="">Channel 9 News</a>
-    </div>
-    <div class="profile-position"><i class="fa fa-briefcase"></i> Owner of <a href="">Burgandy Flutes</a>
-    </div>
-    <div class="profile-phone"><i class="fa fa-phone"></i>  <a href=""><a href="tel:619-564-2827"> 619-564-2827</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
-    </div>
-
-    <div class="profile-email"><i class="fa fa-envelope"></i>  <a href=""><a href="mailto:{{user.email}}"> {{user.email}}</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
-    </div> -->
-<ul class="social-list right row">
-<li class="col-xs-12">
-    <div class="col-xs-2">
-        <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Password" target="_blank"><i class="fa fa-lock"></i></a>
-    </div>
-    <div class="col-xs-8">
-        <p>•••••••••••</p>
-    </div>
-    <div class="col-xs-2"></div>
-</li>
-<!--
-<li class="col-xs-12">
-
-    <div class="col-xs-2">
-        <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-    </div>
-    <div class="col-xs-8">
-        <p>123 Burgandy DriveSan Diego, CA 92102</p>
-    </div>
-    <div class="col-xs-2">
-        <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
-            <span class="hidden-xs">5 More</span>
-        </button>
-    </div>
-</li>
--->
-{{#each user.details}}
-{{#each addresses}}
-{{#if ../addresses.length}}
-<li class="col-xs-12 li-address {{#if @first}}first{{/if}}"  style="{{#unless @first}} display: none;{{/unless}}">
-    <div class="col-xs-2">
-        <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-    </div>
-    <div class="col-xs-8">
-        <p> {{address}} {{address2}}, {{state}} {{zip}}</p>
-    </div>
-    <div class="col-xs-2">
-        {{#if @first}}
-        {{#moreThenOne ../../../addresses.length}}
-        <button href="#" class="btn btn-sm btn-warning  btn-more-addresses">
-            <i class="fa fa-chevron-down"></i>
-            <span class="hidden-xs"> {{lengthMinusOne ../../../../addresses.length}} More</span>
-        </button>
-        {{/moreThenOne}}
-        {{/if}}
-    </div>
-    </a>
-</li>
-{{/if}}
-{{/each}}
-{{/each}}
-
-<!--
-<li class="col-xs-12">
-    <div class="col-xs-2">
-        <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
-    </div>
-    <div class="col-xs-8">
-        <p>619-675-2927</p>
-    </div>
-    <div class="col-xs-2">
-        <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
-            <span class="hidden-xs">2 More</span>
-        </button>
-    </div>
-    </a>
-</li>
--->
-
-{{#each user.details}}
-{{#each phones}}
-{{#if ../phones.length}}
-<li class="col-xs-12 li-phone {{#if @first}}first{{/if}}" style="{{#unless @first}}display: none;{{/unless}}">
-    <div class="col-xs-2">
-        <a href="tel:{{number}}" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
-    </div>
-    <div class="col-xs-8">
-        <p>{{number}}</p>
-        <!--<small>{{!-- phoneTypeLabel type --}}</small>-->
-    </div>
-    <div class="col-xs-2">
-        {{#if @first}}
-        {{#moreThenOne ../../../phones.length}}
-        <button href="#" class="btn btn-sm btn-warning btn-more-phones">
-            <i class="fa fa-chevron-down"></i>
-            <span class="hidden-xs"> {{lengthMinusOne ../../../../phones.length}} More</span>
-        </button>
-        {{/moreThenOne}}
-        {{/if}}
-    </div>
-    </a>
-</li>
-{{/if}}
-{{/each}}
-{{/each}}
-
-<!--
-<li class="col-xs-12">
-    <div class="col-xs-2">
-        <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope"></i></a>
-    </div>
-    <div class="col-xs-8">
-        <p>{{user.email}}</p>
-    </div>
-    <div class="col-xs-2">
-        <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
-            <span class="hidden-xs">1 More</span>
-        </button>
-    </div>
-    </a>
-</li>
--->
-
-
-
-<li class="col-xs-12">
-    <div class="col-xs-2">
-        <a href="mailto:{{user.email}}" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
-            <i class="fa fa-envelope">
-            </i>
-        </a>
-    </div>
-    <div class="col-xs-8">
-        <p>{{user.email}}</p>
-    </div>
-    <div class="col-xs-2">
-    </div>
-    </a>
-</li>
-
-
-{{#each user.details}}
-{{#each socials}}
-{{#if ../socials.length}}
-<li class="col-xs-12">
-    <div class="col-xs-2">
-        <a
-                href="{{URL}}"
-                class="tooltips"
-                data-toggle="tooltip"
-                data-placement="top"
-                title=""
-                data-original-title="{{type}}"
-                target="_blank">
-            <i class="fa fa-{{type}}"></i>
-        </a>
-    </div>
-    <div class="col-xs-10">
-        <p>{{nick}}</p>
-    </div>
-    </a>
-</li>
-{{/if}}
-{{/each}}
-{{/each}}
-
-</ul>
-
-<div class="mb20"></div>
-
-</div>
-<div class="clearfix"></div>
-</div>
-</div>
-
-<div class="col-sm-6">
-<div class="panel-heading">
-    <div class="panel-btns btn-edit-business-info">
-        <a href="" class="panel-edit"><i class="fa fa-edit"></i></a>
-    </div>
-    <h3 class="panel-title">Business Info</h3>
-</div>
-
-<div class="profile panel-body">
-
 <div class="col-xs-12">
     <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
     <div class="clear"></div>
@@ -327,9 +117,16 @@
 <div class="col-xs-12">
     <div class="col-xs-12">
         <div class="mb20"></div>
-
+        <!--
+        <h3 class="profile-name">{{user.first}} {{user.last}}</h3>
+        -->
+        <!--
+        <h4 class="center">
+            <span class="label label-info contact-cat">{{user.last}}</span>
+        </h4>
+        -->
         <h3 class="profile-name">
-            {{account.business.name}}
+            {{user.first}} {{user.middle}} {{user.last}}
         </h3>
         <div class="mb20"></div>
 
@@ -337,36 +134,89 @@
 </div>
 <div class="clearfix mb20"></div>
 <div class="col-xs-12">
+    <!-- <div class="profile-location"><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy DriveSan Diego, CA 92102</a>  <a href="#" class="label label-warning"> + 5 More</a>
+        </div>
+        <div class="profile-position"><i class="fa fa-briefcase"></i> News Anchor at <a href="">Channel 9 News</a>
+        </div>
+        <div class="profile-position"><i class="fa fa-briefcase"></i> Owner of <a href="">Burgandy Flutes</a>
+        </div>
+        <div class="profile-phone"><i class="fa fa-phone"></i>  <a href=""><a href="tel:619-564-2827"> 619-564-2827</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
+        </div>
+
+        <div class="profile-email"><i class="fa fa-envelope"></i>  <a href=""><a href="mailto:{{user.email}}"> {{user.email}}</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
+        </div> -->
     <ul class="social-list right row">
+        <li class="col-xs-12">
+            <div class="col-xs-2">
+                <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Password" target="_blank"><i class="fa fa-lock"></i></a>
+            </div>
+            <div class="col-xs-8">
+                <p>•••••••••••</p>
+            </div>
+            <div class="col-xs-2"></div>
+        </li>
+        <!--
+        <li class="col-xs-12">
 
-        {{#each  account.business.addresses}}
-
-            {{#if ../account.business.addresses.length}}
-                <li class="col-xs-12 li-address {{#if @first}}first{{/if}}"  style="{{#unless @first}} display: none;{{/unless}}">
-                    <div class="col-xs-2">
-                        <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-                    </div>
-                    <div class="col-xs-8">
-                        <p> {{address}} {{address2}}, {{state}} {{zip}}</p>
-                    </div>
-                    <div class="col-xs-2">
-                        {{#if @first}}
-                            {{#moreThenOne ../../../account.business.addresses.length}}
-                                <button href="#" class="btn btn-sm btn-warning  btn-more-addresses">
-                                    <i class="fa fa-chevron-down"></i>
-                                    <span class="hidden-xs"> {{lengthMinusOne ../../../../account.business.addresses.length}} More</span>
-                                </button>
-                            {{/moreThenOne}}
-                        {{/if}}
-                    </div>
-                    </a>
-                </li>
-            {{/if}}
+            <div class="col-xs-2">
+                <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+            </div>
+            <div class="col-xs-8">
+                <p>123 Burgandy DriveSan Diego, CA 92102</p>
+            </div>
+            <div class="col-xs-2">
+                <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                    <span class="hidden-xs">5 More</span>
+                </button>
+            </div>
+        </li>
+        -->
+        {{#each user.details}}
+        {{#each addresses}}
+        {{#if ../addresses.length}}
+        <li class="col-xs-12 li-address {{#if @first}}first{{/if}}"  style="{{#unless @first}} display: none;{{/unless}}">
+            <div class="col-xs-2">
+                <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+            </div>
+            <div class="col-xs-8">
+                <p> {{address}} {{address2}}, {{state}} {{zip}}</p>
+            </div>
+            <div class="col-xs-2">
+                {{#if @first}}
+                {{#moreThenOne ../../../addresses.length}}
+                <button href="#" class="btn btn-sm btn-warning  btn-more-addresses">
+                    <i class="fa fa-chevron-down"></i>
+                    <span class="hidden-xs"> {{lengthMinusOne ../../../../addresses.length}} More</span>
+                </button>
+                {{/moreThenOne}}
+                {{/if}}
+            </div>
+            </a>
+        </li>
+        {{/if}}
+        {{/each}}
         {{/each}}
 
+        <!--
+        <li class="col-xs-12">
+            <div class="col-xs-2">
+                <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
+            </div>
+            <div class="col-xs-8">
+                <p>619-675-2927</p>
+            </div>
+            <div class="col-xs-2">
+                <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                    <span class="hidden-xs">2 More</span>
+                </button>
+            </div>
+            </a>
+        </li>
+        -->
 
-        {{#each account.business.phones}}
-        {{#if ../account.business.phones.length}}
+        {{#each user.details}}
+        {{#each phones}}
+        {{#if ../phones.length}}
         <li class="col-xs-12 li-phone {{#if @first}}first{{/if}}" style="{{#unless @first}}display: none;{{/unless}}">
             <div class="col-xs-2">
                 <a href="tel:{{number}}" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
@@ -377,10 +227,10 @@
             </div>
             <div class="col-xs-2">
                 {{#if @first}}
-                {{#moreThenOne ../../../account.business.phones.length}}
+                {{#moreThenOne ../../../phones.length}}
                 <button href="#" class="btn btn-sm btn-warning btn-more-phones">
                     <i class="fa fa-chevron-down"></i>
-                    <span class="hidden-xs"> {{lengthMinusOne ../../../../account.business.phones.length}} More</span>
+                    <span class="hidden-xs"> {{lengthMinusOne ../../../../phones.length}} More</span>
                 </button>
                 {{/moreThenOne}}
                 {{/if}}
@@ -389,59 +239,68 @@
         </li>
         {{/if}}
         {{/each}}
+        {{/each}}
+
+        <!--
+        <li class="col-xs-12">
+            <div class="col-xs-2">
+                <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope"></i></a>
+            </div>
+            <div class="col-xs-8">
+                <p>{{user.email}}</p>
+            </div>
+            <div class="col-xs-2">
+                <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                    <span class="hidden-xs">1 More</span>
+                </button>
+            </div>
+            </a>
+        </li>
+        -->
+
+
 
         <li class="col-xs-12">
             <div class="col-xs-2">
-                <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
-                    <i class="fa fa-wrench"></i>
+                <a href="mailto:{{user.email}}" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
+                    <i class="fa fa-envelope">
+                    </i>
                 </a>
             </div>
             <div class="col-xs-8">
-                <p>{{#getBusinessType account.business.type}}{{/getBusinessType}}</p>
+                <p>{{user.email}}</p>
             </div>
             <div class="col-xs-2">
             </div>
             </a>
         </li>
+
+
+        {{#each user.details}}
+        {{#each socials}}
+        {{#if ../socials.length}}
         <li class="col-xs-12">
             <div class="col-xs-2">
-                <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
-                    <i class="fa fa-arrows"></i>
+                <a
+                        href="{{URL}}"
+                        class="tooltips"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title=""
+                        data-original-title="{{type}}"
+                        target="_blank">
+                    <i class="fa fa-{{type}}"></i>
                 </a>
             </div>
-            <div class="col-xs-8">
-                <p>{{#getBusinessSize account.business.size}}{{/getBusinessSize}}</p>
-            </div>
-            <div class="col-xs-2">
+            <div class="col-xs-10">
+                <p>{{nick}}</p>
             </div>
             </a>
         </li>
-        <li class="col-xs-12">
-            <div class="col-xs-2">
-                <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
-                    <i class="fa fa-file-o"></i>
-                </a>
-            </div>
-            <div class="col-xs-8">
-                <p>{{account.business.description}}</p>
-            </div>
-            <div class="col-xs-2">
-            </div>
-            </a>
-        </li>
-        <li class="col-xs-12">
-            <div class="col-xs-2">
-                <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
-                    <i class="fa fa-bars"></i>
-                </a>
-            </div>
-            <div class="col-xs-8">
-                <p>{{account.business.category}}</p>
-            </div>
-            <div class="col-xs-2">
-            </div>
-            </a>
-        </li>
+        {{/if}}
+        {{/each}}
+        {{/each}}
+
     </ul>
 
     <div class="mb20"></div>
@@ -449,6 +308,147 @@
 </div>
 <div class="clearfix"></div>
 </div>
+</div>
+
+<div class="col-sm-6">
+    <div class="panel-heading">
+        <div class="panel-btns btn-edit-business-info">
+            <a href="" class="panel-edit"><i class="fa fa-edit"></i></a>
+        </div>
+        <h3 class="panel-title">Business Info</h3>
+    </div>
+
+    <div class="profile panel-body">
+
+        <div class="col-xs-12">
+            <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
+            <div class="clear"></div>
+        </div>
+        <div class="col-xs-12">
+            <div class="col-xs-12">
+                <div class="mb20"></div>
+
+                <h3 class="profile-name">
+                    {{account.business.name}}
+                </h3>
+                <div class="mb20"></div>
+
+            </div>
+        </div>
+        <div class="clearfix mb20"></div>
+        <div class="col-xs-12">
+            <ul class="social-list right row">
+
+                {{#each  account.business.addresses}}
+
+                {{#if ../account.business.addresses.length}}
+                <li class="col-xs-12 li-address {{#if @first}}first{{/if}}"  style="{{#unless @first}} display: none;{{/unless}}">
+                    <div class="col-xs-2">
+                        <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p> {{address}} {{address2}}, {{state}} {{zip}}</p>
+                    </div>
+                    <div class="col-xs-2">
+                        {{#if @first}}
+                        {{#moreThenOne ../../../account.business.addresses.length}}
+                        <button href="#" class="btn btn-sm btn-warning  btn-more-addresses">
+                            <i class="fa fa-chevron-down"></i>
+                            <span class="hidden-xs"> {{lengthMinusOne ../../../../account.business.addresses.length}} More</span>
+                        </button>
+                        {{/moreThenOne}}
+                        {{/if}}
+                    </div>
+                    </a>
+                </li>
+                {{/if}}
+                {{/each}}
+
+
+                {{#each account.business.phones}}
+                {{#if ../account.business.phones.length}}
+                <li class="col-xs-12 li-phone {{#if @first}}first{{/if}}" style="{{#unless @first}}display: none;{{/unless}}">
+                    <div class="col-xs-2">
+                        <a href="tel:{{number}}" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p>{{number}}</p>
+                        <!--<small>{{!-- phoneTypeLabel type --}}</small>-->
+                    </div>
+                    <div class="col-xs-2">
+                        {{#if @first}}
+                        {{#moreThenOne ../../../account.business.phones.length}}
+                        <button href="#" class="btn btn-sm btn-warning btn-more-phones">
+                            <i class="fa fa-chevron-down"></i>
+                            <span class="hidden-xs"> {{lengthMinusOne ../../../../account.business.phones.length}} More</span>
+                        </button>
+                        {{/moreThenOne}}
+                        {{/if}}
+                    </div>
+                    </a>
+                </li>
+                {{/if}}
+                {{/each}}
+
+                <li class="col-xs-12">
+                    <div class="col-xs-2">
+                        <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p>{{#getBusinessType account.business.type}}{{/getBusinessType}}</p>
+                    </div>
+                    <div class="col-xs-2">
+                    </div>
+                    </a>
+                </li>
+                <li class="col-xs-12">
+                    <div class="col-xs-2">
+                        <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
+                            <i class="fa fa-arrows"></i>
+                        </a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p>{{#getBusinessSize account.business.size}}{{/getBusinessSize}}</p>
+                    </div>
+                    <div class="col-xs-2">
+                    </div>
+                    </a>
+                </li>
+                <li class="col-xs-12">
+                    <div class="col-xs-2">
+                        <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
+                            <i class="fa fa-file-o"></i>
+                        </a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p>{{account.business.description}}</p>
+                    </div>
+                    <div class="col-xs-2">
+                    </div>
+                    </a>
+                </li>
+                <li class="col-xs-12">
+                    <div class="col-xs-2">
+                        <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p>{{account.business.category}}</p>
+                    </div>
+                    <div class="col-xs-2">
+                    </div>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="mb20"></div>
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
 </div>
 
 <div class="col-sm-6">
@@ -467,204 +467,13 @@
 </script>
 
 <script type="text/x-handlebars-template" name="account-edit-main">
-<div class="pageheader row">
-    <div class="col-xs-8">
-        <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
-            <span class="fa fa-chevron-left"></span>
-            <span class="hidden-xs">Back</span>
-        </button>
-        <h2><i class="fa fa-users"></i> Edit User</h2>
-    </div>
-
-    <div class="col-xs-4">
-    </div>
-</div>
-<div id="contact-edit-container" class="contentpanel">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="hidden-xs hidden-sm">
-                <h4>
-                    Name & Photo
-                </h4>
-                <hr/>
-            </div>
-
-            <div class="row">
-                <!-- UPDATE NAME -->
-                <div class="col-xs-12 form" role="form">
-                    <div class="form-group">
-                        <label class="">User Name</label>
-                        <input id="input-fullname" type="text" class="form-control" value="{{user.first}} {{user.middle}} {{user.last}}" placeholder="full name">
-                        <small style="margin-left:10px;">
-                            <strong>first:</strong>
-                            <code>
-                                <span id="hint-first">{{user.first}}</span>
-                            </code>
-                            <strong>middle:</strong>
-                            <code>
-                                <span id="hint-middle">{{user.middle}}</span>
-                            </code>
-                            <strong>last:</strong>
-                            <code>
-                                <span id="hint-last">{{user.last}}</span>
-                            </code>
-                        </small>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- UPDATE PHOTO -->
-            <div id="contact-photo-container" class="row">
-                <row>
-                    <div class="col-xs-5 col-md-6">
-                        <div class="hidden-xs hidden-sm">
-                            <div class="btn-link btn-edit-photo">Change Photo</div>
-                        </div>
-                        <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                    </div>
-
-                    <div class="col-xs-7 col-md-6">
-                        <div class="btn-edit-photo-controls hidden-md hidden-lg">
-                            <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
-                            <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
-                        </div>
-                    </div>
-                </row>
-            </div>
-        </div>
-
-        <!-- CONTACT DETAILS -->
-        <div class="col-md-6">
-            <h4>User Information</h4>
-            <hr/>
-
-            <div id="phone-row" class="row">
-                <div class="col-xs-1"><i class="icon-main fa fa-phone" />
-                </div>
-                <div class="col-xs-10">
-                    <div id="edit-phones-container">
-                        {{#each user.details}} {{#canEditContactDetails this}} {{#each ../phones}} {{> edit-phone}} {{/each}} {{else}} {{#each phones}}
-                        <div>
-                            <a href="tel:+1{{number}}">+1 {{number}}</a>
-                            <small>{{phoneTypeLabel type}}</small>
-                            <i class="icon-social {{iconFromSocialType ../type}}" />
-                        </div>
-                        {{/each}} {{/canEditContactDetails}} {{/each}}
-
-                        <!-- ADD NEW PHONE -->
-                        {{> edit-phone}}
-                    </div>
-                            <span style="margin-top:-15px;" class="col-xs-10">
-                                <small>e.g. (303-555-5555)</small>
-                            </span>
-                </div>
-
-            </div>
-
-            <div id="address-row" class="row">
-                <div class="col-xs-1"><i class="icon-main fa fa-map-marker" />
-                </div>
-                <div class="col-xs-10">
-                    <div id="edit-addresses-container">
-                        {{#each user.details}} {{#canEditContactDetails this}} {{> edit-addresses}} {{else}} {{#each addresses}}
-                        <div class="edit-address-container" id="{{_id}}">
-                            {{#if address}}
-                            <div>{{address}}</div>
-                            {{/if}} {{#if address2}}
-                        </div>
-                        {{address2}}
-                    </div>
-                    {{/if}}
-                    <div>
-                        {{city}} {{#if state}}, {{state}}{{/if}} {{#if zip}}, {{zip}}{{/if}} {{#if country}}, {{country}}{{/if}}
-                        <i class="icon-social {{iconFromSocialType ../../type}}" />
-                    </div>
-
-                    {{> edit-default-shipping-billing}}
-                </div>
-                {{/each}} {{/canEditContactDetails}} {{/each}}
-            </div>
-
-            <br/>
-        </div>
-    </div>
-
-    <div id="email-row" class="row">
-        <div class="col-xs-1"><i class="icon-main fa fa-envelope" />
-        </div>
-        <div class="col-xs-10">
-
-            <div id="edit-emails-container">
-
-
-                    {{> edit-email user.email}}
-                        <a href="mailto:{{user.email}}">{{../user.email}}</a>
-                        <i class="icon-social {{iconFromSocialType ../../type}}" />
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- BioMetric Data -->
-
-<!-- End BioMetric Data -->
-
-</div>
-</div>
-
-<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
-                <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-
-<div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" data-dismiss="modal">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Add or Remove Photo</h4>
-            </div>
-
-            <div class="modal-body">
-                <div class="row">
-                    <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
-                </div>
-
-                <div class="row" style="margin-top:6px; margin-bottom:20px;">
-                    <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
-                </div>
-
-                <div id="upload-photo-container" />
-
-                <img id="contact-photo-modal" src="{{user.photo}}" style="max-width:100%; margin-top:20px;" />
-            </div>
-        </div>
-    </div>
-</div>
-
-</script>
-
-<script type="text/x-handlebars-template" name="business-info-edit-main">
     <div class="pageheader row">
         <div class="col-xs-8">
             <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
                 <span class="fa fa-chevron-left"></span>
                 <span class="hidden-xs">Back</span>
             </button>
-            <h2><i class="fa fa-users"></i> Edit Business Info</h2>
+            <h2><i class="fa fa-users"></i> Edit User</h2>
         </div>
 
         <div class="col-xs-4">
@@ -675,7 +484,7 @@
             <div class="col-md-6">
                 <div class="hidden-xs hidden-sm">
                     <h4>
-                        Business Name & Logo
+                        Name & Photo
                     </h4>
                     <hr/>
                 </div>
@@ -684,104 +493,67 @@
                     <!-- UPDATE NAME -->
                     <div class="col-xs-12 form" role="form">
                         <div class="form-group">
-                            <label class="">Business Name</label>
-                            <input id="input-business-name" type="text" class="form-control" value="{{account.business.name}}" placeholder="business name">
+                            <label class="">User Name</label>
+                            <input id="input-fullname" type="text" class="form-control" value="{{user.first}} {{user.middle}} {{user.last}}" placeholder="full name">
+                            <small style="margin-left:10px;">
+                                <strong>first:</strong>
+                                <code>
+                                    <span id="hint-first">{{user.first}}</span>
+                                </code>
+                                <strong>middle:</strong>
+                                <code>
+                                    <span id="hint-middle">{{user.middle}}</span>
+                                </code>
+                                <strong>last:</strong>
+                                <code>
+                                    <span id="hint-last">{{user.last}}</span>
+                                </code>
+                            </small>
                         </div>
                     </div>
                 </div>
 
-
-
-                <div class="row">
-                    <!-- UPDATE Description -->
-                    <div class="col-xs-12 form" role="form">
-                        <div class="form-group">
-                            <label class="">Business Description</label>
-                            <input id="input-business-description" type="text" class="form-control" value="{{account.business.description}}" placeholder="Description">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <!-- UPDATE category -->
-                    <div class="col-xs-12 form" role="form">
-                        <div class="form-group">
-                            <label class="">Business Category</label>
-                            <input id="input-business-category" type="text" class="form-control" value="{{account.business.category}}" placeholder="Category">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group col-xs-6">
-                        <label>Business Size</label>
-                        <select id="select-business-size" class="form-control">
-                            {{#businessSizeOptions}}
-                            <option data-businesssize="{{data}}" {{#equals data ../account.size}}selected{{/equals}}>{{label}}</option>
-                            {{/businessSizeOptions}}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group col-xs-6">
-                        <label>Business Type</label>
-                        <select id="select-business-type" class="form-control">
-                            {{#businessTypeOptions}}
-                            <option data-businesstype="{{data}}" {{#equals data ../account.type}}selected{{/equals}}>{{label}}</option>
-                            {{/businessTypeOptions}}
-                        </select>
-                    </div>
-                </div>
 
                 <!-- UPDATE PHOTO -->
                 <div id="contact-photo-container" class="row">
                     <row>
                         <div class="col-xs-5 col-md-6">
                             <div class="hidden-xs hidden-sm">
-                                <div class="btn-link btn-edit-photo">Change Logo</div>
+                                <div class="btn-link btn-edit-photo">Change Photo</div>
                             </div>
-                            <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if this.logo}}{{ this.logo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                            <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
                         </div>
 
                         <div class="col-xs-7 col-md-6">
                             <div class="btn-edit-photo-controls hidden-md hidden-lg">
-                                <div class="btn btn-primary btn-remove-photo">Remove Logo</div>
-                                <div class="btn btn-primary btn-upload-photo">Upload Logo</div>
+                                <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
+                                <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
                             </div>
                         </div>
                     </row>
                 </div>
-
-
-
-
             </div>
 
             <!-- CONTACT DETAILS -->
             <div class="col-md-6">
-                <h4>Business Information</h4>
+                <h4>User Information</h4>
                 <hr/>
+
                 <div id="phone-row" class="row">
                     <div class="col-xs-1"><i class="icon-main fa fa-phone" />
                     </div>
                     <div class="col-xs-10">
                         <div id="edit-phones-container">
-
-                                    {{#each account.business.phones}}
-                                        {{> edit-business-phone}}
-                                    {{/each}}
-
-                                    {{#each phones}}
-                                        <div>
-                                            <a href="tel:+1{{number}}">+1 {{number}}</a>
-                                            <small>{{phoneTypeLabel type}}</small>
-                                            <i class="icon-social {{iconFromSocialType ../type}}" />
-                                        </div>
-                                    {{/each}}
+                            {{#each user.details}} {{#canEditContactDetails this}} {{#each ../phones}} {{> edit-phone}} {{/each}} {{else}} {{#each phones}}
+                            <div>
+                                <a href="tel:+1{{number}}">+1 {{number}}</a>
+                                <small>{{phoneTypeLabel type}}</small>
+                                <i class="icon-social {{iconFromSocialType ../type}}" />
+                            </div>
+                            {{/each}} {{/canEditContactDetails}} {{/each}}
 
                             <!-- ADD NEW PHONE -->
-                            {{> edit-business-phone}}
+                            {{> edit-phone}}
                         </div>
                             <span style="margin-top:-15px;" class="col-xs-10">
                                 <small>e.g. (303-555-5555)</small>
@@ -790,16 +562,12 @@
 
                 </div>
 
-
-
-
-
                 <div id="address-row" class="row">
                     <div class="col-xs-1"><i class="icon-main fa fa-map-marker" />
                     </div>
                     <div class="col-xs-10">
                         <div id="edit-addresses-container">
-                            {{#each account.business.addresses}} {{> edit-address}} {{else}} {{#each addresses}}
+                            {{#each user.details}} {{#canEditContactDetails this}} {{> edit-addresses}} {{else}} {{#each addresses}}
                             <div class="edit-address-container" id="{{_id}}">
                                 {{#if address}}
                                 <div>{{address}}</div>
@@ -813,21 +581,35 @@
                             <i class="icon-social {{iconFromSocialType ../../type}}" />
                         </div>
 
+                        {{> edit-default-shipping-billing}}
                     </div>
-                    {{/each}} {{/each}}
-
+                    {{/each}} {{/canEditContactDetails}} {{/each}}
                 </div>
 
                 <br/>
-
-
-                <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
-
             </div>
         </div>
 
+        <div id="email-row" class="row">
+            <div class="col-xs-1"><i class="icon-main fa fa-envelope" />
+            </div>
+            <div class="col-xs-10">
 
+                <div id="edit-emails-container">
+
+
+                    {{> edit-email user.email}}
+                    <a href="mailto:{{user.email}}">{{../user.email}}</a>
+                    <i class="icon-social {{iconFromSocialType ../../type}}" />
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- BioMetric Data -->
+
+    <!-- End BioMetric Data -->
+
     </div>
     </div>
 
@@ -846,21 +628,23 @@
         </div>
     </div>
     </div>
+
+
     <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" data-dismiss="modal">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Add or Remove Logo</h4>
+                    <h4 class="modal-title">Add or Remove Photo</h4>
                 </div>
 
                 <div class="modal-body">
                     <div class="row">
-                        <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Logo</div>
+                        <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
                     </div>
 
                     <div class="row" style="margin-top:6px; margin-bottom:20px;">
-                        <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new Logo</div>
+                        <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
                     </div>
 
                     <div id="upload-photo-container" />
@@ -870,6 +654,222 @@
             </div>
         </div>
     </div>
+
+</script>
+
+<script type="text/x-handlebars-template" name="business-info-edit-main">
+<div class="pageheader row">
+    <div class="col-xs-8">
+        <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
+            <span class="fa fa-chevron-left"></span>
+            <span class="hidden-xs">Back</span>
+        </button>
+        <h2><i class="fa fa-users"></i> Edit Business Info</h2>
+    </div>
+
+    <div class="col-xs-4">
+    </div>
+</div>
+<div id="contact-edit-container" class="contentpanel">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="hidden-xs hidden-sm">
+                <h4>
+                    Business Name & Logo
+                </h4>
+                <hr/>
+            </div>
+
+            <div class="row">
+                <!-- UPDATE NAME -->
+                <div class="col-xs-12 form" role="form">
+                    <div class="form-group">
+                        <label class="">Business Name</label>
+                        <input id="input-business-name" type="text" class="form-control" value="{{account.business.name}}" placeholder="business name">
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <!-- UPDATE Description -->
+                <div class="col-xs-12 form" role="form">
+                    <div class="form-group">
+                        <label class="">Business Description</label>
+                        <input id="input-business-description" type="text" class="form-control" value="{{account.business.description}}" placeholder="Description">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- UPDATE category -->
+                <div class="col-xs-12 form" role="form">
+                    <div class="form-group">
+                        <label class="">Business Category</label>
+                        <input id="input-business-category" type="text" class="form-control" value="{{account.business.category}}" placeholder="Category">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <label>Business Size</label>
+                    <select id="select-business-size" class="form-control">
+                        {{#businessSizeOptions}}
+                        <option data-businesssize="{{data}}" {{#equals data ../account.size}}selected{{/equals}}>{{label}}</option>
+                        {{/businessSizeOptions}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <label>Business Type</label>
+                    <select id="select-business-type" class="form-control">
+                        {{#businessTypeOptions}}
+                        <option data-businesstype="{{data}}" {{#equals data ../account.type}}selected{{/equals}}>{{label}}</option>
+                        {{/businessTypeOptions}}
+                    </select>
+                </div>
+            </div>
+
+            <!-- UPDATE PHOTO -->
+            <div id="contact-photo-container" class="row">
+                <row>
+                    <div class="col-xs-5 col-md-6">
+                        <div class="hidden-xs hidden-sm">
+                            <div class="btn-link btn-edit-photo">Change Logo</div>
+                        </div>
+                        <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if this.logo}}{{ this.logo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                    </div>
+
+                    <div class="col-xs-7 col-md-6">
+                        <div class="btn-edit-photo-controls hidden-md hidden-lg">
+                            <div class="btn btn-primary btn-remove-photo">Remove Logo</div>
+                            <div class="btn btn-primary btn-upload-photo">Upload Logo</div>
+                        </div>
+                    </div>
+                </row>
+            </div>
+
+
+
+
+        </div>
+
+        <!-- CONTACT DETAILS -->
+        <div class="col-md-6">
+            <h4>Business Information</h4>
+            <hr/>
+            <div id="phone-row" class="row">
+                <div class="col-xs-1"><i class="icon-main fa fa-phone" />
+                </div>
+                <div class="col-xs-10">
+                    <div id="edit-phones-container">
+
+                        {{#each account.business.phones}}
+                        {{> edit-business-phone}}
+                        {{/each}}
+
+                        {{#each phones}}
+                        <div>
+                            <a href="tel:+1{{number}}">+1 {{number}}</a>
+                            <small>{{phoneTypeLabel type}}</small>
+                            <i class="icon-social {{iconFromSocialType ../type}}" />
+                        </div>
+                        {{/each}}
+
+                        <!-- ADD NEW PHONE -->
+                        {{> edit-business-phone}}
+                    </div>
+                            <span style="margin-top:-15px;" class="col-xs-10">
+                                <small>e.g. (303-555-5555)</small>
+                            </span>
+                </div>
+
+            </div>
+
+
+
+
+
+            <div id="address-row" class="row">
+                <div class="col-xs-1"><i class="icon-main fa fa-map-marker" />
+                </div>
+                <div class="col-xs-10">
+                    <div id="edit-addresses-container">
+                        {{#each account.business.addresses}} {{> edit-address}} {{else}} {{#each addresses}}
+                        <div class="edit-address-container" id="{{_id}}">
+                            {{#if address}}
+                            <div>{{address}}</div>
+                            {{/if}} {{#if address2}}
+                        </div>
+                        {{address2}}
+                    </div>
+                    {{/if}}
+                    <div>
+                        {{city}} {{#if state}}, {{state}}{{/if}} {{#if zip}}, {{zip}}{{/if}} {{#if country}}, {{country}}{{/if}}
+                        <i class="icon-social {{iconFromSocialType ../../type}}" />
+                    </div>
+
+                </div>
+                {{/each}} {{/each}}
+
+            </div>
+
+            <br/>
+
+
+            <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
+
+        </div>
+    </div>
+
+
+</div>
+</div>
+</div>
+
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
+                <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" data-dismiss="modal">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add or Remove Logo</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Logo</div>
+                </div>
+
+                <div class="row" style="margin-top:6px; margin-bottom:20px;">
+                    <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new Logo</div>
+                </div>
+
+                <div id="upload-photo-container" />
+
+                <img id="contact-photo-modal" src="{{user.photo}}" style="max-width:100%; margin-top:20px;" />
+            </div>
+        </div>
+    </div>
+</div>
 
 </script>
 

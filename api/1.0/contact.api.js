@@ -31,6 +31,7 @@ _.extend(api.prototype, baseApi.prototype, {
       //  app.post("/signupnews", this.signUpNews.bind(this));
         app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
 
+
         app.get(this.url(':accountId/contacts/:letter/:skip', "account"), this.isAuthApi, this.getContactsForAccountByLetter.bind(this));
 
         app.get(this.url(':accountId/contacts/:letter', "account"), this.isAuthApi, this.getContactsForAccountByLetter.bind(this));
@@ -65,11 +66,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     createContact: function(req,resp) {
+        var self = this;
+        self.log.debug('>> createContact');
         this._saveOrUpdateContact(req, resp, true);
     },
 
 
     updateContact: function(req,resp) {
+        var self = this;
+        self.log.debug('>> updateContact');
         this._saveOrUpdateContact(req, resp, false);
     },
 
@@ -157,6 +162,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             });
         }
+
     },
     //endregion CONTACT
 

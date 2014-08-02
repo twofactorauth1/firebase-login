@@ -48,7 +48,9 @@ var component = $$.m.ModelBase.extend({
             /**
              * the HTML formatted value
              */
-            value: ""
+            value: "",
+
+            posts: []
         }
     },
 

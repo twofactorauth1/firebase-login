@@ -17,8 +17,9 @@ define([
     'models/cms/components/single-post',
     'models/cms/components/signup-form',
     'models/cms/components/blog',
-    'models/cms/components/single-post',
-], function(Freeform, ContactUs, FeatureBlocks, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost, SignupForm, Blog, SinglePost) {
+    'models/cms/components/products',
+    'models/cms/components/single-page',
+], function(Freeform, ContactUs, FeatureBlocks, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost, SignupForm, Blog, Products, SinglePage) {
 
     var components = {
         "freeform": Freeform,
@@ -32,7 +33,9 @@ define([
         "single-post": SinglePost,
         "signup-form": SignupForm,
         "blog": Blog,
-        "single-post": SinglePost
+        "single-post": SinglePost,
+        "products": Products,
+        "single-page": SinglePage,
     };
 
     var collection = Backbone.Collection.extend({

@@ -25,6 +25,7 @@ define([
         account: null,
 
         websiteId: null,
+        pageId: null,
         postId: null,
         websiteTitle: null,
         websiteSettings: null,
@@ -41,8 +42,8 @@ define([
             "click .btn-cancel-page":"cancelPage",
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
-            "click .add-post":"addBlankPost",
-            "mousemove #sortable":"draggingComponent"
+            "mousemove #sortable":"draggingComponent",
+            "click .blog-title .editable":"updateTitle",
         },
 
         initialize: function(options) {
@@ -112,12 +113,22 @@ define([
                             if (page == "" || page == "/") {
                                 page = "index";
                             }
+
+                            if (page.indexOf("blog/") > -1) {
+                                console.log('editing single blog');
+                                page = "single-post";
+                            }
                             self.pageHandle = page;
                         }
 
                         $.when(p3, p4)
                             .done(function() {
                                 self.getPage().done(function(){
+                                    self.pageId = self.page.attributes._id;
+                                    console.log('This Page ID: '+self.pageId);
+
+                                    // $("#iframe-website").contents().find('#body').data("pageid", self.pageId);
+                                    // console.log('Body Tag: '+$("#iframe-website").contents().find('#body').data("pageid"));
                                     var componentsArray = [];
                                     var rawComponents = self.page.attributes.components.models;
                                     for (key in rawComponents) {
@@ -133,8 +144,9 @@ define([
 
                                     self.setupSidebar(data, rightPanel, sidetmpl);
 
-                                    $(window).on("resize", self.adjustWindowSize);
 
+                                    $(window).on("resize", self.adjustWindowSize);
+                                    self.disableClickableTitles();
                                 });
                         });
                     });
@@ -144,6 +156,10 @@ define([
             this.proxiedOnWebsiteEdit = $.proxy( this.onWebsiteEdit, this);
             this.$el.on("websiteedit", this.proxiedOnWebsiteEdit);
             return this;
+        },
+
+        updateTitle: function () {
+            console.log('update title');
         },
 
         draggingComponent: function (e) {
@@ -180,8 +196,8 @@ define([
                 },
                 stop: function(event, ui) {
                     self.is_dragging = false;
-                    var topComponentID = $(ui.item).prev().data('id');
-                    var bottomComponentID = $(ui.item).next().data('id');
+                    var topComponentID = $(ui.item).prev().data('component-id');
+                    var bottomComponentID = $(ui.item).next().data('component-id');
                     var $iframe = $('#iframe-website').contents();
                     $iframe.ready(function() {
                         var component = $iframe.find(".component[data-id='"+componentID+"']");
@@ -205,13 +221,70 @@ define([
                     });
                 },
                 change: function( e, ui ) {
-                    componentID = $(ui.item).data('id');
+                    console.log('sortable changed');
+                    componentID = $(ui.item).data('component-id');
+                    var start_pos = ui.item.data('start_pos');
                     if(self.is_dragging) console.log('X:' + e.screenX + ' Y: '+e.screenY );
+                    var serialize = $("#sortable").sortable('toArray', {attribute: 'data-component-id'});
+                    console.log('Serialize: ' +JSON.stringify(serialize));
                 },
                 handle: '.dd-handle'
             });
+
             var colorPalette = self.websiteSettings;
             self.renderSidebarColor(colorPalette);
+            self.componentHover();
+        },
+
+        componentHover: function() {
+                var $iframe = $('#iframe-website').contents();
+                $iframe.ready(function() {
+                    var components = $iframe.find(".component");
+                    components.hover(
+                        function() {
+                            var componentId = $(this).data('id');
+                            $("#sortable").find('.dd-item[data-component-id="'+componentId+'"]').addClass('active');
+                        },
+                        function() {
+                            var componentId = $(this).data('id');
+                            $("#sortable").find('.dd-item[data-component-id="'+componentId+'"]').removeClass('active');
+                        }
+                    );
+                });
+            },
+
+        updateOrder: function (componentID, start_pos) {
+            var self = this;
+            console.log('update order');
+            var serialize = $('#sortable').sortable('serialize');
+            console.log('Serialize: ' +JSON.stringify(serialize));
+            this.page = new Page({
+                websiteId:this.websiteId,
+                title: pageTitle,
+                handle: pageUrl,
+                components: [
+                    {
+                        "anchor" : null,
+                        "type" : "single-page"
+                    }
+                ],
+                created: {
+                    date: new Date().getTime(),
+                    by: self.user.attributes._id
+                }
+            });
+
+            this.page.save().done( function() {
+                console.log('page sved');
+                self.pageId = self.page.attributes._id;
+                // var $iframe = $('#iframe-website');
+                // $iframe.ready(function() {
+                //     $iframe.contents().find("#main-area .entry").prepend(html);
+                //     console.log('Blank Post ID: '+self.postId);
+                //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                //     $iframe.contents().find("#main-area").trigger("click");
+                // });
+            });
         },
 
         renderSidebarColor: function(colorPalette) {
@@ -225,6 +298,7 @@ define([
         },
 
         onWebsiteEdit: function(event) {
+            var self = this;
             var data = arguments[1];
             var target = data.target;
 
@@ -237,49 +311,81 @@ define([
             var content = data.content;
             var page = data.pageId;
 
-            var configComponents = this.themeConfig.components;
-            var componentConfig = _.findWhere(configComponents, { type: componentType });
-            var configClasses = componentConfig.classes;
-            for(var key in configClasses) {
-                if (configClasses[key] == dataClass) {
-                    dataClass = key;
-                    break;
-                }
-            }
-            component.setContent(dataClass, content, target, componentConfig);
-            //this.savePage();
-        },
+            console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
 
-        getPost: function () {
-            console.log('Getting Post');
-            var self = this;
-
-            if (this.postId == null) {
-                console.log('No Post ID');
-                this.post = new Post({
-                    websiteId: this.websiteId
+            if (componentType == 'blog' || componentType == 'single-post') {
+                var postId = $(target).closest(".single-blog").attr("data-postid");
+                self.postId = postId;
+                self.getPost().done(function(){
+                    //post excerpt
+                    if (dataClass == 'post_excerpt') {
+                        var replaced =  content.replace(/^\s+|\s+$/g, '')
+                        self.post.set({ post_excerpt: replaced });
+                    }
+                    //post title
+                    if (dataClass == 'post_title') {
+                        var replacedTitle = content.replace(/^\s+|\s+$/g, '');
+                        var replacedUrl = content.replace(/^\s+|\s+$/g, '').toLowerCase().replace(/ /g,'-');
+                        self.post.set({ post_title: replacedTitle, post_url: replacedUrl });
+                    }
+                    //post content
+                    if (dataClass == 'post_content') {
+                        self.post.set({ post_content: content });
+                    }
+                    self.savePost();
                 });
             } else {
-                console.log('Post ID Found');
-                this.post = new Post({
-                    _id: this.postId
-                });
+                var configComponents = this.themeConfig.components;
+                var componentConfig = _.findWhere(configComponents, { type: componentType });
+                var configClasses = componentConfig.classes;
+                for(var key in configClasses) {
+                    if (configClasses[key] == dataClass) {
+                        dataClass = key;
+                        break;
+                    }
+                }
+                component.setContent(dataClass, content, target, componentConfig);
+                //this.savePage();
             }
+        },
+
+        disableClickableTitles: function() {
+            var $iframe = $('#iframe-website');
+                $iframe.ready(function() {
+                    $iframe.contents().find(".blog-title a").on('click', function(e) {
+                        console.log('click');
+                        e.preventDefault();
+                    });
+                });
+        },
+
+        getPost: function() {
+            console.log('Getting Post: '+this.postId);
+            if (this.postId == null) {
+                this.post = new Post({});
+                var deferred = $.Deferred();
+                deferred.resolve(this.post);
+                return deferred;
+            }
+            this.post = new Post({
+                _id:this.postId,
+                pageId:this.pageId
+            });
 
             return this.post.fetch();
         },
 
         savePost: function() {
+            var self = this;
             this.post.save()
                 .done(function() {
                     console.log('post saved');
-                    $$.viewManager.showAlert("Post saved!");
+                    self.postID = null;
                 })
                 .fail(function(resp) {
-                    alert("There was an error saving this post!");
+                    alert("There was an error saving this post! "+JSON.stringify(resp));
                 });
         },
-
 
         savePage: function() {
             this.page.save()
@@ -292,10 +398,8 @@ define([
                 });
         },
 
-
         cancelPage: function() {
         },
-
 
         getUser: function () {
             if (this.userId == null) {
@@ -309,7 +413,6 @@ define([
             return this.user.fetch();
         },
 
-
         getAccount: function () {
             if (this.accountId == null) {
                 this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
@@ -321,7 +424,6 @@ define([
 
             return this.account.fetch();
         },
-
 
         getWebsite: function () {
             if (this.accountId == null) {
@@ -341,8 +443,8 @@ define([
             return this.website.fetch();
         },
 
-
         getPage: function() {
+            console.log('Website ID: '+this.websiteId+' Page Handle: '+this.pageHandle);
             this.page = new Page({
                 websiteId: this.websiteId,
                 handle: this.pageHandle
@@ -350,7 +452,6 @@ define([
 
             return this.page.fetch();
         },
-
 
         getThemeConfig: function () {
             var self = this;

@@ -1,7 +1,7 @@
-.campaign-list {
+.campaign-list, .template-list {
 	padding: 0;
 
-	li {
+	li.row {
 		border-radius: 3px;
 		background: #fcfcfc;
 		min-height: 75px;
@@ -9,7 +9,7 @@
 		border-bottom: 1px solid #e4e7ea;
 	}
 
-	li:hover {
+	li.row:hover {
 		background-color: #e4e7ea;
 	    transition: background-color 1000ms linear;
 	}
@@ -212,6 +212,10 @@
 		margin: 0 auto;
 		text-transform: uppercase;
 	}
+
+    .mailStaticsChart {
+        min-height: 300px;
+    }
 }
 
 .days-left {
@@ -247,7 +251,13 @@
 }
 
 .campaign-details {
+	-webkit-box-shadow: 0 3px 5px 0 #d8dbde;
+	box-shadow: 0 3px 5px 0 #d8dbde;
+	border: 1px solid #e4e7ea;
 	.detail-single {
+		:last {
+			border-right: none;
+		}
 		border-right: 1px solid #e7e7e7;
 	}
 }
@@ -258,9 +268,11 @@
 
 .template-messages {
 	padding-left: 0;
+	margin-top: 5px;
 	li {
 		display: inline-block;
 		position: relative;
+		line-height: 22px;
 		span {
 			background: #39b54a;
 			border: 1px solid #239537;
@@ -279,6 +291,12 @@
 }
 
 .template-details {
+	min-height: 100px;
+	background: white;
+	padding: 10px;
+	-webkit-box-shadow: 0 3px 5px 0 #d8dbde;
+	box-shadow: 0 3px 5px 0 #d8dbde;
+	border: 1px solid #e4e7ea;
 	.title {
 		color: #54c8e8;
 		font-weight: bold;
@@ -288,6 +306,51 @@
 		color: #c2c2c2;
 	}
 }
+
+.marketing-templates .btn-group {
+	padding: 0;
+	height: 38px;
+	margin: 0;
+}
+
+.template-messages {
+	margin: 15px 15px 15px 15%;
+	ul:first {
+	    padding: 0;
+	    margin: 0;
+	    list-style-type: none;
+	    position: relative;
+	}
+
+	li.panel-message {
+	    list-style-type: none;
+	    border-left: 2px solid #000;
+	    margin-left: 1em;
+	    width: 95%;
+	}
+
+	// li.panel-message div {
+	//     padding-left: 1em;
+	//     position: relative;
+	// }
+
+	// li.panel-message div::before {
+	//     content: '';
+	//     position: absolute;
+	//     top: 0;
+	//     left: -2px;
+	//     bottom: 50%;
+	//     width: 0.75em;
+	//     border: 2px solid #000;
+	//     border-top: 0 none transparent;
+	//     border-right: 0 none transparent;
+	// }
+
+	ul:first > li.panel-message:last-child {
+	    border-left: 2px solid transparent;
+	}
+}
+
 
 // Small Device
 @media(max-width:767px){

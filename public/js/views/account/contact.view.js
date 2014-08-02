@@ -12,9 +12,10 @@ define([
     'collections/contacts',
     'services/authentication.service',
     'services/contact.service',
+
     'events/events',
-    'libs/jquery/jquery.batchedimageloader'
-], function(User, Account, Contact, Contacts, AuthenticationService, ContactService,events) {
+    'libs_misc/jquery/jquery.batchedimageloader'
+    ], function(User, Account, Contact, Contacts, AuthenticationService, ContactService,events) {
 
     var view = Backbone.View.extend({
 
@@ -67,10 +68,12 @@ define([
                 }
             }
 
-            $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
-            $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
             _.bindAll(this, 'check_height');
 
+            $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
+            $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
+
+            $(window).scroll(this.check_height);
 
         },
 
@@ -95,6 +98,8 @@ define([
                 .done(function() {
                     self.renderContacts();
                     self.check_welcome();
+                    self.adjustWindowSize();
+                    $(window).on("resize", self.adjustWindowSize);
                 });
 
             $.when(p4)
@@ -363,13 +368,21 @@ define([
 
             if(this.currentLetter=='all') {
                 return this.contacts.getContactsAll(this.accountId, this.currentLetter, this.skip);
-            }
-            else {
+            }  else {
                 return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
             }
 
         },
 
+        adjustWindowSize: function() {
+            console.log('resizing');
+            $('#main-viewport').css('overflow', 'none');
+            var headerBar = $('#headerbar').outerHeight();
+            var pageHeader = $('.pageheader').outerHeight();
+            var mainViewportHeight = $(window).height() - headerBar - pageHeader-10;
+            console.log('adjusting window size to '+$(window).height()+' Headerbar: '+headerBar+' Page Herder: '+pageHeader);
+            $('.contentpanel').css('min-height', $(window).height());
+        },
 
         check_welcome: function() {
             if(!this.user.get('welcome_alert').contact){
@@ -419,6 +432,7 @@ define([
                     else
                         $$.r.account.ContactRouter.navigateToShowContactsForLetter(self.currentLetter);
                 }
+
                 console.log("loadData");
             } else{
                 console.log("dont load");

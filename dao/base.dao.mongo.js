@@ -94,8 +94,16 @@ var mongodao = {
         this._findManyWithFieldsMongo(query, null, type, fn);
     },
 
+    _findManyWithLimitMongo: function(query, limit, type, fn) {
+        this._findManyWithFieldsAndLimitMongo(query, null, limit, type, fn);
+    },
+
 
     _findManyWithFieldsMongo: function(query, fields, type, fn) {
+        this._findManyWithFieldsAndLimitMongo(query, fields, null, type, fn);
+    },
+
+    _findManyWithFieldsAndLimitMongo: function(query, fields, limit, type,  fn) {
         var self = this;
         if (fn == null) {
             fn = type;
@@ -114,13 +122,53 @@ var mongodao = {
             }
         };
 
-        if (query == null && fields == null) {
-            mongoColl.find().toArray(fxn);
-        } else if (query != null) {
-            mongoColl.find(query).toArray(fxn);
-        } else if(fields != null) {
-            mongoColl.find(null, fields).toArray(fxn);
+        if(limit == null) {
+            if (query == null && fields == null) {
+                mongoColl.find().toArray(fxn);
+            } else if (query != null) {
+                mongoColl.find(query).toArray(fxn);
+            } else if(fields != null) {
+                mongoColl.find(null, fields).toArray(fxn);
+            }
+        } else {
+            if (query == null && fields == null) {
+                mongoColl.find().limit(limit).toArray(fxn);
+            } else if (query != null) {
+                mongoColl.find(query).limit(limit).toArray(fxn);
+            } else if(fields != null) {
+                mongoColl.find(null, fields).limit(limit).toArray(fxn);
+            }
         }
+
+    },
+
+
+    _findAndOrderMongo: function(query, fields, type, order_by, order_dir, fn) {
+        var self = this;
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        //ascending === 1 (default)
+        //descending === -1
+        if(order_dir !== -1) {
+            order_dir = 1;
+        }
+
+        var collection = this.getTable(type);
+        var mongoColl = this.mongo(collection);
+
+        var fxn = function(err, value) {
+            if (!err) {
+                return self._wrapArrayMongo(value, fields, type, fn);
+            } else {
+                self.log.error("An error occurred: #findAndOrderMongo() with query: " + JSON.stringify(query), err);
+                fn(err, value);
+            }
+        };
+        this.mongo(collection).find(query).sort({order_by : order_dir}).toArray(fxn);
+
     },
 
     _findAllWithFieldsMongo: function(query,  skip, sort,fields, type, fn) {
@@ -252,6 +300,68 @@ var mongodao = {
         });
     },
 
+    _removeByQueryMongo: function(query, type, fn) {
+        var self = this;
+
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+        this.mongo(collection).remove(query, function(err, value) {
+            if (err) {
+                self.log.error("An error occurred: #removeByQueryMongo. ", err);
+            }
+
+            fn(err, value);
+        });
+    },
+
+    _getMaxValueMongo: function(query, fieldName, type, fn) {
+        //db.thiscollection.find().sort({"thisfieldname":-1}).limit(1)
+        var self = this;
+        var collection = this.getTable(type);
+        this.mongo(collection).find(query).sort({fieldName : -1}).limit(1).toArray(function(err, values){
+            if(err) {
+                self.log.error('An error occurred: #getMaxValueMongo. ', err);
+                fn(err, null);
+            } else {
+                var result = values[0] || {};
+                self.log.info('result: ');
+                console.dir(result);
+                fn(null, result[fieldName]);
+            }
+        });
+    },
+
+    _findAndModify: function(params, fieldName, type, fn) {
+        var self = this;
+
+        var collection = this.getTable(type);
+
+        this.mongo(collection).findAndModify(params,
+            function(err, value) {
+                if (!err && value != null) {
+                    if (fn != null) {
+                        fn(null, value.fieldName);
+                    }
+                } else if(!err){
+                   //we could not find anything.  Insert maybe?
+                    params.seq = 0;
+                    var postOrder = new $$.m.PostOrder(params);
+                    self.mongo(collection).insert(postOrder, null, fn);
+
+                } else {
+                    self.log.error("An error occurred retrieving sequence: ", err);
+                    if (fn != null) {
+                        fn(err, value);
+                    }
+                }
+            }
+        );
+    },
+
 
     _getNextSequence: function(collection, fn) {
         var self = this;
@@ -329,11 +439,13 @@ var mongodao = {
 
     _notifyUnlock: function(collection) {
         if (this.unlockRegister && this.unlockRegister[collection] != null) {
-            var callbacks = this.unlockRegister[collection];
+            //var callbacks = this.unlockRegister[collection];
+            //do a deep copy of the array and delete it so it won't be modified by the callbacks
+            var callbacks = $.extend(true, [], this.unlockRegister[collection]);
+            delete this.unlockRegister[collection];
             for(var i = 0; i < callbacks.length; i++) {
                 callbacks[i]();
             }
-            delete this.unlockRegister[collection];
         }
     },
 

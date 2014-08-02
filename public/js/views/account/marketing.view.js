@@ -20,7 +20,10 @@ define([
         events: {
             "click .close":"close_welcome",
             "click .campaign-list li":"viewSingleCampaign",
-            "click .btn-view-templates":"viewTemplates"
+            "click .btn-view-templates":"viewTemplates",
+            "click .btn-show-add-campaign-modal": "viewAddCampaignModal",
+            "click .btn-clear-campaign-modal": "clearCampaignModal",
+            "click .btn-post-campaign-modal-data": "postCampaignModalData"
         },
 
 
@@ -60,6 +63,46 @@ define([
             var self = this;
             var campaignId = $(event.currentTarget).data("campaignid");
             $$.r.account.marketingRouter.showMarketingSingle(campaignId);
+        },
+
+        viewAddCampaignModal: function(event) {
+            var self = this;
+            var data = {};
+            var campaignModal = $('#add-campaign-modal');
+            campaignModal.find('.datepicker').datepicker();
+            campaignModal.find(".popoverLabel").popover();
+            campaignModal.find('#goalVisits').val(3000);
+            campaignModal.find('#goalContacts').val(500);
+            campaignModal.find('#goalCustomers').val(30);
+            campaignModal.find('#launchDate').val(moment().format('MM/DD/YYYY'));
+            campaignModal.find('#endDate').val(moment().add('days', 7).format('MM/DD/YYYY'));
+            campaignModal.modal('show');
+        },
+
+        clearCampaignModal: function() {
+            console.log('clear campaign');
+            $('#endDate, #launchDate, #campaignName, #goalVisits, #goalContacts, #goalCustomers').val('');
+            $('#add-campaign-modal').modal('hide');
+        },
+
+        postCampaignModalData: function() {
+            var campaignName = $('#campaignName').val();
+            var goalVisits = $('#goalVisits').val();
+            var goalContacts = $('#goalContacts').val();
+            var goalCustomers = $('#goalCustomers').val();
+            var launchDate = $('#launchDate').val();
+            var endDate = $('#endDate').val();
+            console.log('Post Data -> \n Campaign Name: '+campaignName
+                +' \n Goal Visits: '+goalVisits
+                +' \n Goal Contacts: '+goalContacts
+                +' \n Goal Customers: '+goalCustomers
+                +' \n Launch Date: '+launchDate
+                +' \n End Date: '+endDate
+            );
+
+            //ADD Data Posting Function Here
+
+            $('#add-campaign-modal').modal('hide');
         },
 
         adjustWindowSize: function() {

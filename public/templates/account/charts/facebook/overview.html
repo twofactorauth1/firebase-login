@@ -6,9 +6,40 @@
 -->
 
 <script type="text/x-handlebars-template" name="fb-overview">
-    <div class="graph-overview">
-        <p class="p1"><b>{{likes}}</b> likes</p>
-        <p class="p2"><b>{{engaged}}</b> engaged users <sup>(28 days)</sup></p>
-        <p class="p3"><b>{{fofs}}</b> friends of fans</p>
-    </div>
+    <div class="panel panel-success panel-stat">
+	    <div class="panel-heading graph-overview">
+
+	        <div class="stat">
+	            <div class="row">
+	                <div class="col-xs-5">
+	                    <i class="fa fa-thumbs-o-up"></i>
+	                </div>
+	                <div class="col-xs-7">
+	                    <small class="stat-label">Likes</small>
+	                    <h1 class="p1">{{likes}}</h1>
+	                </div>
+	            </div>
+	            <!-- row -->
+
+	            <div class="mb15"></div>
+
+	            <div class="row">
+	                <div class="col-xs-6">
+	                    <small class="stat-label">Engaged Users</small>
+	                    <h4 class="p2">{{engaged}}</h4>
+	                </div>
+
+	                <div class="col-xs-6">
+	                    <small class="stat-label">Friends of Fans</small>
+	                    <h4 class="p3">{{fofs}}</h4>
+	                </div>
+	            </div>
+	            <!-- row -->
+	        </div>
+	        <!-- stat -->
+
+	    </div>
+	    <!-- panel-heading -->
+	</div>
+
 </script>
