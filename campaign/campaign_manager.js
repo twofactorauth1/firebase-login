@@ -316,6 +316,15 @@ module.exports = {
         });
     },
 
+    getPipeshiftTemplateByName: function (templateName, callback) {
+        mandrill_client.templates.info({name: templateName}, function (template) {
+                callback(null, template)
+            }, function (err) {
+                callback(err, null);
+            }
+        );
+    },
+
     _cancelMandrillCampaignMessages: function (query, callback) {
         var self = this;
 

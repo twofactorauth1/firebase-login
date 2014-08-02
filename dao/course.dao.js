@@ -42,17 +42,14 @@ var dao = {
             });
         },
 
-        findVideoByCourseSubdomainAndId: function (subdomain, videoId, curUserId, fn) {
-            var query = { "subdomain": subdomain};
+        findCourseAndVideo: function (courseSubdomain, videoId, fn) {
+            var query = { "subdomain": courseSubdomain};
             this.findOne(query, function (err, course) {
                 if (!err && course) {
                     var videos = course.get("videos");
-                    var video = _.findWhere(videos, {_id: videoId});
-                    if (video && course.userId != curUserId) {
-                        clearVideoFieldsForUnauthorizedUser(video);
-                    }
+                    var video = _.findWhere(videos, {videoId: videoId});
                 }
-                return fn(err || !video, video);
+                return fn(err, course, video);
             });
         }
 
