@@ -29,11 +29,8 @@ angular.module('app.modules.video').controller('AddCourseModalController', ['$sc
         }
         subdomainChangeTimeout = $timeout(function () {
             Course.isSubdomainFree({subdomain: $scope.course.subdomain}, function (response) {
-
                 $scope.isSubdomainChecked = true;
-                if (response.success) {
-                    $scope.isSubdomainFree = response.result;
-                }
+                $scope.isSubdomainFree = response.result;
                 if ($scope.isSubdomainFree) {
                     $scope.courseForm.subdomain.$setValidity("isNotFree", true);
                 } else {

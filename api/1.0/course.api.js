@@ -37,8 +37,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listCourses: function (req, resp) {
         var self = this;
-        courseDao.findMany({userId: self.userId(req), _id: { $ne: "__counter__" }}, function (err, value) {
-            self.sendResultOrError(resp, err, value, "Error getting courses");
+        var userId = self.userId(req);
+        courseDao.listUserCourses(userId, function (err, courses) {
+            self.sendResultOrError(resp, err, courses, "Error getting courses");
         });
     },
 
@@ -52,24 +53,23 @@ _.extend(api.prototype, baseApi.prototype, {
 
         courseId = parseInt(courseId);
 
-        courseDao.getCourseById(courseId, self.userId(), function (err, course) {
+        courseDao.getCourseById(courseId, self.userId(req), function (err, course) {
             self.sendResultOrError(resp, err, course, "Error getting course");
         });
     },
 
     createCourse: function (req, resp) {
         var self = this;
-        var newCourse = new $$.m.Course(req.body);
-        newCourse.set('_id', null);
-        newCourse.set('userId', self.userId(req));
-        courseDao.saveOrUpdate(newCourse, function (err, createdCourse) {
+        var userId = self.userId(req);
+        courseDao.createCourse(req.body, userId, function (err, createdCourse) {
             self.sendResultOrError(resp, err, createdCourse, "Error creating course");
         });
 
     },
+
     updateCourse: function (req, resp) {
         var self = this;
-        var newCourseValues = req.body;
+        var updatedCourseData = req.body;
         var courseId = req.params.id;
 
         if (!courseId) {
@@ -77,28 +77,13 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         courseId = parseInt(courseId);
+        var userId = self.userId(req);
 
-        courseDao.getById(courseId, function (err, course) {
-            if (!err && course != null) {
-                if (course.get('userId') != self.userId(req)) {
-                    return self.wrapError(resp, 403, null, null, "Not allowed");
-                } else {
-                    course.set('title', newCourseValues.title);
-                    course.set('template', newCourseValues.template);
-                    course.set('subtitle', newCourseValues.subtitle);
-                    course.set('body', newCourseValues.body);
-                    course.set('description', newCourseValues.description);
-                    course.set('subdomain', newCourseValues.subdomain);
-                    course.set('price', newCourseValues.price);
-                    courseDao.saveOrUpdate(course, function (err, updatedCourse) {
-                        self.sendResultOrError(resp, err, updatedCourse, "Error updating course");
-                    });
-                }
-            } else {
-                return self.wrapError(resp, 401, null, err, "Error updating course");
-            }
+        courseDao.updateCourse(updatedCourseData, courseId, userId, function (err, value) {
+            return self.sendResultOrError(resp, err, value, "Error updating course");
         });
     },
+
     deleteCourse: function (req, resp) {
         var self = this;
         var courseId = req.params.id;
@@ -108,24 +93,14 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         courseId = parseInt(courseId);
+        var userId = self.userId(req);
 
-        courseDao.getById(courseId, function (err, course) {
-            if (!err && course != null) {
-                if (course.get('userId') != self.userId(req)) {
-                    return self.wrapError(resp, 403, null, null, "Not allowed");
-                } else {
-                    courseDao.remove(course, function (err, removedCourse) {
-                        self.sendResultOrError(resp, err, null, "Error removing course");
-                    });
-                }
-            } else {
-                return self.wrapError(resp, 401, null, err, "Error removing course");
-            }
+        courseDao.deleteCourse(courseId, userId, function (err, value) {
+            return self.sendResultOrError(resp, err, value, "Error removing course");
         });
     },
 
     //videos
-
     listCourseVideos: function (req, resp) {
         var self = this;
         var courseId = req.params.id;
@@ -135,13 +110,10 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         courseId = parseInt(courseId);
+        var userId = self.userId(req);
 
-        courseDao.getById(courseId, function (err, course) {
-            var videos = course.get("videos");
-            if (course.get('userId') != self.userId(req)) {
-                _.forEach(videos, clearVideoFieldsForUnauthorizedUser);
-            }
-            self.sendResultOrError(resp, err, course.get("videos"), "Error getting course videos");
+        courseDao.listCourseVideos(courseId, userId, function (err, videos) {
+            self.sendResultOrError(resp, err, videos, "Error getting course videos");
         });
     },
     getCourseVideoById: function (req, resp) {
@@ -157,18 +129,10 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         courseId = parseInt(courseId);
+        var userId = self.userId(req);
 
-        courseDao.getById(courseId, function (err, course) {
-            var videos = course.get("videos");
-            var video = _.findWhere(videos, {videoId: videoId});
-            if (video == null) {
-                return self.wrapError(resp, 400, null, "Can't find video");
-            } else {
-                if (course.get('userId') != self.userId(req) && !isUserPaidForCourse(req.user, course)) {
-                    clearVideoFieldsForUnauthorizedUser(video);
-                }
-                self.sendResultOrError(resp, err, video, "Error getting course videos");
-            }
+        courseDao.findCourseVideoById(courseId, videoId, userId, function (err, video) {
+            self.sendResultOrError(resp, err, video, "Error getting course video");
         });
     },
     addVideoToCourse: function (req, resp) {
@@ -184,58 +148,30 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         courseId = parseInt(courseId);
-        videoToAdd._id = null;
+        var userId = self.userId(req);
 
-
-        courseDao.getById(courseId, function (err, course) {
-            if (course.get('userId') != self.userId(req)) {
-                return self.wrapError(resp, 403, null, null, "Not allowed");
-            } else {
-                var videos = course.get("videos");
-                videos.push(videoToAdd);
-                courseDao.saveOrUpdate(course, function (err, course) {
-                    self.sendResultOrError(resp, err, videoToAdd, "Error adding video to course");
-                });
-            }
-        });
+        courseDao.addVideoToCourse(videoToAdd, courseId, userId, function (err, video) {
+            self.sendResultOrError(resp, err, video, "Error adding video to course");
+        })
     },
     updateVideoInCourse: function (req, resp) {
         var self = this;
         var courseId = req.params.id;
         var videoId = req.params.videoId;
-        var newVideoValues = req.body;
+        var updatedVideoValues = req.body;
 
         if (!courseId || !videoId) {
             return this.wrapError(resp, 400, null, "Invalid parameter for ID");
         }
-        if (!newVideoValues) {
+        if (!updatedVideoValues) {
             return this.wrapError(resp, 400, null, "Invalid body");
         }
 
         courseId = parseInt(courseId);
+        var userId = self.userId(req);
 
-        courseDao.getById(courseId, function (err, course) {
-            if (course.get('userId') != self.userId(req)) {
-                return self.wrapError(resp, 403, null, null, "Not allowed");
-            } else {
-                var videos = course.get("videos");
-                var video = _.findWhere(videos, {videoId: videoId});
-                if (video == null) {
-                    return self.wrapError(resp, 400, null, "Can't find video");
-                } else {
-                    video.videoTitle = newVideoValues.videoTitle;
-                    video.videoSubtitle = newVideoValues.videoSubtitle;
-                    video.videoBody = newVideoValues.videoBody;
-                    video.scheduledHour = newVideoValues.scheduledHour;
-                    video.scheduledMinute = newVideoValues.scheduledMinute;
-                    video.scheduledDay = newVideoValues.scheduledDay;
-                    video.subject = newVideoValues.subject;
-                    video.isPremium = newVideoValues.isPremium;
-                    courseDao.saveOrUpdate(course, function (err, course) {
-                        self.sendResultOrError(resp, err, video, "Error updating video in course");
-                    });
-                }
-            }
+        courseDao.updateVideoInCourse(videoId, updatedVideoValues, courseId, userId, function (err, video) {
+            self.sendResultOrError(resp, err, video, "Error updating video in course");
         });
     },
     deleteVideoFromCourse: function (req, resp) {
@@ -252,29 +188,18 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         courseId = parseInt(courseId);
+        var userId = self.userId(req);
 
-        courseDao.getById(courseId, function (err, course) {
-            if (course.get('userId') != self.userId(req)) {
-                return self.wrapError(resp, 403, null, null, "Not allowed");
-            } else {
-                var videos = course.get("videos");
-                var video = _.findWhere(videos, {videoId: videoId});
-                if (video == null) {
-                    return self.wrapError(resp, 400, null, "Can't find video");
-                } else {
-                    var index = _.indexOf(videos, video);
-
-                    if (index > -1) {
-                        videos.splice(index, 1);
-                    }
-                    courseDao.saveOrUpdate(course, function (err, course) {
-                        self.sendResultOrError(resp, err, video, "Error removing video from course");
-                    });
-                }
-            }
+        courseDao.deleteVideoFromCourse(videoId, courseId, userId, function (err, video) {
+            self.sendResultOrError(resp, err, video, "Error deleting video from course");
         });
     },
     isSubdomainFree: function (req, resp) {
+        var self = this;
+        var subdomain = req.params.subdomain;
+        courseDao.isSubdomainFree(subdomain, function (err, isFree) {
+            self.sendResultOrError(resp, err, {result: isFree}, "Error while checking subdomain");
+        });
     }
 
 });
