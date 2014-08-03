@@ -60,7 +60,11 @@ define([
             "click .add-page":"newPageModal",
             "click .create-page":"addBlankPage",
             "input #page-title":"urlCreator",
-            "input #page-url":"urlCreator"
+            "input #page-url":"urlCreator",
+
+            //import contact modal
+            "click .choose-import .btn": "changeImportSection",
+            "click #import-contacts-modal .close": "closeImportModal"
         },
 
         initialize: function () {
@@ -86,6 +90,30 @@ define([
                     self.pageId = self.page.attributes._id;
                 });
             });
+        },
+
+        changeImportSection: function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var source = $(e.currentTarget).data('import-source');
+            var contacts = 100;
+
+            $('.modal-body .row').addClass('hidden');
+            var progressModal = $('.row[data-import-section="progress"]');
+            progressModal.removeClass('hidden');
+            progressModal.find('.num').text(contacts);
+            progressModal.find('.source').text(source);
+
+            /*** TEMP UNTIL IMPORT SUCCESS CALLBACK ***/
+            setTimeout(function() {
+                  $('.modal-body .row').addClass('hidden');
+                  $('.modal-body .row[data-import-section="success"]').removeClass('hidden');
+            }, 3000);
+        },
+
+        closeImportModal: function() {
+            $('.modal-body .row').addClass('hidden');
+            $('.modal-body .row[data-import-section="choose"]').removeClass('hidden');
         },
 
         renderHtml: function(html) {

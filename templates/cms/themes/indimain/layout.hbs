@@ -205,6 +205,11 @@
                   interval: 4000
                 });
 
+                $('.gallery-image').on('hover', function () {
+                  console.log('gallery hover');
+                  $(this).parent().next('.overlay-gallery-image').css('opacity', '1');
+                });
+
                 $('.goback').on('click', function() {
                     window.history.back();
                 });
