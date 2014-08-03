@@ -277,7 +277,7 @@ module.exports = {
                                     var video = course.get('videos')[i];
                                     message.subject = video.subject || course.get('title');
                                     // adjust values for current video
-                                    self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/course/" + course.get('subdomain') + "/video/" + video.videoId);
+                                    self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/courses/" + course.get('subdomain') + "/video/" + video.videoId);
                                     self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
                                     self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
                                     self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);

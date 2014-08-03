@@ -27,7 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('campaign/:id/messages'), this.findCampaignMessages.bind(this));
         app.get(this.url('campaign/:id'), this.getCampaign.bind(this));
         //pipeshift
-        app.post(this.url('pipeshift/course/:courseId/subscribe'), this.subscribeToPipeshiftCourse.bind(this));
+        app.post(this.url('pipeshift/courses/:courseId/subscribe'), this.subscribeToPipeshiftCourse.bind(this));
         app.get(this.url('pipeshift/templates'), this.getPipeshiftTemplates.bind(this));
     },
 
@@ -176,7 +176,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var course = req.body.course;
         var timezoneOffset = req.body.timezoneOffset;
         var self = this;
-        campaignManager.subscribeToPipeshiftCourse(toEmail, course, timezoneOffset, this.userId(), function (err, result) {
+        campaignManager.subscribeToPipeshiftCourse(toEmail, course, timezoneOffset, this.userId(req), function (err, result) {
             self.sendResultOrError(resp, err, result, "Could not send pipeshift scheduled emails.", 400);
         })
     },

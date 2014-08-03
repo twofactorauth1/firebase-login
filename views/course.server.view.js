@@ -63,7 +63,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             if (video.isPremium) {
                                 //ToDo: implement purchases
                                 //ToDo: think about video ids
-                                Purchase.find({userId: self.userId(), courseId: course.id()},
+                                Purchase.find({userId: self.userId(req), courseId: course.id()},
                                     function (error, docs) {
                                         if (error) {
                                             respondWithVideo(video, true);
