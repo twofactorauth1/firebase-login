@@ -140,15 +140,15 @@ define([
 
                 var pop = chart.createPopover('top', title, content)
 
-                pop.css({
-                    width : 300
-                    , left  : Math.floor(+this.getAttribute('cx') - 152 + radius * 0.8)
-                    , top   : Math.floor(+this.getAttribute('cy') - pop.height())
-                })
-
-                $(this)
-                    .on('mouseenter', $.proxy(pop.show, pop, 0))
-                    .on('mouseleave', $.proxy(pop.hide, pop, 0))
+//                pop.css({
+//                    width : 300
+//                    , left  : Math.floor(+this.getAttribute('cx') - 152 + radius * 0.8)
+//                    , top   : Math.floor(+this.getAttribute('cy') - pop.height())
+//                })
+//
+//                $(this)
+//                    .on('mouseenter', $.proxy(pop.show, pop, 0))
+//                    .on('mouseleave', $.proxy(pop.hide, pop, 0))
             })
 
         }

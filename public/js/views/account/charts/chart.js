@@ -108,7 +108,7 @@ define([
 
         var picker = $(rangeSelector);
 
-        picker.data('selectedRange', defaultRange)
+        picker.data('selectedRange', defaultRange);
 
         picker.appendTo(this.module).daterangepicker({
             ranges    : ranges
