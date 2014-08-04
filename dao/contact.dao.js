@@ -237,7 +237,7 @@ var dao = {
 
                     if (isNew === true) {
                         contact.set("accountId", this.accountId(req));
-                        contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
+                        contact.createdBy(this.userId(), $$.constants.social.types.LOCAL);
                     }
 
                    self.saveOrUpdate(contact, function(err, value) {
