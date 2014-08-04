@@ -14,6 +14,9 @@ define([
     $$.Charts.FB_engagedDemographics = new Chart({
         id: 'FB_engagedDemographics'
         , url: '/facebook/{{id}}/engagedDemographics'
+        , templateKey: 'account/charts/facebook/engaged_by_age_gender'
+        , templateWrapper: 'fb-engaged-by-age-gender'
+        , targetIndicator: '.graph-engaged-by-age-gender'
         , testData: [
             { gender: 'F', range: '25-34', frequency: 16 }
             , { gender: 'M', range: '25-34', frequency: 14 }
@@ -179,17 +182,17 @@ define([
 
                 content = content.join("<br/>");
 
-                var pop = chart.createPopover('left', title, content);
-
-                pop.css({
-                    width : 120
-                    , left  : Math.floor(+this.getAttribute('data-x') - 120)
-                    , top   : Math.floor(y(d.total))
-                });
-
-                $(this)
-                    .on('mouseenter', $.proxy(pop.show, pop, 0))
-                    .on('mouseleave', $.proxy(pop.hide, pop, 0))
+//                var pop = chart.createPopover('left', title, content);
+//
+//                pop.css({
+//                    width : 120
+//                    , left  : Math.floor(+this.getAttribute('data-x') - 120)
+//                    , top   : Math.floor(y(d.total))
+//                });
+//
+//                $(this)
+//                    .on('mouseenter', $.proxy(pop.show, pop, 0))
+//                    .on('mouseleave', $.proxy(pop.hide, pop, 0))
             })
 
         }

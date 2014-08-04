@@ -42,7 +42,8 @@ require.config({
         date: 'libs/datejs/build/production/date.min',
         daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
         d3: 'libs/d3/d3',
-        moment: 'libs/moment/min/moment.min',
+        moment: 'libs/moment/moment.min',
+        jquerydragdrop: 'libs/jquerydraganddrop/jquery.drag-drop.plugin',
 
         //UI SPECIFIC
         toggles: 'libs_misc/toggles.min',
@@ -112,6 +113,9 @@ require.config({
         daterangepicker: {
             deps: ['jquery', 'moment']
         },
+        jquerydragdrop: {
+            deps: ['jquery']
+        },
 
         tagsinput: {
             deps: ['jquery']
@@ -137,6 +141,7 @@ require.config({
                 'bootstrap',
                 'handlebars',
                 'modernizr',
+                'jquerydragdrop',
 
                 //UI SPECIFIC
                 'toggles',

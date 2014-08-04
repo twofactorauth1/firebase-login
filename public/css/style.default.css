@@ -20262,6 +20262,13 @@ input[type='file'] {
   line-height: normal;
   border-radius: 2px;
 }
+#social_dashboard {
+  position: relative;
+}
+#social_dashboard #social_dashboard_panel {
+  width: 100%;
+  padding-right: 190px;
+}
 #social_dashboard #social_dashboard_panel .grid1,
 #social_dashboard #social_dashboard_panel .grid2 {
   box-sizing: border-box;
@@ -20504,10 +20511,9 @@ input[type='file'] {
 #social_dashboard #social_dashboard_rightbar {
   padding: 0 15px 15px;
   width: 190px;
-  position: fixed;
-  top: 50px;
+  position: absolute;
+  top: 0;
   right: 0;
-  bottom: 0;
   border-right: 1px solid #d3d3d3;
   box-shadow: 1px 0 0 #f7f7f7;
   background: #e7e7e7;

@@ -107,6 +107,24 @@
                   $('.editable').aloha();
                 });
 
+                $('.item').on('hover', '.gallery-image', function() {
+                    var overlay = $(this).find('.overlay-gallery-image');
+                    if ( overlay.hasClass('hidden')){
+                        overlay.removeClass('hidden');
+                    } else {
+                        overlay.addClass('hidden');
+                    }
+                });
+
+                $('.item').on('hover', '.overlay-gallery-image', function() {
+                    var overlay = $(this);
+                    if ( overlay.hasClass('hidden')){
+                        overlay.removeClass('hidden');
+                    } else {
+                        overlay.addClass('hidden');
+                    }
+                });
+
                 // var spinner = $('.spinner-input').spinner();
                 // spinner.spinner('value', 0);
 
