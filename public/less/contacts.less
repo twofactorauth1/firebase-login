@@ -274,6 +274,38 @@
   }
 }
 
+#fix-duplicates-modal .modal-body {
+  padding: 0;
+}
+
+.duplicates-list {
+  p {padding: 15px;}
+  ul {
+    padding: 15px;
+    li {
+      border-radius: 3px;
+      background: #fcfcfc;
+      min-height: 50px;
+      line-height: 50px;
+      text-indent: 30px;
+      border-bottom: 1px solid #e4e7ea;
+
+      .name {
+        width: 20%;
+        float: left;
+      }
+
+      .similar {
+        width:20%;
+        float: left;
+      }
+      &:hover {
+        background: #1adff1;
+      }
+    }
+  }
+}
+
 #import-contacts-modal {
   .btn {
     margin-left: 10px;

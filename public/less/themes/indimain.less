@@ -628,6 +628,7 @@ div[data-class='position'] span{
   padding: 0;
   max-height:300px;
   height: 100%;
+  display: block!important;
 }
 
 .gallery-image img {
@@ -1051,15 +1052,16 @@ div[data-class="image-text"] {
 
  
 .overlay-gallery-image {
-  position: absolute;
   background: black;
   background: rgba(0,0,0,0.75);
   color: white;
   padding: 10px 20px;
-  opacity: 0;
   -webkit-transition: all 0.6s ease;
   -moz-transition:    all 0.6s ease;
   -o-transition:      all 0.6s ease;
+  margin-top: -63px;
+  z-index: 99999;
+  position: relative;
 }
 .overlay-gallery-image:hover figcaption {
   opacity: 1;
@@ -1102,3 +1104,10 @@ div[data-class="image-text"] {
 .cap-bot:before { bottom: 10px; left: 10px; }
 .cap-bot figcaption { left: 0; bottom: -30%;}
 .cap-bot:hover figcaption { bottom: 0; }
+
+/***Content Hover ***/
+.contenthover { padding:20px 20px 10px 20px; }
+.contenthover, .contenthover h3, contenthover a { color:#fff; }
+.contenthover h3, .contenthover p { margin:0 0 10px 0; line-height:1.4em; padding:0; }
+.contenthover a.mybutton { display:block; float:left; padding:5px 10px; background:#3c9632; color:#fff; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; }
+.contenthover a.mybutton:hover { background:#34742d }

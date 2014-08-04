@@ -64,7 +64,11 @@ define([
 
             //import contact modal
             "click .choose-import .btn": "changeImportSection",
-            "click #import-contacts-modal .close": "closeImportModal"
+            "click #import-contacts-modal .close": "closeImportModal",
+
+            //fix duplicates modal
+            "click .fix-duplicates":"showFixDuplicates",
+            "click .duplicates-list li":"showMerge"
         },
 
         initialize: function () {
@@ -92,6 +96,15 @@ define([
             });
         },
 
+        showMerge: function() {
+        },
+
+        showFixDuplicates: function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            $('#fixDuplicates-modal').show();
+        },
+
         changeImportSection: function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
@@ -106,8 +119,8 @@ define([
 
             /*** TEMP UNTIL IMPORT SUCCESS CALLBACK ***/
             setTimeout(function() {
-                  $('.modal-body .row').addClass('hidden');
-                  $('.modal-body .row[data-import-section="success"]').removeClass('hidden');
+              $('.modal-body .row').addClass('hidden');
+              $('.modal-body .row[data-import-section="success"]').removeClass('hidden');
             }, 3000);
         },
 

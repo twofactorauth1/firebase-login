@@ -205,10 +205,22 @@
                   interval: 4000
                 });
 
-                $('.gallery-image').on('hover', function () {
-                  console.log('gallery hover');
-                  $(this).parent().next('.overlay-gallery-image').css('opacity', '1');
+                $('.carousel-inner').on('hover', 'img.gallery-image', function() {
+                  var overlay = $(this).parent().next('.overlay-gallery-image');
+                  if (overlay.hasClass('hidden')) {
+                    overlay.removeClass('hidden');
+                  } else {
+                    overlay.removeClass('hidden');
+                  }
                 });
+
+                $('.carousel-inner').add('.overlay-gallery-image').on('mouseenter', 'img.gallery-image', function(){
+                   $(this).parent().next('.overlay-gallery-image').removeClass('hidden');
+                });
+                $('.carousel-inner').add('.overlay-gallery-image').on('mouseleave', 'img.gallery-image', function(){
+                   $(this).parent().next('.overlay-gallery-image').addClass('hidden');
+                });
+
 
                 $('.goback').on('click', function() {
                     window.history.back();
