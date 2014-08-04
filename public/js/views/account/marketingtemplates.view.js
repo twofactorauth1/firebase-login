@@ -19,6 +19,9 @@ define([
 
          events: {
             "click #btn-back-to-marketing":"viewMarketing",
+            "click .btn-view-my-templates":"viewMyTemplates",
+            "click .btn-view-all-templates":"viewAllTemplates",
+            "click .template-list li":"viewSingleTemplate",
         },
 
         render: function() {
@@ -55,7 +58,7 @@ define([
             var headerBar = $('#headerbar').outerHeight();
             var pageHeader = $('.pageheader').outerHeight();
             var mainViewportHeight = $(window).height() - headerBar - pageHeader-10;
-            $('ul.campaign-list').css('min-height', mainViewportHeight);
+            $('ul.template-list').css('min-height', mainViewportHeight);
         },
 
         viewMarketing: function(event) {
@@ -64,8 +67,26 @@ define([
             $$.r.account.marketingRouter.showMarketing();
         },
 
-        viewTemplates: function() {
-            console.log('view templates');
+        viewSingleTemplate: function(event) {
+            console.log('view single templates');
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            var templateId = $(event.currentTarget).data('templateid');
+            $$.r.account.marketingRouter.showMarketingTemplateSingle(templateId);
+        },
+
+        viewMyTemplates: function() {
+            console.log('view my templates');
+            $('.template-btns button').removeClass('active');
+            $('.template-list').removeClass('hidden');
+            $('.all-templates').addClass('hidden');
+        },
+
+        viewAllTemplates: function() {
+            console.log('view all templates');
+            $('.template-btns button').removeClass('active');
+            $('.template-list').removeClass('hidden');
+            $('.my-templates').addClass('hidden');
         },
 
         check_welcome: function() {

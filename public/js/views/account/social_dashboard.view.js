@@ -27,7 +27,6 @@ define([
             , 'click        .header.accordion'      : "collapse"
             , 'change       .ds-frequency-day'      : "changeWeekDay"
             , 'click        .dashboard-delete'      : 'deleteDashboard'
-
             , 'dragover     .grid-placeholder'      : 'highlight'
             , 'dragenter    .grid-placeholder'      : 'highlight'
             , 'dragleave    .grid-placeholder'      : 'unhighlight'
@@ -116,7 +115,7 @@ define([
                     , day   = d.getDate()
                     , month = d.getMonth() + 1
                     , year  = d.getFullYear()
-                data.title = 'dashboard-' + month + '-' + day + '-' + year
+                data.title = 'dashboard-' + month + '-' + day + '-' + year;
                 this.$('.ds-title').val(data.title)
             }
 
@@ -134,7 +133,8 @@ define([
             var value = $(e.target).val()
                 , day = this.getWeekDay(value);
 
-            this.model.set('frequency', value);
+
+            this.model.set('frequency', value)
             this.$('#frequency-weekday').val(value).prop('checked', true);
             this.$('.frequency-selected').text(day)
         },
@@ -186,7 +186,7 @@ define([
                 , name    = element.data('name')
                 , width   = element.data('width');
 
-            this.dragging = element
+            this.dragging = element;
 
             SR.log('Dragging module:', type, name, width);
 
@@ -200,8 +200,8 @@ define([
         },
 
         dropChart: function(e){
-            e.preventDefault()
-            e.stopPropagation()
+            e.preventDefault();
+            e.stopPropagation();
 
             var self = $(e.target)
                 , data = SR.DragData.get(e);
@@ -215,11 +215,11 @@ define([
                     var chart = $('#'+data.id)
                         , temp = $('<div/>')
                         , chart_data = chart.data()
-                        , self_data = self.data()
+                        , self_data = self.data();
 
                     if (data.width == 1) {
                         // the old elements switch-a-roo
-                        temp.replaceWith( self.replaceWith( chart.replaceWith(temp)))
+                        temp.replaceWith( self.replaceWith( chart.replaceWith(temp)));
                         // remove empty lines
                         if (self.siblings().is('.grid-placeholder')) {
                             self.parent().remove();
@@ -230,7 +230,7 @@ define([
                         self.data(self_data).redraw()
 
                     } else {
-                        var row1 = self.parent(), row2 = chart.parent()
+                        var row1 = self.parent(), row2 = chart.parent();
 
                         if (row1.index() > row2.index())
                             row1.after(row2);
@@ -239,11 +239,11 @@ define([
                     }
                     break;
                 case 'new':
-                    if (data.width > 1) return // TODO: handle inserting wide module in placeholder
+                    if (data.width > 1) return; // TODO: handle inserting wide module in placeholder
                     this.createModule(self, {
                         type : data.type
                         , name : data.name
-                    })
+                    });
                     break;
             }
         },
@@ -312,7 +312,7 @@ define([
             this.$('.row:not(.row-new)').each(function(i){
                 var row = [];
                 $(this).children().each(function(i){
-                    var module = SR.Modules[this.id]
+                    var module = SR.Modules[this.id];
                     row[i] = module && module.toJSON()
                 });
                 grid[i] = row
@@ -335,7 +335,7 @@ define([
                 // Create modules
                 _.each(row, function(module){
                     var w = module && module.gridWidth || 1;
-                    var temp = $('<div class="grid-placeholder grid'+w+'" data-width="'+w+'" />').appendTo(newRow);
+                    var temp = $('<div class="grid-placeholder grid'+w+'" data-width="'+w+'" />').appendTo(newRow)
                     // Defer module drawing
                     if (module) {
                         _.defer(function(){ self.createModule(temp, module) })
@@ -370,6 +370,12 @@ define([
             module.remove();
         },
 
+        moveSidebar: function() {
+            console.log('Main Viewport: '+$('#main-viewport').length+' Right Panel: '+$('#rightpanel').length+' Dashboard: '+$('.rightpanel-dashboard').length);
+            var moveIt = $("#main-viewport .rightpanel-dashboard").remove();
+            $('#rightPanel').append(moveIt);
+        },
+
         render: function() {
             var self = this
                 , p1 = this.getAccount()
@@ -379,6 +385,7 @@ define([
             var html = tmpl;
 
             self.show(html);
+
         }
     });
 

@@ -18,6 +18,7 @@ var cmsApi = require('./1.0/cms.api');
 
 //Integrations
 var awsApi = require('./1.0/integrations/aws.api');
+var paymentsApi = require('./1.0/integrations/payments.api');
 
 //Social
 var facebookApi = require('./1.0/social/facebook.api');

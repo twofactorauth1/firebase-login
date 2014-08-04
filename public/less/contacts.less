@@ -17,7 +17,7 @@
     .inner {
       cursor: pointer;
 
-      .fadeBackgroundHover(0.2s);
+      // .fadeBackgroundHover(0.2s);
       &:hover {
         background-color: @panel-info-heading-bg;
       }
@@ -212,6 +212,7 @@
     }
   }
 
+
   .btn.btn-default-shipping, .btn.btn-default-billing {
     .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
 
@@ -226,6 +227,20 @@
     i.fa {
       visibility: visible;
     }
+  }
+}
+
+.empty {
+  width: 200px;
+  margin: 0 auto;
+  text-align: center;
+
+  .fa {
+    font-size: 74px;
+    color: #bebebe;
+    text-shadow: 1px 1px 1px white;
+    padding: 15px;
+    text-align: center;
   }
 }
 

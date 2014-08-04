@@ -285,6 +285,7 @@ define([], function() {
                 case "POST":
                     return $$.api.getApiUrl("contact", "");
                 case "DELETE":
+                    return $$.api.getApiUrl("contact", this.id);
                     break;
             }
         }

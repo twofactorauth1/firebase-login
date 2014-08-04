@@ -96,19 +96,19 @@ define([
 
             var xDays = data.length
                 , xInterval = xDays <= 7 ? 1 : xDays <= 30 ? 2 : 5
-                , xFormat = xDays <= 7 ? '%a %d' : '%d'
+                , xFormat = xDays <= 7 ? '%a %d' : '%d';
 
             // X axis (date)
             var xAxis = d3.svg.axis()
                 .scale(x)
                 .ticks(d3.time.days, xInterval)
                 .tickFormat(d3.time.format(xFormat))
-                .orient("bottom")
+                .orient("bottom");
 
             root.append("g")
                 .attr("class", "x-axis")
                 .attr("transform", "translate(0," + h + ")")
-                .call(xAxis)
+                .call(xAxis);
 
             // Posts. Larger circles = more impact
             var circles = root.selectAll('.post-circle')

@@ -48,13 +48,13 @@ define([
                     , comments = $$.u.numberutils.toNumber(day.comments, 0);
 
                 return {
-                    date     : parseDate(day.date)
-                    , likes    : likes
-                    , shares   : shares
-                    , comments : comments
-                    , total    : likes + shares+ comments
+                    date        : parseDate(day.date)
+                    , likes     : likes
+                    , shares    : shares
+                    , comments  : comments
+                    , total     : likes + shares+ comments
                 }
-            })
+            });
 
             this.process(options);
 
@@ -75,74 +75,74 @@ define([
             }
 
             // Flag for preview graph
-            var preview = h < 200
+            var preview = h < 200;
 
             var max = d3.max(data, function(d){ return d.total })
-                , barWidth = Math.floor((w - p.r) / data.length) - 3
+                , barWidth = Math.floor((w - p.r) / data.length) - 3;
 
-            max = Math.floor(max * 1.55) // never allow bars to reach full height
+            max = Math.floor(max * 1.55); // never allow bars to reach full height
 
             // Scales
             var x = d3.time.scale()
                 .range([p.l, w - p.r - barWidth]) // ends at X origin of the last bar, not the whole area
-                .domain(d3.extent(data, function(d){ return d.date }))
+                .domain(d3.extent(data, function(d){ return d.date }));
 
-            var xPath = x.copy().range([p.l, w - p.r])
+            var xPath = x.copy().range([p.l, w - p.r]);
 
             var y = d3.scale.linear()
                 .rangeRound([0, h - p.b])
-                .domain([max, 0])
+                .domain([max, 0]);
 
             var color = d3.scale.ordinal()
-                .range(["#bbf", "#99f", "#77f"])
+                .range(["#bbf", "#99f", "#77f"]);
 
-            color.domain(_.without(d3.keys(data[0]), 'date', 'total').reverse())
+            color.domain(_.without(d3.keys(data[0]), 'date', 'total').reverse());
 
             data.forEach(function(d) {
-                var y0 = 0
+                var y0 = 0;
                 // offset bar position by value/height
                 d.values = color.domain().map(function(key) {
                     return { key: key, y0: y0, y1: y0 += +d[key] }
-                })
+                });
                 // total height for this data point
                 d.total = d.values[d.values.length - 1].y1
-            })
+            });
 
             // Y axis (likes/unlikes)
             var yAxis = d3.svg.axis()
                 .scale(y)
                 .orient('left')
-                .tickFormat(d3.format('d'))
+                .tickFormat(d3.format('d'));
 
             var yAxisG = root.append("g")
                 .attr("transform", _.template("translate({{x}},0)", { x: p.l/2 }))
                 .attr("class", "y-axis")
-                .call(yAxis)
+                .call(yAxis);
 
             // X axis (date)
-            var isWeek = data.length < 8
+            var isWeek = data.length < 8;
             var xx = {
                 format: isWeek ? '%a %d' : '%d/%m'
                 , ticks: isWeek ? d3.time.days : 7
-            }
+            };
 
             var xAxis = d3.svg.axis()
                 .scale(x)
                 .orient("bottom")
                 .ticks(xx.ticks)
-                .tickFormat(d3.time.format(xx.format))
+                .tickFormat(d3.time.format(xx.format));
 
             root.append("g")
                 .attr("class", "x-axis")
                 .attr("transform", "translate(" + [Math.floor(barWidth / 2), h - p.b] + ")")
-                .call(xAxis)
+                .call(xAxis);
 
             var days = root.selectAll(".day")
                 .data(data)
                 .enter().append("g")
                 .attr("class", "g")
                 .attr("data-x", function(d){ return Math.floor(x(d.date)) })
-                .attr("transform", function(d) { return "translate(" + x(d.date) + ",0)" })
+                .attr("transform", function(d) { return "translate(" + x(d.date) + ",0)" });
 
             days.selectAll("rect")
                 .data(function(d) { return d.values })
@@ -154,7 +154,7 @@ define([
                 .transition(200)
                 .delay(function(d, i){ return i * 200 })
                 .attr("height", function(d) { return y(d.y0) - y(d.y1) })
-                .attr("y", function(d) { return y(d.y1) })
+                .attr("y", function(d) { return y(d.y1) });
 
             // Add a line path
             var line = root.selectAll('path.line')

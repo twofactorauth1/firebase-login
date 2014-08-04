@@ -6,7 +6,7 @@
  */
 
 define([
-    'models/post'
+    'models/cms/post'
 ], function(Post) {
 
     var collection = Backbone.Collection.extend({

@@ -6584,6 +6584,11 @@ h4,
   font-size: 13px;
   border-color: #ddd;
 }
+.modal-header {
+  background: #eeeeee;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
 .modal-title {
   font-size: 20px;
   color: #333;

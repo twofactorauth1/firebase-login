@@ -68,7 +68,9 @@ define([
             var root = this.createSVG('graph-daily-reach');
 
             // Title
+
 //            this.addTitle("Daily reach");
+
             this.addRangeSelector(options.range);
 
             if (data.length === 0) {
@@ -106,7 +108,7 @@ define([
                 });
                 // total height for this data point
                 d.total = d.values[d.values.length - 1].y1
-            })
+            });
 
             // Y axis (likes/unlikes)
             // var yAxis = d3.svg.axis()
@@ -170,6 +172,7 @@ define([
                         , textline({ n: $$.u.formatutils.formatInteger(d.viral)  , color: color('viral'), text: 'viral' })
                     ].join("<br/>");
 
+
 //                var pop = chart.createPopover('left', title, content)
 //
 //                pop.css({
@@ -181,6 +184,7 @@ define([
 //                $(this)
 //                    .on('mouseenter', $.proxy(pop.show, pop, 0))
 //                    .on('mouseleave', $.proxy(pop.hide, pop, 0))
+
             });
 
             // legend

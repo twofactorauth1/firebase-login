@@ -91,7 +91,7 @@ define([
             } else {
                 var self  = this
                     , since = this.options.since || Date.today().add({ days: -6 })
-                    , until = this.options.until || Date.today()
+                    , until = this.options.until || Date.today();
 
                 self.$el.addClass('loading');
 
@@ -100,7 +100,7 @@ define([
                 data_url = SR.util.url([SR.settings.baseURL, data_url], {
                     since : since.toString('yyyy-MM-dd')
                     , until : until.toString('yyyy-MM-dd')
-                })
+                });
 
                 d3.json(data_url, function(data){
                     self.$el.removeClass('loading');

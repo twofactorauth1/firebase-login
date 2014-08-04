@@ -8,8 +8,9 @@
 define([
     'views/base.view',
     'models/user',
-    'models/account'
-], function(BaseView, User, Account) {
+    'models/account',
+    'views/account/market_chart.view'
+], function(BaseView, User, Account, MarketChartView) {
 
     var view = BaseView.extend({
 
@@ -23,7 +24,6 @@ define([
             "click #btn-back-to-marketing":"viewMarketing",
             "click .minimize":"minimizePanel"
         },
-
 
         render: function() {
             console.log('render marketing single');
@@ -41,8 +41,11 @@ define([
                     var tmpl = $$.templateManager.get("marketing-single", self.templateKey);
 
                     self.show(tmpl);
-                    self.daterangePicker();
+//                    self.daterangePicker();
                     self.check_welcome();
+
+                    self.viewMailStaticsChart();
+                    self.viewAgeStaticsChart();
 
                     $('#main-viewport').css('overflow', 'none');
 
@@ -51,6 +54,32 @@ define([
                     rightPanel.html('');
                     rightPanel.append(sidetmpl);
                 });
+        },
+
+        viewMailStaticsChart: function() {
+            target = $('.mailStaticsChart');
+            var mailStaticsChart = new MarketChartView({
+                type: 'chart'
+                , name: 'Marketing_MailStatics'
+                , width  : target.width()
+                , height : target.height()
+            });
+
+            target.replaceWith(mailStaticsChart.el);
+            mailStaticsChart.render();
+        },
+
+        viewAgeStaticsChart: function() {
+            target = $('.demographics .age');
+            var ageStaticsChart = new MarketChartView({
+                type: 'chart'
+                , name: 'Marketing_AgeStatics'
+                , width  : target.width()
+                , height : target.height()
+            });
+
+//            target.replaceWith(ageStaticsChart.el);
+//            ageStaticsChart.render();
         },
 
         viewMarketing: function(event) {
@@ -97,12 +126,16 @@ define([
         },
 
         check_welcome: function() {
-            if( $.cookie('dashboard-alert') === 'closed' ){
+            if(!this.user.get('welcome_alert').marketingsingle){
                 $('.alert').hide();
             }
         },
         close_welcome: function(e) {
-            $.cookie('dashboard-alert', 'closed', { path: '/' });
+            var user = this.user;
+            var welcome = user.get("welcome_alert");
+            welcome.marketingsingle = false;
+            user.set("welcome_alert", welcome);
+            user.save();
         }
     });
 

@@ -211,8 +211,11 @@ var dao = {
             _total:0,
             values: []
         };
+        var result = {};
+        result.values = [];
 
         var recurseContacts = function(start, max, updated) {
+            self.log.debug('recurseContacts(' + start + ',' + max + ',' + updated + ')');
             getContacts(start, max, updated, function(err, value) {
                 if (err) {
                     return fn(err, value);
@@ -241,6 +244,13 @@ var dao = {
 
                         return fn(null, result);
                     }
+                } else if(result.values.length > 0){
+                    //something funky came back in the last result.  Append the results and return
+                    result._total = value._total;
+                    result._count = value._total;
+                    result._start = 0;
+                    result.values = result.values.concat(values);
+                    return fn(null, result);
                 } else {
                     return fn(err, value);
                 }
@@ -266,27 +276,33 @@ var dao = {
             linkedInBaggage.contacts.updated = new Date().getTime();
 
             var linkedInId = self._getLInkedInId(user);
-            var _connections = value.values;
+            //filter out any bogus values that LinkedIn returns
+            var _connections = _.filter(value.values, Boolean);
 
             var updateContactFromConnection = function(contact, connection) {
+
                 var location= null;
-                if (connection.location && connection.location.name) { location = connection.location.name; }
-                contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
+                if(connection) {
+                    if (connection.location && connection.location.name) { location = connection.location.name; }
+                    contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
 
-                var websites = [];
-                if (!String.isNullOrEmpty(connection.publicProfileUrl)) {
-                    websites.push(connection.publicProfielUrl);
-                }
-                if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
-                    websites.push(connection.siteStandardProfileRequest.url);
+                    var websites = [];
+                    if (!String.isNullOrEmpty(connection.publicProfileUrl)) {
+                        websites.push(connection.publicProfielUrl);
+                    }
+                    if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
+                        websites.push(connection.siteStandardProfileRequest.url);
+                    }
+
+                    //Update contact details
+                    contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
                 }
 
-                //Update contact details
-                contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
             };
 
 
             (function importConnections(connections, page) {
+
                 if (connections != null) {
                     var numPerPage = 50, socialType = $$.constants.social.types.LINKEDIN;
 
@@ -308,19 +324,24 @@ var dao = {
 
                                         //Get reference to current friend
                                         var connection = _.findWhere(items, {id:contact.getSocialId(socialType)});
+                                        if(connection !== null){
+                                            //remove the contact from the items array so we don't process again
+                                            items = _.without(items, connection);
 
-                                        //remove the contact from the items array so we don't process again
-                                        items = _.without(items, connection);
+                                            updateContactFromConnection(contact, connection);
 
-                                        updateContactFromConnection(contact, connection);
-
-                                        contactDao.saveOrUpdate(contact, function(err, value) {
-                                            if (err) {
-                                                self.log.error("An error occurred updating contact during LinkedIn import", err);;
-                                            }
-                                            totalImported++;
+                                            contactDao.saveOrUpdate(contact, function(err, value) {
+                                                if (err) {
+                                                    self.log.error("An error occurred updating contact during LinkedIn import", err);
+                                                }
+                                                totalImported++;
+                                                cb();
+                                            });
+                                        } else {
+                                            self.log.warn('Could not find connection for contact.');
                                             cb();
-                                        });
+                                        }
+
 
                                     }, function(err) {
                                         callback(err);

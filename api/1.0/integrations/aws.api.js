@@ -44,7 +44,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         if (!bucket) {
-            this.wrapError(resp, 400, null, "Invalid paramater for S3 Bucket");
+            this.wrapError(resp, 400, null, "Invalid parameter for S3 Bucket");
             self = req = resp = null;
         }
 
