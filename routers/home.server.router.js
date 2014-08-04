@@ -141,7 +141,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             new AdminView(req,resp).show();
         } else {
             //send them back to the main home
-            resp.redirect("/home");
+            resp.redirect("/admin");
         }
     },
 
