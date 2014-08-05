@@ -66,11 +66,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     createContact: function(req,resp) {
+        var self = this;
+        self.log.debug('>> createContact');
         this._saveOrUpdateContact(req, resp, true);
     },
 
 
     updateContact: function(req,resp) {
+        var self = this;
+        self.log.debug('>> updateContact');
         this._saveOrUpdateContact(req, resp, false);
     },
 

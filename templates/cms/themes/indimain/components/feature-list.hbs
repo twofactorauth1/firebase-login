@@ -18,19 +18,23 @@
                     </div>
                 </div>
             <!-- Feature Three -->
-            <div id="feature_three" class="row inner-page">
+            <div id="feature_three" class="row inner-page parallax">
                 <div class="row">
                     {{#each features}}
-                        <div class="col-sm-4 feature-single-{{@index}}" style="opacity:0">
-                            <span class="{{{feature-icon}}}"></span>
-                        <div class="editable" data-class="features.item.title">
-                            <h4>{{{feature-title}}}</h4>
-                        </div>
-                        <div class="editable" data-class="features.item.subtitle">
-                            <p>{{{feature-subtitle}}}</p>
-                        </div>
+                        <div class="col-sm-6 col-sm-offset-6 feature-single-{{@index}}" style="opacity:0">
+                            <div class="col-xs-4">
+                                <span class="{{{feature-icon}}}"></span>
+                            </div>
+                            <div class="col-xs-8">
+                                <div class="editable" data-class="features.item.title">
+                                    <h4>{{{feature-title}}}</h4>
+                                </div>
+                                <div class="editable" data-class="features.item.subtitle">
+                                    <p>{{{feature-subtitle}}}</p>
+                                </div>
+                            </div>
                     </div>
-                    <div class="pusher visible-xs"></div>
+                    <div class="clearfix mb35"></div>
                     {{/each}}
                 </div>
             </div>
