@@ -1,0 +1,61 @@
+<div class="modal-header">
+    <h3 class="modal-title">Search options</h3>
+</div>
+<div class="modal-body modal-search-options row">
+    <form class="col-md-12">
+        <div class="form-group">
+            <label class="control-label" for="channel">Source:</label>
+            <select multiple id="sources" ng-model="searchOptions.sources">
+                <option value="youtube">Youtube</option>
+                <option value="vimeo">Vimeo</option>
+                <option value="wisia">Wisia</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="channel">Channel:</label>
+            <input id="channel" class="form-control" type="text" ng-model="searchOptions.channel">
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="dateFrom">Date from:</label>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="input-group date-input-group">
+                        <input id="dateFrom" type="text" class="form-control" datepicker-popup="MM.dd.yyyy"
+                               ng-model="searchOptions.dateFrom"
+                               is-open="modal.dateFromOpened" min-date="minDate" max-date="maxDate"
+                               ng-required="true"
+                               close-text="Close"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-primary btn-date" ng-click="openDateFrom($event)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                    </p>
+                </div>
+            </div>
+            <label class="control-label" for="dateFrom">Date until:</label>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="input-group date-input-group">
+                        <input id="dateUntil" type="text" class="form-control" datepicker-popup="MM.dd.yyyy"
+                               ng-model="searchOptions.dateUntil"
+                               is-open="modal.dateUntilOpened" min-date="minDate" max-date="maxDate"
+                               ng-required="true"
+                               close-text="Close"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-primary btn-date" ng-click="openDateUntil($event)"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="close()">Close</button>
+    <div class="h-spacer-15" ng-show="editable"></div>
+    <button type="submit" class="btn btn-primary" ng-click="submit()">Save</button>
+</div>
+
