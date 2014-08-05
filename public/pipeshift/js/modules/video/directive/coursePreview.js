@@ -9,7 +9,7 @@ angular.module('app.directives').directive('coursePreview', function () {
             course: "=",
             minHeight: "="
         },
-        controller: function ($scope, $http, host) {
+        controller: function ($scope, $http) {
             var course = $scope.course;
             $scope.modal = {};
             $scope.subscribe = function () {
@@ -21,7 +21,7 @@ angular.module('app.directives').directive('coursePreview', function () {
                         if (course.videos.length == 0) {
                             alert("Error: empty course");
                         } else {
-                            $http.post(host + '/api/1.0/campaignmanager/pipeshift/courses/' + course._id + '/subscribe/', {email: $scope.modal.email, course: course, timezoneOffset: getTimezoneOffset()}).success(function (data) {
+                            $http.post('/api/1.0/campaignmanager/pipeshift/courses/' + course._id + '/subscribe/', {email: $scope.modal.email, course: course, timezoneOffset: getTimezoneOffset()}).success(function (data) {
                                 alert("Course has been scheduled for " + $scope.modal.email);
                             }).error(function (data) {
                                 alert("Some error happened.");

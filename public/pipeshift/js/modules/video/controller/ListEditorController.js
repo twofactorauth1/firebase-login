@@ -1,7 +1,7 @@
 /**
  * The controller used when editing video courses
  */
-angular.module('app.modules.video').controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', 'host', function ($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo, host) {
+angular.module('app.modules.video').controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', function ($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo) {
     $scope.location = $location;
     $scope.courseBlocked = false;
     $scope.searchsort = $location.search()['searchsort'] || false;
@@ -10,7 +10,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
     $scope.section = $location.path().split('/')[2];
     $scope.courseBlocked = true;
     //todo: might need to replace this with only certain template get, when needed - for example on popup open(if a lot of templates will be used)
-    $http.get(host + "/api/1.0/campaignmanager/pipeshift/templates").success(function (result) {
+    $http.get("/api/1.0/campaignmanager/pipeshift/templates").success(function (result) {
         $scope.courseBlocked = false;
         $scope.templates = result;
     }).error(function (data) {

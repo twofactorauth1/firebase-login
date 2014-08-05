@@ -1,4 +1,4 @@
-angular.module('app').controller('SignupModalController', ['$scope', '$rootScope', '$modal', '$http', '$modalInstance', 'security', 'host', function ($scope, $rootScope, $modal, $http, $modalInstance, security, host) {
+angular.module('app').controller('SignupModalController', ['$scope', '$rootScope', '$modal', '$http', '$modalInstance', 'security', function ($scope, $rootScope, $modal, $http, $modalInstance, security) {
     $scope.user = {};
     $scope.modal = {submited: false};
     $scope.close = function () {
@@ -9,7 +9,7 @@ angular.module('app').controller('SignupModalController', ['$scope', '$rootScope
         $scope.modal.loginForm.confirmPassword.$setValidity("notEqual", passwordsEqual);
         if ($scope.modal.loginForm.$valid && passwordsEqual) {
 
-            $http.post(host + '/signup', {email: $scope.user.email, password: $scope.user.password, confirmPassword: $scope.user.confirmPassword}).success(function (data) {
+            $http.post('/signup', {email: $scope.user.email, password: $scope.user.password, confirmPassword: $scope.user.confirmPassword}).success(function (data) {
                 $scope.submited = false;
                 if (data.success) {
                     security.requestCurrentUser();
