@@ -22,6 +22,7 @@
     {{/if}}
 
         <link rel="stylesheet" href="/css/style.default.css">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 
     <title>{{title}}</title>
 
@@ -88,7 +89,7 @@
     <script type="text/javascript" src="/js/libs/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="/js/libs_misc/jquery/jquery.thumbnailScroller.js"></script>
-    <script type="text/javascript" src="/js/libs/waypoints/waypoints.min.js"></script>
+    <script type="text/javascript" src="/js/libs/jquery-waypoints/waypoints.min.js"></script>
     <script type="text/javascript" src="/js/libs_misc/hw-parallax/parallax.min.js"></script>
 
 
@@ -100,6 +101,11 @@
                   var sidebarHeight = $('#sidebar').height();
                   $('#main-area').css('min-height', sidebarHeight+50);
                 }
+
+                $('#main-area').on('click', function() {
+                  var $ = Aloha.jQuery;
+                  $('.editable').aloha();
+                });
 
                 // var spinner = $('.spinner-input').spinner();
                 // spinner.spinner('value', 0);
@@ -174,12 +180,12 @@
 
                   $(".feature-single-1").waypoint(function (direction) {
                       $(this).addClass("animated fadeIn");
-                  }, { offset: $.waypoints('viewportHeight') - 275,
+                  }, { offset: $.waypoints('viewportHeight') - 200,
                       triggerOnce: true});
 
                   $(".feature-single-2").waypoint(function (direction) {
                       $(this).addClass("animated fadeIn");
-                  }, { offset: $.waypoints('viewportHeight') - 400,
+                  }, { offset: $.waypoints('viewportHeight') - 300,
                       triggerOnce: true});
 
                   $("div[data-class=profilepic]").waypoint(function (direction) {
@@ -197,6 +203,11 @@
 
                 $('#myCarousel').carousel({
                   interval: 4000
+                });
+
+                $('.gallery-image').on('hover', function () {
+                  console.log('gallery hover');
+                  $(this).parent().next('.overlay-gallery-image').css('opacity', '1');
                 });
 
                 $('.goback').on('click', function() {

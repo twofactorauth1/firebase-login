@@ -25,7 +25,7 @@ define(function() {
         return "";
     });
 
-    Handlebars.registerHelper('lengthMinusOne', function(length) {
+    Handlebars.registerHelper('lengthMinusOne', function(length, option) {
         return length - 1;
     });
 

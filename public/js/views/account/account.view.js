@@ -11,7 +11,7 @@ define([
     'models/user'
 ], function(BaseView) {
 
-    var showDetails = function(type, typePlural){
+   /* var showDetails = function(type, typePlural){
             return function () {
                 $('.li-' + type).show();
                 $('.li-' + type + '.first .btn-more-' + typePlural + ' i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
@@ -26,19 +26,21 @@ define([
                 $('.li-' + type + '.first .btn-less-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' More');
                 $('.li-' + type + '.first .btn-less-' + typePlural).removeClass('btn-less-' + typePlural).addClass('btn-more-' + typePlural);
             }
-        };
+        };*/
 
     var view = BaseView.extend({
 
         templateKey: "account/account",
 
         events: {
-            "click .btn-more-emails":"showEmails",
-            "click .btn-less-emails":"hideEmails",
-            "click .btn-more-phones":"showPhones",
-            "click .btn-less-phones":"hidePhones",
-            "click .btn-more-address":"showAddress",
-            "click .btn-less-address":"hideAddress"
+            "click .btn-more-emails"    :   "showEmails",
+            "click .btn-less-emails"    :   "hideEmails",
+            "click .btn-more-phones"    :   "showPhones",
+            "click .btn-less-phones"    :   "hidePhones",
+            "click .btn-more-addresses"   :   "showAddress",
+            "click .btn-less-addresses"   :   "hideAddress",
+            "click .btn-edit-account"   :   "editAccount",
+            "click .btn-edit-business-info":"editBusinessInfo"
         },
 
 
@@ -78,14 +80,52 @@ define([
                     self.show(html);
                 });
         },
-        showEmails: showDetails("email","emails"),
-        hideEmails: hideDetails("email","emails"),
 
-        showPhones: showDetails("phone","phones"),
-        hidePhones: hideDetails("phone","phones"),
+        editAccount: function() {
+            $$.r.account.AccountRouter.navigateToEditAccount(this.accountId);
+        },
+        editBusinessInfo: function() {
+            $$.r.account.AccountRouter.navigateToEditBusinessInfo(this.accountId);
+        },
 
-        showAddress: showDetails("address", "addresses"),
-        hideAddress: hideDetails("address", "addresses")
+
+        showDetails:function(type, typePlural, e){
+            var target = $(e.currentTarget).parents('.social-list');
+            target.find('.li-' + type).show();
+            target.find('.li-' + type + '.first .btn-more-' + typePlural + ' i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            target.find('.li-' + type + '.first .btn-more-' + typePlural + ' span').text((target.find('.li-' + type).length - 1) + ' Less ');
+            target.find('.li-' + type + '.first .btn-more-' + typePlural).removeClass('btn-more-' + typePlural).addClass('btn-less-' + typePlural);
+
+        },
+        hideDetails: function(type, typePlural, e) {
+            var target = $(e.currentTarget).parents('.social-list');
+            target.find('.li-' + type + ':not(:first)').hide();
+            target.find('.li-' + type + '.first .btn-less-' + typePlural + ' i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+            target.find('.li-' + type + '.first .btn-less-' + typePlural + ' span').text((target.find('.li-' + type).length - 1) + ' More');
+            target.find('.li-' + type + '.first .btn-less-' + typePlural).removeClass('btn-less-' + typePlural).addClass('btn-more-' + typePlural);
+
+        },
+
+        showEmails: function(e) {
+            this.showDetails("email","emails", e)
+        },
+        hideEmails:function(e) {
+            this.hideDetails("email","emails", e)
+        },
+
+        showPhones: function(e) {
+            this.showDetails("phone","phones", e)
+        },
+        hidePhones: function(e){
+            this.hideDetails("phone","phones", e)
+        },
+        showAddress: function(e){
+            this.showDetails("address", "addresses", e)
+        },
+        hideAddress: function(e) {
+            this.hideDetails("address", "addresses", e)
+        }
+
 
     });
 

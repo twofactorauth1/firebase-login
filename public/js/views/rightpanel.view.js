@@ -5,8 +5,9 @@ define([
     'services/cms.service',
     'models/cms/post',
     'models/cms/page',
+    'models/user',
     'events/events'
-], function (EditWebsite, utils, Blog, CmsService, Post, Page, events) {
+], function (EditWebsite, utils, Blog, CmsService, Post, Page, User, events) {
 
     var view = EditWebsite.extend({
 
@@ -15,6 +16,7 @@ define([
         themeId: null,
         websiteId: null,
         pageId: null,
+        postId: null,
 
         //temporary themes
         themes: null,
@@ -23,32 +25,54 @@ define([
         templateKey: "account/cms/website",
 
         events: {
+
+            //components
             "click .dd-item":"scrollToSection",
-            "change #nestable": "updateOrder",
             "hover .component": "showComponentOptions",
             "click .add_section": "addSection",
+            "change .dd": "onComponentDrag",
+            "click .btn-add-component":"addComponent",
+
+            //color palette
             "click #drop-zone": "drop_click",
             "change #file":"upload_color_pic",
             "click .btn-change-palette":"changePalette",
             "click .clear-image":"clearImage",
             "click .save-palette":"savePalette",
+
+            //change theme
             "click .btn-change-theme":"changeThemeModal",
             "click .btn-edit-theme":"editTheme",
             "click #change-theme-modal .thumbnail": "selectTheme",
             "click .change-theme":"changeTheme",
-            "change .dd": "onComponentDrag",
-            "click .btn-add-component":"addComponent",
-            "click .add-post":"addBlankPost",
-            "click .add-page":"addBlankPage",
+
+            //page settings
             "change .sort-ordering": "sort_contact",
-            "change .sort-display": "sort_display"
+            "change .sort-display": "sort_display",
+
+            //add blog post
+            "click .add-post":"newPostModal",
+            "click .create-post":"addBlankPost",
+            "input #post-title":"urlCreator",
+            "input #post-url":"urlCreator",
+
+            //add page
+            "click .add-page":"newPageModal",
+            "click .create-page":"addBlankPage",
+            "input #page-title":"urlCreator",
+            "input #page-url":"urlCreator",
+
+            //import contact modal
+            "click .choose-import .btn": "changeImportSection",
+            "click #import-contacts-modal .close": "closeImportModal"
         },
 
         initialize: function () {
             var self = this
                 , p1 = this.getAccount()
                 , p2 = this.getWebsite()
-                , p3 = this.getAllThemes();
+                , p3 = this.getAllThemes()
+                , p4 = this.getUser();
 
             $.when(p1)
                 .done(function () {
@@ -60,10 +84,36 @@ define([
                 .done(function () {
                 self.websiteSettings = self.website.attributes.settings;
                 self.websiteId = self.website.attributes._id;
-                self.getPage().done(function(){
-                    self.pageId = '45b9072c-eb76-4c23-a792-822135554543';
+                console.log('Getting Page on rightpanel');
+                self.getPage().done(function(page){
+                    console.log('Page ID: '+JSON.stringify(page.attributes));
+                    self.pageId = self.page.attributes._id;
                 });
             });
+        },
+
+        changeImportSection: function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var source = $(e.currentTarget).data('import-source');
+            var contacts = 100;
+
+            $('.modal-body .row').addClass('hidden');
+            var progressModal = $('.row[data-import-section="progress"]');
+            progressModal.removeClass('hidden');
+            progressModal.find('.num').text(contacts);
+            progressModal.find('.source').text(source);
+
+            /*** TEMP UNTIL IMPORT SUCCESS CALLBACK ***/
+            setTimeout(function() {
+                  $('.modal-body .row').addClass('hidden');
+                  $('.modal-body .row[data-import-section="success"]').removeClass('hidden');
+            }, 3000);
+        },
+
+        closeImportModal: function() {
+            $('.modal-body .row').addClass('hidden');
+            $('.modal-body .row[data-import-section="choose"]').removeClass('hidden');
         },
 
         renderHtml: function(html) {
@@ -82,29 +132,167 @@ define([
          * Edit Website Sidebar
          * - Functions for Edit Website Sidebar
          */
+
+            getPage: function() {
+                console.log('getPage rightpanel');
+                this.page = new Page({
+                    websiteId: this.websiteId,
+                    handle: 'blog'
+                });
+
+                return this.page.fetch();
+            },
+
             addBlankPage: function() {
                 var self = this;
                 console.log('adding blank page'+self.is_dragging);
                 $('#iframe-website').contents().find('ul.navbar-nav li:last-child').before('<li><a href="#">New Page</a></li>');
+                $('#new-page-modal').modal('hide');
+
+
+                //get title
+                var pageTitle = $('#new-page-modal #page-title').val();
+
+                //get url
+                var pageUrl = $('#new-page-modal #page-url').val();
+
+                var pageAuthor = self.user.attributes.first+' '+self.user.attributes.last;
+
+                var pageDate = new Date().getTime();
+
+                var data = {
+                    pageTitle: pageTitle,
+                    pageUrl: pageUrl,
+                    pageAuthor: pageAuthor,
+                    pageDate: moment(pageDate).format('DD.MM.YYYY')
+                };
+
+                console.log('page data: '+data);
+
+
+                this.page = new Page({
+                    websiteId:this.websiteId,
+                    title: pageTitle,
+                    handle: pageUrl,
+                    components: [
+                        {
+                            "anchor" : null,
+                            "type" : "single-page"
+                        }
+                    ],
+                    created: {
+                        date: new Date().getTime(),
+                        by: self.user.attributes._id
+                    }
+                });
+
+                this.page.save().done( function() {
+                    console.log('page sved');
+                    self.pageId = self.page.attributes._id;
+                    // var $iframe = $('#iframe-website');
+                    // $iframe.ready(function() {
+                    //     $iframe.contents().find("#main-area .entry").prepend(html);
+                    //     console.log('Blank Post ID: '+self.postId);
+                    //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                    //     $iframe.contents().find("#main-area").trigger("click");
+                    // });
+                });
+            },
+
+            newPageModal: function() {
+                $('#new-page-modal').modal('show');
+            },
+
+            urlCreator: function(e) {
+                var postUrl = $(e.currentTarget).val();
+                var scrubbed = postUrl.toLowerCase().replace(/ /g,'-');
+                $('#post-url').val(scrubbed);
+            },
+
+            newPostModal: function() {
+                $('#new-post-modal').modal('show');
             },
 
             addBlankPost: function() {
                 var self = this;
-                console.log('Adding Blank Post');
+                console.log('User: '+JSON.stringify(self.user.attributes));
 
-                var blankPostHTML = $$.templateManager.get("blankPost", self.templateKey);
+                $('#new-post-modal').modal('hide');
 
-                var $iframe = $('#iframe-website');
-                $iframe.ready(function() {
-                    $iframe.contents().find("#main-area .entry").prepend(blankPostHTML);
+                var tmpl = $$.templateManager.get("blankPost", self.templateKey);
+
+                //get title
+                var postTitle = $('#new-post-modal #post-title').val();
+
+                //get url
+                var postUrl = $('#new-post-modal #post-url').val();
+
+                var postAuthor = self.user.attributes.first+' '+self.user.attributes.last;
+
+                var postDate = new Date().getTime();
+
+                var data = {
+                    postTitle: postTitle,
+                    postUrl: postUrl,
+                    postAuthor: postAuthor,
+                    postDate: moment(postDate).format('DD.MM.YYYY')
+                };
+
+                var html = tmpl(data);
+
+                this.post = new Post({
+                    pageId:this.pageId,
+                    post_title: postTitle,
+                    post_author: postAuthor,
+                    post_url: postUrl,
+                    created: {
+                        date: new Date().getTime(),
+                        by: self.user.attributes._id
+                    }
                 });
 
-                console.log('Page ID: '+self.pageId);
-                self.post = new Post({
-                    pageId:self.pageId
+                this.post.save().done( function() {
+                    self.postId = self.post.attributes._id;
+                    var $iframe = $('#iframe-website');
+                    $iframe.ready(function() {
+                        $iframe.contents().find("#main-area .entry").prepend(html);
+                        console.log('Blank Post ID: '+self.postId);
+                        $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                        $iframe.contents().find("#main-area").trigger("click");
+                    });
                 });
 
-                self.post.save();
+                //navigate to new single post
+                //$$.r.account.cmsRouter.viewSinglePost(postTitle, self.postId);
+            },
+
+            getPost: function() {
+                console.log('Getting Post: '+this.postId);
+                if (this.postId == null) {
+                    this.post = new Post({});
+                    var deferred = $.Deferred();
+                    deferred.resolve(this.post);
+                    console.log('Deferred: '+JSON.stringify(deferred));
+                    return deferred;
+                }
+                this.post = new Post({
+                    _id:this.postId,
+                    pageId:this.pageId
+                });
+
+                return this.post.fetch();
+            },
+
+            getUser: function () {
+                if (this.userId == null) {
+                    this.userId = $$.server.get($$.constants.server_props.USER_ID);
+                }
+
+                this.user = new User({
+                    _id: this.userId
+                });
+
+                return this.user.fetch();
             },
             // WORKING
             addComponent: function () {
@@ -129,6 +317,7 @@ define([
                 var html = tmpl(data);
                 $('#sortable').append(html);
                 //add to site
+                self.updateOrder();
             },
             // WORKING
             getComponent: function() {
@@ -210,7 +399,6 @@ define([
                     //show validate error
                     console.log('no theme selected ');
                 }
-
             },
 
             editTheme: function() {
@@ -260,18 +448,12 @@ define([
             scrollToSection: function(event) {
                 var self = this;
                 // var section = $(this).data('id');
-                var section = $(event.currentTarget).data('id');
+                var section = $(event.currentTarget).data('component-id');
+                console.log('Section ID: '+section);
                 var iframe = $('#iframe-website').contents();
                 if (iframe.find('.component[data-id="'+section+'"]').length > 0) {
                     self.scrollToAnchor(section);
                 }
-            },
-
-            updateOrder: function (e) {
-                var self = this;
-                console.log('update order');
-                var serialize = $('.dd').nestable('serialize');
-                console.log('Serialize: ' +JSON.stringify(serialize));
             },
 
             scrollToAnchor: function(aid){

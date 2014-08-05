@@ -49,8 +49,10 @@ CONTACTS MAIN VIEW
     <div class="contentpanel">
         <div class="panel panel-default row">
             <div class="panel-body">
-                <div class="col-sm-12">
-                    <input type="text" placeholder="Search Customers" class="form-control mb15 input-lg">
+
+                <div class="col-sm-6">
+                    <input type="text" placeholder="Search Customers" class="form-control mb15 input-lg  search-contacts">
+
                 </div>
                 <div class="col-sm-6 form-horizontal hidden">
                     <div class="form-group row">
@@ -151,11 +153,13 @@ CONTACTS MAIN VIEW
                             </div>
                             <div class="media-body col-xs-12 hidden-xs">
 
-                                {{#ifCond ../currentDisplay}}
+                                {{#ifCond ../account.displaysettings.display_type}}
+
                                 <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
                                 {{else}}
                                 <h4 class="person-name">{{last}} {{middle}} {{first}}</h4>
                                 {{/ifCond}}
+
 
                                <!-- <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>-->
 
@@ -365,7 +369,6 @@ CONTACTS MAIN VIEW
         {{> contact-paginator}}
     </div>
     -->
-
 </script>
 
 <script type="text/x-handlebars-template" name="contact-sidebar">
@@ -383,7 +386,7 @@ CONTACTS MAIN VIEW
         <div class="tab-pane pane-settings active" id="rp-settings">
 
             <div class="form-group mb20">
-                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#importContactsModal"><i class="fa fa-cloud-upload"></i> Import FB Contacts</button>
+                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#import-contacts-modal"><i class="fa fa-cloud-upload"></i> Import Contacts</button>
             </div>
 
 
@@ -415,10 +418,14 @@ CONTACTS MAIN VIEW
             <div class="form-group row">
                 <label class="col-xs-12 control-label">Contacts List Display</label>
                 <div class="col-xs-12">
-                    <select class=" form-control chosen-select sort-display" data-placeholder="Sort Contacts">
+                    <select class=" form-control chosen-select sort-display" data-placeholder="Sort Contacts" name="one">
                         <option value=""></option>
-                        <option value="first">First Last</option>
-                        <option value="last">Last, First</option>
+                        {{#isSelected account.displaysettings.display_type 'first' 'First, Last'}}{{/isSelected}}
+                        {{#isSelected account.displaysettings.display_type  'last' 'Last, First'}}{{/isSelected}}
+                            <!--
+                            <option value="first" >First Last</option>
+                            <option value="last" >Last, First</option>
+                            -->
                     </select>
                 </div>
             </div>
@@ -426,12 +433,19 @@ CONTACTS MAIN VIEW
             <div class="form-group row">
                 <label class="col-xs-12 control-label">Contacts List Ordering</label>
                 <div class="col-xs-12">
-                    <select class=" form-control chosen-select sort-ordering" data-placeholder="Sort Contacts">
-                        <option value=""></option>
+                    <select class=" form-control chosen-select sort-ordering" data-placeholder="Sort Contacts"  name="two">
+
+                        <option value="">{{../currentOrder}}</option>
+                        {{#isSelected account.settings.sort_type 'first' 'First, Last'}}{{/isSelected}}
+                        {{#isSelected account.settings.sort_type 'last' 'Last, First'}}{{/isSelected}}
+                        {{#isSelected account.settings.sort_type 'created.date' 'Date Added'}}{{/isSelected}}
+
+                        <!--
                         <option value="first">First Last</option>
                         <option value="last">Last, First</option>
                         <option value="created.date">Date Added</option>
                         <option value="lastActiviy">Last Activity</option>
+                        -->
                     </select>
                 </div>
             </div>
@@ -471,6 +485,8 @@ CONTACTS MAIN VIEW
     </div>
     <!-- tab-content -->
     </div>
+
+    {{> importContacts-modal}}
 </script>
 
 
@@ -1056,278 +1072,277 @@ CONTACTS EDIT VIEW
 -->
 <script type="text/x-handlebars-template" name="contact-edit-main">
    <div class="pageheader row">
-    <div class="col-xs-8">
-        <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
-            <span class="fa fa-chevron-left"></span>
-            <span class="hidden-xs">Back</span>
-        </button>
-        <h2><i class="fa fa-users"></i> Edit Contact</h2>
-    </div>
-
-    <div class="col-xs-4">
-        <div class="btn btn-success pull-right btn-save-contact" type="button">
-            <i class="fa fa-save"></i>
-            <span class="hidden-xs">Save</span>
+        <div class="col-xs-8">
+            <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
+                <span class="fa fa-chevron-left"></span>
+                <span class="hidden-xs">Back</span>
+            </button>
+            <h2><i class="fa fa-users"></i> Edit Contact</h2>
         </div>
 
+        <div class="col-xs-4">
+            <div class="btn btn-success pull-right btn-save-contact" type="button">
+                <i class="fa fa-save"></i>
+                <span class="hidden-xs">Save</span>
+            </div>
+
+        </div>
     </div>
-</div>
-<!-- End Page Header -->
+    <!-- End Page Header -->
 
-<div id="contact-edit-container" class="contentpanel">
-    <div class="row">
+    <div id="contact-edit-container" class="contentpanel">
+        <div class="row">
 
-        <div class="col-md-6">
+            <div class="col-md-6">
 
-            <!-- Name & Photo -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Name & Photo</h3>
-                </div>
-                <div class="panel-body">
+                <!-- Name & Photo -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Name & Photo</h3>
+                    </div>
+                    <div class="panel-body">
 
-                    <div class="row">
-                        <!-- UPDATE NAME -->
-                        <div class="col-xs-12 form" role="form">
-                            <div class="form-group">
-                                <label class="">Contact Name</label>
-                                <input id="input-fullname" type="text" class="form-control input-lg" value="{{contact.first}} {{contact.middle}} {{contact.last}}" placeholder="full name">
-                                <small style="margin-left:10px;">
-                                    <strong>first:</strong>
-                                    <code>
-                                        <span id="hint-first">{{contact.first}}</span>
-                                    </code>
-                                    <strong>middle:</strong>
-                                    <code>
-                                        <span id="hint-middle">{{contact.middle}}</span>
-                                    </code>
-                                    <strong>last:</strong>
-                                    <code>
-                                        <span id="hint-last">{{contact.last}}</span>
-                                    </code>
-                                </small>
-                            </div>
+                        <div class="row">
+                            <!-- UPDATE NAME -->
+                            <div class="col-xs-12 form" role="form">
+                                <div class="form-group">
+                                    <label class="">Contact Name</label>
+                                    <input id="input-fullname" type="text" class="form-control input-lg" value="{{contact.first}} {{contact.middle}} {{contact.last}}" placeholder="full name">
+                                    <small style="margin-left:10px;">
+                                        <strong>first:</strong>
+                                        <code>
+                                            <span id="hint-first">{{contact.first}}</span>
+                                        </code>
+                                        <strong>middle:</strong>
+                                        <code>
+                                            <span id="hint-middle">{{contact.middle}}</span>
+                                        </code>
+                                        <strong>last:</strong>
+                                        <code>
+                                            <span id="hint-last">{{contact.last}}</span>
+                                        </code>
+                                    </small>
+                                </div>
 
-                            <div class="row">
-                                <div class="form-group col-xs-6">
-                                    <label>Contact Type</label>
-                                    <select id="select-contact-type" class="form-control input-lg">
-                                        {{#contactTypeOptions}}
-                                        <option data-contacttype="{{data}}" {{#equals data ../contact.type}}selected{{/equals}}>{{label}}</option>
-                                        {{/contactTypeOptions}}
-                                    </select>
+                                <div class="row">
+                                    <div class="form-group col-xs-6">
+                                        <label>Contact Type</label>
+                                        <select id="select-contact-type" class="form-control input-lg">
+                                            {{#contactTypeOptions}}
+                                            <option data-contacttype="{{data}}" {{#equals data ../contact.type}}selected{{/equals}}>{{label}}</option>
+                                            {{/contactTypeOptions}}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
 
-                    <!-- UPDATE PHOTO -->
-                    <div id="contact-photo-container" class="row">
-                        <row>
-                            <div class="col-xs-5 col-md-6">
-                                <div class="hidden-xs hidden-sm">
-                                    <div class="btn-link btn-edit-photo">Change Photo</div>
+                        <!-- UPDATE PHOTO -->
+                        <div id="contact-photo-container" class="row">
+                            <row>
+                                <div class="col-xs-5 col-md-6">
+                                    <div class="hidden-xs hidden-sm">
+                                        <div class="btn-link btn-edit-photo">Change Photo</div>
+                                    </div>
+                                    <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
                                 </div>
-                                <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                            </div>
 
-                            <div class="col-xs-7 col-md-6">
-                                <div class="btn-edit-photo-controls hidden-md hidden-lg">
-                                    <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
-                                    <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+                                <div class="col-xs-7 col-md-6">
+                                    <div class="btn-edit-photo-controls hidden-md hidden-lg">
+                                        <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
+                                        <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+                                    </div>
                                 </div>
-                            </div>
-                        </row>
+                            </row>
+                        </div>
                     </div>
                 </div>
+                <!-- END Name & Photo -->
+
+                <!-- BioMetric Data -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">BioMetric Information</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{#unless contact.devices.length}}
+                        <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
+                        {{/unless}}
+                        <hr/>
+                        <div id="edit-devices-container">
+                            {{#each contact.devices}} {{serialNumber}} {{deviceTypeId}} {{/each}}
+                        </div>
+                        <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
+                    </div>
+                    <!-- End Panel Body -->
+                </div>
+                <!-- End BioMetric Data -->
             </div>
-            <!-- END Name & Photo -->
+
+            <!-- Contact Information -->
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Contact Information</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div id="phone-row" class="row">
+                            <div class="col-xs-1"><i class="icon-main fa fa-phone" />
+                            </div>
+                            <div class="col-xs-10">
+                                <div id="edit-phones-container">
+                                    {{#each contact.details}}
+                                        {{#canEditContactDetails this}}
+                                            {{#each ../phones}}
+                                                {{> edit-phone}}
+                                            {{/each}}
+                                        {{else}}
+                                            {{#each phones}}
+                                                <div>
+                                                    <a href="tel:+1{{number}}">+1 {{number}}</a>
+                                                    <small>{{phoneTypeLabel type}}</small>
+                                                    <i class="icon-social {{iconFromSocialType ../type}}" />
+                                                </div>
+                                            {{/each}}
+                                        {{/canEditContactDetails}}
+                                    {{/each}}
+
+                                    <!-- ADD NEW PHONE -->
+                                    {{> edit-phone}}
+                                </div>
+                                <span style="margin-top:-15px;" class="col-xs-10">
+                                    <small>e.g. (303-555-5555)</small>
+                                </span>
+                            </div>
+                        </div>
+
+                        <hr></hr>
+
+                        <div id="address-row" class="row">
+                            <div class="col-xs-1"><i class="icon-main fa fa-map-marker" />
+                            </div>
+                            <div class="col-xs-10">
+                                <div id="edit-addresses-container">
+                                    {{#each contact.details}}
+                                        {{#canEditContactDetails this}} 
+                                            {{> edit-addresses}} 
+                                        {{else}} 
+                                            {{#each addresses}}
+                                                <div class="edit-address-container" id="{{_id}}">
+                                                    {{#if address}}
+                                                    <div>{{address}}</div>
+                                                    {{/if}}
+                                                    {{#if address2}}
+                                                    </div>
+                                                        {{address2}}
+                                                    </div>
+                                                    {{/if}}
+                                                    <div>
+                                                        {{city}} {{#if state}}, {{state}}{{/if}} {{#if zip}}, {{zip}}{{/if}} {{#if country}}, {{country}}{{/if}}
+                                                        <i class="icon-social {{iconFromSocialType ../../type}}" />
+                                                    </div>
+                                                    {{> edit-default-shipping-billing}}
+                                                    </div>
+                                            {{/each}} 
+                                        {{/canEditContactDetails}} 
+                                    {{/each}}
+                                </div>
+
+                                <br/>
+
+                                <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
+
+                            </div>
+                        </div>
+
+                        <hr></hr>
+
+                        <div id="email-row" class="row">
+                            <div class="col-xs-1"><i class="icon-main fa fa-envelope" />
+                            </div>
+                            <div class="col-xs-10">
+                                <div id="edit-emails-container">
+                                    {{#each contact.details}} {{#canEditContactDetails this}} {{#each emails}} {{> edit-email}} {{/each}} {{else}} {{#each emails}} {{#if this}}
+                                    <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}" />{{/if}} {{/each}} {{/canEditContactDetails}} {{/each}} {{> new-email-partial}}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- End Panel Body -->
+                </div>
+                <!-- End Panel Default -->
+            </div>
 
             <!-- BioMetric Data -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">BioMetric Information</h3>
+            <div class="col-md-6">
+                <h4>BioMetric Information</h4>
+                {{#unless contact.devices.length}}
+                 <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
+                {{/unless}}
+                <hr/>
+                <div id="edit-devices-container">
+                    {{#each contact.devices}}
+                        {{serialNumber}}
+                        {{deviceTypeId}}
+                    {{/each}}
                 </div>
-                <div class="panel-body">
-                    {{#unless contact.devices.length}}
-                    <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
-                    {{/unless}}
-                    <hr/>
-                    <div id="edit-devices-container">
-                        {{#each contact.devices}} {{serialNumber}} {{deviceTypeId}} {{/each}}
-                    </div>
-                    <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
-                </div>
-                <!-- End Panel Body -->
+                <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
             </div>
+            <div class="col-md-12">
+                <div class="btn btn-danger pull-right btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
+                   <i class="fa fa-warning"/>
+                   <span class="hidden-xs">Delete</span>
+               </div>
+            </div>
+
             <!-- End BioMetric Data -->
-        </div>
-
-        <!-- Contact Information -->
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Contact Information</h3>
-                </div>
-                <div class="panel-body">
-
-                    <div id="phone-row" class="row">
-                        <div class="col-xs-1"><i class="icon-main fa fa-phone" />
-                        </div>
-                        <div class="col-xs-10">
-                            <div id="edit-phones-container">
-                                {{#each contact.details}}
-                                    {{#canEditContactDetails this}}
-                                        {{#each ../phones}}
-                                            {{> edit-phone}}
-                                        {{/each}}
-                                    {{else}}
-                                        {{#each phones}}
-                                            <div>
-                                                <a href="tel:+1{{number}}">+1 {{number}}</a>
-                                                <small>{{phoneTypeLabel type}}</small>
-                                                <i class="icon-social {{iconFromSocialType ../type}}" />
-                                            </div>
-                                        {{/each}}
-                                    {{/canEditContactDetails}}
-                                {{/each}}
-
-                                <!-- ADD NEW PHONE -->
-                                {{> edit-phone}}
-                            </div>
-                            <span style="margin-top:-15px;" class="col-xs-10">
-                                <small>e.g. (303-555-5555)</small>
-                            </span>
-                        </div>
-                    </div>
-
-                    <hr></hr>
-
-                    <div id="address-row" class="row">
-                        <div class="col-xs-1"><i class="icon-main fa fa-map-marker" />
-                        </div>
-                        <div class="col-xs-10">
-                            <div id="edit-addresses-container">
-                                {{#each contact.details}}
-                                    {{#canEditContactDetails this}} 
-                                        {{> edit-addresses}} 
-                                    {{else}} 
-                                        {{#each addresses}}
-                                            <div class="edit-address-container" id="{{_id}}">
-                                                {{#if address}}
-                                                <div>{{address}}</div>
-                                                {{/if}}
-                                                {{#if address2}}
-                                                </div>
-                                                    {{address2}}
-                                                </div>
-                                                {{/if}}
-                                                <div>
-                                                    {{city}} {{#if state}}, {{state}}{{/if}} {{#if zip}}, {{zip}}{{/if}} {{#if country}}, {{country}}{{/if}}
-                                                    <i class="icon-social {{iconFromSocialType ../../type}}" />
-                                                </div>
-                                                {{> edit-default-shipping-billing}}
-                                                </div>
-                                        {{/each}} 
-                                    {{/canEditContactDetails}} 
-                                {{/each}}
-                            </div>
-
-                            <br/>
-
-                            <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
-
-                        </div>
-                    </div>
-
-                    <hr></hr>
-
-                    <div id="email-row" class="row">
-                        <div class="col-xs-1"><i class="icon-main fa fa-envelope" />
-                        </div>
-                        <div class="col-xs-10">
-                            <div id="edit-emails-container">
-                                {{#each contact.details}} {{#canEditContactDetails this}} {{#each emails}} {{> edit-email}} {{/each}} {{else}} {{#each emails}} {{#if this}}
-                                <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}" />{{/if}} {{/each}} {{/canEditContactDetails}} {{/each}} {{> new-email-partial}}
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- End Panel Body -->
-            </div>
-            <!-- End Panel Default -->
-        </div>
-
-        <!-- BioMetric Data -->
-        <div class="col-md-6">
-            <h4>BioMetric Information</h4>
-            {{#unless contact.devices.length}}
-             <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
-            {{/unless}}
-            <hr/>
-            <div id="edit-devices-container">
-                {{#each contact.devices}}
-                    {{serialNumber}}
-                    {{deviceTypeId}}
-                {{/each}}
-            </div>
-            <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
-        </div>
-        <div class="col-md-12">
-            <div class="btn btn-danger pull-right btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
-               <i class="fa fa-warning"/>
-               <span class="hidden-xs">Delete</span>
-           </div>
-        </div>
-
-        <!-- End BioMetric Data -->
 
 
-        <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-           <div class="modal-dialog">
-               <div class="modal-content">
-                   <div class="modal-header">
-                       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                       <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
-                   </div>
-                   <div class="modal-footer">
-                       <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
-                       <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
+            <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+               <div class="modal-dialog">
+                   <div class="modal-content">
+                       <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                           <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
+                       </div>
+                       <div class="modal-footer">
+                           <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
+                           <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
+                       </div>
                    </div>
                </div>
-           </div>
-        </div>
-   </div>
+            </div>
+       </div>
 
 
-        <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header" data-dismiss="modal">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Add or Remove Photo</h4>
+            <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header" data-dismiss="modal">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Add or Remove Photo</h4>
+                        </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
                     </div>
 
-            <div class="modal-body">
-                <div class="row">
-                    <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
+                    <div class="row" style="margin-top:6px; margin-bottom:20px;">
+                        <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
+                    </div>
+
+                    <div id="upload-photo-container" />
+
+                    <img id="contact-photo-modal" src="{{contact.photo}}" style="max-width:100%; margin-top:20px;" />
                 </div>
-
-                <div class="row" style="margin-top:6px; margin-bottom:20px;">
-                    <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
-                </div>
-
-                <div id="upload-photo-container" />
-
-                <img id="contact-photo-modal" src="{{contact.photo}}" style="max-width:100%; margin-top:20px;" />
             </div>
         </div>
     </div>
-</div>
-<!-- End Change Photo Modal -->
-
+    <!-- End Change Photo Modal -->
 </script>
 <!-- END CONTACT EDIT VIEW -->
 
@@ -1485,6 +1500,52 @@ CONTACTS EDIT VIEW
     </div>
 </script>
 
+<script type="text/x-handlebars-template" name="importContacts-modal" partial="true">
+  <div class="modal fade" id="import-contacts-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Import Contacts</h4>
+          </div>
+          <div class="modal-body">
+
+            <div class="row choose-import" data-import-section="choose">
+                <p>Choose one of the import options from below: </p>
+                <div class="clearfix mb30"></div>
+                <button type="button" class="btn fb-color btn-lg" data-import-source="facebook"><span class="fa fa-facebook"></span> <div class="clearfix mb5"></div> Facebook</button>
+                <button type="button" class="btn linkedin-color btn-lg" data-import-source="linkedin"><span class="fa fa-linkedin"></span> <div class="clearfix mb5"></div> LinkedIn</button>
+                <button type="button" class="btn google-color btn-lg" data-import-source="googleplus"><span class="fa fa-google-plus"></span> <div class="clearfix mb5"></div> Google+</button>
+                <button type="button" class="btn btn-primary btn-lg" data-import-source="csv"><span class="fa fa-plus"></span> <div class="clearfix mb5"></div> CSV</button>
+                <div class="clearfix mb30"></div>
+            </div>
+
+            <div class="row hidden" data-import-section="progress">
+                <h3 class="center">Importing <span class="num"></span> contacts from <span class="source"></span></h3>
+                <div class="clearfix mb30"></div>
+                <div class="progress progress-striped active">
+                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                  <span class="sr-only">40% Complete (success)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row import-success hidden" data-import-section="success">
+                <span class="fa fa-check"></span>
+                <div class="clearfix mb15"></div>
+                <h3> Successfully Imported Contacts </h3>
+                <div class="clearfix mb15"></div>
+                <button class="btn btn-primary btn-lg">View Imported Contacts</button>
+                <button class="btn btn-primary btn-lg">Fix Duplicate Contacts</button>
+                <div class="clearfix mb30"></div>
+
+            </div>
+
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</script>
 
 <!--
 HELPERS
@@ -1733,10 +1794,20 @@ HELPERS
     });
 
     Handlebars.registerHelper('ifCond', function(v1, options) {
-        if(v1 === 'FIRST') {
+        if(v1 === 'first') {
             return options.fn(this);
         }
         return options.inverse(this);
     });
+    Handlebars.registerHelper('isSelected', function(v1, v2, v5, options) {
 
+   //         var v3 = v1.toLowerCase()
+    //          , v4 = v2.toLowerCase();
+
+
+        if(v1 === v2) {
+            return "<option value='" + v2 + "' selected >" + v5 + "</option>" ;
+        }
+        return "<option value=" + v2 + " >" + v5 + "</option>";
+    });
 </script>
