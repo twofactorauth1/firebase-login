@@ -40,9 +40,9 @@ require.config({
         waypoints: 'libs/jquery-waypoints/waypoints',
         nestable: 'libs/nestable/jquery.nestable',
         date: 'libs/datejs/build/production/date.min',
-        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
         d3: 'libs/d3/d3',
-        moment: 'libs/moment/moment.min',
+        moment: 'libs/moment/min/moment.min',
+        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
         jquerydragdrop: 'libs/jquerydraganddrop/jquery.drag-drop.plugin',
 
         //UI SPECIFIC
