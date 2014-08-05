@@ -30,34 +30,6 @@
 <script src="/pipeshift/js/lib_misc/es5-shim.min.js"></script>
 <script src="/pipeshift/js/lib_misc/json3.min.js"></script>
 <![endif]-->
-<div role="navigation" class="navbar navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header"><a href="#home" class="navbar-brand"><img src="../img/logo.png"></a></div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li ng-class="navClass('/',view)"><a ng-click="changeView('/')">Home</a></li>
-                <li ng-class="navClass('/#feature',view)">
-                    <a ng-click="changeView('/#feature')">Features</a>
-                </li>
-                <li ng-class="navClass('/#pricing',view)">
-                    <a ng-click="changeView('/#pricing')">Pricing</a>
-                </li>
-                <li ng-class="navClass('/video/listeditor',view)" ng-show="isAuthenticated()">
-                    <a ng-click="changeView('/video/listeditor')">Editor</a>
-                </li>
-                <li ng-class="navClass('/profile',view)" ng-show="isAuthenticated()">
-                    <a ng-click="changeView('/profile')">Account</a>
-                </li>
-                <li>
-                    <a href="/logout" target="_self" ng-show="isAuthenticated()">Logout</a>
-                </li>
-                <li>
-                    <a ng-click="global.showLoginModal()" ng-hide="isAuthenticated()">Login</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
 <div ng-view="ng-view">
 </div>
 <script src="http://www.youtube.com/iframe_api"></script>

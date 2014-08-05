@@ -16,14 +16,6 @@
         app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
             $routeProvider
                 .when('/admin/pipeshift/', {
-                    templateUrl: '/pipeshift/views/home.html',
-                    controller: 'HomeController'
-                })
-                .when('/admin/pipeshift/profile/', {
-                    templateUrl: '/pipeshift/views/profile.html',
-                    controller: 'ProfileController'
-                })
-                .when('/admin/pipeshift/editor/', {
                     templateUrl: '/pipeshift/views/video/listeditor.html',
                     controller: 'ListEditorController'
                 })
