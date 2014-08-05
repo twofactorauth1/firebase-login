@@ -441,7 +441,7 @@ var dao = {
         }, function(res){
             var data = res.data[0] && res.data[0].values;
             // no results
-            if (!data) return fn([]);
+            if (!data) return fn(null, []);
 
             data = data.map(function(day, i){
                 var obj = { date: day.end_time.split('T')[0] };
@@ -449,7 +449,7 @@ var dao = {
                 return obj;
             });
 
-            fn(data);
+            fn(null, data);
         })
     },
 
