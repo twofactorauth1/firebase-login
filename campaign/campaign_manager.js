@@ -253,15 +253,15 @@ module.exports = {
 
     subscribeToPipeshiftCourse: function (toEmail, courseMock, timezoneOffset, curUserId, callback) {
         var self = this;
-
-        userDao.createUserFromUsernamePassword(toEmail, "pass", toEmail, null, function (err, value) {
-            if (err) {
-                self.log.warn("Error creating user: " + "\t" + JSON.stringify(value, null, 2) + JSON.stringify(value, null, 2));
-            }
-            courseDao.getCourseById(courseMock._id, curUserId, function (err, course) {
-                    if (err || !course) {
-                        callback(err, null);
-                    } else {
+        courseDao.getCourseById(courseMock._id, curUserId, function (err, course) {
+            if (err || !course) {
+                self.log.warn("Can't find course: " + "\t" + JSON.stringify(err, null, 2));
+                callback(err, null);
+            } else {
+                contactDao.createUserContactFromEmail(course.get('userId'), toEmail, function (err, value) {
+                        if (err) {
+                            self.log.warn("Error creating contact: " + "\t" + JSON.stringify(value, null, 2));
+                        }
                         accountDao.getFirstAccountForUserId(course.get('userId'), function (err, account) {
                             if (err || !account) {
                                 callback(err, null);
@@ -302,8 +302,8 @@ module.exports = {
                             }
                         });
                     }
-                }
-            );
+                );
+            }
         });
 
     },

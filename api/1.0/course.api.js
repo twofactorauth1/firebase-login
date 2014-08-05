@@ -203,11 +203,6 @@ _.extend(api.prototype, baseApi.prototype, {
     }
 
 });
-
-function clearVideoFieldsForUnauthorizedUser(video) {
-    //todo: check if some other params should be removed
-    video.videoUrl = null;
-}
 function isUserPaidForCourse(user, course) {
     //todo: implement in dao
     return true;
