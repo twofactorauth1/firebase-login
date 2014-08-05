@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app.security', [])
-    .factory('security', ['$http', '$q', 'host', function ($http, $q, host) {
+    .factory('security', ['$http', '$q', function ($http, $q) {
 
         var that = this;
 
@@ -43,7 +43,7 @@ angular.module('app.security', [])
                 if (service.isAuthenticated()) {
                     return $q.when(service.currentUser);
                 } else {
-                    return $http.get(host + '/current-user').then(function (response) {
+                    return $http.get('/current-user').then(function (response) {
                         service.currentUser = response.data.user;
                         if (service.currentUser) {
                             service.currentUser.role = 'user';

@@ -1,4 +1,4 @@
-angular.module('app').controller('LoginModalController', ['$scope', '$rootScope', '$modal', '$http', '$location', '$modalInstance', 'security', 'host', function ($scope, $rootScope, $modal, $http, $location, $modalInstance, security, host) {
+angular.module('app').controller('LoginModalController', ['$scope', '$rootScope', '$modal', '$http', '$location', '$modalInstance', 'security', function ($scope, $rootScope, $modal, $http, $location, $modalInstance, security) {
     $scope.user = {};
     $scope.modal = {submited: false};
     $scope.close = function () {
@@ -6,7 +6,7 @@ angular.module('app').controller('LoginModalController', ['$scope', '$rootScope'
     }
     $scope.submit = function () {
         if ($scope.modal.loginForm.$valid) {
-            $http.post(host + '/login', {username: $scope.user.email, password: $scope.user.password}).success(function (data) {
+            $http.post('/login', {username: $scope.user.email, password: $scope.user.password}).success(function (data) {
                 $scope.submited = false;
                 if (data.success) {
                     security.requestCurrentUser();
