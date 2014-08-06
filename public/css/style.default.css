@@ -16174,6 +16174,11 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .people-item {
   opacity: 0;
 }
+@media (max-width: 767px) {
+  .people-item {
+    min-height: 100px!important;
+  }
+}
 .people-item.shown {
   opacity: 1;
 }
@@ -18348,6 +18353,9 @@ div.error label.error:before {
   -moz-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
   -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
   box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+  display: block;
+  position: relative;
+  height: 100%;
 }
 .letter-list li {
   border-left: 1px solid #eee;
@@ -18390,7 +18398,7 @@ div.error label.error:before {
   CONTACTS LIST - PEOPLE ITEM
 **********************************************************/
 .people-item {
-  min-height: 250px;
+  min-height: 265px;
   cursor: pointer;
   background: #fcfcfc;
   padding: 15px 5px;
@@ -18408,7 +18416,7 @@ div.error label.error:before {
 }
 @media (max-width: 767px) {
   .people-item {
-    margin-bottom: 4px;
+    margin-bottom: 15px;
     padding-bottom: 0px;
   }
   .people-item .thumbnail {
@@ -18424,8 +18432,7 @@ div.error label.error:before {
     height: 50px;
     display: inline;
     float: left;
-    margin-right: 15px;
-    margin-bottom: 0px;
+    margin: 0 15px;
   }
   .people-item .important-star {
     top: 23px;
@@ -18496,7 +18503,7 @@ div.error label.error:before {
 @media (min-width: 992px) and (max-width: 1361px) {
   .social-list li a {
     padding: 8px;
-    width: 36px;
+    width: 40px;
     border-radius: 64px!important;
   }
 }

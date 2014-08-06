@@ -221,12 +221,8 @@ define([
                 if ($.inArray(contactsArr[i]._id, self.fetchedContacts) > -1) {
                     console.log('is IN array');
                 } else {
-                    console.log('is NOT in array');
-                    if (!self.fetched && i < 3) {
-                        console.log('First '+i);
-                    } else {
-                        cleanedContacts.push(contactsArr[i]);
-                    }
+                    console.log('is NOT in array '+self.fetched);
+                    cleanedContacts.push(contactsArr[i]);
                 }
             }
 
@@ -239,7 +235,11 @@ define([
                     self.fetchedContacts.push(cleanedContacts[i]._id);
                 }
             }
-            self.fetched = true;
+
+            if (!self.fetched) {
+                cleanedContacts.splice(0[3]);
+                self.fetched = true;
+            }
             console.log('Contacts Fetched: '+self.fetchedContacts);
 
             var data = {
@@ -476,7 +476,7 @@ define([
 
                             self.appendContacts();
                             self.check_welcome();
-                            self.skip=self.contacts.length;
+                            self.skip = self.contacts.length;
                         });
                     if (self.currentLetter == "all")
                         $$.r.account.ContactRouter.navigateToShowContactsForAll(self.currentLetter, self.skip);
