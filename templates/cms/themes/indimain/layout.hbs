@@ -22,7 +22,7 @@
     {{/if}}
 
         <link rel="stylesheet" href="/css/style.default.css">
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Capita+Light:400,700' rel='stylesheet' type='text/css'>
 
     <title>{{title}}</title>
     <script type="text/javascript">
@@ -210,9 +210,22 @@
                   interval: 4000
                 });
 
-                $('.gallery-image').on('hover', function () {
-                  console.log('gallery hover');
-                  $(this).parent().next('.overlay-gallery-image').css('opacity', '1');
+                $('.item').on('hover', '.gallery-image', function() {
+                  var overlay = $(this).parent().next('.overlay-gallery-image');
+                  if (overlay.hasClass('hidden')) {
+                    overlay.removeClass('hidden');
+                  } else {
+                    overlay.addClass('hidden');
+                  }
+                });
+
+                $('.item').on('hover', '.overlay-gallery-image', function() {
+                  var overlay = $(this);
+                  if (overlay.hasClass('hidden')) {
+                    overlay.removeClass('hidden');
+                  } else {
+                    overlay.addClass('hidden');
+                  }
                 });
 
                 $('.goback').on('click', function() {

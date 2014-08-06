@@ -15,6 +15,8 @@ define([
         id: 'FB_overview'
         , url: '/facebook/{{id}}/overview'
         , templateKey: 'account/charts/facebook/overview'
+        , templateWrapper: 'fb-overview'
+        , targetIndicator: '.graph-overview'
         , testData: {
             fofs: 1231234
             , likes: 517
