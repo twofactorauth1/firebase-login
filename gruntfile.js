@@ -80,7 +80,8 @@ module.exports = function(grunt) {
                 files: {
                     '../indigeweb/public/css/site.css': [ 'public/less/site.less' ],
                     '../indigeweb/public/css/style.default.css': [ 'public/less/style.default.less' ],
-                    '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ]
+                    '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ],
+                    '../indigeweb/public/pipeshift/css/site.css': [ 'public/pipeshift/less/theme.less', 'public/pipeshift/less/main.less' ]
                 }
             }
         },
