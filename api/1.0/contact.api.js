@@ -27,6 +27,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthApi, this.createContact.bind(this));
         app.put(this.url(''), this.isAuthApi, this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteContact.bind(this));
+        app.get(this.url(''), this.isAuthApi, this.listContacts.bind(this));
+        app.get(this.url('filter/:letter'), this.isAuthApi, this.getContactsByLetter.bind(this));
+
+
 
       //  app.post("/signupnews", this.signUpNews.bind(this));
         app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
@@ -119,6 +123,34 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+
+    },
+
+    listContacts: function(req, res) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var skip = parseInt(req.query['skip'] || 0);
+        self.log.debug('>> listContacts');
+
+        contactDao.getContactsAll(accountId, skip, function(err, value){
+            self.log.debug('<< listContacts');
+            self.sendResultOrError(res, err, value, "Error listing Contacts");
+            self = null;
+        });
+    },
+
+    getContactsByLetter: function(req, res) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var skip = parseInt(req.query['skip'] || 0);
+        var letter = req.params.letter;
+        self.log.debug('>> getContactsByLetter');
+
+        contactDao.getContactsShort(accountId, letter, function (err, value) {
+            self.log.debug('<< getContactsByLetter');
+            self.sendResultOrError(res, err, value, "Error listing contacts by letter [" + letter + "]");
+            self = null;
+        });
 
     },
 
