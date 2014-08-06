@@ -40,6 +40,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('activity/:id'), this.isAuthApi, this.getActivityById.bind(this));
         app.post(this.url('activity'), this.isAuthApi, this.createActivity.bind(this));
         app.put(this.url('activity'), this.isAuthApi, this.updateActivity.bind(this));
+
+        //duplicate check
+        app.get(this.url('duplicates/check'), this.isAuthApi, this.checkForDuplicates.bind(this));
+        app.post(this.url('duplicates/merge'), this.isAuthApi, this.mergeDuplicates.bind(this));
     },
 
 
@@ -158,6 +162,23 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             });
         }
+
+    },
+
+    checkForDuplicates: function(req, res) {
+        var self = this;
+        self.log.debug('>> checkForDuplicates');
+
+        var accountId = parseInt(self.accountId(req));
+
+        contactDao.findDuplicates(accountId, function(err, value){
+            self.log.debug('<< checkForDuplicates');
+            self.sendResultOrError(res, err, value, "Error checking for duplicate contacts");
+            self = null;
+        });
+    },
+
+    mergeDuplicates:function(req, res) {
 
     },
     //endregion CONTACT

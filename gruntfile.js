@@ -154,6 +154,7 @@ module.exports = function(grunt) {
             all:['test/**/*_test.js'],
             api:['api/test/*_test.js'],
             biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
+            contacts: ['test/contact.dao_test.js'],
             contextio:['test/contextio_test.js'],
             facebook: ['test/facebook_test.js'],
             twonetadapter:['biometrics/twonet/adapter/test/**/*_test.js'],
@@ -193,4 +194,5 @@ module.exports = function(grunt) {
     grunt.registerTask('testUtils', ['nodeunit:utils']);
     grunt.registerTask('testApi', ['nodeunit:api']);
     grunt.registerTask('testFacebook', ['nodeunit:facebook']);
+    grunt.registerTask('testContacts', ['nodeunit:contacts']);
 };

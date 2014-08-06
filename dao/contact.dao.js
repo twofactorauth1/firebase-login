@@ -309,6 +309,120 @@ var dao = {
                     });
                 });
         });
+    },
+
+    findDuplicates: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> findDuplicates(' + accountId + ')');
+
+        /*
+         * Two ways to find duplicates:
+         *  - firstName and lastName match
+         *  - email match
+         */
+        var p1 = $.Deferred(), p2 = $.Deferred();
+        var duplicates = [];
+
+
+        //this is what we will actually use for mongo
+        var groupCriteria = {_first: '$_first', _last: '$_last'};
+        var matchCriteria = {'accountId': accountId };
+        self.aggregate(groupCriteria, matchCriteria, $$.m.Contact, function(err, value){
+            if(err) {
+                p1.reject();
+                self.log.error('Error during aggregate on first/last names: ' + err);
+            } else {
+                //self.log.debug('returning from aggregate on names');
+                //console.dir(value);
+                duplicates = duplicates.concat(value);
+                p1.resolve();
+            }
+        });
+
+
+        var aggregateStages = [
+            {
+                $project: {'details.emails': 1, accountId: 1}
+            },
+            {
+                $unwind: '$details'
+            },
+            {
+                $unwind: '$details.emails'
+            },
+            {
+                $match: {'accountId': accountId }
+            },
+            {
+                $group: {
+                    _id: {'details.emails': '$details.emails'},
+
+                    // Count number of matching docs for the group
+                    count: { $sum:  1 },
+
+                    // Save the _id for matching docs
+                    docs: { $push: "$_id" }
+                }
+            },
+            {
+                // Limit results to duplicates (more than 1 match)
+                $match: {
+                    count: { $gt : 1 }
+                }
+            }
+        ];
+        self.aggregateWithCustomStages(aggregateStages, $$.m.Contact, function(err, value){
+            if(err) {
+                p2.reject();
+                self.log.error('Error during aggregate on email: ' + err);
+            } else {
+                //self.log.debug('returning from aggregate on email');
+                //console.dir(value);
+                duplicates = duplicates.concat(value);
+                p2.resolve();
+            }
+        });
+
+
+        $.when(p1,p2).done(function(){
+            //consolidate duplicates
+            var dupeMap = [];
+            var dupeMapIDs = [];
+
+            /*
+             * Iterate through the duplicates.  The 'docs' element on each duplicate is an array of contact IDs that
+             * are potentially duplicate.  Check if we have identified *any* of them already by looking at an
+             * intersection of the dupeMapIDs array and the docs element.  If none are in the intersection, add them all
+             * to dupeMapIDs and push the group of duplicate IDs to the dupeMap.  If at least one is in the
+             * intersection, add the other duplicate IDs to the dupeMapIDs and to the grouping in dupeMap.
+             */
+            _.each(duplicates, function(element, key, list){
+                //console.log('iterating over element: ');
+                //console.dir(element);
+                if(_.intersection(dupeMapIDs, element.docs).length === 0) {
+                    //console.log('brand new dupe');
+                    //brand new duplicate
+                    dupeMapIDs = dupeMapIDs.concat(element.docs);
+                    dupeMap.push(element.docs);
+
+                } else {
+                    //already found it.  Make sure we know about all the IDs.
+                    dupeMapIDs = _.union(dupeMapIDs, element.docs);
+                    _.each(dupeMap, function(dupeMapEntry, dupeMapKey, dupeMapList){
+                        if(_.intersection(element.docs, dupeMapEntry) !== 0) {
+                            dupeMapEntry = _.union(dupeMapEntry, element.docs);
+                        }
+                    });
+                }
+
+            });
+
+
+
+
+            fn(null, dupeMap);
+        });
+
     }
 };
 
