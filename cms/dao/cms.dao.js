@@ -13,6 +13,7 @@ var cryptoUtil = require('../../utils/security/crypto');
 
 var accountDao = require('./../../dao/account.dao.js');
 var themesConfig = require('../../configs/themes.config.js');
+var segmentioConfig = require('../../configs/segmentio.config.js')
 
 var Website = require('../model/website');
 var Page = require('../model/page');
@@ -1379,6 +1380,7 @@ var dao = {
                     seo: seo,
                     footer: footer,
                     title: title,
+                    segmentIOWriteKey: segmentioConfig.SEGMENT_WRITE_KEY,
                     handle: pageName,
                     linkLists: {},
                     blogposts: null,

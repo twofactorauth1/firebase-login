@@ -171,7 +171,7 @@ var mongodao = {
 
     },
 
-    _findAllWithFieldsMongo: function(query,  skip, sort,fields, type, fn) {
+    _findAllWithFieldsMongo: function(query, skip, sort, fields, type, fn) {
         var self = this;
         if (fn == null) {
             fn = type;
@@ -190,15 +190,16 @@ var mongodao = {
             }
         };
 
+        //TODO: this is a mess
         if (query == null && fields == null) {
-            mongoColl.find({},{ sort : [['last']]}).skip(skip).limit(6).toArray(fxn);
+            mongoColl.find({},{ sort : [[sort]]}).skip(skip).toArray(fxn);
         } else if (query != null) {
     //        mongoColl.find({ $query: {}, $orderby: { sort : 1 } }  ).limit(3+skip).toArray(fxn);
            // mongoColl.find(query).sort( { sort: 1 } ).limit(3+skip).toArray(fxn);
-            mongoColl.find(query,{ sort : [[sort,'ascending']]}).limit(3+skip).toArray(fxn);
+            mongoColl.find(query,{ sort : [[sort,'ascending']]}).skip(skip).toArray(fxn);
            // mongoColl.find(query).skip(skip).limit(6).toArray(fxn);
         } else if(fields != null) {
-            mongoColl.find(null, fields).skip(skip).limit(6).toArray(fxn);
+            mongoColl.find(null, fields).skip(skip).toArray(fxn);
         }
     },
     _wrapArrayMongo: function(value, fields, type, fn) {

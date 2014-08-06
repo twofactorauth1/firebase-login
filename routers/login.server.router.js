@@ -56,6 +56,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/signup/*", this.setup, this.showSignup.bind(this)); //catch all routed routes
         app.post("/signup", this.setup, this.handleSignup.bind(this));
 
+        app.get("/current-user", this.setup, this.getCurrentUser.bind(this));
+
         return this;
     },
 
@@ -98,7 +100,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
         if (redirectUrl != null) {
-            authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function(err, value) {
+            authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function (err, value) {
                 return resp.redirect(redirectUrl);
             });
             return;
@@ -247,8 +249,29 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 return resp.redirect("/signup");
             }
         });
+    },
+
+    getCurrentUser: function (req, resp) {
+        resp.json(this._filterUser(req.user));
+    },
+
+    _filterUser: function (user) {
+        if (user && user.attributes) {
+            return {
+                user: {
+                    id: user.attributes._id,
+                    email: user.attributes.email,
+                    admin: false
+                }
+            };
+        } else {
+            return {
+                user: null
+            };
+        }
     }
-    //endregion
-});
+//endregion
+})
+;
 
 module.exports = new router();
