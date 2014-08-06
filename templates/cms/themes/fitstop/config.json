@@ -1,0 +1,76 @@
+{
+    "template-engine": "handlebars",
+    "supports-menu-lists": "false",
+
+    "theme-id": "fitstop",
+    "theme-name": "Fitstop Theme",
+    "theme-description": "The Fitstop theme for INDIGENOUS SOFTWARE, INC.",
+    "tags": ["default", "awesome", "basic"],
+
+    "linkLists": [
+        {
+            "name": "Head2 Menu",
+            "handle": "head2-menu",
+            "links": [
+                {
+                    "label": "Home",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "home",
+                        "data": "index"
+                    }
+                },
+                {
+                    "label": "Blog",
+                    "type": "link",
+                    "linkTo": {
+                        "type": "page",
+                        "data": "blog"
+                    }
+                },
+                {
+                    "label": "Cart",
+                    "type": "link"
+                }
+            ]
+        }
+    ],
+
+    "pages": [
+        {
+            "handle":"index",
+            "title":"Home",
+            "components": [
+                "freeform",
+                "contact-us",
+                "feature-blocks",
+                "feature-list",
+                "image-gallery",
+                "image-slider",
+                "image-text",
+                "meet-team",
+                "signup-form",
+                "products"
+            ]
+        },
+
+        {
+            "handle":"blog",
+            "title":"Blog",
+            "components": [
+                "blog"
+            ]
+        },
+        {
+            "handle":"single-post",
+            "title":"Single Post",
+            "components": [
+                "single-post"
+            ]
+        }
+    ],
+
+    "excluded-components": [
+
+    ]
+}

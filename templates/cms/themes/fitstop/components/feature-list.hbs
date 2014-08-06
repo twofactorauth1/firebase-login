@@ -1,0 +1,58 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div id="assets" class="page">
+        {{#with component}}
+            <div class="component-header container ">
+                    <div class="editable" data-class="label">
+                        <h2 class="center">{{{label}}}</h2>
+                    </div>
+
+                    <div class="editable" data-class="description">
+                        <p class="center">{{{description}}}</p>
+                    </div>
+                </div>
+            <!-- Feature Three -->
+            <div id="feature_three" class="row inner-page">   
+                    <div class="row">
+                        <div class="editable features-title col-sm-12">
+                            <h5>{{{main-feature-title}}}<h5>
+                        </div>
+                        <!-- Features list -->
+                        {{#each features}}
+                        <div class="col-sm-3 feature-single-{{@index}}" style="opacity:1">
+                            <!-- if feature-title {feature-title} else {feature-image} !-->
+                            {{#if feature-icon}}
+                                <a href="{{{feature-button-url}}}">
+                                    <span class="{{{feature-icon}}}"></span>
+                                </a>
+                            {{else}}
+                                <a href="{{{feature-button-url}}}"><div id="training-icon"></div></a>
+                            {{/if}}
+                            <div class="editable" data-class="features.item.title">
+                                <h4>{{{feature-title}}}</h4>
+                            </div>
+                            <div class="editable feature-p" data-class="features.item.paragraph">
+                                <p>{{{feature-paragraph}}}</p>
+                            </div>
+                            <div class="editable" data-class="features.item.button-text">
+                                <a href="{{{feature-button-url}}}">
+                                    <div id="feature-bttn">
+                                        <a>{{{feature-button-text}}}</a>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="pusher visible-xs"></div>
+                        {{/each}}
+                    </div>
+            </div>
+
+            
+        {{/with}}
+    </div>
