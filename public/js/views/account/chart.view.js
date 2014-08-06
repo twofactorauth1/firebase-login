@@ -32,12 +32,12 @@ define([
 
         setupElement: function(){
             this.$el.empty()
-                .addClass('grid' + this.options.gridWidth)
+//                .addClass('grid' + this.options.gridWidth)
                 .addClass('module')
                 .addClass('chart-item')
                 .attr({
                     draggable: 'true'
-                    , id: this.cid
+//                    , id: this.cid
                     , 'data-width': this.options.gridWidth
                 })
         },
@@ -72,12 +72,18 @@ define([
                     data = [];
                 }
 
+//                chart.render(data, {
+//                    target : this.el
+//                    , width  : width || this.options.width
+//                    , height : height || this.options.height
+//                    , range  : this.options.selectedRange || [this.options.since, this.options.until]
+//                });
                 chart.render(data, {
                     target : this.el
-                    , width  : width || this.options.width
-                    , height : height || this.options.height
+                    , width  : this.options.width
+                    , height : this.options.height
                     , range  : this.options.selectedRange || [this.options.since, this.options.until]
-                })
+                });
             }
 
             if ((window.localStorage && localStorage.testData === 'true')) {

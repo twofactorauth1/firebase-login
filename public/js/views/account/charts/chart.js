@@ -15,6 +15,8 @@ define([
         this.render = options.render;
         this.testData = options.testData;
         this.templateKey = options.templateKey;
+        this.templateWrapper = options.templateWrapper;
+        this.targetIndicator = options.targetIndicator;
     }
 
     Chart.prototype.process = function (options) {

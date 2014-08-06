@@ -32,6 +32,7 @@ define([
         pageHandle: null,
         subdomain: null,
         is_dragging: false,
+        blogBoolean: false,
 
         attributes: {
             id: "edit-website-wrapper"
@@ -114,9 +115,14 @@ define([
                                 page = "index";
                             }
 
+                            if (page.indexOf("blog") > -1) {
+                                self.blogBoolean = true;
+                            }
+
                             if (page.indexOf("blog/") > -1) {
                                 console.log('editing single blog');
                                 page = "single-post";
+                                self.blogBoolean = true;
                             }
                             self.pageHandle = page;
                         }
@@ -139,7 +145,8 @@ define([
                                     var data = {
                                         components: componentsArray,
                                         colorPalette: colorPalette,
-                                        account: self.account
+                                        account: self.account,
+                                        blog: self.blogBoolean
                                     };
 
                                     self.setupSidebar(data, rightPanel, sidetmpl);
@@ -185,6 +192,12 @@ define([
             var template = sidetmpl(data);
             rightPanel.append(sidetmpl(data));
             this.delegateEvents();
+
+            if (data.blog == true) {
+                $('.add-post').show();
+            } else {
+                $('.add-post').hide();
+            }
 
             var body = $("#body");
 
@@ -251,7 +264,7 @@ define([
                         }
                     );
                 });
-            },
+        },
 
         updateOrder: function (componentID, start_pos) {
             var self = this;

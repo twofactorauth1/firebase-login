@@ -14,6 +14,9 @@ define([
     $$.Charts.FB_likesPerDay = new Chart({
         id: 'FB_likesPerDay'
         , url: '/facebook/{{id}}/likesUnlikesPerDay'
+        , templateKey: 'account/charts/facebook/likes_per_day'
+        , templateWrapper: 'fb-likes-per-day'
+        , targetIndicator: '.graph-likes-per-day'
         , testData: [
             { date: '2014-06-20', likes: '2', unlikes: '0' }
             , { date: '2014-06-21', likes: '4', unlikes: '1' }

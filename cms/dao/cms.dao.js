@@ -1521,7 +1521,12 @@ var dao = {
                             //inject editable stuff here
                             //var endHeadReplacement = editableCssScript + " </head>";
                             //value = value.replace("</head>", endHeadReplacement);
+                            console.log('CSS SCRIPT: '+editableCssScript);
+                            if (editableCssScript) {
                             data.footer = data.footer + " " + editableCssScript;
+                            } else {
+                                data.footer = data.footer;
+                            }
                         }
                     }
                     self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {
