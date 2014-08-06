@@ -22632,6 +22632,12 @@ input {
     max-height: 100%;
   }
 }
+/*
+ *  Fitstop base css file
+ */
+/*
+ *  Features list (Services) section
+ */
 #assets {
   border: 0px!important;
 }
@@ -22713,4 +22719,17 @@ input {
 #feature_three .aloha-editable {
   padding-top: 4px;
   bottom: 15px;
+}
+/*
+ *  Features blocks (About) section
+ */
+.feature-blocks .f-title {
+  bottom: 50px;
+}
+.feature-blocks .f-title h5 {
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  font-size: 24px;
+  color: black;
+  opacity: .95;
 }
