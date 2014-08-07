@@ -40,9 +40,10 @@ require.config({
         waypoints: 'libs/jquery-waypoints/waypoints',
         nestable: 'libs/nestable/jquery.nestable',
         date: 'libs/datejs/build/production/date.min',
-        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
         d3: 'libs/d3/d3',
         moment: 'libs/moment/min/moment.min',
+        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
+        jquerydragdrop: 'libs/jquerydraganddrop/jquery.drag-drop.plugin',
 
         //PIPESHIFT
         angular: 'libs/angular/angular',
@@ -122,6 +123,9 @@ require.config({
         daterangepicker: {
             deps: ['jquery', 'moment']
         },
+        jquerydragdrop: {
+            deps: ['jquery']
+        },
 
         tagsinput: {
             deps: ['jquery']
@@ -158,6 +162,7 @@ require.config({
                 'bootstrap',
                 'handlebars',
                 'modernizr',
+                'jquerydragdrop',
 
                 //PIPESHIFT
                 'angular',

@@ -14,8 +14,10 @@ define([
     $$.Charts.FB_topTenPosts = new Chart({
         id: 'FB_topTenPosts'
         , url: '/facebook/{{id}}/topTenPosts'
-        , gridWidth: 2
         , templateKey: 'account/charts/facebook/top_ten_posts'
+        , templateWrapper: 'fb-top-ten-posts'
+        , targetIndicator: '.graph-top-posts'
+        , gridWidth: 2
         , testData: [
             { id: '1-1', date: '2014-06-20', type: 'post', message: 'Hello World', reach: 71213, engaged: 1347, talking: 40087 }
             , { id: '1-1', date: '2014-06-29', type: 'post', message: 'Hello World', reach: 71213, engaged: 1347, talking: 30087 }

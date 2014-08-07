@@ -7,6 +7,7 @@
 
 define([
     'models/cms/components/freeform',
+    'models/cms/components/masthead',
     'models/cms/components/contact-us',
     'models/cms/components/feature-blocks',
     'models/cms/components/feature-list',
@@ -19,10 +20,11 @@ define([
     'models/cms/components/blog',
     'models/cms/components/products',
     'models/cms/components/single-page',
-], function(Freeform, ContactUs, FeatureBlocks, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost, SignupForm, Blog, Products, SinglePage) {
+], function(Freeform, MastHead, ContactUs, FeatureBlocks, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost, SignupForm, Blog, Products, SinglePage) {
 
     var components = {
         "freeform": Freeform,
+        "masthead": MastHead,
         "contact-us": ContactUs,
         "feature-blocks": FeatureBlocks,
         "feature-list": FeatureList,

@@ -232,6 +232,22 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    aggregate: function(groupCriteria, matchCriteria, type,  fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._aggregateMongo(groupCriteria, matchCriteria, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
+    aggregateWithCustomStages: function(stageAry, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._aggregateMongoWithCustomStages(stageAry, type, fn);
+        }  else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
     getMaxValue: function(query, fieldName, type, fn) {
       if(this.getStorage(type) === 'mongo') {
           this._getMaxValueMongo(query, fieldName, type, fn);
