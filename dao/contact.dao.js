@@ -7,6 +7,7 @@
 
 var baseDao = require('./base.dao');
 var accountDao = require('./account.dao');
+var userDao = require('./user.dao');
 requirejs('constants/constants');
 require('../models/contact');
 var async = require('async');
@@ -14,50 +15,52 @@ var async = require('async');
 var dao = {
 
     options: {
-        name:"contact.dao",
+        name: "contact.dao",
         defaultModel: $$.m.Contact
     },
 
-    getContactsShort: function(accountId, letter, fn) {
+    getContactsShort: function (accountId, letter, limit, fn) {
         var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
         var query = {accountId: accountId, _last: { $gte: letter, $lt: nextLetter } };
         //var fields = {_id:1, accountId:1, first:1, last:1, photo:1, photoSquare:1, type:1, siteActivity:1, details:1};
         var fields = null;
-        var obj = {query:query, fields:fields};
-        this.findManyWithFields(query, fields, fn);
+        var obj = {query: query, fields: fields};
+        //this.findManyWithFields(query, fields, fn);
+        this.findManyWithLimit(query, limit, $$.m.Contact, fn);
     },
 
-    getContactsAll: function(accountId,skip, fn) {
+    getContactsAll: function (accountId, skip, limit, fn) {
         //var query = {accountId: accountId, _last: { $gte: "a", $lt: "z" } };
-       var self=this;
+        var self = this;
+        self.log.debug('>> getContactsAll');
         var query = {accountId: accountId };
         var fields = null;
-        var obj = {query:query, fields:fields};
-        accountDao.getAccountByID(accountId,function(err,res){
+        var obj = {query: query, fields: fields};
+        accountDao.getAccountByID(accountId, function (err, res) {
 
-            var sort=res.get('settings')
+            var sort = res.get('settings')
 
-            if(sort)
-                sort=sort.sort_type;
+            if (sort)
+                sort = sort.sort_type;
             else
-                sort='last';
+                sort = 'last';
 
-                //['sort_type'] || 'last';
+            //['sort_type'] || 'last';
 
-            self.findAllWithFields(query,skip,sort, fields, fn);
-        })
+            //self.findAllWithFields(query, skip, sort, fields, fn);
+            self.findAllWithFieldsAndLimit(query, skip, limit, sort, fields, $$.m.Contact, fn);
+        });
 
     },
 
 
-
-    getContactsBySocialIds: function(accountId, socialType, socialIds, fn) {
-        var query = { accountId: accountId, "details.type":socialType, "details.socialId": { $in: socialIds} };
+    getContactsBySocialIds: function (accountId, socialType, socialIds, fn) {
+        var query = { accountId: accountId, "details.type": socialType, "details.socialId": { $in: socialIds} };
         this.findMany(query, fn);
     },
 
 
-    saveOrMerge: function(contact, fn) {
+    saveOrMerge: function (contact, fn) {
         var self = this;
         var emails = contact.getEmails();
 
@@ -94,25 +97,25 @@ var dao = {
                 ]
             };
         }
-        else if(String.isNullOrEmpty(_last)) {
+        else if (String.isNullOrEmpty(_last)) {
             query = emailQ;
         } else {
             query = nameQ;
         }
 
-        var dummyFxn = function() {
+        var dummyFxn = function () {
 
         };
 
 
-        this.findMany(query, function(err, value) {
+        this.findMany(query, function (err, value) {
             if (err) {
                 return fn(err, value);
             }
 
             var matched = false;
             var possibleDups = [];
-            value.forEach(function(existing) {
+            value.forEach(function (existing) {
                 if (matched !== false) {
                     //We have already matched, so this immediately becomes a possible duplicate
                     possibleDups.push(existing);
@@ -151,18 +154,18 @@ var dao = {
                 if (possibleDups && possibleDups.length > 0) {
                     contact.setPossibleDuplicate(possibleDups);
 
-                    self.saveOrUpdate(contact, function(err, value) {
+                    self.saveOrUpdate(contact, function (err, value) {
                         if (err) {
                             return fn(err, value);
                         }
 
-                        possibleDups.forEach(function(dup) {
+                        possibleDups.forEach(function (dup) {
                             dup.setPossibleDuplicate(value);
                             self.saveOrUpdate(dup, dummyFxn);
                         });
 
                         return fn(err, value);
-                    }) ;
+                    });
                     return;
                 } else {
                     self.saveOrUpdate(contact, fn);
@@ -173,7 +176,7 @@ var dao = {
                 matched.mergeContact(contact);
 
                 if (possibleDups && possibleDups.length > 0) {
-                    possibleDups.forEach(function(dup) {
+                    possibleDups.forEach(function (dup) {
                         matched.setPossibleDuplicate(dup);
                         dup.setPossibleDuplicate(matched);
                         self.saveOrUpdate(dup, dummyFxn);
@@ -184,35 +187,42 @@ var dao = {
         });
     },
 
-    getContactByEmail: function(email, fn) {
+    getContactByEmail: function (email, fn) {
         if (email == null) {
             return fn(null, null);
         }
-        this.findOne( {'email':email}, fn);
+        this.findOne({'email': email}, fn);
     },
 
-    createContactFromEmail: function(email, accountToken, fn) {
-       var self=this;
-        console.log('Email (createUserFromEmail): '+JSON.stringify(email));
+    getContactByEmailAndUserId: function (email, userId, fn) {
+        if (email == null || userId == null) {
+            return fn(null, null);
+        }
+        this.findOne({'email': email, 'created.by': userId}, fn);
+    },
+
+    createContactFromEmail: function (email, accountToken, fn) {
+        var self = this;
+        console.log('Email (createUserFromEmail): ' + JSON.stringify(email));
         if (_.isFunction(accountToken)) {
             fn = accountToken;
             accountToken = null;
         }
 
         var self = this;
-        this.getContactByEmail(email, function(err, value) {
+        this.getContactByEmail(email, function (err, value) {
 
             if (err) {
                 return fn(err, value);
             }
 
             if (value != null) {
-                return fn(true, "An account with this username already exists");
+                return fn(true, "Contact with this username already exists");
             }
 
             var deferred = $.Deferred();
 
-            accountDao.convertTempAccount(accountToken, function(err, value) {
+            accountDao.convertTempAccount(accountToken, function (err, value) {
                 if (!err) {
                     deferred.resolve(value);
                 } else {
@@ -222,7 +232,7 @@ var dao = {
             });
 
             deferred
-                .done(function(account) {
+                .done(function (account) {
                     var accountId;
 
                     if (account != null) {
@@ -241,10 +251,10 @@ var dao = {
                         contact.createdBy(this.userId(), $$.constants.social.types.LOCAL);
                     }
 
-                   self.saveOrUpdate(contact, function(err, value) {
+                    self.saveOrUpdate(contact, function (err, value) {
                         if (!err) {
                             self.sendResult(err, value);
-                         } else {
+                        } else {
                             self.wrapError(err, 500, "There was an error updating contact", err, value);
 
                         }
@@ -252,17 +262,58 @@ var dao = {
                 });
         });
     },
-    createContactFromData: function(data, accountToken, fn) {
-        var self=this;
-        var email=data.email
-        console.log('Email (createUserFromEmail): '+JSON.stringify(email));
+
+    createUserContactFromEmail: function (userId, email, fn) {
+        var self = this;
+        console.log('Email (createUserFromEmail): ' + JSON.stringify(email));
+
+        var self = this;
+        this.getContactByEmailAndUserId(email, userId, function (err, value) {
+
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value != null) {
+                return fn(true, "Account with this email already exists for userId: " + userId);
+            }
+
+            userDao.getById(userId, function (err, user) {
+                if (err || !user) {
+                    return fn(err, "Error finding user");
+                } else {
+
+                }
+                var userAccounts = user.get('accounts');
+                var accountId;
+
+                if (userAccounts != null && userAccounts.length > 0 && userAccounts[0] != null) {
+                    accountId = userAccounts[0].accountId;
+                } else {
+                    return fn(true, "Failed to create contact, no account found");
+                }
+
+                var contact = new $$.m.Contact();
+                contact.set('email', email);
+                contact.set("accountId", accountId);
+                contact.createdBy(userId, $$.constants.social.types.LOCAL);
+
+                self.saveOrUpdate(contact, fn);
+            });
+        });
+    },
+
+    createContactFromData: function (data, accountToken, fn) {
+        var self = this;
+        var email = data.email
+        console.log('Email (createUserFromEmail): ' + JSON.stringify(email));
         if (_.isFunction(accountToken)) {
             fn = accountToken;
             accountToken = null;
         }
 
         var self = this;
-        this.getContactByEmail(email, function(err, value) {
+        this.getContactByEmail(email, function (err, value) {
 
             if (err) {
                 return fn(err, value);
@@ -274,7 +325,7 @@ var dao = {
 
             var deferred = $.Deferred();
 
-            accountDao.convertTempAccount(accountToken, function(err, value) {
+            accountDao.convertTempAccount(accountToken, function (err, value) {
                 if (!err) {
                     deferred.resolve(value);
                 } else {
@@ -284,7 +335,7 @@ var dao = {
             });
 
             deferred
-                .done(function(account) {
+                .done(function (account) {
                     var accountId;
 
                     if (account != null) {
@@ -294,12 +345,11 @@ var dao = {
                     if (accountId == null) {
                         return fn(true, "Failed to create user, no account found");
                     }
-                    data.type="potential";
+                    data.type = "potential";
                     var contact = new $$.m.Contact(data);
 
 
-
-                    self.saveOrUpdate(contact, function(err, value) {
+                    self.saveOrUpdate(contact, function (err, value) {
                         if (!err) {
 
                             fn(err, value);

@@ -416,7 +416,7 @@ define([
 
         _showUploadForm: function() {
             var self = this;
-            require(['libs_misc/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
+            require(['./libs_misc/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
                 self.uploadView = new uploadView();
                 self.uploadView.maxNumberOfFiles = 1;
                 self.uploadView.uploadType = "contact-photo";
@@ -477,6 +477,7 @@ define([
                   //  $$.r.account.ContactRouter.navigateToEditContact(self.contact.id, this.currentLetter, false)
                 });
             console.log(this.currentLetter);
+
             $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter,true);
             return p;
 

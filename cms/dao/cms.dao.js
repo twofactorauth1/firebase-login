@@ -13,6 +13,7 @@ var cryptoUtil = require('../../utils/security/crypto');
 
 var accountDao = require('./../../dao/account.dao.js');
 var themesConfig = require('../../configs/themes.config.js');
+var segmentioConfig = require('../../configs/segmentio.config.js')
 
 var Website = require('../model/website');
 var Page = require('../model/page');
@@ -1090,7 +1091,8 @@ var dao = {
 
     getRenderedWebsitePageForAccount: function (accountId, pageName, isEditor, tag, author, category, fn) {
         var self = this, account, website, page, blogposts, tags, categories, themeId, themeConfig;
-        console.log('getRenderedWebsitePageForAccount: '+category);
+        //console.log('getRenderedWebsitePageForAccount: '+category);
+        self.log.debug('>> getRenderedWebsitePageForAccount(' + accountId + ')');
         if (_.isFunction(pageName)) {
             fn = pageName;
             pageName = "index";
@@ -1378,6 +1380,7 @@ var dao = {
                     seo: seo,
                     footer: footer,
                     title: title,
+                    segmentIOWriteKey: segmentioConfig.SEGMENT_WRITE_KEY,
                     handle: pageName,
                     linkLists: {},
                     blogposts: null,
@@ -1520,7 +1523,12 @@ var dao = {
                             //inject editable stuff here
                             //var endHeadReplacement = editableCssScript + " </head>";
                             //value = value.replace("</head>", endHeadReplacement);
+                            console.log('CSS SCRIPT: '+editableCssScript);
+                            if (editableCssScript) {
                             data.footer = data.footer + " " + editableCssScript;
+                            } else {
+                                data.footer = data.footer;
+                            }
                         }
                     }
                     self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {

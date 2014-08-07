@@ -18,9 +18,9 @@ var environments = {
 var XDHosts = [];
 
 //This contains the testing server for Charles Szymanski
-var DEFAULT_XDHOSTS = ['107.170.183.176'];
+var DEFAULT_XDHOSTS = ['107.170.183.176', 'http://localhost:3001', 'pipeshift.com'];
 
-if(process.env.XDHOSTS == null) {
+if (process.env.XDHOSTS == null) {
     XDHosts = DEFAULT_XDHOSTS;
 } else {
     XDHosts = process.env.XDHOSTS.split(',');
@@ -39,8 +39,8 @@ if (process.env.PORT == null) {
     process.env.PORT = 3000;
 }
 
-if (process.env.IS_PROXIED == null){
-   process.env.IS_PROXIED = false;
+if (process.env.IS_PROXIED == null) {
+    process.env.IS_PROXIED = false;
 }
 
 /**
@@ -48,7 +48,7 @@ if (process.env.IS_PROXIED == null){
  * For production: indigenous.io
  */
 if (process.env.ROOT_HOST == null) {
-    if(process.env.NODE_ENV == environments.DEVELOPMENT || process.env.NODE_ENV == environments.TESTING) {
+    if (process.env.NODE_ENV == environments.DEVELOPMENT || process.env.NODE_ENV == environments.TESTING) {
         process.env.ROOT_HOST = "indigenous.local";
     } else {
         process.env.ROOT_HOST = "indigenous.io";
@@ -74,6 +74,20 @@ if (process.env.IS_SECURE == null) {
  */
 process.env.GLOBAL_SUBDOMAINS = "www,home,app";
 
+/**
+ * A comma separated list of strings that represent different environments.
+ * These MUST come right before the host.
+ * If none are present, production is assumed.
+ */
+process.env.GLOBAL_ENVIRONMENTS = "test,prod";
+
+/**
+ * A configuration for the db ID of the main account.  This can be useful
+ * in edge case redirections
+ * @type {string}
+ */
+var MAIN_ACCOUNT_ID = process.env.MAIN_ACCOUNT_ID || 6;
+
 
 //---------------------------------------------------------
 //  SET UP SERVER_URL
@@ -97,13 +111,14 @@ module.exports = {
     port: process.env.PORT,
     server_url: serverUrl,
     support_email: "support@indigenous.io",
-    cluster:false,
-    freeCpus:2,
+    cluster: false,
+    freeCpus: 2,
     xdhost_whitelist: XDHosts,
+    mainAccountID: MAIN_ACCOUNT_ID,
 
     SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
 
-    getServerUrl: function(subdomain, domain) {
+    getServerUrl: function (subdomain, domain) {
         if (subdomain == null && domain == null) {
             return serverUrl;
         }
@@ -116,7 +131,7 @@ module.exports = {
         }
 
         if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080 && process.env.IS_PROXIED != "true") {
-           _serverUrl += ":" + process.env.PORT;
+            _serverUrl += ":" + process.env.PORT;
         }
         return _serverUrl;
     }

@@ -14,6 +14,9 @@ define([
     $$.Charts.FB_postTimeline = new Chart({
         id: 'FB_postTimeline'
         , url: '/facebook/{{id}}/postInteractions'
+        , templateKey: 'account/charts/facebook/post_timeline'
+        , templateWrapper: 'fb-post-timeline'
+        , targetIndicator: '.graph-post-timeline'
         , testData: [
             { date: '2014-06-21', likes: '2', shares: '2', comments: '1', title: 'Post title' }
             , { date: '2014-06-22', likes: '4', shares: '1', comments: '1', title: 'Post title' }
@@ -93,19 +96,19 @@ define([
 
             var xDays = data.length
                 , xInterval = xDays <= 7 ? 1 : xDays <= 30 ? 2 : 5
-                , xFormat = xDays <= 7 ? '%a %d' : '%d'
+                , xFormat = xDays <= 7 ? '%a %d' : '%d';
 
             // X axis (date)
             var xAxis = d3.svg.axis()
                 .scale(x)
                 .ticks(d3.time.days, xInterval)
                 .tickFormat(d3.time.format(xFormat))
-                .orient("bottom")
+                .orient("bottom");
 
             root.append("g")
                 .attr("class", "x-axis")
                 .attr("transform", "translate(0," + h + ")")
-                .call(xAxis)
+                .call(xAxis);
 
             // Posts. Larger circles = more impact
             var circles = root.selectAll('.post-circle')
@@ -137,15 +140,15 @@ define([
 
                 var pop = chart.createPopover('top', title, content)
 
-                pop.css({
-                    width : 300
-                    , left  : Math.floor(+this.getAttribute('cx') - 152 + radius * 0.8)
-                    , top   : Math.floor(+this.getAttribute('cy') - pop.height())
-                })
-
-                $(this)
-                    .on('mouseenter', $.proxy(pop.show, pop, 0))
-                    .on('mouseleave', $.proxy(pop.hide, pop, 0))
+//                pop.css({
+//                    width : 300
+//                    , left  : Math.floor(+this.getAttribute('cx') - 152 + radius * 0.8)
+//                    , top   : Math.floor(+this.getAttribute('cy') - pop.height())
+//                })
+//
+//                $(this)
+//                    .on('mouseenter', $.proxy(pop.show, pop, 0))
+//                    .on('mouseleave', $.proxy(pop.hide, pop, 0))
             })
 
         }

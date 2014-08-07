@@ -80,7 +80,8 @@ module.exports = function(grunt) {
                 files: {
                     '../indigeweb/public/css/site.css': [ 'public/less/site.less' ],
                     '../indigeweb/public/css/style.default.css': [ 'public/less/style.default.less' ],
-                    '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ]
+                    '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ],
+                    '../indigeweb/public/pipeshift/css/site.css': [ 'public/pipeshift/less/theme.less', 'public/pipeshift/less/main.less' ]
                 }
             }
         },
@@ -175,7 +176,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
-    grunt.loadNpmTasks('grunt-awsebtdeploy');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);

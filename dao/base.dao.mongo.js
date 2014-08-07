@@ -171,7 +171,7 @@ var mongodao = {
 
     },
 
-    _findAllWithFieldsMongo: function(query,  skip, sort,fields, type, fn) {
+    _findAllWithFieldsMongo: function(query, skip, sort, fields, type, fn) {
         var self = this;
         if (fn == null) {
             fn = type;
@@ -190,15 +190,45 @@ var mongodao = {
             }
         };
 
+        //TODO: this is a mess
         if (query == null && fields == null) {
-            mongoColl.find({},{ sort : [['last']]}).skip(skip).limit(6).toArray(fxn);
+            mongoColl.find({},{ sort : [[sort]]}).skip(skip).toArray(fxn);
         } else if (query != null) {
     //        mongoColl.find({ $query: {}, $orderby: { sort : 1 } }  ).limit(3+skip).toArray(fxn);
            // mongoColl.find(query).sort( { sort: 1 } ).limit(3+skip).toArray(fxn);
-            mongoColl.find(query,{ sort : [[sort,'ascending']]}).limit(3+skip).toArray(fxn);
+            mongoColl.find(query,{ sort : [[sort,'ascending']]}).skip(skip).toArray(fxn);
            // mongoColl.find(query).skip(skip).limit(6).toArray(fxn);
         } else if(fields != null) {
-            mongoColl.find(null, fields).skip(skip).limit(6).toArray(fxn);
+            mongoColl.find(null, fields).skip(skip).toArray(fxn);
+        }
+    },
+
+    _findAllWithFieldsAndLimitMongo: function(query, skip, limit, sort, fields, type, fn) {
+        var self = this;
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+        var mongoColl = this.mongo(collection);
+        var _query = query || {};
+        var _skip = skip || 0;
+        var _limit = limit || 0;
+
+        var fxn = function(err, value) {
+            if (!err) {
+                return self._wrapArrayMongo(value, fields, type, fn);
+            } else {
+                self.log.error("An error occurred: #_findAllWithFieldsAndLimitMongo() with query: " + JSON.stringify(query), err);
+                fn(err, value);
+            }
+        };
+
+        if(sort) {
+            mongoColl.find(query, fields, {sort : [[sort, 'ascending']]}).skip(skip).limit(limit).toArray(fxn);
+        } else {
+            mongoColl.find(query, fields).skip(skip).limit(limit).toArray(fxn);
         }
     },
 

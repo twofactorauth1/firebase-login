@@ -37,12 +37,23 @@ require.config({
         app: 'app',
         text: "libs/requirejs-plugins/lib/text",
         colorthief: 'libs/color-thief/dist/color-thief.min',
-        waypoints: 'libs/jquery-waypoints/waypoints.min',
+        waypoints: 'libs/jquery-waypoints/waypoints',
         nestable: 'libs/nestable/jquery.nestable',
         date: 'libs/datejs/build/production/date.min',
-        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
         d3: 'libs/d3/d3',
         moment: 'libs/moment/min/moment.min',
+        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
+        jquerydragdrop: 'libs/jquerydraganddrop/jquery.drag-drop.plugin',
+
+        //PIPESHIFT
+        angular: 'libs/angular/angular',
+        angularBootstrap: "libs/angular-bootstrap/ui-bootstrap-tpls",
+        angularRoute: "libs/angular-route/angular-route",
+        angularSanitize: "libs/angular-sanitize/angular-sanitize.min",
+        angularResourse: "libs/angular-resource/angular-resource.min",
+        angularStepper: "libs/angular-stepper/src/angular-stepper",
+        angularMoney: "libs/angular-money-directive/angular-money-directive",
+        xEditable: "libs/angular-xeditable/dist/js/xeditable",
 
         //UI SPECIFIC
         toggles: 'libs_misc/toggles.min',
@@ -70,7 +81,7 @@ require.config({
             exports: "Handlebars"
         },
         backbone: {
-            deps: ['jquery','underscore', 'json2'],
+            deps: ['jquery', 'underscore', 'json2'],
             exports: "Backbone"
         },
         backboneAssoc: {
@@ -89,10 +100,10 @@ require.config({
             deps: ['underscore']
         },
         viewManager: {
-            deps: ['backbone','backboneExtended']
+            deps: ['backbone', 'backboneExtended']
         },
         handlebarsHelpers: {
-            deps: ['underscore', 'handlebars','commonutils']
+            deps: ['underscore', 'handlebars', 'commonutils']
         },
         indigenousHelpers: {
             deps: ['underscore', 'handlebars', 'commonutils']
@@ -112,12 +123,30 @@ require.config({
         daterangepicker: {
             deps: ['jquery', 'moment']
         },
+        jquerydragdrop: {
+            deps: ['jquery']
+        },
 
         tagsinput: {
             deps: ['jquery']
         },
 
         gritter: {
+            deps: ['jquery']
+        },
+        angular: {
+            exports: "angular"
+        },
+
+        angularBootstrap: {deps: ['angular']},
+        angularRoute: {deps: ['angular']},
+        angularSanitize: {deps: ['angular']},
+        angularResourse: {deps: ['angular']},
+        angularStepper: {deps: ['angular']},
+        angularMoney: {deps: ['angular']},
+        xEditable: {deps: ['angular']},
+
+        waypoints: {
             deps: ['jquery']
         },
 
@@ -133,6 +162,17 @@ require.config({
                 'bootstrap',
                 'handlebars',
                 'modernizr',
+                'jquerydragdrop',
+
+                //PIPESHIFT
+                'angular',
+                'angularBootstrap',
+                'angularRoute',
+                'angularSanitize',
+                'angularResourse',
+                'angularStepper',
+                'angularMoney',
+                'xEditable',
 
                 //UI SPECIFIC
                 'toggles',
@@ -172,7 +212,7 @@ require.config({
 define([
     'app'
 ], function (app) {
-    $(document).ready(function(){
+    $(document).ready(function () {
         app.initialize();
         // Page Preloader
     });

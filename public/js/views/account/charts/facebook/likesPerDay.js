@@ -14,6 +14,9 @@ define([
     $$.Charts.FB_likesPerDay = new Chart({
         id: 'FB_likesPerDay'
         , url: '/facebook/{{id}}/likesUnlikesPerDay'
+        , templateKey: 'account/charts/facebook/likes_per_day'
+        , templateWrapper: 'fb-likes-per-day'
+        , targetIndicator: '.graph-likes-per-day'
         , testData: [
             { date: '2014-06-20', likes: '2', unlikes: '0' }
             , { date: '2014-06-21', likes: '4', unlikes: '1' }
@@ -48,43 +51,43 @@ define([
             var root = this.createSVG('graph-likes');
 
             // Title
-            this.addTitle("Likes / Unlikes")
+            this.addTitle("Likes / Unlikes");
             this.addRangeSelector(options.range);
 
             if (data.length === 0) {
                 this.module.addClass('no-data');
 
-                return
+                return;
             }
 
             // Flag for preview graph
-            var preview = h < 200
+            var preview = h < 200;
 
             var maxLikes = d3.max(data, function(d){ return d.likes })
                 , maxUnlikes = d3.max(data, function(d){ return d.unlikes })
-                , max = Math.max(maxLikes, maxUnlikes) + 1
+                , max = Math.max(maxLikes, maxUnlikes) + 1;
 
             // Scales
             var x = d3.time.scale()
                 .range([p.l, w - p.r])
                 .nice(d3.time.day)
                 .clamp(true)
-                .domain(d3.extent(data, function(d){ return d.date }))
+                .domain(d3.extent(data, function(d){ return d.date }));
 
             var y = d3.scale.linear()
                 .range([h - p.b, 0])
-                .domain([0, max])
+                .domain([0, max]);
 
             // Y axis (likes/unlikes)
             var yAxis = d3.svg.axis()
                 .scale(y)
                 .orient('left')
-                .tickFormat(d3.format('d'))
+                .tickFormat(d3.format('d'));
 
             var yAxisG = root.append("g")
                 .attr("transform", _.template("translate({{x}},0)", { x: p.l/2 }))
                 .attr("class", "y-axis")
-                .call(yAxis)
+                .call(yAxis);
 
             // Don't draw label text for preview graph
             if (!preview){
@@ -113,18 +116,18 @@ define([
 
             // X axis (date)
             var xInterval = data.length < 8 ? 1 : data.length < 30 ? 2 : 5
-                , xFormat   = data.length < 8 ? '%a %d' : '%d'
+                , xFormat   = data.length < 8 ? '%a %d' : '%d';
 
             var xAxis = d3.svg.axis()
                 .scale(x)
                 .orient("bottom")
                 .ticks(d3.time.days, xInterval)
-                .tickFormat(d3.time.format(xFormat))
+                .tickFormat(d3.time.format(xFormat));
 
             var xg = root.append("g")
                 .attr("class", "x-axis")
                 .attr("transform", "translate(0," + (h - 10) + ")")
-                .call(xAxis)
+                .call(xAxis);
 
             if (data.length > 7) {
                 xg.selectAll('text')
@@ -133,17 +136,26 @@ define([
 
             // Add a line path
             function addLine(which) {
+//                var line = root.selectAll('path.line')
+//                    .data([data])
+//                    .enter().append("svg:path")
+//                    .attr("class", which)
+//                    .attr("d", d3.svg.line()
+//                        .interpolate('cardinal')
+//                        .x(function(d,i){ return x(d.date) })
+//                        .y(function(d){ return y(d[which]) })
+//                );
+
                 var line = root.selectAll('path.line')
                     .data([data])
                     .enter().append("svg:path")
                     .attr("class", which)
                     .attr("d", d3.svg.line()
-                        .interpolate('cardinal')
                         .x(function(d,i){ return x(d.date) })
                         .y(function(d){ return y(d[which]) })
-                )
+                );
 
-                var totalLength = line.node().getTotalLength()
+                var totalLength = line.node().getTotalLength();
 
                 // animate line
                 line
@@ -152,22 +164,22 @@ define([
                     .transition()
                     .duration(500)
                     .ease("linear")
-                    .attr("stroke-dashoffset", 0)
+                    .attr("stroke-dashoffset", 0);
 
-                var area = d3.svg.area()
-                    .interpolate('cardinal')
-                    .x(function(d) { return x(d.date) })
-                    .y0(h - p.b)
-                    .y1(function(d) { return y(d[which]) })
+//                var area = d3.svg.area()
+//                    .interpolate('cardinal')
+//                    .x(function(d) { return x(d.date) })
+//                    .y0(h - p.b)
+//                    .y1(function(d) { return y(d[which]) });
 
                 root.append("path")
                     .datum(data)
-                    .attr("class", "area " + which)
-                    .attr("d", area)
+                    .attr("class", "area " + which);
+//                    .attr("d", area);
             }
 
             // Add data points
-            var pointSize = preview ? 4 : 6
+            var pointSize = preview ? 4 : 6;
 
             function addPoints(which) {
                 root.selectAll('.' + which + '-point')
@@ -187,8 +199,8 @@ define([
 
             // Add paths + points
             ;['likes', 'unlikes'].forEach(function(metric){
-                addLine(metric)
-                addPoints(metric)
+                addLine(metric);
+                addPoints(metric);
             })
 
         }
