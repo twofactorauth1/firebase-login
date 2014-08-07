@@ -9,6 +9,7 @@ var baseDao = require('./base.dao');
 var accountDao = require('./account.dao');
 requirejs('constants/constants');
 require('../models/contact');
+var async = require('async');
 
 var dao = {
 
@@ -414,13 +415,144 @@ var dao = {
                         }
                     });
                 }
+            });
+            self.log.debug('<< findDuplicates');
+            fn(null, dupeMap);
+        });
+    },
 
+    mergeDuplicates: function(dupeAry, accountId, fn) {
+        var self = this;
+        self.log.debug('>> mergeDuplicates('+ dupeAry + ',' + accountId + ')');
+        console.dir(dupeAry);
+        if(!dupeAry || dupeAry.length < 1) {
+            self.log.debug('Merging all duplicates');
+            self.findDuplicates(accountId, function(err, value){
+                if(err) {
+                    self.log.error('Exception during findDuplicates: ' + err);
+                    fn(err, null);
+                    return;
+                } else {
+                    var mergedContactAry = [];
+                    //value is an array of duplicate Arrays.
+
+                    async.each(value,
+                        function(ary, callback){
+
+                            self.mergeDuplicates(ary, accountId, function(err, mergedContact){
+                                if(err) {
+                                    self.log.error('Exception during mergeDuplicates: ' + err);
+                                    fn(err, null);
+                                    return;
+                                } else {
+                                    mergedContactAry.push(mergedContact);
+                                    callback();
+                                }
+                            });
+                        },
+                        function(err){
+                            if(err) {
+                                self.log.error('Exception during mergeDuplicates: ' + err);
+                                fn(err, null);
+                                return;
+                            } else {
+                                //we're done here
+                                self.log.debug('<< mergeDuplicates');
+                                fn(null, mergedContactAry);
+                            }
+                        }
+                    );
+                }
             });
 
+        } else {
+            var mainContactID = dupeAry.shift();
+            var mainContact = null;
+            self.getById(mainContactID, $$.m.Contact, function(err, value){
+                if(err) {
+                    self.log.error('Exception during merge Duplicates: ' + err);
+                    fn(err, null);
+                    return;
+                } else {
+                    mainContact = value;
+                    async.each(dupeAry,
+                        function(item, callback){
+                            self._safeMergeByContactAndID(mainContact, item, function(err, value){
+                                if(err) {
+                                    self.log.error('Exception during merge Duplicates: ' + err);
+                                    fn(err, null);
+                                    return;
+                                } else {
+                                    mainContact = value;
+                                    callback();
+                                }
+                            });
+                        },
+                        function(err){
+                            //all done
+                            if(err) {
+                                self.log.error('Exception during merge Duplicates: ' + err);
+                                fn(err, null);
+                                return;
+                            } else {
+                                self.log.debug('<< mergeDuplicates');
+                                fn(null, mainContact);
+                                return;
+                            }
+                        }
+                    );
+                }
+            });
+        }
+    },
 
+    /*
+     * This method will merge the data from id2 into id2, w/o overwriting anything in id1.
+     */
+    _safeMergeByID: function(id1, id2, fn) {
+        var self = this;
+        self.log.debug('>> _safeMerge(' + id1 + ', ' + id2 + ')');
 
+        self.getById(id1, $$.m.Contact, function(err, value){
+            if(err) {
+                self.log.error('Exception getting contact by id: ' + err);
+                fn(err, null);
+            } else {
+                self._safeMergeByContactAndID(value, id2, fn);
+                return;
+            }
+        });
+    },
 
-            fn(null, dupeMap);
+    _safeMergeByContactAndID: function(contact1, id2, fn) {
+        var self = this;
+        self.log.debug('>> _safeMergeByContactAndID(' + contact1 + ', ' + id2 + ')');
+
+        self.getById(id2, $$.m.Contact, function(err, value){
+            if(err) {
+                self.log.error('Exception getting contact by id: ' + err);
+                fn(err, null);
+            } else {
+                self._safeMergeByContact(contact1, value, fn);
+                return;
+            }
+        });
+    },
+
+    _safeMergeByContact: function(contact1, contact2, fn) {
+        var self = this;
+        self.log.debug('>> _safeMergeByContact');
+        var merged =  _.defaults(contact1, contact2);
+        //delete contact 2
+        self.remove(contact2, function(err, value){
+            if(err) {
+                self.log.error("Exception while removing merged contact: " + err);
+                fn(err, null);
+                return;
+            } else {
+                self.log.debug('<< _safeMergeByContact');
+                fn(null, merged);
+            }
         });
 
     }

@@ -178,7 +178,22 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     *
+     * Body of request can be empty or an array of contact IDs to merge.
+     */
     mergeDuplicates:function(req, res) {
+        var self = this;
+        self.log.debug('>> mergeDuplicates');
+
+        var accountId = parseInt(self.accountId(req));
+        var dupeAry = req.body;
+
+        contactDao.mergeDuplicates(dupeAry, accountId, function(err, value){
+            self.log.debug('<< mergeDuplicates');
+            self.sendResultOrError(res, err, value, "Error merging duplicate contacts");
+            self = null;
+        });
 
     },
     //endregion CONTACT

@@ -16,7 +16,13 @@ var testContext = {};
 exports.payment_dao_test = {
     setUp: function (cb) {
         var self = this;
-        cb();
+        testContext.testAccountId = 1;
+        testHelpers.createTestContact(1, function(err, value){
+            testHelpers.createTestContact(1, function(err, value){
+                cb();
+            });
+        });
+
     },
 
     tearDown: function (cb) {
@@ -27,13 +33,26 @@ exports.payment_dao_test = {
     testFindDuplicates: function(test) {
         var self = this;
 
-        contactDao.findDuplicates(0, function(err, value){
+        contactDao.findDuplicates(1, function(err, value){
             _log.debug('results:');
             console.dir(value);
             test.ok(true);
             test.done();
         });
 
+    },
+
+    testMergeDuplicates: function(test) {
+        var self = this;
+
+
+
+        contactDao.mergeDuplicates(null, 1, function(err, value){
+            _log.debug('results: ');
+            console.dir(value);
+            test.ok(true);
+            test.done();
+        });
     }
 
 
