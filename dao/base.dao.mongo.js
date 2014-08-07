@@ -202,6 +202,48 @@ var mongodao = {
             mongoColl.find(null, fields).skip(skip).toArray(fxn);
         }
     },
+
+    _aggregateMongoWithCustomStages: function(stageAry, type, fn) {
+        var self = this;
+
+        var collection = this.getTable(type);
+        var mongoColl = this.mongo(collection);
+
+        mongoColl.aggregate(stageAry, function(err, value){
+            if (!err) {
+                fn(null, value);
+            } else {
+                self.log.error("An error occurred: #aggregateMongoWithCustomStages() with stages: " + JSON.stringify(stageAry), err);
+                fn(err, value);
+            }
+        });
+    },
+
+    _aggregateMongo: function(groupCriteria, matchCriteria, type, fn) {
+        var self = this;
+        var stageAry = [];
+        stageAry.push({$match: matchCriteria});
+        stageAry.push({
+            $group: {
+                _id: groupCriteria,
+
+                // Count number of matching docs for the group
+                count: { $sum: 1 },
+
+                // Save the _id for matching docs
+                docs: { $push: "$_id" }
+            }
+        });
+        stageAry.push({
+            // Limit results to duplicates (more than 1 match)
+            $match: {
+                count: { $gt : 1 }
+            }
+        });
+
+        return self._aggregateMongoWithCustomStages(stageAry, type, fn);
+    },
+
     _wrapArrayMongo: function(value, fields, type, fn) {
         var self = this, arr = [];
         value.forEach(function(item) {
