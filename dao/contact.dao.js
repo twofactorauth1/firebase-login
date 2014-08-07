@@ -328,6 +328,7 @@ var dao = {
         //this is what we will actually use for mongo
         var groupCriteria = {_first: '$_first', _last: '$_last'};
         var matchCriteria = {'accountId': accountId };
+
         self.aggregate(groupCriteria, matchCriteria, $$.m.Contact, function(err, value){
             if(err) {
                 p1.reject();
@@ -343,20 +344,24 @@ var dao = {
 
         var aggregateStages = [
             {
-                $project: {'details.emails': 1, accountId: 1}
-            },
-            {
-                $unwind: '$details'
-            },
-            {
-                $unwind: '$details.emails'
+                $project: {'details': 1, accountId: 1}
             },
             {
                 $match: {'accountId': accountId }
             },
             {
+                $unwind: '$details'
+            },
+            {
+                $project: {'emails': '$details.emails' }
+            },
+            {
+                $unwind: '$emails'
+            },
+
+            {
                 $group: {
-                    _id: {'details.emails': '$details.emails'},
+                    _id: {'emails': '$emails'},
 
                     // Count number of matching docs for the group
                     count: { $sum:  1 },
@@ -374,7 +379,8 @@ var dao = {
         ];
         self.aggregateWithCustomStages(aggregateStages, $$.m.Contact, function(err, value){
             if(err) {
-                p2.reject();
+                //p2.reject();
+                p2.resolve();//for now, skip past this error
                 self.log.error('Error during aggregate on email: ' + err);
             } else {
                 //self.log.debug('returning from aggregate on email');
