@@ -130,9 +130,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var skip = parseInt(req.query['skip'] || 0);
+        var limit = parseInt(req.query['limit'] || 0);
         self.log.debug('>> listContacts');
 
-        contactDao.getContactsAll(accountId, skip, function(err, value){
+        contactDao.getContactsAll(accountId, skip, limit, function(err, value){
             self.log.debug('<< listContacts');
             self.sendResultOrError(res, err, value, "Error listing Contacts");
             self = null;
@@ -143,10 +144,11 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var skip = parseInt(req.query['skip'] || 0);
+        var limit = parseInt(req.query['limit'] || 0);
         var letter = req.params.letter;
         self.log.debug('>> getContactsByLetter');
 
-        contactDao.getContactsShort(accountId, letter, function (err, value) {
+        contactDao.getContactsShort(accountId, letter, limit, function (err, value) {
             self.log.debug('<< getContactsByLetter');
             self.sendResultOrError(res, err, value, "Error listing contacts by letter [" + letter + "]");
             self = null;
@@ -162,6 +164,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = req.params.accountId;
         var letter = req.params.letter;
         var skip = req.params.skip || 0;
+        var limit = parseInt(req.query['limit'] || 0);
 
         if (!accountId) {
             return self.wrapError(resp, 400, null, "Invalid parameter for account id");
@@ -178,7 +181,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         if(letter == "all" ) {
-            contactDao.getContactsAll(accountId,skip, function(err, value) {
+            contactDao.getContactsAll(accountId,skip, limit, function(err, value) {
                 if (!err) {
                     return self.sendResult(resp, value);
                 } else {
@@ -186,7 +189,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             });
         } else {
-            contactDao.getContactsShort(accountId, letter, function (err, value) {
+            contactDao.getContactsShort(accountId, letter, limit, function (err, value) {
                 if (!err) {
                     return self.sendResult(resp, value);
                 } else {

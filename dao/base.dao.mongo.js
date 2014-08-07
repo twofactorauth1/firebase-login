@@ -202,6 +202,37 @@ var mongodao = {
             mongoColl.find(null, fields).skip(skip).toArray(fxn);
         }
     },
+
+    _findAllWithFieldsAndLimitMongo: function(query, skip, limit, sort, fields, type, fn) {
+        var self = this;
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+        var mongoColl = this.mongo(collection);
+        var _query = query || {};
+        var _skip = skip || 0;
+        var _limit = limit || 0;
+
+        var fxn = function(err, value) {
+            if (!err) {
+                return self._wrapArrayMongo(value, fields, type, fn);
+            } else {
+                self.log.error("An error occurred: #_findAllWithFieldsAndLimitMongo() with query: " + JSON.stringify(query), err);
+                fn(err, value);
+            }
+        };
+
+        if(sort) {
+            mongoColl.find(query, fields, {sort : [[sort, 'ascending']]}).skip(skip).limit(limit).toArray(fxn);
+        } else {
+            mongoColl.find(query, fields).skip(skip).limit(limit).toArray(fxn);
+        }
+
+    },
+
     _wrapArrayMongo: function(value, fields, type, fn) {
         var self = this, arr = [];
         value.forEach(function(item) {

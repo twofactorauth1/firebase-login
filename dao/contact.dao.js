@@ -18,18 +18,20 @@ var dao = {
         defaultModel: $$.m.Contact
     },
 
-    getContactsShort: function (accountId, letter, fn) {
+    getContactsShort: function (accountId, letter, limit, fn) {
         var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
         var query = {accountId: accountId, _last: { $gte: letter, $lt: nextLetter } };
         //var fields = {_id:1, accountId:1, first:1, last:1, photo:1, photoSquare:1, type:1, siteActivity:1, details:1};
         var fields = null;
         var obj = {query: query, fields: fields};
-        this.findManyWithFields(query, fields, fn);
+        //this.findManyWithFields(query, fields, fn);
+        this.findManyWithLimit(query, limit, $$.m.Contact, fn);
     },
 
-    getContactsAll: function (accountId, skip, fn) {
+    getContactsAll: function (accountId, skip, limit, fn) {
         //var query = {accountId: accountId, _last: { $gte: "a", $lt: "z" } };
         var self = this;
+        self.log.debug('>> getContactsAll');
         var query = {accountId: accountId };
         var fields = null;
         var obj = {query: query, fields: fields};
@@ -44,8 +46,9 @@ var dao = {
 
             //['sort_type'] || 'last';
 
-            self.findAllWithFields(query, skip, sort, fields, fn);
-        })
+            //self.findAllWithFields(query, skip, sort, fields, fn);
+            self.findAllWithFieldsAndLimit(query, skip, limit, sort, fields, $$.m.Contact, fn);
+        });
 
     },
 
