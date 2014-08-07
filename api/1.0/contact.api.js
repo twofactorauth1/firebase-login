@@ -187,7 +187,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> mergeDuplicates');
 
         var accountId = parseInt(self.accountId(req));
-        var dupeAry = req.body;
+        var dupeAry = _.toArray(req.body);
 
         contactDao.mergeDuplicates(dupeAry, accountId, function(err, value){
             self.log.debug('<< mergeDuplicates');

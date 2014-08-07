@@ -543,18 +543,29 @@ var dao = {
         var self = this;
         self.log.debug('>> _safeMergeByContact');
         var merged =  _.defaults(contact1, contact2);
-        //delete contact 2
-        self.remove(contact2, function(err, value){
+        //union details, notes, siteActivity
+        merged.set('details', _.union(contact1.get('details'), contact2.get('details')));
+        merged.set('notes', _.union(contact1.get('notes'), contact2.get('notes')));
+        merged.set('siteActivity', _.union(contact1.get('siteActivity'), contact2.get('siteActivity')));
+        self.saveOrUpdate(merged, function(err, value){
             if(err) {
                 self.log.error("Exception while removing merged contact: " + err);
                 fn(err, null);
                 return;
             } else {
-                self.log.debug('<< _safeMergeByContact');
-                fn(null, merged);
+                //delete contact 2
+                self.remove(contact2, function(err, value){
+                    if(err) {
+                        self.log.error("Exception while removing merged contact: " + err);
+                        fn(err, null);
+                        return;
+                    } else {
+                        self.log.debug('<< _safeMergeByContact');
+                        fn(null, merged);
+                    }
+                });
             }
         });
-
     }
 };
 
