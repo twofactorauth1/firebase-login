@@ -13,17 +13,14 @@ if [ "x$APP_NAME" = "x" ]; then
 	exit 97;
 fi
 
-if [ "$1" = "develop" ]; then
+if [ "$1" = "master" ]; then
 	export AWS_DEFAULT_REGION="us-east-1"
 	export ENV_NAME="indigeweb-develop-env"
 	export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
-elif [ "$1" = "test" ]; then
+elif [ "$1" = "develop" ]; then
 	export AWS_DEFAULT_REGION="us-east-1"
 	export ENV_NAME="indigeweb-test-env"
 	export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
-elif [ "$1" = "master" ]; then
-	echo "Not implemented yet"
-	exit 9
 else
 	echo "No environment specified, exiting"
 	exit 80
