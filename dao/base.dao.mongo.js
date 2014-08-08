@@ -202,6 +202,77 @@ var mongodao = {
             mongoColl.find(null, fields).skip(skip).toArray(fxn);
         }
     },
+
+    _findAllWithFieldsAndLimitMongo: function(query, skip, limit, sort, fields, type, fn) {
+        var self = this;
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+        var mongoColl = this.mongo(collection);
+        var _query = query || {};
+        var _skip = skip || 0;
+        var _limit = limit || 0;
+
+        var fxn = function(err, value) {
+            if (!err) {
+                return self._wrapArrayMongo(value, fields, type, fn);
+            } else {
+                self.log.error("An error occurred: #_findAllWithFieldsAndLimitMongo() with query: " + JSON.stringify(query), err);
+                fn(err, value);
+            }
+        };
+
+        if(sort) {
+            mongoColl.find(query, fields, {sort : [[sort, 'ascending']]}).skip(skip).limit(limit).toArray(fxn);
+        } else {
+            mongoColl.find(query, fields).skip(skip).limit(limit).toArray(fxn);
+        }
+    },
+
+    _aggregateMongoWithCustomStages: function(stageAry, type, fn) {
+        var self = this;
+
+        var collection = this.getTable(type);
+        var mongoColl = this.mongo(collection);
+
+        mongoColl.aggregate(stageAry, function(err, value){
+            if (!err) {
+                fn(null, value);
+            } else {
+                self.log.error("An error occurred: #aggregateMongoWithCustomStages() with stages: " + JSON.stringify(stageAry), err);
+                fn(err, value);
+            }
+        });
+    },
+
+    _aggregateMongo: function(groupCriteria, matchCriteria, type, fn) {
+        var self = this;
+        var stageAry = [];
+        stageAry.push({$match: matchCriteria});
+        stageAry.push({
+            $group: {
+                _id: groupCriteria,
+
+                // Count number of matching docs for the group
+                count: { $sum: 1 },
+
+                // Save the _id for matching docs
+                docs: { $push: "$_id" }
+            }
+        });
+        stageAry.push({
+            // Limit results to duplicates (more than 1 match)
+            $match: {
+                count: { $gt : 1 }
+            }
+        });
+
+        return self._aggregateMongoWithCustomStages(stageAry, type, fn);
+    },
+
     _wrapArrayMongo: function(value, fields, type, fn) {
         var self = this, arr = [];
         value.forEach(function(item) {
