@@ -77,7 +77,11 @@ define([
                         return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page/" + this.get("handle"));
                     }
                     return $$.api.getApiUrl("cms", "page/" + this.id);
+                break;
                 case "PUT":
+                    return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page/"+this.id);
+                    break;
+
                 case "POST":
                     //website/:websiteId/page
                     console.log('Website ID: '+this.get("websiteId"));

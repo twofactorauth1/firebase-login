@@ -47,6 +47,12 @@ define([
             return new component(attr, options);
         },
 
+        filterById: function(idArray) {
+            return this.reset(_.map(idArray, function(id) { return this.get(id); }, this));
+
+
+
+        },
 
         url: function() {
             return "";

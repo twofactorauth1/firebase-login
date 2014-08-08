@@ -49,14 +49,49 @@ define([
         },
 
 
-        url: ""
+
+        url: function(method) {
+            switch(method) {
+                case "GET":
+                    console.log('Website ID: '+this.get("websiteId")+' Handle: '+this.get("handle"));
+                   /* if (this.get("websiteId") != null) {
+                        return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page/" + this.get("handle"));
+                    }
+                    return $$.api.getApiUrl("cms", "page/" + this.id);*/
+                case "PUT":
+                case "POST":
+
+                    //website/:websiteId/page
+                    console.log('pageId: '+this.get("pageId"));
+                    return $$.api.getApiUrl("cms", 'page/'+this.get("pageId")+'/components');
+                    /*if (this.get("websiteId") != null) {
+                        return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page");
+                    }
+
+                    //page/:id/components/:componentId/order/:newOrder
+                    if (this.get("newOrder") != null ) {
+                        return $$.api.getApiUrl("cms", "page/" + this.get("pageId") + "/components/" + this.get("componentId") + "/order/" + this.get("newOrder"));
+                    }
+
+                    //page/:id/components
+                    if (this.get("pageId") != null) {
+                        return $$.api.getApiUrl("cms", "page/" + this.get("pageId") + "/components");
+                    }
+
+
+                    return $$.api.getApiUrl("cms", "page");*/
+                    break;
+                case "DELETE":
+                //    return $$.api.getApiUrl("cms", "page/" + this.id);
+                    return $$.api.getApiUrl("cms", 'page/'+this.get("pageId")+'/components/'+this.id);
+            }
+        }
     });
 
 
     $$.m.cms = $$.m.cms || {};
     $$.m.cms.components = $$.m.cms.components || {};
     $$.m.cms.components.ComponentBase = model;
-
     return model;
 });
 

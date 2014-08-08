@@ -43,13 +43,15 @@ define([
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
             "mousemove #sortable":"draggingComponent",
-            "click .blog-title .editable":"updateTitle",
+            "click .blog-title .editable":"updateTitle"
         },
 
         initialize: function(options) {
+            console.log(options);
             options = options || {};
             this.pageHandle = options.page || "index";
             this.websiteId = options.websiteId;
+
         },
 
         render: function () {
@@ -102,7 +104,7 @@ define([
                     $("#iframe-website", this.el).load(function(pageLoadEvent) {
                         var doc = $(pageLoadEvent.currentTarget)[0].contentDocument ||
                             $(pageLoadEvent.currentTarget)[0].documentWindow;
-
+                        console.log(doc);
                         var page = "index";
                         if (doc != null) {
                             var page = doc.location.pathname;
@@ -119,6 +121,7 @@ define([
                                 page = "single-post";
                             }
                             self.pageHandle = page;
+                            $$.e.PageHandleEvent.trigger("pageHandle", {pageHandle: self.pageHandle });
                         }
 
                         $.when(p3, p4)
@@ -219,6 +222,17 @@ define([
                             console.error('Component Not found in iFrame');
                         }
                     });
+                    var serialize = $('#sortable').sortable('toArray',{attribute: 'data-component-id'});
+
+                    console.log('serialze',serialize);
+                    console.log(JSON.stringify(serialize))
+                    console.log('Serialize: ' +JSON.stringify(serialize));
+
+                    var components=self.page.get("components");
+
+                    components.filterById(serialize);
+                    console.log(components);
+                    self.page.save();
                 },
                 change: function( e, ui ) {
                     console.log('sortable changed');
@@ -256,9 +270,22 @@ define([
         updateOrder: function (componentID, start_pos) {
             var self = this;
             console.log('update order');
-            var serialize = $('#sortable').sortable('serialize');
+            /*var serialize = $('#sortable').sortable('toArray',{attribute: 'data-component-id'});
+
+            console.log('serialze',serialize);
+            console.log(JSON.stringify(serialize))
             console.log('Serialize: ' +JSON.stringify(serialize));
-            this.page = new Page({
+
+            var components=self.page.get("components");
+
+            components.filterById(serialize);*/
+
+
+        //    this.page.set("components",serialize);
+            //this.page.component=serialize;
+
+       //     console.log(this.page);
+           /* this.page = new Page({
                 websiteId:this.websiteId,
                 title: pageTitle,
                 handle: pageUrl,
@@ -272,11 +299,13 @@ define([
                     date: new Date().getTime(),
                     by: self.user.attributes._id
                 }
-            });
+            });*/
 
-            this.page.save().done( function() {
+ /*           this.page.save().done( function(err,res) {
+                console.log(err);
+                console.log(res);
                 console.log('page sved');
-                self.pageId = self.page.attributes._id;
+             //   self.pageId = self.page.attributes._id;
                 // var $iframe = $('#iframe-website');
                 // $iframe.ready(function() {
                 //     $iframe.contents().find("#main-area .entry").prepend(html);
@@ -284,7 +313,7 @@ define([
                 //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
                 //     $iframe.contents().find("#main-area").trigger("click");
                 // });
-            });
+            });*/
         },
 
         renderSidebarColor: function(colorPalette) {

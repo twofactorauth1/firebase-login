@@ -278,6 +278,8 @@ module.exports = {
                 self.log.error(msg);
                 fn(msg, null);
             } else {
+                self.log.debug('>> gettingPage');
+                console.log(page)
                 var componentAry = page.get('components') || [];
                 componentAry.push(component);
                 self.log.debug('<< addPageComponent');
@@ -347,14 +349,14 @@ module.exports = {
             } else {
                 var componentAry = page.get('components') || [];
                 var spliceIndex = -1;
-                for(var i=0; i<componentAry.length; i++) {
-                    if(componentAry[i]['_id'] === componentId) {
-                        spliceIndex = i;
-                        break;
+                    for(var i=0; i<componentAry.length; i++) {
+                        if(componentAry[i]['_id'] === componentId) {
+                            spliceIndex = i;
+                            break;
+                        }
                     }
-                }
-                if(spliceIndex !==-1) {
-                    componentAry.splice(spliceIndex, 1);
+                    if(spliceIndex !==-1) {
+                        componentAry.splice(spliceIndex, 1);
                     cmsDao.saveOrUpdate(page, fn);
                 } else {
                     var msg = 'Referenced componentId [' + componentId + '] was not found on page [' + pageId + '].';

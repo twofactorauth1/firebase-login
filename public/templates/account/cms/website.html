@@ -234,11 +234,12 @@
                                 <li class="ui-state-default dd-item dd3-item" data-component-id="{{this.id}}" id="component_{{@index}}" data-section="myCarousel">
                                     <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
                                     </div>
-                                    <div class="dd3-content">{{this.attributes.type}}</div>
-                                    <div class="dd3-actions">
-                                        <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
-                                    </div>
+                                    <div class="dd3-content">{{this.attributes.type}}<button type="button" data-component-id="{{this.id}}" class="close btn-del-component" data-dismiss="modal" aria-hidden="true">×</button><!--<span class="fa fa-times btn-del-component" style="font-size: 16px;margin-left: 32px;"></span>--></div>
                                 </li>
+                               <!-- <div class="dd3-actions">
+                                        <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
+                                    </div>-->
+
                             {{/each}}
                             </ul>
                             <div class="mb10"></div>
@@ -384,14 +385,14 @@
                         <option value="video-text">Video Text</option>
                         <option value="video-text-left">Video Text Left</option>
                         <option value="video-text-right">Video Text Right</option>
-                        <option value="video-text-right">Sign Up Form</option>
+                        <option value="signup-form">Sign Up Form</option>
                     </select>
             </div>
             <div class="clearfix"></div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary btn-add-component">Add</button>
+            <button type="button" class="btn btn-primary btn-add-component" data-dismiss="modal">Add</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
