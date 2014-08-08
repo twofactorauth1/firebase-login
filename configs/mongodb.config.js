@@ -7,10 +7,13 @@
 
 var config = require('./app.config');
 
+//LOCAL
 var connectionString = "mongodb://localhost/bioindigenous";
-//var connectionString = "mongodb://indigenous:sLRxKmiG42sq@novus.modulusmongo.net:27017/H2inesux";
-//var connectionString = "mongodb://indiweb:anime1@kahana.mongohq.com:10077/indigenous";
 
+//PROD
+//var connectionString = "mongodb://indiweb:anime1@kahana.mongohq.com:10077/indigenous";
+//TEST
+//var connectionString = "mongodb://indiweb-test:testing123@kahana.mongohq.com:10074/test_indigenous";
 
 if (process.env.MONGO_CONNECT != null) {
     connectionString = process.env.MONGO_CONNECT;

@@ -18,12 +18,16 @@ define([
         accounts: null,
 
         events: {
-            "click .close":"close_welcome"
+            "click .close":"close_welcome",
+            "click .commerce-item":"showSingleProduct"
         },
 
 
         render: function() {
             console.log('render commerce');
+
+            $('#main-viewport').css('max-height','none');
+
             var self = this
                 , p1 = this.getAccount()
                 , p2 = this.getUser();
@@ -39,16 +43,34 @@ define([
                     var html = tmpl(data);
 
                     self.show(html);
+                    var sidetmpl = $$.templateManager.get("commerce-sidebar", self.templateKey);
+                    var rightPanel = $('#rightpanel');
+                    rightPanel.html('');
+                    rightPanel.append(sidetmpl);
                     self.check_welcome();
                 });
         },
+
+        showSingleProduct: function(event) {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+
+            var self = this;
+            var singleProductId = $(event.currentTarget).data("productid");
+            $$.r.account.commerceRouter.showSingleProduct(singleProductId);
+        },
+
         check_welcome: function() {
-            if( $.cookie('dashboard-alert') === 'closed' ){
+            if(!this.user.get('welcome_alert').commerce) {
                 $('.alert').hide();
             }
         },
         close_welcome: function(e) {
-            $.cookie('dashboard-alert', 'closed', { path: '/' });
+            var user = this.user;
+            var welcome = user.get("welcome_alert");
+            welcome.commerce = false;
+            user.set("welcome_alert", welcome);
+            user.save();
         }
     });
 

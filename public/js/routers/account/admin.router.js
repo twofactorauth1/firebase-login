@@ -8,12 +8,13 @@
 define([
     'routers/account/contact.router',
     'routers/account/account.router',
-    'routers/account/marketing.router',
+    'routers/account/pipeshift.router',
     'routers/account/commerce.router',
+    'routers/account/social_dashboard.router',
     'routers/account/cms.router',
     'views/account/admin.view',
     'views/account/dashboard.view'
-], function (contactRouter, accountRouter, marketingRouter, commerceRouter, cmsRouter, AdminView, DashboardView) {
+], function (contactRouter, accountRouter, pipeshiftRouter, commerceRouter, cmsRouter, social_dashboardRouter, AdminView, DashboardView) {
 
     var router = Backbone.Router.extend({
 

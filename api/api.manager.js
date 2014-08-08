@@ -9,6 +9,7 @@ var authenticationApi = require('./1.0/authentication.api');
 var accountApi = require('./1.0/account.api');
 var userApi = require('./1.0/user.api');
 var contactApi = require('./1.0/contact.api');
+var courseApi = require('./1.0/course.api');
 var uploadApi = require('./1.0/upload.api');
 var geoApi = require('./1.0/geo.api');
 var emailDataApi = require('./1.0/emaildata.api');
@@ -18,6 +19,7 @@ var cmsApi = require('./1.0/cms.api');
 
 //Integrations
 var awsApi = require('./1.0/integrations/aws.api');
+var paymentsApi = require('./1.0/integrations/payments.api');
 
 //Social
 var facebookApi = require('./1.0/social/facebook.api');

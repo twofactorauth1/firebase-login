@@ -12,6 +12,7 @@ var WebsiteView = require('../views/website.server.view');
 
 var contactDao = require('../dao/contact.dao');
 var cookies = require("../utils/cookieutil");
+var appConfig = require('../configs/app.config.js');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -31,7 +32,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/page/author/:author", this.setup, this.showAuthorPage.bind(this));
         app.get("/page/category/:category", this.setup, this.showCategoryPage.bind(this));
 
-        app.post("/signupnews", this.signUpNews.bind(this));
+//        app.post("/signupnews", this.signUpNews.bind(this));
 
         app.get("/home", this.isAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isAuth.bind(this), this.showHome.bind(this));
@@ -50,12 +51,13 @@ _.extend(router.prototype, BaseRouter.prototype, {
         if (accountId > 0)  {
             new WebsiteView(req, resp).show(accountId);
         } else {
-            resp.redirect("/home");
+            //resp.redirect("/home");
+            new WebsiteView(req, resp).show(appConfig.mainAccountID);
         }
     },
 
     showWebsitePage: function(req, resp) {
-        console.log('show page');
+
         var self = this
             , accountId = this.accountId(req);
 
@@ -123,6 +125,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
 
     showHome: function(req,resp) {
+        var self = this;
         var accountId = this.accountId(req);
         if (accountId > 0) {
             //This is an account based url, there is no /home
@@ -138,7 +141,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             new AdminView(req,resp).show();
         } else {
             //send them back to the main home
-            resp.redirect("/home");
+            resp.redirect("/admin");
         }
     },
 
@@ -148,26 +151,20 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     signUpNews: function(req, resp) {
         var self = this, contact, accountToken, deferred;
-
+        console.log(req.body);
         var email = req.body.email;
         console.log('Email: '+JSON.stringify(email));
 
         var accountToken = cookies.getAccountToken(req);
         console.log('Account Token: '+accountToken);
 
-        contactDao.createContactFromEmail(email, accountToken, function (err, value) {
+        contactDao.createContactFromData(req.body, accountToken, function (err, value) {
             if (!err) {
-                req.login(value, function (err) {
-                    if (err) {
-                        return resp.redirect("/");
-                    } else {
-                        req.flash("info", "Account created successfully");
-                        return resp.redirect("/");
-                    }
-                });
+                req.flash("info", "Account created successfully");
+                return resp.redirect("/");
             } else {
                 req.flash("error", value.toString());
-                return resp.redirect("/signup");
+                return resp.redirect("/");
             }
         });
     }

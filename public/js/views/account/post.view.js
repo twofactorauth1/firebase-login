@@ -8,8 +8,8 @@
 define([
     'models/user',
     'models/account',
-    'models/post',
-    'collections/posts',
+    'models/cms/post',
+    'collections/cms/post',
 
 ], function(User, Account, Post, Posts) {
 

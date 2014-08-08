@@ -1,0 +1,47 @@
+<div ng-show="video">
+    <div ng-show="showSidebar" class="sidebar col-md-4">
+        <div class="row">
+            <div class="col-md-2">
+                <a title="Go home" class="hide-for-small back-menu" href="/video/"><i class="icon-home"></i></a>
+                <a title="Toggle sidebar" class="hide-for-small toggle-menu" ng-click="showSidebar = false"><i
+                        class="icon-fullscreen"></i></a>
+            </div>
+        </div>
+        <ul class="nav nav-tabs">
+            <li ng-class="{active: !showRelated}"><a href="" ng-click="showRelated = false">Info</a></li>
+            <li ng-class="{active: showRelated}"><a href="" ng-click="fetchRelated()">Related</a></li>
+        </ul>
+        <div class="meta" ng-show="!showRelated">
+            <h3><a class="video-link" title="View on YouTube"
+                   href="http://youtube.com/watch?v={{video.video_id}}&toogles=0">{{video.title.$t}}</a>
+            </h3>
+
+            <div class="rating">
+                <div class="like" style="width: {{100 * (video.gd$rating.average / 5)}}%;"></div>
+            </div>
+            <ul class="video-info">
+                <li><i class="glyphicon glyphicon-user"></i> <a
+                        href="/video/user/{{video.author[0].uri.$t.split('/').pop()}}">{{video.author[0].name.$t}}</a>
+                </li>
+                <li><i class="glyphicon glyphicon-eye-open"></i> {{video.yt$statistics.viewCount | number:0}} views</li>
+                <li><i class="glyphicon glyphicon-calendar"></i> {{video.published.$t | date}}</li>
+            </ul>
+            <p class="hide-for-small description" ng-bind-html="video.media$group.media$description.$t | htmlify"></p>
+        </div>
+        <div class="related" ng-show="showRelated">
+            <div class="row" ng-include src="'/pipeshift/views/video/videos.html'"></div>
+        </div>
+    </div>
+    <div class="columns video-view" ng-class="{'col-md-8': showSidebar, 'col-md-10': !showSidebar}">
+        <div class="expanded-info" ng-click="showSidebar = true" ng-show="!showSidebar">
+            <a class="icon" title="Go home" href="/video/browse"><i class="icon-home"></i></a>
+            <a class="icon" title="Toggle sidebar" ng-click="showSidebar = false"><i class="icon-fullscreen"></i></a>
+
+            <h3><a title="View on YouTube" href="http://youtube.com/watch?v={{video.videoId}}&toogles=0">{{video.videoTitle}}</a>
+            </h3>
+        </div>
+        <div class="flex-video {{video.media$group.yt$aspectRatio.$t}}">
+            <iframe id="player" ng-show="video" ng-src="{{trustSrc(video.embedurl)}}" abc="{{trustSrc(video.embedurl)}}" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>

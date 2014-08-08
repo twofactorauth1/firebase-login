@@ -13,6 +13,7 @@ var cryptoUtil = require('../../utils/security/crypto');
 
 var accountDao = require('./../../dao/account.dao.js');
 var themesConfig = require('../../configs/themes.config.js');
+var segmentioConfig = require('../../configs/segmentio.config.js')
 
 var Website = require('../model/website');
 var Page = require('../model/page');
@@ -108,6 +109,21 @@ var dao = {
                 fn(err, themes);
                 self = pathToThemes = themes = obj = fn = null;
             });
+        });
+    },
+
+    getThemePreview: function(themeId, fn) {
+        //TODO: this
+        var self = this;
+        self.log.debug('>> getThemePreview');
+        var path = themesConfig.PATH_TO_THEMES + '/' + themeId + '/' + themesConfig.SUBPATH_TO_PREVIEW;
+        fs.readFile(path, function(err, data){
+            if(err) {
+                self.log.error("Error reading file: " + err);
+                fn(err, null);
+            }
+            self.log.debug('<< getThemePreview');
+            fn(null, data);
         });
     },
 
@@ -275,7 +291,7 @@ var dao = {
 
     //region PAGE
     getPageById: function(pageId, fn) {
-        return this.getById(pageId, Page, fn);
+        return this.getById(pageId, $$.m.cms.Page, fn);
     },
 
 
@@ -369,6 +385,25 @@ var dao = {
       }
       return out;
     },
+
+    //COMPONENTS
+
+    getComponentsByPage: function(pageId, fn) {
+        var self = this;
+        self.log.debug('>> getComponentsByPage');
+        this.getById(pageId, $$.m.cms.Page, function(err, page){
+            if(err) {
+                self.log.error('Error getting components: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< getComponentsByPage');
+                fn(null, page.get('components'));
+            }
+
+        });
+    },
+
+
 
     //region WEBSITES
 
@@ -735,7 +770,7 @@ var dao = {
     },
 
     getRenderedWebsitePagewithPostForAccount: function (accountId, pageName, blogpost, isEditor, fn) {
-        console.log('Post ID (getRenderedWebsitePagewithPostForAccount):'+blogpost);
+        console.log('Post ID (getRenderedWebsitePagewithPostForAccount):'+JSON.stringify(isEditor));
         var self = this, account, website, page, themeId, themeConfig;
 
         if (_.isFunction(pageName)) {
@@ -901,6 +936,7 @@ var dao = {
                     title: blogpost.get("post_title"),
                     handle: pageName,
                     linkLists: {},
+                    _id: blogpost.get("_id"),
                     post_title: blogpost.get("post_title"),
                     post_author: blogpost.get("post_author"),
                     post_content: blogpost.get("post_content"),
@@ -1055,7 +1091,8 @@ var dao = {
 
     getRenderedWebsitePageForAccount: function (accountId, pageName, isEditor, tag, author, category, fn) {
         var self = this, account, website, page, blogposts, tags, categories, themeId, themeConfig;
-        console.log('getRenderedWebsitePageForAccount: '+category);
+        //console.log('getRenderedWebsitePageForAccount: '+category);
+        self.log.debug('>> getRenderedWebsitePageForAccount(' + accountId + ')');
         if (_.isFunction(pageName)) {
             fn = pageName;
             pageName = "index";
@@ -1065,7 +1102,6 @@ var dao = {
             fn = isEditor;
             isEditor = false;
         }
-
 
         if (String.isNullOrEmpty(pageName)) {
             pageName = "index";
@@ -1344,11 +1380,12 @@ var dao = {
                     seo: seo,
                     footer: footer,
                     title: title,
+                    segmentIOWriteKey: segmentioConfig.SEGMENT_WRITE_KEY,
                     handle: pageName,
                     linkLists: {},
                     blogposts: null,
                     tags: null,
-                    categories: null,
+                    categories: null
                 };
 
 
@@ -1486,7 +1523,12 @@ var dao = {
                             //inject editable stuff here
                             //var endHeadReplacement = editableCssScript + " </head>";
                             //value = value.replace("</head>", endHeadReplacement);
+                            console.log('CSS SCRIPT: '+editableCssScript);
+                            if (editableCssScript) {
                             data.footer = data.footer + " " + editableCssScript;
+                            } else {
+                                data.footer = data.footer;
+                            }
                         }
                     }
                     self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {

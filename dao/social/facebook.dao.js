@@ -19,6 +19,10 @@ var Contact = require('../../models/contact');
 var Message = require('../../models/message');
 var Post = require('../../models/post');
 
+/*-- for facebook api--*/
+var FB       = require('fb');
+var moment   = require('moment');
+
 var dao = {
 
     options: {
@@ -125,7 +129,7 @@ var dao = {
 
     getProfile: function (profileId, accessToken, fn) {
         var self = this;
-        var fields = "email,picture,first_name,last_name,middle_name,name,username";
+        var fields = "email,picture,first_name,last_name,middle_name,name";
 
         var path = profileId + "?fields=" + fields;
         var url = this._generateUrl(path, accessToken);
@@ -413,10 +417,340 @@ var dao = {
             fn(null, _messages);
         });
     },
-    //region
 
+    //region
+    getLikesPerDay: function (user, options, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        if (accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+
+        // default == last 7 days
+        var since = +new Date(options.since) || moment().utc().subtract('days', 7).startOf('day').toDate()
+            , until = +new Date(options.until) || moment().utc().startOf('day').toDate();
+        var url = '/' + myFacebookId + '/insights/page_fan_adds/day';
+        // make a call the facebook api through our fb package
+        FB.api(url, 'get', {
+            access_token: accessToken
+            , since: since / 1000
+            , until: until / 1000
+            , limit: options.limit || 90
+        }, function(res){
+            var data = res.data[0] && res.data[0].values;
+            // no results
+            if (!data) return fn(null, []);
+
+            data = data.map(function(day, i){
+                var obj = { date: day.end_time.split('T')[0] };
+                obj[metric] = day.value;
+                return obj;
+            });
+
+            fn(null, data);
+        })
+    },
+
+    getUnlikesPerDay:  function (user, options, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        if (accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+        // default == last 7 days
+        var since = +new Date(options.since) || moment().utc().subtract('days', 7).startOf('day').toDate()
+            , until = +new Date(options.until) || moment().utc().startOf('day').toDate()
+
+        var url = '/' + myFacebookId + '/insights/page_fan_removes/day'
+
+        // make a call the facebook api through our fb package
+        FB.api(url, 'get', {
+            access_token: accessToken
+            , since: since / 1000
+            , until: until / 1000
+            , limit: options.limit || 90
+        }, function(res){
+            var data = res.data[0] && res.data[0].values
+            // no results
+            if (!data) return fn([])
+
+            data = data.map(function(day, i){
+                var obj = { date: day.end_time.split('T')[0] }
+                obj[metric] = day.value
+                return obj
+            })
+
+            fn(data)
+        })
+    },
+
+    getLikesUnlikesPerDay: function (user, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+    },
+
+    getPosts: function (user, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        var url = '/' + myFacebookId + '/posts'
+            , apiOptions = {
+                access_token: accessToken
+                , limit: 15
+            }
+
+        // Only include since && until parameters if they have been set;
+        // the `FB.api` call fails if they are `null` or `undefined`
+        if (options.since && options.until) {
+            // default == last 7 days
+            var since = +new Date() || moment().subtract('days', 7).startOf('day').toDate()
+                , until = +new Date() || moment().startOf('day').toDate()
+            apiOptions.since = since / 1000
+            apiOptions.until = until / 1000
+        }
+
+        var defaultFields = 'id,message,story,link,picture,type,created_time,comments,shares,likes'
+        apiOptions.fields = defaultFields
+
+        logger.info('Requesting posts data', { method: 'getPosts', id: this.myFacebookId })
+
+        FB.api(url, 'get', apiOptions, function(res){
+            logger.info('Received posts data')
+            fn(res.error, res.data || [])
+        })
+    },
+
+    getPostInteractions: function (user, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        this.getPosts(user, function(err, posts){
+            if (!Array.isArray(posts)) return fn(null, [])
+
+            var posts = posts.map(function(post){
+                post.message = (post.message || post.story || '')
+                    .replace(/\t/g, " ")
+                    .replace(/[\n\r]+/g, ' ')
+
+                return {
+                    id       : post.id
+                    , date     : post.created_time.split('T')[0]
+                    , title    : post.message  ? post.message        : ' '
+                    , likes    : post.likes    ? post.likes.count    : 0
+                    , shares   : post.shares   ? post.shares.count   : 0
+                    , comments : post.comments ? post.comments.count : 0
+                }
+            })
+
+            fn(null, posts);
+        })
+    },
+
+    getTopTenPosts: function (user, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        this.getPosts(options, function(err, posts){
+            if (err || !Array.isArray(posts) || posts.length == 0) return fn(err, [])
+
+            var urls = posts.map(function(post){
+                return post.id + '/insights/post_storytellers'
+            })
+
+            self._batchRequest('topTenPosts storytellers', {
+                token : myFacebookId
+                , urls  : urls
+                , since : moment().subtract('days', 90).startOf('day').toDate() / 1000
+            }, function(err, storytellers){
+                var st = storytellers
+                Object.keys(st).forEach(function(key){
+                    storytellers[key] = st[key] && st[key][0] && st[key][0].value || 0
+                })
+                if (err || !storytellers) return callback(err, [])
+
+                var top = posts.map(function(post, i){
+                    post.talking = storytellers[i] || 0
+                    return post
+                }).sort(function(a, b){
+                        if (b.talking > a.talking) return  1
+                        if (b.talking < a.talking) return -1
+                        a = a.likes + a.comments * 2
+                        b = b.likes + b.comments * 2
+                        return b - a
+                    }).slice(0, 10)
+
+                var urls = top.reduce(function(urls, post, i){
+                    urls['p'+i+'_reach']   = post.id + '/insights/post_impressions_unique'
+                    urls['p'+i+'_engaged'] = post.id + '/insights/post_engaged_users'
+                    return urls
+                }, {})
+
+                self._batchRequest('topTenPosts reach/engaged', {
+                    token : myFacebookId
+                    , urls  : urls
+                }, function(err, data){
+                    if (err || !data) return fn(err, [])
+
+                    var results = top.map(function(post, i){
+                        var reach   = (data['p'+i+'_reach'  ] || [])[0]
+                            , engaged = (data['p'+i+'_engaged'] || [])[0]
+
+                        // Fallback to likes & comments if insights data is empty
+                        var likes    = post.likes    && post.likes.count    || 0
+                            , comments = post.comments && post.comments.count || 0
+
+                        return {
+                            id       : post.id
+                            , date     : post.created_time
+                            , type     : post.type
+                            , message  : post.message || post.story
+                            , link     : post.link
+                            , reach    : reach && reach.value || 0
+                            , talking  : post.talking || comments || 0
+                            , engaged  : engaged && engaged.value || (likes + comments) || 0
+                            , likes    : likes
+                            , comments : comments
+                        }
+                    })
+
+                    fn(null, results)
+                })
+            })
+        })
+    },
+
+    getReachPerDay: function (user, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        var since = +new Date() || moment().subtract('days', 7).startOf('day').toDate()
+            , until = +new Date() || moment().startOf('day').toDate()
+
+        self._batchRequest('reachPerday', {
+            token : accessToken
+            , since : since
+            , until : until
+            , id    : myFacebookId
+            , urls  : {
+                paid    : '/insights/page_impressions_paid_unique'
+                , organic : '/insights/page_impressions_organic_unique'
+                , viral   : '/insights/page_impressions_viral_unique'
+            }
+            , merge: true
+        }, callback)
+    },
+
+    getEngagedDemographics: function (user, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+    },
+
+    getTopFiveFans: function (user, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+    },
 
     //region PRIVATE
+    _batchRequest: function(batchName, options, fn){
+        // default == last 7 days
+        var since = +new Date(options.since) || moment().subtract('days', 7).startOf('day').toDate()
+            , until = +new Date(options.until) || 0
+
+        var keys = Object.keys(options.urls)
+            , basePath = '/' + (options.id || '')
+            , batch = []
+            , batches = []
+            , params = _.extend({
+                since: since / 1000
+                , until: until / 1000
+            }, options.params)
+
+        keys.forEach(function(key){
+            var url   = path.join(basePath, options.urls[key])
+                , query = _.extend({}, params, URL.parse(url, true).query)
+
+            batch.push({ method: 'get', relative_url: url + '?' + qs.stringify(query) })
+        })
+
+        // Overcome FB 50 data points per request limit if necessary
+        var batchLimit = 50
+        while (batch.length > batchLimit) {
+            batches.push(batch.splice(0, batchLimit))
+        }
+        if (batch.length > 0) batches.push(batch)
+
+        var total   = batches.length
+            , results = options.array ? [] : {}
+            , raw     = options.array ? [] : {}
+            , errors  = []
+
+        logger.info('Requesting data', { method: batchName, id: options.id, batches: total })
+
+        batches.forEach(function(batch){
+            FB.api('', 'post', {
+                access_token: options.token
+                , batch: batch
+            }, function(res) {
+                logger.info('Response received', { method: batchName, id: options.id, batch: total - batches.length })
+                addResults(res)
+
+                if (--batches.length <= 0) {
+                    if (errors.length) return fn(errors[0])
+                    logger.info('Batch finished', { method: batchName, id: options.id })
+                    if (options.merge) {
+                        results = mergeValues(results)
+                    }
+                    fn(null, results, raw)
+                }
+            })
+        })
+
+        function addResults (res) {
+            if (res.error || res.code >= 400) {
+                try {
+                    var error = JSON.parse(res.body)
+                    error && (error = error.error)
+                } catch (e) {} finally {
+                    logger.error(batchName + ' failed', error || res.error)
+                }
+                errors.push(new Error(batchName + ' failed'))
+                return
+            }
+
+            ;(res || []).forEach(function(item, i){
+                try {
+                    item = JSON.parse(item.body)
+                } catch (e) {
+                    item = null
+                }
+
+                // Allow Graph API requests with plain object responses
+                var values = item && Array.isArray(item.data)
+                    ? getDataValues(item)
+                    : item
+
+                if (options.array) {
+                    raw.push(item)
+                    results.push(values)
+                } else {
+                    raw[keys[i]] = item
+                    results[keys[i]] = values
+                }
+            })
+        }
+    },
+
     _getAccessToken: function (user) {
         var credentials = user.getCredentials($$.constants.user.credential_types.FACEBOOK);
         if (credentials == null) {

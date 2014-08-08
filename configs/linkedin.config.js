@@ -7,9 +7,14 @@
 
 var appConfig =  require('./app.config');
 
-//user: christopher.mina@gmail.com
-var clientId = process.env.LINKEDIN_CLIENT_ID || '77a3p9aub0j6by';
-var clientSecret = process.env.LINKEDIN_CLIENT_SECRET || 'B5Akbohq6q9L8a2G';
+
+var clientId = process.env.LINKEDIN_CLIENT_ID || '75yguynstm9v3i';
+var clientSecret = process.env.LINKEDIN_CLIENT_SECRET || 'IMYsFv9qrnPeng0J';
+
+//var clientId = '774w328y41vuu2';
+//var clientSecret = '9leiTjDCqsEhmjpu';
+
+
 
 module.exports = {
     CLIENT_ID: clientId,

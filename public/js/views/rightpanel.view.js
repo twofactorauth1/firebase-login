@@ -1,56 +1,82 @@
 define([
     'views/account/cms/editwebsite.view',
-    'utils/utils'
-], function (EditWebsite, utils) {
+    'utils/utils',
+    'models/cms/components/blog',
+    'services/cms.service',
+    'models/cms/post',
+    'models/cms/page',
+    'models/user',
+    'events/events'
+], function (EditWebsite, utils, Blog, CmsService, Post, Page, User, events) {
 
     var view = EditWebsite.extend({
 
         subdomain: null,
         websiteSettings: null,
         themeId: null,
+        websiteId: null,
+        pageId: null,
+        postId: null,
 
         //temporary themes
-        themes: [
-            {
-                id: 1,
-                name: 'default',
-                description: 'this is the default description',
-                tags: ['tag1','tag2'],
-                preview: '/assets/images/theme-previews/indimain-preview.jpg'
-            },
-            {
-                id: 2,
-                name: 'indimain',
-                description: 'this is the indimain description',
-                tags: ['tag1','tag2'],
-                preview: '/assets/images/theme-previews/indimain-preview.jpg'
-            },
-        ],
+        themes: null,
 
         el: "#rightpanel",
         templateKey: "account/cms/website",
 
         events: {
+
+            //components
             "click .dd-item":"scrollToSection",
-            "change #nestable": "updateOrder",
             "hover .component": "showComponentOptions",
             "click .add_section": "addSection",
+            "change .dd": "onComponentDrag",
+            "click .btn-add-component":"addComponent",
+
+            //color palette
             "click #drop-zone": "drop_click",
             "change #file":"upload_color_pic",
             "click .btn-change-palette":"changePalette",
             "click .clear-image":"clearImage",
             "click .save-palette":"savePalette",
+
+            //change theme
             "click .btn-change-theme":"changeThemeModal",
             "click .btn-edit-theme":"editTheme",
             "click #change-theme-modal .thumbnail": "selectTheme",
-            "click .change-theme":"changeTheme"
+            "click .change-theme":"changeTheme",
+
+            //page settings
+            "change .sort-ordering": "sort_contact",
+            "change .sort-display": "sort_display",
+
+            //add blog post
+            "click .add-post":"newPostModal",
+            "click .create-post":"addBlankPost",
+            "input #post-title":"urlCreator",
+            "input #post-url":"urlCreator",
+
+            //add page
+            "click .add-page":"newPageModal",
+            "click .create-page":"addBlankPage",
+            "input #page-title":"urlCreator",
+            "input #page-url":"urlCreator",
+
+            //import contact modal
+            "click .choose-import .btn": "changeImportSection",
+            "click #import-contacts-modal .close": "closeImportModal",
+
+            //fix duplicates modal
+            "click .fix-duplicates":"showFixDuplicates",
+            "click .duplicates-list li":"showMerge"
         },
 
         initialize: function () {
-            console.log('rendering');
             var self = this
                 , p1 = this.getAccount()
-                , p2 = this.getWebsite();
+                , p2 = this.getWebsite()
+                , p3 = this.getAllThemes()
+                , p4 = this.getUser();
 
             $.when(p1)
                 .done(function () {
@@ -61,21 +87,284 @@ define([
             $.when(p2)
                 .done(function () {
                 self.websiteSettings = self.website.attributes.settings;
+                self.websiteId = self.website.attributes._id;
+                console.log('Getting Page on rightpanel');
+                self.getPage().done(function(page){
+                    console.log('Page ID: '+JSON.stringify(page.attributes));
+                    self.pageId = self.page.attributes._id;
+                });
             });
+        },
+
+        showMerge: function() {
+        },
+
+        showFixDuplicates: function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            $('#fixDuplicates-modal').show();
+        },
+
+        changeImportSection: function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var source = $(e.currentTarget).data('import-source');
+            var contacts = 100;
+
+            $('.modal-body .row').addClass('hidden');
+            var progressModal = $('.row[data-import-section="progress"]');
+            progressModal.removeClass('hidden');
+            progressModal.find('.num').text(contacts);
+            progressModal.find('.source').text(source);
+
+            /*** TEMP UNTIL IMPORT SUCCESS CALLBACK ***/
+            setTimeout(function() {
+              $('.modal-body .row').addClass('hidden');
+              $('.modal-body .row[data-import-section="success"]').removeClass('hidden');
+            }, 3000);
+        },
+
+        closeImportModal: function() {
+            $('.modal-body .row').addClass('hidden');
+            $('.modal-body .row[data-import-section="choose"]').removeClass('hidden');
         },
 
         renderHtml: function(html) {
             this.show(html);
         },
 
+        sort_contact: function (e){
+            $$.e.ContactSortingEvent.trigger("sortContact", {sort_type: e.target.value}); // generating events
+        },
+        sort_display: function (e){
+            $$.e.ContactSortingEvent.trigger("displayContact", {display_type: e.target.value}); // generating events
+        },
+
+
         /*
          * Edit Website Sidebar
          * - Functions for Edit Website Sidebar
          */
+
+            getPage: function() {
+                console.log('getPage rightpanel');
+                this.page = new Page({
+                    websiteId: this.websiteId,
+                    handle: 'blog'
+                });
+
+                return this.page.fetch();
+            },
+
+            addBlankPage: function() {
+                var self = this;
+                console.log('adding blank page'+self.is_dragging);
+                $('#iframe-website').contents().find('ul.navbar-nav li:last-child').before('<li><a href="#">New Page</a></li>');
+                $('#new-page-modal').modal('hide');
+
+
+                //get title
+                var pageTitle = $('#new-page-modal #page-title').val();
+
+                //get url
+                var pageUrl = $('#new-page-modal #page-url').val();
+
+                var pageAuthor = self.user.attributes.first+' '+self.user.attributes.last;
+
+                var pageDate = new Date().getTime();
+
+                var data = {
+                    pageTitle: pageTitle,
+                    pageUrl: pageUrl,
+                    pageAuthor: pageAuthor,
+                    pageDate: moment(pageDate).format('DD.MM.YYYY')
+                };
+
+                console.log('page data: '+data);
+
+
+                this.page = new Page({
+                    websiteId:this.websiteId,
+                    title: pageTitle,
+                    handle: pageUrl,
+                    components: [
+                        {
+                            "anchor" : null,
+                            "type" : "single-page"
+                        }
+                    ],
+                    created: {
+                        date: new Date().getTime(),
+                        by: self.user.attributes._id
+                    }
+                });
+
+                this.page.save().done( function() {
+                    console.log('page sved');
+                    self.pageId = self.page.attributes._id;
+                    // var $iframe = $('#iframe-website');
+                    // $iframe.ready(function() {
+                    //     $iframe.contents().find("#main-area .entry").prepend(html);
+                    //     console.log('Blank Post ID: '+self.postId);
+                    //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                    //     $iframe.contents().find("#main-area").trigger("click");
+                    // });
+                });
+            },
+
+            newPageModal: function() {
+                $('#new-page-modal').modal('show');
+            },
+
+            urlCreator: function(e) {
+                var postUrl = $(e.currentTarget).val();
+                var scrubbed = postUrl.toLowerCase().replace(/ /g,'-');
+                $('#post-url').val(scrubbed);
+            },
+
+            newPostModal: function() {
+                $('#new-post-modal').modal('show');
+            },
+
+            addBlankPost: function() {
+                var self = this;
+                console.log('User: '+JSON.stringify(self.user.attributes));
+
+                $('#new-post-modal').modal('hide');
+
+                var tmpl = $$.templateManager.get("blankPost", self.templateKey);
+
+                //get title
+                var postTitle = $('#new-post-modal #post-title').val();
+
+                //get url
+                var postUrl = $('#new-post-modal #post-url').val();
+
+                var postAuthor = self.user.attributes.first+' '+self.user.attributes.last;
+
+                var postDate = new Date().getTime();
+
+                var data = {
+                    postTitle: postTitle,
+                    postUrl: postUrl,
+                    postAuthor: postAuthor,
+                    postDate: moment(postDate).format('DD.MM.YYYY')
+                };
+
+                var html = tmpl(data);
+
+                this.post = new Post({
+                    pageId:this.pageId,
+                    post_title: postTitle,
+                    post_author: postAuthor,
+                    post_url: postUrl,
+                    created: {
+                        date: new Date().getTime(),
+                        by: self.user.attributes._id
+                    }
+                });
+
+                this.post.save().done( function() {
+                    self.postId = self.post.attributes._id;
+                    var $iframe = $('#iframe-website');
+                    $iframe.ready(function() {
+                        $iframe.contents().find("#main-area .entry").prepend(html);
+                        console.log('Blank Post ID: '+self.postId);
+                        $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                        $iframe.contents().find("#main-area").trigger("click");
+                    });
+                });
+
+                //navigate to new single post
+                //$$.r.account.cmsRouter.viewSinglePost(postTitle, self.postId);
+            },
+
+            getPost: function() {
+                console.log('Getting Post: '+this.postId);
+                if (this.postId == null) {
+                    this.post = new Post({});
+                    var deferred = $.Deferred();
+                    deferred.resolve(this.post);
+                    console.log('Deferred: '+JSON.stringify(deferred));
+                    return deferred;
+                }
+                this.post = new Post({
+                    _id:this.postId,
+                    pageId:this.pageId
+                });
+
+                return this.post.fetch();
+            },
+
+            getUser: function () {
+                if (this.userId == null) {
+                    this.userId = $$.server.get($$.constants.server_props.USER_ID);
+                }
+
+                this.user = new User({
+                    _id: this.userId
+                });
+
+                return this.user.fetch();
+            },
+            // WORKING
+            addComponent: function () {
+                var self = this;
+                console.log('adding component');
+                //get component name
+                var componentName = $('#component-name').val();
+                //get component type
+                var componentType = $('#component-type').val();
+                //validate
+                //add to mongo
+                //get mongo id
+                var newComponent = self.getComponent();
+                console.log('New Component: '+JSON.stringify(newComponent));
+                //add to sidebar
+                var data = {
+                    "id": 1,
+                    "name": componentName,
+                    "type": componentType
+                };
+                var tmpl = $$.templateManager.get("draggable-component", self.templateKey);
+                var html = tmpl(data);
+                $('#sortable').append(html);
+                //add to site
+                self.updateOrder();
+            },
+            // WORKING
+            getComponent: function() {
+                this.component = new Blog({});
+                var deferred = $.Deferred();
+                deferred.resolve(this.component);
+                return deferred;
+            },
+
+            onComponentDrag: function (event) {
+                var componentID = $(event.currentTarget).data('id');
+                console.log('Component Dragged '+componentID);
+            },
+
             selectTheme: function(e) {
                 $('#change-theme-modal .check-theme').hide();
                 $('#change-theme-modal .thumbnail').removeClass('selected');
                 $(e.currentTarget).addClass('selected').find('.check-theme').show();
+            },
+
+            getAllThemes: function() {
+                var self = this;
+
+                var promise = CmsService.getAllThemes();
+
+                promise
+                    .done(function (themes) {
+                        self.themes = themes;
+                    })
+                    .fail(function (resp) {
+                        $$.viewManager.showAlert("An error occurred retreiving the Theme configuration for this website");
+                    });
+
+                return promise;
             },
 
             changeThemeModal: function() {
@@ -109,8 +398,9 @@ define([
                     console.log('Current ThemeId: '+self.account.attributes.website.themeId);
 
                     //actual code when api works
-                    // self.account.set('website', {'themeId': themeId});
-                    // self.account.save();
+                    self.account.set("updateType","website");
+                    self.account.set('website', {'themeId': themeId});
+                     self.account.save();
 
                     //refresh theme
                     document.getElementById('iframe-website').contentWindow.location.reload(true);
@@ -122,7 +412,6 @@ define([
                     //show validate error
                     console.log('no theme selected ');
                 }
-
             },
 
             editTheme: function() {
@@ -172,18 +461,12 @@ define([
             scrollToSection: function(event) {
                 var self = this;
                 // var section = $(this).data('id');
-                var section = $(event.currentTarget).data('id');
+                var section = $(event.currentTarget).data('component-id');
+                console.log('Section ID: '+section);
                 var iframe = $('#iframe-website').contents();
                 if (iframe.find('.component[data-id="'+section+'"]').length > 0) {
                     self.scrollToAnchor(section);
                 }
-            },
-
-            updateOrder: function (e) {
-                var self = this;
-                console.log('update order');
-                var serialize = $('.dd').nestable('serialize');
-                console.log('Serialize: ' +JSON.stringify(serialize));
             },
 
             scrollToAnchor: function(aid){

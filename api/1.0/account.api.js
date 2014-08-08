@@ -30,7 +30,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getAccountById.bind(this));
         app.post(this.url(''), this.isAuthApi, this.createAccount.bind(this));
-        app.put(this.url(''), this.isAuthApi, this.updateAccount.bind(this));
+        app.put(this.url(':id'), this.isAuthApi, this.updateAccount.bind(this));
+        app.put(this.url(':id/displaysetting'), this.isAuthApi, this.updateAccountDisplaySetting.bind(this));
+        app.put(this.url(':id/setting'), this.isAuthApi, this.updateAccountSetting.bind(this));
+        app.put(this.url(':id/website'), this.isAuthApi, this.updateAccountWebsiteInfo.bind(this));
+
         app.delete(this.url(':id'), this.isAuthApi, this.deleteAccount.bind(this));
 
         app.get(this.url(':userid/accounts', 'user'), this.isAuthApi, this.getAllAccountsForUserId.bind(this));
@@ -41,12 +45,14 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO - add granular security
 
         var self = this;
-
+        self.log.debug('>> getCurrentAccount');
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
             if (!err) {
                 if (value == null) {
+                    self.log.debug('<< getCurrentAccount');
                     return resp.send({});
                 } else {
+                    self.log.debug('<< getCurrentAccount');
                     return resp.send(value.toJSON("public"));
                 }
             } else {
@@ -63,7 +69,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = req.params.id;
 
         if (!accountId) {
-            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+            this.wrapError(resp, 400, null, "Invalid parameter for ID");
         }
 
         accountId = parseInt(accountId);
@@ -104,8 +110,129 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
-    updateAccount: function(req,resp) {
 
+    updateAccount: function(req,resp) {
+        var account = new $$.m.Account(req.body);
+        accountDao.saveOrUpdate(account, function(err, value){
+            if(!err &&value != null){
+                resp.send(value.toJSON("public"));
+            } else {
+                self.wrapError(resp, 500, null, err, value);
+            }
+        });
+/*
+        var self = this;
+        var account = new $$.m.Account(req.body);
+        var accountId= req.body._id;
+
+        accountDao.getById(accountId, function(err, value) {
+            if (!err && value != null) {
+                accountDao.saveOrUpdate(account, function(){
+                    if(!err &&value != null){
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
+            } else {
+                return self.wrapError(resp, 401, null, err, value);
+            }
+        });
+        */
+    },
+
+    updateAccountDisplaySetting: function(req,resp) {
+        console.log(req.body);
+        var account=req.body;
+        var self = this;
+        var accountId = req.params.id;
+
+        if (!accountId) {
+            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+        }
+
+        accountId = parseInt(accountId);
+        accountDao.getById(accountId, function(err, value) {
+
+            if (!err && value != null) {
+
+//                value.set("settings", account.sort_type );
+                value.set("displaysettings", account.display_type );
+
+                accountDao.saveOrUpdate(value, function(err, value) {
+                    console.log(value);
+                    if (!err && value != null) {
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
+                resp.send(value.toJSON("public"));
+            } else {
+                self.wrapError(resp, 500, null, err, value);
+            }
+        });
+    },
+    updateAccountSetting: function(req,resp) {
+        console.log(req.body);
+        var account=req.body;
+        var self = this;
+        var accountId = req.params.id;
+
+        if (!accountId) {
+            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+        }
+
+        accountId = parseInt(accountId);
+        accountDao.getById(accountId, function(err, value) {
+
+            if (!err && value != null) {
+
+                value.set("settings", account.sort_type );
+                accountDao.saveOrUpdate(value, function(err, value) {
+                    console.log(value);
+                    if (!err && value != null) {
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
+                resp.send(value.toJSON("public"));
+            } else {
+                self.wrapError(resp, 500, null, err, value);
+            }
+        });
+    },
+
+    updateAccountWebsiteInfo: function(req,resp) {
+        console.log(req.body);
+        var account=req.body;
+        var self = this;
+        var accountId = req.params.id;
+
+        if (!accountId) {
+            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+        }
+
+        accountId = parseInt(accountId);
+        accountDao.getById(accountId, function(err, value) {
+
+            if (!err && value != null) {
+
+                value.set("website",{themeId:account.website.themeId, websiteId:value.get("website").websiteId});
+                accountDao.saveOrUpdate(value, function(err, value) {
+                    console.log(value);
+                    if (!err && value != null) {
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
+                resp.send(value.toJSON("public"));
+            } else {
+                self.wrapError(resp, 500, null, err, value);
+            }
+        });
     },
 
 

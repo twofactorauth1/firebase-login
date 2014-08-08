@@ -7,9 +7,13 @@
 
 var socialLoginRouter = require('../routers/sociallogin.server.router');
 var loginRouter = require('../routers/login.server.router');
+var courseRouter = require('../routers/course.server.router');
 var homeRouter = require('../routers/home.server.router');
+var stripeRouter = require('../routers/stripeconnect.server.router');
 
 module.exports = {
     loginRouter: loginRouter,
-    homeRouter: homeRouter
+    courseRouter: courseRouter,
+    homeRouter: homeRouter,
+    stripeRouter: stripeRouter
 };

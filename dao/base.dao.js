@@ -98,6 +98,19 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    removeByQuery: function (query, type, fn) {
+        if (this.useCache(type)) {
+            var key = this.getTable(type) + "_" + id;
+            $$.g.cache.remove(key);
+        }
+
+        if (this.getStorage(type) === "mongo") {
+            this._removeByQueryMongo(query, type, fn);
+        } else {
+            fn("No storage medium available for this model");
+        }
+    },
+
 
     getById: function (id, type, fn) {
         if (_.isFunction(type) && fn == null) {
@@ -178,10 +191,81 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    findManyWithLimit: function(query, limit, type, fn) {
+        if (this.getStorage(type) === "mongo") {
+            this._findManyWithLimitMongo(query, limit, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
 
     findManyWithFields: function (query, fields, type, fn) {
         if (this.getStorage(type) === "mongo") {
             this._findManyWithFieldsMongo(query, fields, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
+    findAllWithFields: function (query, skip,sort,fields, type, fn) {
+        if (this.getStorage(type) === "mongo") {
+            this._findAllWithFieldsMongo(query, parseInt(skip), sort,fields, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
+    findAllWithFieldsAndLimit: function(query, skip, limit, sort, fields, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._findAllWithFieldsAndLimitMongo(query, skip, limit, sort, fields, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
+    findAndOrder: function(query, fields, type, order_by, order_dir, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._findAndOrderMongo(query, fields, type, order_by, order_dir, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
+    aggregate: function(groupCriteria, matchCriteria, type,  fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._aggregateMongo(groupCriteria, matchCriteria, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
+    aggregateWithCustomStages: function(stageAry, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._aggregateMongoWithCustomStages(stageAry, type, fn);
+        }  else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
+    getMaxValue: function(query, fieldName, type, fn) {
+      if(this.getStorage(type) === 'mongo') {
+          this._getMaxValueMongo(query, fieldName, type, fn);
+      } else {
+          fn("No storage medium available for this model type");
+      }
+    },
+
+    getNextValue: function(query, fieldName, mod, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            //TODO: handle decrement
+            var params = {
+                'query': query,
+                'update': { $inc: { seq: mod } },
+                'new': true,
+                'upsert':true
+            };
+            this._findAndModify(params, fieldName, type, fn);
         } else {
             fn("No storage medium available for this model type");
         }

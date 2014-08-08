@@ -26,4 +26,9 @@
     $$.g = $$.global = $$.global || {};
     $$.svc =  $$.services = $$.services || {};
     $$.constants = $$.constants || {};
+    $$.e = $$.events = $$.events || {};
+
+    // namespace for social dashboard
+    $$.modules = {};
+    $$.Charts = {};
 })();

@@ -13,29 +13,35 @@ var appConfig = require('../configs/app.config');
 var dao = {
 
     options: {
-        name:"account.dao",
+        name: "account.dao",
         defaultModel: $$.m.Account
     },
 
+    getAccountByID: function (id, fn) {
 
-    getAccountByToken: function(token, fn) {
-        this.findOne( {'token':token}, fn);
+        this.findOne({_id: id}, fn);
+
     },
 
 
-    getAccountBySubdomain: function(subdomain, fn) {
-        this.findOne( {'subdomain':subdomain}, fn);
+    getAccountByToken: function (token, fn) {
+        this.findOne({'token': token}, fn);
     },
 
 
-    getAccountByDomain: function(domain, fn) {
-        this.findOne( {'domain':domain}, fn);
+    getAccountBySubdomain: function (subdomain, fn) {
+        this.findOne({'subdomain': subdomain}, fn);
     },
 
 
-    getServerUrlByAccount: function(accountId, fn) {
+    getAccountByDomain: function (domain, fn) {
+        this.findOne({'domain': domain}, fn);
+    },
+
+
+    getServerUrlByAccount: function (accountId, fn) {
         if (accountId > 0) {
-            this.getById(accountId, function(err, value) {
+            this.getById(accountId, function (err, value) {
                 if (err) {
                     return fn(err, value);
                 }
@@ -54,15 +60,15 @@ var dao = {
     },
 
 
-    getAllAccountsForUserId: function(userId, fn) {
+    getAllAccountsForUserId: function (userId, fn) {
         var self = this;
         var userDao = require('./user.dao');
-        userDao.getById(userId, function(err, value) {
+        userDao.getById(userId, function (err, value) {
             if (!err) {
                 var accounts = value.get("accounts");
                 var ids = [];
-                accounts.forEach(function(account) {
-                   ids.push(account.accountId);
+                accounts.forEach(function (account) {
+                    ids.push(account.accountId);
                 });
 
                 var query = {_id: {$in: ids }};
@@ -72,15 +78,30 @@ var dao = {
         });
     },
 
+    getFirstAccountForUserId: function (userId, fn) {
+        var self = this;
+        var userDao = require('./user.dao');
+        userDao.getById(userId, function (err, value) {
+            if (!err && value) {
+                var accounts = value.get("accounts");
+                var firstAccountId = accounts[0].accountId;
 
-    getAccountByHost: function(host, fn) {
+                self.getById(firstAccountId, fn);
+            } else {
+                fn(err, null)
+            }
+        });
+    },
+
+
+    getAccountByHost: function (host, fn) {
         var parsed = urlUtils.getSubdomainFromHost(host);
         if (parsed.isMainApp) {
             return fn(null, true);
         }
 
         if (parsed.subdomain != null || parsed.domain != null) {
-            var cb = function(err, value) {
+            var cb = function (err, value) {
                 if (err) {
                     return fn(err, value);
                 } else {
@@ -97,12 +118,12 @@ var dao = {
     },
 
 
-    createAccount: function(companyType, companySize, fn) {
+    createAccount: function (companyType, companySize, fn) {
         if (_.isFunction(companyType)) {
             fn = companyType;
             companyType = null;
             companySize = null;
-        } else if(_.isFunction(companySize)) {
+        } else if (_.isFunction(companySize)) {
             fn = companySize;
             companySize = null;
         }
@@ -116,8 +137,8 @@ var dao = {
 
         var account = new $$.m.Account({
             company: {
-                type:companyType,
-                size:companySize
+                type: companyType,
+                size: companySize
             }
         });
 
@@ -125,18 +146,18 @@ var dao = {
     },
 
 
-    _createAccount: function(account, fn) {
+    _createAccount: function (account, fn) {
         var self = this;
         //Test to see if subdomain is already taken
         var p = $.Deferred();
         var subdomain = account.getOrGenerateSubdomain();
         if (String.isNullOrEmpty(account.get("subdomain")) == false) {
-            this.getAccountBySubdomain(account.get("subdomain"), function(err, value) {
+            this.getAccountBySubdomain(account.get("subdomain"), function (err, value) {
                 if (!err) {
                     if (value != null) {
                         var subdomain = account.get("subdomain");
-                        subdomain = subdomain + "-" + Math.round(Math.random()*1000000);
-                        account.set({subdomain:subdomain});
+                        subdomain = subdomain + "-" + Math.round(Math.random() * 1000000);
+                        account.set({subdomain: subdomain});
                     }
                 } else {
                     p.reject();
@@ -149,8 +170,8 @@ var dao = {
         }
 
         $.when(p)
-            .done(function() {
-                self.saveOrUpdate(account, function(err, value) {
+            .done(function () {
+                self.saveOrUpdate(account, function (err, value) {
                     fn(err, value);
                 });
             });
@@ -158,18 +179,18 @@ var dao = {
 
 
     //region TEMPORARILY STORE ACCOUNT INFO DURING CREATION
-    getTempAccount: function(accountToken, fn) {
-        var account = $$.g.cache.get(accountToken, "accounts", true, 3600*24, fn);
+    getTempAccount: function (accountToken, fn) {
+        var account = $$.g.cache.get(accountToken, "accounts", true, 3600 * 24, fn);
     },
 
 
-    saveOrUpdateTmpAccount: function(account, fn) {
-        $$.g.cache.set(account.get("token"), account, "accounts", 3600*24);
+    saveOrUpdateTmpAccount: function (account, fn) {
+        $$.g.cache.set(account.get("token"), account, "accounts", 3600 * 24);
         fn(null, account);
     },
 
 
-    convertTempAccount: function(accountToken, fn) {
+    convertTempAccount: function (accountToken, fn) {
         var self = this, account;
 
         if (accountToken != null) {
@@ -177,7 +198,7 @@ var dao = {
         }
 
         if (account != null) {
-            return this._createAccount(account, function(err, value) {
+            return this._createAccount(account, function (err, value) {
                 if (!err) {
                     $$.g.cache.remove(accountToken, "accounts");
                 }

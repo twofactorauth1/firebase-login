@@ -27,6 +27,10 @@
                         "type": "page",
                         "data": "blog"
                     }
+                },
+                {
+                    "label": "Cart",
+                    "type": "link"
                 }
             ]
         }
@@ -43,9 +47,11 @@
                 "feature-list",
                 "image-gallery",
                 "image-slider",
+
                 "image-text",
                 "meet-team",
-                "singup-form"
+                "signup-form",
+                "products"
             ]
         },
 

@@ -27,6 +27,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('friends/import'), this.isAuthApi, this.importFacebookFriends.bind(this));
         app.post(this.url('friends/import'), this.isAuthApi, this.importFacebookFriends.bind(this));
+
+        //facebook api
+        app.get(this.url('likesperday'), this.isAuthApi, this.getLikesPerDay.bind(this));
     },
 
 
@@ -84,6 +87,139 @@ _.extend(api.prototype, baseApi.prototype, {
             self.wrapError(resp, 500, "Unauthorized action", "Unauthorized action. Contacts may only be imported at the Account level");
             self = null;
         }
+    },
+
+    // Likes
+    // Generate a function to get likes per day
+    getLikesPerDay: function(req, resp) {
+        var self = this;
+        var options = {
+            since : req.query.since
+            , until : req.query.until
+            , limit : req.query.limit
+        };
+        facebookDao.getLikesPerDay(req.user, options, function(err, value) {
+            if (!err) {
+                resp.send(value);
+                self = null;
+            } else {
+                self.wrapError(resp, 500, "Error getting facebook likes per day", err, value);
+                self = null;
+            }
+        });
+    },
+
+    // Unlikes
+    // Generate a function to get unlikes per day
+    getUnlikesPerDay: function(req, resp) {
+        var self = this;
+        var options = {
+            since : req.query.since
+            , until : req.query.until
+            , limit : req.query.limit
+        };
+        facebookDao.getUnlikesPerDay(req.user, options, function(err, value) {
+            if (!err) {
+                resp.send(value);
+                self = null;
+            } else {
+                self.wrapError(resp, 500, "Error getting facebook unlikes per day", err, value);
+                self = null;
+            }
+        });
+    },
+
+    // Likes / Unlikes
+    // Generate a function to get likes/unlikes per day in batch
+    getLikesUnlikesPerDay: function(req, resp) {
+        var self = this;
+        facebookDao.getLikesUnlikesPerDay(req.user, function(err, value) {
+            if (!err) {
+                resp.send(value);
+            } else {
+                self.wrapError(resp, 500, "Error getting facebook likes/unlikes per day in batch", err, value);
+                self = null;
+            }
+        });
+    },
+
+    // Posts
+    // Get Post function
+    getPosts: function(req, resp) {
+        var self = this;
+        facebookDao.getPosts(req.user, function(err, value) {
+            if (!err) {
+                resp.send(value);
+            } else {
+                self.wrapError(resp, 500, "Error getting facebook posts", err, value);
+                self = null;
+            }
+        });
+    },
+
+    // Post Interactions
+    getPostInteractions: function(req, resp) {
+        var self = this;
+        facebookDao.getPostInteractions(req.user, function(err, value) {
+            if (!err) {
+                resp.send(value);
+            } else {
+                self.wrapError(resp, 500, "Error getting facebook post interactions", err, value);
+                self = null;
+            }
+        });
+    },
+
+    // Get Top Ten Posts
+    getTopTenPosts: function(req, resp) {
+        var self = this;
+        facebookDao.getTopTenPosts(req.user, function(err, value) {
+            if (!err) {
+                resp.send(value);
+            } else {
+                self.wrapError(resp, 500, "Error getting facebook top ten posts", err, value);
+                self = null;
+            }
+        });
+    },
+
+    // Get Reach Per Day
+    getReachPerDay: function(req, resp) {
+        var self = this;
+        facebookDao.getReachPerDay(req.user, function(err, value) {
+            if (!err) {
+                resp.send(value);
+            } else {
+                self.wrapError(resp, 500, "Error getting facebook reach per day", err, value);
+                self = null;
+            }
+        });
+    },
+
+    // Get engaged demo graphics
+    getEngagedDemographics: function(req, resp) {
+        var self = this;
+        facebookDao.getEngagedDemographics(req.user, function(err, value) {
+            if (!err) {
+                resp.send(value);
+            } else {
+                self.wrapError(resp, 500, "Error getting facebook engaged demo graphics", err, value);
+                self = null;
+            }
+        });
+    },
+
+    // Get top five fans
+    getTopFiveFans: function(req, resp) {
+        var self = this;
+        facebookDao.getTopFiveFans(req.user, function(err, value) {
+            if (!err) {
+                resp.send(value);
+            } else {
+                self.wrapError(resp, 500, "Error getting facebook top five fans", err, value);
+                self = null;
+            }
+        });
     }
 });
 

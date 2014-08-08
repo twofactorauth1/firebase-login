@@ -4,6 +4,10 @@
     * All use or reproduction of any or all of this content must be approved.
     * Please contact info@indigenous.io for approval or questions.
 
+#preloader
+           #status
+            img(src='/assets/icons/loader.gif')
+
 #leftnav.leftpanel
     .logopanel
         if account
@@ -19,7 +23,7 @@
     // logopanel
     .leftpanelinner
         //This is only visible to small devices
-        div
+        div.hidden
             .media.userlogged
                 if photo
                     img.media-object(alt="" src="#{photo.url}" style="max-height:40px; max-width:60px;")
@@ -29,14 +33,14 @@
         ul.nav.nav-pills.nav-stacked.nav-bracket
             li(data-toggle="pill").dashboard-li: a(href="/dashboard")
                 i.fa.fa-home
-                span Overview
+                span Dashboard
             li(data-toggle="pill").contacts-li: a(href="/contacts")
                 i.fa.fa-users
                 span Customers
             li(data-toggle="pill").website-li: a(href="/website")
                 i.fa.fa-desktop
                 span Website
-            li(data-toggle="pill").marketing-li: a(href="/marketing")
+            li(data-toggle="pill").marketing-li: a(href="/pipeshift")
                     i.fa.fa-bullhorn
                     span Marketing
             li(data-toggle="pill").website-li: a(href="/commerce")
@@ -45,6 +49,6 @@
             li(data-toggle="pill"): a(href="/account")
                     i.fa.fa-cog
                     span Account
-            li(data-toggle="pill"): a(href="/logout")
+            li(data-toggle="pill").logout-li: a(href="/logout")
                     i.fa.fa-sign-out
                     span Sign Out

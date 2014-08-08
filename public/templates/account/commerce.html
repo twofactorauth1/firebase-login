@@ -7,216 +7,525 @@
 
 <script type="text/x-handlebars-template" name="commerce-main">
     <div class="pageheader row">
-    <div class="col-xs-9">
-        <h2><i class="fa fa-shopping-cart"></i> Commerce</h2>
-    </div>
-    <div class="col-xs-3">
-        <a class="btn btn-success pull-right" type="button">
-            <span class="fa fa-plus"></span>
-            <span class="hidden-xs">Create</span>
-        </a>
-    </div>
-    <div class="clear"></div>
-</div>
-
-<div class="alert alert-info fade in">
-    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-    <h4 class="center">Hi Robin, Welcome to Products!</h4>
-    <p class="center">Okay, it&#39;s time to start managing your products. If you need assitance use any of the three ways below.</p>
-    <hr class="mb30"></hr>
-    <div class="col-sm-6">
-        <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about manage your products.</h4>
-        <img class="onboard-vid" src="/assets/images/video-holder.jpg">
-    </div>
-    <div class="mb30"></div>
-    <div class="col-sm-6">
-        <h4><i class="fa fa-compass"></i> Schedule a Demo</h4>
-        <p>Schedule a personal demo with one of our customer support representatives who can show you via screen share how to manage your products.</p>
-        <button class="btn btn-primary btn-lg">Schedule Now <i class="fa fa-caret-right"></i>
-        </button>
-        <hr class="mb30"></hr>
-        <h4><i class="fa fa-file-text-o"></i> Read the Documentation</h4>
-        <p>If you prefer a list of steps to read, then head over to our detailed documentation about all the aspects of managing your products.</p>
-        <button class="btn btn-primary btn-lg">View Docs <i class="fa fa-caret-right"></i>
-        </button>
-    </div>
-    <div class="clearfix mb30"></div>
-</div>
-
-<div class="contentpanel">
-    <div class="panel panel-default row">
-        <div class="panel-body">
-            <div class="col-sm-6">
-                <input type="text" placeholder="Search Products" class="form-control input-lg">
+            <div class="col-xs-9">
+                <h2><i class="fa fa-shopping-cart"></i> Commerce</h2>
             </div>
-            <div class="col-sm-6 form-horizontal">
-                <div class="form-group row">
-                    <select class=" form-control chosen-select input-lg">
-                        <option value="">Filter Products</option>
-                    </select>
+            <div class="col-xs-3">
+                <a class="btn btn-success pull-right" type="button">
+                    <span class="fa fa-plus"></span>
+                    <span class="hidden-xs">Add</span>
+                </a>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="alert alert-info fade in">
+            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+            <h4 class="center">Hi Robin, Welcome to Products!</h4>
+            <p class="center">Okay, it&#39;s time to start managing your products. If you need assitance use any of the three ways below.</p>
+            <hr class="mb30"></hr>
+            <div class="col-sm-6">
+                <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about manage your products.</h4>
+                <img class="onboard-vid" src="/assets/images/video-holder.jpg">
+            </div>
+            <div class="mb30"></div>
+            <div class="col-sm-6">
+                <h4><i class="fa fa-compass"></i> Schedule a Demo</h4>
+                <p>Schedule a personal demo with one of our customer support representatives who can show you via screen share how to manage your products.</p>
+                <button class="btn btn-primary btn-lg">Schedule Now <i class="fa fa-caret-right"></i>
+                </button>
+                <hr class="mb30"></hr>
+                <h4><i class="fa fa-file-text-o"></i> Read the Documentation</h4>
+                <p>If you prefer a list of steps to read, then head over to our detailed documentation about all the aspects of managing your products.</p>
+                <button class="btn btn-primary btn-lg">View Docs <i class="fa fa-caret-right"></i>
+                </button>
+            </div>
+            <div class="clearfix mb30"></div>
+        </div>
+
+        <div class="contentpanel">
+            <div class="panel panel-default row">
+                <div class="panel-body">
+                    <div class="col-sm-6">
+                        <input type="text" placeholder="Search Products" class="form-control input-lg">
+                    </div>
+                    <div class="col-sm-6 form-horizontal">
+                        <div class="form-group row">
+                            <select class=" form-control chosen-select input-lg">
+                                <option value="">Filter Products</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- panel-body -->
+            </div>
+            <div class="products-list">
+                <div class="row">
+
+                    <div class="visible-xs col-xs-10">
+                        <h3>No Products Available</h3>
+                    </div>
+
+                    <div class="visible-xs btn btn-success col-xs-12">Add a new contact</div>
+
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="commerce-item btn-view-product-details" data-productid="1">
+                            <div class="media">
+                                <span class="important-star"><i class="fa fa-star-o"></i>
+                                </span>
+                                <div class="media">
+                                    <div class="col-xs-12">
+                                        <span class="icon">
+                                            <i class="fa fa-cutlery"></i>
+                                        </span>
+                                      <div class="clear"></div>
+                                    </div>
+                                    <div class="media-body col-xs-12">
+                                        <h4 class="person-name center">Nutrition Plan</h4>
+                                        <hr class="clearfix mb15">
+                                        <div class="customer-stats">
+                                        <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                            <span class="data">1234567</span>
+                                        </div>
+                                        <div class="purchased"><i class="fa fa-money"></i> Price:
+                                            <span class="data">$15.00</span>
+                                        </div>
+                                        <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                            <span class="data">this type</span>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="commerce-item btn-view-product-details" data-productid="1">
+                            <div class="media">
+                                <span class="important-star"><i class="fa fa-star-o"></i>
+                                </span>
+                                <div class="media">
+                                    <div class="col-xs-12">
+                                        <span class="icon">
+                                            <i class="fa fa-cutlery"></i>
+                                        </span>
+                                      <div class="clear"></div>
+                                    </div>
+                                    <div class="media-body col-xs-12">
+                                        <h4 class="person-name center">Nutrition Plan</h4>
+                                        <hr class="clearfix mb15">
+                                        <div class="customer-stats">
+                                        <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                            <span class="data">1234567</span>
+                                        </div>
+                                        <div class="purchased"><i class="fa fa-money"></i> Price:
+                                            <span class="data">$15.00</span>
+                                        </div>
+                                        <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                            <span class="data">this type</span>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="commerce-item btn-view-product-details" data-productid="1">
+                            <div class="media">
+                                <span class="important-star"><i class="fa fa-star-o"></i>
+                                </span>
+                                <div class="media">
+                                    <div class="col-xs-12">
+                                        <span class="icon">
+                                            <i class="fa fa-cutlery"></i>
+                                        </span>
+                                      <div class="clear"></div>
+                                    </div>
+                                    <div class="media-body col-xs-12">
+                                        <h4 class="person-name center">Nutrition Plan</h4>
+                                        <hr class="clearfix mb15">
+                                        <div class="customer-stats">
+                                        <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                            <span class="data">1234567</span>
+                                        </div>
+                                        <div class="purchased"><i class="fa fa-money"></i> Price:
+                                            <span class="data">$15.00</span>
+                                        </div>
+                                        <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                            <span class="data">this type</span>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="commerce-item btn-view-product-details" data-productid="1">
+                            <div class="media">
+                                <span class="important-star"><i class="fa fa-star-o"></i>
+                                </span>
+                                <div class="media">
+                                    <div class="col-xs-12">
+                                        <span class="icon">
+                                            <i class="fa fa-cutlery"></i>
+                                        </span>
+                                      <div class="clear"></div>
+                                    </div>
+                                    <div class="media-body col-xs-12">
+                                        <h4 class="person-name center">Nutrition Plan</h4>
+                                        <hr class="clearfix mb15">
+                                        <div class="customer-stats">
+                                        <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                            <span class="data">1234567</span>
+                                        </div>
+                                        <div class="purchased"><i class="fa fa-money"></i> Price:
+                                            <span class="data">$15.00</span>
+                                        </div>
+                                        <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                            <span class="data">this type</span>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="commerce-item btn-view-product-details" data-productid="1">
+                            <div class="media">
+                                <span class="important-star"><i class="fa fa-star-o"></i>
+                                </span>
+                                <div class="media">
+                                    <div class="col-xs-12">
+                                        <span class="icon">
+                                            <i class="fa fa-cutlery"></i>
+                                        </span>
+                                      <div class="clear"></div>
+                                    </div>
+                                    <div class="media-body col-xs-12">
+                                        <h4 class="person-name center">Nutrition Plan</h4>
+                                        <hr class="clearfix mb15">
+                                        <div class="customer-stats">
+                                        <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                            <span class="data">1234567</span>
+                                        </div>
+                                        <div class="purchased"><i class="fa fa-money"></i> Price:
+                                            <span class="data">$15.00</span>
+                                        </div>
+                                        <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                            <span class="data">this type</span>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="commerce-item btn-view-product-details" data-productid="1">
+                            <div class="media">
+                                <span class="important-star"><i class="fa fa-star-o"></i>
+                                </span>
+                                <div class="media">
+                                    <div class="col-xs-12">
+                                        <span class="icon">
+                                            <i class="fa fa-cutlery"></i>
+                                        </span>
+                                      <div class="clear"></div>
+                                    </div>
+                                    <div class="media-body col-xs-12">
+                                        <h4 class="person-name center">Nutrition Plan</h4>
+                                        <hr class="clearfix mb15">
+                                        <div class="customer-stats">
+                                        <div class="last-active"><i class="fa fa-bolt"></i> Sku:
+                                            <span class="data">1234567</span>
+                                        </div>
+                                        <div class="purchased"><i class="fa fa-money"></i> Price:
+                                            <span class="data">$15.00</span>
+                                        </div>
+                                        <div class="emails-opened"><i class="fa fa-envelope"></i> Product Type:
+                                            <span class="data">this type</span>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-        <!-- panel-body -->
+</script>
+
+<script type="text/x-handlebars-template" name="commerce-single">
+    <div class="pageheader row">
+        <div class="col-xs-9">
+            <button id="btn-back-to-commerce" class="btn btn-success pull-left" type="button">
+                <span class="fa fa-chevron-left"></span>
+                <span class="hidden-xs">Back</span>
+            </button>
+            <h2><i class="fa fa-shopping-cart"></i> Single Product</h2>
+        </div>
+        <div class="col-xs-3">
+            <a class="btn btn-success pull-right btn-save-single-product" type="button">
+                <span class="fa fa-save"></span>
+                <span class="hidden-xs">Save</span>
+            </a>
+        </div>
+        <div class="clear"></div>
     </div>
-    <ul class="filemanager-options">
-                <li>
-                    <div class="ckbox ckbox-default">
-                        <input type="checkbox" id="selectall" value="1">
-                        <label for="selectall">Select All</label>
+
+    <div class="product-performance">
+        <div>
+            <div class="col-sm-4 col-xs-12 detail-single">
+                <div class="campaign-overview">
+                    <h4>Product Performance</h4>
+                    <p># Sold:
+                        <p class="subtle-gray">200</p>
+                    </p>
+                    <div class="clearfix"></div>
+                    <p># Sold this Month:
+                        <p class="subtle-gray">100</p>
+                    </p>
+                    <div class="clearfix"></div>
+                    <p>New Customers:
+                        <p class="subtle-gray">10</p>
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-12 detail-single">
+                <div class="campaign-overview">
+                    <div class="mb40"></div>
+                    <p>Metric:
+                        <p class="subtle-gray">200</p>
+                    </p>
+                    <div class="clearfix"></div>
+                    <p>Metric:
+                        <p class="subtle-gray">100</p>
+                    </p>
+                    <div class="clearfix"></div>
+                    <p>Metric:
+                        <p class="subtle-gray">10</p>
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-12 detail-single">
+                <h4>Circle Graph</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="contentpanel product-details">
+        <h3>Manage Product</h3>
+        <div class="mb15 clearfix"></div>
+        <div class="row">
+            <div class="col-xs-3">
+                <div class="product-gallery">
+                    <div class="panel panel-success">
+                        <div class="panel-heading padding5">
+                            <p class="product-img"><i class="fa fa-picture-o"></i>
+                            </p>
+
+                            <p class="center">
+                                <h4><i class="fa fa-plus"></i> Add Image</h4>
+                            </p>
+                            <p class="center">
+                                <h4><i class="fa fa-plus"></i> Add Icon</h4>
+                            </p>
+                        </div>
+                        <div class="panel-body">
+                            <h4 class="center">Purple Summer Yoga Top</h4>
+                            <p class="subtle-gray center">$0.00</p>
+                        </div>
                     </div>
-                </li>
-                <li>
-                    <a href="" class="itemopt disabled"><i class="fa fa-envelope-o"></i> Export</a>
-                </li>
-                <li>
-                    <a href="" class="itemopt disabled"><i class="fa fa-download"></i> Download</a>
-                </li>
-                <li>
-                    <a href="" class="itemopt disabled"><i class="fa fa-pencil"></i> Edit</a>
-                </li>
-                <li>
-                    <a href="" class="itemopt disabled"><i class="fa fa-trash-o"></i> Delete</a>
-                </li>
+                    <div class="remaining-product-images">
+                        <div class="sml-img"><i class="fa fa-picture-o"></i>
+                        </div>
+                        <div class="sml-img"><i class="fa fa-picture-o"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-xs-9">
+                <div>
+                    <div class="col-xs-6">
+                        <h4>Product Details</h4>
+                        <input class="form-control input-lg mb20" type="text" placeholder="Product Title" />
+                        <select class="form-control input-lg">
+                            <option>Product Type</option>
+                            <option>Physical</option>
+                            <option>Digital</option>
+                            <option>Subscription</option>
+                        </select>
+                        <textarea class="form-control input-lg mb15" rows="4" placeholder="Product Description" /></textarea>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="mb35"></div>
+                        <select class="form-control input-lg">
+                            <option>Status</option>
+                            <option>Active</option>
+                            <option>Backorder</option>
+                            <option>Inactive</option>
+                        </select>
+                        <input class="form-control input-lg mb20" type="text" placeholder="Price" />
+                        <input class="form-control input-lg mb20" type="text" placeholder="Cost" />
+                        <input class="form-control input-lg mb20" type="text" placeholder="Sku" />
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <hr></hr>
+                <div class="col-xs-6">
+                    <h4>Categories</h4>
+                    <div class="categories form-group panel panel-default">
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                            <label for="checkboxPrimary">Cateogry One</label>
+                        </div>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                            <label for="checkboxPrimary">Cateogry Two</label>
+                        </div>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                            <label for="checkboxPrimary">Cateogry Three</label>
+                        </div>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                            <label for="checkboxPrimary">Cateogry Four</label>
+                        </div>
+                    </div>
+                    <button class="btn btn-info pull-right">Add</button>
+                </div>
+                <div class="col-xs-6">
+                    <h4>Tags</h4>
+                    <input name="tags" id="tags" class="form-control" value="foo,bar,baz">
+                </div>
+            </div>
+        </div>
+        <hr></hr>
+        <div class="row product-sections">
+            <ul>
+                <li id="shipping-section" class="panel panel-message">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h3>Shipping</h3>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="toggle-modern">
+                                    <div class="toggles on"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="display: none;">
+                        <div class="row">
+                            <div class="form-horizontal col-xs-9" role="form">
+
+                                <div class="form-group">
+                                    <label for="inputWeight" class="col-sm-3 control-label">Weight (kg)</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control input-lg spinner-input" id="inputWeight" placeholder="Enter Weight">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Dimensions (cm)</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" placeholder="Length" class="form-control input-lg spinner-input">
+                                        <span class="help-block">Length</span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" placeholder="Width" class="form-control input-lg spinner-input">
+                                        <span class="help-block">Width</span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input type="text" placeholder="Height" class="form-control input-lg spinner-input">
+                                        <span class="help-block">Height</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div></li>
+                <li id="attributes-section" class="panel panel-message">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h3>Attributes</h3>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="form-group">
+                                    <div class="control-label">
+                                        <div class="toggles toggle-modern" data-toggle-on="true" data-toggle-height="20" data-toggle-width="60"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="display: none;">
+                        <div class="form-horizontal">
+                            <div class="attribute">
+                                <h4>Color</h4>
+                                <input name="tags" id="attribute-1" class="form-control tags col-xs-12" value="red,green,blue" style="display: none;">
+                            </div>
+                            <div class="clearfix mb15"></div>
+                        </div>
+                            <button class="btn btn-info pull-right btn-create-attribute">Create Attribute</button>
+                    </div></li>
+                <li id="variations-section" class="panel panel-message">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h3>Variations</h3>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="form-group">
+                                    <div class="toggles toggle-modern" data-toggle-on="true" data-toggle-height="20" data-toggle-width="60"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="display: none;">
+                        Panel content
+                    </div></li>
             </ul>
-    <div class="table-responsive">
-        <table class="table table-hover mb30">
-            <tbody>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-                <tr onclick="parent.location='view_product.html'">
-                    <td>
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="checkbox1">
-                            <label for="checkbox1"></label>
-                        </div>
-                    </td>
-                    <td>
-                        <img src="../images/t-shirt.jpg" width="50px" height="50px">
-                    </td>
-                    <td>
-                        <p>245543</p>
-                        <p>Pilates</p>
-                        <p>Virtual</p>
-                    </td>
-                    <td>
-                        <p>Varies</p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <ul class="pagination pagination-lg mb5 pull-right">
-            <li class="disabled"><a href="#"><i class="fa fa-angle-left"></i></a>
-            </li>
-            <li><a href="#">1</a>
-            </li>
-            <li class="active"><a href="#">2</a>
-            </li>
-            <li><a href="#">3</a>
-            </li>
-            <li><a href="#">4</a>
-            </li>
-            <li><a href="#">5</a>
-            </li>
-            <li><a href="#"><i class="fa fa-angle-right"></i></a>
-            </li>
-        </ul>
+        </div>
     </div>
-</div>
+</script>
 
+<script type="text/x-handlebars-template" name="commerce-sidebar">
+    <div class="rightpanel rightpanel-commerce">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Page</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+
+            <div class="tab-content">
+                <div class="tab-pane pane-settings active" id="rp-page">
+                    <div class="leftpanelinner">
+                    </div>
+                </div>
+            </div>
+
+    </div><!-- rightpanel -->
+</script>
+
+<script type="text/x-handlebars-template" name="commerce-attribute">
+<div class="attribute">
+    <h4>Custom Attribute Name</h4>
+    <input name="tags" id="attribute-2" class="form-control tags col-xs-12" value="" style="display: none;">
+</div>
+<div class="clearfix mb15"></div>
 </script>
