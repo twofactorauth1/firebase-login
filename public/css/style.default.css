@@ -22347,6 +22347,7 @@ div.blog-thumb span.overlay {
   margin-top: 60px;
   text-shadow: 2px 1px 0px rgba(62, 92, 111, 0.8);
   text-align: center;
+  color: white;
 }
 .btn-wrap {
   margin: 0 auto;
@@ -22373,7 +22374,6 @@ p[data-class='caption'] {
   padding-top: 15px;
 }
 div[data-class='position'] span {
-  color: #5db8d0;
   font-weight: bold;
   text-transform: uppercase;
   font-size: 14px!important;
@@ -22437,12 +22437,52 @@ blockquote {
   margin: 20px 0;
   border-left: 5px solid #fabc35;
 }
+.profilepic {
+  margin-bottom: 20px;
+}
+.profilepic-hover {
+  opacity: 0;
+  width: 230px;
+  background: rgba(239, 160, 34, 0.75);
+  height: 230px;
+  position: absolute;
+  border-radius: 130px;
+  z-index: 99999;
+  margin-left: 12px;
+  overflow: hidden;
+  text-align: center;
+  padding: 40px 20px;
+}
+.profilepic-hover p {
+  min-height: 120px;
+  max-height: 120px;
+  height: 100%;
+}
+.profile-img:hover .profilepic-hover {
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
 .profilepic .thumbnail {
   display: block;
+  min-width: 230px;
+  margin: 10px auto;
   filter: grayscale(1);
   -webkit-filter: grayscale(100%);
   filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
   /* Firefox 3.5+ */
+}
+.profile-social li span {
+  background: #efa022!important;
+  width: 40px;
+  height: 40px;
+  border-radius: 30px;
+  line-height: 40px;
+}
+.profile-social {
+  padding: 0;
+}
+.profile-social li {
+  display: inline-block;
 }
 #single-post {
   padding: 30px 0;
@@ -22580,7 +22620,8 @@ input {
   margin: 0 auto;
 }
 .meet-team {
-  padding: 30px 20px;
+  background: #3b9db7;
+  color: white;
 }
 div[data-class="image-text"] {
   background: url('../assets/images/indimain/wave-bg.jpg');

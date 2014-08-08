@@ -18,13 +18,13 @@
         </div>
     </div>
 
-    <div class="component-body {{bgcolor}}">
+    <div id="{{anchor}}" class="component-body {{bgcolor}}">
         <div class="inner-page">
             <div class="image-text">
                 <div class="{{#if url}}col-sm-6{{/if}} col-xs-12 pull-{{imagePosition}}">
                     <h3 class="editable" data-class="title">{{title}}</h3>
                     <div class="mb30"></div>
-                    <div class="editable" data-class="text">{{text}}</div>
+                    <div class="editable" data-class="text">{{{text}}}</div>
                     {{#if btn}}
                         <a class="btn btn-orange btn-lg" href="{{btn.url}}">{{btn.text}} <span class="fa fa-arrow-circle-o-right"></span></a>
                     {{/if}}

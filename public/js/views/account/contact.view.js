@@ -414,7 +414,7 @@ define([
             this.skip = this.skip || 0;
 
             if(this.currentLetter=='all') {
-                return this.contacts.getContactsAll(this.accountId, this.currentLetter, this.skip);
+                return this.contacts.getContactsAll(this.accountId, this.skip);
             } else {
 
                 return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
@@ -450,20 +450,6 @@ define([
         check_height : function (e){
             var self = this;
             if(window.innerHeight + document.body.scrollTop >= document.body.offsetHeight){
-
-
-               /* console.log(Backbone.history.fragment);
-                var params=Backbone.history.fragment;
-                    params=params.split('/');
-                if(params.length==3) {
-                    var skipindex = params[params.length - 1];
-                    console.log(this.skip);
-                //        this.skip=parseInt(skipindex)+3;
-                 //   this.skip+=3;
-                }*/
-
-                console.log(self.loadMore);
-                console.log(self.skip);
                 if(self.loadMore) {
                     this.getContacts(self.currentLetter)
                         .done(function (res, msg) {

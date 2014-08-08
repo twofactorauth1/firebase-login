@@ -51,12 +51,10 @@ define([
 
 
         toJSON: function() {
-            console.log('Attributes: '+JSON.stringify(this.attributes));
             var json = _.clone(this.attributes);
             var collection = json.components;
-            console.log('Collection: '+JSON.stringify(collection));
             if (collection) {
-                //json.components = json.components.toJSON();
+                json.components = json.components.toJSON();
             }
             return json;
         },
@@ -70,6 +68,7 @@ define([
 
 
         url: function(method) {
+            console.log('Method: '+method);
             switch(method) {
                 case "GET":
                 console.log('Website ID: '+this.get("websiteId")+' Handle: '+this.get("handle"));
@@ -78,6 +77,13 @@ define([
                     }
                     return $$.api.getApiUrl("cms", "page/" + this.id);
                 case "PUT":
+                    return $$.api.getApiUrl("cms", "page");
+                    // console.log('Page Id: '+this.get("pageId")+' ComponentId: '+this.get("componentId"));
+                    // if (this.get("pageId") != null && this.get('componentId') != null) {
+                    //     //return $$.api.getApiUrl("cms", "page/"+ this.get("pageId") + "/components/"+ this.get("componentId"));
+                    //     return $$.api.getApiUrl("cms", "page");
+                    // }
+                    break;
                 case "POST":
                     //website/:websiteId/page
                     console.log('Website ID: '+this.get("websiteId"));
