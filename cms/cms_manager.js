@@ -441,6 +441,7 @@ module.exports = {
         var self = this;
         self.log = log;
 
+
         self.log.debug('>> createPage');
         cmsDao.saveOrUpdate(page, function(err, value){
             if(err) {
@@ -448,7 +449,14 @@ module.exports = {
                 fn(err, null);
             } else {
                 self.log.debug('<< createPage');
-                fn(null, value);
+                self.getWebsiteLinklistsByHandle(value.get('websiteId'),"head-menu",function(err,list){
+                 
+                    var link={label:page.get('title'),type:"link", linkTo:{type:"page",data:page.get('handle')}}
+                    list.links.push(link);
+                 self.updateWebsiteLinklists(value.get('websiteId'),"head-menu",list,fn)
+                })
+
+
             }
         });
     },

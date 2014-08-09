@@ -162,6 +162,7 @@ define([
                     handle: pageUrl,
                     components: [
                         {
+                            _id: $$.u.idutils.generateUUID(),
                             "anchor" : null,
                             "type" : "single-page"
                         }
