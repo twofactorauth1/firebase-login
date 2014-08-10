@@ -22,7 +22,16 @@
         <div class="inner-page">
             <div class="image-text">
                 <div class="{{#if url}}col-sm-6{{/if}} col-xs-12 pull-{{imagePosition}}">
-                    <h3 class="editable" data-class="title">{{title}}</h3>
+                    <h1 class="image-text-title">
+                        <div class="editable" data-class="title">
+                            {{title}}
+                        </div>
+                    </h1>
+                    <h3 class="image-text-subtitle">
+                        <div class="editable" data-class="subtitle">
+                            {{{subtitle}}}
+                        </div>
+                    </h3>
                     <div class="mb30"></div>
                     <div class="editable" data-class="text">{{{text}}}</div>
                     {{#if btn}}
@@ -31,7 +40,7 @@
                 </div>
                 <div class="clearfix mb10 visible-xs"></div>
                 {{#if url}}
-                <div class="pull-{{imagePosition}} col-sm-6 col-xs-12">
+                <div class="pull-{{imagePosition}} col-sm-6 col-xs-12 image-text-image">
                     <div class="editable" data-class="url">
                         <img src="{{url}}" class="img-responsive">
                     </div>

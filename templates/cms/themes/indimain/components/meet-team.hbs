@@ -8,22 +8,14 @@
 
 <div>
     {{#with component}}
-    <div class="component-header">
-        <div>
-            {{label}}
-        </div>
-
-        <div>
-            {{description}}
-        </div>
-    </div>
-
     <div class="component-body">
         <div class="meet-team">
             <div class="inner-page">
-                <div class="editable" data-class="title">
-                    <h3 class="center">{{title}}</h3>
-                </div>
+                <h3 class="title">
+                    <div class="editable" data-class="title">
+                        {{title}}
+                    </div>
+                </h3>
                 <div class="mb30"></div>
                 {{#each teamMembers}}
                     <div class="col-xs-12 col-sm-4 col-md-3 editable profilepic pull-left" data-class="profilepic" style="opacity: 0;">
@@ -39,9 +31,11 @@
                             </div>
                             <img src="{{#if profilepic}} {{profilepic}} {{else}} /assets/icons/blank-user.jpg {{/if}}" class="thumbnail img-circle"/>
                         </div>
-                        <div class="editable" data-class="name">
-                            <h4 class="center">{{name}}</h4>
-                        </div>
+                        <h4 class="name">
+                            <div class="editable" data-class="name">
+                                {{name}}
+                            </div>
+                        </h4>
                         <div class="editable" data-class="position">
                             <span class="center">{{position}}</span>
                         </div>
