@@ -62,7 +62,12 @@ define([], function () {
             company_types: {
                 PROFESSIONAL: 1,
                 BUSINESS: 2,
-                ENTERPRISE: 3
+                ENTERPRISE: 3,
+                dp: [
+                    {label: "Professional", data: "1"},
+                    {label: "Business", data: "2"},
+                    {label: "Enterprise", data: "3"}
+                ]
             },
 
             company_size: {
@@ -70,7 +75,14 @@ define([], function () {
                 SMALL: 2,
                 MEDIUM: 3,
                 LARGE: 4,
-                ENTERPRISE: 5
+                ENTERPRISE: 5,
+                dp: [
+                    {label: "Single", data: "1"},
+                    {label: "Small", data: "2"},
+                    {label: "Medium", data: "3"},
+                    {label: "Large", data: "4"},
+                    {label: "Enterprise", data: "5"}
+                ]
             }
         },
 
@@ -141,6 +153,64 @@ define([], function () {
                 TWITTER: _socialTypes.TWITTER,
                 LINKEDIN: _socialTypes.LINKEDIN,
                 GOOGLE: _socialTypes.GOOGLE
+            },
+
+            detail_types: {
+                LOCAL: _socialTypes.LOCAL,
+                FACEBOOK: _socialTypes.FACEBOOK,
+                TWITTER: _socialTypes.TWITTER,
+                LINKEDIN: _socialTypes.LINKEDIN,
+                GOOGLE: _socialTypes.GOOGLE,
+                FULL_CONTACT: _socialTypes.FULL_CONTACT
+            },
+
+            contact_types: {
+                CUSTOMER: "cu",
+                COLLEAGUE: "co",
+                FRIEND: "fr",
+                MEMBER: "mb",
+                FAMILY: "fa",
+                ADMIN: "ad",
+                OTHER: "ot",
+
+                dp: [
+                    {label: "Customer", data: "cu"},
+                    {label: "Colleague", data: "co"},
+                    {label: "Friend", data: "fr"},
+                    {label: "Member", data: "mb"},
+                    {label: "Family", data: "fa"},
+                    {label: "Admin", data: "ad"},
+                    {label: "Other", data: "ot"}
+                ]
+            },
+
+            phone_types: {
+                MOBILE: "m",
+                HOME: "h",
+                WORK: "w",
+
+                dp: [
+                    {label:"mobile", data:"m"},
+                    {label:"home", data:"h"},
+                    {label:"work", data:"w"}
+                ]
+            },
+
+            device_types: {
+                scale: "2net_scale",
+                HOME: "h",
+                WORK: "w",
+
+                dp: [
+                    {label:"2net_scale", data:"2net_scale"},
+                    {label:"home", data:"h"},
+                    {label:"work", data:"w"}
+                ]
+            },
+
+            activity_types: {
+                PHONE: "p",
+                EMAIL: "e"
             }
         }
     };

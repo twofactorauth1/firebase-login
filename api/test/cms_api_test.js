@@ -30,6 +30,7 @@ var freeForm = require('../../cms/model/components/freeform.js');
 
 module.exports.group = {
     setUp: function(cb) {
+        _log.info('setUp');
         if(sessionInitialized !== true) {
             //delete blogplosts
             var promiseAry = [];
@@ -46,6 +47,7 @@ module.exports.group = {
                 }
                 outerPromise.resolve();
             });
+
             $.when(promiseAry).done(function(){
                 var p1 = $.Deferred();
                 var p2 = $.Deferred();
@@ -157,7 +159,7 @@ module.exports.group = {
         var req = request(accountURL).get('/api/1.0/cms/page/10/blog').set('cookie', cookie);
         //agent.attachCookies(req);
         req.expect(200, function(err, res){
-
+            console.dir(res.body);
             testcontext.blogposts = [];
             for(var i=0; i<res.body.length; i++) {
                 testcontext.blogposts.push(res.body[i]);
@@ -602,21 +604,157 @@ module.exports.group = {
             if(err) {
                 test.ok(false, 'Error setting theme for account: ' + err);
                 test.done();
-            }
-            var req2 = request(accountURL).get('/api/1.0/cms/themeconfig/account/' + testcontext.accountId)
-                .set('cookie', cookie);
-            req2.expect(200, function(err, res){
-                console.dir(res.body);
-                test.equals('indimain', res.body['theme-id']);
-                //set it back.
-                cmsManager.setThemeForAccount(testcontext.accountId, 'default', function(err, value){
-                    test.done();
-                });
+            } else {
+                var req2 = request(accountURL).get('/api/1.0/cms/themeconfig/account/' + testcontext.accountId)
+                    .set('cookie', cookie);
+                req2.expect(200, function(err, res){
+                    console.dir(res.body);
+                    test.equals('indimain', res.body['theme-id']);
+                    //set it back.
+                    cmsManager.setThemeForAccount(testcontext.accountId, 'default', function(err, value){
+                        test.done();
+                    });
 
-            });
+                });
+            }
+
 
         });
         
+    },
+
+    //api/1.0/cms/page
+    testCreatePage: function(test) {
+        test.expect(1);
+        var page = new $$.m.cms.Page({
+            accountId:0,
+            websiteId:0,
+            handle: 'Page Handle',
+            title: 'Page Title'
+        });
+        var req = request(accountURL).post('/api/1.0/cms/website/10/page')
+            .set('cookie', cookie)
+            .send(page);
+
+        req.expect(200, function(err, res){
+            console.dir(res.body);
+            testcontext.cmsPageId = res.body._id;
+            test.ok(true);
+            test.done();
+        });
+
+    },
+
+    //api/1.0/cms/page/:pageId
+    testUpdatePage: function(test) {
+        test.expect(1);
+        var pageId = testcontext.cmsPageId;
+        cmsDAO.getById(pageId, $$.m.cms.Page, function(err, page){
+            page.set('title', 'Updated Page Title');
+            var req = request(accountURL).post('/api/1.0/cms/website/10/page/' + pageId)
+                .set('cookie', cookie)
+                .send(page);
+
+            req.expect(200, function(err, res){
+
+                test.ok(true);
+                test.done();
+            });
+        });
+    },
+
+    //api/1.0/cms/page/:pageId
+    testDeletePage: function(test) {
+        test.expect(1);
+        var pageId = testcontext.cmsPageId;
+        var req = request(accountURL).delete('/api/1.0/cms/website/10/page/' + pageId)
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+
+            test.ok(true);
+            test.done();
+        });
+
+    },
+
+    /*
+     get website/:id/linklists
+     get website/:id/linklists/:handle
+     post website/:id/linklists
+     post website/:id/linklists/:handle
+     delete website/:id/linklists/:handle
+
+     */
+    testGetWebsiteLinklists: function(test) {
+        var p1 = $.Deferred();
+        cmsDAO.getOrCreateWebsiteByAccountId(testcontext.accountId, testcontext.userId, false, function(err, value){
+            if(err) {
+                p1.reject();
+                test.ok(false, 'Error setting up website');
+                test.done();
+            } else {
+                console.dir(value);
+                testcontext.websiteId = value.id();
+                p1.resolve();
+            }
+        });
+
+        $.when(p1).done(function(){
+            var req = request(accountURL).get('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists')
+                .set('cookie', cookie);
+            req.expect(200, function(err, res){
+                console.dir(res.body);
+                test.ok(true);
+                test.done();
+            });
+        });
+    },
+
+    testGetWebsiteLinklistsByHandle: function(test) {
+        //main-menu
+        var req = request(accountURL).get('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists/main-menu')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            console.dir(res.body);
+            test.ok(true);
+            test.done();
+        });
+
+    },
+
+    testAddWebsiteLinklist: function(test) {
+
+        var linkListObj = {'name': 'Test Name', 'handle': 'test-name', 'links': []};
+        var req = request(accountURL).post('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists/')
+            .set('cookie', cookie)
+            .send(linkListObj);
+        req.expect(200, function(err, res){
+            console.dir(res.body);
+            test.ok(true);
+            test.done();
+        });
+    },
+
+    testUpdateWebsiteLinklist: function(test) {
+        var linkListObj = {'name': 'Updated Name', 'handle': 'test-name', 'links': []};
+        var req = request(accountURL).post('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists/test-name')
+            .set('cookie', cookie)
+            .send(linkListObj);
+        req.expect(200, function(err, res){
+            console.dir(res.body);
+            test.ok(true);
+            test.done();
+        });
+    },
+
+    testDeleteWebsiteLinklist: function(test) {
+        var req = request(accountURL).delete('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists/test-name')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            console.dir(res.body);
+            test.ok(true);
+            test.done();
+        });
     }
 
 

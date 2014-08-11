@@ -769,7 +769,7 @@ var dao = {
     },
 
     getRenderedWebsitePagewithPostForAccount: function (accountId, pageName, blogpost, isEditor, fn) {
-        console.log('Post ID (getRenderedWebsitePagewithPostForAccount):'+blogpost);
+        console.log('Post ID (getRenderedWebsitePagewithPostForAccount):'+JSON.stringify(isEditor));
         var self = this, account, website, page, themeId, themeConfig;
 
         if (_.isFunction(pageName)) {
@@ -935,6 +935,7 @@ var dao = {
                     title: blogpost.get("post_title"),
                     handle: pageName,
                     linkLists: {},
+                    _id: blogpost.get("_id"),
                     post_title: blogpost.get("post_title"),
                     post_author: blogpost.get("post_author"),
                     post_content: blogpost.get("post_content"),
@@ -1089,7 +1090,8 @@ var dao = {
 
     getRenderedWebsitePageForAccount: function (accountId, pageName, isEditor, tag, author, category, fn) {
         var self = this, account, website, page, blogposts, tags, categories, themeId, themeConfig;
-        console.log('getRenderedWebsitePageForAccount: '+category);
+        //console.log('getRenderedWebsitePageForAccount: '+category);
+        self.log.debug('>> getRenderedWebsitePageForAccount(' + accountId + ')');
         if (_.isFunction(pageName)) {
             fn = pageName;
             pageName = "index";
@@ -1099,7 +1101,6 @@ var dao = {
             fn = isEditor;
             isEditor = false;
         }
-
 
         if (String.isNullOrEmpty(pageName)) {
             pageName = "index";

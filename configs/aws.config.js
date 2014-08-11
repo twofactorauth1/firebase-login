@@ -10,10 +10,14 @@ var appConfig = require('./app.config.js');
 var serverUrl = appConfig.server_url;
 
 //user: christopher.mina@gmail.com
-var AWS_ACCESS_KEY = "AKIAI25ZEMOG232LK54A";
-var AWS_SECRET_ACCESS_KEY ="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";
+//var AWS_ACCESS_KEY = "AKIAI25ZEMOG232LK54A";
+//var AWS_SECRET_ACCESS_KEY ="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";
 
-var AWS_REGION = "us-east-1";  //US Standard
+//user: indig-application
+var AWS_ACCESS_KEY = 'AKIAIF4QBTOMBZRWROGQ';
+var AWS_SECRET_ACCESS_KEY = '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';
+
+var AWS_REGION = "us-west-1";  //US Standard
 var AWS_S3_API = '2006-03-01';
 
 if (process.env.AWS_ACCESS_KEY == null) {

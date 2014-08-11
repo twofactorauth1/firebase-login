@@ -5,7 +5,7 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-define(['libs/jquery/jquery.cookie'], function() {
+define(['libs/jquery-cookie/jquery.cookie'], function() {
 
     //------------------------------------------------
     //

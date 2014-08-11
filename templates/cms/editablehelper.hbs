@@ -7,7 +7,8 @@
 -->
 
 <!-- load the jQuery and require.js libraries -->
-<script type="text/javascript" src="/js/libs/requirejs/require-min.js"></script>
+<script type="text/javascript" src="/js/libs/requirejs/require.js"></script>
+
 
 <script type="text/javascript">
     Aloha = {};
@@ -46,6 +47,16 @@
         $('.editable').aloha();
 
         $('#main-area').on('click','.add-post',function() {
+            $('.editable').aloha();
+        });
+
+        $(document).on('click', '.blog-title', function(e) {
+            e.preventDefault();
+        });
+
+
+        $('#main-area').bind('contentchanged', function() {
+             alert('main-area changed');
             $('.editable').aloha();
         });
 

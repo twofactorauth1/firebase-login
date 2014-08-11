@@ -9,8 +9,6 @@ var Blog = require('./model/components/blog');
 
 module.exports = {
 
-
-
     getAllThemes: function(fn) {
         $$.dao.CmsDao.getAllThemes(fn);
     },
@@ -280,6 +278,8 @@ module.exports = {
                 self.log.error(msg);
                 fn(msg, null);
             } else {
+                self.log.debug('>> gettingPage');
+                console.log(page)
                 var componentAry = page.get('components') || [];
                 componentAry.push(component);
                 self.log.debug('<< addPageComponent');
@@ -349,14 +349,14 @@ module.exports = {
             } else {
                 var componentAry = page.get('components') || [];
                 var spliceIndex = -1;
-                for(var i=0; i<componentAry.length; i++) {
-                    if(componentAry[i]['_id'] === componentId) {
-                        spliceIndex = i;
-                        break;
+                    for(var i=0; i<componentAry.length; i++) {
+                        if(componentAry[i]['_id'] === componentId) {
+                            spliceIndex = i;
+                            break;
+                        }
                     }
-                }
-                if(spliceIndex !==-1) {
-                    componentAry.splice(spliceIndex, 1);
+                    if(spliceIndex !==-1) {
+                        componentAry.splice(spliceIndex, 1);
                     cmsDao.saveOrUpdate(page, fn);
                 } else {
                     var msg = 'Referenced componentId [' + componentId + '] was not found on page [' + pageId + '].';
@@ -396,6 +396,218 @@ module.exports = {
                     componentAry.splice(spliceIndex, 1);
                     componentAry.splice(newOrder, 0, component);
                     cmsDao.saveOrUpdate(page, fn);
+                }
+            }
+        });
+    },
+
+    updatePage: function(pageId, page, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> updatePage');
+        //make sure the ID is set.
+        page.set('_id', pageId);
+
+        cmsDao.saveOrUpdate(page, function(err, value){
+            if(err) {
+                self.log.error('Error updating page: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< udpatePage');
+                fn(null, value);
+            }
+        });
+
+    },
+
+    deletePage: function(pageId, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> deletePage');
+        cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value){
+            if (err) {
+                self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< deletePage');
+                fn(null, value);
+            }
+        });
+    },
+
+    createPage: function(page, fn) {
+        var self = this;
+        self.log = log;
+
+
+        self.log.debug('>> createPage');
+        cmsDao.saveOrUpdate(page, function(err, value){
+            if(err) {
+                self.log.error('Error creating page: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< createPage');
+                self.getWebsiteLinklistsByHandle(value.get('websiteId'),"head-menu",function(err,list){
+                 
+                    var link={label:page.get('title'),type:"link", linkTo:{type:"page",data:page.get('handle')}}
+                    list.links.push(link);
+                 self.updateWebsiteLinklists(value.get('websiteId'),"head-menu",list,fn)
+                })
+
+
+            }
+        });
+    },
+
+    getWebsiteLinklists: function(websiteId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getWebsiteLinklists');
+
+        cmsDao.getWebsiteById(websiteId, function(err, website){
+            if(err) {
+                self.log.error('Error getting website linklists for id [' + websiteId + ']');
+                fn(err, null);
+            } else {
+                self.log.debug('<< getWebsiteLinklists');
+                fn(null, website.get('linkLists'));
+            }
+        });
+    },
+
+    getWebsiteLinklistsByHandle: function(websiteId, handle, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getWebsiteLinklistsByHandle');
+
+        cmsDao.getWebsiteById(websiteId, function(err, website){
+            if(err) {
+                self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
+                fn(err, null);
+            } else {
+
+                var linkListAry = website.get('linkLists');
+                var targetList = null;
+                for(var i=0; i<linkListAry.length; i++) {
+                    if(linkListAry[i].handle === handle) {
+                        targetList = linkListAry[i];
+                        break;
+                    }
+                }
+                self.log.debug('<< getWebsiteLinklistsByHandle');
+                fn(null, targetList);
+            }
+        });
+    },
+
+    addWebsiteLinklists: function(websiteId, linklist, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getWebsiteLinklistsByHandle');
+
+
+        cmsDao.getWebsiteById(websiteId, function(err, website){
+            if(err) {
+                self.log.error('Error getting website for id [' + websiteId + ']');
+                fn(err, null);
+            } else {
+                //some basic validation
+                var handle = linklist.handle;
+                var name = linklist.name;
+                var links = linklist.links || [];
+                if(!handle || !name) {
+                    self.log.error('Linklist must contain name and handle.');
+                    fn('Linklist must contain name and handle.', null);
+                    return;
+                }
+                website.get('linkLists').push(linklist);
+                cmsDao.saveOrUpdate(website, function(err, website){
+                    if(err) {
+                        self.log.error('Error updating website linklists for id [' + websiteId + ']');
+                        fn(err, null);
+                    } else {
+                        self.log.debug('<< getWebsiteLinklistsByHandle');
+                        fn(null, website.get('linkLists'));
+                    }
+                });
+            }
+        });
+    },
+
+    updateWebsiteLinklists: function(websiteId, handle, linklist, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getWebsiteLinklistsByHandle');
+
+        cmsDao.getWebsiteById(websiteId, function(err, website){
+            if(err) {
+                self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
+                fn(err, null);
+            } else {
+
+                var linkListAry = website.get('linkLists');
+                var targetListIndex = -1;
+                for(var i=0; i<linkListAry.length; i++) {
+                    if(linkListAry[i].handle === handle) {
+                        targetListIndex = i;
+                        break;
+                    }
+                }
+                if(targetListIndex !== -1) {
+                    linkListAry.splice(targetListIndex, 1, linklist);
+                    cmsDao.saveOrUpdate(website, function(err, value){
+                        if(err) {
+                            self.log.error('Error updating website: ' + err);
+                            fn(err, null);
+                        } else {
+                            self.log.debug('<< updateWebsiteLinklists');
+                            fn(null, value.get('linkLists'));
+                        }
+                    });
+                } else {
+                    self.log.error('linklist with handle [' + handle + '] was not found');
+                    fn('linklist with handle [' + handle + '] was not found', null);
+                }
+            }
+        });
+    },
+
+    deleteWebsiteLinklists: function(websiteId, handle, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> deleteWebsiteLinklists');
+
+        cmsDao.getWebsiteById(websiteId, function (err, website) {
+            if (err) {
+                self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
+                fn(err, null);
+            } else {
+
+                var linkListAry = website.get('linkLists');
+                var targetListIndex = -1;
+                for (var i = 0; i < linkListAry.length; i++) {
+                    if (linkListAry[i].handle === handle) {
+                        targetListIndex = i;
+                        break;
+                    }
+                }
+
+                if (targetListIndex !== -1) {
+                    linkListAry.splice(targetListIndex, 1);
+                    cmsDao.saveOrUpdate(website, function (err, value) {
+                        if (err) {
+                            self.log.error('Error updating website: ' + err);
+                            fn(err, null);
+                        } else {
+                            self.log.debug('<< deleteWebsiteLinklists');
+                            fn(null, value.get('linkLists'));
+                        }
+                    });
+                } else {
+                    self.log.error('linklist with handle [' + handle + '] was not found');
+                    fn('linklist with handle [' + handle + '] was not found', null);
                 }
             }
         });

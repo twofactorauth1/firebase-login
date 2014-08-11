@@ -11,20 +11,20 @@ if (typeof CACHEBUSTER === 'undefined') {
 
 require.config({
     paths: {
-        jquery: 'libs/jquery/jquery',
-        jqueryvalidate: 'libs/jquery/jquery.validate',
-        jqueryeasing: 'libs/jquery/jquery.easing',
-        jqueryUI: 'libs/jquery/jquery-ui.min',
+        jquery: 'libs/jquery/dist/jquery',
+        jqueryvalidate: 'libs/jquery-validate/dist/jquery.validate',
+        jqueryeasing: 'libs/jquery-easing/jquery.easing',
+        jqueryUI: 'libs/jquery-ui/jquery-ui.min',
         underscore: 'libs/underscore/underscore',
-        json2: 'libs/json/json2',
+        json2: 'libs/json2/json2',
         backbone: 'libs/backbone/backbone',
-        backboneAssoc: 'libs/backbone/backbone-associations',
-        backboneNested: 'libs/backbone/backbone-nested',
-        backboneExtended: 'libs/backbone/backboneExtended',
+        backboneAssoc: 'libs/backbone-associations/backbone-associations',
+        backboneNested: 'libs/backbone-nested-model/backbone-nested',
+        backboneExtended: 'libs_misc/backbone/backboneExtended',
         handlebars: 'libs/handlebars/handlebars',
-        handlebarsHelpers: 'libs/handlebars/handlebarshelpers',
-        indigenousHelpers: 'libs/handlebars/indigenoushelpers',
-        bootstrap: 'libs/bootstrap/bootstrap',
+        handlebarsHelpers: 'libs_misc/handlebars/handlebarshelpers',
+        indigenousHelpers: 'libs_misc/handlebars/indigenoushelpers',
+        bootstrap: 'libs/bootstrap/dist/js/bootstrap',
         modernizr: 'libs/modernizr/modernizr',
         templates: '../templates',
         namespaces: 'utils/namespaces',
@@ -35,22 +35,21 @@ require.config({
         pushStateUtils: 'utils/pushstateutils',
         usersData: 'global/users.data',
         app: 'app',
-        text: "libs/requirejs/plugins/text",
-        leaflet: 'libs/leaflet/leaflet',
-        colorthief: 'libs/colorthief/colorthief',
-        waypoints: 'libs/waypoints/waypoints.min',
+        text: "libs/requirejs-plugins/lib/text",
+        colorthief: 'libs/color-thief/dist/color-thief.min',
+        waypoints: 'libs/jquery-waypoints/waypoints',
         nestable: 'libs/nestable/jquery.nestable',
-        date: 'libs/date/date',
-        daterangepicker: 'libs/jquerydatepicker/daterangepicker',
+        date: 'libs/datejs/build/production/date.min',
+        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
         d3: 'libs/d3/d3',
-        moment: 'libs/moment/moment.min',
+        moment: 'libs/moment/min/moment.min',
 
         //UI SPECIFIC
-        toggles: 'libs/misc/toggles.min',
-        datepicker: 'libs/bootstrap/bootstrap-datepicker',
-        leaflet: 'libs/leaflet/leaflet',
-        tagsinput: 'libs/jquery/jquery.tagsinput',
-        gritter: 'libs/jquery/jquery.gritter.min'
+        toggles: 'libs_misc/toggles.min',
+        datepicker: 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
+        leaflet: 'libs/leaflet/dist/leaflet',
+        tagsinput: 'libs/jquery.tagsinput/jquery.tagsinput.min',
+        gritter: 'libs/jquery.gritter/js/jquery.gritter.min'
     },
 
     shim: {
@@ -122,6 +121,10 @@ require.config({
             deps: ['jquery']
         },
 
+        waypoints: {
+            deps: ['jquery']
+        },
+
         app: {
             deps: [
                 'jquery',
@@ -154,9 +157,9 @@ require.config({
 
     map: {
         '*': {
-            'css': "libs/requirejs/plugins/css",
-            'normalize': "libs/requirejs/plugins/normalize",
-            'text': "libs/requirejs/plugins/text"
+            'css': "libs/require-css/css",
+            'normalize': "libs_misc/requirejs/normalize",
+            'text': "libs/requirejs-plugins/lib/text"
         }
     }
 });

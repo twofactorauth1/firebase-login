@@ -74,5 +74,4 @@ var component = $$.m.ModelBase.extend({
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
 $$.m.cms.modules.LogoList = component;
-
 module.exports = component;
