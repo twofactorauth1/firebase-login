@@ -271,6 +271,31 @@
                  }
              })
           })(jQuery);
+
+          $("#category_input").hide();
+
+          $("#category_link").on('click', function(e) {
+
+             if(parent.$('#edit-website-wrapper').length)
+                    e.preventDefault();
+
+              parent.$('#edit-website-wrapper').trigger("categoryedit", {
+                  target: e.target,
+                  input:$("#category_input")[0]
+              });
+          });
+
+          $("#category_input").on('blur', function (e) {
+
+              $("#category_link").show();
+              $("#category_input").hide();
+              $("#category_link").html($("#category_input").val());
+
+              parent.$('#edit-website-wrapper').trigger("blogedit", {
+                  value: $("#category_input").val(),
+                  target: e.target
+              });
+          });
     </script>
 </body>
 

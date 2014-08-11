@@ -34,7 +34,9 @@
                                 Posted by <a href="/page/author/{{post_author}}">{{post_author}}</a>
                             {{/if}}
                             {{#if post_category}}
-                                in <a href="/page/category/{{post_category}}">{{post_category}}</a>
+                                in 
+                                <a id="category_link" href="/page/category/{{post_category}}">{{post_category}}</a>
+                                <input id="category_input" type="text" value="{{post_category}}" />
                             {{/if}}
                             {{!-- {{#if comment_count}}
                                  • {{comment_count}} comments
@@ -42,11 +44,30 @@
                         </p>
 
                         {{#if post_tags}}
-                            <ul class="post_tags">
+                            <ul id="tags_link" class="post_tags">
                                 {{#each post_tags}}
                                     <li><a href="/page/tag/{{this}}">{{this}}</a></li>
                                 {{/each}}
                             </ul>
+                            <style>
+                                #tags > span {
+                                    display: inline-block;
+                                    background: #47b1cc;
+                                    padding: 5px;
+                                    border-radius: 5px;
+                                    font-size: 12px;
+                                    color:white;
+                                }
+                            </style>
+                            <div id="tags_input" contenteditable="true">
+                                {{#each post_tags}}
+                                    <span>{{this}}</span>
+                                {{/each}}
+                            </div>
+                            <script>
+                                $("#tags_link")
+
+                            </script>
                         {{/if}}
 
                         <div class="et_pt_thumb alignleft">

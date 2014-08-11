@@ -44,6 +44,8 @@ define([
             "click .launch-btn":"end_setup",
             "mousemove #sortable":"draggingComponent",
             "click .blog-title .editable":"updateTitle"
+
+
         },
 
         initialize: function(options) {
@@ -158,7 +160,41 @@ define([
 
             this.proxiedOnWebsiteEdit = $.proxy( this.onWebsiteEdit, this);
             this.$el.on("websiteedit", this.proxiedOnWebsiteEdit);
+            this.proxiedOnBlogEdit = $.proxy( this.blogEdit, this);
+            this.$el.on("blogedit", this.proxiedOnBlogEdit);
+            this.proxiedOnCategoryEdit = $.proxy( this.editCategory, this);
+            this.$el.on("categoryedit", this.proxiedOnCategoryEdit);
             return this;
+        },
+
+        editCategory: function () {
+           console.log("editCategory");
+            var data = arguments[1];
+            var target = data.target;
+            var input=data.input;
+            console.log(data)
+            $(target).closest("#category_link").hide();
+
+            $(input).closest("#category_input").show().focus().css("width", "150px");
+
+
+        },
+
+        blogEdit: function (e) {
+            var self=this;
+            var data = arguments[1];
+            var target=data.target;
+            var postId = $(target).closest(".single-blog").attr("data-postid");
+            self.postId=postId;
+            console.log(data.value);
+            console.log( postId )
+            self.getPost().done(function(){
+                self.post.set("post_category",data.value)
+                self.post.save();
+
+
+            })
+
         },
 
         updateTitle: function () {
