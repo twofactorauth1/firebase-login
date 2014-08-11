@@ -58,6 +58,8 @@ define([
                     var html = tmpl(data);
                     self.show(html);
                     self.contactMap(data['contact']['address']);
+                    self.adjustWindowSize();
+                    $(window).on("resize", self.adjustWindowSize);
                 })
                 .fail(function(resp) {
                     $$.viewManager.showAlert("There was an error retrieving this contact");
@@ -65,6 +67,16 @@ define([
                 });
 
             this.getReadings();
+        },
+
+        adjustWindowSize: function() {
+            console.log('resizing');
+            $('#main-viewport').css('overflow', 'none');
+            var headerBar = $('#headerbar').outerHeight();
+            var pageHeader = $('.pageheader').outerHeight();
+            var mainViewportHeight = $(window).height() - headerBar - pageHeader-10;
+            console.log('adjusting window size to '+$(window).height()+' Headerbar: '+headerBar+' Page Herder: '+pageHeader);
+            $('#contact-details-container').css('min-height', $(window).height());
         },
 
 

@@ -1,0 +1,37 @@
+<div>
+    <a href="" ng-click="onPreviewImageClick()">
+        <img class="col-md-12" src="{{video.videoBigPreviewUrl}}" ng-if="video.videoUrl==null"/>
+    </a>
+    <div class="flex-video" ng-if="video.videoUrl!=null">
+        <videogular vg-width="config.width" vg-height="config.height" vg-theme="config.theme.url"
+                    vg-autoplay="config.autoPlay" vg-stretch="config.stretch.value" vg-responsive="config.responsive">
+            <video class='videoPlayer' preload='metadata'>
+                <source type="video/youtube" src="{{trustSrc(video.videoUrl)}}"/>
+            </video>
+
+            <vg-youtube></vg-youtube>
+
+            <vg-controls vg-autohide="true" style="height: 50px;">
+                <vg-play-pause-button vg-play-icon="config.theme.playIcon"
+                                      vg-pause-icon="config.theme.pauseIcon"></vg-play-pause-button>
+                <vg-timeDisplay>{{ currentTime }}</vg-timeDisplay>
+                <vg-scrubBar>
+                    <vg-scrubbarcurrenttime></vg-scrubbarcurrenttime>
+                </vg-scrubBar>
+                <vg-timeDisplay>{{ totalTime }}</vg-timeDisplay>
+                <vg-volume>
+                    <vg-mutebutton
+                            vg-volume-level-3-icon="config.theme.volumeLevel3Icon"
+                            vg-volume-level-2-icon="config.theme.volumeLevel2Icon"
+                            vg-volume-level-1-icon="config.theme.volumeLevel1Icon"
+                            vg-volume-level-0-icon="config.theme.volumeLevel0Icon"
+                            vg-mute-icon="config.theme.muteIcon">
+                    </vg-mutebutton>
+                    <vg-volumebar></vg-volumebar>
+                </vg-volume>
+                <vg-fullscreenButton vg-enter-full-screen-icon="config.theme.enterFullScreenIcon"
+                                     vg-exit-full-screen-icon="config.theme.exitFullScreenIcon"></vg-fullscreenButton>
+            </vg-controls>
+        </videogular>
+    </div>
+</div>

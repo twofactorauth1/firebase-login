@@ -57,7 +57,7 @@ var urlutils = {
                 var matchedEnvironment = _.filter(globalEnvironments.split(','), function(_env){return modifier === _env});
                 if(matchedEnvironment && matchedEnvironment.length > 0) {
                     _log.debug('environment: ' + matchedEnvironment);
-                    var regexp = new RegExp('.?' + matchedEnvironment[0], 'gi');
+                    var regexp = new RegExp('\.?' + matchedEnvironment[0] + '\$', 'i');
                     subdomain = subdomain.replace(regexp, '');
                 }
                 /*

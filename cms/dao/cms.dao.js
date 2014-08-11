@@ -13,6 +13,7 @@ var cryptoUtil = require('../../utils/security/crypto');
 
 var accountDao = require('./../../dao/account.dao.js');
 var themesConfig = require('../../configs/themes.config.js');
+var segmentioConfig = require('../../configs/segmentio.config.js')
 
 var Website = require('../model/website');
 var Page = require('../model/page');
@@ -1379,11 +1380,14 @@ var dao = {
                     seo: seo,
                     footer: footer,
                     title: title,
+                    segmentIOWriteKey: segmentioConfig.SEGMENT_WRITE_KEY,
                     handle: pageName,
                     linkLists: {},
                     blogposts: null,
                     tags: null,
-                    categories: null
+                    categories: null,
+                    accountUrl: account.get('accountUrl'),
+                    account: account
                 };
 
 
@@ -1521,7 +1525,12 @@ var dao = {
                             //inject editable stuff here
                             //var endHeadReplacement = editableCssScript + " </head>";
                             //value = value.replace("</head>", endHeadReplacement);
+                            console.log('CSS SCRIPT: '+editableCssScript);
+                            if (editableCssScript) {
                             data.footer = data.footer + " " + editableCssScript;
+                            } else {
+                                data.footer = data.footer;
+                            }
                         }
                     }
                     self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {

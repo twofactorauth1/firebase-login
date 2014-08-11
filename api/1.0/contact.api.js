@@ -27,6 +27,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthApi, this.createContact.bind(this));
         app.put(this.url(''), this.isAuthApi, this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteContact.bind(this));
+        app.get(this.url(''), this.isAuthApi, this.listContacts.bind(this));
+        app.get(this.url('filter/:letter'), this.isAuthApi, this.getContactsByLetter.bind(this));
+
+
 
       //  app.post("/signupnews", this.signUpNews.bind(this));
         app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
@@ -40,6 +44,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('activity/:id'), this.isAuthApi, this.getActivityById.bind(this));
         app.post(this.url('activity'), this.isAuthApi, this.createActivity.bind(this));
         app.put(this.url('activity'), this.isAuthApi, this.updateActivity.bind(this));
+
+        //duplicate check
+        app.get(this.url('duplicates/check'), this.isAuthApi, this.checkForDuplicates.bind(this));
+        app.post(this.url('duplicates/merge'), this.isAuthApi, this.mergeDuplicates.bind(this));
     },
 
 
@@ -86,7 +94,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         if (isNew === true) {
             contact.set("accountId", this.accountId(req));
-            contact.createdBy(this.userId(), $$.constants.social.types.LOCAL);
+            contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
         }
 
         contactDao.saveOrUpdate(contact, function(err, value) {
@@ -122,6 +130,36 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    listContacts: function(req, res) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var skip = parseInt(req.query['skip'] || 0);
+        var limit = parseInt(req.query['limit'] || 0);
+        self.log.debug('>> listContacts');
+
+        contactDao.getContactsAll(accountId, skip, limit, function(err, value){
+            self.log.debug('<< listContacts');
+            self.sendResultOrError(res, err, value, "Error listing Contacts");
+            self = null;
+        });
+    },
+
+    getContactsByLetter: function(req, res) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var skip = parseInt(req.query['skip'] || 0);
+        var limit = parseInt(req.query['limit'] || 0);
+        var letter = req.params.letter;
+        self.log.debug('>> getContactsByLetter');
+
+        contactDao.getContactsShort(accountId, letter, limit, function (err, value) {
+            self.log.debug('<< getContactsByLetter');
+            self.sendResultOrError(res, err, value, "Error listing contacts by letter [" + letter + "]");
+            self = null;
+        });
+
+    },
+
 
     getContactsForAccountByLetter: function(req,resp) {
         //TODO - add granular security
@@ -130,6 +168,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = req.params.accountId;
         var letter = req.params.letter;
         var skip = req.params.skip || 0;
+        var limit = parseInt(req.query['limit'] || 0);
 
         if (!accountId) {
             return self.wrapError(resp, 400, null, "Invalid parameter for account id");
@@ -146,7 +185,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         if(letter == "all" ) {
-            contactDao.getContactsAll(accountId,skip, function(err, value) {
+            contactDao.getContactsAll(accountId,skip, limit, function(err, value) {
                 if (!err) {
                     return self.sendResult(resp, value);
                 } else {
@@ -154,7 +193,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             });
         } else {
-            contactDao.getContactsShort(accountId, letter, function (err, value) {
+            contactDao.getContactsShort(accountId, letter, limit, function (err, value) {
                 if (!err) {
                     return self.sendResult(resp, value);
                 } else {
@@ -162,6 +201,38 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             });
         }
+
+    },
+
+    checkForDuplicates: function(req, res) {
+        var self = this;
+        self.log.debug('>> checkForDuplicates');
+
+        var accountId = parseInt(self.accountId(req));
+
+        contactDao.findDuplicates(accountId, function(err, value){
+            self.log.debug('<< checkForDuplicates');
+            self.sendResultOrError(res, err, value, "Error checking for duplicate contacts");
+            self = null;
+        });
+    },
+
+    /**
+     *
+     * Body of request can be empty or an array of contact IDs to merge.
+     */
+    mergeDuplicates:function(req, res) {
+        var self = this;
+        self.log.debug('>> mergeDuplicates');
+
+        var accountId = parseInt(self.accountId(req));
+        var dupeAry = _.toArray(req.body);
+
+        contactDao.mergeDuplicates(dupeAry, accountId, function(err, value){
+            self.log.debug('<< mergeDuplicates');
+            self.sendResultOrError(res, err, value, "Error merging duplicate contacts");
+            self = null;
+        });
 
     },
     //endregion CONTACT
