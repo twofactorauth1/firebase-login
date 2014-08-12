@@ -21822,6 +21822,16 @@ path {
   font-weight: normal;
   font-style: normal;
 }
+.theme-main #assets {
+  background: url('../assets/images/indimain/bottom-bg.png') no-repeat;
+  background-size: cover;
+  background-position: -130px;
+}
+.theme-main .inner-page {
+  padding: 50px 0;
+  max-width: 1100px;
+  margin: 0 auto;
+}
 ul {
   list-style: none;
 }
@@ -22109,11 +22119,6 @@ ul #center-circle {
   font-family: Capita;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
   font-size: 28px;
-}
-.inner-page {
-  padding: 50px 0;
-  max-width: 1100px;
-  margin: 0 auto;
 }
 .newsletter input {
   width: 100%;
@@ -22421,11 +22426,6 @@ div[data-class='position'] span {
 }
 .footer-logo {
   margin: -50px 5px 0 0;
-}
-#assets {
-  background: url('../assets/images/indimain/bottom-bg.png') no-repeat;
-  background-size: cover;
-  background-position: -130px;
 }
 .carousel-inner .gallery-image:hover .overlay-gallery-image {
   opacity: 1!important;
@@ -22770,108 +22770,6 @@ div[data-class="image-text"] .inner-page {
     max-height: 100%;
   }
 }
-<<<<<<< HEAD
-/*
- *  Fitstop base css file
- */
-/*
- *  Features list (Services) section
- */
-#assets {
-  border: 0px!important;
-}
-#feature_three {
-  background: url('/assets/images/fitstop/feature-list-back.png');
-}
-.features-title h5 {
-  font-family: 'Lato', sans-serif;
-  font-size: 24px;
-  color: white;
-  opacity: .95;
-}
-/* Font awesome feature icons */
-#feature_three .fa {
-  font-size: 2.5em;
-}
-#feature_three .fa-paste,
-#feature_three .fa-flask,
-#feature_three .fa-comments-o {
-  color: white;
-}
-#feature_three .fa-paste:hover,
-#feature_three .fa-flask:hover,
-#feature_three .fa-comments-o:hover {
-  color: #2984D3;
-}
-#feature_three .feature-single-3 #training-icon {
-  margin: 0 auto;
-  height: 41px;
-  width: 70px;
-  background: url('/assets/images/fitstop/training-icon.png');
-  background-size: 67px;
-}
-#feature_three .feature-single-3 #training-icon:hover {
-  margin: 0 auto;
-  height: 41px;
-  width: 70px;
-  background: url('/assets/images/fitstop/training-icon-hov.png');
-  background-size: 67px;
-}
-#feature_three .editable h4,
-#feature_three .editable p,
-#feature_three .editable a {
-  font-family: 'Lato', sans-serif;
-  font-size: 15px;
-}
-#feature_three .editable a {
-  color: white;
-}
-#feature_three .editable h4 {
-  color: #2984D3;
-}
-.feature-p p {
-  padding-left: 20px;
-  padding-right: 20px;
-}
-#feature_three #feature-bttn {
-  width: 120px;
-  height: 40px;
-  margin: 0 auto;
-  border-bottom: 4px solid #2fb0de;
-  background-color: #1583CC;
-  border-color: #2872C2;
-  border-radius: 3px;
-  line-height: 21px;
-  -webkit-transition: all 0.2s ease-out 0s;
-  transition: all 0.2s ease-out 0s;
-  padding: 6px 15px;
-}
-#feature_three #feature-bttn:hover {
-  background-color: #2872C2;
-  cursor: pointer;
-}
-#feature_three #feature-bttn a {
-  text-decoration: none;
-  cursor: pointer;
-  text-shadow: 2px 2px #2872C2;
-}
-#feature_three .aloha-editable {
-  padding-top: 4px;
-  bottom: 15px;
-}
-/*
- *  Features blocks (About) section
- */
-.feature-blocks .f-title {
-  bottom: 50px;
-}
-.feature-blocks .f-title h5 {
-  text-align: center;
-  font-family: 'Lato', sans-serif;
-  font-size: 24px;
-  color: black;
-  opacity: .95;
-=======
 .overlay-gallery-image {
   position: relative;
   background: rgba(230, 145, 10, 0.95);
@@ -22965,5 +22863,408 @@ contenthover a {
 }
 .contenthover a.mybutton:hover {
   background: #34742d;
->>>>>>> origin/Frontend
+}
+/*
+ *  Fitstop base css file
+ */
+.fitstop {
+  /*
+   *  Masthead (Masthead) component
+   */
+  /*
+   *  Features list (Services) component
+   */
+  /*
+   *  Feature text (About) component
+   */
+  /*
+   *  (Products) component
+   */
+  /*
+   *  Freeform (Assessment) component
+   */
+}
+.fitstop #header .navbar.navbar-default {
+  border-bottom: none!important;
+  border-color: 0;
+}
+.fitstop #header .navbar {
+  opacity: .96;
+  background-color: #222121;
+  border-radius: 0;
+}
+.fitstop #header .navbar .navbar-header {
+  float: none;
+  height: 150px;
+}
+.fitstop #header .navbar .navbar-header .navbar-toggle {
+  margin-top: 50px;
+}
+.fitstop #header .navbar ul.navbar-nav {
+  float: none;
+  width: 505px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin: 5px auto 5px auto!important;
+}
+.fitstop #header .navbar ul.navbar-nav li > a {
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  text-shadow: none;
+}
+.fitstop #header .navbar .container-fluid {
+  padding: 0 0 0 0;
+}
+.fitstop #header .navbar .navbar-collapse {
+  background: rgba(0, 0, 0, 0.7);
+  /*box-shadow: 0px 5px 5px rgba(0,0,0,0.4);*/
+  box-shadow: inset 0 2px 4px 0px rgba(50, 50, 50, 0.4);
+}
+.fitstop #header .navbar .navbar-brand {
+  float: none;
+  display: block;
+  margin: 0 auto;
+  max-width: 500px;
+}
+.fitstop #header .navbar .navbar-brand img {
+  margin: 0 auto;
+}
+@media (max-width: 625px) {
+  .fitstop #header .navbar .navbar-brand img {
+    height: 100px;
+    width: 250px;
+  }
+}
+.fitstop .parallax-block {
+  transform: translate(0px, 0px) !important;
+  height: 100%!important;
+}
+.fitstop .parallax-image {
+  transform: translate(0px, 0px) !important;
+}
+.fitstop .masthead {
+  padding: 0px 0px;
+  height: auto;
+}
+.fitstop .masthead .home-text {
+  height: auto;
+  margin-top: 0px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 50px;
+  text-shadow: 2px 1px 0px rgba(255, 255, 255, 0.08);
+}
+.fitstop .masthead .home-text h1 {
+  font-family: 'LatoBold', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;
+  font-size: 25px;
+}
+.fitstop .masthead p {
+  font-family: 'LatoBold', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;
+  max-width: 630px;
+  margin: 0 auto;
+  font-size: 17px;
+  line-height: 1.4em;
+  margin-top: 26px;
+}
+.fitstop .masthead .btn-success {
+  background-color: #298AD6;
+  border-color: #296ED6;
+  width: 220px;
+  height: 55px;
+}
+.fitstop .masthead .btn:hover {
+  background-color: #296ED6;
+}
+.fitstop .masthead .fa-envelope {
+  padding-right: 8px;
+}
+.fitstop #assets {
+  border: 0px!important;
+}
+.fitstop #feature_three {
+  background: url('/assets/images/fitstop/feature-list-back.png');
+}
+.fitstop #feature_three .row {
+  text-align: center;
+}
+.fitstop .features-title {
+  margin-bottom: 13px;
+}
+.fitstop .features-title h5 {
+  text-align: center;
+  font-size: 26px;
+  color: white;
+  opacity: .95;
+  padding-bottom: 4px;
+  font-weight: bold;
+}
+.fitstop #feature_three .fa {
+  font-size: 3em;
+}
+.fitstop #feature_three .fa-paste,
+.fitstop #feature_three .fa-flask,
+.fitstop #feature_three .fa-comments-o {
+  color: white;
+}
+.fitstop #feature_three .fa-paste:hover,
+.fitstop #feature_three .fa-flask:hover,
+.fitstop #feature_three .fa-comments-o:hover {
+  color: 2984D3;
+}
+.fitstop #feature_three .feature-single-3 #training-icon {
+  margin: 0 auto;
+  height: 41px;
+  width: 70px;
+  background: url('/assets/images/fitstop/training-icon.png');
+  background-size: 67px;
+}
+.fitstop #feature_three .feature-single-3 #training-icon:hover {
+  margin: 0 auto;
+  height: 41px;
+  width: 70px;
+  background: url('/assets/images/fitstop/training-icon-hov.png');
+  background-size: 67px;
+}
+.fitstop #feature_three .editable h4,
+.fitstop #feature_three .editable p,
+.fitstop #feature_three .editable a {
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+}
+.fitstop #feature_three .editable a {
+  color: white;
+}
+.fitstop #feature_three .editable h4 {
+  color: #2984D3;
+}
+.fitstop .feature-p p {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: 0 auto;
+  color: white;
+  padding: 0;
+}
+.fitstop #feature_three .feature-bttns {
+  padding-top: 10px;
+}
+.fitstop #feature_three #feature-bttn {
+  width: 120px;
+  height: 40px;
+  margin: 0 auto;
+  border-bottom: 4px solid #2fb0de;
+  background-color: #1583CC;
+  border-color: #2872C2;
+  border-radius: 3px;
+  line-height: 21px;
+  -webkit-transition: all 0.2s ease-out 0s;
+  transition: all 0.2s ease-out 0s;
+  padding: 6px 15px;
+}
+.fitstop #feature_three #feature-bttn:hover {
+  background-color: #2872C2;
+  cursor: pointer;
+}
+.fitstop #feature_three #feature-bttn a {
+  text-decoration: none;
+  cursor: pointer;
+  text-shadow: 2px 2px #2872C2;
+}
+.fitstop #feature_three .aloha-editable {
+  bottom: 15px;
+  margin-top: 15px;
+}
+.fitstop .about {
+  background-color: white;
+  /*height: 475px;*/
+  padding-bottom: 80px;
+}
+.fitstop .about .about-profile {
+  padding-top: 17px;
+}
+.fitstop .about .col-sm-12 h3.about-title {
+  font-size: 26px;
+  color: #2e2d2d !important;
+  opacity: .95;
+  padding-top: 32px;
+  text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
+  font-weight: normal;
+}
+.fitstop .about .col-sm-9 .about-name {
+  text-align: left;
+}
+.fitstop .about .col-sm-9 .about-name h2,
+.fitstop .about .col-sm-9 .about-name h4,
+.fitstop .about .col-sm-9 .about-name p {
+  text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
+}
+.fitstop .about .col-sm-9 .about-name h2 {
+  color: black!important;
+  font-size: 22px;
+}
+.fitstop .about .col-sm-9 .about-name h4 {
+  font-size: 14px;
+  color: #2984D3;
+}
+.fitstop .about .col-sm-9 .about-name p {
+  color: black!important;
+  line-height: 1.6em;
+}
+.fitstop .about .about-btn-wrap {
+  margin-top: 25px;
+}
+.fitstop .about .editable #about-btn {
+  width: 240px;
+  height: 50px;
+  margin: 0 auto;
+  border-bottom: 4px solid #2fb0de;
+  background-color: #1583CC;
+  border-color: #2872C2;
+  border-radius: 3px;
+  line-height: 21px;
+  -webkit-transition: all 0.2s ease-out 0s;
+  transition: all 0.2s ease-out 0s;
+  padding: 15px 15px;
+  float: left;
+}
+.fitstop .about .editable #about-btn .contact-me {
+  padding-right: 20px;
+}
+.fitstop .about .editable #about-btn .editable .fa-envelope {
+  float: left;
+  padding: 2px 0 0 35px;
+}
+.fitstop .about .editable #about-btn:hover {
+  background-color: #2872C2;
+  cursor: pointer;
+}
+.fitstop .about .editable #about-btn a {
+  text-decoration: none;
+  cursor: pointer;
+  text-shadow: 2px 2px #2872C2;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+}
+.fitstop .inner-page {
+  background-color: white;
+}
+.fitstop .products-component h3 {
+  font-size: 26px;
+  color: #2e2d2d !important;
+  opacity: .95;
+  padding-top: 32px;
+  text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
+}
+.fitstop #freeform-component {
+  margin: 80 auto;
+  max-width: 900px;
+}
+.fitstop #freeform-component .freeform-wrap {
+  max-width: 900px;
+}
+.fitstop #freeform-component #assessment-header {
+  background: #FAFAFA;
+  box-shadow: 0 0 2px #c2c2c2;
+}
+.fitstop #freeform-component #assessment-header h1,
+.fitstop #freeform-component #assessment-header h3,
+.fitstop #freeform-component #assessment-header p {
+  text-align: center;
+  opacity: .95;
+  padding-top: 32px;
+  padding-bottom: 20px;
+  text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
+  font-weight: normal;
+}
+.fitstop #freeform-component #assessment-header h1,
+.fitstop #freeform-component #assessment-header h3 {
+  color: black;
+}
+.fitstop #freeform-component #assessment-header h1 {
+  font-size: 28px;
+  margin-bottom: 0px;
+  padding-bottom: 6px;
+}
+.fitstop #freeform-component #assessment-header h3 {
+  font-size: 19px;
+  margin-top: 0px;
+  padding: 0px;
+}
+.fitstop #freeform-component #assessment-header p {
+  padding-top: 0px;
+  max-width: 655px;
+  margin: 0 auto;
+}
+.fitstop #freeform-component #assessment-body {
+  background: #FAFAFA;
+  box-shadow: 0 3px 2px #c2c2c2;
+}
+.fitstop #freeform-component #assessment-body h5,
+.fitstop #freeform-component #assessment-body h4 {
+  display: inline;
+}
+.fitstop #freeform-component #assessment-body .fa-check,
+.fitstop #freeform-component #assessment-body h5.tit {
+  color: #26B7F0;
+  font-weight: bold;
+}
+.fitstop #freeform-component #assessment-body h5.sub {
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  opacity: .4;
+}
+.fitstop #freeform-component #assessment-body .assessment-wrap {
+  padding-top: 25px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.fitstop #freeform-component #assessment-body .assessment-wrap .assessment-content {
+  max-width: 235px;
+  margin: 0 auto;
+  float: none;
+  padding-left: 50px;
+}
+.fitstop #freeform-component #assessment-body .assessment-wrap .assessment-content {
+  padding-top: 15px;
+}
+.fitstop #freeform-component #assessment-body .assessment-wrap .assessment-content-text {
+  text-align: center;
+}
+.fitstop #freeform-component #assessment-body .assessment-wrap .assessment-content-text p {
+  font-weight: bold;
+  font-size: 13px;
+  opacity: .6;
+  padding-top: 4px;
+}
+.fitstop #freeform-component #assessment-body .assessment-wrap .assessment-box {
+  width: 680px;
+  margin: 0 auto;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+}
+.fitstop #freeform-component #assessment-body .assessment-wrap .total {
+  text-align: center;
+  padding: 26px;
+  margin: 0 auto;
+  padding-right: 2px;
+}
+.fitstop #freeform-component #assessment-body .assessment-wrap .total h5,
+.fitstop #freeform-component #assessment-body .assessment-wrap .total h4 {
+  font-weight: bold;
+}
+.fitstop #freeform-component #assessment-body .assessment-wrap .total h5 {
+  color: #26A7F0;
+  font-size: 34px;
+}
+.fitstop #freeform-component #assessment-body .assessment-wrap .total h4 {
+  opacity: .6;
+  font-size: 23px;
+  padding-left: 10px;
+}
+.fitstop #freeform-component #assessment-body .btn-success {
+  border-bottom: 4px solid #338AE7;
+  background-color: #3FABE7;
+  width: 230;
+  height: 55;
+  margin-bottom: 40px;
 }

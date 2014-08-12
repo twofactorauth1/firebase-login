@@ -33,6 +33,40 @@
         <div class="row products">
             <div class="mb15"></div>
 
+
+
+
+
+
+
+        <!-- TESTING !-->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="products-nav">
+                            {{#each links}}
+                                <div class="col-sm-3">
+                                    <a href="{{#if content}}{{/if}}">{{{title}}}</a>
+                                    {{#each content}}
+                                        <p>{{{text}}}</p>
+                                    {{/each}}
+                                </div>
+                            {{/each}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
             <div class="col-sm-3 col-xs-6">
                 <div class="panel panel-success">
                     <div class="panel-heading padding5">

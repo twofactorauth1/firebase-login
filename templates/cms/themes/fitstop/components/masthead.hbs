@@ -1,0 +1,40 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div>
+    {{#with component}}
+    <div class="component-header hidden">
+        <div>
+            {{{label}}}
+        </div>
+
+        <div>
+            {{{description}}}
+        </div>
+    </div>
+
+    <div class="component-body">
+        <div class="masthead {{#if img.parallax}} parallax {{/if}}" data-image="{{img.url}}" data-width="{{img.width}}" data-height="{{img.height}}">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <div class="home-text">
+                        <h1 class="editable">{{title}}</h1>
+                        <p class="editable">{{{subtitle}}}</p>
+                        <div class="col-xs-12">
+                            <div class="btn-wrap">
+                                <button class="btn btn-success btn-block center col-xs-3" href="{{btn.url}}"><i class="fa fa-envelope"></i>{{btn.text}}</button>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/with}}
+    </div>
+</div>

@@ -20,21 +20,45 @@
 
     <div class="component-body {{bgcolor}}">
         <div class="inner-page">
-            <div class="image-text">
-                <div class="{{#if url}}col-sm-6{{/if}} col-xs-12 pull-left">
-                    <h3 class="editable" data-class="title">{{title}}</h3>
-                    <div class="mb30"></div>
-                    <div class="editable" data-class="text">{{{text}}}</div>
-                </div>
-                <div class="clearfix mb10 visible-xs"></div>
-                {{#if url}}
-                <div class="pull-{{imagePosition}} col-sm-6 col-xs-12">
-                    <div class="editable" data-class="url">
-                        <img src="{{url}}" class="img-responsive">
+            <div class="container">
+                <div class="image-text about">
+                    <div class="{{#if url}}col-sm-12{{/if}} col-xs-12">
+                        <h3 class="editable col-sm-12 about-title" data-class="title">{{title}}</h3>
                     </div>
-                    <p class="center editable" data-class="caption">{{caption}}</p>
+                    
+                    {{#if url}}
+                    <div class="pull-{{imagePosition}} col-sm-3 col-xs-12">
+                        <div class="editable about-profile" data-class="url">
+                            <img src="{{url}}" class="img-responsive">
+                        </div>
+                        <p class="center editable" data-class="caption">{{caption}}</p>
+                    </div>
+                    {{/if}}
+                    <div class="{{#if url}}col-sm-9{{/if}} col-xs-12 ">
+                        <!-- <h3 class="editable col-sm-12 about-title" data-class="title">{{title}}</h3> -->
+                        <div class="mb30"></div>
+                        <div class="editable about-name" data-class="text">{{{text}}}</div>
+                    {{#if btn}}
+
+                    <div class="editable about-btn-wrap" data-class="btn.text">
+                        <a href="{{{btn.url}}}">
+                            <div id="about-btn">
+                                {{#each features}}
+                                    {{#if feature-icon}}
+                                        <div class="editable">
+                                            <span class="{{{feature-icon}}}"></span>
+                                        </div>
+                                    {{/if}}
+                                {{/each}}
+                                <a class="contact-me">{{{btn.text}}}</a>
+                            </div>
+                        </a>
+                    </div>
+                    {{/if}}
+                    </div>
+                    <div class="clearfix mb10 visible-xs"></div>
+
                 </div>
-                {{/if}}
             </div>
         </div>
         <div class="clearfix"></div>
@@ -42,4 +66,20 @@
 
     {{/with}}
 </div>
+
+<!-- Previous code in feature-blocks --!>
+<!--         <div class="inner-page ">
+            {{#if main-feature-title}}
+            <div class="col-sm-12 editable f-title" data-class="main-feature-title">
+                <h5 class="center centerh4">{{{main-feature-title}}}</h5>
+            </div>
+            {{/if}}
+            {{#each features}}
+            <div class="col-sm-4 editable" data-class="feature.item.image">
+                <img src="{{{feature-image}}}">
+            </div>
+            {{/each}}
+           <div class="editable">
+                <p class="lead center" data-class="feature-description">{{{text}}}</p>
+            </div></div> -->
 

@@ -41,6 +41,7 @@
             "handle":"index",
             "title":"Home",
             "components": [
+                "masthead",
                 "freeform",
                 "contact-us",
                 "feature-blocks",

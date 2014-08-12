@@ -23,8 +23,10 @@
                         <div class="editable features-title col-sm-12">
                             <h5>{{{main-feature-title}}}<h5>
                         </div>
+                        <div class="container">
                         <!-- Features list -->
                         {{#each features}}
+                        
                         <div class="col-sm-3 feature-single-{{@index}}" style="opacity:1">
                             <!-- if feature-title {feature-title} else {feature-image} !-->
                             {{#if feature-icon}}
@@ -40,16 +42,18 @@
                             <div class="editable feature-p" data-class="features.item.paragraph">
                                 <p>{{{feature-paragraph}}}</p>
                             </div>
-                            <div class="editable" data-class="features.item.button-text">
+                            <div class="editable feature-bttns" data-class="features.item.button-text">
                                 <a href="{{{feature-button-url}}}">
                                     <div id="feature-bttn">
                                         <a>{{{feature-button-text}}}</a>
                                     </div>
                                 </a>
                             </div>
+                        
                         </div>
                         <div class="pusher visible-xs"></div>
                         {{/each}}
+                        </div>
                     </div>
             </div>
 
