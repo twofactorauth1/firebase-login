@@ -91,7 +91,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         if (accountId > 0)  {
             new WebsiteView(req, resp).showPost(accountId, postUrl);
         } else {
-            resp.redirect("/home");
+            //resp.redirect("/home");
+            new WebsiteView(req, resp).showPost(appConfig.mainAccountID, postUrl);
         }
     },
 
