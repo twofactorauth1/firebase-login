@@ -49,10 +49,8 @@ CONTACTS MAIN VIEW
     <div class="contentpanel">
         <div class="panel panel-default row">
             <div class="panel-body">
-
                 <div class="col-sm-6">
                     <input type="text" placeholder="Search Customers" class="form-control mb15 input-lg  search-contacts">
-
                 </div>
                 <div class="col-sm-6 form-horizontal hidden">
                     <div class="form-group row">
@@ -78,17 +76,139 @@ CONTACTS MAIN VIEW
         </div>
         <!-- panel -->
 
-        <div class="people-list row grid">
-            {{#if contacts}}
-                {{> people-list-partial}}
-            {{else}}
+        <div class="people-list">
+            <div class="row">
+ {{#if contacts}}
 
-                    <div class="col-xs-10">
-                        <h3>No Contacts Available</h3>
+    {{#each contacts}}
+
+                <div class="col-xs-12 col-sm-4">
+                    <div class="people-item btn-view-contact-details contact-item" data-contactid="{{_id}}">
+                        <span class="important-star tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Important Contact">
+                            <i class="fa {{#if starred}}fa-star{{else}}fa-star-o{{/if}}" />
+                        </span>
+
+                        <div class="media">
+                            <div class="col-xs-12f">
+                                <!--// {{#if photoSquare}} // {{#isGoogleImage photoSquare}} //-->
+                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" /><!-- // {{else}} // -->
+                                <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
+                                <!--// {{/isGoogleImage}} // {{else}} // {{#isGoogleImage photo}} // -->
+                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />// <!-- {{else}} // -->
+                                <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                                <!-- // {{/isGoogleImage}} // {{/if}} -->
+
+                                <span class="name visible-xs">
+
+                                    <h4>
+                                        {{first}} {{middle}} {{last}}
+                                        <span class="label label-info contact-cat pull-right hidden-xs">{{contactTypeLabel this}}</span>
+                                    </h4>
+                                </span>
+
+                                <div class="clear"></div>
+                                <ul class="social-list hidden-xs">
+                                    <li>
+                                        {{#getBestEmail this}}
+                                        <a href="mailto:{{$email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
+                                        {{else}}
+                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Email Address"><i class="fa fa-envelope-o"></i></a>
+                                        {{/getBestEmail}}
+                                    </li>
+
+
+                                    <li>
+                                        {{#getFacebookId this}}
+                                        <a href="https://www.facebook.com/{{$facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                        {{else}}
+                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Facebook Link"><i class="fa fa-facebook"></i></a>
+                                        {{/getFacebookId}}
+                                    </li>
+
+                                    <li>
+                                        {{#getTwitterId this}}
+                                        <a href="https://twitter.com/intent/user?user_id={{$twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                        {{else}}
+                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Twitter Account"><i class="fa fa-twitter"></i></a>
+                                        {{/getTwitterId}}
+                                    </li>
+
+                                    <li>
+                                        {{#getLinkedInId this}}
+                                        <a href="{{#if $linkedInUrl}}{{$linkedInUrl}}{{else}}http://www.linkedin.com/profile/view?id={{$linkedInId}}{{/if}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                        {{else}}
+                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No LinkedIn Account" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                        {{/getLinkedInId}}
+                                    </li>
+
+                                    {{#getAddress this}}
+                                    <li>
+                                        <a href="https://www.google.com/maps?q={{$this.address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                                    </li>
+                                    {{/getAddress}}
+
+                                </ul>
+                            </div>
+                            <div class="media-body col-xs-12 hidden-xs">
+                                {{#ifCond ../account.displaysettings.display_type}}
+                                <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
+                                {{else}}
+                                <h4 class="person-name">{{last}} {{middle}} {{first}}</h4>
+                                {{/ifCond}}
+
+
+                               <!-- <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>-->
+
+                                <span class="label label-info contact-cat">{{contactTypeLabel this}}</span>
+
+                                <div class="hidden">
+                                    <div class="last-active text-muted">Last Active: {{#if lastActive}} {{lastActive}} days ago {{else}} n/a {{/if}}
+                                    </div>
+
+                                    <div class="purchased text-muted">
+                                        {{#if purchased}} Purchased: Yes {{else}} Purchased: n/a {{/if}}
+                                    </div>
+
+                                    <div class="emails-opened text-muted">
+                                        {{#if totalEmails}} Emails Opened: {{#if emailsOpened}} {{emailsOpened}}/{{totalEmails}} {{else}} 0/{{totalEmails}} {{/if}} {{else}} Emails Opened: n/a {{/if}}
+                                    </div>
+
+                                    <div class="calls-made text-muted">
+                                        Calls Made: {{#if callsMade}} {{callsMade}} {{else}} n/a {{/if}}
+                                    </div>
+
+                                    <div class="customer-since text-muted">
+                                        Customer since: {{#if firstPurchase}} {{formatDate fistPurchase}} {{else}} n/a {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pull-right">
+                                <span class="visible-inline-xs">
+                                    type: {{contactTypeLabel this}} |
+                                </span>
+
+                                <span class="tooltips hidden" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sources where this contact information came from">sources:</span>
+                                {{#each details}}
+                                <span><i class="{{iconFromSocialType type}}" />
+                                </span>
+                                {{/each}}
+
+
+                            </div>
+                            <div class="clear clearfix" />
+                        </div>
                     </div>
+                </div>
+            {{/each}}
+          {{else}}
+
+                <div class="col-xs-10">
+                    <h3>No Contacts Available</h3>
+                </div>
 
                     <div class="visible-xs btn btn-success col-xs-12">Add a new contact</div>
             {{/if}}
+            </div>
         </div>
     </div>
 
@@ -109,7 +229,7 @@ CONTACTS MAIN VIEW
         <div class="tab-pane pane-settings active" id="rp-settings">
 
             <div class="form-group mb20">
-                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#import-contacts-modal"><i class="fa fa-cloud-upload"></i> Import Contacts</button>
+                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#importContactsModal"><i class="fa fa-cloud-upload"></i> Import FB Contacts</button>
             </div>
 
 
@@ -117,8 +237,8 @@ CONTACTS MAIN VIEW
                 <a href="#" class="btn btn-success btn-block"><i class="fa fa-cloud-download"></i> Export Contacts</a>
             </div>
 
-            <div class="form-group">
-                <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#fix-duplicates-modal"><i class="fa fa-files-o"></i> Fix Duplicates</a>
+            <div class="form-group hidden">
+                <a href="#" class="btn btn-primary btn-block"><i class="fa fa-files-o"></i> Fix Duplicates</a>
             </div>
 
             <div class="btn-group pull-right hidden" style="margin-right:8px;">
@@ -544,14 +664,19 @@ CONTACT DETAILS VIEW
 
     <div class="profile">
                 <div class="col-xs-12">
-                    <div class="col-xs-6 col-xs-offset-3">
-                        {{#if contact.photo}}
-                            <img class="img-circle media-object thumbnail standard thumb-lg" src="{{contact.photo}}">
+                    {{#if photoSquare}}
+                        {{#isGoogleImage photoSquare}}
+                            <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader thumb-lg" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
                         {{else}}
-                            <img class="img-circle media-object thumbnail standard thumb-lg" src="/assets/icons/blank-user.jpg">
-                        {{/if}}
-                    </div>
-
+                            <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
+                        {{/isGoogleImage}}
+                    {{else}}
+                        {{#isGoogleImage photo}}
+                            <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader thumb-lg" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
+                        {{else}}
+                            <img class="img-circle media-object thumbnail standard thumb-lg" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                        {{/isGoogleImage}}
+                    {{/if}}
                 </div>
                 <div class="col-xs-12">
                     <div class="col-xs-12">
@@ -1120,7 +1245,27 @@ CONTACTS EDIT VIEW
                     <!-- End Panel Body -->
                 </div>
                 <!-- End Panel Default -->
+        </div>
+        <div class="col-md-6">
+            <h4>BioMetric Information</h4>
+            {{#unless contact.devices.length}}
+             <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
+            {{/unless}}
+            <hr/>
+            <div id="edit-devices-container">
+                {{#each contact.devices}}
+                    {{serialNumber}}
+                    {{deviceTypeId}}
+                {{/each}}
             </div>
+            <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
+        </div>
+        <div class="col-md-12">
+            <div class="btn btn-danger pull-right btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
+               <i class="fa fa-warning"/>
+               <span class="hidden-xs">Delete</span>
+           </div>
+        </div>
 
 
             <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

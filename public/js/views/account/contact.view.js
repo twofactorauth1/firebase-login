@@ -13,7 +13,7 @@ define([
     'services/authentication.service',
     'services/contact.service',
     'events/events',
-    'libs_misc/jquery/jquery.batchedimageloader',
+    'libs_misc/jquery/jquery.batchedimageloader'
     ], function(User, Account, Contact, Contacts, AuthenticationService, ContactService,events) {
 
     var view = Backbone.View.extend({
@@ -68,10 +68,12 @@ define([
                         break;
                 }
             }
+            _.bindAll(this, 'check_height');
 
             $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
             $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
-            _.bindAll(this, 'check_height');
+
+            $(window).scroll(this.check_height);
         },
 
         remove: function () {
@@ -415,8 +417,7 @@ define([
 
             if(this.currentLetter=='all') {
                 return this.contacts.getContactsAll(this.accountId, this.currentLetter, this.skip);
-            } else {
-
+            }  else {
                 return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
             }
 
@@ -450,20 +451,6 @@ define([
         check_height : function (e){
             var self = this;
             if(window.innerHeight + document.body.scrollTop >= document.body.offsetHeight){
-
-
-               /* console.log(Backbone.history.fragment);
-                var params=Backbone.history.fragment;
-                    params=params.split('/');
-                if(params.length==3) {
-                    var skipindex = params[params.length - 1];
-                    console.log(this.skip);
-                //        this.skip=parseInt(skipindex)+3;
-                 //   this.skip+=3;
-                }*/
-
-                console.log(self.loadMore);
-                console.log(self.skip);
                 if(self.loadMore) {
                     this.getContacts(self.currentLetter)
                         .done(function (res, msg) {

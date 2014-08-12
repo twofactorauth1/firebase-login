@@ -1,0 +1,21 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div>
+    {{#with component}}
+    <div class="component-body">
+        <div class="social">
+            <ul>
+                <li class="facebook"><a href="{{#if networks.facebook}}{{networks.facebook}}{{/if}}"><span class="fa fa-facebook"></span></a></li>
+                <li class="twitter"><a href="{{#if networks.twitter}}{{networks.twitter}}{{/if}}"><span class="fa fa-twitter"></span></a></li>
+                <li class="linkedin"><a href="{{#if networks.linkedin}}{{networks.linkedin}}{{/if}}"><span class="fa fa-linkedin"></span></a></li>
+            </ul>
+        </div>
+    </div>
+    {{/with}}
+</div>

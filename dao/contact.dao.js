@@ -345,7 +345,9 @@ var dao = {
                     if (accountId == null) {
                         return fn(true, "Failed to create user, no account found");
                     }
-                    data.type = "potential";
+                    data.type="potential";
+                    data.accountId=accountId;
+
                     var contact = new $$.m.Contact(data);
 
 

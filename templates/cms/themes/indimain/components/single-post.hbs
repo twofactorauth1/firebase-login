@@ -10,67 +10,75 @@
     <div class="container clearfix row-fluid">
         <div id="main-area" class="col-xs-12">
             <article class="entry clearfix">
-                    <div id="et_pt_blog" class="responsive clearfix single-blog" data-postid="{{_id}}">
+                <div id="et_pt_blog" class="responsive clearfix single-blog" data-postid="{{_id}}">
 
-                            <div class="et_pt_blogentry clearfix">
-                                <h2 class="et_pt_title">
-                                    <div class="editable" data-class="post_title">
-                                        {{#if post_title}}
-                                            {{post_title}}
-                                        {{else}}
-                                            Enter Post Title
-                                        {{/if}}
-                                    </div>
-                                </h2>
-
-								 <p class="blog-meta">
-                                {{#if created_date}}
-                                    <div data-class="created.date">
-                                         {{created_date}} 
-                                    </div>
-                                        • 
+                    <div class="et_pt_blogentry clearfix">
+                        <h2 class="et_pt_title">
+                            <div class="editable" data-class="post_title">
+                                {{#if post_title}}
+                                    {{post_title}}
+                                {{else}}
+                                    Enter Post Title
                                 {{/if}}
-                                {{#if post_author}}
-                                    Posted by <a href="/page/author/{{post_author}}">{{post_author}}</a>
-                                {{/if}}
-                                {{#if post_category}}
-                                    in <a href="/page/category/{{post_category}}">{{post_category}}</a>
-                                {{/if}}
-                                {{!-- {{#if comment_count}}
-                                     • {{comment_count}} comments
-                                {{/if}} --}}
-                                </p>
+                            </div>
+                        </h2>
 
-                                {{#if post_tags}}
-                                <ul class="post_tags">
-                                    {{#each post_tags}}
-                                        <li><a href="/page/tag/{{this}}">{{this}}</a></li>
-                                    {{/each}}
-                                </ul>
+                        <p class="blog-meta">
+                            {{#if created_date}}
+                                <div data-class="created.date">
+                                    {{created_date}}
+                                </div>
+                                • 
+                            {{/if}}
+                            {{#if post_author}}
+                                Posted by <a href="/page/author/{{post_author}}">{{post_author}}</a>
+                            {{/if}}
+                            {{#if post_category}}
+                                in <a href="/page/category/{{post_category}}">{{post_category}}</a>
+                            {{/if}}
+                            {{!-- {{#if comment_count}}
+                                 • {{comment_count}} comments
+                            {{/if}} --}}
+                        </p>
+
+                        {{#if post_tags}}
+                            <ul class="post_tags">
+                                {{#each post_tags}}
+                                    <li><a href="/page/tag/{{this}}">{{this}}</a></li>
+                                {{/each}}
+                            </ul>
+                        {{/if}}
+
+                        <div class="et_pt_thumb alignleft">
+                            <a href="">
+                                <span class="overlay"></span>
+                            </a>
+                        </div> <!-- end .thumb -->
+
+                        <div class="entry-content" >
+                            <div class="editable" data-class="post_content">
+                                {{#if post_content}}
+                                    {{{post_content}}}
+                                {{else}}
+                                    Create you blog post here
                                 {{/if}}
-
-                                    <div class="et_pt_thumb alignleft">
-                                        <a href=""><span class="overlay"></span></a>
-                                    </div> <!-- end .thumb -->
-
-                                    <div class="entry-content">
-                                        <div class="editable" data-class="post_content">
-                                            {{#if post_content}}
-                                                {{post_content}}
-                                            {{else}}
-                                                Create you blog post here
-                                            {{/if}}
-                                        </div>
-                                    </div>
-                            </div> <!-- end .et_pt_blogentry -->
-                    </div> <!-- end #et_pt_blog -->
+                            </div>
+                        </div>
+                    </div> <!-- end .et_pt_blogentry -->
+                </div> <!-- end #et_pt_blog -->
             </article> <!-- .entry -->
         </div> <!-- #main-area -->
     </div> <!-- .container -->
     <div class="clearfix row-fluid">
-	    <div class="goback col-xs-12">
-	    	<p><span><i class="fa fa-arrow-circle-o-left"></i> Go Back</span><p>
-	    </span>
-	    <div class="col-xs-3"></div>
+        <div class="goback col-xs-12">
+            <p>
+                <span>
+                    <i class="fa fa-arrow-circle-o-left"></i>
+                    Go Back
+                </span>
+            </p>
+            </span>
+            <div class="col-xs-3"></div>
+        </div>
     </div>
 </div> <!-- #content-area -->

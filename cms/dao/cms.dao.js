@@ -1140,7 +1140,7 @@ var dao = {
 
                             page = value;
 
-                               if (pageName === 'blog') {
+                               //if (pageName === 'blog') {
                                     if (tag != null) {
                                         //get the blog posts and use as variable "blogposts"
                                         self.getBlogPostsWithTagsForWebsite(accountId, tag, function (err, value) {
@@ -1266,9 +1266,9 @@ var dao = {
 
                                         });
                                     }
-                               } else {
-                                    cb();
-                               }
+                               // } else {
+                               //      cb();
+                               // }
                         });
                     });
                 },
@@ -1385,7 +1385,9 @@ var dao = {
                     linkLists: {},
                     blogposts: null,
                     tags: null,
-                    categories: null
+                    categories: null,
+                    accountUrl: account.get('accountUrl'),
+                    account: account
                 };
 
 

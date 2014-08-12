@@ -12,6 +12,7 @@ var baseApi = require('../base.api.js');
 var cmsDao = require('../../cms/dao/cms.dao.js');
 
 var Page = require('../../cms/model/page');
+//var Components = require('../../cms/model/components');
 
 
 var cmsManager = require('../../cms/cms_manager');
@@ -49,6 +50,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteId/page/:id'), this.getPageById.bind(this));
         app.post(this.url('website/:websiteId/page'), this.createPage.bind(this));
         app.post(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
+        app.put(this.url('website/:websiteId/page'), this.createPage.bind(this));
+        app.put(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
         app.delete(this.url('website/:websiteId/page/:id'), this.deletePage.bind(this));
 
         // THEME
@@ -240,6 +243,7 @@ _.extend(api.prototype, baseApi.prototype, {
     saveOrUpdatePage: function(req, resp) {
         //TODO: Add Security
         var self = this;
+        self.log.debug('>> saveOrUpdatePage');
         var _page = req.body;
 
         var page = new Page(_page);
@@ -415,12 +419,21 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> addComponentToPage');
         var componentObj = req.body;
+        //var componentObj = $$.m.cms.modules[req.body.type];
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        var component = require('../../cms/model/components/' + componentObj.type);
+        if (component != null) {
+            component = new component({
+                _id: $$.u.idutils.generateUUID()
+            });
 
-        cmsManager.addPageComponent(pageId, componentObj, function(err, value){
-            self.log.debug('<< addComponentToPage');
+        }
+
+        cmsManager.addPageComponent(pageId, component.attributes, function(err, value){
+            self.log.debug('<< addComponentToPageID'+pageId);
+            self.log.debug('<< addComponentToPageComponent'+componentObj);
             self.sendResultOrError(res, err, value, "Error adding components to page");
             self = null;
         });
@@ -459,6 +472,7 @@ _.extend(api.prototype, baseApi.prototype, {
             self = null;
         });
     },
+
 
     deleteComponent: function(req, res) {
         //TODO: Add Security
