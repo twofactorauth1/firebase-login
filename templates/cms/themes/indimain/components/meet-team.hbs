@@ -18,14 +18,14 @@
                 </h3>
                 <div class="mb30"></div>
                 {{#each teamMembers}}
-                    <div class="col-xs-12 col-sm-4 col-md-3 editable profilepic pull-left" data-class="profilepic" style="opacity: 0;">
+                    <div class="col-xs-12 col-sm-4 col-md-3 editable profilepic pull-left {{#if become-member}} become-member {{/if}}" data-class="profilepic" style="opacity: 0;">
                         <div class="profile-img">
                             <div class="profilepic-hover">
                                 <div class="editable" data-class="bio">
                                     <p>{{bio}}</p>
                                     <ul class="profile-social">
-                                        <li><span class="fa fa-facebook"></span></li>
-                                        <li><span class="fa fa-twitter"></span></li>
+                                        <li><a href="{{#if social.facebook}}{{social.facebook}}{{/if}}" target="_blank"><span class="fa fa-facebook"></span></a></li>
+                                        <li><a href="{{#if social.twitter}}{{social.twitter}}{{/if}}" target="_blank"><span class="fa fa-twitter"></span></a></li>
                                     </ul>
                                 </div>
                             </div>

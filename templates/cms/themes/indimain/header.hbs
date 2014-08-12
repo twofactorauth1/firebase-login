@@ -25,10 +25,8 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         {{#each linkLists.head-menu}}
-            <li>{{{link this}}}</li>
+            <li {{#if class}} class="{{this.class}}" {{/if}}>{{{link this}}}</li>
         {{/each}}
-            <li class="social"><a href="https://twitter.com/indigenous_io" target="_blank"><span class="fa fa-twitter"></span></a></li>
-            <li class="social"><a href="https://www.facebook.com/indigenous.io" target="_blank"><span class="fa fa-facebook"></span></a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

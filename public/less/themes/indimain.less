@@ -10,7 +10,7 @@
     }
 
     body.theme-main {
-      font-family: 'Open Sans'!important;
+      font-family: 'Capita Light'!important;
       font-size: 17px;
       line-height: 1.6;
     }
@@ -106,6 +106,16 @@
         li.social a {
           padding: 0!important;
         }
+        li.sign-in a {
+          background: #fcb351;
+          color: #fff!important;
+          text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+          border-bottom: 4px solid #fa8b28;
+            &:hover {
+              background: #fcb351;
+              border-bottom: 4px solid #fcb351;
+            }
+        }
         .fa-twitter {
           background: none!important;
           padding: 10px 10px 10px;
@@ -150,9 +160,8 @@
     .navbar .nav>li>a {
       float: none;
       padding: 10px 25px 10px;
-      color: #58585b;
+      color: #939597;
       text-decoration: none;
-      text-shadow: -2px 1px 0 #dbdbdb;
       font-size: 15px;
       text-transform: uppercase;
     }
@@ -337,13 +346,96 @@
       text-align: center;
     }
 
+    .profile-img {
+      max-width: 230px;
+      max-height: 230px;
+      margin: 0 auto;
+    }
+
+    .profilepic {
+      margin-bottom: 20px;
+    }
+
+    .profilepic-hover {
+      opacity: 0;
+      width: 230px;
+      background: rgba(239, 160, 34, 0.75);
+      height: 230px;
+      position: absolute;
+      border-radius: 130px;
+      z-index: 99999;
+      overflow: hidden;
+      text-align: center;
+      padding: 40px 20px;
+      line-height: 18px;
+
+      p {
+        min-height: 120px;
+        max-height: 120px;
+        height: 100%;
+      }
+    }
+
+    .profile-img:hover .profilepic-hover{
+      opacity:1;
+      transition: opacity .5s ease-out;
+    }
+
+    .profilepic .thumbnail {
+      display: block;
+      min-width: 230px;
+      margin: 10px auto;
+      filter: grayscale(1);
+      -webkit-filter: grayscale(100%);
+      filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 3.5+ */
+    }
+
+    .become-member {
+        .profilepic-hover {
+          display: none;
+        }
+        .thumbnail {
+          filter: none!important;
+          -webkit-filter: none!important;
+        }
+
+        .name {
+          display: none!important;
+        }
+    }
+
+    .profile-social li span {
+      background: #efa022!important;
+      width: 40px;
+      height: 40px;
+      border-radius: 30px;
+      line-height: 40px;
+      color: white;
+      border: 2px solid #efa022;
+
+        &:hover {
+          border: 2px solid white;
+        }
+    }
+
+    .profile-social {
+      padding: 0;
+    }
+
+    .profile-social li {
+      display: inline-block;
+    }
+
   }
 
 /********** Testimonials **********/
-  .testimonials {
 
-      background: url('../assets/images/indimain/wave-bg.jpg');
-      background-size: 15% auto;
+  div[data-class="testimonials"] {
+    background: url('../assets/images/indimain/wave-bg.jpg');
+    background-size: 15% auto;
+  }
+
+  .testimonials {
       height: 100%;
       display: block;
       position: relative;
@@ -351,6 +443,10 @@
       .single-testimonial {
         border-bottom: 1px solid #eee;
         padding-bottom: 25px;
+      }
+
+      .last {
+        border-bottom: none;
       }
 
       .title {
@@ -362,6 +458,7 @@
         width: 185px;
         height: 185px;
         border-radius: 100px;
+        margin: 0 auto;
       }
 
       .name {
@@ -391,12 +488,15 @@
   .image-text {
     .image-text-title {
       color: #247e96;
-      text-shadow: 1px 1px 1px #fff;
+      font-weight: bold;
+      text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
       display: block;
+      position: relative;
     }
     .image-text-subtitle {
       text-shadow: 1px 1px 1px rgba(36, 135, 159, 0.8);
       margin-top: 0px;
+      font-weight: bold;
     }
     .btn {
       margin: 20px auto;
@@ -644,18 +744,189 @@
       .billing-shipping .tab-content {
         max-height: 100%;
       }
+
+      .single-testimonial {
+
+          .pull-right {
+            float: none!important;
+          }
+          .name {
+            text-align: center;
+          }
+          .site {
+            text-align: center;
+          }
+          .text {
+            text-align: center;
+          }
+
+      }
     }
+
+/********** Full Blog **********/
+
+  div[data-class="blog"] {
+    .single-blog {
+      padding: 0 0 25px 0;
+    }
+  }
 
 /********** Blog Teaser **********/
 
-.blog-teaser {
-    .title {
-      text-align: center;
-      text-transform: uppercase;
-      font-weight: bold;
-    }
-}
+  .blog-teaser {
+      background: #f6f6f6;
+      padding: 40px;
 
+      .posts {
+        margin-top: 45px;
+      }
+
+      .title {
+        text-align: center;
+        font-weight: bold;
+      }
+
+      .single-blog {
+        min-height: 380px;
+        display: block;
+        background: #fff;
+        border-bottom: 4px solid #e3e3e3;
+        border-radius: 5px;
+
+        .blog-content {
+          padding: 15px;
+        }
+
+        .featured-image img {
+          border-top-right-radius: 5px;
+          border-top-left-radius: 5px;
+        }
+
+        .title {
+          color: #4bb0cb;
+          text-align: left;
+        }
+
+        .excerpt {
+          font-size: 12px;
+          color: #444444;
+          font-weight: bold;
+        }
+
+        .footer {
+          height: 35px;
+          width: 100%;
+          padding: 15px 0 0 15px;
+          margin-left: -14px;
+          text-align: left;
+
+          .date, .comments {
+            display: block;
+            position: relative;
+            z-index: 999;
+            color: #bababa;
+            font-size: 12px;
+            padding: 0;
+          }
+
+          .comments {
+            text-align: right;
+          }
+        }
+      }
+
+      .btn-full-blog {
+        display: block;
+        position: relative;
+        max-width: 200px;
+      }
+  }
+
+/********** SignUP Form **********/
+
+    .newsletter {
+        background: #4bafca;
+        padding: 0px!important;
+        margin: 0px!important;
+
+
+      h3 {
+        color: white;
+        padding: 0 0 20px 10px;
+        font-weight: 600;
+        font-family: Capita;
+        text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+        font-size: 28px;
+        margin-top: 10px;
+      }
+
+      input {
+        width: 100%;
+        text-indent: 10px;
+      }
+
+      .inner-page {
+        padding: 15px 0 30px;
+      }
+
+      .btn, input {
+        height: 50px;
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+    }
+
+/********** Social **********/
+
+  .social {
+      ul {
+        text-align: center;
+      }
+      ul li {
+        width: 48px;
+        height: 48px;
+        display: inline-block;
+        border-radius: 5px;
+        text-align: center;
+
+        a {
+          color: white;
+          position: relative;
+
+          span {
+            background: none!important;
+            line-height: 48px;
+          }
+        }
+      }
+
+      .facebook {background: #395a93;border-bottom: 3px solid #36558b;opacity: .9;}
+      .twitter {background: #05b3df;border-bottom: 3px solid #06aad3;opacity: .9;}
+      .linkedin {background: #007bb6;border-bottom: 3px solid #36558b;opacity: .9;}
+
+      .facebook, .twitter, .linkedin {
+        &:hover {
+          opacity: 1;
+        }
+      }
+  }
+
+  // .social {
+  //     padding: 0;
+  //   }
+  //   .social li {
+  //     background-image: url(/assets/images/indimain/social-sprite.png);
+  //     width: 26px;
+  //     height: 26px;
+  //     display: inline-block;
+  //     margin-left: 10px;
+  //   }
+  //   .social li a {
+  //     width: 26px;
+  //     height: 26px;
+  //     display: block;
+  //   }
 /**********  **********/
 
     .primary {
@@ -887,14 +1158,13 @@
 
     .masthead {
       margin-top: 0;
-      padding: 0 50px;
-      // background: url(/assets/images/indimain/home-top.jpg) 50% 0 no-repeat fixed;
       height: 460px;
       transition:none;
     }
 
     .masthead h1 {
       color: white;
+      margin-top: 100px;
     }
 
     .masthead p {
@@ -954,22 +1224,6 @@
 
     .feature-blocks {
       min-height: 400px;
-    }
-
-    .social {
-      padding: 0;
-    }
-    .social li {
-      background-image: url(/assets/images/indimain/social-sprite.png);
-      width: 26px;
-      height: 26px;
-      display: inline-block;
-      margin-left: 10px;
-    }
-    .social li a {
-      width: 26px;
-      height: 26px;
-      display: block;
     }
 
     .copyright {
@@ -1073,7 +1327,7 @@
     .home-text {
       padding: 30px;
       background: rgba(0,0,0,0.3);
-      margin-top: 60px;
+      height: 100%;
       text-shadow: 2px 1px 0px rgba(62, 92, 111, .8);
       text-align: center;
       color: white;
@@ -1177,61 +1431,6 @@
       border-left: 5px solid #fabc35;
     }
 
-    .profilepic {
-      margin-bottom: 20px;
-    }
-
-    .profilepic-hover {
-      opacity: 0;
-      width: 230px;
-      background: rgba(239, 160, 34, 0.75);
-      height: 230px;
-      position: absolute;
-      border-radius: 130px;
-      z-index: 99999;
-      margin-left: 12px;
-      overflow: hidden;
-      text-align: center;
-      padding: 40px 20px;
-      line-height: 18px;
-
-      p {
-        min-height: 120px;
-        max-height: 120px;
-        height: 100%;
-      }
-    }
-
-    .profile-img:hover .profilepic-hover{
-      opacity:1;
-      transition: opacity .5s ease-out;
-    }
-
-    .profilepic .thumbnail {
-      display: block;
-      min-width: 230px;
-      margin: 10px auto;
-      filter: grayscale(1);
-      -webkit-filter: grayscale(100%);
-      filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 3.5+ */
-    }
-
-    .profile-social li span {
-      background: #efa022!important;
-      width: 40px;
-      height: 40px;
-      border-radius: 30px;
-      line-height: 40px;
-    }
-
-    .profile-social {
-      padding: 0;
-    }
-
-    .profile-social li {
-      display: inline-block;
-    }
-
     #single-post {
       padding: 30px 0;
     }
@@ -1278,10 +1477,6 @@
 
     div {
       // transition: all 0.5s ease;
-    }
-
-    .single-blog {
-      padding: 0 0 25px 0;
     }
 
     .searchbar input{
