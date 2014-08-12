@@ -272,8 +272,6 @@
              })
           })(jQuery);
 
-          $("#category_input").hide();
-
           $("#category_link").on('click', function(e) {
 
              if(parent.$('#edit-website-wrapper').length)
@@ -285,11 +283,16 @@
               });
           });
 
-          $("#category_input").on('blur', function (e) {
+          $("#category_input").hide().on('blur', function (e) {
+              var link = $("#category_link");
+              var input = $(this);
+              var href = link.attr("href");
 
-              $("#category_link").show();
-              $("#category_input").hide();
-              $("#category_link").html($("#category_input").val());
+              input.hide();
+              link.show()
+                  .html(input.val())
+                  .attr('href', href.substring(0, href.lastIndexOf("/")) + "/" + (input.val()));
+
 
               parent.$('#edit-website-wrapper').trigger("blogedit", {
                   value: $("#category_input").val(),

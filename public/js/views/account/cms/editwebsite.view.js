@@ -174,8 +174,8 @@ define([
             var input=data.input;
             console.log(data)
             $(target).closest("#category_link").hide();
-
-            $(input).closest("#category_input").show().focus().css("width", "150px");
+            $(input).show().focus().val($(input).val()).css("width", "150px");
+            //$(input).closest("#category_input").show().focus().css("width", "150px");
 
 
         },
