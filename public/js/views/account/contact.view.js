@@ -89,7 +89,8 @@ define([
                 , p1 = this.getAccount()
                 , p2 = this.getUser()
                 , p3 = this.getContacts(this.currentLetter)
-                , p4 = AuthenticationService.getGoogleAccessToken();
+                //, p4 = AuthenticationService.getGoogleAccessToken();
+                ,p4 = AuthenticationService.hasGoogleAccessToken();
 
             //_.bindAll(self, 'check_height');
 
@@ -102,8 +103,8 @@ define([
                 });
 
             $.when(p4)
-                .done(function(accessToken) {
-                    if (String.isNullOrEmpty(accessToken) == false) {
+                .done(function(accessToken){
+                    if (String.isNullOrEmpty(accessToken) == false && accessToken !== 'false') {
                         self.googleAccessToken = accessToken;
                         self.refreshGooglePhotos();
                     }
