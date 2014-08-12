@@ -130,6 +130,7 @@
         "feature-list",
         "feature-list-compare",
         "freeform",
+        "masthead",
         "image-gallery",
         "image-slider",
         "image-text",
@@ -338,7 +339,7 @@
             "anchor": "logolist",
             "classes": {
                 "label": "label",
-                "description": "ldescription",
+                "description": "description",
                 "logos":"logos",
                 "logos.item":"logo",
                 "logos.item.label":"logo-label",
@@ -353,6 +354,18 @@
             "anchor": "socialfeed",
             "classes": {
 
+            }
+        },
+
+        {
+            "type": "masthead",
+            "anchor": "masthead",
+            "classes": {
+                "label": "label",
+                "description": "description",
+                "title": "title",
+                "subtitle":"subtitle",
+                "btn.text":"btn-text"
             }
         },
 

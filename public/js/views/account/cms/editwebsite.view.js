@@ -353,7 +353,7 @@ define([
             var content = data.content;
             var page = data.pageId;
 
-            console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
+            //console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
 
             if (componentType == 'blog' || componentType == 'single-post') {
                 var postId = $(target).closest(".single-blog").attr("data-postid");
@@ -386,8 +386,15 @@ define([
                         break;
                     }
                 }
+                console.log('Component Before: '+JSON.stringify(component.attributes['_id']));
                 component.setContent(dataClass, content, target, componentConfig);
-                //this.savePage();
+                this.page.save({
+                    "pageId": self.pageId,
+                    "componentId": component.attributes['_id'],
+                    "component": component
+                }).done(function() {
+                    console.log('Page Saved');
+                });
             }
         },
 
