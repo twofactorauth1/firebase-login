@@ -13,7 +13,7 @@ define([
     'services/authentication.service',
     'services/contact.service',
     'events/events',
-    'libs_misc/jquery/jquery.batchedimageloader',
+    'libs_misc/jquery/jquery.batchedimageloader'
     ], function(User, Account, Contact, Contacts, AuthenticationService, ContactService,events) {
 
     var view = Backbone.View.extend({
@@ -68,10 +68,12 @@ define([
                         break;
                 }
             }
+            _.bindAll(this, 'check_height');
 
             $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
             $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
-            _.bindAll(this, 'check_height');
+
+            $(window).scroll(this.check_height);
         },
 
         remove: function () {
@@ -414,9 +416,8 @@ define([
             this.skip = this.skip || 0;
 
             if(this.currentLetter=='all') {
-                return this.contacts.getContactsAll(this.accountId, this.skip);
-            } else {
-
+                return this.contacts.getContactsAll(this.accountId, this.currentLetter, this.skip);
+            }  else {
                 return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
             }
 

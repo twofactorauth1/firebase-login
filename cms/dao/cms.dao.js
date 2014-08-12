@@ -1385,7 +1385,9 @@ var dao = {
                     linkLists: {},
                     blogposts: null,
                     tags: null,
-                    categories: null
+                    categories: null,
+                    accountUrl: account.get('accountUrl'),
+                    account: account
                 };
 
 

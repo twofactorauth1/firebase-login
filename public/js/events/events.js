@@ -8,5 +8,6 @@
 define([], function() {
 
     $$.e.ContactSortingEvent = _.extend({}, Backbone.Events);
+    $$.e.PageHandleEvent = _.extend({}, Backbone.Events);
 
 });

@@ -137,6 +137,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         req.session.accountId = null;
         req.logout();
+        req.session.destroy();
 
         if (accountId > 0) {
             var appConfig = require('../configs/app.config');

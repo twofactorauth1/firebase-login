@@ -76,14 +76,11 @@ define([
                         return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page/" + this.get("handle"));
                     }
                     return $$.api.getApiUrl("cms", "page/" + this.id);
+                break;
                 case "PUT":
-                    return $$.api.getApiUrl("cms", "page");
-                    // console.log('Page Id: '+this.get("pageId")+' ComponentId: '+this.get("componentId"));
-                    // if (this.get("pageId") != null && this.get('componentId') != null) {
-                    //     //return $$.api.getApiUrl("cms", "page/"+ this.get("pageId") + "/components/"+ this.get("componentId"));
-                    //     return $$.api.getApiUrl("cms", "page");
-                    // }
+                    return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page/"+this.id);
                     break;
+
                 case "POST":
                     //website/:websiteId/page
                     console.log('Website ID: '+this.get("websiteId"));
