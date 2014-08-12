@@ -53,7 +53,9 @@ var dao = {
                                     log.info("Incorrect password");
                                     return fn("Incorrect password", "Incorrect password");
                                 } else {
-                                    log.info("Login successful");
+                                    //TODO: This might be a problem with a user authenticating to main app w/ multiple accounts.
+                                    req.session.accountId = user.getAllAccountIds()[0];
+                                    log.info("Login successful. AccountId is now " + req.session.accountId);
                                     return fn(null, user);
                                 }
                             } else {
@@ -432,6 +434,37 @@ var dao = {
             }
             url += "&authtoken=value";
             fn(null, url);
+        });
+    },
+
+    getAuthenticatedUrlForRedirect: function(accountId, userId, path, fn) {
+        var self = this;
+        accountDao.getServerUrlByAccount(accountId, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            var serverUrl = value;
+
+            if (path == null || path == "" || path == "/") {
+                if (accountId > 0) {
+                    path = "admin";
+                } else {
+                    path = "home";
+                }
+            }
+
+            if (path != null && path.charAt(0) != "/") {
+                path = "/" + path;
+            }
+
+            if (path != null) {
+                serverUrl += path;
+            }
+
+
+
+            fn(null, serverUrl);
         });
     },
 
