@@ -124,12 +124,14 @@
 
     "supported-components": [
         "contact-us",
+        "products",
         "facebook-comments",
         "facebook-likes",
         "feature-blocks",
         "feature-list",
         "feature-list-compare",
         "freeform",
+        "masthead",
         "image-gallery",
         "image-slider",
         "image-text",
@@ -296,7 +298,26 @@
                 "text":"text"
             }
         },
-
+        {
+            "type": "products",
+            "anchor": "products",
+            "classes": {
+                "label": "label",
+                "description": "description",
+                "caption": "caption",
+                "text": "text",
+                "title": "title",
+                "products":"products",
+                "products.item":  "product",
+                "product.product-id": "product-id",
+                "product.title": "product-title",
+                "product.product-attributes": "product-attributes",
+                "product-attributes.image": "product-image",
+                "product-attributes.title": "product-title",
+                "product-attributes.subtitle": "product-subtitle",
+                "product-attributes.text": "product-text"
+            }
+        },
         {
             "type": "meet-team",
             "anchor": "meet-team",
@@ -338,7 +359,7 @@
             "anchor": "logolist",
             "classes": {
                 "label": "label",
-                "description": "ldescription",
+                "description": "description",
                 "logos":"logos",
                 "logos.item":"logo",
                 "logos.item.label":"logo-label",
@@ -353,6 +374,18 @@
             "anchor": "socialfeed",
             "classes": {
 
+            }
+        },
+
+        {
+            "type": "masthead",
+            "anchor": "masthead",
+            "classes": {
+                "label": "label",
+                "description": "description",
+                "title": "title",
+                "subtitle":"subtitle",
+                "btn.text":"btn-text"
             }
         },
 

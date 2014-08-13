@@ -26,9 +26,12 @@
                         <h1 class="editable">{{title}}</h1>
                         <p class="editable">{{{subtitle}}}</p>
                         <div class="col-xs-12">
-                            <div class="btn-wrap">
-                                <button class="btn btn-success btn-block center col-xs-3" href="{{btn.url}}"><i class="fa fa-envelope"></i>{{btn.text}}</button>
-                            </div>
+                            <button class="btn btn-success btn-block center" href="{{btn.url}}">
+                                <div class="fa fa-envelope"></div>
+                                <div data-class="btn-text" class="editable btn-text">
+                                    {{btn.text}}
+                                </div>
+                            </button>
                         </div>
                         <div class="clearfix"></div>
                     </div>

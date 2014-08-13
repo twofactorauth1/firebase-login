@@ -13,6 +13,7 @@ var cryptoUtil = require('../../utils/security/crypto');
 
 var accountDao = require('./../../dao/account.dao.js');
 var themesConfig = require('../../configs/themes.config.js');
+var segmentioConfig = require('../../configs/segmentio.config.js')
 
 var Website = require('../model/website');
 var Page = require('../model/page');
@@ -1138,8 +1139,9 @@ var dao = {
                             }
 
                             page = value;
+                            //TODO: Fix blog so its on every page.
 
-                               if (pageName === 'blog') {
+                               //if (pageName === 'blog') {
                                     if (tag != null) {
                                         //get the blog posts and use as variable "blogposts"
                                         self.getBlogPostsWithTagsForWebsite(accountId, tag, function (err, value) {
@@ -1171,7 +1173,7 @@ var dao = {
                                             });
 
                                         });
-                                   } else if (author != null) {
+                                    } else if (author != null) {
                                         //get the blog posts and use as variable "blogposts"
                                         self.getBlogPostsWithAuthorForWebsite(accountId, author, function (err, value) {
                                             if (err) {
@@ -1202,7 +1204,7 @@ var dao = {
                                             });
 
                                         });
-                                   } else if (category != null) {
+                                    } else if (category != null) {
                                         //get the blog posts and use as variable "blogposts"
                                         self.getBlogPostsWithCategoryForWebsite(accountId, category, function (err, value) {
                                             if (err) {
@@ -1265,9 +1267,9 @@ var dao = {
 
                                         });
                                     }
-                               } else {
-                                    cb();
-                               }
+                               //} else {
+                               //     cb();
+                               //}
                         });
                     });
                 },
@@ -1379,11 +1381,14 @@ var dao = {
                     seo: seo,
                     footer: footer,
                     title: title,
+                    segmentIOWriteKey: segmentioConfig.SEGMENT_WRITE_KEY,
                     handle: pageName,
                     linkLists: {},
                     blogposts: null,
                     tags: null,
-                    categories: null
+                    categories: null,
+                    accountUrl: account.get('accountUrl'),
+                    account: account
                 };
 
 
@@ -1395,6 +1400,7 @@ var dao = {
                 }
 
                 if(blogposts != null) {
+                    self.log.debug('adding blogposts to data for backbone');
                     data.blogposts = new Array();
                     for (var i = 0; i < blogposts.length; i++) {
                         blogposts[i].attributes.created.date = moment(blogposts[i].attributes.created.date).format("DD.MM.YYYY");

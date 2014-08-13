@@ -10,7 +10,7 @@
     "linkLists": [
         {
             "name": "Head2 Menu",
-            "handle": "head2-menu",
+            "handle": "head-menu",
             "links": [
                 {
                     "label": "Home",

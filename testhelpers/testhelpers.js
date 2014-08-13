@@ -236,6 +236,31 @@ module.exports = {
 
     },
 
+    createTestContact: function (accountId, fn) {
+        if (fn == null) {
+            fn = accountId;
+            accountId = 0;
+        }
+        var _c = new $$.m.Contact({
+            accountId: accountId,
+            first: 'Test',
+            last: 'Contact',
+            birthday: '01/01/1979',
+            details: [
+                {
+                    emails: ['test@example.com']
+                }
+            ]
+        });
+
+        contactDao.saveOrUpdate(_c, function(err, value){
+            if(err) {
+                throw Error("Failed to create test contact: " + err.toString());
+            }
+            fn(err, value);
+        });
+    },
+
     createTestPayment: function(params, fn) {
         var defaultParams = {
             chargeId: 'charge_1',

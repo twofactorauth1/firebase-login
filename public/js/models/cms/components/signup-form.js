@@ -18,6 +18,7 @@ define([
 
                 anchor: null,
 
+
                 type: "signup-form",
 
                 label:"",

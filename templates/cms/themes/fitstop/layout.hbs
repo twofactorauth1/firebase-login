@@ -98,6 +98,11 @@
           (function($) {
              $(document).ready(function() {
 
+                $('#myTab a').click(function (e) {
+                  e.preventDefault()
+                  $(this).tab('show')
+                })
+
                 function changeSidebarHeight() {
                   var sidebarHeight = $('#sidebar').height();
                   $('#main-area').css('min-height', sidebarHeight+50);
@@ -260,7 +265,6 @@
                      });
 
                  })
-
 
                  function append_style() {
                      $("head").append('<STYLE type="text/css"> \

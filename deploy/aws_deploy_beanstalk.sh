@@ -13,13 +13,18 @@ if [ "x$APP_NAME" = "x" ]; then
 	exit 97;
 fi
 
-if [ "$1" = "develop" ]; then
+if [ "$1" = "master" ]; then
 	export AWS_DEFAULT_REGION="us-east-1"
 	export ENV_NAME="indigeweb-develop-env"
 	export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
-elif [ "$1" = "master" ]; then
-	echo "Not implemented yet"
-	exit 9
+	export GOOGLE_CLIENT_ID="277102651227-m80ppab4ler5fo08jle3a2g0vhnjce99.apps.googleusercontent.com"
+	export GOOGLE_CLIENT_SECRET="yPiJOniUgxjT94O7M_4tNj_M"
+elif [ "$1" = "develop" ]; then
+	export AWS_DEFAULT_REGION="us-east-1"
+	export ENV_NAME="indigeweb-test-env"
+	export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
+	export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
+    export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
 else
 	echo "No environment specified, exiting"
 	exit 80

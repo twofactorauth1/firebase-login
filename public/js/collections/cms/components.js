@@ -18,9 +18,12 @@ define([
     'models/cms/components/single-post',
     'models/cms/components/signup-form',
     'models/cms/components/blog',
+    'models/cms/components/blog-teaser',
     'models/cms/components/products',
     'models/cms/components/single-page',
-], function(Freeform, MastHead, ContactUs, FeatureBlocks, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost, SignupForm, Blog, Products, SinglePage) {
+    'models/cms/components/testimonials',
+    'models/cms/components/social',
+], function(Freeform, MastHead, ContactUs, FeatureBlocks, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost, SignupForm, Blog, BlogTeaser, Products, SinglePage, Testimonials, Social) {
 
     var components = {
         "freeform": Freeform,
@@ -35,9 +38,12 @@ define([
         "single-post": SinglePost,
         "signup-form": SignupForm,
         "blog": Blog,
+        "blog-teaser": BlogTeaser,
         "single-post": SinglePost,
         "products": Products,
         "single-page": SinglePage,
+        "testimonials": Testimonials,
+        "social": Social
     };
 
     var collection = Backbone.Collection.extend({
@@ -49,6 +55,12 @@ define([
             return new component(attr, options);
         },
 
+        filterById: function(idArray) {
+            return this.reset(_.map(idArray, function(id) { return this.get(id); }, this));
+
+
+
+        },
 
         url: function() {
             return "";

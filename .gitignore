@@ -23,3 +23,7 @@ public/css/style.default.css
 public/css/style.default.css
 
 public/js/libs
+dump/
+.ntvs_analysis.dat
+indigeweb.njsproj
+indigeweb.sln

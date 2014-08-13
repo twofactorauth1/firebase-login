@@ -2,12 +2,13 @@ define([
     'views/account/cms/editwebsite.view',
     'utils/utils',
     'models/cms/components/blog',
+    'models/cms/components/signup-form',
     'services/cms.service',
     'models/cms/post',
     'models/cms/page',
     'models/user',
     'events/events'
-], function (EditWebsite, utils, Blog, CmsService, Post, Page, User, events) {
+], function (EditWebsite, utils, Blog, Signup,CmsService, Post, Page, User, events) {
 
     var view = EditWebsite.extend({
 
@@ -29,9 +30,10 @@ define([
             //components
             "click .dd-item":"scrollToSection",
             "hover .component": "showComponentOptions",
-            "click .add_section": "addSection",
-            "change .dd": "onComponentDrag",
+            "click .add_section": "addSidebarComponent", //addSection
+            "mouseup .dd-item": "onComponentDrag",
             "click .btn-add-component":"addComponent",
+            "click .btn-del-component":"removeComponent",
 
             //color palette
             "click #drop-zone": "drop_click",
@@ -80,20 +82,25 @@ define([
 
             $.when(p1)
                 .done(function () {
+                    console.log(self);
                     self.subdomain = self.account.attributes.subdomain;
                     self.themeId = self.account.attributes.website.themeId;
             });
 
             $.when(p2)
                 .done(function () {
+                    console.log(self);
                 self.websiteSettings = self.website.attributes.settings;
                 self.websiteId = self.website.attributes._id;
                 console.log('Getting Page on rightpanel');
-                self.getPage().done(function(page){
-                    console.log('Page ID: '+JSON.stringify(page.attributes));
+                self.getPage().done(function(){
+                    console.log('Page ID: '+JSON.stringify(self.page.attributes._id));
                     self.pageId = self.page.attributes._id;
                 });
             });
+
+
+            $$.e.PageHandleEvent.bind("pageHandle",this.pageHandleEvent.bind(this));
         },
 
         showMerge: function() {
@@ -130,6 +137,9 @@ define([
         },
 
         renderHtml: function(html) {
+            console.log($("#iframe-website"));
+            var self = this
+
             this.show(html);
         },
 
@@ -140,20 +150,24 @@ define([
             $$.e.ContactSortingEvent.trigger("displayContact", {display_type: e.target.value}); // generating events
         },
 
-
         /*
          * Edit Website Sidebar
          * - Functions for Edit Website Sidebar
          */
 
             getPage: function() {
-                console.log('getPage rightpanel');
+                console.log('GETTING PAGEHANDLE'+this.pageHandle);
                 this.page = new Page({
                     websiteId: this.websiteId,
-                    handle: 'blog'
+                    handle:   this.pageHandle || 'index'
                 });
 
-                return this.page.fetch();
+                return this.page.fetch({
+                    success: function (page) {
+                        console.log("PAGE FETCH");
+                        console.log(page);
+                    }
+                });
             },
 
             addBlankPage: function() {
@@ -189,6 +203,7 @@ define([
                     handle: pageUrl,
                     components: [
                         {
+                            _id: $$.u.idutils.generateUUID(),
                             "anchor" : null,
                             "type" : "single-page"
                         }
@@ -310,27 +325,61 @@ define([
             // WORKING
             addComponent: function () {
                 var self = this;
+                self.getPage().done(function(){
+                    console.log('Page ID: '+JSON.stringify( self.page.attributes._id));
+                    console.log("@%!$%" + self.page.get("handle"));
+                    self.pageId = self.page.attributes._id;
+                    console.log(self.pageId)
+                    //   self.pageId = self.page.get("._id");
+
+                console.log(self);
                 console.log('adding component');
                 //get component name
                 var componentName = $('#component-name').val();
                 //get component type
                 var componentType = $('#component-type').val();
+
+
                 //validate
+                var component=new Signup({ pageId:self.pageId,  formName:componentName, type:componentType});
+                component.save().done(function( ){
+
+                    console.log(component)
+                    var data = {
+                        "id": component.id,
+                        "name": componentName,
+                        "type": componentType
+                    };
+                    console.log(data);
+                    /*  var data = {
+                     "id": component._id,
+                     "name": component.get('formName'),
+                     "type": component.get('type')
+                     };*/
+                    var tmpl = $$.templateManager.get("draggable-component", self.templateKey);
+                    var html = tmpl(data);
+                    $('#sortable').append(html);
+
+                    $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
+
+
+                });
+                //    $( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
                 //add to mongo
                 //get mongo id
-                var newComponent = self.getComponent();
-                console.log('New Component: '+JSON.stringify(newComponent));
+          //      var newComponent = self.getComponent();
+           //     console.log('New Component: '+JSON.stringify(newComponent));
                 //add to sidebar
-                var data = {
-                    "id": 1,
-                    "name": componentName,
-                    "type": componentType
-                };
-                var tmpl = $$.templateManager.get("draggable-component", self.templateKey);
-                var html = tmpl(data);
-                $('#sortable').append(html);
+
+                });
+            //    Backbone.history.loadUrl();
+             //   $( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
+
+
                 //add to site
-                self.updateOrder();
+        //        self.updateOrder();
+                //$('#iframe-website').contentWindow.location.reload(true);
+
             },
             // WORKING
             getComponent: function() {
@@ -340,9 +389,34 @@ define([
                 return deferred;
             },
 
+            removeComponent:function(event){
+                var self=this;
+                var componentID = $(event.currentTarget).data('component-id');
+                console.log('Component Deleted '+componentID);
+                self.getPage().done(function(){
+
+                self.pageId = self.page.attributes._id;
+
+                var component=new Signup({ pageId:self.pageId,  _id:componentID});
+
+                component.destroy({
+                    success: function(err,res) {
+                        console.log(err);
+                        console.log(res)
+                        $( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
+                    }
+                })
+                });
+                event.stopImmediatePropagation();
+
+            },
+
             onComponentDrag: function (event) {
-                var componentID = $(event.currentTarget).data('id');
+                var self=this;
+                console.log($(event.currentTarget))
+                var componentID = $(event.currentTarget).data('component-id');
                 console.log('Component Dragged '+componentID);
+                self.updateOrder();
             },
 
             selectTheme: function(e) {
@@ -447,12 +521,12 @@ define([
                 $('#drop-zone').show();
             },
 
-            addSection: function() {
+            addSidebarComponent: function() {
                 //initiate modal
                 $('#add-component-modal').modal('show');
             },
 
-            renderSection: function() {
+             renderSidebarComponent: function() {
                 var self = this;
                 var componentItem = $$.templateManager.get("component-item", self.templateKey);
                 $('.dd-list').append(componentItem);
@@ -465,7 +539,8 @@ define([
                 console.log('Section ID: '+section);
                 var iframe = $('#iframe-website').contents();
                 if (iframe.find('.component[data-id="'+section+'"]').length > 0) {
-                    self.scrollToAnchor(section);
+                    $('#iframe-website').contents().find('body').animate({scrollTop: aTag.offset().top},'slow');
+                 //   self.scrollToAnchor(section);
                 }
             },
 
@@ -603,6 +678,11 @@ define([
                 console.log('file click');
                 $("#file").trigger('click');
                 return false;
+            },
+            pageHandleEvent: function(options) {
+                var self = this;
+                self.pageHandle = options.pageHandle;
+                console.log("Pagehandle:"+self.pageHandle)
             }
 
     });

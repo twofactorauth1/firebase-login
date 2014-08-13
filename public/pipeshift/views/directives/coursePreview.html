@@ -1,0 +1,152 @@
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+        <td align="center" style="margin: 0; background:#d6d6d6 url('/img/bkg.png');display: block" ng-style="{'min-height':minHeight+'px'}">
+            <table cellpadding="0" cellspacing="0" border="0" align="center" width="600"
+                   style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; color: #6f6f6f;">
+                <tr>
+                    <td height="30"></td>
+                </tr>
+                <tr>
+                    <td height="6">
+                        <img src="/pipeshift/img/ribbon.jpg" alt="ribbon" width="600" height="6" border="0"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-bottom: 2px dotted #bfbfbf; background: #f7f7f7;" bgcolor="#f7f7f7" height="75"
+                        align="center">
+                        <h1 style="color: #000000; font: normal 33px Georgia, serif; margin: 0; padding: 0; line-height: 33px;"
+                            e-style="width:440px" ps-editable="course.title" ps-editable-type="text"
+                            edit-mode="editMode">
+                            {{course.title}}</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="20" bgcolor="f7f7f7"></td>
+                </tr>
+                <tr>
+                    <td align="center" bgcolor="#f7f7f7">
+                        <form class="col-md-12 form-horizontal" name="modal.emailForm" novalidate
+                              ng-submit="subscribe()">
+                            <div class="form-group"
+                                 ng-class="{'has-error': (modal.emailForm.email.$invalid && modal.submited)}">
+                                <label class="control-label col-md-2" for="email">Email:</label>
+
+                                <div class="col-md-6">
+                                    <input id="email" class="form-control" name="email" required type="email"
+                                           ng-model="modal.email">
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-send" type="submit">Sign up</button>
+                                    <stripe-pay-button label="Buy"></stripe-pay-button>
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="#f7f7f7" style="border-bottom: 2px dotted #bfbfbf; padding: 5px 0;">
+                        <table width="520" cellpadding="0" cellspacing="0" border="0" align="center" bgcolor="#f7f7f7"
+                               style="color: #6f6f6f; font-size: 11px;">
+                            <tr>
+                                <td width="100%" valign="top">
+                                    <h3 style="color: #434343;"
+                                        e-style="width:440px; margin-bottom: 10px; margin-top: 20px;"
+                                        ps-editable="course.subtitle" ps-editable-type="text" edit-mode="editMode">
+                                        {{course.subtitle}}</h3>
+
+                                    <p style="padding-right: 12px;" e-style="width:440px" ps-editable="course.body"
+                                       ps-editable-type="textarea" edit-mode="editMode"
+                                            >{{course.body}}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="#f7f7f7" style="padding: 35px 0; border-bottom: 2px dotted #bfbfbf;">
+                        <table width="520" cellpadding="0" cellspacing="0" border="0" align="center" bgcolor="#f7f7f7"
+                               style="font-size: 13px;">
+                            <tr>
+                                <td valign="top" width="180" ng-show="course.videos.length>0">
+                                    <p><img ng-src="{{course.videos[0].videoPreviewUrl}}"
+                                            width="160" border="0"/>
+                                    </p>
+                                    <h4 style="color:#326c94;">
+                                        <video-title width="160px" video="course.videos[0]"></video-title>
+                                    </h4>
+
+                                    <p style="color:#6c6c6c; padding-right: 12px;">{{course.videos[0].videoTitle}}</p>
+                                </td>
+                                <td valign="top" width="180" ng-show="course.videos.length>1">
+                                    <p><img ng-src="{{course.videos[1].videoPreviewUrl}}"
+                                            width="160" border="0"/>
+                                    </p>
+                                    <h4 style="color:#326c94;">
+                                        <video-title width="160px" video="course.videos[1]"></video-title>
+                                    </h4>
+
+                                    <p style="color:#6c6c6c; padding-right: 12px;">{{course.videos[1].videoTitle |
+                                        limitTo:50}}</p>
+                                </td>
+                                <td valign="top" width="160px" ng-show="course.videos.length>2">
+                                    <p><img ng-src="{{course.videos[2].videoPreviewUrl}}"
+                                            width="160" border="0"/>
+                                    </p>
+                                    <h4 style="color:#326c94;">
+                                        <video-title width="160px" video="course.videos[2]"></video-title>
+                                    </h4>
+
+                                    <p style="color:#6c6c6c; padding-right: 12px;">{{course.videos[2].videoTitle |
+                                        limitTo:50}}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="#f7f7f7" style="padding: 20px 0;">
+                        <table width="150" cellpadding="0" cellspacing="0" border="0" align="center">
+                            <tr>
+                                <td width="40" valign="top" align="left"><a href=""><img src="/pipeshift/img/facebook_btn.png"
+                                                                                         alt="Facebook" width="40"
+                                                                                         height="40" border="0"/></a>
+                                </td>
+                                <td width="40" valign="top" align="left"><a href=""><img src="/pipeshift/img/rss_btn.png"
+                                                                                         alt="RSS" width="40"
+                                                                                         height="40" border="0"/></a>
+                                </td>
+                                <td width="40" valign="top" align="left"><a href=""><img src="/pipeshift/img/twitter_btn.png"
+                                                                                         alt="Twitter" width="40"
+                                                                                         height="40" border="0"/></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="24">
+                        <img src="/pipeshift/img/bottom.jpg" alt="bottom" width="600" height="24" border="0"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table width="600" cellpadding="0" cellspacing="0" border="0" style="font-size: 11px;">
+                            <tr>
+                                <td align="left"><p style="color:#8C8C8C;">Does this email look funky? <a href="#"
+                                                                                                          style="color:#8C8C8C;">View
+                                    it in your browser</a></p></td>
+                                <td align="right"><p style="color:#8C8C8C;">2012 Awesome Industries LLC. All Rights
+                                    Reserved.</p></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="40"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

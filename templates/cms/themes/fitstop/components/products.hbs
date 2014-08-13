@@ -33,14 +33,52 @@
         <div class="row products">
             <div class="mb15"></div>
 
+            <div class="container">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                  <li class="active"><a href="#tests" role="tab" data-toggle="tab">Tests</a></li>
+                  <li><a href="#equipment" role="tab" data-toggle="tab">Equipment</a></li>
+                  <li><a href="#training-plans" role="tab" data-toggle="tab">Training Plans</a></li>
+                  <li><a href="#coaching" role="tab" data-toggle="tab">Coaching</a></li>
+                </ul>
+            </div>
+
+            <!-- Tab panes -->
+            <div class="container">
+                <div class="tab-content">
+                  {{#each products}}
+                        {{#if @first}}
+                            <div class="tab-pane active" id="{{product-id}}">
+                                <div class="col-sm-6" data-class="product-image">
+                                        <img src="{{product-attributes.image}}">
+                                </div>
+                                <div class="col-sm-6" data-class="product-title">
+                                    {{product-attributes.title}}
+                                </div>
+                            </div>
+                        {{else}}
+                            <div class="tab-pane" id="{{product-id}}">
+                                <div class="col-sm-6" data-class="product-image">
+                                        <img src="{{product-attributes.image}}">
+                                </div>
+                                <div class="col-sm-6" data-class="product-title">
+                                    {{product-attributes.title}}
+                                </div>
+                            </div>
+                        {{/if}}
+                  {{/each}}
+                </div>
+            </div>  
 
 
-
-
-
+            <button class="btn btn-success btn-block center" href="{{btn.url}}">
+                                <div data-class="btn-text" class="editable">
+                                    {{btn.text}}
+                                </div>
+                            </button>
 
         <!-- TESTING !-->
-            <div class="container">
+<!--             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
                         <ul class="products-nav">
@@ -55,7 +93,7 @@
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
 
 

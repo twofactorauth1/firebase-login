@@ -1,12 +1,15 @@
-/*
- *  Fitstop base css file
- */
-
-
-
-
+/********** Global **********/
 
 .fitstop {
+  #assets {
+    background: none;
+  }
+
+  @media (min-width: 1200px) {
+    .container {
+    width: 1080px;
+    } 
+  }
 
   #header .navbar.navbar-default {
       border-bottom: none!important;
@@ -91,42 +94,62 @@
   .masthead {
     padding: 0px 0px;
     height: auto;
+    h1 {
+      margin-top: 0px;
+    }
+
     .home-text{
       height: auto;
-      margin-top: 0px;
+      margin-top: 0px!important;
       background: rgba(0, 0, 0, 0.2);
       padding: 50px;
       text-shadow: 2px 1px 0px rgba(255, 255, 255, 0.08);
 
       h1 {
-          font-family: 'LatoBold', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;
+          font-family: 'Lato', 'Lucida Grande';
           font-size: 25px;
+          font-weight: bold;
         }
       }
 
       p {
-        font-family: 'LatoBold', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;
+        font-family: 'Lato', 'Lucida Grande';
         max-width: 630px;
         margin: 0 auto;
         font-size: 17px;
-        line-height: 1.4em;
+        line-height: 1.5em;
         margin-top: 26px;
       }
 
+      .btn-wrap {
+        width: 100%;
+      }
+
       .btn-success {
-        background-color: #298AD6;
+
+        background-color: #299FD6 ;
         border-color: #296ED6;
-        width: 220px;
+        width: 250px;
         height: 55px;
+
+        .fa-envelope {
+          font-weight: bold;
+          font-size: 15px;
+        }
+
+        .btn-text {
+          display: inline;
+          text-decoration: none;
+          cursor: pointer;
+          margin: 0px;
+          font-size: 15px;
+          padding-left: 10px;
+        }
       }
 
       .btn:hover {
         background-color: #296ED6;
       } 
-
-      .fa-envelope {
-      padding-right: 8px;
-    }
   }
 
   /*
@@ -140,10 +163,10 @@
 
   #feature_three {
     background: url('/assets/images/fitstop/feature-list-back.png');
+    max-width: 100%;
     .row {
       text-align: center;
     }
-
   }
 
   .features-title {
@@ -176,20 +199,10 @@
       color: 2984D3;
     }
 
-    .feature-single-3 #training-icon {
-    margin: 0 auto;
-    height: 41px;
-    width: 70px;
-    background: url('/assets/images/fitstop/training-icon.png');
-    background-size: 67px;
-    }
-
-    .feature-single-3 #training-icon:hover {
+    .feature-case img {
+      height: auto;
       margin: 0 auto;
-      height: 41px;
-      width: 70px;
-      background: url('/assets/images/fitstop/training-icon-hov.png');
-      background-size: 67px;
+      width: 60px;
     }
   }
 
@@ -220,12 +233,12 @@
     padding-top: 10px;
   }
 
-  #feature_three #feature-bttn {
+  #feature_three .btn-success {
     width: 120px;
     height: 40px;
-    margin: 0 auto;
+    margin: 20px auto;
     border-bottom: 4px solid #2fb0de;
-    background-color: #1583CC;
+    background-color: #299FD6;
     border-color: #2872C2;
     border-radius: 3px;
     line-height: 21px;
@@ -234,15 +247,15 @@
     padding: 6px 15px;
   }
 
-  #feature_three #feature-bttn:hover {
-    background-color: #2872C2;
-    cursor: pointer;
+  #feature_three .btn-success:hover {
+    background-color: #296ED6;
   }
 
-  #feature_three #feature-bttn a {
+  #feature_three .btn-success .editable {
     text-decoration: none;
     cursor: pointer;
-    text-shadow: 2px 2px #2872C2;
+    margin: 0px;
+    font-family: 'Lato', sans-serif;
   }
 
   #feature_three .aloha-editable {
@@ -258,10 +271,14 @@
    *  Feature text (About) component
    */
 
+  .component .primary {
+    background: white;
+  }
+
   .about {
     background-color: white;
-    /*height: 475px;*/
     padding-bottom: 80px;
+    padding: 0px;
     .about-profile {
       padding-top: 17px;
     }
@@ -273,12 +290,13 @@
       padding-top: 32px;
       text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
       font-weight: normal;
+      text-align: center;
     }
 
     .col-sm-9 .about-name {
       text-align: left;
       
-      h2,h4,p {
+      h2,h4 {
         text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
       }
 
@@ -291,52 +309,38 @@
         color: #2984D3;
       }
       p {
-        color: black!important;
-        line-height: 1.6em;
-
+        color: #707070 !important;
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 15px;
       }
     }
 
-    .about-btn-wrap {
+    .btn-wrap {
+      margin: 0;
       margin-top: 25px;
-    }
+      .btn-success {
 
-    .editable #about-btn {
-      width: 240px;
-      height: 50px;
-      margin: 0 auto;
-      border-bottom: 4px solid #2fb0de;
-      background-color: #1583CC;
-      border-color: #2872C2;
-      border-radius: 3px;
-      line-height: 21px;
-      -webkit-transition: all 0.2s ease-out 0s;
-      transition: all 0.2s ease-out 0s;
-      padding: 15px 15px;
-      float: left;
+        background-color: #299FD6 ;
+        border-color: #296ED6;
+        width: 250px;
+        height: 55px;
+        margin: 0px auto;
 
-      .contact-me {
-        padding-right: 20px;
+        .fa-envelope {
+          font-weight: bold;
+          font-size: 15px;
+        }
+
+        .btn-text {
+          display: inline;
+          text-decoration: none;
+          cursor: pointer;
+          margin: 0px;
+          font-size: 15px;
+          padding-left: 10px;
+        }
       }
-
-      .editable .fa-envelope {
-        float: left;
-        padding: 2px 0 0 35px;
-      }
-    }
-
-    .editable #about-btn:hover {
-      background-color: #2872C2;
-      cursor: pointer;
-    }
-
-    .editable #about-btn a {
-      text-decoration: none;
-      cursor: pointer;
-      text-shadow: 2px 2px #2872C2;
-      color: white;
-      font-size: 15px;
-      font-weight: 600;
     }
   }
 
