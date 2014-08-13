@@ -23386,12 +23386,18 @@ input {
 .fitstop .inner-page {
   background-color: white;
 }
+.fitstop .products-component .nav-tabs {
+  width: 400px;
+  margin: 0 auto;
+}
 .fitstop .products-component h3 {
   font-size: 26px;
   color: #2e2d2d !important;
   opacity: .95;
   padding-top: 32px;
   text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
+  font-weight: normal;
+  text-align: center;
 }
 .fitstop #freeform-component {
   margin: 80 auto;

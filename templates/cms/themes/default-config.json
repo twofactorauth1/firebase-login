@@ -307,15 +307,15 @@
                 "caption": "caption",
                 "text": "text",
                 "title": "title",
-                "products":"products",
-                "products.item":  "product",
-                "product.product-id": "product-id",
+                "product-sections": "product-sections",
+                "product-sections.item": "products",
+                "products.products-section-id": "products-section-id", 
+                "products.item": "product",
+                "product.id": "product-id",
+                "product.image": "product-image",
                 "product.title": "product-title",
-                "product.product-attributes": "product-attributes",
-                "product-attributes.image": "product-image",
-                "product-attributes.title": "product-title",
-                "product-attributes.subtitle": "product-subtitle",
-                "product-attributes.text": "product-text"
+                "product.subtitle": "product-subtitle",
+                "product.text": "product-text"
             }
         },
         {

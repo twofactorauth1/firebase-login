@@ -46,7 +46,7 @@
             <!-- Tab panes -->
             <div class="container">
                 <div class="tab-content">
-                  {{#each products}}
+                  <!-- {{#each products}}
                         {{#if @first}}
                             <div class="tab-pane active" id="{{product-id}}">
                                 <div class="col-sm-6" data-class="product-image">
@@ -66,16 +66,56 @@
                                 </div>
                             </div>
                         {{/if}}
-                  {{/each}}
+                  {{/each}} -->
+                  {{#each product-sections}}
+                      {{#if @first}}
+                            <div class="tab-pane active" id="{{product-section-id}}">
+                                <div data-class="product-section-id">
+                                    {{#each products}}
+                                    <div class="row">
+                                        <div class="col-sm-6 editable">
+                                                <img src="{{image}}" class="img-responsive">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h2>{{{title}}}</h2>
+                                            <h2>{{{subtitle}}}</h2>
+                                            <p>{{{text}}}</p>
+                                            <button class="btn btn-success btn-block center" href="{{btn.url}}">
+                                                <div data-class="btn-text" class="editable">
+                                                    {{btn.text}}
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {{/each}}
+                                </div>
+                            </div>
+                        {{else}}
+                            <div class="tab-pane" id="{{product-section-id}}">
+                                <div data-class="product-section-id">
+                                    {{#each products}}
+                                    <div class="row">
+                                        <div class="col-sm-6 editable">
+                                                <img src="{{image}}" class="img-responsive">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <h2>{{{title}}}</h2>
+                                            <h2>{{{subtitle}}}</h2>
+                                            <p>{{{text}}}</p>
+                                            <button class="btn btn-success btn-block center" href="{{btn.url}}">
+                                                <div data-class="btn-text" class="editable">
+                                                    {{btn.text}}
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {{/each}}
+                                </div>
+                            </div>
+                        {{/if}}
+                    {{/each}}
                 </div>
             </div>  
-
-
-            <button class="btn btn-success btn-block center" href="{{btn.url}}">
-                                <div data-class="btn-text" class="editable">
-                                    {{btn.text}}
-                                </div>
-                            </button>
 
         <!-- TESTING !-->
 <!--             <div class="container">
