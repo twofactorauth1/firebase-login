@@ -357,8 +357,36 @@
   .products-component {
     
     .nav-tabs {
-      width: 400px;
+      width: 417px;
       margin: 0 auto;
+
+      li a {
+        font-style: italic;
+        font-size: 15px;
+        font-weight: bold;
+        padding: 8px 18px;
+      }
+
+      
+
+      @media (max-width: 550px) {
+        li {
+          float: none;
+        }
+      }
+    }
+
+    .nav-tabs > li.active > a {
+      background: url('black');
+    }
+
+    #arrow-down {
+      width: 0; 
+  height: 0; 
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  
+  border-top: 20px solid #f00;
     }
 
     h3 {

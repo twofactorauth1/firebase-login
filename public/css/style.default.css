@@ -23387,8 +23387,22 @@ input {
   background-color: white;
 }
 .fitstop .products-component .nav-tabs {
-  width: 400px;
+  width: 417px;
   margin: 0 auto;
+}
+.fitstop .products-component .nav-tabs li a {
+  font-style: italic;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 8px 18px;
+}
+@media (max-width: 550px) {
+  .fitstop .products-component .nav-tabs li {
+    float: none;
+  }
+}
+.fitstop .products-component .nav-tabs > li.active > a {
+  background-color: black;
 }
 .fitstop .products-component h3 {
   font-size: 26px;
