@@ -23383,11 +23383,11 @@ input {
   font-size: 15px;
   padding-left: 10px;
 }
-.fitstop .inner-page {
-  background-color: white;
+.fitstop .products-component {
+  background: #FAFAFA;
 }
 .fitstop .products-component .nav-tabs {
-  width: 417px;
+  width: 425px;
   margin: 0 auto;
 }
 .fitstop .products-component .nav-tabs li a {
@@ -23401,8 +23401,32 @@ input {
     float: none;
   }
 }
+.fitstop .products-component .nav-tabs {
+  background: white;
+}
+.fitstop .products-component .nav-tabs > li {
+  box-shadow: 0 0 .75px #c2c2c2;
+}
+.fitstop .products-component .nav-tabs li a {
+  margin-right: 0px;
+  opacity: .4;
+  padding: 5px 20px;
+}
 .fitstop .products-component .nav-tabs > li.active > a {
-  background-color: black;
+  border-bottom: solid 3.5px #299FD6;
+  border-radius: 3px;
+  opacity: .8;
+}
+.fitstop .products-component .nav-tabs > li.active .arrowsprite {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #299FD6;
+  display: block;
+  position: absolute;
+  bottom: -5;
+  left: 38%;
 }
 .fitstop .products-component h3 {
   font-size: 26px;
@@ -23412,6 +23436,27 @@ input {
   text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
   font-weight: normal;
   text-align: center;
+}
+.fitstop .products-component .tab-content {
+  margin-top: 40px;
+  background: none!important;
+}
+.fitstop .products-component .tab-content .product {
+  margin-bottom: 70px;
+}
+.fitstop .products-component .tab-content .col-sm-9 {
+  background-color: white;
+  box-shadow: 0 0 1.75px #c2c2c2;
+}
+.fitstop .products-component .tab-content .col-sm-3 {
+  padding-top: 0px;
+}
+.fitstop .products-component .tab-content .product-content h4 {
+  font-size: 16px;
+  font-weight: bold;
+  padding-top: 10px;
+  padding-left: 10px;
+  font-family: 'Lato', sans-serif;
 }
 .fitstop #freeform-component {
   margin: 80 auto;

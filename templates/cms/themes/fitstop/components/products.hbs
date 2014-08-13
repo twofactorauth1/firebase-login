@@ -36,34 +36,37 @@
             <div class="container">
                 <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                      <li class="active"><a href="#tests" role="tab" data-toggle="tab">Tests</a></li><div id="arrow-down"></div>
-                      <li><a href="#equipment" role="tab" data-toggle="tab">Equipment</a></li>
-                      <li><a href="#training-plans" role="tab" data-toggle="tab">Training Plans</a></li>
-                      <li><a href="#coaching" role="tab" data-toggle="tab">Coaching</a></li>
+                      
+                      <li class="active"><a href="#tests" role="tab" data-toggle="tab">Tests</a><span class="arrowsprite"></span></li>
+                      <li><a href="#equipment" role="tab" data-toggle="tab">Equipment</a><span class="arrowsprite"></span></li>
+                      <li><a href="#training-plans" role="tab" data-toggle="tab">Training Plans</a><span class="arrowsprite"></span></li>
+                      <li><a href="#coaching" role="tab" data-toggle="tab">Coaching</a><span class="arrowsprite"></span></li>
                     </ul>
             </div>
 
             <!-- Tab panes -->
-            <div class="container">
-                <div class="tab-content">
+            
+                <div class="tab-content container">
                   {{#each product-sections}}
                       {{#if @first}}
                             <div class="tab-pane active" id="{{product-section-id}}">
                                 <div data-class="product-section-id">
                                     {{#each products}}
-                                    <div class="row">
-                                        <div class="col-sm-6 editable">
-                                                <img src="{{image}}" class="img-responsive">
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <h2>{{{title}}}</h2>
-                                            <h2>{{{subtitle}}}</h2>
-                                            <p>{{{text}}}</p>
-                                            <button class="btn btn-success btn-block center" href="{{btn.url}}">
-                                                <div data-class="btn-text" class="editable">
-                                                    {{btn.text}}
-                                                </div>
-                                            </button>
+                                    <div class="row container product">
+                                        <div>
+                                            <div class="col-sm-3 editable product-img">
+                                                    <img src="{{image}}" class="img-responsive">
+                                            </div>
+                                            <div class="col-sm-9 product-content">
+                                                <h4>{{{title}}}</h4>
+                                                <h2>{{{subtitle}}}</h2>
+                                                <p>{{{text}}}</p>
+                                                <button class="btn btn-success btn-block center" href="{{btn.url}}">
+                                                    <div data-class="btn-text" class="editable">
+                                                        {{btn.text}}
+                                                    </div>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     {{/each}}
@@ -73,19 +76,21 @@
                             <div class="tab-pane" id="{{product-section-id}}">
                                 <div data-class="product-section-id">
                                     {{#each products}}
-                                    <div class="row">
-                                        <div class="col-sm-6 editable">
-                                                <img src="{{image}}" class="img-responsive">
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <h2>{{{title}}}</h2>
-                                            <h2>{{{subtitle}}}</h2>
-                                            <p>{{{text}}}</p>
-                                            <button class="btn btn-success btn-block center" href="{{btn.url}}">
-                                                <div data-class="btn-text" class="editable">
-                                                    {{btn.text}}
-                                                </div>
-                                            </button>
+                                    <div class="row container product">
+                                        <div>
+                                            <div class="col-sm-3 editable">
+                                                    <img src="{{image}}" class="img-responsive">
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <h4>{{{title}}}</h4>
+                                                <h2>{{{subtitle}}}</h2>
+                                                <p>{{{text}}}</p>
+                                                <button class="btn btn-success btn-block center" href="{{btn.url}}">
+                                                    <div data-class="btn-text" class="editable">
+                                                        {{btn.text}}
+                                                    </div>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     {{/each}}
@@ -94,7 +99,7 @@
                         {{/if}}
                     {{/each}}
                 </div>
-            </div>  
+              
 
             <div class="col-sm-3 col-xs-6">
                 <div class="panel panel-success">
