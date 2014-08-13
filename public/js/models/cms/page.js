@@ -51,12 +51,10 @@ define([
 
 
         toJSON: function() {
-            console.log('Attributes: '+JSON.stringify(this.attributes));
             var json = _.clone(this.attributes);
             var collection = json.components;
-            console.log('Collection: '+JSON.stringify(collection));
             if (collection) {
-                //json.components = json.components.toJSON();
+                json.components = json.components.toJSON();
             }
             return json;
         },
@@ -70,6 +68,7 @@ define([
 
 
         url: function(method) {
+            console.log('Method: '+method);
             switch(method) {
                 case "GET":
                 console.log('Website ID: '+this.get("websiteId")+' Handle: '+this.get("handle"));

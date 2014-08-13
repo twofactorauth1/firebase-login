@@ -5,38 +5,35 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
-<div id="assets" class="page">
-        {{#with component}}
-            <div class="component-header container hidden">
-                    <div class="editable" data-class="label">
-                        <h2 class="center">{{{label}}}</h2>
-                    </div>
-
-                    <div class="editable" data-class="description">
-                        <p class="center">{{{description}}}</p>
-                    </div>
-                </div>
-            <!-- Feature Three -->
-            <div id="feature_three" class="row inner-page parallax">
+{{#with component}}
+    <div id="{{anchor}}" class="page feature-list">
+            <div class="row inner-page">
                 <div class="row">
-                    {{#each features}}
-                        <div class="col-sm-6 col-sm-offset-6 feature-single-{{@index}}" style="opacity:0">
-                            <div class="col-xs-4">
-                                <span class="{{{feature-icon}}}"></span>
-                            </div>
-                            <div class="col-xs-8">
-                                <div class="editable" data-class="features.item.title">
-                                    <h4>{{{feature-title}}}</h4>
-                                </div>
-                                <div class="editable" data-class="features.item.subtitle">
-                                    <p>{{{feature-subtitle}}}</p>
-                                </div>
-                            </div>
+                    <div class="editable" data-class="title">
+                        <h1 class="feature-list-title">{{{title}}}</h1>
                     </div>
-                    <div class="clearfix mb35"></div>
+                    <div class="editable" data-class="subtitle">
+                        <p class="feature-list-subtitle col-xs-8 col-xs-offset-2">{{{subtitle}}}</p>
+                    </div>
+                    <div class="clearfix mb15"></div>
+                    {{#each features}}
+                    <div class="col-sm-6">
+                        <div class="feature-single feature-single-{{@index}}" style="opacity:0">
+                            <span class="feature-icon {{{feature-icon}}}"></span>
+                            <h3 class="feature-title">
+                                <div class="editable" data-class="feature-title">
+                                    {{{feature-title}}}
+                                </div>
+                            </h3>
+                            <div class="feature-subtitle">
+                                <div class="editable" data-class="feature-subtitle">
+                                    {{{feature-subtitle}}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {{/each}}
                 </div>
             </div>
-        {{/with}}
     </div>
+{{/with}}

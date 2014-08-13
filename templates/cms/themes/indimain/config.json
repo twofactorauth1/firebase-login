@@ -47,7 +47,13 @@
                 "feature-list",
                 "image-gallery",
                 "image-slider",
-                "image-text"
+                "masthead",
+                "image-text",
+                "meet-team",
+                "signup-form",
+                "products",
+                "testimonials",
+                "blog-teaser"
             ]
         },
 

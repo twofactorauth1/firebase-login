@@ -14,7 +14,6 @@ define([
         idAttribute: "_id",
 
         setContent: function(dataClass, content, targetData, config) {
-            console.log('setting content with Data Class: '+dataClass+' Content'+content+' Target Data: '+targetData+' Config:'+config);
             if (this.attributes.hasOwnProperty(dataClass)) {
                 console.log('has own property');
                 this.set(dataClass, content);

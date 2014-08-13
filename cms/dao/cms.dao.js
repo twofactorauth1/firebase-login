@@ -1140,7 +1140,7 @@ var dao = {
 
                             page = value;
 
-                               if (pageName === 'blog') {
+                               if (pageName === 'blog' || pageName === 'index') {
                                     if (tag != null) {
                                         //get the blog posts and use as variable "blogposts"
                                         self.getBlogPostsWithTagsForWebsite(accountId, tag, function (err, value) {
@@ -1525,7 +1525,6 @@ var dao = {
                             //inject editable stuff here
                             //var endHeadReplacement = editableCssScript + " </head>";
                             //value = value.replace("</head>", endHeadReplacement);
-                            console.log('CSS SCRIPT: '+editableCssScript);
                             if (editableCssScript) {
                             data.footer = data.footer + " " + editableCssScript;
                             } else {

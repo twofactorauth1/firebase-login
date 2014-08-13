@@ -177,20 +177,36 @@
                   $('.feature-single-0, .feature-single-1, .feature-single-2, div[data-class=profilepic], .btn-outline').css('opacity', 1);
                 }
 
+                $('.navbar-nav a').on('click', function(event) {
+                  console.log('nav click to '+this.href);
+                    var target = $(this.getAttribute('href'));
+                    if( target.length ) {
+                        event.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: target.offset().top
+                        }, 1000);
+                    }
+                });
+
                 if (window.top===window.self) {
                   $(".feature-single-0").waypoint(function (direction) {
                       $(this).addClass("animated fadeIn");
-                  }, { offset: $.waypoints('viewportHeight') - 100,
+                  }, { offset: $.waypoints('viewportHeight') - 0,
                       triggerOnce: true});
 
                   $(".feature-single-1").waypoint(function (direction) {
                       $(this).addClass("animated fadeIn");
-                  }, { offset: $.waypoints('viewportHeight') - 200,
+                  }, { offset: $.waypoints('viewportHeight') - 150,
                       triggerOnce: true});
 
                   $(".feature-single-2").waypoint(function (direction) {
                       $(this).addClass("animated fadeIn");
-                  }, { offset: $.waypoints('viewportHeight') - 300,
+                  }, { offset: $.waypoints('viewportHeight') - 250,
+                      triggerOnce: true});
+
+                  $(".feature-single-3").waypoint(function (direction) {
+                      $(this).addClass("animated fadeIn");
+                  }, { offset: $.waypoints('viewportHeight') - 375,
                       triggerOnce: true});
 
                   $("div[data-class=profilepic]").waypoint(function (direction) {
