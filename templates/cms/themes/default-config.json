@@ -213,13 +213,12 @@
             "type": "feature-list",
             "anchor": "featurelist",
             "classes": {
-                "label": "label",
-                "description": "description",
-
+                "title": "title",
+                "subtitle": "subtitle",
                 "features":"features",
                 "features.item":"feature",
-                "features.item.title":"feature-title",
-                "features.item.subtitle":"feature-subtitle"
+                "features.item.feature-title":"feature-title",
+                "features.item.feature-subtitle":"feature-subtitle"
             }
         },
 
@@ -304,10 +303,12 @@
             "classes": {
                 "label": "label",
                 "description": "description",
-                "teamMembers.name": "name",
-                "teamMembers.position":"position",
-                "teamMembers.profilePic":"profilepic",
-                "teamMembers.bio":"bio"
+                "teamMembers":"teamMembers",
+                "teamMembers.item":"item",
+                "teamMembers.item.name": "name",
+                "teamMembers.item.position":"position",
+                "teamMembers.item.profilePic":"profilepic",
+                "teamMembers.item.bio":"bio"
             }
         },
 
