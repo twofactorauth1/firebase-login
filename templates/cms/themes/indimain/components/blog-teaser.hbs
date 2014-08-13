@@ -10,6 +10,9 @@
 {{#with component}}
         <div class="component-body">
             <div class="blog-teaser">
+            {{#each blogposts}}
+                {{this.attributes.post_url}}
+            {{/each}}
                 <h3 class="title">
                     <div class="editable" data-class="title">
                         {{{title}}}

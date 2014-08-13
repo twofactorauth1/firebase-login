@@ -1139,8 +1139,9 @@ var dao = {
                             }
 
                             page = value;
+                            //TODO: Fix blog so its on every page.
 
-                               //if (pageName === 'blog') {
+                               if (pageName === 'blog' || pageName === 'index') {
                                     if (tag != null) {
                                         //get the blog posts and use as variable "blogposts"
                                         self.getBlogPostsWithTagsForWebsite(accountId, tag, function (err, value) {
@@ -1172,7 +1173,7 @@ var dao = {
                                             });
 
                                         });
-                                   } else if (author != null) {
+                                    } else if (author != null) {
                                         //get the blog posts and use as variable "blogposts"
                                         self.getBlogPostsWithAuthorForWebsite(accountId, author, function (err, value) {
                                             if (err) {
@@ -1203,7 +1204,7 @@ var dao = {
                                             });
 
                                         });
-                                   } else if (category != null) {
+                                    } else if (category != null) {
                                         //get the blog posts and use as variable "blogposts"
                                         self.getBlogPostsWithCategoryForWebsite(accountId, category, function (err, value) {
                                             if (err) {
@@ -1266,9 +1267,9 @@ var dao = {
 
                                         });
                                     }
-                               // } else {
-                               //      cb();
-                               // }
+                               } else {
+                                    cb();
+                               }
                         });
                     });
                 },
@@ -1399,6 +1400,7 @@ var dao = {
                 }
 
                 if(blogposts != null) {
+                    self.log.debug('adding blogposts to data for backbone');
                     data.blogposts = new Array();
                     for (var i = 0; i < blogposts.length; i++) {
                         blogposts[i].attributes.created.date = moment(blogposts[i].attributes.created.date).format("DD.MM.YYYY");
@@ -1525,7 +1527,6 @@ var dao = {
                             //inject editable stuff here
                             //var endHeadReplacement = editableCssScript + " </head>";
                             //value = value.replace("</head>", endHeadReplacement);
-                            console.log('CSS SCRIPT: '+editableCssScript);
                             if (editableCssScript) {
                             data.footer = data.footer + " " + editableCssScript;
                             } else {

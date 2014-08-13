@@ -20,17 +20,18 @@ define([
 
                 type: "feature-list",
 
-                label:"",
+                title:"",
 
-                description:"",
+                subtitle:"",
+
+                features: []
                 /*
                 {
-                    title:"",
-                    subtitle:"",
-                    icon:"",
+                    "feature-title" : "",
+                    "feature-subtitle" : "",
+                    "feature-icon" : ""
                 }
                 */
-                features: []
             }
         }
     });
