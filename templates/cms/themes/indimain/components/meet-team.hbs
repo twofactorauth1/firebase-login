@@ -5,45 +5,44 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
-<div>
-    {{#with component}}
-    <div class="component-body">
-        <div class="meet-team">
-            <div class="inner-page">
-                <h3 class="title">
-                    <div class="editable" data-class="title">
-                        {{title}}
-                    </div>
-                </h3>
-                <div class="mb30"></div>
-                {{#each teamMembers}}
-                    <div class="col-xs-12 col-sm-4 col-md-3 editable profilepic pull-left {{#if become-member}} become-member {{/if}}" data-class="profilepic" style="opacity: 0;">
-                        <div class="profile-img">
-                            <div class="profilepic-hover">
-                                <div class="editable" data-class="bio">
-                                    <p>{{bio}}</p>
+{{#with component}}
+    <div id="{{anchor}}">
+        <div class="component-body">
+            <div class="meet-team">
+                <div class="inner-page">
+                    <h3 class="title">
+                        <div class="editable" data-class="title">
+                            {{title}}
+                        </div>
+                    </h3>
+                    <div class="mb30"></div>
+                    {{#each teamMembers}}
+                        <div class="col-xs-12 col-sm-4 col-md-3 profilepic pull-left {{#if become-member}} become-member {{/if}}">
+                            <div class="profile-img">
+                                <div class="profilepic-hover">
+                                    <div class="editable" data-class="bio">
+                                        {{bio}}
+                                    </div>
                                     <ul class="profile-social">
                                         <li><a href="{{#if social.facebook}}{{social.facebook}}{{/if}}" target="_blank"><span class="fa fa-facebook"></span></a></li>
                                         <li><a href="{{#if social.twitter}}{{social.twitter}}{{/if}}" target="_blank"><span class="fa fa-twitter"></span></a></li>
                                     </ul>
                                 </div>
+                                <img src="{{#if profilepic}} {{profilepic}} {{else}} /assets/icons/blank-user.jpg {{/if}}" class="thumbnail img-circle"/>
                             </div>
-                            <img src="{{#if profilepic}} {{profilepic}} {{else}} /assets/icons/blank-user.jpg {{/if}}" class="thumbnail img-circle"/>
-                        </div>
-                        <h4 class="name">
-                            <div class="editable" data-class="name">
-                                {{name}}
+                            <h4 class="name">
+                                <div class="editable" data-class="name">
+                                    {{name}}
+                                </div>
+                            </h4>
+                            <div class="editable" data-class="position">
+                                <span class="center">{{position}}</span>
                             </div>
-                        </h4>
-                        <div class="editable" data-class="position">
-                            <span class="center">{{position}}</span>
                         </div>
-                    </div>
-                {{/each}}
-                <div class="clearfix"></div>
+                    {{/each}}
+                    <div class="clearfix"></div>
+                </div>
             </div>
         </div>
     </div>
-    {{/with}}
-</div>
+{{/with}}

@@ -18,22 +18,20 @@ define([
 
                 anchor: null,
 
-                type: "feature-blocks",
+                type: "blog-teaser",
 
-                value: "",
+                label:"",
 
-                title: "",
+                description:"",
 
-                subtitle: "",
-
-                text: ""
+                value: ""
             }
         }
     });
 
     $$.m.cms = $$.m.cms || {};
     $$.m.cms.components = $$.m.cms.components || {};
-    $$.m.cms.components.FeatureBlocks = model;
+    $$.m.cms.components.BlogTeaser = model;
 
     return model;
 });
