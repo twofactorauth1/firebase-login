@@ -21869,9 +21869,10 @@ img {
 .navbar {
   margin-bottom: 0px;
   min-height: 90px;
-  -webkit-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
-  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
+  z-index: 999;
 }
 .navbar-brand {
   height: 80px;
@@ -21911,7 +21912,6 @@ ul.nav {
 .feature-list-subtitle {
   color: #bbbbbb;
   text-align: center;
-  margin-bottom: 35px;
 }
 .feature-single {
   background: #4bb0cb;
@@ -22431,9 +22431,12 @@ div[data-class="blog"] .single-blog {
 .blog-teaser .single-blog .footer {
   height: 35px;
   width: 100%;
-  padding: 15px 0 0 15px;
+  padding: 15px;
   margin-left: -14px;
   text-align: left;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 15px;
 }
 .blog-teaser .single-blog .footer .date,
 .blog-teaser .single-blog .footer .comments {
@@ -22519,6 +22522,30 @@ div[data-class="blog"] .single-blog {
 .social .twitter:hover,
 .social .linkedin:hover {
   opacity: 1;
+}
+/********** MastHead **********/
+.masthead {
+  margin-top: 0;
+  height: 460px;
+  transition: none;
+}
+.masthead h4 div,
+.masthead h4 i {
+  float: left;
+  text-indent: 10px;
+  line-height: 15px;
+}
+.masthead h1 {
+  color: white;
+  margin-top: 100px;
+}
+.masthead p {
+  color: white;
+}
+.masthead .btn {
+  width: 200px;
+  height: 50px;
+  margin-top: 30px;
 }
 /**********  **********/
 .primary {
@@ -22735,23 +22762,6 @@ ul #center-circle {
   line-height: 1.4;
   color: #ffffff;
   font-size: 16px;
-}
-.masthead {
-  margin-top: 0;
-  height: 460px;
-  transition: none;
-}
-.masthead h1 {
-  color: white;
-  margin-top: 100px;
-}
-.masthead p {
-  color: white;
-}
-.masthead .btn {
-  width: 200px;
-  height: 50px;
-  margin-top: 30px;
 }
 #feature_three {
   padding: 50px 0;
