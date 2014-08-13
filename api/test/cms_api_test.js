@@ -457,6 +457,7 @@ module.exports.group = {
                 test.done();
             }
             console.dir(res.body);
+            testcontext.componentId = res.body.components[0]._id;
             test.equals(2, res.body['components'].length);
             test.done();
         });
@@ -596,6 +597,7 @@ module.exports.group = {
     //api/1.0/cms/website/:websiteId/theme/:themeId
     //themeconfig/account/:accountId
     testSetThemeForAccount: function(test) {
+        console.log('\nRUNNING testSetThemeForAccount\n');
         test.expect(1);
         //default -> indimain
         var req = request(accountURL).post('/api/1.0/cms/website/whatever/theme/indimain')
@@ -625,33 +627,59 @@ module.exports.group = {
 
     //api/1.0/cms/page
     testCreatePage: function(test) {
+        console.log('\nRUNNING testCreatePage\n');
         test.expect(1);
-        var page = new $$.m.cms.Page({
-            accountId:0,
-            websiteId:0,
-            handle: 'Page Handle',
-            title: 'Page Title'
+        var p1 = $.Deferred();
+        cmsDAO.getOrCreateWebsiteByAccountId(testcontext.accountId, testcontext.userId, false, function(err, value){
+            if(err) {
+                p1.reject();
+                test.ok(false, 'Error setting up website');
+                test.done();
+            } else {
+                console.dir(value);
+                testcontext.websiteId = value.id();
+                p1.resolve();
+            }
         });
-        var req = request(accountURL).post('/api/1.0/cms/website/10/page')
-            .set('cookie', cookie)
-            .send(page);
 
-        req.expect(200, function(err, res){
-            console.dir(res.body);
-            testcontext.cmsPageId = res.body._id;
-            test.ok(true);
-            test.done();
+        $.when(p1).done(function(){
+            var page = new $$.m.cms.Page({
+                accountId:0,
+                websiteId:testcontext.websiteId,
+                handle: 'Page Handle',
+                title: 'Page Title'
+            });
+            var req = request(accountURL).post('/api/1.0/cms/website/' + testcontext.websiteId + '/page')
+                .set('cookie', cookie)
+                .send(page);
+
+            req.expect(200, function(err, res){
+                console.dir(res.body);
+                testcontext.cmsPageId = res.body._id;
+                test.ok(true);
+                test.done();
+            });
         });
+
 
     },
 
     //api/1.0/cms/page/:pageId
     testUpdatePage: function(test) {
+        console.log('\nRUNNING testUpdatePage\n');
         test.expect(1);
         var pageId = testcontext.cmsPageId;
         cmsDAO.getById(pageId, $$.m.cms.Page, function(err, page){
+            if(err) {
+                test.ok(false, 'error getting page: ' + err);
+                test.done();
+            }
+            console.log('got page:');
+            console.dir(page);
+
+
             page.set('title', 'Updated Page Title');
-            var req = request(accountURL).post('/api/1.0/cms/website/10/page/' + pageId)
+            var req = request(accountURL).post('/api/1.0/cms/website/' + testcontext.websiteId + '/page/' + pageId)
                 .set('cookie', cookie)
                 .send(page);
 
@@ -665,9 +693,10 @@ module.exports.group = {
 
     //api/1.0/cms/page/:pageId
     testDeletePage: function(test) {
+        console.log('\nRUNNING testDeletePage\n');
         test.expect(1);
         var pageId = testcontext.cmsPageId;
-        var req = request(accountURL).delete('/api/1.0/cms/website/10/page/' + pageId)
+        var req = request(accountURL).delete('/api/1.0/cms/website/' + testcontext.websiteId + '/page/' + pageId)
             .set('cookie', cookie);
         req.expect(200, function(err, res){
 
@@ -686,33 +715,23 @@ module.exports.group = {
 
      */
     testGetWebsiteLinklists: function(test) {
-        var p1 = $.Deferred();
-        cmsDAO.getOrCreateWebsiteByAccountId(testcontext.accountId, testcontext.userId, false, function(err, value){
-            if(err) {
-                p1.reject();
-                test.ok(false, 'Error setting up website');
-                test.done();
-            } else {
-                console.dir(value);
-                testcontext.websiteId = value.id();
-                p1.resolve();
-            }
+
+        console.log('\nRUNNING testGetWebsiteLinklists\n');
+
+        var req = request(accountURL).get('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists')
+            .set('cookie', cookie);
+        req.expect(200, function(err, res){
+            console.dir(res.body);
+            test.ok(true);
+            test.done();
         });
 
-        $.when(p1).done(function(){
-            var req = request(accountURL).get('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists')
-                .set('cookie', cookie);
-            req.expect(200, function(err, res){
-                console.dir(res.body);
-                test.ok(true);
-                test.done();
-            });
-        });
     },
 
     testGetWebsiteLinklistsByHandle: function(test) {
         //main-menu
-        var req = request(accountURL).get('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists/main-menu')
+        console.log('\nRUNNING testGetWebsiteLinklistsByHandle\n');
+        var req = request(accountURL).get('/api/1.0/cms/website/' + testcontext.websiteId + '/linklists/head2-menu')
             .set('cookie', cookie);
         req.expect(200, function(err, res){
             console.dir(res.body);

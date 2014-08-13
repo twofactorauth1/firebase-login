@@ -441,10 +441,17 @@ var dao = {
             fn = populateDefaultsFromTheme;
             populateDefaultsFromTheme = false;
         }
-        var self = this,
-            website, websiteId, account, themeId, themeConfig;
 
-        accountDao.getById(accountId, function(err, value) {
+        var self = this
+            , website
+            , websiteId
+            , account
+            , themeId
+            , themeConfig;
+        self.log.debug('>> getOrCreateWebsiteByAccountId');
+
+        accountDao.getById(accountId, function (err, value) {
+
             if (err) {
                 fn(err, value);
                 self = value = null;
@@ -456,9 +463,10 @@ var dao = {
                 self = value = null;
                 return;
             }
-
+            self.log.debug('retrieved account');
             account = value;
             website = account.get("website");
+            self.log.debug('website is ' + website);
 
             if (website != null) {
                 websiteId = website.websiteId;
@@ -477,15 +485,18 @@ var dao = {
                     self = website = account = fn = null;
                     return;
                 }
-
+                self.log.debug('Got website by id: ' + websiteId);
+                console.dir(value);
                 var websiteValue = value;
                 if (populateDefaultsFromTheme == true) {
                     self._populateWebsiteDefaultsFromThemeConfig(websiteValue, themeId, function(err, value) {
+                        self.log.debug('populated defaults');
                         self._setLinkListUrlsForWebsite(websiteValue);
                         fn(null, websiteValue);
                         self = website = websiteValue = themeConfig = account = fn = null;
                     });
                 } else {
+                    self.log.debug('setting linklist urls');
                     self._setLinkListUrlsForWebsite(websiteValue);
                     fn(err, websiteValue);
                     self = website = websiteValue = account = fn = null;
@@ -502,9 +513,10 @@ var dao = {
      * @param userId
      * @param fn
      */
-    createWebsiteForAccount: function(accountId, userId, fn) {
-        var self = this,
-            website, websiteObj, websiteId, account, themeId, p1;
+
+    createWebsiteForAccount: function (accountId, userId, fn) {
+        var self = this, website, websiteObj, websiteId, account, themeId, p1;
+        self.log.debug('>> createWebsiteForAccount');
 
         website = new Website({
             accountId: accountId
@@ -1251,7 +1263,7 @@ var dao = {
                                 });
                             } else {
                                 //get the blog posts and use as variable "blogposts"
-                                self.getAllBlogPostsForWebsite(accountId, function(err, value) {
+                                self.getAllBlogPostsForWebsite(accountId, function (err, value) {
                                     if (err) {
                                         return cb(err);
                                     }
@@ -1259,14 +1271,14 @@ var dao = {
                                     blogposts = value;
 
                                     //strip the tags from the posts and get a list
-                                    self.getAllTagsFromPosts(blogposts, function(err, value) {
+                                    self.getAllTagsFromPosts(blogposts, function (err, value) {
                                         if (err) {
                                             return cb(err);
                                         }
 
                                         tags = value;
 
-                                        self.getAllCategoriesFromPosts(blogposts, function(err, value) {
+                                        self.getAllCategoriesFromPosts(blogposts, function (err, value) {
                                             if (err) {
                                                 return cb(err);
                                             }
@@ -1278,12 +1290,8 @@ var dao = {
                                         });
 
                                     });
-
                                 });
                             }
-                            //} else {
-                            //     cb();
-                            //}
                         });
                     });
                 },
