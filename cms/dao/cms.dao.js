@@ -37,11 +37,11 @@ var dao = {
      * @param themeId
      * @param fn
      */
-    themeExists: function (themeId, fn) {
-        var pathToThemes = themesConfig.PATH_TO_THEMES
-            , pathToTheme = pathToThemes + "/" + themeId;
+    themeExists: function(themeId, fn) {
+        var pathToThemes = themesConfig.PATH_TO_THEMES,
+            pathToTheme = pathToThemes + "/" + themeId;
 
-        fs.lstat(pathToTheme, function (err, stats) {
+        fs.lstat(pathToTheme, function(err, stats) {
             if (!err && stats.isDirectory()) {
                 fn(null, true);
                 pathToTheme = pathToThemes = themeId = fn = null;
@@ -58,27 +58,27 @@ var dao = {
      * Retrieves basic theme information for all themes in the system.
      * @param fn
      */
-    getAllThemes: function (fn) {
+    getAllThemes: function(fn) {
         //TODO - Cache this
 
-        var self = this
-            , pathToThemes = themesConfig.PATH_TO_THEMES
-            , themes = []
-            , obj;
+        var self = this,
+            pathToThemes = themesConfig.PATH_TO_THEMES,
+            themes = [],
+            obj;
 
         themes = [];
-        fs.readdir(pathToThemes, function (err, files) {
-            async.eachLimit(files, 25, function (directory, cb) {
+        fs.readdir(pathToThemes, function(err, files) {
+            async.eachLimit(files, 25, function(directory, cb) {
                 if (directory == "assets") {
                     return cb();
                 }
-                fs.lstat(pathToThemes + "/" + directory, function (err, stats) {
+                fs.lstat(pathToThemes + "/" + directory, function(err, stats) {
                     if (err) {
                         return cb(err);
                     }
                     if (stats.isDirectory()) {
                         //Attempt to read config file from directory
-                        fs.readFile(pathToThemes + "/" + directory + "/config.json", "utf8", function (err, data) {
+                        fs.readFile(pathToThemes + "/" + directory + "/config.json", "utf8", function(err, data) {
                             if (err) {
                                 self.log.error("An error occurred reading Theme config File: " + err);
                                 return cb();
@@ -105,7 +105,7 @@ var dao = {
                         cb();
                     }
                 })
-            }, function (err) {
+            }, function(err) {
                 fn(err, themes);
                 self = pathToThemes = themes = obj = fn = null;
             });
@@ -117,8 +117,8 @@ var dao = {
         var self = this;
         self.log.debug('>> getThemePreview');
         var path = themesConfig.PATH_TO_THEMES + '/' + themeId + '/' + themesConfig.SUBPATH_TO_PREVIEW;
-        fs.readFile(path, function(err, data){
-            if(err) {
+        fs.readFile(path, function(err, data) {
+            if (err) {
                 self.log.error("Error reading file: " + err);
                 fn(err, null);
             }
@@ -136,7 +136,7 @@ var dao = {
      * @param fn
      * @returns {*}
      */
-    getThemeConfig: function (themeId, fn) {
+    getThemeConfig: function(themeId, fn) {
         return this._getThemeConfig(themeId, false, fn);
     },
 
@@ -149,7 +149,7 @@ var dao = {
      * @param fn
      * @returns {*}
      */
-    getThemeConfigSigned: function (themeId, fn) {
+    getThemeConfigSigned: function(themeId, fn) {
         return this._getThemeConfig(themeId, true, fn);
     },
 
@@ -187,22 +187,16 @@ var dao = {
     },
 
 
-    _getThemeConfig: function (themeId, signed, fn) {
-        var self = this
-            , pathToThemeConfig = themesConfig.PATH_TO_THEMES + "/" + themeId + "/config.json"
-            , themeConfig
-            , defaultConfig
-            , defaultComponents
-            , themeComponents
-            , defaultComponent
-            , componentType
-            , themeComponent
-            , index;
+    _getThemeConfig: function(themeId, signed, fn) {
+        var self = this,
+            pathToThemeConfig = themesConfig.PATH_TO_THEMES + "/" + themeId + "/config.json",
+            themeConfig, defaultConfig, defaultComponents, themeComponents, defaultComponent, componentType, themeComponent, index;
 
         async.parallel([
-            function (cb) {
+
+            function(cb) {
                 // Read theme config
-                fs.readFile(pathToThemeConfig, "utf8", function (err, data) {
+                fs.readFile(pathToThemeConfig, "utf8", function(err, data) {
                     if (err) {
                         self.log.error("An error occurred reading Theme config File: " + err);
                         return cb("An error occurred reading theme config file: " + err);
@@ -227,8 +221,8 @@ var dao = {
                 });
             },
 
-            function (cb) {
-                fs.readFile(themesConfig.PATH_TO_THEMES + "/default-config.json", "utf8", function (err, data) {
+            function(cb) {
+                fs.readFile(themesConfig.PATH_TO_THEMES + "/default-config.json", "utf8", function(err, data) {
                     if (err) {
                         self.log.error("An error occurred reading Default theme config File: " + err);
                         return cb("An error occurred reading default theme config file: " + err);
@@ -239,7 +233,7 @@ var dao = {
                     cb();
                 });
             }
-        ], function (err) {
+        ], function(err) {
 
             if (err) {
                 return fn(err);
@@ -261,7 +255,9 @@ var dao = {
                 componentType = defaultComponent.type;
 
                 //Get the theme component of same type
-                var themeComponent = _.findWhere(themeComponents, {type: componentType});
+                var themeComponent = _.findWhere(themeComponents, {
+                    type: componentType
+                });
 
                 if (themeComponent == null) {
                     //Do not add it if it is an excluded component from the theme
@@ -280,10 +276,7 @@ var dao = {
 
             fn(null, themeConfig);
 
-            self = pathToThemeConfig = themeConfig = defaultConfig
-                = defaultComponents = themeComponents = defaultComponent
-                = componentType = themeComponent = index
-                = themeId = signed = fn = null;
+            self = pathToThemeConfig = themeConfig = defaultConfig = defaultComponents = themeComponents = defaultComponent = componentType = themeComponent = index = themeId = signed = fn = null;
         });
     },
     //endregion
@@ -295,37 +288,48 @@ var dao = {
     },
 
 
-    getPageForWebsite: function (websiteId, pageName, fn) {
-        var query = {websiteId: websiteId, handle: pageName};
+    getPageForWebsite: function(websiteId, pageName, fn) {
+        var query = {
+            websiteId: websiteId,
+            handle: pageName
+        };
         this.findOne(query, Page, fn);
     },
 
-    getBlogPostForWebsite: function (accountId, blogPostUrl, fn) {
-        console.log('Post ID (getBlogPostForWebsite): ' +blogPostUrl+ ' Account ID: '+accountId);
+    getBlogPostForWebsite: function(accountId, blogPostUrl, fn) {
+        console.log('Post ID (getBlogPostForWebsite): ' + blogPostUrl + ' Account ID: ' + accountId);
         var self = this;
         accountId = accountId.toString();
         blogPostUrl = blogPostUrl.toString();
-        console.log('Account ID: '+accountId+' Blog Post Url: '+JSON.stringify(blogPostUrl));
-        var query = {accountId: accountId, post_url: blogPostUrl};
+        console.log('Account ID: ' + accountId + ' Blog Post Url: ' + JSON.stringify(blogPostUrl));
+        var query = {
+            accountId: accountId,
+            post_url: blogPostUrl
+        };
         this.findOne(query, BlogPost, fn);
     },
 
-    getAllBlogPostsForWebsite: function (accountId, fn) {
+    getAllBlogPostsForWebsite: function(accountId, fn) {
         var self = this;
         accountId = accountId.toString();
-        var query = {accountId: accountId};
+        var query = {
+            accountId: accountId
+        };
         this.findMany(query, BlogPost, fn);
     },
 
-    getBlogPostsWithTagsForWebsite: function (accountId, tag, fn) {
-        console.log('Getting Posts with tag: '+tag);
+    getBlogPostsWithTagsForWebsite: function(accountId, tag, fn) {
+        console.log('Getting Posts with tag: ' + tag);
         var self = this;
         accountId = accountId.toString();
-        var query = {accountId: accountId, post_tags: tag};
+        var query = {
+            accountId: accountId,
+            post_tags: tag
+        };
         this.findMany(query, BlogPost, fn);
     },
 
-    getAllTagsFromPosts: function (blogposts, fn) {
+    getAllTagsFromPosts: function(blogposts, fn) {
         var self = this;
 
         var tags = new Array();
@@ -342,7 +346,7 @@ var dao = {
         return;
     },
 
-    getAllCategoriesFromPosts: function (blogposts, fn) {
+    getAllCategoriesFromPosts: function(blogposts, fn) {
         var self = this;
 
         var categories = new Array();
@@ -356,34 +360,40 @@ var dao = {
         return;
     },
 
-    getBlogPostsWithAuthorForWebsite: function (accountId, author, fn) {
-        console.log('Getting Posts with author: '+author);
+    getBlogPostsWithAuthorForWebsite: function(accountId, author, fn) {
+        console.log('Getting Posts with author: ' + author);
         var self = this;
         accountId = accountId.toString();
-        var query = {accountId: accountId, post_author: author};
+        var query = {
+            accountId: accountId,
+            post_author: author
+        };
         this.findMany(query, BlogPost, fn);
     },
 
-    getBlogPostsWithCategoryForWebsite: function (accountId, category, fn) {
-        console.log('Getting Posts with category: '+category);
+    getBlogPostsWithCategoryForWebsite: function(accountId, category, fn) {
+        console.log('Getting Posts with category: ' + category);
         var self = this;
         accountId = accountId.toString();
-        var query = {accountId: accountId, post_category: category};
+        var query = {
+            accountId: accountId,
+            post_category: category
+        };
         this.findMany(query, BlogPost, fn);
     },
 
-    eliminateDuplicates: function (arr) {
-      var i,
-          len=arr.length,
-          out=[],
-          obj={};
-      for (i=0;i<len;i++) {
-        obj[arr[i]]=0;
-      }
-      for (i in obj) {
-        out.push(i);
-      }
-      return out;
+    eliminateDuplicates: function(arr) {
+        var i,
+            len = arr.length,
+            out = [],
+            obj = {};
+        for (i = 0; i < len; i++) {
+            obj[arr[i]] = 0;
+        }
+        for (i in obj) {
+            out.push(i);
+        }
+        return out;
     },
 
     //COMPONENTS
@@ -391,8 +401,8 @@ var dao = {
     getComponentsByPage: function(pageId, fn) {
         var self = this;
         self.log.debug('>> getComponentsByPage');
-        this.getById(pageId, $$.m.cms.Page, function(err, page){
-            if(err) {
+        this.getById(pageId, $$.m.cms.Page, function(err, page) {
+            if (err) {
                 self.log.error('Error getting components: ' + err);
                 fn(err, null);
             } else {
@@ -426,11 +436,12 @@ var dao = {
      * @param userId
      * @param fn
      */
-    getOrCreateWebsiteByAccountId: function (accountId, userId, populateDefaultsFromTheme, fn) {
+    getOrCreateWebsiteByAccountId: function(accountId, userId, populateDefaultsFromTheme, fn) {
         if (_.isFunction(populateDefaultsFromTheme)) {
             fn = populateDefaultsFromTheme;
             populateDefaultsFromTheme = false;
         }
+
         var self = this
             , website
             , websiteId
@@ -440,6 +451,7 @@ var dao = {
         self.log.debug('>> getOrCreateWebsiteByAccountId');
 
         accountDao.getById(accountId, function (err, value) {
+
             if (err) {
                 fn(err, value);
                 self = value = null;
@@ -467,7 +479,7 @@ var dao = {
                 return;
             }
 
-            self.getById(websiteId, Website, function (err, value) {
+            self.getById(websiteId, Website, function(err, value) {
                 if (err) {
                     fn(err, value);
                     self = website = account = fn = null;
@@ -501,6 +513,7 @@ var dao = {
      * @param userId
      * @param fn
      */
+
     createWebsiteForAccount: function (accountId, userId, fn) {
         var self = this, website, websiteObj, websiteId, account, themeId, p1;
         self.log.debug('>> createWebsiteForAccount');
@@ -552,14 +565,16 @@ var dao = {
                             websiteId: websiteId,
                             themeId: "default"
                         };
-                        account.set({website: websiteObj});
+                        account.set({
+                            website: websiteObj
+                        });
                     } else {
                         websiteObj.websiteId = websiteId;
                         if (websiteObj.themeId == null) {
                             websiteObj.themeId = "default";
                         }
                     }
-                    accountDao.saveOrUpdate(account, function () {
+                    accountDao.saveOrUpdate(account, function() {
                         self._setLinkListUrlsForWebsite(website);
                         fn(null, website);
                         self = website = websiteObj = websiteId = p1 = account = null;
@@ -588,7 +603,7 @@ var dao = {
             return;
         }
 
-        this.getThemeConfig(themeId, function (err, value) {
+        this.getThemeConfig(themeId, function(err, value) {
             if (err) {
                 fn(err, value);
                 fn = null;
@@ -598,12 +613,16 @@ var dao = {
                 var themeConfig = value;
 
                 if (website.get("linkLists") == null) {
-                    website.set({linkLists:themeConfig.linkLists});
+                    website.set({
+                        linkLists: themeConfig.linkLists
+                    });
                 }
 
                 if (website.get("footer") == null) {
                     var footer = $$.u.objutils.extend({}, themeConfig.footer, website.get("footer"));
-                    website.set({footer:footer});
+                    website.set({
+                        footer: footer
+                    });
                 }
             }
 
@@ -621,10 +640,11 @@ var dao = {
      * @param websiteId
      * @param fn
      */
-    deleteWebsite: function (websiteId, fn) {
-        var self = this, accountId;
+    deleteWebsite: function(websiteId, fn) {
+        var self = this,
+            accountId;
 
-        this.getById(websiteId, Website, function (err, value) {
+        this.getById(websiteId, Website, function(err, value) {
             if (err) {
                 fn(err, value);
                 self = accountId = null;
@@ -639,7 +659,7 @@ var dao = {
 
             accountId = value.get("accountId");
 
-            self.remove(value, function (err, value) {
+            self.remove(value, function(err, value) {
                 if (err) {
                     fn(err, value);
                     self = accountId = null;
@@ -647,7 +667,7 @@ var dao = {
                 }
 
                 if (accountId > 0) {
-                    accountDao.getById(accountId, function (err, value) {
+                    accountDao.getById(accountId, function(err, value) {
                         if (err) {
                             fn(err, value);
                             self = accountId = null;
@@ -657,7 +677,7 @@ var dao = {
                         if (value != null && value.get("website") != null && value.get("website").websiteId == websiteId) {
                             value.get("website").websiteId = null;
 
-                            accountDao.saveOrUpdate(value, function (err, value) {
+                            accountDao.saveOrUpdate(value, function(err, value) {
                                 if (err) {
                                     fn(err, value);
                                     self = accountId = null;
@@ -688,9 +708,9 @@ var dao = {
      * @param websiteId
      * @param fn
      */
-    switchDefaultWebsite: function (accountId, websiteId, fn) {
+    switchDefaultWebsite: function(accountId, websiteId, fn) {
         //ensure website exists and belongs to this account
-        this.getById(websiteId, Website, function (err, value) {
+        this.getById(websiteId, Website, function(err, value) {
             if (err) {
                 fn(err, value);
                 accountId = websiteId = fn = null;
@@ -709,7 +729,7 @@ var dao = {
                 return;
             }
 
-            accountDao.getById(accountId, function (err, value) {
+            accountDao.getById(accountId, function(err, value) {
                 if (err) {
                     fn(err, value);
                     accountId = websiteId = fn = null;
@@ -722,7 +742,9 @@ var dao = {
                         websiteId: websiteId,
                         themeId: "default"
                     };
-                    value.set({website: website});
+                    value.set({
+                        website: website
+                    });
                 }
                 website.websiteId = websiteId;
 
@@ -733,11 +755,12 @@ var dao = {
         });
     },
 
-    updateWebsiteSettings: function (newSettings, accountId, websiteId,fn) {
-        var self = this, website;
-        console.log('New Settings: '+JSON.stringify(newSettings));
+    updateWebsiteSettings: function(newSettings, accountId, websiteId, fn) {
+        var self = this,
+            website;
+        console.log('New Settings: ' + JSON.stringify(newSettings));
         //ensure website exists and belongs to this account
-        this.getById(websiteId, Website, function (err, value) {
+        this.getById(websiteId, Website, function(err, value) {
             if (err) {
                 fn(err, value);
                 accountId = websiteId = fn = null;
@@ -757,34 +780,34 @@ var dao = {
             }
 
             var settings = value.get('settings');
-            console.log('Website Settings: '+JSON.stringify(settings));
+            console.log('Website Settings: ' + JSON.stringify(settings));
             if (settings == null) {
                 settings = newSettings;
                 value.set('settings', settings);
-                console.log('Website Settings2: '+JSON.stringify(value.get('settings')));
+                console.log('Website Settings2: ' + JSON.stringify(value.get('settings')));
             } else {
                 settings = newSettings;
                 value.set('settings', settings);
             }
 
-             self.saveOrUpdate(value, function() {
+            self.saveOrUpdate(value, function() {
                 console.log('saved');
-             });
-             accountId = website = null;
-             return;
+            });
+            accountId = website = null;
+            return;
         });
     },
 
-    getRenderedWebsitePagewithPostForAccount: function (accountId, pageName, blogpost, isEditor, fn) {
-        console.log('Post ID (getRenderedWebsitePagewithPostForAccount):'+JSON.stringify(isEditor));
-        var self = this, account, website, page, themeId, themeConfig;
+    getRenderedWebsitePagewithPostForAccount: function(accountId, pageName, blogpost, isEditor, fn) {
+        console.log('Post ID (getRenderedWebsitePagewithPostForAccount):' + JSON.stringify(isEditor));
+        var self = this,
+            account, website, page, themeId, themeConfig;
 
         if (_.isFunction(pageName)) {
             fn = pageName;
             pageName = "index";
             isEditor = false;
-        }
-        else if (_.isFunction(isEditor)) {
+        } else if (_.isFunction(isEditor)) {
             fn = isEditor;
             isEditor = false;
         }
@@ -795,7 +818,7 @@ var dao = {
         }
 
         var p1 = $.Deferred();
-        accountDao.getById(accountId, function (err, value) {
+        accountDao.getById(accountId, function(err, value) {
             if (err) {
                 return p1.reject(err);
             }
@@ -810,17 +833,18 @@ var dao = {
             }
 
             async.parallel([
-                function (cb) {
+
+                function(cb) {
 
                     //Get Website and page
-                    self.getOrCreateWebsiteByAccountId(accountId, null, function (err, value) {
+                    self.getOrCreateWebsiteByAccountId(accountId, null, function(err, value) {
                         if (err) {
                             return cb(err);
                         }
 
                         website = value;
 
-                        self.getPageForWebsite(website.id(), pageName, function (er, value) {
+                        self.getPageForWebsite(website.id(), pageName, function(er, value) {
                             if (err) {
                                 return cb(err);
                             }
@@ -833,10 +857,10 @@ var dao = {
                     });
                 },
 
-                function (cb) {
+                function(cb) {
 
                     //Load theme config
-                    self.getThemeConfig(themeId, function (err, value) {
+                    self.getThemeConfig(themeId, function(err, value) {
                         if (err) {
                             return cb(err);
                         }
@@ -846,7 +870,7 @@ var dao = {
                     });
                 }
 
-            ], function (err) {
+            ], function(err) {
                 if (err) {
                     p1.reject();
                     fn(err);
@@ -859,20 +883,19 @@ var dao = {
         });
 
         $.when(p1)
-            .done(function () {
+            .done(function() {
                 //We now have website, page, themeId, themeConfig, account
 
                 if (page == null || page.get("components") == null) {
                     //Lets pull the default from the theme config
                     var isNewPage = false;
-                    var defaultPage = _.findWhere(themeConfig.pages, {handle: pageName});
+                    var defaultPage = _.findWhere(themeConfig.pages, {
+                        handle: pageName
+                    });
                     if (defaultPage == null) {
                         fn($$.u.errors._404_PAGE_NOT_FOUND);
 
-                        self = account = website = page = themeId = themeConfig
-                            = isNewPage = defaultPage = page = components = pageComponents
-                            = settings = seo = linklists = footer = header = body = title = data
-                            = accountId = pageName = fn = null;
+                        self = account = website = page = themeId = themeConfig = isNewPage = defaultPage = page = components = pageComponents = settings = seo = linklists = footer = header = body = title = data = accountId = pageName = fn = null;
                         return;
                     }
                     if (page == null) {
@@ -889,12 +912,14 @@ var dao = {
                     var pageComponents = page.get("components");
                     if (pageComponents == null) {
                         pageComponents = [];
-                        page.set({components: pageComponents});
+                        page.set({
+                            components: pageComponents
+                        });
                     }
 
                     var components = defaultPage.components;
 
-                    components.forEach(function (component) {
+                    components.forEach(function(component) {
                         var type = component;
 
                         var component = require('../model/components/' + type);
@@ -921,7 +946,9 @@ var dao = {
                 var seo = $$.u.objutils.extend({}, website.get("seo"), page.get("seo"));
 
                 if (website.get("linkLists") == null) {
-                    website.set({linkLists:themeConfig.linkLists});
+                    website.set({
+                        linkLists: themeConfig.linkLists
+                    });
                 }
                 var linklists = website.get("linkLists");
 
@@ -963,18 +990,15 @@ var dao = {
                     }
                 }
 
-                var header
-                    , footer
-                    , editableCssScript
-                    , body = {
-                        components: []
-                    };
+                var header, footer, editableCssScript, body = {
+                    components: []
+                };
 
                 // render header, footer, and body
                 async.parallel([
                     //render header
-                    function (cb) {
-                        self._renderItem(data, themeId, "header", themeConfig['template-engine'], "default-header", function (err, value) {
+                    function(cb) {
+                        self._renderItem(data, themeId, "header", themeConfig['template-engine'], "default-header", function(err, value) {
                             if (err) {
                                 return cb(err);
                             }
@@ -985,8 +1009,8 @@ var dao = {
                     },
 
                     //render footer
-                    function (cb) {
-                        self._renderItem(data, themeId, "footer", themeConfig['template-engine'], "default-footer", function (err, value) {
+                    function(cb) {
+                        self._renderItem(data, themeId, "footer", themeConfig['template-engine'], "default-footer", function(err, value) {
                             if (err) {
                                 return cb(err);
                             }
@@ -997,10 +1021,10 @@ var dao = {
                     },
 
                     //render components in series
-                    function (cb) {
+                    function(cb) {
 
                         if (page.isVisible() == false) {
-                            self._renderItem(data, themeId, "404", themeConfig['template-engine'], "default-404", function (err, value) {
+                            self._renderItem(data, themeId, "404", themeConfig['template-engine'], "default-404", function(err, value) {
                                 if (err) {
                                     cb(err);
                                 }
@@ -1017,18 +1041,20 @@ var dao = {
                             return cb();
                         }
 
-                        async.eachSeries(components, function (component, _cb) {
+                        async.eachSeries(components, function(component, _cb) {
                             data.component = component;
 
-                            self._renderComponent(data, themeId, component.type, themeConfig['template-engine'], function (err, value) {
+                            self._renderComponent(data, themeId, component.type, themeConfig['template-engine'], function(err, value) {
                                 if (err) {
                                     return _cb(err);
                                 }
 
-                                body.components.push({value:value});
+                                body.components.push({
+                                    value: value
+                                });
                                 _cb();
                             })
-                        }, function (err) {
+                        }, function(err) {
                             data.component = null;
                             cb();
                         });
@@ -1037,21 +1063,18 @@ var dao = {
                     function(cb) {
                         if (isEditor === true) {
                             app.render("cms/editablehelper.hbs", {}, function(err, value) {
-                               editableCssScript = value;
+                                editableCssScript = value;
                                 cb();
                             });
                         } else {
                             cb();
                         }
                     }
-                ], function (err) {
+                ], function(err) {
                     if (err) {
                         fn(err);
 
-                        self = account = website = page = themeId = themeConfig
-                            = isNewPage = defaultPage = page = components = pageComponents
-                            = settings = seo = linklists = footer = header = body = title = data
-                            = accountId = pageName = fn = null;
+                        self = account = website = page = themeId = themeConfig = isNewPage = defaultPage = page = components = pageComponents = settings = seo = linklists = footer = header = body = title = data = accountId = pageName = fn = null;
 
                         return;
                     }
@@ -1071,40 +1094,34 @@ var dao = {
                             data.footer = data.footer + " " + editableCssScript;
                         }
                     }
-                    self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {
+                    self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function(err, value) {
                         if (err) {
                             fn(err, value);
 
-                            self = account = website = page = themeId = themeConfig
-                                = isNewPage = defaultPage = page = components = pageComponents
-                                = settings = seo = linklists = footer = header = body = title = data
-                                = accountId = pageName = fn = null;
+                            self = account = website = page = themeId = themeConfig = isNewPage = defaultPage = page = components = pageComponents = settings = seo = linklists = footer = header = body = title = data = accountId = pageName = fn = null;
 
                             return;
                         }
 
                         fn(null, value);
 
-                        self = account = website = page = themeId = themeConfig
-                            = isNewPage = defaultPage = page = components = pageComponents
-                            = settings = seo = linklists = footer = header = body = title = data
-                            = accountId = pageName = fn = null;
+                        self = account = website = page = themeId = themeConfig = isNewPage = defaultPage = page = components = pageComponents = settings = seo = linklists = footer = header = body = title = data = accountId = pageName = fn = null;
                     });
                 });
             });
     },
 
 
-    getRenderedWebsitePageForAccount: function (accountId, pageName, isEditor, tag, author, category, fn) {
-        var self = this, account, website, page, blogposts, tags, categories, themeId, themeConfig;
+    getRenderedWebsitePageForAccount: function(accountId, pageName, isEditor, tag, author, category, fn) {
+        var self = this,
+            account, website, page, blogposts, tags, categories, themeId, themeConfig;
         //console.log('getRenderedWebsitePageForAccount: '+category);
         self.log.debug('>> getRenderedWebsitePageForAccount(' + accountId + ')');
         if (_.isFunction(pageName)) {
             fn = pageName;
             pageName = "index";
             isEditor = false;
-        }
-        else if (_.isFunction(isEditor)) {
+        } else if (_.isFunction(isEditor)) {
             fn = isEditor;
             isEditor = false;
         }
@@ -1114,7 +1131,7 @@ var dao = {
         }
 
         var p1 = $.Deferred();
-        accountDao.getById(accountId, function (err, value) {
+        accountDao.getById(accountId, function(err, value) {
             if (err) {
                 return p1.reject(err);
             }
@@ -1129,17 +1146,18 @@ var dao = {
             }
 
             async.parallel([
-                function (cb) {
+
+                function(cb) {
 
                     //Get Website and page
-                    self.getOrCreateWebsiteByAccountId(accountId, null, function (err, value) {
+                    self.getOrCreateWebsiteByAccountId(accountId, null, function(err, value) {
                         if (err) {
                             return cb(err);
                         }
 
                         website = value;
 
-                        self.getPageForWebsite(website.id(), pageName, function (err, value) {
+                        self.getPageForWebsite(website.id(), pageName, function(err, value) {
                             if (err) {
                                 return cb(err);
                             }
@@ -1147,143 +1165,141 @@ var dao = {
                             page = value;
                             //TODO: Fix blog so its on every page.
 
-                               if (pageName === 'blog' || pageName === 'index') {
-                                    if (tag != null) {
-                                        //get the blog posts and use as variable "blogposts"
-                                        self.getBlogPostsWithTagsForWebsite(accountId, tag, function (err, value) {
-                                            if (err) {
-                                                return cb(err);
-                                            }
-
-                                            blogposts = value;
-
-                                            //strip the tags from the posts and get a list
-                                            self.getAllTagsFromPosts(blogposts, function (err, value) {
-                                                if (err) {
-                                                    return cb(err);
-                                                }
-                                                console.log('Tags (getRenderedWebsitePageForAccount): '+value);
-                                                tags = value;
-
-                                                self.getAllCategoriesFromPosts(blogposts, function (err, value) {
-                                                    if (err) {
-                                                        return cb(err);
-                                                    }
-                                                    console.log('Tags (getRenderedWebsitePageForAccount): '+value);
-                                                    categories = value;
-
-                                                    cb();
-
-                                                });
-
-                                            });
-
-                                        });
-                                    } else if (author != null) {
-                                        //get the blog posts and use as variable "blogposts"
-                                        self.getBlogPostsWithAuthorForWebsite(accountId, author, function (err, value) {
-                                            if (err) {
-                                                return cb(err);
-                                            }
-
-                                            blogposts = value;
-
-                                            //strip the tags from the posts and get a list
-                                            self.getAllTagsFromPosts(blogposts, function (err, value) {
-                                                if (err) {
-                                                    return cb(err);
-                                                }
-                                                console.log('Tags (getRenderedWebsitePageForAccount): '+value);
-                                                tags = value;
-
-                                                self.getAllCategoriesFromPosts(blogposts, function (err, value) {
-                                                    if (err) {
-                                                        return cb(err);
-                                                    }
-                                                    console.log('Tags (getRenderedWebsitePageForAccount): '+value);
-                                                    categories = value;
-
-                                                    cb();
-
-                                                });
-
-                                            });
-
-                                        });
-                                    } else if (category != null) {
-                                        //get the blog posts and use as variable "blogposts"
-                                        self.getBlogPostsWithCategoryForWebsite(accountId, category, function (err, value) {
-                                            if (err) {
-                                                return cb(err);
-                                            }
-
-                                            blogposts = value;
-
-                                            //strip the tags from the posts and get a list
-                                            self.getAllTagsFromPosts(blogposts, function (err, value) {
-                                                if (err) {
-                                                    return cb(err);
-                                                }
-                                                console.log('Tags (getRenderedWebsitePageForAccount): '+value);
-                                                tags = value;
-
-                                                    self.getAllCategoriesFromPosts(blogposts, function (err, value) {
-                                                        if (err) {
-                                                            return cb(err);
-                                                        }
-                                                        console.log('Tags (getRenderedWebsitePageForAccount): '+value);
-                                                        categories = value;
-
-                                                        cb();
-
-                                                    });
-
-                                            });
-
-                                        });
-                                   } else {
-                                        //get the blog posts and use as variable "blogposts"
-                                        self.getAllBlogPostsForWebsite(accountId, function (err, value) {
-                                            if (err) {
-                                                return cb(err);
-                                            }
-
-                                            blogposts = value;
-
-                                            //strip the tags from the posts and get a list
-                                            self.getAllTagsFromPosts(blogposts, function (err, value) {
-                                                if (err) {
-                                                    return cb(err);
-                                                }
-
-                                                tags = value;
-
-                                                self.getAllCategoriesFromPosts(blogposts, function (err, value) {
-                                                    if (err) {
-                                                        return cb(err);
-                                                    }
-                                                    console.log('Tags (getRenderedWebsitePageForAccount): '+value);
-                                                    categories = value;
-
-                                                    cb();
-
-                                                });
-
-                                            });
-
-                                        });
+                            //if (pageName === 'blog') {
+                            if (tag != null) {
+                                //get the blog posts and use as variable "blogposts"
+                                self.getBlogPostsWithTagsForWebsite(accountId, tag, function(err, value) {
+                                    if (err) {
+                                        return cb(err);
                                     }
-                               } else {
-                                    cb();
-                               }
+
+                                    blogposts = value;
+
+                                    self.log.debug('>> blogposts(' + blogposts + ')');
+
+                                    //strip the tags from the posts and get a list
+                                    self.getAllTagsFromPosts(blogposts, function(err, value) {
+                                        if (err) {
+                                            return cb(err);
+                                        }
+                                        console.log('Tags (getRenderedWebsitePageForAccount): ' + value);
+                                        tags = value;
+
+                                        self.getAllCategoriesFromPosts(blogposts, function(err, value) {
+                                            if (err) {
+                                                return cb(err);
+                                            }
+                                            console.log('Tags (getRenderedWebsitePageForAccount): ' + value);
+                                            categories = value;
+
+                                            cb();
+
+                                        });
+
+                                    });
+
+                                });
+                            } else if (author != null) {
+                                //get the blog posts and use as variable "blogposts"
+                                self.getBlogPostsWithAuthorForWebsite(accountId, author, function(err, value) {
+                                    if (err) {
+                                        return cb(err);
+                                    }
+
+                                    blogposts = value;
+
+                                    //strip the tags from the posts and get a list
+                                    self.getAllTagsFromPosts(blogposts, function(err, value) {
+                                        if (err) {
+                                            return cb(err);
+                                        }
+                                        console.log('Tags (getRenderedWebsitePageForAccount): ' + value);
+                                        tags = value;
+
+                                        self.getAllCategoriesFromPosts(blogposts, function(err, value) {
+                                            if (err) {
+                                                return cb(err);
+                                            }
+                                            console.log('Tags (getRenderedWebsitePageForAccount): ' + value);
+                                            categories = value;
+
+                                            cb();
+
+                                        });
+
+                                    });
+
+                                });
+                            } else if (category != null) {
+                                //get the blog posts and use as variable "blogposts"
+                                self.getBlogPostsWithCategoryForWebsite(accountId, category, function(err, value) {
+                                    if (err) {
+                                        return cb(err);
+                                    }
+
+                                    blogposts = value;
+
+                                    //strip the tags from the posts and get a list
+                                    self.getAllTagsFromPosts(blogposts, function(err, value) {
+                                        if (err) {
+                                            return cb(err);
+                                        }
+                                        console.log('Tags (getRenderedWebsitePageForAccount): ' + value);
+                                        tags = value;
+
+                                        self.getAllCategoriesFromPosts(blogposts, function(err, value) {
+                                            if (err) {
+                                                return cb(err);
+                                            }
+                                            console.log('Tags (getRenderedWebsitePageForAccount): ' + value);
+                                            categories = value;
+
+                                            cb();
+
+                                        });
+
+                                    });
+
+                                });
+                            } else {
+                                //get the blog posts and use as variable "blogposts"
+                                self.getAllBlogPostsForWebsite(accountId, function (err, value) {
+                                    if (err) {
+                                        return cb(err);
+                                    }
+
+                                    blogposts = value;
+
+                                    //strip the tags from the posts and get a list
+                                    self.getAllTagsFromPosts(blogposts, function (err, value) {
+                                        if (err) {
+                                            return cb(err);
+                                        }
+
+                                        tags = value;
+
+                                        self.getAllCategoriesFromPosts(blogposts, function (err, value) {
+                                            if (err) {
+                                                return cb(err);
+                                            }
+                                            console.log('Tags (getRenderedWebsitePageForAccount): ' + value);
+                                            categories = value;
+
+                                            cb();
+
+                                        });
+
+                                    });
+                                });
+                            }
                         });
                     });
                 },
 
-                function (cb) {
+                function(cb) {
 
                     //Load theme config
-                    self.getThemeConfig(themeId, function (err, value) {
+                    self.getThemeConfig(themeId, function(err, value) {
                         if (err) {
                             return cb(err);
                         }
@@ -1293,7 +1309,7 @@ var dao = {
                     });
                 }
 
-            ], function (err) {
+            ], function(err) {
                 if (err) {
                     p1.reject();
                     fn(err);
@@ -1306,20 +1322,19 @@ var dao = {
         });
 
         $.when(p1)
-            .done(function () {
+            .done(function() {
                 //We now have website, page, themeId, themeConfig, account
 
                 if (page == null || page.get("components") == null) {
                     //Lets pull the default from the theme config
                     var isNewPage = false;
-                    var defaultPage = _.findWhere(themeConfig.pages, {handle: pageName});
+                    var defaultPage = _.findWhere(themeConfig.pages, {
+                        handle: pageName
+                    });
                     if (defaultPage == null) {
                         fn($$.u.errors._404_PAGE_NOT_FOUND);
 
-                        self = account = website = page = themeId = themeConfig
-                            = isNewPage = defaultPage = page = components = pageComponents
-                            = settings = seo = linklists = footer = header = body = title = data
-                            = accountId = pageName = fn = null;
+                        self = account = website = page = themeId = themeConfig = isNewPage = defaultPage = page = components = pageComponents = settings = seo = linklists = footer = header = body = title = data = accountId = pageName = fn = null;
                         return;
                     }
                     if (page == null) {
@@ -1336,12 +1351,14 @@ var dao = {
                     var pageComponents = page.get("components");
                     if (pageComponents == null) {
                         pageComponents = [];
-                        page.set({components: pageComponents});
+                        page.set({
+                            components: pageComponents
+                        });
                     }
 
                     var components = defaultPage.components;
 
-                    components.forEach(function (component) {
+                    components.forEach(function(component) {
                         var type = component;
 
                         var component = require('../model/components/' + type);
@@ -1368,7 +1385,9 @@ var dao = {
                 var seo = $$.u.objutils.extend({}, website.get("seo"), page.get("seo"));
 
                 if (website.get("linkLists") == null) {
-                    website.set({linkLists:themeConfig.linkLists});
+                    website.set({
+                        linkLists: themeConfig.linkLists
+                    });
                 }
                 var linklists = website.get("linkLists");
 
@@ -1405,7 +1424,7 @@ var dao = {
                     }
                 }
 
-                if(blogposts != null) {
+                if (blogposts != null) {
                     self.log.debug('adding blogposts to data for backbone');
                     data.blogposts = new Array();
                     for (var i = 0; i < blogposts.length; i++) {
@@ -1414,32 +1433,29 @@ var dao = {
                     }
                 }
 
-                if(tags != null) {
+                if (tags != null) {
                     data.tags = new Array();
                     for (var i = 0; i < tags.length; i++) {
                         data.tags.push(tags[i]);
                     }
                 }
 
-                if(categories != null) {
+                if (categories != null) {
                     data.categories = new Array();
                     for (var i = 0; i < categories.length; i++) {
                         data.categories.push(categories[i]);
                     }
                 }
 
-                var header
-                    , footer
-                    , editableCssScript
-                    , body = {
-                        components: []
-                    };
+                var header, footer, editableCssScript, body = {
+                    components: []
+                };
 
                 // render header, footer, and body
                 async.parallel([
                     //render header
-                    function (cb) {
-                        self._renderItem(data, themeId, "header", themeConfig['template-engine'], "default-header", function (err, value) {
+                    function(cb) {
+                        self._renderItem(data, themeId, "header", themeConfig['template-engine'], "default-header", function(err, value) {
                             if (err) {
                                 return cb(err);
                             }
@@ -1450,8 +1466,8 @@ var dao = {
                     },
 
                     //render footer
-                    function (cb) {
-                        self._renderItem(data, themeId, "footer", themeConfig['template-engine'], "default-footer", function (err, value) {
+                    function(cb) {
+                        self._renderItem(data, themeId, "footer", themeConfig['template-engine'], "default-footer", function(err, value) {
                             if (err) {
                                 return cb(err);
                             }
@@ -1462,10 +1478,10 @@ var dao = {
                     },
 
                     //render components in series
-                    function (cb) {
+                    function(cb) {
 
                         if (page.isVisible() == false) {
-                            self._renderItem(data, themeId, "404", themeConfig['template-engine'], "default-404", function (err, value) {
+                            self._renderItem(data, themeId, "404", themeConfig['template-engine'], "default-404", function(err, value) {
                                 if (err) {
                                     cb(err);
                                 }
@@ -1482,18 +1498,20 @@ var dao = {
                             return cb();
                         }
 
-                        async.eachSeries(components, function (component, _cb) {
+                        async.eachSeries(components, function(component, _cb) {
                             data.component = component;
 
-                            self._renderComponent(data, themeId, component.type, themeConfig['template-engine'], function (err, value) {
+                            self._renderComponent(data, themeId, component.type, themeConfig['template-engine'], function(err, value) {
                                 if (err) {
                                     return _cb(err);
                                 }
 
-                                body.components.push({value:value});
+                                body.components.push({
+                                    value: value
+                                });
                                 _cb();
                             })
-                        }, function (err) {
+                        }, function(err) {
                             data.component = null;
                             cb();
                         });
@@ -1502,21 +1520,18 @@ var dao = {
                     function(cb) {
                         if (isEditor === true) {
                             app.render("cms/editablehelper.hbs", {}, function(err, value) {
-                               editableCssScript = value;
+                                editableCssScript = value;
                                 cb();
                             });
                         } else {
                             cb();
                         }
                     }
-                ], function (err) {
+                ], function(err) {
                     if (err) {
                         fn(err);
 
-                        self = account = website = page = themeId = themeConfig
-                            = isNewPage = defaultPage = page = components = pageComponents
-                            = settings = seo = linklists = footer = header = body = title = data
-                            = accountId = pageName = fn = null;
+                        self = account = website = page = themeId = themeConfig = isNewPage = defaultPage = page = components = pageComponents = settings = seo = linklists = footer = header = body = title = data = accountId = pageName = fn = null;
 
                         return;
                     }
@@ -1533,39 +1548,34 @@ var dao = {
                             //inject editable stuff here
                             //var endHeadReplacement = editableCssScript + " </head>";
                             //value = value.replace("</head>", endHeadReplacement);
+                            console.log('CSS SCRIPT: ' + editableCssScript);
                             if (editableCssScript) {
-                            data.footer = data.footer + " " + editableCssScript;
+                                data.footer = data.footer + " " + editableCssScript;
                             } else {
                                 data.footer = data.footer;
                             }
                         }
                     }
-                    self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function (err, value) {
+                    self._renderItem(data, themeId, "layout", themeConfig['template-engine'], "default-layout", function(err, value) {
                         if (err) {
                             fn(err, value);
 
-                            self = account = website = page = themeId = themeConfig
-                                = isNewPage = defaultPage = page = components = pageComponents
-                                = settings = seo = linklists = footer = header = body = title = data
-                                = accountId = pageName = fn = null;
+                            self = account = website = page = themeId = themeConfig = isNewPage = defaultPage = page = components = pageComponents = settings = seo = linklists = footer = header = body = title = data = accountId = pageName = fn = null;
 
                             return;
                         }
 
                         fn(null, value);
 
-                        self = account = website = page = themeId = themeConfig
-                            = isNewPage = defaultPage = page = components = pageComponents
-                            = settings = seo = linklists = footer = header = body = title = data
-                            = accountId = pageName = fn = null;
+                        self = account = website = page = themeId = themeConfig = isNewPage = defaultPage = page = components = pageComponents = settings = seo = linklists = footer = header = body = title = data = accountId = pageName = fn = null;
                     });
                 });
             });
     },
 
 
-    _renderComponent: function (data, themeId, component, engine, fn) {
-        this._renderItem(data, themeId, "components/" + component, engine, null, function (err, value) {
+    _renderComponent: function(data, themeId, component, engine, fn) {
+        this._renderItem(data, themeId, "components/" + component, engine, null, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
@@ -1580,11 +1590,11 @@ var dao = {
     },
 
 
-    _renderItem: function (data, themeId, item, engine, defaultItem, fn) {
-        var self = this
-            , path = "cms/themes/"
-            , engine = engine || themesConfig.DEFAULT_ENGINE
-            , extension = this._getExtensionForEngine(engine);
+    _renderItem: function(data, themeId, item, engine, defaultItem, fn) {
+        var self = this,
+            path = "cms/themes/",
+            engine = engine || themesConfig.DEFAULT_ENGINE,
+            extension = this._getExtensionForEngine(engine);
 
         data.helpers = data.helpers || {};
         data.helpers.link = this._hbsLinkAnchor;
@@ -1594,7 +1604,7 @@ var dao = {
             defaultItem = null;
         }
 
-        app.render(path + themeId + "/" + item + extension, data, function (err, value) {
+        app.render(path + themeId + "/" + item + extension, data, function(err, value) {
             if (err) {
                 console.log("ERROR: " + path + themeId + "/" + item + extension + ", " + err);
                 if (defaultItem != null) {
@@ -1615,7 +1625,7 @@ var dao = {
     },
 
 
-    _getExtensionForEngine: function (engine) {
+    _getExtensionForEngine: function(engine) {
         if (engine == "handlebars" || engine == "hbs") {
             return ".hbs";
         } else if (engine == "jade") {
@@ -1647,7 +1657,7 @@ var dao = {
 
     _setLinkListUrls: function(links, isEditor) {
         if (links != null) {
-            for(var i = 0; i < links.length; i++) {
+            for (var i = 0; i < links.length; i++) {
                 links[i].url = this._getLinkListItemUrl(links[i].linkTo, isEditor);
             }
         }
@@ -1664,7 +1674,7 @@ var dao = {
         }
 
         var _url;
-        switch(data.type) {
+        switch (data.type) {
             case "page":
                 _url = "/page/" + data.data;
                 break;
@@ -1676,10 +1686,10 @@ var dao = {
             case "section":
                 return "#" + data.data;
             case "product":
-                _url = "";  //Not yet implemented
+                _url = ""; //Not yet implemented
                 break;
             case "collection":
-                _url =  "";  //Not yet implemented
+                _url = ""; //Not yet implemented
                 break;
             default:
                 return "#";
