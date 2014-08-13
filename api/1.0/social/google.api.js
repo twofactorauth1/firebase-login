@@ -21,6 +21,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function() {
         //GET
         app.get(this.url('checkaccess'), this.isAuthApi, this.checkAccess.bind(this));
+        app.get(this.url('hasaccess'), this.isAuthApi, this.hasAccess.bind(this));
         app.get(this.url('accesstoken'), this.isAuthApi, this.getAccessToken.bind(this));
 
         app.get(this.url('profile'), this.isAuthApi, this.getProfile.bind(this));
@@ -38,6 +39,17 @@ _.extend(api.prototype, baseApi.prototype, {
                 resp.send(value);
             } else {
                 self.wrapError(resp, 500, "Google API access not verified", err, value);
+            }
+        });
+    },
+
+    hasAccess: function(req, res) {
+        var self = this;
+        googleDao.checkAccessToken(req.user, function(err, value) {
+            if(!err) {
+                res.send(value);
+            } else {
+                res.send('false');
             }
         });
     },
