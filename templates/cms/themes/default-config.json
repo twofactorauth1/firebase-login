@@ -124,6 +124,7 @@
 
     "supported-components": [
         "contact-us",
+        "products",
         "facebook-comments",
         "facebook-likes",
         "feature-blocks",
@@ -296,7 +297,26 @@
                 "text":"text"
             }
         },
-
+        {
+            "type": "products",
+            "anchor": "products",
+            "classes": {
+                "label": "label",
+                "description": "description",
+                "caption": "caption",
+                "text": "text",
+                "title": "title",
+                "product-sections": "product-sections",
+                "product-sections.item": "products",
+                "products.products-section-id": "products-section-id", 
+                "products.item": "product",
+                "product.id": "product-id",
+                "product.image": "product-image",
+                "product.title": "product-title",
+                "product.subtitle": "product-subtitle",
+                "product.text": "product-text"
+            }
+        },
         {
             "type": "meet-team",
             "anchor": "meet-team",
