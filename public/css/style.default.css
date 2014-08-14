@@ -21748,6 +21748,12 @@ path {
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: 'open_sansregular';
+  src: url('../fonts/opensans/OpenSans-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
 /********** Global **********/
 ul {
   list-style: none;
@@ -23467,6 +23473,7 @@ input {
 }
 .fitstop .products-component .tab-content .product-content h4 {
   font-size: 16px;
+  color: #4BADE4!important;
   font-weight: bold;
   padding-top: 10px;
   padding-left: 10px;

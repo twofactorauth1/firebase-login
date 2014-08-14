@@ -110,12 +110,16 @@
 
                 $('.navbar-nav a').on('click touchstart', function(event) {
                     event.preventDefault();
-                    console.log('nav click to '+this.href);
-                    var href = $(this).attr('href');
-                    var target = $(this.getAttribute('href'));
-                    if (document.location.href.indexOf('/page') > -1) {
-                      window.location.replace(window.location.origin+href);
+                    var target = $(this).attr('href');
+                    if (target.indexOf('login') > -1) {
+                      window.location.replace(window.location.origin+target);
+                      return false;
                     }
+                    if (document.location.href.indexOf('/page') > -1) {
+                      window.location.replace(window.location.origin+target);
+                      return false;
+                    }
+
                     if( target.length > -1) {
                         //calculate destination place
                         var dest = 0;
@@ -128,7 +132,7 @@
                         $('html, body').animate({
                             scrollTop: dest
                         }, 2000, 'swing');
-                        window.location.replace(window.location.origin+href);
+                        window.location.replace(window.location.origin+target);
                     }
                 });
 
@@ -300,10 +304,10 @@
                      $('#InputEmail').val($('#emailSub').val());
                  });
 
-                 $('.single-blog').on('click', function() {
-                    // var href = $(this).data('url');
-                    // console.log('href: '+href);
-                    // window.location.replace(window.location.origin+'/page/blog/'+href)
+                 $('.blog-teaser .single-blog').on('click', function() {
+                    var href = $(this).data('url');
+                    console.log('href: '+href);
+                    window.location.replace(window.location.origin+'/page/blog/'+href)
                  });
 
                  $('#subscribelist').click(function(){
