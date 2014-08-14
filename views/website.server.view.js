@@ -50,7 +50,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
             var path = 'single-post';
 
-            var isEditor = true;
+            var isEditor = false;
 
             var cacheKey = "web-" + accountId + "-" + blogPost;
 

@@ -22,7 +22,6 @@
     {{/if}}
 
         <link rel="stylesheet" href="/css/style.default.css">
-        <link href='http://fonts.googleapis.com/css?family=Capita+Light:400,700' rel='stylesheet' type='text/css'>
 
     <title>{{title}}</title>
     <script type="text/javascript">
@@ -101,16 +100,59 @@
     <script type="text/javascript" >
           (function($) {
              $(document).ready(function() {
+                var elem = window.location.hash;
+                window.location = '#';
 
                 function changeSidebarHeight() {
                   var sidebarHeight = $('#sidebar').height();
                   $('#main-area').css('min-height', sidebarHeight+50);
                 }
 
-                $('#main-area').on('click', function() {
-                  var $ = Aloha.jQuery;
-                  $('.editable').aloha();
+                $('.navbar-nav a').on('click touchstart', function(event) {
+                    event.preventDefault();
+                    console.log('nav click to '+this.href);
+                    var href = $(this).attr('href');
+                    var target = $(this.getAttribute('href'));
+                    if (document.location.href.indexOf('/page') > -1) {
+                      window.location.replace(window.location.origin+href);
+                    }
+                    if( target.length > -1) {
+                        //calculate destination place
+                        var dest = 0;
+                        if ($(target).offset().top > $(document).height() - $(window).height()) {
+                            dest = $(document).height() - $(window).height();
+                        } else {
+                            dest = $(target).offset().top;
+                        }
+                        //go to destination
+                        $('html, body').animate({
+                            scrollTop: dest
+                        }, 2000, 'swing');
+                        window.location.replace(window.location.origin+href);
+                    }
                 });
+
+                $(window).load(function(e){
+                  if(elem) {
+                        //calculate destination place
+                        var dest = 0;
+                        if ($(elem).offset().top > $(document).height() - $(window).height()) {
+                            dest = $(document).height() - $(window).height();
+                        } else {
+                            dest = $(elem).offset().top;
+                        }
+                        //go to destination
+                        $('html, body').animate({
+                            scrollTop: dest
+                        }, 2000, 'swing');
+                        window.location.replace(window.location.origin+elem);
+                  }
+                });
+
+                // $('#main-area').on('click', function() {
+                //   var $ = Aloha.jQuery;
+                //   $('.editable').aloha();
+                // });
 
                 // var spinner = $('.spinner-input').spinner();
                 // spinner.spinner('value', 0);
@@ -172,52 +214,42 @@
                     scroll_factor: 0.5
                 });
 
-                if (window.top!=window.self)
-                {
+                if (window.top!=window.self) {
                   $('.feature-single-0, .feature-single-1, .feature-single-2, div[data-class=profilepic], .btn-outline').css('opacity', 1);
                 }
 
-                $('.navbar-nav a').on('click', function(event) {
-                  console.log('nav click to '+this.href);
-                    var target = $(this.getAttribute('href'));
-                    if( target.length ) {
-                        event.preventDefault();
-                        $('html, body').animate({
-                            scrollTop: target.offset().top
-                        }, 1000);
-                    }
-                });
+                if ( window.top === window.self ) {
+                  $(function () {
+                    $(".feature-single-0").waypoint(function (direction) {
+                        $(this).addClass("animated fadeIn");
+                    }, { offset: $.waypoints('viewportHeight') - 0,
+                        triggerOnce: true});
 
-                if (window.top===window.self) {
-                  $(".feature-single-0").waypoint(function (direction) {
-                      $(this).addClass("animated fadeIn");
-                  }, { offset: $.waypoints('viewportHeight') - 0,
-                      triggerOnce: true});
+                    $(".feature-single-1").waypoint(function (direction) {
+                        $(this).addClass("animated fadeIn");
+                    }, { offset: $.waypoints('viewportHeight') - 150,
+                        triggerOnce: true});
 
-                  $(".feature-single-1").waypoint(function (direction) {
-                      $(this).addClass("animated fadeIn");
-                  }, { offset: $.waypoints('viewportHeight') - 150,
-                      triggerOnce: true});
+                    $(".feature-single-2").waypoint(function (direction) {
+                        $(this).addClass("animated fadeIn");
+                    }, { offset: $.waypoints('viewportHeight') - 250,
+                        triggerOnce: true});
 
-                  $(".feature-single-2").waypoint(function (direction) {
-                      $(this).addClass("animated fadeIn");
-                  }, { offset: $.waypoints('viewportHeight') - 250,
-                      triggerOnce: true});
+                    $(".feature-single-3").waypoint(function (direction) {
+                        $(this).addClass("animated fadeIn");
+                    }, { offset: $.waypoints('viewportHeight') - 375,
+                        triggerOnce: true});
 
-                  $(".feature-single-3").waypoint(function (direction) {
-                      $(this).addClass("animated fadeIn");
-                  }, { offset: $.waypoints('viewportHeight') - 375,
-                      triggerOnce: true});
+                    $("div[data-class=profilepic]").waypoint(function (direction) {
+                        $(this).addClass("animated fadeIn");
+                    }, { offset: $.waypoints('viewportHeight') - 100,
+                        triggerOnce: true});
 
-                  $("div[data-class=profilepic]").waypoint(function (direction) {
-                      $(this).addClass("animated fadeIn");
-                  }, { offset: $.waypoints('viewportHeight') - 100,
-                      triggerOnce: true});
-
-                  $(".btn-outline").waypoint(function (direction) {
-                      $(this).addClass("animated fadeIn");
-                  }, { offset: $.waypoints('viewportHeight') - 100,
-                      triggerOnce: true});
+                    $(".btn-outline").waypoint(function (direction) {
+                        $(this).addClass("animated fadeIn");
+                    }, { offset: $.waypoints('viewportHeight') - 100,
+                        triggerOnce: true});
+                  });
                 }
 
                 $('#myCarousel .item:first-child').addClass('active');
@@ -244,7 +276,8 @@
                   }
                 });
 
-                $('.goback').on('click', function() {
+                $('#content-area .goback').on('click touchstart', function() {
+                    console.log('go back');
                     window.history.back();
                 });
 
@@ -268,7 +301,9 @@
                  });
 
                  $('.single-blog').on('click', function() {
-                    var href = $().data('url');
+                    // var href = $(this).data('url');
+                    // console.log('href: '+href);
+                    // window.location.replace(window.location.origin+'/page/blog/'+href)
                  });
 
                  $('#subscribelist').click(function(){
