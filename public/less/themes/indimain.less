@@ -516,7 +516,6 @@
   }
 
   div[data-class='image-text'] p {
-    color: #999999;
     font-size: 14px;
   }
 
@@ -932,36 +931,69 @@
   //     display: block;
   //   }
 
+
 /********** MastHead **********/
 
-.masthead {
-  margin-top: 0;
-  height: 460px;
-  transition:none;
+  .masthead {
+    margin-top: 0;
+    height: 460px;
+    transition:none;
 
-    h4  {
-      div, i {
-        float: left;
-        text-indent: 10px;
-        line-height: 15px;
+      h4  {
+        div, i {
+          float: left;
+          text-indent: 10px;
+          line-height: 15px;
+        }
+      }
+
+      h1 {
+        color: white;
+        margin-top: 100px;
+      }
+
+      p {
+        color: white;
+      }
+
+      .btn {
+        width: 200px;
+        height: 50px;
+        margin-top: 30px;
+      }
+  }
+
+/********** Single Blog ***********/
+
+    .single-blog {
+      .blog-meta {
+        margin-top: 15px;
+        margin-bottom: 30px;
       }
     }
 
-    h1 {
-      color: white;
-      margin-top: 100px;
+    p.blog-meta {
+      border-bottom: none!important;
+      border-top: none!important;
+      text-transform: none!important;
+      color: #9E9E9E;
+      font-family: Georgia,serif;
+      font-size: 12px;
+      font-style: italic;
+      padding: 0 5px 7px 4px;
+      margin: 0;
     }
 
-    p {
-      color: white;
+    h2.blog-title {
+    padding-bottom: 0px!important;
     }
 
-    .btn {
-      width: 200px;
-      height: 50px;
-      margin-top: 30px;
+    #content-area {background: linear-gradient(to left, #f7f7f7 50%, #ffffff 50%);}
+
+    div.blog-thumb span.overlay {
+      background: none!important;
     }
-}
+
 /**********  **********/
 
     .primary {
@@ -1270,27 +1302,6 @@
       padding: 10px 40px;
     }
 
-    p.blog-meta {
-      border-bottom: none!important;
-      border-top: none!important;
-      text-transform: none!important;
-      color: #9E9E9E;
-      font-family: Georgia,serif;
-      font-size: 12px;
-      font-style: italic;
-      padding: 0 5px 7px 4px;
-      margin: 0;
-    }
-
-    h2.blog-title {
-    padding-bottom: 0px!important;
-    }
-
-    #content-area {background: linear-gradient(to left, #f7f7f7 50%, #ffffff 50%);}
-
-    div.blog-thumb span.overlay {
-      background: none!important;
-    }
 
     .fb-like {
       padding: 14px 20px 0 15px;

@@ -23,23 +23,25 @@
                             </div>
                         </h2>
 
-                        <p class="blog-meta">
+                        <div class="blog-meta">
                             {{#if created_date}}
-                                <div data-class="created.date">
+                                <div class="pull-left" data-class="created.date">
                                     {{created_date}}
                                 </div>
-                                • 
-                            {{/if}}
-                            {{#if post_author}}
-                                Posted by <a href="/page/author/{{post_author}}">{{post_author}}</a>
-                            {{/if}}
-                            {{#if post_category}}
-                                in <a href="/page/category/{{post_category}}">{{post_category}}</a>
-                            {{/if}}
+                                <div class="posted">
+                                        &nbsp;• 
+                                    {{/if}}
+                                    {{#if post_author}}
+                                        Posted by <a href="/page/author/{{post_author}}">{{post_author}}</a>
+                                    {{/if}}
+                                    {{#if post_category}}
+                                        in <a href="/page/category/{{post_category}}">{{post_category}}</a>
+                                    {{/if}}
+                                </div>
                             {{!-- {{#if comment_count}}
                                  • {{comment_count}} comments
                             {{/if}} --}}
-                        </p>
+                        </div>
 
                         {{#if post_tags}}
                             <ul class="post_tags">
