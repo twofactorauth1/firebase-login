@@ -14,6 +14,10 @@ var clientSecret = process.env.GOOGLE_CLIENT_SECRET || 'yPiJOniUgxjT94O7M_4tNj_M
 //var clientId = '204086573911-ft949pmouf9etb2gevtgqujk1v56gac5.apps.googleusercontent.com';
 //var clientSecret = 'SY730wdxw0RZbaxWwikwSQqT';
 
+//TEST Environment Credentials (*.test.indigenous.io)
+//var clientId = '277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com';
+//var clientSecret = 'lg41TWgRgRfZQ22Y9Qd902pH';
+
 module.exports = {
     CLIENT_ID: clientId,
     CLIENT_SECRET: clientSecret,
