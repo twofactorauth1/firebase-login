@@ -216,10 +216,34 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    findAllWithFieldsAndLimit: function(query, skip, limit, sort, fields, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._findAllWithFieldsAndLimitMongo(query, skip, limit, sort, fields, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
     findAndOrder: function(query, fields, type, order_by, order_dir, fn) {
         if(this.getStorage(type) === 'mongo') {
             this._findAndOrderMongo(query, fields, type, order_by, order_dir, fn);
         } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
+    aggregate: function(groupCriteria, matchCriteria, type,  fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._aggregateMongo(groupCriteria, matchCriteria, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
+    aggregateWithCustomStages: function(stageAry, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._aggregateMongoWithCustomStages(stageAry, type, fn);
+        }  else {
             fn("No storage medium available for this model type");
         }
     },

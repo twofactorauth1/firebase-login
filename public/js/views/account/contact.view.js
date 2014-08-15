@@ -13,7 +13,7 @@ define([
     'services/authentication.service',
     'services/contact.service',
     'events/events',
-    'libs_misc/jquery/jquery.batchedimageloader',
+    'libs_misc/jquery/jquery.batchedimageloader'
     ], function(User, Account, Contact, Contacts, AuthenticationService, ContactService,events) {
 
     var view = Backbone.View.extend({
@@ -27,6 +27,8 @@ define([
         loadMore : true,
         currentDisplay:'first',
         currentOrder:'first',
+        fetched: false,
+        fetchedContacts: [],
 
         events: {
             "click .btn-letter":"showLetter",
@@ -66,12 +68,12 @@ define([
                         break;
                 }
             }
+            _.bindAll(this, 'check_height');
 
             $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
             $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
-            _.bindAll(this, 'check_height');
 
-
+            $(window).scroll(this.check_height);
         },
 
         remove: function () {
@@ -87,7 +89,8 @@ define([
                 , p1 = this.getAccount()
                 , p2 = this.getUser()
                 , p3 = this.getContacts(this.currentLetter)
-                , p4 = AuthenticationService.getGoogleAccessToken();
+                //, p4 = AuthenticationService.getGoogleAccessToken();
+                ,p4 = AuthenticationService.hasGoogleAccessToken();
 
             //_.bindAll(self, 'check_height');
 
@@ -100,8 +103,8 @@ define([
                 });
 
             $.when(p4)
-                .done(function(accessToken) {
-                    if (String.isNullOrEmpty(accessToken) == false) {
+                .done(function(accessToken){
+                    if (String.isNullOrEmpty(accessToken) == false && accessToken !== 'false') {
                         self.googleAccessToken = accessToken;
                         self.refreshGooglePhotos();
                     }
@@ -198,6 +201,8 @@ define([
             var html = tmpl(data);
 
             self.show(html);
+            self.adjustWindowSize();
+            $('.people-item').addClass('animate');
 
             var sidetmpl = $$.templateManager.get("contact-sidebar", self.templateKey);
             var rightPanel = $('#rightpanel');
@@ -209,6 +214,57 @@ define([
             self.updateTooltips();
         },
 
+        appendContacts: function() {
+            var self = this;
+
+            //check to see if the fetched contacts have already been appended
+            var contactsArr = self.contacts.toJSON();
+            var cleanedContacts = [];
+            for (var i = 0; i < contactsArr.length; i++) {
+                if ($.inArray(contactsArr[i]._id, self.fetchedContacts) > -1) {
+                    console.log('is IN array');
+                } else {
+                    console.log('is NOT in array '+self.fetched);
+                    cleanedContacts.push(contactsArr[i]);
+                }
+            }
+
+            //update the fecthedContacts with newly fetched contact Id's
+            console.log('Cleaned Contacts: '+cleanedContacts.length);
+            for (var i = 0; i < cleanedContacts.length; i++) {
+                if (self.fetchedContacts.indexOf(cleanedContacts[i]._id) > -1) {
+                    //do nothing
+                } else {
+                    self.fetchedContacts.push(cleanedContacts[i]._id);
+                }
+            }
+
+            if (!self.fetched) {
+                cleanedContacts.splice(0[3]);
+                self.fetched = true;
+            }
+            console.log('Contacts Fetched: '+self.fetchedContacts);
+
+            var data = {
+                account: self.account.toJSON(),
+                user: self.user.toJSON(),
+                contacts: cleanedContacts,
+                currentLetter: self.currentLetter.toLowerCase(),
+                currentDisplay:self.currentDisplay.toLowerCase()
+            };
+
+            data.min = 6;
+            data.count = data.contacts.length;
+
+            var tmpl = $$.templateManager.get("people-list", self.templateKey);
+            var html = tmpl(data);
+            $('.people-list').append(html);
+            $('.people-item').addClass('animate');
+
+            self.refreshGooglePhotos();
+
+            self.updateTooltips();
+        },
 
         refreshGooglePhotos: function(contacts) {
             var self = this;
@@ -226,7 +282,6 @@ define([
                 $(".batched-image-loader").batchedImageLoader();
             }
         },
-
 
         showLetter: function(event) {
             event.stopImmediatePropagation();
@@ -268,7 +323,6 @@ define([
             $("i", event.currentTarget).toggleClass("fa-star-o fa-star");
         },
 
-
         viewContactDetails: function(event) {
             var href = $(event.target).attr("href") || $(event.target).parent().attr("href");
             if (href != null) {
@@ -282,11 +336,9 @@ define([
             $$.r.account.ContactRouter.navigateToContactDetails(contactId, this.currentLetter);
         },
 
-
         createContact: function() {
             $$.r.account.ContactRouter.navigateToCreateContact(this.currentLetter);
         },
-
 
         //region IMPORT
         importFacebookFriends: function(event) {
@@ -351,6 +403,7 @@ define([
 
 
         getContacts: function() {
+            var self = this;
             if (this.accountId == null) {
                 this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
             }
@@ -365,8 +418,7 @@ define([
 
             if(this.currentLetter=='all') {
                 return this.contacts.getContactsAll(this.accountId, this.currentLetter, this.skip);
-            } else {
-
+            }  else {
                 return this.contacts.getContactsByLetter(this.accountId, this.currentLetter);
             }
 
@@ -400,20 +452,6 @@ define([
         check_height : function (e){
             var self = this;
             if(window.innerHeight + document.body.scrollTop >= document.body.offsetHeight){
-
-
-               /* console.log(Backbone.history.fragment);
-                var params=Backbone.history.fragment;
-                    params=params.split('/');
-                if(params.length==3) {
-                    var skipindex = params[params.length - 1];
-                    console.log(this.skip);
-                //        this.skip=parseInt(skipindex)+3;
-                 //   this.skip+=3;
-                }*/
-
-                console.log(self.loadMore);
-                console.log(self.skip);
                 if(self.loadMore) {
                     this.getContacts(self.currentLetter)
                         .done(function (res, msg) {
@@ -421,9 +459,12 @@ define([
                             if (res.length < self.skip+3) {
                                 self.loadMore = false;
                             }
-                            self.renderContacts();
+                            //determine the ID's of the contacts being fetched
+                            //make a fetched list so there will be no duplicates
+
+                            self.appendContacts();
                             self.check_welcome();
-                            self.skip=self.contacts.length;
+                            self.skip = self.contacts.length;
                         });
                     if (self.currentLetter == "all")
                         $$.r.account.ContactRouter.navigateToShowContactsForAll(self.currentLetter, self.skip);
@@ -476,6 +517,7 @@ define([
             var html = tmpl(data);
 
             self.show(html);
+            $('.people-item').addClass('shown');
 
             var sidetmpl = $$.templateManager.get("contact-sidebar", self.templateKey);
             var rightPanel = $('#rightpanel');

@@ -10,7 +10,16 @@ define([
     'models/user',
     'models/account',
     'models/activity',
-    'views/account/chart.view'
+    'views/account/chart.view',
+    'views/account/charts/chart',
+    'views/account/charts/facebook/engagedByAgeGender',
+    'views/account/charts/facebook/likesPerDay',
+    'views/account/charts/facebook/overview',
+    'views/account/charts/facebook/postInteractionsPerDay',
+    'views/account/charts/facebook/postTimeline',
+    'views/account/charts/facebook/reachPerDay',
+    'views/account/charts/facebook/topFans',
+    'views/account/charts/facebook/topTenPosts'
 ], function(BaseView, User, Account, Activity, ChartView) {
 
     var view = BaseView.extend({
@@ -39,13 +48,15 @@ define([
             , 'dragenter    .grid-placeholder'      : 'highlight'
             , 'dragleave    .grid-placeholder'      : 'unhighlight'
             , 'drop         .grid-placeholder'      : 'dropChart'
-            , 'dragstart    .chart-item'            : 'dragChart'
-            , 'dragleave    .chart-item'            : 'unhighlightChart'
+
+            , 'dragstart    .grid-placeholder'      : 'dragChart'
+//            , 'dragstart    .chart-item'            : 'dragChart'
+//            , 'dragleave    .chart-item'            : 'unhighlightChart'
             , 'dragover     .grid-new'              : 'dragOverNew'
             , 'dragleave    .grid-new'              : 'unhighlight'
             , 'drop         .grid-new'              : 'dropNew'
-            , 'mouseenter   .module'                : 'showRemoveButton'
-            , 'mouseleave   .module'                : 'hideRemoveButton'
+            , 'mouseenter   .moduleplaced'          : 'showRemoveButton'
+            , 'mouseleave   .moduleplaced'          : 'hideRemoveButton'
             , 'click        .delete-module'         : 'deleteModule'
         },
 
@@ -100,7 +111,7 @@ define([
                 , type   : type
                 , name   : name
                 , width  : width
-            })
+            });
         },
 
         cancel: function (e) {
@@ -122,9 +133,9 @@ define([
                 var d     = new Date
                     , day   = d.getDate()
                     , month = d.getMonth() + 1
-                    , year  = d.getFullYear()
-                data.title = 'dashboard-' + month + '-' + day + '-' + year
-                this.$('.ds-title').val(data.title)
+                    , year  = d.getFullYear();
+                data.title = 'dashboard-' + month + '-' + day + '-' + year;
+                this.$('.ds-title').val(data.title);
             }
 
             return data
@@ -176,7 +187,7 @@ define([
 
         highlightChart: function(e){
             var module = this.dragging || $()
-                , target = $(e.currentTarget).closest('.module')
+                , target = $(e.currentTarget).closest('.module');
 
             if (module[0] != target[0]) {
                 target.addClass('highlight')
@@ -193,17 +204,17 @@ define([
                 , name    = element.data('name')
                 , width   = element.data('width');
 
-            this.dragging = element
+            this.dragging = element;
 
-            SR.log('Dragging module:', type, name, width);
+            console.log('Dragging module:', type, name, width);
 
-            SR.DragData.set(e, {
+            this.dragdata_set(e, {
                 action : 'move'
                 , type   : type
                 , name   : name
                 , width  : width
                 , id     : e.target.id
-            })
+            });
         },
 
         dropChart: function(e){
@@ -211,33 +222,87 @@ define([
             e.stopPropagation();
 
             var self = $(e.target)
-                , data = SR.DragData.get(e);
+                , data = this.dragdata_get(e);
 
             self.removeClass('dragover');
 
-            SR.log('Drop ['+data.action+']:', data.chart);
+            console.log('Drop ['+data.action+']:', data.chart);
 
             switch (data.action) {
                 case 'move':
                     var chart = $('#'+data.id)
                         , temp = $('<div/>')
                         , chart_data = chart.data()
-                        , self_data = self.data()
+                        , self_data = self.data();
 
                     if (data.width == 1) {
-                        // the old elements switch-a-roo
-                        temp.replaceWith( self.replaceWith( chart.replaceWith(temp)))
-                        // remove empty lines
-                        if (self.siblings().is('.grid-placeholder')) {
-                            self.parent().remove();
-                            return
-                        }
-                        // recover jQuery data()
-                        chart.data(chart_data).redraw();
-                        self.data(self_data).redraw()
+                        temp_html = self.html();
+                        self.html( chart.html() );
+                        chart.html( temp_html );
 
+                        // recover jQuery data()
+                        if(typeof self_data.name == 'undefined' || self_data.name == "") {
+                            chart.removeAttr("data-name");
+                        } else {
+                            chart.attr("data-name",  self_data.name);
+                        }
+
+                        if(typeof self_data.type == 'undefined' || self_data.type == "") {
+                            chart.removeAttr("data-type");
+                        } else {
+                            chart.attr("data-type",  self_data.type);
+                        }
+
+                        if(typeof self_data.width == 'undefined' || self_data.width == "") {
+                            chart.removeAttr("data-width");
+                        } else {
+                            chart.attr("data-width",  self_data.width);
+                        }
+
+                        if(typeof chart_data.name == 'undefined' || chart_data.name == "") {
+                            self.removeAttr("data-name");
+                        } else {
+                            self.attr("data-name",  chart_data.name);
+                        }
+
+                        if(typeof chart_data.type == 'undefined' || chart_data.type == "") {
+                            self.removeAttr("data-type");
+                        } else {
+                            self.attr("data-type",  chart_data.type);
+                        }
+
+                        if(typeof chart_data.width == 'undefined' || chart_data.width == "") {
+                            self.removeAttr("data-width");
+                        } else {
+                            self.attr("data-width",  chart_data.width);
+                        }
+
+                        self_id = self.attr("id");
+                        chart_id = chart.attr("id");
+
+                        if(typeof self_id != 'undefined' && self_id != "") {
+                            chart.attr("id", self_id);
+                        } else {
+                            chart.removeAttr("id");
+                        }
+
+                        if(typeof chart_id != 'undefined' && chart_id != "") {
+                            self.attr("id", chart_id);
+                        } else {
+                            self.removeAttr("id");
+                        }
+
+                        if(self.hasClass("moduleplaced")) {
+
+                        } else {
+                            self.addClass("moduleplaced");
+                            chart.removeClass("moduleplaced");
+                        }
+
+                        self.find(".delete-module").remove();
+                        chart.find(".delete-module").remove();
                     } else {
-                        var row1 = self.parent(), row2 = chart.parent()
+                        var row1 = self.parent(), row2 = chart.parent();
 
                         if (row1.index() > row2.index())
                             row1.after(row2);
@@ -250,7 +315,7 @@ define([
                     this.createModule(self, {
                         type : data.type
                         , name : data.name
-                    })
+                    });
                     break;
             }
         },
@@ -272,11 +337,12 @@ define([
 
         addModule: function(data){
             var newRow = $('<div class="row" />');
+
             if (data.width == 2) {
-                newRow.append('<div class="grid-placeholder grid2" data-width="2" />');
+                newRow.append('<div class="grid-placeholder grid2 moduleplaced" data-width="2" data-type="' + data.type + '" data-name="' + data.name + '" draggable="true" />');
             } else {
-                newRow.append('<div class="grid-placeholder grid1" data-width="1" />');
-                newRow.append('<div class="grid-placeholder grid1" data-width="1" />');
+                newRow.append('<div class="grid-placeholder grid1 moduleplaced" data-width="1" data-type="' + data.type + '" data-name="' + data.name + '" draggable="true" />');
+                newRow.append('<div class="grid-placeholder grid1" data-width="1" draggable="true" />');
             }
 
             this.$('.row-new').before(newRow);
@@ -293,7 +359,14 @@ define([
         },
 
         createChart: function (target, chart) {
-            target = $(target);
+            origin_target = $(target);
+            var gridWidth = origin_target.data('width');
+            var chart_obj = $$.Charts[chart.name];
+            var tmpl = $$.templateManager.get(chart_obj.templateWrapper, chart_obj.templateKey);
+            var html = tmpl();
+            origin_target.html(html);
+
+            target = $(chart_obj.targetIndicator);
 
             var range = chart.range || [];
             var chart = new ChartView({
@@ -301,14 +374,17 @@ define([
                 , name   : chart.name
                 , width  : target.width()
                 , height : target.height()
-                , gridWidth : target.data('width')
+                , gridWidth : gridWidth
                 , model  : this.model
                 , since  : range[0]
                 , until  : range[1]
             });
 
+            origin_target.attr({ id: chart.cid });
+
             target.replaceWith(chart.el);
             chart.render();
+            origin_target.addClass("moduleplaced");
         },
 
         // Grid data is derived directly from the DOM tree. This is simpler than maintaining
@@ -319,12 +395,13 @@ define([
             this.$('.row:not(.row-new)').each(function(i){
                 var row = [];
                 $(this).children().each(function(i){
-                    var module = SR.Modules[this.id]
-                    row[i] = module && module.toJSON()
+                    var module = $$.modules[this.id];
+                    row[i] = module && module.toJSON();
                 });
                 grid[i] = row
             });
-            return grid
+
+            return grid;
         },
 
         redraw: function () {
@@ -353,7 +430,7 @@ define([
         },
 
         showRemoveButton: function (e) {
-            var module = $(e.target).closest('.module');
+            var module = $(e.target);
             this.removeButton.appendTo(module);
         },
 
@@ -362,17 +439,18 @@ define([
         },
 
         deleteModule: function (e) {
-            var module = $(e.target).closest('.module')
-                , id     = module.attr('id')
+            var module_wrapper = $(e.target).closest('.moduleplaced')
+                , id     = module_wrapper.attr('id')
                 , module = $$.modules[id]
                 , w      = module.options.gridWidth;
 
             // Remove entire row
-            if (w == 2 || module.$el.siblings('.module').length < 1) {
-                module.$el.closest('.row').remove();
+//            if (w == 2 || module.$el.siblings('.module').length < 1) {
+            if (w == 2) {
+                module_wrapper.closest('.row').remove();
                 // Replace with placeholder
             } else if (w == 1) {
-                module.$el.replaceWith($('<div class="grid-placeholder grid'+w+'" data-width="'+w+'" />'))
+                module_wrapper.replaceWith($('<div class="grid-placeholder grid'+w+'" data-width="'+w+'" />'))
             }
             module.remove();
         },
@@ -395,6 +473,37 @@ define([
                     var html = tmpl(data);
 
                     self.show(html);
+
+//                    $('.module_sidebar').draggable({
+//                        helper: "clone"
+//                        , start: _.bind(function(e){
+//                            console.log("Okay");
+//
+//                            var element = $(e.target)
+//                                , type    = element.data('type')
+//                                , name    = element.data('name')
+//                                , width   = element.data('width');
+//
+//                            console.log('Drag started:', type, name, width);
+//
+//                            this.dragdata_set(e, {
+//                                action : 'new'
+//                                , type   : type
+//                                , name   : name
+//                                , width  : width
+//                            });
+//
+//                        }, this)
+//                    });
+//                    $('#social_dashboard').droppable({
+//                        drop: function( event, ui ) {
+//                            $( this )
+//                                .addClass( "ui-state-highlight" )
+//                                .find( "p" )
+//                                .html( "Dropped!" );
+//                        }
+//                    });
+
                     self.check_welcome();
                 });
         },

@@ -9,5 +9,5 @@ module.exports = {
     /**
      * Client API Key
      */
-    CLIENT_API_KEY: 'Yh-J5BT-NPgbcYZ1TjyCiQ'
+    CLIENT_API_KEY: '8G6lE_7iRN5oLF5shYKgCQ'
 }

@@ -278,6 +278,8 @@ module.exports = {
                 self.log.error(msg);
                 fn(msg, null);
             } else {
+                self.log.debug('>> gettingPage');
+                console.log(page)
                 var componentAry = page.get('components') || [];
                 componentAry.push(component);
                 self.log.debug('<< addPageComponent');
@@ -347,14 +349,14 @@ module.exports = {
             } else {
                 var componentAry = page.get('components') || [];
                 var spliceIndex = -1;
-                for(var i=0; i<componentAry.length; i++) {
-                    if(componentAry[i]['_id'] === componentId) {
-                        spliceIndex = i;
-                        break;
+                    for(var i=0; i<componentAry.length; i++) {
+                        if(componentAry[i]['_id'] === componentId) {
+                            spliceIndex = i;
+                            break;
+                        }
                     }
-                }
-                if(spliceIndex !==-1) {
-                    componentAry.splice(spliceIndex, 1);
+                    if(spliceIndex !==-1) {
+                        componentAry.splice(spliceIndex, 1);
                     cmsDao.saveOrUpdate(page, fn);
                 } else {
                     var msg = 'Referenced componentId [' + componentId + '] was not found on page [' + pageId + '].';
@@ -439,14 +441,45 @@ module.exports = {
         var self = this;
         self.log = log;
 
+
         self.log.debug('>> createPage');
         cmsDao.saveOrUpdate(page, function(err, value){
             if(err) {
                 self.log.error('Error creating page: ' + err);
                 fn(err, null);
             } else {
-                self.log.debug('<< createPage');
-                fn(null, value);
+                //self.log.debug('<< createPage');
+                self.log.debug('created page.  Updating Linklists');
+                //console.dir(page);
+                //console.dir(value);
+                self.getWebsiteLinklistsByHandle(value.get('websiteId'),"head-menu",function(err,list){
+                    if(err) {
+                        self.log.error('Error getting website linklists by handle: ' + err);
+                        fn(err, value);
+                    } else {
+                        var link={
+                            label:page.get('title'),
+                            type:"link",
+                            linkTo:{
+                                type:"page",
+                                data:page.get('handle')
+                            }
+                        };
+                        list.links.push(link);
+                        self.updateWebsiteLinklists(value.get('websiteId'),"head-menu",list,function(err, linkLists){
+                            if(err) {
+                                self.log.error('Error updating website linklists by handle: ' + err);
+                                fn(err, value);
+                            } else {
+                                self.log.debug('<< createPage');
+                                fn(null, value);
+                            }
+                        });
+                    }
+
+                })
+
+
             }
         });
     },
@@ -470,14 +503,15 @@ module.exports = {
     getWebsiteLinklistsByHandle: function(websiteId, handle, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> getWebsiteLinklistsByHandle');
+        self.log.debug('>> getWebsiteLinklistsByHandle(' + websiteId + ',' + handle + ')');
 
         cmsDao.getWebsiteById(websiteId, function(err, website){
             if(err) {
                 self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
                 fn(err, null);
             } else {
-
+                self.log.debug('got the website:');
+                console.dir(website);
                 var linkListAry = website.get('linkLists');
                 var targetList = null;
                 for(var i=0; i<linkListAry.length; i++) {
@@ -529,7 +563,7 @@ module.exports = {
     updateWebsiteLinklists: function(websiteId, handle, linklist, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> getWebsiteLinklistsByHandle');
+        self.log.debug('>> updateWebsiteLinklists');
 
         cmsDao.getWebsiteById(websiteId, function(err, website){
             if(err) {

@@ -20,10 +20,6 @@ define([
 
                 type: "feature-blocks",
 
-                label:"",
-
-                description:"",
-
                 value: "",
 
                 title: "",

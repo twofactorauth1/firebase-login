@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h3 class="modal-title">Timeline item</h3>
+</div>
+<div class="modal-body modal-timeline-item row">
+    <form class="col-md-12">
+        <div class="form-group">
+            <label class="control-label" for="subject">Subject:</label>
+            <input id="subject" class="form-control" type="text" ng-model="video.subject">
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="premium">Premium:</label>
+            <input id="premium" type="checkbox" ng-model="video.isPremium">
+        </div>
+        <div class="form-group">
+            <label class="control-label">Day:</label>
+            <div rn-stepper ng-model="video.scheduledDay" min="0" max="100"></div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Time:</label>
+            <timepicker class="timepicker" ng-model="video.scheduledTime" ng-change="changed()" hour-step="hstep" minute-step="mstep"
+                        show-meridian="true"></timepicker>
+        </div>
+    </form>
+    <div class="col-md-12">
+        <button type="button" class="btn btn-primary" ng-click="editMode=!editMode" data-toggle="button">Edit template
+        </button>
+        <video-preview video="video" template="template" edit-mode="editMode"></video-preview>
+    </div>
+
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="close()">Close</button>
+    <div class="h-spacer-15"></div>
+    <button type="submit" class="btn btn-primary" ng-click="submit()">Save</button>
+</div>
+

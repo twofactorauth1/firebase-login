@@ -49,10 +49,8 @@ CONTACTS MAIN VIEW
     <div class="contentpanel">
         <div class="panel panel-default row">
             <div class="panel-body">
-
                 <div class="col-sm-6">
                     <input type="text" placeholder="Search Customers" class="form-control mb15 input-lg  search-contacts">
-
                 </div>
                 <div class="col-sm-6 form-horizontal hidden">
                     <div class="form-group row">
@@ -152,9 +150,7 @@ CONTACTS MAIN VIEW
                                 </ul>
                             </div>
                             <div class="media-body col-xs-12 hidden-xs">
-
                                 {{#ifCond ../account.displaysettings.display_type}}
-
                                 <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
                                 {{else}}
                                 <h4 class="person-name">{{last}} {{middle}} {{first}}</h4>
@@ -210,165 +206,12 @@ CONTACTS MAIN VIEW
                     <h3>No Contacts Available</h3>
                 </div>
 
-                <div class="visible-xs btn btn-success col-xs-12">Add a new contact</div>
-         {{/if}}
-
-
-     <!--           {{#iterateDifference min count 0}}
-                <div class="col-xs-12 col-sm-4">
-
-                    <div class="people-item btn-view-contact-details" data-contactid="{{_id}}">
-                        <div class="media">
-                            <span class="important-star"><i class="fa fa-star-o"></i>
-                            </span>
-                            <div class="media">
-                                <div class="col-xs-12">
-                                    {{#if photoSquare}} {{#isGoogleImage photoSquare}}
-                                    <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />{{else}}
-                                    <img class="img-circle media-object thumbnail" src="{{photoSquare}}">{{/isGoogleImage}} {{else}} {{#isGoogleImage photo}}
-                                    <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />{{else}}
-                                    <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">{{/isGoogleImage}} {{/if}}
-                                    <div class="clear"></div>
-                                </div>
-                                <div class="media-body col-xs-12">
-                                    <h4 class="person-name center">Henry Holmes
-                                        <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>">
-                                            <i class="fa fa-leaf"></i>
-                                            <i class="fa fa-leaf"></i>
-                                            <i class="fa fa-leaf"></i>
-                                            <i class="fa fa-leaf text-muted"></i>
-                                            <i class="fa fa-leaf text-muted"></i>
-                                        </span>
-                                    </h4>
-                                    <div class="center">
-                                        <span class="label label-info contact-cat">Customer</span>
-                                        <span class="label label-info contact-cat">Lead</span>
-                                    </div>
-                                    <hr class="clearfix mb15"></hr>
-                                    <div class="customer-stats">
-                                        <div class="last-active"><i class="fa fa-bolt"></i> Last Active:
-                                            <span class="data">2 days ago</span>
-                                        </div>
-                                        <div class="purchased"><i class="fa fa-money"></i> Purchased:
-                                            <span class="data">Yes</span>
-                                        </div>
-                                        <div class="emails-opened"><i class="fa fa-envelope"></i> Emails Opened:
-                                            <span class="data">3/5</span>
-                                        </div>
-                                        <div class="calls-made"><i class="fa fa-phone"></i> Calls Made:
-                                            <span class="data">5</span>
-                                        </div>
-                                        <div class="customer-since"><i class="fa fa-calendar"></i> Customer Since:
-                                            <span class="data">Jan 2013</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix mb15"></div>
-                                <hr></hr>
-                                <ul class="social-list">
-                                    <li><a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="700 E. Ocean Blvd" target="_blank"><i class="fa fa-map-marker"></i></a>
-                                    </li>
-                                    <li><a href="#" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="619-000-0000" target="_blank"><i class="fa fa-phone"></i></a>
-                                    </li>
-                                    <li><a href="mailto:ronburgandy@gmail.com" class="tooltips" data-toggle="tooltip" data-placement="top" title="ronburgandy@gmail.com" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
-                                    </li>
-                                    <li><a href="https://www.facebook.com/theronburgandy" class="tooltips" data-toggle="tooltip" data-placement="top" title="theronburgandy" data-original-title="theronburgandy" target="_blank"><i class="fa fa-facebook"></i></a>
-                                    </li>
-                                    <li><a href="https://twitter.com/RobinBurgundy" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="RobinBurgundy"><i class="fa fa-twitter"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{/iterateDifference}}-->
+                    <div class="visible-xs btn btn-success col-xs-12">Add a new contact</div>
+            {{/if}}
             </div>
         </div>
     </div>
 
-    <!--
-    <div id="contacts-main-container">
-
-
-        <div class="row">
-            <ul class="pull-right hidden-md hidden-lg unstyled col-sm-1" style="margin-top:15px;">
-                {{#eachLetter}}
-                <li><a class="btn-letter" href="#">{{letter}}</a></li>
-                {{/eachLetter}}
-            </ul>
-
-            <div id="contacts-list-container" class="col-sm-11 col-md-12">
-                {{#each contacts}}
-                <div class="col-xs-11 col-sm-6 col-md-4 contact-thumbnail">
-                    <div class="inner btn-view-contact-details" data-contactid="{{_id}}">
-                        <strong>{{first}} {{middle}} {{last}}</strong> <span class="visible-inline-xs"><small>
-                        {{contactTypeLabel this}}
-                    </small></span>
-
-                        <div class="hidden-xs">
-                            <small>{{contactTypeLabel this}}</small>
-                        </div>
-
-                        <div class="contacts-photo-container">
-                            {{#if photoSquare}}
-                                {{#isGoogleImage photoSquare}}
-                                    <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader thumb-lg" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                                {{else}}
-                                    <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
-                                {{/isGoogleImage}}
-                            {{else}}
-                                {{#isGoogleImage photo}}
-                                    <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader thumb-lg" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                                {{else}}
-                                    <img class="img-circle media-object thumbnail standard thumb-lg" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                                {{/isGoogleImage}}
-                            {{/if}}
-                        </div>
-
-                        <div class="hidden-xs contact-thumbnail-details">
-                            <div>Last Active:</div>
-                            <div>Purchased:</div>
-                            <div>Emails Opened:</div>
-                            <div>Calls Made:</div>
-                        </div>
-
-                        <div class="contact-thumbnail-actions hidden-xs">
-                            <div class="fa fa-envelope-o" title="send-message"/>
-                        </div>
-                    </div>
-                </div>
-                {{else}}
-
-                <div class="visible-xs col-xs-10">
-                    <h3>No Records Available</h3>
-                </div>
-
-                <div class="visible-xs btn btn-primary col-xs-8">Add a new contact</div>
-                {{/each}}
-
-                {{#iterateDifference min count 0}}
-                <div class="col-xs-11 col-sm-6 col-md-4 contact-thumbnail hidden-xs {{#if $last}}hidden-md hidden-lg{{/if}}">
-                    <div class="inner">
-                        <strong>Create new Contact</strong>
-
-                        <div class="contacts-photo-container">
-                            <img class="img-circle" src="/assets/icons/blank-user.jpg">
-                        </div>
-
-                        <div class="hidden-xs">
-                            <div class="btn btn-success btn-create-contact">Add Contact</div>
-                        </div>
-
-                    </div>
-                </div>
-                {{/iterateDifference}}
-            </div>
-        </div>
-
-
-        {{> contact-paginator}}
-    </div>
-    -->
 </script>
 
 <script type="text/x-handlebars-template" name="contact-sidebar">
@@ -386,7 +229,7 @@ CONTACTS MAIN VIEW
         <div class="tab-pane pane-settings active" id="rp-settings">
 
             <div class="form-group mb20">
-                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#import-contacts-modal"><i class="fa fa-cloud-upload"></i> Import Contacts</button>
+                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#importContactsModal"><i class="fa fa-cloud-upload"></i> Import FB Contacts</button>
             </div>
 
 
@@ -487,6 +330,7 @@ CONTACTS MAIN VIEW
     </div>
 
     {{> importContacts-modal}}
+    {{> fixDuplicates-modal}}
 </script>
 
 
@@ -498,6 +342,133 @@ CONTACTS MAIN VIEW
             {{/eachLetter}}
         </ul>
     </div>
+</script>
+
+<script type="text/x-handlebars-template" name="people-list">
+    {{> people-list-partial}}
+</script>
+
+<script type="text/x-handlebars-template" name="people-list-partial" partial="true">
+        {{#each contacts}}
+            <div class="col-xs-12 col-sm-4 col-md-3">
+                <div class="people-item btn-view-contact-details contact-item" data-contactid="{{_id}}">
+                    <span class="important-star tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Important Contact">
+                        <i class="fa {{#if starred}}fa-star{{else}}fa-star-o{{/if}}" />
+                    </span>
+
+                    <div class="media">
+                        <div class="col-xs-12f">
+                            <!--// {{#if photoSquare}} // {{#isGoogleImage photoSquare}} //-->
+                            <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" /><!-- // {{else}} // -->
+                            <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
+                            <!--// {{/isGoogleImage}} // {{else}} // {{#isGoogleImage photo}} // -->
+                            <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />// <!-- {{else}} // -->
+                            <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                            <!-- // {{/isGoogleImage}} // {{/if}} -->
+
+                            <span class="name visible-xs">
+
+                                <h4>
+                                    {{first}} {{middle}} {{last}}
+                                    <span class="label label-info contact-cat pull-right hidden-xs">{{contactTypeLabel this}}</span>
+                                </h4>
+                            </span>
+
+                            <div class="clear"></div>
+                        </div>
+                        <div class="media-body col-xs-12 hidden-xs">
+
+                            {{#ifCond ../account.displaysettings.display_type}}
+
+                            <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
+                            {{else}}
+                            <h4 class="person-name">{{last}} {{middle}} {{first}}</h4>
+                            {{/ifCond}}
+
+
+                           <!-- <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>-->
+
+                            <span class="label label-info contact-cat">{{contactTypeLabel this}}</span>
+
+                            <div class="hidden">
+                                <div class="last-active text-muted">Last Active: {{#if lastActive}} {{lastActive}} days ago {{else}} n/a {{/if}}
+                                </div>
+
+                                <div class="purchased text-muted">
+                                    {{#if purchased}} Purchased: Yes {{else}} Purchased: n/a {{/if}}
+                                </div>
+
+                                <div class="emails-opened text-muted">
+                                    {{#if totalEmails}} Emails Opened: {{#if emailsOpened}} {{emailsOpened}}/{{totalEmails}} {{else}} 0/{{totalEmails}} {{/if}} {{else}} Emails Opened: n/a {{/if}}
+                                </div>
+
+                                <div class="calls-made text-muted">
+                                    Calls Made: {{#if callsMade}} {{callsMade}} {{else}} n/a {{/if}}
+                                </div>
+
+                                <div class="customer-since text-muted">
+                                    Customer since: {{#if firstPurchase}} {{formatDate fistPurchase}} {{else}} n/a {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix mb10"></div>
+                        <ul class="social-list hidden-xs">
+                                    {{#getBestEmail this}}
+                                        <li>
+                                            <a href="mailto:{{$email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
+                                        </li>
+                                    {{else}}
+                                    {{/getBestEmail}}
+
+
+                                <li>
+                                    {{#getFacebookId this}}
+                                    <a href="https://www.facebook.com/{{$facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                    {{else}}
+
+                                    {{/getFacebookId}}
+                                </li>
+
+                                <li>
+                                    {{#getTwitterId this}}
+                                    <a href="https://twitter.com/intent/user?user_id={{$twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                    {{else}}
+
+                                    {{/getTwitterId}}
+                                </li>
+
+                                <li>
+                                    {{#getLinkedInId this}}
+                                    <a href="{{#if $linkedInUrl}}{{$linkedInUrl}}{{else}}http://www.linkedin.com/profile/view?id={{$linkedInId}}{{/if}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                    {{else}}
+                                    {{/getLinkedInId}}
+                                </li>
+
+                                {{#getAddress this}}
+                                <li>
+                                    <a href="https://www.google.com/maps?q={{$this.address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                                {{else}}
+                                {{/getAddress}}
+                                </li>
+                            </ul>
+                        <div class="pull-right">
+                            <span class="visible-inline-xs">
+                                type: {{contactTypeLabel this}} |
+                            </span>
+
+                            <span class="tooltips hidden" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sources where this contact information came from">sources:</span>
+                            {{#each details}}
+                            <span><i class="{{iconFromSocialType type}}" />
+                            </span>
+                            {{/each}}
+
+
+                        </div>
+                        <div class="clear clearfix" />
+                    </div>
+                </div>
+            </div>
+        {{/each}}
 </script>
 <!-- END CONTACTS MAIN -->
 
@@ -1274,31 +1245,27 @@ CONTACTS EDIT VIEW
                     <!-- End Panel Body -->
                 </div>
                 <!-- End Panel Default -->
+        </div>
+        <div class="col-md-6">
+            <h4>BioMetric Information</h4>
+            {{#unless contact.devices.length}}
+             <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
+            {{/unless}}
+            <hr/>
+            <div id="edit-devices-container">
+                {{#each contact.devices}}
+                    {{serialNumber}}
+                    {{deviceTypeId}}
+                {{/each}}
             </div>
-
-            <!-- BioMetric Data -->
-            <div class="col-md-6">
-                <h4>BioMetric Information</h4>
-                {{#unless contact.devices.length}}
-                 <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
-                {{/unless}}
-                <hr/>
-                <div id="edit-devices-container">
-                    {{#each contact.devices}}
-                        {{serialNumber}}
-                        {{deviceTypeId}}
-                    {{/each}}
-                </div>
-                <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
-            </div>
-            <div class="col-md-12">
-                <div class="btn btn-danger pull-right btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
-                   <i class="fa fa-warning"/>
-                   <span class="hidden-xs">Delete</span>
-               </div>
-            </div>
-
-            <!-- End BioMetric Data -->
+            <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
+        </div>
+        <div class="col-md-12">
+            <div class="btn btn-danger pull-right btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
+               <i class="fa fa-warning"/>
+               <span class="hidden-xs">Delete</span>
+           </div>
+        </div>
 
 
             <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -1541,6 +1508,33 @@ CONTACTS EDIT VIEW
 
             </div>
 
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</script>
+
+<script type="text/x-handlebars-template" name="fixDuplicates-modal" partial="true">
+  <div class="modal fade" id="fix-duplicates-modal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Fix Duplicate Contacts</h4>
+          </div>
+          <div class="modal-body">
+                <div class="duplicates-list">
+                    <p>Select from the list of similar contacts to merge</p>
+                    <ul>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span></li>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span></li>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span></li>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span></li>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span></li>
+                    </ul>
+                </div>
+                <div class="row merge-contact">
+                </div>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

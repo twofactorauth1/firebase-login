@@ -14,6 +14,9 @@ define([
     $$.Charts.FB_reachPerDay = new Chart({
         id: 'FB_reachPerDay'
         , url: '/facebook/{{id}}/reachPerDay'
+        , templateKey: 'account/charts/facebook/reach_per_day'
+        , templateWrapper: 'fb-reach-per-day'
+        , targetIndicator: '.graph-reach-per-day'
         , testData: [
             { date: '2014-06-21', paid: 5000, organic: 2000, viral: 1000 }
             , { date: '2014-06-22', paid: 8000, organic: 1000, viral: 200 }
@@ -65,7 +68,9 @@ define([
             var root = this.createSVG('graph-daily-reach');
 
             // Title
-            this.addTitle("Daily reach");
+
+//            this.addTitle("Daily reach");
+
             this.addRangeSelector(options.range);
 
             if (data.length === 0) {
@@ -100,7 +105,7 @@ define([
                 // offset bar position by value/height
                 d.values = color.domain().map(function(key) {
                     return { key: key, y0: y0, y1: y0 += +d[key] }
-                })
+                });
                 // total height for this data point
                 d.total = d.values[d.values.length - 1].y1
             });
@@ -167,17 +172,19 @@ define([
                         , textline({ n: $$.u.formatutils.formatInteger(d.viral)  , color: color('viral'), text: 'viral' })
                     ].join("<br/>");
 
-                var pop = chart.createPopover('left', title, content);
 
-                pop.css({
-                    width : 120
-                    , left  : Math.floor(+this.getAttribute('data-x') - 120)
-                    , top   : Math.floor(y(d.total))
-                });
+//                var pop = chart.createPopover('left', title, content)
+//
+//                pop.css({
+//                    width : 120
+//                    , left  : Math.floor(+this.getAttribute('data-x') - 120)
+//                    , top   : Math.floor(y(d.total))
+//                })
 
-                $(this)
-                    .on('mouseenter', $.proxy(pop.show, pop, 0))
-                    .on('mouseleave', $.proxy(pop.hide, pop, 0))
+//                $(this)
+//                    .on('mouseenter', $.proxy(pop.show, pop, 0))
+//                    .on('mouseleave', $.proxy(pop.hide, pop, 0))
+
             });
 
             // legend
