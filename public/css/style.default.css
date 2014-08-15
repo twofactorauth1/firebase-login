@@ -16885,7 +16885,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .mainpanel .alert {
   margin: 10px 10px 0px;
 }
-.pageheader {
+.mainpanel .pageheader {
   padding: 15px 0px;
   border-bottom: 1px solid #d3d7db;
   border-top: 1px solid #eee;
@@ -16894,14 +16894,14 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin: 0;
   height: 62px;
 }
-.pageheader h2 {
+.mainpanel .pageheader h2 {
   font-size: 28px;
   color: #1D2939;
   letter-spacing: -0.5px;
   margin: 0;
   padding-left: 10px;
 }
-.pageheader h2 span {
+.mainpanel .pageheader h2 span {
   font-size: 13px;
   text-transform: none;
   color: #999;
@@ -16909,91 +16909,91 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   vertical-align: middle;
   letter-spacing: 0;
 }
-.pageheader h2 span::before {
+.mainpanel .pageheader h2 span::before {
   content: '/';
   margin: 0 10px 0 5px;
   color: #ccc;
 }
-.pageheader .glyphicon {
+.mainpanel .pageheader .glyphicon {
   font-size: 24px;
   margin-right: 5px;
   padding: 6px 7px;
   border: 2px solid #1D2939;
   border-radius: 50px;
 }
-.pageheader .btn.pull-left {
+.mainpanel .pageheader .btn.pull-left {
   margin-right: 10px;
 }
-.pageheader .fa.fa-pencil {
+.mainpanel .pageheader .fa.fa-pencil {
   padding: 6px 9px;
 }
-.pageheader .fa.fa-hand-o-up {
+.mainpanel .pageheader .fa.fa-hand-o-up {
   padding: 6px 9px 6px 7px;
 }
-.pageheader .fa-file-o {
+.mainpanel .pageheader .fa-file-o {
   padding: 6px 10px;
 }
-.pageheader .fa-user {
+.mainpanel .pageheader .fa-user {
   padding: 6px 10px;
 }
-.pageheader .fa-file-text {
+.mainpanel .pageheader .fa-file-text {
   padding: 6px 10px;
 }
-.pageheader .fa-map-marker {
+.mainpanel .pageheader .fa-map-marker {
   padding: 6px 12px;
 }
-.pageheader .fa-dollar {
+.mainpanel .pageheader .fa-dollar {
   padding: 6px 12px;
 }
-.pageheader .fa-clock-o {
+.mainpanel .pageheader .fa-clock-o {
   padding: 6px 8px;
 }
-.pageheader .breadcrumb-wrapper {
+.mainpanel .pageheader .breadcrumb-wrapper {
   position: absolute;
   top: 23px;
   right: 25px;
 }
-.pageheader .breadcrumb-wrapper .label {
+.mainpanel .pageheader .breadcrumb-wrapper .label {
   color: #999;
   text-transform: uppercase;
   font-size: 11px;
   font-weight: normal;
   display: inline-block;
 }
-.pageheader .breadcrumb {
+.mainpanel .pageheader .breadcrumb {
   background: none;
   display: inline-block;
   padding: 0;
 }
-.pageheader .breadcrumb li {
+.mainpanel .pageheader .breadcrumb li {
   font-size: 12px;
 }
-.pageheader .breadcrumb li.active {
+.mainpanel .pageheader .breadcrumb li.active {
   color: #333;
 }
-.contentpanel {
+.mainpanel .contentpanel {
   padding: 20px;
 }
-.contentpanel::after {
+.mainpanel .contentpanel::after {
   clear: both;
   display: block;
   content: '';
 }
-form .form-group:last-child {
+.mainpanel form .form-group:last-child {
   margin-bottom: 0;
 }
-.row-pad-5 {
+.mainpanel .row-pad-5 {
   margin-left: -5px;
   margin-right: -5px;
 }
-.row-pad-5[class*="col-lg"],
-.row-pad-5[class*="col-md"],
-.row-pad-5[class*="col-sm"] {
+.mainpanel .row-pad-5[class*="col-lg"],
+.mainpanel .row-pad-5[class*="col-md"],
+.mainpanel .row-pad-5[class*="col-sm"] {
   padding-left: 5px;
   padding-right: 5px;
   margin-bottom: 10px;
 }
-.subtitle {
+.mainpanel .subtitle {
   font-size: 13px;
   text-transform: uppercase;
   color: #333;
@@ -17001,7 +17001,7 @@ form .form-group:last-child {
   margin-bottom: 15px;
   margin-top: 0;
 }
-p {
+.mainpanel p {
   margin-bottom: 10px;
 }
 .profile-name {
@@ -22072,7 +22072,6 @@ contenthover a {
   z-index: 99999;
   overflow: hidden;
   text-align: center;
-  padding: 40px 20px;
   line-height: 18px;
 }
 .meet-team .profilepic-hover p {
@@ -22108,7 +22107,7 @@ contenthover a {
   width: 40px;
   height: 40px;
   border-radius: 30px;
-  line-height: 40px;
+  line-height: 35px;
   color: white;
   border: 2px solid #efa022;
 }
@@ -22117,6 +22116,11 @@ contenthover a {
 }
 .meet-team .profile-social {
   padding: 0;
+  text-align: center;
+  bottom: 0;
+  left: 70px;
+  margin-bottom: 25px;
+  margin-top: 10px;
 }
 .meet-team .profile-social li {
   display: inline-block;
@@ -22492,6 +22496,7 @@ div[data-class="blog"] .single-blog {
 /********** Social **********/
 .social ul {
   text-align: center;
+  padding-left: 0;
 }
 .social ul li {
   width: 48px;
@@ -22518,14 +22523,26 @@ div[data-class="blog"] .single-blog {
   border-bottom: 3px solid #06aad3;
   opacity: .9;
 }
+.social .pinterest {
+  background: #cb2027;
+  border-bottom: 3px solid rgba(160, 32, 39, 0.4);
+  opacity: .9;
+}
+.social .google-plus {
+  background: #dd4b39;
+  border-bottom: 3px solid #b44b39;
+  opacity: .9;
+}
 .social .linkedin {
   background: #007bb6;
-  border-bottom: 3px solid #36558b;
+  border-bottom: 3px solid #007bb6;
   opacity: .9;
 }
 .social .facebook:hover,
 .social .twitter:hover,
-.social .linkedin:hover {
+.social .pinterest:hover,
+.social .linkedin:hover,
+.social .google-plus:hover {
   opacity: 1;
 }
 /********** MastHead **********/
@@ -23115,26 +23132,16 @@ input {
 .gray-bg {
   border-left: 1px solid #efefef;
 }
-/********** Global **********/
 .fitstop {
-  /*
-   *  Masthead (Masthead) component
-   */
-  /*
-   *  Features list (Services) component
-   */
-  /*
-   *  Feature text (About) component
-   */
-  /*
-   *  (Products) component
-   */
-  /*
-   *  Freeform (Assessment) component
-   */
+  /********** Global **********/
 }
 .fitstop #assets {
   background: none;
+}
+.fitstop .inner-page {
+  padding: 50px 0;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 @media (min-width: 1200px) {
   .fitstop .container {
@@ -23149,6 +23156,11 @@ input {
   opacity: .96;
   background-color: #222121;
   border-radius: 0;
+  /********** Masthead Component **********/
+  /********** Features list (Services) component **********/
+  /********** Feature text (About) component **********/
+  /********** (Products) component **********/
+  /********** Freeform (Assessment) component **********/
 }
 .fitstop #header .navbar .navbar-header {
   float: none;
@@ -23158,18 +23170,31 @@ input {
   margin-top: 50px;
 }
 .fitstop #header .navbar ul.navbar-nav {
+  width: 100%;
+  display: inline-block;
+  padding: 0;
+  list-style: none;
+  margin-left: 0px;
+  margin: 0 auto;
+  text-align: center;
+  height: 52px;
+  margin-top: 0!important;
+}
+.fitstop #header .navbar ul.navbar-nav li {
   float: none;
-  width: 505px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin: 5px auto 5px auto!important;
+  text-align: center;
+  display: inline-block;
+}
+.fitstop #header .navbar ul.navbar-nav li:hover {
+  border-bottom: 4px solid #3398df;
 }
 .fitstop #header .navbar ul.navbar-nav li > a {
   color: white;
+  height: 48px;
   font-family: 'Lato', sans-serif;
   font-size: 15px;
   text-shadow: none;
+  line-height: 35px;
 }
 .fitstop #header .navbar .container-fluid {
   padding: 0 0 0 0;
@@ -23194,33 +23219,37 @@ input {
     width: 250px;
   }
 }
-.fitstop .parallax-block {
+.fitstop #header .navbar .parallax-block {
   transform: translate(0px, 0px) !important;
   height: 100%!important;
 }
-.fitstop .parallax-image {
+.fitstop #header .navbar .parallax-image {
   transform: translate(0px, 0px) !important;
 }
-.fitstop .masthead {
+.fitstop #header .navbar .masthead {
   padding: 0px 0px;
   height: auto;
 }
-.fitstop .masthead h1 {
-  margin-top: 0px;
-}
-.fitstop .masthead .home-text {
+.fitstop #header .navbar .masthead .home-text {
   height: auto;
   margin-top: 0px!important;
   background: rgba(0, 0, 0, 0.2);
   padding: 50px;
   text-shadow: 2px 1px 0px rgba(255, 255, 255, 0.08);
 }
-.fitstop .masthead .home-text h1 {
+.fitstop #header .navbar .masthead .home-text .subtitle {
+  margin-top: 0px;
+  font-weight: bold;
+  font-family: 'Myriad Pro';
+  font-size: 16px;
+  text-align: center;
+}
+.fitstop #header .navbar .masthead .home-text .title {
   font-family: 'Lato', 'Lucida Grande';
   font-size: 25px;
   font-weight: bold;
 }
-.fitstop .masthead p {
+.fitstop #header .navbar .masthead p {
   font-family: 'Lato', 'Lucida Grande';
   max-width: 630px;
   margin: 0 auto;
@@ -23228,20 +23257,20 @@ input {
   line-height: 1.5em;
   margin-top: 26px;
 }
-.fitstop .masthead .btn-wrap {
+.fitstop #header .navbar .masthead .btn-wrap {
   width: 100%;
 }
-.fitstop .masthead .btn-success {
+.fitstop #header .navbar .masthead .btn-success {
   background-color: #299FD6 ;
   border-color: #296ED6;
   width: 250px;
   height: 55px;
 }
-.fitstop .masthead .btn-success .fa-envelope {
+.fitstop #header .navbar .masthead .btn-success .fa-envelope {
   font-weight: bold;
   font-size: 15px;
 }
-.fitstop .masthead .btn-success .btn-text {
+.fitstop #header .navbar .masthead .btn-success .btn-text {
   display: inline;
   text-decoration: none;
   cursor: pointer;
@@ -23249,23 +23278,19 @@ input {
   font-size: 15px;
   padding-left: 10px;
 }
-.fitstop .masthead .btn:hover {
+.fitstop #header .navbar .masthead .btn:hover {
   background-color: #296ED6;
 }
-.fitstop #assets {
+.fitstop #header .navbar #assets {
   border: 0px!important;
 }
-.fitstop #feature_three {
-  background: url('/assets/images/fitstop/feature-list-back.png');
-  max-width: 100%;
-}
-.fitstop #feature_three .row {
+.fitstop #header .navbar .feature-list .row {
   text-align: center;
 }
-.fitstop .features-title {
+.fitstop #header .navbar .feature-list .title {
   margin-bottom: 13px;
 }
-.fitstop .features-title h5 {
+.fitstop #header .navbar .feature-list .title h5 {
   text-align: center;
   font-size: 26px;
   color: white;
@@ -23273,47 +23298,47 @@ input {
   padding-bottom: 4px;
   font-weight: bold;
 }
-.fitstop #feature_three .fa {
+.fitstop #header .navbar .feature-list .fa {
   font-size: 3em;
 }
-.fitstop #feature_three .fa-paste,
-.fitstop #feature_three .fa-flask,
-.fitstop #feature_three .fa-comments-o {
+.fitstop #header .navbar .feature-list .fa-paste,
+.fitstop #header .navbar .feature-list .fa-flask,
+.fitstop #header .navbar .feature-list .fa-comments-o {
   color: white;
 }
-.fitstop #feature_three .fa-paste:hover,
-.fitstop #feature_three .fa-flask:hover,
-.fitstop #feature_three .fa-comments-o:hover {
+.fitstop #header .navbar .feature-list .fa-paste:hover,
+.fitstop #header .navbar .feature-list .fa-flask:hover,
+.fitstop #header .navbar .feature-list .fa-comments-o:hover {
   color: 2984D3;
 }
-.fitstop #feature_three .feature-case img {
+.fitstop #header .navbar .feature-list .feature-case img {
   height: auto;
   margin: 0 auto;
   width: 60px;
 }
-.fitstop #feature_three .editable h4,
-.fitstop #feature_three .editable p,
-.fitstop #feature_three .editable a {
+.fitstop #header .navbar .feature-list .editable h4,
+.fitstop #header .navbar .feature-list .editable p,
+.fitstop #header .navbar .feature-list .editable a {
   font-family: 'Lato', sans-serif;
   font-size: 15px;
 }
-.fitstop #feature_three .editable a {
+.fitstop #header .navbar .feature-list .editable a {
   color: white;
 }
-.fitstop #feature_three .editable h4 {
+.fitstop #header .navbar .feature-list .editable h4 {
   color: #2984D3;
 }
-.fitstop .feature-p p {
+.fitstop #header .navbar .feature-list .feature-p p {
   padding-left: 20px;
   padding-right: 20px;
   margin: 0 auto;
   color: white;
   padding: 0;
 }
-.fitstop #feature_three .feature-bttns {
+.fitstop #header .navbar .feature-list .feature-bttns {
   padding-top: 10px;
 }
-.fitstop #feature_three .btn-success {
+.fitstop #header .navbar .feature-list .btn-success {
   width: 120px;
   height: 40px;
   margin: 20px auto;
@@ -23326,31 +23351,31 @@ input {
   transition: all 0.2s ease-out 0s;
   padding: 6px 15px;
 }
-.fitstop #feature_three .btn-success:hover {
+.fitstop #header .navbar .feature-list .btn-success:hover {
   background-color: #296ED6;
 }
-.fitstop #feature_three .btn-success .editable {
+.fitstop #header .navbar .feature-list .btn-success .editable {
   text-decoration: none;
   cursor: pointer;
   margin: 0px;
   font-family: 'Lato', sans-serif;
 }
-.fitstop #feature_three .aloha-editable {
+.fitstop #header .navbar .feature-list .aloha-editable {
   bottom: 15px;
   margin-top: 15px;
 }
-.fitstop .component .primary {
+.fitstop #header .navbar .component .primary {
   background: white;
 }
-.fitstop .about {
+.fitstop #header .navbar .about {
   background-color: white;
   padding-bottom: 80px;
   padding: 0px;
 }
-.fitstop .about .about-profile {
+.fitstop #header .navbar .about .about-profile {
   padding-top: 17px;
 }
-.fitstop .about .col-sm-12 h3.about-title {
+.fitstop #header .navbar .about .col-sm-12 h3.about-title {
   font-size: 26px;
   color: #2e2d2d !important;
   opacity: .95;
@@ -23359,43 +23384,43 @@ input {
   font-weight: normal;
   text-align: center;
 }
-.fitstop .about .col-sm-9 .about-name {
+.fitstop #header .navbar .about .col-sm-9 .about-name {
   text-align: left;
 }
-.fitstop .about .col-sm-9 .about-name h2,
-.fitstop .about .col-sm-9 .about-name h4 {
+.fitstop #header .navbar .about .col-sm-9 .about-name h2,
+.fitstop #header .navbar .about .col-sm-9 .about-name h4 {
   text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
 }
-.fitstop .about .col-sm-9 .about-name h2 {
+.fitstop #header .navbar .about .col-sm-9 .about-name h2 {
   color: black!important;
   font-size: 22px;
 }
-.fitstop .about .col-sm-9 .about-name h4 {
+.fitstop #header .navbar .about .col-sm-9 .about-name h4 {
   font-size: 14px;
   color: #2984D3;
 }
-.fitstop .about .col-sm-9 .about-name p {
+.fitstop #header .navbar .about .col-sm-9 .about-name p {
   color: #707070 !important;
   margin-top: 10px;
   font-weight: bold;
   font-size: 15px;
 }
-.fitstop .about .btn-wrap {
+.fitstop #header .navbar .about .btn-wrap {
   margin: 0;
   margin-top: 25px;
 }
-.fitstop .about .btn-wrap .btn-success {
+.fitstop #header .navbar .about .btn-wrap .btn-success {
   background-color: #299FD6 ;
   border-color: #296ED6;
   width: 250px;
   height: 55px;
   margin: 0px auto;
 }
-.fitstop .about .btn-wrap .btn-success .fa-envelope {
+.fitstop #header .navbar .about .btn-wrap .btn-success .fa-envelope {
   font-weight: bold;
   font-size: 15px;
 }
-.fitstop .about .btn-wrap .btn-success .btn-text {
+.fitstop #header .navbar .about .btn-wrap .btn-success .btn-text {
   display: inline;
   text-decoration: none;
   cursor: pointer;
@@ -23403,41 +23428,41 @@ input {
   font-size: 15px;
   padding-left: 10px;
 }
-.fitstop .products-component {
+.fitstop #header .navbar .products-component {
   background: #FAFAFA;
 }
-.fitstop .products-component .nav-tabs {
+.fitstop #header .navbar .products-component .nav-tabs {
   width: 425px;
   margin: 0 auto;
 }
-.fitstop .products-component .nav-tabs li a {
+.fitstop #header .navbar .products-component .nav-tabs li a {
   font-style: italic;
   font-size: 15px;
   font-weight: bold;
   padding: 8px 18px;
 }
 @media (max-width: 550px) {
-  .fitstop .products-component .nav-tabs li {
+  .fitstop #header .navbar .products-component .nav-tabs li {
     float: none;
   }
 }
-.fitstop .products-component .nav-tabs {
+.fitstop #header .navbar .products-component .nav-tabs {
   background: white;
 }
-.fitstop .products-component .nav-tabs > li {
+.fitstop #header .navbar .products-component .nav-tabs > li {
   box-shadow: 0 0 .75px #c2c2c2;
 }
-.fitstop .products-component .nav-tabs li a {
+.fitstop #header .navbar .products-component .nav-tabs li a {
   margin-right: 0px;
   opacity: .4;
   padding: 5px 20px;
 }
-.fitstop .products-component .nav-tabs > li.active > a {
+.fitstop #header .navbar .products-component .nav-tabs > li.active > a {
   border-bottom: solid 3.5px #299FD6;
   border-radius: 3px;
   opacity: .8;
 }
-.fitstop .products-component .nav-tabs > li.active .arrowsprite {
+.fitstop #header .navbar .products-component .nav-tabs > li.active .arrowsprite {
   width: 0;
   height: 0;
   border-left: 8px solid transparent;
@@ -23448,7 +23473,7 @@ input {
   bottom: -5;
   left: 38%;
 }
-.fitstop .products-component h3 {
+.fitstop #header .navbar .products-component h3 {
   font-size: 26px;
   color: #2e2d2d !important;
   opacity: .95;
@@ -23457,21 +23482,21 @@ input {
   font-weight: normal;
   text-align: center;
 }
-.fitstop .products-component .tab-content {
+.fitstop #header .navbar .products-component .tab-content {
   margin-top: 40px;
   background: none!important;
 }
-.fitstop .products-component .tab-content .product {
+.fitstop #header .navbar .products-component .tab-content .product {
   margin-bottom: 70px;
 }
-.fitstop .products-component .tab-content .col-sm-9 {
+.fitstop #header .navbar .products-component .tab-content .col-sm-9 {
   background-color: white;
   box-shadow: 0 0 1.75px #c2c2c2;
 }
-.fitstop .products-component .tab-content .col-sm-3 {
+.fitstop #header .navbar .products-component .tab-content .col-sm-3 {
   padding-top: 0px;
 }
-.fitstop .products-component .tab-content .product-content h4 {
+.fitstop #header .navbar .products-component .tab-content .product-content h4 {
   font-size: 16px;
   color: #4BADE4!important;
   font-weight: bold;
@@ -23479,20 +23504,20 @@ input {
   padding-left: 10px;
   font-family: 'Lato', sans-serif;
 }
-.fitstop #freeform-component {
+.fitstop #header .navbar #freeform-component {
   margin: 80 auto;
   max-width: 900px;
 }
-.fitstop #freeform-component .freeform-wrap {
+.fitstop #header .navbar #freeform-component .freeform-wrap {
   max-width: 900px;
 }
-.fitstop #freeform-component #assessment-header {
+.fitstop #header .navbar #freeform-component #assessment-header {
   background: #FAFAFA;
   box-shadow: 0 0 2px #c2c2c2;
 }
-.fitstop #freeform-component #assessment-header h1,
-.fitstop #freeform-component #assessment-header h3,
-.fitstop #freeform-component #assessment-header p {
+.fitstop #header .navbar #freeform-component #assessment-header h1,
+.fitstop #header .navbar #freeform-component #assessment-header h3,
+.fitstop #header .navbar #freeform-component #assessment-header p {
   text-align: center;
   opacity: .95;
   padding-top: 32px;
@@ -23500,91 +23525,91 @@ input {
   text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
   font-weight: normal;
 }
-.fitstop #freeform-component #assessment-header h1,
-.fitstop #freeform-component #assessment-header h3 {
+.fitstop #header .navbar #freeform-component #assessment-header h1,
+.fitstop #header .navbar #freeform-component #assessment-header h3 {
   color: black;
 }
-.fitstop #freeform-component #assessment-header h1 {
+.fitstop #header .navbar #freeform-component #assessment-header h1 {
   font-size: 28px;
   margin-bottom: 0px;
   padding-bottom: 6px;
 }
-.fitstop #freeform-component #assessment-header h3 {
+.fitstop #header .navbar #freeform-component #assessment-header h3 {
   font-size: 19px;
   margin-top: 0px;
   padding: 0px;
 }
-.fitstop #freeform-component #assessment-header p {
+.fitstop #header .navbar #freeform-component #assessment-header p {
   padding-top: 0px;
   max-width: 655px;
   margin: 0 auto;
 }
-.fitstop #freeform-component #assessment-body {
+.fitstop #header .navbar #freeform-component #assessment-body {
   background: #FAFAFA;
   box-shadow: 0 3px 2px #c2c2c2;
 }
-.fitstop #freeform-component #assessment-body h5,
-.fitstop #freeform-component #assessment-body h4 {
+.fitstop #header .navbar #freeform-component #assessment-body h5,
+.fitstop #header .navbar #freeform-component #assessment-body h4 {
   display: inline;
 }
-.fitstop #freeform-component #assessment-body .fa-check,
-.fitstop #freeform-component #assessment-body h5.tit {
+.fitstop #header .navbar #freeform-component #assessment-body .fa-check,
+.fitstop #header .navbar #freeform-component #assessment-body h5.tit {
   color: #26B7F0;
   font-weight: bold;
 }
-.fitstop #freeform-component #assessment-body h5.sub {
+.fitstop #header .navbar #freeform-component #assessment-body h5.sub {
   font-family: 'Lato', sans-serif;
   font-size: 14px;
   opacity: .4;
 }
-.fitstop #freeform-component #assessment-body .assessment-wrap {
+.fitstop #header .navbar #freeform-component #assessment-body .assessment-wrap {
   padding-top: 25px;
   max-width: 700px;
   margin: 0 auto;
 }
-.fitstop #freeform-component #assessment-body .assessment-wrap .assessment-content {
+.fitstop #header .navbar #freeform-component #assessment-body .assessment-wrap .assessment-content {
   max-width: 235px;
   margin: 0 auto;
   float: none;
   padding-left: 50px;
 }
-.fitstop #freeform-component #assessment-body .assessment-wrap .assessment-content {
+.fitstop #header .navbar #freeform-component #assessment-body .assessment-wrap .assessment-content {
   padding-top: 15px;
 }
-.fitstop #freeform-component #assessment-body .assessment-wrap .assessment-content-text {
+.fitstop #header .navbar #freeform-component #assessment-body .assessment-wrap .assessment-content-text {
   text-align: center;
 }
-.fitstop #freeform-component #assessment-body .assessment-wrap .assessment-content-text p {
+.fitstop #header .navbar #freeform-component #assessment-body .assessment-wrap .assessment-content-text p {
   font-weight: bold;
   font-size: 13px;
   opacity: .6;
   padding-top: 4px;
 }
-.fitstop #freeform-component #assessment-body .assessment-wrap .assessment-box {
+.fitstop #header .navbar #freeform-component #assessment-body .assessment-wrap .assessment-box {
   width: 680px;
   margin: 0 auto;
   border-bottom: 2px solid rgba(0, 0, 0, 0.05);
 }
-.fitstop #freeform-component #assessment-body .assessment-wrap .total {
+.fitstop #header .navbar #freeform-component #assessment-body .assessment-wrap .total {
   text-align: center;
   padding: 26px;
   margin: 0 auto;
   padding-right: 2px;
 }
-.fitstop #freeform-component #assessment-body .assessment-wrap .total h5,
-.fitstop #freeform-component #assessment-body .assessment-wrap .total h4 {
+.fitstop #header .navbar #freeform-component #assessment-body .assessment-wrap .total h5,
+.fitstop #header .navbar #freeform-component #assessment-body .assessment-wrap .total h4 {
   font-weight: bold;
 }
-.fitstop #freeform-component #assessment-body .assessment-wrap .total h5 {
+.fitstop #header .navbar #freeform-component #assessment-body .assessment-wrap .total h5 {
   color: #26A7F0;
   font-size: 34px;
 }
-.fitstop #freeform-component #assessment-body .assessment-wrap .total h4 {
+.fitstop #header .navbar #freeform-component #assessment-body .assessment-wrap .total h4 {
   opacity: .6;
   font-size: 23px;
   padding-left: 10px;
 }
-.fitstop #freeform-component #assessment-body .btn-success {
+.fitstop #header .navbar #freeform-component #assessment-body .btn-success {
   border-bottom: 4px solid #338AE7;
   background-color: #3FABE7;
   width: 230;

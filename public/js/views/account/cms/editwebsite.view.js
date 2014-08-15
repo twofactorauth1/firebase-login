@@ -157,6 +157,7 @@ define([
 
                                     $(window).on("resize", self.adjustWindowSize);
                                     self.disableClickableTitles();
+                                    self.disableWaypointsOpacity();
                                 });
                         });
                     });
@@ -400,12 +401,18 @@ define([
 
         disableClickableTitles: function() {
             var $iframe = $('#iframe-website');
-                $iframe.ready(function() {
-                    $iframe.contents().find(".blog-title a").on('click', function(e) {
-                        console.log('click');
-                        e.preventDefault();
-                    });
+            $iframe.ready(function() {
+                $iframe.contents().find(".blog-title a").on('click', function(e) {
+                    e.preventDefault();
                 });
+            });
+        },
+
+        disableWaypointsOpacity: function() {
+            var $iframe = $('#iframe-website');
+            $iframe.ready(function() {
+                $iframe.contents().find('.feature-single, div[data-class=profilepic], .btn-outline').css('opacity', 1);
+            });
         },
 
         getPost: function() {

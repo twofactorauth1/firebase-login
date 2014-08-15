@@ -27,6 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('profile'), this.isAuthApi, this.getProfile.bind(this));
         app.get(this.url('contacts'), this.isAuthApi, this.getContacts.bind(this));
 
+        app.get(this.url('contacts/groups'), this.isAuthApi, this.getContactGroups.bind(this));
         app.get(this.url('contacts/import'), this.isAuthApi, this.importContacts.bind(this));
         app.post(this.url('contacts/import'), this.isAuthApi, this.importContacts.bind(this));
     },
@@ -99,9 +100,9 @@ _.extend(api.prototype, baseApi.prototype, {
     importContacts: function(req, resp) {
         var self = this;
         var accountId = this.accountId(req);
-
+        var groupIdAry = (req.query['groupIDs'] || '').split(',');
         if (accountId > 0) {
-            googleDao.importContactsForUser(accountId, req.user, function(err, value) {
+            googleDao.importContactsForUser(accountId, req.user, groupIdAry, function(err, value) {
                 if (err) {
                     self.log.error("Google contacts import failed:", err);
                 } else {
@@ -111,6 +112,24 @@ _.extend(api.prototype, baseApi.prototype, {
             resp.send({data:"Processing Import"});
         } else {
             self.wrapError(resp, 403, "Unauthorized action", "Unauthorized action. Contacts may only be imported at the Account level");
+        }
+    },
+
+    getContactGroups: function(req, res) {
+        var self = this;
+        self.log.debug('>> getContactGroups');
+        var accountId = this.accountId(req);
+
+        if(accountId > 0) {
+            googleDao.getGroupsForUser(req.user, function(err, value){
+                self.log.debug('just got back from googleDao.');
+                console.dir(err);
+                console.dir(value);
+                self.log.debug('<< getContactGroups');
+                self.sendResultOrError(res, err, value, "Error getting groups");
+            });
+        } else {
+            self.wrapError(res, 403, "Unauthorized action", "Unauthorized action. Contacts may only be imported at the Account level");
         }
     }
 });
