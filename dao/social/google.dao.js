@@ -28,6 +28,7 @@ var dao = {
     REFRESH_TOKEN_URL: "https://accounts.google.com/o/oauth2/token",
     PROFILE_API_URL: "https://www.googleapis.com/oauth2/v1/userinfo",
     CONTACT_API_URL: "https://www.google.com/m8/feeds/contacts/",
+    GROUPS_API_URL: "https://www.google.com/m8/feeds/groups/",
 
 //region ACCESS TOKEN
     refreshAccessToken: function(user, fn) {
@@ -135,14 +136,63 @@ var dao = {
         });
     },
 //endregion
+//region GROUPS
+    getGroupsForUser: function(user, fn) {
+        var self = this;
+        self.log.debug('>> getGroupsForUser');
 
+        var socialId = this._getGoogleId(user);
+        var accessToken = this._getAccessToken(user);
 
+        var url = self.GROUPS_API_URL + 'default/thin?v=3&alt=json&max-results=100000000&access_token=' + accessToken;
+
+        this._makeAuthenticatedRequest(url, function(err, value){
+            if(err) {
+                self.log.error('Error getting groups: ' + err.toString());
+                fn(err, null);
+            } else {
+                self.log.debug('results from the goog:');
+                console.dir(value);
+                var entries = value.feed.entry || [];
+                var processEntry = function(entry) {
+                    self.log.debug('processing: ');
+                    console.dir(entry);
+                    var obj = {};
+                    obj.id = entry.id.$t;
+                    obj.name = entry.title.$t;
+                    return obj;
+                };
+                var result = [];
+                async.each(entries, function(entry, cb) {
+                    var obj = {};
+                    obj.id = entry.id.$t;
+                    obj.name = entry.title.$t;
+                    //result.push(processEntry(entry));
+                    self.log.debug('About to push to result:');
+                    console.dir(obj);
+                    result.push(obj);
+                    cb();
+                }, function(err) {
+                    self.log.debug('<< getGroupsForUser');
+                    fn(err, result);
+                });
+
+                //fn(null, value);
+            }
+        });
+
+    },
+//endregion
 //region CONTACTS
-    getContactsForUser: function(user, lastUpdated, fn) {
+    getContactsForUser: function(user, lastUpdated, groupIdAry, fn) {
         if (_.isFunction(lastUpdated)) {
             fn = lastUpdated;
             lastUpdated = null;
+        } else if(_.isFunction(groupIdAry)){
+            fn = groupIdAry;
+            groupIdAry = null;
         }
+        var self = this;
 
         var socialId = this._getGoogleId(user);
         var accessToken = this._getAccessToken(user);
@@ -151,136 +201,77 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to Google");
         }
 
-        var url = this.CONTACT_API_URL + "default/full?alt=json&max-results=100000000&access_token=" + accessToken;
+        var url = this.CONTACT_API_URL + "default/full?v=3&alt=json&max-results=100000000&access_token=" + accessToken;
         if (String.isNullOrEmpty(lastUpdated) === false) {
             url += "&updated-min=" + lastUpdated;
         }
 
-        this._makeAuthenticatedRequest(url, function(err, value) {
-            if (!err) {
-                var list = value;
-                var entries = list.feed.entry || [];
-                var updated = list.feed.updated.$t;
+        /*
+         * collect the entries for each group specified (or all groups if none are specified)
+         * process each entry into a contact
+         * return list of contacts
+         */
 
-                var processEntry = function(entry) {
-                    var obj = {}, i, l, item, itemType;
-
-                    obj.id = entry.id.$t;
-                    obj.id = obj.id.replace("http://www.google.com/m8/feeds/contacts/","");
-                    if (entry.gd$email != null) {
-                        obj.emails = [];
-                        for(i = 0, l = entry.gd$email.length; i < l; i++) {
-                            item = entry.gd$email[i];
-
-                            var o = {
-                                email: item.address
-                            };
-
-                            if (item.primary == "true") {
-                                o.primary = true;
-                            }
-
-                            obj.emails.push(o);
-                        }
-                    }
-
-                    if (entry.link != null) {
-                        for(i = 0, l = entry.link.length; i < l; i++) {
-                            if (entry.link[i].type == "image/*" &&
-                                (entry.link[i].rel == "http://schemas.google.com/contacts/2008/rel#photo")) {
-                                obj.photos = obj.photos || [];
-                                obj.photos.push(entry.link[i].href);
-                                break;
-                            }
-                        }
-                    }
-
-                    if (entry.title != null) {
-                        obj.name = entry.title.$t;
-                        var nameParts = $$.u.stringutils.splitFullname(obj.name);
-                        obj.first = nameParts[0];
-                        obj.middle = nameParts[1];
-                        obj.last = nameParts[2];
-                    }
-
-                    if (entry.gd$phoneNumber != null) {
-                        obj.phones = [];
-                        for(i = 0, l = entry.gd$phoneNumber.length; i < l; i++) {
-                            item = entry.gd$phoneNumber[i];
-                            itemType = "o";
-                            if (item.rel != null) {
-                                if (item.rel.indexOf("work")) {
-                                    itemType = "w";
-                                } else if(item.rel.indexOf("mobile")) {
-                                    itemType = "m";
-                                } else if(item.rel.indexOf("home")) {
-                                    itemType = "h";
-                                } else {
-                                    itemType = "o";
-                                }
-                            }
-
-                            obj.phones.push({
-                                type: itemType,
-                                number: item.$t,
-                                primary: item.primary === "true"
-                            });
-                        }
-                    }
-
-                    if (entry.gd$postalAddress != null) {
-                        obj.addresses = [];
-                        for(i = 0, l = entry.gd$postalAddress.length; i < l; i++) {
-                            item = entry.gd$postalAddress[i];
-                            itemType = "o";
-
-                            if (item.rel != null) {
-                                if (item.rel.indexOf("work")) {
-                                    itemType = "w";
-                                } else if(item.rel.indexOf("home")) {
-                                    itemType = "h";
-                                } else {
-                                    itemType = "o";
-                                }
-                            }
-                        }
-
-                        obj.addresses.push({
-                            type:itemType,
-                            address:item.$t,
-                            primary: item.primary == "true"
-                        });
-                    }
-
-                    return obj;
-                };
-
-                var result = [];
-                var count = 0;
-                async.each(entries, function(entry, cb) {
-                    result.push(processEntry(entry));
-                    cb();
-                }, function(err) {
-                    fn(err, result, {updated: updated});
-                });
-            } else {
-                return fn(err, value);
+        var entryAry = [];
+        var urlAry = [];
+        var updated = 0;
+        if(groupIdAry === null || groupIdAry.length ===0) {
+            urlAry.push(url);
+        } else {
+            for(var i=0; i<groupIdAry.length; i++) {
+                urlAry.push(url + '&group=' + groupIdAry[i]);
             }
-        });
+        }
+
+        async.concat(urlAry,
+            function(url, cb){
+                self.log.debug('calling ' + url);
+                var _entryAry = entryAry;
+                self._makeAuthenticatedRequest(url, function(err, value){
+                    if(!err) {
+                        
+                        var entries = value.feed.entry || [];
+                        updated = value.feed.updated.$t;
+
+                        cb(null, entries);
+                    } else {
+                        return fn(err, value);
+                    }
+
+                });
+            }, function(err, results){
+                if(err) {
+                    return fn(err, value);
+                } else {
+                    self.log.debug('Processing ' + results.length + ' contacts from google');
+                    var result = [];
+                    var count = 0;
+                    async.each(results, function(entry, cb) {
+                        result.push(self._processContact(entry));
+                        cb();
+                    }, function(err) {
+                        fn(err, result, {updated: updated});
+                    });
+                }
+            });
 
         return null;
     },
 
 
-    importContactsForUser: function(accountId, user, fn) {
+    importContactsForUser: function(accountId, user, groupIdAry, fn) {
         var self = this;
         var totalImported = 0;
+        if(fn === null) {
+            fn = groupIdAry;
+            groupIdAry = null;
+        }
 
         var googleBaggage = user.getUserAccountBaggage(accountId, "google");
         googleBaggage.contacts = googleBaggage.contacts || {};
         var updated = googleBaggage.contacts.updated;
 
-        this.getContactsForUser(user, updated, function(err, value, params) {
+        this.getContactsForUser(user, updated, groupIdAry, function(err, value, params) {
             if (err) {
                 return fn(err, value);
             }
@@ -398,6 +389,7 @@ var dao = {
                             } else {
                                 self.log.info("Google Contact Import Succeeded. " + totalImported + " imports");
                                 //Last step, save the user
+                                //TODO: I think this clobbers passwords.
                                 userDao.saveOrUpdate(user, function() {});
                                 fn(null);
                             }
@@ -449,6 +441,99 @@ var dao = {
                 fn(err, resp);
             }
         });
+    },
+
+    _processContact: function(entry) {
+        var obj = {}, i, l, item, itemType;
+
+        obj.id = entry.id.$t;
+        obj.id = obj.id.replace("http://www.google.com/m8/feeds/contacts/","");
+        if (entry.gd$email != null) {
+            obj.emails = [];
+            for(i = 0, l = entry.gd$email.length; i < l; i++) {
+                item = entry.gd$email[i];
+
+                var o = {
+                    email: item.address
+                };
+
+                if (item.primary == "true") {
+                    o.primary = true;
+                }
+
+                obj.emails.push(o);
+            }
+        }
+
+        if (entry.link != null) {
+            for(i = 0, l = entry.link.length; i < l; i++) {
+                if (entry.link[i].type == "image/*" &&
+                    (entry.link[i].rel == "http://schemas.google.com/contacts/2008/rel#photo")) {
+                    obj.photos = obj.photos || [];
+                    obj.photos.push(entry.link[i].href);
+                    break;
+                }
+            }
+        }
+
+        if (entry.title != null) {
+            obj.name = entry.title.$t;
+            var nameParts = $$.u.stringutils.splitFullname(obj.name);
+            obj.first = nameParts[0];
+            obj.middle = nameParts[1];
+            obj.last = nameParts[2];
+        }
+
+        if (entry.gd$phoneNumber != null) {
+            obj.phones = [];
+            for(i = 0, l = entry.gd$phoneNumber.length; i < l; i++) {
+                item = entry.gd$phoneNumber[i];
+                itemType = "o";
+                if (item.rel != null) {
+                    if (item.rel.indexOf("work")) {
+                        itemType = "w";
+                    } else if(item.rel.indexOf("mobile")) {
+                        itemType = "m";
+                    } else if(item.rel.indexOf("home")) {
+                        itemType = "h";
+                    } else {
+                        itemType = "o";
+                    }
+                }
+
+                obj.phones.push({
+                    type: itemType,
+                    number: item.$t,
+                    primary: item.primary === "true"
+                });
+            }
+        }
+
+        if (entry.gd$postalAddress != null) {
+            obj.addresses = [];
+            for(i = 0, l = entry.gd$postalAddress.length; i < l; i++) {
+                item = entry.gd$postalAddress[i];
+                itemType = "o";
+
+                if (item.rel != null) {
+                    if (item.rel.indexOf("work")) {
+                        itemType = "w";
+                    } else if(item.rel.indexOf("home")) {
+                        itemType = "h";
+                    } else {
+                        itemType = "o";
+                    }
+                }
+            }
+
+            obj.addresses.push({
+                type:itemType,
+                address:item.$t,
+                primary: item.primary == "true"
+            });
+        }
+
+        return obj;
     }
 //endregion
 };
