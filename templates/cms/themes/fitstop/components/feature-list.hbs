@@ -6,29 +6,17 @@
 *
 -->
 
-<div id="assets" class="page">
-        {{#with component}}
-            <div class="component-header container ">
-                    <div class="editable" data-class="label">
-                        <h2 class="center">{{{label}}}</h2>
+<div class="page">
+    {{#with component}}
+        <div {{#if anchor}}id="{{anchor}}"{{/if}} class="row inner-page feature-list">
+                <div class="row">
+                    <div class="editable title col-sm-12">
+                        <h5>{{{main-feature-title}}}<h5>
                     </div>
-
-                    <div class="editable" data-class="description">
-                        <p class="center">{{{description}}}</p>
-                    </div>
-                </div>
-            <!-- Feature Three -->
-            <div id="feature_three" class="row inner-page">   
-                    <div class="row">
-                        <div class="editable features-title col-sm-12">
-                            <h5>{{{main-feature-title}}}<h5>
-                        </div>
-                        <div class="container">
-                        <!-- Features list -->
+                    <div class="container">
                         {{#each features}}
-                        
-                        <div class="col-sm-3 feature-single-{{@index}}" style="opacity:1">
-                            <!-- if feature-title {feature-title} else {feature-image} !-->
+
+                        <div class="col-sm-3 feature-single-{{@index}}" style="opacity:0">
                             {{#if feature-icon}}
                             <div class="editable">
                                 <a href="{{{feature-button-url}}}">
@@ -49,22 +37,16 @@
                             <div class="editable feature-p" data-class="features.item.paragraph">
                                 <p>{{{feature-paragraph}}}</p>
                             </div>
-                            
-                            
                                 <button class="btn btn-success btn-block center" href="{{btn.url}}">
                                     <div data-class="btn-text" class="editable">
                                         {{btn.text}}
                                     </div>
                                 </button>
-                            
-                        
                         </div>
                         <div class="pusher visible-xs"></div>
                         {{/each}}
-                        </div>
                     </div>
-            </div>
-
-            
-        {{/with}}
-    </div>
+                </div>
+        </div>
+    {{/with}}
+</div>
