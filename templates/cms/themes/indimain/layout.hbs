@@ -108,7 +108,7 @@
                   $('#main-area').css('min-height', sidebarHeight+50);
                 }
 
-                $('.navbar-nav a').on('click touchstart', function(event) {
+                $('.navbar-nav a, .scrollto').on('click touchstart', function(event) {
                     event.preventDefault();
                     var target = $(this).attr('href');
                     if (target.indexOf('login') > -1) {
@@ -231,17 +231,17 @@
 
                     $(".feature-single-1").waypoint(function (direction) {
                         $(this).addClass("animated fadeIn");
-                    }, { offset: $.waypoints('viewportHeight') - 150,
+                    }, { offset: $.waypoints('viewportHeight') - 100,
                         triggerOnce: true});
 
                     $(".feature-single-2").waypoint(function (direction) {
                         $(this).addClass("animated fadeIn");
-                    }, { offset: $.waypoints('viewportHeight') - 250,
+                    }, { offset: $.waypoints('viewportHeight') - 200,
                         triggerOnce: true});
 
                     $(".feature-single-3").waypoint(function (direction) {
                         $(this).addClass("animated fadeIn");
-                    }, { offset: $.waypoints('viewportHeight') - 375,
+                    }, { offset: $.waypoints('viewportHeight') - 300,
                         triggerOnce: true});
 
                     $("div[data-class=profilepic]").waypoint(function (direction) {

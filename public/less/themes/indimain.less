@@ -366,7 +366,6 @@
       z-index: 99999;
       overflow: hidden;
       text-align: center;
-      padding: 40px 20px;
       line-height: 18px;
 
       p {
@@ -409,7 +408,7 @@
       width: 40px;
       height: 40px;
       border-radius: 30px;
-      line-height: 40px;
+      line-height: 35px;
       color: white;
       border: 2px solid #efa022;
 
@@ -419,7 +418,12 @@
     }
 
     .profile-social {
-      padding: 0;
+     padding: 0;
+     text-align: center;
+     bottom: 0;
+     left: 70px;
+     margin-bottom: 25px;
+     margin-top: 10px;
     }
 
     .profile-social li {
@@ -885,6 +889,7 @@
   .social {
       ul {
         text-align: center;
+        padding-left: 0;
       }
       ul li {
         width: 48px;
@@ -906,9 +911,11 @@
 
       .facebook {background: #395a93;border-bottom: 3px solid #36558b;opacity: .9;}
       .twitter {background: #05b3df;border-bottom: 3px solid #06aad3;opacity: .9;}
-      .linkedin {background: #007bb6;border-bottom: 3px solid #36558b;opacity: .9;}
+      .pinterest {background: rgba(203, 32, 39, 1);border-bottom: 3px solid rgba(160, 32, 39, 0.4);opacity: .9;}
+      .google-plus {background: rgba(221, 75, 57, 1);border-bottom: 3px solid rgba(180, 75, 57, 1);opacity: .9;}
+      .linkedin {background: rgba(0, 123, 182, 1);border-bottom: 3px solid rgba(0, 123, 182, 1);opacity: .9;}
 
-      .facebook, .twitter, .linkedin {
+      .facebook, .twitter, .pinterest, .linkedin, .google-plus {
         &:hover {
           opacity: 1;
         }
@@ -1571,7 +1578,7 @@
         color: #d1d1d1;
     }
     .left-inner-addon input {
-        padding-left: 30px;    
+        padding-left: 30px;
     }
     .left-inner-addon i {
         position: absolute;
@@ -1583,7 +1590,7 @@
         position: relative;
     }
     .right-inner-addon input {
-        padding-right: 30px;    
+        padding-right: 30px;
     }
     .right-inner-addon i {
         position: absolute;
@@ -1599,7 +1606,6 @@
     .powered-by{
         text-align: right;
     }
-
 
     .gray-bg {
       border-left: 1px solid #efefef;

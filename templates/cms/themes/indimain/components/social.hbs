@@ -11,9 +11,9 @@
     <div class="component-body">
         <div class="social">
             <ul>
-                <li class="facebook"><a href="{{#if networks.facebook}}{{networks.facebook}}{{/if}}"><span class="fa fa-facebook"></span></a></li>
-                <li class="twitter"><a href="{{#if networks.twitter}}{{networks.twitter}}{{/if}}"><span class="fa fa-twitter"></span></a></li>
-                <li class="linkedin"><a href="{{#if networks.linkedin}}{{networks.linkedin}}{{/if}}"><span class="fa fa-linkedin"></span></a></li>
+                {{#each networks}}
+                    <li class="{{@key}}"><a href="{{this}}"><span class="fa fa-{{@key}}"></span></a></li>
+                {{/each}}
             </ul>
         </div>
     </div>
