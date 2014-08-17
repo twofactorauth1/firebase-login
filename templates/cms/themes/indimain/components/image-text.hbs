@@ -8,32 +8,30 @@
 
 <div>
     {{#with component}}
-    <div class="component-header">
-        <div>
-            {{label}}
-        </div>
-
-        <div>
-            {{description}}
-        </div>
-    </div>
-
     <div id="{{anchor}}" class="component-body {{bgcolor}}">
         <div class="inner-page">
             <div class="image-text">
                 <div class="{{#if url}}col-sm-6{{/if}} col-xs-12 pull-{{imagePosition}}">
-                    <h3 class="image-text-title">
-                        <div class="editable" data-class="title">
-                            {{title}}
+                    {{#if title}}
+                        <h3 class="image-text-title">
+                            <div class="editable" data-class="title">
+                                {{title}}
+                            </div>
+                        </h3>
+                    {{/if}}
+                    {{#if subtitle}}
+                        <h2 class="image-text-subtitle">
+                            <div class="editable" data-class="subtitle">
+                                {{{subtitle}}}
+                            </div>
+                        </h2>
+                    {{/if}}
+                    <div class="mb15"></div>
+                    <div class="image-text-text">
+                        <div class="editable" data-class="text">
+                            {{{text}}}
                         </div>
-                    </h3>
-                    <h2 class="image-text-subtitle">
-                        <div class="editable" data-class="subtitle">
-                            {{{subtitle}}}
-                        </div>
-                    </h2>
-                    <div class="mb30"></div>
-                    <div class="editable" data-class="text">{{{text}}}</div>
+                    </div>
                     {{#if btn}}
                         <a class="btn btn-outline btn-lg" href="{{btn.url}}">{{btn.text}} <span class="fa fa-arrow-circle-o-right"></span></a>
                     {{/if}}
