@@ -224,12 +224,21 @@ var mongodao = {
                 fn(err, value);
             }
         };
-
-        if(sort) {
-            mongoColl.find(query, fields, {sort : [[sort, 'ascending']]}).skip(skip).limit(limit).toArray(fxn);
+        if(fields) {
+            if(sort) {
+                mongoColl.find(query, fields, {sort : [[sort, 'ascending']]}).skip(skip).limit(limit).toArray(fxn);
+            } else {
+                mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
+            }
         } else {
-            mongoColl.find(query, fields).skip(skip).limit(limit).toArray(fxn);
+            if(sort) {
+                mongoColl.find(query, {sort : [[sort, 'ascending']]}).skip(skip).limit(limit).toArray(fxn);
+            } else {
+                mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
+            }
         }
+
+
     },
 
     _aggregateMongoWithCustomStages: function(stageAry, type, fn) {

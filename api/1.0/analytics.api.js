@@ -30,16 +30,27 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('events'), this.isAuthApi, this.createEvent.bind(this));
         app.get(this.url('events/:id'), this.isAuthApi, this.getEvent.bind(this));
         app.post(this.url('events/:id'), this.isAuthApi, this.updateEvent.bind(this));
-        app.delete(this.urL('events/:id'), this.isAuthApi, this.deleteEvent.bind(this));
+        app.delete(this.url('events/:id'), this.isAuthApi, this.deleteEvent.bind(this));
 
     },
 
     verifyEvent: function(req, res, next) {
+        //TODO: verify event comes from segment
         next();
     },
 
     saveAnalyticEvent: function(req, res) {
-
+        var self = this;
+        self.log.debug('>> saveAnalyticEvent');
+        analyticsManager.createEventFromSegment(req.body, function(err, event){
+            self.send200();
+            if(err) {
+                self.log.error('Exception storing event: ' + err);
+                self.log.error(JSON.stringify(req.body));
+            } else {
+                self.log.debug('<< saveAnalyticEvent');
+            }
+        });
     },
 
     listEvents: function(req, res) {
@@ -47,7 +58,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> listEvents');
-        analyticsManager.listEvents(function(err, eventList){
+        analyticsManager.listEvents(null, null, function(err, eventList){
             self.log.debug('<< listEvents');
             self.sendResultOrError(res, err, eventList, "Error listing Analytic Events");
         });
