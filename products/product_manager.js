@@ -72,10 +72,10 @@ module.exports = {
         });
     },
 
-    listProducts: function(limit, skip, fn) {
+    listProducts: function(accountId, limit, skip, fn) {
         var self = this;
         log.debug('>> listProducts');
-        productDao.findAllWithFieldsAndLimit({}, skip, limit, null, null, $$.m.Product, function(err, list){
+        productDao.findAllWithFieldsAndLimit({'accountId':accountId}, skip, limit, null, null, $$.m.Product, function(err, list){
             if(err) {
                 log.error('Exception listing products: ' + err);
                 fn(err, null);

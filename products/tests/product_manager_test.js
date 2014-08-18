@@ -101,7 +101,7 @@ exports.subscription_dao_test = {
 
     testListProducts: function(test) {
         test.expect(2);
-        manager.listProducts(null, null, function(err, list){
+        manager.listProducts(1, null, null, function(err, list){
             if(err) {
                 test.ok(false, 'Error listing products');
                 test.done();
