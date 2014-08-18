@@ -313,7 +313,7 @@ if (process.env.NODE_ENV != "testing") {
 }
 
 //-----------------------------------------------------
-//  CATCH UNCAUGH EXCEPTIONS - Log them and email the error
+//  CATCH UNCAUGHT EXCEPTIONS - Log them and email the error
 //-----------------------------------------------------
 process.on('uncaughtException', function (err) {
     log.error("Stack trace: " + err.stack);
