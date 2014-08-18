@@ -433,14 +433,15 @@ define([
                     //actual code when api works
                     self.account.set("updateType","website");
                     self.account.set('website', {'themeId': themeId});
-                     self.account.save();
+                    self.account.save();
 
                     //refresh theme
                     document.getElementById('iframe-website').contentWindow.location.reload(true);
                     //replace preview
                     //get theme by name
-                    var previewSrc = '/assets/images/theme-previews/indimain-preview.jpg';
-                    $('.theme-img').attr('src', previewSrc);
+                    //var previewSrc = '/assets/images/theme-previews/indimain-preview.jpg';
+                    //$('.theme-img').attr('src', previewSrc);
+                    self.setThemePreview(self.themeId, $('.theme-img')[0]);
                 } else {
                     //show validate error
                     console.log('no theme selected ');
@@ -643,7 +644,6 @@ define([
                 self.pageHandle = options.pageHandle;
                 console.log("Pagehandle:"+self.pageHandle)
             }
-
     });
 
     $$.v.RightPanel = view;

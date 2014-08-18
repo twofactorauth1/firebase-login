@@ -22,6 +22,7 @@
     {{/if}}
 
         <link rel="stylesheet" href="/css/style.default.css">
+        <link rel="stylesheet" href="/js/libs_misc/jquery.tagsinput/jquery.tagsinput.css" />
 
     <title>{{title}}</title>
 
@@ -283,7 +284,9 @@
               });
           });
 
-          $("#category_input").hide().on('blur', function (e) {
+          $("#category_input")
+                  .hide()
+                  .on('blur', function (e) {
               var link = $("#category_link");
               var input = $(this);
               var href = link.attr("href");
@@ -299,6 +302,29 @@
                   target: e.target
               });
           });
+
+          $(document).ready(function(){
+              parent.$('#edit-website-wrapper').trigger("tagseditinit", {
+                  a: $("#tags_link > li > a"),
+                  input : $("#tags_input")[0]
+              });
+
+              $("#tags_link").on('click', function(e) {
+
+                  if(parent.$('#edit-website-wrapper').length) {
+                      e.preventDefault();
+                  }
+
+                  parent.$('#edit-website-wrapper').trigger("tagseditstart", {
+                      target: e.target,
+                      link : $("#tags_link")[0],
+                      a: $("#tags_link > li > a"),
+                      input : $("#tags_input")[0]
+                  });
+              });
+          });
+
+
     </script>
 </body>
 

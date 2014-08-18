@@ -13,8 +13,10 @@ define([
     'models/cms/post',
     'services/cms.service',
     'utils/utils',
-    'views/rightpanel.view'
-], function (User, Account, Website, Page, Post, CmsService, utils, RightPanel) {
+    'views/rightpanel.view',
+    'libs_misc/jquery.tagsinput/jquery.tagsinput'
+
+], function (User, Account, Website, Page, Post, CmsService, utils, RightPanel, TagsInput) {
 
     var view = Backbone.View.extend({
 
@@ -43,7 +45,7 @@ define([
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
             "mousemove #sortable":"draggingComponent",
-            "click .blog-title .editable":"updateTitle"
+            "click .blog-title .editable":"updateTitle",
 
 
         },
@@ -61,8 +63,22 @@ define([
                 , p1 = this.getAccount()
                 , p2 = this.getUser()
                 , p3 = this.getThemeConfig()
-                , p4 = this.getWebsite();
+                , p4 = this.getWebsite()
+                , p5 = $.Deferred()
+                , themePreviewURL;
 
+            $.when(p1)
+                .done(function() {
+                    self._getThemePreview( self.account.get('website').themeId).done(function(themePreview){
+                        var arrayBufferView = new Uint8Array( themePreview );
+                        var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
+                        var urlCreator = window.URL || window.webkitURL;
+                        var imageUrl = urlCreator.createObjectURL( blob );
+
+                        themePreviewURL = imageUrl;
+                        p5.resolve();
+                    });
+                });
 
             $.when(p4)
                 .done(function() {
@@ -74,12 +90,14 @@ define([
 
             $.when(p1, p2, p4)
                 .done(function () {
-                    var data = {
+
+                    data = {
                         websiteId: self.websiteId,
                         websiteTitle: self.websiteTitle,
                         subdomain: self.subdomain
                     };
-
+                    data.currentThemePreviewURL = self.setThemePreview(self.account.attributes.website.themeId);
+                    console.log(data);
                     if (self.pageHandle == "index" || self.pageHandle == "null" || self.pageHandle == "/") {
                         data.page = "/index";
                     } else {
@@ -123,10 +141,10 @@ define([
                                 page = "single-post";
                             }
                             self.pageHandle = page;
-                            $$.e.PageHandleEvent.trigger("pageHandle", {pageHandle: self.pageHandle });
+                            $$.e.PageHandleEvent.trigger("pageHandle", { pageHandle: self.pageHandle });
                         }
 
-                        $.when(p3, p4)
+                        $.when(p3, p4, p5)
                             .done(function() {
                                 self.getPage().done(function(){
                                     self.pageId = self.page.attributes._id;
@@ -144,11 +162,11 @@ define([
                                     var data = {
                                         components: componentsArray,
                                         colorPalette: colorPalette,
-                                        account: self.account
+                                        account: self.account,
+                                        currentThemePreviewURL: themePreviewURL
                                     };
 
                                     self.setupSidebar(data, rightPanel, sidetmpl);
-
 
                                     $(window).on("resize", self.adjustWindowSize);
                                     self.disableClickableTitles();
@@ -164,20 +182,91 @@ define([
             this.$el.on("blogedit", this.proxiedOnBlogEdit);
             this.proxiedOnCategoryEdit = $.proxy( this.editCategory, this);
             this.$el.on("categoryedit", this.proxiedOnCategoryEdit);
+            this.proxiedOnTagsEditInit = $.proxy( this.editTagsInit, this);
+            this.$el.on("tagseditinit", this.proxiedOnTagsEditInit);
+            this.proxiedOnTagsEditStart = $.proxy( this.editTagsStart, this);
+            this.$el.on("tagseditstart", this.proxiedOnTagsEditStart);
+            this.proxiedOnTagsEditDone = $.proxy( this.editTagsDone, this);
+            this.$el.on("tagseditdone", this.proxiedOnTagsEditDone);
             return this;
         },
+        editTagsInit: function () {
+            var data  = arguments[1]
+              , input = data.input
+              , a     = data.a
+              , tags  = [];
+
+            $(a).each(function(i, elem) {
+                tags.push($(elem).text());
+            });
+
+            $(input).tagsInput({
+                'width': "100%",
+                'removeWithBackspace': false,
+            }).importTags(tags.join(','));
+            $('.tagsinput').hide();
+
+            $('body').on('click',function (e) {
+                if(!( $(e.toElement||e.target).hasClass('tagsinput') || $(e.toElement||e.target).parent().hasClass('tagsinput') || $(e.toElement||e.target).parent().parent().hasClass('tagsinput') )) {
+                    if ($(e.toElement || e.target).parent().parent()[0].id != 'tags_link') {
+                        parent.$('#edit-website-wrapper').trigger("tagseditdone", {
+                            target : e.target,
+                            ul     : $('#tags_link')[0],
+                            tags   : $('.tag > span', $('#tags_input_tagsinput'))
+                        });
+                    }
+                }
+            });
+        },
+
+        editTagsStart: function (){
+            var data = arguments[1]
+              , a = data.a
+              , tags = [];
+            $(a).each(function(i, elem) {
+                tags.push($(elem).text());
+            });
+            $('.tagsinput').show();
+            $("#tags_link").hide();
+        },
+
+        editTagsDone: function () {
+            var self     = this
+              , data     = arguments[1]
+              , target   = data.target
+              , tagsElem = data.tags
+              , ul       = data.ul
+              , tags     = []
+              , markup   = ''
+              , postId = $(target).closest(".single-blog").attr("data-postid");
+
+            self.postId = postId;
+
+            $(tagsElem).each(function(i, elem) {
+                var text = $(elem).text().substring(0, $(elem).text().length - 2);
+                tags.push(text);
+                markup += '<li ><a href="/page/tag/"' + text + '>' + text + '</a></li>';
+            });
+
+            $("#tags_link").show();
+            $('.tagsinput').hide();
+            $(ul).html(markup)
+
+            if(tags.length !== 0) {
+                self.getPost().done(function () {
+                    self.post.save({"post_tags": tags});
+                });
+            }
+        },
+
 
         editCategory: function () {
-           console.log("editCategory");
             var data = arguments[1];
             var target = data.target;
             var input=data.input;
-            console.log(data)
+
             $(target).closest("#category_link").hide();
             $(input).show().focus().val($(input).val()).css("width", "150px");
-            //$(input).closest("#category_input").show().focus().css("width", "150px");
-
-
         },
 
         blogEdit: function (e) {
@@ -185,16 +274,12 @@ define([
             var data = arguments[1];
             var target=data.target;
             var postId = $(target).closest(".single-blog").attr("data-postid");
+
             self.postId=postId;
-            console.log(data.value);
-            console.log( postId )
             self.getPost().done(function(){
-                self.post.set("post_category",data.value)
+                self.post.set("post_category", data.value)
                 self.post.save();
-
-
-            })
-
+            });
         },
 
         updateTitle: function () {
@@ -564,6 +649,26 @@ define([
 
             $.cookie('website-setup', 'true', { path: '/' });
             this.render();
+        },
+        _getThemePreview: function (themeId) {
+            return CmsService.getThemePreview(themeId);
+        },
+        setThemePreview: function (themeId, imageElement) {
+            var self = this;
+            var promise = self._getThemePreview(themeId);
+            promise.responseType = "arraybuffer";
+            promise.done(function (themePreview) {
+                var arrayBufferView = new Uint8Array( themePreview );
+                var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
+                var urlCreator = window.URL || window.webkitURL;
+                var imageUrl = urlCreator.createObjectURL( blob );
+                if (imageElement) {
+                    imageElement.src = imageUrl;
+                }
+                self.currentThemePreviewURL = imageUrl;
+            }).fail(function(resp){
+                $$.viewManager.showAlert("An error occurred retreiving the Theme Preview");
+            });
         }
     });
 

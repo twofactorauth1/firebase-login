@@ -11,7 +11,7 @@ if (typeof CACHEBUSTER === 'undefined') {
 
 require.config({
     paths: {
-        jquery: 'libs/jquery/dist/jquery',
+        jquery: 'libs_misc/jquery/dist/jquery',
         jqueryvalidate: 'libs/jquery-validate/dist/jquery.validate',
         jqueryeasing: 'libs/jquery-easing/jquery.easing',
         jqueryUI: 'libs/jquery-ui/jquery-ui.min',
@@ -48,8 +48,8 @@ require.config({
         toggles: 'libs_misc/toggles.min',
         datepicker: 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         leaflet: 'libs/leaflet/dist/leaflet',
-        tagsinput: 'libs/jquery.tagsinput/jquery.tagsinput.min',
-        gritter: 'libs/jquery.gritter/js/jquery.gritter.min'
+        tagsinput: 'libs_misc/jquery.tagsinput/jquery.tagsinput.min',
+        gritter: 'libs/jquery.gritter/js/jquery.gritter.min',
     },
 
     shim: {
@@ -150,7 +150,7 @@ require.config({
                 'datepicker',
                 'tagsinput',
                 'd3',
-                'gritter'
+                'gritter',
             ]
         }
     },

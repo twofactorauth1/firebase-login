@@ -46,28 +46,14 @@
                         {{#if post_tags}}
                             <ul id="tags_link" class="post_tags">
                                 {{#each post_tags}}
-                                    <li><a href="/page/tag/{{this}}">{{this}}</a></li>
+                                    <li >
+                                        <a href="/page/tag/{{this}}">{{this}}</a>
+                                    </li>
                                 {{/each}}
                             </ul>
-                            <style>
-                                #tags > span {
-                                    display: inline-block;
-                                    background: #47b1cc;
-                                    padding: 5px;
-                                    border-radius: 5px;
-                                    font-size: 12px;
-                                    color:white;
-                                }
-                            </style>
-                            <div id="tags_input" contenteditable="true">
-                                {{#each post_tags}}
-                                    <span>{{this}}</span>
-                                {{/each}}
-                            </div>
-                            <script>
-                                $("#tags_link")
 
-                            </script>
+                            <div id="tags_input"></div>
+
                         {{/if}}
 
                         <div class="et_pt_thumb alignleft">

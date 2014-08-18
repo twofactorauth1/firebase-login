@@ -92,7 +92,12 @@ define(function() {
             }
 
             var div = '<div id="tmpTemplateHolder"></div>';
-            var body = $(document).find("body");
+       //     var body = $(document).find("body");
+            var body;
+            $(document).find("body").each(function(i,v){if(!v.inframe)body=$(v)});
+            $(body).append(div);
+
+
             $(body).append(div);
 
             div = $("#tmpTemplateHolder");
