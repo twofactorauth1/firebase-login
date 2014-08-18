@@ -17,6 +17,11 @@ define([], function() {
         getAllThemes: function(accountId) {
             var url = $$.api.getApiUrl("cms", "themes");
             return $.getJSON(url);
+        },
+
+        getThemePreview: function(themeId) {
+            var url = $$.api.getApiUrl("cms", "theme/" + themeId + "/preview");
+            return $.getJSON(url);
         }
     };
 
