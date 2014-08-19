@@ -34,6 +34,9 @@ var runkeeperApi = require('./1.0/runkeeperadapter.api');
 // Campaigns
 var campaignManager = require('./1.0/campaignmanager.api');
 
+// Products
+var productsApi = require('./1.0/product.api');
+
 module.exports = {
 
 };

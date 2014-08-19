@@ -224,6 +224,7 @@ var mongodao = {
                 fn(err, value);
             }
         };
+
         if(fields) {
             if(sort) {
                 mongoColl.find(query, fields, {sort : [[sort, 'ascending']]}).skip(skip).limit(limit).toArray(fxn);

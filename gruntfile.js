@@ -159,6 +159,7 @@ module.exports = function(grunt) {
             contacts: ['test/contact.dao_test.js'],
             contextio:['test/contextio_test.js'],
             facebook: ['test/facebook_test.js'],
+            products: ['products/tests/*_test.js'],
             twonet:['biometrics/twonet/adapter/test/**/*_test.js', 'biometrics/twonet/client/test/**/*_test.js',
                 'biometrics/twonet/adapter/test/twonet_test_poll.js'],
             twonetadapter:['biometrics/twonet/adapter/test/**/*_test.js'],
@@ -186,7 +187,8 @@ module.exports = function(grunt) {
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
     grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
 
-    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils']);
+    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
+            'nodeunit:products']);
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
     grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);
@@ -200,4 +202,5 @@ module.exports = function(grunt) {
     grunt.registerTask('testFacebook', ['nodeunit:facebook']);
     grunt.registerTask('testContacts', ['nodeunit:contacts']);
     grunt.registerTask('testAnalytics', ['nodeunit:analytics']);
+    grunt.registerTask('testProducts', ['nodeunit:products']);
 };
