@@ -22,6 +22,7 @@
     {{/if}}
 
         <link rel="stylesheet" href="/css/style.default.css">
+        <link rel="stylesheet" href="/js/libs_misc/jquery.tagsinput/jquery.tagsinput.css" />
 
     <title>Indigenous</title>
     <script type="text/javascript">
@@ -354,6 +355,59 @@
                  }
              })
           })(jQuery);
+
+          $("#category_link").on('click', function(e) {
+
+             if(parent.$('#edit-website-wrapper').length)
+                    e.preventDefault();
+
+              parent.$('#edit-website-wrapper').trigger("categoryedit", {
+                  target: e.target,
+                  input:$("#category_input")[0]
+              });
+          });
+
+          $("#category_input")
+                  .hide()
+                  .on('blur', function (e) {
+              var link = $("#category_link");
+              var input = $(this);
+              var href = link.attr("href");
+
+              input.hide();
+              link.show()
+                  .html(input.val())
+                  .attr('href', href.substring(0, href.lastIndexOf("/")) + "/" + (input.val()));
+
+
+              parent.$('#edit-website-wrapper').trigger("blogedit", {
+                  value: $("#category_input").val(),
+                  target: e.target
+              });
+          });
+
+          $(document).ready(function(){
+              parent.$('#edit-website-wrapper').trigger("tagseditinit", {
+                  a: $("#tags_link > li > a"),
+                  input : $("#tags_input")[0]
+              });
+
+              $("#tags_link").on('click', function(e) {
+
+                  if(parent.$('#edit-website-wrapper').length) {
+                      e.preventDefault();
+                  }
+
+                  parent.$('#edit-website-wrapper').trigger("tagseditstart", {
+                      target: e.target,
+                      link : $("#tags_link")[0],
+                      a: $("#tags_link > li > a"),
+                      input : $("#tags_input")[0]
+                  });
+              });
+          });
+
+
     </script>
 </body>
 

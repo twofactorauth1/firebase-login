@@ -153,6 +153,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(app.router);
+// Handle 404
+app.use(function(req, res) {
+    res.status(400);
+    res.render('404.html', {title: '404: File Not Found'});
+});
+
+// Handle 500
+app.use(function(error, req, res, next) {
+    res.status(500);
+    res.render('500.html', {title:'500: Internal Server Error', error: error});
+});
 app.use(connect.compress());
 
 app.configure('development', function() {
@@ -313,7 +324,7 @@ if (process.env.NODE_ENV != "testing") {
 }
 
 //-----------------------------------------------------
-//  CATCH UNCAUGH EXCEPTIONS - Log them and email the error
+//  CATCH UNCAUGHT EXCEPTIONS - Log them and email the error
 //-----------------------------------------------------
 process.on('uncaughtException', function (err) {
     log.error("Stack trace: " + err.stack);

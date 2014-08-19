@@ -35,6 +35,8 @@ define([
 
                 post_status: null,
 
+                post_category:null,
+
                 comment_status: null,
 
                 comment_count: null,
