@@ -52,21 +52,15 @@ CONTACTS MAIN VIEW
                 <div class="col-sm-6">
                     <input type="text" placeholder="Search Customers" class="form-control mb15 input-lg  search-contacts">
                 </div>
-                <div class="col-sm-6 form-horizontal hidden">
+                <div class="col-sm-6 form-horizontal">
                     <div class="form-group row">
                         <select class=" form-control chosen-select input-lg">
                             <option value="">Filter Customers</option>
-                            <option value="near_store">Important</option>
-                            <option value="near_store">People</option>
-                            <option value="near_store">Companies</option>
-                            <option value="near_store">Recently Viewed</option>
-                            <option value="near_store">Recently Added</option>
-                            <option value="near_store">Recently Contacted</option>
-                            <option value="last_acitve">Last Active</option>
-                            <option value="visits"># of Visits</option>
-                            <option value="purchases">Purchased</option>
-                            <option value="starred">Important</option>
-                            <option value="near_store">Proximity to You</option>
+                            <option value="a_to_z">A to Z</option>
+                            <option value="z_to_a">Z to A</option>
+                            <option value="first_last">First, Last</option>
+                            <option value="last_first">Last, First</option>
+                            <option value="date_added">Date Added</option>
                         </select>
                     </div>
                 </div>
@@ -82,7 +76,7 @@ CONTACTS MAIN VIEW
 
     {{#each contacts}}
 
-                <div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-3">
                     <div class="people-item btn-view-contact-details contact-item" data-contactid="{{_id}}">
                         <span class="important-star tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Important Contact">
                             <i class="fa {{#if starred}}fa-star{{else}}fa-star-o{{/if}}" />
@@ -212,6 +206,9 @@ CONTACTS MAIN VIEW
         </div>
     </div>
 
+    {{> fixDuplicates-modal}}
+    {{> importContacts-modal}}
+
 </script>
 
 <script type="text/x-handlebars-template" name="contact-sidebar">
@@ -229,7 +226,7 @@ CONTACTS MAIN VIEW
         <div class="tab-pane pane-settings active" id="rp-settings">
 
             <div class="form-group mb20">
-                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#importContactsModal"><i class="fa fa-cloud-upload"></i> Import FB Contacts</button>
+                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#import-contacts-modal"><i class="fa fa-cloud-upload"></i> Import Contacts</button>
             </div>
 
 
@@ -329,8 +326,6 @@ CONTACTS MAIN VIEW
     <!-- tab-content -->
     </div>
 
-    {{> importContacts-modal}}
-    {{> fixDuplicates-modal}}
 </script>
 
 
@@ -1480,10 +1475,9 @@ CONTACTS EDIT VIEW
             <div class="row choose-import" data-import-section="choose">
                 <p>Choose one of the import options from below: </p>
                 <div class="clearfix mb30"></div>
-                <button type="button" class="btn fb-color btn-lg" data-import-source="facebook"><span class="fa fa-facebook"></span> <div class="clearfix mb5"></div> Facebook</button>
-                <button type="button" class="btn linkedin-color btn-lg" data-import-source="linkedin"><span class="fa fa-linkedin"></span> <div class="clearfix mb5"></div> LinkedIn</button>
-                <button type="button" class="btn google-color btn-lg" data-import-source="googleplus"><span class="fa fa-google-plus"></span> <div class="clearfix mb5"></div> Google+</button>
-                <button type="button" class="btn btn-primary btn-lg" data-import-source="csv"><span class="fa fa-plus"></span> <div class="clearfix mb5"></div> CSV</button>
+                <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook"><span class="fa fa-facebook"></span> <div class="clearfix mb5"></div> Facebook</button>
+                <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin"><span class="fa fa-linkedin"></span> <div class="clearfix mb5"></div> LinkedIn</button>
+                <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus"><span class="fa fa-google"></span> <div class="clearfix mb5"></div> Gmail</button>
                 <div class="clearfix mb30"></div>
             </div>
 

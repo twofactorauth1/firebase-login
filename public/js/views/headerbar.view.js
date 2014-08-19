@@ -79,7 +79,11 @@ define([
 
 
         toggleRightMenu: function() {
-            var body = $('body');
+            var body;
+            $('body').each(function(i,v){
+                if(!v.inframe)
+                    body=$(v)
+            });
             var bodypos = body.css('position');
 
             if (bodypos != 'relative') {

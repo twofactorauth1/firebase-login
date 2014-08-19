@@ -1,4 +1,8 @@
 #pipeshiftDiv {
+
+    padding: 0;
+    background: #e4e7ea;
+
     body {
         background: #fafafa;
         color: #333;
@@ -133,6 +137,10 @@
         color: #28a4c9 !important;*/
         background: rgb(0, 115, 199) !important;
         border-color: rgb(0, 115, 199) !important;
+        border-bottom-right-radius: 0px;
+        border-top-right-radius: 0px;
+        height: 46px;
+        width: 44px;
     }
 
     .btn-info:active,
@@ -148,8 +156,15 @@
         background-color: rgba(255, 255, 255, 0.25);
     }
 
-    body .btn-primary {
+    .btn-primary {
         color: #fff !important;
+        background: #f0ad4e;
+        border: none;
+        border-bottom: 4px solid #fa8b28;
+
+        &:hover {
+            background: #f0ad4e;
+        }
     }
 
     .account {
@@ -255,17 +270,20 @@
     }
 
     body .jumbotron-profile .fus-section {
-        padding-left: 50px;
         background-color: rgba(255, 255, 255, 0.55);
         border-radius: 5px;
     }
 
+    .fus-section {
+        padding: 0!important;
+    }
+
     .video-container {
         /*padding-left: 50px;*/
-        background-color: rgba(0, 0, 0, 0.55);
-        border-radius: 5px;
-        padding-left: 15px;
-        padding-right: 15px;
+        // background-color: rgba(0, 0, 0, 0.55);
+        // border-radius: 5px;
+        // padding-left: 15px;
+        // padding-right: 15px;
     }
 
     .btn-send.btn-square {
@@ -280,6 +298,12 @@
         border-top-left-radius: 0px;
     }
 
+    .btn-search-options {
+        float: left;
+        width: 10%;
+        height: 46px;
+    }
+
     .btn-search, .btn-add {
         float: right;
         border: 1px solid;
@@ -291,9 +315,10 @@
     }
 
     .btn-add {
-        background-color: rgb(43, 144, 80) !important;
-        border-color: rgb(43, 144, 80) !important;
-        margin-left: 10px;
+        background-color: #2b9050 !important;
+        border-color: #2b9050 !important;
+        width: 10%;
+        height: 46px;
     }
 
     .btn-send {
@@ -344,10 +369,10 @@
     }
 
     .search-form input {
-        height: 57px;
+        height: 46px;
         padding: 5px;
         box-sizing: border-box;
-        border: solid 1px white;
+        border: 1px solid #cccccc;
         border-radius: 3px;
         width: 100%;
     }
@@ -358,7 +383,7 @@
 
     .playlist-editor .search-form input {
         /*width: 440px;*/
-        width: calc(100% - 57px);
+        // width: calc(100% - 57px);
         border-bottom-left-radius: 0px;
         border-top-left-radius: 0px;
         color: black;
@@ -541,17 +566,14 @@
     }
 
     .playlist-selector {
-        height: 57px;
+        height: 46px;
         padding: 10px;
         box-sizing: border-box;
-        /*border: solid 1px white;*/
-        /*border-radius: 3px;*/
-        border-bottom-right-radius: 3px;
-        border-top-right-radius: 3px;
-        margin-bottom: 22px;
-        width: 250px;
-        float: right;
-        width: calc(100% - 124px);
+        border-bottom-right-radius: 0px;
+        border-top-right-radius: 0px;
+        margin-bottom: 0;
+        width: 80%;
+        float: left;
         color: black;
     }
 
@@ -721,6 +743,8 @@
 
     .search-form {
         position: relative;
+        float: left;
+        width: 90%;
     }
 
     .btn-search {
@@ -729,6 +753,8 @@
         top: 0px;
         background: transparent !important;
         border: none !important;
+        height: 46px;
+        font-size: 20px;
     }
 
     .glyphicon-search {

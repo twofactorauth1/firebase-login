@@ -20280,7 +20280,7 @@ input[type='file'] {
 }
 #social_dashboard #social_dashboard_panel {
   width: 100%;
-  padding: 15px;
+  padding-right: 190px;
 }
 #social_dashboard #social_dashboard_panel .grid1,
 #social_dashboard #social_dashboard_panel .grid2 {
@@ -21203,6 +21203,18 @@ path {
 .template-list {
   padding: 0;
 }
+.campaign-list .fa-facebook,
+.template-list .fa-facebook {
+  background: #245f9b!important;
+}
+.campaign-list .fa-twitter,
+.template-list .fa-twitter {
+  background: #5dd7fc!important;
+}
+.campaign-list .fa-google-plus,
+.template-list .fa-google-plus {
+  background: #c1272d!important;
+}
 .campaign-list li.row,
 .template-list li.row {
   border-radius: 3px;
@@ -21355,15 +21367,6 @@ path {
   line-height: 50px;
   margin-right: 10px;
   background: #42c0fb;
-}
-.fa-facebook {
-  background: #245f9b!important;
-}
-.fa-twitter {
-  background: #5dd7fc!important;
-}
-.fa-google-plus {
-  background: #c1272d!important;
 }
 .minimize i {
   margin-top: 15px;
@@ -22032,18 +22035,6 @@ div[data-class="feature-list"] {
   text-shadow: 1px 1px 1px black;
   list-style-type: circle;
   list-style-position: inside;
-}
-.feature-block {
-  padding: 0 20px;
-}
-.feature-block h3 {
-  color: #16778b;
-  font-style: italic;
-  font-size: 36px;
-  margin-bottom: 30px;
-}
-.feature-block .inner-page {
-  padding: 80px 0;
 }
 /********** Gallery **********/
 .overlay-gallery-image {
