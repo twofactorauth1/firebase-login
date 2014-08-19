@@ -65,7 +65,7 @@ define([
             "input #page-url":"urlCreator",
 
             //import contact modal
-            "click .choose-import .btn": "changeImportSection",
+            "click .choose-import": "changeImportSection",
             "click #import-contacts-modal .close": "closeImportModal",
 
             //fix duplicates modal
