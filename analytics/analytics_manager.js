@@ -103,10 +103,14 @@ module.exports = {
         });
     },
 
-    listEvents: function(skip, limit, fn) {
+    listEvents: function(accountId, limit, skip, fn) {
         var self = this;
         _log.debug('>> listEvents');
-        dao.findAllWithFieldsAndLimit({}, skip, limit, null, null, $$.m.AnalyticsEvent, function(err, list){
+        var query = {};
+        if(accountId) {
+            query.accountId = accountId;
+        }
+        dao.findAllWithFieldsAndLimit(query, skip, limit, null, null, $$.m.AnalyticsEvent, function(err, list){
             if(err) {
                 _log.error('Exception listing events: ' + err);
                 fn(err, null);
