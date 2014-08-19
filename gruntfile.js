@@ -153,6 +153,7 @@ module.exports = function(grunt) {
         //TESTING
         nodeunit: {
             all:['test/**/*_test.js'],
+            analytics: ['analytics/tests/*_test.js'],
             api:['api/test/*_test.js'],
             biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
             contacts: ['test/contact.dao_test.js'],
@@ -200,5 +201,6 @@ module.exports = function(grunt) {
     grunt.registerTask('testApi', ['nodeunit:api']);
     grunt.registerTask('testFacebook', ['nodeunit:facebook']);
     grunt.registerTask('testContacts', ['nodeunit:contacts']);
+    grunt.registerTask('testAnalytics', ['nodeunit:analytics']);
     grunt.registerTask('testProducts', ['nodeunit:products']);
 };
