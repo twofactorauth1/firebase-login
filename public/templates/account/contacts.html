@@ -134,12 +134,13 @@ CONTACTS MAIN VIEW
                                         <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No LinkedIn Account" target="_blank"><i class="fa fa-linkedin"></i></a>
                                         {{/getLinkedInId}}
                                     </li>
-
-                                    {{#getAddress this}}
                                     <li>
+                                    {{#getAddress this}}
                                         <a href="https://www.google.com/maps?q={{$this.address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-                                    </li>
+                                    {{else}}
+                                        <a href="https://www.google.com/maps?q={{$this.address}}" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
                                     {{/getAddress}}
+                                    </li>
 
                                 </ul>
                             </div>
@@ -208,7 +209,6 @@ CONTACTS MAIN VIEW
 
     {{> fixDuplicates-modal}}
     {{> importContacts-modal}}
-
 </script>
 
 <script type="text/x-handlebars-template" name="contact-sidebar">
@@ -325,7 +325,6 @@ CONTACTS MAIN VIEW
     </div>
     <!-- tab-content -->
     </div>
-
 </script>
 
 
@@ -360,6 +359,47 @@ CONTACTS MAIN VIEW
                             <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />// <!-- {{else}} // -->
                             <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
                             <!-- // {{/isGoogleImage}} // {{/if}} -->
+
+                            <ul class="social-list hidden-xs test">
+                                <li>
+                                    {{#getBestEmail this}}
+                                        <a href="mailto:{{$email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
+                                    {{else}}
+                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Email Address"><i class="fa fa-envelope-o"></i></a>
+                                    {{/getBestEmail}}
+                                </li>
+
+                                <li>
+                                    {{#getFacebookId this}}
+                                        <a href="https://www.facebook.com/{{$facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                    {{else}}
+                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Facebook Link"><i class="fa fa-facebook"></i></a>
+                                    {{/getFacebookId}}
+                                </li>
+
+                                <li>
+                                    {{#getTwitterId this}}
+                                        <a href="https://twitter.com/intent/user?user_id={{$twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                    {{else}}
+                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Twitter Account"><i class="fa fa-twitter"></i></a>
+                                    {{/getTwitterId}}
+                                </li>
+
+                                <li>
+                                    {{#getLinkedInId this}}
+                                        <a href="{{#if $linkedInUrl}}{{$linkedInUrl}}{{else}}http://www.linkedin.com/profile/view?id={{$linkedInId}}{{/if}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                    {{else}}
+                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No LinkedIn Account" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                    {{/getLinkedInId}}
+                                </li>
+                                <li>
+                                    {{#getAddress this}}
+                                        <a href="https://www.google.com/maps?q={{$this.address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                                    {{else}}
+                                        <a href="https://www.google.com/maps?q={{$this.address}}" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                                    {{/getAddress}}
+                                </li>
+                        </ul>
 
                             <span class="name visible-xs">
 
@@ -407,45 +447,6 @@ CONTACTS MAIN VIEW
                             </div>
                         </div>
                         <div class="clearfix mb10"></div>
-                        <ul class="social-list hidden-xs">
-                                    {{#getBestEmail this}}
-                                        <li>
-                                            <a href="mailto:{{$email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
-                                        </li>
-                                    {{else}}
-                                    {{/getBestEmail}}
-
-
-                                <li>
-                                    {{#getFacebookId this}}
-                                    <a href="https://www.facebook.com/{{$facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                                    {{else}}
-
-                                    {{/getFacebookId}}
-                                </li>
-
-                                <li>
-                                    {{#getTwitterId this}}
-                                    <a href="https://twitter.com/intent/user?user_id={{$twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
-                                    {{else}}
-
-                                    {{/getTwitterId}}
-                                </li>
-
-                                <li>
-                                    {{#getLinkedInId this}}
-                                    <a href="{{#if $linkedInUrl}}{{$linkedInUrl}}{{else}}http://www.linkedin.com/profile/view?id={{$linkedInId}}{{/if}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
-                                    {{else}}
-                                    {{/getLinkedInId}}
-                                </li>
-
-                                {{#getAddress this}}
-                                <li>
-                                    <a href="https://www.google.com/maps?q={{$this.address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-                                {{else}}
-                                {{/getAddress}}
-                                </li>
-                            </ul>
                         <div class="pull-right">
                             <span class="visible-inline-xs">
                                 type: {{contactTypeLabel this}} |
