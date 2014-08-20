@@ -97,7 +97,7 @@ define([
                         subdomain: self.subdomain
                     };
                     data.currentThemePreviewURL = self.setThemePreview(self.account.attributes.website.themeId);
-                    console.log(data);
+
                     if (self.pageHandle == "index" || self.pageHandle == "null" || self.pageHandle == "/") {
                         data.page = "/index";
                     } else {

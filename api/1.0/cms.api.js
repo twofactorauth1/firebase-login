@@ -46,13 +46,17 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id'), this.getPageById.bind(this));
         app.put(this.url('page'), this.saveOrUpdatePage.bind(this));
 
+
+
         //consistent URLs
+
+        app.get(this.url('website/:websiteId/pages/:id'), this.getPagesById.bind(this));
         app.get(this.url('website/:websiteId/page/:id'), this.getPageById.bind(this));
         app.post(this.url('website/:websiteId/page'), this.createPage.bind(this));
         app.post(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
         app.put(this.url('website/:websiteId/page'), this.createPage.bind(this));
         app.put(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
-        app.delete(this.url('website/:websiteId/page/:id'), this.deletePage.bind(this));
+        app.delete(this.url('website/:websiteId/page/:id/:label'), this.deletePage.bind(this));
 
         // THEME
         app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
@@ -211,6 +215,19 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     //region PAGE
+    getPagesById: function(req, resp) {
+        //TODO: Add security
+        var self = this;
+        var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        self.log.debug('>> getPagesById');
+
+        cmsDao.getPagesById(accountId, function(err, value) {
+            self.sendResultOrError(resp, err, value, "Error Retrieving Page by Id");
+            self = null;
+        });
+    },
+
     getPageByHandle: function(req, resp) {
         //TODO: Add security
         var self = this;
@@ -290,10 +307,53 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> deletePage');
 
         var pageId = req.params.id;
+        var websiteId = req.params.websiteId;
+        var label = req.params.label;
 
         cmsManager.deletePage(pageId, function(err, value){
             self.log.debug('<< deletePage');
-            self.sendResultOrError(res, err, value, "Error deleting Page");
+            if(!err && value){
+
+                cmsManager.getWebsiteLinklistsByHandle(websiteId,"head-menu",function(err,list){
+
+              //      var links=  list["links"];
+
+                    var spliceIndex = -1;
+                    for(var i = 0; i<list.links.length; i++) {
+                        if(list.links[i].label === label) {
+                            spliceIndex = i;
+                        }
+                    }
+
+                    if(spliceIndex > 0) {
+                        list.links.splice(spliceIndex, 1);
+                    }
+
+                    cmsManager.updateWebsiteLinklists(websiteId, "head-menu", list, function(err, value){
+                        if(err) {
+                            console.log(err)
+                        } else {
+                            console.log(value)
+                        }
+                    });
+                })
+                /*
+                cmsManager.deleteWebsiteLinklists(websiteId, "head-menu", function(err, value){
+                    self.log.debug('<< deleteWebsiteLinklists');
+                    self.sendResultOrError(res, err, value, "Error adding website Linklists");
+                    self = value = null;
+                });
+                */
+                /*
+                cmsManager.updateWebsiteLinklists(websiteId, "head-menu", linkList, function(err, value){
+                    self.log.debug('<< deletePageLink');
+                    self.sendResultOrError(res, err, value, "Error deleting Page Link");
+                    self = value = null;
+                });
+                */
+            }
+            else
+               self.sendResultOrError(res, err, value, "Error deleting Page");
             self = null;
         });
 

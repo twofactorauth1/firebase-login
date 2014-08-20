@@ -91,8 +91,6 @@ module.exports = {
                 });
             }
         });
-
-
     },
 
     getBlogPost: function(accountId, postId, fn) {
@@ -110,7 +108,7 @@ module.exports = {
         self.log = log;
         self.log.debug('>> deleteBlogPost');
         blogPostDao.removeById(postId, $$.m.BlogPost, function(err, value){
-            cmsDao.getPageById(pageId,function(err, page){
+            cmsDao.getPageById(pageId,function(err, page) {
                 if(err) {
                     self.log.error('Error getting page for post: ' + err);
                     fn(err, null);
@@ -432,6 +430,7 @@ module.exports = {
                 fn(err, null);
             } else {
                 self.log.debug('<< deletePage');
+
                 fn(null, value);
             }
         });

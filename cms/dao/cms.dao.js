@@ -292,7 +292,12 @@ var dao = {
     getPageById: function(pageId, fn) {
         return this.getById(pageId, $$.m.cms.Page, fn);
     },
-
+    getPagesById: function(accountId, fn) {
+      //  accountId = accountId.toString();
+        var query = {accountId: accountId};
+      //  return this.getById(accountId, $$.m.cms.Page, fn);
+        this.findMany(query, Page, fn);
+    },
 
     getPageForWebsite: function (websiteId, pageName, fn) {
         var query = {websiteId: websiteId, handle: pageName};

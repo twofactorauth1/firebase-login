@@ -7,8 +7,9 @@ define([
     'models/cms/post',
     'models/cms/page',
     'models/user',
-    'events/events'
-], function (EditWebsite, utils, Blog, Signup,CmsService, Post, Page, User, events) {
+    'events/events',
+    'collections/cms/pages'
+], function (EditWebsite, utils, Blog, Signup,CmsService, Post, Page, User, events,Pages) {
 
     var view = EditWebsite.extend({
 
@@ -60,6 +61,8 @@ define([
 
             //add page
             "click .add-page":"newPageModal",
+            "click .delete-page":"deletePageModal",
+            "click .remove-page":"deletePage",
             "click .create-page":"addBlankPage",
             "input #page-title":"urlCreator",
             "input #page-url":"urlCreator"
@@ -74,14 +77,12 @@ define([
 
             $.when(p1)
                 .done(function () {
-                    console.log(self);
                     self.subdomain = self.account.attributes.subdomain;
                     self.themeId = self.account.attributes.website.themeId;
             });
 
             $.when(p2)
                 .done(function () {
-                    console.log(self);
                 self.websiteSettings = self.website.attributes.settings;
                 self.websiteId = self.website.attributes._id;
                 console.log('Getting Page on rightpanel');
@@ -91,12 +92,10 @@ define([
                 });
             });
 
-
             $$.e.PageHandleEvent.bind("pageHandle",this.pageHandleEvent.bind(this));
         },
 
         renderHtml: function(html) {
-            console.log($("#iframe-website"));
             var self = this
 
             this.show(html);
@@ -114,25 +113,57 @@ define([
          * - Functions for Edit Website Sidebar
          */
 
-            getPage: function() {
-                console.log('GETTING PAGEHANDLE'+this.pageHandle);
-                this.page = new Page({
-                    websiteId: this.websiteId,
-                    handle:   this.pageHandle || 'index'
-                });
+        getPage: function() {
+            console.log('GETTING PAGEHANDLE'+this.pageHandle);
+            this.page = new Page({
+                websiteId: this.websiteId,
+                handle:   this.pageHandle || 'index'
+            });
 
-                return this.page.fetch({
-                    success: function (page) {
-                        console.log("PAGE FETCH");
-                        console.log(page);
-                    }
-                });
-            },
+            return this.page.fetch({
+                success: function (page) {
+                    console.log("PAGE FETCH");
+                    console.log(page);
+                }
+            });
+        },
 
-            addBlankPage: function() {
+        getPages: function() {
+            if (this.accountId == null) {
+                this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
+            }
+            this.pages = new $$.c.Pages();
+
+            //return this.pages.getPagesAll(this.accountId, this.websiteId);
+            return this.pages.fetch();
+        },
+
+        deletePage:function(){
+            var self = this;
+            var pageId=$('#myselect option:selected').val();
+            var handle=$('#myselect option:selected').text();
+            var page = new Page({
+                websiteId : this.websiteId,
+                _id       : pageId,
+                title:handle
+            });
+            /*
+            var linklist = self.website.get('linklist');
+            console.log(linklist);
+            */
+            page.destroy({
+                success: function(err,res) {
+
+                }
+            });
+            $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
+        },
+
+
+        addBlankPage: function() {
                 var self = this;
                 console.log('adding blank page'+self.is_dragging);
-                $('#iframe-website').contents().find('ul.navbar-nav li:last-child').before('<li><a href="#">New Page</a></li>');
+              //  $('#iframe-website').contents().find('ul.navbar-nav li:last-child').before('<li><a href="#">New Page</a></li>');
                 $('#new-page-modal').modal('hide');
 
 
@@ -176,6 +207,7 @@ define([
                 this.page.save().done( function() {
                     console.log('page sved');
                     self.pageId = self.page.attributes._id;
+                    $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
                     // var $iframe = $('#iframe-website');
                     // $iframe.ready(function() {
                     //     $iframe.contents().find("#main-area .entry").prepend(html);
@@ -189,6 +221,36 @@ define([
             newPageModal: function() {
                 $('#new-page-modal').modal('show');
             },
+
+            deletePageModal: function(){
+                var self=this;
+                var select = $('#myselect');
+                this.getPages().done(function() {
+                    var newOptions=self.pages.models;
+                    /*
+                    var newOptions = {
+                        'red' : 'Red',
+                        'blue' : 'Blue',
+                        'green' : 'Green',
+                        'yellow' : 'Yellow'
+                    };
+                    */
+                    $('option', select).remove();
+                    $.each(newOptions, function(index, value) {
+                        var title=value.get('title')
+                        if(title!='Home') {
+                            var option = new Option(title, value.id);
+                            select.append($(option));
+                        }
+                    });
+
+                    $('#delete-page-modal').modal('show');
+                })
+
+
+
+            },
+
 
             urlCreator: function(e) {
                 var postUrl = $(e.currentTarget).val();
@@ -297,12 +359,9 @@ define([
                 var componentName = $('#component-name').val();
                 //get component type
                 var componentType = $('#component-type').val();
-
-
                 //validate
                 var component=new Signup({ pageId:self.pageId,  formName:componentName, type:componentType});
                 component.save().done(function( ){
-
                     console.log(component)
                     var data = {
                         "id": component.id,
@@ -310,33 +369,32 @@ define([
                         "type": componentType
                     };
                     console.log(data);
-                    /*  var data = {
-                     "id": component._id,
-                     "name": component.get('formName'),
-                     "type": component.get('type')
-                     };*/
+                    /*
+                    var data = {
+                        "id": component._id,
+                        "name": component.get('formName'),
+                        "type": component.get('type')
+                    };*/
                     var tmpl = $$.templateManager.get("draggable-component", self.templateKey);
                     var html = tmpl(data);
                     $('#sortable').append(html);
 
                     $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
-
-
                 });
-                //    $( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
+                //$( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
                 //add to mongo
                 //get mongo id
-          //      var newComponent = self.getComponent();
-           //     console.log('New Component: '+JSON.stringify(newComponent));
+                //var newComponent = self.getComponent();
+                //console.log('New Component: '+JSON.stringify(newComponent));
                 //add to sidebar
 
                 });
-            //    Backbone.history.loadUrl();
-             //   $( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
+                //Backbone.history.loadUrl();
+                //$( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
 
 
                 //add to site
-        //        self.updateOrder();
+                //self.updateOrder();
                 //$('#iframe-website').contentWindow.location.reload(true);
 
             },
@@ -354,17 +412,17 @@ define([
                 console.log('Component Deleted '+componentID);
                 self.getPage().done(function(){
 
-                self.pageId = self.page.attributes._id;
+                    self.pageId = self.page.attributes._id;
 
-                var component=new Signup({ pageId:self.pageId,  _id:componentID});
+                    var component=new Signup({ pageId:self.pageId,  _id:componentID});
 
-                component.destroy({
-                    success: function(err,res) {
-                        console.log(err);
-                        console.log(res)
-                        $( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
-                    }
-                })
+                    component.destroy({
+                        success: function(err,res) {
+                            console.log(err);
+                            console.log(res)
+                            $( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
+                        }
+                    })
                 });
                 event.stopImmediatePropagation();
 
