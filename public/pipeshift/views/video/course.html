@@ -5,13 +5,16 @@
          ng-click="$parent.$parent.$parent.showTimelineItemModal(video)"><span
             class="glyphicon glyphicon-envelope"></span></div>
     <div class="playlist-video">
-        <button class="btn btn-square-sm" ng-click="removeVideo(video)"><span
-                    class="glyphicon glyphicon-remove"></span>
-            </button>
-        <h4 class="video-title"><a ng-href="{{getLink(video, $index)}}"><span tooltip="{{video.videoTitle}}" tooltip-placement="bottom" class="single-line-text">{{($index+1)+'. '+video.videoTitle}}</span></a>
+        <h4 class="video-title"><a ng-href="{{getLink(video, $index)}}"><span tooltip="{{video.videoTitle}}"
+                                                                              tooltip-placement="bottom"
+                                                                              class="single-line-text">{{($index+1)+'. '+video.videoTitle}}</span></a>
         </h4>
+
         <div class="preview-image-container">
             <img ng-src="{{video.videoPreviewUrl}}" class="preview-image"/>
+            <button class="btn btn-square-sm" ng-click="removeVideo(video)"><span
+                    class="glyphicon glyphicon-remove"></span>
+            </button>
             <div class="duration">{{formatDuration(video.media$group.yt$duration.seconds)}}</div>
         </div>
     </div>
