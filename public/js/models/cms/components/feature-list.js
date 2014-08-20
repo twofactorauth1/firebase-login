@@ -30,7 +30,8 @@ define([
                     icon:"",
                 }
                 */
-                features: []
+                features: [],
+                title:""
             }
         }
     });

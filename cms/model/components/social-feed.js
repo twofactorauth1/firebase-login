@@ -70,7 +70,8 @@ var component = $$.m.ModelBase.extend({
             /**
              * Options used to determine what to pull
              */
-            options: null
+            options: null,
+            title:""
         }
     },
 

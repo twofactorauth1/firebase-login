@@ -59,7 +59,8 @@ var component = $$.m.ModelBase.extend({
             /**
              * Comment options
              */
-            options: null
+            options: null,
+            title:""
         }
     },
 

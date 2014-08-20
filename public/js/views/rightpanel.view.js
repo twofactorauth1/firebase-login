@@ -185,7 +185,7 @@ define([
                 };
 
                 console.log('page data: '+data);
-
+                var temp=$$.u.idutils.generateUUID();
 
                 this.page = new Page({
                     websiteId:this.websiteId,
@@ -193,9 +193,10 @@ define([
                     handle: pageUrl,
                     components: [
                         {
-                            _id: $$.u.idutils.generateUUID(),
-                            "anchor" : null,
-                            "type" : "single-page"
+                            "anchor" :temp,
+                            _id: temp,
+                            "type" : "single-page",
+                            "title":"temp"
                         }
                     ],
                     created: {
@@ -360,7 +361,7 @@ define([
                 //get component type
                 var componentType = $('#component-type').val();
                 //validate
-                var component=new Signup({ pageId:self.pageId,  formName:componentName, type:componentType});
+                var component=new Signup({ pageId:self.pageId,  formName:componentName, type:componentType,title:"temp"});
                 component.save().done(function( ){
                     console.log(component)
                     var data = {

@@ -34,7 +34,8 @@ define([
                 contact: {
                     email: "",
                     phone: ""
-                }
+                },
+                title:""
             };
         }
     });

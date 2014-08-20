@@ -19,7 +19,8 @@ define([
                 type: "blog",
                 label:"",
                 description:"",
-                value: ""
+                value: "",
+                title:""
             };
         }
     });

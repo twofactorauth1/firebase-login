@@ -31,6 +31,7 @@ define([
                 subtitle: "",
 
                 text: ""
+
             }
         }
     });
