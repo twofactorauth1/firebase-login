@@ -151,6 +151,10 @@ _.extend(apiBase.prototype, {
         result = null;
     },
 
+    send200: function(res) {
+        res.send({});
+    },
+
 
     wrapError: function(resp, code, status, message, detail) {
         if (_.isObject(message)) {
