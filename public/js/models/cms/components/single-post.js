@@ -24,7 +24,8 @@ define([
 
                 description:"",
 
-                value: ""
+                value: "",
+                title:""
             }
         }
     });

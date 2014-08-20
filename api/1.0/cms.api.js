@@ -484,9 +484,13 @@ _.extend(api.prototype, baseApi.prototype, {
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
         var component = require('../../cms/model/components/' + componentObj.type);
+        var temp=$$.u.idutils.generateUUID();
         if (component != null) {
             component = new component({
-                _id: $$.u.idutils.generateUUID()
+                _id: temp,
+                anchor: temp,
+                title: componentObj.title
+
             });
 
         }

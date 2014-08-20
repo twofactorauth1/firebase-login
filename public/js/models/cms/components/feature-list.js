@@ -32,6 +32,9 @@ define([
                     "feature-icon" : ""
                 }
                 */
+
+                features: [],
+                title:""
             }
         }
     });

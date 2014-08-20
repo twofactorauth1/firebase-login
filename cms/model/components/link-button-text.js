@@ -66,7 +66,8 @@ var component = $$.m.ModelBase.extend({
             /**
              * The url the button links to
              */
-            url: ""
+            url: "",
+            title:""
         }
     },
 
