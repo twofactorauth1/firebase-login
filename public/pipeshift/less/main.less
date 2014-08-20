@@ -398,7 +398,7 @@
     }
 
     .video {
-        /*margin-bottom: 10px;*/
+        margin-bottom: 20px;
         cursor: pointer;
         /*padding-right: 15px;
         padding-left: 0px;*/
@@ -427,18 +427,18 @@
     }
 
     .video-separator {
-        opacity: 0.5;
-        color: #000;
-        border-top: 1px solid #000;
-        margin-top: 10px;
-        margin-bottom: 26px;
+        // opacity: 0.5;
+        // color: #000;
+        // border-top: 1px solid #000;
+        // margin-top: 10px;
+        // margin-bottom: 26px;
     }
 
     .duration {
         margin-top: 10px;
         float: right;
         /*color: black;*/
-        color: #fff;
+        color: #292929;
         font-size: 20px;
         font-weight: bold;
         font-style: normal;
@@ -519,6 +519,14 @@
         /*background-color: #00BBFC;*/
     }
 
+    .video-col-wrap {
+        padding-left: 0!important;
+    }
+
+    .playlist-col-wrap {
+        padding-right: 0!important;
+    }
+
     .video-list, .playlist {
         height: 520px;
         overflow-y: auto;
@@ -526,12 +534,18 @@
         padding-bottom: 20px;
         padding-left: 0px;
         padding-right: 0px;
+        padding-top: 10px;
+        margin-bottom: 20px;
     }
 
     .video-list {
-        background: #2b2b2b;
-        padding: 15px;
-        border-radius: 3px;
+        .video-wrap {
+            border: 1px solid #999999;
+            padding: 10px;
+            background: #bbbbbb;
+            border-radius: 5px;
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        }
     }
 
     .fixed {
@@ -542,16 +556,21 @@
         /*background-color: rgba(79, 210, 228, 0.8);*/
         /*background-color: rgb(255, 255, 255);*/
         border-radius: 5px;
-        padding-top: 30px;
+        padding-top: 0px;
         /*opacity: 0.3;*/
     }
 
     .playlist-video {
         padding: 15px;
-        background-color: rgba(255, 255, 255, 0.3);
         height: 160px;
         margin: 20px 5px 0 100px;
         border-radius: 3px;
+
+        border: 1px solid #999999;
+        padding: 10px;
+        background: #bbbbbb;
+        border-radius: 5px;
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 
         .preview-image {
             width: 150px;
@@ -578,6 +597,7 @@
         }
 
         .video-title {
+            color: #292929;
             height: auto;
             padding-bottom: 5px;
             /* border-bottom: solid 1px rgba(220, 220, 220, 0.8); */
@@ -618,29 +638,36 @@
     .videos-search-col {
         /*margin-left: -50px;
         margin-right: 25px;*/
-        width: 50%;
+        width: 100%;
         padding-left: 10px;
         padding-right: 10px;
         margin-left: 0px;
         margin-right: 0px;
         float: left;
+
+        .panel-body {
+            padding: 0;
+        }
     }
 
     .playlist-col {
         padding: 0px 15px;
-        width: 50%;
+        width: 100%;
         padding-left: 10px;
         padding-right: 0px;
         margin-left: 0px;
         margin-right: 0px;
         float: left;
-    }
 
-    .playlist-col .row {
-        margin-left: 0px;
-        margin-right: 0px;
-    }
+        .panel-body {
+            padding: 0px;
+        }
 
+        .row {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+    }
     body .btn-add, body .btn-search, body .btn-add:hover, body .btn-search:hover, body .btn-remove:hover, body .btn-info, body .btn-info:hover, body .btn-send, body .btn-send:hover, body .btn-link, body .btn-link:hover {
         color: #292929;
     }
@@ -685,7 +712,7 @@
 
     .timeline {
         width: 100%;
-        background: #2b2b2b;
+        color: #2b2b2b;
     }
 
     .timeline-element:before {
@@ -713,13 +740,12 @@
         top: 8px;
         cursor: pointer;
         border: 1px solid;
-    }
-
-    .timeline-image span {
-        display: block;
-        color: white;
-        font-size: 22px;
-        margin: 23px 23px;
+        span {
+            display: block;
+            color: #292929;
+            font-size: 22px;
+            margin: 23px 23px;
+        }
     }
 
     .date-input-group .dropdown-menu {
