@@ -16880,7 +16880,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .mainpanel {
   margin-left: 240px;
-  background: #e4e7ea;
 }
 .mainpanel .alert {
   margin: 10px 10px 0px;
@@ -16973,6 +16972,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .mainpanel .contentpanel {
   padding: 20px;
+  background: #e4e7ea;
 }
 .mainpanel .contentpanel::after {
   clear: both;
@@ -18528,6 +18528,7 @@ div.error label.error:before {
 .person-name {
   margin: 0 0 5px 0;
   color: #222;
+  text-align: center;
 }
 .people-item .important-star:hover,
 .people-item .important-star .fa-star {
