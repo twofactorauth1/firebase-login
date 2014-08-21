@@ -12,6 +12,7 @@ var accountDao = require('../dao/account.dao');
 var contactDao = require('../dao/contact.dao');
 var courseDao = require('../dao/course.dao');
 var userDao = require('../dao/user.dao');
+var appConfig = require('../configs/app.config');
 
 var mandrillConfig = require('../configs/mandrill.config');
 
@@ -19,7 +20,7 @@ var mandrill = require('mandrill-api/mandrill');
 var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
 
 //todo: change it to dynamic resolution depending on env
-var hostSuffix = 'indigenous.local:3000';
+var hostSuffix = appConfig.subdomain_suffix;
 
 /**
  * Constants for pipeshift
