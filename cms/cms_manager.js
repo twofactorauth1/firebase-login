@@ -447,12 +447,35 @@ module.exports = {
                 self.log.error('Error creating page: ' + err);
                 fn(err, null);
             } else {
-                self.log.debug('<< createPage');
+                //self.log.debug('<< createPage');
+                self.log.debug('created page.  Updating Linklists');
+                //console.dir(page);
+                //console.dir(value);
                 self.getWebsiteLinklistsByHandle(value.get('websiteId'),"head-menu",function(err,list){
-                 
-                    var link={label:page.get('title'),type:"link", linkTo:{type:"page",data:page.get('handle')}}
-                    list.links.push(link);
-                 self.updateWebsiteLinklists(value.get('websiteId'),"head-menu",list,fn)
+                    if(err) {
+                        self.log.error('Error getting website linklists by handle: ' + err);
+                        fn(err, value);
+                    } else {
+                        var link={
+                            label:page.get('title'),
+                            type:"link",
+                            linkTo:{
+                                type:"page",
+                                data:page.get('handle')
+                            }
+                        };
+                        list.links.push(link);
+                        self.updateWebsiteLinklists(value.get('websiteId'),"head-menu",list,function(err, linkLists){
+                            if(err) {
+                                self.log.error('Error updating website linklists by handle: ' + err);
+                                fn(err, value);
+                            } else {
+                                self.log.debug('<< createPage');
+                                fn(null, value);
+                            }
+                        });
+                    }
+
                 })
 
 
@@ -479,14 +502,15 @@ module.exports = {
     getWebsiteLinklistsByHandle: function(websiteId, handle, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> getWebsiteLinklistsByHandle');
+        self.log.debug('>> getWebsiteLinklistsByHandle(' + websiteId + ',' + handle + ')');
 
         cmsDao.getWebsiteById(websiteId, function(err, website){
             if(err) {
                 self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
                 fn(err, null);
             } else {
-
+                self.log.debug('got the website:');
+                console.dir(website);
                 var linkListAry = website.get('linkLists');
                 var targetList = null;
                 for(var i=0; i<linkListAry.length; i++) {
@@ -538,7 +562,7 @@ module.exports = {
     updateWebsiteLinklists: function(websiteId, handle, linklist, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> getWebsiteLinklistsByHandle');
+        self.log.debug('>> updateWebsiteLinklists');
 
         cmsDao.getWebsiteById(websiteId, function(err, website){
             if(err) {

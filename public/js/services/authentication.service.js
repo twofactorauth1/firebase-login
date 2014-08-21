@@ -88,6 +88,17 @@ define([], function () {
             });
 
             return deferred;
+        },
+
+        hasGoogleAccessToken: function() {
+            var url = $$.api.getApiUrl("social/google", "hasaccess");
+
+            var deferred = $.Deferred();
+            $.getJSON(url, null, function (result, data) {
+                deferred.resolve(result.data);
+            });
+
+            return deferred;
         }
     };
 

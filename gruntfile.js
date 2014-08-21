@@ -80,7 +80,8 @@ module.exports = function(grunt) {
                 files: {
                     '../indigeweb/public/css/site.css': [ 'public/less/site.less' ],
                     '../indigeweb/public/css/style.default.css': [ 'public/less/style.default.less' ],
-                    '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ]
+                    '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ],
+                    '../indigeweb/public/pipeshift/css/site.css': [ 'public/pipeshift/less/theme.less', 'public/pipeshift/less/main.less' ]
                 }
             }
         },
@@ -152,13 +153,19 @@ module.exports = function(grunt) {
         //TESTING
         nodeunit: {
             all:['test/**/*_test.js'],
+            analytics: ['analytics/tests/*_test.js'],
             api:['api/test/*_test.js'],
             biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
+            contacts: ['test/contact.dao_test.js'],
             contextio:['test/contextio_test.js'],
             facebook: ['test/facebook_test.js'],
+            products: ['products/tests/*_test.js'],
+            twonet:['biometrics/twonet/adapter/test/**/*_test.js', 'biometrics/twonet/client/test/**/*_test.js',
+                'biometrics/twonet/adapter/test/twonet_test_poll.js'],
             twonetadapter:['biometrics/twonet/adapter/test/**/*_test.js'],
             twonetclient:['biometrics/twonet/client/test/**/*_test.js'],
             twonetpoll:['biometrics/twonet/adapter/test/twonet_test_poll.js'],
+            runkeeper:['biometrics/runkeeper/adapter/test/**/*_test.js', 'biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             runkeeperadapter:['biometrics/runkeeper/adapter/test/**/*_test.js'],
             runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             utils:['utils/test/*_test.js']
@@ -174,14 +181,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
-    grunt.loadNpmTasks('grunt-awsebtdeploy');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
     grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
 
-    grunt.registerTask('tests', ['nodeunit:all']);
+    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
+            'nodeunit:products']);
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
     grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);
@@ -193,4 +200,7 @@ module.exports = function(grunt) {
     grunt.registerTask('testUtils', ['nodeunit:utils']);
     grunt.registerTask('testApi', ['nodeunit:api']);
     grunt.registerTask('testFacebook', ['nodeunit:facebook']);
+    grunt.registerTask('testContacts', ['nodeunit:contacts']);
+    grunt.registerTask('testAnalytics', ['nodeunit:analytics']);
+    grunt.registerTask('testProducts', ['nodeunit:products']);
 };

@@ -225,9 +225,17 @@
             <div class="tab-pane pane-settings active" id="rp-page">
                 <div class="leftpanelinner">
                     <h4>Page Actions</h4>
+                    <select class="form-control">
+                        {{#if pages}}
+                            {{#each pages}}
+                                <option>{{this}}</option>
+                            {{/each}}
+                        {{/if}}
+                    </select>
                     <button class="btn btn-primary btn-block add-page">Add Page</button>
                     <button class="btn btn-primary btn-block delete-page">Delete Page</button>
                     <button class="btn btn-primary btn-block add-post">Add Post</button>
+
                     <div id="nestable" class="dd">
                             <h4>Page Components</h4>
                             <ul id="sortable">

@@ -48,10 +48,11 @@
                                             {{/each}}
                                         </ul>
                                         {{/if}}
-
+                                            {{#if this.attributes.featured-image}}
                                             <div class="blog-thumb alignleft">
-                                                <a href=""><span class="overlay"></span></a>
+                                                <img src="{{this.attributes.featured-image}}"/>
                                             </div> <!-- end .thumb -->
+                                            {{/if}}
 
                                             <div class="entry-excerpt"><p>
                                             <div class="editable" data-class="post_excerpt">

@@ -23,9 +23,9 @@
                             </div>
                         </h2>
 
-                        <p class="blog-meta">
+                        <div class="blog-meta">
                             {{#if created_date}}
-                                <div data-class="created.date">
+                                <div class="pull-left" data-class="created.date">
                                     {{created_date}}
                                 </div>
                                 • 
@@ -41,7 +41,7 @@
                             {{!-- {{#if comment_count}}
                                  • {{comment_count}} comments
                             {{/if}} --}}
-                        </p>
+                        </div>
 
                         {{#if post_tags}}
                             <ul id="tags_link" class="post_tags">

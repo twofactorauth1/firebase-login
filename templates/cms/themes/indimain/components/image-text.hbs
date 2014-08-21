@@ -8,27 +8,37 @@
 
 <div>
     {{#with component}}
-    <div class="component-header">
-        <div>
-            {{label}}
-        </div>
-
-        <div>
-            {{description}}
-        </div>
-    </div>
-
-    <div class="component-body {{bgcolor}}">
+    <div id="{{anchor}}" class="component-body {{bgcolor}}">
         <div class="inner-page">
             <div class="image-text">
-                <div class="{{#if url}}col-sm-6{{/if}} col-xs-12 pull-left">
-                    <h3 class="editable" data-class="title">{{title}}</h3>
-                    <div class="mb30"></div>
-                    <div class="editable" data-class="text">{{{text}}}</div>
+                <div class="{{#if url}}col-sm-6{{/if}} col-xs-12 pull-{{imagePosition}}">
+                    {{#if title}}
+                        <h3 class="image-text-title">
+                            <div class="editable" data-class="title">
+                                {{title}}
+                            </div>
+                        </h3>
+                    {{/if}}
+                    {{#if subtitle}}
+                        <h2 class="image-text-subtitle">
+                            <div class="editable" data-class="subtitle">
+                                {{{subtitle}}}
+                            </div>
+                        </h2>
+                    {{/if}}
+                    <div class="mb15"></div>
+                    <div class="image-text-text">
+                        <div class="editable" data-class="text">
+                            {{{text}}}
+                        </div>
+                    </div>
+                    {{#if btn}}
+                        <a class="btn btn-outline btn-lg" href="{{btn.url}}">{{btn.text}} <span class="fa fa-arrow-circle-o-right"></span></a>
+                    {{/if}}
                 </div>
                 <div class="clearfix mb10 visible-xs"></div>
                 {{#if url}}
-                <div class="pull-{{imagePosition}} col-sm-6 col-xs-12">
+                <div class="pull-{{imagePosition}} col-sm-6 col-xs-12 image-text-image">
                     <div class="editable" data-class="url">
                         <img src="{{url}}" class="img-responsive">
                     </div>

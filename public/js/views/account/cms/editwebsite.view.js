@@ -34,6 +34,7 @@ define([
         pageHandle: null,
         subdomain: null,
         is_dragging: false,
+        blogBoolean: false,
 
         attributes: {
             id: "edit-website-wrapper"
@@ -136,9 +137,14 @@ define([
                                 page = "index";
                             }
 
+                            if (page.indexOf("blog") > -1) {
+                                self.blogBoolean = true;
+                            }
+
                             if (page.indexOf("blog/") > -1) {
                                 console.log('editing single blog');
                                 page = "single-post";
+                                self.blogBoolean = true;
                             }
                             self.pageHandle = page;
                             $$.e.PageHandleEvent.trigger("pageHandle", { pageHandle: self.pageHandle });
@@ -163,6 +169,7 @@ define([
                                         components: componentsArray,
                                         colorPalette: colorPalette,
                                         account: self.account,
+                                        blog: self.blogBoolean,
                                         currentThemePreviewURL: themePreviewURL
                                     };
 
@@ -170,6 +177,7 @@ define([
 
                                     $(window).on("resize", self.adjustWindowSize);
                                     self.disableClickableTitles();
+                                    self.disableWaypointsOpacity();
                                 });
                         });
                     });
@@ -310,6 +318,12 @@ define([
             rightPanel.append(sidetmpl(data));
             this.delegateEvents();
 
+            if (data.blog == true) {
+                $('.add-post').show();
+            } else {
+                $('.add-post').hide();
+            }
+
             var body = $("#body");
 
             var componentID;
@@ -386,7 +400,7 @@ define([
                         }
                     );
                 });
-            },
+        },
 
         updateOrder: function (componentID, start_pos) {
             var self = this;
@@ -461,7 +475,7 @@ define([
             var content = data.content;
             var page = data.pageId;
 
-            console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
+            //console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
 
             if (componentType == 'blog' || componentType == 'single-post') {
                 var postId = $(target).closest(".single-blog").attr("data-postid");
@@ -494,19 +508,32 @@ define([
                         break;
                     }
                 }
+                console.log('Component Before: '+JSON.stringify(component.attributes['_id']));
                 component.setContent(dataClass, content, target, componentConfig);
-                //this.savePage();
+                this.page.save({
+                    "pageId": self.pageId,
+                    "componentId": component.attributes['_id'],
+                    "component": component
+                }).done(function() {
+                    console.log('Page Saved');
+                });
             }
         },
 
         disableClickableTitles: function() {
             var $iframe = $('#iframe-website');
-                $iframe.ready(function() {
-                    $iframe.contents().find(".blog-title a").on('click', function(e) {
-                        console.log('click');
-                        e.preventDefault();
-                    });
+            $iframe.ready(function() {
+                $iframe.contents().find(".blog-title a").on('click', function(e) {
+                    e.preventDefault();
                 });
+            });
+        },
+
+        disableWaypointsOpacity: function() {
+            var $iframe = $('#iframe-website');
+            $iframe.ready(function() {
+                $iframe.contents().find('.feature-single, div[data-class=profilepic], .btn-outline').css('opacity', 1);
+            });
         },
 
         getPost: function() {

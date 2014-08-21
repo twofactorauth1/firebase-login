@@ -14,6 +14,7 @@ require.config({
         jquery: 'libs_misc/jquery/dist/jquery',
         jqueryvalidate: 'libs/jquery-validate/dist/jquery.validate',
         jqueryeasing: 'libs/jquery-easing/jquery.easing',
+        jqueryUI: 'libs/jquery-ui/jquery-ui.min',
         underscore: 'libs/underscore/underscore',
         json2: 'libs/json2/json2',
         backbone: 'libs/backbone/backbone',
@@ -37,9 +38,29 @@ require.config({
         text: "libs/requirejs-plugins/lib/text",
         leaflet: 'libs/leaflet/dist/leaflet',
         colorthief: 'libs/color-thief/dist/color-thief.min',
+        waypoints: 'libs/jquery-waypoints/waypoints',
+        nestable: 'libs/nestable/jquery.nestable',
+        date: 'libs/datejs/build/production/date.min',
+        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
+        d3: 'libs/d3/d3',
+        moment: 'libs/moment/min/moment.min',
+
+        //PIPESHIFT
+        angular: 'libs/angular/angular',
+        angularBootstrap: "libs/angular-bootstrap/ui-bootstrap-tpls",
+        angularRoute: "libs/angular-route/angular-route",
+        angularSanitize: "libs/angular-sanitize/angular-sanitize.min",
+        angularResourse: "libs/angular-resource/angular-resource.min",
+        angularStepper: "libs/angular-stepper/src/angular-stepper",
+        angularMoney: "libs/angular-money-directive/angular-money-directive",
+        xEditable: "libs/angular-xeditable/dist/js/xeditable",
 
         //UI SPECIFIC
-        toggles: "libs_misc/toggles.min"
+        toggles: 'libs_misc/toggles.min',
+        datepicker: 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
+        leaflet: 'libs/leaflet/dist/leaflet',
+        tagsinput: 'libs/jquery.tagsinput/jquery.tagsinput.min',
+        gritter: 'libs/jquery.gritter/js/jquery.gritter.min'
     },
 
     shim: {
@@ -47,6 +68,9 @@ require.config({
             deps: ['jquery']
         },
         jqueryeasing: {
+            deps: ['jquery']
+        },
+        jqueryUI: {
             deps: ['jquery']
         },
         underscore: {
@@ -57,7 +81,7 @@ require.config({
             exports: "Handlebars"
         },
         backbone: {
-            deps: ['jquery','underscore', 'json2'],
+            deps: ['jquery', 'underscore', 'json2'],
             exports: "Backbone"
         },
         backboneAssoc: {
@@ -93,11 +117,42 @@ require.config({
         toggles: {
             deps: ['jquery']
         },
+        moment: {
+            deps: ['jquery']
+        },
+        daterangepicker: {
+            deps: ['jquery', 'moment']
+        },
+
+        tagsinput: {
+            deps: ['jquery']
+        },
+
+        gritter: {
+            deps: ['jquery']
+        },
+        angular: {
+            exports: "angular"
+        },
+
+        angularBootstrap: {deps: ['angular']},
+        angularRoute: {deps: ['angular']},
+        angularSanitize: {deps: ['angular']},
+        angularResourse: {deps: ['angular']},
+        angularStepper: {deps: ['angular']},
+        angularMoney: {deps: ['angular']},
+        xEditable: {deps: ['angular']},
+
+        waypoints: {
+            deps: ['jquery']
+        },
+
         app: {
             deps: [
                 'jquery',
                 'jqueryvalidate',
                 'jqueryeasing',
+                'jqueryUI',
                 'underscore',
                 'backbone',
                 'backboneExtended',
@@ -106,10 +161,29 @@ require.config({
                 'handlebars',
                 'modernizr',
 
+                //PIPESHIFT
+                'angular',
+                'angularBootstrap',
+                'angularRoute',
+                'angularSanitize',
+                'angularResourse',
+                'angularStepper',
+                'angularMoney',
+                'xEditable',
+
                 //UI SPECIFIC
                 'toggles',
                 'leaflet',
-                'colorthief'
+                'colorthief',
+                'waypoints',
+                'nestable',
+                'date',
+                'moment',
+                'daterangepicker',
+                'datepicker',
+                'tagsinput',
+                'd3',
+                'gritter'
             ]
         }
     },
@@ -137,5 +211,6 @@ define([
 ], function (app) {
     $(document).ready(function(){
         app.initialize();
+        // Page Preloader
     });
 });

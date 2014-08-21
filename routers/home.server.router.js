@@ -25,6 +25,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     initialize: function() {
         app.get("/", this.setup, this.index.bind(this));
         app.get("/index", this.setup, this.index.bind(this));
+        app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
         app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
 
         app.get("/page/blog/:posturl", this.setup, this.showBlogPage.bind(this));
@@ -69,6 +70,18 @@ _.extend(router.prototype, BaseRouter.prototype, {
         }
     },
 
+    showMainBlog: function(req, res) {
+        var self = this
+            , accountId = this.accountId(req);
+
+        var page = req.params.page;
+        if (accountId > 0)  {
+            new WebsiteView(req, res).showPage(accountId, 'blog');
+        } else {
+            new WebsiteView(req, res).showPage(appConfig.mainAccountID, 'blog');
+        }
+    },
+
     showBlogPage: function(req, resp) {
         var self = this
             , accountId = this.accountId(req);
@@ -78,7 +91,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         if (accountId > 0)  {
             new WebsiteView(req, resp).showPost(accountId, postUrl);
         } else {
-            resp.redirect("/home");
+            //resp.redirect("/home");
+            new WebsiteView(req, resp).showPost(appConfig.mainAccountID, postUrl);
         }
     },
 
@@ -141,7 +155,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             new AdminView(req,resp).show();
         } else {
             //send them back to the main home
-            resp.redirect("/home");
+            resp.redirect("/admin");
         }
     },
 

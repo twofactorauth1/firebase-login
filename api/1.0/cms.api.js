@@ -260,6 +260,7 @@ _.extend(api.prototype, baseApi.prototype, {
     saveOrUpdatePage: function(req, resp) {
         //TODO: Add Security
         var self = this;
+        self.log.debug('>> saveOrUpdatePage');
         var _page = req.body;
 
         var page = new Page(_page);

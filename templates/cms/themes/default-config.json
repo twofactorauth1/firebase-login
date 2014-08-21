@@ -124,12 +124,14 @@
 
     "supported-components": [
         "contact-us",
+        "products",
         "facebook-comments",
         "facebook-likes",
         "feature-blocks",
         "feature-list",
         "feature-list-compare",
         "freeform",
+        "masthead",
         "image-gallery",
         "image-slider",
         "image-text",
@@ -212,13 +214,12 @@
             "type": "feature-list",
             "anchor": "featurelist",
             "classes": {
-                "label": "label",
-                "description": "description",
-
+                "title": "title",
+                "subtitle": "subtitle",
                 "features":"features",
                 "features.item":"feature",
-                "features.item.title":"feature-title",
-                "features.item.subtitle":"feature-subtitle"
+                "features.item.feature-title":"feature-title",
+                "features.item.feature-subtitle":"feature-subtitle"
             }
         },
 
@@ -296,17 +297,38 @@
                 "text":"text"
             }
         },
-
+        {
+            "type": "products",
+            "anchor": "products",
+            "classes": {
+                "label": "label",
+                "description": "description",
+                "caption": "caption",
+                "text": "text",
+                "title": "title",
+                "product-sections": "product-sections",
+                "product-sections.item": "products",
+                "products.products-section-id": "products-section-id", 
+                "products.item": "product",
+                "product.id": "product-id",
+                "product.image": "product-image",
+                "product.title": "product-title",
+                "product.subtitle": "product-subtitle",
+                "product.text": "product-text"
+            }
+        },
         {
             "type": "meet-team",
             "anchor": "meet-team",
             "classes": {
                 "label": "label",
                 "description": "description",
-                "teamMembers.name": "name",
-                "teamMembers.position":"position",
-                "teamMembers.profilePic":"profilepic",
-                "teamMembers.bio":"bio"
+                "teamMembers":"teamMembers",
+                "teamMembers.item":"item",
+                "teamMembers.item.name": "name",
+                "teamMembers.item.position":"position",
+                "teamMembers.item.profilePic":"profilepic",
+                "teamMembers.item.bio":"bio"
             }
         },
 
@@ -338,7 +360,7 @@
             "anchor": "logolist",
             "classes": {
                 "label": "label",
-                "description": "ldescription",
+                "description": "description",
                 "logos":"logos",
                 "logos.item":"logo",
                 "logos.item.label":"logo-label",
@@ -353,6 +375,18 @@
             "anchor": "socialfeed",
             "classes": {
 
+            }
+        },
+
+        {
+            "type": "masthead",
+            "anchor": "masthead",
+            "classes": {
+                "label": "label",
+                "description": "description",
+                "title": "title",
+                "subtitle":"subtitle",
+                "btn.text":"btn-text"
             }
         },
 

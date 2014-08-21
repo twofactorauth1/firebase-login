@@ -52,21 +52,15 @@ CONTACTS MAIN VIEW
                 <div class="col-sm-6">
                     <input type="text" placeholder="Search Customers" class="form-control mb15 input-lg  search-contacts">
                 </div>
-                <div class="col-sm-6 form-horizontal hidden">
+                <div class="col-sm-6 form-horizontal">
                     <div class="form-group row">
                         <select class=" form-control chosen-select input-lg">
                             <option value="">Filter Customers</option>
-                            <option value="near_store">Important</option>
-                            <option value="near_store">People</option>
-                            <option value="near_store">Companies</option>
-                            <option value="near_store">Recently Viewed</option>
-                            <option value="near_store">Recently Added</option>
-                            <option value="near_store">Recently Contacted</option>
-                            <option value="last_acitve">Last Active</option>
-                            <option value="visits"># of Visits</option>
-                            <option value="purchases">Purchased</option>
-                            <option value="starred">Important</option>
-                            <option value="near_store">Proximity to You</option>
+                            <option value="a_to_z">A to Z</option>
+                            <option value="z_to_a">Z to A</option>
+                            <option value="first_last">First, Last</option>
+                            <option value="last_first">Last, First</option>
+                            <option value="date_added">Date Added</option>
                         </select>
                     </div>
                 </div>
@@ -82,7 +76,7 @@ CONTACTS MAIN VIEW
 
     {{#each contacts}}
 
-                <div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-3">
                     <div class="people-item btn-view-contact-details contact-item" data-contactid="{{_id}}">
                         <span class="important-star tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Important Contact">
                             <i class="fa {{#if starred}}fa-star{{else}}fa-star-o{{/if}}" />
@@ -206,165 +200,14 @@ CONTACTS MAIN VIEW
                     <h3>No Contacts Available</h3>
                 </div>
 
-                <div class="visible-xs btn btn-success col-xs-12">Add a new contact</div>
-         {{/if}}
-
-
-     <!--           {{#iterateDifference min count 0}}
-                <div class="col-xs-12 col-sm-4">
-
-                    <div class="people-item btn-view-contact-details" data-contactid="{{_id}}">
-                        <div class="media">
-                            <span class="important-star"><i class="fa fa-star-o"></i>
-                            </span>
-                            <div class="media">
-                                <div class="col-xs-12">
-                                    {{#if photoSquare}} {{#isGoogleImage photoSquare}}
-                                    <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />{{else}}
-                                    <img class="img-circle media-object thumbnail" src="{{photoSquare}}">{{/isGoogleImage}} {{else}} {{#isGoogleImage photo}}
-                                    <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />{{else}}
-                                    <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">{{/isGoogleImage}} {{/if}}
-                                    <div class="clear"></div>
-                                </div>
-                                <div class="media-body col-xs-12">
-                                    <h4 class="person-name center">Henry Holmes
-                                        <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>">
-                                            <i class="fa fa-leaf"></i>
-                                            <i class="fa fa-leaf"></i>
-                                            <i class="fa fa-leaf"></i>
-                                            <i class="fa fa-leaf text-muted"></i>
-                                            <i class="fa fa-leaf text-muted"></i>
-                                        </span>
-                                    </h4>
-                                    <div class="center">
-                                        <span class="label label-info contact-cat">Customer</span>
-                                        <span class="label label-info contact-cat">Lead</span>
-                                    </div>
-                                    <hr class="clearfix mb15"></hr>
-                                    <div class="customer-stats">
-                                        <div class="last-active"><i class="fa fa-bolt"></i> Last Active:
-                                            <span class="data">2 days ago</span>
-                                        </div>
-                                        <div class="purchased"><i class="fa fa-money"></i> Purchased:
-                                            <span class="data">Yes</span>
-                                        </div>
-                                        <div class="emails-opened"><i class="fa fa-envelope"></i> Emails Opened:
-                                            <span class="data">3/5</span>
-                                        </div>
-                                        <div class="calls-made"><i class="fa fa-phone"></i> Calls Made:
-                                            <span class="data">5</span>
-                                        </div>
-                                        <div class="customer-since"><i class="fa fa-calendar"></i> Customer Since:
-                                            <span class="data">Jan 2013</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="clearfix mb15"></div>
-                                <hr></hr>
-                                <ul class="social-list">
-                                    <li><a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="700 E. Ocean Blvd" target="_blank"><i class="fa fa-map-marker"></i></a>
-                                    </li>
-                                    <li><a href="#" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="619-000-0000" target="_blank"><i class="fa fa-phone"></i></a>
-                                    </li>
-                                    <li><a href="mailto:ronburgandy@gmail.com" class="tooltips" data-toggle="tooltip" data-placement="top" title="ronburgandy@gmail.com" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
-                                    </li>
-                                    <li><a href="https://www.facebook.com/theronburgandy" class="tooltips" data-toggle="tooltip" data-placement="top" title="theronburgandy" data-original-title="theronburgandy" target="_blank"><i class="fa fa-facebook"></i></a>
-                                    </li>
-                                    <li><a href="https://twitter.com/RobinBurgundy" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="RobinBurgundy"><i class="fa fa-twitter"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{/iterateDifference}}-->
+                    <div class="visible-xs btn btn-success col-xs-12">Add a new contact</div>
+            {{/if}}
             </div>
         </div>
     </div>
 
-    <!--
-    <div id="contacts-main-container">
-
-
-        <div class="row">
-            <ul class="pull-right hidden-md hidden-lg unstyled col-sm-1" style="margin-top:15px;">
-                {{#eachLetter}}
-                <li><a class="btn-letter" href="#">{{letter}}</a></li>
-                {{/eachLetter}}
-            </ul>
-
-            <div id="contacts-list-container" class="col-sm-11 col-md-12">
-                {{#each contacts}}
-                <div class="col-xs-11 col-sm-6 col-md-4 contact-thumbnail">
-                    <div class="inner btn-view-contact-details" data-contactid="{{_id}}">
-                        <strong>{{first}} {{middle}} {{last}}</strong> <span class="visible-inline-xs"><small>
-                        {{contactTypeLabel this}}
-                    </small></span>
-
-                        <div class="hidden-xs">
-                            <small>{{contactTypeLabel this}}</small>
-                        </div>
-
-                        <div class="contacts-photo-container">
-                            {{#if photoSquare}}
-                                {{#isGoogleImage photoSquare}}
-                                    <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader thumb-lg" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                                {{else}}
-                                    <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
-                                {{/isGoogleImage}}
-                            {{else}}
-                                {{#isGoogleImage photo}}
-                                    <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader thumb-lg" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
-                                {{else}}
-                                    <img class="img-circle media-object thumbnail standard thumb-lg" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                                {{/isGoogleImage}}
-                            {{/if}}
-                        </div>
-
-                        <div class="hidden-xs contact-thumbnail-details">
-                            <div>Last Active:</div>
-                            <div>Purchased:</div>
-                            <div>Emails Opened:</div>
-                            <div>Calls Made:</div>
-                        </div>
-
-                        <div class="contact-thumbnail-actions hidden-xs">
-                            <div class="fa fa-envelope-o" title="send-message"/>
-                        </div>
-                    </div>
-                </div>
-                {{else}}
-
-                <div class="visible-xs col-xs-10">
-                    <h3>No Records Available</h3>
-                </div>
-
-                <div class="visible-xs btn btn-primary col-xs-8">Add a new contact</div>
-                {{/each}}
-
-                {{#iterateDifference min count 0}}
-                <div class="col-xs-11 col-sm-6 col-md-4 contact-thumbnail hidden-xs {{#if $last}}hidden-md hidden-lg{{/if}}">
-                    <div class="inner">
-                        <strong>Create new Contact</strong>
-
-                        <div class="contacts-photo-container">
-                            <img class="img-circle" src="/assets/icons/blank-user.jpg">
-                        </div>
-
-                        <div class="hidden-xs">
-                            <div class="btn btn-success btn-create-contact">Add Contact</div>
-                        </div>
-
-                    </div>
-                </div>
-                {{/iterateDifference}}
-            </div>
-        </div>
-
-
-        {{> contact-paginator}}
-    </div>
-    -->
+    {{> fixDuplicates-modal}}
+    {{> importContacts-modal}}
 
 </script>
 
@@ -383,7 +226,7 @@ CONTACTS MAIN VIEW
         <div class="tab-pane pane-settings active" id="rp-settings">
 
             <div class="form-group mb20">
-                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#importContactsModal"><i class="fa fa-cloud-upload"></i> Import FB Contacts</button>
+                <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#import-contacts-modal"><i class="fa fa-cloud-upload"></i> Import Contacts</button>
             </div>
 
 
@@ -482,6 +325,7 @@ CONTACTS MAIN VIEW
     </div>
     <!-- tab-content -->
     </div>
+
 </script>
 
 
@@ -493,6 +337,133 @@ CONTACTS MAIN VIEW
             {{/eachLetter}}
         </ul>
     </div>
+</script>
+
+<script type="text/x-handlebars-template" name="people-list">
+    {{> people-list-partial}}
+</script>
+
+<script type="text/x-handlebars-template" name="people-list-partial" partial="true">
+        {{#each contacts}}
+            <div class="col-xs-12 col-sm-4 col-md-3">
+                <div class="people-item btn-view-contact-details contact-item" data-contactid="{{_id}}">
+                    <span class="important-star tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Important Contact">
+                        <i class="fa {{#if starred}}fa-star{{else}}fa-star-o{{/if}}" />
+                    </span>
+
+                    <div class="media">
+                        <div class="col-xs-12f">
+                            <!--// {{#if photoSquare}} // {{#isGoogleImage photoSquare}} //-->
+                            <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" /><!-- // {{else}} // -->
+                            <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
+                            <!--// {{/isGoogleImage}} // {{else}} // {{#isGoogleImage photo}} // -->
+                            <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />// <!-- {{else}} // -->
+                            <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                            <!-- // {{/isGoogleImage}} // {{/if}} -->
+
+                            <span class="name visible-xs">
+
+                                <h4>
+                                    {{first}} {{middle}} {{last}}
+                                    <span class="label label-info contact-cat pull-right hidden-xs">{{contactTypeLabel this}}</span>
+                                </h4>
+                            </span>
+
+                            <div class="clear"></div>
+                        </div>
+                        <div class="media-body col-xs-12 hidden-xs">
+
+                            {{#ifCond ../account.displaysettings.display_type}}
+
+                            <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
+                            {{else}}
+                            <h4 class="person-name">{{last}} {{middle}} {{first}}</h4>
+                            {{/ifCond}}
+
+
+                           <!-- <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>-->
+
+                            <span class="label label-info contact-cat">{{contactTypeLabel this}}</span>
+
+                            <div class="hidden">
+                                <div class="last-active text-muted">Last Active: {{#if lastActive}} {{lastActive}} days ago {{else}} n/a {{/if}}
+                                </div>
+
+                                <div class="purchased text-muted">
+                                    {{#if purchased}} Purchased: Yes {{else}} Purchased: n/a {{/if}}
+                                </div>
+
+                                <div class="emails-opened text-muted">
+                                    {{#if totalEmails}} Emails Opened: {{#if emailsOpened}} {{emailsOpened}}/{{totalEmails}} {{else}} 0/{{totalEmails}} {{/if}} {{else}} Emails Opened: n/a {{/if}}
+                                </div>
+
+                                <div class="calls-made text-muted">
+                                    Calls Made: {{#if callsMade}} {{callsMade}} {{else}} n/a {{/if}}
+                                </div>
+
+                                <div class="customer-since text-muted">
+                                    Customer since: {{#if firstPurchase}} {{formatDate fistPurchase}} {{else}} n/a {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix mb10"></div>
+                        <ul class="social-list hidden-xs">
+                                    {{#getBestEmail this}}
+                                        <li>
+                                            <a href="mailto:{{$email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
+                                        </li>
+                                    {{else}}
+                                    {{/getBestEmail}}
+
+
+                                <li>
+                                    {{#getFacebookId this}}
+                                    <a href="https://www.facebook.com/{{$facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                    {{else}}
+
+                                    {{/getFacebookId}}
+                                </li>
+
+                                <li>
+                                    {{#getTwitterId this}}
+                                    <a href="https://twitter.com/intent/user?user_id={{$twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                    {{else}}
+
+                                    {{/getTwitterId}}
+                                </li>
+
+                                <li>
+                                    {{#getLinkedInId this}}
+                                    <a href="{{#if $linkedInUrl}}{{$linkedInUrl}}{{else}}http://www.linkedin.com/profile/view?id={{$linkedInId}}{{/if}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                    {{else}}
+                                    {{/getLinkedInId}}
+                                </li>
+
+                                {{#getAddress this}}
+                                <li>
+                                    <a href="https://www.google.com/maps?q={{$this.address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                                {{else}}
+                                {{/getAddress}}
+                                </li>
+                            </ul>
+                        <div class="pull-right">
+                            <span class="visible-inline-xs">
+                                type: {{contactTypeLabel this}} |
+                            </span>
+
+                            <span class="tooltips hidden" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sources where this contact information came from">sources:</span>
+                            {{#each details}}
+                            <span><i class="{{iconFromSocialType type}}" />
+                            </span>
+                            {{/each}}
+
+
+                        </div>
+                        <div class="clear clearfix" />
+                    </div>
+                </div>
+            </div>
+        {{/each}}
 </script>
 <!-- END CONTACTS MAIN -->
 
@@ -1067,211 +1038,209 @@ CONTACTS EDIT VIEW
 -->
 <script type="text/x-handlebars-template" name="contact-edit-main">
    <div class="pageheader row">
-    <div class="col-xs-8">
-        <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
-            <span class="fa fa-chevron-left"></span>
-            <span class="hidden-xs">Back</span>
-        </button>
-        <h2><i class="fa fa-users"></i> Edit Contact</h2>
-    </div>
-
-    <div class="col-xs-4">
-        <div class="btn btn-success pull-right btn-save-contact" type="button">
-            <i class="fa fa-save"></i>
-            <span class="hidden-xs">Save</span>
+        <div class="col-xs-8">
+            <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
+                <span class="fa fa-chevron-left"></span>
+                <span class="hidden-xs">Back</span>
+            </button>
+            <h2><i class="fa fa-users"></i> Edit Contact</h2>
         </div>
 
-    </div>
-</div>
-<!-- End Page Header -->
-
-<div id="contact-edit-container" class="contentpanel">
-    <div class="row">
-
-        <div class="col-md-6">
-
-            <!-- Name & Photo -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Name & Photo</h3>
-                </div>
-                <div class="panel-body">
-
-                    <div class="row">
-                        <!-- UPDATE NAME -->
-                        <div class="col-xs-12 form" role="form">
-                            <div class="form-group">
-                                <label class="">Contact Name</label>
-                                <input id="input-fullname" type="text" class="form-control input-lg" value="{{contact.first}} {{contact.middle}} {{contact.last}}" placeholder="full name">
-                                <small style="margin-left:10px;">
-                                    <strong>first:</strong>
-                                    <code>
-                                        <span id="hint-first">{{contact.first}}</span>
-                                    </code>
-                                    <strong>middle:</strong>
-                                    <code>
-                                        <span id="hint-middle">{{contact.middle}}</span>
-                                    </code>
-                                    <strong>last:</strong>
-                                    <code>
-                                        <span id="hint-last">{{contact.last}}</span>
-                                    </code>
-                                </small>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-xs-6">
-                                    <label>Contact Type</label>
-                                    <select id="select-contact-type" class="form-control input-lg">
-                                        {{#contactTypeOptions}}
-                                        <option data-contacttype="{{data}}" {{#equals data ../contact.type}}selected{{/equals}}>{{label}}</option>
-                                        {{/contactTypeOptions}}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <!-- UPDATE PHOTO -->
-                    <div id="contact-photo-container" class="row">
-                        <row>
-                            <div class="col-xs-5 col-md-6">
-                                <div class="hidden-xs hidden-sm">
-                                    <div class="btn-link btn-edit-photo">Change Photo</div>
-                                </div>
-                                <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                            </div>
-
-                            <div class="col-xs-7 col-md-6">
-                                <div class="btn-edit-photo-controls hidden-md hidden-lg">
-                                    <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
-                                    <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
-                                </div>
-                            </div>
-                        </row>
-                    </div>
-                </div>
+        <div class="col-xs-4">
+            <div class="btn btn-success pull-right btn-save-contact" type="button">
+                <i class="fa fa-save"></i>
+                <span class="hidden-xs">Save</span>
             </div>
-            <!-- END Name & Photo -->
 
-            <!-- BioMetric Data -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">BioMetric Information</h3>
-                </div>
-                <div class="panel-body">
-                    {{#unless contact.devices.length}}
-                    <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
-                    {{/unless}}
-                    <hr/>
-                    <div id="edit-devices-container">
-                        {{#each contact.devices}} {{serialNumber}} {{deviceTypeId}} {{/each}}
-                    </div>
-                    <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
-                </div>
-                <!-- End Panel Body -->
-            </div>
-            <!-- End BioMetric Data -->
         </div>
+    </div>
+    <!-- End Page Header -->
 
-        <!-- Contact Information -->
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Contact Information</h3>
-                </div>
-                <div class="panel-body">
+    <div id="contact-edit-container" class="contentpanel">
+        <div class="row">
 
-                    <div id="phone-row" class="row">
-                        <div class="col-xs-1"><i class="icon-main fa fa-phone" />
-                        </div>
-                        <div class="col-xs-10">
-                            <div id="edit-phones-container">
-                                {{#each contact.details}}
-                                    {{#canEditContactDetails this}}
-                                        {{#each ../phones}}
-                                            {{> edit-phone}}
-                                        {{/each}}
-                                    {{else}}
-                                        {{#each phones}}
-                                            <div>
-                                                <a href="tel:+1{{number}}">+1 {{number}}</a>
-                                                <small>{{phoneTypeLabel type}}</small>
-                                                <i class="icon-social {{iconFromSocialType ../type}}" />
-                                            </div>
-                                        {{/each}}
-                                    {{/canEditContactDetails}}
-                                {{/each}}
+            <div class="col-md-6">
 
-                                <!-- ADD NEW PHONE -->
-                                {{> edit-phone}}
+                <!-- Name & Photo -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Name & Photo</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <!-- UPDATE NAME -->
+                            <div class="col-xs-12 form" role="form">
+                                <div class="form-group">
+                                    <label class="">Contact Name</label>
+                                    <input id="input-fullname" type="text" class="form-control input-lg" value="{{contact.first}} {{contact.middle}} {{contact.last}}" placeholder="full name">
+                                    <small style="margin-left:10px;">
+                                        <strong>first:</strong>
+                                        <code>
+                                            <span id="hint-first">{{contact.first}}</span>
+                                        </code>
+                                        <strong>middle:</strong>
+                                        <code>
+                                            <span id="hint-middle">{{contact.middle}}</span>
+                                        </code>
+                                        <strong>last:</strong>
+                                        <code>
+                                            <span id="hint-last">{{contact.last}}</span>
+                                        </code>
+                                    </small>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-xs-6">
+                                        <label>Contact Type</label>
+                                        <select id="select-contact-type" class="form-control input-lg">
+                                            {{#contactTypeOptions}}
+                                            <option data-contacttype="{{data}}" {{#equals data ../contact.type}}selected{{/equals}}>{{label}}</option>
+                                            {{/contactTypeOptions}}
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <span style="margin-top:-15px;" class="col-xs-10">
-                                <small>e.g. (303-555-5555)</small>
-                            </span>
+                        </div>
+
+
+                        <!-- UPDATE PHOTO -->
+                        <div id="contact-photo-container" class="row">
+                            <row>
+                                <div class="col-xs-5 col-md-6">
+                                    <div class="hidden-xs hidden-sm">
+                                        <div class="btn-link btn-edit-photo">Change Photo</div>
+                                    </div>
+                                    <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                                </div>
+
+                                <div class="col-xs-7 col-md-6">
+                                    <div class="btn-edit-photo-controls hidden-md hidden-lg">
+                                        <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
+                                        <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+                                    </div>
+                                </div>
+                            </row>
                         </div>
                     </div>
+                </div>
+                <!-- END Name & Photo -->
 
-                    <hr></hr>
-
-                    <div id="address-row" class="row">
-                        <div class="col-xs-1"><i class="icon-main fa fa-map-marker" />
+                <!-- BioMetric Data -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">BioMetric Information</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{#unless contact.devices.length}}
+                        <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
+                        {{/unless}}
+                        <hr/>
+                        <div id="edit-devices-container">
+                            {{#each contact.devices}} {{serialNumber}} {{deviceTypeId}} {{/each}}
                         </div>
-                        <div class="col-xs-10">
-                            <div id="edit-addresses-container">
-                                {{#each contact.details}}
-                                    {{#canEditContactDetails this}} 
-                                        {{> edit-addresses}} 
-                                    {{else}} 
-                                        {{#each addresses}}
-                                            <div class="edit-address-container" id="{{_id}}">
-                                                {{#if address}}
-                                                <div>{{address}}</div>
-                                                {{/if}}
-                                                {{#if address2}}
-                                                </div>
-                                                    {{address2}}
-                                                </div>
-                                                {{/if}}
+                        <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
+                    </div>
+                    <!-- End Panel Body -->
+                </div>
+                <!-- End BioMetric Data -->
+            </div>
+
+            <!-- Contact Information -->
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Contact Information</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div id="phone-row" class="row">
+                            <div class="col-xs-1"><i class="icon-main fa fa-phone" />
+                            </div>
+                            <div class="col-xs-10">
+                                <div id="edit-phones-container">
+                                    {{#each contact.details}}
+                                        {{#canEditContactDetails this}}
+                                            {{#each ../phones}}
+                                                {{> edit-phone}}
+                                            {{/each}}
+                                        {{else}}
+                                            {{#each phones}}
                                                 <div>
-                                                    {{city}} {{#if state}}, {{state}}{{/if}} {{#if zip}}, {{zip}}{{/if}} {{#if country}}, {{country}}{{/if}}
-                                                    <i class="icon-social {{iconFromSocialType ../../type}}" />
+                                                    <a href="tel:+1{{number}}">+1 {{number}}</a>
+                                                    <small>{{phoneTypeLabel type}}</small>
+                                                    <i class="icon-social {{iconFromSocialType ../type}}" />
                                                 </div>
-                                                {{> edit-default-shipping-billing}}
-                                                </div>
-                                        {{/each}} 
-                                    {{/canEditContactDetails}} 
-                                {{/each}}
-                            </div>
+                                            {{/each}}
+                                        {{/canEditContactDetails}}
+                                    {{/each}}
 
-                            <br/>
-
-                            <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
-
-                        </div>
-                    </div>
-
-                    <hr></hr>
-
-                    <div id="email-row" class="row">
-                        <div class="col-xs-1"><i class="icon-main fa fa-envelope" />
-                        </div>
-                        <div class="col-xs-10">
-                            <div id="edit-emails-container">
-                                {{#each contact.details}} {{#canEditContactDetails this}} {{#each emails}} {{> edit-email}} {{/each}} {{else}} {{#each emails}} {{#if this}}
-                                <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}" />{{/if}} {{/each}} {{/canEditContactDetails}} {{/each}} {{> new-email-partial}}
+                                    <!-- ADD NEW PHONE -->
+                                    {{> edit-phone}}
+                                </div>
+                                <span style="margin-top:-15px;" class="col-xs-10">
+                                    <small>e.g. (303-555-5555)</small>
+                                </span>
                             </div>
                         </div>
-                    </div>
 
+                        <hr></hr>
+
+                        <div id="address-row" class="row">
+                            <div class="col-xs-1"><i class="icon-main fa fa-map-marker" />
+                            </div>
+                            <div class="col-xs-10">
+                                <div id="edit-addresses-container">
+                                    {{#each contact.details}}
+                                        {{#canEditContactDetails this}} 
+                                            {{> edit-addresses}} 
+                                        {{else}} 
+                                            {{#each addresses}}
+                                                <div class="edit-address-container" id="{{_id}}">
+                                                    {{#if address}}
+                                                    <div>{{address}}</div>
+                                                    {{/if}}
+                                                    {{#if address2}}
+                                                    </div>
+                                                        {{address2}}
+                                                    </div>
+                                                    {{/if}}
+                                                    <div>
+                                                        {{city}} {{#if state}}, {{state}}{{/if}} {{#if zip}}, {{zip}}{{/if}} {{#if country}}, {{country}}{{/if}}
+                                                        <i class="icon-social {{iconFromSocialType ../../type}}" />
+                                                    </div>
+                                                    {{> edit-default-shipping-billing}}
+                                                    </div>
+                                            {{/each}} 
+                                        {{/canEditContactDetails}} 
+                                    {{/each}}
+                                </div>
+
+                                <br/>
+
+                                <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
+
+                            </div>
+                        </div>
+
+                        <hr></hr>
+
+                        <div id="email-row" class="row">
+                            <div class="col-xs-1"><i class="icon-main fa fa-envelope" />
+                            </div>
+                            <div class="col-xs-10">
+                                <div id="edit-emails-container">
+                                    {{#each contact.details}} {{#canEditContactDetails this}} {{#each emails}} {{> edit-email}} {{/each}} {{else}} {{#each emails}} {{#if this}}
+                                    <a href="mailto:{{this}}">{{this}}</a> <i class="icon-social {{iconFromSocialType ../../type}}" />{{/if}} {{/each}} {{/canEditContactDetails}} {{/each}} {{> new-email-partial}}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- End Panel Body -->
                 </div>
-                <!-- End Panel Body -->
-            </div>
-            <!-- End Panel Default -->
+                <!-- End Panel Default -->
         </div>
-
-        <!-- BioMetric Data -->
         <div class="col-md-6">
             <h4>BioMetric Information</h4>
             {{#unless contact.devices.length}}
@@ -1293,52 +1262,49 @@ CONTACTS EDIT VIEW
            </div>
         </div>
 
-        <!-- End BioMetric Data -->
 
-
-        <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-           <div class="modal-dialog">
-               <div class="modal-content">
-                   <div class="modal-header">
-                       <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                       <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
-                   </div>
-                   <div class="modal-footer">
-                       <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
-                       <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
+            <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+               <div class="modal-dialog">
+                   <div class="modal-content">
+                       <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                           <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
+                       </div>
+                       <div class="modal-footer">
+                           <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
+                           <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
+                       </div>
                    </div>
                </div>
-           </div>
-        </div>
-   </div>
+            </div>
+       </div>
 
 
-        <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header" data-dismiss="modal">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Add or Remove Photo</h4>
+            <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header" data-dismiss="modal">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Add or Remove Photo</h4>
+                        </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
                     </div>
 
-            <div class="modal-body">
-                <div class="row">
-                    <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
+                    <div class="row" style="margin-top:6px; margin-bottom:20px;">
+                        <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
+                    </div>
+
+                    <div id="upload-photo-container" />
+
+                    <img id="contact-photo-modal" src="{{contact.photo}}" style="max-width:100%; margin-top:20px;" />
                 </div>
-
-                <div class="row" style="margin-top:6px; margin-bottom:20px;">
-                    <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
-                </div>
-
-                <div id="upload-photo-container" />
-
-                <img id="contact-photo-modal" src="{{contact.photo}}" style="max-width:100%; margin-top:20px;" />
             </div>
         </div>
     </div>
-</div>
-<!-- End Change Photo Modal -->
-
+    <!-- End Change Photo Modal -->
 </script>
 <!-- END CONTACT EDIT VIEW -->
 
@@ -1496,6 +1462,78 @@ CONTACTS EDIT VIEW
     </div>
 </script>
 
+<script type="text/x-handlebars-template" name="importContacts-modal" partial="true">
+  <div class="modal fade" id="import-contacts-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Import Contacts</h4>
+          </div>
+          <div class="modal-body">
+
+            <div class="row choose-import" data-import-section="choose">
+                <p>Choose one of the import options from below: </p>
+                <div class="clearfix mb30"></div>
+                <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook"><span class="fa fa-facebook"></span> <div class="clearfix mb5"></div> Facebook</button>
+                <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin"><span class="fa fa-linkedin"></span> <div class="clearfix mb5"></div> LinkedIn</button>
+                <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus"><span class="fa fa-google"></span> <div class="clearfix mb5"></div> Gmail</button>
+                <div class="clearfix mb30"></div>
+            </div>
+
+            <div class="row hidden" data-import-section="progress">
+                <h3 class="center">Importing <span class="num"></span> contacts from <span class="source"></span></h3>
+                <div class="clearfix mb30"></div>
+                <div class="progress progress-striped active">
+                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                  <span class="sr-only">40% Complete (success)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row import-success hidden" data-import-section="success">
+                <span class="fa fa-check"></span>
+                <div class="clearfix mb15"></div>
+                <h3> Successfully Imported Contacts </h3>
+                <div class="clearfix mb15"></div>
+                <button class="btn btn-primary btn-lg">View Imported Contacts</button>
+                <button class="btn btn-primary btn-lg">Fix Duplicate Contacts</button>
+                <div class="clearfix mb30"></div>
+
+            </div>
+
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</script>
+
+<script type="text/x-handlebars-template" name="fixDuplicates-modal" partial="true">
+  <div class="modal fade" id="fix-duplicates-modal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Fix Duplicate Contacts</h4>
+          </div>
+          <div class="modal-body">
+                <div class="duplicates-list">
+                    <p>Select from the list of similar contacts to merge</p>
+                    <ul>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span></li>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span></li>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span></li>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span></li>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span></li>
+                    </ul>
+                </div>
+                <div class="row merge-contact">
+                </div>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</script>
 
 <!--
 HELPERS
