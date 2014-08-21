@@ -406,7 +406,7 @@ module.exports = {
             ],
             "subaccount": null,
             "google_analytics_domains": [
-                "indigenous.io"
+                "indigenous.io" //TODO: This should be dynamic
             ],
             "google_analytics_campaign": null,
             "metadata": {
@@ -539,7 +539,17 @@ module.exports = {
         var nowUtc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
         return nowUtc.toISOString();
     },
-    _getScheduleUtcDateTimeIsoString: function (daysShift, hoursValue, minutesValue, timezoneOffset) {
+    _getScheduleUtcDateTimeIsoString: function(daysShift, hoursValue, minutesValue, timezoneOffset) {
+        var now = new Date();
+        now.setHours(hoursValue);
+        now.setMinutes(minutesValue);
+        now.setSeconds(0);
+        var shiftedUtcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysShift,
+            now.getUTCHours(), now.getUTCMinutes() - timezoneOffset, now.getUTCSeconds());
+        return shiftedUtcDate.toISOString();
+    },
+
+    _getScheduleUtcDateTimeIsoStringOLD: function (daysShift, hoursValue, minutesValue, timezoneOffset) {
         var now = new Date();
         var shiftedUtcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysShift, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
         shiftedUtcDate.setUTCHours(hoursValue);
