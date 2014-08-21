@@ -24,7 +24,6 @@ define([
 
                 subtitle:"",
 
-                features: []
                 /*
                 {
                     "feature-title" : "",
