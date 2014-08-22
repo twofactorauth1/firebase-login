@@ -1,9 +1,40 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+<div class="section image-slider" data-ng-show="component">
+    <div class="component-header container">
+        <div class="editable" data-class="label">
+            <h2 class="section-title">{{component.label}}</h2>
+        </div>
+        <div class="editable" data-class="description">
+            <p>{{component.description}}</p>
+        </div>
+    </div>
+    <div id="#myCarousel-{{component._id}}" class="carousel slide">
+        <!-- Indicators -->
+        <ol class="carousel-indicators" data-ng-repeat="image in images track by $index">
+            <li data-target="#myCarousel-{{{_id}}}" data-slide-to="{{this.key}}" class=""></li>
+        </ol>
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" data-ng-repeat="image in images track by $index">
+            <div class="item {{#if images[0] }} active{{/if}}">
+                <div class="fill" style="background-image:url('{{image.url}}');"></div>
+                <div class="carousel-caption" style="display: none;">
+                    <h2>Yoga Instruction</h2>
+                    <a href="#" class="button">View Schedule</a>
+                </div>
+            </div>
+        </div>
+        <!-- Controls -->
+        <a class="left carousel-control" href="#myCarousel-{{component._id}}" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="right carousel-control" href="#myCarousel-{{_id}}" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+</div>

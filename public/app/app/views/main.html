@@ -1,3 +1,4 @@
-<div>
-    Hello this is main view.
+<div data-ng-controller="MainCtrl" data-ng-model="component">
+    this is component {{component}}<br>
+    this is url for component {{ component | createURLforComponent }}.
 </div>
