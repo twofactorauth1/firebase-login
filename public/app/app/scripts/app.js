@@ -8,8 +8,8 @@
  *
  * Main module of the application.
  */
-angular
-    .module('appApp', [
+var mainApp = angular
+    .module('mainApp', [
         'ngAnimate',
         'ngCookies',
         'ngResource',
@@ -20,10 +20,10 @@ angular
     ])
     .config(function ($stateProvider, $routeProvider) {
         $stateProvider
-            .state('main', {
-                url: '/main',
+            .state('/', {
+                url: '/',
                 templateUrl: 'views/main.html',
-                controller: 'MainCtrl'
+                controller: 'MainCtrl as main'
             })
             .state('about', {
                 url: '/about',
@@ -31,6 +31,6 @@ angular
                 controller: 'MainCtrl'
             });
         $routeProvider.otherwise({
-            redirectTo: '/'
+            redirectTo: '/#/'
         });
     });

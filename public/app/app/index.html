@@ -15,30 +15,15 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
 </head>
-<body ng-app="appApp">
+<body ng-app="mainApp" ng-controller="MainCtrl as main">
+<div ng-include src="main.theamUrl">
+
+</div>
+</body>
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
 <![endif]-->
-
-<!-- Add your site or application content here -->
-<div class="container">
-    <div class="header">
-        <ul class="nav nav-pills pull-right">
-            <li class="active"><a ng-href="#">Home</a></li>
-            <li><a ui-sref='about'>About</a></li>
-            <li><a ui-sref='main'>main</a></li>
-        </ul>
-        <h3 class="text-muted">app</h3>
-    </div>
-
-    <div ui-view=""></div>
-
-    <div class="footer">
-        <p><span class="glyphicon"></span> Footer</p>
-    </div>
-</div>
-
 
 <!-- build:js(.) scripts/oldieshim.js -->
 <!--[if lt IE 9]>
@@ -65,8 +50,11 @@
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
+<script src="scripts/services/accountService.js"></script>
+<script src="scripts/services/websiteService.js"></script>
+<script src="scripts/services/themeService.js"></script>
+<script src="scripts/services/pagesService.js"></script>
 <script src="scripts/controllers/mainCtrl.js"></script>
-<script src="scripts/filters/createURLForComponent.js"></script>
 <!-- endbuild -->
 </body>
 </html>
