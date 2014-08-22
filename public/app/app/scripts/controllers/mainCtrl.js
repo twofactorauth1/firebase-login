@@ -24,5 +24,7 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
     this.pages = pagesService(this.account.website.websiteId);
     console.log(this.pages);
 
+    //Include Layout For Theme
+    this.theamUrl = 'components/layout/layout_' + this.account.website.themeId + '.html';
 
 }]);
