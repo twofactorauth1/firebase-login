@@ -422,6 +422,16 @@ define([
                     $('#sortable').append(html);
 
                     $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
+
+
+                    jQuery.gritter.add({
+                        title: 'Component Added',
+                        text: 'Component was Successfully Added!',
+                        class_name: 'growl-success',
+                        sticky: false,
+                        time: 3000
+                    });
+
                 });
                 //$( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
                 //add to mongo
@@ -458,13 +468,21 @@ define([
 
                     var component=new Signup({ pageId:self.pageId,  _id:componentID});
 
-                    component.destroy({
-                        success: function(err,res) {
-                            console.log(err);
-                            console.log(res)
-                            $( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
-                        }
-                    })
+
+                component.destroy({
+                    success: function(err,res) {
+                        console.log(err);
+                        console.log(res)
+                        $( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
+                        jQuery.gritter.add({
+                            title: 'Component Deleted',
+                            text: 'Component was Successfully Removed.',
+                            class_name: 'growl-success',
+                            sticky: false,
+                            time: 3000
+                        });
+                    }
+                })
                 });
                 event.stopImmediatePropagation();
 
