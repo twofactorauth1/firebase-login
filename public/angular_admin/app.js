@@ -8,8 +8,14 @@ define(['angularAMD', 'angularRoute'], function (angularAMD) {
     		controller: 'AccountCtrl',
     		controllerUrl: '/angular_admin/controllers/account.js'
     	}))
+    	.when('/account/edit', angularAMD.route({
+    		templateUrl: '/angular_admin/views/account_edit.html',
+    		controller: 'AccountEditCtrl',
+    		controllerUrl: '/angular_admin/controllers/account_edit.js'
+    	}))
     	.otherwise({redirectTo:'/account'});
     });
     
+	$('#preloader').fadeOut();
     return angularAMD.bootstrap(app);
 });

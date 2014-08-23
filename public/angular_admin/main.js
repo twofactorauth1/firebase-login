@@ -8,6 +8,7 @@
  require.config({
  	baseUrl: '/js',
  	paths: {
+ 		'jquery': 'libs_misc/jquery/dist/jquery',
  		'angular': 'libs/angular/angular',
         'angularBootstrap': 'libs/angular-bootstrap/ui-bootstrap-tpls',
         'angularRoute': 'libs/angular-route/angular-route',
@@ -16,6 +17,7 @@
         'angularAMD': 'libs/angularAMD/angularAMD.min'
  	},
  	shim: {
+ 		'angular': {deps: ['jquery']},
  		'angularBootstrap': {deps: ['angular']},
         'angularRoute': {deps: ['angular']},
         'angularSanitize': {deps: ['angular']},
