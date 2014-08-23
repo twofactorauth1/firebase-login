@@ -20,7 +20,8 @@
         'storageutils': 'utils/storageutils',
         'namespaces': 'utils/namespaces',
         'adminCommon': '/angular_admin/admin_common',
-        'app': '/angular_admin/app'
+        'app': '/angular_admin/app',
+        'apiService': '/angular_admin/services/api'
  	},
  	shim: {
  		'adminCommon': {deps: ['jquery', 'storageutils', 'namespaces']},

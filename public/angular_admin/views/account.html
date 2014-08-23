@@ -27,7 +27,8 @@
 		<div class="col-sm-6 profile-section panel panel-default">
 			<div class="panel-heading">
 				<div class="panel-btns btn-edit-account">
-					<a href="#/account/edit" class="panel-edit"><i class="fa fa-edit"></i></a>
+					<a href="#/account/edit" class="panel-edit"><i
+						class="fa fa-edit"></i></a>
 				</div>
 				<!-- panel-btns -->
 				<h3 class="panel-title">Owner Info</h3>
@@ -50,14 +51,14 @@
 					<div class="col-xs-12">
 						<div class="mb20"></div>
 						<!--
-        <h3 class="profile-name">Jaideep Das</h3>
+        <h3 class="profile-name"{{user.first}} {{user.last}}Jaideep Das</h3>
         -->
 						<!--
         <h4 class="center">
             <span class="label label-info contact-cat">Das</span>
         </h4>
         -->
-						<h3 class="profile-name">Jaideep Das</h3>
+						<h3 class="profile-name">{{user.first}} {{user.last}}</h3>
 						<div class="mb20"></div>
 
 					</div>
@@ -145,14 +146,14 @@
 
 						<li class="col-xs-12">
 							<div class="col-xs-2">
-								<a href="mailto:jaideep.jdof@gmail.com"
+								<a href="mailto:{{user.email}}"
 									class="tooltips pull-left" data-toggle="tooltip"
 									data-placement="top" title="" data-original-title="Email"
 									target="_blank"> <i class="fa fa-envelope"> </i>
 								</a>
 							</div>
 							<div class="col-xs-8">
-								<p>jaideep.jdof@gmail.com</p>
+								<p>{{user.email}}</p>
 							</div>
 							<div class="col-xs-2"></div>
 
@@ -173,7 +174,8 @@
 		<div class="col-sm-6">
 			<div class="panel-heading">
 				<div class="panel-btns btn-edit-business-info">
-					<a href="#/account/edit" class="panel-edit"><i class="fa fa-edit"></i></a>
+					<a href="#/account/edit" class="panel-edit"><i
+						class="fa fa-edit"></i></a>
 				</div>
 				<h3 class="panel-title">Business Info</h3>
 			</div>
