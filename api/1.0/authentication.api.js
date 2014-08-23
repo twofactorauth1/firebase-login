@@ -34,7 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         if (accountId == null) {
             return this.wrapError(resp, 400, "Invalid parameter", "Invalid parameter provided for accountId");
         }
-
+        //TODO: add security - VIEW_ACCOUNT
         if (accountId > 0 && !this.sm.canReadAccount(req, accountId)) {
             return this.wrapError(resp, 401, "Unauthorized access to this account", "Unauthorized access to account [" + accountId + "]");
         }

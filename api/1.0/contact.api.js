@@ -54,8 +54,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
     //region CONTACT
     getContactById: function(req,resp) {
-        //TODO - add granular security
+
         var self = this;
+        self.log.debug('>> getContactById');
         var contactId = req.params.id;
 
         if (!contactId) {
@@ -64,7 +65,12 @@ _.extend(api.prototype, baseApi.prototype, {
 
         contactId = parseInt(contactId);
         contactDao.getById(contactId, function(err, value) {
-            if (!err && value != null) {
+            self.log.debug('<< getContactById');
+            if(!err && !value) {
+                self.wrapError(resp, 404, null, 'Contact not found.', 'Contact not found.');
+            } else if (!err && value != null) {
+                //TODO - add granular security - VIEW_CONTACT
+                var contactAccountId = value.get('accountId');
                 resp.send(value.toJSON("public"));
             } else {
                 self.wrapError(resp, 401, null, err, value);
@@ -76,6 +82,8 @@ _.extend(api.prototype, baseApi.prototype, {
     createContact: function(req,resp) {
         var self = this;
         self.log.debug('>> createContact');
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_CONTACT
         this._saveOrUpdateContact(req, resp, true);
     },
 
@@ -83,6 +91,8 @@ _.extend(api.prototype, baseApi.prototype, {
     updateContact: function(req,resp) {
         var self = this;
         self.log.debug('>> updateContact');
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_CONTACT
         this._saveOrUpdateContact(req, resp, false);
     },
 
@@ -90,10 +100,12 @@ _.extend(api.prototype, baseApi.prototype, {
     _saveOrUpdateContact: function(req, resp, isNew) {
         //TODO - add granular security
         var self = this;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_CONTACT
         var contact = new $$.m.Contact(req.body);
 
         if (isNew === true) {
-            contact.set("accountId", this.accountId(req));
+            contact.set("accountId", accountId);
             contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
         }
 
@@ -112,6 +124,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO - add granular security
         var self = this;
         var contactId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_CONTACT
 
         if (!contactId) {
             this.wrapError(resp, 400, null, "Invalid paramater for ID");
@@ -136,6 +150,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var skip = parseInt(req.query['skip'] || 0);
         var limit = parseInt(req.query['limit'] || 0);
         self.log.debug('>> listContacts');
+        //TODO: Add Security - VIEW_CONTACT
 
         contactDao.getContactsAll(accountId, skip, limit, function(err, value){
             self.log.debug('<< listContacts');
@@ -151,6 +166,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query['limit'] || 0);
         var letter = req.params.letter;
         self.log.debug('>> getContactsByLetter');
+        //TODO: Add Security - VIEW_CONTACT
 
         contactDao.getContactsShort(accountId, letter, limit, function (err, value) {
             self.log.debug('<< getContactsByLetter');
@@ -175,6 +191,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         accountId = parseInt(accountId);
+        //TODO: Add Security - VIEW_CONTACT
 
         if (letter == null || letter == "") {
             letter = "a";
@@ -209,6 +226,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> checkForDuplicates');
 
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_CONTACT
 
         contactDao.findDuplicates(accountId, function(err, value){
             self.log.debug('<< checkForDuplicates');
@@ -226,6 +244,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> mergeDuplicates');
 
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_CONTACT
         var dupeAry = _.toArray(req.body);
 
         contactDao.mergeDuplicates(dupeAry, accountId, function(err, value){
@@ -239,9 +258,12 @@ _.extend(api.prototype, baseApi.prototype, {
 
     signUpNews: function(req, resp) {
         var self = this, contact, accountToken, deferred;
+        self.log.debug('>> signUpNews');
         console.log(req.body);
         var email = req.body.email;
         console.log('Email: '+JSON.stringify(email));
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_CONTACT
 
         var accountToken = cookies.getAccountToken(req);
         console.log('Account Token: '+accountToken);
@@ -273,6 +295,8 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         contactId = parseInt(contactId);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_CONTACT
         contactActivityDao.getByContactId(contactId, function(err, value) {
             if (!err) {
                 return self.sendResult(resp, value);

@@ -37,14 +37,19 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listCourses: function (req, resp) {
         var self = this;
+        self.log.debug('>> listCourses');
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_COURSE
         var userId = self.userId(req);
         courseDao.listUserCourses(userId, function (err, courses) {
+            self.log.debug('<< listCourses');
             self.sendResultOrError(resp, err, courses, "Error getting courses");
         });
     },
 
     getCourseById: function (req, resp) {
         var self = this;
+        self.log.debug('>> getCourseById');
         var courseId = req.params.id;
 
         if (!courseId) {
@@ -54,6 +59,10 @@ _.extend(api.prototype, baseApi.prototype, {
         courseId = parseInt(courseId);
 
         courseDao.getCourseById(courseId, self.userId(req), function (err, course) {
+            var accountId = parseInt(self.accountId(req));
+            //TODO: Add Security - VIEW_COURSE
+            //TODO: ADD accountId to course
+            self.log.debug('<< getCourseById');
             self.sendResultOrError(resp, err, course, "Error getting course");
         });
     },
@@ -61,6 +70,8 @@ _.extend(api.prototype, baseApi.prototype, {
     createCourse: function (req, resp) {
         var self = this;
         var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_COURSE
         courseDao.createCourse(req.body, userId, function (err, createdCourse) {
             self.sendResultOrError(resp, err, createdCourse, "Error creating course");
         });
@@ -78,6 +89,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         courseId = parseInt(courseId);
         var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_COURSE
 
         courseDao.updateCourse(updatedCourseData, courseId, userId, function (err, value) {
             return self.sendResultOrError(resp, err, value, "Error updating course");
@@ -94,6 +107,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         courseId = parseInt(courseId);
         var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_COURSE
 
         courseDao.deleteCourse(courseId, userId, function (err, value) {
             return self.sendResultOrError(resp, err, value, "Error removing course");
@@ -111,6 +126,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
         courseId = parseInt(courseId);
         var userId = self.userId(req);
+
+        //TODO: Get accountId from Course
+        //TODO: Add Security - VIEW_COURSE
 
         courseDao.listCourseVideos(courseId, userId, function (err, videos) {
             self.sendResultOrError(resp, err, videos, "Error getting course videos");
@@ -131,6 +149,9 @@ _.extend(api.prototype, baseApi.prototype, {
         courseId = parseInt(courseId);
         var userId = self.userId(req);
 
+        //TODO: Get accountId from Course
+        //TODO: Add Security - VIEW_COURSE
+
         courseDao.findCourseVideoById(courseId, videoId, userId, function (err, video) {
             self.sendResultOrError(resp, err, video, "Error getting course video");
         });
@@ -149,6 +170,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         courseId = parseInt(courseId);
         var userId = self.userId(req);
+        //TODO: Get accountId from Course
+        //TODO: Add Security - MODIFY_COURSE
 
         courseDao.addVideoToCourse(videoToAdd, courseId, userId, function (err, video) {
             self.sendResultOrError(resp, err, video, "Error adding video to course");
@@ -170,6 +193,9 @@ _.extend(api.prototype, baseApi.prototype, {
         courseId = parseInt(courseId);
         var userId = self.userId(req);
 
+        //TODO: Get accountId from Course
+        //TODO: Add Security - MODIFY_COURSE
+
         courseDao.updateVideoInCourse(videoId, updatedVideoValues, courseId, userId, function (err, video) {
             self.sendResultOrError(resp, err, video, "Error updating video in course");
         });
@@ -189,6 +215,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
         courseId = parseInt(courseId);
         var userId = self.userId(req);
+
+        //TODO: Get accountId from Course
+        //TODO: Add Security - MODIFY_COURSE
 
         courseDao.deleteVideoFromCourse(videoId, courseId, userId, function (err, video) {
             self.sendResultOrError(resp, err, video, "Error deleting video from course");

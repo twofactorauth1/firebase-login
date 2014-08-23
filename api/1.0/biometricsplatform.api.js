@@ -25,6 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
     findReadings: function(req,resp) {
         var self = this;
         var contactId = req.query['contactId'];
+        //TODO: add security - VIEW_READINGS
         deviceManager.findReadings(contactId, function(err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Readings by contactId");
             //self.sendResult(resp, value);

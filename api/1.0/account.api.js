@@ -52,6 +52,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('<< getCurrentAccount');
                     return resp.send({});
                 } else {
+                    //TODO: add security - VIEW_ACCOUNT
                     self.log.debug('<< getCurrentAccount');
                     return resp.send(value.toJSON("public"));
                 }
@@ -73,6 +74,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         accountId = parseInt(accountId);
+        //TODO: add security - VIEW_ACCOUNT
         accountDao.getById(accountId, function(err, value) {
             if (!err && value != null) {
                 resp.send(value.toJSON("public"));
@@ -84,7 +86,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     getAllAccountsForUserId: function(req,resp) {
-        //TODO - add granular security
+        //TODO - add granular security VIEW_USER
 
         var self = this;
         var userId = req.params.userid;
@@ -113,6 +115,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     updateAccount: function(req,resp) {
         var account = new $$.m.Account(req.body);
+        //TODO: add granular security MODIFY_ACCOUNT
         accountDao.saveOrUpdate(account, function(err, value){
             if(!err &&value != null){
                 resp.send(value.toJSON("public"));
@@ -152,6 +155,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         accountId = parseInt(accountId);
+        //TODO: add security - MODIFY_ACCOUNT
         accountDao.getById(accountId, function(err, value) {
 
             if (!err && value != null) {
@@ -184,6 +188,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         accountId = parseInt(accountId);
+        //TODO: add security - MODIFY_ACCOUNT
         accountDao.getById(accountId, function(err, value) {
 
             if (!err && value != null) {
@@ -215,6 +220,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         accountId = parseInt(accountId);
+        //TODO: add security - MODIFY_ACCOUNT
         accountDao.getById(accountId, function(err, value) {
 
             if (!err && value != null) {

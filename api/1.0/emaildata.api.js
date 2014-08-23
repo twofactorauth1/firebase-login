@@ -31,9 +31,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     getEmailSources: function(req, resp) {
-        //Todo, implement security
+
         var self = this;
         var accountId = this.accountId(req);
+        //TODO: Implement Security - VIEW_EMAIL_SOURCE
         if (accountId == null) {
             return this.wrapError(resp, 403, "Cannot retrieve ContextIO information", "An account id must be specific to return this information");
         }
@@ -45,12 +46,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     createEmailSource: function(req, resp) {
-        //Todo, implement security
+
         var self = this;
         var accountId = this.accountId(req);
         if (accountId == null) {
             return this.wrapError(resp, 403, "Cannot create Email Source", "An account id must be specific to return this information");
         }
+        //TODO: Implement Security - MODIFY_EMAIL_SOURCE
 
         var body = req.body;
         emailDataDao.createEmailSource(req.user, accountId, body.email, body.username, body.password, body.imapServer, body.port, function(err, value) {
@@ -60,10 +62,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     getMessages: function(req, resp) {
-        //TODO: Implement security
+
         var self = this;
         var sourceId = req.params.sourceid;
         var accountId = this.accountId(req);
+        //TODO: Implement Security - VIEW_EMAIL_MESSAGE
 
         var includeBody = req.query.includebody;
         var options = {
@@ -82,12 +85,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     getMessageById: function(req, resp) {
-        //TODO: Implement security
+
         var self = this;
         var sourceId = req.params.sourceid;
         var messageId = req.paams.messageid;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Implement Security - VIEW_EMAIL_MESSAGE
 
-        emailDataDao.getMessageById(req.user, this.accountId(req), sourceId, messageId, function(err, value) {
+        emailDataDao.getMessageById(req.user, accountId, sourceId, messageId, function(err, value) {
             self.sendResultOrError(resp, err, value, "Error retrieving message by id");
         });
     }

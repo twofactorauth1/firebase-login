@@ -54,10 +54,12 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     listEvents: function(req, res) {
-        //TODO - add granular security
+
 
         var self = this;
         var accountId = parseInt(self.accountId(req));
+        //TODO - add granular security - VIEW_ANALYTICS
+
         var skip = req.query['skip'];
         var limit = req.query['limit'];
         self.log.debug('>> listEvents');
@@ -69,11 +71,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
     createEvent: function(req, res) {
         var self = this;
-        //TODO - add granular security
+        var accountId = parseInt(self.accountId(req));
+        //TODO - add granular security - MODIFY_ANALYTICS
 
         self.log.debug('>> createEvent');
         var event = req.body;
-        event.accountId = parseInt(self.accountId(req));
+        event.accountId = accountId;
+
+
         analyticsManager.createEvent(event, function(err, value){
             self.log.debug('<< createEvent');
             self.sendResultOrError(res, err, value, "Error creating Analytic Event");
@@ -82,7 +87,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getEvent: function(req, res) {
         var self = this;
-        //TODO - add granular security
+        var accountId = parseInt(self.accountId(req));
+        //TODO - add granular security - VIEW_ANALYTICS
 
         self.log.debug('>> getEvent');
         var eventId = req.params.id;
@@ -94,7 +100,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
     updateEvent: function(req, res) {
         var self = this;
-        //TODO - add granular security
+        var accountId = parseInt(self.accountId(req));
+        //TODO - add granular security - MODIFY_ANALYTICS
 
         self.log.debug('>> updateEvent');
         var eventId = req.params.id;
@@ -109,7 +116,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
     deleteEvent: function(req, res) {
         var self = this;
-        //TODO - add granular security
+        var accountId = parseInt(self.accountId(req));
+        //TODO - add granular security - MODIFY_ANALYTICS
 
         self.log.debug('>> deleteEvent');
         var eventId = req.params.id;

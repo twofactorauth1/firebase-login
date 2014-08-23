@@ -99,9 +99,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     //region WEBSITE
     getWebsiteById: function(req, resp) {
-        //TODO: Add security
+
         var self = this;
         var websiteId = req.params.id;
+        var accountId = self.accountId(req);
+        //TODO: Add security - VIEW_WEBSITE
 
         cmsDao.getWebsiteById(websiteId, function(err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Website by Id");
@@ -110,12 +112,13 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     saveOrUpdateWebsite: function(req, resp) {
-        //TODO: Add Security
+
         var self = this;
         var settings = req.body.settings;
         var accountId = req.body.accountId;
         var websiteId = req.body._id;
         //console.log('Other Data: '+JSON.stringify(req.body));
+        //TODO: Add Security - MODIFY_WEBSITE
 
 
         cmsDao.updateWebsiteSettings( settings, accountId, websiteId,function(err, value) {
@@ -127,9 +130,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     getWebsiteForAccountId: function(req, resp) {
-        //TODO: Add Security
+
         var self = this;
         var accountId = parseInt(req.params.accountid);
+        //TODO: Add Security - VIEW_WEBSITE
 
         cmsDao.getOrCreateWebsiteByAccountId(accountId, req.user.id(), true, function(err, value) {
             self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
@@ -138,9 +142,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getWebsiteLinklists: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> getWebsiteLinklists');
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
 
         var websiteId = req.params.id;
         cmsManager.getWebsiteLinklists(websiteId, function(err, value){
@@ -152,11 +158,15 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getWebsiteLinklistsByHandle: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> getWebsiteLinklistsByHandle');
         var websiteId = req.params.id;
         var handle = req.params.handle;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
+
+
         cmsManager.getWebsiteLinklistsByHandle(websiteId, handle, function(err, value){
             self.log.debug('<< getWebsiteLinklistsByHandle');
             self.sendResultOrError(res, err, value, "Error retrieving website Linklists");
@@ -165,11 +175,13 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     addWebsiteLinklists: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> addWebsiteLinklists');
         var websiteId = req.params.id;
         var linkLists = req.body;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
 
         cmsManager.addWebsiteLinklists(websiteId, linkLists, function(err, value){
             self.log.debug('<< addWebsiteLinklists');
@@ -179,12 +191,14 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     updateWebsiteLinklists: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> updateWebsiteLinklists');
         var websiteId = req.params.id;
         var handle = req.params.handle;
         var linkLists = req.body;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
 
         cmsManager.updateWebsiteLinklists(websiteId, handle, linkLists, function(err, value){
             self.log.debug('<< updateWebsiteLinklists');
@@ -194,11 +208,13 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     deleteWebsiteLinklists: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> deleteWebsiteLinklists');
         var websiteId = req.params.id;
         var handle = req.params.handle;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
 
         cmsManager.deleteWebsiteLinklists(websiteId, handle, function(err, value){
             self.log.debug('<< deleteWebsiteLinklists');
@@ -212,12 +228,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
     //region PAGE
     getPageByHandle: function(req, resp) {
-        //TODO: Add security
+
         var self = this;
         var websiteId = req.params.websiteid;
         var pageHandle = req.params.handle;
-
-        self.log.debug('>> getPageByHandle Website Id: '+websiteId+' HAndle: '+pageHandle);
+        self.log.debug('>> getPageByHandle Website Id: '+websiteId+' Handle: '+pageHandle);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
 
         cmsDao.getPageForWebsite(websiteId, pageHandle, function(err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website");
@@ -227,11 +244,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     getPageById: function(req, resp) {
-        //TODO: Add security
+
         var self = this;
         var pageId = req.params.id;
 
         self.log.debug('>> getPageById');
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
 
         cmsDao.getPageById(pageId, function(err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page by Id");
@@ -245,6 +264,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> saveOrUpdatePage');
         var _page = req.body;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
 
         var page = new Page(_page);
         cmsDao.saveOrUpdate(page, function(err, value) {
@@ -259,6 +280,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var websiteId = req.params.websiteId;
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
         var _page = req.body;
         var pageObj = new Page(_page);
         pageObj.set('websiteId', websiteId);
@@ -274,6 +296,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> updatePage');
 
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
 
         var pageId = req.params.id;
         var _page = req.body;
@@ -286,9 +310,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     deletePage: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> deletePage');
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
 
         var pageId = req.params.id;
 
@@ -304,11 +330,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
     //region THEME
     getThemeConfigById: function(req, resp) {
-        //TODO: Add Security
+
         var self = this;
+        self.log.debug('>> getThemeConfigById')
         var themeId = req.params.id;
 
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_THEME
+
         cmsDao.getThemeConfig(themeId, function(err, value) {
+            self.log.debug('<< getThemeConfigById')
             self.sendResultOrError(resp, err, value, "Error retrieving Theme Config for ID: [" + themeId + "]");
             self = null;
         });
@@ -316,8 +347,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getAllThemes: function(req, res) {
         var self = this;
+        self.log.debug('>> getAllThemes');
+
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_THEME
 
         cmsManager.getAllThemes(function(err, value) {
+            self.log.debug('<< getAllThemes');
             if (err) {
                 self.wrapError(res, 500, "Error retrieving all themes", err, value);
             } else {
@@ -327,11 +363,13 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getThemeConfigForAccountId: function(req, resp) {
-        //TODO: Add Security
+
         var self = this;
+        self.log.debug('>> getThemeConfigForAccountId');
         var accountId = req.params.accountId;
 
         accountId = parseInt(accountId);
+        //TODO: Add Security - VIEW_THEME
 
         if (isNaN(accountId)) {
             this.sendResultOrError(resp, "Account Id is not valid", "");
@@ -339,19 +377,22 @@ _.extend(api.prototype, baseApi.prototype, {
             return;
         }
         cmsDao.getThemeConfigSignedByAccountId(accountId, function(err, value) {
+            self.log.debug('<< getThemeConfigForAccountId');
             self.sendResultOrError(resp, err, value, "Error retrieving Theme Config for AccountId: [" + accountId + "]");
             self = null;
         });
     },
 
     getThemePreview: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> getThemePreview');
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_THEME
         var themeId = req.params.id;
 
         cmsManager.getThemePreview(themeId, function(err, value){
+            self.log.debug('<< getThemePreview');
             self.sendResultOrError(res, err, value, "Error retrieving Theme Preview for ThemeId: [" + themeId + "]");
             self = null;
         });
@@ -363,10 +404,12 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> setTheme');
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_THEME
         var themeId = req.params.themeId;
         var websiteId = req.params.websiteId;
 
         cmsManager.setThemeForAccount(accountId, themeId, function(err, value){
+            self.log.debug('<< modifyTheme');
             self.sendResultOrError(res, err, value, "Error setting theme for account.");
             self = null;
         });
@@ -382,10 +425,11 @@ _.extend(api.prototype, baseApi.prototype, {
     //COMPONENTS
 
     getComponentsByPage: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> getComponentsByPage');
-        var accountId = req.params.accountid;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
         var pageId = req.params.id;
 
         accountId = parseInt(accountId);
@@ -398,10 +442,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getComponentsByType: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> getComponentsByType');
-        var accountId = req.params.accountid;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
         var pageId = req.params.id;
         var type = req.params.type;
 
@@ -423,6 +468,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
         var component = require('../../cms/model/components/' + componentObj.type);
         if (component != null) {
             component = new component({
@@ -440,13 +486,14 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     updateComponent: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> updateComponent');
         var componentObj = req.body;
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
         var componentId = req.params.componentId;
 
         cmsManager.updatePageComponent(pageId, componentObj, function(err, value){
@@ -458,13 +505,14 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     updateAllComponents: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> updateAllComponents');
         var componentAry = req.body;
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
 
         cmsManager.updateAllPageComponents(pageId, componentAry, function(err, value){
             self.log.debug('<< updateAllComponents');
@@ -475,12 +523,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     deleteComponent: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> deleteComponent');
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
         var componentId = req.params.componentId;
 
         cmsManager.deleteComponent(pageId, componentId, function(err, value){
@@ -492,12 +541,13 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     updateComponentOrder: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> updateComponentOrder');
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
         var componentId = req.params.componentId;
         var newOrder = req.params.newOrder;
 
@@ -512,13 +562,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
     //BLOG POSTS
     createBlogPost: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> createBlogPost');
         var blogPost = new $$.m.BlogPost(req.body);
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
 
         blogPost.set('accountId', accountId);
         blogPost.set('pageId', pageId);
@@ -531,10 +582,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getBlogPost: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> getBlogPost');
         var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
         var blogPostId = req.params.postId;
         self.log.debug('Account ID: '+accountId+' Blog Post ID: '+blogPostId);
         cmsManager.getBlogPost(accountId, blogPostId, function(err, value){
@@ -545,13 +597,14 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     updateBlogPost: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> updateBlogPost');
         var blogPost = new $$.m.BlogPost(req.body);
         var postId = req.params.postId;
         var pageId = req.params.id;
-        var accountId = self.accountId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
         blogPost.set('accountId', accountId.toString());
         blogPost.set('_id', postId);
         blogPost.set('pageId', pageId);
@@ -566,10 +619,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     deleteBlogPost: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> deleteBlogPost');
-        var accountId = self.accountId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
         var blogPostId = req.params.postId;
         var pageId = req.params.id;
         self.log.debug('deleting post with id: ' + blogPostId);
@@ -582,11 +636,12 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     listBlogPosts: function(req, res) {
-        //TODO: Add Security
+
         //TODO: Need to find a way to iterate through posts
         var self = this;
         self.log.debug('>> listBlogPosts');
-        var accountId = self.accountId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
         var limit = parseInt(req.query['limit'] || 10);//suitable default?
 
         cmsManager.listBlogPosts(accountId, limit, function(err, value){
@@ -597,10 +652,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getPostsByAuthor: function(req, res){
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> getPostsByAuthor');
-        var accountId = self.accountId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
         var author = req.params.author;
 
         cmsManager.getPostsByAuthor(accountId, author, function(err, value){
@@ -612,10 +668,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getPostsByTitle: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> getPostsByTitle');
-        var accountId = self.accountId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
         var title = req.params.title;
 
         cmsManager.getPostsByTitle(accountId, title, function(err, value){
@@ -626,10 +683,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getPostsByContent: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> getPostsByContent');
-        var accountId = self.accountId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
         var content = req.params.content;
 
         cmsManager.getPostsByData(accountId, content, function(err, value){
@@ -640,10 +698,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getPostsByCategory: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> getPostsByCategory');
-        var accountId = self.accountId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
         var category = req.params.category;
 
         cmsManager.getPostsByCategory(accountId, category, function(err, value){
@@ -654,10 +713,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getPostsByTag: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> getPostsByTag');
-        var accountId = self.accountId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_WEBSITE
         var tag = req.params.tag;
 
         cmsManager.getPostsByTag(accountId, [tag], function(err, value){
@@ -668,10 +728,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     reorderPosts: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> reorderPosts');
-        var accountId = self.accountId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
         var pageId = req.params.id;
 
         var blogComponent = new $$.m.cms.components.Blog(req.body);
@@ -685,10 +746,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     reorderBlogPost: function(req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> reorderBlogPost');
-        var accountId = self.accountId(req);
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_WEBSITE
         var pageId = req.params.id;
         var postId = "" + req.params.postId;
         var newOrder = req.params.newOrder;
