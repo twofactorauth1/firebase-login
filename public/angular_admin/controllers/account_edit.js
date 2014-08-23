@@ -1,4 +1,4 @@
-define(['/angular_admin/app.js'], function(app) {
+define(['app'], function(app) {
     app.controller("AccountEditCtrl", ["$scope", function ($scope) {
     }]);
 });

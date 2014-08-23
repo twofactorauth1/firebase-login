@@ -14,9 +14,13 @@
         'angularRoute': 'libs/angular-route/angular-route',
         'angularSanitize': 'libs/angular-sanitize/angular-sanitize.min',
         'angularResource': 'libs/angular-resource/angular-resource.min',
-        'angularAMD': 'libs/angularAMD/angularAMD.min'
+        'angularAMD': 'libs/angularAMD/angularAMD.min',
+        //application related
+        'adminCommon': '/angular_admin/admin_common',
+        'app': '/angular_admin/app'
  	},
  	shim: {
+ 		'adminCommon': {deps: ['jquery']},
  		'angular': {deps: ['jquery']},
  		'angularBootstrap': {deps: ['angular']},
         'angularRoute': {deps: ['angular']},
@@ -24,5 +28,5 @@
         'angularResource': {deps: ['angular']},
         'angularAMD': {deps: ['angular']}
  	},
- 	deps: ['/angular_admin/app.js']
+ 	deps: ['adminCommon', 'app']
  });
