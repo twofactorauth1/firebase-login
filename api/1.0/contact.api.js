@@ -27,8 +27,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthApi, this.createContact.bind(this));
         app.put(this.url(''), this.isAuthApi, this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteContact.bind(this));
-        app.get(this.url(''), this.isAuthApi, this.listContacts.bind(this));
-        app.get(this.url('filter/:letter'), this.isAuthApi, this.getContactsByLetter.bind(this));
+        app.get(this.url(''), this.isAuthApi, this.listContacts.bind(this)); // for all contacts
+        app.get(this.url('filter/:letter'), this.isAuthApi, this.getContactsByLetter.bind(this)); // for individual letter
 
 
 

@@ -73,7 +73,8 @@ CONTACTS MAIN VIEW
         <div class="people-list">
             <div class="row">
  {{#if contacts}}
-
+    {{>people-list-partial}}
+    <!--
     {{#each contacts}}
 
                 <div class="col-xs-12 col-sm-3">
@@ -84,13 +85,13 @@ CONTACTS MAIN VIEW
 
                         <div class="media">
                             <div class="col-xs-12f">
-                                <!--// {{#if photoSquare}} // {{#isGoogleImage photoSquare}} //-->
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" /><!-- // {{else}} // -->
+                                &lt;!&ndash;// {{#if photoSquare}} // {{#isGoogleImage photoSquare}} //&ndash;&gt;
+                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />&lt;!&ndash; // {{else}} // &ndash;&gt;
                                 <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
-                                <!--// {{/isGoogleImage}} // {{else}} // {{#isGoogleImage photo}} // -->
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />// <!-- {{else}} // -->
+                                &lt;!&ndash;// {{/isGoogleImage}} // {{else}} // {{#isGoogleImage photo}} // &ndash;&gt;
+                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />// &lt;!&ndash; {{else}} // &ndash;&gt;
                                 <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                                <!-- // {{/isGoogleImage}} // {{/if}} -->
+                                &lt;!&ndash; // {{/isGoogleImage}} // {{/if}} &ndash;&gt;
 
                                 <span class="name visible-xs">
 
@@ -151,7 +152,7 @@ CONTACTS MAIN VIEW
                                 {{/ifCond}}
 
 
-                               <!-- <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>-->
+                               &lt;!&ndash; <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>&ndash;&gt;
 
                                 <span class="label label-info contact-cat">{{contactTypeLabel this}}</span>
 
@@ -194,6 +195,7 @@ CONTACTS MAIN VIEW
                     </div>
                 </div>
             {{/each}}
+            -->
           {{else}}
 
                 <div class="col-xs-10">
