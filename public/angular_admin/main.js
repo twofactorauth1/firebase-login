@@ -15,12 +15,15 @@
         'angularSanitize': 'libs/angular-sanitize/angular-sanitize.min',
         'angularResource': 'libs/angular-resource/angular-resource.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
+        
         //application related
+        'storageutils': 'utils/storageutils',
+        'namespaces': 'utils/namespaces',
         'adminCommon': '/angular_admin/admin_common',
         'app': '/angular_admin/app'
  	},
  	shim: {
- 		'adminCommon': {deps: ['jquery']},
+ 		'adminCommon': {deps: ['jquery', 'storageutils', 'namespaces']},
  		'angular': {deps: ['jquery']},
  		'angularBootstrap': {deps: ['angular']},
         'angularRoute': {deps: ['angular']},
