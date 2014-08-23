@@ -4,6 +4,6 @@
     * All use or reproduction of any or all of this content must be approved.
     * Please contact info@indigenous.io for approval or questions.
 
-extends snippets/_admin_require_layout
-block content
- div(ng-view)
+include standardhead
+
+script(data-main="/angular_admin/main", src="/js/libs/requirejs/require.js")

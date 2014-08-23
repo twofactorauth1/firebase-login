@@ -28,7 +28,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account = value.toJSON();
             }
 
-            data.showPreloader = true;
+            data.showPreloader = false;
             data.includeJs = false;
             data = self.baseData(data);
 
