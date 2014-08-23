@@ -1,0 +1,39 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div class="section image-gallery" data-ng-show="component">
+    <div class="component-header container">
+        <div class="editable" data-class="label">
+            <h2 class="section-title center">{{component.label}}</h2>
+        </div>
+
+        <div class="editable" data-class="description">
+            <p class="center">{{component.description}}</p>
+        </div>
+    </div>
+
+    <div class="component-body section-colored">
+        <div class="container">
+            <div class="row" data-ng-repeat="image in component.images track by $index">
+                {{#each images}}
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <a href="portfolio-item.html" class="link-gallery-image">
+                        <div class="overlay-gallery-image" style="opacity: 0;">
+                            <h3 class="center">{{image.image-label}}</h3>
+                            <small class="text-muted center">
+                                {{image.image-description}}
+                            </small>
+                        </div>
+                        <!-- /.overlay-portfolio -->
+                        <img class="img-responsive img-home-portfolio" src="{{image.image-url}}" alt="portfolio 1">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
