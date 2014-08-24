@@ -25,14 +25,14 @@
 					<div class="col-xs-12 form" role="form">
 						<div class="form-group">
 							<label class="">User Name</label> <input id="input-fullname"
-								class="form-control" value="Jaideep  Das"
+								class="form-control" ng-model='fullName'
 								placeholder="full name" type="text"> <small
 								style="margin-left: 10px;"> <strong>first:</strong> <code>
-									<span id="hint-first">Jaideep</span>
+									<span id="hint-first">{{user.first}}</span>
 								</code> <strong>middle:</strong> <code>
-									<span id="hint-middle"></span>
+									<span id="hint-middle">{{user.middle}}</span>
 								</code> <strong>last:</strong> <code>
-									<span id="hint-last">Das</span>
+									<span id="hint-last">{{user.last}}</span>
 								</code>
 							</small>
 						</div>
@@ -156,8 +156,7 @@
 							<div class="row edit-email-container">
 								<div class="form-group">
 									<input class="form-control input-edit-email"
-										placeholder="new email" value="jaideep.jdof@gmail.com"
-										data-email="jaideep.jdof@gmail.com" type="email">
+										placeholder="new email" ng-model='user.email' type="email">
 								</div>
 							</div>
 
