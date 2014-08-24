@@ -1,6 +1,14 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope','accountService','themeService','websiteService','pagesService', function ($scope,accountService,themeService,websiteService,pagesService) {
+/*
+* TODO
+* We have to make one transport service which will take
+* Theme Dependent Data from the server only one time in
+* MainCtrl and we have to inject the service into current LayoutCtrl
+*
+* */
+
+ mainApp.controller('LayoutCtrl', ['$scope','accountService','themeService','websiteService','pagesService', function ($scope,accountService,themeService,websiteService,pagesService) {
 
     console.log('i m layout controller');
 

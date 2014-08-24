@@ -1,12 +1,20 @@
 'use strict';
 
+/*
+ * TODO
+ * We have to make one transport service which will take
+ * Theme Dependent Data from the server only one time in
+ * MainCtrl and we have to inject the service into current LayoutCtrl
+ *
+ * */
+
 mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 'themeService', 'pagesService', function ($scope, accountService, websiteService, themeService, pagesService) {
 
     //Checking Services Working Only Do not use all the services here
 
     //Getting Data From Database According to Subdomain
     //TODO
-    this.account = accountService('enter-subdomain-url-here');
+    this.account = accountService('enter-domain-url-here');
     //console.log(this.account);
 
     //Getting All the Data Related to website

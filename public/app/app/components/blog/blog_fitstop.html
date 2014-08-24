@@ -1,0 +1,130 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div>
+    <div id="content-area">
+        <div class="container clearfix row-fluid">
+            <div id="main-area" class="col-sm-8">
+                <article class="entry clearfix">
+                    {{#if blogposts}}
+                    {{#each blogposts}}
+                    <div class="single-blog responsive clearfix" data-postId="{{this.attributes._id}}">
+
+                        <div class="blog-entry clearfix">
+                            <h2 class="blog-title">
+                                <a href="/page/blog/{{#if this.attributes.post_url}}{{this.attributes.post_url}}{{/if}}">
+                                    <div class="editable" data-class="post_title">
+                                        {{#if this.attributes.post_title}}
+                                        {{this.attributes.post_title}}
+                                        {{/if}}
+                                    </div>
+                                </a>
+                            </h2>
+
+                            <p class="blog-meta">
+                                {{#if this.attributes.created.date}}
+                                {{this.attributes.created.date}} • 
+                                {{/if}}
+                                {{#if this.attributes.post_author}}
+                                Posted by <a href="/page/author/{{this.attributes.post_author}}">{{this.attributes.post_author}}</a>
+                                {{/if}}
+                                {{#if this.attributes.post_category}}
+                                in <a href="/page/category/{{this.attributes.post_category}}">{{this.attributes.post_category}}</a>
+                                {{/if}}
+                                {{!-- {{#if this.attributes.comment_count}}
+                                • {{this.attributes.comment_count}} comments
+                                {{/if}} --}}
+                            </p>
+
+                            {{#if this.attributes.post_tags}}
+                            <ul class="post_tags">
+                                {{#each this.attributes.post_tags}}
+                                <li><a href="/page/tag/{{this}}">{{this}}</a></li>
+                                {{/each}}
+                            </ul>
+                            {{/if}}
+
+                            <div class="blog-thumb alignleft">
+                                <a href=""><span class="overlay"></span></a>
+                            </div> <!-- end .thumb -->
+
+                            <div class="entry-excerpt"><p>
+                                <div class="editable" data-class="post_excerpt">
+                                    {{#if this.attributes.post_excerpt}}
+                                    {{{this.attributes.post_excerpt}}}...
+                                    {{/if}}
+                                </div>
+                                </p></div>
+                            <a href="/page/blog/{{#if this.attributes.post_url}}{{this.attributes.post_url}}{{/if}}" class="btn btn-orange pull-right"><span>READ MORE</span></a>
+                        </div> <!-- end .et_pt_blogentry -->
+
+                    </div> <!-- end #et_pt_blog -->
+                    <hr></hr>
+                    {{/each}}
+                    {{/if}}
+                </article> <!-- .entry -->
+            </div> <!-- #main-area -->
+            <div id="sidebar" class="col-sm-4 col-xs-12">
+                <div class="searchbar hidden">
+                    <input type="search" name="s" placeholder="Search">
+                </div>
+                <div class="clearfix mb30 hidden"></div>
+
+                {{#if tags}}
+                <div class="tags">
+                    <h4><i class="fa fa-tag"></i> Tags</h4>
+                    <ul class="tag-cloud">
+                        {{#each tags}}
+                        <li><a href="/page/tag/{{this}}" >{{this}}</a></li>
+                        {{/each}}
+                    </ul>
+                </div>
+                {{/if}}
+
+                {{#if comments}}
+                <div class="clearfix mb30"></div>
+                <div class="comments hidden">
+                    <h4><i class="fa fa-comments"></i> Comments</h4>
+                    <ul>
+                        <li>Lauren M. on Social Media Design</li>
+                        <li>Lauren M. on Social Media Design</li>
+                        <li>Lauren M. on Social Media Design</li>
+                    </ul>
+                </div>
+                {{/if}}
+
+
+                {{#if blogposts}}
+                <div class="posts">
+                    <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
+                    <ul>
+                        {{#each blogposts}}
+                        <li><a href="/page/blog/{{#if this.attributes.post_url}}{{this.attributes.post_url}}{{/if}}">{{#if this.attributes.post_title}}{{this.attributes.post_title}}{{/if}}</a> {{#if this.attributes.post_author}} by <a href="/page/author/{{this.attributes.post_author}}">{{this.attributes.post_author}}</a>{{/if}}</li>
+                        {{/each}}
+
+                    </ul>
+                </div>
+                {{/if}}
+
+                {{#if categories}}
+                <div class="clearfix mb30"></div>
+                <div class="categories">
+                    <h4><i class="fa fa-list-ul"></i> Categories</h4>
+                    <ul class="tag-cloud">
+                        {{#each categories}}
+                        <li><a href="/page/category/{{this}}" >{{this}}</a></li>
+                        {{/each}}
+                    </ul>
+                </div>
+                {{/if}}
+
+            </div>
+        </div>
+    </div> <!-- .container -->
+</div> <!-- #content-area -->
+</div>
