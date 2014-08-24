@@ -8,5 +8,13 @@ define(['app'], function (app) {
 				fn(data);
 			});
 		};
+		
+		this.putUser = function (user, fn) {
+			var apiUrl = baseUrl + ['user', $$.server.userId].join('/');
+			$http.put(apiUrl, user)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
 	});
 });

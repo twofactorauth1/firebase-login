@@ -25,11 +25,18 @@ define(['app', 'apiService'], function(app) {
     				$scope.user.middle = '';
     				$scope.user.last = '';
     			}
+    			ApiService.putUser($scope.user, function (user) {
+    				$scope.user = user;
+    			});
     		}
     	});
     	
     	$scope.$watch('user.email', function (newValue, oldValue) {
-    		console.log(newValue);
+    		if (newValue) {
+    			ApiService.putUser($scope.user, function (user) {
+    				$scope.user = user;
+    			});
+    		}
     	});
     }]);
 });
