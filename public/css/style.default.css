@@ -15580,6 +15580,36 @@ strong {
   background: -moz-linear-gradient(top, #ffffff, #ffffff 30%, rgba(255, 255, 255, 0));
   background: linear-gradient(to bottom, #ffffff, #ffffff 30%, rgba(255, 255, 255, 0));
 }
+.fb-color {
+  background: #3b5998;
+}
+.fb-color:hover {
+  background: #466cbb;
+}
+.linkedin-color {
+  background: #007bb6;
+}
+.linkedin-color:hover {
+  background: #0393d8;
+}
+.google-color {
+  background: #dd4b39;
+}
+.google-color:hover {
+  background: #f8533f;
+}
+.twitter-color {
+  background: #4099ff;
+}
+.twitter-color:hover {
+  background: #3784dc;
+}
+.email-color {
+  background: #999999;
+}
+.email-color:hover {
+  background: #666666;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -16090,24 +16120,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   text-shadow: 1px 1px 1px white;
   padding: 15px;
   text-align: center;
-}
-.fb-color {
-  background: #3b5998;
-}
-.fb-color:hover {
-  background: #466cbb;
-}
-.linkedin-color {
-  background: #007bb6;
-}
-.linkedin-color:hover {
-  background: #0393d8;
-}
-.google-color {
-  background: #dd4b39;
-}
-.google-color:hover {
-  background: #f8533f;
 }
 .import-success {
   text-align: center;
