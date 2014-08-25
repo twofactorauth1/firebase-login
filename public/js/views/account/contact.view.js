@@ -96,6 +96,7 @@ define([
 
             $.when(p1, p2, p3)
                 .done(function() {
+                    self.loadMore = !(self.contacts.length < 6)
                     self.renderContacts();
                     self.check_welcome();
                     self.adjustWindowSize();
@@ -214,42 +215,40 @@ define([
 
         appendContacts: function() {
             var self = this;
-            console.log(self.contacts);
             //check to see if the fetched contacts have already been appended
             var getContacts = self.contacts.toJSON();
-//            var cleanedContacts = [];
-//            /*
-//            for (var i = 0; i < contactsArr.length; i++) {
-//                if ($.inArray(contactsArr[i]._id, self.fetchedContacts) > -1) {
-//                    console.log('is IN array');
-//                } else {
-//                    console.log('is NOT in array '+self.fetched);
-//                    cleanedContacts.push(contactsArr[i]);
-//                }
-//            }
-//            */
-//            //update the fecthedContacts with newly fetched contact Id's
-//            console.log('Cleaned Contacts: '+cleanedContacts.length);
-//            for (var i = 0; i < cleanedContacts.length; i++) {
-//                if (self.fetchedContacts.indexOf(cleanedContacts[i]._id) > -1) {
-//                    //do nothing
-//                } else {
-//                    self.fetchedContacts.push(cleanedContacts[i]._id);
-//                }
-//            }
-//
-//            if (!self.fetched) {
-//                cleanedContacts.splice(0[3]);
-//                self.fetched = true;
-//            }
+            var cleanedContacts = [];
+            /*
+            for (var i = 0; i < contactsArr.length; i++) {
+                if ($.inArray(contactsArr[i]._id, self.fetchedContacts) > -1) {
+                    console.log('is IN array');
+                } else {
+                    console.log('is NOT in array '+self.fetched);
+                    cleanedContacts.push(contactsArr[i]);
+                }
+            }
+            //update the fecthedContacts with newly fetched contact Id's
+            console.log('Cleaned Contacts: '+cleanedContacts.length);
+            for (var i = 0; i < cleanedContacts.length; i++) {
+                if (self.fetchedContacts.indexOf(cleanedContacts[i]._id) > -1) {
+                    //do nothing
+                } else {
+                    self.fetchedContacts.push(cleanedContacts[i]._id);
+                }
+            }
 
+            if (!self.fetched) {
+                cleanedContacts.splice(0[3]);
+                self.fetched = true;
+            }
+            */
             console.log('Contacts Fetched: '+self.fetchedContacts);
-
             var data = {
                 account: self.account.toJSON(),
                 user: self.user.toJSON(),
                 //contacts: cleanedContacts,
                 contacts: getContacts,
+                contactsLength: $('.people-list .people-item').length,
                 currentLetter: self.currentLetter.toLowerCase(),
                 currentDisplay:self.currentDisplay.toLowerCase()
             };
@@ -259,11 +258,15 @@ define([
 
             var tmpl = $$.templateManager.get("people-list", self.templateKey);
             var html = tmpl(data);
+            if (!$('.people-list .people-item').length) {
+                $('.people-list .row').html('');
+            }
             $('.people-list .row').append(html);
             $('.people-item').addClass('animate');
 
             self.refreshGooglePhotos();
             self.updateTooltips();
+
         },
 
         refreshGooglePhotos: function(contacts) {
@@ -290,16 +293,17 @@ define([
             var self = this;
 
             if(self.currentLetter !== $(event.currentTarget).html().toLowerCase()) {
-                self.skip = 0;
-                self.loadMore = true;
+                self.loadMore = false;
                 var letter = $(event.currentTarget).html();
                 self.currentLetter = letter.toLowerCase();
 
                 self.getContacts(0)
-                    .done(function (err, res) {
+                    .done(function (res) {
                         //self.skip = $('.people-list .people-item').length;
                         //self.renderContacts();
                         //self.check_welcome();
+                        self.loadMore = !(res.length < 6);
+
                         $('.people-list .row').html('');
                         self.appendContacts();
                     });
@@ -428,7 +432,7 @@ define([
             if(self.currentLetter=='all') {
                 return self.contacts.getContactsAll(self.accountId, skip, self.limit );
             }  else {
-                return self.contacts.getContactsByLetter(self.accountId, self.currentLetter);
+                return self.contacts.getContactsByLetter(self.accountId, self.currentLetter,skip,self.limit);
             }
 
         },
@@ -449,7 +453,6 @@ define([
             }
         },
 
-
         close_welcome: function(e) {
             var user = this.user;
             var welcome = user.get("welcome_alert");
@@ -458,16 +461,16 @@ define([
             user.save();
         },
 
-        check_height : function (e){
+        check_height: function (e){
             var self = this;
-            if(window.innerHeight + document.body.scrollTop >= document.body.offsetHeight){
-                if(self.loadMore) {
-                    self.getContacts($('.people-list .people-item').length)
-                        .done(function (res, msg) {
 
-                            if (res.length < 6) {
-                                self.loadMore = false;
-                            }
+            if(self.loadMore) {
+                if(window.innerHeight + document.body.scrollTop >= document.body.offsetHeight){
+
+                    self.loadMore = false;
+                    self.getContacts($('.people-list .people-item').length)
+                        .done(function (res) {
+                            self.loadMore = !(res.length < 6)
                             //determine the ID's of the contacts being fetched
                             //make a fetched list so there will be no duplicates
 
