@@ -65,152 +65,18 @@ CONTACTS MAIN VIEW
                     </div>
                 </div>
             </div>
-
             {{> contact-paginator}}
         </div>
         <!-- panel -->
-
         <div class="people-list">
             <div class="row">
- {{#if contacts}}
-
-    {{#each contacts}}
-
-                <div class="col-xs-12 col-sm-3">
-                    <div class="people-item btn-view-contact-details contact-item" data-contactid="{{_id}}">
-                        <span class="important-star tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Important Contact">
-                            <i class="fa {{#if starred}}fa-star{{else}}fa-star-o{{/if}}" />
-                        </span>
-
-                        <div class="media">
-                            <div class="col-xs-12f">
-                                <!--// {{#if photoSquare}} // {{#isGoogleImage photoSquare}} //-->
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" /><!-- // {{else}} // -->
-                                <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
-                                <!--// {{/isGoogleImage}} // {{else}} // {{#isGoogleImage photo}} // -->
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />// <!-- {{else}} // -->
-                                <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                                <!-- // {{/isGoogleImage}} // {{/if}} -->
-
-                                <span class="name visible-xs">
-
-                                    <h4>
-                                        {{first}} {{middle}} {{last}}
-                                        <span class="label label-info contact-cat pull-right hidden-xs">{{contactTypeLabel this}}</span>
-                                    </h4>
-                                </span>
-
-                                <div class="clear"></div>
-                                <ul class="social-list hidden-xs">
-                                    <li>
-                                        {{#getBestEmail this}}
-                                        <a href="mailto:{{$email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
-                                        {{else}}
-                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Email Address"><i class="fa fa-envelope-o"></i></a>
-                                        {{/getBestEmail}}
-                                    </li>
-
-
-                                    <li>
-                                        {{#getFacebookId this}}
-                                        <a href="https://www.facebook.com/{{$facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                                        {{else}}
-                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Facebook Link"><i class="fa fa-facebook"></i></a>
-                                        {{/getFacebookId}}
-                                    </li>
-
-                                    <li>
-                                        {{#getTwitterId this}}
-                                        <a href="https://twitter.com/intent/user?user_id={{$twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
-                                        {{else}}
-                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Twitter Account"><i class="fa fa-twitter"></i></a>
-                                        {{/getTwitterId}}
-                                    </li>
-
-                                    <li>
-                                        {{#getLinkedInId this}}
-                                        <a href="{{#if $linkedInUrl}}{{$linkedInUrl}}{{else}}http://www.linkedin.com/profile/view?id={{$linkedInId}}{{/if}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
-                                        {{else}}
-                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No LinkedIn Account" target="_blank"><i class="fa fa-linkedin"></i></a>
-                                        {{/getLinkedInId}}
-                                    </li>
-
-                                    {{#getAddress this}}
-                                    <li>
-                                        <a href="https://www.google.com/maps?q={{$this.address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-                                    </li>
-                                    {{/getAddress}}
-
-                                </ul>
-                            </div>
-                            <div class="media-body col-xs-12 hidden-xs">
-                                {{#ifCond ../account.displaysettings.display_type}}
-                                <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
-                                {{else}}
-                                <h4 class="person-name">{{last}} {{middle}} {{first}}</h4>
-                                {{/ifCond}}
-
-
-                               <!-- <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>-->
-
-                                <span class="label label-info contact-cat">{{contactTypeLabel this}}</span>
-
-                                <div class="hidden">
-                                    <div class="last-active text-muted">Last Active: {{#if lastActive}} {{lastActive}} days ago {{else}} n/a {{/if}}
-                                    </div>
-
-                                    <div class="purchased text-muted">
-                                        {{#if purchased}} Purchased: Yes {{else}} Purchased: n/a {{/if}}
-                                    </div>
-
-                                    <div class="emails-opened text-muted">
-                                        {{#if totalEmails}} Emails Opened: {{#if emailsOpened}} {{emailsOpened}}/{{totalEmails}} {{else}} 0/{{totalEmails}} {{/if}} {{else}} Emails Opened: n/a {{/if}}
-                                    </div>
-
-                                    <div class="calls-made text-muted">
-                                        Calls Made: {{#if callsMade}} {{callsMade}} {{else}} n/a {{/if}}
-                                    </div>
-
-                                    <div class="customer-since text-muted">
-                                        Customer since: {{#if firstPurchase}} {{formatDate fistPurchase}} {{else}} n/a {{/if}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pull-right">
-                                <span class="visible-inline-xs">
-                                    type: {{contactTypeLabel this}} |
-                                </span>
-
-                                <span class="tooltips hidden" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sources where this contact information came from">sources:</span>
-                                {{#each details}}
-                                <span><i class="{{iconFromSocialType type}}" />
-                                </span>
-                                {{/each}}
-
-
-                            </div>
-                            <div class="clear clearfix" />
-                        </div>
-                    </div>
-                </div>
-            {{/each}}
-          {{else}}
-
-                <div class="col-xs-10">
-                    <h3>No Contacts Available</h3>
-                </div>
-
-                    <div class="visible-xs btn btn-success col-xs-12">Add a new contact</div>
-            {{/if}}
+                {{>people-list-partial}}
             </div>
         </div>
     </div>
-
     {{> fixDuplicates-modal}}
     {{> importContacts-modal}}
-
 </script>
-
 <script type="text/x-handlebars-template" name="contact-sidebar">
   <div class="rightpanel rightpanel-website">
        <ul class="nav nav-tabs nav-justified">
@@ -317,18 +183,10 @@ CONTACTS MAIN VIEW
                     <label for="customer-since">Customer Since</label>
                 </div>
             </div>
-
-        </div>
-        <!-- tab-pane -->
-
-
+        </div>        <!-- tab-pane -->
+    </div>    <!-- tab-content -->
     </div>
-    <!-- tab-content -->
-    </div>
-
 </script>
-
-
 <script type="text/x-handlebars-template" name="contact-paginator" partial="true">
     <div style="width:100%; text-align:center">
         <ul class="pagination hidden-xs letter-list">
@@ -338,13 +196,12 @@ CONTACTS MAIN VIEW
         </ul>
     </div>
 </script>
-
 <script type="text/x-handlebars-template" name="people-list">
     {{> people-list-partial}}
 </script>
-
 <script type="text/x-handlebars-template" name="people-list-partial" partial="true">
-        {{#each contacts}}
+    {{#if contacts}}
+        {{#each ../contacts}}
             <div class="col-xs-12 col-sm-4 col-md-3">
                 <div class="people-item btn-view-contact-details contact-item" data-contactid="{{_id}}">
                     <span class="important-star tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Important Contact">
@@ -464,6 +321,15 @@ CONTACTS MAIN VIEW
                 </div>
             </div>
         {{/each}}
+    {{else}}
+        {{#if ../contactsLength}}
+        {{else}}
+        <div class="col-xs-10">
+            <h3>No Contacts Available</h3>
+        </div>
+        {{/if}}
+    {{/if}}
+
 </script>
 <!-- END CONTACTS MAIN -->
 
@@ -566,8 +432,6 @@ CONTACT DETAILS VIEW
 
     </div>
 </script>
-
-
 <script type="text/x-handlebars-template" name="contact-details" partial="true">
     <div class="old-contact hidden">
         <div id="contact-type">
@@ -989,7 +853,6 @@ CONTACT DETAILS VIEW
         </div>
     </li>
 </script>
-
 <script type="text/x-handlebars-template" name="contact-activity-default">
     <li>
         <div class="smart-timeline-icon">
@@ -1307,13 +1170,9 @@ CONTACTS EDIT VIEW
     <!-- End Change Photo Modal -->
 </script>
 <!-- END CONTACT EDIT VIEW -->
-
-
 <script type="text/x-handlebars-template" name="new-phone">
     {{> edit-phone}}
 </script>
-
-
 <script type="text/x-handlebars-template" name="edit-phone" partial="true">
     <div class="row edit-phone-container" data-id="{{_id}}" style="margin-top:8px;">
         <div class="form-group col-xs-12 col-sm-8 col-md-10">
@@ -1338,8 +1197,6 @@ CONTACTS EDIT VIEW
 <script type="text/x-handlebars-template" name="new-email">
     {{> new-email-partial}}
 </script>
-
-
 <script type="text/x-handlebars-template" name="edit-email" partial="true">
     <div class="row edit-email-container">
         <div class="form-group">
@@ -1347,8 +1204,6 @@ CONTACTS EDIT VIEW
         </div>
     </div>
 </script>
-
-
 <script type="text/x-handlebars-template" name="new-email-partial" partial="true">
     <div class="row edit-email-container">
         <div class="form-group">
@@ -1368,8 +1223,6 @@ CONTACTS EDIT VIEW
     {{> edit-address}}
     {{/each}}
 </script>
-
-
 <script type="text/x-handlebars-template" name="edit-address" partial="true">
     <div class="edit-address-container" data-id="{{_id}}">
         <div class="form form-horizontal">
@@ -1507,7 +1360,6 @@ CONTACTS EDIT VIEW
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 </script>
-
 <script type="text/x-handlebars-template" name="fixDuplicates-modal" partial="true">
   <div class="modal fade" id="fix-duplicates-modal">
       <div class="modal-dialog modal-lg">

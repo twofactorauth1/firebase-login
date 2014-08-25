@@ -80,7 +80,8 @@ var component = $$.m.ModelBase.extend({
             contact: {
                 email: "",
                 phone: ""
-            }
+            },
+            title:""
         }
     },
 
