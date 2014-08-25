@@ -14,8 +14,8 @@ if [ "x$APP_NAME" = "x" ]; then
 fi
 
 if [ "$1" = "master" ]; then
-	export AWS_DEFAULT_REGION="us-east-1"
-	export ENV_NAME="indigeweb-develop-env"
+	export AWS_DEFAULT_REGION="us-west-2"
+	export ENV_NAME="indigeweb-live-env"
 	export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
 	export GOOGLE_CLIENT_ID="277102651227-m80ppab4ler5fo08jle3a2g0vhnjce99.apps.googleusercontent.com"
 	export GOOGLE_CLIENT_SECRET="yPiJOniUgxjT94O7M_4tNj_M"
