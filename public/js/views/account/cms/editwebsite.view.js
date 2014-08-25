@@ -46,7 +46,7 @@ define([
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
             "mousemove #sortable":"draggingComponent",
-            "click .blog-title .editable":"updateTitle",
+            "click .blog-title .editable":"updateTitle"
 
 
         },

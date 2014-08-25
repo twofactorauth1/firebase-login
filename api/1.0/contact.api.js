@@ -152,7 +152,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var letter = req.params.letter;
         self.log.debug('>> getContactsByLetter');
 
-        contactDao.getContactsShort(accountId, letter, limit, function (err, value) {
+        contactDao.getContactsShort(accountId, skip, letter, limit, function (err, value) {
             self.log.debug('<< getContactsByLetter');
             self.sendResultOrError(res, err, value, "Error listing contacts by letter [" + letter + "]");
             self = null;
