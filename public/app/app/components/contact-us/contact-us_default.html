@@ -5,7 +5,6 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
 <div id="contact-us" data-ng-show="component">
     <h3 class="editable title" data-class="label">
         <span data-ng-show="component.label">{{component.label}}</span>
@@ -24,41 +23,40 @@
 
             <div class="editable ">
                 <span data-ng-show="component.description">{{component.label}}</span>
-                <span data-ng-hide="!component.description"><strong>Contact us description</strong></span>
+                <span data-ng-show="!component.description"><strong>Contact us description</strong></span>
             </div>
 
             <div class="editable">
-                <span data-ng-show="component.location.displayLabel">{{component.location.displayLabel}}</span>
-                <span data-ng-hide="!component.location.displayLabel">Enter your Address type here</span>
+                <span data-ng-show="component.location.addressDisplayLabel">{{component.location.addressDisplayLabel}}</span>
+                <!-- <span>{{component.location}}1111</span>
+                 <span>{{component.location.displayLabel}}2222</span>-->
+                <span data-ng-show="!component.location.addressDisplayLabel">Enter your Address type here</span>
             </div>
 
             <div>
                 <span class="editable">
                  <span data-ng-show="component.location.address">{{component.location.address}}</span>
-                 <span data-ng-hide="!component.location.address">Address</span>
+                 <span data-ng-show="!component.location.address">Address</span>
                 </span>
 
                 <span class="editable">
                     <span data-ng-show="component.location.address2">{{component.location.address2}}</span>
-                    <span data-ng-hide="!component.location.address2"> Address Suite or Apartment</span>
+                    <span data-ng-show="!component.location.address2"> Address Suite or Apartment</span>
                 </span>
             </div>
-
-
             <div>
                 <span class="editable">
                  <span data-ng-show="component.location.city">{{component.location.city}}</span>
-                 <span data-ng-hide="!component.location.city">City</span>
+                 <span data-ng-show="!component.location.city">City</span>
                 </span>
 
                 <span class="editable">
                      <span data-ng-show="component.location.state">{{component.location.state}}</span>
-                     <span data-ng-hide="!component.location.state">State</span>
+                     <span data-ng-show="!component.location.state">State</span>
                 </span>
-
                 <span class="editable">
                     <span data-ng-show="component.location.zip">{{component.location.zip}}</span>
-                     <span data-ng-hide="!component.location.zip">Zip Code</span>
+                     <span data-ng-show="!component.location.zip">Zip Code</span>
                 </span>
             </div>
         </div>
