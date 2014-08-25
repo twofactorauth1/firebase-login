@@ -6,18 +6,13 @@
 *
 -->
 
-<div id="contact-us">
-    {{#with component}}
+<div id="contact-us" data-ng-show="component">
     <h3 class="editable title" data-class="label">
-        {{#if label}}
-        {{{label}}}
-        {{else}}
-        Contact us label
-        {{/if}}
+        <span data-ng-show="component.label">{{component.label}}</span>
+        <span data-ng-show="!component.label">Contact us label</span>
     </h3>
 
     <div class="row">
-
         <div class="col-sm-6">
             <div class="map-wrap">
                 <div id="map-marker" style="height: 150px; width:100%"></div>
@@ -27,70 +22,45 @@
         <div class="col-sm-6">
             <strong>Our location</strong>
 
-            <div class="editable" data-class="description">
-                {{#if description}}
-                {{{description}}}
-                {{else}}
-                <strong>Contact us description</strong>
-                {{/if}}
+            <div class="editable ">
+                <span data-ng-show="component.description">{{component.label}}</span>
+                <span data-ng-hide="!component.description"><strong>Contact us description</strong></span>
             </div>
 
-            <div class="editable" data-class="address-display-label">
-                {{#if location.displayLabel}}
-                {{{location.displayLabel}}}
-                {{else}}
-                Enter your Address type here
-                {{/if}}
+            <div class="editable">
+                <span data-ng-show="component.location.displayLabel">{{component.location.displayLabel}}</span>
+                <span data-ng-hide="!component.location.displayLabel">Enter your Address type here</span>
             </div>
 
             <div>
-                <span class="editable" data-class="address">
-                {{#if location.address}}
-                    {{{location.address}}}
-                {{else}}
-                    Address
-                {{/if}}
+                <span class="editable">
+                 <span data-ng-show="component.location.address">{{component.location.address}}</span>
+                 <span data-ng-hide="!component.location.address">Address</span>
                 </span>
 
-                <span class="editable" data-class="address2">
-                    {{#if location.address2}}
-                        {{{location.address2}}}
-                    {{else}}
-                        Address Suite or Apartment
-                    {{/if}}
+                <span class="editable">
+                    <span data-ng-show="component.location.address2">{{component.location.address2}}</span>
+                    <span data-ng-hide="!component.location.address2"> Address Suite or Apartment</span>
                 </span>
             </div>
 
 
-
             <div>
-                <span class="editable" data-class="city">
-                    {{#if location.city}}
-                        {{{location.city}}}
-                    {{else}}
-                        City
-                    {{/if}}
+                <span class="editable">
+                 <span data-ng-show="component.location.city">{{component.location.city}}</span>
+                 <span data-ng-hide="!component.location.city">City</span>
                 </span>
 
-                <span class="editable" data-class="state">
-                    {{#if location.state}}
-                        {{{location.state}}}
-                    {{else}}
-                        State
-                    {{/if}}
+                <span class="editable">
+                     <span data-ng-show="component.location.state">{{component.location.state}}</span>
+                     <span data-ng-hide="!component.location.state">State</span>
                 </span>
 
-                <span class="editable" data-class="zip">
-                    {{#if location.zip}}
-                        {{{location.zip}}}
-                    {{else}}
-                        Zip Code
-                    {{/if}}
+                <span class="editable">
+                    <span data-ng-show="component.location.zip">{{component.location.zip}}</span>
+                     <span data-ng-hide="!component.location.zip">Zip Code</span>
                 </span>
             </div>
         </div>
-
     </div>
-
-    {{/with}}
 </div>

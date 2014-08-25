@@ -1,51 +1,55 @@
-<div>
-    {{#with component}}
+<div ng-show="component">
+
     <div class="component-header hidden">
         <div>
-            {{{label}}}
+            {{component.label}}
         </div>
 
         <div>
-            {{{description}}}
+            {{component.description}}
         </div>
     </div>
-
 
     <div id="freeform-component" class="component-body container">
         <div class="col-xs-12 col-sm-12 freeform-wrap">
             <div id="assessment-header" class="">
-                <h1 class="editable">{{title}}</h1>
-                <h3 class="editable">{{{subtitle}}}</h3>
-                <p class="editable">{{{text}}}</p>
+                <h1 class="editable">{{component.title}}</h1>
+
+                <h3 class="editable">{{component.subtitle}}</h3>
+
+                <p class="editable">{{component.text}}</p>
+
                 <div class="clearfix"></div>
             </div>
             <div id="assessment-body">
                 <div class="assessment-wrap">
-                    {{#each assessments}}
-                    <div class="assessment-content">
-                        <span class="{{{assessment-icon}}}"></span>
-                        <h5 class="tit">{{{title}}}</h5>
-                        <h5 class="sub">{{{subtitle}}}</h5>
 
+                    <div ng-repeat="assessment in component.assessments">
+                        <div class="assessment-content">
+                            <span class="{{assessment['assessment-icon']}}"></span>
+                            <h5 class="tit">{{assessment['title']}}</h5>
+                            <h5 class="sub">{{assessment['subtitle']}}</h5>
+
+                        </div>
+                        <div class="assessment-content-text">
+                            <p>{{assessment['text']}}</p>
+                        </div>
+                        <div class="assessment-box"></div>
                     </div>
-                    <div class="assessment-content-text">
-                        <p>{{{text}}}</p>
-                    </div>
-                    <div class="assessment-box"></div>
-                    {{/each}}
                     <div class="editable col-xs-12 col-sm-12 total">
-                        <h5>{{{assessment-title}}}</h5>
-                        <h4>{{{assessment-text}}}</h4>
+                        <h5>{{component['assessment-title']}}</h5>
+                        <h4>{{component['assessment-text']}}</h4>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12">
                     <div class="btn-wrap">
-                        <button class="btn btn-success btn-block center col-xs-3" href="{{btn.url}}"><i class=""></i>{{btn.text}}</button>
+                        <button class="btn btn-success btn-block center col-xs-3" href="{{component.btn.url}}"><i class=""></i>{{component.btn.text}}
+                        </button>
                     </div>
                 </div>
                 <div class="clearfix"></div>
             </div>
         </div>
     </div>
-    {{/with}}
+
 </div>

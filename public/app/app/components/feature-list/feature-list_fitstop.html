@@ -7,46 +7,47 @@
 -->
 
 <div class="page">
-    {{#with component}}
-    <div {{#if anchor}}id="{{anchor}}"{{/if}} class="row inner-page feature-list">
-    <div class="row">
-        <div class="editable title col-sm-12">
-            <h5>{{{main-feature-title}}}<h5>
-        </div>
-        <div class="container">
-            {{#each features}}
 
-            <div class="col-sm-3 feature-single-{{@index}}" style="opacity:0">
-                {{#if feature-icon}}
-                <div class="editable">
-                    <a href="{{{feature-button-url}}}">
-                        <span class="{{{feature-icon}}}"></span>
-                    </a>
-                </div>
-                {{else}}
-                <div class="editable">
-                                <span class="feature-case" data-class="feature-image">
-                                    <img src="{{feature-image}}" onmouseover="this.src='{{feature-image-hover}}'" onmouseout="this.src='{{feature-image}}'">
-                                </span>
-                </div>
-                {{/if}}
-
-                <div class="editable" data-class="features.item.title">
-                    <h4>{{{feature-title}}}</h4>
-                </div>
-                <div class="editable feature-p" data-class="features.item.paragraph">
-                    <p>{{{feature-paragraph}}}</p>
-                </div>
-                <button class="btn btn-success btn-block center" href="{{btn.url}}">
-                    <div data-class="btn-text" class="editable">
-                        {{btn.text}}
-                    </div>
-                </button>
+    <div ng-show="component" id="{{ component.anchor}}"
+         class="row inner-page feature-list">
+        <div class="row">
+            <div class="editable title col-sm-12">
+                <h5>{{component['main-feature-title']}}</h5>
             </div>
-            <div class="pusher visible-xs"></div>
-            {{/each}}
+            <div class="container">
+
+                <div class="col-sm-3 feature-single-{{$index}}" ng-repeat="feature in component.features"
+                     style="opacity:1">
+
+                    <div class="editable" ng-if="feature['feature-icon']">
+                        <a href="{{feature['feature-button-url']}}">
+                            <span class="{{feature['feature-icon']}}"></span>
+                        </a>
+                    </div>
+
+                    <div class="editable" ng-if="!feature['feature-icon']">
+                                  <span class="feature-case" data-class="feature-image">
+                                      <img src="{{feature['feature-image']}}"
+                                           onmouseover="{{feature.src + '=' + feature['feature-image-hover']}}"
+                                           onmouseout="this.src='{{feature.feature-image}}'">
+                                  </span>
+                    </div>
+
+                    <div class="editable" data-class="features.item.title">
+                        <h4>{{feature['feature-title']}}</h4>
+                    </div>
+                    <div class="editable feature-p" data-class="features.item.paragraph">
+                        <p>{{feature['feature-paragraph']}}</p>
+                    </div>
+                    <button class="btn btn-success btn-block center" href="{{feature.btn.url}}">
+                        <div data-class="btn-text" class="editable">
+                            {{feature.btn.text}}
+                        </div>
+                    </button>
+                </div>
+                <div class="pusher visible-xs"></div>
+            </div>
         </div>
     </div>
-</div>
-{{/with}}
+
 </div>
