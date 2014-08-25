@@ -8,17 +8,19 @@
 
 <div class="hidden">
     <h4>Main Menu Links</h4>
-    <ul class="list-main-menu" data-ng-repeat=" link in linkLists.main-menu ">
-        <li>{{link this}}</li>
+    <ul class="list-main-menu" data-ng-repeat=" main-menu in website.linkLists.main-menu track by $index">
+        <!-- {{#each linkLists.main-menu}}
+         <li>{{{link this}}}</li>-->
+        <li>{{main-menu}}</li>
     </ul>
 </div>
 
 <div class="hidden">
     <h4>Head Menu Links</h4>
-    <ul class="list-head-menu">
-        {{#each linkLists.head-menu}}
-        <li>{{{link this}}}</li>
-        {{/each}}
+    <ul class="list-head-menu" data-ng-repeat=" head-menu in website.linkLists.head-menu track by $index">
+        <!-- {{#each linkLists.head-menu}}
+         <li>{{{link this}}}</li>-->
+        <li>{{head-menu}}</li>
     </ul>
 </div>
 
@@ -38,10 +40,12 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav navbar-left">
-                {{#each linkLists.head-menu}}
-                <li>{{{link this}}}</li>
-                {{/each}}
+            <ul class="nav navbar-nav navbar-left"
+                data-ng-repeat=" head-menu in website.linkLists.head-menu track by $index">
+                <!-- {{#each linkLists.head-menu}}
+                 <li>{{{link this}}}</li>
+                 {{/each}}-->
+                <li>{{head-menu}}</li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
