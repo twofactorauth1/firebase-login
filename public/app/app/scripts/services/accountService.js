@@ -22,7 +22,7 @@ mainApp.factory('accountService', function () {
             "token": "003c6a16-ee93-47cb-8119-6dd1bf8822ba",
             "website": {
                 "websiteId": "e3e39555-2c1c-45d7-bdc5-b7a0d7df9cfe",
-                "themeId": "fitstop"
+                "themeId": "indimain"    //change here to apply theme indimain,default,gitstop
             },
             "business": {
                 "logo": "",

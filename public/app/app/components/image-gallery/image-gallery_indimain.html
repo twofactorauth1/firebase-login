@@ -1,0 +1,45 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div class="section image-gallery">
+    {{#with component}}
+    <div class="component-header container">
+        <div class="editable" data-class="label">
+            <h2 class="section-title center">{{{label}}}</h2>
+        </div>
+
+        <div class="editable" data-class="description">
+            <p class="center">{{{description}}}</p>
+        </div>
+    </div>
+
+    <div class="col-xs-12 pad0">
+        <div class="carousel slide" id="myCarousel">
+            <div class="carousel-inner">
+                {{#each images}}
+                <div class="item">
+                    <div class="col-md-4 pad0">
+                        <a href="#">
+                            <img src="{{{image-url}}}" class="img-responsive gallery-image">
+                        </a>
+                        <div class="overlay-gallery-image hidden" >
+                            <h3 class="center">{{{image-label}}}</h3>
+                            <small class="text-muted center">
+                                {{{image-description}}}
+                            </small>
+                        </div><!-- /.overlay-portfolio -->
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            <a class="left carousel-control hidden" href="#myCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+            <a class="right carousel-control hidden" href="#myCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+        </div>
+    </div>
+    {{/with}}
+</div>

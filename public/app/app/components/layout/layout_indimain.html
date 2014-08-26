@@ -1,0 +1,454 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{seo.description}}">
+    <meta name="keywords" content="{{seo.keywords}}">
+    <meta name="author" content="">
+
+    {{#if settings.favicon}}
+    <link rel="shortcut icon" href="{{settings.favicon}}">
+    {{else}}
+    <link rel="shortcut icon" href="https://s3.amazonaws.com/indigenous-themes/assets/icons/favicon.ico"/>
+    {{/if}}
+
+    <link rel="stylesheet" href="/css/style.default.css">
+    <link rel="stylesheet" href="/js/libs_misc/jquery.tagsinput/jquery.tagsinput.css" />
+
+    <title>Indigenous</title>
+    <script type="text/javascript">
+        window.analytics=window.analytics||[],window.analytics.methods=["identify","group","track","page","pageview","alias","ready","on","once","off","trackLink","trackForm","trackClick","trackSubmit"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var key=window.analytics.methods[i];window.analytics[key]=window.analytics.factory(key)}window.analytics.load=function(t){if(!document.getElementById("analytics-js")){var a=document.createElement("script");a.type="text/javascript",a.id="analytics-js",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.io/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)}},window.analytics.SNIPPET_VERSION="2.0.9",
+                window.analytics.load("{{segmentIOWriteKey}}");
+        window.analytics.page();
+    </script>
+
+    <!-- TODO add stylesheets and responsive fallback for IE -->
+    <style type="text/css">
+        .navbar-white {
+        color: rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }});
+        border-bottom: 3px solid rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }}) !important;
+        }
+        .color-1 {
+        background: rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }});
+        color: #ffffff;
+        }
+        .color-8 {
+        background: rgb({{ settings.color-palette.palette.[7].[0] }},{{ settings.color-palette.palette.[7].[1] }},{{ settings.color-palette.palette.[7].[2] }});
+        }
+        .btn-orange {
+        background: rgb({{ settings.color-palette.palette.[1].[0] }},{{ settings.color-palette.palette.[1].[1] }},{{ settings.color-palette.palette.[1].[2] }})!important;
+        border-bottom: 5px solid rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        border-color: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }});
+        }
+        .btn-orange:hover {
+        background: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
+        border-bottom: 5px solid rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        border-color: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }});
+        }
+    </style>
+</head>
+
+<body class="theme-main">
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=522744787823977";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div id="header">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand editable" href="/" data-name="{{account.company.name}}">
+                    <span class="logo-1"> <img src="/assets/images/indimain/logo.png" scale="0"> </span>
+
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    {{#each linkLists.head-menu}}
+                    <li {{#if class}} class="{{this.class}}" {{/if}}>{{{link this}}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+</div>
+
+<div id="body">
+
+    <div class="">
+        {{#foreach body.components}}
+        {{{value}}}
+        {{#notequals $last true}}
+        {{/notequals}}
+        {{/foreach}}
+    </div>
+
+</div>
+
+<div id="footer">
+    <div class="footer-after section">
+        <div class="row">
+            <p class="col-sm-8 copyright">Copyright © 2014.  All Rights reserved.</p>
+            <div class="clear mb15 visible-xs"></div>
+            <p class="col-sm-4 powered-by"><a href="//www.indigenous.io " rel="nofollow">Powered by  Indigenous</a>
+                <img class="footer-logo" src="/assets/images/footer-logo.png">
+            </p>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/js/libs/underscore/underscore.js"></script>
+<script type="text/javascript" src="/js/libs/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/js/libs/jquery-ui/jquery-ui.min.js"></script>
+
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+
+<script type="text/javascript" src="/js/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/js/libs_misc/jquery/jquery.thumbnailScroller.js"></script>
+<script type="text/javascript" src="/js/libs/jquery-waypoints/waypoints.min.js"></script>
+<script type="text/javascript" src="/js/libs_misc/hw-parallax/parallax.min.js"></script>
+
+
+<script type="text/javascript" >
+(function($) {
+    $(document).ready(function() {
+        var elem = window.location.hash;
+        window.location = '#';
+
+        function changeSidebarHeight() {
+            var sidebarHeight = $('#sidebar').height();
+            $('#main-area').css('min-height', sidebarHeight+50);
+        }
+
+        $('.navbar-nav a, .scrollto').on('click touchstart', function(event) {
+            event.preventDefault();
+            var target = $(this).attr('href');
+            if (target.indexOf('login') > -1) {
+                window.location.replace(window.location.origin+target);
+                return false;
+            }
+            if (document.location.href.indexOf('/page') > -1) {
+                window.location.replace(window.location.origin+target);
+                return false;
+            }
+
+            if( target.length > -1) {
+                //calculate destination place
+                var dest = 0;
+                if ($(target).offset().top > $(document).height() - $(window).height()) {
+                    dest = $(document).height() - $(window).height();
+                } else {
+                    dest = $(target).offset().top;
+                }
+                //go to destination
+                $('html, body').animate({
+                    scrollTop: dest
+                }, 2000, 'swing');
+                window.location.replace(window.location.origin+target);
+            }
+        });
+
+        $(window).load(function(e){
+            if(elem) {
+                //calculate destination place
+                var dest = 0;
+                if ($(elem).offset().top > $(document).height() - $(window).height()) {
+                    dest = $(document).height() - $(window).height();
+                } else {
+                    dest = $(elem).offset().top;
+                }
+                //go to destination
+                $('html, body').animate({
+                    scrollTop: dest
+                }, 2000, 'swing');
+                window.location.replace(window.location.origin+elem);
+            }
+        });
+
+        // $('#main-area').on('click', function() {
+        //   var $ = Aloha.jQuery;
+        //   $('.editable').aloha();
+        // });
+
+        // var spinner = $('.spinner-input').spinner();
+        // spinner.spinner('value', 0);
+
+        if ($('#sidebar').length) {
+            changeSidebarHeight();
+            $( window ).resize(function() {
+                changeSidebarHeight();
+            });
+        }
+
+        $('.continue-shopping').on('click touchstart', function() {
+            $('#cart-checkout-modal').modal('hide');
+        });
+
+        var cart = $('.shopping-cart, .cart-footer');
+        var billing = $('.billing-shipping, .billing-footer');
+        var payment = $('.payment, .payment-footer');
+        var modalTitle = $('#cart-checkout-modal .modal-title');
+
+        $('.btn-checkout').on('click touchstart', function() {
+            modalTitle.html('<i class="fa fa-credit-card"></i> Checkout');
+            cart.addClass('hidden fadeOut');
+            billing.removeClass('hidden fadeIn');
+        });
+
+        $('.back-to-shopping-cart').on('click touchstart', function() {
+            modalTitle.html('<i class="fa fa-shopping-cart"></i> My Cart');
+            cart.removeClass('hidden fadeIn');
+            billing.addClass('hidden fadeOut');
+        });
+
+        $('.back-to-billing-shipping').on('click touchstart', function() {
+            billing.removeClass('hidden fadeIn');
+            payment.addClass('hidden fadeOut');
+        });
+
+        $('.btn-payment').on('click touchstart', function() {
+            payment.removeClass('hidden fadeIn');
+            billing.addClass('hidden fadeOut');
+        });
+
+        $('.btn-confirm-payment').on('click touchstart', function() {
+            modalTitle.html('<i class="fa fa-check-circle-o"></i> Order Placed!');
+            $('.thank-you').removeClass('hidden fadeIn');
+            payment.addClass('hidden fadeOut');
+        });
+
+        $('.checkbox').on('change', function() {
+            var shipTab = $('.shipping-tab');
+            if (shipTab.hasClass('hidden')) {
+                shipTab.removeClass('hidden');
+            } else {
+                shipTab.addClass('hidden');
+            }
+        });
+
+        $('.parallax').parallax({
+            scroll_factor: 0.5
+        });
+
+        if (window.top!=window.self) {
+            $('.feature-single-0, .feature-single-1, .feature-single-2, div[data-class=profilepic], .btn-outline').css('opacity', 1);
+        }
+
+        if ( window.top === window.self ) {
+            $(function () {
+                $(".feature-single-0").waypoint(function (direction) {
+                    $(this).addClass("animated fadeIn");
+                }, { offset: $.waypoints('viewportHeight') - 0,
+                    triggerOnce: true});
+
+                $(".feature-single-1").waypoint(function (direction) {
+                    $(this).addClass("animated fadeIn");
+                }, { offset: $.waypoints('viewportHeight') - 100,
+                    triggerOnce: true});
+
+                $(".feature-single-2").waypoint(function (direction) {
+                    $(this).addClass("animated fadeIn");
+                }, { offset: $.waypoints('viewportHeight') - 200,
+                    triggerOnce: true});
+
+                $(".feature-single-3").waypoint(function (direction) {
+                    $(this).addClass("animated fadeIn");
+                }, { offset: $.waypoints('viewportHeight') - 300,
+                    triggerOnce: true});
+
+                $("div[data-class=profilepic]").waypoint(function (direction) {
+                    $(this).addClass("animated fadeIn");
+                }, { offset: $.waypoints('viewportHeight') - 100,
+                    triggerOnce: true});
+
+                // $(".btn-outline").waypoint(function (direction) {
+                //     $(this).addClass("animated fadeIn");
+                // }, { offset: $.waypoints('viewportHeight') - 100,
+                //     triggerOnce: true});
+            });
+        }
+
+        $('#myCarousel .item:first-child').addClass('active');
+
+        $('#myCarousel').carousel({
+            interval: 4000
+        });
+
+        $('.item').on('hover', '.gallery-image', function() {
+            var overlay = $(this).parent().next('.overlay-gallery-image');
+            if (overlay.hasClass('hidden')) {
+                overlay.removeClass('hidden');
+            } else {
+                overlay.addClass('hidden');
+            }
+        });
+
+        $('.item').on('hover', '.overlay-gallery-image', function() {
+            var overlay = $(this);
+            if (overlay.hasClass('hidden')) {
+                overlay.removeClass('hidden');
+            } else {
+                overlay.addClass('hidden');
+            }
+        });
+
+        $('#content-area .goback').on('click touchstart', function() {
+            console.log('go back');
+            window.history.back();
+        });
+
+        $('.carousel .item').each(function(){
+            var next = $(this).next();
+            if (!next.length) {
+                next = $(this).siblings(':first');
+            }
+            next.children(':first-child').clone().appendTo($(this));
+
+            if (next.next().length>0) {
+                next.next().children(':first-child').clone().appendTo($(this));
+            }
+            else {
+                $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+            }
+        });
+
+        $('#form-subscribe').click(function() {
+            $('#InputEmail').val($('#emailSub').val());
+        });
+
+        $('.blog-teaser .single-blog').on('click', function() {
+            var href = $(this).data('url');
+            console.log('href: '+href);
+            window.location.replace(window.location.origin+'/page/blog/'+href)
+        });
+
+        $('#subscribelist').click(function(){
+
+            $.ajax({
+                type: "POST",
+                url: '/api/1.0/contact/signupnews',
+                data: _.object(_.map($('#form1').serializeArray(), _.values)),
+                success: function(data,textStatus){
+                    console.log("Called success")
+                    $("#error-msg").removeClass("hidden").html("sucessfully subscribed");
+                    setTimeout(function(){
+                        $("#error-msg").addClass('hidden');
+                    },2500);
+
+
+                },
+                error:function(qXHR, textStatus, errorThrown){
+                    console.log("called Error")
+
+                    var response=JSON.parse(qXHR.responseText);
+
+                    $("#error-msg").removeClass("hidden").html(response.status);
+                    setTimeout(function(){
+                        $("#error-msg").addClass('hidden');
+                    },2500);
+
+
+                }
+
+            });
+
+        })
+
+
+        function append_style() {
+            $("head").append('<STYLE type="text/css"> \
+                          .dispersed #center-circle { left: ' + center + 'px;top: 293px; margin: 0;} \
+                          .dispersed #circle-1 { left: ' + center_1 + 'px; top: 195px; margin: 0;} \
+                          .dispersed #circle-2 { left: ' + center_2 + 'px; top: 195px; margin: 0;} \
+                          .dispersed #circle-3 { left: ' + center_3 + 'px; top: 400px; margin: 0;} \
+                          .dispersed #circle-4 { left: ' + center_4 + 'px; top: 400px; margin: 0;} \
+                          </STYLE>')
+        }
+    })
+})(jQuery);
+
+$("#category_link").on('click', function(e) {
+
+    if(parent.$('#edit-website-wrapper').length)
+        e.preventDefault();
+
+    parent.$('#edit-website-wrapper').trigger("categoryedit", {
+        target: e.target,
+        input:$("#category_input")[0]
+    });
+});
+
+$("#category_input")
+        .hide()
+        .on('blur', function (e) {
+            var link = $("#category_link");
+            var input = $(this);
+            var href = link.attr("href");
+
+            input.hide();
+            link.show()
+                    .html(input.val())
+                    .attr('href', href.substring(0, href.lastIndexOf("/")) + "/" + (input.val()));
+
+
+            parent.$('#edit-website-wrapper').trigger("blogedit", {
+                value: $("#category_input").val(),
+                target: e.target
+            });
+        });
+
+$(document).ready(function(){
+    parent.$('#edit-website-wrapper').trigger("tagseditinit", {
+        a: $("#tags_link > li > a"),
+        input : $("#tags_input")[0]
+    });
+
+    $("#tags_link").on('click', function(e) {
+
+        if(parent.$('#edit-website-wrapper').length) {
+            e.preventDefault();
+        }
+
+        parent.$('#edit-website-wrapper').trigger("tagseditstart", {
+            target: e.target,
+            link : $("#tags_link")[0],
+            a: $("#tags_link > li > a"),
+            input : $("#tags_input")[0]
+        });
+    });
+});
+
+
+</script>
+</body>
+
