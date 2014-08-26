@@ -5,16 +5,16 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div>
-{{#with component}}
+<div ng-show="component">
+
 <div class="component-header hidden">
     <div class="col-xs-6">
         <div>
             <div class="editable" data-class="label">
-                {{{label}}}
+                {{component.label}}
             </div>
             <div class="editable" data-class="description">
-                {{{description}}}
+                {{component.description}}
             </div>
         </div>
     </div>
@@ -27,7 +27,7 @@
 </div>
 <div class="products-component">
 <div class="editable" data-class="feature-label">
-    <h3 class="center centerh4">{{{title}}}</h3>
+    <h3 class="center centerh4">{{component.title}}</h3>
 </div>
 
 <div class="row products">
@@ -46,58 +46,56 @@
 
     <!-- Tab panes -->
 
-    <div class="tab-content container">
-        {{#each product-sections}}
-        {{#if @first}}
-        <div class="tab-pane active" id="{{product-section-id}}">
-            <div data-class="product-section-id">
-                {{#each products}}
+    <div class="tab-content container" ng-repeat="ps in component['product-sections']">
+
+        <div ng-show="$index == 0" class="tab-pane active" id="{{ps['product-section-id']}}">
+            <div data-class="product-section-id" ng-repeat="product in ps.products">
+
                 <div class="row container product">
                     <div>
                         <div class="col-sm-3 editable product-img">
-                            <img src="{{image}}" class="img-responsive">
+                            <img src="{{product.image}}" class="img-responsive">
                         </div>
                         <div class="col-sm-9 product-content">
-                            <h4>{{{title}}}</h4>
-                            <h2>{{{subtitle}}}</h2>
-                            <p>{{{text}}}</p>
-                            <button class="btn btn-success btn-block center" href="{{btn.url}}">
+                            <h4>{{product.title}}</h4>
+                            <h2>{{product.subtitle}}</h2>
+                            <p>{{product.text}}</p>
+                            <button class="btn btn-success btn-block center" href="{{product.btn.url}}">
                                 <div data-class="btn-text" class="editable">
-                                    {{btn.text}}
+                                    {{product.btn.text}}
                                 </div>
                             </button>
                         </div>
                     </div>
                 </div>
-                {{/each}}
+
             </div>
         </div>
-        {{else}}
-        <div class="tab-pane" id="{{product-section-id}}">
+
+        <div ng-show="$index != 0" class="tab-pane" id="{{ps['product-section-id']}}">
             <div data-class="product-section-id">
-                {{#each products}}
+
                 <div class="row container product">
                     <div>
-                        <div class="col-sm-3 editable">
-                            <img src="{{image}}" class="img-responsive">
+                        <div class="col-sm-3 editable product-img">
+                            <img src="{{product.image}}" class="img-responsive">
                         </div>
-                        <div class="col-sm-9">
-                            <h4>{{{title}}}</h4>
-                            <h2>{{{subtitle}}}</h2>
-                            <p>{{{text}}}</p>
-                            <button class="btn btn-success btn-block center" href="{{btn.url}}">
+                        <div class="col-sm-9 product-content">
+                            <h4>{{product.title}}</h4>
+                            <h2>{{product.subtitle}}</h2>
+                            <p>{{product.text}}</p>
+                            <button class="btn btn-success btn-block center" href="{{product.btn.url}}">
                                 <div data-class="btn-text" class="editable">
-                                    {{btn.text}}
+                                    {{product.btn.text}}
                                 </div>
                             </button>
                         </div>
                     </div>
                 </div>
-                {{/each}}
+
             </div>
         </div>
-        {{/if}}
-        {{/each}}
+
     </div>
 
 
@@ -129,12 +127,12 @@
 
 </div>
 
-{{!--
+<!--{{!--
 <div class="component-body">
     <div class="editable" data-class="value">
         {{{value}}}
     </div>
-</div>--}}
+</div>--}}-->
 
 <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#cart-checkout-modal">
     Launch Cart modal
@@ -150,7 +148,7 @@
 </div>
 <div class="modal-body">
 
-{{!-- CART SECTION --}}
+<!--{{!-- CART SECTION --}}-->
 <div class="row shopping-cart">
     <div class="col-sm-8 order-line-items">
         <div class="mb15">
@@ -218,7 +216,7 @@
 
     </div></div>
 
-{{!-- BILLING SECTION --}}
+<!--{{!-- BILLING SECTION --}}-->
 <div class="row billing-shipping hidden">
     <div class="col-sm-8 information">
         <ul class="nav nav-tabs">
@@ -370,7 +368,7 @@
         </div>
     </div></div>
 
-{{!-- PAYMENT SECTION --}}
+<!--{{!-- PAYMENT SECTION --}}-->
 <div class="row payment hidden">
     <div class="col-xs-8 card-details">
         <div class="row">
@@ -464,7 +462,7 @@
         <div class="mb15"></div>
     </div></div>
 
-{{!-- THANK YOU SECTION --}}
+<!--{{!-- THANK YOU SECTION --}}-->
 <div class="row thank-you hidden">
     <h3 class="center mb20">Thank You For you Purchase</h3>
     <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam maiores, iure quo blanditiis alias asperiores. Quis, veniam unde illum adipisci reiciendis qui, libero est facere et vitae perferendis iusto deserunt, animi omnis saepe ipsa placeat quibusdam tenetur sint fuga consequuntur quisquam sapiente! Sapiente repellendus optio, libero quaerat mollitia magnam, voluptatem.</p>
@@ -508,5 +506,5 @@
 </div>
 <!-- /.modal -->
 </div>
-{{/with}}
+
 </div>

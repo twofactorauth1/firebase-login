@@ -26,6 +26,60 @@ mainApp.factory('pagesService', function () {
                 },
                 "components": [
                     {
+                        "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
+                        "anchor": null,
+                        "type": "products",
+                        "label": "Products Label",
+                        "title":"title",
+                        "description": "Products Description",
+                        "product-sections":[{
+                            "product-section-id":"product-section-id",
+                            "products":[{
+                                "image":"image",
+                                "title":"title",
+                                "subtitle":"subtitle",
+                                "text":"text",
+                                "btn":{
+                                    "url":"url",
+                                    "text":"text"
+                                }
+                            }]
+                        }]
+                    },
+                    /*{
+                        "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
+                        "anchor": null,
+                        "type": "meet-team",
+                        "label": "Meet Team",
+                        "title":"title",
+                        "description": "Meet Team Description",
+                        "teamMembers":{
+                            "profilepic":"profilepic",
+                            "name":"name",
+                            "position":"position",
+                            "bio":"bio"
+                        }
+                    }*//*,
+                    {
+                        _id: "1e2b6078-c1d2-4550-8747-35eb74c8d763",
+                        anchor: null,
+                        type: "masthead",
+                        label: "Masthead Block",
+                        description: "Feature Block Description",
+                        title:"title",
+                        subtitle:"subtitle",
+                        img:{
+                            "parallax":"parallax",
+                            "url":"url",
+                            "width":"width",
+                            "height":"height"
+                        },
+                        btn:{
+                            "url":"url",
+                            "text":"text"
+                        }
+                    },
+                    {
                         "_id": "b9d284c4-48f0-4718-a12b-210b8c73df60",
                         "anchor": null,
                         "type": "contact-us",
@@ -129,24 +183,24 @@ mainApp.factory('pagesService', function () {
                         "type": "blog",
                         "label": "blog-label",
                         "description": "blog-description",
-                        "categories":["categorie1","categorie2"],
+                        "categories": ["categorie1", "categorie2"],
                         "blogposts": [
                             {
                                 "attributes": {
                                     "_id": "_id",
                                     "post_url": "post_url",
                                     "post_title": "post_title",
-                                    "post_author":"post_author",
-                                    "post_category":"post_category",
-                                    "comment_count":"comment_count",
-                                    "post_excerpt":"post_excerpt",
-                                    "post_tags":["tag1","tag2"],
-                                    "comments":["comment1","comment2"],
+                                    "post_author": "post_author",
+                                    "post_category": "post_category",
+                                    "comment_count": "comment_count",
+                                    "post_excerpt": "post_excerpt",
+                                    "post_tags": ["tag1", "tag2"],
+                                    "comments": ["comment1", "comment2"],
                                     "created": {"date": "date"}
                                 }
                             }
                         ]
-                    }
+                    }*/
                 ],
                 "created": {
                     "date": 1408599403942,
