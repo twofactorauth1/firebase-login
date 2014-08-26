@@ -1,5 +1,5 @@
 <div class="theme-1">
-    <div ng-controller="LayoutCtrl as layout">
+<div ng-controller="LayoutCtrl as layout">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,39 +18,56 @@
 
     <title>{{layout.website.title}}</title>
     <script type="text/javascript">
-        window.analytics=window.analytics||[],window.analytics.methods=["identify","group","track","page","pageview","alias","ready","on","once","off","trackLink","trackForm","trackClick","trackSubmit"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var key=window.analytics.methods[i];window.analytics[key]=window.analytics.factory(key)}window.analytics.load=function(t){if(!document.getElementById("analytics-js")){var a=document.createElement("script");a.type="text/javascript",a.id="analytics-js",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.io/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)}},window.analytics.SNIPPET_VERSION="2.0.9",
+        window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
+            return function () {
+                var a = Array.prototype.slice.call(arguments);
+                return a.unshift(t), window.analytics.push(a), window.analytics
+            }
+        };
+        for (var i = 0; i < window.analytics.methods.length; i++) {
+            var key = window.analytics.methods[i];
+            window.analytics[key] = window.analytics.factory(key)
+        }
+        window.analytics.load = function (t) {
+            if (!document.getElementById("analytics-js")) {
+                var a = document.createElement("script");
+                a.type = "text/javascript", a.id = "analytics-js", a.async = !0, a.src = ("https:" === document.location.protocol ? "https://" : "http://") + "cdn.segment.io/analytics.js/v1/" + t + "/analytics.min.js";
+                var n = document.getElementsByTagName("script")[0];
+                n.parentNode.insertBefore(a, n)
+            }
+        }, window.analytics.SNIPPET_VERSION = "2.0.9",
                 window.analytics.load("{{segmentIOWriteKey}}");
         window.analytics.page();
     </script>
 
-            <!-- TODO add stylesheets and responsive fallback for IE -->
-        <style type="text/css">
-            .navbar-white {
-            color: rgb({{ layout.website.settings..color-palette.color.[0] }},{{ layout.website.settings..color-palette.color.[1] }},{{ layout.website.settings..color-palette.color.[2] }});
-            border-bottom: 3px solid rgb({{ layout.website.settings..color-palette.color.[0] }},{{ layout.website.settings..color-palette.color.[1] }},{{ layout.website.settings..color-palette.color.[2] }}) !important;
-            }
-            .color-1 {
-            background: rgb({{ layout.website.settings..color-palette.color.[0] }},{{ layout.website.settings..color-palette.color.[1] }},{{ layout.website.settings..color-palette.color.[2] }});
-            color: #ffffff;
-            }
-            .color-8 {
-            background: rgb({{ layout.website.settings..color-palette.palette.[7].[0] }},{{ layout.website.settings..color-palette.palette.[7].[1] }},{{ layout.website.settings..color-palette.palette.[7].[2] }});
-            }
-            .btn-orange {
-            background: rgb({{ layout.website.settings..color-palette.palette.[1].[0] }},{{ layout.website.settings..color-palette.palette.[1].[1] }},{{ layout.website.settings..color-palette.palette.[1].[2] }})!important;
-            border-bottom: 5px solid rgb({{ layout.website.settings..color-palette.palette.[2].[0] }},{{ layout.website.settings..color-palette.palette.[2].[1] }},{{ layout.website.settings..color-palette.palette.[2].[2] }})!important;
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-            border-color: rgb({{ layout.website.settings..color-palette.palette.[2].[0] }},{{ layout.website.settings..color-palette.palette.[2].[1] }},{{ layout.website.settings..color-palette.palette.[2].[2] }});
-            }
-            .btn-orange:hover {
-            background: rgb({{ layout.website.settings..color-palette.palette.[2].[0] }},{{ layout.website.settings..color-palette.palette.[2].[1] }},{{ layout.website.settings..color-palette.palette.[2].[2] }})!important;
-            border-bottom: 5px solid rgb({{ layout.website.settings..color-palette.palette.[2].[0] }},{{ layout.website.settings..color-palette.palette.[2].[1] }},{{ layout.website.settings..color-palette.palette.[2].[2] }})!important;
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-            border-color: rgb({{ layout.website.settings..color-palette.palette.[2].[0] }},{{ layout.website.settings..color-palette.palette.[2].[1] }},{{ layout.website.settings..color-palette.palette.[2].[2] }});
-            }
-        </style>
-    </head>
-    <div id="header"><!--
+    <!-- TODO add stylesheets and responsive fallback for IE -->
+    <!-- <style type="text/css">
+         .navbar-white {
+         color: rgb({{ layout.website.settings.color-palette.color.[0] }},{{ layout.website.settings.color-palette.color.[1] }},{{ layout.website.settings.color-palette.color.[2] }});
+         border-bottom: 3px solid rgb({{ layout.website.settings.color-palette.color.[0] }},{{ layout.website.settings.color-palette.color.[1] }},{{ layout.website.settings.color-palette.color.[2] }}) !important;
+         }
+         .color-1 {
+         background: rgb({{ layout.website.settings.color-palette.color.[0] }},{{ layout.website.settings.color-palette.color.[1] }},{{ layout.website.settings.color-palette.color.[2] }});
+         color: #ffffff;
+         }
+         .color-8 {
+         background: rgb({{ layout.website.settings.color-palette.palette.[7].[0] }},{{ layout.website.settings.color-palette.palette.[7].[1] }},{{ layout.website.settings.color-palette.palette.[7].[2] }});
+         }
+         .btn-orange {
+         background: rgb({{ layout.website.settings.color-palette.palette.[1].[0] }},{{ layout.website.settings.color-palette.palette.[1].[1] }},{{ layout.website.settings.color-palette.palette.[1].[2] }})!important;
+         border-bottom: 5px solid rgb({{ layout.website.settings.color-palette.palette.[2].[0] }},{{ layout.website.settings.color-palette.palette.[2].[1] }},{{ layout.website.settings.color-palette.palette.[2].[2] }})!important;
+         text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+         border-color: rgb({{ layout.website.settings.color-palette.palette.[2].[0] }},{{ layout.website.settings.color-palette.palette.[2].[1] }},{{ layout.website.settings.color-palette.palette.[2].[2] }});
+         }
+         .btn-orange:hover {
+         background: rgb({{ layout.website.settings.color-palette.palette.[2].[0] }},{{ layout.website.settings.color-palette.palette.[2].[1] }},{{ layout.website.settings.color-palette.palette.[2].[2] }})!important;
+         border-bottom: 5px solid rgb({{ layout.website.settings.color-palette.palette.[2].[0] }},{{ layout.website.settings.color-palette.palette.[2].[1] }},{{ layout.website.settings.color-palette.palette.[2].[2] }})!important;
+         text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+         border-color: rgb({{ layout.website.settings.color-palette.palette.[2].[0] }},{{ layout.website.settings.color-palette.palette.[2].[1] }},{{ layout.website.settings.color-palette.palette.[2].[2] }});
+         }
+     </style>-->
+</head>
+<div id="header"><!--
 * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
 *
 * All use or reproduction of any or all of this content must be approved.
@@ -58,83 +75,63 @@
 *
 -->
 
-       <!-- <div class="hidden">
-            <h4>Main Menu Links</h4>
-            <ul class="list-main-menu" data-ng-repeat="link in layout.website.linkLists.main-menu track by $index">
-                <li>{{link}}</li>
-            </ul>
-        </div>
-
-        <div class="hidden">
-            <h4>Head Menu Links</h4>
-              <ul class="list-head-menu" data-ng-repeat="link in layout.website.linkLists.head-menu track by $index">
-                <li>{{ link }}</li>
-            </ul>
-        </div>
--->
-        <div class="hidden">
-            <h4>Main Menu Links</h4>
-            <ul class="list-main-menu">
-
-                <li><a href="#">Top</a></li>
-
-                <li><a href="#section1">Section 1</a></li>
-
-                <li><a href="#section2">Section 2</a></li>
-
-                <li><a href="#section3">Section 3</a></li>
-
-                <li><a href="/page/contact-us">Contact Us</a></li>
-
-            </ul>
-        </div>
-
-        <div class="hidden">
-            <h4>Head Menu Links</h4>
-            <ul class="list-head-menu">
-
-                <li><a href="/">Home</a></li>
-
-                <li><a href="/page/about-us">About us</a></li>
-
-                <li><a href="http://INDIGENOUS SOFTWARE, INC." target="_blank">Indigenous</a></li>
-
-            </ul>
-        </div>
-
-        <div id="top-header">
-            <h1>{{layout.account.company.name}} </h1>
-        </div>
-        <nav class="navbar navbar-inverse" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <ul class="nav navbar-nav navbar-left">
-
-                        <li><a href="/">Home</a></li>
-
-                        <li><a href="/page/about-us">About us</a></li>
-
-                        <li><a href="http://INDIGENOUS SOFTWARE, INC." target="_blank">Indigenous</a></li>
-
-                    </ul>
-                </div>
-                <!-- /.navbar-collapse -->
-            </div>
-            <!-- /.container -->
-        </nav>
-
-        <br><br>
+    <div class="hidden">
+        <h4>Main Menu Links </h4>
+        <ul class="list-main-menu" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if="mainMenu.handle=='main-menu'">
+             <span data-ng-repeat="link in mainMenu.links track by $index">
+                <li data-ng-init="url=(link.linkTo|generateURLforLinks)" data-ng-if="link && url">
+                  <a href={{url}} target=_blank>{{link.label || link.url}}</a></li>
+                <li data-ng-init="url=(link.linkTo|generateURLforLinks)" data-ng-if="link && ! url">
+                    <a href={{url}}>{{link.label || link.url}}</a></li>
+             </span>
+        </ul>
     </div>
+
+    <div class="hidden">
+        <h4>Head Menu Links </h4>
+        <ul class="list-main-menu" data-ng-repeat="headMenu in layout.website.linkLists track by $index" data-ng-if="headMenu.handle=='main-menu'">
+             <span data-ng-repeat="link in headMenu.links track by $index">
+                <li data-ng-init="url=(link.linkTo|generateURLforLinks)" data-ng-if="link && url">
+                    <a href={{url}} target=_blank>{{link.label || link.url}} </a></li>
+                <li data-ng-init="url=(link.linkTo|generateURLforLinks)" data-ng-if="link && ! url">
+                    <a href={{url}}>{{link.label || link.url}}</a></li>
+             </span>
+        </ul>
+    </div>
+
+    <div id="top-header">
+        <h1>{{layout.account.company.name}} </h1>
+    </div>
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav navbar-left">
+
+                    <li><a href="/">Home</a></li>
+
+                    <li><a href="/page/about-us">About us</a></li>
+
+                    <li><a href="http://INDIGENOUS SOFTWARE, INC." target="_blank">Indigenous</a></li>
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <br><br>
+</div>
 
 <div id="body">
     <div id="myCarousel" class="carousel slide">
@@ -261,26 +258,26 @@
 <script type="text/javascript" src="/js/libs/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript">
     /* Carousel */
-    $('.carousel').each(function() {
+    $('.carousel').each(function () {
         $(this).carousel({interval: 4000});
     });
     //$('[id^="myCarousel"]').carousel({interval: 4000});
 
-    $('[id^="myCarousel"]').on('slide.bs.carousel', function() {
+    $('[id^="myCarousel"]').on('slide.bs.carousel', function () {
         $('.carousel-caption').css('display', 'none');
     });
 
-    $('[id^="myCarousel"]').on('slid.bs.carousel', function() {
+    $('[id^="myCarousel"]').on('slid.bs.carousel', function () {
         $('.carousel-inner > .item.active .carousel-caption').fadeIn("slow");
     });
 
     $(".link-gallery-image").hover(
-            function() {
+            function () {
                 var opac = 1;
                 $(this).children('.overlay-gallery-image').animate({
                     opacity: opac
                 }, 500);
-            }, function() {
+            }, function () {
                 $(this).children('.overlay-gallery-image').animate({
                     opacity: 0
                 }, 500);
@@ -288,5 +285,5 @@
     );
 
 </script>
- </div>
+</div>
 </div>
