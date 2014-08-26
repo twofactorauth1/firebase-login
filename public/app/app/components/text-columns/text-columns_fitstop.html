@@ -6,26 +6,22 @@
 *
 -->
 
-<div class="section text-columns">
-    {{#with component}}
+<div class="section text-columns" data-ng-show="component">
     <div class="component-header container">
         <div class="editable" data-class="label">
-            <h2 class="section-title">{{{label}}}</h2>
+            <h2 class="section-title">{{component.label}}</h2>
         </div>
 
         <div class="editable" data-class="description">
-            <p>{{{description}}}</p>
+            <p>{{component.description}}</p>
         </div>
     </div>
 
     <div class="component-body section-colored">
-        <div class="container">
-            {{#each columns}}
+        <div class="container" data-ng-repeat="column in component.columns track by $index">
             <div class="col-lg-4 col-md-4 col-sm-6">
-                {{{description}}}
+                {{column}}
             </div>
-            {{/each}}
         </div>
     </div>
-    {{/with}}
 </div>

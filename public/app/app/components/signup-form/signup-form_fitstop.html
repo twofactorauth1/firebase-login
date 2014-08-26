@@ -6,15 +6,15 @@
 *
 -->
 
-<div id="error-msg" class="alert alert-danger hidden"><button type="button" aria-hidden="true" class="close">×</button><span class="message"></span></div><div>
-    {{#with component}}
+<div ng-show="component" id="error-msg" class="alert alert-danger hidden"><button type="button" aria-hidden="true" class="close">×</button><span class="message"></span></div><div>
+
     <div class="component-header hidden">
         <div>
-            {{{label}}}
+            {{component.label}}
         </div>
 
         <div>
-            {{{description}}}
+            {{component.description}}
         </div>
     </div>
 
@@ -38,8 +38,6 @@
             </div>
         </div>
     </div>
-    {{/with}}
-
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
