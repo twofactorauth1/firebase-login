@@ -6,7 +6,7 @@
 *
 -->
 <div id="contact-us" data-ng-show="component">
-    <h3 class="editable title">
+    <h3 class="editable title" data-class="label">
         <span data-ng-show="component.label">{{component.label}}</span>
         <span data-ng-show="!component.label">Contact us label</span>
     </h3>
@@ -21,7 +21,7 @@
         <div class="col-sm-6">
             <strong>Our location</strong>
 
-            <div class="editable">
+            <div class="editable ">
                 <span data-ng-show="component.description">{{component.label}}</span>
                 <span data-ng-show="!component.description"><strong>Contact us description</strong></span>
             </div>
