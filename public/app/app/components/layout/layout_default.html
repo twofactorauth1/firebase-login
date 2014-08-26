@@ -89,7 +89,7 @@
 
     <div class="hidden">
         <h4>Head Menu Links </h4>
-        <ul class="list-main-menu" data-ng-repeat="headMenu in layout.website.linkLists track by $index" data-ng-if="headMenu.handle=='main-menu'">
+        <ul class="list-head-menu" data-ng-repeat="headMenu in layout.website.linkLists track by $index" data-ng-if="headMenu.handle=='main-menu'">
              <span data-ng-repeat="link in headMenu.links track by $index">
                 <li data-ng-init="url=(link.linkTo|generateURLforLinks)" data-ng-if="link && url">
                     <a href={{url}} target=_blank>{{link.label || link.url}} </a></li>
