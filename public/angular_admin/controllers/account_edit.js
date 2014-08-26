@@ -1,11 +1,27 @@
 define(['app', 'apiService'], function(app) {
     app.controller('AccountEditCtrl', ['$scope', 'ApiService', function ($scope, ApiService) {
+        //back button click function
+        $scope.$back = function() {window.history.back();};
+
         ApiService.getUser(function (user) {
     		$scope.user = user;
     		$scope.fullName = [user.first, user.middle, user.last].join(' ');
-            $scope.$back = function() {  window.history.back(); };
+
+            if (user.details.phones && user.details.phones.length) {
+                $scope.userPhone = null;
+                user.details.phones.forEach(function (value) {
+                    if (value.default) {
+                        $scope.userPhone = value;
+                    }
+                });
+                if ($scope.userPhone === null)
+                    $scope.userPhone = {_id: '', type: 'm', number: '', default: true};
+            } else {
+                $scope.userPhone = {_id: '', type: 'm', number: '', default: true};
+            }
     	});
 
+        //user fullname PUT call
     	$scope.$watch('fullName', function (newValue, oldValue) {
     		if (newValue) {
     			var nameSplit = newValue.split(' ');
@@ -32,6 +48,7 @@ define(['app', 'apiService'], function(app) {
     		}
     	});
 
+        //user email ID PUT call
     	$scope.$watch('user.email', function (newValue, oldValue) {
     		if (newValue) {
     			ApiService.putUser($scope.user, function (user) {
@@ -39,5 +56,28 @@ define(['app', 'apiService'], function(app) {
     			});
     		}
     	});
+
+        //user phone number PUT call
+        $scope.$watch('userPhone.number', function (newValue, oldValue) {
+            if (newValue) {
+                if ($scope.user.details.phones && $scope.user.details.phones.length) {
+                    var noDefault = true;
+                    $scope.user.details.phones.forEach(function (value, index) {
+                        if (value.default) {
+                            $scope.user.details.phones[index] = $scope.userPhone;
+                            noDefault = false;
+                        }
+                    });
+                    if (noDefault) {
+                        $scope.user.details.phones.push($scope.userPhone);
+                    }
+                } else {
+                    $scope.user.details.phones = [$scope.userPhone];
+                }
+                ApiService.putUser($scope.user, function (user) {
+                    $scope.user = user;
+                });
+            }
+        });
     }]);
 });
