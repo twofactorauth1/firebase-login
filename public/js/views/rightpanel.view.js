@@ -31,11 +31,12 @@ define([
             //components
             "click .dd-item":"scrollToSection",
             "hover .component": "showComponentOptions",
-            "click .add_section": "addSidebarComponent", //addSection
+            "click .btn-add-section": "addSidebarComponent", //addSection
+            "click .edit_section": "editSidebarComponent", //addSection
             "mouseup .dd-item": "onComponentDrag",
             "click .btn-add-component":"addComponent",
             "click .btn-del-component":"removeComponent",
-
+            "click .btn-edit-component":"updateComponent",
             //color palette
             "click #drop-zone": "drop_click",
             "change #file":"upload_color_pic",
@@ -402,7 +403,7 @@ define([
                 //get component type
                 var componentType = $('#component-type').val();
                 //validate
-                var component=new Signup({ pageId:self.pageId,  formName:componentName, type:componentType,title:"temp"});
+                var component=new Signup({ pageId:self.pageId,  formName:componentName, type:componentType,title:componentName});
                 component.save().done(function( ){
                     console.log(component)
                     var data = {
@@ -469,6 +470,38 @@ define([
                 event.stopImmediatePropagation();
 
             },
+
+            updateComponent:function(){
+                var self=this;
+
+                var componentID=$('#component-edit option:selected').val();
+                var title=$('#component-title').val()
+                    console.log(self.page);
+
+                    self.pageId = self.page.attributes._id;
+                    console.log(self.page);
+                    var newOptions=self.page.get("components").models;
+                    console.log(newOptions);
+
+
+                    $.each(newOptions, function(index, value) {
+
+                        if(componentID==value.id) {
+
+                              value.set('title',title);
+                              value.save({pageId:self.pageId});
+                          //  var option = new Option(title, value.id);
+
+                           // select.append($(option));
+                        }
+
+
+//                    $('#edit-component-modal').modal('show');
+                })
+
+
+            },
+
 
             onComponentDrag: function (event) {
                 var self=this;
@@ -584,6 +617,40 @@ define([
             addSidebarComponent: function() {
                 //initiate modal
                 $('#add-component-modal').modal('show');
+            },
+
+            editSidebarComponent: function(event) {
+            //initiate modal
+                var componentID = $(event.currentTarget).data('component-id');
+                console.log(componentID )
+                var self=this;
+                var select = $('#component-edit');
+                this.getPage().done(function() {
+                    self.pageId = self.page.attributes._id;
+                    console.log(self.page);
+                    var newOptions=self.page.get("components").models;
+                    console.log(newOptions);
+                var input=$('#component-title');
+
+                    $('option', select).remove();
+                    $.each(newOptions, function(index, value) {
+                        console.log(index);
+                        console.log(value);
+                        if(componentID==value.id) {
+                            var title = value.get('type');
+                            input.val(value.get('title'));
+                          //  value.set('title',"123");
+                         //   value.save({pageId:self.pageId});
+                            var option = new Option(title, value.id);
+
+                            select.append($(option));
+                        }
+                    });
+
+                    $('#edit-component-modal').modal('show');
+                })
+
+         //   $('#edit-component-modal').modal('show');
             },
 
              renderSidebarComponent: function() {
