@@ -26,13 +26,14 @@ define([
         events: {
             "click #btn-business,#btn-professional,#btn-enterprise": "onCompanyTypeChanged",
             "change .radio-company-size": "onCompanySizeChanged",
-            "onkeytimer #input-company-name": "onCompanyNameKeyTimer",
+             "onkeytimer #input-company-name": "onCompanyNameKeyTimer",
             "onkeytimer #input-username": "onUsernameKeyTimer",
             "onkeytimer #input-password": "onPasswordKeyTimer",
             "onkeytimer #input-password2": "onPasswordKeyTimer",
             "submit #form-create-account": "onCreateAccount",
             "click .right-nav": "nextPanel",
-            "click .left-nav": "prevPanel"
+            "click .left-nav": "prevPanel",
+            "blur #input-company-name":"checkForSubdomain"
         },
 
 
@@ -65,7 +66,6 @@ define([
             if (!this._isFirstPlace(this.place) && (data.account === null || data.account.company.type === null || data.account.company.type === 0)) {
                 return $$.r.mainAppRouter.navigate("/start", {trigger:true});
             }
-
             var tmpl = $$.templateManager.get("signup-main", this.templateKey);
             var html = tmpl(data);
             this.show(html);
@@ -377,6 +377,22 @@ define([
 
         onClose: function() {
             this.stopKeyTimers();
+        },
+
+        checkForSubdomain:function(){
+            var account = new $$.m.Account();
+            $.getJSON('/api/1.0/account/subdomain?subdomain='+$("#input-company-name").val().trim(),function(data,status,xhr){
+               if(data.subdomain)
+               {
+                   $ ("#input-company-name").val('');
+                   $("#help-subdomain").html("Subdomain Already Exists");
+               }
+               else{
+                   $("#help-subdomain").html("");
+               }
+            }).error(function(xhr,status,err){
+                    alert(err);
+            })
         }
 
     });

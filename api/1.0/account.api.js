@@ -25,7 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('tmp'), this.getTempAccount.bind(this));
         app.post(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
         app.put(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
-
+        app.get(this.url('subdomain'),this.getAccountBySubdomain.bind(this));
         //GET
         app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getAccountById.bind(this));
@@ -38,6 +38,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id'), this.isAuthApi, this.deleteAccount.bind(this));
 
         app.get(this.url(':userid/accounts', 'user'), this.isAuthApi, this.getAllAccountsForUserId.bind(this));
+
     },
 
 
@@ -269,6 +270,20 @@ _.extend(api.prototype, baseApi.prototype, {
            } else {
                self.wrapError(resp, 500, null, err, value);
            }
+        });
+    },
+
+    getAccountBySubdomain:function(req,resp){
+           accountDao.getAccountBySubdomain(req.query.subdomain,function(err,value){
+            if(!err){
+               if(value!=null)
+                  resp.send(value.toJSON("public"));
+               else
+                  resp.send({});
+            }
+            else{
+                  resp.wrapError(resp,500,null,err,value);
+            }
         });
     }
 });
