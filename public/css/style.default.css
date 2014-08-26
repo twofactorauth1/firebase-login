@@ -16205,6 +16205,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
     opacity: 1;
   }
 }
+.billing-section .panel-body {
+  min-height: 275px;
+}
 .headerbar {
   border-left: 1px solid #eee;
   background: #fff;

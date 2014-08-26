@@ -3,8 +3,9 @@ define(['app', 'apiService'], function(app) {
         ApiService.getUser(function (user) {
     		$scope.user = user;
     		$scope.fullName = [user.first, user.middle, user.last].join(' ');
+            $scope.$back = function() {  window.history.back(); };
     	});
-    	
+
     	$scope.$watch('fullName', function (newValue, oldValue) {
     		if (newValue) {
     			var nameSplit = newValue.split(' ');
@@ -30,7 +31,7 @@ define(['app', 'apiService'], function(app) {
     			});
     		}
     	});
-    	
+
     	$scope.$watch('user.email', function (newValue, oldValue) {
     		if (newValue) {
     			ApiService.putUser($scope.user, function (user) {

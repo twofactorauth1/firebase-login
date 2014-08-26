@@ -1,12 +1,13 @@
 <div style="">
 	<div class="pageheader row">
 		<div class="col-xs-8">
-			<button id="btn-back-to-contact" class="btn btn-success pull-left"
+			<button ng-click="$back()"
+ class="btn btn-success pull-left"
 				type="button">
 				<span class="fa fa-chevron-left"></span> <span class="hidden-xs">Back</span>
 			</button>
 			<h2>
-				<i class="fa fa-users"></i> Edit User
+				<i class="fa fa-cog"></i> Edit Account
 			</h2>
 		</div>
 
@@ -15,154 +16,301 @@
 	<div id="contact-edit-container" class="contentpanel">
 		<div class="row">
 			<div class="col-md-6">
-				<div class="hidden-xs hidden-sm">
-					<h4>Name &amp; Photo</h4>
-					<hr>
-				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Edit Owner Information</h3>
+					</div>
+					<div class="panel-body">
 
-				<div class="row">
-					<!-- UPDATE NAME -->
-					<div class="col-xs-12 form" role="form">
-						<div class="form-group">
-							<label class="">User Name</label> <input id="input-fullname"
-								class="form-control" ng-model='fullName'
-								placeholder="full name" type="text"> <small
-								style="margin-left: 10px;"> <strong>first:</strong> <code>
-									<span id="hint-first">{{user.first}}</span>
-								</code> <strong>middle:</strong> <code>
-									<span id="hint-middle">{{user.middle}}</span>
-								</code> <strong>last:</strong> <code>
-									<span id="hint-last">{{user.last}}</span>
-								</code>
-							</small>
+						<!-- UPDATE PHOTO -->
+						<div id="contact-photo-container" class="row">
+							<row>
+							<div class="col-xs-5 col-md-6">
+								<div class="hidden-xs hidden-sm">
+									<div class="btn-link btn-edit-photo">Change Photo</div>
+								</div>
+								<img id="contact-photo"
+									class="img-responsive img-rounded hand btn-edit-photo"
+									src="/assets/icons/blank-user.jpg">
+							</div>
+
+							<div class="col-xs-7 col-md-6">
+								<div class="btn-edit-photo-controls hidden-md hidden-lg">
+									<div class="btn btn-primary btn-remove-photo">Remove Photo</div>
+									<div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+								</div>
+							</div>
+							</row>
+						</div>
+
+						<div class="clearfix mb30"></div>
+
+						<div class="row">
+							<!-- UPDATE NAME -->
+							<div class="col-xs-12 form" role="form">
+								<div class="form-group">
+									<label class="">User Name</label> <input id="input-fullname"
+										class="form-control input-lg" ng-model='fullName'
+										placeholder="full name" type="text"> <small
+										style="margin-left: 10px;"> <strong>first:</strong> <code>
+											<span id="hint-first">{{user.first}}</span>
+										</code> <strong>middle:</strong> <code>
+											<span id="hint-middle">{{user.middle}}</span>
+										</code> <strong>last:</strong> <code>
+											<span id="hint-last">{{user.last}}</span>
+										</code>
+									</small>
+								</div>
+							</div>
+						</div>
+
+						<div id="phone-row" class="row">
+							<div class="col-xs-1">
+								<i class="icon-main fa fa-phone"></i>
+							</div>
+							<div class="col-xs-10">
+								<div id="edit-phones-container">
+
+
+									<!-- ADD NEW PHONE -->
+
+									<div class="row edit-phone-container" data-id=""
+										style="margin-top: 8px;">
+										<div class="form-group col-xs-12 col-sm-8 col-md-10">
+											<div class="input-group">
+												<div class="input-group-addon">+1</div>
+												<input class="input-edit-phone form-control input-lg" value=""
+													type="text">
+
+												<div class="btn-group pull-right" style="margin-right: 8px;">
+													<button type="button"
+														class="btn-edit-phone-type btn btn-default dropdown-toggle"
+														data-toggle="dropdown" data-type="">
+														<span class="edit-phone-type-label">mobile</span> <span
+															class="caret"></span>
+													</button>
+													<ul class="dropdown-menu pull-right">
+
+														<li class="li-edit-phone-type" data-type="m"><a
+															href="#">mobile</a></li>
+
+														<li class="li-edit-phone-type" data-type="h"><a
+															href="#">home</a></li>
+
+														<li class="li-edit-phone-type" data-type="w"><a
+															href="#">work</a></li>
+
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+								<span style="margin-top: -15px;" class="col-xs-10"> <small>e.g.
+										(<span class="skype_c2c_print_container notranslate">303-555-5555</span><span
+										id="skype_c2c_container" class="skype_c2c_container notranslate"
+										dir="ltr" tabindex="-1"
+										onmouseover="SkypeClick2Call.MenuInjectionHandler.showMenu(this, event)"
+										onmouseout="SkypeClick2Call.MenuInjectionHandler.hideMenu(this, event)"
+										onclick="SkypeClick2Call.MenuInjectionHandler.makeCall(this, event)"
+										data-numbertocall="+13035555555" data-isfreecall="false"
+										data-isrtl="false" data-ismobile="false"><span
+											class="skype_c2c_highlighting_inactive_common" dir="ltr"
+											skypeaction="skype_dropdown"><span
+												class="skype_c2c_textarea_span" id="non_free_num_ui"><img
+													class="skype_c2c_logo_img"
+													src="resource://skype_ff_extension-at-jetpack/skype_ff_extension/data/call_skype_logo.png"
+													height="0" width="0"><span class="skype_c2c_text_span">303-555-5555</span><span
+													class="skype_c2c_free_text_span"></span></span></span></span>)
+								</small>
+								</span>
+							</div>
+						</div>
+
+						<div id="address-row" class="row">
+							<div class="col-xs-1">
+								<i class="icon-main fa fa-map-marker"></i>
+							</div>
+							<div class="col-xs-10">
+								<div id="edit-addresses-container"></div>
+
+								<br>
+							</div>
+						</div>
+
+						<div id="email-row" class="row">
+							<div class="col-xs-1">
+								<i class="icon-main fa fa-envelope"></i>
+							</div>
+							<div class="col-xs-10">
+
+								<div id="edit-emails-container">
+
+
+
+									<div class="row edit-email-container">
+										<div class="form-group">
+											<input class="form-control input-edit-email input-lg"
+												placeholder="new email" ng-model='user.email' type="email">
+										</div>
+									</div>
+
+									<a href="mailto:jaideep.jdof@gmail.com"></a> <i
+										class="icon-social "></i>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-
-
-				<!-- UPDATE PHOTO -->
-				<div id="contact-photo-container" class="row">
-					<row>
-					<div class="col-xs-5 col-md-6">
-						<div class="hidden-xs hidden-sm">
-							<div class="btn-link btn-edit-photo">Change Photo</div>
-						</div>
-						<img id="contact-photo"
-							class="img-responsive img-rounded hand btn-edit-photo"
-							src="/assets/icons/blank-user.jpg">
-					</div>
-
-					<div class="col-xs-7 col-md-6">
-						<div class="btn-edit-photo-controls hidden-md hidden-lg">
-							<div class="btn btn-primary btn-remove-photo">Remove Photo</div>
-							<div class="btn btn-primary btn-upload-photo">Upload Photo</div>
-						</div>
-					</div>
-					</row>
 				</div>
 			</div>
 
 			<!-- CONTACT DETAILS -->
 			<div class="col-md-6">
-				<h4>User Information</h4>
-				<hr>
-
-				<div id="phone-row" class="row">
-					<div class="col-xs-1">
-						<i class="icon-main fa fa-phone"></i>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Edit Business Information</h3>
 					</div>
-					<div class="col-xs-10">
-						<div id="edit-phones-container">
+					<div class="panel-body">
 
+						<!-- UPDATE PHOTO -->
+				        <div id="contact-photo-container" class="row">
+				            <row>
+				                <div class="col-xs-5 col-md-6">
+				                    <div class="hidden-xs hidden-sm">
+				                        <div class="btn-link btn-edit-photo">Change Logo</div>
+				                    </div>
+				                    <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="/assets/icons/blank-user.jpg">
+				                </div>
 
-							<!-- ADD NEW PHONE -->
+				                <div class="col-xs-7 col-md-6">
+				                    <div class="btn-edit-photo-controls hidden-md hidden-lg">
+				                        <div class="btn btn-primary btn-remove-photo">Remove Logo</div>
+				                        <div class="btn btn-primary btn-upload-photo">Upload Logo</div>
+				                    </div>
+				                </div>
+				            </row>
+				        </div>
 
-							<div class="row edit-phone-container" data-id=""
-								style="margin-top: 8px;">
-								<div class="form-group col-xs-12 col-sm-8 col-md-10">
-									<div class="input-group">
-										<div class="input-group-addon">+1</div>
-										<input class="input-edit-phone form-control" value=""
-											type="text">
+				        <div class="clearfix mb30"></div>
 
-										<div class="btn-group pull-right" style="margin-right: 8px;">
-											<button type="button"
-												class="btn-edit-phone-type btn btn-default dropdown-toggle"
-												data-toggle="dropdown" data-type="">
-												<span class="edit-phone-type-label">mobile</span> <span
-													class="caret"></span>
-											</button>
-											<ul class="dropdown-menu pull-right">
-
-												<li class="li-edit-phone-type" data-type="m"><a
-													href="#">mobile</a></li>
-
-												<li class="li-edit-phone-type" data-type="h"><a
-													href="#">home</a></li>
-
-												<li class="li-edit-phone-type" data-type="w"><a
-													href="#">work</a></li>
-
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-
-						</div>
-						<span style="margin-top: -15px;" class="col-xs-10"> <small>e.g.
-								(<span class="skype_c2c_print_container notranslate">303-555-5555</span><span
-								id="skype_c2c_container" class="skype_c2c_container notranslate"
-								dir="ltr" tabindex="-1"
-								onmouseover="SkypeClick2Call.MenuInjectionHandler.showMenu(this, event)"
-								onmouseout="SkypeClick2Call.MenuInjectionHandler.hideMenu(this, event)"
-								onclick="SkypeClick2Call.MenuInjectionHandler.makeCall(this, event)"
-								data-numbertocall="+13035555555" data-isfreecall="false"
-								data-isrtl="false" data-ismobile="false"><span
-									class="skype_c2c_highlighting_inactive_common" dir="ltr"
-									skypeaction="skype_dropdown"><span
-										class="skype_c2c_textarea_span" id="non_free_num_ui"><img
-											class="skype_c2c_logo_img"
-											src="resource://skype_ff_extension-at-jetpack/skype_ff_extension/data/call_skype_logo.png"
-											height="0" width="0"><span class="skype_c2c_text_span">303-555-5555</span><span
-											class="skype_c2c_free_text_span"></span></span></span></span>)
-						</small>
-						</span>
-					</div>
-
-				</div>
-
-				<div id="address-row" class="row">
-					<div class="col-xs-1">
-						<i class="icon-main fa fa-map-marker"></i>
-					</div>
-					<div class="col-xs-10">
-						<div id="edit-addresses-container"></div>
-
-						<br>
-					</div>
-				</div>
-
-				<div id="email-row" class="row">
-					<div class="col-xs-1">
-						<i class="icon-main fa fa-envelope"></i>
-					</div>
-					<div class="col-xs-10">
-
-						<div id="edit-emails-container">
+				        <div class="row">
+				            <!-- UPDATE NAME -->
+				            <div class="col-xs-12 form" role="form">
+				                <div class="form-group">
+				                    <label class="">Business Name</label>
+				                    <input id="input-business-name" type="text" class="form-control input-lg" value="" placeholder="business name">
+				                </div>
+				            </div>
+				        </div>
 
 
 
-							<div class="row edit-email-container">
-								<div class="form-group">
-									<input class="form-control input-edit-email"
-										placeholder="new email" ng-model='user.email' type="email">
-								</div>
-							</div>
+				        <div class="row">
+				            <!-- UPDATE Description -->
+				            <div class="col-xs-12 form" role="form">
+				                <div class="form-group">
+				                    <label class="">Business Description</label>
+				                    <input id="input-business-description" type="text" class="form-control input-lg" value="" placeholder="Description">
+				                </div>
+				            </div>
+				        </div>
 
-							<a href="mailto:jaideep.jdof@gmail.com"></a> <i
-								class="icon-social "></i>
-						</div>
+				        <div class="row">
+				            <!-- UPDATE category -->
+				            <div class="col-xs-12 form" role="form">
+				                <div class="form-group">
+				                    <label class="">Business Category</label>
+				                    <input id="input-business-category" type="text" class="form-control input-lg" value="" placeholder="Category">
+				                </div>
+				            </div>
+				        </div>
+
+				        <div class="row">
+				            <div class="form-group col-xs-6">
+				                <label>Business Size</label>
+				                <select id="select-business-size" class="form-control input-lg">
+
+				                    <option data-businesssize="1">Single</option>
+
+				                    <option data-businesssize="2">Small</option>
+
+				                    <option data-businesssize="3">Medium</option>
+
+				                    <option data-businesssize="4">Large</option>
+
+				                    <option data-businesssize="5">Enterprise</option>
+
+				                </select>
+				            </div>
+				        </div>
+
+				        <div class="row">
+				            <div class="form-group col-xs-6">
+				                <label>Business Type</label>
+				                <select id="select-business-type" class="form-control input-lg">
+
+				                    <option data-businesstype="1">Professional</option>
+
+				                    <option data-businesstype="2">Business</option>
+
+				                    <option data-businesstype="3">Enterprise</option>
+
+				                </select>
+				            </div>
+				        </div>
+
+				        <hr></hr>
+
+				        <div id="phone-row" class="row">
+				            <div class="col-xs-1"><i class="icon-main fa fa-phone"></i>
+				            </div>
+				            <div class="col-xs-10">
+				                <div id="edit-phones-container">
+
+
+
+
+
+				                    <!-- ADD NEW PHONE -->
+
+				                    <div class="row edit-phone-container" data-id="" style="margin-top:8px;">
+				                        <div class="form-group col-xs-12 col-sm-8 col-md-10">
+				                            <div class="input-group">
+				                                <div class="input-group-addon">+1</div>
+				                                <input type="text" class="input-edit-phone form-control input-lg" value="">
+				                            </div>
+				                        </div>
+				                    </div>
+
+				                </div>
+				                <span style="margin-top:-15px;" class="col-xs-10">
+				                    <small>e.g. (303-555-5555)</small>
+				                </span>
+				            </div>
+
+				        </div>
+
+
+
+
+
+				        <div id="address-row" class="row">
+				            <div class="col-xs-1"><i class="icon-main fa fa-map-marker"></i>
+				            </div>
+				            <div class="col-xs-10">
+				                <div id="edit-addresses-container">
+
+
+				                </div>
+
+				                <br>
+
+
+				                <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
+
+				            </div>
+				        </div>
 					</div>
 				</div>
 			</div>
