@@ -18,9 +18,9 @@
     </div>
 
     <div class="component-body section-colored">
-        <div class="container" data-ng-repeat="column in columns track by $index">
+        <div class="container" data-ng-repeat="column in component.columns track by $index">
             <div class="col-lg-4 col-md-4 col-sm-6">
-                {{{column.description}}}
+                {{column}}
             </div>
         </div>
     </div>

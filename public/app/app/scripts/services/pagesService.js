@@ -28,55 +28,102 @@ mainApp.factory('pagesService', function () {
                     {
                         "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
                         "anchor": null,
+                        "type": "text-columns",
+                        "label": "text-columns label",
+                        "title": "text-columns title",
+                        "description": "text-columns Description"
+                    }
+                    ,
+                    {
+                        "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
+                        "anchor": null,
+                        "post_title": "post_title",
+                        "created_date": "created_date",
+                        "post_author": "post_author",
+                        "post_category": "post_category",
+                        "type": "single-post",
+                        "label": "single post label",
+                        "title": "single post title",
+                        "description": "single post Description",
+                        "post_content": "post_content",
+                        "comment_count": "comment_count",
+                        "post_tags": ["tag1", "tag2"]
+                    }
+                    ,
+                    {
+                        "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
+                        "anchor": null,
+                        "type": "single-page",
+                        "label": "single page label",
+                        "title": "single page title",
+                        "description": "single page Description"
+                    }
+                    ,
+                    {
+                        "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
+                        "anchor": null,
+                        "type": "signup-form",
+                        "label": "Signup Label",
+                        "title": "title",
+                        "description": "Signup Description"
+
+                    },
+                    {
+                        "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
+                        "anchor": null,
                         "type": "products",
                         "label": "Products Label",
-                        "title":"title",
+                        "title": "title",
                         "description": "Products Description",
-                        "product-sections":[{
-                            "product-section-id":"product-section-id",
-                            "products":[{
-                                "image":"image",
-                                "title":"title",
-                                "subtitle":"subtitle",
-                                "text":"text",
-                                "btn":{
-                                    "url":"url",
-                                    "text":"text"
-                                }
-                            }]
-                        }]
+                        "product-sections": [
+                            {
+                                "product-section-id": "product-section-id",
+                                "products": [
+                                    {
+                                        "image": "image",
+                                        "title": "title",
+                                        "subtitle": "subtitle",
+                                        "text": "text",
+                                        "btn": {
+                                            "url": "url",
+                                            "text": "text"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
                     },
-                    /*{
+                    {
                         "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
                         "anchor": null,
                         "type": "meet-team",
                         "label": "Meet Team",
-                        "title":"title",
+                        "title": "title",
                         "description": "Meet Team Description",
-                        "teamMembers":{
-                            "profilepic":"profilepic",
-                            "name":"name",
-                            "position":"position",
-                            "bio":"bio"
+                        "teamMembers": {
+                            "profilepic": "profilepic",
+                            "name": "name",
+                            "position": "position",
+                            "bio": "bio"
                         }
-                    }*//*,
+                    },
                     {
                         _id: "1e2b6078-c1d2-4550-8747-35eb74c8d763",
                         anchor: null,
                         type: "masthead",
                         label: "Masthead Block",
                         description: "Feature Block Description",
-                        title:"title",
-                        subtitle:"subtitle",
-                        img:{
-                            "parallax":"parallax",
-                            "url":"url",
-                            "width":"width",
-                            "height":"height"
+                        title: "title",
+                        subtitle: "subtitle",
+                        img: {
+                            "parallax": "parallax",
+                            "url": "url",
+                            "width": "width",
+                            "height": "height"
                         },
-                        btn:{
-                            "url":"url",
-                            "text":"text"
+                        btn: {
+                            "url": "url",
+                            "text": "text"
                         }
                     },
                     {
@@ -200,7 +247,7 @@ mainApp.factory('pagesService', function () {
                                 }
                             }
                         ]
-                    }*/
+                    }
                 ],
                 "created": {
                     "date": 1408599403942,
