@@ -5,30 +5,33 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div>
-    {{#with component}}
-    <div {{#if anchor}} id="{{anchor}}" {{/if}} class="feature-blocks {{#if bgimg.parallax}} parallax {{/if}}" data-image="{{#if bgimg.url}}{{bgimg.url}}{{/if}}" data-width="{{#if bgimg.width}}{{bgimg.width}}{{/if}}" data-height="{{#if bgimg.height}}{{bgimg.height}}{{/if}}" {{#if bgimg.blur}} data-image-class="blur"{{/if}}>
+<div ng-show="component">
+
+    <div id="{{component.anchor}}"
+    class="feature-blocks {{component.bgimg.parallax?'parallax':''}}"
+    data-image="{{component.bgimg.url}}"
+    data-width="{{component.bgimg.width}}"
+    data-height="{{component.bgimg.height}}"
+    data-image-class="{{component.bgimg.blur?'blur':''}}">
     <div class="inner-page">
         <h1 class="feature-block-title">
             <div class="editable" data-class="title">
-                {{{title}}}
+                {{component.title}}
             </div>
         </h1>
-        {{#if subtitle}}
-        <h3 class="feature-block-subtitle">
+
+        <h3 ng-show="component.subtitle" class="feature-block-subtitle">
             <div class="editable" data-class="subtitle">
-                {{{subtitle}}}
+                {{component.subtitle}}
             </div>
         </h3>
-        {{/if}}
-        {{#if text}}
-        <div class="lead center" data-class="feature-description">
+
+        <div ng-show="component.text" class="lead center" data-class="feature-description">
             <div class="editable" data-class="text">
-                {{{text}}}
+                {{component.text}}
             </div>
         </div>
-        {{/if}}
     </div>
 </div>
-{{/with}}
+
 </div>
