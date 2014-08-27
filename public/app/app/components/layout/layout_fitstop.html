@@ -89,21 +89,17 @@
                             <div class="logo-1"> <img src="/assets/images/fitstop/fitstop-logo.png" scale="0"> </div>
                         </a>
                     </div>
+
                     <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav navbar-left" ng-repeat="link in layout.website.linkLists[0].link">
-                            <li>{{link.label}}</li>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"
+                         data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if="mainMenu.handle=='main-menu'">
+                        <ul class="nav navbar-nav" >
+                            <li data-ng-repeat="link in mainMenu.links track by $index">
+                                <a href="{{link.linkTo|generateURLforLinks}}">{{link.label || link.url}}</a>
+                            </li>
                         </ul>
-                        <!--todo change ul for creating head menu link-->
-                        <!--<ul class="list-head-menu" data-ng-repeat="headMenu in layout.website.linkLists track by $index" data-ng-if="headMenu.handle=='main-menu'">
-             <span data-ng-repeat="link in headMenu.links track by $index">
-                <li data-ng-init="url=(link.linkTo|generateURLforLinks)" data-ng-if="link && url">
-                    <a href={{url}} target=_blank>{{link.label || link.url}} </a></li>
-                <li data-ng-init="url=(link.linkTo|generateURLforLinks)" data-ng-if="link && ! url">
-                    <a href={{url}}>{{link.label || link.url}}</a></li>
-             </span>
-                        </ul>-->
-                    </div><!-- /.navbar-collapse -->
+                    </div>
+                    <!-- /.navbar-collapse -->
 
                 </div><!-- /.container-fluid -->
             </nav>
