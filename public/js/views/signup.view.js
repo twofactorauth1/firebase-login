@@ -32,7 +32,8 @@ define([
             "onkeytimer #input-password2": "onPasswordKeyTimer",
             "submit #form-create-account": "onCreateAccount",
             "click .right-nav": "nextPanel",
-            "click .left-nav": "prevPanel"
+            "click .left-nav": "prevPanel",
+            "click .showEmailForm": "showEmailForm"
         },
 
 
@@ -47,6 +48,9 @@ define([
             return this;
         },
 
+        showEmailForm: function () {
+            $('#form-create-account').fadeIn();
+        },
 
         _getData: function () {
             return {

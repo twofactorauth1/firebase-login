@@ -95,10 +95,12 @@ var MAIN_ACCOUNT_ID = process.env.MAIN_ACCOUNT_ID || 6;
 
 var serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
 serverUrl += "app." + process.env.ROOT_HOST;
+var subdomainSuffix = process.env.ROOT_HOST;
 
 
 if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080 && process.env.IS_PROXIED != "true") {
     serverUrl += ":" + process.env.PORT;
+    subdomainSuffix += ":" + process.env.PORT;
 }
 
 
@@ -110,6 +112,7 @@ module.exports = {
     environment: process.env.NODE_ENV,
     port: process.env.PORT,
     server_url: serverUrl,
+    subdomain_suffix: subdomainSuffix,
     support_email: "support@indigenous.io",
     cluster: false,
     freeCpus: 2,

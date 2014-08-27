@@ -42,7 +42,8 @@ define([
                  *      dateFormat:                // if the field is a date, then a format must be chosen
                  * }]
                  */
-                fields: []
+                fields: [],
+                title:""
             }
         }
     });

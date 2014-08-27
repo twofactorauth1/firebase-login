@@ -71,7 +71,9 @@ var component = $$.m.ModelBase.extend({
              *      compare: []         // The actual comparisons, see above
              * ]}
              */
-            features: []
+            features: [],
+            title:""
+
         }
     },
 

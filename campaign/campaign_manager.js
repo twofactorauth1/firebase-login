@@ -12,6 +12,7 @@ var accountDao = require('../dao/account.dao');
 var contactDao = require('../dao/contact.dao');
 var courseDao = require('../dao/course.dao');
 var userDao = require('../dao/user.dao');
+var appConfig = require('../configs/app.config');
 
 var mandrillConfig = require('../configs/mandrill.config');
 
@@ -19,7 +20,7 @@ var mandrill = require('mandrill-api/mandrill');
 var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
 
 //todo: change it to dynamic resolution depending on env
-var hostSuffix = 'indigenous.local:3000';
+var hostSuffix = appConfig.subdomain_suffix;
 
 /**
  * Constants for pipeshift
@@ -405,7 +406,7 @@ module.exports = {
             ],
             "subaccount": null,
             "google_analytics_domains": [
-                "indigenous.io"
+                "indigenous.io" //TODO: This should be dynamic
             ],
             "google_analytics_campaign": null,
             "metadata": {
@@ -538,7 +539,17 @@ module.exports = {
         var nowUtc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
         return nowUtc.toISOString();
     },
-    _getScheduleUtcDateTimeIsoString: function (daysShift, hoursValue, minutesValue, timezoneOffset) {
+    _getScheduleUtcDateTimeIsoString: function(daysShift, hoursValue, minutesValue, timezoneOffset) {
+        var now = new Date();
+        now.setHours(hoursValue);
+        now.setMinutes(minutesValue);
+        now.setSeconds(0);
+        var shiftedUtcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysShift,
+            now.getUTCHours(), now.getUTCMinutes() - timezoneOffset, now.getUTCSeconds());
+        return shiftedUtcDate.toISOString();
+    },
+
+    _getScheduleUtcDateTimeIsoStringOLD: function (daysShift, hoursValue, minutesValue, timezoneOffset) {
         var now = new Date();
         var shiftedUtcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysShift, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
         shiftedUtcDate.setUTCHours(hoursValue);
