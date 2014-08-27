@@ -83,6 +83,10 @@ define(['app', 'apiService'], function(app) {
         //update account object on change
         $scope.$watch('account', function (newValue, oldValue) {
             if (newValue) {
+                if ($scope.account.business.size)
+                    $scope.account.business.size = parseInt($scope.account.business.size);
+                if ($scope.account.business.type)
+                    $scope.account.business.type = parseInt($scope.account.business.type);
                 ApiService.putAccount($scope.account, function (account) {
                     $scope.account = account;
                 });
