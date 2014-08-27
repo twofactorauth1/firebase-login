@@ -12,14 +12,16 @@
             <article class="entry clearfix">
                 <div id="et_pt_blog" class="responsive clearfix single-blog" data-postid="{{component._id}}">
 
+                    {{component._id}}
                     <div class="et_pt_blogentry clearfix">
                         <h2 class="et_pt_title">
                             <div class="editable" data-class="post_title">
                                 <span ng-show="component.post_title">{{component.post_title}}</span>
+
                                 <span ng-show="!component.post_title">Enter Post Title</span>
                             </div>
                         </h2>
-
+                        {{component.post_title}}
                         <p class="blog-meta">
                         <div ng-show="component.created_date" data-class="created.date">
                             {{component.created_date}}
@@ -61,8 +63,14 @@
     </div> <!-- .container -->
     <div class="clearfix row-fluid">
         <div class="goback col-xs-12">
-            <p><span><i class="fa fa-arrow-circle-o-left"></i> Go Back</span></p>
+            <p>
+                <span>
+                    <i class="fa fa-arrow-circle-o-left"></i>
+                    Go Back
+                </span>
+            </p>
             </span>
             <div class="col-xs-3"></div>
         </div>
-    </div> <!-- #content-area -->
+    </div><!-- #content-area -->
+</div>
