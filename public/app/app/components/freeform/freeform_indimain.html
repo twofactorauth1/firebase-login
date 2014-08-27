@@ -6,22 +6,22 @@
 *
 -->
 
-<div>
-    {{#with component}}
+<div ng-show="component">
+
     <div class="component-header hidden">
         <div>
-            {{{label}}}
+            {{component.label}}
         </div>
 
         <div>
-            {{{description}}}
+            {{component.description}}
         </div>
     </div>
 
     <div class="component-body">
         <div>
-            {{{value}}}
+            {{component.value}}
         </div>
     </div>
-    {{/with}}
+
 </div>
