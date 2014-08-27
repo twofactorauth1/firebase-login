@@ -1,4 +1,4 @@
-define(['app', 'apiService'], function(app) {
+define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
     app.controller('AccountEditCtrl', ['$scope', 'ApiService', function ($scope, ApiService) {
         //back button click function
         $scope.$back = function() {window.history.back();};
@@ -16,9 +16,9 @@ define(['app', 'apiService'], function(app) {
                     }
                 });
                 if ($scope.userPhone === null)
-                    $scope.userPhone = {_id: '', type: 'm', number: '', default: true};
+                    $scope.userPhone = {_id: $$.u.idutils.generateUniqueAlphaNumericShort(), type: 'm', number: '', default: true};
             } else {
-                $scope.userPhone = {_id: '', type: 'm', number: '', default: true};
+                $scope.userPhone = {_id: $$.u.idutils.generateUniqueAlphaNumericShort(), type: 'm', number: '', default: true};
             }
     	});
 
@@ -69,6 +69,9 @@ define(['app', 'apiService'], function(app) {
                     $scope.user.details.phones = [$scope.userPhone];
                 }
             }
+            ApiService.putUser($scope.user, function (user) {
+                $scope.user = user;
+            });
         });
 
         //update user object on change

@@ -16,11 +16,13 @@
         'angularResource': 'libs/angular-resource/angular-resource.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
         'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
+        'underscore': 'libs/underscore/underscore',
 
         //application related
         'storageutils': 'utils/storageutils',
         'namespaces': 'utils/namespaces',
         'adminCommon': '/angular_admin/admin_common',
+        'commonutils': 'utils/commonutils',
         'app': '/angular_admin/app',
         'apiService': '/angular_admin/services/api'
  	},
@@ -32,7 +34,9 @@
         'angularSanitize': {deps: ['angular']},
         'angularResource': {deps: ['angular']},
         'angularAMD': {deps: ['angular']},
-        'bootstrap': {deps: ['jquery']}
+        'bootstrap': {deps: ['jquery']},
+        'underscore': {deps: ['jquery']},
+        'commonutils': {deps: ['underscore']}
  	},
  	deps: ['adminCommon', 'bootstrap', 'app']
  });
