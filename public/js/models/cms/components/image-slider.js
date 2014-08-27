@@ -24,7 +24,8 @@ define([
 
                 description:"",
 
-                images: []
+                images: [],
+                title:""
             }
         }
     });
