@@ -33,7 +33,8 @@ define([
             "submit #form-create-account": "onCreateAccount",
             "click .right-nav": "nextPanel",
             "click .left-nav": "prevPanel",
-            "blur #input-company-name":"checkForSubdomain"
+            "blur #input-company-name":"checkForSubdomain",
+            "click .showEmailForm": "showEmailForm"
         },
 
 
@@ -48,6 +49,9 @@ define([
             return this;
         },
 
+        showEmailForm: function () {
+            $('#form-create-account').fadeIn();
+        },
 
         _getData: function () {
             return {

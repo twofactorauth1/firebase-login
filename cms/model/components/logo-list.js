@@ -54,7 +54,8 @@ var component = $$.m.ModelBase.extend({
              *      iconClass: null         //The classname of the icon to display
              * ]}
              */
-            logos: []
+            logos: [],
+            title:""
         }
     },
 

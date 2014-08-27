@@ -17,7 +17,7 @@
                 </h3>
             {{/with}}
                 <div class="posts row">
-                    {{#each blogposts}}
+                    {{#each_upto blogposts 3 }}
                     <div class="col-sm-4">
                         <div class="single-blog" data-url="{{this.attributes.post_url}}">
                         {{#if this.attributes.featured-image}}
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div class="clearfix mb15 visible-xs"></div>
-                    {{/each}}
+                    {{/each_upto}}
                 </div>
                 <div class="clearfix mb30"></div>
                 <div class="col-xs-12 mb15">

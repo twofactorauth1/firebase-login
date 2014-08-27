@@ -491,6 +491,11 @@ define([
                 var p = this.contact.save();
                 p
                 .done(function() {
+                    $.gritter.add({
+                        title: 'Contact Created',
+                        text: 'This will fade out after a certain amount of time.',
+                        time: 2000
+                    });
                     self.contactId = self.contact.id;
                     $$.r.account.ContactRouter.navigateToEditContact(self.contact.id, this.currentLetter, false)
                 });
