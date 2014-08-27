@@ -24,7 +24,6 @@ define([
 
                 subtitle:"",
 
-                features: []
                 /*
                 {
                     "feature-title" : "",
@@ -32,6 +31,9 @@ define([
                     "feature-icon" : ""
                 }
                 */
+                features: [],
+                title:""
+
             }
         }
     });
