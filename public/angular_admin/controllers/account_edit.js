@@ -25,6 +25,8 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
         //account API call for object population
         ApiService.getAccount(function (account) {
             $scope.account = account;
+            if (!(account.business.phones && account.business.phones.length))
+                $scope.account.business.phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: true});
         });
 
         //user fullname PUT call
