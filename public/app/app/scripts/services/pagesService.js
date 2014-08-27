@@ -28,21 +28,83 @@ mainApp.factory('pagesService', function () {
                     {
                         "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
                         "anchor": null,
+                        "type": "meet-team",
+                        "label": "Meet Team",
+                        "img":{
+                            "url":"url",
+                            "width":"width",
+                            "height":"height"
+                        },
+                        "title": "title",
+                        "description": "Meet Team Description",
+                        "teamMembers": {
+                            "profilepic": "profilepic",
+                            "name": "name",
+                            "position": "position",
+                            "bio": "bio"
+                        },
+                        "btn": {
+                            "url": "url",
+                            "text": "text"
+                        }
+                    },
+                    {
+                        "_id": "b9d284c4-48f0-4718-a12b-210b8c73df60",
+                        "anchor": null,
+                        "type": "image-text",
+                        "label": "image text label",
+                        "description": "image text description",
+                        "url": "url",
+                        "title": "title",
+                        "subtitle": "subtitle",
+                        "text": "text",
+                        "btn": {
+                            "url": "url",
+                            "text": "text"
+                        },
+                        "imagePosition": "imagePosition",
+                        "caption":"caption",
+                        "bgcolor": "bgcolor"
+                    },
+                    {
+                        "_id": "09bf4453-e567-4263-9042-cb2e9eb1adf2",
+                        "anchor": null,
+                        "main-feature-title": "main-feature-title",
+                        "type": "feature-list",
+                        "label": "feature-list-label",
+                        "description": "feature-list-description",
+                        "features": [
+                            {
+                                'feature-icon': 'feature-icon',
+                                'feature-button-url': 'feature-button-url',
+                                'src': 'src',
+                                'feature-title': 'feature-title',
+                                'feature-subtitle': 'feature-subtitle',
+                                'feature-paragraph': 'feature-paragraph',
+                                'btn': {text: 'button text'}
+                            }
+                        ]
+                    },
+                    {
+                        "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
+                        "anchor": null,
                         "type": "blog-teaser",
                         "label": "blog-teaser label",
                         "title": "blog-teaser title",
                         "description": "blog-teaser Description",
-                        "blogposts":[{
-                            "attributes":{
-                                "post_url":"post_url",
-                                "featured-image":"featured-image",
-                                "post_title":"post_title",
-                                "post_excerpt":"post_excerpt",
-                                "created":{
-                                    "date":"date"
+                        "blogposts": [
+                            {
+                                "attributes": {
+                                    "post_url": "post_url",
+                                    "featured-image": "featured-image",
+                                    "post_title": "post_title",
+                                    "post_excerpt": "post_excerpt",
+                                    "created": {
+                                        "date": "date"
+                                    }
                                 }
                             }
-                        }]
+                        ]
                     },
                     {
                         "_id": "b9d284c4-48f0-4718-a12b-210b8c73df60",
@@ -77,15 +139,15 @@ mainApp.factory('pagesService', function () {
                     {
                         "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
                         "anchor": null,
-                        "title":"title",
-                        "subtitle":"subtitle",
-                        "text":"text",
-                        "bgimg":{
-                            "parallax":"parallax",
-                            "url":"url",
-                            "width":"width",
-                            "height":"height",
-                            "blur":"blur"
+                        "title": "title",
+                        "subtitle": "subtitle",
+                        "text": "text",
+                        "bgimg": {
+                            "parallax": "parallax",
+                            "url": "url",
+                            "width": "width",
+                            "height": "height",
+                            "blur": "blur"
                         },
                         "type": "feature-blocks",
                         "label": "Feature Block",
@@ -160,20 +222,7 @@ mainApp.factory('pagesService', function () {
                      }
                      ]
                      },
-                     {
-                     "_id": "1e2b6078-c1d2-4550-8747-35eb74c8d763",
-                     "anchor": null,
-                     "type": "meet-team",
-                     "label": "Meet Team",
-                     "title": "title",
-                     "description": "Meet Team Description",
-                     "teamMembers": {
-                     "profilepic": "profilepic",
-                     "name": "name",
-                     "position": "position",
-                     "bio": "bio"
-                     }
-                     },
+
                      {
                      _id: "1e2b6078-c1d2-4550-8747-35eb74c8d763",
                      anchor: null,
@@ -212,25 +261,6 @@ mainApp.factory('pagesService', function () {
                      "title": "title",
                      "subtitle": "subtitle",
                      "text": "text"
-                     }
-                     ]
-                     },
-                     {
-                     "_id": "09bf4453-e567-4263-9042-cb2e9eb1adf2",
-                     "anchor": null,
-                     "main-feature-title": "main-feature-title",
-                     "type": "feature-list",
-                     "label": "feature-list-label",
-                     "description": "feature-list-description",
-                     "features": [
-                     {
-                     'feature-icon': 'feature-icon',
-                     'feature-button-url': 'feature-button-url',
-                     'src': 'src',
-                     'feature-title': 'feature-title',
-                     'feature-subtitle': 'feature-subtitle',
-                     'feature-paragraph': 'feature-paragraph',
-                     'btn': {text: 'button text'}
                      }
                      ]
                      },

@@ -6,22 +6,22 @@
 *
 -->
 
-<div id="error-msg" class="alert alert-danger hidden"><button type="button" aria-hidden="true" class="close">×</button><span class="message"></span></div><div>
-    {{#with component}}
+<div ng-show="component" id="error-msg" class="alert alert-danger hidden"><button type="button" aria-hidden="true" class="close">×</button><span class="message"></span></div><div>
+
     <div class="component-header hidden">
         <div>
-            {{{label}}}
+            {{component.label}}
         </div>
 
         <div>
-            {{{description}}}
+            {{component.description}}
         </div>
     </div>
 
     <div class="component-body">
         <div class="newsletter">
             <div class="inner-page row">
-                <h3>{{title}}</h3>
+                <h3>Sign Up For News Updates</h3>
 
                 <div class="col-sm-9">
                     <div class="left-inner-addon">
@@ -32,14 +32,12 @@
                 </div>
                 <div class="col-sm-3">
 
-                    <button data-toggle="modal" data-target="#myModal" name="subscribe" id="form-subscribe" class="btn btn-outline pull-right btn-block" script="">{{btntext}} <i class="fa fa-arrow-circle-o-right"></i></button>
+                    <button data-toggle="modal" data-target="#myModal" name="subscribe" id="form-subscribe" class="btn btn-outline pull-right btn-block " style="opacity:0" script="">IM INTERESTED <i class="fa fa-arrow-circle-o-right"></i></button>
                 </div>
 
             </div>
         </div>
     </div>
-    {{/with}}
-
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

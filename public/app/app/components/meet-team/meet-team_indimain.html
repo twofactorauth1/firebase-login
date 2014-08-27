@@ -6,25 +6,25 @@
 *
 -->
 
-<div>
-    {{#with component}}
+<div ng-show="component">
+
     <div class="component-body">
-        <div class="masthead {{#if img.parallax}} parallax {{/if}}" data-image="{{img.url}}" data-width="{{img.width}}" data-height="{{img.height}}">
+        <div class="masthead {{component.img.parallax?'parallax':''}}" data-image="{{component.img.url}}" data-width="{{component.img.width}}" data-height="{{component.img.height}}">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="home-text">
                         <h1>
-                            <div class="editable" data-class="title">{{{title}}}</div>
+                            <div class="editable" data-class="title">{{component.title}}</div>
                         </h1>
 
                         <p>
-                        <div class="editable" data-class="subtitle">{{{subtitle}}}</div>
+                        <div class="editable" data-class="subtitle">{{component.subtitle}}</div>
                         </p>
 
                         <div class="col-xs-12">
                             <div class="btn-wrap">
-                                <a class="btn btn-success btn-block center col-xs-3 scrollto" href="{{btn.url}}">
-                                    <h4 class="btn-text"><div class="editable" data-class="btn-text">{{btn.text}}</div> <i class="fa fa-arrow-circle-o-down"></i></h4>
+                                <a class="btn btn-success btn-block center col-xs-3 scrollto" href="{{component.btn.url}}">
+                                    <h4 class="btn-text"><div class="editable" data-class="btn-text">{{component.btn.text}}</div> <i class="fa fa-arrow-circle-o-down"></i></h4>
                                 </a>
                             </div>
                         </div>
@@ -34,5 +34,6 @@
                 </div>
             </div>
         </div>
-        {{/with}}
+
     </div>
+</div>
