@@ -3,6 +3,7 @@ define(['app', 'apiService'], function(app) {
         //back button click function
         $scope.$back = function() {window.history.back();};
 
+        //user API call for object population
         ApiService.getUser(function (user) {
     		$scope.user = user;
     		$scope.fullName = [user.first, user.middle, user.last].join(' ');
@@ -20,6 +21,11 @@ define(['app', 'apiService'], function(app) {
                 $scope.userPhone = {_id: '', type: 'm', number: '', default: true};
             }
     	});
+
+        //account API call for object population
+        ApiService.getAccount(function (account) {
+            $scope.account = account;
+        });
 
         //user fullname PUT call
     	$scope.$watch('fullName', function (newValue, oldValue) {
@@ -42,18 +48,6 @@ define(['app', 'apiService'], function(app) {
     				$scope.user.middle = '';
     				$scope.user.last = '';
     			}
-    			ApiService.putUser($scope.user, function (user) {
-    				$scope.user = user;
-    			});
-    		}
-    	});
-
-        //user email ID PUT call
-    	$scope.$watch('user.email', function (newValue, oldValue) {
-    		if (newValue) {
-    			ApiService.putUser($scope.user, function (user) {
-    				$scope.user = user;
-    			});
     		}
     	});
 
@@ -74,10 +68,25 @@ define(['app', 'apiService'], function(app) {
                 } else {
                     $scope.user.details.phones = [$scope.userPhone];
                 }
+            }
+        });
+
+        //update user object on change
+        $scope.$watch('user', function (newValue, oldValue) {
+            if (newValue) {
                 ApiService.putUser($scope.user, function (user) {
                     $scope.user = user;
                 });
             }
-        });
+        }, true);
+
+        //update account object on change
+        $scope.$watch('account', function (newValue, oldValue) {
+            if (newValue) {
+                ApiService.putAccount($scope.account, function (account) {
+                    $scope.account = account;
+                });
+            }
+        }, true);
     }]);
 });
