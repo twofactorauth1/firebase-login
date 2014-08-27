@@ -102,7 +102,7 @@ define([
                     return $$.api.getApiUrl("cms", "page");
                     break;
                 case "DELETE":
-                    return $$.api.getApiUrl("cms", "page/" + this.id);
+                    return $$.api.getApiUrl("cms","website/" + this.get("websiteId") + "/page/" + this.id+"/"+this.get('title'));
                     break;
             }
         }

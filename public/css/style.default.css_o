@@ -14768,38 +14768,6 @@ strong {
 .signinpanel form a {
   color: #666;
 }
-.signuppanel {
-  margin: 5% auto 0 auto;
-  width: 780px;
-}
-.signuppanel .row {
-  margin-left: -5px;
-  margin-right: -5px;
-}
-.signuppanel .logopanel {
-  float: none;
-  width: auto;
-  padding: 0;
-  background: none;
-}
-.signuppanel .signup-info {
-  padding-right: 20px;
-}
-.signuppanel form {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid #ccc;
-  -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
-  box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
-  border-radius: 3px;
-  padding: 30px;
-}
-.signuppanel .col-sm-6,
-.signuppanel .col-sm-5,
-.signuppanel .col-sm-3,
-.signuppanel .col-sm-4 {
-  padding-left: 5px;
-  padding-right: 5px;
-}
 .feat-list {
   margin-top: 20px;
 }

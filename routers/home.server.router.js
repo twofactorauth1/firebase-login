@@ -8,6 +8,7 @@
 var BaseRouter = require('./base.server.router.js');
 var HomeView = require('../views/home.server.view');
 var AdminView = require('../views/admin.server.view');
+var AngularAdminView = require('../views/angular.admin.server.view');
 var WebsiteView = require('../views/website.server.view');
 
 var contactDao = require('../dao/contact.dao');
@@ -40,6 +41,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         app.get("/admin", this.isAuth, this.showAdmin.bind(this));
         app.get("/admin/*", this.isAuth, this.showAdmin.bind(this));
+        
+        app.get("/admin1", this.isAuth, this.showAngularAdmin.bind(this));
+        app.get("/admin1/*", this.isAuth, this.showAngularAdmin.bind(this));
 
         return this;
     },
@@ -153,6 +157,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var accountId = this.accountId(req);
         if (accountId > 0) {
             new AdminView(req,resp).show();
+        } else {
+            //send them back to the main home
+            resp.redirect("/admin");
+        }
+    },
+
+    showAngularAdmin: function(req,resp) {
+        var accountId = this.accountId(req);
+        if (accountId > 0) {
+            new AngularAdminView(req,resp).show();
         } else {
             //send them back to the main home
             resp.redirect("/admin");

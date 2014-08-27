@@ -27,8 +27,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthApi, this.createContact.bind(this));
         app.put(this.url(''), this.isAuthApi, this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteContact.bind(this));
-        app.get(this.url(''), this.isAuthApi, this.listContacts.bind(this));
-        app.get(this.url('filter/:letter'), this.isAuthApi, this.getContactsByLetter.bind(this));
+        app.get(this.url(''), this.isAuthApi, this.listContacts.bind(this)); // for all contacts
+        app.get(this.url('filter/:letter'), this.isAuthApi, this.getContactsByLetter.bind(this)); // for individual letter
 
 
 
@@ -152,7 +152,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var letter = req.params.letter;
         self.log.debug('>> getContactsByLetter');
 
-        contactDao.getContactsShort(accountId, letter, limit, function (err, value) {
+        contactDao.getContactsShort(accountId, skip, letter, limit, function (err, value) {
             self.log.debug('<< getContactsByLetter');
             self.sendResultOrError(res, err, value, "Error listing contacts by letter [" + letter + "]");
             self = null;

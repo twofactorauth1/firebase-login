@@ -71,7 +71,8 @@ var component = $$.m.ModelBase.extend({
             /**
              * The optional embed code to embed the video (e.g. YouTube embed)
              */
-            embed: null
+            embed: null,
+            title:""
         }
     },
 
