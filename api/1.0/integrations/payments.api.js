@@ -160,7 +160,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: security
         var cardToken = req.body.cardToken;
         var contact = req.body.contact;
-        var user = req.body.user;
+        var user = req.body.user || req.user;
         var _accountId = self.accountId(req);
         //validate arguments
         if(cardToken && cardToken.length ===0) {
