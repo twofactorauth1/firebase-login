@@ -6,9 +6,7 @@
 *
 -->
 
-<div>
-    {{#with component}}
-
+<div data-ng-if="component">
     <div id="{{anchor}}" class="component-body hidden {{bgcolor}}">
         <div class="testimonials">
             <div class="inner-page">
@@ -17,45 +15,41 @@
                         {{{title}}}
                     </div>
                 </h1>
-                <div class="col-xs-12">
-                    {{#each testimonials}}
-                    <div class="single-testimonial row {{#if @last}} last {{/if}}">
+                <div class="col-xs-12" data-ng-repeat="testimonial in component.testimonials track by $index">
+                    <div class="single-testimonial row " data-ng-class="{last: $last}">
                         {{#everyOther @index 2 }}
-                        <div class="img col-sm-3 pull-right">
-                            {{else}}
-                            <div class="img col-sm-3">
-                                {{/everyOther}}
+                        <div class="img col-sm-3 pull-right" data-ng-if="component.testimonials.everyOther[1]">
+                            <div class="img col-sm-3" data-ng-if="!component.testimonials.everyOther">
                                 <div class="editable" data-class="img">
-                                    <img src="{{img}}"/>
+                                    <img src="{{component.testimonials.img}}"/>
                                 </div>
                             </div>
                             <div class="clearfix visible-xs"></div>
                             <div class="col-sm-9">
                                 <h3 class="name">
                                     <div class="editable" data-class="img">
-                                        {{name}}
+                                        {{testimonial.name}}
                                     </div>
                                 </h3>
                                 <div class="site">
                                     <div class="editable" data-class="site">
-                                        {{site}}
+                                        {{testimonial.site}}
                                     </div>
                                 </div>
                                 <div class="text">
                                     <div class="editable" data-class="site">
-                                        {{text}}
+                                        {{testimonial.text}}
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="clearfix mb30"></div>
-                        {{/each}}
                     </div>
                 </div>
             </div>
         </div>
 
-        {{/with}}
     </div>
 
     <div class="clearfix"></div>
+</div>

@@ -6,16 +6,13 @@
 *
 -->
 
-<div class="section text-columns">
+<div class="section text-columns" data-ng-if="component">
     {{#with component}}
     <div class="component-body section-colored">
-        <div class="container">
-            {{#each columns}}
+        <div class="container" data-ng-repeat="column in component.columns track by $index">
             <div class="col-lg-4 col-md-4 col-sm-6">
                 {{{description}}}
             </div>
-            {{/each}}
         </div>
     </div>
-    {{/with}}
 </div>

@@ -6,16 +6,14 @@
 *
 -->
 
-<div>
-    {{#with component}}
+<div data-ng-if="component">
     <div class="component-body">
         <div class="social">
-            <ul>
-                {{#each networks}}
-                <li class="{{@key}}"><a href="{{this}}"><span class="fa fa-{{@key}}"></span></a></li>
-                {{/each}}
+            <ul data-ng-repeat="network in component.networks track by $index">
+              <span data-ng-repeat="(key,value) in network">
+                <li class="{{key}}"><a ng-href="{{network}}"><span class="fa fa-{{key}}"></span></a></li>
+                </span>
             </ul>
         </div>
     </div>
-    {{/with}}
 </div>
