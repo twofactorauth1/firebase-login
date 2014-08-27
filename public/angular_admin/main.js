@@ -4,7 +4,7 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
- 
+
  require.config({
  	baseUrl: '/js',
  	paths: {
@@ -15,7 +15,8 @@
         'angularSanitize': 'libs/angular-sanitize/angular-sanitize.min',
         'angularResource': 'libs/angular-resource/angular-resource.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
-        
+        'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
+
         //application related
         'storageutils': 'utils/storageutils',
         'namespaces': 'utils/namespaces',
@@ -30,7 +31,8 @@
         'angularRoute': {deps: ['angular']},
         'angularSanitize': {deps: ['angular']},
         'angularResource': {deps: ['angular']},
-        'angularAMD': {deps: ['angular']}
+        'angularAMD': {deps: ['angular']},
+        'bootstrap': {deps: ['jquery']}
  	},
- 	deps: ['adminCommon', 'app']
+ 	deps: ['adminCommon', 'bootstrap', 'app']
  });

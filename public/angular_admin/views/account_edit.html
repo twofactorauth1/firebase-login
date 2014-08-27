@@ -27,7 +27,7 @@
 							<row>
 							<div class="col-xs-5 col-md-6">
 								<div class="hidden-xs hidden-sm">
-									<div class="btn-link btn-edit-photo">Change Photo</div>
+									<div class="btn-link btn-edit-photo" data-toggle="modal" data-target="#modal-change-photo">Change Photo</div>
 								</div>
 								<img id="contact-photo"
 									class="img-responsive img-rounded hand btn-edit-photo"
@@ -178,7 +178,7 @@
 				            <row>
 				                <div class="col-xs-5 col-md-6">
 				                    <div class="hidden-xs hidden-sm">
-				                        <div class="btn-link btn-edit-photo">Change Logo</div>
+				                        <div class="btn-link btn-edit-photo" data-toggle="modal" data-target="#modal-change-logo">Change Logo</div>
 				                    </div>
 				                    <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="/assets/icons/blank-user.jpg">
 				                </div>
@@ -352,6 +352,36 @@
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">�</button>
 					<h4 class="modal-title">Add or Remove Photo</h4>
+				</div>
+
+				<div class="modal-body">
+					<div class="row">
+						<div class="btn btn-primary col-xs-12 btn-remove-photo">Remove
+							Photo</div>
+					</div>
+
+					<div class="row" style="margin-top: 6px; margin-bottom: 20px;">
+						<div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload
+							new photo</div>
+					</div>
+
+					<div id="upload-photo-container"></div>
+
+					<img id="contact-photo-modal" src="/assets/icons/blank-user.jpg"
+						style="max-width: 100%; margin-top: 20px;">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="modal-change-logo" tabindex="-1"
+		role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" data-dismiss="modal">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">�</button>
+					<h4 class="modal-title">Add or Remove Logo</h4>
 				</div>
 
 				<div class="modal-body">
