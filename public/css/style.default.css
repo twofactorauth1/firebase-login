@@ -16256,6 +16256,21 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .billing-section .panel-body {
   min-height: 275px;
 }
+.integrations-section .thumbnail {
+  max-height: 400px;
+  height: 100%;
+}
+.integrations-section .thumbnail img {
+  max-height: 200px;
+  border: 1px solid #e7e7e7;
+  width: 100%;
+}
+.integrations-section .thumbnail h3 {
+  margin-top: 5px;
+}
+.integrations-section .thumbnail .caption p {
+  height: 60px;
+}
 .headerbar {
   border-left: 1px solid #eee;
   background: #fff;
