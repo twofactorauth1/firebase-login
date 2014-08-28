@@ -174,10 +174,10 @@ define([
             if (this.accountId == null) {
                 this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
             }
-            this.pages = new $$.c.Pages();
+            this.pages = new Pages();
 
-            //return this.pages.getPagesAll(this.accountId, this.websiteId);
-            return this.pages.fetch();
+            return this.pages.getPagesAll(this.accountId, this.websiteId);
+         //   return this.pages.fetch();
         },
 
         deletePage:function(){
