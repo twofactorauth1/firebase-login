@@ -16,6 +16,7 @@ var customerLink = $$.m.ModelBase.extend({
             _id: null,
             accountId: null,
             contactId: null,
+            userId: null,
             customerId: null,
             created: 0,
             _v:"0.1"
