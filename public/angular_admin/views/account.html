@@ -196,11 +196,6 @@
                         <div class="col-xs-12">
                             <ul class="social-list right row">
 
-
-
-
-
-
                                 <li class="col-xs-12">
                                     <div class="col-xs-2">
                                         <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-wrench"></i>
@@ -263,12 +258,12 @@
                         <h3 class="panel-title">Bill</h3>
                     </div>
                     <div class="panel-body">
-                        <h2 class="center">$99.98</h2>
+                        <h2 class="center total">$99.98</h2>
                         <p class="center">Total Due by September 12th, 2014</p>
                         <hr></hr>
-                        <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#viewBillModal">View Bill Details</button>
+                        <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
                         <div class="cleatfix mb30"></div>
-                        <button class="btn btn-lg btn-success btn-block">Pay Bill</button>
+                        <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#payBillModal">Pay Bill</button>
                         <!-- Add Auto Pay Option Toggle-->
                     </div>
                 </div>
@@ -324,6 +319,7 @@
                                     <th>Date</th>
                                     <th>Amount</th>
                                     <th>Card</th>
+                                    <th>Status</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -333,8 +329,9 @@
                                     <td>August 10th, 2014</td>
                                     <td>$99.98</td>
                                     <td>Visa - 8943</td>
+                                    <td>PAID</td>
                                     <td class="table-action">
-					                  <a href=""><i class="fa fa-eye"></i></a>
+					                  <a href="" data-toggle="modal" data-target="#viewTransactionModal"><i class="fa fa-eye"></i></a>
 					                </td>
                                 </tr>
                                 <tr>
@@ -342,8 +339,9 @@
                                     <td>July 10th, 2014</td>
                                     <td>$99.98</td>
                                     <td>Visa - 8943</td>
+                                    <td>PAID</td>
                                     <td class="table-action">
-					                  <a href=""><i class="fa fa-eye"></i></a>
+					                  <a href="" data-toggle="modal" data-target="#viewTransactionModal"><i class="fa fa-eye"></i></a>
 					                </td>
                                 </tr>
                                 <tr>
@@ -351,8 +349,9 @@
                                     <td>June 10th, 2014</td>
                                     <td>$99.98</td>
                                     <td>Visa - 8943</td>
+                                    <td>PAID</td>
                                     <td class="table-action">
-					                  <a href=""><i class="fa fa-eye"></i></a>
+					                  <a href="" data-toggle="modal" data-target="#viewTransactionModal"><i class="fa fa-eye"></i></a>
 					                </td>
                                 </tr>
                             </tbody>
@@ -363,30 +362,249 @@
         </div>
 
         <div class="integrations-section" ng-switch-when="integrations">
-            <h1>Google Analytics</h1>
-        </div>
 
+            <div class="row">
+              <div class="col-sm-3 col-md-4">
+                <div class="thumbnail">
+                    <div class="img-wrap">
+                        <img src="../assets/images/facebook-logo.png" alt="...">
+                    </div>
+                  <div class="caption">
+                    <h3>Facebook</h3>
+                    <p>Import friends as customers, post directly from admin, create a campaign.</p>
+                    <p><button class="btn btn-success btn-lg btn-block" role="button" data-toggle="modal" data-target="#facebookSettingsModal">Settings</button></p>
+                    <div class="toggle-modern">
+                        <div class="toggles on"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-4">
+                <div class="thumbnail">
+                    <div class="img-wrap">
+                        <img src="../assets/images/twitter-logo.jpg" alt="...">
+                    </div>
+                  <div class="caption">
+                    <h3>Twitter</h3>
+                    <p>Tweet with customers, plan tweets in advance.</p>
+                    <p><a href="#" class="btn btn-success btn-lg btn-block" role="button">Settings</a></p>
+                    <div class="toggle-modern">
+                        <div class="toggles on"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-4">
+                <div class="thumbnail">
+                    <div class="img-wrap">
+                        <img src="../assets/images/google-plus-logo.jpg" alt="...">
+                    </div>
+                  <div class="caption">
+                    <h3>Google +</h3>
+                    <p>Import customers, plan posts in advance.</p>
+                    <p><a href="#" class="btn btn-success btn-lg btn-block" role="button">Settings</a></p>
+                    <div class="toggle-modern">
+                        <div class="toggles on"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-4">
+                <div class="thumbnail">
+                    <div class="img-wrap">
+                        <img src="../assets/images/linkedin-logo.png" alt="...">
+                    </div>
+                  <div class="caption">
+                    <h3>LinkedIn</h3>
+                    <p>Import contacts</p>
+                    <p><a href="#" class="btn btn-success btn-lg btn-block" role="button">Settings</a></p>
+                    <div class="toggle-modern">
+                        <div class="toggles on"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-4">
+                <div class="thumbnail">
+                    <div class="img-wrap">
+                        <img src="../assets/images/google-analytics-logo.png" alt="...">
+                    </div>
+                  <div class="caption">
+                    <h3>Google Analytics</h3>
+                    <p>Provides tracking for your site so you can learn more about your vistors and how to improve your search engine optimization. </p>
+                    <p><a href="#" class="btn btn-success btn-lg btn-block" role="button">Settings</a></p>
+                    <div class="toggle-modern">
+                        <div class="toggles on"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-4">
+                <div class="thumbnail">
+                    <div class="img-wrap">
+                        <img src="../assets/images/stripe-logo.jpg" alt="...">
+                    </div>
+                  <div class="caption">
+                    <h3>Stripe</h3>
+                    <p>Stripe Allows you to recieve payments on your website.</p>
+                    <p><a href="#" class="btn btn-success btn-lg btn-block" role="button">Settings</a></p>
+                    <div class="toggle-modern">
+                        <div class="toggles on"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
     </div>
+
+    <div class="modal" id="billSummaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    	<div class="modal-dialog">
+    		<div class="modal-content">
+    			<div class="modal-header">
+    				<button type="button" class="close" data-dismiss="modal">
+    					<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+    				</button>
+    				<h4 class="modal-title" id="myModalLabel">Bill Summary</h4>
+    			</div>
+    			<div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="mb40"></div>
+                            <h4 class="center">Amount Due</h4>
+                            <h1 class="center total">$99.98</h1>
+                        </div>
+                        <div class="col-xs-6">
+                            <h4>Current Payment:</h4>
+                            <span>due 01SEP14</span>
+                            <h4>Last Payment:</h4>
+                            <span>recieved 01AUG14</span>
+                        </div>
+                    </div>
+    				<!-- <h3 class="center">Last Payment</h3>
+                    <h4>Amount: <span class="pull-right">$99.00</span></h4>
+                    <h4>Date: <span class="pull-right">01AUG14</span></h4>
+                    <hr></hr>
+                    <h3 class="center">Current Balance</h3>
+                    <h4>Amount Due: <span class="pull-right">$99.00</span></h4>
+                    <h4>Due Date: <span class="pull-right">01SEP14</span></h4> -->
+    			</div>
+    			<div class="modal-footer">
+    				<button type="button" class="btn btn-primary btn-lg btn-make-payment"
+    					id="" data-dismiss="modal" data-toggle="modal" data-target="#payBillModal"><span class="fa fa-credit-card"></span> Pay Bill</button>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+
+    <div class="modal" id="payBillModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Verify Payment</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb20">
+                        <div class="col-xs-6">
+                            <div class="mb30"></div>
+                            <h4 class="center">Amount Due</h4>
+                            <h1 class="center total">$99.98</h1>
+                        </div>
+                        <div class="col-xs-6">
+                            <h4>Current Payment:</h4>
+                            <span>due 01SEP14</span>
+                            <h4>Period:</h4>
+                            <span>01AUG14 - 31AUG14</span>
+                        </div>
+                    </div>
+                    <hr></hr>
+                    <h4>Pay To: <span class="pull-right">Indigenous Software Inc.</span></h4>
+                    <h4 class="pull-left">Payment Method: </h4>
+                    <span class="pull-right">
+                        <select class="form-control">
+                            <option>Visa xxxx-xxxx-xxxx-2345 06/15</option>
+                            <option>Mastercard xxxx-xxxx-xxxx-9894 09/15</option>
+                            <option>Paypal mypaypalemail@gmail.com</option>
+                        </select>
+                    </span>
+                    <div class="clearfix"></div>
+                    <!-- <h4>Date: <span class="pull-right">Monday, September 1st, 2014</span></h4> -->
+                    <!-- <h4>Amount: <span class="pull-right">$99.98</span></h4> -->
+                </div>
+                <div class="modal-footer">
+                    <label class="col-xs-9">Please verify the information above and click "Submit" to authorize us to complete your payment.</label>
+                    <button type="button" class="btn btn-success btn-lg btn-pay-bill" id="" data-dismiss="modal"><span class="fa fa-lock"></span> Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="viewTransactionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Transaction #1</h4>
+                </div>
+                <div class="modal-body">
+                    <img src="../assets/images/paid-in-full.png" class="center paid" />
+                    <h4>Pay To: <span class="pull-right">Indigenous Software Inc.</span></h4>
+                    <h4>Payment Method: <span class="pull-right">Visa xxxx-xxxx-xxxx-2345 06/15</span></h4>
+                    <h4>Date: <span class="pull-right">Monday, September 1st, 2014</span></h4>
+                    <h4>Period: <span class="pull-right">01AUG14 - 31AUG14</span></h4>
+                    <h4>Amount Paid: <span class="pull-right">$99.98</span></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-lg btn-download-bill"
+                        id="" data-dismiss="modal"><span class="fa fa-download"></span> Download</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-print-bill"
+                        id="" data-dismiss="modal"><span class="fa fa-print"></span> Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="facebookSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Facebook Settings</h4>
+                </div>
+                <div class="modal-body">
+                <h4>Facebook Admins: <span class="fa fa-info-circle"></span></h4>
+                <input type="text" placeholder="Facebook Admin ID" class="form-control mb15 input-lg">
+                <div class="well">
+                    <h4>Facebook App: <span class="fa fa-info-circle"></span></h4>
+                    <input type="text" placeholder="Facebook App ID" class="form-control mb15 input-lg">
+                    <input type="text" placeholder="Facebook App Secret" class="form-control mb15 input-lg">
+                </div>
+                <h4>Facebook Page: <span class="fa fa-info-circle"></span></h4>
+                <input type="text" placeholder="Facebook Page Url" class="form-control mb15 input-lg">
+
+                <h4>Landing Page Redirect: <span class="fa fa-info-circle"></span></h4>
+                <select class="form-control input-lg">
+                    <option>Landing Page 1</option>
+                    <option>Landing Page 2</option>
+                    <option>Landing Page 3</option>
+                </select>
+
+                </div>
+                <div class="modal-footer">
+                    <span>Last synced 3hrs ago </span>
+                    <button type="button" class="btn btn-primary btn-lg btn-print-bill"
+                        id="" data-dismiss="modal"><span class="fa fa-repeat"></span> Sync</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
-<div class="modal" id="viewBillModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">×</span><span class="sr-only">Close</span>
-					</button>
-					<h4 class="modal-title" id="myModalLabel">View Bill</h4>
-				</div>
-				<div class="modal-content">
-					<h3>the Bill</h3>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary btn-delete-contact-ok"
-						id="" data-dismiss="modal">OK</button>
-					<button type="button" class="btn btn-primary" id=""
-						data-dismiss="modal">cancel</button>
-				</div>
-			</div>
-		</div>
-	</div>
