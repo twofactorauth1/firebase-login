@@ -16254,6 +16254,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
     opacity: 1;
   }
 }
+.account {
+  overflow: hidden;
+}
 .account .billing-section .panel-body {
   min-height: 275px;
 }
@@ -16292,6 +16295,10 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .account .total {
   font-size: 60px;
+}
+.account .profile .social-list p {
+  line-height: 50px;
+  margin-bottom: 0;
 }
 .headerbar {
   border-left: 1px solid #eee;
