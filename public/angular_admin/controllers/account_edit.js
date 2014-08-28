@@ -1,6 +1,6 @@
 define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
     app.controller('AccountEditCtrl', ['$scope', 'ApiService', function ($scope, ApiService) {
-        var phoneCharLimit = 9;
+        var phoneCharLimit = 4;
 
         //back button click function
         $scope.$back = function() {window.history.back();};
@@ -9,11 +9,18 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
         ApiService.getUser(function (user) {
     		$scope.user = user;
     		$scope.fullName = [user.first, user.middle, user.last].join(' ');
+            if (!$scope.user.details[0].phones.length)
+                $scope.user.details[0].phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false, type: 'm'});
+            $scope.user.details[0].phones.forEach(function (value, index) {
+                $scope.userPhoneWatchFn(index);
+            });
     	});
 
         //account API call for object population
         ApiService.getAccount(function (account) {
             $scope.account = account;
+            if (!$scope.account.business.phones.length)
+                $scope.account.business.phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false});
             $scope.account.business.phones.forEach(function (value, index) {
                 $scope.businessPhoneWatchFn(index);
             });
@@ -31,7 +38,7 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
 
         //business phone field add
         $scope.addBusinessContactFn = function () {
-            $scope.account.business.phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: true});
+            $scope.account.business.phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false});
             $scope.businessPhoneWatchFn($scope.account.business.phones.length-1);
         };
 
@@ -98,6 +105,33 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
                 });
             });
         });
+
+        $scope.userPhoneTypeSaveFn = function (index, type) {
+            var typeLabel = null;
+            if (type == 'm')
+                typeLabel = 'mobile';
+            if (type == 'h')
+                typeLabel = 'home';
+            if (type == 'w')
+                typeLabel = 'work';
+            $('#user-phone-type-' + index).html(typeLabel);
+            $scope.user.details[0].phones[index].type = type;
+        };
+
+        $scope.userPhoneWatchFn = function (index) {
+            $scope.$watch('user.details[0].phones[' + index + ']', function (newValue, oldValue) {
+                if (newValue && newValue.number.length > phoneCharLimit)
+                    ApiService.putUser($scope.user, function (account) {
+                        //$scope.account = account;
+                    });
+            }, true);
+        };
+
+        //business phone field add
+        $scope.addUserContactFn = function () {
+            $scope.user.details[0].phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false, type: 'm'});
+            $scope.userPhoneWatchFn($scope.user.details[0].phones.length-1);
+        };
 
     }]);
 });
