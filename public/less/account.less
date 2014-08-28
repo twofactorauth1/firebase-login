@@ -1,35 +1,54 @@
-.billing-section {
-	.panel-body {
-		min-height: 275px;
+.account {
+	.billing-section {
+		.panel-body {
+			min-height: 275px;
+		}
 	}
-}
 
-.integrations-section {
-	.thumbnail {
-		max-height: 400px;
-		height: 100%;
-		img {
-			margin-left: auto;
-			margin-right: auto;
-			position: absolute;
-			top: 50%;
-			transform: translate(0, -50%);
-			padding: 2em;
-		}
+	.integrations-section {
+		.thumbnail {
+			max-height: 400px;
+			height: 100%;
+			img {
+				margin-left: auto;
+				margin-right: auto;
+				position: absolute;
+				top: 50%;
+				transform: translate(0, -50%);
+				padding: 2em;
+			}
 
-		h3 {
-			margin-top: 5px;
-		}
+			h3 {
+				margin-top: 5px;
+			}
 
-		.caption p {
-			height: 60px;
-		}
+			.caption p {
+				height: 60px;
+			}
 
-		.img-wrap {
-			height: 200px;
-			position: relative;
-			border: 1px solid #e7e7e7;
-			overflow: hidden;
+			.img-wrap {
+				height: 200px;
+				position: relative;
+				border: 1px solid #e7e7e7;
+				overflow: hidden;
+			}
 		}
+	}
+
+	.modal-body {
+		h3:first-child {
+			margin-top: 0;
+		}
+	}
+
+	.paid {
+		width: 330px;
+		position: fixed;
+		opacity: .05;
+		margin: 0 18%;
+	}
+
+	.total {
+		font-size: 60px;
 	}
 }

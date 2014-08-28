@@ -1,3 +1,4 @@
+@import "../js/libs/skeuocard/styles/skeuocard.css";
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -16253,14 +16254,14 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
     opacity: 1;
   }
 }
-.billing-section .panel-body {
+.account .billing-section .panel-body {
   min-height: 275px;
 }
-.integrations-section .thumbnail {
+.account .integrations-section .thumbnail {
   max-height: 400px;
   height: 100%;
 }
-.integrations-section .thumbnail img {
+.account .integrations-section .thumbnail img {
   margin-left: auto;
   margin-right: auto;
   position: absolute;
@@ -16268,17 +16269,29 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   transform: translate(0, -50%);
   padding: 2em;
 }
-.integrations-section .thumbnail h3 {
+.account .integrations-section .thumbnail h3 {
   margin-top: 5px;
 }
-.integrations-section .thumbnail .caption p {
+.account .integrations-section .thumbnail .caption p {
   height: 60px;
 }
-.integrations-section .thumbnail .img-wrap {
+.account .integrations-section .thumbnail .img-wrap {
   height: 200px;
   position: relative;
   border: 1px solid #e7e7e7;
   overflow: hidden;
+}
+.account .modal-body h3:first-child {
+  margin-top: 0;
+}
+.account .paid {
+  width: 330px;
+  position: fixed;
+  opacity: .05;
+  margin: 0 18%;
+}
+.account .total {
+  font-size: 60px;
 }
 .headerbar {
   border-left: 1px solid #eee;
