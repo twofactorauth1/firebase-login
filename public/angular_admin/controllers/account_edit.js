@@ -1,5 +1,7 @@
 define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
     app.controller('AccountEditCtrl', ['$scope', 'ApiService', function ($scope, ApiService) {
+        var phoneCharLimit = 9;
+
         //back button click function
         $scope.$back = function() {window.history.back();};
 
@@ -7,27 +9,31 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
         ApiService.getUser(function (user) {
     		$scope.user = user;
     		$scope.fullName = [user.first, user.middle, user.last].join(' ');
-
-            if (user.details.phones && user.details.phones.length) {
-                $scope.userPhone = null;
-                user.details.phones.forEach(function (value) {
-                    if (value.default) {
-                        $scope.userPhone = value;
-                    }
-                });
-                if ($scope.userPhone === null)
-                    $scope.userPhone = {_id: $$.u.idutils.generateUniqueAlphaNumericShort(), type: 'm', number: '', default: true};
-            } else {
-                $scope.userPhone = {_id: $$.u.idutils.generateUniqueAlphaNumericShort(), type: 'm', number: '', default: true};
-            }
     	});
 
         //account API call for object population
         ApiService.getAccount(function (account) {
             $scope.account = account;
-            if (!(account.business.phones && account.business.phones.length))
-                $scope.account.business.phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: true});
+            $scope.account.business.phones.forEach(function (value, index) {
+                $scope.businessPhoneWatchFn(index);
+            });
         });
+
+        //business phone watch setup
+        $scope.businessPhoneWatchFn = function (index) {
+            $scope.$watch('account.business.phones[' + index + ']', function (newValue, oldValue) {
+                if (newValue && newValue.number.length > phoneCharLimit)
+                    ApiService.putAccount($scope.account, function (account) {
+                        //$scope.account = account;
+                    });
+            }, true);
+        };
+
+        //business phone field add
+        $scope.addBusinessContactFn = function () {
+            $scope.account.business.phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: true});
+            $scope.businessPhoneWatchFn($scope.account.business.phones.length-1);
+        };
 
         //user fullname PUT call
     	$scope.$watch('fullName', function (newValue, oldValue) {
@@ -50,52 +56,48 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
     				$scope.user.middle = '';
     				$scope.user.last = '';
     			}
+                ApiService.putUser($scope.user, function (user) {
+                    //$scope.user = user;
+                });
     		}
     	});
 
-        //user phone number PUT call
-        $scope.$watch('userPhone.number', function (newValue, oldValue) {
-            if (newValue) {
-                if ($scope.user.details.phones && $scope.user.details.phones.length) {
-                    var noDefault = true;
-                    $scope.user.details.phones.forEach(function (value, index) {
-                        if (value.default) {
-                            $scope.user.details.phones[index] = $scope.userPhone;
-                            noDefault = false;
-                        }
+        ['user.email'].forEach(function (value) {
+            $scope.$watch(value, function (newValue, oldValue) {
+                if (newValue) {
+                    ApiService.putUser($scope.user, function (user) {
+                        //$scope.user = user;
                     });
-                    if (noDefault) {
-                        $scope.user.details.phones.push($scope.userPhone);
-                    }
-                } else {
-                    $scope.user.details.phones = [$scope.userPhone];
                 }
-            }
-            ApiService.putUser($scope.user, function (user) {
-                $scope.user = user;
             });
         });
 
-        //update user object on change
-        $scope.$watch('user', function (newValue, oldValue) {
-            if (newValue) {
-                ApiService.putUser($scope.user, function (user) {
-                    $scope.user = user;
-                });
-            }
-        }, true);
+        $scope.$watch('account.business.size', function (newValue, oldValue) {
+            if ($scope.account && $scope.account.business.size !== parseInt($scope.account.business.size))
+                $scope.account.business.size = parseInt($scope.account.business.size);
+            ApiService.putAccount($scope.account, function (account) {
+                //$scope.account = account;
+            });
+        });
 
-        //update account object on change
-        $scope.$watch('account', function (newValue, oldValue) {
-            if (newValue) {
-                if ($scope.account.business.size)
-                    $scope.account.business.size = parseInt($scope.account.business.size);
-                if ($scope.account.business.type)
-                    $scope.account.business.type = parseInt($scope.account.business.type);
+        $scope.$watch('account.business.type', function (newValue, oldValue) {
+            if ($scope.account && $scope.account.business.type !== parseInt($scope.account.business.type))
+                $scope.account.business.type = parseInt($scope.account.business.type);
+            ApiService.putAccount($scope.account, function (account) {
+                // $scope.account = account;
+            });
+        });
+
+
+        ['account.business.name',
+         'account.business.description',
+         'account.business.category'].forEach(function (value) {
+            $scope.$watch(value, function (newValue, oldValue) {
                 ApiService.putAccount($scope.account, function (account) {
-                    $scope.account = account;
+                    //$scope.account = account;
                 });
-            }
-        }, true);
+            });
+        });
+
     }]);
 });
