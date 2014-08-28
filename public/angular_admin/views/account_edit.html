@@ -262,7 +262,7 @@
 
 				        <hr></hr>
 
-				        <div id="phone-row" class="row">
+				        <div id="phone-row" class="row" ng-repeat="phone in account.business.phones">
 				            <div class="col-xs-1"><i class="icon-main fa fa-phone"></i>
 				            </div>
 				            <div class="col-xs-10">
@@ -278,7 +278,7 @@
 				                        <div class="form-group col-xs-12 col-sm-8 col-md-10">
 				                            <div class="input-group">
 				                                <div class="input-group-addon">+1</div>
-				                                <input type="text" class="input-edit-phone form-control input-lg" ng-model='account.business.phones[0].number'>
+				                                <input type="text" class="input-edit-phone form-control input-lg" ng-model='phone.number'>
 				                            </div>
 				                        </div>
 				                    </div>
@@ -290,6 +290,9 @@
 				            </div>
 
 				        </div>
+						<div class="row">
+							<button id="btn-new-address" class="btn btn-primary btn-sm" ng-click="addBusinessContactFn()">Add Contact</button>
+						</div>
 
 
 
