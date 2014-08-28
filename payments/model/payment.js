@@ -28,6 +28,7 @@ var payment = $$.m.ModelBase.extend({
             balance_transaction: null,
             customerId: null,
             contactId: null,
+            userId: null,
             failure_code: null,
             failure_message: null,
             invoiceId: null,

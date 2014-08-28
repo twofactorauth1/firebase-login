@@ -30,6 +30,13 @@ var dao = {
         this.findMany(query, fn);
     },
 
+    getSubscriptionsByUser: function(userId, fn) {
+        var self = this;
+        self.log.debug('>> getSubscriptionsByUser');
+        var query = {userId: userId};
+        this.findMany(query, fn);
+    },
+
     getSubscriptionsByAccountAndPlan: function(accountId, planId, fn) {
         var self = this;
         self.log.debug(">> getSubscriptionsByAccountAndPlan");

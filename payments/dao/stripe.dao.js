@@ -9,12 +9,13 @@ var baseDao = require('../../dao/base.dao.js');
 var stripeConfigs = require('../../configs/stripe.config.js');
 var appConfig = require('../../configs/app.config.js');
 var contactDao = require('../../dao/contact.dao.js');
+var userDao = require('../../dao/user.dao.js');
 var subscriptionDao = require('./subscription.dao.js');
 var paymentDao = require('./payment.dao.js');
 var customerLinkDao = require('./customer_link.dao.js');
 
 /*-- for stripe api--*/
-var stripe = require("stripe")( stripeConfigs.KM_STRIPE_TEST_SECRET_KEY);//TODO: app config
+var stripe = require("stripe")( stripeConfigs.STRIPE_SECRET_KEY);//TODO: app config
 
 var dao = {
 
@@ -79,6 +80,55 @@ var dao = {
         });
     },
 
+    createStripeCustomerForUser: function(cardToken, user, accountId, fn) {
+        //TODO: check if this is already a customer and add accountId
+        var self = this;
+        self.log.debug(">> createStripeCustomerForUser");
+        var params = {};
+        params.email = user.get('email');
+        params.description = 'Customer for ' + user.get('email');
+        params.metadata = {};
+        params.metadata.contactId = user.id();
+        params.metadata.accountId_0 = accountId;
+        if(cardToken && cardToken.length > 0) {
+            params.cardToken = cardToken;
+        }
+
+        stripe.customers.create(params, function(err, customer) {
+
+            if(err) {
+                fn(err, customer);
+                fn = null;
+            }
+            user.set('stripeId', customer.id);
+            self.log.debug('Setting user stripeId to ' + user.get('stripeId'));
+            var p1 = $.Deferred(), p2 = $.Deferred();
+            var savedCustomer = customer;
+            userDao.saveOrUpdate(user, function(err, value){
+                if (err) {
+                    fn(err, value);
+                    fn = null;
+                }
+                p1.resolve();
+            });
+
+
+            customerLinkDao.safeCreateWithUser(accountId, user.id(), customer.id, function(err, value){
+                if (err) {
+                    fn(err, value);
+                    fn = null;
+                }
+                p2.resolve();
+            });
+
+            $.when(p1,p2).done(function(){
+                self.log.debug('<< createStripeCustomerForUser');
+                return fn(err, savedCustomer);
+            });
+
+        });
+    },
+
     /*
      * Because we are sharing customers across accounts, all customers will be saved to the
      * main indigenous account.  When we list customers for a specific account, we will need
@@ -87,7 +137,8 @@ var dao = {
     listStripeCustomers: function(accountId, limit, fn) {
         var self = this;
         self.log.debug('>> listStripeCustomers');
-        stripe.customers.list({ limit: 10 }, function(err, customers) {
+        var _limit = limit ||10;
+        stripe.customers.list({ limit: _limit }, function(err, customers) {
             // asynchronously called
             if (err) {
                 fn(err, customers);
@@ -159,6 +210,7 @@ var dao = {
      * @param stripeCustomerId
      * @param fn
      */
+        //TODO: handle customers on a user
     deleteStripeCustomer: function(stripeCustomerId, contactId, fn) {
         var self = this;
         self.log.debug('>> deleteStripeCustomer');
@@ -328,6 +380,7 @@ var dao = {
      *
      * Returns Stripe Subscription object.  *Note* An internal subscription object has also been created.
      */
+        //TODO: handle subs on User
     createStripeSubscription: function(customerId, planId, coupon, trial_end, card, quantity, application_fee_percent,
                                        metadata, accountId, contactId, accessToken, fn) {
         var self = this;
@@ -647,6 +700,7 @@ var dao = {
      *
      * @return result object containing charge and payment objects
      */
+        //TODO: handle charges for User
     createStripeCharge: function(amount, currency, card, customerId, contactId, description, metadata, capture,
                                  statement_description, receipt_email, application_fee, accessToken, fn) {
         var self = this;
