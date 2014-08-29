@@ -1,6 +1,6 @@
 define(['angularAMD', 'angularRoute'], function (angularAMD) {
     var app = angular.module('indigeweb', ['ngRoute']);
-    
+
     //routes
     app.config(function ($routeProvider) {
     	$routeProvider.when('/account', angularAMD.route({
@@ -15,7 +15,7 @@ define(['angularAMD', 'angularRoute'], function (angularAMD) {
     	}))
     	.otherwise({redirectTo:'/account'});
     });
-    
+
 	$('#preloader').fadeOut();
     return angularAMD.bootstrap(app);
 });

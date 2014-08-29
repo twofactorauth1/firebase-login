@@ -1,4 +1,4 @@
-define(['app', 'apiService'], function(app) {
+define(['app', 'apiService', 'skeuocardDirective'], function(app) {
     app.controller('AccountCtrl', ['$scope', 'ApiService', function ($scope, ApiService) {
     	ApiService.getUser(function (user) {
     		$scope.user = user;
