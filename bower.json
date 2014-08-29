@@ -61,7 +61,8 @@
     "reset-css": "~2.0.20110126",
     "angular-money-directive": "~1.0.1",
     "videogular-overlay-play": "~0.4.2",
-    "angularAMD": "~0.2.1"
+    "angularAMD": "~0.2.1",
+    "skeuocard": "~1.0.3"
   },
   "resolutions": {
     "moment": "~2.8.0"
