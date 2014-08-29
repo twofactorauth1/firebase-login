@@ -30,6 +30,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function() {
         // WEBSITE
         app.get(this.url('website/:id'), this.isAuthApi, this.getWebsiteById.bind(this));
+        app.get(this.url('website/:id'), this.getWebsiteById.bind(this)); //Temp Added
         app.get(this.url(':accountid/cms/website', "account"), this.isAuthApi, this.getWebsiteForAccountId.bind(this));
         app.post(this.url('website'), this.saveOrUpdateWebsite.bind(this));
         app.put(this.url('website'), this.saveOrUpdateWebsite.bind(this));
