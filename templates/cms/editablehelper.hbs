@@ -79,5 +79,10 @@
             });
             return;
         });
+        // Adds ?editor=true to the end of url
+        // to make web-pages editable
+        $('a').on('click', function(e){
+            $(this).attr('href', this + "?editor=true")
+        })
     });
 </script>

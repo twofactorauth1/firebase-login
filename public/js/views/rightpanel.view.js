@@ -191,7 +191,7 @@ define([
 
                 }
             });
-            $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
+            $('#iframe-website').attr("src", $('#iframe-website').attr("src") + '?editor=true');
         },
 
         changePage:function(){
@@ -258,7 +258,7 @@ define([
                                 self.pageId = self.page.attributes._id;
 
 
-                                $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
+                                $('#iframe-website').attr("src", $('#iframe-website').attr("src")+'?editor=true');
                                 // var $iframe = $('#iframe-website');
                                 // $iframe.ready(function() {
                                 //     $iframe.contents().find("#main-area .entry").prepend(html);
@@ -431,7 +431,7 @@ define([
                     var html = tmpl(data);
                     $('#sortable').append(html);
 
-                    $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
+                    $('#iframe-website').attr("src", $('#iframe-website').attr("src")  + '?editor=true');
                 });
                 //$( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
                 //add to mongo
