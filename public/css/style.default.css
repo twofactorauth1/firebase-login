@@ -21880,6 +21880,9 @@ path {
 #media-manager-modal .modal-footer {
   margin-top: 0;
 }
+#media-manager-modal .single-filemanager .filemanager-options {
+  margin: 0;
+}
 #media-manager-modal .filemanager-options {
   margin: 0 15px 0 15px;
   z-index: 9999;
@@ -21890,6 +21893,9 @@ path {
   position: relative;
   top: 0;
   left: 0;
+}
+#media-manager-modal .filemanager-options hr {
+  margin: 10px 0;
 }
 #media-manager-modal .filemanager .media {
   max-height: 470px;
