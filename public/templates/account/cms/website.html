@@ -937,3 +937,32 @@
             </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 </script>
+
+<script type="text/x-handlebars-template" name="deletePage-modal" partial="true">
+    <div class="modal fade" id="delete-page-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Delete Page</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="delete_page">
+                        <div class="form-group">
+                            <label for="page-title" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Provide the title of the page you want to create">Page Title</label>
+                       <!--     <input id="page-title" class="form-control input-lg" type="text" value="">-->
+                            <select class="form-control input-lg" name="" id="myselect">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary remove-page" data-dismiss="modal">Delete Page</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</script>

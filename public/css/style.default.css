@@ -21316,6 +21316,9 @@ path {
   font-size: 18px;
   color: #2ecc71;
 }
+.rightpanel-commerce .leftpanelinner {
+  margin-top: 0;
+}
 .campaign-list,
 .template-list {
   padding: 0;

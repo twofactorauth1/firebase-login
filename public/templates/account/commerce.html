@@ -53,6 +53,13 @@
                         <div class="form-group row">
                             <select class=" form-control chosen-select input-lg">
                                 <option value="">Filter Products</option>
+                                <option>A to Z</option>
+                                <option>Z to A</option>
+                                <option>Date Added</option>
+                                <option>Best Selling</option>
+                                <option>Price: Low to High</option>
+                                <option>Price: High to Low</option>
+                                <option>Starred</option>
                             </select>
                         </div>
                     </div>
@@ -605,7 +612,7 @@
 
             <!-- Nav tabs -->
             <ul class="nav nav-tabs nav-justified">
-                <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Page</a></li>
+                <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Commerce Settings</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -613,6 +620,53 @@
             <div class="tab-content">
                 <div class="tab-pane pane-settings active" id="rp-page">
                     <div class="leftpanelinner">
+                        <button class="btn btn-orange btn-block mb15"><span class="fa fa-upload"></span> Import Products</button>
+                        <div class="form-group">
+                            <label>Default View</label>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default"> <span class="fa fa-th"></span> Grid</button>
+                                <button type="button" class="btn btn-default"><span class="fa fa-list"></span> List</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Default Order</label>
+                            <select class="form-control">
+                                <option>A to Z</option>
+                                <option>Z to A</option>
+                                <option>Date Added</option>
+                                <option>Best Selling</option>
+                                <option>Price: Low to High</option>
+                                <option>Price: High to Low</option>
+                                <option>Starred</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Show/Hide</label>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showProductThumb" checked="checked">
+                                <label for="showProductThumb">Thumbnail</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showSku" checked="checked">
+                                <label for="showSku">Sku</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showPrice" checked="checked">
+                                <label for="showPrice">Price</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showProductType" checked="checked">
+                                <label for="showProductType">Type</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showProductStatus" checked="checked">
+                                <label for="showProductStatus">Status</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showProductCost" checked="checked">
+                                <label for="showProductCost">Cost</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
