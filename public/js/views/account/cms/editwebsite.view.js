@@ -215,13 +215,15 @@ define([
             $('.tagsinput').hide();
 
             $('body').on('click',function (e) {
-                if(!( $(e.toElement||e.target).hasClass('tagsinput') || $(e.toElement||e.target).parent().hasClass('tagsinput') || $(e.toElement||e.target).parent().parent().hasClass('tagsinput') )) {
-                    if ($(e.toElement || e.target).parent().parent()[0].id != 'tags_link') {
-                        parent.$('#edit-website-wrapper').trigger("tagseditdone", {
-                            target : e.target,
-                            ul     : $('#tags_link')[0],
-                            tags   : $('.tag > span', $('#tags_input_tagsinput'))
-                        });
+                if (!( $(e.toElement||e.target).hasClass('tagsinput') || $(e.toElement||e.target).parent().hasClass('tagsinput') || $(e.toElement||e.target).parent().parent().hasClass('tagsinput') )) {
+                    if ( $(e.toElement || e.target).parent().parent()[0].id != 'tags_link') {
+                        if ( $('#tags_input_tagsinput').css('display') === 'block') {
+                            parent.$('#edit-website-wrapper').trigger("tagseditdone", {
+                                target: e.target,
+                                ul: $('#tags_link')[0],
+                                tags: $('.tag > span', $('#tags_input_tagsinput'))
+                            });
+                        }
                     }
                 }
             });
