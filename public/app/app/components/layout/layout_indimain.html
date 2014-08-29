@@ -106,7 +106,7 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if="mainMenu.handle=='main-menu'">
+                <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='main-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
                         <a href="{{link.linkTo|generateURLforLinks}}">{{link.label || link.url}}</a>
                     </li>
@@ -120,8 +120,10 @@
 </div>
 
 <div id="body">
+    {{layout}}
         <div ng-repeat="component in layout.pages[0].components | CreateUrlFilter">
-            <div ng-include src="component.url"></div>
+            {{component}}
+            <div ng-include src="{{component.url}}"></div>
         </div>
  </div>
 

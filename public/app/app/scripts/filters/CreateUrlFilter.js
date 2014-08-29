@@ -1,20 +1,23 @@
 mainApp.filter('CreateUrlFilter', ['accountService', function (accountService) {
-    var themeName;
     console.log('i m filter');
-    accountService(function (err, data) {
-        if (err) {
-            console.log(err);
-        } else {
-            themeName = data.website.themeId;
-            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', themeName);
-        }
-    });
+    var componentURL;
+
     return function (obj) {
-        obj.filter(function (item) {
-            console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', item);
-            item['url'] = 'components/' + item.type + '/' + item.type.trim() + '_' + themeName + '.html';
-            return item;
-        });
-        return obj;
+        if (obj) {
+            accountService(function (err, data) {
+                if (err) {
+                    console.log('Error ' + err);
+                    return err;
+                } else {
+                    console.log(data, "==========data=======");
+                    obj.forEach(function (component) {
+                        component['url'] = 'components/' + component.type + '/'+ component.type + '_'+ data.website.themeId + '.html';
+                        console.log(component.url);
+                    });
+                    console.log("@#@##############@@@@",obj);
+                    return obj;
+                }
+            });
+        }
     }
 }]);

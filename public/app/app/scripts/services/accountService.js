@@ -13,7 +13,7 @@ mainApp.factory('accountService', ['$location', '$http', function ($location, $h
         console.log('START:Account Service');
         if (that.account) {
             console.log('GET:Account Service Cached Data');
-            callback(that.account);
+            callback(null,that.account);
         } else {
             console.log('GET:Account Service Database Data');
             // API URL: http://yoursubdomain.indigenous.local/api/1.0/account

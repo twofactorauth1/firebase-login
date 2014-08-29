@@ -14,11 +14,12 @@ mainApp.factory('themeService', ['accountService', '$http', function (accountSer
         console.log('START:Theme Service');
         if (that.theme) {
             console.log('GET:Theme Service Cached Data');
-            callback(that.theme);
+            callback(null,that.theme);
         } else {
             accountService(function (err, data) {
                 if (err) {
                     console.log('Method:themeService Error: ' + err);
+                    callback(err);
                 } else {
                     console.log('Method:themeService Success: ', data);
                     console.log('GET:Theme Service Database Data');

@@ -14,11 +14,12 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
         console.log('START:Website Service');
         if (that.website) {
             console.log('GET:Website Service Cached Data');
-            callback(that.website);
+            callback(null,that.website);
         } else {
             accountService(function (err, data) {
                 if (err) {
                     console.log('Method:accountService Error: ' + err);
+                    callback(err, null);
                 } else {
                     console.log('Method:accountService Success: ', data);
                     console.log('GET:Website Service Database Data');
