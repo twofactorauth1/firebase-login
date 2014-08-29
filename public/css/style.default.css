@@ -14815,6 +14815,9 @@ body {
   background: rgba(255, 255, 255, 0.75);
   color: #666;
 }
+.btn-media-manager {
+  margin-right: 10px;
+}
 /**
  * Nestable
  */
@@ -16299,6 +16302,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .account .profile .social-list p {
   line-height: 50px;
   margin-bottom: 0;
+}
+.account #billSummaryModal .summary h4 {
+  margin: 0;
 }
 .headerbar {
   border-left: 1px solid #eee;
@@ -21867,6 +21873,35 @@ path {
   src: url('../fonts/opensans/OpenSans-Regular.ttf');
   font-weight: normal;
   font-style: normal;
+}
+#media-manager-modal .modal-body {
+  padding: 0;
+}
+#media-manager-modal .modal-footer {
+  margin-top: 0;
+}
+#media-manager-modal .filemanager-options {
+  margin: 0 15px 0 15px;
+  z-index: 9999;
+  position: relative;
+}
+#media-manager-modal .filemanager-options .ckbox {
+  display: block;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+#media-manager-modal .filemanager .media {
+  max-height: 470px;
+  overflow-y: scroll;
+  padding: 20px;
+  margin-right: 10px;
+  padding: 20px 5px 0px 20px;
+}
+#media-manager-modal .filemanager .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: -100px;
 }
 /********** Global **********/
 ul {
