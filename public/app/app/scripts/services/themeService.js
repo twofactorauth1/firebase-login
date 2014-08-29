@@ -5,57 +5,38 @@
 
 'use strict';
 
-mainApp.factory('themeService', function () {
+mainApp.factory('themeService', ['accountService', '$http', function (accountService, $http) {
 
-    //TODO Fetch Data Theam Data Front End
+    var that = this;
+    that.theme = null;
 
-    return function (websiteId) {
-        console.log(websiteId);
-        var theme = {
-            "template-engine": "handlebars",
-            "supports-menu-lists": "false",
-
-            "theme-id": "default",
-            "theme-name": "Indigenous Default",
-            "theme-description": "The default indigenous theme",
-            "tags": ["default", "awesome", "basic"],
-
-            "excluded-components": [
-
-            ],
-
-            "pages": [
-                {
-                    "handle": "index",
-                    "title": "Home",
-                    "components": [
-                        "freeform",
-                        "contact-us",
-                        "feature-blocks",
-                        "feature-list",
-                        "image-gallery",
-                        "image-slider"
-                    ]
-                },
-
-                {
-                    "handle": "about-us",
-                    "title": "About Us",
-                    "components": [
-                        "freeform"
-                    ]
-                },
-
-                {
-                    "handle": "contact-us",
-                    "title": "Contact Us",
-                    "components": [
-                        "contact-us"
-                    ]
+    return function (callback) {
+        console.log('START:Theme Service');
+        if (that.theme) {
+            console.log('GET:Theme Service Cached Data');
+            callback(that.theme);
+        } else {
+            accountService(function (err, data) {
+                if (err) {
+                    console.log('Method:themeService Error: ' + err);
+                } else {
+                    console.log('Method:themeService Success: ', data);
+                    console.log('GET:Theme Service Database Data');
+                    // API URL: http://dad.indigenous.local:3000/api/1.0/cms/theme/yourThemeId
+                    $http.get('/api/1.0/cms/theme/' + data.website.themeId)
+                        .success(function (data) {
+                            that.theme = data;
+                            console.log('END:Theme Service with SUCCESS');
+                            callback(null, data)
+                        })
+                        .error(function (err) {
+                            console.log('END:Theme Service with ERROR');
+                            callback(err, null);
+                        });
                 }
-            ]
-        };
-        return theme;
+
+            });
+        }
     };
 
-});
+}]);

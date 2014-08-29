@@ -18,9 +18,9 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
         } else {
             accountService(function (err, data) {
                 if (err) {
-                    console.log('Controller:WebService -> Method:accountService Error: ' + err);
+                    console.log('Method:accountService Error: ' + err);
                 } else {
-                    console.log('Controller:WebService -> Method:accountService Success: ', data);
+                    console.log('Method:accountService Success: ', data);
                     console.log('GET:Website Service Database Data');
                     // API URL: http://yoursubdomain.indigenous.local/api/1.0/cms/website/yourid
                     $http.get('/api/1.0/cms/website/' + data.website.websiteId)

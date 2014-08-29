@@ -1,44 +1,35 @@
 'use strict';
 
-/*
- * TODO
- * We have to make one transport service which will take
- * Theme Dependent Data from the server only one time in
- * MainCtrl and we have to inject the service into current LayoutCtrl
- *
- * */
+mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 'themeService', 'pagesService',
+    function ($scope, accountService, websiteService, themeService, pagesService) {
 
-mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 'themeService', 'pagesService', function ($scope, accountService, websiteService, themeService, pagesService) {
+        var account, pages,that = this;
 
-    //Checking Services Working Only Do not use all the services here
+        accountService(function (err, data) {
+            if (err) {
+                console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
+            } else {
+                account = data;
 
-    //Getting Data From Database According to Subdomain
-    //TODO
-    this.account = accountService('enter-domain-url-here');
-    //console.log(this.account);
+                //Include Layout For Theme
+                that.themeUrl = 'components/layout/layout_' + account.website.themeId + '.html';
 
-    //Getting All the Data Related to website
-    //TODO
-    this.website = websiteService(this.account.website.websiteId);
-    //console.log(this.website);
+                //Include CSS For Theme
+                that.themeStyle = 'styles/style.' + account.website.themeId + '.css';
 
-    //Getting All the Data Related to theme
-    //TODO
-    this.theme = themeService(this.account.website.websiteId);
-    //console.log(this.theme);
+                console.log('Controller:MainCtrl -> Method:accountService Success: ', data);
+            }
+        });
 
-    //Getting All ARRAY of PAGES to theme
-    //TODO
-    this.pages = pagesService(this.account.website.websiteId);
-    //console.log(this.pages);
+        pagesService(function (err, data) {
+            if (err) {
+                console.log('Controller:MainCtrl -> Method:pageService Error: ' + err);
+            } else {
+                pages = data;
+                console.log('Controller:MainCtrl -> Method:pageService Success: ', data);
 
-    //Include Layout For Theme
-    this.themeUrl = 'components/layout/layout_' + this.account.website.themeId + '.html';
-
-    //Include CSS For Theme
-    this.themeStyle = 'styles/style.' + this.account.website.themeId + '.css';
-
-    //Set Page Title
-    this.pageName = this.pages[0].title;
-
-}]);
+                //Set Page Title
+                that.pageName = pages[0].title;
+            }
+        });
+    }]);

@@ -28,7 +28,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
 
         //GET
-        app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
+        //app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
         app.get(this.url(''), this.getCurrentAccount.bind(this)); //Temp Added
         app.get(this.url('billing'), this.isAuthApi, this.getCurrentAccountBilling.bind(this));
         app.post(this.url('billing'), this.isAuthApi, this.updateCurrentAccountBilling.bind(this));
