@@ -6852,12 +6852,12 @@ small.media-desc {
 }
 .table {
   background: #fcfcfc;
+  -moz-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
   -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
   box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
 }
 .table th {
-  font-weight: normal;
-  font-family: 'LatoBold';
+  font-weight: bold;
 }
 .table thead > tr > th {
   border-color: #eee;
@@ -6873,10 +6873,58 @@ small.media-desc {
 .table tbody > tr > td,
 .table tfoot > tr > td {
   border-color: #eee;
+  padding: 10px;
 }
 .table-striped > tbody > tr:nth-child(2n+1) > td,
 .table-striped > tbody > tr:nth-child(2n+1) > th {
   background-color: #f5f5f5;
+}
+.table-bordered thead th:first-child {
+  border-left: 0;
+}
+.table thead .table-head-alt th {
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.table tbody tr td .progress {
+  margin: 0;
+}
+/***** TABLE STYLES ******/
+/*************************/
+.table-primary thead tr th {
+  background: #428BCA;
+}
+.table-success thead tr th {
+  background: #1CAF9A;
+}
+.table-warning thead tr th {
+  background: #F0AD4E;
+}
+.table-danger thead tr th {
+  background: #D9534F;
+}
+.table-info thead tr th {
+  background: #5BC0DE;
+}
+.table-dark thead tr th {
+  background: #1D2939;
+}
+.table.table-primary thead tr th,
+.table.table-success thead tr th,
+.table.table-danger thead tr th,
+.table.table-warning thead tr th,
+.table.table-info thead tr th,
+.table.table-dark thead tr th {
+  color: #fff;
+  border-bottom: 0;
+}
+.table-bordered.table-primary thead tr th,
+.table-bordered.table-success thead tr th,
+.table-bordered.table-warning thead tr th,
+.table-bordered.table-danger thead tr th,
+.table-bordered.table-info thead tr th,
+.table-bordered.table-dark thead tr th {
+  border-color: rgba(255, 255, 255, 0.2);
 }
 .hidden-inline-xs {
   display: inline !important;
