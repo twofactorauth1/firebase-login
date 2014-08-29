@@ -44,7 +44,8 @@ define([
 
             "click .import-contacts": "importTest",
             "scroll body": "check_height",
-            "keyup .search-contacts": "filter_contacts"
+            "keyup .search-contacts": "filter_contacts",
+            "change .chosen-select" :"sort_contact"
         },
 
         initialize: function() {
@@ -193,12 +194,14 @@ define([
                 currentLetter: self.currentLetter.toLowerCase(),
                 currentDisplay:self.currentDisplay.toLowerCase()
             };
+            console.log(data.account)
 
             //data.min = 6;
             //data.count = data.contacts.length;
 
             var tmpl = $$.templateManager.get("contacts-main", self.templateKey);
             var html = tmpl(data);
+
 
             self.show(html);
             self.adjustWindowSize();
@@ -517,7 +520,6 @@ define([
                 currentLetter: self.currentLetter.toLowerCase(),
                 currentDisplay:self.currentDisplay.toLowerCase()
             };
-
             data.contacts = contacts
             data.min = 6;
             data.count = data.contacts.length;
@@ -537,6 +539,73 @@ define([
 
             self.updateTooltips();
             cb && cb();
+        },
+        sort_contact:function(e)
+        {
+
+            var self = this, contacts;
+            var sortBy= e.target.value;
+            contacts = self.contacts.toJSON();
+            account=self.account.toJSON() ;
+            console.log(account.displaysettings.display_type);
+            switch(sortBy)
+            {
+                case 'a_to_z':
+                              if(account.displaysettings.display_type)
+
+                              {
+                                  contacts = _.sortBy( contacts, function(value) {
+                                      if(account.displaysettings.display_type==='first')
+                                          return value.first.charCodeAt(0);
+                                      else
+                                          return value.last.charCodeAt(0);
+
+                                  });
+
+                              }
+                              else{
+                                  contacts = _.sortBy( contacts, function(value) {
+                                      return value.last.charCodeAt(0);});
+                              }
+                              break;
+                case 'z_to_a':
+                              if(account.displaysettings.display_type){
+                                    contacts = _.sortBy( contacts, function(value) {
+                                      if(account.displaysettings.display_type==='first')
+                                        return value.first.charCodeAt(0)*-1;
+                                      else
+                                        return value.last.charCodeAt(0)*-1;
+                                  });
+                              }
+                              else{
+                                   contacts = _.sortBy( contacts, function(value) {
+                                      return value.last.charCodeAt(0)*-1;});
+
+                              }
+                              break;
+                case 'first_last':
+                                  contacts = _.sortBy( contacts, function(value) {
+                                  return value.first.charCodeAt(0);});
+                                  break;
+                case 'last_first':
+                                  contacts = _.sortBy( contacts, function(value) {
+                                  return value.last.charCodeAt(0);});
+                                  break;
+                case 'date_added':
+                                  contacts = _.sortBy( contacts, function(value) {
+                                      return value.created.date;});
+                                  break;
+                default:console.log('not selected');
+            }
+                self.reRenderContacts(contacts, function(){
+                    $(".chosen-select").val(e.target.value).focus();
+                });
+                self.check_welcome();
+
+
+
+
+
         }
 
     });
