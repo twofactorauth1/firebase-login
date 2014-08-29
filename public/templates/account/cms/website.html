@@ -225,10 +225,10 @@
             <div class="tab-pane pane-settings active" id="rp-page">
                 <div class="leftpanelinner">
                     <h4>Page Actions</h4>
-                    <select class="form-control">
+                    <select class="form-control page-select">
                         {{#if pages}}
                             {{#each pages}}
-                                <option>{{this}}</option>
+                                <option value="{{this.handle}}">{{this.title}}</option>
                             {{/each}}
                         {{/if}}
                     </select>

@@ -14,9 +14,10 @@ define([
     'services/cms.service',
     'utils/utils',
     'views/rightpanel.view',
-    'libs_misc/jquery.tagsinput/jquery.tagsinput'
+    'libs_misc/jquery.tagsinput/jquery.tagsinput',
+    'collections/cms/pages'
 
-], function (User, Account, Website, Page, Post, CmsService, utils, RightPanel, TagsInput) {
+], function (User, Account, Website, Page, Post, CmsService, utils, RightPanel, TagsInput,Pages) {
 
     var view = Backbone.View.extend({
 
@@ -66,7 +67,8 @@ define([
                 , p3 = this.getThemeConfig()
                 , p4 = this.getWebsite()
                 , p5 = $.Deferred()
-                , themePreviewURL;
+                , themePreviewURL
+                , p6 = this.getPages();
 
             $.when(p1)
                 .done(function() {
@@ -150,34 +152,40 @@ define([
                             $$.e.PageHandleEvent.trigger("pageHandle", { pageHandle: self.pageHandle });
                         }
 
-                        $.when(p3, p4, p5)
+                        $.when(p3, p4, p5,p6)
                             .done(function() {
                                 self.getPage().done(function(){
-                                    self.pageId = self.page.attributes._id;
-                                    console.log('This Page ID: '+self.pageId);
+                                    self.getPages()
+                                        .done( function() {
+                                            self.pageId = self.page.attributes._id;
+                                            console.log('This Page ID: ' + self.pageId);
 
-                                    // $("#iframe-website").contents().find('#body').data("pageid", self.pageId);
-                                    // console.log('Body Tag: '+$("#iframe-website").contents().find('#body').data("pageid"));
-                                    var componentsArray = [];
-                                    var rawComponents = self.page.attributes.components.models;
-                                    for (key in rawComponents) {
-                                        if (rawComponents.hasOwnProperty(key)) {
-                                            componentsArray.push(rawComponents[key]);
-                                        };
-                                    }
-                                    var data = {
-                                        components: componentsArray,
-                                        colorPalette: colorPalette,
-                                        account: self.account,
-                                        blog: self.blogBoolean,
-                                        currentThemePreviewURL: themePreviewURL
-                                    };
+                                            // $("#iframe-website").contents().find('#body').data("pageid", self.pageId);
+                                            // console.log('Body Tag: '+$("#iframe-website").contents().find('#body').data("pageid"));
+                                            var componentsArray = [];
+                                            var rawComponents = self.page.attributes.components.models;
+                                            for (key in rawComponents) {
+                                                if (rawComponents.hasOwnProperty(key)) {
+                                                    componentsArray.push(rawComponents[key]);
+                                                }
+                                                ;
+                                            }
+                                          
+                                            var data = {
+                                                pages: self.pages.toJSON(),
+                                                components: componentsArray,
+                                                colorPalette: colorPalette,
+                                                account: self.account,
+                                                blog: self.blogBoolean,
+                                                currentThemePreviewURL: themePreviewURL
+                                            };
 
-                                    self.setupSidebar(data, rightPanel, sidetmpl);
+                                            self.setupSidebar(data, rightPanel, sidetmpl);
 
-                                    $(window).on("resize", self.adjustWindowSize);
-                                    self.disableClickableTitles();
-                                    self.disableWaypointsOpacity();
+                                            $(window).on("resize", self.adjustWindowSize);
+                                            self.disableClickableTitles();
+                                            self.disableWaypointsOpacity();
+                                        })
                                 });
                         });
                     });
@@ -210,7 +218,7 @@ define([
 
             $(input).tagsInput({
                 'width': "100%",
-                'removeWithBackspace': false,
+                'removeWithBackspace': false
             }).importTags(tags.join(','));
             $('.tagsinput').hide();
 
@@ -628,6 +636,16 @@ define([
             });
 
             return this.page.fetch();
+        },
+
+        getPages: function() {
+            if (this.accountId == null) {
+                this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
+            }
+            this.pages = new Pages();
+
+            return this.pages.getPagesAll(this.accountId, this.websiteId);
+            //   return this.pages.fetch();
         },
 
         getThemeConfig: function () {

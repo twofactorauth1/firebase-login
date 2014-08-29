@@ -67,6 +67,7 @@ define([
             "click .create-page":"addBlankPage",
             "input #page-title":"urlCreator",
             "input #page-url":"urlCreator",
+            "change .page-select":"changePage",
 
             //import contact modal
             "click .choose-import": "changeImportSection",
@@ -170,15 +171,7 @@ define([
             });
         },
 
-        getPages: function() {
-            if (this.accountId == null) {
-                this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
-            }
-            this.pages = new Pages();
 
-            return this.pages.getPagesAll(this.accountId, this.websiteId);
-         //   return this.pages.fetch();
-        },
 
         deletePage:function(){
             var self = this;
@@ -201,6 +194,14 @@ define([
             $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
         },
 
+        changePage:function(){
+            var handle=$('.page-select option:selected').val();
+           // var handle=$('.page-select option:selected').text();
+
+            //window.location.replace(window.location.origin+"/page/"+handle+'?&editor=true');
+
+            $('#iframe-website').attr("src", "/page/"+handle+"?editor=true");
+        },
 
         addBlankPage: function() {
                 var self = this;
@@ -229,8 +230,8 @@ define([
                 console.log('page data: '+data);
                 var temp=$$.u.idutils.generateUUID();
 
-                this.page = new Page({
-                    websiteId:this.websiteId,
+                self.page = new Page({
+                    websiteId:self.websiteId,
                     title: pageTitle,
                     handle: pageUrl,
                     components: [
@@ -247,17 +248,25 @@ define([
                     }
                 });
 
-                this.page.save().done( function() {
-                    console.log('page sved');
-                    self.pageId = self.page.attributes._id;
-                    $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
-                    // var $iframe = $('#iframe-website');
-                    // $iframe.ready(function() {
-                    //     $iframe.contents().find("#main-area .entry").prepend(html);
-                    //     console.log('Blank Post ID: '+self.postId);
-                    //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
-                    //     $iframe.contents().find("#main-area").trigger("click");
-                    // });
+                //SAVE PAGE
+                self.page.save()
+                    .done(function() {
+                        //GETS LIST OF WEBSITE PAGES
+
+                                //UPDATES LIST OF WEBSITE PAGES ON RIGHTPANEL
+                                console.log('PAGE SAVED');
+                                self.pageId = self.page.attributes._id;
+
+
+                                $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
+                                // var $iframe = $('#iframe-website');
+                                // $iframe.ready(function() {
+                                //     $iframe.contents().find("#main-area .entry").prepend(html);
+                                //     console.log('Blank Post ID: '+self.postId);
+                                //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                                //     $iframe.contents().find("#main-area").trigger("click");
+                                // });
+
                 });
             },
 
