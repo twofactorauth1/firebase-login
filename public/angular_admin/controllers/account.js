@@ -4,5 +4,9 @@ define(['app', 'apiService', 'skeuocardDirective'], function(app) {
     		$scope.user = user;
     		$scope.activeTab = 'account';
     	});
+
+        ApiService.getAccount(function (account) {
+            $scope.account = account;
+        });
     }]);
 });

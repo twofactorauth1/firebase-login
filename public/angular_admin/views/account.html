@@ -202,7 +202,7 @@
                                         </a>
                                     </div>
                                     <div class="col-xs-8">
-                                        <p></p>
+                                        <p>{{account.business.name}}</p>
                                     </div>
                                     <div class="col-xs-2"></div>
 
@@ -213,7 +213,11 @@
                                         </a>
                                     </div>
                                     <div class="col-xs-8">
-                                        <p></p>
+                                        <p ng-show="account.business.size==1">Single</p>
+                                        <p ng-show="account.business.size==2">Small</p>
+                                        <p ng-show="account.business.size==3">medium</p>
+                                        <p ng-show="account.business.size==4">Large</p>
+                                        <p ng-show="account.business.size==5">Enterprise</p>
                                     </div>
                                     <div class="col-xs-2"></div>
 
@@ -224,7 +228,7 @@
                                         </a>
                                     </div>
                                     <div class="col-xs-8">
-                                        <p></p>
+                                        <p>{{account.business.description}}</p>
                                     </div>
                                     <div class="col-xs-2"></div>
 
@@ -235,7 +239,7 @@
                                         </a>
                                     </div>
                                     <div class="col-xs-8">
-                                        <p></p>
+                                        <p>{{account.business.category}}</p>
                                     </div>
                                     <div class="col-xs-2"></div>
 
