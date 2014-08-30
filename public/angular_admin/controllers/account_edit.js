@@ -1,7 +1,8 @@
 define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
-    app.controller('AccountEditCtrl', ['$scope', 'ApiService', function ($scope, ApiService) {
+    app.controller('AccountEditCtrl', ['$scope', '$routeParams', 'ApiService', function ($scope, $routeParams, ApiService) {
         var phoneCharLimit = 4;
-
+        if ($routeParams.focus)
+            $('[name="' + $routeParams.focus + '"]').focus();
         //back button click function
         $scope.$back = function() {window.history.back();};
 
