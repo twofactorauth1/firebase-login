@@ -82,7 +82,16 @@
         // Adds ?editor=true to the end of url
         // to make web-pages editable
         $('a').on('click', function(e){
-            $(this).attr('href', this + "?editor=true")
-        })
+            var href = $(this).attr('href');
+            if (href.indexOf('?editor=true') > -1) {
+                // url already have query string containing '?editor=true'
+            } else if (href.indexOf('?') > -1) {
+                // url already have query string adding
+                $(this).attr('href', this + "&editor=true")
+            } else {
+                // adding query string to url
+                $(this).attr('href', this + "?editor=true")
+            }
+        });
     });
 </script>
