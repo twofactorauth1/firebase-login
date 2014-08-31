@@ -13,6 +13,16 @@ define(['angularAMD', 'angularRoute'], function (angularAMD) {
     		controller: 'AccountEditCtrl',
     		controllerUrl: '/angular_admin/controllers/account_edit.js'
     	}))
+    	.when('/commerce', angularAMD.route({
+    		templateUrl: '/angular_admin/views/commerce.html',
+    		controller: 'CommerceCtrl',
+    		controllerUrl: '/angular_admin/controllers/commerce.js'
+    	}))
+    	.when('/commerce/:id', angularAMD.route({
+    		templateUrl: '/angular_admin/views/commerce_edit.html',
+    		controller: 'CommerceEditCtrl',
+    		controllerUrl: '/angular_admin/controllers/commerce_edit.js'
+    	}))
     	.otherwise({redirectTo:'/account'});
     });
 
