@@ -25,7 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('tmp'), this.getTempAccount.bind(this));
         app.post(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
         app.put(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
-        app.get(this.url('subdomain'),this.getAccountBySubdomain.bind(this));
+        app.get(this.url(':subdomain/available'), this.checkSubdomainAvailability.bind(this));
         //GET
         app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getAccountById.bind(this));
@@ -285,6 +285,22 @@ _.extend(api.prototype, baseApi.prototype, {
                   resp.wrapError(resp,500,null,err,value);
             }
         });
+    },
+
+    checkSubdomainAvailability: function(req, res) {
+        var self = this;
+        self.log.debug('>> checkSubdomainAvailability');
+        var subdomain = req.params.subdomain;
+        accountDao.getAccountBySubdomain(subdomain, function(err, value){
+            if(err) {
+                res.wrapError(resp,500,null,err,value);
+            } else if(value === null) {
+                res.send('true');
+            } else {
+                res.send('false');
+            }
+        });
+
     }
 });
 

@@ -385,6 +385,20 @@ define([
 
         checkForSubdomain:function(){
             var account = new $$.m.Account();
+            var companyName = $("#input-company-name").val().trim();
+            $.getJSON('/api/1.0/account/' + companyName +'/available', function(data, status, xhr){
+                console.dir(data);
+                if(data === 'true') {
+                    $("#help-subdomain").html("");
+                } else {
+                    $("#input-company-name").val('');
+                    $("#help-subdomain").html("Subdomain Already Exists");
+                }
+            }).error(function(xhr,status,err){
+                alert(err);
+            });
+
+            /*
             $.getJSON('/api/1.0/account/subdomain?subdomain='+$("#input-company-name").val().trim(),function(data,status,xhr){
                if(data.subdomain)
                {
@@ -396,7 +410,7 @@ define([
                }
             }).error(function(xhr,status,err){
                     alert(err);
-            })
+            })*/
         }
 
     });
