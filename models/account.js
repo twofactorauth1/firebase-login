@@ -56,6 +56,12 @@ var account = $$.m.ModelBase.extend({
                 "type" :''
             },
 
+            "billing" : {
+                "userId" : '', //logged in user that added Stripe details
+                "customerId": '', //Stripe customerId... also stored on User
+                "cardToken": '' //optional. Not sure if we need this if we have the customer reference
+            },
+
             _v:"0.1"
         }
     },

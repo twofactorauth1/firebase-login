@@ -4,7 +4,7 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
- 
+
  require.config({
  	baseUrl: '/js',
  	paths: {
@@ -15,13 +15,18 @@
         'angularSanitize': 'libs/angular-sanitize/angular-sanitize.min',
         'angularResource': 'libs/angular-resource/angular-resource.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
-        
+        'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
+        'underscore': 'libs/underscore/underscore',
+        'skeuocard': 'libs/skeuocard/javascripts/skeuocard.min',
+
         //application related
         'storageutils': 'utils/storageutils',
         'namespaces': 'utils/namespaces',
         'adminCommon': '/angular_admin/admin_common',
+        'commonutils': 'utils/commonutils',
         'app': '/angular_admin/app',
-        'apiService': '/angular_admin/services/api'
+        'apiService': '/angular_admin/services/api',
+        'skeuocardDirective': '/angular_admin/directives/skeuocard'
  	},
  	shim: {
  		'adminCommon': {deps: ['jquery', 'storageutils', 'namespaces']},
@@ -30,7 +35,10 @@
         'angularRoute': {deps: ['angular']},
         'angularSanitize': {deps: ['angular']},
         'angularResource': {deps: ['angular']},
-        'angularAMD': {deps: ['angular']}
+        'angularAMD': {deps: ['angular']},
+        'bootstrap': {deps: ['jquery']},
+        'underscore': {deps: ['jquery']},
+        'commonutils': {deps: ['underscore']}
  	},
- 	deps: ['adminCommon', 'app']
+ 	deps: ['adminCommon', 'bootstrap', 'app']
  });

@@ -11,8 +11,13 @@
         <div class="container">
             <div class="signuppanel row">
                 <div class="col-xs-6 col-xs-offset-3">
-                        <h3 class="center">Create an account</h3>
-                        <hr></hr>
+                        <h3 class="center">Sign Up</h3>
+                        <hr class="mb30"></hr>
+                         <div class="form-group">
+                            <label for="input-company-name">Business Name</label>
+                            <input class="form-control input-lg" type="text" id="input-company-name" value="{{account.company.name}}" placeholder="My Business Name"/>
+                         </div>
+                         <hr></hr>
                         <p class="description center">Choose one of the ways to register below</p>
                         <div class="form form-inner">
                             <div class="row social">
@@ -104,7 +109,7 @@
                             </form>
                         </div>
                 </div>
-                <div class=" hidden">
+                <div class="hidden">
                     <h3>Benefits</h3>
                     <hr></hr>
                     <ul class="benefits">
@@ -124,6 +129,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>

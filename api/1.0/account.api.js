@@ -9,6 +9,7 @@ var baseApi = require('../base.api');
 var accountDao = require('../../dao/account.dao');
 var cookies = require('../../utils/cookieutil');
 var Account = require('../../models/account');
+var userDao = require('../../dao/user.dao');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -28,6 +29,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':subdomain/available'), this.checkSubdomainAvailability.bind(this));
         //GET
         app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
+        app.get(this.url('billing'), this.isAuthApi, this.getCurrentAccountBilling.bind(this));
+        app.post(this.url('billing'), this.isAuthApi, this.updateCurrentAccountBilling.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getAccountById.bind(this));
         app.post(this.url(''), this.isAuthApi, this.createAccount.bind(this));
         app.put(this.url(':id'), this.isAuthApi, this.updateAccount.bind(this));
@@ -38,6 +41,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id'), this.isAuthApi, this.deleteAccount.bind(this));
 
         app.get(this.url(':userid/accounts', 'user'), this.isAuthApi, this.getAllAccountsForUserId.bind(this));
+
 
     },
 
@@ -58,6 +62,48 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             } else {
                 return self.wrapError(resp, 500, null, err, value);
+            }
+        });
+    },
+
+    getCurrentAccountBilling: function(req, res) {
+        var self = this;
+        self.log.debug('>> getCurrentAccountBilling');
+        var accountId = self.accountId(req);
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err || account===null) {
+                self.log.debug('<< getCurrentAccountBilling');
+                return self.wrapError(res, 500, null, err, account);
+            } else {
+                self.log.debug('<< getCurrentAccountBilling');
+                return res.send(account.get('billing'));
+            }
+        });
+    },
+
+    updateCurrentAccountBilling: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateCurrentAccountBilling');
+        var accountId = self.accountId(req);
+        //TODO: add security - MODIFY_ACCOUNT
+        var userId = self.userId(req);
+        var billingObj = req.body;
+        billingObj.userId = userId;
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err) {
+                self.log.error('Exception retrieving current account: ' + err);
+                return self.wrapError(res, 500, null, err, err);
+            } else {
+                account.set('billing', billingObj);
+                accountDao.saveOrUpdate(account, function(err, updatedAccount){
+                    if(err) {
+                        self.log.error('Exception updating billing object on account: ' + err);
+                        return self.wrapError(res, 500, null, err, err);
+                    } else {
+                        self.log.debug('<< updateCurrentAccountBilling');
+                        return res.send(updatedAccount);
+                    }
+                });
             }
         });
     },
