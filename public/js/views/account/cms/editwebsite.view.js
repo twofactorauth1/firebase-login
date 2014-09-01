@@ -46,7 +46,7 @@ define([
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
             "mousemove #sortable":"draggingComponent",
-            "click .blog-title .editable":"updateTitle",
+            "click .blog-title .editable":"updateTitle"
 
 
         },
@@ -98,7 +98,7 @@ define([
                         subdomain: self.subdomain
                     };
                     data.currentThemePreviewURL = self.setThemePreview(self.account.attributes.website.themeId);
-                    console.log(data);
+
                     if (self.pageHandle == "index" || self.pageHandle == "null" || self.pageHandle == "/") {
                         data.page = "/index";
                     } else {

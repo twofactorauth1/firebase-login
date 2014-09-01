@@ -50,7 +50,8 @@ define([
                  *      url:                        // The url of the image
                  * }]
                  */
-                images: []
+                images: [],
+                title:""
             }
         }
     }, {

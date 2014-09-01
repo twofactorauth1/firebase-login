@@ -66,7 +66,8 @@ var component = $$.m.ModelBase.extend({
             /**
              * The url of the image
              */
-            url: ""
+            url: "",
+            title:""
         }
     },
 

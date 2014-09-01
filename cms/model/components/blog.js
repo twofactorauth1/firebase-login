@@ -50,7 +50,8 @@ var component = $$.m.ModelBase.extend({
              */
             value: "",
 
-            posts: []
+            posts: [],
+            title:""
         }
     },
 
