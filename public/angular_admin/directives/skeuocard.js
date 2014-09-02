@@ -1,11 +1,11 @@
-define(['angularAMD', 'skeuocard', 'stripeService'], function (angularAMD) {
-    angularAMD.directive('indigewebSkeuocard', ['StripeService', function (StripeService) {
+define(['angularAMD', 'skeuocard', 'stripeService', 'userService'], function (angularAMD) {
+    angularAMD.directive('indigewebSkeuocard', ['StripeService', function (StripeService, UserService) {
             return {
                 require: [],
                 restrict: 'C',
                 transclude: true,
                 scope: {
-
+					user: '=user'
                 },
                 templateUrl: '/angular_admin/views/partials/_skeocard.html',
                 link: function (scope, element, attrs, controllers) {
@@ -20,7 +20,9 @@ define(['angularAMD', 'skeuocard', 'stripeService'], function (angularAMD) {
 						};
 						
                 		StripeService.getStripeCardToken(cardInput, function (token) {
-                			console.log(token);
+                			StripeService.postStripeCustomer(token, scope.user, function (stripeUser) {
+                				console.log(stripeUser);
+                			});
                 		});
                     };
                 }
