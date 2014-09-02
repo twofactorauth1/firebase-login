@@ -1,5 +1,5 @@
-define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
-    app.controller('AccountEditCtrl', ['$scope', '$routeParams', 'ApiService', function ($scope, $routeParams, ApiService) {
+define(['app', 'userService', 'underscore', 'commonutils'], function(app) {
+    app.controller('AccountEditCtrl', ['$scope', '$routeParams', 'UserService', function ($scope, $routeParams, UserService) {
         var phoneCharLimit = 4;
         if ($routeParams.focus)
             $('[name="' + $routeParams.focus + '"]').focus();
@@ -7,7 +7,7 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
         $scope.$back = function() {window.history.back();};
 
         //user API call for object population
-        ApiService.getUser(function (user) {
+        UserService.getUser(function (user) {
     		$scope.user = user;
     		$scope.fullName = [user.first, user.middle, user.last].join(' ');
             if (!$scope.user.details[0].phones.length)
@@ -18,7 +18,7 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
     	});
 
         //account API call for object population
-        ApiService.getAccount(function (account) {
+        UserService.getAccount(function (account) {
             $scope.account = account;
             if (!$scope.account.business.phones.length)
                 $scope.account.business.phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false});
@@ -31,7 +31,7 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
         $scope.businessPhoneWatchFn = function (index) {
             $scope.$watch('account.business.phones[' + index + ']', function (newValue, oldValue) {
                 if (newValue && newValue.number.length > phoneCharLimit)
-                    ApiService.putAccount($scope.account, function (account) {
+                    UserService.putAccount($scope.account, function (account) {
                         //$scope.account = account;
                     });
             }, true);
@@ -64,7 +64,7 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
     				$scope.user.middle = '';
     				$scope.user.last = '';
     			}
-                ApiService.putUser($scope.user, function (user) {
+                UserService.putUser($scope.user, function (user) {
                     //$scope.user = user;
                 });
     		}
@@ -73,7 +73,7 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
         ['user.email'].forEach(function (value) {
             $scope.$watch(value, function (newValue, oldValue) {
                 if (newValue) {
-                    ApiService.putUser($scope.user, function (user) {
+                    UserService.putUser($scope.user, function (user) {
                         //$scope.user = user;
                     });
                 }
@@ -83,7 +83,7 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
         $scope.$watch('account.business.size', function (newValue, oldValue) {
             if ($scope.account && $scope.account.business.size !== parseInt($scope.account.business.size))
                 $scope.account.business.size = parseInt($scope.account.business.size);
-            ApiService.putAccount($scope.account, function (account) {
+            UserService.putAccount($scope.account, function (account) {
                 //$scope.account = account;
             });
         });
@@ -91,7 +91,7 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
         $scope.$watch('account.business.type', function (newValue, oldValue) {
             if ($scope.account && $scope.account.business.type !== parseInt($scope.account.business.type))
                 $scope.account.business.type = parseInt($scope.account.business.type);
-            ApiService.putAccount($scope.account, function (account) {
+            UserService.putAccount($scope.account, function (account) {
                 // $scope.account = account;
             });
         });
@@ -101,7 +101,7 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
          'account.business.description',
          'account.business.category'].forEach(function (value) {
             $scope.$watch(value, function (newValue, oldValue) {
-                ApiService.putAccount($scope.account, function (account) {
+                UserService.putAccount($scope.account, function (account) {
                     //$scope.account = account;
                 });
             });
@@ -122,7 +122,7 @@ define(['app', 'apiService', 'underscore', 'commonutils'], function(app) {
         $scope.userPhoneWatchFn = function (index) {
             $scope.$watch('user.details[0].phones[' + index + ']', function (newValue, oldValue) {
                 if (newValue && newValue.number.length > phoneCharLimit)
-                    ApiService.putUser($scope.user, function (account) {
+                    UserService.putUser($scope.user, function (account) {
                         //$scope.account = account;
                     });
             }, true);
