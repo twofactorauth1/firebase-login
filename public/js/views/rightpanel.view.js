@@ -19,7 +19,6 @@ define([
         websiteId: null,
         pageId: null,
         postId: null,
-
         //temporary themes
         themes: null,
 
@@ -583,7 +582,7 @@ define([
                     //get theme by name
                     //var previewSrc = '/assets/images/theme-previews/indimain-preview.jpg';
                     //$('.theme-img').attr('src', previewSrc);
-                    self.setThemePreview(self.themeId, $('.theme-img')[0]);
+                    self.setThemePreview(self.account.get('website').themeId, $('.theme-img')[0]);
                 } else {
                     //show validate error
                     console.log('no theme selected ');

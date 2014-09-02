@@ -36,6 +36,7 @@ define([
         subdomain: null,
         is_dragging: false,
         blogBoolean: false,
+        currentThemePreviewURL: null,
 
         attributes: {
             id: "edit-website-wrapper"
@@ -48,8 +49,6 @@ define([
             "click .launch-btn":"end_setup",
             "mousemove #sortable":"draggingComponent",
             "click .blog-title .editable":"updateTitle"
-
-
         },
 
         initialize: function(options) {
@@ -62,25 +61,20 @@ define([
 
         render: function () {
             var self = this
-                , p1 = this.getAccount()
-                , p2 = this.getUser()
-                , p3 = this.getThemeConfig()
-                , p4 = this.getWebsite()
-                , p5 = $.Deferred()
-                , themePreviewURL
-                , p6 = this.getPages();
+                , p1 = self.getAccount()
+                , p2 = self.getUser()
+                , p3 = self.getThemeConfig()
+                , p4 = self.getWebsite()
+                , p5 = self.getPages()
+                , p6 = $.Deferred(); //loading image theme Preview
 
             $.when(p1)
                 .done(function() {
-                    self._getThemePreview( self.account.get('website').themeId).done(function(themePreview){
-                        var arrayBufferView = new Uint8Array( themePreview );
-                        var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
-                        var urlCreator = window.URL || window.webkitURL;
-                        var imageUrl = urlCreator.createObjectURL( blob );
-
-                        themePreviewURL = imageUrl;
-                        p5.resolve();
+                    self._getThemePreview(self.account.get("website").themeId, function(themePreview){
+                        self.currentThemePreviewURL = themePreview;
+                        p6.resolve();
                     });
+
                 });
 
             $.when(p4)
@@ -91,7 +85,7 @@ define([
                     self.websiteSettings = self.website.attributes.settings;
                 });
 
-            $.when(p1, p2, p4)
+            $.when(p1, p2, p4, p6)
                 .done(function () {
 
                     data = {
@@ -99,8 +93,6 @@ define([
                         websiteTitle: self.websiteTitle,
                         subdomain: self.subdomain
                     };
-                    data.currentThemePreviewURL = self.setThemePreview(self.account.attributes.website.themeId);
-
                     if (self.pageHandle == "index" || self.pageHandle == "null" || self.pageHandle == "/") {
                         data.page = "/index";
                     } else {
@@ -126,7 +118,7 @@ define([
 
                     $("#iframe-website", this.el).load(function(pageLoadEvent) {
                         var doc = $(pageLoadEvent.currentTarget)[0].contentDocument ||
-                            $(pageLoadEvent.currentTarget)[0].documentWindow;
+                                  $(pageLoadEvent.currentTarget)[0].documentWindow;
                         console.log(doc);
                         var page = "index";
                         if (doc != null) {
@@ -152,7 +144,7 @@ define([
                             $$.e.PageHandleEvent.trigger("pageHandle", { pageHandle: self.pageHandle });
                         }
 
-                        $.when(p3, p4, p5,p6)
+                        $.when(p3, p4, p5, p6)
                             .done(function() {
                                 self.getPage().done(function(){
                                     self.getPages()
@@ -168,7 +160,6 @@ define([
                                                 if (rawComponents.hasOwnProperty(key)) {
                                                     componentsArray.push(rawComponents[key]);
                                                 }
-                                                ;
                                             }
                                           
                                             var data = {
@@ -177,20 +168,19 @@ define([
                                                 colorPalette: colorPalette,
                                                 account: self.account,
                                                 blog: self.blogBoolean,
-                                                currentThemePreviewURL: themePreviewURL
+                                                currentThemePreviewURL: self.currentThemePreviewURL
                                             };
 
-                                            self.setupSidebar(data, rightPanel, sidetmpl);
+                                self.setupSidebar(data, rightPanel, sidetmpl);
 
-                                            $(window).on("resize", self.adjustWindowSize);
-                                            self.disableClickableTitles();
-                                            self.disableWaypointsOpacity();
-                                        })
-                                });
+                                $(window).on("resize", self.adjustWindowSize);
+                                self.disableClickableTitles();
+                                self.disableWaypointsOpacity();
+                            })
                         });
                     });
-
                 });
+            });
 
             this.proxiedOnWebsiteEdit = $.proxy( this.onWebsiteEdit, this);
             this.$el.on("websiteedit", this.proxiedOnWebsiteEdit);
@@ -697,24 +687,22 @@ define([
             $.cookie('website-setup', 'true', { path: '/' });
             this.render();
         },
-        _getThemePreview: function (themeId) {
-            return CmsService.getThemePreview(themeId);
+        _getThemePreview: function (themeId, done, fail) {
+            var p1 = CmsService.getThemePreview(themeId);
+            p1.responseType = "arraybuffer";
+            p1.done(function (imageData){
+                done((window.URL || window.webkitURL).createObjectURL( new Blob( [ new Uint8Array( imageData ) ], { type: "image/jpeg" } ) ));
+            }).fail(fail);
+
+            return p1;
         },
         setThemePreview: function (themeId, imageElement) {
             var self = this;
-            var promise = self._getThemePreview(themeId);
-            promise.responseType = "arraybuffer";
-            promise.done(function (themePreview) {
-                var arrayBufferView = new Uint8Array( themePreview );
-                var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
-                var urlCreator = window.URL || window.webkitURL;
-                var imageUrl = urlCreator.createObjectURL( blob );
-                if (imageElement) {
-                    imageElement.src = imageUrl;
-                }
-                self.currentThemePreviewURL = imageUrl;
-            }).fail(function(resp){
-                $$.viewManager.showAlert("An error occurred retreiving the Theme Preview");
+            self._getThemePreview(themeId, function (themePreview) {
+                if (imageElement) imageElement.src = themePreview;
+                self.currentThemePreviewURL =  themePreview;
+            },function(resp){
+                $$.viewManager.showAlert("An error occurred retrieving the Theme Preview");
             });
         }
     });
