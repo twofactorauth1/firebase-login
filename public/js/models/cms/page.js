@@ -50,14 +50,7 @@ define([
         },
 
 
-        toJSON: function() {
-            var json = _.clone(this.attributes);
-            var collection = json.components;
-            if (collection) {
-                json.components = json.components.toJSON();
-            }
-            return json;
-        },
+
 
 
         getComponentById: function(id) {
