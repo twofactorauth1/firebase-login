@@ -17,6 +17,7 @@
         'angularAMD': 'libs/angularAMD/angularAMD.min',
         'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
         'underscore': 'libs/underscore/underscore',
+        'skeuocard': 'libs/skeuocard/javascripts/skeuocard.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -24,7 +25,8 @@
         'adminCommon': '/angular_admin/admin_common',
         'commonutils': 'utils/commonutils',
         'app': '/angular_admin/app',
-        'apiService': '/angular_admin/services/api'
+        'apiService': '/angular_admin/services/api',
+        'skeuocardDirective': '/angular_admin/directives/skeuocard'
  	},
  	shim: {
  		'adminCommon': {deps: ['jquery', 'storageutils', 'namespaces']},
