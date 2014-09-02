@@ -26,7 +26,7 @@
         'adminCommon': '/angular_admin/admin_common',
         'commonutils': 'utils/commonutils',
         'app': '/angular_admin/app',
-        'apiService': '/angular_admin/services/api',
+        'userService': '/angular_admin/services/user',
         'stripeService': '/angular_admin/services/stripe',
         'skeuocardDirective': '/angular_admin/directives/skeuocard'
  	},
