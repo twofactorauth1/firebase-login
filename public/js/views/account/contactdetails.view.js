@@ -188,18 +188,16 @@ define([
         },
         fullContactImport: function () {
             var self = this;
-            console.log(JSON.parse( JSON.stringify(self.contact)));
+            var id = JSON.parse(JSON.stringify(self.contact))._id;
             jQuery.ajax({
                 type: 'PUT',
                 url: '/api/1.0/contact/fullcontact',
                 dataType: 'json',
                 success: function (response) {
-                    console.log(response);
                 },
                 error: function (response) {
-                    console.log(response);
                 },
-                data:JSON.parse( JSON.stringify(self.contact))
+                data: {_id: id}
             });
         }
     });

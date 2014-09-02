@@ -88,7 +88,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
-    _saveOrUpdateContact: function _saveOrUpdateContact(req, resp, isNew) {
+    _saveOrUpdateContact: function (req, resp, isNew) {
         //TODO - add granular security
         var self = this;
         var contact = new $$.m.Contact(req.body);
@@ -239,10 +239,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     signUpNews: function (req, resp) {
         var self = this, contact, accountToken, deferred;
-        console.log(req.body);
         var email = req.body.email;
-        console.log('Email: ' + JSON.stringify(email));
-
         var accountToken = cookies.getAccountToken(req);
         console.log('Account Token: ' + accountToken);
 
@@ -294,45 +291,74 @@ _.extend(api.prototype, baseApi.prototype, {
     //Update data from FullContact API
     updateContactByFullContactApi: function (req, resp) {
         var self = this,
-            email, flag = true;
+            email,
+            flag = true,
+            contactId;
+
         self.log.debug('>> updateContactByFullContactApi');
 
+        contactId = parseInt(req.param('_id'));
+        //Getting Contact Data via ContactId
+        if (!contactId) {
+            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+        }
 
-        //Get EmailId via req.body (Presently it is working only for one record in an array)
+        contactDao.getById(contactId, function (err, value) {
+            var flag = true;
+            if (!err && value != null && value.attributes.details.length > 0) {
 
-        req.body.details[0]['emails'] = [];
+                value.attributes.details.forEach(function (obj) {
+                    if ( obj.emails && obj.emails.length) {
+                        obj.emails.forEach(function (eml) {
+                            email = eml;
+                        })
+                    }
+                });
 
+                //Get EmailId via req.body (Presently it is working only for one record in an array)
+                if (email) {
+                    // Hit FullContactAPI
+                    // https://api.fullcontact.com/v2/person.json?email=your-email-id&apiKey=your-key
 
-        req.body.details[0].emails.push("kushal@intelligrape.com");
-        console.log(res.body);
-        /* if (email = body.email) {
+                    request('https://api.fullcontact.com/v2/person.json?email=' + email + '&apiKey=' + fullContactConfig.key, function (error, response, body) {
 
-         //Hit FullContactAPI
-         // https://api.fullcontact.com/v2/person.json?email=your-email-id&apiKey=your-key
-         request('https://api.fullcontact.com/v2/person.json?email=' + email + '&apiKey=' + fullContactConfig.key, function (error, response, body) {
-         if (!error && response.statusCode == 200) {
-         console.log(body); // Print the google web page.
-         body["type"] = "fullcontact";
+                        if (!error && response.statusCode == 200) {
+                            body = JSON.parse(body);
+                            body["type"] = "fullcontact";
 
-         //Parse Data According to DataBase
-         req.body.details.forEach(function (dta) {
-         if (dta.type === "fullcontact") {
-         flag = false;
-         dta = body;
-         }
-         });
-         if (flag) {
-         req.body.details.push(body);
-         }
+                            for (var x = 0; x < value.attributes.details; x++) {
+                                if (value.attributes.details[x].type == "fullcontact") {
+                                    flag = false;
+                                    value.attributes.details[x] = body;
+                                }
+                            }
+                            if (flag) {
+                                value.attributes.details.push(body);
+                            }
 
-         //Update the Contact Data into DataBase
-         _saveOrUpdateContact(req, resp, false);
-         }
-         });
-         } else {
-         self.log.debug('>> updateContactByFullContactApi: email not found');
-         resp.send({status: 'email not found'});
-         }*/
+                            //Update the Contact Data into DataBase
+                            contactDao.saveOrUpdate(value, function (err, vl) {
+
+                                if (!err) {
+                                    self.sendResult(resp, vl);
+                                } else {
+                                    self.wrapError(resp, 500, "There was an error updating contact", err, vl);
+                                }
+                            });
+                        } else {
+                            console.log('FullContact has no data related to this user');
+                            resp.send({status: 'No Data Found with FullContact API'});
+                        }
+                    });
+                } else {
+                    self.log.debug('>> updateContactByFullContactApi: email not found');
+                    resp.send({status: 'email not found'});
+                }
+            }
+            else {
+                self.wrapError(resp, 401, null, err, value);
+            }
+        });
 
 
     },
