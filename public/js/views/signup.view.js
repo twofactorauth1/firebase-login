@@ -22,6 +22,7 @@ define([
         emailvalid: false,
         passwordsvalid: false,
         usernamevalid: false,
+        businessNameValid: false,
 
         events: {
             "click #btn-business,#btn-professional,#btn-enterprise": "onCompanyTypeChanged",
@@ -98,6 +99,7 @@ define([
 
 
         onCompanyNameKeyTimer: function (event) {
+
             var name = $(event.currentTarget).val();
 
             this.tmpAccount.get("company").name = name;
@@ -106,6 +108,7 @@ define([
             this.tmpAccount.set({subdomain: subdomain});
 
             this.tmpAccount.saveOrUpdateTmpAccount();
+
         },
 
 
@@ -384,33 +387,22 @@ define([
         },
 
         checkForSubdomain:function(){
-            var account = new $$.m.Account();
+
             var companyName = $("#input-company-name").val().trim();
             $.getJSON('/api/1.0/account/' + companyName +'/available', function(data, status, xhr){
-                console.dir(data);
-                if(data === 'true') {
-                    $("#help-subdomain").html("");
+
+                if(data === true) {
+                    $("#help-company-name").html('');
                 } else {
                     $("#input-company-name").val('');
-                    $("#help-subdomain").html("Subdomain Already Exists");
+                    $("#help-company-name").html("Subdomain Already Exists");
                 }
             }).error(function(xhr,status,err){
-                alert(err);
+                //alert(err);
+                console.err(err);
+                //$('#help-company-name').html('Error checking for account availability.');
             });
 
-            /*
-            $.getJSON('/api/1.0/account/subdomain?subdomain='+$("#input-company-name").val().trim(),function(data,status,xhr){
-               if(data.subdomain)
-               {
-                   $ ("#input-company-name").val('');
-                   $("#help-subdomain").html("Subdomain Already Exists");
-               }
-               else{
-                   $("#help-subdomain").html("");
-               }
-            }).error(function(xhr,status,err){
-                    alert(err);
-            })*/
         }
 
     });
