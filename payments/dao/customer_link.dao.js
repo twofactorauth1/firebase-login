@@ -118,7 +118,7 @@ var dao = {
         self.log.debug('>> safeCreate');
         var safetyFunction = function(err, value) {
 
-            if(!err) {
+            if(err || value !== null) {
                 //we expect an error, because it should not exist.
                 return fn('The customer link already exists.', null);
             }
