@@ -99,6 +99,7 @@ var dao = {
             if(err) {
                 fn(err, customer);
                 fn = null;
+                return;
             }
             user.set('stripeId', customer.id);
             self.log.debug('Setting user stripeId to ' + user.get('stripeId'));
@@ -108,6 +109,7 @@ var dao = {
                 if (err) {
                     fn(err, value);
                     fn = null;
+                    return;
                 }
                 p1.resolve();
             });
@@ -115,8 +117,13 @@ var dao = {
 
             customerLinkDao.safeCreateWithUser(accountId, user.id(), customer.id, function(err, value){
                 if (err) {
-                    fn(err, value);
-                    fn = null;
+                    if(err.toString() === 'The customer link already exists.') {
+                        //that's ok.
+                    } else {
+                        fn(err, value);
+                        fn = null;
+                        return;
+                    }
                 }
                 p2.resolve();
             });

@@ -158,8 +158,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> createCustomer');
         //TODO: security
-        var cardToken = req.body.cardToken;
-        var contact = req.body.contact;
+        var cardToken = req.cardToken;
+        var contact = req.contact;
         var user = req.body.user || req.user;
         var _accountId = self.accountId(req);
         //validate arguments
@@ -169,7 +169,7 @@ _.extend(api.prototype, baseApi.prototype, {
         if (!contact && !user) {
             return this.wrapError(resp, 400, null, "Must have either contact or user");
         }
-        if(contact.stripeId && contact.stripeId.length > 0) {
+        if(contact && contact.stripeId && contact.stripeId.length > 0) {
             return this.wrapError(resp, 409, null, "Customer already exists.");
         }
 
