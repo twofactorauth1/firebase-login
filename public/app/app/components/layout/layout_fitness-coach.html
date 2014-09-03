@@ -140,10 +140,8 @@
 
 <div id="body" ng-controller="LayoutCtrl as layout">
  <div ng-repeat="component in layout.pages[0].components | createUrlFilter">
-     ==================={{component.url}}============================
      <div ng-include src="component.url"></div>
 </div>
-
 </div>
 
 <div id="footer">
