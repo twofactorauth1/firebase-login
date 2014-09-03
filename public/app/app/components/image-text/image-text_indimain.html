@@ -1,0 +1,55 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div ng-show="component">
+
+    <div id="{{component.anchor}}" class="component-body {{component.bgcolor}}">
+        <div class="inner-page">
+            <div class="image-text">
+                <div class="{{(component.url?'col-sm-6':'')}}col-xs-12 pull-{{component.imagePosition}}">
+
+                    <h3 class="image-text-title" ng-show="component.title">
+                        <div class="editable" data-class="title">
+                            {{component.title}}
+                        </div>
+                    </h3>
+
+                    <h2 class="image-text-subtitle" ng-show="component.subtitle">
+                        <div class="editable" data-class="subtitle">
+                            {{component.subtitle}}
+                        </div>
+                    </h2>
+
+                    <div class="mb15"></div>
+                    <div class="image-text-text">
+                        <div class="editable" data-class="text" ng-show="component.text">
+                            {{component.text}}
+                        </div>
+                    </div>
+
+                    <div ng-show="component.btn">
+                        <a class="btn btn-outline btn-lg" href="{{component.btn.url}}">{{component.btn.text}} <span class="fa fa-arrow-circle-o-right"></span></a>
+                    </div>
+
+                </div>
+                <div class="clearfix mb10 visible-xs"></div>
+
+                <div ng-show="component.url" class="pull-{{component.imagePosition}} col-sm-6 col-xs-12 image-text-image">
+                    <div class="editable" data-class="url">
+                        <img src="{{component.url}}" class="img-responsive">
+                    </div>
+                    <p class="center editable" data-class="caption">{{component.caption}}</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+</div>
+

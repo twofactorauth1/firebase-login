@@ -22140,7 +22140,7 @@ ul.nav {
   transition: none !important;
 }
 div[data-class="feature-list"] {
-  background: url('../assets/images/indimain/wave-bg.jpg');
+  background: url('../app/app/assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
 }
 /********** Feature Block **********/
@@ -22346,7 +22346,7 @@ contenthover a {
 }
 /********** Testimonials **********/
 div[data-class="testimonials"] {
-  background: url('../assets/images/indimain/wave-bg.jpg');
+  background: url('../app/app/assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
 }
 .testimonials {
@@ -23198,7 +23198,7 @@ div[data-class='position'] span {
   margin: -50px 5px 0 0;
 }
 #assets {
-  background: url('../assets/images/indimain/bottom-bg.png') no-repeat;
+  background: url('../app/app/assets/images/indimain/bottom-bg.png') no-repeat;
   background-size: cover;
   background-position: -130px;
 }
