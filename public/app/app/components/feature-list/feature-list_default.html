@@ -11,7 +11,7 @@
         <div class="container">
             <div class="component-header container">
                 <div class="editable">
-                    <h2 class="center">{{component.label}}</h2>
+                    <h2 class="center">{{component.title}}</h2>
                 </div>
 
                 <div class="editable">
@@ -21,7 +21,7 @@
             <div class="row" data-ng-repeat=" feature in component.features track by $index">
                 <div class="col-md-4 col-sm-4 feature">
                     <div class="block-icon">
-                        <i class="fa fa-{{feature.icon}}"></i>
+                        <i class="fa fa-{{feature['feature-icon']}}"></i>
                     </div>
 
                     <div class="block-body">
