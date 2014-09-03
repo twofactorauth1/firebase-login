@@ -64,7 +64,7 @@
 							</div>
 						</div>
 
-						<div id="phone-row" class="row">
+						<div id="phone-row" class="row" ng-repeat="phone in user.details[0].phones">
 							<div class="col-xs-1">
 								<i class="icon-main fa fa-phone"></i>
 							</div>
@@ -79,26 +79,25 @@
 										<div class="form-group col-xs-12 col-sm-8 col-md-10">
 											<div class="input-group">
 												<div class="input-group-addon">+1</div>
-												<input class="input-edit-phone form-control input-lg" ng-model='userPhone.number'
+												<input class="input-edit-phone form-control input-lg" ng-model='phone.number'
 													type="text">
 
 												<div class="btn-group pull-right" style="margin-right: 8px;">
 													<button type="button"
 														class="btn-edit-phone-type btn btn-default dropdown-toggle"
 														data-toggle="dropdown" data-type="">
-														<span class="edit-phone-type-label">mobile</span> <span
-															class="caret"></span>
+														<span class="edit-phone-type-label" id="user-phone-type-{{$index}}" ng-show="phone.type == 'm'">mobile</span>
+														<span class="edit-phone-type-label" id="user-phone-type-{{$index}}" ng-show="phone.type == 'h'">home</span>
+														<span class="edit-phone-type-label" id="user-phone-type-{{$index}}" ng-show="phone.type == 'w'">work</span>
+														<span class="caret"></span>
 													</button>
 													<ul class="dropdown-menu pull-right">
 
-														<li class="li-edit-phone-type" ng-model='userPhone.type' value="m"><a
-															href="#">mobile</a></li>
+														<li class="li-edit-phone-type" ng-click="userPhoneTypeSaveFn($index, 'm')"><a>mobile</a></li>
 
-														<li class="li-edit-phone-type" ng-model='userPhone.type' value="h"><a
-															href="#">home</a></li>
+														<li class="li-edit-phone-type" ng-click="userPhoneTypeSaveFn($index, 'h')"><a>home</a></li>
 
-														<li class="li-edit-phone-type" ng-model='userPhone.type' value="w"><a
-															href="#">work</a></li>
+														<li class="li-edit-phone-type" ng-click="userPhoneTypeSaveFn($index, 'w')"><a>work</a></li>
 
 													</ul>
 												</div>
@@ -126,6 +125,9 @@
 								</small>
 								</span>
 							</div>
+						</div>
+						<div class="row">
+							<button id="btn-new-address" class="btn btn-primary btn-sm" ng-click="addUserContactFn()">Add Contact</button>
 						</div>
 
 						<div id="address-row" class="row">
@@ -199,7 +201,7 @@
 				            <div class="col-xs-12 form" role="form">
 				                <div class="form-group">
 				                    <label class="">Business Name</label>
-				                    <input id="input-business-name" type="text" class="form-control input-lg" ng-model='account.business.name' placeholder="business name">
+				                    <input id="input-business-name" type="text" class="form-control input-lg" ng-model='account.business.name' placeholder="business name" name="business-name">
 				                </div>
 				            </div>
 				        </div>
@@ -211,7 +213,7 @@
 				            <div class="col-xs-12 form" role="form">
 				                <div class="form-group">
 				                    <label class="">Business Description</label>
-				                    <input id="input-business-description" type="text" class="form-control input-lg" ng-model='account.business.description' placeholder="Description">
+				                    <input id="input-business-description" type="text" class="form-control input-lg" ng-model='account.business.description' placeholder="Description" name="business-description">
 				                </div>
 				            </div>
 				        </div>
@@ -221,7 +223,7 @@
 				            <div class="col-xs-12 form" role="form">
 				                <div class="form-group">
 				                    <label class="">Business Category</label>
-				                    <input id="input-business-category" type="text" class="form-control input-lg" ng-model='account.business.category' placeholder="Category">
+				                    <input id="input-business-category" type="text" class="form-control input-lg" ng-model='account.business.category' placeholder="Category" name="business-category">
 				                </div>
 				            </div>
 				        </div>
@@ -229,7 +231,7 @@
 				        <div class="row">
 				            <div class="form-group col-xs-6">
 				                <label>Business Size</label>
-				                <select id="select-business-size" class="form-control input-lg" ng-model='account.business.size'>
+				                <select id="select-business-size" class="form-control input-lg" ng-model='account.business.size' name="business-size">
 
 				                    <option value="1">Single</option>
 
@@ -262,7 +264,7 @@
 
 				        <hr></hr>
 
-				        <div id="phone-row" class="row">
+				        <div id="phone-row" class="row" ng-repeat="phone in account.business.phones">
 				            <div class="col-xs-1"><i class="icon-main fa fa-phone"></i>
 				            </div>
 				            <div class="col-xs-10">
@@ -278,7 +280,7 @@
 				                        <div class="form-group col-xs-12 col-sm-8 col-md-10">
 				                            <div class="input-group">
 				                                <div class="input-group-addon">+1</div>
-				                                <input type="text" class="input-edit-phone form-control input-lg" ng-model='account.business.phones[0].number'>
+				                                <input type="text" class="input-edit-phone form-control input-lg" ng-model='phone.number'>
 				                            </div>
 				                        </div>
 				                    </div>
@@ -290,6 +292,9 @@
 				            </div>
 
 				        </div>
+						<div class="row">
+							<button id="btn-new-address" class="btn btn-primary btn-sm" ng-click="addBusinessContactFn()">Add Contact</button>
+						</div>
 
 
 
