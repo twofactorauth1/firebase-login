@@ -6,14 +6,17 @@
 -->
 
 <script type="text/x-handlebars-template" name="commerce-main">
-    <div class="pageheader row">
-            <div class="col-xs-9">
+    <div class="commerce">
+        <div class="pageheader row">
+            <div class="col-xs-6">
                 <h2><i class="fa fa-shopping-cart"></i> Commerce</h2>
             </div>
-            <div class="col-xs-3">
-                <a class="btn btn-success pull-right" type="button">
-                    <span class="fa fa-plus"></span>
-                    <span class="hidden-xs">Add</span>
+            <div class="col-xs-6">
+                <a class="btn btn-success pull-right btn-add-product" type="button">
+                    <span class="hidden-xs">Add</span> Product
+                </a>
+                <a class="btn btn-orange pull-right btn-add-order hidden" type="button">
+                    <span class="hidden-xs">Add</span> Order
                 </a>
             </div>
             <div class="clear"></div>
@@ -43,30 +46,45 @@
             <div class="clearfix mb30"></div>
         </div>
 
+         <div class="row hidden">
+                <div class="btn-group col-xs-12 template-btns mb0">
+                    <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-products">
+                        <i class="fa fa-barcode"></i>
+                        <span class="hidden-xs">Products
+                        </span>
+                    </button>
+                    <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-orders active">
+                        <i class="fa fa-list-ol"></i>
+                        <span class="hidden-xs">Orders</span>
+                    </button>
+                </div>
+        </div>
+
         <div class="contentpanel">
+        <div class="products-list">
             <div class="panel panel-default row">
                 <div class="panel-body">
                     <div class="col-sm-6">
                         <input type="text" placeholder="Search Products" class="form-control input-lg">
                     </div>
                     <div class="col-sm-6 form-horizontal">
-                        <div class="form-group row">
+                        <div class="form-group row mb0">
                             <select class=" form-control chosen-select input-lg">
                                 <option value="">Filter Products</option>
+                                <option>A to Z</option>
+                                <option>Z to A</option>
+                                <option>Date Added</option>
+                                <option>Best Selling</option>
+                                <option>Price: Low to High</option>
+                                <option>Price: High to Low</option>
+                                <option>Starred</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <!-- panel-body -->
             </div>
-            <div class="products-list">
                 <div class="row">
-
-                    <div class="visible-xs col-xs-10">
-                        <h3>No Products Available</h3>
-                    </div>
-
-                    <div class="visible-xs btn btn-success col-xs-12">Add a new contact</div>
 
                     <div class="col-xs-12 col-sm-4">
                         <div class="commerce-item btn-view-product-details" data-productid="1">
@@ -262,340 +280,385 @@
 
                 </div>
             </div>
+            <div class="orders-list hidden">
+                <div class="table-responsive">
+                    <table class="table table-info mb30">
+                        <thead>
+                          <tr>
+                            <th>Status</th>
+                            <th>Order #</th>
+                            <th>Purchased</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><span class="fa fa-check"></span></td>
+                            <td>1234</td>
+                            <td>1 item</td>
+                            <td>30 AUG 14</td>
+                            <td>$99.98</td>
+                            <td>View</td>
+                          </tr>
+                          <tr>
+                            <td><span class="fa fa-check"></span></td>
+                            <td>1234</td>
+                            <td>1 item</td>
+                            <td>30 AUG 14</td>
+                            <td>$99.98</td>
+                            <td>View</td>
+                          </tr>
+                          <tr>
+                            <td><span class="fa fa-check"></span></td>
+                            <td>1234</td>
+                            <td>1 item</td>
+                            <td>30 AUG 14</td>
+                            <td>$99.98</td>
+                            <td>View</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+    </div>
 </script>
 
 <script type="text/x-handlebars-template" name="commerce-single">
-    <div class="pageheader row">
-        <div class="col-xs-9">
-            <button id="btn-back-to-commerce" class="btn btn-success pull-left" type="button">
-                <span class="fa fa-chevron-left"></span>
-                <span class="hidden-xs">Back</span>
-            </button>
-            <h2><i class="fa fa-shopping-cart"></i> Single Product</h2>
-        </div>
-        <div class="col-xs-3">
-            <a class="btn btn-success pull-right btn-save-single-product" type="button">
-                <span class="fa fa-save"></span>
-                <span class="hidden-xs">Save</span>
-            </a>
-        </div>
-        <div class="clear"></div>
-    </div>
-
-    <div class="product-performance">
-        <div>
-            <div class="col-sm-4 col-xs-12 detail-single">
-                <div class="campaign-overview">
-                    <h4>Product Performance</h4>
-                    <p># Sold:
-                        <p class="subtle-gray">200</p>
-                    </p>
-                    <div class="clearfix"></div>
-                    <p># Sold this Month:
-                        <p class="subtle-gray">100</p>
-                    </p>
-                    <div class="clearfix"></div>
-                    <p>New Customers:
-                        <p class="subtle-gray">10</p>
-                    </p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-xs-12 detail-single">
-                <div class="campaign-overview">
-                    <div class="mb40"></div>
-                    <p>Metric:
-                        <p class="subtle-gray">200</p>
-                    </p>
-                    <div class="clearfix"></div>
-                    <p>Metric:
-                        <p class="subtle-gray">100</p>
-                    </p>
-                    <div class="clearfix"></div>
-                    <p>Metric:
-                        <p class="subtle-gray">10</p>
-                    </p>
-                </div>
-            </div>
-            <div class="col-sm-3 col-xs-12 detail-single">
-                <h4>Circle Graph</h4>
-            </div>
-        </div>
-    </div>
-
-    <div class="contentpanel product-details">
-        <h3>Manage Product</h3>
-        <div class="mb15 clearfix"></div>
-        <div class="row">
-            <div class="col-xs-3">
-                <div class="product-gallery">
-                    <div class="panel panel-success">
-                        <div class="panel-heading padding5">
-                            <p class="product-img"><i class="fa fa-picture-o"></i>
-                            </p>
-
-                            <p class="center">
-                                <h4><i class="fa fa-plus"></i> Add Image</h4>
-                            </p>
-                            <p class="center">
-                                <h4><i class="fa fa-plus"></i> Add Icon</h4>
-                            </p>
-                        </div>
-                        <div class="panel-body">
-                            <h4 class="center">Purple Summer Yoga Top</h4>
-                            <p class="subtle-gray center">$0.00</p>
-                        </div>
-                    </div>
-                    <div class="remaining-product-images">
-                        <div class="sml-img"><i class="fa fa-picture-o"></i>
-                        </div>
-                        <div class="sml-img"><i class="fa fa-picture-o"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+    <div class="single-product">
+        <div class="pageheader row">
             <div class="col-xs-9">
-                <div>
-                    <div class="col-xs-6">
-                        <h4>Product Details</h4>
-                        <input class="form-control input-lg mb20" type="text" placeholder="Product Title" />
-                        <select class="form-control input-lg">
-                            <option>Product Type</option>
-                            <option>Physical</option>
-                            <option>Digital</option>
-                            <option>Subscription</option>
-                        </select>
-                        <textarea class="form-control input-lg mb15" rows="4" placeholder="Product Description" /></textarea>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="mb35"></div>
-                        <select class="form-control input-lg">
-                            <option>Status</option>
-                            <option>Active</option>
-                            <option>Backorder</option>
-                            <option>Inactive</option>
-                        </select>
-                        <input class="form-control input-lg mb20" type="text" placeholder="Price" />
-                        <input class="form-control input-lg mb20" type="text" placeholder="Cost" />
-                        <input class="form-control input-lg mb20" type="text" placeholder="Sku" />
+                <button id="btn-back-to-commerce" class="btn btn-success pull-left" type="button">
+                    <span class="fa fa-chevron-left"></span>
+                    <span class="hidden-xs">Back</span>
+                </button>
+                <h2><i class="fa fa-shopping-cart"></i> Single Product</h2>
+            </div>
+            <div class="col-xs-3">
+                <a class="btn btn-success pull-right btn-save-single-product" type="button">
+                    <span class="fa fa-save"></span>
+                    <span class="hidden-xs">Save</span>
+                </a>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="product-performance">
+            <div>
+                <div class="col-sm-4 col-xs-12 detail-single">
+                    <div class="campaign-overview">
+                        <h4>Product Performance</h4>
+                        <p># Sold:
+                            <p class="subtle-gray">200</p>
+                        </p>
+                        <div class="clearfix"></div>
+                        <p># Sold this Month:
+                            <p class="subtle-gray">100</p>
+                        </p>
+                        <div class="clearfix"></div>
+                        <p>New Customers:
+                            <p class="subtle-gray">10</p>
+                        </p>
                     </div>
                 </div>
-                <div class="clearfix"></div>
-                <hr></hr>
-                <div class="col-xs-6">
-                    <h4>Categories</h4>
-                    <div class="categories form-group panel panel-default">
-                        <div class="ckbox ckbox-primary">
-                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
-                            <label for="checkboxPrimary">Cateogry One</label>
-                        </div>
-                        <div class="ckbox ckbox-primary">
-                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
-                            <label for="checkboxPrimary">Cateogry Two</label>
-                        </div>
-                        <div class="ckbox ckbox-primary">
-                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
-                            <label for="checkboxPrimary">Cateogry Three</label>
-                        </div>
-                        <div class="ckbox ckbox-primary">
-                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
-                            <label for="checkboxPrimary">Cateogry Four</label>
-                        </div>
+                <div class="col-sm-3 col-xs-12 detail-single">
+                    <div class="campaign-overview">
+                        <div class="mb40"></div>
+                        <p>Metric:
+                            <p class="subtle-gray">200</p>
+                        </p>
+                        <div class="clearfix"></div>
+                        <p>Metric:
+                            <p class="subtle-gray">100</p>
+                        </p>
+                        <div class="clearfix"></div>
+                        <p>Metric:
+                            <p class="subtle-gray">10</p>
+                        </p>
                     </div>
-                    <button class="btn btn-info pull-right">Add</button>
                 </div>
-                <div class="col-xs-6">
-                    <h4>Tags</h4>
-                    <input name="tags" id="tags" class="form-control" value="foo,bar,baz">
+                <div class="col-sm-3 col-xs-12 detail-single">
+                    <h4>Circle Graph</h4>
                 </div>
             </div>
         </div>
-        <hr></hr>
-        <div class="row product-sections">
-            <ul>
-                <li id="subscription-section" class="panel panel-message">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <h3>Subscriptions</h3>
+
+        <div class="contentpanel product-details">
+            <h3>Manage Product</h3>
+            <div class="mb15 clearfix"></div>
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="product-gallery">
+                        <div class="panel panel-success">
+                            <div class="panel-heading padding5">
+                                <p class="product-img"><i class="fa fa-picture-o"></i>
+                                </p>
+
+                                <p class="center">
+                                    <h4><i class="fa fa-plus"></i> Add Image</h4>
+                                </p>
+                                <p class="center">
+                                    <h4><i class="fa fa-plus"></i> Add Icon</h4>
+                                </p>
                             </div>
-                            <div class="col-xs-2">
-                                <div class="toggle-modern">
-                                    <div class="toggles on"></div>
-                                </div>
+                            <div class="panel-body">
+                                <h4 class="center">Purple Summer Yoga Top</h4>
+                                <p class="subtle-gray center">$0.00</p>
+                            </div>
+                        </div>
+                        <div class="remaining-product-images">
+                            <div class="sml-img"><i class="fa fa-picture-o"></i>
+                            </div>
+                            <div class="sml-img"><i class="fa fa-picture-o"></i>
                             </div>
                         </div>
                     </div>
-                    <div class="panel-body" style="display: none;">
-                            <div class="form-horizontal well row" role="form">
-                                    <h4>New Subscription</h4>
-                                    <hr></hr>
-                                    <div class="clearfix"></div>
+                </div>
 
-                                    <div class="col-sm-7">
-                                        <label for="inputBilling" class="col-sm-3 control-label">Bill Every</label>
-                                        <input type="number" class="form-control input-lg spinner-input" id="inputBilling" placeholder="Enter Number">
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <select class="form-control input-lg" id="selectDuration">
-                                            <option>Day</option>
-                                            <option>Week</option>
-                                            <option>Month</option>
-                                            <option>Year</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-sm-7">
-                                        <label for="inputCycles" class="col-sm-3 control-label"># of Cycles</label>
-                                        <input type="text" placeholder="Cycles" id="inputCycles" class="col-sm-9 form-control input-lg spinner-input">
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <input type="text" placeholder="Price" class="form-control input-lg">
-                                    </div>
-
-                                    <div class="clearfix mb30"></div>
-
-                                    <button class="btn btn-lg btn-block btn-success"><span class="fa fa-plus"></span> Add</button>
-
-                            </div>
-
-                            <div class="clearfix"></div>
-
-                            <table class="table table-hover table-primary all-subscriptions">
-                              <thead>
-                                <tr>
-                                  <th>Active</th>
-                                  <th>Bill Every</th>
-                                  <th>Cycles</th>
-                                  <th>$45.00</th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td><span class="fa fa-check"></span></td>
-                                  <td>Month for 12 Months</td>
-                                  <td>3</td>
-                                  <td>$45.00</td>
-                                  <td class="table-action">
-                                    <a href="#"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
-                                   </td>
-                                </tr>
-                                <tr>
-                                  <td><span class="fa fa-check"></span></td>
-                                  <td>Month for 12 Months</td>
-                                  <td>3</td>
-                                  <td>$45.00</td>
-                                  <td class="table-action">
-                                    <a href="#"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
-                                   </td>
-                                </tr>
-                                <tr>
-                                  <td><span class="fa fa-check"></span></td>
-                                  <td>Month for 12 Months</td>
-                                  <td>3</td>
-                                  <td>$45.00</td>
-                                  <td class="table-action">
-                                    <a href="#"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
-                                   </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                    </div>
-                </li>
-                <li id="shipping-section" class="panel panel-message">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <h3>Shipping</h3>
-                            </div>
-                            <div class="col-xs-2">
-                                <div class="toggle-modern">
-                                    <div class="toggles on"></div>
-                                </div>
-                            </div>
+                <div class="col-xs-9">
+                    <div>
+                        <div class="col-xs-6">
+                            <h4>Product Details</h4>
+                            <input class="form-control input-lg mb20" type="text" placeholder="Product Title" />
+                            <select class="form-control input-lg">
+                                <option>Product Type</option>
+                                <option>Physical</option>
+                                <option>Digital</option>
+                                <option>Subscription</option>
+                            </select>
+                            <textarea class="form-control input-lg mb15" rows="4" placeholder="Product Description" /></textarea>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="mb35"></div>
+                            <select class="form-control input-lg">
+                                <option>Status</option>
+                                <option>Active</option>
+                                <option>Backorder</option>
+                                <option>Inactive</option>
+                            </select>
+                            <input class="form-control input-lg mb20" type="text" placeholder="Price" />
+                            <input class="form-control input-lg mb20" type="text" placeholder="Cost" />
+                            <input class="form-control input-lg mb20" type="text" placeholder="Sku" />
                         </div>
                     </div>
-                    <div class="panel-body" style="display: none;">
-                        <div class="row">
-                            <div class="form-horizontal col-xs-9" role="form">
-
-                                <div class="form-group">
-                                    <label for="inputWeight" class="col-sm-3 control-label">Weight (kg)</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control input-lg spinner-input" id="inputWeight" placeholder="Enter Weight">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">Dimensions (cm)</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" placeholder="Length" class="form-control input-lg spinner-input">
-                                        <span class="help-block">Length</span>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input type="text" placeholder="Width" class="form-control input-lg spinner-input">
-                                        <span class="help-block">Width</span>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input type="text" placeholder="Height" class="form-control input-lg spinner-input">
-                                        <span class="help-block">Height</span>
-                                    </div>
-                                </div>
+                    <div class="clearfix"></div>
+                    <hr></hr>
+                    <div class="col-xs-6">
+                        <h4>Categories</h4>
+                        <div class="categories form-group panel panel-default">
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                                <label for="checkboxPrimary">Cateogry One</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                                <label for="checkboxPrimary">Cateogry Two</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                                <label for="checkboxPrimary">Cateogry Three</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                                <label for="checkboxPrimary">Cateogry Four</label>
                             </div>
                         </div>
+                        <button class="btn btn-info pull-right">Add</button>
                     </div>
-                </li>
-                <li id="attributes-section" class="panel panel-message">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <h3>Attributes</h3>
-                            </div>
-                            <div class="col-xs-2">
-                                <div class="form-group">
+                    <div class="col-xs-6">
+                        <h4>Tags</h4>
+                        <input name="tags" id="tags" class="form-control" value="foo,bar,baz">
+                    </div>
+                </div>
+            </div>
+            <hr></hr>
+            <div class="row product-sections">
+                <ul>
+                    <li id="subscription-section" class="panel panel-message">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h3>Subscriptions</h3>
+                                </div>
+                                <div class="col-xs-2">
                                     <div class="toggle-modern">
                                         <div class="toggles on"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="panel-body" style="display: none;">
-                        <div class="form-horizontal">
-                            <div class="attribute">
-                                <h4>Color</h4>
-                                <input name="tags" id="attribute-1" class="form-control tags col-xs-12" value="red,green,blue" style="display: none;">
-                            </div>
-                            <div class="clearfix mb15"></div>
+                        <div class="panel-body" style="display: none;">
+                                <div class="form-horizontal well row" role="form">
+                                        <h4>New Subscription</h4>
+                                        <hr></hr>
+                                        <div class="clearfix"></div>
+
+                                        <div class="col-sm-7">
+                                            <label for="inputBilling" class="col-sm-3 control-label">Bill Every</label>
+                                            <input type="number" class="form-control input-lg spinner-input" id="inputBilling" placeholder="Enter Number">
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <select class="form-control input-lg" id="selectDuration">
+                                                <option>Day</option>
+                                                <option>Week</option>
+                                                <option>Month</option>
+                                                <option>Year</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-sm-7">
+                                            <label for="inputCycles" class="col-sm-3 control-label"># of Cycles</label>
+                                            <input type="text" placeholder="Cycles" id="inputCycles" class="col-sm-9 form-control input-lg spinner-input">
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <input type="text" placeholder="Price" class="form-control input-lg">
+                                        </div>
+
+                                        <div class="clearfix mb30"></div>
+
+                                        <button class="btn btn-lg btn-block btn-success"><span class="fa fa-plus"></span> Add</button>
+
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <table class="table table-hover table-primary all-subscriptions">
+                                  <thead>
+                                    <tr>
+                                      <th>Active</th>
+                                      <th>Bill Every</th>
+                                      <th>Cycles</th>
+                                      <th>$45.00</th>
+                                      <th></th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td><span class="fa fa-check"></span></td>
+                                      <td>Month for 12 Months</td>
+                                      <td>3</td>
+                                      <td>$45.00</td>
+                                      <td class="table-action">
+                                        <a href="#"><i class="fa fa-pencil"></i></a>
+                                        <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                                       </td>
+                                    </tr>
+                                    <tr>
+                                      <td><span class="fa fa-check"></span></td>
+                                      <td>Month for 12 Months</td>
+                                      <td>3</td>
+                                      <td>$45.00</td>
+                                      <td class="table-action">
+                                        <a href="#"><i class="fa fa-pencil"></i></a>
+                                        <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                                       </td>
+                                    </tr>
+                                    <tr>
+                                      <td><span class="fa fa-check"></span></td>
+                                      <td>Month for 12 Months</td>
+                                      <td>3</td>
+                                      <td>$45.00</td>
+                                      <td class="table-action">
+                                        <a href="#"><i class="fa fa-pencil"></i></a>
+                                        <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                                       </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
                         </div>
-                            <button class="btn btn-info pull-right btn-create-attribute">Create Attribute</button>
-                    </div>
-                </li>
-                <li id="variations-section" class="panel panel-message">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <h3>Variations</h3>
-                            </div>
-                            <div class="col-xs-2">
-                                <div class="form-group">
-                                   <div class="toggle-modern">
+                    </li>
+                    <li id="shipping-section" class="panel panel-message">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h3>Shipping</h3>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="toggle-modern">
                                         <div class="toggles on"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="panel-body" style="display: none;">
-                        Panel content
-                    </div>
-                </li>
-            </ul>
+                        <div class="panel-body" style="display: none;">
+                            <div class="row">
+                                <div class="form-horizontal col-xs-9" role="form">
+
+                                    <div class="form-group">
+                                        <label for="inputWeight" class="col-sm-3 control-label">Weight (kg)</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control input-lg spinner-input" id="inputWeight" placeholder="Enter Weight">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Dimensions (cm)</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" placeholder="Length" class="form-control input-lg spinner-input">
+                                            <span class="help-block">Length</span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" placeholder="Width" class="form-control input-lg spinner-input">
+                                            <span class="help-block">Width</span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" placeholder="Height" class="form-control input-lg spinner-input">
+                                            <span class="help-block">Height</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="attributes-section" class="panel panel-message">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h3>Attributes</h3>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                        <div class="toggle-modern">
+                                            <div class="toggles on"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: none;">
+                            <div class="form-horizontal">
+                                <div class="attribute">
+                                    <h4>Color</h4>
+                                    <input name="tags" id="attribute-1" class="form-control tags col-xs-12" value="red,green,blue" style="display: none;">
+                                </div>
+                                <div class="clearfix mb15"></div>
+                            </div>
+                                <button class="btn btn-info pull-right btn-create-attribute">Create Attribute</button>
+                        </div>
+                    </li>
+                    <li id="variations-section" class="panel panel-message">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <h3>Variations</h3>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                       <div class="toggle-modern">
+                                            <div class="toggles on"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body" style="display: none;">
+                            Panel content
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </script>
@@ -605,7 +668,7 @@
 
             <!-- Nav tabs -->
             <ul class="nav nav-tabs nav-justified">
-                <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Page</a></li>
+                <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Commerce Settings</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -613,6 +676,53 @@
             <div class="tab-content">
                 <div class="tab-pane pane-settings active" id="rp-page">
                     <div class="leftpanelinner">
+                        <button class="btn btn-orange btn-block mb15"><span class="fa fa-upload"></span> Import Products</button>
+                        <div class="form-group">
+                            <label>Default View</label>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default"> <span class="fa fa-th"></span> Grid</button>
+                                <button type="button" class="btn btn-default"><span class="fa fa-list"></span> List</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Default Order</label>
+                            <select class="form-control">
+                                <option>A to Z</option>
+                                <option>Z to A</option>
+                                <option>Date Added</option>
+                                <option>Best Selling</option>
+                                <option>Price: Low to High</option>
+                                <option>Price: High to Low</option>
+                                <option>Starred</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Show/Hide</label>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showProductThumb" checked="checked">
+                                <label for="showProductThumb">Thumbnail</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showSku" checked="checked">
+                                <label for="showSku">Sku</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showPrice" checked="checked">
+                                <label for="showPrice">Price</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showProductType" checked="checked">
+                                <label for="showProductType">Type</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showProductStatus" checked="checked">
+                                <label for="showProductStatus">Status</label>
+                            </div>
+                            <div class="ckbox ckbox-primary">
+                                <input type="checkbox" value="1" id="showProductCost" checked="checked">
+                                <label for="showProductCost">Cost</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -621,9 +731,9 @@
 </script>
 
 <script type="text/x-handlebars-template" name="commerce-attribute">
-<div class="attribute">
-    <h4>Custom Attribute Name</h4>
-    <input name="tags" id="attribute-2" class="form-control tags col-xs-12" value="" style="display: none;">
-</div>
-<div class="clearfix mb15"></div>
+    <div class="attribute">
+        <h4>Custom Attribute Name</h4>
+        <input name="tags" id="attribute-2" class="form-control tags col-xs-12" value="" style="display: none;">
+    </div>
+    <div class="clearfix mb15"></div>
 </script>
