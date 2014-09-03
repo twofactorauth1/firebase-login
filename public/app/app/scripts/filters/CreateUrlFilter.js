@@ -1,11 +1,17 @@
-mainApp.filter('CreateUrlFilter', ['accountService', function (accountService) {
-    console.log('i m filter');
-    var themeName = accountService('enter-subdomain-url-here').website.themeId;
+mainApp.filter('createUrlFilter', ['accountService', function (accountService) {
     return function (obj) {
-        obj.filter(function (item) {
-            item['url'] = 'components/' + item.type + '/' + item.type.trim() + '_' + themeName + '.html';
-            return item;
-        });
+        if (obj) {
+            accountService(function (err, data) {
+                if (err) {
+                    console.log('Error ' + err);
+                    return err;
+                } else {
+                    obj.forEach(function (cp) {
+                        cp['url'] = 'components/' + cp.type + '/'+ cp.type + '_'+ data.website.themeId + '.html';
+                    });
+                }
+            });
+        }
         return obj;
     }
 }]);

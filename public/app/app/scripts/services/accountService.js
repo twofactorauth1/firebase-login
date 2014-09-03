@@ -4,42 +4,29 @@
 
 'use strict';
 
-mainApp.factory('accountService', function () {
+mainApp.factory('accountService', ['$location', '$http', function ($location, $http) {
 
-    //TODO Fetch Data AccountDB
+    var that = this;
+    that.account = null;
 
-    return function (domainURL) {
-        console.log(domainURL);
-        var account = {
-            "_id": 11,
-            "company": {
-                "name": "sunny",
-                "type": 2,
-                "size": 0
-            },
-            "subdomain": "sunny",
-            "domain": "",
-            "token": "003c6a16-ee93-47cb-8119-6dd1bf8822ba",
-            "website": {
-                "websiteId": "e3e39555-2c1c-45d7-bdc5-b7a0d7df9cfe",
-                "themeId": "indimain"    //change here to apply theme indimain,default,fitstop
-            },
-            "business": {
-                "logo": "",
-                "name": "",
-                "description": "",
-                "category": "",
-                "size": "",
-                "phones": [ ],
-                "addresses": [ ],
-                "type": ""
-            },
-            "_v": "0.1",
-            "updateType": "",
-            "accountUrl": "http://.indigenous.local:3000"
-        };
-
-        return account;
+    return function (callback) {
+        console.log('START:Account Service');
+        if (that.account) {
+            console.log('GET:Account Service Cached Data');
+            callback(null,that.account);
+        } else {
+            console.log('GET:Account Service Database Data');
+            // API URL: http://yoursubdomain.indigenous.local/api/1.0/account
+            $http.get('/api/1.0/account')
+                .success(function (data) {
+                    that.account = data;
+                    console.log('END:Account Service with SUCCESS');
+                    callback(null, data)
+                })
+                .error(function (err) {
+                    console.log('END:Account Service with ERROR');
+                    callback(err, null);
+                });
+        }
     };
-
-});
+}]);
