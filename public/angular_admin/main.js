@@ -18,6 +18,7 @@
         'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
         'underscore': 'libs/underscore/underscore',
         'skeuocard': 'libs/skeuocard/javascripts/skeuocard.min',
+        'stripe': 'https://js.stripe.com/v2/?tmp',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -25,7 +26,8 @@
         'adminCommon': '/angular_admin/admin_common',
         'commonutils': 'utils/commonutils',
         'app': '/angular_admin/app',
-        'apiService': '/angular_admin/services/api',
+        'userService': '/angular_admin/services/user',
+        'stripeService': '/angular_admin/services/stripe',
         'skeuocardDirective': '/angular_admin/directives/skeuocard'
  	},
  	shim: {
