@@ -308,7 +308,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if (!err && value != null && value.attributes.details.length > 0) {
 
                 value.attributes.details.forEach(function (obj) {
-                    if ( obj.emails && obj.emails.length) {
+                    if (obj.emails && obj.emails.length) {
                         obj.emails.forEach(function (eml) {
                             email = eml;
                         })
@@ -326,19 +326,19 @@ _.extend(api.prototype, baseApi.prototype, {
                             body = JSON.parse(body);
                             body["type"] = "fullcontact";
 
-                            for (var x = 0; x < value.attributes.details; x++) {
-                                if (value.attributes.details[x].type == "fullcontact") {
+                            value.attributes.details.forEach(function (detail) {
+                                if (detail.type == "fullcontact") {
                                     flag = false;
-                                    value.attributes.details[x] = body;
+                                    detail = body;
                                 }
-                            }
+                            });
+
                             if (flag) {
                                 value.attributes.details.push(body);
                             }
 
                             //Update the Contact Data into DataBase
                             contactDao.saveOrUpdate(value, function (err, vl) {
-
                                 if (!err) {
                                     self.sendResult(resp, vl);
                                 } else {

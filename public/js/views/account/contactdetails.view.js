@@ -194,6 +194,16 @@ define([
                 url: '/api/1.0/contact/fullcontact',
                 dataType: 'json',
                 success: function (response) {
+                    if (response.status == "email not found") {
+                        alert('Email Id not available. No data imported')
+                    }
+                    else if (response.status == "No Data Found with FullContact API") {
+                        alert('No Data Found with FullContact')
+                    }
+                    else {
+                        alert('Data Successfully Imported')
+                    }
+                    console.log(response);
                 },
                 error: function (response) {
                 },
