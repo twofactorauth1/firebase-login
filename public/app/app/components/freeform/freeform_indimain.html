@@ -6,22 +6,19 @@
 *
 -->
 
-<div ng-show="component">
-
-    <div class="component-header hidden">
-        <div>
-            {{component.label}}
+<div data-ng-show="component">
+    <div class="component-header">
+        <div class="editable">
+            {{component.title}}
         </div>
-
-        <div>
-            {{component.description}}
+        <div class="editable">
+            {{component.subtitle}}
         </div>
     </div>
 
     <div class="component-body">
-        <div>
+        <div class="editable">
             {{component.value}}
         </div>
     </div>
-
 </div>

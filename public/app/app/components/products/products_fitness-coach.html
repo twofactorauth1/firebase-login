@@ -11,7 +11,7 @@
     <div class="col-xs-6">
         <div>
             <div class="editable" data-class="label">
-                {{component.title}}
+                {{component.label}}
             </div>
             <div class="editable" data-class="description">
                 {{component.description}}
@@ -37,9 +37,11 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
 
-            <li class="active"><a href="#tests" role="tab" data-toggle="tab">Tests</a><span class="arrowsprite"></span></li>
+            <li class="active"><a href="#tests" role="tab" data-toggle="tab">Tests</a><span class="arrowsprite"></span>
+            </li>
             <li><a href="#equipment" role="tab" data-toggle="tab">Equipment</a><span class="arrowsprite"></span></li>
-            <li><a href="#training-plans" role="tab" data-toggle="tab">Training Plans</a><span class="arrowsprite"></span></li>
+            <li><a href="#training-plans" role="tab" data-toggle="tab">Training Plans</a><span
+                    class="arrowsprite"></span></li>
             <li><a href="#coaching" role="tab" data-toggle="tab">Coaching</a><span class="arrowsprite"></span></li>
         </ul>
     </div>
@@ -58,7 +60,9 @@
                         </div>
                         <div class="col-sm-9 product-content">
                             <h4>{{product.title}}</h4>
+
                             <h2>{{product.subtitle}}</h2>
+
                             <p>{{product.text}}</p>
                             <button class="btn btn-success btn-block center" href="{{product.btn.url}}">
                                 <div data-class="btn-text" class="editable">
@@ -82,7 +86,9 @@
                         </div>
                         <div class="col-sm-9 product-content">
                             <h4>{{product.title}}</h4>
+
                             <h2>{{product.subtitle}}</h2>
+
                             <p>{{product.text}}</p>
                             <button class="btn btn-success btn-block center" href="{{product.btn.url}}">
                                 <div data-class="btn-text" class="editable">
@@ -107,6 +113,7 @@
             </div>
             <div class="panel-body">
                 <h4 class="center">Purple Summer Yoga Top</h4>
+
                 <p class="subtle-gray center">$0.00</p>
             </div>
         </div>
@@ -120,6 +127,7 @@
             </div>
             <div class="panel-body">
                 <h4 class="center">Purple Summer Yoga Top</h4>
+
                 <p class="subtle-gray center">$0.00</p>
             </div>
         </div>
@@ -144,7 +152,7 @@
 <div class="modal-content">
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h4 class="modal-title"> <i class="fa fa-shopping-cart"></i> My Cart</h4>
+    <h4 class="modal-title"><i class="fa fa-shopping-cart"></i> My Cart</h4>
 </div>
 <div class="modal-body">
 
@@ -157,6 +165,7 @@
                     <div class="line-item-header row">
                         <button type="button" class="close" aria-hidden="true">×</button>
                         <h4 class="col-sm-6">Lorem Ipsum E-Book</h4>
+
                         <div class="col-sm-3">
                             <input type="text" class="form-control spinner-input">
                         </div>
@@ -164,13 +173,16 @@
                     </div>
 
                     <p class="description">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error sint dolores expedita tempore sunt quos, a facilis soluta architecto ratione, enim fugiat ab quisquam beatae dicta ullam minima neque optio.
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error sint dolores expedita tempore
+                        sunt quos, a facilis soluta architecto ratione, enim fugiat ab quisquam beatae dicta ullam
+                        minima neque optio.
                     </p>
                 </li>
                 <li>
                     <div class="line-item-header row">
                         <button type="button" class="close" aria-hidden="true">×</button>
                         <h4 class="col-sm-6">Lorem Ipsum E-Book</h4>
+
                         <div class="col-sm-3">
                             <input type="text" class="form-control spinner-input">
                         </div>
@@ -178,7 +190,9 @@
                     </div>
 
                     <p class="description">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error sint dolores expedita tempore sunt quos, a facilis soluta architecto ratione, enim fugiat ab quisquam beatae dicta ullam minima neque optio.
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error sint dolores expedita tempore
+                        sunt quos, a facilis soluta architecto ratione, enim fugiat ab quisquam beatae dicta ullam
+                        minima neque optio.
                     </p>
                 </li>
             </ul>
@@ -189,10 +203,12 @@
         <ul>
             <li>
                 <p class="text-left product-name">Product Name</p>
+
                 <p class="text-right product-price">$0.00</p>
             </li>
             <li>
                 <p class="text-left product-name">Product Name</p>
+
                 <p class="text-right product-price">$0.00</p>
             </li>
         </ul>
@@ -201,6 +217,7 @@
             <div class="clearfix mb30"></div>
             <div class="col-xs-offset-6 col-xs-6">
                 <p>Subtotal: $0.00</p>
+
                 <p>Tax (8%): $0.00</p>
             </div>
         </div>
@@ -214,7 +231,8 @@
         </div>
         <div class="mb15"></div>
 
-    </div></div>
+    </div>
+</div>
 
 <!--{{!-- BILLING SECTION --}}-->
 <div class="row billing-shipping hidden">
@@ -344,10 +362,12 @@
         <ul>
             <li>
                 <p class="text-left product-name">Product Name</p>
+
                 <p class="text-right product-price">$0.00</p>
             </li>
             <li>
                 <p class="text-left product-name">Product Name</p>
+
                 <p class="text-right product-price">$0.00</p>
             </li>
         </ul>
@@ -355,6 +375,7 @@
             <div class="col-xs-6"></div>
             <div class="col-xs-6">
                 <p>Subtotal: $0.00</p>
+
                 <p>Tax (8%): $0.00</p>
             </div>
         </div>
@@ -366,7 +387,8 @@
                 <h2>$0.00</h2>
             </div>
         </div>
-    </div></div>
+    </div>
+</div>
 
 <!--{{!-- PAYMENT SECTION --}}-->
 <div class="row payment hidden">
@@ -437,10 +459,12 @@
         <ul>
             <li>
                 <p class="text-left product-name">Product Name</p>
+
                 <p class="text-right product-price">$0.00</p>
             </li>
             <li>
                 <p class="text-left product-name">Product Name</p>
+
                 <p class="text-right product-price">$0.00</p>
             </li>
         </ul>
@@ -448,6 +472,7 @@
             <div class="col-xs-6"></div>
             <div class="col-xs-6">
                 <p>Subtotal: $0.00</p>
+
                 <p>Tax (8%): $0.00</p>
             </div>
         </div>
@@ -460,18 +485,25 @@
             </div>
         </div>
         <div class="mb15"></div>
-    </div></div>
+    </div>
+</div>
 
 <!--{{!-- THANK YOU SECTION --}}-->
 <div class="row thank-you hidden">
     <h3 class="center mb20">Thank You For you Purchase</h3>
-    <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam maiores, iure quo blanditiis alias asperiores. Quis, veniam unde illum adipisci reiciendis qui, libero est facere et vitae perferendis iusto deserunt, animi omnis saepe ipsa placeat quibusdam tenetur sint fuga consequuntur quisquam sapiente! Sapiente repellendus optio, libero quaerat mollitia magnam, voluptatem.</p>
+
+    <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam maiores, iure quo blanditiis
+        alias asperiores. Quis, veniam unde illum adipisci reiciendis qui, libero est facere et vitae perferendis iusto
+        deserunt, animi omnis saepe ipsa placeat quibusdam tenetur sint fuga consequuntur quisquam sapiente! Sapiente
+        repellendus optio, libero quaerat mollitia magnam, voluptatem.</p>
+
     <div class="clearfix mb30"></div>
     <div class="col-xs-12">
         <button class="btn btn-lg btn-orange">View Order</button>
     </div>
     <div class="clearfix mb30"></div>
     <p class="center">Stay Connected</p>
+
     <div class="clearfix mb30"></div>
     <ul class="social-connected">
         <li>
@@ -481,23 +513,29 @@
         </li>
         <li><i class="fa fa-google-plus"></i>
         </li>
-    </ul></div>
+    </ul>
+</div>
 
 <div class="clearfix"></div>
 </div>
 <div class="modal-footer cart-footer">
-    <button class="btn btn-orange btn-checkout pull-right"> <i class="fa fa-shopping-cart"></i> Checkout</button>
-    <button class="btn btn-info continue-shopping pull-left"> <i class="fa fa-chevron-left"></i> Continue Shopping</button>
+    <button class="btn btn-orange btn-checkout pull-right"><i class="fa fa-shopping-cart"></i> Checkout</button>
+    <button class="btn btn-info continue-shopping pull-left"><i class="fa fa-chevron-left"></i> Continue Shopping
+    </button>
 </div>
 
 <div class="modal-footer billing-footer hidden">
-    <button class="btn btn-success btn-payment pull-right"> <i class="fa fa-credit-card"></i> Payment</button>
-    <button class="btn pull-left btn-info back-to-shopping-cart"> <i class="fa fa-chevron-left"></i> Back to Cart</button>
+    <button class="btn btn-success btn-payment pull-right"><i class="fa fa-credit-card"></i> Payment</button>
+    <button class="btn pull-left btn-info back-to-shopping-cart"><i class="fa fa-chevron-left"></i> Back to Cart
+    </button>
 </div>
 
 <div class="modal-footer payment-footer hidden">
-    <button class="btn btn-success btn-confirm-payment pull-right"> <i class="fa fa-check-o"></i> Confirm Payment</button>
-    <button class="btn pull-left btn-info back-to-billing-shipping"> <i class="fa fa-chevron-left"></i> Back to Billing/Shipping</button>
+    <button class="btn btn-success btn-confirm-payment pull-right"><i class="fa fa-check-o"></i> Confirm Payment
+    </button>
+    <button class="btn pull-left btn-info back-to-billing-shipping"><i class="fa fa-chevron-left"></i> Back to
+        Billing/Shipping
+    </button>
 </div>
 </div>
 <!-- /.modal-content -->
