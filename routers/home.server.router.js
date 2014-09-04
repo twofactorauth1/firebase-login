@@ -64,7 +64,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
 
     demo: function(req, res) {
-        res.redirect('/app/app');
+        res.redirect('/dist');
     },
 
     showWebsitePage: function(req, resp) {
