@@ -38,6 +38,9 @@ var dao = {
         this.findOne( { "credentials.type":socialType, "credentials.socialId":socialId }, fn);
     },
 
+    getUserBySocialUsername: function(socialType, socialUsername, fn) {
+        this.findOne( {'credentials.type': socialType, 'credentials.userName': socialUsername}, fn);
+    },
 
     createUserFromUsernamePassword: function(username, password, email, accountToken, fn) {
         if (_.isFunction(accountToken)) {
