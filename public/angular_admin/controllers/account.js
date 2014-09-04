@@ -1,5 +1,5 @@
-define(['app', 'userService', 'skeuocardDirective'], function(app) {
-    app.controller('AccountCtrl', ['$scope', 'UserService', function ($scope, UserService) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective'], function(app) {
+    app.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', function ($scope, UserService, PaymentService) {
     	UserService.getUser(function (user) {
     		$scope.user = user;
     		$scope.activeTab = 'account';

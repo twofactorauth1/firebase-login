@@ -16,8 +16,9 @@
         "/signup/twitter",
         "/signup/linkedin",
         "/signup/google",
+        "/admin1",
         "/",
-        ""
+        "",
     ];
 
     //ensure we don't have any changed
