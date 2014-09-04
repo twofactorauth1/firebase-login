@@ -1,5 +1,3 @@
-<div class="theme-1">
-<div ng-controller="LayoutCtrl as layout">
 <!--
 * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
 *
@@ -7,108 +5,87 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<!-- Global Variables -->
 
+<!-- GLOBAL VARIABLEs -->
 
-<!-- Nav Variables -->
+<!-- NAVIGATION VARIABLES -->
 
+<!-- MASTHEAD VARIABLES -->
 
-<!-- MastHead Variables -->
+<!-- FEATURE LIST VARIABLES -->
 
+<!-- IMAGE TEXT VARIABLES -->
 
-<!-- Image Text Variables -->
+<!-- FEATURE BLOCK VARIABLES -->
 
-
-
-
-<!-- Feature List Variables -->
-
-
+<!-- PRODUCTS VARIABLES -->
 
 <!-- TESTIMONIALS VARIABLES -->
 
-
-
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-
-    <link href='http://fonts.googleapis.com/css?family=Spinnaker' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-
-    <style type="text/css">
-
-        h1, h2, h3, h4, h5 { font-family: 'Spinnaker', sans-serif!important; color: #833954!important;}
-        body { font-family: 'Lato', sans-serif!important; }
-
-        .btn-primary, .contact-us, .navbar-collapse {
-            background: #284ca1!important;
-        }
-
-        .feature-list {
-            background: #284ca1;
-            color: #fff;
-        }
-
-        .feature-list-title, .feature-title  {
-            color: #fff!important;
-        }
-
-        .feature-block {
-            background: #284ca1;
-            color: #fff!important;
-        }
-
-        .feature-block-title, .feature-block-subtitle {
-            color: #fff!important;
-        }
-
-        .navbar-collapse {
-            background: #833954!important;
-        }
-
-        .btn-primary {
-            background: #284ca1!important;
-            border-bottom: 4px solid #163082!important;
-        }
-
-        .navbar-v2 #header .navbar ul.navbar-nav li:hover {
-            border-bottom: 4px solid #67223b;
-        }
-
-        .secondary-color {
-            color: #284ca1!important;
-        }
-
-        .testimonials {
-            background: #284ca1!important;
-        }
-    </style>
-
-  <!--    <link rel="stylesheet" href="../../styles/site.css">  -->
-
-    <title>Sherry Byrd</title>
-
-</head>
-<!-- Custom Css -->
+<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Spinnaker' rel='stylesheet' type='text/css'>
 
 <style type="text/css">
-    .navbar-header {
-        background-color: rgba(255, 255, 255, 0.7)!important;
+
+    h1, h2, h3, h4, h5 {
+        font-family: 'Lato', sans-serif !important;
+        color: #060403 !important;
     }
 
-    .navbar-brand img {
-        margin-top: 30px!important;
+    body {
+        font-family: 'Spinnaker', sans-serif !important;
+    }
+
+    .btn-primary, .contact-us, .navbar-collapse {
+        background: #3398df !important;
+    }
+
+    .feature-list {
+        background: #3398df;
+        color: #fff;
+    }
+
+    .feature-list-title, .feature-title {
+        color: #fff !important;
+    }
+
+    .feature-block {
+        background: #3398df;
+        color: #fff !important;
+    }
+
+    .feature-block-title, .feature-block-subtitle {
+        color: #fff !important;
+    }
+
+    .navbar-collapse {
+        background: #060403 !important;
+    }
+
+    .btn-primary {
+        background: #3398df !important;
+        border-bottom: 4px solid #1e78d0 !important;
+    }
+
+    .navbar-v2 #header .navbar ul.navbar-nav li:hover {
+        border-bottom: 4px solid #3398df;
+    }
+
+    .secondary-color {
+        color: #44a96a !important;
+    }
+
+    .testimonials {
+        background: #fff !important;
     }
 </style>
 
+<link rel="stylesheet" href="../../css/site.css">
+
+<title>Fit Teaser</title>
+
+
+<div class="fitstop" ng-controller="LayoutCtrl as layout">
 
 <div class="navbar-v2">
     <div id="header">
@@ -116,7 +93,8 @@
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -125,7 +103,7 @@
 
                     <a class="navbar-brand editable" href="/" data-name="">
                         <span class="logo-1">
-                            <img src="../../images/copywriter/logo.png" scale="0">
+                            <img src="images/fittester/fittester-logo.png" scale="0">
                         </span>
 
                     </a>
@@ -136,11 +114,11 @@
                     <ul class="nav navbar-nav navbar-right">
 
                         <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About</a></li>
                         <li><a href="#testimonials">Testimonials</a></li>
                         <li><a href="#services">Services</a></li>
-                        <li><a href="#faq">FAQ</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#cart"><span class="fa fa-shopping-cart"></span></a></li>
 
                     </ul>
                 </div>
@@ -150,26 +128,11 @@
         </nav>
     </div>
 </div>
-
 <div id="body">
 
-        <div ng-repeat="component in layout.pages[0].components | createUrlFilter">
-            <div ng-include src="component.url"></div>
-        </div>
+<div ng-repeat="component in layout.pages[0].components | createUrlFilter">
+<div ng-include src="component.url">
 
-
-</div>
-
-<div id="footer">
-    <div class="footer-after section">
-        <div class="row">
-            <p class="col-sm-8 copyright">Copyright © 2014. All Rights reserved.</p>
-            <div class="clear mb15 visible-xs"></div>
-            <p class="col-sm-4 powered-by"><a href="//www.indigenous.io " rel="nofollow">Powered by  Indigenous</a>
-                <img class="footer-logo" src="../../images/footer-logo.png">
-            </p>
-        </div>
-    </div>
 </div>
 
 <script type="text/javascript">
@@ -202,15 +165,16 @@
 
 </script>
 
-<script type="text/javascript">
-(function($) {
-    $(document).ready(function() {
+
+<!--<script type="text/javascript">
+(function ($) {
+    $(document).ready(function () {
 
         $('.thumbnail').hover(
-                function(){
+                function () {
                     $(this).find('.caption').fadeIn(250); //.fadeIn(250)
                 },
-                function(){
+                function () {
                     $(this).find('.caption').fadeOut(250); //.fadeOut(205)
                 }
         );
@@ -223,7 +187,7 @@
             $('#main-area').css('min-height', sidebarHeight + 50);
         }
 
-        $('.navbar-nav a, .scrollto').on('click touchstart', function(event) {
+        $('.navbar-nav a, .scrollto').on('click touchstart', function (event) {
             event.preventDefault();
             var target = $(this).attr('href');
             if (target.indexOf('login') > -1) {
@@ -251,7 +215,7 @@
             }
         });
 
-        $(window).load(function(e) {
+        $(window).load(function (e) {
             if (elem) {
                 //calculate destination place
                 var dest = 0;
@@ -278,12 +242,12 @@
 
         if ($('#sidebar').length) {
             changeSidebarHeight();
-            $(window).resize(function() {
+            $(window).resize(function () {
                 changeSidebarHeight();
             });
         }
 
-        $('.continue-shopping').on('click touchstart', function() {
+        $('.continue-shopping').on('click touchstart', function () {
             $('#cart-checkout-modal').modal('hide');
         });
 
@@ -292,35 +256,35 @@
         var payment = $('.payment, .payment-footer');
         var modalTitle = $('#cart-checkout-modal .modal-title');
 
-        $('.btn-checkout').on('click touchstart', function() {
+        $('.btn-checkout').on('click touchstart', function () {
             modalTitle.html('<i class="fa fa-credit-card"></i> Checkout');
             cart.addClass('hidden fadeOut');
             billing.removeClass('hidden fadeIn');
         });
 
-        $('.back-to-shopping-cart').on('click touchstart', function() {
+        $('.back-to-shopping-cart').on('click touchstart', function () {
             modalTitle.html('<i class="fa fa-shopping-cart"></i> My Cart');
             cart.removeClass('hidden fadeIn');
             billing.addClass('hidden fadeOut');
         });
 
-        $('.back-to-billing-shipping').on('click touchstart', function() {
+        $('.back-to-billing-shipping').on('click touchstart', function () {
             billing.removeClass('hidden fadeIn');
             payment.addClass('hidden fadeOut');
         });
 
-        $('.btn-payment').on('click touchstart', function() {
+        $('.btn-payment').on('click touchstart', function () {
             payment.removeClass('hidden fadeIn');
             billing.addClass('hidden fadeOut');
         });
 
-        $('.btn-confirm-payment').on('click touchstart', function() {
+        $('.btn-confirm-payment').on('click touchstart', function () {
             modalTitle.html('<i class="fa fa-check-circle-o"></i> Order Placed!');
             $('.thank-you').removeClass('hidden fadeIn');
             payment.addClass('hidden fadeOut');
         });
 
-        $('.checkbox').on('change', function() {
+        $('.checkbox').on('change', function () {
             var shipTab = $('.shipping-tab');
             if (shipTab.hasClass('hidden')) {
                 shipTab.removeClass('hidden');
@@ -338,36 +302,36 @@
         }
 
         if (window.top === window.self) {
-            $(function() {
-                $(".feature-single-0").waypoint(function(direction) {
+            $(function () {
+                $(".feature-single-0").waypoint(function (direction) {
                     $(this).addClass("animated fadeIn");
                 }, {
                     offset: $.waypoints('viewportHeight') - 0,
                     triggerOnce: true
                 });
 
-                $(".feature-single-1").waypoint(function(direction) {
+                $(".feature-single-1").waypoint(function (direction) {
                     $(this).addClass("animated fadeIn");
                 }, {
                     offset: $.waypoints('viewportHeight') - 100,
                     triggerOnce: true
                 });
 
-                $(".feature-single-2").waypoint(function(direction) {
+                $(".feature-single-2").waypoint(function (direction) {
                     $(this).addClass("animated fadeIn");
                 }, {
                     offset: $.waypoints('viewportHeight') - 200,
                     triggerOnce: true
                 });
 
-                $(".feature-single-3").waypoint(function(direction) {
+                $(".feature-single-3").waypoint(function (direction) {
                     $(this).addClass("animated fadeIn");
                 }, {
                     offset: $.waypoints('viewportHeight') - 300,
                     triggerOnce: true
                 });
 
-                $("div[data-class=profilepic]").waypoint(function(direction) {
+                $("div[data-class=profilepic]").waypoint(function (direction) {
                     $(this).addClass("animated fadeIn");
                 }, {
                     offset: $.waypoints('viewportHeight') - 100,
@@ -387,7 +351,7 @@
             interval: 4000
         });
 
-        $('.item').on('hover', '.gallery-image', function() {
+        $('.item').on('hover', '.gallery-image', function () {
             var overlay = $(this).parent().next('.overlay-gallery-image');
             if (overlay.hasClass('hidden')) {
                 overlay.removeClass('hidden');
@@ -396,7 +360,7 @@
             }
         });
 
-        $('.item').on('hover', '.overlay-gallery-image', function() {
+        $('.item').on('hover', '.overlay-gallery-image', function () {
             var overlay = $(this);
             if (overlay.hasClass('hidden')) {
                 overlay.removeClass('hidden');
@@ -405,12 +369,12 @@
             }
         });
 
-        $('#content-area .goback').on('click touchstart', function() {
+        $('#content-area .goback').on('click touchstart', function () {
             console.log('go back');
             window.history.back();
         });
 
-        $('.carousel .item').each(function() {
+        $('.carousel .item').each(function () {
             var next = $(this).next();
             if (!next.length) {
                 next = $(this).siblings(':first');
@@ -424,38 +388,38 @@
             }
         });
 
-        $('#form-subscribe').click(function() {
+        $('#form-subscribe').click(function () {
             $('#InputEmail').val($('#emailSub').val());
         });
 
-        $('.blog-teaser .single-blog').on('click', function() {
+        $('.blog-teaser .single-blog').on('click', function () {
             var href = $(this).data('url');
             console.log('href: ' + href);
             window.location.replace(window.location.origin + '/page/blog/' + href)
         });
 
-        $('#subscribelist').click(function() {
+        $('#subscribelist').click(function () {
 
             $.ajax({
                 type: "POST",
                 url: '/api/1.0/contact/signupnews',
                 data: _.object(_.map($('#form1').serializeArray(), _.values)),
-                success: function(data, textStatus) {
+                success: function (data, textStatus) {
                     console.log("Called success")
                     $("#error-msg").removeClass("hidden").html("sucessfully subscribed");
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $("#error-msg").addClass('hidden');
                     }, 2500);
 
 
                 },
-                error: function(qXHR, textStatus, errorThrown) {
+                error: function (qXHR, textStatus, errorThrown) {
                     console.log("called Error")
 
                     var response = JSON.parse(qXHR.responseText);
 
                     $("#error-msg").removeClass("hidden").html(response.status);
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $("#error-msg").addClass('hidden');
                     }, 2500);
 
@@ -479,7 +443,7 @@
     })
 })(jQuery);
 
-$("#category_link").on('click', function(e) {
+$("#category_link").on('click', function (e) {
 
     if (parent.$('#edit-website-wrapper').length)
         e.preventDefault();
@@ -492,7 +456,7 @@ $("#category_link").on('click', function(e) {
 
 $("#category_input")
         .hide()
-        .on('blur', function(e) {
+        .on('blur', function (e) {
             var link = $("#category_link");
             var input = $(this);
             var href = link.attr("href");
@@ -509,13 +473,13 @@ $("#category_input")
             });
         });
 
-$(document).ready(function() {
+$(document).ready(function () {
     parent.$('#edit-website-wrapper').trigger("tagseditinit", {
         a: $("#tags_link > li > a"),
         input: $("#tags_input")[0]
     });
 
-    $("#tags_link").on('click', function(e) {
+    $("#tags_link").on('click', function (e) {
 
         if (parent.$('#edit-website-wrapper').length) {
             e.preventDefault();
@@ -529,8 +493,18 @@ $(document).ready(function() {
         });
     });
 });
-</script>
-
-
+</script>-->
 </div>
+
+<div id="footer">
+    <div class="footer-after section">
+        <div class="row">
+            <p class="col-sm-8 copyright">Copyright © 2014. All Rights reserved.</p>
+
+            <div class="clear mb15 visible-xs"></div>
+            <p class="col-sm-4 powered-by"><a href="//www.indigenous.io " rel="nofollow">Powered by Indigenous</a>
+                <img class="footer-logo" src="images/footer-logo.png">
+            </p>
+        </div>
+    </div>
 </div>
