@@ -6,7 +6,7 @@
 *
 -->
 
-<div class="section image-gallery hidden">
+<div class="section image-gallery">
     {{#with component}}
     	<div class="component-header container">
         <div class="editable" data-class="label">
@@ -27,7 +27,7 @@
                         <a href="#">
                             <img src="{{{image-url}}}" class="img-responsive gallery-image">
                         </a>
-                        <div class="overlay-gallery-image" style="opacity: 0;">
+                        <div class="overlay-gallery-image hidden" >
                             <h3 class="center">{{{image-label}}}</h3>
                             <small class="text-muted center">
                                 {{{image-description}}}

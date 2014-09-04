@@ -25,7 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.post(this.url(''), this.createUser.bind(this));
-        app.put(this.url(''), this.isAuthApi, this.updateUser.bind(this));
+        app.put(this.url(':id'), this.isAuthApi, this.updateUser.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteUser.bind(this));
 
         app.get(this.url('exists/:username'), this.setup, this.userExists.bind(this));
@@ -115,6 +115,38 @@ _.extend(api.prototype, baseApi.prototype, {
 
     updateUser: function(req,resp) {
         //TODO - ensure user accounts are not tampered with
+        var self = this;
+        var user = new $$.m.User(req.body);
+        var userId=req.body._id;
+
+  /*      userDao.saveOrUpdate(user, function(err, value) {
+            if (!err) {
+                self.sendResult(resp, value);
+            } else {
+                self.wrapError(resp, 500, "There was an error updating contact", err, value);
+            }
+        });*/
+
+        userDao.getById(userId, function(err, value) {
+            if (!err && value != null) {
+                value.set("welcome_alert",req.body.welcome_alert);
+                console.log(value);
+                user.set("credentials",value.get("credentials"))
+
+                userDao.saveOrUpdate(user, function(err, value) {
+                    if (!err && value != null) {
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
+
+            } else {
+                return self.wrapError(resp, 401, null, err, value);
+            }
+        });
+
+
     },
 
 

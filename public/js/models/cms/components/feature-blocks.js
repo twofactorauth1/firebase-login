@@ -20,10 +20,6 @@ define([
 
                 type: "feature-blocks",
 
-                label:"",
-
-                description:"",
-
                 value: "",
 
                 title: "",
@@ -31,6 +27,7 @@ define([
                 subtitle: "",
 
                 text: ""
+
             }
         }
     });

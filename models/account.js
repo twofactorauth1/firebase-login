@@ -45,6 +45,22 @@ var account = $$.m.ModelBase.extend({
                 websiteId:null,             //The current Inidenous template being used, defaults to "default"
                 themeId:"default"           //The current template data id being referenced (may have more than one)
             },
+            "business" : {
+                "logo" : '',
+                "name" : '',
+                "description" : '',
+                "category" : '',
+                "size" : '',
+                "phones" : [],
+                "addresses" : [],
+                "type" :''
+            },
+
+            "billing" : {
+                "userId" : '', //logged in user that added Stripe details
+                "customerId": '', //Stripe customerId... also stored on User
+                "cardToken": '' //optional. Not sure if we need this if we have the customer reference
+            },
 
             _v:"0.1"
         }

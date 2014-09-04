@@ -9,6 +9,7 @@ var authenticationApi = require('./1.0/authentication.api');
 var accountApi = require('./1.0/account.api');
 var userApi = require('./1.0/user.api');
 var contactApi = require('./1.0/contact.api');
+var courseApi = require('./1.0/course.api');
 var uploadApi = require('./1.0/upload.api');
 var geoApi = require('./1.0/geo.api');
 var emailDataApi = require('./1.0/emaildata.api');
@@ -32,6 +33,9 @@ var runkeeperApi = require('./1.0/runkeeperadapter.api');
 
 // Campaigns
 var campaignManager = require('./1.0/campaignmanager.api');
+
+// Products
+var productsApi = require('./1.0/product.api');
 
 module.exports = {
 

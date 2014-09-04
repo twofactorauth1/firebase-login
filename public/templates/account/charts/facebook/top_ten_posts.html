@@ -1,0 +1,85 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+-->
+
+<script type="text/x-handlebars-template" name="fb-top-ten-posts">
+    <table class="graph-top-posts hidden">
+        <colgroup>
+            <col width="10%" />
+            <col width="10%" />
+            <col width="30%" />
+            <col width="9%" />
+            <col width="9%" />
+            <col width="10%" />
+            <col width="12%" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Post</th>
+            <th>Reach</th>
+            <th>Clicks</th>
+            <th>Stories</th>
+            <th>Virality</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each posts}}
+        <tr>
+            <td>{{date}}</td>
+            <td>{{type}}</td>
+            <td><a href="{{url}}" rel="external">{{text}}</a></td>
+            <td>{{reach}}</td>
+            <td>{{engaged}}</td>
+            <td>{{talking}}</td>
+            <td class="virality">
+                <div>
+                    <span class="meter" style="width:{{vwidth}}px"></span>
+                    <span class="text">{{virality}}</span>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+
+    <div class="panel panel-default panel-alt widget-messaging graph-top-posts">
+        <div class="panel-heading">
+            <div class="panel-btns">
+                <a href="" class="panel-edit"><i class="fa fa-edit"></i></a>
+            </div>
+            <!-- panel-btns -->
+            <h3 class="panel-title">Top Ten Posts</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+                {{#each posts}}
+                <li>
+                    <div class="post-header">
+                        <small class="pull-right">{{date}}</small>
+                        <h4 class="sender">{{text}}</h4>
+                    </div>
+                    <small class="row">
+                        <div class="col-sm-3"><p class="metric">{{reach}}</p><div class="clearfix"></div><p class="title">Reach</p></div>
+                        <div class="col-sm-3"><p class="metric">{{engaged}}</p><div class="clearfix"></div><p class="title">Engaged</p></div>
+                        <div class="col-sm-3"><p class="metric">{{talking}}</p><div class="clearfix"></div><p class="title">Talking</p></div>
+                        <div class="col-sm-3 virality">
+                            <div>
+                                <span class="meter" style="width:{{vwidth}}px"></span>
+                                <span class="text">{{virality}}</span>
+                                <div class="clearfix"></div><p class="title">Virality</p>
+                            </div>
+                        </div>
+                    </small>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+        <!-- panel-body -->
+    </div>
+
+</script>

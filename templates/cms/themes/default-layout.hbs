@@ -142,9 +142,9 @@
     <br/><br/>
     <div id="footer">{{{footer}}}</div>
 
-    <script type="text/javascript" src="/js/libs/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/libs/jquery/dist/jquery.min.js"></script>
 
-    <script type="text/javascript" src="/js/libs/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/libs/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <script type="text/javascript">
         /* Carousel */
@@ -160,18 +160,18 @@
             $('.carousel-inner > .item.active .carousel-caption').fadeIn("slow");
         });
 
-        $(".link-gallery-image").hover(
-            function() {
-                var opac = 1;
-                $(this).children('.overlay-gallery-image').animate({
-                    opacity: opac
-                }, 500);
-            }, function() {
-                $(this).children('.overlay-gallery-image').animate({
-                    opacity: 0
-                }, 500);
-            }
-        );
+        // $(".link-gallery-image").hover(
+        //     function() {
+        //         var opac = 1;
+        //         $(this).children('.overlay-gallery-image').animate({
+        //             opacity: opac
+        //         }, 500);
+        //     }, function() {
+        //         $(this).children('.overlay-gallery-image').animate({
+        //             opacity: 0
+        //         }, 500);
+        //     }
+        // );
 
         // $(".carousel-inner").swipe({
         //     swipeLeft: function(event, direction, distance, duration, fingerCount) {

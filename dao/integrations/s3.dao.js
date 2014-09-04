@@ -13,7 +13,7 @@ var appConfig = require('../../configs/app.config');
 var dao = {
 
     options: {
-        name: "user.dao",
+        name: "s3.dao",
         defaultModel: $$.m.User
     },
 
@@ -106,6 +106,8 @@ var dao = {
 
         //proxy out to s3
         var AWS = require('aws-sdk');
+
+        AWS.config.region = "";
         var fs = require('fs');
 
         fs.readFile(path, function (err, data) {

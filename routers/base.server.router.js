@@ -9,6 +9,7 @@ var cookies = require('../utils/cookieutil');
 var authenticationDao = require('../dao/authentication.dao');
 var securityManager = require('../security/securitymanager');
 var logger = $$.g.getLogger("baserouter");
+var urlUtils = require('../utils/urlutils.js');
 
 var baseRouter = function(options) {
     this.init.apply(this, arguments);
@@ -53,7 +54,7 @@ _.extend(baseRouter.prototype, {
                         req.session.accountId = value.id();
                     }
                 } else {
-                    logger.warn("Error from getAccountByHost");
+                    logger.warn("No account found from getAccountByHost");
                 }
 
                 return next();
@@ -66,8 +67,26 @@ _.extend(baseRouter.prototype, {
 
     isAuth: function(req, resp, next) {
         var self = this;
+        var path = req.url;
         if (req.isAuthenticated()) {
-            return next()
+            if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
+                //need to redirect
+                authenticationDao.getAuthenticatedUrlForRedirect(req.session.accountId, req.user.id(), req.url,
+                    function(err, value){
+                        if (err) {
+                            console.dir(err);
+                            resp.redirect("/home");
+                            self = null;
+                            return;
+                        } else {
+                            resp.redirect(value);
+                            self = null;
+                        }
+                    }
+                );
+            } else {
+                return next();
+            }
         }
 
         var checkAuthToken = function(req, fn) {

@@ -5,22 +5,63 @@
 * Please contact info@indigenous.io for approval or questions.
 -->
 
-<script type="text/x-handlebars-template" name="account-main">
-    <h3>Manage my account</h3>
 
+
+<script type="text/x-handlebars-template" name="account-main1">
+    <h3 class="accountTitle">Manage my account</h3>
     <hr/>
+    <div class="row">
+        <div class="col-md-6 accountInfo">
+            <h4 class="accountInfoSubhead">Account Information</h4>
+            <table class="maData madataAlign accountInfoTable">
+                <tr>
+                    <td>Account Name</td>
+                    <td>:</td>
+                    <td>{{account.company.name}}</td>
+                </tr>
+                <tr>
+                    <td>Account Url</td>
+                    <td>:</td>
+                    <td>{{account.accountUrl}}</td>
+                </tr>
+                <tr>
+                    <td>Account Sub-domain</td>
+                    <td>:</td>
+                    <td>{{account.subdomain}}</td>
+                </tr>
+            </table>
 
-    <h4>My Social Networks</h4>
+        </div>
+        <div class="col-md-6 userInfo">
+            <h4 class="userInfoSubhead">User Information</h4>
+            <table class="userInfoTable">
+                <tr>
+                    <td>User Name</td>
+                    <td>:</td>
+                    <td>{{user.username}}</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>:</td>
+                    <td>{{user.email}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
+
+
+
+    <h4 class="socialNetwork">My Social Networks</h4>
     <ul class="unstyled">
         {{#each networks}}
-            <li>
-                <i class="{{iconFromSocialType type}}"/> {{labelFromSocialType type}} <a href="{{socialUrl}}" target="_blank">{{username}}</a>
-            </li>
+        <li>
+            <i class="{{iconFromSocialType type}}"/> {{labelFromSocialType type}} <a href="{{socialUrl}}" target="_blank">{{username}}</a>
+        </li>
         {{/each}}
     </ul>
 
-    <h4>Avaialble Networks</h4>
+    <h4 class="avaialbleNetwork">Avaialble Networks</h4>
     <ul class="unstyled">
         {{#each otherNetworks}}
         <li>
@@ -29,9 +70,1274 @@
         {{/each}}
     </ul>
 
-    <h4>My Linked Emails</h4>
-
+    <h4 class="myLinkedEmails">My Linked Emails</h4>
     <ul>
+    </ul>
+</script>
+
+<script type="text/x-handlebars-template" name="account-main">
+<div class="pageheader row">
+    <div class="col-xs-9">
+        <h2><i class="fa fa-shopping-cart"></i> Account</h2>
+    </div>
+    <div class="col-xs-3">
+
+    </div>
+    <div class="clear"></div>
+</div>
+
+<div class="row">
+    <div class="btn-group col-xs-12 template-btns">
+        <button type="button" class="btn btn-info col-xs-6 btn-view-my-profile active"><i class="fa fa-user"></i> <span class="hidden-xs">Account Information</span></button>
+        <button type="button" class="btn btn-info col-xs-6 btn-view-users"><i class="fa fa-users"></i> <span class="hidden-xs">Users</span></button>
+    </div>
+</div>
+
+
+<div class="contentpanel">
+<div class="col-sm-6 profile-section panel panel-default">
+<div class="panel-heading">
+    <div class="panel-btns btn-edit-account">
+        <a href="" class="panel-edit"><i class="fa fa-edit"></i></a>
+    </div>
+    <!-- panel-btns -->
+    <h3 class="panel-title">Owner Info</h3>
+</div>
+
+<div class="profile panel-body">
+<!--
+<div class="col-xs-12">
+    <img alt="" src="../images/photos/loggeduser.png" class="thumbnail thumb-lg img-circle media-object">
+</div>
+-->
+<div class="col-xs-12">
+    <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
+    <div class="clear"></div>
+</div>
+<div class="col-xs-12">
+    <div class="col-xs-12">
+        <div class="mb20"></div>
+        <!--
+        <h3 class="profile-name">{{user.first}} {{user.last}}</h3>
+        -->
+        <!--
+        <h4 class="center">
+            <span class="label label-info contact-cat">{{user.last}}</span>
+        </h4>
+        -->
+        <h3 class="profile-name">
+            {{user.first}} {{user.middle}} {{user.last}}
+        </h3>
+        <div class="mb20"></div>
+
+    </div>
+</div>
+<div class="clearfix mb20"></div>
+<div class="col-xs-12">
+    <!-- <div class="profile-location"><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy DriveSan Diego, CA 92102</a>  <a href="#" class="label label-warning"> + 5 More</a>
+        </div>
+        <div class="profile-position"><i class="fa fa-briefcase"></i> News Anchor at <a href="">Channel 9 News</a>
+        </div>
+        <div class="profile-position"><i class="fa fa-briefcase"></i> Owner of <a href="">Burgandy Flutes</a>
+        </div>
+        <div class="profile-phone"><i class="fa fa-phone"></i>  <a href=""><a href="tel:619-564-2827"> 619-564-2827</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
+        </div>
+
+        <div class="profile-email"><i class="fa fa-envelope"></i>  <a href=""><a href="mailto:{{user.email}}"> {{user.email}}</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
+        </div> -->
+    <ul class="social-list right row">
+        <li class="col-xs-12">
+            <div class="col-xs-2">
+                <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Password" target="_blank"><i class="fa fa-lock"></i></a>
+            </div>
+            <div class="col-xs-8">
+                <p>•••••••••••</p>
+            </div>
+            <div class="col-xs-2"></div>
+        </li>
+        <!--
+        <li class="col-xs-12">
+
+            <div class="col-xs-2">
+                <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+            </div>
+            <div class="col-xs-8">
+                <p>123 Burgandy DriveSan Diego, CA 92102</p>
+            </div>
+            <div class="col-xs-2">
+                <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                    <span class="hidden-xs">5 More</span>
+                </button>
+            </div>
+        </li>
+        -->
+        {{#each user.details}}
+        {{#each addresses}}
+        {{#if ../addresses.length}}
+        <li class="col-xs-12 li-address {{#if @first}}first{{/if}}"  style="{{#unless @first}} display: none;{{/unless}}">
+            <div class="col-xs-2">
+                <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+            </div>
+            <div class="col-xs-8">
+                <p> {{address}} {{address2}}, {{state}} {{zip}}</p>
+            </div>
+            <div class="col-xs-2">
+                {{#if @first}}
+                {{#moreThenOne ../../../addresses.length}}
+                <button href="#" class="btn btn-sm btn-warning  btn-more-addresses">
+                    <i class="fa fa-chevron-down"></i>
+                    <span class="hidden-xs"> {{lengthMinusOne ../../../../addresses.length}} More</span>
+                </button>
+                {{/moreThenOne}}
+                {{/if}}
+            </div>
+            </a>
+        </li>
+        {{/if}}
+        {{/each}}
+        {{/each}}
+
+        <!--
+        <li class="col-xs-12">
+            <div class="col-xs-2">
+                <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
+            </div>
+            <div class="col-xs-8">
+                <p>619-675-2927</p>
+            </div>
+            <div class="col-xs-2">
+                <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                    <span class="hidden-xs">2 More</span>
+                </button>
+            </div>
+            </a>
+        </li>
+        -->
+
+        {{#each user.details}}
+        {{#each phones}}
+        {{#if ../phones.length}}
+        <li class="col-xs-12 li-phone {{#if @first}}first{{/if}}" style="{{#unless @first}}display: none;{{/unless}}">
+            <div class="col-xs-2">
+                <a href="tel:{{number}}" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
+            </div>
+            <div class="col-xs-8">
+                <p>{{number}}</p>
+                <!--<small>{{!-- phoneTypeLabel type --}}</small>-->
+            </div>
+            <div class="col-xs-2">
+                {{#if @first}}
+                {{#moreThenOne ../../../phones.length}}
+                <button href="#" class="btn btn-sm btn-warning btn-more-phones">
+                    <i class="fa fa-chevron-down"></i>
+                    <span class="hidden-xs"> {{lengthMinusOne ../../../../phones.length}} More</span>
+                </button>
+                {{/moreThenOne}}
+                {{/if}}
+            </div>
+            </a>
+        </li>
+        {{/if}}
+        {{/each}}
+        {{/each}}
+
+        <!--
+        <li class="col-xs-12">
+            <div class="col-xs-2">
+                <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope"></i></a>
+            </div>
+            <div class="col-xs-8">
+                <p>{{user.email}}</p>
+            </div>
+            <div class="col-xs-2">
+                <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                    <span class="hidden-xs">1 More</span>
+                </button>
+            </div>
+            </a>
+        </li>
+        -->
+
+
+
+        <li class="col-xs-12">
+            <div class="col-xs-2">
+                <a href="mailto:{{user.email}}" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
+                    <i class="fa fa-envelope">
+                    </i>
+                </a>
+            </div>
+            <div class="col-xs-8">
+                <p>{{user.email}}</p>
+            </div>
+            <div class="col-xs-2">
+            </div>
+            </a>
+        </li>
+
+
+        {{#each user.details}}
+        {{#each socials}}
+        {{#if ../socials.length}}
+        <li class="col-xs-12">
+            <div class="col-xs-2">
+                <a
+                        href="{{URL}}"
+                        class="tooltips"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title=""
+                        data-original-title="{{type}}"
+                        target="_blank">
+                    <i class="fa fa-{{type}}"></i>
+                </a>
+            </div>
+            <div class="col-xs-10">
+                <p>{{nick}}</p>
+            </div>
+            </a>
+        </li>
+        {{/if}}
+        {{/each}}
+        {{/each}}
 
     </ul>
+
+    <div class="mb20"></div>
+
+</div>
+<div class="clearfix"></div>
+</div>
+</div>
+
+<div class="col-sm-6">
+    <div class="panel-heading">
+        <div class="panel-btns btn-edit-business-info">
+            <a href="" class="panel-edit"><i class="fa fa-edit"></i></a>
+        </div>
+        <h3 class="panel-title">Business Info</h3>
+    </div>
+
+    <div class="profile panel-body">
+
+        <div class="col-xs-12">
+            <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
+            <div class="clear"></div>
+        </div>
+        <div class="col-xs-12">
+            <div class="col-xs-12">
+                <div class="mb20"></div>
+
+                <h3 class="profile-name">
+                    {{account.business.name}}
+                </h3>
+                <div class="mb20"></div>
+
+            </div>
+        </div>
+        <div class="clearfix mb20"></div>
+        <div class="col-xs-12">
+            <ul class="social-list right row">
+
+                {{#each  account.business.addresses}}
+
+                {{#if ../account.business.addresses.length}}
+                <li class="col-xs-12 li-address {{#if @first}}first{{/if}}"  style="{{#unless @first}} display: none;{{/unless}}">
+                    <div class="col-xs-2">
+                        <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p> {{address}} {{address2}}, {{state}} {{zip}}</p>
+                    </div>
+                    <div class="col-xs-2">
+                        {{#if @first}}
+                        {{#moreThenOne ../../../account.business.addresses.length}}
+                        <button href="#" class="btn btn-sm btn-warning  btn-more-addresses">
+                            <i class="fa fa-chevron-down"></i>
+                            <span class="hidden-xs"> {{lengthMinusOne ../../../../account.business.addresses.length}} More</span>
+                        </button>
+                        {{/moreThenOne}}
+                        {{/if}}
+                    </div>
+                    </a>
+                </li>
+                {{/if}}
+                {{/each}}
+
+
+                {{#each account.business.phones}}
+                {{#if ../account.business.phones.length}}
+                <li class="col-xs-12 li-phone {{#if @first}}first{{/if}}" style="{{#unless @first}}display: none;{{/unless}}">
+                    <div class="col-xs-2">
+                        <a href="tel:{{number}}" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p>{{number}}</p>
+                        <!--<small>{{!-- phoneTypeLabel type --}}</small>-->
+                    </div>
+                    <div class="col-xs-2">
+                        {{#if @first}}
+                        {{#moreThenOne ../../../account.business.phones.length}}
+                        <button href="#" class="btn btn-sm btn-warning btn-more-phones">
+                            <i class="fa fa-chevron-down"></i>
+                            <span class="hidden-xs"> {{lengthMinusOne ../../../../account.business.phones.length}} More</span>
+                        </button>
+                        {{/moreThenOne}}
+                        {{/if}}
+                    </div>
+                    </a>
+                </li>
+                {{/if}}
+                {{/each}}
+
+                <li class="col-xs-12">
+                    <div class="col-xs-2">
+                        <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p>{{#getBusinessType account.business.type}}{{/getBusinessType}}</p>
+                    </div>
+                    <div class="col-xs-2">
+                    </div>
+                    </a>
+                </li>
+                <li class="col-xs-12">
+                    <div class="col-xs-2">
+                        <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
+                            <i class="fa fa-arrows"></i>
+                        </a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p>{{#getBusinessSize account.business.size}}{{/getBusinessSize}}</p>
+                    </div>
+                    <div class="col-xs-2">
+                    </div>
+                    </a>
+                </li>
+                <li class="col-xs-12">
+                    <div class="col-xs-2">
+                        <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
+                            <i class="fa fa-file-o"></i>
+                        </a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p>{{account.business.description}}</p>
+                    </div>
+                    <div class="col-xs-2">
+                    </div>
+                    </a>
+                </li>
+                <li class="col-xs-12">
+                    <div class="col-xs-2">
+                        <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                    <div class="col-xs-8">
+                        <p>{{account.business.category}}</p>
+                    </div>
+                    <div class="col-xs-2">
+                    </div>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="mb20"></div>
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<div class="col-sm-6">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h3 class="panel-title mb15">Billing Information</h3>
+            <p>Current Bill: {{currencySymbol account.Billing_Information.currency}}{{account.Billing_Information.Current_Bill}}</p>
+            <p>Next Due Date: {{account.Billing_Information.Next_Due_Date}}</p>
+            {{#each account.Billing_Information.Credit_Card}}
+            <p>Credit Card #{{plusOne @index}}: {{type}} {{number}}</p>
+            {{/each}}
+        </div>
+    </div>
+</div>
+</div>
+</script>
+
+<script type="text/x-handlebars-template" name="account-edit-main">
+    <div class="pageheader row">
+        <div class="col-xs-8">
+            <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
+                <span class="fa fa-chevron-left"></span>
+                <span class="hidden-xs">Back</span>
+            </button>
+            <h2><i class="fa fa-users"></i> Edit User</h2>
+        </div>
+
+        <div class="col-xs-4">
+        </div>
+    </div>
+    <div id="contact-edit-container" class="contentpanel">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="hidden-xs hidden-sm">
+                    <h4>
+                        Name & Photo
+                    </h4>
+                    <hr/>
+                </div>
+
+                <div class="row">
+                    <!-- UPDATE NAME -->
+                    <div class="col-xs-12 form" role="form">
+                        <div class="form-group">
+                            <label class="">User Name</label>
+                            <input id="input-fullname" type="text" class="form-control" value="{{user.first}} {{user.middle}} {{user.last}}" placeholder="full name">
+                            <small style="margin-left:10px;">
+                                <strong>first:</strong>
+                                <code>
+                                    <span id="hint-first">{{user.first}}</span>
+                                </code>
+                                <strong>middle:</strong>
+                                <code>
+                                    <span id="hint-middle">{{user.middle}}</span>
+                                </code>
+                                <strong>last:</strong>
+                                <code>
+                                    <span id="hint-last">{{user.last}}</span>
+                                </code>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- UPDATE PHOTO -->
+                <div id="contact-photo-container" class="row">
+                    <row>
+                        <div class="col-xs-5 col-md-6">
+                            <div class="hidden-xs hidden-sm">
+                                <div class="btn-link btn-edit-photo">Change Photo</div>
+                            </div>
+                            <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if contact.photo}}{{contact.photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                        </div>
+
+                        <div class="col-xs-7 col-md-6">
+                            <div class="btn-edit-photo-controls hidden-md hidden-lg">
+                                <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
+                                <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+                            </div>
+                        </div>
+                    </row>
+                </div>
+            </div>
+
+            <!-- CONTACT DETAILS -->
+            <div class="col-md-6">
+                <h4>User Information</h4>
+                <hr/>
+
+                <div id="phone-row" class="row">
+                    <div class="col-xs-1"><i class="icon-main fa fa-phone" />
+                    </div>
+                    <div class="col-xs-10">
+                        <div id="edit-phones-container">
+                            {{#each user.details}} {{#canEditContactDetails this}} {{#each ../phones}} {{> edit-phone}} {{/each}} {{else}} {{#each phones}}
+                            <div>
+                                <a href="tel:+1{{number}}">+1 {{number}}</a>
+                                <small>{{phoneTypeLabel type}}</small>
+                                <i class="icon-social {{iconFromSocialType ../type}}" />
+                            </div>
+                            {{/each}} {{/canEditContactDetails}} {{/each}}
+
+                            <!-- ADD NEW PHONE -->
+                            {{> edit-phone}}
+                        </div>
+                            <span style="margin-top:-15px;" class="col-xs-10">
+                                <small>e.g. (303-555-5555)</small>
+                            </span>
+                    </div>
+
+                </div>
+
+                <div id="address-row" class="row">
+                    <div class="col-xs-1"><i class="icon-main fa fa-map-marker" />
+                    </div>
+                    <div class="col-xs-10">
+                        <div id="edit-addresses-container">
+                            {{#each user.details}} {{#canEditContactDetails this}} {{> edit-addresses}} {{else}} {{#each addresses}}
+                            <div class="edit-address-container" id="{{_id}}">
+                                {{#if address}}
+                                <div>{{address}}</div>
+                                {{/if}} {{#if address2}}
+                            </div>
+                            {{address2}}
+                        </div>
+                        {{/if}}
+                        <div>
+                            {{city}} {{#if state}}, {{state}}{{/if}} {{#if zip}}, {{zip}}{{/if}} {{#if country}}, {{country}}{{/if}}
+                            <i class="icon-social {{iconFromSocialType ../../type}}" />
+                        </div>
+
+                        {{> edit-default-shipping-billing}}
+                    </div>
+                    {{/each}} {{/canEditContactDetails}} {{/each}}
+                </div>
+
+                <br/>
+            </div>
+        </div>
+
+        <div id="email-row" class="row">
+            <div class="col-xs-1"><i class="icon-main fa fa-envelope" />
+            </div>
+            <div class="col-xs-10">
+
+                <div id="edit-emails-container">
+
+
+                    {{> edit-email user.email}}
+                    <a href="mailto:{{user.email}}">{{../user.email}}</a>
+                    <i class="icon-social {{iconFromSocialType ../../type}}" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BioMetric Data -->
+
+    <!-- End BioMetric Data -->
+
+    </div>
+    </div>
+
+    <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
+                    <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" data-dismiss="modal">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add or Remove Photo</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
+                    </div>
+
+                    <div class="row" style="margin-top:6px; margin-bottom:20px;">
+                        <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
+                    </div>
+
+                    <div id="upload-photo-container" />
+
+                    <img id="contact-photo-modal" src="{{user.photo}}" style="max-width:100%; margin-top:20px;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<script type="text/x-handlebars-template" name="business-info-edit-main">
+<div class="pageheader row">
+    <div class="col-xs-8">
+        <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
+            <span class="fa fa-chevron-left"></span>
+            <span class="hidden-xs">Back</span>
+        </button>
+        <h2><i class="fa fa-users"></i> Edit Business Info</h2>
+    </div>
+
+    <div class="col-xs-4">
+    </div>
+</div>
+<div id="contact-edit-container" class="contentpanel">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="hidden-xs hidden-sm">
+                <h4>
+                    Business Name & Logo
+                </h4>
+                <hr/>
+            </div>
+
+            <div class="row">
+                <!-- UPDATE NAME -->
+                <div class="col-xs-12 form" role="form">
+                    <div class="form-group">
+                        <label class="">Business Name</label>
+                        <input id="input-business-name" type="text" class="form-control" value="{{account.business.name}}" placeholder="business name">
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <!-- UPDATE Description -->
+                <div class="col-xs-12 form" role="form">
+                    <div class="form-group">
+                        <label class="">Business Description</label>
+                        <input id="input-business-description" type="text" class="form-control" value="{{account.business.description}}" placeholder="Description">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- UPDATE category -->
+                <div class="col-xs-12 form" role="form">
+                    <div class="form-group">
+                        <label class="">Business Category</label>
+                        <input id="input-business-category" type="text" class="form-control" value="{{account.business.category}}" placeholder="Category">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <label>Business Size</label>
+                    <select id="select-business-size" class="form-control">
+                        {{#businessSizeOptions}}
+                        <option data-businesssize="{{data}}" {{#equals data ../account.size}}selected{{/equals}}>{{label}}</option>
+                        {{/businessSizeOptions}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <label>Business Type</label>
+                    <select id="select-business-type" class="form-control">
+                        {{#businessTypeOptions}}
+                        <option data-businesstype="{{data}}" {{#equals data ../account.type}}selected{{/equals}}>{{label}}</option>
+                        {{/businessTypeOptions}}
+                    </select>
+                </div>
+            </div>
+
+            <!-- UPDATE PHOTO -->
+            <div id="contact-photo-container" class="row">
+                <row>
+                    <div class="col-xs-5 col-md-6">
+                        <div class="hidden-xs hidden-sm">
+                            <div class="btn-link btn-edit-photo">Change Logo</div>
+                        </div>
+                        <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="{{#if this.logo}}{{ this.logo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
+                    </div>
+
+                    <div class="col-xs-7 col-md-6">
+                        <div class="btn-edit-photo-controls hidden-md hidden-lg">
+                            <div class="btn btn-primary btn-remove-photo">Remove Logo</div>
+                            <div class="btn btn-primary btn-upload-photo">Upload Logo</div>
+                        </div>
+                    </div>
+                </row>
+            </div>
+
+
+
+
+        </div>
+
+        <!-- CONTACT DETAILS -->
+        <div class="col-md-6">
+            <h4>Business Information</h4>
+            <hr/>
+            <div id="phone-row" class="row">
+                <div class="col-xs-1"><i class="icon-main fa fa-phone" />
+                </div>
+                <div class="col-xs-10">
+                    <div id="edit-phones-container">
+
+                        {{#each account.business.phones}}
+                        {{> edit-business-phone}}
+                        {{/each}}
+
+                        {{#each phones}}
+                        <div>
+                            <a href="tel:+1{{number}}">+1 {{number}}</a>
+                            <small>{{phoneTypeLabel type}}</small>
+                            <i class="icon-social {{iconFromSocialType ../type}}" />
+                        </div>
+                        {{/each}}
+
+                        <!-- ADD NEW PHONE -->
+                        {{> edit-business-phone}}
+                    </div>
+                            <span style="margin-top:-15px;" class="col-xs-10">
+                                <small>e.g. (303-555-5555)</small>
+                            </span>
+                </div>
+
+            </div>
+
+
+
+
+
+            <div id="address-row" class="row">
+                <div class="col-xs-1"><i class="icon-main fa fa-map-marker" />
+                </div>
+                <div class="col-xs-10">
+                    <div id="edit-addresses-container">
+                        {{#each account.business.addresses}} {{> edit-address}} {{else}} {{#each addresses}}
+                        <div class="edit-address-container" id="{{_id}}">
+                            {{#if address}}
+                            <div>{{address}}</div>
+                            {{/if}} {{#if address2}}
+                        </div>
+                        {{address2}}
+                    </div>
+                    {{/if}}
+                    <div>
+                        {{city}} {{#if state}}, {{state}}{{/if}} {{#if zip}}, {{zip}}{{/if}} {{#if country}}, {{country}}{{/if}}
+                        <i class="icon-social {{iconFromSocialType ../../type}}" />
+                    </div>
+
+                </div>
+                {{/each}} {{/each}}
+
+            </div>
+
+            <br/>
+
+
+            <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
+
+        </div>
+    </div>
+
+
+</div>
+</div>
+</div>
+
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
+                <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" data-dismiss="modal">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add or Remove Logo</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Logo</div>
+                </div>
+
+                <div class="row" style="margin-top:6px; margin-bottom:20px;">
+                    <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new Logo</div>
+                </div>
+
+                <div id="upload-photo-container" />
+
+                <img id="contact-photo-modal" src="{{user.photo}}" style="max-width:100%; margin-top:20px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+</script>
+
+<script type="text/x-handlebars-template" name="new-phone">
+    {{> edit-phone}}
+</script>
+
+<script type="text/x-handlebars-template" name="edit-phone" partial="true">
+    <div class="row edit-phone-container" data-id="{{_id}}" style="margin-top:8px;">
+        <div class="form-group col-xs-12 col-sm-8 col-md-10">
+            <div class="input-group">
+                <div class="input-group-addon">+1</div>
+                <input type="text" class="input-edit-phone form-control" value="{{number}}"/>
+
+                <div class="btn-group pull-right" style="margin-right:8px;">
+                    <button type="button" class="btn-edit-phone-type btn btn-default dropdown-toggle" data-toggle="dropdown" data-type="{{type}}">
+                        <span class="edit-phone-type-label">{{phoneTypeLabel this}}</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        {{#phoneTypeOptions}}
+                        <li class="li-edit-phone-type" data-type="{{data}}"><a href="#">{{label}}</a></li>
+                        {{/phoneTypeOptions}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" name="new-business-phone">
+    {{> edit-business-phone}}
+</script>
+
+<script type="text/x-handlebars-template" name="edit-business-phone" partial="true">
+    <div class="row edit-phone-container" data-id="{{_id}}" style="margin-top:8px;">
+        <div class="form-group col-xs-12 col-sm-8 col-md-10">
+            <div class="input-group">
+                <div class="input-group-addon">+1</div>
+                <input type="text" class="input-edit-phone form-control" value="{{number}}"/>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" name="new-email">
+    {{> new-email-partial}}
+</script>
+
+
+<script type="text/x-handlebars-template" name="edit-email" partial="true">
+    <div class="row edit-email-container">
+        <div class="form-group">
+            <input type="email" class="form-control input-edit-email" placeholder="new email" value="{{this}}" data-email="{{this}}"/>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-handlebars-template" name="new-email-partial" partial="true">
+    <div class="row edit-email-container">
+        <div class="form-group">
+            <input type="email" class="form-control input-edit-email" placeholder="new email" value="" data-email=""/>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-handlebars-template" name="new-address">
+    {{> edit-address}}
+</script>
+
+
+<script type="text/x-handlebars-template" name="edit-addresses" partial="true">
+    {{#each addresses}}
+    {{> edit-address}}
+    {{/each}}
+</script>
+
+
+<script type="text/x-handlebars-template" name="edit-address" partial="true">
+    <div class="edit-address-container" data-id="{{_id}}">
+        <div class="form form-horizontal">
+            <div class="fg-address-string form-group">
+                <label>Address</label>
+                <input type="text" class="form-control input-address-string" value="{{displayName}}">
+                <small>
+                    <span class="address-display-name hidden">{{displayName}}</span>
+
+                    <div class="btn-link btn-edit-address-fields">Modify</div>
+                </small>
+            </div>
+            <div class="edit-address-fields hidden">
+                <div class="form-group">
+                    <label>Street Address</label>
+                    <input type="text" class="form-control input-address input-address-field" value="{{address}}">
+                </div>
+
+                <div class="form-group">
+                    <label>Suite / Apt</label>
+                    <input type="text" class="form-control input-address2 input-address-field" value="{{address2}}">
+                </div>
+
+                <div class="form-group">
+                    <label>City, State, Zip</label>
+                    <input type="text" class="form-control input-city input-address-field" value="{{city}}">
+                    <input type="text" class="form-control input-state input-address-field" value="{{state}}">
+                    <input type="text" class="form-control input-zip input-address-field" value="{{zip}}">
+
+                    <small>
+                        <span class="address-display-name">{{displayName}}</span>
+
+                        <div class="btn-link btn-cancel-edit-address-fields">Close</div>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-handlebars-template" name="edit-default-shipping-billing" partial="true">
+    <div class="hidden-xs hidden-sm">
+        <div class="checkbox">
+            <label>
+                <input class="chk-default-shipping" type="checkbox" {{#if defaultShipping}}checked{{/if}}/> Default
+                Shipping
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input class="chk-default-billing" type="checkbox" {{#if defaultBilling}}checked{{/if}}/> Default
+                Billing
+            </label>
+        </div>
+    </div>
+
+    <div class="hidden-md hidden-lg" style="margin-top:10px">
+        <div class="btn-default-shipping btn btn-md {{#if defaultShipping}}default{{/if}}">Default Shipping
+            <i class="fa fa-check"/></div>
+        <div class="btn-default-billing btn btn-md {{#if defaultBilling}}default{{/if}}">Default Billing
+            <i class="fa fa-check"/></div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" name="new-device">
+    {{> edit-device}}
+</script>
+
+<script type="text/x-handlebars-template" name="edit-device" partial="true">
+
+    <div class="row edit-device-container" data-id="{{_id}}" style="margin-top:8px;">
+        <div class="form-group col-xs-12 col-sm-8 col-md-10">
+            <div class="input-group">
+                <input type="text" class="input-device-phone form-control" value="" placeholder="Enter Device Serial #"/>
+
+                <div class="btn-group pull-right" style="margin-right:8px;">
+                    <button type="button" class="btn-edit-device-type btn btn-default dropdown-toggle" data-toggle="dropdown" data-type="{{type}}">
+                        <span class="edit-device-type-label"> </span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        {{#deviceTypeOptions}}
+                        <li class="li-edit-phone-type" data-type="{{data}}"><a href="#">{{label}}</a></li>
+                        {{/deviceTypeOptions}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<!--
+HELPERS
+-->
+<script type="text/javascript">
+Handlebars.registerHelper("eachLetter", function (options) {
+    var charCode = "A".charCodeAt();
+    var str = "";
+    this.letter = "all";
+    str += options.fn(this);
+    for (var i = 0; i < 26; i++) {
+        this.letter = String.fromCharCode(charCode);
+        str += options.fn(this);
+        charCode++;
+    }
+    return str;
+});
+
+
+Handlebars.registerHelper("contactTypeLabel", function (contact) {
+    if (contact == null) {
+        contact = this;
+    }
+    var contactTypes = $$.constants.contact.contact_types.dp;
+    var type = _.find(contactTypes, function (type) {
+        return type.data === contact.type
+    });
+    return type == null ? "" : type.label;
+});
+
+
+Handlebars.registerHelper("phoneTypeLabel", function (phone) {
+    if (phone == null) {
+        phone = this;
+    }
+    var phoneType = phone.hasOwnProperty("type") ? phone.type : phone;
+
+    var phoneTypes = $$.constants.contact.phone_types.dp;
+    var type = _.find(phoneTypes, function (type) {
+        return type.data === phoneType
+    });
+    return type == null ? "mobile" : type.label;
+});
+
+
+Handlebars.registerHelper("contactTypeOptions", function (options) {
+    var contactTypes = $$.constants.contact.contact_types.dp;
+
+    var str = "";
+    for (var i = 0, l = contactTypes.length; i < l; i++) {
+        str += options.fn(contactTypes[i]);
+    }
+    return str;
+});
+
+
+Handlebars.registerHelper("phoneTypeOptions", function (options) {
+    var phoneTypes = $$.constants.contact.phone_types.dp;
+
+    var str = "";
+    for (var i = 0, l = phoneTypes.length; i < l; i++) {
+        str += options.fn(phoneTypes[i]);
+    }
+    return str;
+});
+
+
+Handlebars.registerHelper("canEditContactDetails", function (contactDetails, options) {
+    if (contactDetails.type == $$.constants.contact.detail_types.LOCAL) {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
+});
+
+
+Handlebars.registerHelper("canDeleteContact", function (contact, options) {
+    console.log(contact);
+    console.log(this);
+    if (contact.accountId == this) {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
+});
+
+
+Handlebars.registerHelper("unlessHasLocalPhone", function (contact, options) {
+    if (contact && contact.details != null) {
+        var localDetails = _.find(contact.details, function (details) {
+            return details.type === $$.constants.contact.detail_types.LOCAL
+        });
+        if (localDetails != null && localDetails.phones != null && localDetails.phones.length > 0) {
+            return options.inverse(this);
+        }
+    }
+    return options.fn(this);
+});
+
+
+Handlebars.registerHelper("unlessAddressIsEmpty", function (address, options) {
+    if (address) {
+        if (String.isNullOrEmpty(address.address) && String.isNullOrEmpty(address.address2) && String.isNullOrEmpty(address.city)
+                && String.isNullOrEmpty(address.state) && String.isNullOrEmpty(address.zip) && String.isNullOrEmpty(address.country)) {
+            return options.inverse(this);
+        } else {
+            return options.inverse(this);
+        }
+    } else {
+        return options.inverse(this);
+    }
+});
+
+
+Handlebars.registerHelper("getBestEmail", function(contact, options) {
+    if (contact.details != null && contact.details.length > 0) {
+        //see if we have a google contact, that's the best source of email
+        var details = _.findWhere(contact.details, { type: $$.constants.social.types.GOOGLE });
+        if (details != null && details.emails != null && details.emails.length > 0) {
+            this.$email = details.emails[0];
+            return options.fn(this);
+        }
+
+        for(var i = 0; i < contact.details.length; i++) {
+            var details = contact.details[0];
+            if (details != null && details.emails != null && details.emails.length > 0) {
+                this.$email = details.emails[0];
+                return options.fn(this);
+            }
+        }
+        return options.inverse(this);
+    }
+});
+
+
+Handlebars.registerHelper("getFacebookId", function(contact, options) {
+    if (contact.details != null && contact.details.length > 0) {
+        //see if we have a google contact, that's the best source of email
+        var details = _.findWhere(contact.details, { type: $$.constants.social.types.FACEBOOK });
+        if (details != null) {
+            this.$facebookId = details.socialId;
+            return options.fn(this);
+        }
+
+        return options.inverse(this);
+    }
+});
+
+
+Handlebars.registerHelper("getTwitterId", function(contact, options) {
+    if (contact.details != null && contact.details.length > 0) {
+        //see if we have a google contact, that's the best source of email
+        var details = _.findWhere(contact.details, { type: $$.constants.social.types.TWITTER });
+        if (details != null) {
+            this.$twitterId = details.socialId;
+            return options.fn(this);
+        }
+
+        return options.inverse(this);
+    }
+});
+
+
+Handlebars.registerHelper("getLinkedInId", function(contact, options) {
+    if (contact.details != null && contact.details.length > 0) {
+        //see if we have a google contact, that's the best source of email
+        var details = _.findWhere(contact.details, { type: $$.constants.social.types.LINKEDIN });
+        if (details != null) {
+            if (details.websites != null && details.websites.length > 0) {
+                for (var i = 0; i < details.websites.length; i++) {
+                    if (details.websites[i] != null) {
+                        this.$linkedInUrl = details.websites[i];
+                        return options.fn(this);
+                    }
+                }
+            }
+            this.$linkedInId = details.socialId;
+            return options.fn(this);
+        }
+
+        return options.inverse(this);
+    }
+});
+
+
+Handlebars.registerHelper("getAddress", function(contact, options) {
+    var _address = null;
+    if (contact.details != null && contact.details.length > 0) {
+        for (var i = 0; i < contact.details.length; i++) {
+            var details = contact.details[i];
+            if (details.addresses != null && details.addresses.length > 0) {
+                for (var j = 0; j < details.addresses.length; j++) {
+                    var address = details.addresses[j];
+                    if (address) {
+                        if (address.displayName != null) {
+                            this.$address = encodeURIComponent(address.displayName);
+                            return options.fn(this);
+                        } else {
+                            if (_address == null) {
+                                _address = address;
+                            } else {
+                                if (address.address != null && address.city != null) {
+                                    _address = address;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (_address != null) {
+        var addressStr = "";
+        if (String.isNullOrEmpty(_address.address)) {
+            addressStr += _address.address;
+        }
+
+        if (String.isNullOrEmpty(_address.city)) {
+            addressStr += ", " + address.city;
+        }
+
+        if (String.isNullOrEmpty(_address.state)) {
+            addressStr += ", " + address.state;
+        }
+
+        if (String.isNullOrEmpty(_address.zip)) {
+            addressStr += ", " + _address.zip;
+        }
+
+        this.$address = encodeURIComponent(addressStr);
+        return options.fn(this);
+    }
+
+    return options.inverse(this);
+});
+
+
+Handlebars.registerHelper("contactSources", function(contact, options) {
+
+});
+
+Handlebars.registerHelper("isGoogleImage", function (photo, options) {
+    if (String.isNullOrEmpty(photo) == false && photo.indexOf("www.google.com/m8") > -1) {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
+});
+
+Handlebars.registerHelper('ifCond', function(v1, options) {
+    if(v1 === 'first') {
+        return options.fn(this);
+    }
+    return options.inverse(this);
+});
+Handlebars.registerHelper('isSelected', function(v1, v2, v5, options) {
+
+    //         var v3 = v1.toLowerCase()
+    //          , v4 = v2.toLowerCase();
+
+
+    if(v1 === v2) {
+        return "<option value='" + v2 + "' selected >" + v5 + "</option>" ;
+    }
+    return "<option value=" + v2 + " >" + v5 + "</option>";
+});
+
+Handlebars.registerHelper("businessTypeOptions", function (options) {
+    var companyTypes = $$.constants.account.company_types.dp;
+
+    var str = "";
+    for (var i = 0, l = companyTypes.length; i < l; i++) {
+        str += options.fn(companyTypes[i]);
+    }
+    return str;
+});
+
+Handlebars.registerHelper("businessSizeOptions", function (options) {
+    var companySize = $$.constants.account.company_size.dp;
+
+    var str = "";
+    for (var i = 0, l = companySize.length; i < l; i++) {
+        str += options.fn(companySize[i]);
+    }
+    return str;
+});
+Handlebars.registerHelper("getBusinessSize", function(businessSize, options) {
+    var BusinessSize = $$.constants.account.company_size.dp;
+    if(businessSize > 0 && businessSize <= BusinessSize.length ) {
+        return BusinessSize[businessSize - 1].label;
+    }
+});
+Handlebars.registerHelper("getBusinessType", function(businessType, options) {
+    var BusinessType = $$.constants.account.company_types.dp;
+    if(businessType > 0 && businessType <= BusinessType.length ) {
+        return BusinessType[businessType - 1].label;
+    }
+});
 </script>

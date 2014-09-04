@@ -8,14 +8,14 @@ exports.urlutils_test = {
         var self = this;
         self.testUrls = [];
         self.testUrls[0] = {
-            host:'app.indigenous.io:3000/',
+            host:'app.indigenous.io:3000',
             isMainApp: true,
             subDomain:'app'
         };
         self.testUrls[1] = {
             host: 'www.indigenous.io:3000/',
-            isMainApp: false,
-            subDomain: 'main'
+            isMainApp: true,
+            subDomain: null
         };
         self.testUrls[2] = {
             host: 'yogaone.indigenous.io',
@@ -24,10 +24,29 @@ exports.urlutils_test = {
         };
         self.testUrls[3] = {
             host: 'indigenous.io',
-            isMainApp: false,
-            subDomain: 'main'
+            isMainApp: true,
+            subDomain: null
         };
-        cb();
+        self.testUrls[4] = {
+            host: 'www.test.indigenous.io',
+            isMainApp: true,
+            subDomain: null
+        };
+        self.testUrls[5] = {
+            host: 'www.prod.indigenous.io',
+            isMainApp: true,
+            subDomain: null
+        };
+        self.testUrls[6] = {
+            host: 'www.stuff.test.indigenous.io',
+            isMainApp: false,
+            subDomain: 'stuff'
+        };
+        var tldtools = require('tldtools');
+        tldtools.init(function() {
+            cb();
+        });
+
     },
 
     tearDown: function(cb) {

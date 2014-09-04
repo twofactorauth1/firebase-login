@@ -8,7 +8,7 @@
 define([
     'views/base.view',
     'models/contact',
-    'libs/jquery/jquery.keytimer',
+    'libs_misc/jquery/jquery.keytimer',
     'services/geo.service'
 
 ], function(BaseView, Contact) {
@@ -53,6 +53,8 @@ define([
             "onkeytimer .input-edit-device":"deviceChanged",
 
             "click .btn-subscribe-two-net":"subscribeTwoNetUser",
+            "click .btn-delete-contact-ok": "deleteContact"
+
         },
 
 
@@ -61,6 +63,7 @@ define([
             var self = this;
             this.getContact()
                 .done(function() {
+                    console.log('Getting Contact: '+JSON.stringify(self.contact.attributes));
                     var data = {
                         contact:self.contact.toJSON()
                     };
@@ -78,6 +81,19 @@ define([
                 });
         },
 
+        saveContactBtnPress: function() {
+            var self = this;
+            jQuery.gritter.add({
+                    title: 'Contact Saved',
+                    image: 'thumbs-up',
+                    text: 'This contact has been saved successfully.',
+                    class_name: 'growl-success',
+                    sticky: false,
+                    time: 8000,
+                    position: 'bottom-right'
+            });
+            this.saveContact();
+        },
 
         //region FULLNAME
         fullnameChanged: function(event) {
@@ -400,7 +416,7 @@ define([
 
         _showUploadForm: function() {
             var self = this;
-            require(['libs/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
+            require(['../../libs_misc/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
                 self.uploadView = new uploadView();
                 self.uploadView.maxNumberOfFiles = 1;
                 self.uploadView.uploadType = "contact-photo";
@@ -450,15 +466,36 @@ define([
 
             return this.contact.fetch();
         },
+        deleteContact: function() {
+            var self = this;
 
+            var p = this.contact.destroy();
+            p.done(function() {
+                self.contactId = self.contact.id;
+
+                  //  $$.r.account.ContactRouter.navigateToShowContactsForLetter(null,false);
+                  //  $$.r.account.ContactRouter.navigateToEditContact(self.contact.id, this.currentLetter, false)
+                });
+            console.log(this.currentLetter);
+
+            $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter,true);
+            return p;
+
+        },
 
         saveContact: function() {
+            console.log('save contact');
             var self = this;
             if (this.isNew) {
                 this.isNew = false;
                 var p = this.contact.save();
                 p
                 .done(function() {
+                    $.gritter.add({
+                        title: 'Contact Created',
+                        text: 'This will fade out after a certain amount of time.',
+                        time: 2000
+                    });
                     self.contactId = self.contact.id;
                     $$.r.account.ContactRouter.navigateToEditContact(self.contact.id, this.currentLetter, false)
                 });
@@ -574,7 +611,7 @@ define([
             phone.type = phoneType;
 
             this.saveContact();
-        },
+        }
         //endregion
     });
 

@@ -77,10 +77,30 @@ module.exports = function(grunt) {
 
         less: {
             style: {
-                files: {"../indigeweb-release/public/css/site.css":"public/less/site.less"}
+                files: {
+                    '../indigeweb/public/css/site.css': [ 'public/less/site.less' ],
+                    '../indigeweb/public/css/style.default.css': [ 'public/less/style.default.less' ],
+                    '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ],
+                    '../indigeweb/public/pipeshift/css/site.css': [ 'public/pipeshift/less/theme.less', 'public/pipeshift/less/main.less' ]
+                }
             }
         },
 
+        watch: {
+            less: {
+                files: "../indigeweb/public/less/*",
+                tasks: ["less"]
+            },
+            html: {
+                files: "../indigeweb/public/templates/**/*.html"
+            },
+            scripts: {
+              files: '../indigeweb/public/js/**/*.js'
+            },
+            options: {
+              livereload: true
+            }
+        },
 
         requirejs: {
             compile: {
@@ -133,18 +153,28 @@ module.exports = function(grunt) {
         //TESTING
         nodeunit: {
             all:['test/**/*_test.js'],
-            contextio:['test/contextio_test.js'],
+            analytics: ['analytics/tests/*_test.js'],
+            api:['api/test/*_test.js'],
             biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
+            contacts: ['test/contact.dao_test.js'],
+            contextio:['test/contextio_test.js'],
+            facebook: ['test/facebook_test.js'],
+            products: ['products/tests/*_test.js'],
+            twonet:['biometrics/twonet/adapter/test/**/*_test.js', 'biometrics/twonet/client/test/**/*_test.js',
+                'biometrics/twonet/adapter/test/twonet_test_poll.js'],
             twonetadapter:['biometrics/twonet/adapter/test/**/*_test.js'],
             twonetclient:['biometrics/twonet/client/test/**/*_test.js'],
             twonetpoll:['biometrics/twonet/adapter/test/twonet_test_poll.js'],
+            runkeeper:['biometrics/runkeeper/adapter/test/**/*_test.js', 'biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             runkeeperadapter:['biometrics/runkeeper/adapter/test/**/*_test.js'],
             runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
-            utils:['utils/test/*_test.js'],
-            payments:['payments/tests/*_test.js']
+            utils:['utils/test/*_test.js']
         }
+
+
     });
 
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -157,7 +187,8 @@ module.exports = function(grunt) {
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
     grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
 
-    grunt.registerTask('tests', ['nodeunit:all']);
+    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
+            'nodeunit:products']);
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
     grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);
@@ -167,5 +198,9 @@ module.exports = function(grunt) {
     grunt.registerTask('testRunkeeperpoll', ['nodeunit:runkeeperpoll']);
     grunt.registerTask('testBiometrics', ['nodeunit:twonetclient','nodeunit:biometricsPlatform','nodeunit:twonetadapter','nodeunit:twonetpoll','nodeunit:runkeeperadapter','nodeunit:runkeeperpoll']);
     grunt.registerTask('testUtils', ['nodeunit:utils']);
-    grunt.registerTask('testPayments', ['nodeunit:payments']);
+    grunt.registerTask('testApi', ['nodeunit:api']);
+    grunt.registerTask('testFacebook', ['nodeunit:facebook']);
+    grunt.registerTask('testContacts', ['nodeunit:contacts']);
+    grunt.registerTask('testAnalytics', ['nodeunit:analytics']);
+    grunt.registerTask('testProducts', ['nodeunit:products']);
 };

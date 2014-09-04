@@ -1,0 +1,21 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+-->
+
+<script type="text/x-handlebars-template" name="fb-top-five-fans">
+    <table class="graph-top-fans" cellspacing="0" cellpadding="0">
+        <tbody>
+        {{#each users}}
+        <tr>
+            <td class="picture"><img src="{{picture}}" alt="{{name}}'s profile picture" /></td>
+            <td class="name"><a href="//facebook.com/{{id}}" target="_blank">{{name}}</a></td>
+            <td class="likes"><span>{{likes}}</span> likes</td>
+            <td class="comments"><span>{{comments}}</span> comments</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</script>

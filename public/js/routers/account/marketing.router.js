@@ -6,21 +6,51 @@
  */
 
 define([
-    'views/account/marketing.view'
-], function(MarketingView) {
+    'views/account/marketing.view',
+    'views/account/marketingsingle.view',
+    'views/account/marketingtemplates.view',
+    'views/account/marketingtemplatesingle.view',
+], function(MarketingView, MarketingSingleView, MarketingTemplatesView, MarketingTemplateSingleView) {
 
     var router = Backbone.Router.extend({
 
         routes: {
             "marketing":"showMarketing",
-            "marketing/":"showMarketing"
+            "marketing/campaign/:campaignId":"showMarketingSingle",
+
+            "marketing/templates":"showMarketingTemplates",
+            "marketing/template/:templateId":"showMarketingTemplateSingle",
         },
 
         showMarketing: function() {
-            console.log('showing marketing');
             var view = new MarketingView();
             $$.viewManager.replaceMain(view);
-        }
+        },
+
+        showMarketingSingle: function (campaignId) {
+            if (campaignId == null) {
+                campaignId = 1;
+            }
+
+            var view = new MarketingSingleView();
+            view.campaignId = campaignId;
+            $$.viewManager.replaceMain(view);
+        },
+
+        showMarketingTemplates: function () {
+            var view = new MarketingTemplatesView();
+            $$.viewManager.replaceMain(view);
+        },
+
+        showMarketingTemplateSingle: function (templateId) {
+            if (templateId == null) {
+                templateId = 1;
+            }
+
+            var view = new MarketingTemplateSingleView();
+            view.templateId = templateId;
+            $$.viewManager.replaceMain(view);
+        },
     });
 
 

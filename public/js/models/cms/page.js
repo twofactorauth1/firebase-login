@@ -53,30 +53,56 @@ define([
         toJSON: function() {
             var json = _.clone(this.attributes);
             var collection = json.components;
-            json.components = json.components.toJSON()
+            if (collection) {
+                json.components = json.components.toJSON();
+            }
             return json;
         },
 
 
         getComponentById: function(id) {
             var components = this.get("components");
+            console.log('Components: '+JSON.stringify(components));
             return components.get(id);
         },
 
 
         url: function(method) {
+            console.log('Method: '+method);
             switch(method) {
                 case "GET":
-                    if (this.id == null) {
+                console.log('Website ID: '+this.get("websiteId")+' Handle: '+this.get("handle"));
+                    if (this.get("websiteId") != null) {
                         return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page/" + this.get("handle"));
                     }
                     return $$.api.getApiUrl("cms", "page/" + this.id);
+                break;
                 case "PUT":
+                    return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page/"+this.id);
+                    break;
+
                 case "POST":
+                    //website/:websiteId/page
+                    console.log('Website ID: '+this.get("websiteId"));
+                    if (this.get("websiteId") != null) {
+                        return $$.api.getApiUrl("cms", "website/" + this.get("websiteId") + "/page");
+                    }
+
+                    //page/:id/components/:componentId/order/:newOrder
+                    if (this.get("newOrder") != null ) {
+                        return $$.api.getApiUrl("cms", "page/" + this.get("pageId") + "/components/" + this.get("componentId") + "/order/" + this.get("newOrder"));
+                    }
+
+                    //page/:id/components
+                    if (this.get("pageId") != null) {
+                        return $$.api.getApiUrl("cms", "page/" + this.get("pageId") + "/components");
+                    }
+
+
                     return $$.api.getApiUrl("cms", "page");
                     break;
                 case "DELETE":
-                    return $$.api.getApiUrl("cms", "page/" + this.id);
+                    return $$.api.getApiUrl("cms","website/" + this.get("websiteId") + "/page/" + this.id+"/"+this.get('title'));
                     break;
             }
         }

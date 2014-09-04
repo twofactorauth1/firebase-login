@@ -8,10 +8,12 @@
 var BaseRouter = require('./base.server.router.js');
 var HomeView = require('../views/home.server.view');
 var AdminView = require('../views/admin.server.view');
+var AngularAdminView = require('../views/angular.admin.server.view');
 var WebsiteView = require('../views/website.server.view');
 
 var contactDao = require('../dao/contact.dao');
 var cookies = require("../utils/cookieutil");
+var appConfig = require('../configs/app.config.js');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -24,6 +26,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     initialize: function() {
         app.get("/", this.setup, this.index.bind(this));
         app.get("/index", this.setup, this.index.bind(this));
+        app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
         app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
 
         app.get("/page/blog/:posturl", this.setup, this.showBlogPage.bind(this));
@@ -31,13 +34,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/page/author/:author", this.setup, this.showAuthorPage.bind(this));
         app.get("/page/category/:category", this.setup, this.showCategoryPage.bind(this));
 
-        app.post("/signupnews", this.signUpNews.bind(this));
+//        app.post("/signupnews", this.signUpNews.bind(this));
 
         app.get("/home", this.isAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isAuth.bind(this), this.showHome.bind(this));
 
         app.get("/admin", this.isAuth, this.showAdmin.bind(this));
         app.get("/admin/*", this.isAuth, this.showAdmin.bind(this));
+        
+        app.get("/admin1", this.isAuth, this.showAngularAdmin.bind(this));
+        app.get("/admin1/*", this.isAuth, this.showAngularAdmin.bind(this));
 
         return this;
     },
@@ -50,12 +56,13 @@ _.extend(router.prototype, BaseRouter.prototype, {
         if (accountId > 0)  {
             new WebsiteView(req, resp).show(accountId);
         } else {
-            resp.redirect("/home");
+            //resp.redirect("/home");
+            new WebsiteView(req, resp).show(appConfig.mainAccountID);
         }
     },
 
     showWebsitePage: function(req, resp) {
-        console.log('show page');
+
         var self = this
             , accountId = this.accountId(req);
 
@@ -64,6 +71,18 @@ _.extend(router.prototype, BaseRouter.prototype, {
             new WebsiteView(req, resp).showPage(accountId, page);
         } else {
             resp.redirect("/home");
+        }
+    },
+
+    showMainBlog: function(req, res) {
+        var self = this
+            , accountId = this.accountId(req);
+
+        var page = req.params.page;
+        if (accountId > 0)  {
+            new WebsiteView(req, res).showPage(accountId, 'blog');
+        } else {
+            new WebsiteView(req, res).showPage(appConfig.mainAccountID, 'blog');
         }
     },
 
@@ -76,7 +95,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         if (accountId > 0)  {
             new WebsiteView(req, resp).showPost(accountId, postUrl);
         } else {
-            resp.redirect("/home");
+            //resp.redirect("/home");
+            new WebsiteView(req, resp).showPost(appConfig.mainAccountID, postUrl);
         }
     },
 
@@ -123,6 +143,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
 
     showHome: function(req,resp) {
+        var self = this;
         var accountId = this.accountId(req);
         if (accountId > 0) {
             //This is an account based url, there is no /home
@@ -138,7 +159,17 @@ _.extend(router.prototype, BaseRouter.prototype, {
             new AdminView(req,resp).show();
         } else {
             //send them back to the main home
-            resp.redirect("/home");
+            resp.redirect("/admin");
+        }
+    },
+
+    showAngularAdmin: function(req,resp) {
+        var accountId = this.accountId(req);
+        if (accountId > 0) {
+            new AngularAdminView(req,resp).show();
+        } else {
+            //send them back to the main home
+            resp.redirect("/admin");
         }
     },
 
@@ -148,26 +179,20 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     signUpNews: function(req, resp) {
         var self = this, contact, accountToken, deferred;
-
+        console.log(req.body);
         var email = req.body.email;
         console.log('Email: '+JSON.stringify(email));
 
         var accountToken = cookies.getAccountToken(req);
         console.log('Account Token: '+accountToken);
 
-        contactDao.createContactFromEmail(email, accountToken, function (err, value) {
+        contactDao.createContactFromData(req.body, accountToken, function (err, value) {
             if (!err) {
-                req.login(value, function (err) {
-                    if (err) {
-                        return resp.redirect("/");
-                    } else {
-                        req.flash("info", "Account created successfully");
-                        return resp.redirect("/");
-                    }
-                });
+                req.flash("info", "Account created successfully");
+                return resp.redirect("/");
             } else {
                 req.flash("error", value.toString());
-                return resp.redirect("/signup");
+                return resp.redirect("/");
             }
         });
     }

@@ -1,0 +1,97 @@
+<div class="pageheader row">
+    <h2 class="col-xs-8"><i class="fa fa-bullhorn"></i> Marketing</h2>
+    <div class="col-xs-4">
+    </div>
+</div>
+
+<div class="contentpanel">
+    <div class="fus-bg"></div>
+    <div class="fus-overlay"></div>
+    <div class="fus-section col-md-12 pscontainer video-container">
+        <div class="playlist-editor">
+
+            <div class="panel panel-default row">
+                <div class="panel-body">
+                    <div class="col-sm-6">
+                        <div class="search-form-div">
+                            <button href="" class="btn btn-primary btn-square btn-search-options"
+                                    ng-click="showSearchOptionsModal()"><span
+                                    class="glyphicon glyphicon-asterisk"></span>
+                            </button>
+                            <form class="search-form" ng-submit="findVideo(query)">
+                                <div class="fullwidth-input-wrapper">
+                                    <input ng-model="query" type="text" placeholder="Search">
+                                </div>
+                                <button class="btn btn-search btn-primary btn-square" type="submit"><span
+                                        class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <button class="btn btn-info btn-primary btn-square"
+                                    ng-click="!courseBlocked && showCourseInfoModal(course)"><span
+                                    class="glyphicon glyphicon-info-sign"></span></button>
+                            <button class="btn btn-add btn-square" ng-click="!courseBlocked && showAddCourseModal()"><span
+                                    class="glyphicon glyphicon-plus"></span></button>
+                            <div class="fullwidth-input-wrapper">
+                                <input disabled class="playlist-selector" placeholder="Add Course" ng-if="courses.length==0"/>
+                                <select ng-model="ui.selectedCourseId" class="playlist-selector"
+                                        ng-change="courseSelected()" ng-if="courses.length>0" ng-disabled="courseBlocked"
+                                        ng-options="course._id as course.title for course in courses | orderBy:'title'">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- panel -->
+
+            <div class="col-md-7 row videos-search-col">
+                <!-- <div class="search-form-div">
+                    <button href="" class="btn btn-primary btn-square btn-search-options"
+                            ng-click="showSearchOptionsModal()"><span
+                            class="glyphicon glyphicon-asterisk"></span>
+                    </button>
+                    <form class="search-form" ng-submit="findVideo(query)">
+                        <div class="fullwidth-input-wrapper">
+                            <input ng-model="query" type="text" placeholder="Search">
+                        </div>
+                        <button class="btn btn-search btn-primary btn-square" type="submit"><span
+                                class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </form>
+                </div> -->
+
+                <div when-ui-scrolled="loadMore()" class="col-md-12 video-list">
+                    <div ng-include src="'/pipeshift/views/video/videos.html'"></div>
+                </div>
+            </div>
+            <div class="col-md-5 playlist-col">
+                <!-- <div class="row">
+                    <button class="btn btn-info btn-primary btn-square"
+                            ng-click="!courseBlocked && showCourseInfoModal(course)"><span
+                            class="glyphicon glyphicon-info-sign"></span></button>
+                    <button class="btn btn-add btn-square" ng-click="!courseBlocked && showAddCourseModal()"><span
+                            class="glyphicon glyphicon-plus"></span></button>
+                    <div class="fullwidth-input-wrapper">
+                        <input disabled class="playlist-selector" placeholder="Add Course" ng-if="courses.length==0"/>
+                        <select ng-model="ui.selectedCourseId" class="playlist-selector"
+                                ng-change="courseSelected()" ng-if="courses.length>0" ng-disabled="courseBlocked"
+                                ng-options="course._id as course.title for course in courses | orderBy:'title'">
+                        </select>
+                    </div>
+                </div> -->
+
+                <!--TODO: show loading animation until saved(!courseBlocked)-->
+                <div class="row">
+                    <div class="playlist timeline" video-drop from="videos" ng-disabled="courseBlocked"
+                         to="course.videos" videos="course.videos" remove-video="showRemoveVideoModal"
+                         add-video="addVideo"
+                         video-sort="dayTimeSort">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

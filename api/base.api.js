@@ -104,7 +104,7 @@ _.extend(apiBase.prototype, {
 
     userId: function(req) {
         try {
-            return req.user.id();
+            return req.user.attributes._id;
         }catch(exception) {
             return null;
         }
@@ -149,6 +149,10 @@ _.extend(apiBase.prototype, {
         }
         return resp.send(result);
         result = null;
+    },
+
+    send200: function(res) {
+        res.send({});
     },
 
 

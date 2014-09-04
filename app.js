@@ -153,6 +153,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(app.router);
+// Handle 404
+app.use(function(req, res) {
+    res.status(400);
+    res.render('404.html', {title: '404: File Not Found'});
+});
+
+// Handle 500
+app.use(function(error, req, res, next) {
+    res.status(500);
+    res.render('500.html', {title:'500: Internal Server Error', error: error});
+});
 app.use(connect.compress());
 
 app.configure('development', function() {
@@ -168,6 +179,25 @@ app.configure('production', function() {
     //TODO - Set up proper error handling for production environments
     app.use(express.errorHandler());
 });
+
+//-----------------------------------------------------
+// SETUP CROSS-DOMAIN SCRIPTING WHITELIST
+//-----------------------------------------------------
+
+var allowCrossDomain = function(req, res, next) {
+    var allowedHost = appConfig.xdhost_whitelist;
+    if(allowedHost.indexOf(req.headers.origin) !== -1 || allowedHost.indexOf(req.headers.host) !== -1) {
+        res.header('Access-Control-Allow-Credentials', true);
+        res.header('Access-Control-Allow-Origin', req.headers.origin)
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'X-CSRF-Token, X-USER-ID, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+        next();
+    } else {
+        res.send({auth: false});
+    }
+}
+log.info('Allowing xd scripting calls from: ' + appConfig.xdhost_whitelist.join());
+app.use(allowCrossDomain);
 
 
 //-----------------------------------------------------
@@ -249,8 +279,8 @@ require('./api/api.manager');
 //  SETUP RENDER HELPERS
 //-----------------------------------------------------
 Handlebars = require('handlebars');
-requirejs('libs/handlebars/handlebarshelpers');
-requirejs('libs/handlebars/indigenoushelpers');
+requirejs('libs_misc/handlebars/handlebarshelpers');
+requirejs('libs_misc/handlebars/indigenoushelpers');
 
 //-----------------------------------------------------
 //  SETUP BIOMETRICS POLLING
@@ -294,7 +324,7 @@ if (process.env.NODE_ENV != "testing") {
 }
 
 //-----------------------------------------------------
-//  CATCH UNCAUGH EXCEPTIONS - Log them and email the error
+//  CATCH UNCAUGHT EXCEPTIONS - Log them and email the error
 //-----------------------------------------------------
 process.on('uncaughtException', function (err) {
     log.error("Stack trace: " + err.stack);

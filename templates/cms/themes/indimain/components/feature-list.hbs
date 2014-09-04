@@ -5,34 +5,39 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
-<div id="assets" class="page">
-        {{#with component}}
-            <div class="component-header container hidden">
-                    <div class="editable" data-class="label">
-                        <h2 class="center">{{{label}}}</h2>
-                    </div>
-
-                    <div class="editable" data-class="description">
-                        <p class="center">{{{description}}}</p>
-                    </div>
-                </div>
-            <!-- Feature Three -->
-            <div id="feature_three" class="row inner-page">
+{{#with component}}
+    <div id="{{anchor}}" class="page feature-list">
+            <div class="row inner-page">
                 <div class="row">
-                    {{#each features}}
-                        <div class="col-sm-4 feature-single-{{@index}}" style="opacity:0">
-                            <span class="{{{feature-icon}}}"></span>
-                        <div class="editable" data-class="features.item.title">
-                            <h4>{{{feature-title}}}</h4>
+                    <h1 class="feature-list-title">
+                        <div class="editable" data-class="title">
+                            {{{title}}}
                         </div>
-                        <div class="editable" data-class="features.item.subtitle">
-                            <p>{{{feature-subtitle}}}</p>
+                    </h1>
+                    <div class="feature-list-subtitle col-xs-8 col-xs-offset-2">
+                        <div class="editable" data-class="subtitle">
+                            {{{subtitle}}}
                         </div>
                     </div>
-                    <div class="pusher visible-xs"></div>
+                    <div class="clearfix mb15"></div>
+                    {{#each features}}
+                    <div class="col-sm-6 feature">
+                        <div class="feature-single feature-single-{{@index}}" style="opacity:0">
+                            <span class="feature-icon {{{feature-icon}}}"></span>
+                            <h3 class="feature-title">
+                                <div class="editable" data-class="feature-title">
+                                    {{{feature-title}}}
+                                </div>
+                            </h3>
+                            <div class="feature-subtitle">
+                                <div class="editable" data-class="feature-subtitle">
+                                    {{{feature-subtitle}}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {{/each}}
                 </div>
             </div>
-        {{/with}}
     </div>
+{{/with}}

@@ -16,9 +16,5 @@ module.exports = {
     STRIPE_SECRET_KEY: stripeSecretKey,
     STRIPE_PUBLISHABLE_KEY: stripePublishableKey,
     STRIPE_CLIENT_ID: stripeClientId,
-    CALLBACK_URL_LOGIN: appConfig.server_url + "/stripe/connect/callback",
-
-    KM_STRIPE_TEST_SECRET_KEY: 'sk_test_HrvWk6U4oejdazs5iSMQCVMa',
-    KM_STRIPE_TEST_PUBLISH_KEY: 'pk_test_JG80mKROqTMgPBr3RSM1ehpT',
-    KM_STRIPE_TEST_CLIENT_ID: 'ca_4DR4NAINnxW3RxXGg1TzCxTLIr2XJkpS'
+    CALLBACK_URL_LOGIN: appConfig.server_url + "/stripe/connect/callback"
 }

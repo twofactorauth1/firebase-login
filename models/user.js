@@ -144,7 +144,16 @@ var user = $$.m.ModelBase.extend({
              *   }]
              * }]
              */
-            details: []
+            details: [],
+            stripeId: "",           //stripe CustomerID if available.  This is separate from login credentials
+            welcome_alert: {
+                editwebsite: true,
+                commerce: true,
+                contact: true,
+                dashboard: true,
+                marketing: true,
+                marketingsingle: true
+            }
         };
     },
 

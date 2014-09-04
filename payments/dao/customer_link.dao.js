@@ -37,14 +37,24 @@ var dao = {
         this.findMany(query, $$.m.CustomerLink, fn);
     },
 
-    getLinkByIds: function(accountId, contactId, customerId, fn) {
+    getLinkByIds: function(accountId, contactId, customerId, userId, fn) {
         var self = this;
         self.log.debug('>> getLinkByIds');
+        if(fn === null) {
+            fn = userId;
+            userId = null;
+        }
         var query = {
             'accountId': accountId,
-            'customerId': customerId,
-            'contactId': contactId
+            'customerId': customerId
+
         };
+        if(contactId) {
+            query.contactId=contactId;
+        }
+        if(userId) {
+            query.userId = userId;
+        }
         this.findOne(query, $$.m.CustomerLink, fn);
     },
 
@@ -101,6 +111,25 @@ var dao = {
             return self.saveOrUpdate(link, fn);
         };
         return self.getLinkByIds(accountId, customerId, contactId, safetyFunction);
+    },
+
+    safeCreateWithUser: function(accountId, userId, customerId, fn) {
+        var self = this;
+        self.log.debug('>> safeCreate');
+        var safetyFunction = function(err, value) {
+
+            if(err || value !== null) {
+                //we expect an error, because it should not exist.
+                return fn('The customer link already exists.', null);
+            }
+            var link = new $$.m.CustomerLink({
+                'accountId': accountId,
+                'customerId': customerId,
+                'userId': userId
+            });
+            return self.saveOrUpdate(link, fn);
+        };
+        return self.getLinkByIds(accountId, customerId, null, userId, safetyFunction);
     }
 
 

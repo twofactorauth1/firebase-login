@@ -20,6 +20,7 @@ define([
                 label:"",
                 description:"",
                 value: "",
+                title:""
             };
         }
     });

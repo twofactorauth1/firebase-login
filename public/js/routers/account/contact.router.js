@@ -18,12 +18,14 @@ define([
                 "contacts": "showContacts",
                 "contacts/": "showContacts",
                 "contacts/:letter": "showContacts",
+                "contacts/:letter/:skip": "showContacts",
 
                 "contacts/:letter/view/:contactId": "viewContactDetails",
                 "contacts/view/:contactId": "viewContactDetails",
 
                 "contacts/:letter/edit/:contactId": "editContact",
-                "contacts/edit/:contactId": "editContact"
+                "contacts/edit/:contactId": "editContact",
+                "contacts/delete/:contactId": "deleteContact"
             },
 
             _onCall: function() {
@@ -69,6 +71,16 @@ define([
             }
         },
         {
+
+            navigateToShowContactsForAll: function (letter,trigger) {
+                if (letter != null) {
+
+                    $$.r.mainAppRouter.navigate("contacts/" + letter, {trigger: trigger});
+                } else {
+                    $$.r.mainAppRouter.navigate("contacts", {trigger: trigger});
+                }
+            },
+
             navigateToShowContactsForLetter: function (letter, trigger) {
                 if (letter != null) {
                     $$.r.mainAppRouter.navigate("contacts/" + letter, {trigger: trigger});
@@ -101,7 +113,7 @@ define([
 
             navigateToCreateContact: function (letter) {
                 if (letter != null) {
-                    $$.r.mainAppRouter
+
                     $$.r.mainAppRouter.navigate("contacts/" + letter + "/edit/new", {trigger: true});
                 } else {
                     $$.r.mainAppRouter.navigate("contacts/" + "edit/new", {trigger: true});

@@ -5,43 +5,79 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
-<div>
-    {{#with component}}
-    <div class="component-header">
-        <div>
-            {{label}}
-        </div>
-
-        <div>
-            {{description}}
+{{#with component}}
+    <div id="{{anchor}}">
+        <div class="component-body">
+            <div class="meet-team">
+                <div class="inner-page">
+                    <h3 class="title">
+                        <div class="editable" data-class="title">
+                            {{title}}
+                        </div>
+                    </h3>
+                    <div class="mb30"></div>
+                    {{#each teamMembers}}
+                        <div class="col-xs-12 col-sm-4 col-md-3 profilepic pull-left {{#if become-member}} become-member {{/if}}">
+                                <div class="profile-img">
+                                    <div class="profilepic-hover">
+                                    <div style="float:left;clear:left;height:15px;width:115px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:115px"></div>
+                                    <div style="float:left;clear:left;height:15px;width: 115px;"></div>
+                                    <div style="float:right;clear:right;height:15px;width:115px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:40px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:40px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:25px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:25px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:20px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:20px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:10px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:10px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:10px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:10px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:5px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:5px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:10px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:10px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:15px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:15px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:20px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:20px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:25px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:25px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:35px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:35px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:45px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:45px"></div>
+                                    <div style="float:left;clear:left;height:15px;width:115px"></div>
+                                    <div style="float:right;clear:right;height:15px;width:115px"></div>
+                                    <span class="c" style="font-size: 13px;">
+                                        <div class="editable" data-class="bio">
+                                            {{bio}}
+                                        </div>
+                                    </span>
+                                    {{#if social}}
+                                    <ul class="profile-social">
+                                        {{#each social}}
+                                            <li><a href="{{this}}" target="_blank"><span class="fa fa-{{@key}}"></span></a></li>
+                                        {{/each}}
+                                    </ul>
+                                    {{/if}}
+                                </div>
+                                <img src="{{#if profilepic}} {{profilepic}} {{else}} /assets/icons/blank-user.jpg {{/if}}" class="thumbnail img-circle"/>
+                            </div>
+                            <h4 class="name">
+                                <div class="editable" data-class="name">
+                                    {{name}}
+                                </div>
+                            </h4>
+                            <div class="editable" data-class="position">
+                                <span class="center">{{position}}</span>
+                            </div>
+                        </div>
+                    {{/each}}
+                    <div class="clearfix"></div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="component-body">
-        <div class="inner-page meet-team">
-        <div class="editable" data-class="title">
-            <h3>{{title}}</h3>
-        </div>
-        <div class="mb30"></div>
-        {{#each teamMembers}}
-            <div class="col-xs-3 editable" data-class="profilepic" style="opacity: 0;">
-                <img src="{{profilepic}}" class="thumbnail img-circle"/>
-            </div>
-            <div class="col-xs-9">
-                <div class="editable" data-class="name">
-                    <h4>{{name}}</h4>
-                </div>
-                <div class="editable" data-class="position">
-                    <span>{{position}}</span>
-                </div>
-                <div class="editable" data-class="bio">
-                <p>{{bio}}</p>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-        {{/each}}
-        </div>
-    </div>
-    {{/with}}
-</div>
+{{/with}}
