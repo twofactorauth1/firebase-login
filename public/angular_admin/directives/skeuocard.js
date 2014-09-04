@@ -22,7 +22,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function (a
                 		PaymentService.getStripeCardToken(cardInput, function (token) {
                 			PaymentService.postStripeCustomer(token, function (stripeUser) {
                 				UserService.postAccountBilling(stripeUser.id, token, function (billing) {
-                					console.log(billing);
+                					console.info('Bill: ' + billing._id + ' updated with token: ' + token + ' and stripe customer ID: ' + stripeUser.id);
                 				});
                 			});
                 		});

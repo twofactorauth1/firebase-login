@@ -17,5 +17,21 @@ define(['app', 'stripe'], function (app) {
 			});
 		};
 		
+		this.getUpcomingInvoice = function (fn) {
+			var apiUrl = baseUrl + ['integrations', 'payments', 'customers', $$.server.userId, 'upcomingInvoice'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+		
+		this.getAllInvoices = function (fn) {
+			var apiUrl = baseUrl + ['integrations', 'payments', 'invoices'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		}
+		
 	});
 });

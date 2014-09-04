@@ -40,5 +40,13 @@ define(['app'], function (app) {
 				fn(data);
 			});
 		};
+		
+		this.getAccountBilling = function (fn) {
+			var apiUrl = baseUrl + ['account', 'billing'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
 	});
 });
