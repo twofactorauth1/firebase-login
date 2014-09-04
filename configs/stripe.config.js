@@ -17,5 +17,4 @@ module.exports = {
     STRIPE_PUBLISHABLE_KEY: stripePublishableKey,
     STRIPE_CLIENT_ID: stripeClientId,
     CALLBACK_URL_LOGIN: appConfig.server_url + "/stripe/connect/callback"
-
 }

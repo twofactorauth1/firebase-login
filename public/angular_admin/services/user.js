@@ -32,5 +32,21 @@ define(['app'], function (app) {
 				fn(data);
 			});
 		};
+		
+		this.postAccountBilling = function (stripeCustomerId, cardToken, fn) {
+			var apiUrl = baseUrl + ['account', 'billing'].join('/');
+			$http.post(apiUrl, {stripeCustomerId: stripeCustomerId, cardToken: cardToken})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+		
+		this.getAccountBilling = function (fn) {
+			var apiUrl = baseUrl + ['account', 'billing'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
 	});
 });

@@ -1,0 +1,488 @@
+<div class="products-v1">
+<div class="editable" data-class="feature-label">
+    <h3 class="center centerh4">
+        Products </h3>
+</div>
+
+<div class="row products">
+    <div class="mb15"></div>
+
+    <div class="container">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#tests" role="tab" data-toggle="tab">Tests</a><span class="arrowsprite"></span>
+            </li>
+            <li><a href="#equipment" role="tab" data-toggle="tab">Equipment</a><span class="arrowsprite"></span></li>
+            <li><a href="#training-plans" role="tab" data-toggle="tab">Training Plans</a><span
+                    class="arrowsprite"></span></li>
+            <li><a href="#coaching" role="tab" data-toggle="tab">Coaching</a><span class="arrowsprite"></span></li>
+        </ul>
+    </div>
+
+    <!-- Tab panes -->
+
+    <div class="tab-content container">
+
+        <div class="tab-pane active" id="{{product-section-id}}">
+            <div data-class="product-section-id">
+                <div class="row container product">
+                    <div>
+                        <div class="col-sm-3 col-xs-12 editable product-img">
+                            <img src="images/product.jpg" class="img-responsive">
+                        </div>
+                        <div class="col-sm-9 col-xs-12 product-content">
+                            <h4>Product Title</h4>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto dicta saepe eos
+                                laudantium, quibusdam excepturi reiciendis at, recusandae accusantium dolores!</p>
+                            <button class="btn btn-primary center" href="{{btn.url}}">
+                                <div data-class="btn-text" class="editable">
+                                    <span class="fa fa-shopping-cart"></span> Add to Cart
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row container product">
+                    <div>
+                        <div class="col-sm-3 editable product-img">
+                            <img src="images/product.jpg" class="img-responsive">
+                        </div>
+                        <div class="col-sm-9 product-content">
+                            <h4>Product Title</h4>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto dicta saepe eos
+                                laudantium, quibusdam excepturi reiciendis at, recusandae accusantium dolores!</p>
+                            <button class="btn btn-primary center" href="{{btn.url}}">
+                                <div data-class="btn-text" class="editable">
+                                    <span class="fa fa-shopping-cart"></span> Add to Cart
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row container product">
+                    <div>
+                        <div class="col-sm-3 editable product-img">
+                            <img src="images/product.jpg" class="img-responsive">
+                        </div>
+                        <div class="col-sm-9 product-content">
+                            <h4>Product Title</h4>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto dicta saepe eos
+                                laudantium, quibusdam excepturi reiciendis at, recusandae accusantium dolores!</p>
+                            <button class="btn btn-primary center" href="{{btn.url}}">
+                                <div data-class="btn-text" class="editable">
+                                    <span class="fa fa-shopping-cart"></span> Add to Cart
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<button class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#cart-checkout-modal">
+    Launch Cart modal
+</button>
+
+
+<div class="modal fade" id="cart-checkout-modal">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title"><i class="fa fa-shopping-cart"></i> My Cart</h4>
+</div>
+<div class="modal-body">
+
+{{!-- CART SECTION --}}
+<div class="row shopping-cart">
+    <div class="col-sm-8 order-line-items">
+        <div class="mb15">
+            <ul>
+                <li>
+                    <div class="line-item-header row">
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <h4 class="col-sm-6">Lorem Ipsum E-Book</h4>
+
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control spinner-input">
+                        </div>
+                        <p class="price col-sm-3">$50.00</p>
+                    </div>
+
+                    <p class="description">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error sint dolores expedita tempore
+                        sunt quos, a facilis soluta architecto ratione, enim fugiat ab quisquam beatae dicta ullam
+                        minima neque optio.
+                    </p>
+                </li>
+                <li>
+                    <div class="line-item-header row">
+                        <button type="button" class="close" aria-hidden="true">×</button>
+                        <h4 class="col-sm-6">Lorem Ipsum E-Book</h4>
+
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control spinner-input">
+                        </div>
+                        <p class="price col-sm-3">$50.00</p>
+                    </div>
+
+                    <p class="description">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error sint dolores expedita tempore
+                        sunt quos, a facilis soluta architecto ratione, enim fugiat ab quisquam beatae dicta ullam
+                        minima neque optio.
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-4 gray-bg order-summary">
+        <h4 class="text-center">Order Summary</h4>
+        <ul>
+            <li>
+                <p class="text-left product-name">Product Name</p>
+
+                <p class="text-right product-price">$0.00</p>
+            </li>
+            <li>
+                <p class="text-left product-name">Product Name</p>
+
+                <p class="text-right product-price">$0.00</p>
+            </li>
+        </ul>
+        <div class="row">
+            <div class="col-xs-6"></div>
+            <div class="clearfix mb30"></div>
+            <div class="col-xs-offset-6 col-xs-6">
+                <p>Subtotal: $0.00</p>
+
+                <p>Tax (8%): $0.00</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <h2>Total</h2>
+            </div>
+            <div class="col-xs-6">
+                <h2>$0.00</h2>
+            </div>
+        </div>
+        <div class="mb15"></div>
+
+    </div>
+</div>
+
+{{!-- BILLING SECTION --}}
+<div class="row billing-shipping hidden">
+    <div class="col-sm-8 information">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#billing" data-toggle="tab">
+                    <strong>Billing</strong>
+                </a>
+            </li>
+            <li class="shipping-tab hidden">
+                <a href="#shipping" data-toggle="tab">
+                    <strong>Shipping</strong>
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content mb30">
+            <div class="tab-pane active" id="billing">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="true" checked>Shipping same as billing information
+                    </label>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstName">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="address">Address</label>
+                            <input type="text" class="form-control" id="address">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label" for="city">City</label>
+                            <input type="text" class="form-control" id="city">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label" for="state">State</label>
+                            <input type="text" class="form-control" id="state">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="zipCode">Zip Code</label>
+                            <input type="text" class="form-control" id="zipCode">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="phone">Phone</label>
+                            <input type="text" class="form-control" id="phone">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="shipping">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="firstName">First Name</label>
+                            <input type="text" class="form-control" id="firstName">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="lastName">Last Name</label>
+                            <input type="text" class="form-control" id="lastName">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="address">Address</label>
+                            <input type="text" class="form-control" id="address">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label" for="city">City</label>
+                            <input type="text" class="form-control" id="city">
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label" for="state">State</label>
+                            <input type="text" class="form-control" id="state">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="zipCode">Zip Code</label>
+                            <input type="text" class="form-control" id="zipCode">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label" for="phone">Phone</label>
+                            <input type="text" class="form-control" id="phone">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 gray-bg order-summary">
+        <h4 class="text-center">Order Summary</h4>
+        <ul>
+            <li>
+                <p class="text-left product-name">Product Name</p>
+
+                <p class="text-right product-price">$0.00</p>
+            </li>
+            <li>
+                <p class="text-left product-name">Product Name</p>
+
+                <p class="text-right product-price">$0.00</p>
+            </li>
+        </ul>
+        <div class="row">
+            <div class="col-xs-6"></div>
+            <div class="col-xs-6">
+                <p>Subtotal: $0.00</p>
+
+                <p>Tax (8%): $0.00</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <h2>Total</h2>
+            </div>
+            <div class="col-xs-6">
+                <h2>$0.00</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- PAYMENT SECTION --}}
+<div class="row payment hidden">
+    <div class="col-xs-8 card-details">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <label class="control-label" for="cardNumber">Card Number</label>
+                    <input type="text" class="form-control" id="cardNumber">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label" for="cvc">CVC</label>
+                    <input type="text" class="form-control" id="lastName">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label" for="cardNumber">Card Holder Name</label>
+                    <input type="text" class="form-control" id="cardNumber">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="control-label" for="cvc">Expiration</label>
+                    <select class="form-control col-sm-2" name="expiry-month" id="expiry-month">
+                        <option>Month</option>
+                        <option value="01">Jan (01)</option>
+                        <option value="02">Feb (02)</option>
+                        <option value="03">Mar (03)</option>
+                        <option value="04">Apr (04)</option>
+                        <option value="05">May (05)</option>
+                        <option value="06">June (06)</option>
+                        <option value="07">July (07)</option>
+                        <option value="08">Aug (08)</option>
+                        <option value="09">Sep (09)</option>
+                        <option value="10">Oct (10)</option>
+                        <option value="11">Nov (11)</option>
+                        <option value="12">Dec (12)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="control-label" for="cvc"></label>
+                    <select class="form-control" name="expiry-year">
+                        <option value="13">2013</option>
+                        <option value="14">2014</option>
+                        <option value="15">2015</option>
+                        <option value="16">2016</option>
+                        <option value="17">2017</option>
+                        <option value="18">2018</option>
+                        <option value="19">2019</option>
+                        <option value="20">2020</option>
+                        <option value="21">2021</option>
+                        <option value="22">2022</option>
+                        <option value="23">2023</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 gray-bg order-summary">
+        <h4 class="text-center">Order Summary</h4>
+        <ul>
+            <li>
+                <p class="text-left product-name">Product Name</p>
+
+                <p class="text-right product-price">$0.00</p>
+            </li>
+            <li>
+                <p class="text-left product-name">Product Name</p>
+
+                <p class="text-right product-price">$0.00</p>
+            </li>
+        </ul>
+        <div class="row">
+            <div class="col-xs-6"></div>
+            <div class="col-xs-6">
+                <p>Subtotal: $0.00</p>
+
+                <p>Tax (8%): $0.00</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <h2>Total</h2>
+            </div>
+            <div class="col-xs-6">
+                <h2>$0.00</h2>
+            </div>
+        </div>
+        <div class="mb15"></div>
+    </div>
+</div>
+
+{{!-- THANK YOU SECTION --}}
+<div class="row thank-you hidden">
+    <h3 class="center mb20">Thank You For you Purchase</h3>
+
+    <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam maiores, iure quo blanditiis
+        alias asperiores. Quis, veniam unde illum adipisci reiciendis qui, libero est facere et vitae perferendis iusto
+        deserunt, animi omnis saepe ipsa placeat quibusdam tenetur sint fuga consequuntur quisquam sapiente! Sapiente
+        repellendus optio, libero quaerat mollitia magnam, voluptatem.</p>
+
+    <div class="clearfix mb30"></div>
+    <div class="col-xs-12">
+        <button class="btn btn-lg btn-orange">View Order</button>
+    </div>
+    <div class="clearfix mb30"></div>
+    <p class="center">Stay Connected</p>
+
+    <div class="clearfix mb30"></div>
+    <ul class="social-connected">
+        <li>
+            <i class="fa fa-facebook"></i>
+        </li>
+        <li><i class="fa fa-twitter"></i>
+        </li>
+        <li><i class="fa fa-google-plus"></i>
+        </li>
+    </ul>
+</div>
+
+<div class="clearfix"></div>
+</div>
+<div class="modal-footer cart-footer">
+    <button class="btn btn-orange btn-checkout pull-right"><i class="fa fa-shopping-cart"></i> Checkout</button>
+    <button class="btn btn-info continue-shopping pull-left"><i class="fa fa-chevron-left"></i> Continue Shopping
+    </button>
+</div>
+
+<div class="modal-footer billing-footer hidden">
+    <button class="btn btn-success btn-payment pull-right"><i class="fa fa-credit-card"></i> Payment</button>
+    <button class="btn pull-left btn-info back-to-shopping-cart"><i class="fa fa-chevron-left"></i> Back to Cart
+    </button>
+</div>
+
+<div class="modal-footer payment-footer hidden">
+    <button class="btn btn-success btn-confirm-payment pull-right"><i class="fa fa-check-o"></i> Confirm Payment
+    </button>
+    <button class="btn pull-left btn-info back-to-billing-shipping"><i class="fa fa-chevron-left"></i> Back to
+        Billing/Shipping
+    </button>
+</div>
+</div>
+<!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+</div>
