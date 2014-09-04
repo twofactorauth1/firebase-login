@@ -45,7 +45,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url('activity'), this.isAuthApi, this.updateActivity.bind(this));
 
         // http://localhost:3000/api/1.0/contact/fullcontact
-        app.put(this.url('fullcontact'), this.isAuthApi, this.updateContactByFullContactApi.bind(this));
+        app.post(this.url('fullcontact'), this.isAuthApi, this.updateContactByFullContactApi.bind(this));
 
         //duplicate check
         app.get(this.url('duplicates/check'), this.isAuthApi, this.checkForDuplicates.bind(this));

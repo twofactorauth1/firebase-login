@@ -190,7 +190,7 @@ define([
             var self = this;
             var id = JSON.parse(JSON.stringify(self.contact))._id;
             jQuery.ajax({
-                type: 'PUT',
+                type: 'POST',
                 url: '/api/1.0/contact/fullcontact',
                 dataType: 'json',
                 success: function (response) {
