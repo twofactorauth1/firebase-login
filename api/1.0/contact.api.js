@@ -44,8 +44,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('activity'), this.isAuthApi, this.createActivity.bind(this));
         app.put(this.url('activity'), this.isAuthApi, this.updateActivity.bind(this));
 
-        // http://localhost:3000/api/1.0/contact/fullcontact
-        app.post(this.url('fullcontact'), this.isAuthApi, this.updateContactByFullContactApi.bind(this));
+        // http://localhost:3000/api/1.0/contact/:id/fullcontact
+        app.post(this.url(':id/fullcontact'), this.isAuthApi, this.updateContactByFullContactApi.bind(this));
 
         //duplicate check
         app.get(this.url('duplicates/check'), this.isAuthApi, this.checkForDuplicates.bind(this));
@@ -297,7 +297,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.log.debug('>> updateContactByFullContactApi');
 
-        contactId = parseInt(req.param('_id'));
+        contactId = parseInt(req.param('id'));
         //Getting Contact Data via ContactId
         if (!contactId) {
             this.wrapError(resp, 400, null, "Invalid paramater for ID");

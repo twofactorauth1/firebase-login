@@ -189,9 +189,10 @@ define([
         fullContactImport: function () {
             var self = this;
             var id = JSON.parse(JSON.stringify(self.contact))._id;
+            var url = '/api/1.0/contact/' + id + '/fullcontact';
             jQuery.ajax({
                 type: 'POST',
-                url: '/api/1.0/contact/fullcontact',
+                url: url,
                 dataType: 'json',
                 success: function (response) {
                     if (response.status == "email not found") {
