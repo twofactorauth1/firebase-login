@@ -9,23 +9,23 @@ define([
     'views/base.view',
     'models/contact',
     'services/geocode.service'
-], function(BaseView, Contact, GeocodeService) {
+], function (BaseView, Contact, GeocodeService) {
     /*var showDetails = function(type, typePlural){
-            return function () {
-                $('.li-' + type).show();
-                $('.li-' + type + '.first .btn-more-' + typePlural + ' i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-                $('.li-' + type + '.first .btn-more-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' Less ');
-                $('.li-' + type + '.first .btn-more-' + typePlural).removeClass('btn-more-' + typePlural).addClass('btn-less-' + typePlural);
-            }
-        },
-        hideDetails =  function(type, typePlural) {
-            return function () {
-                $('.li-' + type + ':not(:first)').hide();
-                $('.li-' + type + '.first .btn-less-' + typePlural + ' i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-                $('.li-' + type + '.first .btn-less-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' More');
-                $('.li-' + type + '.first .btn-less-' + typePlural).removeClass('btn-less-' + typePlural).addClass('btn-more-' + typePlural);
-            }
-        };*/
+     return function () {
+     $('.li-' + type).show();
+     $('.li-' + type + '.first .btn-more-' + typePlural + ' i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+     $('.li-' + type + '.first .btn-more-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' Less ');
+     $('.li-' + type + '.first .btn-more-' + typePlural).removeClass('btn-more-' + typePlural).addClass('btn-less-' + typePlural);
+     }
+     },
+     hideDetails =  function(type, typePlural) {
+     return function () {
+     $('.li-' + type + ':not(:first)').hide();
+     $('.li-' + type + '.first .btn-less-' + typePlural + ' i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+     $('.li-' + type + '.first .btn-less-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' More');
+     $('.li-' + type + '.first .btn-less-' + typePlural).removeClass('btn-less-' + typePlural).addClass('btn-more-' + typePlural);
+     }
+     };*/
 
     var view = BaseView.extend({
 
@@ -35,23 +35,24 @@ define([
         currentLetter: null,
 
         events: {
-            "click #btn-back-to-contacts":"goBack",
-            "click .btn-edit-contact":"editContact",
-            "click .btn-more-emails":"showEmails",
-            "click .btn-less-emails":"hideEmails",
-            "click .btn-more-phones":"showPhones",
-            "click .btn-less-phones":"hidePhones",
-            "click .btn-more-address":"showAddress",
-            "click .btn-less-address":"hideAddress"
+            "click #btn-back-to-contacts": "goBack",
+            "click .btn-edit-contact": "editContact",
+            "click .btn-more-emails": "showEmails",
+            "click .btn-less-emails": "hideEmails",
+            "click .btn-more-phones": "showPhones",
+            "click .btn-less-phones": "hidePhones",
+            "click .btn-more-address": "showAddress",
+            "click .btn-less-address": "hideAddress",
+            "click .btn-full-contacts": "fullContactImport"
         },
 
 
-        render: function() {
+        render: function () {
             var self = this;
             this.getContact()
-                .done(function() {
+                .done(function () {
                     var data = {
-                        contact:self.contact.toJSON(),
+                        contact: self.contact.toJSON(),
                         currentTime: moment().format('h:mm a')
                     };
                     var tmpl = $$.templateManager.get("contact-details-main", self.templateKey);
@@ -61,7 +62,7 @@ define([
                     self.adjustWindowSize();
                     $(window).on("resize", self.adjustWindowSize);
                 })
-                .fail(function(resp) {
+                .fail(function (resp) {
                     $$.viewManager.showAlert("There was an error retrieving this contact");
                     self.goBack();
                 });
@@ -69,37 +70,37 @@ define([
             this.getReadings();
         },
 
-        adjustWindowSize: function() {
+        adjustWindowSize: function () {
             console.log('resizing');
             $('#main-viewport').css('overflow', 'none');
             var headerBar = $('#headerbar').outerHeight();
             var pageHeader = $('.pageheader').outerHeight();
-            var mainViewportHeight = $(window).height() - headerBar - pageHeader-10;
-            console.log('adjusting window size to '+$(window).height()+' Headerbar: '+headerBar+' Page Herder: '+pageHeader);
+            var mainViewportHeight = $(window).height() - headerBar - pageHeader - 10;
+            console.log('adjusting window size to ' + $(window).height() + ' Headerbar: ' + headerBar + ' Page Herder: ' + pageHeader);
             $('#contact-details-container').css('min-height', $(window).height());
         },
 
 
-        getContact: function() {
+        getContact: function () {
             this.contact = new Contact({
-                _id:this.contactId
+                _id: this.contactId
             });
 
             return this.contact.fetch();
         },
 
 
-        editContact: function() {
+        editContact: function () {
             $$.r.account.ContactRouter.navigateToEditContact(this.contactId, this.currentLetter);
         },
 
 
-        goBack: function() {
+        goBack: function () {
             $$.r.account.ContactRouter.navigateToShowContactsForLetter(this.currentLetter, true);
         },
 
-        contactMap: function(address) {
-            console.log('initializing map '+address);
+        contactMap: function (address) {
+            console.log('initializing map ' + address);
 
             var zoom = 13;
 
@@ -108,11 +109,11 @@ define([
                 zoom = 2;
             }
 
-            $$.svc.GeocodeService.addresstolatlng(address).done(function(value){
+            $$.svc.GeocodeService.addresstolatlng(address).done(function (value) {
                 var map = L.map('map-marker', {
                     center: [ value[0]['lat'], value[0]['lon']],
                     zoom: zoom,
-                    zoomControl:false,
+                    zoomControl: false,
                     autoPan: false,
                     dragging: false,
                     zooming: false,
@@ -131,32 +132,32 @@ define([
 
         },
 
-        showEmails: function (){
-            this.showDetails("email","emails");
+        showEmails: function () {
+            this.showDetails("email", "emails");
         },
 
         hideEmails: function () {
             this.hideDetails("email", "emails");
         },
 
-        showPhones : function () {
+        showPhones: function () {
             this.showDetails("phone", "phones")
         },
-        hidePhones: function (){
-            this.hideDetails("phone","phones");
+        hidePhones: function () {
+            this.hideDetails("phone", "phones");
         },
         showAddress: function () {
             this.showDetails("address", "addresses");
         },
-        hideAddress : function (){
+        hideAddress: function () {
             this.hideDetails("address", "addresses");
         },
 
-        getReadings: function() {
+        getReadings: function () {
             var self = this;
-             var url = $$.api.getApiUrl("biometrics", "readings?contactId="+this.contactId);
-             $.getJSON(url)
-                .done(function(result) {
+            var url = $$.api.getApiUrl("biometrics", "readings?contactId=" + this.contactId);
+            $.getJSON(url)
+                .done(function (result) {
                     for (var i = 0; i < result.length; i++) {
                         console.log(JSON.stringify(result[i].readingTypeId));
                         //TODO variable templates based on type
@@ -166,26 +167,50 @@ define([
                         $('.activity-section ul').append(html);
                     }
                 })
-                .fail(function(resp) {
-                    console.log('Fail: '+JSON.stringify(result));
+                .fail(function (resp) {
+                    console.log('Fail: ' + JSON.stringify(result));
                 });
         },
 
 
-        showDetails : function(type, typePlural){
+        showDetails: function (type, typePlural) {
             $('.li-' + type).show();
             $('.li-' + type + '.first .btn-more-' + typePlural + ' i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
             $('.li-' + type + '.first .btn-more-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' Less ');
             $('.li-' + type + '.first .btn-more-' + typePlural).removeClass('btn-more-' + typePlural).addClass('btn-less-' + typePlural);
 
         },
-        hideDetails : function(type, typePlural) {
+        hideDetails: function (type, typePlural) {
             $('.li-' + type + ':not(:first)').hide();
             $('.li-' + type + '.first .btn-less-' + typePlural + ' i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
             $('.li-' + type + '.first .btn-less-' + typePlural + ' span').text(($('.li-' + type).length - 1) + ' More');
             $('.li-' + type + '.first .btn-less-' + typePlural).removeClass('btn-less-' + typePlural).addClass('btn-more-' + typePlural);
+        },
+        fullContactImport: function () {
+            var self = this;
+            var id = JSON.parse(JSON.stringify(self.contact))._id;
+            var url = '/api/1.0/contact/' + id + '/fullcontact';
+            jQuery.ajax({
+                type: 'POST',
+                url: url,
+                dataType: 'json',
+                success: function (response) {
+                    if (response.status == "email not found") {
+                        alert('Email Id not available. No data imported')
+                    }
+                    else if (response.status == "No Data Found with FullContact API") {
+                        alert('No Data Found with FullContact')
+                    }
+                    else {
+                        alert('Data Successfully Imported')
+                    }
+                    console.log(response);
+                },
+                error: function (response) {
+                },
+                data: {_id: id}
+            });
         }
-
     });
 
     $$.v.account = $$.v.account || {};
