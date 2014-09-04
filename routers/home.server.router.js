@@ -45,6 +45,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/admin1", this.isAuth, this.showAngularAdmin.bind(this));
         app.get("/admin1/*", this.isAuth, this.showAngularAdmin.bind(this));
 
+        app.get("/demo", this.setup, this.demo.bind(this));
+
         return this;
     },
 
@@ -59,6 +61,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
             //resp.redirect("/home");
             new WebsiteView(req, resp).show(appConfig.mainAccountID);
         }
+    },
+
+    demo: function(req, res) {
+        res.redirect('/app/app');
     },
 
     showWebsitePage: function(req, resp) {
