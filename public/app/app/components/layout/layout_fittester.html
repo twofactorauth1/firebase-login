@@ -135,6 +135,35 @@
 
 </div>
 
+<script type="text/javascript">
+    /* Carousel */
+    $('.carousel').each(function () {
+        $(this).carousel({interval: 4000});
+    });
+    //$('[id^="myCarousel"]').carousel({interval: 4000});
+
+    $('[id^="myCarousel"]').on('slide.bs.carousel', function () {
+        $('.carousel-caption').css('display', 'none');
+    });
+
+    $('[id^="myCarousel"]').on('slid.bs.carousel', function () {
+        $('.carousel-inner > .item.active .carousel-caption').fadeIn("slow");
+    });
+
+    $(".link-gallery-image").hover(
+            function () {
+                var opac = 1;
+                $(this).children('.overlay-gallery-image').animate({
+                    opacity: opac
+                }, 500);
+            }, function () {
+                $(this).children('.overlay-gallery-image').animate({
+                    opacity: 0
+                }, 500);
+            }
+    );
+
+</script>
 
 
 <!--<script type="text/javascript">
