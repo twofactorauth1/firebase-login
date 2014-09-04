@@ -1,5 +1,5 @@
 define(['app', 'stripe'], function (app) {
-	app.service('StripeService', function ($http) {
+	app.service('PaymentService', function ($http) {
 		var baseUrl = '/api/1.0/';
 		Stripe.setPublishableKey('pk_test_EuZhZHVourE3RaRxELJaYEya');
 		
@@ -9,9 +9,9 @@ define(['app', 'stripe'], function (app) {
 			});
 		};
 		
-		this.postStripeCustomer = function (cardToken, user, fn) {
+		this.postStripeCustomer = function (cardToken, fn) {
 			var apiUrl = baseUrl + ['integrations', 'payments', 'customers'].join('/');
-			$http.post(apiUrl, {cardToken: cardToken, user: user})
+			$http.post(apiUrl, {cardToken: cardToken})
 			.success(function (data, status, headers, config) {
 				fn(data);
 			});

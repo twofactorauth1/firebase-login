@@ -1,5 +1,5 @@
-define(['angularAMD', 'skeuocard', 'stripeService', 'userService'], function (angularAMD) {
-    angularAMD.directive('indigewebSkeuocard', ['StripeService', function (StripeService, UserService) {
+define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function (angularAMD) {
+    angularAMD.directive('indigewebSkeuocard', ['PaymentService', 'UserService', function (PaymentService, UserService) {
             return {
                 require: [],
                 restrict: 'C',
@@ -19,9 +19,11 @@ define(['angularAMD', 'skeuocard', 'stripeService', 'userService'], function (an
   							exp_year: $('#cc_exp_year').val()
 						};
 						
-                		StripeService.getStripeCardToken(cardInput, function (token) {
-                			StripeService.postStripeCustomer(token, scope.user, function (stripeUser) {
-                				console.log(stripeUser);
+                		PaymentService.getStripeCardToken(cardInput, function (token) {
+                			PaymentService.postStripeCustomer(token, function (stripeUser) {
+                				UserService.postAccountBilling(stripeUser.id, token, function (billing) {
+                					console.log(billing);
+                				});
                 			});
                 		});
                     };

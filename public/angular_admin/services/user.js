@@ -33,9 +33,9 @@ define(['app'], function (app) {
 			});
 		};
 		
-		this.postAccountBilling = function (user, stripeUser, fn) {
-			var apiUrl = baseUrl + ['account', billing].join('/');
-			$http.put(apiUrl, {userId: user.id, stripeUserId: stripUser.id})
+		this.postAccountBilling = function (stripeCustomerId, cardToken, fn) {
+			var apiUrl = baseUrl + ['account', 'billing'].join('/');
+			$http.post(apiUrl, {stripeCustomerId: stripeCustomerId, cardToken: cardToken})
 			.success(function (data, status, headers, config) {
 				fn(data);
 			});

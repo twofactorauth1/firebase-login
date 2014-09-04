@@ -27,7 +27,7 @@
         'commonutils': 'utils/commonutils',
         'app': '/angular_admin/app',
         'userService': '/angular_admin/services/user',
-        'stripeService': '/angular_admin/services/stripe',
+        'paymentService': '/angular_admin/services/payment',
         'skeuocardDirective': '/angular_admin/directives/skeuocard'
  	},
  	shim: {
