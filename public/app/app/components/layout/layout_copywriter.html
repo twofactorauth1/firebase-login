@@ -1,5 +1,35 @@
 <div class="theme-1">
 <div ng-controller="LayoutCtrl as layout">
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+<!-- Global Variables -->
+
+
+<!-- Nav Variables -->
+
+
+<!-- MastHead Variables -->
+
+
+<!-- Image Text Variables -->
+
+
+
+
+<!-- Feature List Variables -->
+
+
+
+<!-- TESTIMONIALS VARIABLES -->
+
+
+
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +45,7 @@
 
     <style type="text/css">
 
-        h1, h2, h3, h4, h5 { font-family: 'Spinnaker', sans-serif!important; color: #833954 !important;}
+        h1, h2, h3, h4, h5 { font-family: 'Spinnaker', sans-serif!important; color: #833954!important;}
         body { font-family: 'Lato', sans-serif!important; }
 
         .btn-primary, .contact-us, .navbar-collapse {
@@ -24,7 +54,7 @@
 
         .feature-list {
             background: #284ca1;
-            color:  #fff;
+            color: #fff;
         }
 
         .feature-list-title, .feature-title  {
@@ -32,21 +62,21 @@
         }
 
         .feature-block {
-            background:#284ca1;
-            color:  #fff!important;
+            background: #284ca1;
+            color: #fff!important;
         }
 
         .feature-block-title, .feature-block-subtitle {
-            color:  #fff!important;
+            color: #fff!important;
         }
 
         .navbar-collapse {
-            background: #833954 !important;
+            background: #833954!important;
         }
 
         .btn-primary {
             background: #284ca1!important;
-            border-bottom: 4px solid  #163082 !important;
+            border-bottom: 4px solid #163082!important;
         }
 
         .navbar-v2 #header .navbar ul.navbar-nav li:hover {
@@ -62,11 +92,24 @@
         }
     </style>
 
-    <link rel="stylesheet" href="../../css/site.css">
+  <!--    <link rel="stylesheet" href="../../styles/site.css">  -->
 
     <title>Sherry Byrd</title>
 
 </head>
+<!-- Custom Css -->
+
+<style type="text/css">
+    .navbar-header {
+        background-color: rgba(255, 255, 255, 0.7)!important;
+    }
+
+    .navbar-brand img {
+        margin-top: 30px!important;
+    }
+</style>
+
+
 <div class="navbar-v2">
     <div id="header">
         <nav class="navbar navbar-default" role="navigation">
@@ -82,7 +125,7 @@
 
                     <a class="navbar-brand editable" href="/" data-name="">
                         <span class="logo-1">
-                            <img src="../../img/copywriter/logo.png" scale="0">
+                            <img src="../../images/copywriter/logo.png" scale="0">
                         </span>
 
                     </a>
@@ -107,19 +150,31 @@
         </nav>
     </div>
 </div>
+
 <div id="body">
 
-    <div ng-repeat="component in layout.pages[0].components | createUrlFilter">
-        <div ng-include src="component.url"></div>
+        <div ng-repeat="component in layout.pages[0].components | createUrlFilter">
+            <div ng-include src="component.url"></div>
+        </div>
+
+
+</div>
+
+<div id="footer">
+    <div class="footer-after section">
+        <div class="row">
+            <p class="col-sm-8 copyright">Copyright © 2014. All Rights reserved.</p>
+            <div class="clear mb15 visible-xs"></div>
+            <p class="col-sm-4 powered-by"><a href="//www.indigenous.io " rel="nofollow">Powered by  Indigenous</a>
+                <img class="footer-logo" src="../../images/footer-logo.png">
+            </p>
+        </div>
     </div>
 </div>
-<br/><br/>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-<script type="text/javascript" src="../../js/waypoints.js"></script>
-<script type="text/javascript" src="../../js/parallax.min.js"></script>
 <script type="text/javascript">
 (function($) {
     $(document).ready(function() {
@@ -448,16 +503,7 @@ $(document).ready(function() {
     });
 });
 </script>
-<div id="footer">
-    <div class="footer-after section">
-        <div class="row">
-            <p class="col-sm-8 copyright">Copyright © 2014. All Rights reserved.</p>
-            <div class="clear mb15 visible-xs"></div>
-            <p class="col-sm-4 powered-by"><a href="//www.indigenous.io " rel="nofollow">Powered by  Indigenous</a>
-                <img class="footer-logo" src="../../img/footer-logo.png">
-            </p>
-        </div>
-    </div>
-</div>
+
+
 </div>
 </div>
