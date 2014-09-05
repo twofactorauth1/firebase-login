@@ -1,0 +1,37 @@
+<!doctype html> <html class="no-js" ng-app="mainApp" ng-controller="MainCtrl as main"> <head> <meta charset="utf-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width,initial-scale=1"> <title>{{main.pageName}}</title> <script type="text/javascript">/* window.analytics=window.analytics||[],window.analytics.methods=["identify","group","track","page","pageview","alias","ready","on","once","off","trackLink","trackForm","trackClick","trackSubmit"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var key=window.analytics.methods[i];window.analytics[key]=window.analytics.factory(key)}window.analytics.load=function(t){if(!document.getElementById("analytics-js")){var a=document.createElement("script");a.type="text/javascript",a.id="analytics-js",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.io/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)}},window.analytics.SNIPPET_VERSION="2.0.9",
+                window.analytics.load("{{segmentIOWriteKey}}");
+        window.analytics.page();*/</script> <!-- TODO add stylesheets and responsive fallback for IE --> <!--<style type="text/css">
+        .navbar-white {
+        color: rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }});
+        border-bottom: 3px solid rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }}) !important;
+        }
+        .color-1 {
+        background: rgb({{ settings.color-palette.color.[0] }},{{ settings.color-palette.color.[1] }},{{ settings.color-palette.color.[2] }});
+        color: #ffffff;
+        }
+        .color-8 {
+        background: rgb({{ settings.color-palette.palette.[7].[0] }},{{ settings.color-palette.palette.[7].[1] }},{{ settings.color-palette.palette.[7].[2] }});
+        }
+        .btn-orange {
+        background: rgb({{ settings.color-palette.palette.[1].[0] }},{{ settings.color-palette.palette.[1].[1] }},{{ settings.color-palette.palette.[1].[2] }})!important;
+        border-bottom: 5px solid rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        border-color: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }});
+        }
+        .btn-orange:hover {
+        background: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
+        border-bottom: 5px solid rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }})!important;
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        border-color: rgb({{ settings.color-palette.palette.[2].[0] }},{{ settings.color-palette.palette.[2].[1] }},{{ settings.color-palette.palette.[2].[2] }});
+        }
+    </style>--> <!-- <meta name="description" content="{{seo.description}}">
+     <meta name="keywords" content="{{seo.keywords}}">--> <!--{{#if settings.favicon}}
+   <link rel="shortcut icon" href="{{settings.favicon}}">
+   {{else}}
+   <link rel="shortcut icon" href="https://s3.amazonaws.com/indigenous-themes/assets/icons/favicon.ico"/>
+   {{/if}}--> <!-- Place favicon.ico and apple-touch-icon.png in the root directory --> <link rel="stylesheet" href="styles/vendor.20833e0b.css">  <body> <div ng-include src="main.themeUrl"> </div>  <!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]--> <!--[if lt IE 9]>
+<script src="scripts/oldieshim.ff90b0fb.js"></script>
+<![endif]--> <script src="scripts/vendor.c3a07674.js"></script> <script src="scripts/scripts.442e319d.js"></script>  
