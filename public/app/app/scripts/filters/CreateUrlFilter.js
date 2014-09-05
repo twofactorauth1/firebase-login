@@ -1,8 +1,8 @@
 mainApp.filter('createUrlFilter', ['accountService', function (accountService) {
     return function (obj) {
         if (obj) {
-            var componentName = 'contact-us',
-                themeName = 'default';
+            var componentName = 'image-text',
+                themeName = 'copywriter';
 
             accountService(function (err, data) {
                 if (err) {

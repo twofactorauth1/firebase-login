@@ -30,41 +30,30 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
                     },
                     "components": [
                         {
-                            "_id": "00000000-0000-0000-0000-000000000000",
-                            "anchor": null,
-                            "type": "contact-us",
-                            "title": "Contact Us",
-                            "subtitle": "This is the contact us subtitle",
-                            "hours": [ ],
-                            "location": {
-                                "address": "address",
-                                "address2": "address2",
-                                "city": "City",
-                                "state": "State",
-                                "zip": "000000",
-                                "lat": "0000000000",
-                                "lon": "0000000000",
-                                "showMap": false,
-                                "addressDisplayLabel": "display label"
+                            "_id" : "00000000-0000-0000-0000-000000000000",
+                            "anchor" : null,
+                            "type" : "image-text",
+                            "title" : "Image Text Title",
+                            "text" : "This is the image text text.",
+                            "mainimg" : {
+                                "imgPos" : "left",
+                                "caption" : "caption",
+                                "url" : "assets/images/fitstop/about.png"
                             },
-                            "contact": {
-                                "email": "email",
-                                "phone": "phone"
-                            },
-                            "bg": {
-                                "img": {
-                                    "url": "http://www.site.com/images/bgimage.jpg",
-                                    "width": 1400,
-                                    "height": 836,
-                                    "parallax": true,
+                            "bg" : {
+                                "img" : {
+                                    "url" : "http://www.site.com/images/bgimage.jpg",
+                                    "width" : 1400,
+                                    "height" : 836,
+                                    "parallax" : true,
                                     "blur": true
                                 },
-                                "color": "#000000"
+                                "color" : "#000000"
                             },
-                            "btn": {
-                                "text": "Btn Text",
-                                "url": "http://google.com",
-                                "icon": "fa fa-rocket"
+                            "btn" : {
+                                "text" : "Btn Text",
+                                "url" : "http://google.com",
+                                "icon" : "fa fa-rocket"
                             }
                         }
                     ],
@@ -76,7 +65,7 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
                         "date": "",
                         "by": null
                     }
-                }
+                };
                 callback(null, pages);
             }
         });
