@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'accountService', 'websiteService',
-    function ($scope, pagesService, accountService, websiteService) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService',
+    function ($scope, pagesService) {
 
         var account, theme, website, pages, that = this;
         console.log('i m layout controller');
