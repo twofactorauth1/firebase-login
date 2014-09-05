@@ -97,7 +97,8 @@ var dao = {
     getAccountByHost: function (host, fn) {
         var parsed = urlUtils.getSubdomainFromHost(host);
         if (parsed.isMainApp) {
-            return fn(null, true);
+            return this.getAccountByID(appConfig.mainAccountID, fn);
+            //return fn(null, true);
         }
 
         if (parsed.subdomain != null || parsed.domain != null) {
