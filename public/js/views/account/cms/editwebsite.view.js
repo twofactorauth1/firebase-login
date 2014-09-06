@@ -27,6 +27,8 @@ define([
         user: null,
         account: null,
 
+        temp_page: null,
+
         websiteId: null,
         pageId: null,
         postId: null,
@@ -43,8 +45,12 @@ define([
         },
 
         events: {
-            "click .btn-save-page":"savePage",
-            "click .btn-cancel-page":"cancelPage",
+            "click .btn-cancel-page" : "openSavePageModal",
+            "click .btn-save-page" : "openSavePageModal",
+            "click .ignore-page-changes": "ignorePageChanges",
+            "click .save-page-changes": "savePageChanges",
+            /*"click .btn-save-page":"savePage",*/
+            /*"click .btn-cancel-page":"cancelPage",*/
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
             "mousemove #sortable":"draggingComponent",
@@ -146,36 +152,40 @@ define([
 
                         $.when(p3, p4, p5, p6)
                             .done(function() {
-                                self.getPage().done(function(){
-                                    self.getPages()
-                                        .done( function() {
-                                            self.pageId = self.page.attributes._id;
-                                            console.log('This Page ID: ' + self.pageId);
+                                self.getPage()
+                                //self.createTempPage()
+                                    .done(function(){
+                                        self.getPages()
+                                            //self.createTempPage()
+                                            .done( function() {
+                                                var key, componentsArray = [], rawComponents, data;
+                                                self.pageId = self.page.get("_id");
+                                                //self.pageId = self.temp_page.get("_id");
+                                                console.log('This Page ID: ' + self.pageId);
 
-                                            // $("#iframe-website").contents().find('#body').data("pageid", self.pageId);
-                                            // console.log('Body Tag: '+$("#iframe-website").contents().find('#body').data("pageid"));
-                                            var componentsArray = [];
-                                            var rawComponents = self.page.attributes.components.models;
-                                            for (key in rawComponents) {
-                                                if (rawComponents.hasOwnProperty(key)) {
-                                                    componentsArray.push(rawComponents[key]);
+                                                componentsArray = [];
+                                                rawComponents = self.page.get("components").models;
+                                                //rawComponents = self.temp_page.get("components").models;
+
+                                                for (key in rawComponents) {
+                                                    if (rawComponents.hasOwnProperty(key)) {
+                                                        componentsArray.push(rawComponents[key]);
+                                                    }
                                                 }
-                                            }
-                                          
-                                            var data = {
-                                                pages: self.pages.toJSON(),
-                                                components: componentsArray,
-                                                colorPalette: colorPalette,
-                                                account: self.account,
-                                                blog: self.blogBoolean,
-                                                currentThemePreviewURL: self.currentThemePreviewURL
-                                            };
 
-                                self.setupSidebar(data, rightPanel, sidetmpl);
+                                                data = {
+                                                    pages: self.pages.toJSON(),
+                                                    components: componentsArray,
+                                                    colorPalette: colorPalette,
+                                                    account: self.account,
+                                                    blog: self.blogBoolean,
+                                                    currentThemePreviewURL: self.currentThemePreviewURL
+                                                };
 
-                                $(window).on("resize", self.adjustWindowSize);
-                                self.disableClickableTitles();
-                                self.disableWaypointsOpacity();
+                                            self.setupSidebar(data, rightPanel, sidetmpl);
+                                            $(window).on("resize", self.adjustWindowSize);
+                                            self.disableClickableTitles();
+                                            self.disableWaypointsOpacity();
                             })
                         });
                     });
@@ -692,7 +702,7 @@ define([
             p1.responseType = "arraybuffer";
             p1.done(function (imageData){
                 done((window.URL || window.webkitURL).createObjectURL( new Blob( [ new Uint8Array( imageData ) ], { type: "image/jpeg" } ) ));
-            }).fail(fail);
+            }).fail(typeof fail === 'function' ? fail : function(){ });
 
             return p1;
         },
@@ -701,10 +711,42 @@ define([
             self._getThemePreview(themeId, function (themePreview) {
                 if (imageElement) imageElement.src = themePreview;
                 self.currentThemePreviewURL =  themePreview;
-            },function(resp){
+            }, function(resp){
                 $$.viewManager.showAlert("An error occurred retrieving the Theme Preview");
             });
+        },
+        createTempPage: function () {
+            var self = this;
+
+            return self.getPage()
+                        .done(function(){
+                            self.temp_page = new Page(self.page.toJSON());
+                            self.temp_page.set("_id", null);
+                            self.temp_page.set("type", "temp");
+                            self.temp_page.set("handle", self.temp_page.get("handle") + "_temp_page");
+                        });
+        },
+        getTempPage: function () {
+            var self = this;
+            self.page.get("handle").indexOf("_temp_page");
+            if (self.temp_page) {
+                return self.temp_page.save();
+            }
+            return self.createTempPage();
+        },
+
+        openSavePageModal: function (){
+            $('#save-page-modal').modal('show');
+        },
+
+        ignorePageChanges: function (){
+            console.log("ignore")
+        },
+
+        savePageChanges: function (){
+            console.log("save")
         }
+
     });
 
 
