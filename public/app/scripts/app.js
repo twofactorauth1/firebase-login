@@ -16,7 +16,8 @@ var mainApp = angular
         'ngRoute',
         'ngSanitize',
         'ngTouch',
-        'ui.router'
+        'ui.router',
+        'angular-parallax'
     ])
     .config(function ($stateProvider, $routeProvider) {
         $stateProvider
@@ -33,4 +34,7 @@ var mainApp = angular
         $routeProvider.otherwise({
             redirectTo: '/#/'
         });
+    })
+    .controller('LayoutCtrl', function($scope, parallaxHelper){
+        $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);
     });

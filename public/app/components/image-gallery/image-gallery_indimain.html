@@ -20,7 +20,7 @@
 
     <div class="col-xs-12 pad0">
         <div class="carousel slide" id="myCarousel">
-            <div class="carousel-inner" ng-repeat="image in component.images">
+            <div class="carousel-inner" ng-repeat="image in component.images track by $index">
 
                 <div class="item">
                     <div class="col-md-4 pad0">

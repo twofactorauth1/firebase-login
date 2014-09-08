@@ -1,38 +1,17 @@
-<div class="component" data-class="social" data-id="g98d442s-0034-2f09-4h65-33423h8894778">
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
 
-    <div>
-
-        <div class="component-body">
-            <div class="social">
-                <ul>
-
-                    <li class="facebook">
-                        <a href="https://www.facebook.com/indigenous.io">
-                            <span class="fa fa-facebook"></span>
-                        </a>
-                    </li>
-
-                    <li class="twitter">
-                        <a href="https://twitter.com/indigenous_io">
-                            <span class="fa fa-twitter"></span>
-                        </a>
-                    </li>
-
-                    <li class="google-plus">
-                        <a href="https://plus.google.com/u/0/105022706688618584400/posts/p/pub">
-                            <span class="fa fa-google-plus"></span>
-                        </a>
-                    </li>
-
-                    <li class="pinterest">
-                        <a href="http://www.pinterest.com/indigenousdotio/">
-                            <span class="fa fa-pinterest"></span>
-                        </a>
-                    </li>
-
-                </ul>
-            </div>
+<div data-ng-if="component">
+    <div class="component-body">
+        <div class="social">
+            <ul>
+                <li data-ng-repeat="(key,val) in component.networks track by $index" class="{{key}}"><a ng-href="{{val}}"><span class="fa fa-{{key}}"></span></a></li>
+            </ul>
         </div>
-
     </div>
 </div>

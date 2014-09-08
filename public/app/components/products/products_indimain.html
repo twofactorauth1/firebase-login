@@ -46,10 +46,10 @@
 
     <!-- Tab panes -->
 
-    <div class="tab-content container" ng-repeat="ps in component['product-sections']">
+    <div class="tab-content container" ng-repeat="ps in component['product-sections'] track by $index">
 
         <div ng-show="$index == 0" class="tab-pane active" id="{{ps['product-section-id']}}">
-            <div data-class="product-section-id" ng-repeat="product in ps.products">
+            <div data-class="product-section-id" ng-repeat="product in ps.products track by $index">
 
                 <div class="row container product">
                     <div>

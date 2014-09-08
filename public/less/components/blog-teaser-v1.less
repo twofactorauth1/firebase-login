@@ -1,0 +1,80 @@
+/********** Blog Teaser v1 **********/
+
+  .blog-teaser {
+      background: #f6f6f6;
+      padding: 40px;
+
+      .posts {
+        margin-top: 45px;
+      }
+
+      .title {
+        text-align: center;
+        font-weight: bold;
+      }
+
+      .single-blog {
+        min-height: 380px;
+        display: block;
+        background: #fff;
+        border-bottom: 4px solid #e3e3e3;
+        border-radius: 5px;
+
+        .blog-content {
+          padding: 15px;
+        }
+
+        .featured-image {
+          max-height: 200px;
+          overflow: hidden;
+          img {
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+            max-height: 200px;
+            height: 100%;
+            width: 100%;
+          }
+        }
+
+        .title {
+          color: #4bb0cb;
+          text-align: left;
+        }
+
+        .excerpt {
+          font-size: 12px;
+          color: #444444;
+          font-weight: bold;
+        }
+
+        .footer {
+          height: 35px;
+          width: 100%;
+          padding: 15px;
+          margin-left: -14px;
+          text-align: left;
+          position: absolute;
+          bottom: 0;
+          margin-bottom: 15px;
+
+          .date, .comments {
+            display: block;
+            position: relative;
+            z-index: 999;
+            color: #bababa;
+            font-size: 12px;
+            padding: 0;
+          }
+
+          .comments {
+            text-align: right;
+          }
+        }
+      }
+
+      .btn-full-blog {
+        display: block;
+        position: relative;
+        max-width: 200px;
+      }
+  }

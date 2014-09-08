@@ -1,4 +1,4 @@
-<div class="component" data-class="social" data-id="g98d442s-0034-2f09-4h65-33423h8894778">
+<div class="component" ng-show="component" data-class="social" data-id="{{component._id}}">
 
     <div>
 
@@ -6,26 +6,26 @@
             <div class="social">
                 <ul>
 
-                    <li class="facebook">
-                        <a href="https://www.facebook.com/indigenous.io">
+                    <li ng-show="component.networks.facebook" class="facebook">
+                        <a href="{{component.networks.facebook}}">
                             <span class="fa fa-facebook"></span>
                         </a>
                     </li>
 
-                    <li class="twitter">
-                        <a href="https://twitter.com/indigenous_io">
+                    <li ng-show="component.networks.twitter" class="twitter">
+                        <a href="{{component.networks.twitter}}">
                             <span class="fa fa-twitter"></span>
                         </a>
                     </li>
 
-                    <li class="google-plus">
-                        <a href="https://plus.google.com/u/0/105022706688618584400/posts/p/pub">
+                    <li ng-show="component.networks.google-plus" class="google-plus">
+                        <a href="{{component.networks.google-plus}}">
                             <span class="fa fa-google-plus"></span>
                         </a>
                     </li>
 
-                    <li class="pinterest">
-                        <a href="http://www.pinterest.com/indigenousdotio/">
+                    <li ng-show="component.networks.pinterest" class="pinterest">
+                        <a href="{{component.networks.pinterest}}">
                             <span class="fa fa-pinterest"></span>
                         </a>
                     </li>

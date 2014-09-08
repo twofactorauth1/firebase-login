@@ -20,12 +20,12 @@
 
     <div id="#myCarousel-{{component._id}}" class="carousel slide">
         <!-- Indicators -->
-        <ol class="carousel-indicators" ng-repeat="image in component.images">
+        <ol class="carousel-indicators" ng-repeat="image in component.images track by $index">
             <li data-target="#myCarousel-{{component._id}}" data-slide-to="{{image.key}}" class=""></li>
         </ol>
 
         <!-- Wrapper for slides -->
-        <div class="carousel-inner" ng-repeat="image in component.images">
+        <div class="carousel-inner" ng-repeat="image in component.images track by $index">
 
             <div class="item active">
                 <div class="fill" style="background-image:url('{{image.url}}');"></div>

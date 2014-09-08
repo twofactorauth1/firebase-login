@@ -5,36 +5,42 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div ng-show="component" id="{{component.anchor}}" class="page feature-list">
+
+<div 
+    ng-show="component"
+    id="{{component.anchor}}"
+    class="page feature-list-v1 {{component.bg.img.parallax?'parallax':''}}"
+    {{component.bg.img.parallax?'parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0"':''}}
+    style="background: url('{{component.bg.img.url}}') {{component.bg.img.parallax?'no-repeat fixed':''}}; background: {{component.bg.color?component.bg.color:''}}">
     <div class="row inner-page">
         <div class="row">
             <h1 class="feature-list-title">
-                <div class="editable" data-class="title">
-                    {{component.title}}
+                <div class="editable" data-class="title" ng-bind-html="component.title">
                 </div>
             </h1>
             <div class="feature-list-subtitle col-xs-8 col-xs-offset-2">
-                <div class="editable" data-class="subtitle">
-                    {{component.subtitle}}
+                <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle">
                 </div>
             </div>
             <div class="clearfix mb15"></div>
-
-            <div ng-repeat="feature in component.features">
+            <div ng-repeat="feature in component.features track by $index">
                 <div class="col-sm-6 feature">
-                    <div class="feature-single feature-single-{{$index}}" style="opacity:0">
-                        <span class="feature-icon {{feature.feature-icon}}"></span>
+                    <div class="feature-single feature-single-{{$index}}">
+                        <span class='feature-icon {{feature["feature-icon"]}}'></span>
 
                         <h3 class="feature-title">
-                            <div class="editable" data-class="feature-title">
-                                {{feature.feature-title}}
+                            <div class="editable" data-class="feature-title" ng-bind-html='feature["feature-title"]'>
                             </div>
                         </h3>
                         <div class="feature-subtitle">
-                            <div class="editable" data-class="feature-subtitle">
-                                {{feature.feature-text}}
+                            <div class="editable" data-class="feature-subtitle" ng-bind-html='feature["feature-subtitle"]'>
                             </div>
                         </div>
+                        <button class="btn btn-success btn-block center" href="{{feature.btn.url}}">
+                            <div class="{{feature.btn.icon}}"></div>
+                            <div data-class="btn-text" class="editable btn-text" ng-bind-html="feature.btn.text">
+                            </div>
+                        </button>
                     </div>
                 </div>
             </div>

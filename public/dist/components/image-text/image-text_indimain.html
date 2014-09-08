@@ -8,27 +8,24 @@
 
 <div ng-show="component">
 
-    <div id="{{component.anchor}}" class="component-body {{component.bgcolor}}">
+    <div id="{{component.anchor}}" class="component-body" style="background: {{component.bg.color}}">
         <div class="inner-page">
             <div class="image-text">
-                <div class="{{(component.url?'col-sm-6':'')}}col-xs-12 pull-{{component.imagePosition}}">
+                <div class="{{(component.url?'col-sm-6':'')}} col-xs-12 pull-{{component.imagePosition}}">
 
                     <h3 class="image-text-title" ng-show="component.title">
-                        <div class="editable" data-class="title">
-                            {{component.title}}
+                        <div class="editable" data-class="title" ng-bind-html="component.title">
                         </div>
                     </h3>
 
-                    <h2 class="image-text-subtitle" ng-show="component.text">
-                        <div class="editable" data-class="subtitle">
-                            {{component.text}}
+                    <h2 class="image-text-subtitle" ng-show="component.subtitle">
+                        <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle">
                         </div>
                     </h2>
 
                     <div class="mb15"></div>
-                    <div class="image-text-text">
-                        <div class="editable" data-class="text" ng-show="component.text">
-                            {{component.text}}
+                    <div class="image-text-text" ng-show="component.text">
+                        <div class="editable" data-class="text" ng-bind-html="component.text">
                         </div>
                     </div>
 
@@ -41,9 +38,9 @@
 
                 <div ng-show="component.url" class="pull-{{component.imagePosition}} col-sm-6 col-xs-12 image-text-image">
                     <div class="editable" data-class="url">
-                        <img src="{{component.url}}" class="img-responsive">
+                        <img src="{{component.imgurl}}" class="img-responsive">
                     </div>
-                    <p class="center editable" data-class="caption">{{component.caption}}</p>
+                    <p class="center editable" data-class="caption" ng-bind-html="component.caption"></p>
                 </div>
 
             </div>
@@ -52,4 +49,3 @@
     </div>
 
 </div>
-
