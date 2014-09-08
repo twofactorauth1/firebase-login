@@ -9,11 +9,11 @@ require('./dao/product.dao.js');
 var productDao = require('./dao/product.dao.js');
 var log = $$.g.getLogger("product_manager");
 
-
 module.exports = {
     createProduct: function(productObj, fn){
         var self = this;
         log.debug('>> createProduct');
+
         productDao.saveOrUpdate(productObj, function(err, value){
             if(err) {
                 log.error('Error creating product: ' + err);
@@ -81,6 +81,20 @@ module.exports = {
                 fn(err, null);
             } else {
                 log.debug('<< listProducts');
+                fn(null, list);
+            }
+        });
+    },
+
+    getProductsByType: function(accountId, productType, fn) {
+        var self = this;
+        log.debug('>> getProductsByType');
+        productDao.findMany({'accountId': accountId, 'product_type':productType}, $$.m.Product, function(err, list){
+            if(err) {
+                log.error('Exception listing products: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< getProductsByType');
                 fn(null, list);
             }
         });
