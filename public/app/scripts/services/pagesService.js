@@ -166,127 +166,127 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
                             }
                         },
                         /*{
-                            "_id": "3941e2e4-c6fc-4745-a81f-afeecac45391",
-                            "anchor": null,
-                            "type": "products",
-                            "label": "label",
-                            "version":"v1",
-                            "description": "description",
-                            "title": "PRODUCTS",
-                            "product-sections": [
-                                {
-                                    "product-section-id": "tests",
-                                    "products": [
-                                        {
-                                            "id": "metabolic",
-                                            "image": "assets/images/fitstop/about.png",
-                                            "title": "METABOLIC EXERCISE TESTING",
-                                            "subtitle": "Metabolic Exercise Testing will include:",
-                                            "text": "1.lorem",
-                                            "btn": {
-                                                "url": "http://google.com",
-                                                "text": "Read More"
-                                            }
-                                        },
-                                        {
-                                            "id": "body-fat",
-                                            "image": "assets/images/fitstop/about.png",
-                                            "title": "Body Fat title",
-                                            "subtitle": "Body Fat subtitle",
-                                            "text": "Body Fat text",
-                                            "btn": {
-                                                "url": "http://google.com",
-                                                "text": "Read More"
-                                            }
-                                        }
-                                    ]
-                                },
-                                {
-                                    "product-section-id": "equipment",
-                                    "products": [
-                                        {
-                                            "id": "equipment1",
-                                            "image": "assets/images/fitstop/about.png",
-                                            "title": "Equipment title",
-                                            "subtitle": "Equipment subtitle",
-                                            "text": "Equipment text",
-                                            "btn": {
-                                                "url": "http://google.com",
-                                                "text": "Read More"
-                                            }
-                                        },
-                                        {
-                                            "id": "equipment2",
-                                            "image": "assets/images/fitstop/about.png",
-                                            "title": "Equipment child title",
-                                            "subtitle": "Equipment child subtitle",
-                                            "text": "Equipment child text",
-                                            "btn": {
-                                                "url": "http://google.com",
-                                                "text": "Read More"
-                                            }
-                                        }
-                                    ]
-                                }
-                            ],
-                            "value": "value"
-                        },*/
+                         "_id": "3941e2e4-c6fc-4745-a81f-afeecac45391",
+                         "anchor": null,
+                         "type": "products",
+                         "label": "label",
+                         "version":"v1",
+                         "description": "description",
+                         "title": "PRODUCTS",
+                         "product-sections": [
+                         {
+                         "product-section-id": "tests",
+                         "products": [
+                         {
+                         "id": "metabolic",
+                         "image": "assets/images/fitstop/about.png",
+                         "title": "METABOLIC EXERCISE TESTING",
+                         "subtitle": "Metabolic Exercise Testing will include:",
+                         "text": "1.lorem",
+                         "btn": {
+                         "url": "http://google.com",
+                         "text": "Read More"
+                         }
+                         },
+                         {
+                         "id": "body-fat",
+                         "image": "assets/images/fitstop/about.png",
+                         "title": "Body Fat title",
+                         "subtitle": "Body Fat subtitle",
+                         "text": "Body Fat text",
+                         "btn": {
+                         "url": "http://google.com",
+                         "text": "Read More"
+                         }
+                         }
+                         ]
+                         },
+                         {
+                         "product-section-id": "equipment",
+                         "products": [
+                         {
+                         "id": "equipment1",
+                         "image": "assets/images/fitstop/about.png",
+                         "title": "Equipment title",
+                         "subtitle": "Equipment subtitle",
+                         "text": "Equipment text",
+                         "btn": {
+                         "url": "http://google.com",
+                         "text": "Read More"
+                         }
+                         },
+                         {
+                         "id": "equipment2",
+                         "image": "assets/images/fitstop/about.png",
+                         "title": "Equipment child title",
+                         "subtitle": "Equipment child subtitle",
+                         "text": "Equipment child text",
+                         "btn": {
+                         "url": "http://google.com",
+                         "text": "Read More"
+                         }
+                         }
+                         ]
+                         }
+                         ],
+                         "value": "value"
+                         },*/
                         /*{
-                            "_id": "3941e2e4-c6fc-4745-a81f-afeecac45397",
-                            "anchor": null,
-                            "type": "freeform",
-                            "version":"v1",
-                            "label": "",
-                            "description": "",
-                            "title": "Advanced Overhaul Profile (AOP)",
-                            "subtitle": "This is a Comprehensive Health, Fitness, and Physical Performance Assessment",
-                            "text": "The AOP will evalulate your fitness and then assist in setting you up with your training plans and devices with one month of online coaching with an exercise physiologist. Here is what is included:",
-                            "assessments": [
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "CMP -",
-                                    "subtitle": "Reg.$200",
-                                    "text": "Cardio-Metabolic Exercise Profile w/VO2Max, Anaerobic Threshold, MaxFat & Target Training Zones."
-                                },
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "VITALS -",
-                                    "subtitle": "Reg.$25",
-                                    "text": "Resting blood pressure and heart rate, Lung Function (VC & FEV1) and a Health Risk Appraisal"
-                                },
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "REE -",
-                                    "subtitle": "Reg.$100",
-                                    "text": "Resting Energy Expendure Profile to determine resting metabolism"
-                                },
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "FMT -",
-                                    "subtitle": "Reg.$100",
-                                    "text": "Functional Movement screening with range of motion, strength, power and core stability assessments"
-                                },
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "FAR -",
-                                    "subtitle": "Reg.$25",
-                                    "text": "Fitness Age Report which takes into account your aerobic capacity, function and motion assessments and muscle strength and endurance (push-ups, sit-ups, grip, vertical jump)"
-                                },
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "COACHING -",
-                                    "subtitle": "Reg.$100",
-                                    "text": "1-month of online coaching with an exercise physiologist"
-                                }
-                            ],
-                            "assessment-title": "$339",
-                            "assessment-text": "$550 value!",
-                            "btn": {
-                                "url": "www.google.com",
-                                "text": "START TODAY"
-                            },
-                            "value": ""
-                        },*/
+                         "_id": "3941e2e4-c6fc-4745-a81f-afeecac45397",
+                         "anchor": null,
+                         "type": "freeform",
+                         "version":"v1",
+                         "label": "",
+                         "description": "",
+                         "title": "Advanced Overhaul Profile (AOP)",
+                         "subtitle": "This is a Comprehensive Health, Fitness, and Physical Performance Assessment",
+                         "text": "The AOP will evalulate your fitness and then assist in setting you up with your training plans and devices with one month of online coaching with an exercise physiologist. Here is what is included:",
+                         "assessments": [
+                         {
+                         "assessment-icon": "fa fa-check",
+                         "title": "CMP -",
+                         "subtitle": "Reg.$200",
+                         "text": "Cardio-Metabolic Exercise Profile w/VO2Max, Anaerobic Threshold, MaxFat & Target Training Zones."
+                         },
+                         {
+                         "assessment-icon": "fa fa-check",
+                         "title": "VITALS -",
+                         "subtitle": "Reg.$25",
+                         "text": "Resting blood pressure and heart rate, Lung Function (VC & FEV1) and a Health Risk Appraisal"
+                         },
+                         {
+                         "assessment-icon": "fa fa-check",
+                         "title": "REE -",
+                         "subtitle": "Reg.$100",
+                         "text": "Resting Energy Expendure Profile to determine resting metabolism"
+                         },
+                         {
+                         "assessment-icon": "fa fa-check",
+                         "title": "FMT -",
+                         "subtitle": "Reg.$100",
+                         "text": "Functional Movement screening with range of motion, strength, power and core stability assessments"
+                         },
+                         {
+                         "assessment-icon": "fa fa-check",
+                         "title": "FAR -",
+                         "subtitle": "Reg.$25",
+                         "text": "Fitness Age Report which takes into account your aerobic capacity, function and motion assessments and muscle strength and endurance (push-ups, sit-ups, grip, vertical jump)"
+                         },
+                         {
+                         "assessment-icon": "fa fa-check",
+                         "title": "COACHING -",
+                         "subtitle": "Reg.$100",
+                         "text": "1-month of online coaching with an exercise physiologist"
+                         }
+                         ],
+                         "assessment-title": "$339",
+                         "assessment-text": "$550 value!",
+                         "btn": {
+                         "url": "www.google.com",
+                         "text": "START TODAY"
+                         },
+                         "value": ""
+                         },*/
                         {
                             "_id": "g98d442s-0034-2f09-4h65-33423h8894778",
                             "anchor": null,
