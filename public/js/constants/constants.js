@@ -103,6 +103,7 @@ define([], function () {
                 MEMBER: "mb",
                 FAMILY: "fa",
                 ADMIN: "ad",
+                LEAD: 'ld',
                 OTHER: "ot",
 
                 dp: [
@@ -112,6 +113,7 @@ define([], function () {
                     {label: "Member", data: "mb"},
                     {label: "Family", data: "fa"},
                     {label: "Admin", data: "ad"},
+                    {label: 'Lead', data: 'ld'},
                     {label: "Other", data: "ot"}
                 ]
             },
@@ -171,6 +173,7 @@ define([], function () {
                 MEMBER: "mb",
                 FAMILY: "fa",
                 ADMIN: "ad",
+                LEAD: 'ld',
                 OTHER: "ot",
 
                 dp: [
@@ -180,6 +183,7 @@ define([], function () {
                     {label: "Member", data: "mb"},
                     {label: "Family", data: "fa"},
                     {label: "Admin", data: "ad"},
+                    {label: 'Lead', data: 'ld'},
                     {label: "Other", data: "ot"}
                 ]
             },

@@ -6,6 +6,7 @@
  */
 
 var baseApi = require('../base.api');
+var accountDao = require('../../dao/account.dao');
 var contactDao = require('../../dao/contact.dao');
 var contactActivityDao = require('../../dao/contactactivity.dao');
 var cookies = require('../../utils/cookieutil');
@@ -239,6 +240,30 @@ _.extend(api.prototype, baseApi.prototype, {
 
     signUpNews: function (req, resp) {
         var self = this, contact, accountToken, deferred;
+        self.log.debug('>> signUpNews');
+        accountDao.getAccountByHost(req.get("host"), function(err, value) {
+            if(err) {
+                self.log.error('Error signing up: ' + err);
+                req.flash("error", value.toString());
+                return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
+            } else {
+                self.log.debug('signing up contact with account: ' + value.get('token'));
+                var contact = new $$.m.Contact(req.body);
+                contact.set('accountId', value.id());
+                contact.set('type', 'ld');
+                contactDao.saveOrUpdate(contact, function(err, savedContact){
+                    if(err) {
+                        self.log.error('Error signing up: ' + err);
+                        req.flash("error", 'There was a problem signing up.  Please try again later.');
+                        return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
+                    } else {
+                        req.flash("info", "Thank you for subscribing.");
+                        return self.sendResult(resp, savedContact);
+                    }
+                });
+            }
+        });
+/*
         var email = req.body.email;
         var accountToken = cookies.getAccountToken(req);
         console.log('Account Token: ' + accountToken);
@@ -254,6 +279,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 //     return resp.redirect("/");
             }
         });
+        */
     },
 
 
