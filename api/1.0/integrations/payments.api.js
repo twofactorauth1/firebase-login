@@ -9,6 +9,7 @@ var baseApi = require('../../base.api.js');
 var stripeDao = require('../../../payments/dao/stripe.dao.js');
 var userDao = require('../../../dao/user.dao.js');
 var customerLinkDao = require('../../../payments/dao/customer_link.dao.js');
+var stripeEventHandler = require('../../../payments/stripe.event.handler.js');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -86,6 +87,11 @@ _.extend(api.prototype, baseApi.prototype, {
         //Events - GL
         app.get(this.url('events/:id'), this.isAuthApi, this.getEvent.bind(this));
         app.get(this.url('events'), this.isAuthApi, this.listEvents.bind(this));
+
+        // ------------------------------------------------
+        //  Webhook
+        // ------------------------------------------------
+        app.post('stripe/webhook', this.verifyEvent.bind(this), this.handleEvent.bind(this));
 
     },
 
@@ -479,8 +485,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var customerId = req.params.id;
         var subscriptionId = req.params.subId;
         var at_period_end = req.body.at_period_end;
+        var accountId = self.accountId(req);
 
-        stripeDao.cancelStripeSubscription(customerId, subscriptionId, at_period_end, accessToken, function(err, value){
+        stripeDao.cancelStripeSubscription(accountId, customerId, subscriptionId, at_period_end, accessToken, function(err, value){
             self.log.debug('<< cancelSubscription');
             return self.sendResultOrError(resp, err, value, "Error cancelling subscription");
             self = value = null;
@@ -987,6 +994,50 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.sendResultOrError(resp, err, value, "Error listing events.");
         });
         self = accessToken = null;
+    },
+
+    verifyEvent: function(req, res, next) {
+        var self = this;
+        self.log.debug('>> verifyEvent');
+        // first, make sure the posted data looks like we expect
+        if(req.body.object!=='event') {
+            self.log.error('could not recognize event object');
+            return res.send(400); // respond with HTTP bad request
+        }
+
+        // we only care about the event id - we use it to query the Stripe API
+        var eventId = req.body.id;
+        stripeDao.getEvent(eventId, null, function(err, value){
+            // the request to Stripe was signed - so if the event id is invalid
+            //  (eg it doesnt belong to our account), the API will respond with an error,
+            //  & if there was a problem on Stripe's side, we might get no data.
+            if(err || !event) {
+                self.log.error('Error verifying event with stripe.');
+                return res.send(401); // respond with HTTP forbidden
+            }
+            // store the validated, confirmed from Stripe event for use by our next middleware
+            req.modeled.stripeEvent = event;
+            self.log.debug('<< verifyEvent');
+            next();
+        });
+
+    },
+
+    handleEvent: function(req, res) {
+        var self = this;
+        self.log.debug('>> handleEvent');
+        var stripeEvent = req.modeled.stripeEvent;
+        stripeEventHandler.handleEvent(stripeEvent, function(err, value){
+            if(err) {
+                //determine response code.  It may not matter.  For now... 500?
+                self.log.error('Error handling event: ' + err);
+                res.send(500);
+            } else {
+                self.log.debug('<< handleEvent');
+                res.send(200);
+            }
+        });
+
     },
 
     _getAccessToken: function(req) {

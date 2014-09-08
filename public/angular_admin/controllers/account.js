@@ -1,11 +1,11 @@
-define(['app', 'apiService', 'skeuocardDirective'], function(app) {
-    app.controller('AccountCtrl', ['$scope', 'ApiService', function ($scope, ApiService) {
-    	ApiService.getUser(function (user) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective'], function(app) {
+    app.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', function ($scope, UserService, PaymentService) {
+    	UserService.getUser(function (user) {
     		$scope.user = user;
     		$scope.activeTab = 'account';
     	});
 
-        ApiService.getAccount(function (account) {
+        UserService.getAccount(function (account) {
             $scope.account = account;
         });
     }]);

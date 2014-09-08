@@ -15,6 +15,7 @@ require('./passport.twitter');
 require('./passport.google');
 require('./passport.linkedin');
 require('./passport.stripe');
+require('./oauth/index');
 
 //  Store only the User Id in the session
 passport.serializeUser(function(user, done) {
