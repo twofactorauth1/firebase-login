@@ -1,0 +1,18 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div ng-show="component" class="feature-block parallax" background-image="url('{{component.bg.img.url}}')" width="{{component.bg.img.width}}" height="{{component.bg.img.height}}" >
+    <div class="inner-page">
+        <div class="editable" data-class="label">
+            <h3 class="center centerh4" ng-bind-html="component.title"></h3>
+        </div>
+        <div class="editable" data-class="description">
+            <p class="lead center" ng-bind-html="component.subtitle"></p>
+        </div>
+    </div>
+</div>
