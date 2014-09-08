@@ -1,7 +1,7 @@
 mainApp.filter('createUrlFilter', ['accountService', function (accountService) {
     return function (obj) {
         if (obj) {
-            var componentName = 'signup-form',
+            var componentName = 'social',
                 themeName = 'fittester';
 
             accountService(function (err, data) {
@@ -10,7 +10,7 @@ mainApp.filter('createUrlFilter', ['accountService', function (accountService) {
                     return err;
                 } else {
                     obj.forEach(function (cp) {
-                        cp['url'] = 'components/' + componentName + '/'+ componentName + '_'+ themeName + '.html';
+                        cp['url'] = 'components/' + cp.type + '_' + cp.version + '.html';
                     });
                 }
             });

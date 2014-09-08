@@ -5,51 +5,41 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
-<div ng-show="component">
-
-    <div id="{{component.anchor}}" class="component-body {{component.bg.color}}">
+<div ng-show="component" class="component image-text-v1" data-class="image-text" data-id="{{component._id}}">
+    <div class="component-body" style="background:#fff;">
         <div class="inner-page">
-            <div class="image-text">
-                <div class="{{(component.mainimg.url?'col-sm-6':'')}}col-xs-12 pull-{{component.mainimg.imgPos}}">
+            <div class="col-sm-8 col-xs-12 pull-right">
 
-                    <h3 class="image-text-title" ng-show="component.title">
-                        <div class="editable" data-class="title">
-                            {{component.title}}
-                        </div>
-                    </h3>
-
-                    <h2 class="image-text-subtitle" ng-show="component.text">
-                        <div class="editable" data-class="subtitle">
-                            {{component.text}}
-                        </div>
-                    </h2>
-
-                    <div class="mb15"></div>
-                    <div class="image-text-text">
-                        <div class="editable" data-class="text" ng-show="component.text">
-                            {{component.text}}
-                        </div>
+                <h3 class="image-text-title">
+                    <div class="editable" data-class="title">
+                        {{component.title}}
                     </div>
+                </h3>
 
-                    <div ng-show="component.btn">
-                        <a class="btn btn-outline btn-lg" href="{{component.btn.url}}">{{component.btn.text}} <span class="fa fa-arrow-circle-o-right"></span></a>
+
+                <div class="mb15"></div>
+                <div class="image-text-text" style="color:#444;">
+                    <div class="editable" data-class="text">
+                        <span ng-bind-html="component.text"></span>
                     </div>
-
                 </div>
-                <div class="clearfix mb10 visible-xs"></div>
 
-                <div ng-show="component.mainimg.url" class="pull-{{component.mainimg.imgPos}} col-sm-6 col-xs-12 image-text-image">
-                    <div class="editable" data-class="url">
-                        <img src="{{component.mainimg.url}}" class="img-responsive">
-                    </div>
-                    <p class="center editable" data-class="caption">{{component.mainimg.caption}}</p>
-                </div>
+                <a class="btn btn-outline btn-lg" href="{{component.btn.url}}"> {{component.btn.text}} <span
+                        class="fa fa-arrow-circle-o-right"></span></a>
 
             </div>
+            <div class="clearfix mb10 visible-xs"></div>
+
+            <div class="pull-{{component.imagePosition}} col-sm-4 col-xs-12 image-text-image">
+                <div class="editable" data-class="url">
+                    <img src="{{component.imgurl}}" class="img-responsive">
+                </div>
+                <p class="center editable" data-class="caption">{{component.caption}}</p>
+            </div>
+
         </div>
         <div class="clearfix"></div>
     </div>
-
 </div>
+
 
