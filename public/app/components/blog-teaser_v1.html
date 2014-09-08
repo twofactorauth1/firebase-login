@@ -1,0 +1,64 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div>
+    <div class="component-body" ng-show="component">
+        <h1>This is blog-teaser v1</h1>
+        <div class="blog-teaser" id="{{component.anchor}}">
+            <h3 class="title">
+                <div class="editable" data-class="title">
+                    {{component.title}}
+                </div>
+            </h3>
+
+            <div class="posts row" ng-repeat="blogpost in component.blogposts">
+
+                <div class="col-sm-4">
+                    <div class="single-blog" data-url="{{blogpost.attributes.post_url}}">
+
+                        <div class="featured-image" ng-show="blogpost.attributes['featured-image']">
+                            <div class="editable" data-class="featured-image">
+                                <img src="{{blogpost.attributes.featured-image}}"/>
+                            </div>
+                        </div>
+
+                        <div class="blog-content">
+                            <h4 class="title">
+                                <div class="editable" data-class="title">
+                                    {{blogpost.attributes.post_title}}
+                                </div>
+                            </h4>
+                            <div class="excerpt">
+                                <div class="editable" data-class="subtitle">
+                                    {{blogpost.attributes.post_excerpt}}
+                                </div>
+                            </div>
+                            <div class="footer">
+                                <div class="date col-xs-6">
+                                    <span class="fa fa-calendar"></span>
+                                    {{blogpost.attributes.created.date}}
+                                </div>
+                                <div class="comments col-xs-6 hidden">
+                                    <span class="fa fa-comments"></span>
+                                    170 Comments
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix mb15 visible-xs"></div>
+
+            </div>
+            <div class="clearfix mb30"></div>
+            <div class="col-xs-12 mb15">
+                <a class="btn btn-success center btn-lg btn-full-blog" href="/page/blog">See Full Blog</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
