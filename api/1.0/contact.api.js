@@ -32,8 +32,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('filter/:letter'), this.isAuthApi, this.getContactsByLetter.bind(this)); // for individual letter
 
         //  app.post("/signupnews", this.signUpNews.bind(this));
-        app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
-
+        //app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
+        app.post(this.url('signupnews'), this.setup, this.signUpNews.bind(this));
 
         app.get(this.url(':accountId/contacts/:letter/:skip', "account"), this.isAuthApi, this.getContactsForAccountByLetter.bind(this));
 
@@ -245,12 +245,12 @@ _.extend(api.prototype, baseApi.prototype, {
 
         contactDao.createContactFromData(req.body, accountToken, function (err, value) {
             if (!err) {
-                req.flash("info", "Account created successfully");
+                req.flash("info", "Thank you for subscribing.");
                 return self.sendResult(resp, value);
                 //       return resp.redirect("/");
             } else {
                 req.flash("error", value.toString());
-                return self.wrapError(resp, 500, "account already Exists", err, value);
+                return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
                 //     return resp.redirect("/");
             }
         });
