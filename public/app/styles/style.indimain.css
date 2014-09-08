@@ -22605,11 +22605,12 @@ div[data-class="blog"] .single-blog {
 .social .google-plus:hover {
     opacity: 1;
 }
-/********** MastHead **********/
+/********** MastHead1 **********/
 .masthead {
     margin-top: 0;
     height: 460px;
     transition: none;
+    overflow: hidden;
 }
 .masthead h4 div,
 .masthead h4 i {

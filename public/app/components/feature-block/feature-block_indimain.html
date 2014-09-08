@@ -6,15 +6,17 @@
 *
 -->
 
-<div ng-show="component" class="feature-block parallax" data-image="/assets/images/indimain/feature-blocks.jpg" data-width="800" data-height="200" >
+<div ng-show="component" class="feature-block {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}'>
 
     <div class="inner-page">
-        <div class="editable" data-class="label">
-            <h3 class="center centerh4">{{component.title}}</h3>
-        </div>
-        <div class="editable" data-class="description">
-            <p class="lead center">{{component.subtitle}}</p>
-        </div>
+        <h1 class="feature-block-title">
+            <div class="editable" data-class="label" ng-bind-html="component.title">
+            </div>
+        </h1>
+        <h3 ng-show="component.subtitle" class="feature-block-subtitle">
+            <div class="editable" data-class="description" ng-bind-html="component.subtitle">
+            </div>
+        </h3>
     </div>
 
    <!-- {{!-- <div class="component-body">

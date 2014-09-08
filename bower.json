@@ -47,7 +47,7 @@
     "angular-ui": "git://github.com/angular-ui/angular-ui.git#~0.4.0",
     "bootstrap-sass": "git://github.com/jlong/sass-twitter-bootstrap.git#~2.3.1",
     "es5-shim": "git://github.com/kriskowal/es5-shim.git#~2.0.8",
-    "font-awesome": "~3.2.1",
+    "font-awesome": "~4.2.0",
     "json3": "git://github.com/bestiejs/json3.git#~3.2.4",
     "angular-route": "~1.2.4",
     "angular-bootstrap": "~0.11.0",

@@ -96,7 +96,7 @@
     <script type="text/javascript" src="/js/libs_misc/jquery/jquery.thumbnailScroller.js"></script>
     <script type="text/javascript" src="/js/libs/jquery-waypoints/waypoints.min.js"></script>
     <script type="text/javascript" src="/js/libs_misc/hw-parallax/parallax.min.js"></script>
-
+    <script type="text/javascript" src="/js/libs_misc/hw-parallax/parallax.min.js"></script>
 
     <script type="text/javascript" >
           (function($) {
@@ -124,11 +124,14 @@
                     if( target.length > -1) {
                         //calculate destination place
                         var dest = 0;
+                        /* //target is not a jquery element or selector
+                           //getting jQuery error
+                           //target = "/page/--page-handle--"
                         if ($(target).offset().top > $(document).height() - $(window).height()) {
                             dest = $(document).height() - $(window).height();
                         } else {
                             dest = $(target).offset().top;
-                        }
+                        }*/
                         //go to destination
                         $('html, body').animate({
                             scrollTop: dest
@@ -410,4 +413,4 @@
 
     </script>
 </body>
-
+</html>

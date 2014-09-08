@@ -1,74 +1,50 @@
-<div class="component feature-list feature-list-v2" data-class="feature-list" data-ng-show="component"
-     data-id="a21b456q-5564-1g87-6j43-22123j887656"
-     style="background: url('images/fittester/feature-list-back.png');">
-    <div class="page">
-        <div class="row inner-page">
-            <div class="row">
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
 
-                <h1 class="feature-list-title">
-                    <div class="editable" data-class="title">
-                        Services
-                    </div>
-                </h1>
-                <div class="feature-list-subtitle col-xs-8 col-xs-offset-2">
-                    <div class="editable" data-class="subtitle">
-                        <span></span></div>
+<div 
+    ng-show="component"
+    id="{{component.anchor}}"
+    class="page feature-list-v2 {{component.bg.img.parallax?'parallax':''}}"
+    {{component.bg.img.parallax?'parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0"':''}}
+    style="background: url('{{component.bg.img.url}}') {{component.bg.img.parallax?'no-repeat fixed':''}}; background: {{component.bg.color?component.bg.color:''}}; color: {{component.text-color?component.text-color:''}};">
+    <div class="row inner-page">
+        <div class="row">
+            <h1 class="feature-list-title">
+                <div class="editable" data-class="title" ng-bind-html="component.title">
                 </div>
-                <div class="clearfix mb15"></div>
-
-                <div class="col-sm-4 feature">
-                    <div class="feature-single feature-single-0">
-                        <span class="feature-icon fa fa-users"></span>
-
-                        <h3 class="feature-title">
-                            <div class="editable" data-class="feature-title">
-                                Customers
-                            </div>
-                        </h3>
-                        <div class="feature-subtitle">
-                            <div class="editable" data-class="feature-subtitle">
-                                Lorem Ipsum <br> Lorem Ipsum <br> Lorem Ipsum <br> Lorem Ipsum
-                            </div>
-                        </div>
-                        <a href="#" class="btn btn-primary feature-btn">View</a></div>
+            </h1>
+            <div class="feature-list-subtitle col-xs-8 col-xs-offset-2">
+                <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle">
                 </div>
-
-                <div class="col-sm-4 feature">
-                    <div class="feature-single feature-single-0">
-                        <span class="feature-icon fa fa-users"></span>
-
-                        <h3 class="feature-title">
-                            <div class="editable" data-class="feature-title">
-                                Customers
-                            </div>
-                        </h3>
-                        <div class="feature-subtitle">
-                            <div class="editable" data-class="feature-subtitle">
-                                Lorem Ipsum <br> Lorem Ipsum <br> Lorem Ipsum <br> Lorem Ipsum
-                            </div>
-                        </div>
-                        <a href="#" class="btn btn-primary feature-btn">View</a></div>
-                </div>
-
-                <div class="col-sm-4 feature">
-                    <div class="feature-single feature-single-0">
-                        <span class="feature-icon fa fa-users"></span>
-
-                        <h3 class="feature-title">
-                            <div class="editable" data-class="feature-title">
-                                Customers
-                            </div>
-                        </h3>
-                        <div class="feature-subtitle">
-                            <div class="editable" data-class="feature-subtitle">
-                                Lorem Ipsum <br> Lorem Ipsum <br> Lorem Ipsum <br> Lorem Ipsum
-                            </div>
-                        </div>
-                        <a href="#" class="btn btn-primary feature-btn">View</a></div>
-                </div>
-
-
             </div>
+            <div class="clearfix mb15"></div>
+            <div ng-repeat="feature in component.features track by $index">
+                <div class="col-sm-3 feature">
+                    <div class="feature-single feature-single-{{$index}}">
+                        <span class='feature-icon {{feature["feature-icon"]}}'></span>
+
+                        <h3 class="feature-title">
+                            <div class="editable" data-class="feature-title" ng-bind-html='feature["feature-title"]'>
+                            </div>
+                        </h3>
+                        <div class="feature-subtitle">
+                            <div class="editable" data-class="feature-subtitle" ng-bind-html='feature["feature-subtitle"]'>
+                            </div>
+                        </div>
+                        <button class="btn btn-success btn-block center" href="{{feature.btn.url}}">
+                            <div class="{{feature.btn.icon}}"></div>
+                            <div data-class="btn-text" class="editable btn-text" ng-bind-html="feature.btn.text">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

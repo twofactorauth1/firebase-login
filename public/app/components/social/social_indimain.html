@@ -9,10 +9,8 @@
 <div data-ng-if="component">
     <div class="component-body">
         <div class="social">
-            <ul data-ng-repeat="network in component.networks track by $index">
-              <span data-ng-repeat="(key,value) in network">
-                <li class="{{key}}"><a ng-href="{{network}}"><span class="fa fa-{{key}}"></span></a></li>
-                </span>
+            <ul>
+                <li data-ng-repeat="(key,val) in component.networks track by $index" class="{{key}}"><a ng-href="{{val}}"><span class="fa fa-{{key}}"></span></a></li>
             </ul>
         </div>
     </div>

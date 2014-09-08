@@ -7,27 +7,22 @@
 -->
 
 <div ng-show="component">
-    <div  class="masthead {{ component.bgimg.parallax?'parallax':''}}"
-          data-image="{{component.bgimg.url}}"
-          data-width="{{component.bgimg.width}}" data-height="{{component.bgimg.height}}">
-        <div class="row">
+    <div  class="masthead {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}'>
+        <div class="row black-overlay">
             <div class="col-xs-12 col-sm-12">
                 <div class="home-text">
-                    <h2 class="title">
-                        <div class="editable" data-class="title">
-                            {{component.title}}
+                    <h2 class="masthead-title">
+                        <div class="editable" data-class="title" ng-bind-html="component.title">
                         </div>
                     </h2>
-                    <div class="subtitle">
-                        <div class="editable" data-class="subtitle">
-                            {{component.subtitle}}
+                    <div class="masthead-subtitle">
+                        <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle">
                         </div>
                     </div>
                     <div class="col-xs-12">
                         <button class="btn btn-success btn-block center" href="{{component.btn.url}}">
-                            <div class="fa fa-envelope"></div>
-                            <div data-class="btn-text" class="editable btn-text">
-                                {{component.btn.text}}
+                            <div class="{{component.btn.icon}}"></div>
+                            <div data-class="btn-text" class="editable btn-text" ng-bind-html="component.btn.text">
                             </div>
                         </button>
                     </div>
