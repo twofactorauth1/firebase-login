@@ -41,7 +41,7 @@
                         </p>
 
                         <div ng-show="component.post_tags">
-                            <ul class="post_tags" ng-repeat="tag in component.post_tags">
+                            <ul class="post_tags" ng-repeat="tag in component.post_tags track by $index">
                                 <li><a href="/page/tag/{{tag}}">{{tag}}</a></li>
                             </ul>
                         </div>

@@ -43,7 +43,7 @@
                             </p>
 
                             <ul class="post_tags" data-ng-if="blogpost.attributes.post_tags"
-                                data-ng-repeat="post_tags in blogpost.attributes.post_tags trak by $index">
+                                data-ng-repeat="post_tags in blogpost.attributes.post_tags track by $index">
                                 <li><a href="/page/tag/{{post_tags}}">{{post_tags}}</a></li>
                             </ul>
 

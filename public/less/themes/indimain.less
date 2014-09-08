@@ -272,6 +272,7 @@
       margin: 0 auto;
       display: block;
       text-shadow: none;
+      color: white;
     }
   }
 
@@ -279,8 +280,7 @@
     text-align: center;
   }
 
-  .feature-blocks {
-    background: #4bb0cb;
+  .feature-block {
 
     .feature-block-title {
       color: white;
@@ -303,9 +303,10 @@
     }
   }
 
-  .feature-blocks.parallax{
-    background: none!important;
+  .feature-block.parallax{
     min-height: 400px;
+    position: relative;
+    overflow: hidden;
     h1 {
       color:white;
       text-shadow: 1px 1px 1px black;
@@ -1003,9 +1004,14 @@
 
 /********** MastHead **********/
 
+  .masthead.navbar-v2 {
+       .home-text {
+        margin-top: 210px!important;
+      }
+    }
+
   .masthead {
     margin-top: 0;
-    height: 460px;
     transition:none;
 
       h4  {
@@ -1016,9 +1022,14 @@
         }
       }
 
-      h1 {
-        color: white;
-        margin-top: 100px;
+      .masthead-title {
+        color: white!important;
+      }
+
+      .masthead-subtitle {
+        max-width: 60%;
+        margin: 0 auto;
+        font-size: 18px;
       }
 
       p {
@@ -1029,11 +1040,27 @@
         width: 200px;
         height: 50px;
         margin-top: 30px;
+        line-height: 30px;
+
+        .fa {
+          float: left;
+        }
       }
 
       .btn-text {
         font-weight: bold;
         text-shadow: none;
+      }
+
+      .home-text {
+        padding: 50px 30px;
+        text-shadow: 2px 1px 0px rgba(62, 92, 111, .8);
+        text-align: center;
+        color: white;
+
+        .title {
+          margin-top: 110px;
+        }
       }
   }
 
@@ -1395,8 +1422,7 @@
 
     .home-text {
       padding: 30px;
-      background: rgba(0,0,0,0.3);
-      height: 100%;
+      height: 450px;
       text-shadow: 2px 1px 0px rgba(62, 92, 111, .8);
       text-align: center;
       color: white;
@@ -1661,3 +1687,69 @@
     .gray-bg {
       border-left: 1px solid #efefef;
     }
+
+    img.parallax {
+      position: absolute;
+    }
+
+    .black-overlay {
+      background: rgba(0, 0, 0, 0.3);
+      height: 100%;
+    }
+
+/********** Social **********/
+
+  .social {
+      ul {
+        text-align: center;
+        padding-left: 0;
+        margin-top: 10px;
+      }
+      ul li {
+        width: 48px;
+        height: 48px;
+        display: inline-block;
+        border-radius: 5px;
+        text-align: center;
+        margin-right: 15px;
+
+        a {
+          color: white;
+          position: relative;
+
+          span {
+            background: none!important;
+            line-height: 48px;
+          }
+        }
+      }
+
+      .facebook {background: #395a93;border-bottom: 3px solid #36558b;opacity: .9;}
+      .twitter {background: #05b3df;border-bottom: 3px solid #06aad3;opacity: .9;}
+      .pinterest {background: rgba(203, 32, 39, 1);border-bottom: 3px solid rgba(160, 32, 39, 0.4);opacity: .9;}
+      .google-plus {background: rgba(221, 75, 57, 1);border-bottom: 3px solid rgba(180, 75, 57, 1);opacity: .9;}
+      .linkedin {background: rgba(0, 123, 182, 1);border-bottom: 3px solid rgba(0, 123, 182, 1);opacity: .9;}
+
+      .facebook, .twitter, .pinterest, .linkedin, .google-plus {
+        &:hover {
+          opacity: 1;
+        }
+      }
+  }
+
+  // .social {
+  //     padding: 0;
+  //   }
+  //   .social li {
+  //     background-image: url(/assets/images/indimain/social-sprite.png);
+  //     width: 26px;
+  //     height: 26px;
+  //     display: inline-block;
+  //     margin-left: 10px;
+  //   }
+  //   .social li a {
+  //     width: 26px;
+  //     height: 26px;
+  //     display: block;
+  //   }
+
