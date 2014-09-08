@@ -29,33 +29,7 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
                         "displayOn": null
                     },
                     "components": [
-                        {
-                            "_id" : "00000000-0000-0000-0000-000000000000",
-                            "anchor" : null,
-                            "type" : "image-text",
-                            "title" : "Image Text Title",
-                            "text" : "This is the image text text.",
-                            "mainimg" : {
-                                "imgPos" : "left",
-                                "caption" : "caption",
-                                "url" : "assets/images/fitstop/about.png"
-                            },
-                            "bg" : {
-                                "img" : {
-                                    "url" : "http://www.site.com/images/bgimage.jpg",
-                                    "width" : 1400,
-                                    "height" : 836,
-                                    "parallax" : true,
-                                    "blur": true
-                                },
-                                "color" : "#000000"
-                            },
-                            "btn" : {
-                                "text" : "Btn Text",
-                                "url" : "http://google.com",
-                                "icon" : "fa fa-rocket"
-                            }
-                        }
+
                     ],
                     "created": {
                         "date": 1408599403942,

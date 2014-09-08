@@ -1,8 +1,8 @@
 mainApp.filter('createUrlFilter', ['accountService', function (accountService) {
     return function (obj) {
         if (obj) {
-            var componentName = 'image-text',
-                themeName = 'copywriter';
+            var componentName = 'signup-form',
+                themeName = 'fittester';
 
             accountService(function (err, data) {
                 if (err) {
