@@ -20,10 +20,10 @@
             </div>
             <div class="clearfix mb15"></div>
 
-            <div data-ng-repeat="feature in component.features track by $index">
-                <div class="col-sm-6 feature">
-                    <div class="feature-single feature-single-{{$index}}" style="opacity:0">
-                        <span class="feature-icon {{feature.feature-icon}}"></span>
+            <div class="row features-wrap">
+                <div class="col-sm-6 feature" data-ng-repeat="feature in component.features track by $index">
+                    <div class="feature-single feature-single-{{$index}}">
+                        <span class="feature-icon {{feature['feature-icon']}}"></span>
 
                         <h3 class="feature-title">
                             <div class="editable" data-class="feature-title">

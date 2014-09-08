@@ -8,10 +8,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService',
 
         pagesService(function (err, data) {
             if (err) {
-                console.log('Controller:LayoutCtrl -> Method:accountService Error: ' + err);
+                console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
             } else {
                 that.pages = data;
-                console.log('Controller:LayoutCtrl -> Method:accountService Success: ', data);
+                console.log('Controller:LayoutCtrl -> Method:pageService Success: ', data);
             }
         });
 
