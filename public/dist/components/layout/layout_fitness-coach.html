@@ -1,0 +1,161 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+
+<div class="theme-main" >
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="author" content="">
+
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+        <link href='http://fonts.googleapis.com/css?family=Spinnaker' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+        <style type="text/css">
+
+            h1, h2, h3, h4, h5 { font-family: 'Spinnaker', sans-serif!important; color: #d99111!important;}
+            body { font-family: 'Lato', sans-serif!important; }
+
+            .btn-primary, .contact-us, .navbar-collapse {
+                background: #f39b00!important;
+            }
+
+            .feature-list {
+                background: #f39b00;
+                color: #fff;
+            }
+
+            .feature-list-title, .feature-title  {
+                color: #fff!important;
+            }
+
+            .feature-block {
+                background: #f39b00;
+                color: #fff!important;
+            }
+
+            .feature-block-title, .feature-block-subtitle {
+                color: #fff!important;
+            }
+
+            .navbar-collapse {
+                background: #d99111!important;
+            }
+
+            .btn-primary {
+                background: #f39b00!important;
+                border-bottom: 4px solid #c66700!important;
+            }
+
+            .navbar-v2 #header .navbar ul.navbar-nav li:hover {
+                border-bottom: 4px solid #c66700;
+            }
+
+            .secondary-color {
+                color: #ed7b00!important;
+            }
+
+            .testimonials {
+                background: #fff!important;
+            }
+        </style>
+
+        <link rel="stylesheet" href="../../css/site.css">
+
+        <title>{{layout.website.title}}</title>
+
+        <script type="text/javascript">
+            window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
+                return function () {
+                    var a = Array.prototype.slice.call(arguments);
+                    return a.unshift(t), window.analytics.push(a), window.analytics
+                }
+            };
+            for (var i = 0; i < window.analytics.methods.length; i++) {
+                var key = window.analytics.methods[i];
+                window.analytics[key] = window.analytics.factory(key)
+            }
+            window.analytics.load = function (t) {
+                if (!document.getElementById("analytics-js")) {
+                    var a = document.createElement("script");
+                    a.type = "text/javascript", a.id = "analytics-js", a.async = !0, a.src = ("https:" === document.location.protocol ? "https://" : "http://") + "cdn.segment.io/analytics.js/v1/" + t + "/analytics.min.js";
+                    var n = document.getElementsByTagName("script")[0];
+                    n.parentNode.insertBefore(a, n)
+                }
+            }, window.analytics.SNIPPET_VERSION = "2.0.9",
+                    window.analytics.load("{{segmentIOWriteKey}}");
+            window.analytics.page();
+        </script>
+    </head>
+
+    <div  class="navbar-v2 theme-main" id="header">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <a class="navbar-brand editable" href="/" data-name="">
+                        <span class="logo-1">
+                            <img src="images/fitness-coach/logo.png" scale="0">
+                        </span>
+
+                    </a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#cart"><span class="fa fa-shopping-cart"></span></a></li>
+
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </div>
+
+    <div id="body" ng-controller="LayoutCtrl as layout">
+        <div ng-repeat="component in layout.pages[0].components | createUrlFilter">
+            <div ng-include src="component.url"></div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="footer-after section">
+            <div class="row">
+                <p class="col-sm-8 copyright">Copyright © 2014. All Rights reserved.</p>
+                <div class="clear mb15 visible-xs"></div>
+                <p class="col-sm-4 powered-by"><a href="//www.indigenous.io " rel="nofollow">Powered by  Indigenous</a>
+                    <img class="footer-logo" src="images/footer-logo.png">
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>

@@ -7,11 +7,8 @@
 
 var baseRouter = require('./base.server.router.js');
 var passport = require('passport');
-var cookies = require("../utils/cookieutil");
-var urlUtils = require('../utils/urlutils');
 var appConfig = require('../configs/app.config');
 var stripeConfig = require('../configs/stripe.config');
-var authenticationDao = require('../dao/authentication.dao');
 
 
 
@@ -30,9 +27,7 @@ _.extend(router.prototype, baseRouter.prototype, {
         // ------------------------------------------------
 
         app.get('/stripe/connect', passport.authenticate('stripe', { scope: 'read_write' }));
-        app.get('/stripe/connect/callback', passport.authenticate('stripe', { scope: 'read_write',
-            failureRedirect: '/login' }), this.handleStripeCallback.bind(this));
-
+        app.get('/stripe/connect/callback', passport.authenticate('stripe', { failureRedirect: '/login' }), this.handleStripeCallback.bind(this));
 
         this.log.debug('<< initialize');
         return this;
@@ -41,16 +36,9 @@ _.extend(router.prototype, baseRouter.prototype, {
     handleStripeCallback: function(req, res) {
         var self = this;
         self.log.debug('>> handleStripeCallback');
-        var user = req.user;
-        var account = req.account;
-        console.dir(user);
-        console.dir(account);
-
         self.log.debug('<< handleStripeCallback');
-        res.redirect('/home');
+        res.redirect('/login');
     }
-
-
 
 });
 

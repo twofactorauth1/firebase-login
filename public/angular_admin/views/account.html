@@ -262,7 +262,7 @@
                         <h3 class="panel-title">Current Bill</h3>
                     </div>
                     <div class="panel-body">
-                        <h2 class="center total">$99.98</h2>
+                        <h2 class="center total">$107.84</h2>
                         <p class="center">Total Due by September 12th, 2014</p>
                         <hr></hr>
                         <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
@@ -278,7 +278,7 @@
                         <h3 class="panel-title">Credit Card</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="indigeweb-skeuocard"></div>
+                        <div class="indigeweb-skeuocard" user='user'></div>
                     </div>
                 </div>
             </div>
@@ -450,7 +450,7 @@
                         <div class="col-xs-6">
                             <div class="mb40"></div>
                             <h4 class="center">Amount Due</h4>
-                            <h1 class="center total">$99.98</h1>
+                            <h1 class="center total">$107.84</h1>
                         </div>
                         <div class="col-xs-6">
                             <h4>Current Payment:</h4>
@@ -459,13 +459,39 @@
                             <span>recieved 01AUG14</span>
                         </div>
                     </div>
-    				<!-- <h3 class="center">Last Payment</h3>
-                    <h4>Amount: <span class="pull-right">$99.00</span></h4>
-                    <h4>Date: <span class="pull-right">01AUG14</span></h4>
-                    <hr></hr>
-                    <h3 class="center">Current Balance</h3>
-                    <h4>Amount Due: <span class="pull-right">$99.00</span></h4>
-                    <h4>Due Date: <span class="pull-right">01SEP14</span></h4> -->
+                    <div class="mb30"></div>
+    				<div class="table-responsive summary">
+                        <table class="table mb30">
+                            <thead>
+                                <tr class="info">
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Business Subscription</td>
+                                    <td>$99.98</td>
+                                </tr>
+                                <tr>
+                                    <td>Stripe Widget</td>
+                                    <td>$4.00</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pull-right"><h4>Sub-Total</h4></span></td>
+                                    <td><h4>$103.98</h4></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pull-right"><h4>Taxes</h4></span></td>
+                                    <td><h4>3.86</h4></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="pull-right"><h4>TOTAL</h4></span></td>
+                                    <td><h4>$107.84</h4></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
     			</div>
     			<div class="modal-footer">
     				<button type="button" class="btn btn-primary btn-lg btn-make-payment"

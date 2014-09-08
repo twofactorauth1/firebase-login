@@ -111,14 +111,12 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
-
     getById: function (id, type, fn) {
         if (_.isFunction(type) && fn == null) {
             fn = type;
             type = null;
         }
         var self = this;
-
         var useCache = this.useCache(type);
         if (useCache) {
             var key = this.getTable(type) + "_" + id;
@@ -126,10 +124,10 @@ _.extend(baseDao.prototype, mongoBaseDao, {
                 if (!err && value != null) {
                     console.log("FOUND IN CACHE: " + key);
                     fn(null, value);
+
                     fn = type = id = null;
                     return;
                 }
-
                 self._getById(id, type, useCache, fn);
                 fn = type = id = null;
             });
