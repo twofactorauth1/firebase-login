@@ -58,7 +58,7 @@
 			<div class="panel-body">
 				<div class="col-sm-6">
 					<input type="text" placeholder="Search Products"
-						class="form-control input-lg">
+						class="form-control input-lg" ng-model="productSearch.name"/>
 				</div>
 				<div class="col-sm-6 form-horizontal">
 					<div class="form-group row">
@@ -80,7 +80,7 @@
 				<div class="visible-xs btn btn-success col-xs-12">Add a new
 					contact</div>
 
-				<div class="col-xs-12 col-sm-4" ng-repeat="product in products.data">
+				<div class="col-xs-12 col-sm-4" ng-repeat="product in products.data | filter:productSearch">
 					<a href="#/commerce/edit/{{product.id}}">
 						<div class="commerce-item btn-view-product-details"
 							data-productid="1">
