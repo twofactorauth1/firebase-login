@@ -15,6 +15,7 @@
             <div ng-repeat="teamMember in component.teamMembers track by $index">
             <div data-ng-if="!teamMember['become-member']" >
                 <div class="col-xs-3 editable profilepic" data-class="profilepic" style="opacity: 0;">
+                    <img src="{{teamMember.profilepic}}" class="thumbnail img-circle"/>
                     <ul class="profile-social">
                         <li>
                             <a ng-href="{{teamMember.social.linkedin}}" target="_blank">
@@ -23,7 +24,6 @@
                         </li>
 
                     </ul>
-                    <img src="{{teamMember.profilepic}}" class="thumbnail img-circle"/>
                 </div>
                 <div class="col-xs-9">
                     <div class="editable" data-class="name">
