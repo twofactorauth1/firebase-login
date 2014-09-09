@@ -10,6 +10,6 @@ mainApp.controller('MainCtrl', ['$scope',
         that.themeUrl = 'components/layout/layout_' + themeName + '.html';
 
         //Include CSS For Theme
-        //that.themeStyle = 'styles/style.' + themeName + '.css';
+        that.themeStyle = 'styles/style.' + themeName + '.css';
 
     }]);
