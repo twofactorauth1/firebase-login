@@ -89,7 +89,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         // BLOG POSTS
         app.post(this.url('page/:id/blog'), this.isAuthApi, this.createBlogPost.bind(this));
-        app.get(this.url('page/:id/blog'), this.isAuthApi, this.listBlogPosts.bind(this));
+        app.get(this.url('page/:id/blog'), this.setup, this.listBlogPosts.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.isAuthApi, this.getBlogPost.bind(this));
         app.post(this.url('page/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
         app.put(this.url('page/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
@@ -697,7 +697,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query['limit'] || 10);//suitable default?
 
         cmsManager.listBlogPosts(accountId, limit, function (err, value) {
-            self.log.debug('<< listBlogPosts');
+            self.log.debug('<< listBlogPosts '+value);
             self.sendResultOrError(res, err, value, "Error listing Blog Posts");
             self = null;
         });

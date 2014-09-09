@@ -15,9 +15,9 @@
                 </div>
             </h3>
 
-            <div class="posts row" ng-repeat="blogpost in component.blogposts">
+            <div class="posts row">
 
-                <div class="col-sm-4">
+                <div class="col-sm-4" ng-repeat="blogpost in layout.blogposts">
                     <div class="single-blog" data-url="{{blogpost.attributes.post_url}}">
 
                         <div class="featured-image" ng-show="blogpost.attributes['featured-image']">

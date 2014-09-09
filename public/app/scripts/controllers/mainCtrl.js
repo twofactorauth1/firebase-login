@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 'themeService', 'pagesService', 'postsService',
-function ($scope, accountService, websiteService, themeService, pagesService, postsService) {
+mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 'themeService', 'pagesService',
+function ($scope, accountService, websiteService, themeService, pagesService) {
 
     var account, pages, website, that = this;
 
@@ -39,17 +39,6 @@ function ($scope, accountService, websiteService, themeService, pagesService, po
         } else {
             website = data;
             console.log('Controller:MainCtrl -> Method:websiteService Success: ', data);
-
-            //do something
-        }
-    });
-
-    postsService(function (err, data) {
-        if (err) {
-            console.log('Controller:MainCtrl -> Method:postsService Error: ' + err);
-        } else {
-            website = data;
-            console.log('Controller:MainCtrl -> Method:postsService Success: ', data);
 
             //do something
         }
