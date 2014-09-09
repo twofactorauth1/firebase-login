@@ -11,7 +11,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService',
             $scope.pages=data;
 
             $scope.pages[0].components.forEach(function (cName) {
-                cName.url=('components/' + cName.type + '_' + 'v1' + '.html');
+                cName.url=('components/' + cName.type + '_v' + cName.version + '.html');
             });
         });
         var componentName = ['masthead','feature-block','feature-list','[meet-team]','[testimonials]','blog-teaser','signup-form','social'];
