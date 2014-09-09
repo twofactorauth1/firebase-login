@@ -107,9 +107,8 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
-                        <a href="{{link.linkTo|generateURLforLinks}}">{{link.label || link.url}}</a>
+                        <a href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}">{{link.label || link.url}}</a>
                     </li>
-                    <li class="sign-in"><a href="/login" target="_blank">Sign In</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
