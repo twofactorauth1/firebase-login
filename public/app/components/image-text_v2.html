@@ -1,5 +1,5 @@
-<div class="component image-text-v2" data-class="image-text" data-id="w12b442s-0034-2f09-4h65-33423h8898767">
-    <div class="component-body" style="background:#f9f9f9;">
+<div class="component image-text-v2" data-class="image-text" data-id="{{component._id}}">
+    <div class="component-body" style="background:{{component.bg.color}};">
         <div class="inner-page">
             <h3 class="image-text-title">
                 <div class="editable" data-class="title">
@@ -7,24 +7,23 @@
                 </div>
             </h3>
 
-            <div class="col-sm-9 col-xs-12 pull-right">
+            <div class="col-sm-9 col-xs-12 {{component.mainimg.imgPos}}">
 
                 <div class="mb15"></div>
-                <div class="image-text-text" style="color:#444;">
+                <div class="image-text-text" style="color:{{component.bg.color}}">
                     <div class="editable" data-class="text">
-                        <span ng-bind-html="component.text"></span>
+                        {{component.text}}
                     </div>
                 </div>
 
-                <a class="btn btn-outline btn-lg" href="{{component.btn.url}}"> {{component.btn.text}}<span
-                        class="fa fa-arrow-circle-o-right"></span></a>
+                <a class="btn btn-outline btn-lg" href="{{component.btn.url}}"> {{component.btn.text}} <span class="fa fa-arrow-circle-o-right"></span></a>
 
             </div>
             <div class="clearfix mb10 visible-xs"></div>
 
-            <div class="pull-right col-sm-3 col-xs-12 image-text-image">
+            <div class="<!-- @image-text-pull --> col-sm-3 col-xs-12 image-text-image">
                 <div class="editable" data-class="url">
-                    <img src="{{component.imgurl}}" class="img-responsive img-circle">
+                    <img src="{{component.mainimg.url}}" class="img-responsive img-circle">
                 </div>
                 <p class="center editable" data-class="caption"></p>
             </div>

@@ -12,49 +12,64 @@
                 <h3>{{component.title}}</h3>
             </div>
             <div class="mb30"></div>
-            <div ng-repeat="teamMember in component.teamMembers track by $index">
-                <div data-ng-if="!teamMember['become-member']" >
-                    <div class="col-xs-3 editable profilepic" data-class="profilepic" style="opacity: 0;">
-                        <img src="{{teamMember.profilepic}}" class="thumbnail img-circle"/>
-                        <ul class="profile-social">
-                            <li>
-                                <a ng-href="{{teamMember.social.linkedin}}" target="_blank">
-                                    <span class="fa fa-linkedin"></span>
-                                </a>
-                            </li>
 
-                        </ul>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-3 profilepic pull-left" ng-repeat="teamMember in component.teamMembers">
+                    <div class="profile-img">
+                        <div class="profilepic-hover">
+                            <div style="float:left;clear:left;height:15px;width:115px"></div>
+                            <div style="float:right;clear:right;height:15px;width:115px"></div>
+                            <div style="float:left;clear:left;height:15px;width: 115px;"></div>
+                            <div style="float:right;clear:right;height:15px;width:115px"></div>
+                            <div style="float:left;clear:left;height:15px;width:40px"></div>
+                            <div style="float:right;clear:right;height:15px;width:40px"></div>
+                            <div style="float:left;clear:left;height:15px;width:25px"></div>
+                            <div style="float:right;clear:right;height:15px;width:25px"></div>
+                            <div style="float:left;clear:left;height:15px;width:20px"></div>
+                            <div style="float:right;clear:right;height:15px;width:20px"></div>
+                            <div style="float:left;clear:left;height:15px;width:10px"></div>
+                            <div style="float:right;clear:right;height:15px;width:10px"></div>
+                            <div style="float:left;clear:left;height:15px;width:10px"></div>
+                            <div style="float:right;clear:right;height:15px;width:10px"></div>
+                            <div style="float:left;clear:left;height:15px;width:5px"></div>
+                            <div style="float:right;clear:right;height:15px;width:5px"></div>
+                            <div style="float:left;clear:left;height:15px;width:10px"></div>
+                            <div style="float:right;clear:right;height:15px;width:10px"></div>
+                            <div style="float:left;clear:left;height:15px;width:15px"></div>
+                            <div style="float:right;clear:right;height:15px;width:15px"></div>
+                            <div style="float:left;clear:left;height:15px;width:20px"></div>
+                            <div style="float:right;clear:right;height:15px;width:20px"></div>
+                            <div style="float:left;clear:left;height:15px;width:25px"></div>
+                            <div style="float:right;clear:right;height:15px;width:25px"></div>
+                            <div style="float:left;clear:left;height:15px;width:35px"></div>
+                            <div style="float:right;clear:right;height:15px;width:35px"></div>
+                            <div style="float:left;clear:left;height:15px;width:45px"></div>
+                            <div style="float:right;clear:right;height:15px;width:45px"></div>
+                            <div style="float:left;clear:left;height:15px;width:115px"></div>
+                            <div style="float:right;clear:right;height:15px;width:115px"></div>
+                            <span class="c" style="font-size: 13px;">
+                                <div class="editable" data-class="bio">
+                                    <p>{{teamMember.bio}}</p>
+                                </div>
+                            </span>
+                            <ul class="profile-social">
+                                <li>
+                                    <a href="http://www.linkedin.com/pub/mike-trevino/0/6b2/856" target="_blank">
+                                        <span class="fa fa-linkedin"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <img src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img" />
                     </div>
-                    <div class="col-xs-9">
+                    <h4 class="name">
                         <div class="editable" data-class="name">
                             <h4>{{teamMember.name}}</h4>
                         </div>
-                        <div class="editable" data-class="position">
-                            <span>{{teamMember.position}}</span>
-                        </div>
-                        <div class="editable" data-class="bio">
-                            <p>{{teamMember.bio}}</p>
-                        </div>
+                    </h4>
+                    <div class="editable" data-class="position">
+                        <span>{{teamMember.position}}</span>
                     </div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="become-member " data-ng-if="teamMember['become-member']">
-                    <div class="col-xs-3 editable profilepic" data-class="profilepic" style="opacity: 0;">
-                        <img src="{{teamMember.profilepic}}" class="thumbnail img-circle"/>
-                    </div>
-                    <div class="col-xs-9">
-                        <div class="editable" data-class="name">
-                            <h4>{{teamMember.name}}</h4>
-                        </div>
-                        <div class="editable" data-class="position">
-                            <span>{{teamMember.position}}</span>
-                        </div>
-                        <div class="editable" data-class="bio">
-                            <p>{{teamMember.bio}}</p>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-
                 </div>
             </div>
         </div>
