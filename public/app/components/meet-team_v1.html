@@ -6,17 +6,6 @@
 *
 -->
 <div ng-show="component">
-<h1>This is meet-team v1</h1>
-    <div class="component-header">
-        <div>
-            {{component.title}}
-        </div>
-
-        <div>
-            {{component.subtitle}}
-        </div>
-    </div>
-
     <div class="component-body">
         <div class="inner-page meet-team">
             <div class="editable" data-class="title">
@@ -24,8 +13,16 @@
             </div>
             <div class="mb30"></div>
 
-            <div ng-repeat="teamMember in component.teamMembers">
+            <div ng-repeat="teamMember in component.teamMembers track by $index">
                 <div class="col-xs-3 editable profilepic" data-class="profilepic" style="opacity: 0;">
+                    <ul class="profile-social">
+                        <li>
+                            <a ng-href="{{teamMember.social.linkedin}}" target="_blank">
+                                <span class="fa fa-linkedin"></span>
+                            </a>
+                        </li>
+
+                    </ul>
                     <img src="{{teamMember.profilepic}}" class="thumbnail img-circle"/>
                 </div>
                 <div class="col-xs-9">
@@ -45,3 +42,4 @@
     </div>
 
 </div>
+

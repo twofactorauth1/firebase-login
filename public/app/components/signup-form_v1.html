@@ -1,4 +1,4 @@
-<div class="component" data-class="signup-form" data-id="d12b442s-0034-2f09-4h65-33423h8894778">
+<div class="component" data-ng-show="component" data-class="signup-form" data-id="{{component._id}}">
 
     <div id="error-msg" class="alert alert-danger hidden">
         <button type="button" aria-hidden="true" class="close">×</button>
@@ -9,7 +9,7 @@
         <div class="component-body">
             <div class="newsletter">
                 <div class="inner-page row">
-                    <h3>Sign Up For News Updates</h3>
+                    <h3 ng-bind-html="component.title"></h3>
 
                     <div class="col-sm-9">
                         <div class="left-inner-addon">
@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-sm-3">
 
-                        <button data-toggle="modal" data-target="#myModal" name="subscribe" id="form-subscribe" class="btn btn-outline pull-right btn-block" script="">I&#x27;M INTERESTED <i class="fa fa-arrow-circle-o-right"></i>
+                        <button data-toggle="modal" data-target="#myModal" name="subscribe" id="form-subscribe" class="btn btn-outline pull-right btn-block" script="">{{component.btntext}}<i class="fa fa-arrow-circle-o-right"></i>
                         </button>
                     </div>
 
