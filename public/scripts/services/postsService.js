@@ -16,13 +16,15 @@ mainApp.factory('postsService', ['accountService', '$http', function (accountSer
                 accountObject = data;
                 var handle = 'blog';
                 //API is getting only one page but we need page arrays
-                $http.get('/api/1.0/cms/page/' + accountObject._id + '/' + handle)
+                var postsUrl = '/api/1.0/cms/blog';
+
+                $http.get(postsUrl)
                     .success(function (post) {
                         if (post !== null) {
                             //TODO
                             //Temp page pushing array
-                            posts[0] = post;
-                            callback(null, posts);
+                            //posts[0] = post;
+                            callback(null, post);
                         } else {
                             callback("post not found");
                         }
