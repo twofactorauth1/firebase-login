@@ -28,275 +28,371 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
                         "asOf": null,
                         "displayOn": null
                     },
-                    "components": [
+                    "components" : [
                         {
-                            "_id": "f43b987f-9164-4b08-8a27-57471e789016",
-                            "anchor": null,
-                            "version": "v1",
-                            "type": "masthead",
-                            "title": "FIT STOP HUMAN PERFORMANCE & HEALTH ENHANCEMENT LAB",
-                            "subtitle": " We are a fitness testing and guidance company that provides advanced assessment services to fitness minded organizations and individuals with programs that are designed for the novice as well as the experienced exerciser. Our testing programs and exercise instruction provide practical information on how to manipulate your energy systems to optimize weight management, endurance performance, power production and stamina gains.",
-                            "bg": {
-                                "img": {
-                                    "url": "/assets/images/fitstop/home-top.jpg",
-                                    "width": 1235,
-                                    "height": 935,
-                                    "parallax": true,
-                                    "blur": false
+                            "_id" : "f43b987f-9164-4b08-8a27-57471e789016",
+                            "anchor" : null,
+                            "type" : "masthead",
+                            "label" : "Masthead",
+                            "description" : "This is the masthead description",
+                            "title" : "Introducing <b>INDIGENOUS!</b>",
+                            "subtitle" : "Indigenous is a fully integrated business management platform&nbsp;<br>for independent service professionals and small businesses<br>",
+                            "bg" : {
+                                "img" : {
+                                    "url" : "/assets/images/indimain/home-top.jpg",
+                                    "width" : 2716,
+                                    "height" : 1810,
+                                    "parallax" : true,
+                                    "blur" : false
                                 },
-                                "color": ""
+                                "color" : ""
                             },
-                            "btn": {
-                                "text": "SIGN UP TODAY",
-                                "url": "http://google.com",
-                                "icon": "fa fa-email"
+                            "btn" : {
+                                "text" : "Learn More",
+                                "url" : "#features",
+                                "icon" : "fa fa-email"
                             }
                         },
                         {
-                            "_id": "cd591421-d223-40bf-861e-ccc840d61960",
-                            "anchor": null,
-                            "version":"v2",
-                            "type": "feature-list",
-                            "title": "SERVICES",
-                            "subtitle": "Subtitle Services",
-                            "features": [
+                            "_id" : "s32d253h-8675-2x06-2v68-65431s970864",
+                            "anchor" : "customers",
+                            "type" : "feature-block",
+                            "label" : "",
+                            "description" : "",
+                            "value" : "",
+                            "title" : "<span class='fa fa-users'></span>",
+                            "subtitle" : "We’re launching our first customers now! Check back here and on <a href='/page/blog'>our blog</a> to learn more about how Indigenous has helped their businesses.",
+                            "text" : "",
+                            "bg" : {
+                                "img" : {
+                                    "url" : "",
+                                    "width" : null,
+                                    "height" : null,
+                                    "parallax" : false,
+                                    "blur" : false
+                                },
+                                "color" : "#4bb0cb"
+                            },
+                            "btn" : {
+                                "text" : "Btn Text",
+                                "url" : "http://google.com",
+                                "icon" : "fa fa-rocket"
+                            }
+                        },
+                        {
+                            "_id" : "d56d253h-8675-2x06-2v68-65431s970864",
+                            "anchor" : null,
+                            "type" : "feature-block",
+                            "title" : "With Indigenous - an environment built around you - the elements key to nurturing your business are at your fingertips. Not only that, they are flexible and scalable.",
+                            "subtitle" : "",
+                            "text" : "<ul><li>A dynamic and evolving website that tells your story</li><li>A way to connect with clients via mailing lists, newsletters, and more</li><li>An innovative and educated marketing plan</li><li>An easy-to-setup and easy-to-use billing system</li></ul>",
+                            "bg" : {
+                                "img" : {
+                                    "url" : "/assets/images/indimain/img-3.jpg",
+                                    "width" : 1400,
+                                    "height" : 998,
+                                    "parallax" : true,
+                                    "blur" : false
+                                },
+                                "color" : ""
+                            },
+                            "btn" : {
+                                "text" : "Btn Text",
+                                "url" : "http://google.com",
+                                "icon" : "fa fa-rocket"
+                            }
+                        },
+                        {
+                            "_id" : "a21b456q-5564-1g87-6j43-22123j887656",
+                            "anchor" : "features",
+                            "type" : "feature-list",
+                            "title" : "<h1>Features<br></h1>",
+                            "subtitle" : "Tell your story. Build and connect with your customer base. Realize your revenue potential.",
+                            "features" : [
                                 {
-                                    "feature-icon": "fa fa-paste",
-                                    "feature-title": "ADVANCED FITNESS TESTING",
-                                    "feature-subtitle": 'VO2 Max<br>Anaerobic Threshold<br>Resting Metabolic Rate<br>Body Fat Testing',
-                                    "btn": {
-                                        "url": "www.google.com",
-                                        "text": "View All"
+                                    "feature-title" : "Customers",
+                                    "feature-subtitle" : "<ul><li> Mail and social account contact import</li><li>Social profile synchronization and contact completion</li><li>Sales pipeline status & filtering by internal and external activity</li><li>Push button access to key demographic info integrated with your mobile workflow</li></ul>",
+                                    "feature-icon" : "fa fa-users"
+                                },
+                                {
+                                    "feature-title" : "Website",
+                                    "feature-subtitle" : "<ul><li>Modern web site with drag and drop development and inline editing</li><li>Templates, professional design options & copywriting services</li><li>Unique subdomain.indigenous.io or fully qualified top level domain name support</li><li>Fully integrated hosting and push button publishing</li><li>Responsive design optimized for mobile administration and viewing</li></ul>",
+                                    "feature-icon" : "fa fa-laptop"
+                                },
+                                {
+                                    "feature-title" : "Marketing",
+                                    "feature-subtitle" : "<ul><li>Continuous monitoring of social channels in one simple dashboard</li><li>Collect, manage, and segment subscribers on a platform you control</li><li>Group subscribers and schedule targeted, cross channel campaigns</li><li>Ready-to-use templates make it easy to create eye-catching, polished emails</li></ul>",
+                                    "feature-icon" : "fa fa-bullhorn"
+                                },
+                                {
+                                    "feature-title" : "Commerce",
+                                    "feature-subtitle" : "<ul><li>Fully integrated online store for digital, physical and recurring products</li><li>Digital goods delivery and integrated reporting and tracking</li><li>Direct settlement through customer merchant account with Stripe</li><li>Comprehensive real time reporting</li></ul>",
+                                    "feature-icon" : "fa fa-credit-card"
+                                }
+                            ],
+                            "bg" : {
+                                "img" : {
+                                    "url" : "/assets/images/indimain/wave-bg.jpg",
+                                    "width" : null,
+                                    "height" : null,
+                                    "parallax" : false,
+                                    "blur" : false,
+                                    "pattern" : true
+                                },
+                                "color" : ""
+                            },
+                            "btn" : {
+                                "text" : "Learn More",
+                                "url" : "#features",
+                                "icon" : "fa fa-email"
+                            }
+                        },
+                        {
+                            "_id" : "w12b442s-0034-2f09-4h65-33423h8898767",
+                            "anchor" : "company",
+                            "type" : "image-text",
+                            "title" : "Company",
+                            "subtitle" : "",
+                            "text" : "<p>The thing is, it’s not about who we are, but how we help you tell your story and vision, and the intrinsic qualities and talents that make you and your program, services, and ideas so awesome. Indigenous gives you the framework and the tools you need to excel so that you can do what you do best instead of getting bogged down in the technical aspects. We listen to and evolve with your needs and those of your clients.</p><p>Indigenous was founded to help businesses evolve past their plateaus and achieve their stretch goals. We accelerate growth and solve problems by assessing the effectiveness of people, processes, and technology, and we provide feedback that allows our clients to make precise adjustments.</p><p>At its core, the founders and employees of Indigenous feel strongly that best-in-suite tools should not deter small and medium-sized businesses from reaching their goals. While we continue to <a href='http://indigenous.io/signup'>support enterprises</a>, we are now deploying a Software as a Service (SaaS) platform that brings best-in-class tools to businesses that already have the right people and are open to using best practices as their process.</p>",
+                            "imagePosition" : "left",
+                            "caption" : "",
+                            "imgurl" : "/assets/images/indimain/office-image.jpg ",
+                            "bg" : {
+                                "img" : {
+                                    "url" : "",
+                                    "width" : null,
+                                    "height" : null,
+                                    "parallax" : true,
+                                    "blur" : false
+                                },
+                                "color" : "#4bb0cb"
+                            },
+                            "btn" : {
+                                "text" : "Learn More",
+                                "url" : "#features",
+                                "icon" : "fa fa-email"
+                            }
+                        },
+                        {
+                            "_id" : "c12b442s-0034-2f09-4h65-33423h674832",
+                            "anchor" : "team",
+                            "type" : "meet-team",
+                            "title" : " Team",
+                            "teamMembers" : [
+                                {
+                                    "name" : "Mike Trevino",
+                                    "position" : "Chief Executive Officer",
+                                    "profilepic" : "/assets/images/indimain/team/mike.jpg",
+                                    "bio" : "Mike is a senior business leader with global experience developing high growth companies and a focus on delivering advanced software.",
+                                    "social" : {
+                                        "linkedin" : "http://www.linkedin.com/pub/mike-trevino/0/6b2/856"
                                     }
                                 },
                                 {
-                                    "feature-icon": "fa fa-flask",
-                                    "feature-title": "RESEARCH",
-                                    "feature-subtitle": "Product Development &<br>Showcasing.",
-                                    "btn": {
-                                        "url": "www.google.com",
-                                        "text": "View"
+                                    "name" : "Donavon Guyot",
+                                    "position" : "Chief Technology Officer",
+                                    "profilepic" : "/assets/images/indimain/team/donavon.jpg",
+                                    "bio" : "A strategic and trusted technical advisor, Donavon has deep expertise in sourcing, leading, and steering diverse, high performing technical teams.",
+                                    "social" : {
+                                        "linkedin" : "http://www.linkedin.com/pub/donavon-guyot/2/90b/27a"
                                     }
                                 },
                                 {
-                                    "feature-icon": "fa fa-comments-o",
-                                    "feature-title": "COACHING",
-                                    "feature-subtitle": "Train to Finish Strong.<br>Online Coaching with an Exercise Physiologist.",
-                                    "btn": {
-                                        "url": "www.google.com",
-                                        "text": "View"
+                                    "name" : "John Eisenschmidt",
+                                    "position" : "VP, Product Management",
+                                    "profilepic" : "/assets/images/indimain/team/john.jpg",
+                                    "bio" : "Solving problems at the intersection of business and information technology, John identifies best practices and simple solutions for your business.",
+                                    "social" : {
+                                        "linkedin" : "http://www.linkedin.com/in/johneisenschmidt"
                                     }
                                 },
                                 {
-                                    "feature-image": "/assets/images/fitstop/training-icon.png",
-                                    "feature-image-hover": "assets/images/fitstop/training-icon-hov.png",
-                                    "feature-title": "TRAINING PLANS",
-                                    "feature-subtitle": "Our training plans follow a<br>systematic approach in the<br>ramping up of your fitness, to help<br>you achieve your goal safely and<br>efficiently",
-                                    "btn": {
-                                        "url": "www.google.com",
-                                        "text": "View Plans"
+                                    "name" : "Noël Norcross ",
+                                    "position" : "Director of Content",
+                                    "profilepic" : "/assets/images/indimain/team/noel.jpg",
+                                    "bio" : "With a diverse background as a writer, editor, and educator, Noël collaborates with businesses to tell their stories creatively and compellingly.",
+                                    "social" : {
+                                        "linkedin" : "http://www.linkedin.com/in/noelnorcross"
+                                    }
+                                },
+                                {
+                                    "name" : "Brad Risse",
+                                    "position" : "UI Designer",
+                                    "profilepic" : "/assets/images/indimain/team/brad.jpg",
+                                    "bio" : "Brad utilizes his programming skills to produce elegant and very functional websites and mobile apps focused on the user experience.",
+                                    "social" : {
+                                        "linkedin" : "http://www.linkedin.com/pub/bradly-risse/26/431/103"
+                                    }
+                                },
+                                {
+                                    "name" : "Lana V. Risse",
+                                    "position" : "Graphic Designer",
+                                    "profilepic" : "/assets/images/indimain/team/lana.jpg",
+                                    "bio" : "Well-versed in print and digital design and branding, Lana adopts the latest techniques to create beautiful and functional audience experiences.",
+                                    "social" : {
+                                        "linkedin" : "http://www.linkedin.com/pub/lana-vorobyeva/28/910/4b2"
+                                    }
+                                },
+                                {
+                                    "name" : "Kyle Miller",
+                                    "position" : "Architect",
+                                    "profilepic" : "/assets/images/indimain/team/kyle.jpg",
+                                    "bio" : "Kyle is a detail-oriented lead developer with a strong background in communication, leadership, and critical thinking.",
+                                    "social" : {
+                                        "linkedin" : "http://www.linkedin.com/in/kylejmiller"
+                                    }
+                                },
+                                {
+                                    "name" : "",
+                                    "position" : "",
+                                    "profilepic" : "/assets/images/indimain/team/become.png",
+                                    "bio" : "The bio.",
+                                    "become-member" : "true"
+                                }
+                            ],
+                            "value" : ""
+                        },
+                        {
+                            "_id" : "f34s442s-0034-2f09-4h65-33423h8894778",
+                            "anchor" : null,
+                            "type" : "testimonials",
+                            "title" : "Testimonials",
+                            "subtitle" : "",
+                            "testimonials" : [
+                                {
+                                    "img" : "/assets/images/indimain/testimonials/prolific.jpg",
+                                    "name" : "Prolific Athletes",
+                                    "site" : "www.profilicathletes.com",
+                                    "text" : "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac eleifend lorem. Ut a velit hendrerit, suscipit metus in, ornare dolor. Suspendisse tortor ligula, tempus et iaculis at, tempor id dui. Pellentesque ac vestibulum mi. Suspendisse tristique sapien tempus neque placerat pulvinar. Suspendisse molestie, turpis eu ornare dictum, ligula purus ultricies turpis, eget dictum nibh urna tincidunt lacus. Integer ligula tortor, egestas et odio in, suscipit placerat risus.”"
+                                },
+                                {
+                                    "img" : "/assets/images/indimain/testimonials/katya.jpg",
+                                    "name" : "Katya Myers",
+                                    "site" : "www.katyameyers.com",
+                                    "text" : "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac eleifend lorem. Ut a velit hendrerit, suscipit metus in, ornare dolor. Suspendisse tortor ligula, tempus et iaculis at, tempor id dui. Pellentesque ac vestibulum mi. Suspendisse tristique sapien tempus neque placerat pulvinar. Suspendisse molestie, turpis eu ornare dictum, ligula purus ultricies turpis, eget dictum nibh urna tincidunt lacus. Integer ligula tortor, egestas et odio in, suscipit placerat risus.”"
+                                },
+                                {
+                                    "img" : "/assets/images/indimain/testimonials/racingweight.jpg",
+                                    "name" : "Racing Weight",
+                                    "site" : "www.racingweight.com",
+                                    "text" : "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac eleifend lorem. Ut a velit hendrerit, suscipit metus in, ornare dolor. Suspendisse tortor ligula, tempus et iaculis at, tempor id dui. Pellentesque ac vestibulum mi. Suspendisse tristique sapien tempus neque placerat pulvinar. Suspendisse molestie, turpis eu ornare dictum, ligula purus ultricies turpis, eget dictum nibh urna tincidunt lacus. Integer ligula tortor, egestas et odio in, suscipit placerat risus.”"
+                                },
+                                {
+                                    "img" : "/assets/images/indimain/testimonials/fitstop.jpg",
+                                    "name" : "Fit Stop",
+                                    "site" : "www.fitstop-lab.com",
+                                    "text" : "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac eleifend lorem. Ut a velit hendrerit, suscipit metus in, ornare dolor. Suspendisse tortor ligula, tempus et iaculis at, tempor id dui. Pellentesque ac vestibulum mi. Suspendisse tristique sapien tempus neque placerat pulvinar. Suspendisse molestie, turpis eu ornare dictum, ligula purus ultricies turpis, eget dictum nibh urna tincidunt lacus. Integer ligula tortor, egestas et odio in, suscipit placerat risus.”"
+                                },
+                                {
+                                    "img" : "/assets/images/indimain/testimonials/sherbakov.jpg",
+                                    "name" : "Mike Sherbakov",
+                                    "site" : "www.mikesherbakov.com",
+                                    "text" : "“Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac eleifend lorem. Ut a velit hendrerit, suscipit metus in, ornare dolor. Suspendisse tortor ligula, tempus et iaculis at, tempor id dui. Pellentesque ac vestibulum mi. Suspendisse tristique sapien tempus neque placerat pulvinar. Suspendisse molestie, turpis eu ornare dictum, ligula purus ultricies turpis, eget dictum nibh urna tincidunt lacus. Integer ligula tortor, egestas et odio in, suscipit placerat risus.”"
+                                }
+                            ],
+                            "label" : "",
+                            "description" : "",
+                            "value" : ""
+                        },
+                        {
+                            "_id" : "k97g096d-8675-2x06-2v68-65431s970864",
+                            "anchor" : null,
+                            "type" : "feature-block",
+                            "title" : " <span class=\"fa fa-globe\"></span>",
+                            "subtitle" : "<span class=\"fa fa-map-marker\"></span> We are inspired by the natural beauty, people, and excellence of our home base in San Diego.",
+                            "text" : "",
+                            "bg" : {
+                                "img" : {
+                                    "url" : "/assets/images/indimain/img-4.jpg",
+                                    "width" : 1400,
+                                    "height" : 544,
+                                    "parallax" : true,
+                                    "blur" : false
+                                },
+                                "color" : ""
+                            },
+                            "btn" : {
+                                "text" : "Btn Text",
+                                "url" : "http://google.com",
+                                "icon" : "fa fa-rocket"
+                            }
+                        },
+                        {
+                            "_id" : "j45k442s-0034-2f09-4h65-33423h8894778",
+                            "anchor" : "blog",
+                            "type" : "blog-teaser",
+                            "title" : "Check out our blog",
+                            "subtitle" : "",
+                            "posts" : [
+                                {
+                                    _id: "2",
+                                    accountId: "6",
+                                    websiteId: "4s4r2sx2-3g54-3f5h-44f3-erer3d22ss3s",
+                                    post_author: "Noel Norcross",
+                                    post_title: "What's an Indigenous?",
+                                    post_content: "<p>The problem with giving your company an adjective for a name is that it imputes the essence</p>",
+                                    post_excerpt: "The problem with giving your company an adjective",
+                                    post_status: "Publish",
+                                    post_url: "welcome-to-indigenous",
+                                    post_tags: [
+                                        "Social Media",
+                                        "Customer Service",
+                                        "Marketing",
+                                        "Pricing"
+                                    ],
+                                    post_category: "Marketing",
+                                    comment_status: "on",
+                                    comment_count: "2",
+                                    created: {
+                                        date: 1397761951291,
+                                        by: null
+                                    },
+                                    modified: {
+                                        date: "",
+                                        by: null
                                     }
                                 }
                             ],
-                            "text-color": "#fff",
-                            "bg": {
-                                "img": {
-                                    "url": "/assets/images/fitstop/feature-list-back.png",
-                                    "width": 1235,
-                                    "height": 935,
-                                    "parallax": false,
-                                    "blur": false
+                            "bg" : {
+                                "img" : {
+                                    "url" : "http://www.site.com/images/bgimage.jpg",
+                                    "width" : 1400,
+                                    "height" : 836,
+                                    "parallax" : true,
+                                    "blur": true
                                 },
-                                "color": ""
+                                "color" : "#000000"
                             },
-                            "btn": {
-                                "text": "SIGN UP TODAY",
-                                "url": "http://google.com",
-                                "icon": "fa fa-email"
-                            }
-                        },
-                        {
-                            "_id": "d749298j-0034-2f09-4h65-33423h8898767",
-                            "anchor": null,
-                            "type": "image-text",
-                            "version":"v1",
-                            "title": "ABOUT",
-                            "text": "<h2>Ken Nocodemus, MA.</h2><h4>EXERCISE PHYSIOLOGIST & COACH</h4><p>Ken is the director and founder of The Fit Stop Human Performance Lab in Carlsbad, CA. His work involves developing and implementing a variety of sophisticated assessment and guidance programs to improve the health and physical performance levels of endurance athletes, employees and the general population.  He has delivered and managed wellness screening programs for a number of prestigious clients including the California Highway Patrol, Calif. Department of Corrections, the City of Santa Monica, PacificCare Health Systems, the Los Angeles Clippers, Sempre Utilities, Navy Special Warfare, along with numerous fire and police departments throughout California.  Early in his career, he worked as an exercise physiologist in the clinical arena including physical therapy and cardiac rehabilitation.</p>",
-                            "imagePosition": "right",
-                            "caption": "caption",
-                            "imgurl": "/assets/images/fitstop/about.png",
-                            "bg": {
-                                "img": {
-                                    "url": "",
-                                    "width": null,
-                                    "height": null,
-                                    "parallax": false,
-                                    "blur": false
-                                },
-                                "color": "#fff"
+                            "btn" : {
+                                "text" : "Btn Text",
+                                "url" : "http://google.com",
+                                "icon" : "fa fa-rocket"
                             },
-                            "btn": {
-                                "text": "SIGN UP TODAY",
-                                "url": "http://google.com",
-                                "icon": "fa fa-email"
-                            }
+                            "label" : "",
+                            "description" : "",
+                            "value" : ""
                         },
                         {
-                            "_id": "d56d253h-8675-2x06-2v68-65431s970864",
-                            "anchor": null,
-                            "type": "feature-block",
-                            "version":"v1",
-                            "title": "With Indigenous - an environment built around you - the elements key to nurturing your business are at your fingertips. Not only that, they are flexible and scalable.",
-                            "subtitle": "",
-                            "text": "<ul><li>A dynamic and evolving website that tells your story</li><li>A way to connect with clients via mailing lists, newsletters, and more</li><li>An innovative and educated marketing plan</li><li>An easy-to-setup and easy-to-use billing system</li></ul>",
-                            "bg": {
-                                "img": {
-                                    "url": "/assets/images/fitstop/feature-block-1.jpg",
-                                    "width": 1400,
-                                    "height": 998,
-                                    "parallax": true,
-                                    "blur": false
-                                },
-                                "color": ""
-                            },
-                            "btn": {
-                                "text": "Btn Text",
-                                "url": "http://google.com",
-                                "icon": "fa fa-rocket"
-                            }
+                            "_id" : "d12b442s-0034-2f09-4h65-33423h8894778",
+                            "anchor" : null,
+                            "type" : "signup-form",
+                            "formName" : "",
+                            "contactType" : "",
+                            "fields" : [],
+                            "title" : "Sign Up For News Updates",
+                            "btntext" : "I'M INTERESTED",
+                            "label" : "",
+                            "description" : ""
                         },
                         {
-                            "_id": "3941e2e4-c6fc-4745-a81f-afeecac45391",
-                            "anchor": null,
-                            "type": "products",
-                            "label": "label",
-                            "version":"v1",
-                            "description": "description",
-                            "title": "PRODUCTS",
-                            "product-sections": [
-                                {
-                                    "product-section-id": "tests",
-                                    "products": [
-                                        {
-                                            "id": "metabolic",
-                                            "image": "assets/images/fitstop/about.png",
-                                            "title": "METABOLIC EXERCISE TESTING",
-                                            "subtitle": "Metabolic Exercise Testing will include:",
-                                            "text": "1.lorem",
-                                            "btn": {
-                                                "url": "http://google.com",
-                                                "text": "Read More and more"
-                                            }
-                                        },
-                                        {
-                                            "id": "body-fat",
-                                            "image": "assets/images/fitstop/about.png",
-                                            "title": "Body Fat title",
-                                            "subtitle": "Body Fat subtitle",
-                                            "text": "Body Fat text",
-                                            "btn": {
-                                                "url": "http://google.com",
-                                                "text": "Read More"
-                                            }
-                                        }
-                                    ]
-                                },
-                                {
-                                    "product-section-id": "equipment",
-                                    "products": [
-                                        {
-                                            "id": "equipment1",
-                                            "image": "assets/images/fitstop/about.png",
-                                            "title": "Equipment title",
-                                            "subtitle": "Equipment subtitle",
-                                            "text": "Equipment text",
-                                            "btn": {
-                                                "url": "http://google.com",
-                                                "text": "Read More"
-                                            }
-                                        },
-                                        {
-                                            "id": "equipment2",
-                                            "image": "assets/images/fitstop/about.png",
-                                            "title": "Equipment child title",
-                                            "subtitle": "Equipment child subtitle",
-                                            "text": "Equipment child text",
-                                            "btn": {
-                                                "url": "http://google.com",
-                                                "text": "Read More"
-                                            }
-                                        }
-                                    ]
-                                }
-                            ],
-                            "value": "value"
-                        },
-                        {
-                            "_id": "3941e2e4-c6fc-4745-a81f-afeecac45397",
-                            "anchor": null,
-                            "type": "freeform",
-                            "version":"v1",
-                            "label": "",
-                            "description": "",
-                            "title": "Advanced Overhaul Profile (AOP)",
-                            "subtitle": "This is a Comprehensive Health, Fitness, and Physical Performance Assessment",
-                            "text": "The AOP will evalulate your fitness and then assist in setting you up with your training plans and devices with one month of online coaching with an exercise physiologist. Here is what is included:",
-                            "assessments": [
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "CMP -",
-                                    "subtitle": "Reg.$200",
-                                    "text": "Cardio-Metabolic Exercise Profile w/VO2Max, Anaerobic Threshold, MaxFat & Target Training Zones."
-                                },
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "VITALS -",
-                                    "subtitle": "Reg.$25",
-                                    "text": "Resting blood pressure and heart rate, Lung Function (VC & FEV1) and a Health Risk Appraisal"
-                                },
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "REE -",
-                                    "subtitle": "Reg.$100",
-                                    "text": "Resting Energy Expendure Profile to determine resting metabolism"
-                                },
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "FMT -",
-                                    "subtitle": "Reg.$100",
-                                    "text": "Functional Movement screening with range of motion, strength, power and core stability assessments"
-                                },
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "FAR -",
-                                    "subtitle": "Reg.$25",
-                                    "text": "Fitness Age Report which takes into account your aerobic capacity, function and motion assessments and muscle strength and endurance (push-ups, sit-ups, grip, vertical jump)"
-                                },
-                                {
-                                    "assessment-icon": "fa fa-check",
-                                    "title": "COACHING -",
-                                    "subtitle": "Reg.$100",
-                                    "text": "1-month of online coaching with an exercise physiologist"
-                                }
-                            ],
-                            "assessment-title": "$339",
-                            "assessment-text": "$550 value!",
-                            "btn": {
-                                "url": "www.google.com",
-                                "text": "START TODAY"
-                            },
-                            "value": ""
-                        },
-                        {
-                            "_id": "g98d442s-0034-2f09-4h65-33423h8894778",
-                            "anchor": null,
-                            "version":"v1",
-                            "type": "social",
-                            "networks": {
-                                "facebook": "https://www.facebook.com",
-                                "twitter": "https://twitter.com",
-                                "google-plus": "https://plus.google.com",
-                                "pinterest": "http://www.pinterest.com"
+                            "_id" : "g98d442s-0034-2f09-4h65-33423h8894778",
+                            "anchor" : null,
+                            "type" : "social",
+                            "networks" : {
+                                "facebook" : "https://www.facebook.com/indigenous.io",
+                                "twitter" : "https://twitter.com/indigenous_io",
+                                "google-plus" : "https://plus.google.com/u/0/105022706688618584400/posts/p/pub",
+                                "pinterest" : "http://www.pinterest.com/indigenousdotio/"
                             }
                         }
                     ],
