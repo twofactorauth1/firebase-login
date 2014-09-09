@@ -227,7 +227,7 @@ module.exports = function(grunt) {
     grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
 
     grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
-            'nodeunit:products']);
+            'nodeunit:products', 'nodeunit:cms']);
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
     grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);
