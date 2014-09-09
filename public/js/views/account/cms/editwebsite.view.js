@@ -26,7 +26,7 @@ define([
         userId: null,
         user: null,
         account: null,
-
+        page: null,
         temp_page: null,
 
         websiteId: null,
@@ -58,11 +58,14 @@ define([
         },
 
         initialize: function(options) {
-            console.log(options);
-            options = options || {};
-            this.pageHandle = options.page || "index";
-            this.websiteId = options.websiteId;
+            var self = this;
 
+            options = options || {};
+            self.pageHandle = options.page || "index";
+            self.websiteId = options.websiteId;
+
+            console.log("options.page: " + options.page);
+            console.log("PageHanlde: " + self.pageHandle);
         },
 
         render: function () {
@@ -72,7 +75,9 @@ define([
                 , p3 = self.getThemeConfig()
                 , p4 = self.getWebsite()
                 , p5 = self.getPages()
-                , p6 = $.Deferred(); //loading image theme Preview
+                , p6 = $.Deferred()             //loading image theme Preview
+                , p7 = $.Deferred()             //loading temp page model
+                , p8 = $.Deferred()             //loading      page model
 
             $.when(p1)
                 .done(function() {
@@ -80,58 +85,77 @@ define([
                         self.currentThemePreviewURL = themePreview;
                         p6.resolve();
                     });
-
                 });
 
             $.when(p4)
                 .done(function() {
-                    self.websiteId = self.website.id;
-                    self.websiteTitle = self.website.attributes.title;
-                    self.subdomain = self.attributes.subdomain;
-                    self.websiteSettings = self.website.attributes.settings;
+                    self.websiteId = self.website.get("_id");
+                    self.websiteTitle = self.website.get("title");
+                    self.subdomain = self.account.get("subdomain");
+                    self.websiteSettings = self.website.get("settings");
+
+                    self.getTempPage().done(function (){
+                        p7.resolve();
+                        p8.resolve();
+                    });
                 });
 
-            $.when(p1, p2, p4, p6)
+            $.when(p1, p2, p4, p6, p7)
                 .done(function () {
+                    var data
+                      , tmpl
+                      , html
+                      , colorPalette
+                      , sidetmpl
+                      , rightPanel;
 
                     data = {
                         websiteId: self.websiteId,
                         websiteTitle: self.websiteTitle,
                         subdomain: self.subdomain
                     };
-                    if (self.pageHandle == "index" || self.pageHandle == "null" || self.pageHandle == "/") {
-                        data.page = "/index";
+                    if (self.pageHandle == "index" || self.pageHandle == "index_temp_page" || self.pageHandle == "null" || self.pageHandle == "/") {
+                        data.page = "/index_temp_page";
                     } else {
-                        data.page = "/page/" + self.pageHandle;
+                        if (self.pageHandle && self.pageHandle.indexOf("_temp_page") === -1) {
+                            data.page = "/page/" + self.pageHandle + "_temp_page";
+                        } else {
+                            data.page = "/page/" + self.pageHandle;
+                        }
                     }
 
 
-                    var tmpl = $$.templateManager.get("edit-website", self.templateKey);
-                    var html = tmpl(data);
+                    tmpl = $$.templateManager.get("edit-website", self.templateKey);
+                    html = tmpl(data);
 
-                    var colorPalette = self.websiteSettings;
+                    colorPalette = self.websiteSettings;
 
                     self.show(html);
 
                     self.check_welcome();
 
-                    var sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
-                    var rightPanel = $('#rightpanel');
+                    //sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
+                    rightPanel = $('#rightpanel');
 
                     //TODO: make main panel avaliable to all views
 
                     self.adjustWindowSize();
 
                     $("#iframe-website", this.el).load(function(pageLoadEvent) {
-                        var doc = $(pageLoadEvent.currentTarget)[0].contentDocument ||
+                    //$("#iframe-website", this.el).ready(function(pageLoadEvent) {
+
+                        var doc, page;
+                        doc = $(pageLoadEvent.currentTarget)[0].contentDocument ||
                                   $(pageLoadEvent.currentTarget)[0].documentWindow;
-                        console.log(doc);
-                        var page = "index";
+
+                        sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
+                        page = "index";
                         if (doc != null) {
-                            var page = doc.location.pathname;
+                            page = doc.location.pathname;
                             if (page.indexOf("/") == 0) {
                                 page = page.substr(1);
                             }
+                            page = page.replace("_temp_page", "");
                             page = page.replace("page/", "");
                             if (page == "" || page == "/") {
                                 page = "index";
@@ -150,47 +174,41 @@ define([
                             $$.e.PageHandleEvent.trigger("pageHandle", { pageHandle: self.pageHandle });
                         }
 
-                        $.when(p3, p4, p5, p6)
+                        $.when(p3, p4, p5, p6, p7, p8, self.temp_page.fetch())
                             .done(function() {
-                                self.getPage()
-                                //self.createTempPage()
-                                    .done(function(){
-                                        self.getPages()
-                                            //self.createTempPage()
-                                            .done( function() {
-                                                var key, componentsArray = [], rawComponents, data;
-                                                self.pageId = self.page.get("_id");
-                                                //self.pageId = self.temp_page.get("_id");
-                                                console.log('This Page ID: ' + self.pageId);
+                                self.getPages()
+                                    .done( function() {
+                                        var key
+                                          , componentsArray = []
+                                          , rawComponents = self.temp_page.get("components").models
+                                          , data;
 
-                                                componentsArray = [];
-                                                rawComponents = self.page.get("components").models;
-                                                //rawComponents = self.temp_page.get("components").models;
+                                        self.pageId = self.page.get("_id");
+                                        self.temp_pageId = self.temp_page.get("_id");
 
-                                                for (key in rawComponents) {
-                                                    if (rawComponents.hasOwnProperty(key)) {
-                                                        componentsArray.push(rawComponents[key]);
-                                                    }
-                                                }
+                                        for (key in rawComponents) {
+                                            if (rawComponents.hasOwnProperty(key)) {
+                                                componentsArray.push(rawComponents[key]);
+                                            }
+                                        }
 
-                                                data = {
-                                                    pages: self.pages.toJSON(),
-                                                    components: componentsArray,
-                                                    colorPalette: colorPalette,
-                                                    account: self.account,
-                                                    blog: self.blogBoolean,
-                                                    currentThemePreviewURL: self.currentThemePreviewURL
-                                                };
+                                        data = {
+                                            pages: self.pages.toJSON(),
+                                            components: componentsArray,
+                                            colorPalette: colorPalette,
+                                            account: self.account,
+                                            blog: self.blogBoolean,
+                                            currentThemePreviewURL: self.currentThemePreviewURL
+                                        };
 
-                                            self.setupSidebar(data, rightPanel, sidetmpl);
-                                            $(window).on("resize", self.adjustWindowSize);
-                                            self.disableClickableTitles();
-                                            self.disableWaypointsOpacity();
-                            })
-                        });
+                                        self.setupSidebar(data, rightPanel, sidetmpl);
+                                        $(window).on("resize", self.adjustWindowSize);
+                                        self.disableClickableTitles();
+                                        self.disableWaypointsOpacity();
+                                    })
+                            });
                     });
                 });
-            });
 
             this.proxiedOnWebsiteEdit = $.proxy( this.onWebsiteEdit, this);
             this.$el.on("websiteedit", this.proxiedOnWebsiteEdit);
@@ -424,13 +442,10 @@ define([
             var components=self.page.get("components");
 
             components.filterById(serialize);*/
-
-
-        //    this.page.set("components",serialize);
+            //    this.page.set("components",serialize);
             //this.page.component=serialize;
-
-       //     console.log(this.page);
-           /* this.page = new Page({
+            //     console.log(this.page);
+            /* this.page = new Page({
                 websiteId:this.websiteId,
                 title: pageTitle,
                 handle: pageUrl,
@@ -445,8 +460,7 @@ define([
                     by: self.user.attributes._id
                 }
             });*/
-
- /*           this.page.save().done( function(err,res) {
+            /*           this.page.save().done( function(err,res) {
                 console.log(err);
                 console.log(res);
                 console.log('page sved');
@@ -631,13 +645,15 @@ define([
         },
 
         getPage: function() {
-            console.log('Website ID: '+this.websiteId+' Page Handle: '+this.pageHandle);
-            this.page = new Page({
-                websiteId: this.websiteId,
-                handle: this.pageHandle
+            var self = this;
+
+            console.log('Website ID: ' + self.websiteId + ' Page Handle: ' + self.pageHandle);
+            self.page = new Page({
+                websiteId: self.websiteId,
+                handle: self.pageHandle
             });
 
-            return this.page.fetch();
+            return self.page.fetch();
         },
 
         getPages: function() {
@@ -706,6 +722,7 @@ define([
 
             return p1;
         },
+
         setThemePreview: function (themeId, imageElement) {
             var self = this;
             self._getThemePreview(themeId, function (themePreview) {
@@ -715,24 +732,48 @@ define([
                 $$.viewManager.showAlert("An error occurred retrieving the Theme Preview");
             });
         },
-        createTempPage: function () {
-            var self = this;
 
-            return self.getPage()
-                        .done(function(){
-                            self.temp_page = new Page(self.page.toJSON());
-                            self.temp_page.set("_id", null);
-                            self.temp_page.set("type", "temp");
-                            self.temp_page.set("handle", self.temp_page.get("handle") + "_temp_page");
-                        });
-        },
         getTempPage: function () {
-            var self = this;
-            self.page.get("handle").indexOf("_temp_page");
-            if (self.temp_page) {
-                return self.temp_page.save();
+            var self = this
+                , temp_page
+                , p1 = $.Deferred();
+            if (self.temp_page === null || self.temp_page.get("_id") === null) {
+                if ( self.pageHandle === null ) {
+                    self.pageHandle = "index_temp_page";
+                }
+                else if ( self.pageHandle.indexOf("_temp_page") === -1 ) {
+                    self.pageHandle += "_temp_page";
+                }
+                self.getPage()
+                    .done(function () {
+                        temp_page = self.page.toJSON();
+                        if ( temp_page._id !== null ) {
+                            self.temp_page = new Page(temp_page);
+                            p1.resolve(self.temp_page);
+                        } else {
+                            self.pageHandle = self.pageHandle.replace("_temp_page", "");
+                            self.getPage()
+                                .done(function () {
+                                    temp_page = self.page.toJSON();
+                                    temp_page.handle += "_temp_page";
+                                    temp_page._id = null;
+                                    self.temp_page = new Page(temp_page);
+                                    self.temp_page.save()
+                                        .done(function () {
+                                            p1.resolve(self.temp_page);
+                                        }).fail(function (){
+                                            p1.reject();
+                                        })
+                                })
+                        }
+
+
+                    });
+                return p1;
             }
-            return self.createTempPage();
+            else {
+                return self.temp_page.fetch();
+            }
         },
 
         openSavePageModal: function (){

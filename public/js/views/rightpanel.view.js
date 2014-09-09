@@ -13,6 +13,9 @@ define([
 
     var view = EditWebsite.extend({
 
+        page: null,
+        temp_page: null,
+
         subdomain: null,
         websiteSettings: null,
         themeId: null,
@@ -84,7 +87,9 @@ define([
                 , p1 = this.getAccount()
                 , p2 = this.getWebsite()
                 , p3 = this.getAllThemes()
-                , p4 = this.getUser();
+                , p4 = this.getUser()
+                , p5 = $.Deferred();
+
 
             $.when(p1)
                 .done(function () {
@@ -97,14 +102,18 @@ define([
                     self.websiteSettings = self.website.attributes.settings;
                     self.websiteId = self.website.attributes._id;
                     console.log('Getting Page on rightpanel');
-                    //self.getPage()
-                    self.createTempPage()
+                    self.getPage()
                         .done(function(){
                             console.log('Page ID: ' + JSON.stringify(self.page.get("_id")));
                             self.pageId = self.page.get("_id");
+                            p5.resolve();
                         });
-                });
 
+                });
+            $.when(p5)
+                .done(function () {
+                    self.getTempPage()
+                })
             $$.e.PageHandleEvent.bind("pageHandle",this.pageHandleEvent.bind(this));
         },
 
@@ -159,7 +168,7 @@ define([
          * - Functions for Edit Website Sidebar
          */
 
-        getPage: function() {
+        /*getPage: function() {
             console.log('GETTING PAGEHANDLE'+this.pageHandle);
             this.page = new Page({
                 websiteId: this.websiteId,
@@ -172,8 +181,7 @@ define([
                     console.log(page);
                 }
             });
-        },
-
+        },*/
 
 
         deletePage:function(){
@@ -203,7 +211,7 @@ define([
 
             //window.location.replace(window.location.origin+"/page/"+handle+'?&editor=true');
 
-            $('#iframe-website').attr("src", "/page/"+handle+"?editor=true");
+            $('#iframe-website').attr("src", "/page/" + handle + "_temp_page?editor=true");
         },
 
         addBlankPage: function() {
@@ -274,11 +282,11 @@ define([
                 });
             },
 
-            newPageModal: function() {
+        newPageModal: function() {
                 $('#new-page-modal').modal('show');
             },
 
-            deletePageModal: function(){
+        deletePageModal: function(){
                 var self=this;
                 var select = $('#myselect');
                 this.getPages().done(function() {
@@ -308,15 +316,15 @@ define([
             },
 
 
-            urlCreator: function(e) {
-                var postUrl = $(e.currentTarget).val();
-                var scrubbed = postUrl.toLowerCase().replace(/ /g,'-');
-                $('#post-url').val(scrubbed);
-            },
+        urlCreator: function(e) {
+            var postUrl = $(e.currentTarget).val();
+            var scrubbed = postUrl.toLowerCase().replace(/ /g,'-');
+            $('#post-url').val(scrubbed);
+        },
 
-            newPostModal: function() {
-                $('#new-post-modal').modal('show');
-            },
+        newPostModal: function() {
+            $('#new-post-modal').modal('show');
+        },
 
             addBlankPost: function() {
                 var self = this;
@@ -417,7 +425,7 @@ define([
                         //validate
 
                         //component=new Signup({ pageId:self.pageId,  formName:componentName, type:componentType,title:componentName});
-                        component=new Signup({ pageId:self.temp_page.get("_id"),  formName:componentName, type:componentType,title:componentName});
+                        component = new Signup({ pageId:self.temp_page.get("_id"),  formName:componentName, type:componentType,title:componentName});
                         component.save().done(function( ){
                             var data, tmpl, html;
                             console.log(component)
@@ -437,8 +445,11 @@ define([
                             html = tmpl(data);
                             $('#sortable').append(html);
 
-                            //$('#iframe-website').attr("src", $('#iframe-website').attr("src")  + '?editor=true');
-                            self.refreshIFrame();
+                            self.temp_page.fetch().done(function(){
+
+                                //$('#iframe-website').attr("src", $('#iframe-website').attr("src")  + '?editor=true');
+                                self.refreshIFrame();
+                            });
                         });
                         //$( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
                         //add to mongo
@@ -825,33 +836,13 @@ define([
                 $("#file").trigger('click');
                 return false;
             },
+
             pageHandleEvent: function(options) {
                 var self = this;
                 self.pageHandle = options.pageHandle;
-                console.log("Pagehandle:"+self.pageHandle)
+                console.log("Pagehandle:" + self.pageHandle)
             },
 
-        createTempPage: function () {
-            var self = this;
-
-            return self.getPage().done(function() {
-                    self.temp_page = new Page(self.page.toJSON());
-                    self.temp_page.set("_id", null);
-                    self.temp_page.set("type", "temp");
-                    self.temp_page.set("handle", self.temp_page.get("handle") + "_temp_page");
-                });
-
-        },
-
-        getTempPage: function () {
-            var self = this;
-            self.page.get("handle").indexOf("_temp_page");
-            if (self.temp_page) {
-                return self.temp_page.save();
-            }
-
-            return self.createTempPage();
-        },
 
         refreshIFrame: function () {
             $("#iframe-website")
