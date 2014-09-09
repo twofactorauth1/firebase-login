@@ -31,7 +31,23 @@ define(['app', 'stripe'], function (app) {
 			.success(function (data, status, headers, config) {
 				fn(data);
 			});
-		}
+		};
+		
+		this.postCreatePlan = function (newProduct, fn) {
+			var apiUrl = baseUrl + ['integrations', 'payments', 'plans'].join('/');
+			$http.post(apiUrl, newProduct)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+		
+		this.getListPlans = function (fn) {
+			var apiUrl = baseUrl + ['integrations', 'payments', 'plans'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
 		
 	});
 });
