@@ -24,7 +24,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/", this.setup, this.index.bind(this));
+        //app.get("/", this.setup, this.index.bind(this));
         app.get("/index", this.setup, this.index.bind(this));
         app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
         app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
