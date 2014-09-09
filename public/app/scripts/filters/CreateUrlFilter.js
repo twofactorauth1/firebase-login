@@ -1,7 +1,7 @@
 mainApp.filter('createUrlFilter', ['accountService', function (accountService) {
     return function (obj) {
         if (obj) {
-            var componentName = 'social',
+            var componentName = 'products',
                 themeName = 'fittester';
 
             accountService(function (err, data) {

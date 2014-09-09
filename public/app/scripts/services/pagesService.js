@@ -165,7 +165,7 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
                                 "icon": "fa fa-rocket"
                             }
                         },
-                        /*{
+                        {
                             "_id": "3941e2e4-c6fc-4745-a81f-afeecac45391",
                             "anchor": null,
                             "type": "products",
@@ -185,7 +185,7 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
                                             "text": "1.lorem",
                                             "btn": {
                                                 "url": "http://google.com",
-                                                "text": "Read More"
+                                                "text": "Read More and more"
                                             }
                                         },
                                         {
@@ -230,8 +230,8 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
                                 }
                             ],
                             "value": "value"
-                        },*/
-                        /*{
+                        },
+                        {
                             "_id": "3941e2e4-c6fc-4745-a81f-afeecac45397",
                             "anchor": null,
                             "type": "freeform",
@@ -286,7 +286,7 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
                                 "text": "START TODAY"
                             },
                             "value": ""
-                        },*/
+                        },
                         {
                             "_id": "g98d442s-0034-2f09-4h65-33423h8894778",
                             "anchor": null,
