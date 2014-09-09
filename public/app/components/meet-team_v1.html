@@ -13,7 +13,7 @@
             </div>
             <div class="mb30"></div>
             <div ng-repeat="teamMember in component.teamMembers track by $index">
-            <div data-ng-if="!teamMember['become-member']" class="col-xs-12 col-sm-4 col-md-3 profilepic pull-left">
+            <div data-ng-if="!teamMember['become-member']" >
                 <div class="col-xs-3 editable profilepic" data-class="profilepic" style="opacity: 0;">
                     <ul class="profile-social">
                         <li>
@@ -38,7 +38,7 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
-            <div class="col-xs-12 col-sm-4 col-md-3 profilepic pull-left  become-member " data-ng-if="teamMember['become-member']">
+            <div class="become-member " data-ng-if="teamMember['become-member']">
                   <div class="col-xs-3 editable profilepic" data-class="profilepic" style="opacity: 0;">
                         <img src="{{teamMember.profilepic}}" class="thumbnail img-circle"/>
                   </div>
