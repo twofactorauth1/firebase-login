@@ -4,7 +4,7 @@ mainApp.controller('MainCtrl', ['$scope',
     function ($scope) {
 
         var account, pages,that = this,
-            themeName = 'fittester';
+            themeName = 'fitness-coach';
 
         //Include Layout For Theme
         that.themeUrl = 'components/layout/layout_' + themeName + '.html';
