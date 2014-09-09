@@ -120,9 +120,9 @@
 </div>
 
 <div id="body">
-        <div data-ng-repeat="component in pages[0].components">
-            <div ng-include src="component.url"></div>
-        </div>
+    <div ng-repeat="component in layout.pages[0].components | createUrlFilter">
+        <div ng-include src="component.url"></div>
+    </div>
  </div>
 
 <div id="footer">

@@ -3,11 +3,72 @@ require('./dao/cms.dao.js');
 var blogPostDao = require('./dao/blogpost.dao.js');
 var cmsDao = require('./dao/cms.dao.js');
 var accountDao = require('../dao/account.dao.js');
+var themeConfigDao = require('./dao/themeconfig.dao.js');
 
 var log = $$.g.getLogger("cms_manager");
 var Blog = require('./model/components/blog');
 
 module.exports = {
+
+    /*
+     * ThemeConfig
+     */
+
+    getThemeConfigById: function(themeId, fn) {
+        log.debug('>> getThemeConfigById');
+        themeConfigDao.getById(themeId, $$.m.cms.ThemeConfig, function(err, value){
+            if(err) {
+                log.error('Exception thrown getting config: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< getThemeConfigById');
+                fn(null, value);
+            }
+        });
+    },
+
+    getThemeConfigByName: function(name, fn) {
+        log.debug('>> getThemeConfigByName');
+        themeConfigDao.findOne({'name': name}, $$.m.cms.ThemeConfig, function(err, value){
+            if(err) {
+                log.error('Exception thrown getting config: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< getThemeConfigByName');
+                fn(null, value);
+            }
+        });
+    },
+
+    getThemeConfigByAccountId: function(accountId, fn) {
+        //TODO: later
+    },
+
+    getAllThemeConfigs: function(fn) {
+        log.debug('>> getAllThemeConfigs');
+        themeConfigDao.findMany({}, $$.m.cms.ThemeConfig, function(err, list){
+            if(err) {
+                log.error('Exception thrown listing theme configs: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< getAllThemeConfigs');
+                fn(null, list);
+            }
+        });
+    },
+
+    updateThemeConfig: function(themeConfig, fn) {
+        log.debug('>> updateThemeConfig');
+        themeConfigDao.saveOrUpdate(themeConfig, function(err, value){
+            if(err) {
+                log.error('Exception thrown updating themeconfig: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< updateThemeConfig');
+                fn(null, value);
+            }
+        });
+    },
 
     getAllThemes: function(fn) {
         $$.dao.CmsDao.getAllThemes(fn);

@@ -25,16 +25,16 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
                     console.log('GET:Website Service Database Data');
                     callback(null, data);
                     // API URL: http://yoursubdomain.indigenous.local/api/1.0/cms/website/yourid
-                   /* $http.get('/api/1.0/cms/website/' + data.website.websiteId)
-                        .success(function (data) {
-                            that.website = data;
-                            console.log('END:Website Service with SUCCESS');
-                            callback(null, data)
-                        })
-                        .error(function (err) {
-                            console.log('END:Website Service with ERROR');
-                            callback(err, null);
-                        });*/
+                    $http.get('/api/1.0/cms/website/' + data.website.websiteId)
+                    .success(function (data) {
+                        that.website = data;
+                        console.log('END:Website Service with SUCCESS');
+                        callback(null, data)
+                    })
+                    .error(function (err) {
+                        console.log('END:Website Service with ERROR');
+                        callback(err, null);
+                    });
                 }
 
             });
