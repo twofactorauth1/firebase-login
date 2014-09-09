@@ -49,14 +49,15 @@
   },
   "devDependencies": {
     "grunt": "~0.4.2",
-    "grunt-contrib-watch": "^0.6.1",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-handlebars": "~0.6.1",
     "grunt-contrib-less": "~0.9.0",
     "grunt-contrib-nodeunit": "~0.3.3",
     "grunt-contrib-requirejs": "~0.4.1",
+    "grunt-contrib-watch": "^0.6.1",
     "grunt-copy-to": "0.0.10",
+    "grunt-ng-constant": "^1.0.0",
     "superagent": "0.18.1",
     "supertest": "0.13.0"
   },
