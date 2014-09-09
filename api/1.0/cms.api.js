@@ -698,7 +698,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query['limit'] || 10);//suitable default?
 
         cmsManager.listBlogPosts(accountId, limit, function (err, value) {
-            self.log.debug('<< listBlogPosts');
+            self.log.debug('<< listBlogPosts '+value);
             self.sendResultOrError(res, err, value, "Error listing Blog Posts");
             self = null;
         });
