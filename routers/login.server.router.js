@@ -195,9 +195,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
     showSignup: function (req, resp) {
         if (req.isAuthenticated()) {
             return resp.redirect("/");
-        } else if (this.accountId(req) > 0) {
+        }/* else if (this.accountId(req) > 0) {
             return resp.redirect("/login");
-        }
+        }*/
 
         new SignupView(req, resp).show();
     },

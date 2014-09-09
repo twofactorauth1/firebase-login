@@ -4,6 +4,7 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
+var STRIPE_CONFIG = require('./configs/stripe.config.js');
 
 module.exports = function(grunt) {
 
@@ -170,6 +171,42 @@ module.exports = function(grunt) {
             runkeeperadapter:['biometrics/runkeeper/adapter/test/**/*_test.js'],
             runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             utils:['utils/test/*_test.js']
+        },
+
+        //NG-Constant for angular constants
+        /*
+         * Add environment specific constants in each section.  Use config files as necessary.
+         */
+        ngconstant: {
+            // Options for all targets
+            options: {
+                space: '  ',
+                wrap: '"use strict";\n\n {%= __ngModule %}',
+                name: 'config'
+            },
+            // Environment targets
+            development: {
+                options: {
+                    dest: 'public/js/scripts/config.js'
+                },
+                constants: {
+                    ENV: {
+                        name: 'development',
+                        stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY
+                    }
+                }
+            },
+            production: {
+                options: {
+                    dest: 'public/js/scripts/config.js'
+                },
+                constants: {
+                    ENV: {
+                        name: 'production',
+                        stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY
+                    }
+                }
+            }
         }
 
 
@@ -182,6 +219,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
+    grunt.loadNpmTasks('grunt-ng-constant');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
@@ -189,7 +227,7 @@ module.exports = function(grunt) {
     grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
 
     grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
-            'nodeunit:products']);
+            'nodeunit:products', 'nodeunit:cms']);
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
     grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);
@@ -205,4 +243,5 @@ module.exports = function(grunt) {
     grunt.registerTask('testAnalytics', ['nodeunit:analytics']);
     grunt.registerTask('testProducts', ['nodeunit:products']);
     grunt.registerTask('testCms', ['nodeunit:cms']);
+    
 };

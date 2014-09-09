@@ -18,7 +18,7 @@ define(['angularAMD', 'angularRoute'], function (angularAMD) {
     		controller: 'CommerceCtrl',
     		controllerUrl: '/angular_admin/controllers/commerce.js'
     	}))
-    	.when('/commerce/:id', angularAMD.route({
+    	.when('/commerce/edit/:id', angularAMD.route({
     		templateUrl: '/angular_admin/views/commerce_edit.html',
     		controller: 'CommerceEditCtrl',
     		controllerUrl: '/angular_admin/controllers/commerce_edit.js'
