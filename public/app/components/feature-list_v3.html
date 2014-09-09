@@ -15,21 +15,22 @@
                 </div>
                 <div class="clearfix mb15"></div>
 
-                <div ng-repeat="feature in component.features">
+                <div ng-repeat="feature in component.features track by $index">
                     <div class="col-sm-4 feature">
-                        <div class="feature-single feature-single-{{$index}}" style="opacity:0">
-                            <span class="feature-icon {{feature.feature-icon}}"></span>
+                        <div class="feature-single feature-single-0">
+                            <img src="{{feature['feature-image']}}"/>
 
                             <h3 class="feature-title">
                                 <div class="editable" data-class="feature-title">
-                                    {{feature.feature-title}}
+                                    {{feature['feature-title']}}
                                 </div>
                             </h3>
                             <div class="feature-subtitle">
                                 <div class="editable" data-class="feature-subtitle">
-                                    {{feature.feature-text}}
+                                    <span ng-bind-html="feature['feature-subtitle']"></span>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -38,5 +39,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>
