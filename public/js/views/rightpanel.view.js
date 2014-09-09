@@ -31,11 +31,12 @@ define([
             //components
             "click .dd-item":"scrollToSection",
             "hover .component": "showComponentOptions",
-            "click .add_section": "addSidebarComponent", //addSection
+            "click .btn-add-section": "addSidebarComponent", //addSection
+            "click .edit_section": "editSidebarComponent", //addSection
             "mouseup .dd-item": "onComponentDrag",
             "click .btn-add-component":"addComponent",
             "click .btn-del-component":"removeComponent",
-
+            "click .btn-edit-component":"updateComponent",
             //color palette
             "click #drop-zone": "drop_click",
             "change #file":"upload_color_pic",
@@ -66,6 +67,7 @@ define([
             "click .create-page":"addBlankPage",
             "input #page-title":"urlCreator",
             "input #page-url":"urlCreator",
+            "change .page-select":"changePage",
 
             //import contact modal
             "click .choose-import": "changeImportSection",
@@ -169,15 +171,7 @@ define([
             });
         },
 
-        getPages: function() {
-            if (this.accountId == null) {
-                this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
-            }
-            this.pages = new $$.c.Pages();
 
-            //return this.pages.getPagesAll(this.accountId, this.websiteId);
-            return this.pages.fetch();
-        },
 
         deletePage:function(){
             var self = this;
@@ -197,9 +191,17 @@ define([
 
                 }
             });
-            $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
+            $('#iframe-website').attr("src", $('#iframe-website').attr("src") + '?editor=true');
         },
 
+        changePage:function(){
+            var handle=$('.page-select option:selected').val();
+           // var handle=$('.page-select option:selected').text();
+
+            //window.location.replace(window.location.origin+"/page/"+handle+'?&editor=true');
+
+            $('#iframe-website').attr("src", "/page/"+handle+"?editor=true");
+        },
 
         addBlankPage: function() {
                 var self = this;
@@ -228,8 +230,8 @@ define([
                 console.log('page data: '+data);
                 var temp=$$.u.idutils.generateUUID();
 
-                this.page = new Page({
-                    websiteId:this.websiteId,
+                self.page = new Page({
+                    websiteId:self.websiteId,
                     title: pageTitle,
                     handle: pageUrl,
                     components: [
@@ -246,17 +248,25 @@ define([
                     }
                 });
 
-                this.page.save().done( function() {
-                    console.log('page sved');
-                    self.pageId = self.page.attributes._id;
-                    $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
-                    // var $iframe = $('#iframe-website');
-                    // $iframe.ready(function() {
-                    //     $iframe.contents().find("#main-area .entry").prepend(html);
-                    //     console.log('Blank Post ID: '+self.postId);
-                    //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
-                    //     $iframe.contents().find("#main-area").trigger("click");
-                    // });
+                //SAVE PAGE
+                self.page.save()
+                    .done(function() {
+                        //GETS LIST OF WEBSITE PAGES
+
+                                //UPDATES LIST OF WEBSITE PAGES ON RIGHTPANEL
+                                console.log('PAGE SAVED');
+                                self.pageId = self.page.attributes._id;
+
+
+                                $('#iframe-website').attr("src", $('#iframe-website').attr("src")+'?editor=true');
+                                // var $iframe = $('#iframe-website');
+                                // $iframe.ready(function() {
+                                //     $iframe.contents().find("#main-area .entry").prepend(html);
+                                //     console.log('Blank Post ID: '+self.postId);
+                                //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                                //     $iframe.contents().find("#main-area").trigger("click");
+                                // });
+
                 });
             },
 
@@ -402,7 +412,7 @@ define([
                 //get component type
                 var componentType = $('#component-type').val();
                 //validate
-                var component=new Signup({ pageId:self.pageId,  formName:componentName, type:componentType,title:"temp"});
+                var component=new Signup({ pageId:self.pageId,  formName:componentName, type:componentType,title:componentName});
                 component.save().done(function( ){
                     console.log(component)
                     var data = {
@@ -485,6 +495,38 @@ define([
                 event.stopImmediatePropagation();
 
             },
+
+            updateComponent:function(){
+                var self=this;
+
+                var componentID=$('#component-edit option:selected').val();
+                var title=$('#component-title').val()
+                    console.log(self.page);
+
+                    self.pageId = self.page.attributes._id;
+                    console.log(self.page);
+                    var newOptions=self.page.get("components").models;
+                    console.log(newOptions);
+
+
+                    $.each(newOptions, function(index, value) {
+
+                        if(componentID==value.id) {
+
+                              value.set('title',title);
+                              value.save({pageId:self.pageId});
+                          //  var option = new Option(title, value.id);
+
+                           // select.append($(option));
+                        }
+
+
+//                    $('#edit-component-modal').modal('show');
+                })
+
+
+            },
+
 
             onComponentDrag: function (event) {
                 var self=this;
@@ -600,6 +642,40 @@ define([
             addSidebarComponent: function() {
                 //initiate modal
                 $('#add-component-modal').modal('show');
+            },
+
+            editSidebarComponent: function(event) {
+            //initiate modal
+                var componentID = $(event.currentTarget).data('component-id');
+                console.log(componentID )
+                var self=this;
+                var select = $('#component-edit');
+                this.getPage().done(function() {
+                    self.pageId = self.page.attributes._id;
+                    console.log(self.page);
+                    var newOptions=self.page.get("components").models;
+                    console.log(newOptions);
+                var input=$('#component-title');
+
+                    $('option', select).remove();
+                    $.each(newOptions, function(index, value) {
+                        console.log(index);
+                        console.log(value);
+                        if(componentID==value.id) {
+                            var title = value.get('type');
+                            input.val(value.get('title'));
+                          //  value.set('title',"123");
+                         //   value.save({pageId:self.pageId});
+                            var option = new Option(title, value.id);
+
+                            select.append($(option));
+                        }
+                    });
+
+                    $('#edit-component-modal').modal('show');
+                })
+
+         //   $('#edit-component-modal').modal('show');
             },
 
              renderSidebarComponent: function() {

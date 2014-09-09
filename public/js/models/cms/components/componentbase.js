@@ -58,6 +58,11 @@ define([
                     }
                     return $$.api.getApiUrl("cms", "page/" + this.id);*/
                 case "PUT":
+                    {
+                    var pageId=this.get("pageId");
+                    this.unset("pageId", { silent: true });
+                    return $$.api.getApiUrl("cms", 'page/' + pageId + '/components/' + this.id);
+                    }
                 case "POST":
 
                     //website/:websiteId/page

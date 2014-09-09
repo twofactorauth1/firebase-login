@@ -16,16 +16,16 @@
 
     <div class="row">
         <div class="btn-group col-xs-12 template-btns">
-            <button type="button" class="btn btn-info col-xs-4 btn-view-account-info active" ng-class="{'active': activeTab === 'account'}" ng-click="activeTab = 'account'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info active" ng-class="{'active': activeTab === 'account'}" ng-click="activeTab = 'account'">
                 <i class="fa fa-user"></i>
                 <span class="hidden-xs">Account Information
                 </span>
             </button>
-            <button type="button" class="btn btn-info col-xs-4 btn-view-billing" ng-class="{'active': activeTab === 'billing'}" ng-click="activeTab = 'billing'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-billing" ng-class="{'active': activeTab === 'billing'}" ng-click="activeTab = 'billing'">
                 <i class="fa fa-credit-card"></i>
                 <span class="hidden-xs">Billing</span>
             </button>
-            <button type="button" class="btn btn-info col-xs-4 btn-view-integrations" ng-class="{'active': activeTab === 'integrations'}" ng-click="activeTab = 'integrations'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-integrations" ng-class="{'active': activeTab === 'integrations'}" ng-click="activeTab = 'integrations'">
                 <i class="fa fa-rocket"></i>
                 <span class="hidden-xs">Integrations</span>
             </button>
@@ -349,11 +349,15 @@
                     </div>
                   <div class="caption">
                     <h3>Facebook</h3>
-                    <p>Import friends as customers, post directly from admin, create a campaign.</p>
-                    <p><button class="btn btn-success btn-lg btn-block" role="button" data-toggle="modal" data-target="#facebookSettingsModal">Settings</button></p>
-                    <div class="toggle-modern">
-                        <div class="toggles on"></div>
-                    </div>
+                    <div class="clearfix mb5"></div>
+                    <img src="http://api.randomuser.me/portraits/med/women/89.jpg" class="img-circle" />
+                        <div class="col-xs-6">
+                            <button class="btn btn-success btn-lg btn-block" role="button" data-toggle="modal" data-target="#facebookSettingsModal"><span class="fa fa-wrench"></span> Settings</button>
+                        </div>
+                        <div class="col-xs-6">
+                            <button class="btn btn-danger btn-lg btn-block" role="button"><span class="fa fa-trash-o"></span> Delete</button>
+                        </div>
+                        <div class="clearfix"></div>
                   </div>
                 </div>
               </div>
@@ -365,10 +369,7 @@
                   <div class="caption">
                     <h3>Twitter</h3>
                     <p>Tweet with customers, plan tweets in advance.</p>
-                    <p><a href="#" class="btn btn-success btn-lg btn-block" role="button">Settings</a></p>
-                    <div class="toggle-modern">
-                        <div class="toggles on"></div>
-                    </div>
+                    <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect with Twitter</a></p>
                   </div>
                 </div>
               </div>
@@ -380,7 +381,7 @@
                   <div class="caption">
                     <h3>Google +</h3>
                     <p>Import customers, plan posts in advance.</p>
-                    <p><a href="#" class="btn btn-success btn-lg btn-block" role="button">Settings</a></p>
+                    <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect with Google Plus</a></p>
                     <div class="toggle-modern">
                         <div class="toggles on"></div>
                     </div>
@@ -395,7 +396,7 @@
                   <div class="caption">
                     <h3>LinkedIn</h3>
                     <p>Import contacts</p>
-                    <p><a href="#" class="btn btn-success btn-lg btn-block" role="button">Settings</a></p>
+                    <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect with LinkedIn</a></p>
                     <div class="toggle-modern">
                         <div class="toggles on"></div>
                     </div>
@@ -410,7 +411,7 @@
                   <div class="caption">
                     <h3>Google Analytics</h3>
                     <p>Provides tracking for your site so you can learn more about your vistors and how to improve your search engine optimization. </p>
-                    <p><a href="#" class="btn btn-success btn-lg btn-block" role="button">Settings</a></p>
+                    <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect with Google Analytics</a></p>
                     <div class="toggle-modern">
                         <div class="toggles on"></div>
                     </div>
@@ -425,7 +426,7 @@
                   <div class="caption">
                     <h3>Stripe</h3>
                     <p>Stripe Allows you to recieve payments on your website.</p>
-                    <p><a href="#" class="btn btn-success btn-lg btn-block" role="button">Settings</a></p>
+                    <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect with Stripe</a></p>
                     <div class="toggle-modern">
                         <div class="toggles on"></div>
                     </div>

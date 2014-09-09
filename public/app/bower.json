@@ -14,7 +14,7 @@
         "angular-route": "1.2.16",
         "angular-ui-router": "~0.2.10",
         "jquery-waypoints": "2.0.5",
-        "parallax": "2.1.3"
+        "angular-parallax": "*"
     },
     "devDependencies": {
         "angular-mocks": "1.2.16",
