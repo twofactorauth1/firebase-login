@@ -25,7 +25,7 @@ var mainApp = angular
             .state('/', {
                 url: '/',
                 templateUrl: 'views/main.html',
-                controller: 'MainCtrl'
+                controller: 'LayoutCtrl as layout'
             })
             .state('about', {
                 url: '/about',
