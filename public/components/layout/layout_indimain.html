@@ -117,7 +117,7 @@
     </nav>
 </div>
 
-<div id="body">
+<div id="body" ui-view>
         <div ng-repeat="component in layout.pages[0].components | createUrlFilter track by $index">
             <div ng-include src="component.url"></div>
         </div>

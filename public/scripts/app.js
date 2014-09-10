@@ -30,6 +30,11 @@ var mainApp = angular
                 url: '/about',
                 templateUrl: 'views/about.html',
                 controller: 'MainCtrl'
+            })
+            .state('blog', {
+                url: '/blog',
+                templateUrl: 'views/blog.html',
+                controller: 'BlogCtrl'
             });
         $routeProvider.otherwise({
             redirectTo: '/#/'
