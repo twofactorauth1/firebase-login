@@ -40,7 +40,7 @@
     "angular-mocks": "~1.2.0",
     "angular-sanitize": "~1.2.0",
     "angular-scenario": "~1.2.0",
-    "angular-ui": "git://github.com/angular-ui/angular-ui.git#~0.4.0",
+    "angular-ui-bootstrap": "~0.11.0",
     "bootstrap-sass": "git://github.com/jlong/sass-twitter-bootstrap.git#~2.3.1",
     "font-awesome": "~4.2.0",
     "angular-route": "~1.2.4",
