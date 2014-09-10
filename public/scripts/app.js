@@ -22,8 +22,8 @@ var mainApp = angular
     ])
     .config(function ($stateProvider, $routeProvider) {
         $stateProvider
-            .state('/', {
-                url: '/',
+            .state('main', {
+                url: '',
                 templateUrl: 'views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
