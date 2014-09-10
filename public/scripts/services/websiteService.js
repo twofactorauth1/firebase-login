@@ -23,7 +23,7 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
                 } else {
                     console.log('Method:accountService Success: ', data);
                     console.log('GET:Website Service Database Data');
-                    callback(null, data);
+
                     // API URL: http://yoursubdomain.indigenous.local/api/1.0/cms/website/yourid
                     $http.get('/api/1.0/cms/website/' + data.website.websiteId)
                     .success(function (data) {
