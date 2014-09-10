@@ -1,10 +1,14 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService',
-    function ($scope, pagesService, websiteService, postsService) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'ENV', '$window',
+    function ($scope, pagesService, websiteService, postsService, ENV, $window) {
 
         var account, theme, website, pages, blogposts, that = this;
         console.log('i m layout controller');
+        //var config = angular.module('config');
+        console.dir(ENV);
+        that.segmentIOWriteKey = ENV.segmentKey;
+        $window.segmentIOWriteKey = ENV.segmentKey;
 
         pagesService(function (err, data) {
             if (err) {
@@ -30,7 +34,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:postsService Error: ' + err);
             } else {
-                that.blogposts = data[0];
+                that.blogposts = data;
                 console.log('Controller:LayoutCtrl -> Method:postsService Success: ', data);
 
                 //do something

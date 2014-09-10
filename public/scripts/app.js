@@ -17,14 +17,15 @@ var mainApp = angular
         'ngSanitize',
         'ngTouch',
         'ui.router',
-        'angular-parallax'
+        'angular-parallax',
+        'config'
     ])
     .config(function ($stateProvider, $routeProvider) {
         $stateProvider
             .state('/', {
                 url: '/',
                 templateUrl: 'views/main.html',
-                controller: 'LayoutCtrl as layout'
+                controller: 'MainCtrl'
             })
             .state('about', {
                 url: '/about',
