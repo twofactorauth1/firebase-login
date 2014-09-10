@@ -14,7 +14,6 @@ define([
     "/pipeshift/js/controller/RemoveModalController.js",
     "/pipeshift/js/service/securityConfig.js",
     "/pipeshift/js/service/security.js",
-    "/pipeshift/js/controller/MainController.js",
     "/pipeshift/js/modules/home/controller/HomeController.js",
     "/pipeshift/js/modules/profile/controller/ProfileController.js",
     "/pipeshift/js/modules/video/filter/htmlify.js",
