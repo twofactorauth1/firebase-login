@@ -15,6 +15,7 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
 
                 //Include Layout For Theme
                 that.themeUrl = 'components/layout/layout_' + account.website.themeId + '.html';
+
                 console.log('Controller:MainCtrl -> Method:accountService Success: ', data);
             }
         });
