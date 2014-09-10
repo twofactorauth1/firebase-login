@@ -17,7 +17,8 @@ var mainApp = angular
         'ngSanitize',
         'ngTouch',
         'ui.router',
-        'angular-parallax'
+        'angular-parallax',
+        'config'
     ])
     .config(function ($stateProvider, $routeProvider) {
         $stateProvider

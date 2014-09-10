@@ -69,6 +69,6 @@
     "angular-parallax": "*"
   },
   "resolutions": {
-    "angular": "1.2.23"
+    "angular": "1.2.24"
   }
 }
