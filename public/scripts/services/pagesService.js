@@ -15,6 +15,7 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
             } else {
                 if (pages.length != 0) {
                     console.log('Getting PageData From cache ');
+                    console.log(null, pages);
                     callback(null, pages);
                 } else {
                     websiteObject = data;
@@ -30,13 +31,12 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
                                 pages[0] = page;
                                 callback(null, pages);
                             } else {
-                                callback("page not found");
+                                callback("page not found",null);
                             }
                         }).error(function (err) {
                             console.log(err, "PageService >> DB-Hit >> ERROR");
-                            callback(err);
+                            callback(err,null);
                         });
-                    callback(null, pages);
                 }
             }
         });
