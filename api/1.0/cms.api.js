@@ -51,6 +51,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //consistent URLs
 
         app.get(this.url('website/:websiteId/pages/:id'), this.getPagesById.bind(this));
+        app.get(this.url('website/:websiteId/pages'), this.getAllPages.bind(this));
         app.get(this.url('website/:websiteId/page/:id'), this.getPageById.bind(this));
         app.post(this.url('website/:websiteId/page'), this.createPage.bind(this));
         app.post(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
@@ -359,6 +360,20 @@ _.extend(api.prototype, baseApi.prototype, {
             }
             else
                 self.sendResultOrError(res, err, value, "Error deleting Page");
+            self = null;
+        });
+
+    },
+
+    getAllPages: function(req, res) {
+        var self = this;
+        self.log.debug('>> getAllPages');
+        var websiteId = req.params.websiteId;
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getPagesByWebsiteId(websiteId, accountId, function(err, map){
+            self.log.debug('<< getAllPages');
+            self.sendResultOrError(res, err, map, 'Error getting all pages for account');
             self = null;
         });
 

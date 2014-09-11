@@ -544,6 +544,24 @@ module.exports = {
         });
     },
 
+    getPagesByWebsiteId: function(websiteId, accountId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPagesByWebsiteId');
+        cmsDao.findMany({'accountId': accountId, 'websiteId':websiteId}, $$.m.cms.Page, function(err, list){
+            if(err) {
+                self.log.error('Error getting pages by websiteId: ' + err);
+                fn(err, null);
+            } else {
+                var map = {};
+                _.each(list, function(value){
+                    map[value.get('handle')] = value;
+                });
+                fn(null, map);
+            }
+        });
+    },
+
     getWebsiteLinklists: function(websiteId, fn) {
         var self = this;
         self.log = log;
