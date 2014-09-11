@@ -20,6 +20,7 @@ define([
     "/pipeshift/js/modules/video/service/youtube.js",
     "/pipeshift/js/modules/video/service/Course.js",
     "/pipeshift/js/modules/video/service/CourseVideo.js",
+    "/pipeshift/js/modules/video/service/Subscriber.js",
     "/pipeshift/js/modules/video/controller/EditCourseModalController.js",
     "/pipeshift/js/modules/video/controller/ListEditorController.js",
     "/pipeshift/js/modules/video/controller/TimelineItemController.js",

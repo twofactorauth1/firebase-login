@@ -7,6 +7,7 @@
 
 var baseApi = require('../base.api');
 var courseDao = require('../../dao/course.dao');
+var subscriberDao = require('../../dao/subscriber.dao');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -33,6 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id/video/:videoId'), this.isAuthApi, this.deleteVideoFromCourse.bind(this));
         //other
         app.get(this.url('free/:subdomain'), this.isAuthApi, this.isSubdomainFree.bind(this));
+        app.get(this.url(':id/subscribers'), this.isAuthApi, this.getSubscribersList.bind(this));
     },
 
     listCourses: function (req, resp) {
@@ -200,6 +202,27 @@ _.extend(api.prototype, baseApi.prototype, {
         courseDao.isSubdomainFree(subdomain, function (err, isFree) {
             self.sendResultOrError(resp, err, {result: isFree}, "Error while checking subdomain");
         });
+    },
+    getSubscribersList: function (req, resp) {
+        var courseId = req.params.id;
+        if (!courseId) {
+            return this.wrapError(resp, 400, null, "Invalid parameter for ID");
+        }
+        var userId = self.userId(req);
+        courseDao.getCourseById(courseId, userId, function (err, course) {
+            if (err || !course) {
+                return this.wrapError(resp, 500, null, err, "No course found");
+            } else {
+                if (course.userId != userId) {
+                    return this.wrapError(resp, 403, null, "Not allowed", "Not allowed");
+                } else {
+                    subscriberDao.listCourseSubscribers(courseId, function (err, docs) {
+                        self.sendResultOrError(resp, err, docs, "Error while getting subscribers");
+                    });
+                }
+            }
+        });
+
     }
 
 });

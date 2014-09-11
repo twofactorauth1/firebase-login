@@ -45,7 +45,7 @@ require.config({
         d3: 'libs/d3/d3',
         moment: 'libs/moment/min/moment.min',
 
-        //PIPESHIFT
+        //VIDEO AUTORESPONDER
         angular: 'libs/angular/angular',
         angularBootstrap: "libs/angular-bootstrap/ui-bootstrap-tpls",
         angularRoute: "libs/angular-route/angular-route",
@@ -54,6 +54,7 @@ require.config({
         angularStepper: "libs/angular-stepper/src/angular-stepper",
         angularMoney: "libs/angular-money-directive/angular-money-directive",
         xEditable: "libs/angular-xeditable/dist/js/xeditable",
+        ngCsv: "libs/ng-csv/build/ng-csv.min",
 
         //UI SPECIFIC
         toggles: 'libs_misc/toggles.min',
@@ -142,6 +143,7 @@ require.config({
         angularStepper: {deps: ['angular']},
         angularMoney: {deps: ['angular']},
         xEditable: {deps: ['angular']},
+        ngCsv: {deps: ['angular']},
 
         waypoints: {
             deps: ['jquery']
@@ -170,6 +172,7 @@ require.config({
                 'angularStepper',
                 'angularMoney',
                 'xEditable',
+                'ngCsv',
 
                 //UI SPECIFIC
                 'toggles',

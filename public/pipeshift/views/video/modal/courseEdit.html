@@ -42,7 +42,8 @@
         </div>
         <div class="checkbox">
             <label>
-                <input id="showExitIntentModal" type="checkbox" ng-model="playlist.showExitIntentModal"> Show exit intent modal
+                <input id="showExitIntentModal" type="checkbox" ng-model="playlist.showExitIntentModal"> Show exit
+                intent modal
             </label>
         </div>
     </form>
@@ -51,6 +52,22 @@
         </button>
         <course-preview course="course" edit-mode="editMode"></course-preview>
     </div>
+    <div class="col-md-12 subscribers-list-div" ng-hide="isAdd">
+        Subscribers({{subscribers.length}}):
+        <div class="clearfix">
+            Subscribers({{subscribers.length}}):
+            <button class="pull-right" type="button" ng-csv="subscribers" filename="test.csv">Export</button>
+        </div>
+        <div class="well subscribers-list">
+            <table>
+                <tr ng-repeat="subscriber in subscribers">
+                    <td>{{($index+1)+'. '+subscriber.email+'['+(subscriber.subscribeDate | date:'yyyy-MM-dd hh:mm a')+']'}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
 </div>
 <div class="modal-footer">
     <button type="submit" class="btn btn-remove pull-left" ng-show="!isAdd" ng-click="removeCourse()">Remove</button>

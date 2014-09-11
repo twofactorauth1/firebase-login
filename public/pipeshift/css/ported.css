@@ -1,0 +1,10 @@
+.subscribers-list-div {
+    margin-top: 20px;
+}
+
+.subscribers-list {
+    margin-top: 10px;
+    height: 100px;
+    overflow: scroll;
+}
+

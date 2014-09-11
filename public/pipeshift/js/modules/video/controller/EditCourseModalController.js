@@ -1,4 +1,4 @@
-angular.module('app.modules.video').controller('EditCourseModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'course', 'templates', 'Course', function ($scope, $modal, $http, $location, $timeout, $modalInstance, course, templates, Course) {
+angular.module('app.modules.video').controller('EditCourseModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'course', 'templates', 'Course', 'Subscriber', function ($scope, $modal, $http, $location, $timeout, $modalInstance, course, templates, Course, Subscriber) {
     $scope.modal = {};
     $scope.isSubdomainChecked = true;
     $scope.isSubdomainFree = true;
@@ -13,6 +13,11 @@ angular.module('app.modules.video').controller('EditCourseModalController', ['$s
     $scope.title = "Course info";
     $scope.course = $.extend({}, course);
     $scope.templates = templates;
+    $scope.subscribers = [];
+    Subscriber.query({id: course._id}, function (response) {
+        $scope.subscribers = response;
+    });
+
     $scope.close = function () {
         $modalInstance.dismiss();
     }
