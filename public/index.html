@@ -13,7 +13,6 @@
 
     <link rel="stylesheet" href="/css/style.default.css">
     <link rel="stylesheet" href="/js/libs_misc/jquery.tagsinput/jquery.tagsinput.css" />
-    <link rel="stylesheet" href="js/libs/bootstrap/dist/css/bootstrap.css"/>
 
     <title>{{layout.website.title}}</title>
 
@@ -45,7 +44,7 @@
 
 </head>
 <body class="theme-main">
-<div ng-include src="main.themeUrl">
+<div ng-include src="main.themeUrl" style="overflow: hidden;">
 
 </div>
 
@@ -69,7 +68,6 @@
 <script src="../js/libs/bootstrap/dist/js/bootstrap.js"></script>
 <script src="../js/libs/angular/angular.js"></script>
 <script src="../js/libs/json3/lib/json3.js"></script>
-<script src="../js/libs/bootstrap/dist/js/bootstrap.js"></script>
 <script src="../js/libs/angular-resource/angular-resource.js"></script>
 <script src="../js/libs/angular-cookies/angular-cookies.js"></script>
 <script src="../js/libs/angular-sanitize/angular-sanitize.js"></script>
@@ -93,7 +91,7 @@
 <script src="scripts/filters/generateURLforLinks.js"></script>
 <script src="scripts/controllers/mainCtrl.js"></script>
 <script src="scripts/controllers/blogCtrl.js"></script>
-<script src="components/layout/layoutCtrl.js"></script>
+<script src="scripts/controllers/layoutCtrl.js"></script>
 <script src="../js/scripts/config.js"></script>
 <!-- endbuild -->
 </body>

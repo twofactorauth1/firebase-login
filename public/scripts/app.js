@@ -21,6 +21,22 @@ var mainApp = angular
         'config'
     ])
     .config(function ($stateProvider, $routeProvider) {
+        // $routeProvider
+        //     .when('', {
+        //         templateUrl: 'views/main.html',
+        //         controller: 'LayoutCtrl as layout'
+        //     })
+        //     .when('/about', {
+        //         templateUrl: 'views/about.html',
+        //         controller: 'MainCtrl'
+        //     })
+        //     .when('/blog', {
+        //         templateUrl: 'views/main.html',
+        //         controller: 'LayoutCtrl as layout'
+        //     }).when('/blog/:postname', {
+        //         templateUrl: 'views/main.html',
+        //         controller: 'LayoutCtrl as layout'
+        //     });
         $stateProvider
             .state('main', {
                 url: '',
@@ -34,8 +50,12 @@ var mainApp = angular
             })
             .state('blog', {
                 url: '/blog',
-                templateUrl: 'views/blog.html',
-                controller: 'BlogCtrl'
+                templateUrl: 'views/main.html',
+                controller: 'LayoutCtrl as layout'
+            })
+            .state('/blog/:postname', {
+                templateUrl: 'views/main.html',
+                controller: 'LayoutCtrl as layout'
             });
         $routeProvider.otherwise({
             redirectTo: '/#/'

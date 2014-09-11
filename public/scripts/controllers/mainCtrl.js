@@ -28,7 +28,7 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
                 console.log('Controller:MainCtrl -> Method:pageService Success: ', data);
 
                 //Set Page Title
-                that.pageName = pages[0].title;
+                that.pageName = pages.title;
             }
         });
 
