@@ -11,7 +11,7 @@ if (typeof CACHEBUSTER === 'undefined') {
 
 require.config({
     paths: {
-        jquery: 'libs_misc/jquery/dist/jquery',
+        jquery: 'libs/jquery/dist/jquery',
         jqueryvalidate: 'libs/jquery-validate/dist/jquery.validate',
         jqueryeasing: 'libs/jquery-easing/jquery.easing',
         jqueryUI: 'libs/jquery-ui/jquery-ui.min',
