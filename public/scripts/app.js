@@ -20,7 +20,7 @@ var mainApp = angular
         'angular-parallax',
         'config'
     ])
-    .config(function ($stateProvider, $routeProvider) {
+    .config(function ($stateProvider, $routeProvider,$locationProvider) {
         // $routeProvider
         //     .when('', {
         //         templateUrl: 'views/main.html',
@@ -39,7 +39,7 @@ var mainApp = angular
         //     });
         $stateProvider
             .state('main', {
-                url: '',
+                url: '/',
                 templateUrl: 'views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
@@ -60,6 +60,7 @@ var mainApp = angular
         $routeProvider.otherwise({
             redirectTo: '/#/'
         });
+        $locationProvider.html5Mode(true);
     })
     .controller('LayoutCtrl', function($scope, parallaxHelper){
         $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);
