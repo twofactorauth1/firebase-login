@@ -6,11 +6,8 @@ define(['app', 'jqueryGridster'], function(app) {
             self.find('.arrow').toggleClass('open closed');
     	});
     	var chartGrid = $(".gridster ul").gridster({
-    		widget_margins: [10, 10],
+    		widget_margins: [2, 2],
         	widget_base_dimensions: [140, 140]
     	}).data('gridster');
-    	//chartGrid.add_widget('<li class="new">The HTML of the widget...</li>', 2, 1);
-    	
-    	//console.log(chartGrid.serialize());
     }]);
 });
