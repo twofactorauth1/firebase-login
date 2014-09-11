@@ -7,14 +7,14 @@
 
 var mongoConfig = require('../configs/mongodb.config');
 var mongoskin = require('mongoskin');
-var mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {safe:true});
+var mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {safe: true});
 
 $$.g.mongos = $$.g.monogs || [];
 var mongodao = {
 
     mongodatabase: mongodb,
 
-    initMongo: function() {
+    initMongo: function () {
         $$.g.mongos.push(this.mongodatabase);
         //ensure we have our ID counters set up for this collection
         if (this.defaultModel != null) {
@@ -28,18 +28,18 @@ var mongodao = {
     },
 
 
-    mongo: function(collection) {
+    mongo: function (collection) {
         return this.mongodatabase.collection(collection || this.getTable());
     },
 
 
-    getMongoCollection: function(type) {
+    getMongoCollection: function (type) {
         var collection = this.getTable(type);
         return this.mongo(collection);
     },
 
 
-    _createModel: function(object, type, xFields) {
+    _createModel: function (object, type, xFields) {
         if (object == null) {
             return null;
         }
@@ -51,7 +51,7 @@ var mongodao = {
     },
 
     //region PROTECTED
-    _getByIdMongo: function(id, type, fn) {
+    _getByIdMongo: function (id, type, fn) {
         var self = this;
 
         if (fn == null) {
@@ -60,7 +60,7 @@ var mongodao = {
         }
 
         var collection = this.getTable(type);
-        this.mongo(collection).findById(id, function(err, result) {
+        this.mongo(collection).findById(id, function (err, result) {
             if (!err) {
                 fn(err, self._createModel(result, type));
             } else {
@@ -71,7 +71,7 @@ var mongodao = {
     },
 
 
-    _findOneMongo: function(query, type, fn) {
+    _findOneMongo: function (query, type, fn) {
         var self = this;
         if (fn == null) {
             fn = type;
@@ -79,31 +79,31 @@ var mongodao = {
         }
 
         var collection = this.getTable(type);
-        this.mongo(collection).findOne(query, function(err, result) {
-           if (!err) {
-               fn(null, self._createModel(result, type));
-           } else {
-               self.log.error("An error occurred: #findOneMongo() with query: " + JSON.stringify(query), err);
-               fn(err, result);
-           }
+        this.mongo(collection).findOne(query, function (err, result) {
+            if (!err) {
+                fn(null, self._createModel(result, type));
+            } else {
+                self.log.error("An error occurred: #findOneMongo() with query: " + JSON.stringify(query), err);
+                fn(err, result);
+            }
         });
     },
 
 
-    _findManyMongo: function(query, type, fn) {
+    _findManyMongo: function (query, type, fn) {
         this._findManyWithFieldsMongo(query, null, type, fn);
     },
 
-    _findManyWithLimitMongo: function(query, limit, type, fn) {
+    _findManyWithLimitMongo: function (query, limit, type, fn) {
         this._findManyWithFieldsAndLimitMongo(query, null, limit, type, fn);
     },
 
 
-    _findManyWithFieldsMongo: function(query, fields, type, fn) {
+    _findManyWithFieldsMongo: function (query, fields, type, fn) {
         this._findManyWithFieldsAndLimitMongo(query, fields, null, type, fn);
     },
 
-    _findManyWithFieldsAndLimitMongo: function(query, fields, limit, type,  fn) {
+    _findManyWithFieldsAndLimitMongo: function (query, fields, limit, type, fn) {
         var self = this;
         if (fn == null) {
             fn = type;
@@ -113,7 +113,7 @@ var mongodao = {
         var collection = this.getTable(type);
         var mongoColl = this.mongo(collection);
 
-        var fxn = function(err, value) {
+        var fxn = function (err, value) {
             if (!err) {
                 return self._wrapArrayMongo(value, fields, type, fn);
             } else {
@@ -122,28 +122,27 @@ var mongodao = {
             }
         };
 
-        if(limit == null) {
+        if (limit == null) {
             if (query == null && fields == null) {
-                mongoColl.find().toArray(fxn);
+                mongoColl.find().sort({_id: -1}).toArray(fxn);
             } else if (query != null) {
-                mongoColl.find(query).toArray(fxn);
-            } else if(fields != null) {
-                mongoColl.find(null, fields).toArray(fxn);
+                mongoColl.find(query).sort({_id: -1}).toArray(fxn);
+            } else if (fields != null) {
+                mongoColl.find(null, fields).sort({_id: -1}).toArray(fxn);
             }
         } else {
             if (query == null && fields == null) {
-                mongoColl.find().limit(limit).toArray(fxn);
+                mongoColl.find().sort({_id: -1}).limit(limit).toArray(fxn);
             } else if (query != null) {
-                mongoColl.find(query).limit(limit).toArray(fxn);
-            } else if(fields != null) {
-                mongoColl.find(null, fields).limit(limit).toArray(fxn);
+                mongoColl.find(query).sort({_id: -1}).limit(limit).toArray(fxn);
+            } else if (fields != null) {
+                mongoColl.find(null, fields).sort({_id: -1}).limit(limit).toArray(fxn);
             }
         }
-
     },
 
 
-    _findAndOrderMongo: function(query, fields, type, order_by, order_dir, fn) {
+    _findAndOrderMongo: function (query, fields, type, order_by, order_dir, fn) {
         var self = this;
         if (fn == null) {
             fn = type;
@@ -152,14 +151,14 @@ var mongodao = {
 
         //ascending === 1 (default)
         //descending === -1
-        if(order_dir !== -1) {
+        if (order_dir !== -1) {
             order_dir = 1;
         }
 
         var collection = this.getTable(type);
         var mongoColl = this.mongo(collection);
 
-        var fxn = function(err, value) {
+        var fxn = function (err, value) {
             if (!err) {
                 return self._wrapArrayMongo(value, fields, type, fn);
             } else {
@@ -167,11 +166,11 @@ var mongodao = {
                 fn(err, value);
             }
         };
-        this.mongo(collection).find(query).sort({order_by : order_dir}).toArray(fxn);
+        this.mongo(collection).find(query).sort({order_by: order_dir}).toArray(fxn);
 
     },
 
-    _findAllWithFieldsMongo: function(query, skip, sort, fields, type, fn) {
+    _findAllWithFieldsMongo: function (query, skip, sort, fields, type, fn) {
         var self = this;
         if (fn == null) {
             fn = type;
@@ -181,7 +180,7 @@ var mongodao = {
         var collection = this.getTable(type);
         var mongoColl = this.mongo(collection);
 
-        var fxn = function(err, value) {
+        var fxn = function (err, value) {
             if (!err) {
                 return self._wrapArrayMongo(value, fields, type, fn);
             } else {
@@ -192,18 +191,22 @@ var mongodao = {
 
         //TODO: this is a mess
         if (query == null && fields == null) {
-            mongoColl.find({},{ sort : [[sort]]}).skip(skip).toArray(fxn);
+            mongoColl.find({}, { sort: [
+                [sort]
+            ]}).skip(skip).toArray(fxn);
         } else if (query != null) {
-    //        mongoColl.find({ $query: {}, $orderby: { sort : 1 } }  ).limit(3+skip).toArray(fxn);
-           // mongoColl.find(query).sort( { sort: 1 } ).limit(3+skip).toArray(fxn);
-            mongoColl.find(query,{ sort : [[sort,'ascending']]}).skip(skip).toArray(fxn);
-           // mongoColl.find(query).skip(skip).limit(6).toArray(fxn);
-        } else if(fields != null) {
+            //        mongoColl.find({ $query: {}, $orderby: { sort : 1 } }  ).limit(3+skip).toArray(fxn);
+            // mongoColl.find(query).sort( { sort: 1 } ).limit(3+skip).toArray(fxn);
+            mongoColl.find(query, { sort: [
+                [sort, 'ascending']
+            ]}).skip(skip).toArray(fxn);
+            // mongoColl.find(query).skip(skip).limit(6).toArray(fxn);
+        } else if (fields != null) {
             mongoColl.find(null, fields).skip(skip).toArray(fxn);
         }
     },
 
-    _findAllWithFieldsAndLimitMongo: function(query, skip, limit, sort, fields, type, fn) {
+    _findAllWithFieldsAndLimitMongo: function (query, skip, limit, sort, fields, type, fn) {
         var self = this;
         if (fn == null) {
             fn = type;
@@ -216,7 +219,7 @@ var mongodao = {
         var _skip = skip || 0;
         var _limit = limit || 0;
 
-        var fxn = function(err, value) {
+        var fxn = function (err, value) {
             if (!err) {
                 return self._wrapArrayMongo(value, fields, type, fn);
             } else {
@@ -225,15 +228,19 @@ var mongodao = {
             }
         };
 
-        if(fields) {
-            if(sort) {
-                mongoColl.find(query, fields, {sort : [[sort, 'ascending']]}).skip(skip).limit(limit).toArray(fxn);
+        if (fields) {
+            if (sort) {
+                mongoColl.find(query, fields, {sort: [
+                    [sort, 'ascending']
+                ]}).skip(skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
             }
         } else {
-            if(sort) {
-                mongoColl.find(query, {sort : [[sort, 'ascending']]}).skip(skip).limit(limit).toArray(fxn);
+            if (sort) {
+                mongoColl.find(query, {sort: [
+                    [sort, 'ascending']
+                ]}).skip(skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
             }
@@ -242,13 +249,13 @@ var mongodao = {
 
     },
 
-    _aggregateMongoWithCustomStages: function(stageAry, type, fn) {
+    _aggregateMongoWithCustomStages: function (stageAry, type, fn) {
         var self = this;
 
         var collection = this.getTable(type);
         var mongoColl = this.mongo(collection);
 
-        mongoColl.aggregate(stageAry, function(err, value){
+        mongoColl.aggregate(stageAry, function (err, value) {
             if (!err) {
                 fn(null, value);
             } else {
@@ -258,7 +265,7 @@ var mongodao = {
         });
     },
 
-    _aggregateMongo: function(groupCriteria, matchCriteria, type, fn) {
+    _aggregateMongo: function (groupCriteria, matchCriteria, type, fn) {
         var self = this;
         var stageAry = [];
         stageAry.push({$match: matchCriteria});
@@ -276,16 +283,16 @@ var mongodao = {
         stageAry.push({
             // Limit results to duplicates (more than 1 match)
             $match: {
-                count: { $gt : 1 }
+                count: { $gt: 1 }
             }
         });
 
         return self._aggregateMongoWithCustomStages(stageAry, type, fn);
     },
 
-    _wrapArrayMongo: function(value, fields, type, fn) {
+    _wrapArrayMongo: function (value, fields, type, fn) {
         var self = this, arr = [];
-        value.forEach(function(item) {
+        value.forEach(function (item) {
             arr.push(self._createModel(item, type, fields));
         });
 
@@ -294,7 +301,7 @@ var mongodao = {
     },
 
 
-    _existsMongo: function(query, type, fn) {
+    _existsMongo: function (query, type, fn) {
         var self = this;
         if (fn == null) {
             fn = type;
@@ -302,7 +309,7 @@ var mongodao = {
         }
 
         var collection = this.getTable(type);
-            this.mongo(collection).find(query).limit(1).count(function(err, result) {
+        this.mongo(collection).find(query).limit(1).count(function (err, result) {
             if (!err) {
                 if (result > 0) {
                     fn(null, true);
@@ -317,11 +324,11 @@ var mongodao = {
     },
 
 
-    _saveOrUpdateMongo: function(model, fn) {
+    _saveOrUpdateMongo: function (model, fn) {
         var self = this;
         var collection = this.getTable(model);
         if (model.id() == null || model.id() == 0 || model.id() == "") {
-            this._getNextSequence(collection, function(err, value) {
+            this._getNextSequence(collection, function (err, value) {
                 if (!err) {
                     model.id(value);
                     self._saveOrUpdateMongo(model, fn);
@@ -335,7 +342,7 @@ var mongodao = {
             return;
         }
 
-        this.mongo(collection).save(model.toJSON("db"), function(err, result) {
+        this.mongo(collection).save(model.toJSON("db"), function (err, result) {
             if (!err) {
                 if (fn != null) {
                     fn(null, model);
@@ -350,11 +357,11 @@ var mongodao = {
     },
 
 
-    _removeMongo: function(model, fn) {
+    _removeMongo: function (model, fn) {
         var self = this;
         var collection = this.getTable(model);
 
-        this.mongo(collection).removeById(model.id(), function(err, value) {
+        this.mongo(collection).removeById(model.id(), function (err, value) {
             if (err) {
                 self.log.error("An error occurred: #removeMongo. ", err);
             }
@@ -364,7 +371,7 @@ var mongodao = {
     },
 
 
-    _removeByIdMongo: function(id, type, fn) {
+    _removeByIdMongo: function (id, type, fn) {
         var self = this;
 
         if (fn == null) {
@@ -373,7 +380,7 @@ var mongodao = {
         }
 
         var collection = this.getTable(type);
-        this.mongo(collection).removeById(id, function(err, value) {
+        this.mongo(collection).removeById(id, function (err, value) {
             if (err) {
                 self.log.error("An error occurred: #removeByIdMongo. ", err);
             }
@@ -382,7 +389,7 @@ var mongodao = {
         });
     },
 
-    _removeByQueryMongo: function(query, type, fn) {
+    _removeByQueryMongo: function (query, type, fn) {
         var self = this;
 
         if (fn == null) {
@@ -391,7 +398,7 @@ var mongodao = {
         }
 
         var collection = this.getTable(type);
-        this.mongo(collection).remove(query, function(err, value) {
+        this.mongo(collection).remove(query, function (err, value) {
             if (err) {
                 self.log.error("An error occurred: #removeByQueryMongo. ", err);
             }
@@ -400,12 +407,12 @@ var mongodao = {
         });
     },
 
-    _getMaxValueMongo: function(query, fieldName, type, fn) {
+    _getMaxValueMongo: function (query, fieldName, type, fn) {
         //db.thiscollection.find().sort({"thisfieldname":-1}).limit(1)
         var self = this;
         var collection = this.getTable(type);
-        this.mongo(collection).find(query).sort({fieldName : -1}).limit(1).toArray(function(err, values){
-            if(err) {
+        this.mongo(collection).find(query).sort({fieldName: -1}).limit(1).toArray(function (err, values) {
+            if (err) {
                 self.log.error('An error occurred: #getMaxValueMongo. ', err);
                 fn(err, null);
             } else {
@@ -417,19 +424,19 @@ var mongodao = {
         });
     },
 
-    _findAndModify: function(params, fieldName, type, fn) {
+    _findAndModify: function (params, fieldName, type, fn) {
         var self = this;
 
         var collection = this.getTable(type);
 
         this.mongo(collection).findAndModify(params,
-            function(err, value) {
+            function (err, value) {
                 if (!err && value != null) {
                     if (fn != null) {
                         fn(null, value.fieldName);
                     }
-                } else if(!err){
-                   //we could not find anything.  Insert maybe?
+                } else if (!err) {
+                    //we could not find anything.  Insert maybe?
                     params.seq = 0;
                     var postOrder = new $$.m.PostOrder(params);
                     self.mongo(collection).insert(postOrder, null, fn);
@@ -445,7 +452,7 @@ var mongodao = {
     },
 
 
-    _getNextSequence: function(collection, fn) {
+    _getNextSequence: function (collection, fn) {
         var self = this;
 
         if (_.isFunction(collection)) {
@@ -456,8 +463,8 @@ var mongodao = {
         collection = collection || this.collection;
 
         if (this._isLocked(collection)) {
-            (function(collection, fn) {
-                self._registerUnlock(collection, function() {
+            (function (collection, fn) {
+                self._registerUnlock(collection, function () {
                     self._getNextSequence(collection, fn);
                 });
             })(collection, fn);
@@ -468,9 +475,9 @@ var mongodao = {
         this.mongo(collection).findAndModify(
             { _id: "__counter__" },
             [],
-            { $inc: { seq:1 } },
+            { $inc: { seq: 1 } },
             { new: true, upsert: true },
-            function(err, value) {
+            function (err, value) {
                 self._unlockCollection(collection);
                 if (!err && value != null && value.hasOwnProperty('seq')) {
                     if (fn != null) {
@@ -489,21 +496,21 @@ var mongodao = {
     //endregion PROTECTED
 
     //region PRIVATE
-    _lockCollection: function(collection) {
+    _lockCollection: function (collection) {
         this.locked = this.locked || {};
         collection = collection || this.collection;
         this.locked[collection] = true;
     },
 
 
-    _unlockCollection: function(collection) {
+    _unlockCollection: function (collection) {
         collection = collection || this.collection;
         delete this.locked[collection];
         this._notifyUnlock(collection);
     },
 
 
-    _isLocked: function(collection) {
+    _isLocked: function (collection) {
         collection = collection || this.collection;
         if (this.locked && this.locked[collection] === true) {
             return true;
@@ -512,27 +519,27 @@ var mongodao = {
     },
 
 
-    _registerUnlock: function(collection, fn) {
+    _registerUnlock: function (collection, fn) {
         this.unlockRegister = this.unlockRegister || {};
         this.unlockRegister[collection] = this.unlockRegister[collection] || [];
         this.unlockRegister[collection].push(fn);
     },
 
 
-    _notifyUnlock: function(collection) {
+    _notifyUnlock: function (collection) {
         if (this.unlockRegister && this.unlockRegister[collection] != null) {
             //var callbacks = this.unlockRegister[collection];
             //do a deep copy of the array and delete it so it won't be modified by the callbacks
             var callbacks = $.extend(true, [], this.unlockRegister[collection]);
             delete this.unlockRegister[collection];
-            for(var i = 0; i < callbacks.length; i++) {
+            for (var i = 0; i < callbacks.length; i++) {
                 callbacks[i]();
             }
         }
     },
 
 
-    _ensureCounters: function(collection, fn) {
+    _ensureCounters: function (collection, fn) {
         var self = this;
 
         if (_.isFunction(collection)) {
@@ -547,9 +554,9 @@ var mongodao = {
         this.mongo(collection).findAndModify(
             { _id: "__counter__" },
             [],
-            { $inc: { seq:0 } },
+            { $inc: { seq: 0 } },
             { new: true, upsert: true },
-            function(err, value) {
+            function (err, value) {
                 self._unlockCollection(collection)
                 if (fn != null) {
                     fn(err, value);

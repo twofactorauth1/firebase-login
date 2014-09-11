@@ -710,7 +710,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> listBlogPosts');
         var accountId = self.accountId(req);
-        var limit = parseInt(req.query['limit'] || 10);//suitable default?
+        var limit = parseInt(req.query['limit'] || 3);//suitable default?
 
         cmsManager.listBlogPosts(accountId, limit, function (err, value) {
             self.log.debug('<< listBlogPosts '+value);

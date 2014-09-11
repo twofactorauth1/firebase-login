@@ -25,13 +25,13 @@ mainApp.filter('generateURLforLinks', function () {
                 return "#";
         }
         //toDo findOut use of isEditor
-        var isEditor = true;
+        /*var isEditor = true;
         if (_url != null && isEditor === true) {
             if (_url.indexOf("?") == -1) {
                 _url = _url + "?";
             }
             _url += "&editor=true";
-        }
+        }*/
         return _url;
     }
 });

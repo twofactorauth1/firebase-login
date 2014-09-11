@@ -16,9 +16,11 @@ var view = function(req,resp,options) {
 _.extend(view.prototype, BaseView.prototype, {
 
     show: function(accountId) {
-        this._show(accountId, "index");
+            this._show(accountId, "index");
     },
-
+    showTempPage: function(accountId) {
+        this._show(accountId, "index_temp_page");
+    },
 
     showPage: function(accountId, page) {
         this._show(accountId, page);

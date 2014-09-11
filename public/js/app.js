@@ -63,8 +63,8 @@ define([
                     fragment = fragment.replace("_=_", "");
                     Backbone.history.loadUrl(fragment)
                 }
-
-                if ( Backbone.history.fragment === '' ) {
+                console.log(Backbone.history.fragment[0]);
+                if ( Backbone.history.fragment === '' || Backbone.history.fragment[0] === '?') {
                     Backbone.history.navigate('contacts', { trigger: true });
                 }
             });

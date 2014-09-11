@@ -134,10 +134,8 @@
         </nav>
     </div>
 </div>
-<div id="body">
-    <div ng-repeat="component in layout.pages[0].components | createUrlFilter">
-        <div ng-include src="component.url"></div>
-    </div>
+<div ui-view>
+
 </div>
 
 <div id="footer">

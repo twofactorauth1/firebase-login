@@ -21,9 +21,6 @@ mainApp.factory('postsService', ['accountService', '$http', function (accountSer
                 $http.get(postsUrl)
                     .success(function (post) {
                         if (post !== null) {
-                            //TODO
-                            //Temp page pushing array
-                            //posts[0] = post;
                             callback(null, post);
                         } else {
                             callback("post not found");

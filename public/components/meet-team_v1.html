@@ -5,12 +5,14 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div ng-show="component">
+<div ng-show="component" class="meet-team {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};'>
     <div class="component-body">
-        <div class="inner-page meet-team">
-            <div class="editable" data-class="title">
-                <h3>{{component.title}}</h3>
-            </div>
+        <div class="inner-page">
+            <h3 class="title">
+                <div class="editable" data-class="title">
+                    {{component.title}}
+                </div>
+            </h3>
             <div class="mb30"></div>
 
             <div class="row">
