@@ -19,15 +19,10 @@
 <!-- Image Text Variables -->
 
 
-
-
 <!-- Feature List Variables -->
 
 
-
 <!-- TESTIMONIALS VARIABLES -->
-
-
 
 
 <head>
@@ -42,11 +37,17 @@
 
     <style type="text/css">
 
-        h1, h2, h3, h4, h5 { font-family: 'Spinnaker', sans-serif!important; color: #833954!important;}
-        body { font-family: 'Lato', sans-serif!important; }
+        h1, h2, h3, h4, h5 {
+            font-family: 'Spinnaker', sans-serif !important;
+            color: #833954 !important;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif !important;
+        }
 
         .btn-primary, .contact-us, .navbar-collapse {
-            background: #284ca1!important;
+            background: #284ca1 !important;
         }
 
         .feature-list {
@@ -54,26 +55,26 @@
             color: #fff;
         }
 
-        .feature-list-title, .feature-title  {
-            color: #fff!important;
+        .feature-list-title, .feature-title {
+            color: #fff !important;
         }
 
         .feature-block {
             background: #284ca1;
-            color: #fff!important;
+            color: #fff !important;
         }
 
         .feature-block-title, .feature-block-subtitle {
-            color: #fff!important;
+            color: #fff !important;
         }
 
         .navbar-collapse {
-            background: #833954!important;
+            background: #833954 !important;
         }
 
         .btn-primary {
-            background: #284ca1!important;
-            border-bottom: 4px solid #163082!important;
+            background: #284ca1 !important;
+            border-bottom: 4px solid #163082 !important;
         }
 
         .navbar-v2 #header .navbar ul.navbar-nav li:hover {
@@ -81,15 +82,15 @@
         }
 
         .secondary-color {
-            color: #284ca1!important;
+            color: #284ca1 !important;
         }
 
         .testimonials {
-            background: #284ca1!important;
+            background: #284ca1 !important;
         }
     </style>
 
-  <!--    <link rel="stylesheet" href="../../styles/site.css">  -->
+    <!--    <link rel="stylesheet" href="../../styles/site.css">  -->
 
     <title>Sherry Byrd</title>
 
@@ -98,11 +99,11 @@
 
 <style type="text/css">
     .navbar-header {
-        background-color: rgba(255, 255, 255, 0.7)!important;
+        background-color: rgba(255, 255, 255, 0.7) !important;
     }
 
     .navbar-brand img {
-        margin-top: 30px!important;
+        margin-top: 30px !important;
     }
 </style>
 
@@ -113,7 +114,8 @@
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -148,12 +150,7 @@
     </div>
 </div>
 
-<div id="body">
-
-        <div ng-repeat="component in layout.pages[0].components | createUrlFilter">
-            <div ng-include src="component.url"></div>
-        </div>
-
+<div ui-view>
 
 </div>
 
@@ -161,8 +158,9 @@
     <div class="footer-after section">
         <div class="row">
             <p class="col-sm-8 copyright">Copyright © 2014. All Rights reserved.</p>
+
             <div class="clear mb15 visible-xs"></div>
-            <p class="col-sm-4 powered-by"><a href="//www.indigenous.io " rel="nofollow">Powered by  Indigenous</a>
+            <p class="col-sm-4 powered-by"><a href="//www.indigenous.io " rel="nofollow">Powered by Indigenous</a>
                 <img class="footer-logo" src="../../images/footer-logo.png">
             </p>
         </div>
