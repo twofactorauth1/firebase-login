@@ -122,7 +122,7 @@ var mongodao = {
             }
         };
 
-        if (limit == null) {
+        if (limit == null || limit === 0) {
             if (query == null && fields == null) {
                 mongoColl.find().sort({_id: -1}).toArray(fxn);
             } else if (query != null) {

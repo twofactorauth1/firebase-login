@@ -706,11 +706,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listBlogPosts: function (req, res) {
         //TODO: Add Security
-        //TODO: Need to find a way to iterate through posts
         var self = this;
         self.log.debug('>> listBlogPosts');
-        var accountId = self.accountId(req);
-        var limit = parseInt(req.query['limit'] || 3);//suitable default?
+        var accountId = parseInt(self.accountId(req));
+        var limit = parseInt(req.query['limit'] || 0);//suitable default?
+        var skip = parseInt(req.query['skip'] || 0);//TODO: use skip for paging
 
         cmsManager.listBlogPosts(accountId, limit, function (err, value) {
             self.log.debug('<< listBlogPosts '+value);
