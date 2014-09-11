@@ -2,7 +2,6 @@ var mainApp = angular.module("mainApp");
 
 mainApp.filter('generateURLforLinks', function () {
     return function (linkToObject) {
-        console.log('LinktoObject: '+JSON.stringify(linkToObject));
         var _url = "";
         switch (linkToObject.type) {
             case "page":
