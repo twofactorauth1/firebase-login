@@ -16,7 +16,7 @@ mainApp.factory('postsService', ['accountService', '$http', function (accountSer
                 accountObject = data;
                 var handle = 'blog';
                 //API is getting only one page but we need page arrays
-                var postsUrl = '/api/1.0/cms/blog';
+                var postsUrl = '/api/1.0/cms/blog?limit=3';
 
                 $http.get(postsUrl)
                     .success(function (post) {

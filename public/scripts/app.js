@@ -34,11 +34,11 @@ var mainApp = angular
             })
             .state('blog', {
                 url: '/blog',
-                templateUrl: 'views/blog.html',
-                controller: 'BlogCtrl'
+                templateUrl: 'views/main.html',
+                controller: 'LayoutCtrl as layout'
             });
         $routeProvider.otherwise({
-            redirectTo: '/#/'
+            redirectTo: '/ng/'
         });
     })
     .controller('LayoutCtrl', function($scope, parallaxHelper){

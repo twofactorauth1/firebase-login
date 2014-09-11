@@ -20,7 +20,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 console.log('Data: ' + JSON.stringify(data));
 
                 //Include Layout For Theme
-                that.themeUrl = 'components/layout/layout_' + account.website.themeId + '.html';
+                that.themeUrl = 'components/layout/layout_default.html';
 
                 console.log('Controller:MainCtrl -> Method:accountService Success: ', data);
             }

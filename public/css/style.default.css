@@ -21937,6 +21937,22 @@ path {
   top: 100%;
   left: -100px;
 }
+.inner-page {
+  padding: 50px 0;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.btn-outline {
+  background: none;
+  border: 2px solid #fff!important;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+}
+.btn-outline:hover {
+  background-color: #16778b!important;
+  border: 2px solid #fff!important;
+  color: #ffffff;
+}
 .contact-us-v1 .contact-us-title {
   text-align: center;
   color: #176134;
@@ -22256,9 +22272,6 @@ ul.nav {
   }
 }
 /********** Feature Block **********/
-.feature-block {
-  min-height: 380px;
-}
 .feature-block .feature-block-title {
   text-align: center;
 }
@@ -22287,12 +22300,18 @@ ul.nav {
   text-decoration: underline;
 }
 .feature-block .inner-page {
-  padding: 50px 0;
+  padding: 10px 0;
   height: 100%;
 }
+.feature-block ul {
+  color: white;
+  text-align: center;
+  text-shadow: 1px 1px 1px black;
+  list-style-type: circle;
+  list-style-position: inside;
+}
 .feature-block.parallax {
-  max-height: 400px;
-  background-size: 100%!important;
+  height: 440px;
 }
 .feature-block.parallax .feature-block-title {
   color: white;
@@ -22307,14 +22326,7 @@ ul.nav {
   text-align: center;
 }
 .feature-block.parallax .inner-page {
-  padding: 80px 0;
-}
-.feature-block.parallax ul {
-  color: white;
-  text-align: center;
-  text-shadow: 1px 1px 1px black;
-  list-style-type: circle;
-  list-style-position: inside;
+  padding: 50px 0;
 }
 /********** Gallery **********/
 .overlay-gallery-image {
@@ -22368,9 +22380,8 @@ contenthover a {
 }
 /********** Meet Team **********/
 .meet-team {
-  background: #3b9db7;
-  color: white;
   padding: 0 20px;
+  overflow: hidden;
 }
 .meet-team .title {
   font-weight: bold;
@@ -22520,7 +22531,6 @@ contenthover a {
 }
 /********** Image Text v1 **********/
 .image-text-v1 .image-text-title {
-  color: #444;
   font-weight: bold;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
   display: block;
@@ -22538,8 +22548,8 @@ contenthover a {
   margin-top: 65px;
 }
 .image-text-v1 .image-text-text a {
-  color: white;
   text-decoration: underline;
+  color: white;
 }
 div[data-class='image-text'] h3 {
   font-weight: bold;
@@ -22549,10 +22559,6 @@ div[data-class='text'] {
 }
 div[data-class='image-text'] p {
   font-size: 14px;
-}
-div[data-class="image-text"] {
-  background: #4bb0cb;
-  color: #fff;
 }
 .image-text {
   padding: 0 20px;
@@ -23100,4 +23106,41 @@ div[data-class="image-text"] {
 }
 .footer-logo {
   margin: -50px 5px 0 0;
+}
+/********** Single Blog ***********/
+.single-blog .blog-meta {
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+.single-blog .entry-content img.center {
+  margin: 40px auto;
+}
+.single-blog .blog-thumb {
+  max-height: 200px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+p.blog-meta {
+  border-bottom: none!important;
+  border-top: none!important;
+  text-transform: none!important;
+  color: #9E9E9E;
+  font-family: Georgia,serif;
+  font-size: 12px;
+  font-style: italic;
+  padding: 0 5px 7px 4px;
+  margin: 0;
+}
+h2.blog-title {
+  padding-bottom: 0px!important;
+}
+#content-area {
+  background: linear-gradient(to left, #f7f7f7 50%, #ffffff 50%);
+}
+div.blog-thumb span.overlay {
+  background: none!important;
+}
+/********** Full Blog **********/
+div[data-class="blog"] .single-blog {
+  padding: 0 0 25px 0;
 }

@@ -3,7 +3,7 @@
  *
  * */
 'use strict';
-mainApp.factory('pagesService', ['websiteService', '$http', function (websiteService, $http) {
+mainApp.factory('pagesService', ['websiteService', '$http', function (websiteService, $cacheFactory, $http) {
     var websiteObject, pages = [];
 
     return function (callback) {
@@ -19,10 +19,8 @@ mainApp.factory('pagesService', ['websiteService', '$http', function (websiteSer
                     callback(null, pages);
                 } else {
                     websiteObject = data;
-                    var handle = 'index';
-
                     //API is getting only one page but we need page arrays
-                    $http.get('/api/1.0/cms/website/' + websiteObject._id + '/page/' + handle)
+                    $http.get('/api/1.0/cms/website/' + websiteObject._id + '/pages')
                         .success(function (page) {
                             console.log('Getting PageData From Database');
                             if (page !== null) {

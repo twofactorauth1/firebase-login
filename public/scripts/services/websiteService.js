@@ -13,7 +13,7 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
     return function (callback) {
         console.log('START:Website Service');
         if (that.website) {
-            console.log('GET:Website Service Cached Data');
+            console.log('GET:Website Service Cached Data: ', that.website);
             callback(null,that.website);
         } else {
             accountService(function (err, data) {
