@@ -60,14 +60,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             } else {
                 that.blogposts = data;
                 console.log('Post Name'+postname);
-                $scope.posts = function(fish_id) {
-                     var found = $filter('filter')($scope.fish, {id: fish_id}, true);
-                     if (found.length) {
-                         $scope.selected = JSON.stringify(found[0]);
-                     } else {
-                         $scope.selected = 'Not found';
-                     }
-                 }
                 console.log('Controller:LayoutCtrl -> Method:postsService Success: ', data);
 
                 //do something
