@@ -28,7 +28,8 @@
         'app': '/angular_admin/app',
         'userService': '/angular_admin/services/user',
         'paymentService': '/angular_admin/services/payment',
-        'skeuocardDirective': '/angular_admin/directives/skeuocard'
+        'skeuocardDirective': '/angular_admin/directives/skeuocard',
+        'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
  	},
  	shim: {
  		'adminCommon': {deps: ['jquery', 'storageutils', 'namespaces']},
@@ -40,7 +41,8 @@
         'angularAMD': {deps: ['angular']},
         'bootstrap': {deps: ['jquery']},
         'underscore': {deps: ['jquery']},
-        'commonutils': {deps: ['underscore']}
+        'commonutils': {deps: ['underscore']},
+        'jqueryGridster': {deps: ['jquery']}
  	},
  	deps: ['adminCommon', 'bootstrap', 'app']
  });
