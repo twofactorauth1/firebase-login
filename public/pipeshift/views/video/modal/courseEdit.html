@@ -15,7 +15,7 @@
             <input name="subdomain" id="subdomain" class="form-control " type="text" ng-model="course.subdomain"
                    ng-change="onSubdomainChange()" tooltip="{{isSubdomainFree?'':'Subdomain is already taken'}}">
             <!--ng-href="{{protocol+(hostHasWWW?'www.':'')+playlist.subdomain+'.'+domain}}"-->
-            <a ng-href="{{protocol + domain + '/courses/' + course.subdomain }}" target="_blank"
+            <a ng-href="{{protocol + domain + '/course/' + course.subdomain }}" target="_blank"
                class="btn btn-primary form-control"
                ng-disabled="!isSubdomainChecked || !isSubdomainFree || course.subdomain==null || course.subdomain.trim().length==0">Course
                 Link</a>
@@ -39,6 +39,11 @@
         <div class="form-group" ng-show="isAdd">
             <label class="control-label" for="body">Body:</label>
             <textarea id="body" class="form-control" ng-model="course.body"></textarea>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input id="showExitIntentModal" type="checkbox" ng-model="playlist.showExitIntentModal"> Show exit intent modal
+            </label>
         </div>
     </form>
     <div class="col-md-12" ng-hide="isAdd">

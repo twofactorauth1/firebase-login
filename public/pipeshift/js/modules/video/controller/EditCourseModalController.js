@@ -10,8 +10,8 @@ angular.module('app.modules.video').controller('EditCourseModalController', ['$s
     }
     $scope.domain = host + ":" + $location.port();
     $scope.isAdd = false;
-    $scope.title = "Course info"
-    $scope.course = {_id: course._id, title: course.title, description: course.description, template: course.template, videos: course.videos, subtitle: course.subtitle, body: course.body, userId: course.userId, subdomain: course.subdomain, price: course.price};
+    $scope.title = "Course info";
+    $scope.course = $.extend({}, course);
     $scope.templates = templates;
     $scope.close = function () {
         $modalInstance.dismiss();

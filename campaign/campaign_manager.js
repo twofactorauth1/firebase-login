@@ -11,6 +11,7 @@ require('./dao/campaign_message.dao.js');
 var accountDao = require('../dao/account.dao');
 var contactDao = require('../dao/contact.dao');
 var courseDao = require('../dao/course.dao');
+var subscriberDao = require('../dao/subscriber.dao');
 var userDao = require('../dao/user.dao');
 var appConfig = require('../configs/app.config');
 
@@ -252,13 +253,14 @@ module.exports = {
         this._cancelMandrillCampaignMessages({'campaignId': campaignId, 'contactId': contactId}, callback);
     },
 
-    subscribeToPipeshiftCourse: function (toEmail, courseMock, timezoneOffset, curUserId, callback) {
+    subscribeToVARCourse: function (toEmail, courseMock, timezoneOffset, curUserId, callback) {
         var self = this;
         courseDao.getCourseById(courseMock._id, curUserId, function (err, course) {
             if (err || !course) {
                 self.log.warn("Can't find course: " + "\t" + JSON.stringify(err, null, 2));
                 callback(err, null);
             } else {
+                var timezoneOffset = req.body.timezoneOffset;
                 contactDao.createUserContactFromEmail(course.get('userId'), toEmail, function (err, value) {
                         if (err) {
                             self.log.warn("Error creating contact: " + "\t" + JSON.stringify(value, null, 2));
@@ -267,39 +269,16 @@ module.exports = {
                             if (err || !account) {
                                 callback(err, null);
                             } else {
-                                var host = account.get('subdomain') + "." + hostSuffix;
-                                var templateName = course.get('template').name;
-                                //base message
-                                var message = self._initPipeshiftMessage(toEmail);
-                                var async = false;
-                                var successItemsCounter = 0;
-                                //loop through course videos
-                                for (var i = 0; i < course.get('videos').length; i++) {
-                                    var video = course.get('videos')[i];
-                                    message.subject = video.subject || course.get('title');
-                                    // adjust values for current video
-                                    self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/courses/" + course.get('subdomain') + "/video/" + video.videoId);
-                                    self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
-                                    self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
-                                    self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
-                                    self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
-                                    var sendObj = self._initVideoTemplateSendObject(templateName, message, async);
-                                    // schedule email
-                                    // if time is in the past mandrill sends email immediately
-                                    sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
-                                    // send template
-                                    mandrill_client.messages.sendTemplate(sendObj, function (result) {
-                                        self.log.debug(result);
-                                        //
-                                        successItemsCounter++;
-                                        if (successItemsCounter == course.get('videos').length) {
-                                            callback(null, {});
-                                        }
-                                    }, function (e) {
-                                        self.log.warn('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-                                        callback(e, null);
-                                    });
-                                }
+                                var timezoneOffset = req.body.timezoneOffset;
+                                this._addSubscriber(toEmail, course, req.user, function (error) {
+                                    if (error) {
+                                        return res.json({success: false, error: 'Error creating subscriber.'});
+                                    } else {
+                                        this._sendVAREmails(toEmail, course, timezoneOffset, function (result) {
+                                            res.json(result);
+                                        });
+                                    }
+                                });
                             }
                         });
                     }
@@ -534,12 +513,17 @@ module.exports = {
             + ' ' + this._toTwoDigit(hh) + ":" + this._toTwoDigit(mm) + ":" + this._toTwoDigit(ss);
     },
 
+    _getNowDateUtc: function () {
+        var now = new Date();
+        return now.toISOString();
+    },
+
     _getUtcDateIsoString: function () {
         var now = new Date();
         var nowUtc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
         return nowUtc.toISOString();
     },
-    _getScheduleUtcDateTimeIsoString: function(daysShift, hoursValue, minutesValue, timezoneOffset) {
+    _getScheduleUtcDateTimeIsoString: function (daysShift, hoursValue, minutesValue, timezoneOffset) {
         var now = new Date();
         now.setHours(hoursValue);
         now.setMinutes(minutesValue);
@@ -569,8 +553,8 @@ module.exports = {
         return {
             "html": "<p>Empty</p>",
             "subject": "example subject",
-            "from_email": "info@pipeshift.com",
-            "from_name": "Pipeshift",
+            "from_email": "info@videoautoresponder.com",
+            "from_name": "Video Autoresponder",
             "to": [
                 {
                     "email": toEmail,
@@ -581,7 +565,7 @@ module.exports = {
             "global_merge_vars": [
                 {
                     "name": LINK_VAR_NAME,
-                    "content": "http://pipeshift.herokuapp.com"
+                    "content": "http://videoautoresponder.com"
                 },
                 {
                     "name": PREVIEW_IMAGE_VAR_NAME,
@@ -617,6 +601,54 @@ module.exports = {
             }
         }
         return result;
+    },
+
+    _addSubscriber: function (toEmail, course, user, callback) {
+        var userId = (user == null) ? null : user._id;
+        var userNowDateUtc = this._getNowDateUtc();
+        subscriberDao.createSubscriber({email: toEmail, courseId: course._id, subscribeDate: userNowDateUtc, userId: userId}, function (error, subscriber) {
+            if (error || !subscriber) {
+                return callback(error);
+            } else {
+                return callback();
+            }
+        });
+    },
+
+    _sendVAREmails: function (toEmail, course, timezoneOffset, callback) {
+        var host = account.get('subdomain') + "." + hostSuffix;
+        var templateName = course.get('template').name;
+        //base message
+        var message = self._initPipeshiftMessage(toEmail);
+        var async = false;
+        var successItemsCounter = 0;
+        //loop through course videos
+        for (var i = 0; i < course.get('videos').length; i++) {
+            var video = course.get('videos')[i];
+            message.subject = video.subject || course.get('title');
+            // adjust values for current video
+            self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/course/" + course.get('subdomain') + "/video/" + video.videoId);
+            self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
+            self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
+            self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
+            self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
+            var sendObj = self._initVideoTemplateSendObject(templateName, message, async);
+            // schedule email
+            // if time is in the past mandrill sends email immediately
+            sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
+            // send template
+            mandrill_client.messages.sendTemplate(sendObj, function (result) {
+                self.log.debug(result);
+                //
+                successItemsCounter++;
+                if (successItemsCounter == course.get('videos').length) {
+                    callback(null, {});
+                }
+            }, function (e) {
+                self.log.warn('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                callback(e, null);
+            });
+        }
     }
 
 }

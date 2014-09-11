@@ -54,7 +54,8 @@ var dao = {
                         course.set('description', updatedCourseData.description);
                         course.set('subdomain', updatedCourseData.subdomain);
                         course.set('price', updatedCourseData.price);
-                        self.saveOrUpdate(course, fn);
+                        course.set('showExitIntentModal', updatedCourseData.showExitIntentModal);
+                    self.saveOrUpdate(course, fn);
                     }
                 } else {
                     fn(err || {message: "Error updating course", status: 400}, null);

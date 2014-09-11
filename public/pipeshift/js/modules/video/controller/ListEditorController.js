@@ -198,6 +198,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
                     course.description = updatedCourse.description;
                     course.subdomain = updatedCourse.subdomain;
                     course.price = updatedCourse.price;
+                    course.showExitIntentModal = updatedCourse.showExitIntentModal;
                 }, function (error) {
                     alert("Some error happened");
                 });
