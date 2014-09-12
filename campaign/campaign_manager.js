@@ -586,7 +586,7 @@ module.exports = {
                 {
                     "name": BODY_VAR_NAME,
                     "content": ""
-                }
+                },
                 {
                     "name": PERCENTS_VAR_NAME,
                     "content": ""
