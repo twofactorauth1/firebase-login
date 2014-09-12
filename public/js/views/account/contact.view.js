@@ -186,6 +186,8 @@ define([
 
         renderContacts: function() {
             var self = this;
+            self.contacts.comparator=self.currentOrder;
+            self.contacts.sort();
             var data = {
                 account: self.account.toJSON(),
                 user: self.user.toJSON(),
@@ -375,11 +377,17 @@ define([
                     if (result == true) {
                         ContactService.importContacts(socialType)
                             .done(function() {
-                                alert("Contacts are importing!")
+                                //alert("Contacts are importing!")
+                                $('#import-contacts-modal').modal('show');
+
                             })
                             .fail(function(resp) {
                                 alert("There was an error importing contacts");
-                            });
+                            })
+                            .progress(function(resp){
+
+
+                            })
                     } else {
                         AuthenticationService.authenticateSocial(socialType, "import", socialType);
                     }
