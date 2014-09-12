@@ -33,7 +33,7 @@
                                    <span ng-bind-html="feature['feature-subtitle']"></span>
                                 </div>
                             </div>
-                            <div>
+                            <div ng-show="feature.btn.url">
                                 <a href="{{feature.btn.url}}"
                                    class="btn btn-primary feature-btn">{{feature.btn.text}}</a>
                             </div>
