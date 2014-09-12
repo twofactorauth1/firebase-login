@@ -9,6 +9,7 @@
  	baseUrl: '/js',
  	paths: {
  		'jquery': 'libs_misc/jquery/dist/jquery',
+ 		'jqueryUI': 'libs/jquery-ui/jquery-ui.min',
  		'angular': 'libs/angular/angular',
         'angularBootstrap': 'libs/angular-bootstrap/ui-bootstrap-tpls',
         'angularRoute': 'libs/angular-route/angular-route',
@@ -32,6 +33,7 @@
         'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
  	},
  	shim: {
+ 		'jqueryUI': {deps: ['jquery']},
  		'adminCommon': {deps: ['jquery', 'storageutils', 'namespaces']},
  		'angular': {deps: ['jquery']},
  		'angularBootstrap': {deps: ['angular']},
