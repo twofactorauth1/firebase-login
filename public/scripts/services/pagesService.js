@@ -14,15 +14,12 @@ mainApp.factory('pagesService', ['websiteService','$http', function (websiteServ
                 callback(err, null)
             } else {
                 if (pages.length != 0) {
-                    console.log('Getting PageData From cache ');
-                    console.log(null, pages);
                     callback(null, pages);
                 } else {
                     websiteObject = data;
                     //API is getting only one page but we need page arrays
                     $http.get('/api/1.0/cms/website/' + websiteObject._id + '/pages')
                     .success(function (page) {
-                            console.log('Getting PageData From Database', page);
                             if (page !== null) {
                                 //TODO
                                 //Temp page pushing array

@@ -16,9 +16,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
             } else {
                     route = 'single-post';
-                console.log('Route: '+route);
                 that.pages = data[route];
-                console.log('Controller:LayoutCtrl -> Method:pageService Success: ', data[route]);
             }
         });
 
@@ -30,7 +28,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 //      var found = $filter('getByProperty')('post_tags', $route.current.params.tagname, data);
                 // } else {
                     var found = $filter('getByProperty')('post_url', $route.current.params.postname, data);
-                    console.log('Found: ', found);
                     if (found) {
                         that.post = found;
                     }
