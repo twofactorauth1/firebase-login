@@ -18,7 +18,7 @@
             <div class="posts row">
 
                 <div class="col-sm-4" ng-repeat="blogpost in layout.blogposts|limitTo: 3">
-                    <div class="single-blog" data-url="{{blogpost.attributes.post_url}}">
+                    <a class="single-blog" data-ng-href="/blog/{{blogpost['post_url']}}">
 
                         <div class="featured-image" ng-show="blogpost['featured-image']">
                             <div class="editable" data-class="featured-image">
@@ -48,14 +48,14 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="clearfix mb15 visible-xs"></div>
 
             </div>
             <div class="clearfix mb30"></div>
             <div class="col-xs-12 mb15">
-                <a class="btn btn-success center btn-lg btn-full-blog" href="/page/blog">See Full Blog</a>
+                <a class="btn btn-success center btn-lg btn-full-blog" href="/blog">See Full Blog</a>
             </div>
             <div class="clearfix"></div>
         </div>

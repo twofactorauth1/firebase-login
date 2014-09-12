@@ -18,7 +18,7 @@ define([
 
                 anchor: null,
 
-                type: "feature-blocks",
+                type: "feature-block",
 
                 value: "",
 
@@ -34,7 +34,7 @@ define([
 
     $$.m.cms = $$.m.cms || {};
     $$.m.cms.components = $$.m.cms.components || {};
-    $$.m.cms.components.FeatureBlocks = model;
+    $$.m.cms.components.FeatureBlock = model;
 
     return model;
 });
