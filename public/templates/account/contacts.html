@@ -125,7 +125,7 @@ CONTACTS MAIN VIEW
                 <label class="col-xs-12 control-label">Contacts List Display</label>
                 <div class="col-xs-12">
                     <select class=" form-control chosen-select sort-display" data-placeholder="Sort Contacts" name="one">
-                        <option value=""></option>
+                        <!--<option value=""></option>-->
                         {{#isSelected account.displaysettings.display_type 'first' 'First, Last'}}{{/isSelected}}
                         {{#isSelected account.displaysettings.display_type  'last' 'Last, First'}}{{/isSelected}}
                             <!--
@@ -141,9 +141,9 @@ CONTACTS MAIN VIEW
                 <div class="col-xs-12">
                     <select class=" form-control chosen-select sort-ordering" data-placeholder="Sort Contacts"  name="two">
 
-                        <option value="">{{../currentOrder}}</option>
-                        {{#isSelected account.settings.sort_type 'first' 'First, Last'}}{{/isSelected}}
-                        {{#isSelected account.settings.sort_type 'last' 'Last, First'}}{{/isSelected}}
+<!--                        <option value="">{{../currentOrder}}</option>-->
+                        {{#isSelected account.settings.sort_type 'first' 'First'}}{{/isSelected}}
+                        {{#isSelected account.settings.sort_type 'last' 'Last'}}{{/isSelected}}
                         {{#isSelected account.settings.sort_type 'created.date' 'Date Added'}}{{/isSelected}}
 
                         <!--

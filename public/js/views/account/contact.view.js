@@ -69,9 +69,11 @@ define([
                 }
             }
             _.bindAll(this, 'check_height');
+/*
 
             $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
             $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
+*/
 
             $(window).scroll(this.check_height);
         },
@@ -83,6 +85,9 @@ define([
         },
 
         render: function() {
+            $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
+            $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
+
             $(window).bind('scroll' ,this.check_height);
 
             var self = this
@@ -187,7 +192,7 @@ define([
         renderContacts: function() {
             var self = this;
             self.contacts.comparator=self.currentOrder;
-            self.contacts.sort();
+           console.log( self.contacts.sort());
             var data = {
                 account: self.account.toJSON(),
                 user: self.user.toJSON(),
@@ -545,6 +550,11 @@ define([
 
             self.updateTooltips();
             cb && cb();
+        },
+        onClose:function(){
+
+            $$.e.ContactSortingEvent.unbind("sortContact");
+            $$.e.ContactSortingEvent.unbind("displayContact");
         }
 
     });
