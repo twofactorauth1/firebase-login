@@ -9,6 +9,7 @@
  	baseUrl: '/js',
  	paths: {
  		'jquery': 'libs_misc/jquery/dist/jquery',
+ 		'jqueryUI': 'libs/jquery-ui/jquery-ui.min',
  		'angular': 'libs/angular/angular',
         'angularBootstrap': 'libs/angular-bootstrap/ui-bootstrap-tpls',
         'angularRoute': 'libs/angular-route/angular-route',
@@ -19,6 +20,9 @@
         'underscore': 'libs/underscore/underscore',
         'skeuocard': 'libs/skeuocard/javascripts/skeuocard.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
+        'd3': 'libs/d3/d3',
+        'c3': 'libs/c3/c3.min',
+        'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -29,9 +33,9 @@
         'userService': '/angular_admin/services/user',
         'paymentService': '/angular_admin/services/payment',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
-        'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
  	},
  	shim: {
+ 		'jqueryUI': {deps: ['jquery']},
  		'adminCommon': {deps: ['jquery', 'storageutils', 'namespaces']},
  		'angular': {deps: ['jquery']},
  		'angularBootstrap': {deps: ['angular']},
@@ -42,7 +46,8 @@
         'bootstrap': {deps: ['jquery']},
         'underscore': {deps: ['jquery']},
         'commonutils': {deps: ['underscore']},
-        'jqueryGridster': {deps: ['jquery']}
+        'jqueryGridster': {deps: ['jquery']},
+        'c3': {deps: ['d3']}
  	},
  	deps: ['adminCommon', 'bootstrap', 'app']
  });

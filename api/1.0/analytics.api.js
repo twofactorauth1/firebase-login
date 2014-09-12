@@ -7,7 +7,7 @@
 
 var baseApi = require('../base.api');
 var cookies = require('../../utils/cookieutil');
-var analyticsDao = require('../../analytics/dao/analyticsDao.js');
+var analyticsDao = require('../../analytics/dao/analytics.dao.js');
 var analyticsManager = require('../../analytics/analytics_manager.js');
 
 var api = function() {
@@ -24,6 +24,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         //segmentio webhook
         app.post(this.url('webhook/event'), this.verifyEvent, this.saveAnalyticEvent.bind(this));
+        app.get(this.url('webhook/event'), this.verifyEvent, this.showOk.bind(this));
 
         //event CRUDL
         app.get(this.url('events'), this.isAuthApi, this.listEvents.bind(this));
@@ -51,6 +52,11 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug('<< saveAnalyticEvent');
             }
         });
+    },
+
+    showOk: function(req, res) {
+        var self = this;
+        self.sendResult(res, {'ok': 'ok'});
     },
 
     listEvents: function(req, res) {

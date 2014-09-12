@@ -40,7 +40,7 @@
     "angular-mocks": "~1.2.0",
     "angular-sanitize": "~1.2.0",
     "angular-scenario": "~1.2.0",
-    "angular-ui": "git://github.com/angular-ui/angular-ui.git#~0.4.0",
+    "angular-ui-bootstrap": "~0.11.0",
     "bootstrap-sass": "git://github.com/jlong/sass-twitter-bootstrap.git#~2.3.1",
     "font-awesome": "~4.2.0",
     "angular-route": "~1.2.4",
@@ -68,9 +68,15 @@
     "angular-ui-router": "~0.2.10",
     "angular-moment": "~0.8.2",
     "angular-parallax": "*",
-    "gridster": "~0.5.5"
+    "gridster": "~0.5.5",
+    "c3": "~0.3.0",
+    "ng-csv": "~0.2.3",
+    "angular-carousel": "~0.2.5",
+    "angular-file-upload": "~1.1.1",
+    "ouibounce": "~0.0.10"
   },
   "resolutions": {
-    "angular": "1.2.24"
+    "angular": "1.2.24",
+    "es5-shim": ">=3.4.0"
   }
 }

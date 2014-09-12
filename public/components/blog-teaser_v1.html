@@ -8,7 +8,7 @@
 
 <div>
     <div class="component-body" ng-show="component">
-        <div class="blog-teaser" id="{{component.anchor}}">
+        <div class="blog-teaser {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};' id="{{component.anchor}}" >
             <h3 class="title">
                 <div class="editable" data-class="title">
                     {{component.title}}
