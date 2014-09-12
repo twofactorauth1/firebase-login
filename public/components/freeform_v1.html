@@ -1,53 +1,87 @@
-<div ng-show="component">
+<style type="text/css">
+    .container {
+        padding-top: 40px;
+    }
 
-    <div class="component-header hidden">
-        <div>
-            {{component.title}}
-        </div>
+    #details {
+        font-family: "Quicksand", sans-serif;
+        font-size: 60px;
+    }
 
-        <div>
-            {{component.subtitle}}
-        </div>
+    #home-box > h2 {
+        font-family: "Quicksand", sans-serif;
+        font-weight: 400;
+        line-height: 1.1;
+        color: #75b1ae;
+    }
+
+    .price {
+        font-size: 25px;
+        float: left;
+    }
+
+    .pricing_header {
+        background: none repeat scroll 0% 0% rgb(44, 62, 80);
+        border-radius: 5px 5px 0px 0px;
+        transition: background 0.4s ease-out 0s;
+    }
+
+    .pricing_header h2 {
+        text-align: center;
+        line-height: 25px;
+        padding: 15px 0px;
+        margin: 0px;
+        font-family: "Quicksand", sans-serif;
+        font-weight: 400;
+        color: #75b1ae;
+    }
+
+    .list-group-item:first-child {
+        border-top-right-radius: 0px;
+        border-top-left-radius: 0px;
+    }
+
+    .btn {
+        float: right;
+        font-family: "Quicksand", sans-serif;
+        font-weight: 500;
+    }
+
+    .off {
+        text-decoration: line-through;
+        color: rgb(86, 86, 86);
+    }
+
+    .space {
+        height: 2px;
+        background-color: #75b1ae;
+    }
+</style>
+
+<!-- price & service -->
+<div ng-show="component" class="container">
+    <div class="row">
+        <h2 id="details">{{component.title}}</h2>
     </div>
+    <br>
 
-    <div id="freeform-component" class="component-body container">
-        <div class="col-xs-12 col-sm-12 freeform-wrap">
-            <div id="assessment-header" class="">
-                <h1 class="editable">{{component.title}}</h1>
+    <div ng-repeat="assessment in component.assessments track by $index">
+        <div class="col-md-3" id="home-box">
+            <div class="pricing_header">
+                <h2>{{assessment['title']}}</h2>
 
-                <h3 class="editable">{{component.subtitle}}</h3>
-
-                <p class="editable">{{component.text}}</p>
-
-                <div class="clearfix"></div>
+                <div class="space"></div>
             </div>
-            <div id="assessment-body">
-                <div class="assessment-wrap">
+            <ul class="list-group">
+                <li ng-repeat="txt in assessment.text.split(',')"
+                    class="list-group-item">
+                    <span class="glyphicon glyphicon-ok"></span> {{txt}}
+                </li>
+            </ul>
 
-                    <div ng-repeat="assessment in component.assessments">
-                        <div class="assessment-content">
-                            <span class="{{assessment['assessment-icon']}}"></span>
-                            <h5 class="tit">{{assessment['title']}}</h5>
-                            <h5 class="sub">{{assessment['subtitle']}}</h5>
-
-                        </div>
-                        <div class="assessment-content-text">
-                            <p>{{assessment['text']}}</p>
-                        </div>
-                        <div class="assessment-box"></div>
-                    </div>
-                    <div class="editable col-xs-12 col-sm-12 total">
-                        <h5>{{component['assessment-title']}}</h5>
-                        <h4>{{component['assessment-text']}}</h4>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-12">
-                    <div class="btn-wrap">
-                        <button class="btn btn-success btn-block center col-xs-3" href="{{component.btn.url}}"><i class=""></i>{{component.btn.text}}
-                        </button>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
+            <div class="try">
+                <p class="price">{{assessment.subtitle}}</p>
+                <a class="btn btn-default" href="{{component.btn.url}}" type="button">{{component.btn.text}}</a>
             </div>
         </div>
     </div>
