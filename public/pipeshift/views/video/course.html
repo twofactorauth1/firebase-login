@@ -2,8 +2,9 @@
     <div class="timeline-image"
          tooltip="Day {{(video.scheduledDay) +', '+(getScheduledTime(video) | date:'hh:mm a')}}"
          tooltip-placement="right"
-         ng-click="$parent.$parent.$parent.showTimelineItemModal(video)"><span
-            class="glyphicon glyphicon-envelope"></span></div>
+         ng-click="$parent.$parent.$parent.showTimelineItemModal(video,$index,videos.length)">
+        <span class="glyphicon glyphicon-envelope"></span>
+    </div>
     <div class="playlist-video">
         <h4 class="video-title"><a ng-href="{{getLink(video, $index)}}"><span tooltip="{{video.videoTitle}}"
                                                                               tooltip-placement="bottom"

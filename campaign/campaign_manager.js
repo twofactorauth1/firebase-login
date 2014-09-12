@@ -32,6 +32,10 @@ var PREVIEW_IMAGE_VAR_NAME = "preview_image";
 var TITLE_VAR_NAME = "title";
 var SUBTITLE_VAR_NAME = "subtitle";
 var BODY_VAR_NAME = "body";
+var PERCENTS_VAR_NAME = "percents";
+var VIDEO_INDEX_VAR_NAME = "video_index";
+var TOTAL_VIDEOS_VAR_NAME = "total_videos";
+
 
 module.exports = {
 
@@ -583,6 +587,18 @@ module.exports = {
                     "name": BODY_VAR_NAME,
                     "content": ""
                 }
+                {
+                    "name": PERCENTS_VAR_NAME,
+                    "content": ""
+                },
+                {
+                    "name": VIDEO_INDEX_VAR_NAME,
+                    "content": ""
+                },
+                {
+                    "name": TOTAL_VIDEOS_VAR_NAME,
+                    "content": ""
+                }
             ]
         };
     },
@@ -632,6 +648,10 @@ module.exports = {
             self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
             self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
             self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
+            self._setGlobalVarValue(message, PERCENTS_VAR_NAME, Math.round(100 * (i + 1) / course.videos.length));
+            self._setGlobalVarValue(message, VIDEO_INDEX_VAR_NAME, i + 1);
+            self._setGlobalVarValue(message, TOTAL_VIDEOS_VAR_NAME, course.videos.length);
+
             var sendObj = self._initVideoTemplateSendObject(templateName, message, async);
             // schedule email
             // if time is in the past mandrill sends email immediately
