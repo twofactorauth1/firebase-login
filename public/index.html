@@ -18,8 +18,6 @@
     <title>{{layout.website.title}}</title>
 
     <script type="text/javascript">
-        var segmentKey = window.segmentIOWriteKey;
-
 
         window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
             return function () {
@@ -39,7 +37,7 @@
                 n.parentNode.insertBefore(a, n)
             }
         }, window.analytics.SNIPPET_VERSION = "2.0.9",
-                window.analytics.load(segmentKey);
+                window.analytics.load('xot1dd3rul');//TODO: this should be generated server side.
         window.analytics.page();
     </script>
 
