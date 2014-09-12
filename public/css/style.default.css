@@ -22239,7 +22239,7 @@ path {
   margin-top: 30px;
 }
 .feature-list-v3 .feature-single .feature-subtitle li {
-  list-style-type: disc;
+  list-style-type: none;
   list-style-position: inside;
   line-height: 14px;
   margin-bottom: 15px;
@@ -22708,10 +22708,6 @@ div[data-class='text'] {
 }
 div[data-class='image-text'] p {
   font-size: 14px;
-}
-div[data-class="image-text"] {
-  background: #4bb0cb;
-  color: #fff;
 }
 .image-text {
   padding: 0 20px;

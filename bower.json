@@ -68,8 +68,8 @@
     "angular-ui-router": "~0.2.10",
     "angular-moment": "~0.8.2",
     "angular-parallax": "*",
-    "angular-moment": "~0.8.2",
-      "gridster": "~0.5.5"
+    "gridster": "~0.5.5",
+    "c3": "~0.3.0"
   },
   "resolutions": {
     "angular": "1.2.24"

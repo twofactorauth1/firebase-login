@@ -1,9 +1,11 @@
 'use strict';
 
-mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 'themeService', 'pagesService',
-    function ($scope, accountService, websiteService, themeService, pagesService) {
+mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 'themeService', 'pagesService', 'ENV',
+    function ($scope, accountService, websiteService, themeService, pagesService, ENV) {
 
         var account, pages, website, that = this;
+        that.segmentIOWriteKey = ENV.segmentKey;
+
 
         accountService(function (err, data) {
             if (err) {
@@ -32,7 +34,11 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
                 console.log('Controller:MainCtrl -> Method:websiteService Error: ' + err);
             } else {
                 website = data;
-                $scope.primaryColor = website.settings.primary_color;
+                if(website.settings) {
+                    $scope.primaryColor = website.settings.primary_color;
+                } else {
+                    console.warn('settings was null on the website object');
+                }
             }
         });
 
