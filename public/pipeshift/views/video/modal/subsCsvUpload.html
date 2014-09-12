@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <h3 class="modal-title">Subscribe from file</h3>
+</div>
+<div class="modal-body row">
+    <input type="file" nv-file-select="" uploader="uploader"/>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="close()">Close</button>
+    <button type="submit" class="btn btn-add pull-right" ng-click="submit()"
+            ng-disabled="!isFileSelected||isSubmitted">Upload
+    </button>
+</div>
+
