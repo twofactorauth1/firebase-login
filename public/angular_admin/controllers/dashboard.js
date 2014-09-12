@@ -1,4 +1,4 @@
-define(['app', 'jqueryGridster', 'jqueryUI'], function(app) {
+define(['app', 'c3', 'jqueryGridster', 'jqueryUI'], function(app, c3) {
     app.controller('DashboardCtrl', ['$scope', function ($scope) {
     	$('.header.accordion').click(function (e) {
     		var self = $(e.target);
@@ -18,11 +18,18 @@ define(['app', 'jqueryGridster', 'jqueryUI'], function(app) {
     	
     	$('.gridster').droppable({
     		drop: function (event, ui) {
-    			console.log(ui.draggable.attr('data-name'), ui.draggable.attr('data-width'), ui.draggable.attr('data-type'));
-    			chartGrid.add_widget('<li style="border: 2px solid red;" class="new"><img src="http://thinkblueprint.com.au/wp-content/uploads/2013/06/blueprint-cogs-cmyk-80x80.jpg" /></li>', 1, 1);
+    			console.info(ui.draggable.attr('data-name'), ui.draggable.attr('data-width'), ui.draggable.attr('data-type'));
+    			chartGrid.add_widget('<li style="border: 2px solid red;" class="' + ui.draggable.attr('data-name') + '"></li>', 1, 1);
+    			c3.generate({
+    				bindto: '.' + ui.draggable.attr('data-name'),
+    				data: {
+      					columns: [
+        					['data1', 30, 200, 100, 400, 150, 250],
+        					['data2', 50, 20, 10, 40, 15, 25]
+      					]
+    				}
+				});
     		}
     	});
-    	
-    	
     }]);
 });
