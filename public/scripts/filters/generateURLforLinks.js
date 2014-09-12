@@ -5,7 +5,7 @@ mainApp.filter('generateURLforLinks', function () {
         var _url = "";
         switch (linkToObject.type) {
             case "page":
-                _url = "#/page/" + linkToObject.data;
+                _url = "#/" + linkToObject.data;
                 return _url;
                 break;
             case "home":
@@ -13,8 +13,10 @@ mainApp.filter('generateURLforLinks', function () {
                 break;
             case "url":
                 return linkToObject.data;
+                break;
             case "section":
-                return "#" + linkToObject.data;
+                return '#/#'+linkToObject.data;
+                break;
             case "product":
                 _url = ""; //Not yet implemented
                 break;
@@ -23,6 +25,7 @@ mainApp.filter('generateURLforLinks', function () {
                 break;
             default:
                 return "#";
+                break;
         }
         //toDo findOut use of isEditor
         /*var isEditor = true;

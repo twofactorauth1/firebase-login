@@ -1,10 +1,13 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location',
-    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams',
+    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams) {
+        $scope.$route = $route;
+        $scope.$location = $location;
+        $scope.$routeParams = $routeParams;
 
         var account, theme, website, pages, blogposts, route, postname, that = this;
-        route = $location.$$path.replace('/', '');
+        route = $location.$$path;
         console.log('i m layout controller', route);
         //var config = angular.module('config');
         console.dir(ENV);
@@ -16,12 +19,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
             } else {
-                account = data;
+                that.account = data;
                 console.log('Controller:MainCtrl -> AccountService Hit');
                 console.log('Data: ' + JSON.stringify(data));
 
                 //Include Layout For Theme
-                that.themeUrl = 'components/layout/layout_default.html';
+                that.themeUrl = 'components/layout/layout_indimain.html';
 
                 console.log('Controller:MainCtrl -> Method:accountService Success: ', data);
             }
@@ -37,6 +40,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 if (route.indexOf("blog/") > -1) {
                     route = 'single-post';
                 }
+                route = route.replace('/', '');
                 console.log('Route: '+route);
                 that.pages = data[route];
                 console.log('Controller:LayoutCtrl -> Method:pageService Success: ', data[route]);
@@ -59,18 +63,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 console.log('Controller:LayoutCtrl -> Method:postsService Error: ' + err);
             } else {
                 that.blogposts = data;
-                console.log('Post Name'+postname);
-                $scope.posts = function(fish_id) {
-                     var found = $filter('filter')($scope.fish, {id: fish_id}, true);
-                     if (found.length) {
-                         $scope.selected = JSON.stringify(found[0]);
-                     } else {
-                         $scope.selected = 'Not found';
-                     }
-                 }
-                console.log('Controller:LayoutCtrl -> Method:postsService Success: ', data);
+                console.log('Post Handle Name: ', $route.current.params);
 
-                //do something
+                console.log('Controller:LayoutCtrl -> Method:postsService Success: ', data);
             }
         });
 
