@@ -247,9 +247,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                 if (video == null) {
                                     return self.wrapError(resp, 500, "Error: video not found.");
                                 } else {
-                                    if (!checkIfVideoAlreadySent(subscriber, course, video)) {
-                                        delete video.videoId;
-                                        delete video.videoUrl;
+                                    if (!checkIfVideoAlreadySent(subscriber, video)) {
+                                        video.videoId = null;
+                                        video.videoUrl = null;
                                     }
                                     return self.sendResultOrError(resp, null, video);
                                 }
@@ -292,7 +292,7 @@ function checkIfDateAlreadyPassed(startDate, daysShift, hoursValue, minutesValue
     shiftedUtcDate.setUTCHours(hoursValue);
     shiftedUtcDate.setUTCMinutes(minutesValue + timezoneOffset);
     shiftedUtcDate.setUTCSeconds(0);
-    return (new Date()).after(shiftedUtcDate);
+    return (new Date()) >= shiftedUtcDate;
 }
 
 module.exports = new api();
