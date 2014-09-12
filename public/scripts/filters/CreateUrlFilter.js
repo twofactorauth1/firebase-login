@@ -4,7 +4,7 @@ mainApp.filter('createUrlFilter', [function () {
             obj.forEach(function (cp) {
                 cp['url'] = '/components/' + cp.type + '_v' + cp.version + '.html';
             });
-        }else{
+        } else {
             console.log('CreateUrlFilter Else Check');
         }
         return obj;

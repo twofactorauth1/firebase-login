@@ -10,13 +10,9 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
             } else {
                 account = data;
-                console.log('Controller:MainCtrl -> AccountService Hit');
-                console.log('Data: ' + JSON.stringify(data));
 
                 //Include Layout For Theme
                 that.themeUrl = 'components/layout/layout_' + account.website.themeId + '.html';
-
-                console.log('Controller:MainCtrl -> Method:accountService Success: ', data);
             }
         });
 
@@ -25,7 +21,6 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
                 console.log('Controller:MainCtrl -> Method:pageService Error: ' + err);
             } else {
                 pages = data;
-                console.log('Controller:MainCtrl -> Method:pageService Success: ', data);
 
                 //Set Page Title
                 that.pageName = pages.title;
@@ -37,9 +32,6 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
                 console.log('Controller:MainCtrl -> Method:websiteService Error: ' + err);
             } else {
                 website = data;
-                console.log('Controller:MainCtrl -> Method:websiteService Success: ', data);
-
-                //do something here
             }
         });
 

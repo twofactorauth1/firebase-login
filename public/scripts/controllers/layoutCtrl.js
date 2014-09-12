@@ -8,9 +8,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         var account, theme, website, pages, blogposts, route, postname, that = this;
         route = $location.$$path;
-        console.log('i m layout controller', route);
         //var config = angular.module('config');
-        console.dir(ENV);
         that.segmentIOWriteKey = ENV.segmentKey;
         $window.segmentIOWriteKey = ENV.segmentKey;
         //that.themeUrl = $scope.themeUrl;
@@ -20,13 +18,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
             } else {
                 that.account = data;
-                console.log('Controller:MainCtrl -> AccountService Hit');
-                console.log('Data: ' + JSON.stringify(data));
 
                 //Include Layout For Theme
                 that.themeUrl = 'components/layout/layout_indimain.html';
 
-                console.log('Controller:MainCtrl -> Method:accountService Success: ', data);
             }
         });
 
@@ -41,9 +36,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     route = 'single-post';
                 }
                 route = route.replace('/', '');
-                console.log('Route: '+route);
                 that.pages = data[route];
-                console.log('Controller:LayoutCtrl -> Method:pageService Success: ', data[route]);
             }
         });
 
@@ -52,9 +45,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 console.log('Controller:LayoutCtrl -> Method:websiteService Error: ' + err);
             } else {
                 that.website = data;
-                console.log('Controller:LayoutCtrl -> Method:websiteService Success: ', data);
-
-                //do something
             }
         });
 
@@ -63,9 +53,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 console.log('Controller:LayoutCtrl -> Method:postsService Error: ' + err);
             } else {
                 that.blogposts = data;
-                console.log('Post Handle Name: ', $route.current.params);
-
-                console.log('Controller:LayoutCtrl -> Method:postsService Success: ', data);
             }
         });
 
