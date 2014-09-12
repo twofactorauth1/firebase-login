@@ -1,0 +1,31 @@
+<!-- price & service -->
+<div ng-show="component" class="container pricing-tables-v1">
+    <div class="row">
+        <h2 id="details">{{component.title}}</h2>
+    </div>
+    <br>
+
+    <div ng-repeat="table in component.tables track by $index">
+        <div class="col-md-8 col-mg-offset-2" id="home-box">
+            <div class="pricing_header">
+                <h2>{{table['title']}}</h2>
+                <h2>{{table['subtitle']}}</h2>
+                <h2>{{table['text']}}</h2>
+
+                <div class="space"></div>
+            </div>
+            <ul class="list-group">
+                <li ng-repeat="feature in table.features"
+                    class="list-group-item">
+                    <span class="fa fa-check"></span> {{feature}}
+                </li>
+            </ul>
+
+            <div class="try">
+                <p class="price">{{table.price}}</p>
+                <a class="btn btn-default" href="{{table.btn.url}}" type="button">{{table.btn.text}}</a>
+            </div>
+        </div>
+    </div>
+
+</div>
