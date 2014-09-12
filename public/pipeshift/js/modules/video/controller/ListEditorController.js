@@ -198,6 +198,7 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
                     course.description = updatedCourse.description;
                     course.subdomain = updatedCourse.subdomain;
                     course.price = updatedCourse.price;
+                    course.showExitIntentModal = updatedCourse.showExitIntentModal;
                 }, function (error) {
                     alert("Some error happened");
                 });
@@ -260,14 +261,14 @@ angular.module('app.modules.video').controller('ListEditorController', ['$scope'
         }, function () {
         });
     }
-    $scope.showTimelineItemModal = function (video) {
+    $scope.showTimelineItemModal = function (video, index, totalNumber) {
         var modalInstance = $modal.open({
             templateUrl: '/pipeshift/views/video/modal/timelineItem.html',
             controller: 'TimelineItemModalController',
             size: 'lg',
             resolve: {
                 video: function () {
-                    return video;
+                    return $.extend({}, video, {percents: Math.round(100*(index + 1) / totalNumber), videoIndex: index + 1, totalVideos: totalNumber});
                 }, template: function () {
                     return findTemplateByName($scope.course.template.name);
                 }

@@ -15,11 +15,11 @@
         var app = angular.module('app');
         app.config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
             $routeProvider
-                .when('/admin/pipeshift/', {
+                .when('/admin/pipeshift', {
                     templateUrl: '/pipeshift/views/video/listeditor.html',
                     controller: 'ListEditorController'
                 })
-                .otherwise({ redirectTo: '/admin/pipeshift/' });
+                .otherwise({ redirectTo: '/admin/pipeshift' });
             ;
             $locationProvider.html5Mode(true);
 

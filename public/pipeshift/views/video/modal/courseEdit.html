@@ -15,7 +15,7 @@
             <input name="subdomain" id="subdomain" class="form-control " type="text" ng-model="course.subdomain"
                    ng-change="onSubdomainChange()" tooltip="{{isSubdomainFree?'':'Subdomain is already taken'}}">
             <!--ng-href="{{protocol+(hostHasWWW?'www.':'')+playlist.subdomain+'.'+domain}}"-->
-            <a ng-href="{{protocol + domain + '/courses/' + course.subdomain }}" target="_blank"
+            <a ng-href="{{protocol + domain + '/course/' + course.subdomain }}" target="_blank"
                class="btn btn-primary form-control"
                ng-disabled="!isSubdomainChecked || !isSubdomainFree || course.subdomain==null || course.subdomain.trim().length==0">Course
                 Link</a>
@@ -40,12 +40,34 @@
             <label class="control-label" for="body">Body:</label>
             <textarea id="body" class="form-control" ng-model="course.body"></textarea>
         </div>
+        <div class="checkbox">
+            <label>
+                <input id="showExitIntentModal" type="checkbox" ng-model="playlist.showExitIntentModal"> Show exit
+                intent modal
+            </label>
+        </div>
     </form>
     <div class="col-md-12" ng-hide="isAdd">
         <button type="button" class="btn btn-primary" ng-click="editMode=!editMode" data-toggle="button">Edit template
         </button>
         <course-preview course="course" edit-mode="editMode"></course-preview>
     </div>
+    <div class="col-md-12 subscribers-list-div" ng-hide="isAdd">
+        <div class="clearfix">
+            Subscribers({{subscribers.length}}):
+            <button class="pull-right" type="button" ng-click="showSubscribersCsvUploadModal()">Upload</button>
+            <button class="pull-right" type="button" ng-csv="subscribers" filename="test.csv">Export</button>
+        </div>
+        <div class="well subscribers-list">
+            <table>
+                <tr ng-repeat="subscriber in subscribers">
+                    <td>{{($index+1)+'. '+subscriber.email+'['+(subscriber.subscribeDate | date:'yyyy-MM-dd hh:mm a')+']'}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
 </div>
 <div class="modal-footer">
     <button type="submit" class="btn btn-remove pull-left" ng-show="!isAdd" ng-click="removeCourse()">Remove</button>

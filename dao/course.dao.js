@@ -21,7 +21,7 @@ var dao = {
             this.getById(courseId, function (err, course) {
                 if (!err && course) {
                     var videos = course.get("videos");
-                    if (course.userId != curUserId) {
+                    if (course.get("userId") != curUserId) {
                         _.forEach(videos, clearVideoFieldsForUnauthorizedUser);
                     }
                 }
@@ -54,6 +54,7 @@ var dao = {
                         course.set('description', updatedCourseData.description);
                         course.set('subdomain', updatedCourseData.subdomain);
                         course.set('price', updatedCourseData.price);
+                        course.set('showExitIntentModal', updatedCourseData.showExitIntentModal);
                         self.saveOrUpdate(course, fn);
                     }
                 } else {
@@ -217,7 +218,7 @@ var dao = {
             this.findOne(query, function (err, course) {
                 if (!err && course) {
                     var videos = course.get("videos");
-                    if (course.userId != curUserId) {
+                    if (course.get("userId") != curUserId) {
                         _.forEach(videos, clearVideoFieldsForUnauthorizedUser);
                     }
                 }
