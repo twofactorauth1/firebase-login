@@ -42,9 +42,6 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.course = JSON.stringify(course);
                 data = self.baseData(data);
 
-                self.resp.render('courses/course', data);
-                self.cleanUp();
-                data = self = null;
                 if (self.user != null) {
                     subscriberDao.find({courseId: course._id, email: self.user.email}, function (error, docs) {
                         if (error || !docs || !docs.length > 0) {
@@ -56,7 +53,8 @@ _.extend(view.prototype, BaseView.prototype, {
                 } else {
                     renderCourse(course, false);
                 }
-
+                self.cleanUp();
+                data = self = null;
             } else {
                 self.resp.redirect("/");
             }

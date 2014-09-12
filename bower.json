@@ -69,7 +69,8 @@
     "parallax": "2.1.3",
     "ng-csv": "~0.2.3",
     "angular-carousel": "~0.2.5",
-    "angular-file-upload": "~1.1.1"
+    "angular-file-upload": "~1.1.1",
+    "ouibounce": "~0.0.10"
   },
   "resolutions": {
     "angular": "~1.2.24",

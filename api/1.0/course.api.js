@@ -213,13 +213,14 @@ _.extend(api.prototype, baseApi.prototype, {
         if (!courseId) {
             return this.wrapError(resp, 400, null, "Invalid parameter for ID");
         }
+        courseId = parseInt(courseId);
         var self = this;
         var userId = self.userId(req);
         courseDao.getCourseById(courseId, userId, function (err, course) {
             if (err || !course) {
                 return self.wrapError(resp, 500, null, err, "No course found");
             } else {
-                if (course.userId != userId) {
+                if (course.get("userId") != userId) {
                     return self.wrapError(resp, 403, null, "Not allowed", "Not allowed");
                 } else {
                     subscriberDao.listCourseSubscribers(courseId, function (err, docs) {

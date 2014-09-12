@@ -21,7 +21,7 @@ var dao = {
             this.getById(courseId, function (err, course) {
                 if (!err && course) {
                     var videos = course.get("videos");
-                    if (course.userId != curUserId) {
+                    if (course.get("userId") != curUserId) {
                         _.forEach(videos, clearVideoFieldsForUnauthorizedUser);
                     }
                 }
@@ -55,7 +55,7 @@ var dao = {
                         course.set('subdomain', updatedCourseData.subdomain);
                         course.set('price', updatedCourseData.price);
                         course.set('showExitIntentModal', updatedCourseData.showExitIntentModal);
-                    self.saveOrUpdate(course, fn);
+                        self.saveOrUpdate(course, fn);
                     }
                 } else {
                     fn(err || {message: "Error updating course", status: 400}, null);

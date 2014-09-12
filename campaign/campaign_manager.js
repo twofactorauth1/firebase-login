@@ -264,7 +264,6 @@ module.exports = {
                 self.log.warn("Can't find course: " + "\t" + JSON.stringify(err, null, 2));
                 callback(err, null);
             } else {
-                var timezoneOffset = req.body.timezoneOffset;
                 contactDao.createUserContactFromEmail(course.get('userId'), toEmail, function (err, value) {
                         if (err) {
                             self.log.warn("Error creating contact: " + "\t" + JSON.stringify(value, null, 2));
@@ -273,13 +272,12 @@ module.exports = {
                             if (err || !account) {
                                 callback(err, null);
                             } else {
-                                var timezoneOffset = req.body.timezoneOffset;
-                                this._addSubscriber(toEmail, course, req.user, timezoneOffset, function (error) {
+                                self._addSubscriber(toEmail, course, curUserId, timezoneOffset, function (error) {
                                     if (error) {
-                                        return res.json({success: false, error: 'Error creating subscriber.'});
+                                        callback('Error creating subscriber.', null);
                                     } else {
-                                        this._sendVAREmails(toEmail, course, timezoneOffset, function (result) {
-                                            res.json(result);
+                                        self._sendVAREmails(toEmail, course, timezoneOffset, account, function (result) {
+                                            callback(null, result);
                                         });
                                     }
                                 });
@@ -619,10 +617,9 @@ module.exports = {
         return result;
     },
 
-    _addSubscriber: function (toEmail, course, user, timezoneOffset, callback) {
-        var userId = (user == null) ? null : user._id;
+    _addSubscriber: function (toEmail, course, userId, timezoneOffset, callback) {
         var userNowDateUtc = this._getNowDateUtc();
-        subscriberDao.createSubscriber({email: toEmail, courseId: course._id, subscribeDate: userNowDateUtc, userId: userId, timezoneOffset: timezoneOffset}, function (error, subscriber) {
+        subscriberDao.createSubscriber({email: toEmail, courseId: course.id(), subscribeDate: userNowDateUtc, userId: userId, timezoneOffset: timezoneOffset}, function (error, subscriber) {
             if (error || !subscriber) {
                 return callback(error);
             } else {
@@ -631,16 +628,18 @@ module.exports = {
         });
     },
 
-    _sendVAREmails: function (toEmail, course, timezoneOffset, callback) {
+    _sendVAREmails: function (toEmail, course, timezoneOffset, account, callback) {
         var host = account.get('subdomain') + "." + hostSuffix;
         var templateName = course.get('template').name;
+        var self = this;
         //base message
         var message = self._initPipeshiftMessage(toEmail);
         var async = false;
         var successItemsCounter = 0;
+        var videos = course.get('videos');
         //loop through course videos
-        for (var i = 0; i < course.get('videos').length; i++) {
-            var video = course.get('videos')[i];
+        for (var i = 0; i < videos.length; i++) {
+            var video = videos[i];
             message.subject = video.subject || course.get('title');
             // adjust values for current video
             self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/course/" + course.get('subdomain') + "/?videoId=" + video._id);
@@ -648,9 +647,9 @@ module.exports = {
             self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
             self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
             self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
-            self._setGlobalVarValue(message, PERCENTS_VAR_NAME, Math.round(100 * (i + 1) / course.videos.length));
+            self._setGlobalVarValue(message, PERCENTS_VAR_NAME, Math.round(100 * (i + 1) / videos.length));
             self._setGlobalVarValue(message, VIDEO_INDEX_VAR_NAME, i + 1);
-            self._setGlobalVarValue(message, TOTAL_VIDEOS_VAR_NAME, course.videos.length);
+            self._setGlobalVarValue(message, TOTAL_VIDEOS_VAR_NAME, videos.length);
 
             var sendObj = self._initVideoTemplateSendObject(templateName, message, async);
             // schedule email

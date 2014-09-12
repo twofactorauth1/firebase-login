@@ -16,7 +16,7 @@ angular.module('app.modules.video').controller('EditCourseModalController', ['$s
     $scope.subscribers = [];
     function refreshSubscribers() {
         Subscriber.query({id: course._id}, function (response) {
-            $scope.subscribers = response.result;
+            $scope.subscribers = response;
         });
     }
 

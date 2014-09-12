@@ -35,12 +35,12 @@ define([
     "/pipeshift/js/modules/video/directive/coursePreview.js",
     "/pipeshift/js/modules/video/directive/videoTitle.js",
     "/pipeshift/js/modules/video/directive/videoPreview.js",
-    "/pipeshift/js/modules/video/directive/videoPlayer.js",
+    "/pipeshift/js/modules/video/directive/videoPlayerVG.js",
     "/pipeshift/js/modules/video/directive/psEditable.js",
     "/pipeshift/js/controller/LoginModalController.js",
     "/pipeshift/js/controller/SignupModalController.js",
     "/pipeshift/js/modules/account/controller/LoginController.js",
-    "/pipeshift/js/directive/stripePayButton.js",
+    "/pipeshift/js/directive/stripePayButton.js"
 ], function (BaseView, pipeshiftApp) {
 
     var view = BaseView.extend({

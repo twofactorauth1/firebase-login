@@ -45,12 +45,8 @@ angular.module('app.directives').directive('coursePreview', function () {
                 }
             };
             function subscribeToCourse(email, course) {
-                $http.post('/api/1.0/campaignmanager/pipeshift/courses/' + course._id + '/subscribe/', {email: $scope.modal.email, course: course, timezoneOffset: getTimezoneOffset()}).success(function (data) {
-                    if (data.success) {
-                        alert("Course has been scheduled for " + email);
-                    } else {
-                        alert(data.error);
-                    }
+                $http.post('/api/1.0/campaignmanager/pipeshift/courses/' + course._id + '/subscribe/', {email: email, course: course, timezoneOffset: getTimezoneOffset()}).success(function (data) {
+                    alert("Course has been scheduled for " + email);
                 }).error(function (data) {
                     alert("Some error happened.");
                 });
@@ -79,7 +75,7 @@ angular.module('app.directives').directive('coursePreview', function () {
             }
             $scope.showCourseSubscribeModal = function () {
                 var modalInstance = $modal.open({
-                    templateUrl: '/views/modal/subscribeModal.html',
+                    templateUrl: '/pipeshift/views/modal/subscribeModal.html',
                     controller: 'CourseSubscribeModalController',
                 });
                 modalInstance.result.then(function (email) {

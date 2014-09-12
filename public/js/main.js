@@ -43,7 +43,7 @@ require.config({
         d3: 'libs/d3/d3',
         moment: 'libs/moment/min/moment.min',
         daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
-        jquerydragdrop: 'libs/jquerydraganddrop/jquery.drag-drop.plugin',
+        jquerydragdrop: 'libs_misc/jquery/jquery.drag-drop.plugin',
 
         //VIDEO AUTORESPONDER
         angular: 'libs/angular/angular',
