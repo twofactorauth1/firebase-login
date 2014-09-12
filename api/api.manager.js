@@ -40,6 +40,9 @@ var productsApi = require('./1.0/product.api');
 // Analytics
 var analyticsApi = require('./1.0/analytics.api');
 
+//Assets
+var assetsApi = require('./1.0/assets.api');
+
 module.exports = {
 
 };
