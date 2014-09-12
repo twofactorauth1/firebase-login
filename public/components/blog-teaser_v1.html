@@ -40,7 +40,7 @@
                             <div class="footer">
                                 <div class="date col-xs-6">
                                     <span class="fa fa-calendar"></span>
-                                    {{blogpost.created.date}}
+                                    {{blogpost.created.date | amDateFormat:'DD-MM-YYYY'}}
                                 </div>
                                 <div class="comments col-xs-6 hidden">
                                     <span class="fa fa-comments"></span>

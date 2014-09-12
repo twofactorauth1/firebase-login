@@ -32,6 +32,7 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
                 console.log('Controller:MainCtrl -> Method:websiteService Error: ' + err);
             } else {
                 website = data;
+                $scope.primaryColor = website.settings.primary_color;
             }
         });
 
