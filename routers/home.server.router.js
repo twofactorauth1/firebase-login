@@ -24,8 +24,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/", this.setup, this.index.bind(this));
+        //app.get("/", this.setup, this.index.bind(this));
         app.get("/index", this.setup, this.index.bind(this));
+        app.get("/index_temp_page", this.setup, this.indexTempPage.bind(this));
         app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
         app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
 
@@ -57,6 +58,17 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         if (accountId > 0)  {
             new WebsiteView(req, resp).show(accountId);
+        } else {
+            //resp.redirect("/home");
+            new WebsiteView(req, resp).show(appConfig.mainAccountID);
+        }
+    },
+    indexTempPage: function(req,resp) {
+        var self = this
+            , accountId = this.accountId(req);
+
+        if (accountId > 0)  {
+            new WebsiteView(req, resp).showTempPage(accountId);
         } else {
             //resp.redirect("/home");
             new WebsiteView(req, resp).show(appConfig.mainAccountID);

@@ -5,6 +5,7 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 var STRIPE_CONFIG = require('./configs/stripe.config.js');
+var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
 
 module.exports = function(grunt) {
 
@@ -192,7 +193,8 @@ module.exports = function(grunt) {
                 constants: {
                     ENV: {
                         name: 'development',
-                        stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY
+                        stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY,
+                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY
                     }
                 }
             },
@@ -203,7 +205,8 @@ module.exports = function(grunt) {
                 constants: {
                     ENV: {
                         name: 'production',
-                        stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY
+                        stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY,
+                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY
                     }
                 }
             }
@@ -227,7 +230,7 @@ module.exports = function(grunt) {
     grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
 
     grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
-            'nodeunit:products']);
+            'nodeunit:products', 'nodeunit:cms']);
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
     grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);

@@ -51,6 +51,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //consistent URLs
 
         app.get(this.url('website/:websiteId/pages/:id'), this.getPagesById.bind(this));
+        app.get(this.url('website/:websiteId/pages'), this.getAllPages.bind(this));
         app.get(this.url('website/:websiteId/page/:id'), this.getPageById.bind(this));
         app.post(this.url('website/:websiteId/page'), this.createPage.bind(this));
         app.post(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
@@ -90,6 +91,7 @@ _.extend(api.prototype, baseApi.prototype, {
         // BLOG POSTS
         app.post(this.url('page/:id/blog'), this.isAuthApi, this.createBlogPost.bind(this));
         app.get(this.url('page/:id/blog'), this.setup, this.listBlogPosts.bind(this));
+        app.get(this.url('blog'), this.setup, this.listBlogPosts.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup, this.getBlogPost.bind(this));
         app.post(this.url('page/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
         app.put(this.url('page/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
@@ -358,6 +360,20 @@ _.extend(api.prototype, baseApi.prototype, {
             }
             else
                 self.sendResultOrError(res, err, value, "Error deleting Page");
+            self = null;
+        });
+
+    },
+
+    getAllPages: function(req, res) {
+        var self = this;
+        self.log.debug('>> getAllPages');
+        var websiteId = req.params.websiteId;
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getPagesByWebsiteId(websiteId, accountId, function(err, map){
+            self.log.debug('<< getAllPages');
+            self.sendResultOrError(res, err, map, 'Error getting all pages for account');
             self = null;
         });
 
@@ -690,14 +706,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listBlogPosts: function (req, res) {
         //TODO: Add Security
-        //TODO: Need to find a way to iterate through posts
         var self = this;
         self.log.debug('>> listBlogPosts');
-        var accountId = self.accountId(req);
-        var limit = parseInt(req.query['limit'] || 10);//suitable default?
+        var accountId = parseInt(self.accountId(req));
+        var limit = parseInt(req.query['limit'] || 0);//suitable default?
+        var skip = parseInt(req.query['skip'] || 0);//TODO: use skip for paging
 
         cmsManager.listBlogPosts(accountId, limit, function (err, value) {
-            self.log.debug('<< listBlogPosts');
+            self.log.debug('<< listBlogPosts '+value);
             self.sendResultOrError(res, err, value, "Error listing Blog Posts");
             self = null;
         });

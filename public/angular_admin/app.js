@@ -3,7 +3,13 @@ define(['angularAMD', 'angularRoute'], function (angularAMD) {
 
     //routes
     app.config(function ($routeProvider) {
-    	$routeProvider.when('/account', angularAMD.route({
+    	$routeProvider
+    	.when('/dashboard', angularAMD.route({
+    		templateUrl: '/angular_admin/views/dashboard.html',
+    		controller: 'DashboardCtrl',
+    		controllerUrl: '/angular_admin/controllers/dashboard.js'
+    	}))
+    	.when('/account', angularAMD.route({
     		templateUrl: '/angular_admin/views/account.html',
     		controller: 'AccountCtrl',
     		controllerUrl: '/angular_admin/controllers/account.js'
@@ -18,12 +24,12 @@ define(['angularAMD', 'angularRoute'], function (angularAMD) {
     		controller: 'CommerceCtrl',
     		controllerUrl: '/angular_admin/controllers/commerce.js'
     	}))
-    	.when('/commerce/:id', angularAMD.route({
+    	.when('/commerce/edit/:id', angularAMD.route({
     		templateUrl: '/angular_admin/views/commerce_edit.html',
     		controller: 'CommerceEditCtrl',
     		controllerUrl: '/angular_admin/controllers/commerce_edit.js'
     	}))
-    	.otherwise({redirectTo:'/account'});
+    	.otherwise({redirectTo:'/dashboard'});
     });
 
 	$('#preloader').fadeOut();

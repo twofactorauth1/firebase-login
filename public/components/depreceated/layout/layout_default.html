@@ -1,0 +1,62 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+<div id="fb-root"></div>
+<!--<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=522744787823977";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>-->
+
+<div id="header" ng-controller="LayoutCtrl as layout">
+    <nav class="navbar navbar-v{{layout.website}} navbar-default" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand editable" href="{{layout.account.accountUrl}}" data-name="{{layout.account.company.name}}">
+                    <span class="logo-1"> <img src="/assets/images/indimain/logo.png" scale="0"> </span>
+                </a>
+
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                    <li data-ng-repeat="link in mainMenu.links track by $index">
+                        <a href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}">{{link.label || link.url}}</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+</div>
+<div ui-view>
+
+</div>
+
+
+<div id="footer">
+    <div class="footer-after section">
+        <div class="row">
+            <p class="col-sm-8 copyright">Copyright © 2014.  All Rights reserved.</p>
+            <div class="clear mb15 visible-xs"></div>
+            <p class="col-sm-4 powered-by"><a href="//www.indigenous.io " rel="nofollow">Powered by  Indigenous</a>
+                <img class="footer-logo" src="/assets/images/footer-logo.png">
+            </p>
+        </div>
+    </div>
+</div>

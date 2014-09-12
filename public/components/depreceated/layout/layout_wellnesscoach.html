@@ -1,0 +1,518 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+
+
+<!-- Global Variables -->
+
+
+<!-- Nav Variables -->
+
+
+<!-- MastHead Variables -->
+
+
+<!-- Image Text Variables -->
+
+
+<!-- Feature List Variables -->
+
+
+<!-- TESTIMONIALS VARIABLES -->
+
+
+
+
+    <link href='http://fonts.googleapis.com/css?family=Spinnaker' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style type="text/css">
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Spinnaker', sans-serif !important;
+            color: #44a96a !important;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif !important;
+        }
+
+        .btn-primary, .contact-us, .navbar-collapse {
+            background: #44af6e !important;
+        }
+
+        .feature-list {
+            background: #44af6e;
+            color: #fff;
+        }
+
+        .feature-list-title, .feature-title {
+            color: #fff !important;
+        }
+
+        .feature-block {
+            background: #44af6e;
+            color: #fff !important;
+        }
+
+        .feature-block-title, .feature-block-subtitle {
+            color: #fff !important;
+        }
+
+        .navbar-collapse {
+            background: #44a96a !important;
+        }
+
+        .btn-primary {
+            background: #44af6e !important;
+            border-bottom: 4px solid #2a924d !important;
+        }
+
+        .navbar-v2 #header .navbar ul.navbar-nav li:hover {
+            border-bottom: 4px solid #ffffff;
+        }
+
+        .secondary-color {
+            color: #44a96a !important;
+        }
+
+        .testimonials {
+            background: #284ca1 !important;
+        }
+    </style>
+
+    <link rel="stylesheet" href="../../css/site.css">
+
+    <title>Wellness Coach</title>
+
+
+<div  ng-controller="LayoutCtrl as layout">
+
+<div class="navbar-v2">
+    <div id="header">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <a class="navbar-brand editable" href="/" data-name="">
+                        <span class="logo-1">
+                            <img src="images/wellnesscoach/logo.png" scale="0">
+                        </span>
+
+                    </a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li><a href="#mission">Mission</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#hire">Hire</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#contact">Contact</a></li>
+
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </div>
+</div>
+<div ui-view>
+
+</div>
+
+<div id="footer">
+    <div class="footer-after section">
+        <div class="row">
+            <p class="col-sm-8 copyright">Copyright © 2014. All Rights reserved.</p>
+
+            <div class="clear mb15 visible-xs"></div>
+            <p class="col-sm-4 powered-by"><a href="//www.indigenous.io " rel="nofollow">Powered by Indigenous</a>
+                <img class="footer-logo" src="images/footer-logo.png">
+            </p>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    /* Carousel */
+    $('.carousel').each(function () {
+        $(this).carousel({interval: 4000});
+    });
+    //$('[id^="myCarousel"]').carousel({interval: 4000});
+
+    $('[id^="myCarousel"]').on('slide.bs.carousel', function () {
+        $('.carousel-caption').css('display', 'none');
+    });
+
+    $('[id^="myCarousel"]').on('slid.bs.carousel', function () {
+        $('.carousel-inner > .item.active .carousel-caption').fadeIn("slow");
+    });
+
+    $(".link-gallery-image").hover(
+            function () {
+                var opac = 1;
+                $(this).children('.overlay-gallery-image').animate({
+                    opacity: opac
+                }, 500);
+            }, function () {
+                $(this).children('.overlay-gallery-image').animate({
+                    opacity: 0
+                }, 500);
+            }
+    );
+
+</script>
+
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+
+<!--<script type="text/javascript" src="../../js/waypoints.js"></script>
+<script type="text/javascript" src="../../js/parallax.min.js"></script>-->
+
+<!--<script type="text/javascript">
+(function (jQuery) {
+    jQuery(document).ready(function () {
+
+        jQuery('.thumbnail').hover(
+                function () {
+                    jQuery(this).find('.caption').fadeIn(250); //.fadeIn(250)
+                },
+                function () {
+                    jQuery(this).find('.caption').fadeOut(250); //.fadeOut(205)
+                }
+        );
+
+        var elem = window.location.hash;
+        window.location = '#';
+
+        function changeSidebarHeight() {
+            var sidebarHeight = jQuery('#sidebar').height();
+            jQuery('#main-area').css('min-height', sidebarHeight + 50);
+        }
+
+        jQuery('.navbar-nav a, .scrollto').on('click touchstart', function (event) {
+            event.preventDefault();
+            var target = jQuery(this).attr('href');
+            if (target.indexOf('login') > -1) {
+                window.location.replace(window.location.origin + target);
+                return false;
+            }
+            if (document.location.href.indexOf('/page') > -1) {
+                window.location.replace(window.location.origin + target);
+                return false;
+            }
+
+            if (target.length > -1) {
+                //calculate destination place
+                var dest = 0;
+                if (jQuery(target).offset().top > jQuery(document).height() - jQuery(window).height()) {
+                    dest = jQuery(document).height() - jQuery(window).height();
+                } else {
+                    dest = jQuery(target).offset().top;
+                }
+                //go to destination
+                jQuery('html, body').animate({
+                    scrollTop: dest
+                }, 2000, 'swing');
+                window.location.replace(window.location.origin + target);
+            }
+        });
+
+        jQuery(window).load(function (e) {
+            if (elem) {
+                //calculate destination place
+                var dest = 0;
+                if (jQuery(elem).offset().top > jQuery(document).height() - jQuery(window).height()) {
+                    dest = jQuery(document).height() - jQuery(window).height();
+                } else {
+                    dest = jQuery(elem).offset().top;
+                }
+                //go to destination
+                jQuery('html, body').animate({
+                    scrollTop: dest
+                }, 2000, 'swing');
+                window.location.replace(window.location.origin + elem);
+            }
+        });
+
+        // $('#main-area').on('click', function() {
+        //   var $ = Aloha.jQuery;
+        //   $('.editable').aloha();
+        // });
+
+        // var spinner = $('.spinner-input').spinner();
+        // spinner.spinner('value', 0);
+
+        if (jQuery('#sidebar').length) {
+            changeSidebarHeight();
+            jQuery(window).resize(function () {
+                changeSidebarHeight();
+            });
+        }
+
+        jQuery('.continue-shopping').on('click touchstart', function () {
+            jQuery('#cart-checkout-modal').modal('hide');
+        });
+
+        var cart = jQuery('.shopping-cart, .cart-footer');
+        var billing = jQuery('.billing-shipping, .billing-footer');
+        var payment = jQuery('.payment, .payment-footer');
+        var modalTitle = jQuery('#cart-checkout-modal .modal-title');
+
+        jQuery('.btn-checkout').on('click touchstart', function () {
+            modalTitle.html('<i class="fa fa-credit-card"></i> Checkout');
+            cart.addClass('hidden fadeOut');
+            billing.removeClass('hidden fadeIn');
+        });
+
+        jQuery('.back-to-shopping-cart').on('click touchstart', function () {
+            modalTitle.html('<i class="fa fa-shopping-cart"></i> My Cart');
+            cart.removeClass('hidden fadeIn');
+            billing.addClass('hidden fadeOut');
+        });
+
+        jQuery('.back-to-billing-shipping').on('click touchstart', function () {
+            billing.removeClass('hidden fadeIn');
+            payment.addClass('hidden fadeOut');
+        });
+
+        jQuery('.btn-payment').on('click touchstart', function () {
+            payment.removeClass('hidden fadeIn');
+            billing.addClass('hidden fadeOut');
+        });
+
+        jQuery('.btn-confirm-payment').on('click touchstart', function () {
+            modalTitle.html('<i class="fa fa-check-circle-o"></i> Order Placed!');
+            jQuery('.thank-you').removeClass('hidden fadeIn');
+            payment.addClass('hidden fadeOut');
+        });
+
+        jQuery('.checkbox').on('change', function () {
+            var shipTab = jQuery('.shipping-tab');
+            if (shipTab.hasClass('hidden')) {
+                shipTab.removeClass('hidden');
+            } else {
+                shipTab.addClass('hidden');
+            }
+        });
+
+        jQuery('.parallax').parallax({
+            scroll_factor: 0.5
+        });
+
+        if (window.top != window.self) {
+            jQuery('.feature-single-0, .feature-single-1, .feature-single-2, div[data-class=profilepic], .btn-outline').css('opacity', 1);
+        }
+
+        if (window.top === window.self) {
+            jQuery(function () {
+                jQuery(".feature-single-0").waypoint(function (direction) {
+                    jQuery(this).addClass("animated fadeIn");
+                }, {
+                    offset: jQuery.waypoints('viewportHeight') - 0,
+                    triggerOnce: true
+                });
+
+                jQuery(".feature-single-1").waypoint(function (direction) {
+                    jQuery(this).addClass("animated fadeIn");
+                }, {
+                    offset: jQuery.waypoints('viewportHeight') - 100,
+                    triggerOnce: true
+                });
+
+                jQuery(".feature-single-2").waypoint(function (direction) {
+                    jQuery(this).addClass("animated fadeIn");
+                }, {
+                    offset: jQuery.waypoints('viewportHeight') - 200,
+                    triggerOnce: true
+                });
+
+                jQuery(".feature-single-3").waypoint(function (direction) {
+                    jQuery(this).addClass("animated fadeIn");
+                }, {
+                    offset: jQuery.waypoints('viewportHeight') - 300,
+                    triggerOnce: true
+                });
+
+                jQuery("div[data-class=profilepic]").waypoint(function (direction) {
+                    jQuery(this).addClass("animated fadeIn");
+                }, {
+                    offset: jQuery.waypoints('viewportHeight') - 100,
+                    triggerOnce: true
+                });
+
+                // $(".btn-outline").waypoint(function (direction) {
+                //     $(this).addClass("animated fadeIn");
+                // }, { offset: $.waypoints('viewportHeight') - 100,
+                //     triggerOnce: true});
+            });
+        }
+
+        jQuery('#myCarousel .item:first-child').addClass('active');
+
+        jQuery('#myCarousel').carousel({
+            interval: 4000
+        });
+
+        jQuery('.item').on('hover', '.gallery-image', function () {
+            var overlay = jQuery(this).parent().next('.overlay-gallery-image');
+            if (overlay.hasClass('hidden')) {
+                overlay.removeClass('hidden');
+            } else {
+                overlay.addClass('hidden');
+            }
+        });
+
+        jQuery('.item').on('hover', '.overlay-gallery-image', function () {
+            var overlay = jQuery(this);
+            if (overlay.hasClass('hidden')) {
+                overlay.removeClass('hidden');
+            } else {
+                overlay.addClass('hidden');
+            }
+        });
+
+        jQuery('#content-area .goback').on('click touchstart', function () {
+            console.log('go back');
+            window.history.back();
+        });
+
+        jQuery('.carousel .item').each(function () {
+            var next = jQuery(this).next();
+            if (!next.length) {
+                next = jQuery(this).siblings(':first');
+            }
+            next.children(':first-child').clone().appendTo(jQuery(this));
+
+            if (next.next().length > 0) {
+                next.next().children(':first-child').clone().appendTo(jQuery(this));
+            } else {
+                jQuery(this).siblings(':first').children(':first-child').clone().appendTo(jQuery(this));
+            }
+        });
+
+        jQuery('#form-subscribe').click(function () {
+            jQuery('#InputEmail').val(jQuery('#emailSub').val());
+        });
+
+        jQuery('.blog-teaser .single-blog').on('click', function () {
+            var href = jQuery(this).data('url');
+            console.log('href: ' + href);
+            window.location.replace(window.location.origin + '/page/blog/' + href)
+        });
+
+        jQuery('#subscribelist').click(function () {
+
+            jQuery.ajax({
+                type: "POST",
+                url: '/api/1.0/contact/signupnews',
+                data: _.object(_.map(jQuery('#form1').serializeArray(), _.values)),
+                success: function (data, textStatus) {
+                    console.log("Called success")
+                    jQuery("#error-msg").removeClass("hidden").html("sucessfully subscribed");
+                    setTimeout(function () {
+                        jQuery("#error-msg").addClass('hidden');
+                    }, 2500);
+
+
+                },
+                error: function (qXHR, textStatus, errorThrown) {
+                    console.log("called Error")
+
+                    var response = JSON.parse(qXHR.responseText);
+
+                    jQuery("#error-msg").removeClass("hidden").html(response.status);
+                    setTimeout(function () {
+                        jQuery("#error-msg").addClass('hidden');
+                    }, 2500);
+
+
+                }
+
+            });
+
+        })
+
+
+        function append_style() {
+            jQuery("head").append('<STYLE type="text/css"> \
+                          .dispersed #center-circle { left: ' + center + 'px;top: 293px; margin: 0;} \
+                          .dispersed #circle-1 { left: ' + center_1 + 'px; top: 195px; margin: 0;} \
+                          .dispersed #circle-2 { left: ' + center_2 + 'px; top: 195px; margin: 0;} \
+                          .dispersed #circle-3 { left: ' + center_3 + 'px; top: 400px; margin: 0;} \
+                          .dispersed #circle-4 { left: ' + center_4 + 'px; top: 400px; margin: 0;} \
+                          </STYLE>')
+        }
+    })
+})(jQuery);
+
+jQuery("#category_link").on('click', function (e) {
+
+    if (parent.jQuery('#edit-website-wrapper').length)
+        e.preventDefault();
+
+    parent.jQuery('#edit-website-wrapper').trigger("categoryedit", {
+        target: e.target,
+        input: jQuery("#category_input")[0]
+    });
+});
+
+jQuery("#category_input")
+        .hide()
+        .on('blur', function (e) {
+            var link = jQuery("#category_link");
+            var input = jQuery(this);
+            var href = link.attr("href");
+
+            input.hide();
+            link.show()
+                    .html(input.val())
+                    .attr('href', href.substring(0, href.lastIndexOf("/")) + "/" + (input.val()));
+
+
+            parent.jQuery('#edit-website-wrapper').trigger("blogedit", {
+                value: jQuery("#category_input").val(),
+                target: e.target
+            });
+        });
+
+jQuery(document).ready(function () {
+    parent.jQuery('#edit-website-wrapper').trigger("tagseditinit", {
+        a: jQuery("#tags_link > li > a"),
+        input: jQuery("#tags_input")[0]
+    });
+
+    jQuery("#tags_link").on('click', function (e) {
+
+        if (parent.jQuery('#edit-website-wrapper').length) {
+            e.preventDefault();
+        }
+
+        parent.jQuery('#edit-website-wrapper').trigger("tagseditstart", {
+            target: e.target,
+            link: jQuery("#tags_link")[0],
+            a: jQuery("#tags_link > li > a"),
+            input: jQuery("#tags_input")[0]
+        });
+    });
+});
+</script>-->
+</div>

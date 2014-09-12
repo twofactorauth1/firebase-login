@@ -1,0 +1,152 @@
+<!doctype html>
+<html class="no-js" ng-app="mainApp" ng-controller="MainCtrl as main">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{seo.description}}">
+    <meta name="keywords" content="{{seo.keywords}}">
+    <meta name="author" content="">
+    <base href="/">
+
+    <link data-ng-if="layout.website.settings.favicon" rel="shortcut icon" href="{{layout.website.settings.favicon}}">
+    <link data-ng-if="!layout.website.settings.favicon" rel="shortcut icon" href="https://s3.amazonaws.com/indigenous-themes/assets/icons/favicon.ico"/>
+
+
+    <link rel="stylesheet" href="/css/style.default.css">
+    <link rel="stylesheet" href="/js/libs_misc/jquery.tagsinput/jquery.tagsinput.css" />
+
+    <title>{{layout.website.title}}</title>
+
+    <script type="text/javascript">
+
+        window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
+            return function () {
+                var a = Array.prototype.slice.call(arguments);
+                return a.unshift(t), window.analytics.push(a), window.analytics
+            }
+        };
+        for (var i = 0; i < window.analytics.methods.length; i++) {
+            var key = window.analytics.methods[i];
+            window.analytics[key] = window.analytics.factory(key)
+        }
+        window.analytics.load = function (t) {
+            if (!document.getElementById("analytics-js")) {
+                var a = document.createElement("script");
+                a.type = "text/javascript", a.id = "analytics-js", a.async = !0, a.src = ("https:" === document.location.protocol ? "https://" : "http://") + "cdn.segment.io/analytics.js/v1/" + t + "/analytics.min.js";
+                var n = document.getElementsByTagName("script")[0];
+                n.parentNode.insertBefore(a, n)
+            }
+        }, window.analytics.SNIPPET_VERSION = "2.0.9",
+                window.analytics.load('xot1dd3rul');//TODO: this should be generated server side.
+        window.analytics.page();
+    </script>
+
+</head>
+<body class="theme-main navbar-v{{layout.website.nav_version}}" ng-controller="LayoutCtrl as layout">
+
+<div id="fb-root"></div>
+<!--<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=522744787823977";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>-->
+
+<div id="header">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand editable" href="{{layout.account.accountUrl}}" data-name="{{layout.account.company.name}}">
+                    <span class="logo-1"> <img src="{{layout.account.business.logo}}" scale="0"> </span>
+                </a>
+
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                    <li data-ng-repeat="link in mainMenu.links track by $index">
+                        <a  data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" >{{link.label || link.url}}</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+</div>
+
+<div data-ng-view></div>
+
+<div id="footer">
+    <div class="footer-after section">
+        <div class="row">
+            <p class="col-sm-8 copyright">Copyright © 2014.  All Rights reserved.</p>
+            <div class="clear mb15 visible-xs"></div>
+            <p class="col-sm-4 powered-by"><a href="//www.indigenous.io " rel="nofollow">Powered by  Indigenous</a>
+                <img class="footer-logo" src="/assets/images/footer-logo.png">
+            </p>
+        </div>
+    </div>
+</div>
+
+    <!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!-- build:js(.) scripts/oldieshim.js -->
+<!--[if lt IE 9]>
+<script src="../js/libs/es5-shim/es5-shim.js"></script>
+<script src="../js/libs/json3/lib/json3.min.js"></script>
+<![endif]-->
+<!-- endbuild -->
+
+
+
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="../js/libs/jquery/dist/jquery.js"></script>
+<script src="../js/libs/bootstrap/dist/js/bootstrap.js"></script>
+<script src="../js/libs/angular/angular.js"></script>
+<script src="../js/libs/json3/lib/json3.js"></script>
+<script src="../js/libs/angular-resource/angular-resource.js"></script>
+<script src="../js/libs/angular-cookies/angular-cookies.js"></script>
+<script src="../js/libs/angular-sanitize/angular-sanitize.js"></script>
+<script src="../js/libs/angular-animate/angular-animate.js"></script>
+<script src="../js/libs/angular-touch/angular-touch.js"></script>
+<script src="../js/libs/angular-route/angular-route.js"></script>
+<script src="../js/libs/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="../js/libs/jquery-waypoints/waypoints.js"></script>
+<script src="../js/libs/angular-parallax/scripts/angular-parallax.js"></script>
+<script src="../js/libs/moment/moment.js"></script>
+<script src="../js/libs/angular-moment/angular-moment.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<script src="scripts/app.js"></script>
+<script src="scripts/services/accountService.js"></script>
+<script src="scripts/services/websiteService.js"></script>
+<script src="scripts/services/themeService.js"></script>
+<script src="scripts/services/pagesService.js"></script>
+<script src="scripts/services/postsService.js"></script>
+<script src="scripts/filters/CreateUrlFilter.js"></script>
+<script src="scripts/filters/generateURLforLinks.js"></script>
+<script src="scripts/filters/getByProperty.js"></script>
+<script src="scripts/controllers/mainCtrl.js"></script>
+<script src="scripts/controllers/blogCtrl.js"></script>
+<script src="scripts/controllers/layoutCtrl.js"></script>
+<script src="scripts/directives/scrollTo.js"></script>
+<script src="../js/scripts/config.js"></script>
+<!-- endbuild -->
+</body>
+</html>
