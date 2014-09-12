@@ -17,7 +17,8 @@ var mainApp = angular
         'ngSanitize',
         'ngTouch',
         'angular-parallax',
-        'config'
+        'config',
+        'angularMoment'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         // if(window.history && window.history.pushState){
