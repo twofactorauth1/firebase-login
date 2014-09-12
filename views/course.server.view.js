@@ -30,32 +30,34 @@ _.extend(view.prototype, BaseView.prototype, {
         };
 
         function renderCourse(course, isLoggedInAndSubscribed) {
-            data.title = course.title;
+            data.title = course.get("title");
             data.course = JSON.stringify(course);
             data.isLoggedInAndSubscribed = isLoggedInAndSubscribed;
             self.resp.render('courses/course', data);
+            self.cleanUp();
+            data = self = null;
         }
 
         var self = this;
         courseDao.findCourseBySubdomain(courseSubdomain, this.userId(), function (err, course) {
             if (!err && course != null) {
-                data.course = JSON.stringify(course);
                 data = self.baseData(data);
-
-                if (self.user != null) {
-                    subscriberDao.find({courseId: course._id, email: self.user.email}, function (error, docs) {
-                        if (error || !docs || !docs.length > 0) {
-                            renderCourse(course, false);
-                        } else {
-                            renderCourse(course, true);
+                var user = self.req.user;
+                if (user != null) {
+                    subscriberDao.findOne({courseId: course.id(), email: user.get("email")},
+                        function (error, subscriber) {
+                            if (error || !subscriber) {
+                                renderCourse(course, false);
+                            } else {
+                                renderCourse(course, true);
+                            }
                         }
-                    })
+                    )
                 } else {
                     renderCourse(course, false);
                 }
-                self.cleanUp();
-                data = self = null;
-            } else {
+            }
+            else {
                 self.resp.redirect("/");
             }
         });

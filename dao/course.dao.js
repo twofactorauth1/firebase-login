@@ -218,7 +218,7 @@ var dao = {
             this.findOne(query, function (err, course) {
                 if (!err && course) {
                     var videos = course.get("videos");
-                    if (course.userId != curUserId) {
+                    if (course.get("userId") != curUserId) {
                         _.forEach(videos, clearVideoFieldsForUnauthorizedUser);
                     }
                 }
