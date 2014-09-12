@@ -66,6 +66,7 @@
     "angular-animate": "1.2.16",
     "angular-touch": "1.2.16",
     "angular-ui-router": "~0.2.10",
+    "angular-moment": "~0.8.2",
     "angular-parallax": "*",
     "angular-moment": "~0.8.2",
       "gridster": "~0.5.5"
