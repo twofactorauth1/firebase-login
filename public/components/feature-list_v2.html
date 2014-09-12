@@ -27,9 +27,9 @@
                 </div>
                 <div class="clearfix mb15"></div>
                 <div ng-repeat="feature in component.features track by $index">
-                    <div class="col-sm-4 feature">
+                    <div class="col-sm-3 feature">
                         <div class="feature-single feature-single-0">
-                            <span class="feature-icon fa fa-users"></span>
+                            <span class="feature-icon {{feature['feature-icon']}}"></span>
 
                             <h3 class="feature-title">
                                 <div class="editable" data-class="feature-title">

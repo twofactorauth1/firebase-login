@@ -44,7 +44,7 @@
     </script>
 
 </head>
-<body class="theme-main" ng-controller="LayoutCtrl as layout">
+<body class="theme-main navbar-v{{layout.website.nav_version}}" ng-controller="LayoutCtrl as layout">
 
 <div id="fb-root"></div>
 <!--<script>(function(d, s, id) {
@@ -56,7 +56,7 @@
 }(document, 'script', 'facebook-jssdk'));</script>-->
 
 <div id="header">
-    <nav class="navbar navbar-v1 navbar-default" role="navigation">
+    <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -68,7 +68,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand editable" href="{{layout.account.accountUrl}}" data-name="{{layout.account.company.name}}">
-                    <span class="logo-1"> <img src="/assets/images/indimain/logo.png" scale="0"> </span>
+                    <span class="logo-1"> <img src="{{layout.account.business.logo}}" scale="0"> </span>
                 </a>
 
             </div>
