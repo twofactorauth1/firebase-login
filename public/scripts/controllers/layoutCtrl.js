@@ -7,7 +7,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.$routeParams = $routeParams;
 
         var account, theme, website, pages, blogposts, route, postname, that = this;
-        route = $location.$$path.replace('/', '');
+        route = $location.$$path;
         console.log('i m layout controller', route);
         //var config = angular.module('config');
         console.dir(ENV);
@@ -40,6 +40,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 if (route.indexOf("blog/") > -1) {
                     route = 'single-post';
                 }
+                route = route.replace('/', '');
                 console.log('Route: '+route);
                 that.pages = data[route];
                 console.log('Controller:LayoutCtrl -> Method:pageService Success: ', data[route]);
@@ -63,12 +64,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             } else {
                 that.blogposts = data;
                 console.log('Post Handle Name: ', $route.current.params);
-                //find post_url in data
-                //the single post
 
                 console.log('Controller:LayoutCtrl -> Method:postsService Success: ', data);
-
-                //do something
             }
         });
 

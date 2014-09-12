@@ -20,9 +20,9 @@ var mainApp = angular
         'config'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-        if(window.history && window.history.pushState){
-            $locationProvider.html5Mode(true);
-          }
+        // if(window.history && window.history.pushState){
+        //     $locationProvider.html5Mode(true);
+        //   }
         $routeProvider
             .when('/', {
                 templateUrl: '../views/main.html',
@@ -31,9 +31,14 @@ var mainApp = angular
             .when('/blog', {
                 templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
-            }).when('/blog/:postname', {
+            })
+            .when('/blog/:postname', {
+                templateUrl: '../views/blog.html',
+                controller: 'BlogCtrl as blog'
+            })
+            .when('/blog/tag/:tagname', {
                 templateUrl: '../views/main.html',
-                controller: 'LayoutCtrl as layout'
+                controller: 'BlogCtrl as blog'
             })
             .otherwise({ redirectTo: '/' });
     }])
