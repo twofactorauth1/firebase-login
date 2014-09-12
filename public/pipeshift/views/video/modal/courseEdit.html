@@ -56,6 +56,7 @@
         Subscribers({{subscribers.length}}):
         <div class="clearfix">
             Subscribers({{subscribers.length}}):
+            <button class="pull-right" type="button" ng-click="showSubscribersCsvUploadModal()">Upload</button>
             <button class="pull-right" type="button" ng-csv="subscribers" filename="test.csv">Export</button>
         </div>
         <div class="well subscribers-list">

@@ -8,6 +8,9 @@
 var baseApi = require('../base.api');
 var courseDao = require('../../dao/course.dao');
 var subscriberDao = require('../../dao/subscriber.dao');
+var csv = require("fast-csv");
+var campaignManager = require('../../campaign/campaign_manager');
+
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -36,6 +39,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('free/:subdomain'), this.isAuthApi, this.isSubdomainFree.bind(this));
         app.get(this.url(':id/subscribers'), this.isAuthApi, this.getSubscribersList.bind(this));
         app.get(this.url(':id/subscribers/video/:videoId'), this.isAuthApi, this.getVideoForCurrentUser.bind(this));
+        app.post(this.url(':id/subscribers/upload'), this.isAuthApi, this.subscribeEmailsFromFile.bind(this));
     },
 
     listCourses: function (req, resp) {
@@ -261,7 +265,51 @@ _.extend(api.prototype, baseApi.prototype, {
         } else {
             return self.wrapError(resp, 500, "Error: Course id should be provided");
         }
+    },
+    subscribeEmailsFromFile: function (req, resp) {
+        var courseId = req.params.id;
+        req.pipe(req.busboy);
+        var emailsToSubscribe = [];
+        var subscribed = 0;
+        var subscribersResultCounter = 0;
+        var self = this;
+        req.busboy.on('file', function (fieldname, file, filename) {
+            console.log("Uploading: " + filename);
+            csv.fromStream(file)
+                .on("data", function (data) {
+                    if (data.length > 0) {
+                        var email = data[0];
+                        emailsToSubscribe.push(email);
+                    }
+                })
+                .on("end", function () {
+                    var emailsCount = emailsToSubscribe.length;
+                    for (var i = 0; i < emailsCount; i++) {
+                        var email = emailsToSubscribe[i];
+                        courseDao.findById(courseId, function (error, course) {
+                            if (error || !course) {
+                                self.wrapError(resp, 500, error, "Error finding course");
+                            } else {
+                                campaignManager.subscribeToVARCourse(email, course, 0, self.userId, function (result) {
+                                    subscribersResultCounter++;
+                                    if (!result.success) {
+                                        console.log(result.error);
+                                    } else {
+                                        subscribed++;
+                                    }
+                                    if (subscribersResultCounter == emailsCount) {
+                                        var msg = subscribed + " email(s) were subscribed to course(out of " + emailsCount + ")";
+                                        console.log(msg);
+                                        return  self.sendResult(resp, msg);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+        });
     }
+
 
 });
 function isUserPaidForCourse(user, course) {

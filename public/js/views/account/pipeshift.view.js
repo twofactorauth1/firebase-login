@@ -27,6 +27,7 @@ define([
     "/pipeshift/js/modules/video/controller/SearchOptionsModalController.js",
     "/pipeshift/js/modules/video/controller/VideoViewModalController.js",
     "/pipeshift/js/modules/video/controller/AddCourseModalController.js",
+    "/pipeshift/js/modules/video/controller/SubscribersCsvUploadController.js",
     "/pipeshift/js/modules/video/directive/whenUiScrolled.js",
     "/pipeshift/js/modules/video/directive/whenScrolled.js",
     "/pipeshift/js/modules/video/directive/videoDrop.js",

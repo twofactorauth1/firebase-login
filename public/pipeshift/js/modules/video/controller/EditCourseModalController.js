@@ -14,10 +14,13 @@ angular.module('app.modules.video').controller('EditCourseModalController', ['$s
     $scope.course = $.extend({}, course);
     $scope.templates = templates;
     $scope.subscribers = [];
-    Subscriber.query({id: course._id}, function (response) {
-        $scope.subscribers = response;
-    });
+    function refreshSubscribers() {
+        Subscriber.query({id: course._id}, function (response) {
+            $scope.subscribers = response.result;
+        });
+    }
 
+    refreshSubscribers();
     $scope.close = function () {
         $modalInstance.dismiss();
     }
@@ -63,5 +66,21 @@ angular.module('app.modules.video').controller('EditCourseModalController', ['$s
             }
         }, 250)
     }
+    $scope.showSubscribersCsvUploadModal = function () {
+        var modalInstance = $modal.open({
+            templateUrl: '/pipeshift/views/video/modal/subsCsvUpload.html',
+            controller: 'SubscribersCsvUploadController',
+            resolve: {
+                course: function () {
+                    return $scope.course;
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            refreshSubscribers();
+        }, function () {
+        });
+    }
+
 }])
 ;

@@ -19,7 +19,7 @@ var app = angular.module('app', ['ngRoute',
     'app.constants',
     'ui.bootstrap',
     'xeditable',
-    'ngCsv',
+    'ngCsv', 'angularFileUpload',
     'revolunet.stepper', 'fiestah.money']);
 
 app.run(['$rootScope', '$location', 'security', 'editableOptions', function ($rootScope, $location, security, editableOptions) {

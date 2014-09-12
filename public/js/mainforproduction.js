@@ -55,6 +55,7 @@ require.config({
         angularMoney: "libs/angular-money-directive/angular-money-directive",
         xEditable: "libs/angular-xeditable/dist/js/xeditable",
         ngCsv: "libs/ng-csv/build/ng-csv.min",
+        ngFileUpload: "libs/angular-file-upload/angular-file-upload",
 
         //UI SPECIFIC
         toggles: 'libs_misc/toggles.min',
@@ -144,6 +145,7 @@ require.config({
         angularMoney: {deps: ['angular']},
         xEditable: {deps: ['angular']},
         ngCsv: {deps: ['angular']},
+        ngFileUpload: {deps: ['angular']},
 
         waypoints: {
             deps: ['jquery']
@@ -173,6 +175,7 @@ require.config({
                 'angularMoney',
                 'xEditable',
                 'ngCsv',
+                'ngFileUpload',
 
                 //UI SPECIFIC
                 'toggles',
