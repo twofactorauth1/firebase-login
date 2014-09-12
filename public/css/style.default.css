@@ -23297,6 +23297,73 @@ div[data-class="blog"] .single-blog {
   box-shadow: 3px 0px 7px 0px rgba(50, 50, 50, 0.15);
   padding: 30px;
 }
+.pricing-tables-v1 .container {
+  padding-top: 40px;
+}
+.pricing-tables-v1 #details {
+  font-family: "Quicksand", sans-serif;
+  font-size: 60px;
+}
+.pricing-tables-v1 #home-box > h2 {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 400;
+  line-height: 1.1;
+  color: #75b1ae;
+}
+.pricing-tables-v1 .price {
+  font-size: 25px;
+  float: left;
+}
+.pricing-tables-v1 .pricing_header {
+  background: #FAFAFA;
+  box-shadow: 0 0 2px #c2c2c2;
+}
+.pricing-tables-v1 .pricing_header h1,
+.pricing-tables-v1 .pricing_header h3,
+.pricing-tables-v1 .pricing_header p {
+  text-align: center;
+  opacity: .95;
+  padding-top: 32px;
+  padding-bottom: 20px;
+  text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
+  font-weight: normal;
+}
+.pricing-tables-v1 .pricing_header h1,
+.pricing-tables-v1 .pricing_header h3 {
+  color: black;
+}
+.pricing-tables-v1 .pricing_header h1 {
+  font-size: 28px;
+  margin-bottom: 0px;
+  padding-bottom: 6px;
+}
+.pricing-tables-v1 .pricing_header h3 {
+  font-size: 19px;
+  margin-top: 0px;
+  padding: 0px;
+}
+.pricing-tables-v1 .pricing_header p {
+  padding-top: 0px;
+  max-width: 655px;
+  margin: 0 auto;
+}
+.pricing-tables-v1 .list-group-item:first-child {
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+}
+.pricing-tables-v1 .btn {
+  float: right;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 500;
+}
+.pricing-tables-v1 .off {
+  text-decoration: line-through;
+  color: #565656;
+}
+.pricing-tables-v1 .space {
+  height: 2px;
+  background-color: #75b1ae;
+}
 hr {
   margin-top: 20px;
   margin-bottom: 20px;

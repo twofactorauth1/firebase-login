@@ -19,7 +19,9 @@
                 <div ng-repeat="feature in component.features track by $index">
                     <div class="col-sm-4 feature">
                         <div class="feature-single feature-single-0">
-                            <span class="feature-icon {{feature['feature-icon']}}"></span>
+                            <span ng-show="feature['feature-icon']" class="feature-icon {{feature['feature-icon']}}"></span>
+
+                            <img ng-show="feature['feature-image']" src="{{feature['feature-image']}}"/>
 
                             <h3 class="feature-title">
                                 <div class="editable" data-class="feature-title">
@@ -31,7 +33,7 @@
                                    <span ng-bind-html="feature['feature-subtitle']"></span>
                                 </div>
                             </div>
-                            <div>
+                            <div ng-show="feature.btn.url">
                                 <a href="{{feature.btn.url}}"
                                    class="btn btn-primary feature-btn">{{feature.btn.text}}</a>
                             </div>
