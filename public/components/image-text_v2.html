@@ -1,5 +1,5 @@
-<div class="component image-text-v2" data-class="image-text" data-id="{{component._id}}">
-    <div class="component-body" style="background:{{component.bg.color}};">
+<div class="component image-text-v2" data-class="image-text" data-id="{{component._id}}" ng-style="background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};">
+    <div class="component-body" id="{{component.anchor}}" ng-style="background:{{component.bg.color||primary_color}};color:{{component.txtcolor||text_primary}}">
         <div class="inner-page row">
             <h3 class="image-text-title">
                 <div class="editable" data-class="title">
