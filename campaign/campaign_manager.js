@@ -270,7 +270,7 @@ module.exports = {
                                 callback(err, null);
                             } else {
                                 var timezoneOffset = req.body.timezoneOffset;
-                                this._addSubscriber(toEmail, course, req.user, function (error) {
+                                this._addSubscriber(toEmail, course, req.user, timezoneOffset, function (error) {
                                     if (error) {
                                         return res.json({success: false, error: 'Error creating subscriber.'});
                                     } else {
@@ -603,10 +603,10 @@ module.exports = {
         return result;
     },
 
-    _addSubscriber: function (toEmail, course, user, callback) {
+    _addSubscriber: function (toEmail, course, user, timezoneOffset, callback) {
         var userId = (user == null) ? null : user._id;
         var userNowDateUtc = this._getNowDateUtc();
-        subscriberDao.createSubscriber({email: toEmail, courseId: course._id, subscribeDate: userNowDateUtc, userId: userId}, function (error, subscriber) {
+        subscriberDao.createSubscriber({email: toEmail, courseId: course._id, subscribeDate: userNowDateUtc, userId: userId, timezoneOffset: timezoneOffset}, function (error, subscriber) {
             if (error || !subscriber) {
                 return callback(error);
             } else {

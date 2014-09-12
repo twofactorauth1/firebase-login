@@ -90,7 +90,7 @@ html(data-ng-app="courseApp")
                 js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&appId=390601691078573&version=v2.0";
                 fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));
-            course-preview.clearfix.standalone-playlist(course="#{course}",min-height="minHeight",ng-controller="CourseController")
+            course-preview.clearfix.standalone-playlist(course="#{course}",is-logged-in-and-subscribed="#{isLoggedInAndSubscribed}",min-height="minHeight",ng-controller="CourseController")
             div#exit_intent_modal
                 div.underlay
                 div.modal

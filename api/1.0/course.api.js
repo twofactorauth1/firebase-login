@@ -35,6 +35,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //other
         app.get(this.url('free/:subdomain'), this.isAuthApi, this.isSubdomainFree.bind(this));
         app.get(this.url(':id/subscribers'), this.isAuthApi, this.getSubscribersList.bind(this));
+        app.get(this.url(':id/subscribers/video/:videoId'), this.isAuthApi, this.getVideoForCurrentUser.bind(this));
     },
 
     listCourses: function (req, resp) {
@@ -208,13 +209,14 @@ _.extend(api.prototype, baseApi.prototype, {
         if (!courseId) {
             return this.wrapError(resp, 400, null, "Invalid parameter for ID");
         }
+        var self = this;
         var userId = self.userId(req);
         courseDao.getCourseById(courseId, userId, function (err, course) {
             if (err || !course) {
-                return this.wrapError(resp, 500, null, err, "No course found");
+                return self.wrapError(resp, 500, null, err, "No course found");
             } else {
                 if (course.userId != userId) {
-                    return this.wrapError(resp, 403, null, "Not allowed", "Not allowed");
+                    return self.wrapError(resp, 403, null, "Not allowed", "Not allowed");
                 } else {
                     subscriberDao.listCourseSubscribers(courseId, function (err, docs) {
                         self.sendResultOrError(resp, err, docs, "Error while getting subscribers");
@@ -223,12 +225,74 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+    getVideoForCurrentUser: function (req, resp) {
+        var courseId = req.params.id;
+        var videoId = req.params.videoId;
+        var self = this;
+        if (courseId) {
+            courseDao.findById(courseId, function (error, course) {
+                    if (error || !course) {
+                        var msg = "Error getting course: " + (error != null ? error.message : "");
+                        return self.wrapError(resp, 500, msg, msg, msg);
+                    } else {
+                        subscriberDao.find({courseId: courseId, email: self.user.email}, function (error, docs) {
+                            if (error) {
+                                return self.wrapError(resp, 500, error);
+                            } else if (docs == null || docs.length == 0) {
+                                return self.wrapError(resp, 500, "Error: not subscribed.");
+                            } else {
+                                var subscriber = docs[0];
+                                var video = getVideoById(course, videoId);
+                                if (video == null) {
+                                    return self.wrapError(resp, 500, "Error: video not found.");
+                                } else {
+                                    if (!checkIfVideoAlreadySent(subscriber, course, video)) {
+                                        delete video.videoId;
+                                        delete video.videoUrl;
+                                    }
+                                    return self.sendResultOrError(resp, null, video);
+                                }
+                            }
+                        });
+                    }
+                }
+            );
+        } else {
+            return self.wrapError(resp, 500, "Error: Course id should be provided");
+        }
     }
 
 });
 function isUserPaidForCourse(user, course) {
     //todo: implement in dao
     return true;
+}
+
+function getVideoById(course, videoId) {
+    var result = null;
+    for (var i = 0; i < course.videos.length; i++) {
+        var video = course.videos[i];
+        if (video._id == videoId) {
+            result = video;
+            break;
+        }
+    }
+    return result;
+}
+
+function checkIfVideoAlreadySent(subscriber, video) {
+    var subscribeDate = subscriber.subscribeDate;
+    var timezoneOffset = subscriber.timezoneOffset == null ? 0 : subscriber.timezoneOffset;
+    return checkIfDateAlreadyPassed(subscribeDate, video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
+}
+
+function checkIfDateAlreadyPassed(startDate, daysShift, hoursValue, minutesValue, timezoneOffset) {
+    var shiftedUtcDate = new Date(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate() + daysShift, startDate.getUTCHours(), startDate.getUTCMinutes(), startDate.getUTCSeconds());
+    shiftedUtcDate.setUTCHours(hoursValue);
+    shiftedUtcDate.setUTCMinutes(minutesValue + timezoneOffset);
+    shiftedUtcDate.setUTCSeconds(0);
+    return (new Date()).after(shiftedUtcDate);
 }
 
 module.exports = new api();

@@ -8,6 +8,7 @@
 var BaseView = require('./base.server.view');
 
 var courseDao = require('../dao/course.dao');
+var subscriberDao = require('../dao/subscriber.dao');
 var campaignManager = require('../campaign/campaign_manager')
 
 var view = function (req, resp, options) {
@@ -28,6 +29,13 @@ _.extend(view.prototype, BaseView.prototype, {
             includeFooter: false
         };
 
+        function renderCourse(course, isLoggedInAndSubscribed) {
+            data.title = course.title;
+            data.course = JSON.stringify(course);
+            data.isLoggedInAndSubscribed = isLoggedInAndSubscribed;
+            self.resp.render('courses/course', data);
+        }
+
         var self = this;
         courseDao.findCourseBySubdomain(courseSubdomain, this.userId(), function (err, course) {
             if (!err && course != null) {
@@ -37,6 +45,18 @@ _.extend(view.prototype, BaseView.prototype, {
                 self.resp.render('courses/course', data);
                 self.cleanUp();
                 data = self = null;
+                if (self.user != null) {
+                    subscriberDao.find({courseId: course._id, email: self.user.email}, function (error, docs) {
+                        if (error || !docs || !docs.length > 0) {
+                            renderCourse(course, false);
+                        } else {
+                            renderCourse(course, true);
+                        }
+                    })
+                } else {
+                    renderCourse(course, false);
+                }
+
             } else {
                 self.resp.redirect("/");
             }

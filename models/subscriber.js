@@ -16,6 +16,7 @@ var subscriber = $$.m.ModelBase.extend({
             email: null,
             courseId: null,
             subscribeDate: null,
+            timezoneOffset: null,
             userId: null
         };
     },
