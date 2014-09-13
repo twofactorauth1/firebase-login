@@ -44,7 +44,8 @@ module.exports = {
     BUCKETS: {
         CONTACT_PHOTOS: "indigenous-contact-photos",
         THEMES: "indigenous-themes",
-        ACCOUNT_WEBSITES: "indigenous-account-websites"
+        ACCOUNT_WEBSITES: "indigenous-account-websites",
+        ASSETS: 'indigenous-digital-assets'
     },
     "accessKeyId":AWS_ACCESS_KEY,
     "secretAccessKey":AWS_SECRET_ACCESS_KEY,
