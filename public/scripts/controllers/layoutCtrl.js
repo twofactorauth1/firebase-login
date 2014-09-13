@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams',
-    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter',
+    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter) {
         $scope.$route = $route;
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
@@ -52,7 +52,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:postsService Error: ' + err);
             } else {
-                that.blogposts = data;
+
+                if ($route.current.params.tagname) {
+                    console.log('Theres a tag name');
+                     var found = $filter('getByProperty')('post_tags', $route.current.params.tagname, data);
+                } else {
+
+                    that.blogposts = data;
+
+                }
             }
         });
 
