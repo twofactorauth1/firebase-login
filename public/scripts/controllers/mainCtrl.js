@@ -36,6 +36,12 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
                 website = data;
                 if(website.settings) {
                     $scope.primaryColor = website.settings.primary_color;
+                    $scope.primaryHighlight = website.settings.primary_highlight;
+                    $scope.secondaryColor = website.settings.secondary_color;
+                    $scope.navHover = website.settings.nav_hover;
+                    $scope.primaryTextColor = website.settings.primary_text_color;
+                    $scope.fontFamily = website.settings.font_family;
+                    $scope.fontFamily2 = website.settings.font_family_2;
                 } else {
                     console.warn('settings was null on the website object');
                 }

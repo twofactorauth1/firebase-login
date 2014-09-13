@@ -22183,6 +22183,10 @@ path {
   display: block;
   max-width: 200px;
 }
+.feature-list-v2 .parallax {
+  background-repeat: no-repeat;
+  background-position: fixed;
+}
 /********** Features list v3 **********/
 .feature-list-v3 .feature-list-title {
   text-align: center;
@@ -22383,6 +22387,9 @@ ul.nav {
   }
 }
 /********** Feature Block **********/
+.feature-block {
+  padding: 40px 0px;
+}
 .feature-block .feature-block-title {
   text-align: center;
 }
@@ -22491,7 +22498,6 @@ contenthover a {
 }
 /********** Meet Team **********/
 .meet-team {
-  padding: 0 20px;
   overflow: hidden;
 }
 .meet-team .title {
@@ -22584,6 +22590,7 @@ contenthover a {
   height: 100%;
   display: block;
   position: relative;
+  min-height: 400px;
 }
 .testimonials-v1 .testimonials .single-testimonial {
   border-bottom: 1px solid #eee;
@@ -22623,7 +22630,7 @@ contenthover a {
   height: 100%;
   display: block;
   position: relative;
-  max-height: 370px;
+  min-height: 370px;
 }
 .testimonials-v2 .carousel {
   height: 100%;
