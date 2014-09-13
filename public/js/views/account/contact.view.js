@@ -70,9 +70,11 @@ define([
                 }
             }
             _.bindAll(this, 'check_height');
+/*
 
-            $$.e.ContactSortingEvent.bind("sortContact", this.sort_contacts.bind(this));
-            $$.e.ContactSortingEvent.bind("displayContact", this.display_contacts.bind(this));
+            $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
+            $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
+*/
 
             $(window).scroll(this.check_height);
         },
@@ -83,8 +85,11 @@ define([
             Backbone.View.prototype.remove.call(this);
         },
 
-        render: function () {
-            $(window).bind('scroll', this.check_height);
+        render: function() {
+            $$.e.ContactSortingEvent.bind("sortContact",this.sort_contacts.bind(this));
+            $$.e.ContactSortingEvent.bind("displayContact",this.display_contacts.bind(this));
+
+            $(window).bind('scroll' ,this.check_height);
 
             var self = this
                 , p1 = this.getAccount()
@@ -185,6 +190,8 @@ define([
 
         renderContacts: function () {
             var self = this;
+            self.contacts.comparator=self.currentOrder;
+           console.log( self.contacts.sort());
             var data = {
                 account: self.account.toJSON(),
                 user: self.user.toJSON(),
@@ -374,12 +381,18 @@ define([
                 .done(function (result) {
                     if (result == true) {
                         ContactService.importContacts(socialType)
-                            .done(function () {
-                                alert("Contacts are importing!")
+                            .done(function() {
+                                //alert("Contacts are importing!")
+                                $('#import-contacts-modal').modal('show');
+
                             })
                             .fail(function (resp) {
                                 alert("There was an error importing contacts");
-                            });
+                            })
+                            .progress(function(resp){
+
+
+                            })
                     } else {
                         AuthenticationService.authenticateSocial(socialType, "import", socialType);
                     }
@@ -537,62 +550,12 @@ define([
             self.updateTooltips();
             cb && cb();
         },
-        sort_contact: function (e) {
-            var self = this, contacts, account;
-            var sortBy = e.target.value;
-            contacts = self.contacts.toJSON();
-            account = self.account.toJSON();
-            switch (sortBy) {
-                case 'a_to_z':
-                    if (account.displaysettings.display_type) {
-                        contacts = _.sortBy(contacts, function (value) {
-                            if (account.displaysettings.display_type === 'first')
-                                return value.first.charCodeAt(0);
-                            else
-                                return value.last.charCodeAt(0);
-                        });
-                    } else {
-                        contacts = _.sortBy(contacts, function (value) {
-                            return value.last.charCodeAt(0);
-                        });
-                    }
-                    break;
-                case 'z_to_a':
-                    if (account.displaysettings.display_type) {
-                        contacts = _.sortBy(contacts, function (value) {
-                            if (account.displaysettings.display_type === 'first')
-                                return value.first.charCodeAt(0) * -1;
-                            else
-                                return value.last.charCodeAt(0) * -1;
-                        });
-                    } else {
-                        contacts = _.sortBy(contacts, function (value) {
-                            return value.last.charCodeAt(0) * -1;
-                        });
-                    }
-                    break;
-                case 'first_last':
-                    contacts = _.sortBy(contacts, function (value) {
-                        return value.first.charCodeAt(0);
-                    });
-                    break;
-                case 'last_first':
-                    contacts = _.sortBy(contacts, function (value) {
-                        return value.last.charCodeAt(0);
-                    });
-                    break;
-                case 'date_added':
-                    contacts = _.sortBy(contacts, function (value) {
-                        return value.created.date;
-                    });
-                    break;
-                default:
-                    console.log('not selected');
-            }
-            self.reRenderContacts(contacts, function () {
-                $(".chosen-select").val(e.target.value).focus();
-            });
-            self.check_welcome();
+
+        onClose:function(){
+
+            $$.e.ContactSortingEvent.unbind("sortContact");
+            $$.e.ContactSortingEvent.unbind("displayContact");
+
         }
 
     });

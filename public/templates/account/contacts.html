@@ -123,7 +123,7 @@ CONTACTS MAIN VIEW
                 <label class="col-xs-12 control-label">Contacts List Display</label>
                 <div class="col-xs-12">
                     <select class=" form-control chosen-select sort-display" data-placeholder="Sort Contacts" name="one">
-                        <option value=""></option>
+                        <!--<option value=""></option>-->
                         {{#isSelected account.displaysettings.display_type 'first' 'First, Last'}}{{/isSelected}}
                         {{#isSelected account.displaysettings.display_type  'last' 'Last, First'}}{{/isSelected}}
                             <!--
@@ -139,9 +139,9 @@ CONTACTS MAIN VIEW
                 <div class="col-xs-12">
                     <select class=" form-control chosen-select sort-ordering" data-placeholder="Sort Contacts"  name="two">
 
-                        <option value="">{{../currentOrder}}</option>
-                        {{#isSelected account.settings.sort_type 'first' 'First, Last'}}{{/isSelected}}
-                        {{#isSelected account.settings.sort_type 'last' 'Last, First'}}{{/isSelected}}
+<!--                        <option value="">{{../currentOrder}}</option>-->
+                        {{#isSelected account.settings.sort_type 'first' 'First'}}{{/isSelected}}
+                        {{#isSelected account.settings.sort_type 'last' 'Last'}}{{/isSelected}}
                         {{#isSelected account.settings.sort_type 'created.date' 'Date Added'}}{{/isSelected}}
 
                         <!--
@@ -232,7 +232,7 @@ CONTACTS MAIN VIEW
 
                             <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
                             {{else}}
-                            <h4 class="person-name">{{last}} {{middle}} {{first}}</h4>
+                            <h4 class="person-name">{{last}}  {{first}} {{middle}}</h4>
                             {{/ifCond}}
 
 
@@ -1333,7 +1333,7 @@ CONTACTS EDIT VIEW
                 <div class="clearfix mb30"></div>
             </div>
 
-            <div class="row hidden" data-import-section="progress">
+            <div class="row " data-import-section="progress">
                 <h3 class="center">Importing <span class="num"></span> contacts from <span class="source"></span></h3>
                 <div class="clearfix mb30"></div>
                 <div class="progress progress-striped active">
