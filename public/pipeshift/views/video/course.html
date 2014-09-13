@@ -2,8 +2,9 @@
     <div class="timeline-image"
          tooltip="Day {{(video.scheduledDay) +', '+(getScheduledTime(video) | date:'hh:mm a')}}"
          tooltip-placement="right"
-         ng-click="$parent.$parent.$parent.showTimelineItemModal(video)"><span
-            class="glyphicon glyphicon-envelope"></span></div>
+         ng-click="$parent.$parent.$parent.showTimelineItemModal(video,$index,videos.length)">
+        <span class="glyphicon glyphicon-envelope"></span>
+    </div>
     <div class="playlist-video">
         <h4 class="video-title"><a ng-href="{{getLink(video, $index)}}"><span tooltip="{{video.videoTitle}}"
                                                                               tooltip-placement="bottom"
@@ -18,9 +19,11 @@
             <div class="duration">{{formatDuration(video.media$group.yt$duration.seconds)}}</div>
         </div>
     </div>
-
-    <!--<div class="duration">{{formatDuration(video.media$group.yt$duration.seconds)}}</div>-->
-    <!--<div class="rating">-->
-    <!--<div class="like" style="width: {{100 * (video.gd$rating.average / 5)}}%;"></div>-->
-    <!--</div>-->
+</div>
+<div class="timeline-element timeline-element-no-border col-md-12">
+    <div class="timeline-image ng-scope"><span class="glyphicon glyphicon-envelope"></span></div>
+    <div class="playlist-video drag-drop-target">
+        <h4 class="video-title"><span class="glyphicon glyphicon-move"></span>Drag & Drop here</a>
+        </h4>
+    </div>
 </div>

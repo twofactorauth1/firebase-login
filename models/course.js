@@ -20,6 +20,7 @@ var course = $$.m.ModelBase.extend({
             body: null,
             description: null,
             price: 0,
+            showExitIntentModal: false,
             /**
              * @videos
              * [{

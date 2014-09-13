@@ -8,6 +8,7 @@
 var BaseView = require('./base.server.view');
 
 var courseDao = require('../dao/course.dao');
+var subscriberDao = require('../dao/subscriber.dao');
 var campaignManager = require('../campaign/campaign_manager')
 
 var view = function (req, resp, options) {
@@ -28,16 +29,35 @@ _.extend(view.prototype, BaseView.prototype, {
             includeFooter: false
         };
 
+        function renderCourse(course, isLoggedInAndSubscribed) {
+            data.title = course.get("title");
+            data.course = JSON.stringify(course);
+            data.isLoggedInAndSubscribed = isLoggedInAndSubscribed;
+            self.resp.render('courses/course', data);
+            self.cleanUp();
+            data = self = null;
+        }
+
         var self = this;
         courseDao.findCourseBySubdomain(courseSubdomain, this.userId(), function (err, course) {
             if (!err && course != null) {
-                data.course = JSON.stringify(course);
                 data = self.baseData(data);
-
-                self.resp.render('courses/course', data);
-                self.cleanUp();
-                data = self = null;
-            } else {
+                var user = self.req.user;
+                if (user != null) {
+                    subscriberDao.findOne({courseId: course.id(), email: user.get("email")},
+                        function (error, subscriber) {
+                            if (error || !subscriber) {
+                                renderCourse(course, false);
+                            } else {
+                                renderCourse(course, true);
+                            }
+                        }
+                    )
+                } else {
+                    renderCourse(course, false);
+                }
+            }
+            else {
                 self.resp.redirect("/");
             }
         });
