@@ -26,14 +26,14 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         app.post(this.url(''), this.isAuthApi, this.createAsset.bind(this));
-        app.get(this.url('/:id'), this.isAuthApi, this.getAsset.bind(this));
+        app.get(this.url(':id'), this.isAuthApi, this.getAsset.bind(this));
         app.get(this.url(''), this.isAuthApi, this.listAssets.bind(this));
-        app.post(this.url('/:id'), this.isAuthApi, this.updateAsset.bind(this));
-        app.delete(this.url('/:id'), this.isAuthApi, this.deleteAsset.bind(this));
+        app.post(this.url(':id'), this.isAuthApi, this.updateAsset.bind(this));
+        app.delete(this.url(':id'), this.isAuthApi, this.deleteAsset.bind(this));
 
-        app.get(this.url('/type/:type'), this.isAuthApi, this.getAssetsByType.bind(this));
-        app.get(this.url('/tag/:tag'), this.isAuthApi, this.getAssetsByTag.bind(this));
-        app.get(this.url('/source/:source'), this.isAuthApi, this.getAssetsBySource.bind(this));
+        app.get(this.url('type/:type'), this.isAuthApi, this.getAssetsByType.bind(this));
+        app.get(this.url('tag/:tag'), this.isAuthApi, this.getAssetsByTag.bind(this));
+        app.get(this.url('source/:source'), this.isAuthApi, this.getAssetsBySource.bind(this));
     },
 
     //file must be uploaded using the 'file' input name
@@ -102,23 +102,76 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     updateAsset: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateAsset');
+        //TODO: check security.
+        var assetId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var asset = new $$.m.Asset(req.body);
 
+        assetManager.updateAsset(asset, function(err, value) {
+            self.log.debug('<< updateAsset');
+            self.sendResultOrError(res, err, value, "Error updating Asset");
+        });
     },
 
     deleteAsset: function(req, res) {
+        var self = this;
+        self.log.debug('>> deleteAsset');
 
+        //TODO: check security
+        var assetId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        assetManager.deleteAsset(assetId, function(err, value){
+            self.log.debug('<< deleteAsset');
+            self.sendResultOrError(res, err, value, "Error deleting Asset");
+        });
     },
 
     getAssetsByType: function(req, res) {
+        var self = this;
+        self.log.debug('getAssetsByType');
 
+        var accountId = parseInt(self.accountId(req));
+        var skip = req.query['skip'];
+        var limit = req.query['limit'];
+        var type = req.params.type;
+
+        assetManager.findByType(accountId, type, skip, limit, function(err, list){
+            self.log.debug('<< getAssetsByType');
+            self.sendResultOrError(res, err, list, "Error getting Assets by type");
+        });
     },
 
     getAssetsBySource: function(req, res) {
+        var self = this;
+        self.log.debug('getAssetsBySource');
 
+        var accountId = parseInt(self.accountId(req));
+        var skip = req.query['skip'];
+        var limit = req.query['limit'];
+        var source = req.params.source;
+
+        assetManager.findBySource(accountId, source, skip, limit, function(err, list){
+            self.log.debug('<< getAssetsBySource');
+            self.sendResultOrError(res, err, list, "Error getting Assets by source");
+        });
     },
 
     getAssetsByTag: function(req, res) {
+        var self = this;
+        self.log.debug('getAssetsByTag');
 
+        var accountId = parseInt(self.accountId(req));
+        var skip = req.query['skip'];
+        var limit = req.query['limit'];
+        var tag = req.params.tag;
+
+        assetManager.findByTag(accountId, tag, skip, limit, function(err, list){
+            self.log.debug('<< getAssetsByTag');
+            self.sendResultOrError(res, err, list, "Error getting Assets by tag");
+        });
     }
 });
 

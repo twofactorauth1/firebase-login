@@ -98,6 +98,99 @@ module.exports = {
                 fn(null, list);
             }
         });
+    },
+
+    updateAsset: function(asset, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> updateAsset');
+        assetDao.saveOrUpdate(asset, function(err, value){
+            if(err) {
+                self.log.error('Exception in updateAsset: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< updateAsset');
+                fn(null, value);
+            }
+        });
+    },
+
+    deleteAsset: function(assetId, fn) {
+        //TODO: delete from the source as well
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> deleteAsset');
+        assetDao.removeById(assetId, function(err, value){
+            if(err) {
+                self.log.error('Exception in deleteAsset: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< deleteAsset');
+                fn(null, value);
+            }
+        });
+    },
+
+    findByType: function(accountId, type, skip, limit, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> findByType');
+        var query = {
+            'accountId': accountId,
+            'mimeType': type
+        };
+        assetDao.findAllWithFieldsAndLimit(query, skip, limit, null, null, $$.m.Asset, function(err, list){
+            if(err) {
+                self.log.error('Exception in findByType: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< findByType');
+                fn(null, list);
+            }
+        });
+    },
+
+    findBySource: function(accountId, source, skip, limit, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> findBySource');
+        var query = {
+            'accountId': accountId,
+            'source': source
+        };
+        assetDao.findAllWithFieldsAndLimit(query, skip, limit, null, null, $$.m.Asset, function(err, list){
+            if(err) {
+                self.log.error('Exception in findBySource: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< findBySource');
+                fn(null, list);
+            }
+        });
+    },
+
+    findByTag: function(accountId, tag, skip, limit, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> findByTag');
+        var query = {
+            'accountId': accountId,
+            'tags': {$in: [tag]}
+        };
+        assetDao.findAllWithFieldsAndLimit(query, skip, limit, null, null, $$.m.Asset, function(err, list){
+            if(err) {
+                self.log.error('Exception in findByTag: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< findByTag');
+                fn(null, list);
+            }
+        });
     }
 
 };
