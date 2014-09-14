@@ -17,6 +17,14 @@ define(['app', 'stripe'], function (app) {
 			});
 		};
 		
+		this.getStripeCustomer = function (fn) {
+			var apiUrl = baseUrl + ['integrations', 'payments', 'customers'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+		
 		this.getUpcomingInvoice = function (fn) {
 			var apiUrl = baseUrl + ['integrations', 'payments', 'customers', $$.server.userId, 'upcomingInvoice'].join('/');
 			$http.get(apiUrl)
@@ -24,6 +32,7 @@ define(['app', 'stripe'], function (app) {
 				fn(data);
 			});
 		};
+		
 		
 		this.getAllInvoices = function (fn) {
 			var apiUrl = baseUrl + ['integrations', 'payments', 'invoices'].join('/');
@@ -43,6 +52,14 @@ define(['app', 'stripe'], function (app) {
 		
 		this.getListPlans = function (fn) {
 			var apiUrl = baseUrl + ['integrations', 'payments', 'plans'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+		
+		this.getListStripeSubscriptions = function (stripeId, fn) {
+			var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId , 'subscriptions'].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
