@@ -24,7 +24,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             if(err) {
                 console.log('BlogCtrl Error: ' + err);
             } else {
-                // if (route.indexOf('/blog/tag/') > -1) {
+                // if ($route.current.params.tagname) {
                 //      var found = $filter('getByProperty')('post_tags', $route.current.params.tagname, data);
                 // } else {
                     var found = $filter('getByProperty')('post_url', $route.current.params.postname, data);

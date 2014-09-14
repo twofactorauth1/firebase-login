@@ -15,11 +15,8 @@
     <link rel="stylesheet" href="/css/style.default.css">
     <link rel="stylesheet" href="/js/libs_misc/jquery.tagsinput/jquery.tagsinput.css" />
 
-    <title>{{layout.website.title}}</title>
-
+    <title ng-cloak>{{main.website.title}}</title>
     <script type="text/javascript">
-        var segmentKey = window.segmentIOWriteKey;
-
 
         window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
             return function () {
@@ -39,13 +36,32 @@
                 n.parentNode.insertBefore(a, n)
             }
         }, window.analytics.SNIPPET_VERSION = "2.0.9",
-                window.analytics.load(segmentKey);
+                window.analytics.load('xot1dd3rul');//TODO: this should be generated server side.
         window.analytics.page();
     </script>
 
-</head>
-<body class="theme-main navbar-v{{layout.website.nav_version}}" ng-controller="LayoutCtrl as layout">
+    <style type="text/css">
 
+        h1, h2, h3, h4, h5 { font-family: {{fontFamily}} sans-serif!important;}
+        body { font-family: {{fontFamily2}}, sans-serif!important; }
+
+        .navbar-collapse {
+            background: #fff;
+        }
+
+        .btn-primary {
+            background: {{primaryColor}};
+            border-bottom: 4px solid {{secondaryColor}};
+        }
+
+        .navbar-v2 #header .navbar ul.navbar-nav li:hover {
+            border-bottom: 4px solid {{navHover}};
+        }
+
+    </style>
+
+</head>
+<body class="theme-main navbar-v{{layout.website.nav_version}}" ng-controller="LayoutCtrl as layout" ng-cloak>
 <div id="fb-root"></div>
 <!--<script>(function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
@@ -76,7 +92,8 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
-                        <a  data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" >{{link.label || link.url}}</a>
+                        <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll du-Scrollspy>{{link.label || link.url}}</a>
+                        <a data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}">{{link.label || link.url}}</a>
                     </li>
                 </ul>
             </div>
@@ -131,11 +148,13 @@
 <script src="../js/libs/angular-parallax/scripts/angular-parallax.js"></script>
 <script src="../js/libs/moment/moment.js"></script>
 <script src="../js/libs/angular-moment/angular-moment.js"></script>
+<script src="../js/libs/angular-scroll/angular-scroll.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
+<script src="scripts/directives/dmStyle.js"></script>
 <script src="scripts/services/accountService.js"></script>
 <script src="scripts/services/websiteService.js"></script>
 <script src="scripts/services/themeService.js"></script>
@@ -147,7 +166,6 @@
 <script src="scripts/controllers/mainCtrl.js"></script>
 <script src="scripts/controllers/blogCtrl.js"></script>
 <script src="scripts/controllers/layoutCtrl.js"></script>
-<script src="scripts/directives/scrollTo.js"></script>
 <script src="../js/scripts/config.js"></script>
 <!-- endbuild -->
 </body>

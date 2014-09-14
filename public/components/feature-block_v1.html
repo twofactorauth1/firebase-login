@@ -6,7 +6,7 @@
 *
 -->
 
-<div ng-show="component" class="feature-block {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='color: {{component.txtcolor}}; background: url("{{component.bg.img.url}}") no-repeat fixed; background-size: cover; background: {{component.bg.color}}; color:{{component.txtcolor}};'>
+<div ng-show="component" class="feature-block {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='color: {{component.txtcolor}}; background: url("{{component.bg.img.url}}") no-repeat fixed; background-size: cover; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};;'>
     <div class="inner-page" id="{{component.anchor}}">
         <h1 class="feature-block-title">
             <div class="editable" data-class="feature-title" ng-bind-html="component.title">

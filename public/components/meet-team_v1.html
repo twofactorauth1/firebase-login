@@ -5,8 +5,9 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div ng-show="component" class="meet-team {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};'>
-    <div class="component-body">
+<div ng-show="component"
+class="meet-team {{component.bg.img.parallax?'parallax':''}}">
+    <div class="component-body" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='background: url("{{component.bg.img.url}}"); background: {{component.bg.color||secondaryColor}}; color: {{component.txtcolor||primaryTextColor}};'>
         <div class="inner-page">
             <h3 class="title">
                 <div class="editable" data-class="title">

@@ -18,12 +18,14 @@ var mainApp = angular
         'ngTouch',
         'angular-parallax',
         'config',
+        'dm.style',
+        'duScroll',
         'angularMoment'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-        // if(window.history && window.history.pushState){
-        //     $locationProvider.html5Mode(true);
-        //   }
+        if(window.history && window.history.pushState){
+            $locationProvider.html5Mode(true).hashPrefix('!');
+          }
         $routeProvider
             .when('/', {
                 templateUrl: '../views/main.html',
@@ -37,37 +39,38 @@ var mainApp = angular
                 templateUrl: '../views/blog.html',
                 controller: 'BlogCtrl as blog'
             })
-            .when('/blog/tag/:tagname', {
+            .when('/tag/:tagname', {
                 templateUrl: '../views/main.html',
                 controller: 'BlogCtrl as blog'
-            })
-            .otherwise({ redirectTo: '/' });
+            });
     }])
     .controller('LayoutCtrl', function($scope, parallaxHelper){
         $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);
+    })
+    .run(function($rootScope, $location, $anchorScroll, $routeParams, $document) {
+        $rootScope.$on('$viewContentLoaded', function(newRoute, oldRoute) {
+
+          var loc = $location.hash();
+          var top = 400;
+          var duration = 2000;
+          var offset = 0;
+          addEventListener('load', load, false);
+
+          function load(){
+              var someElement = angular.element(document.getElementById(loc));
+              $document.scrollToElement(someElement, offset, duration);
+          }
+        });
+    })
+    .run(function($rootScope, $location){
+      $rootScope.$on('duScrollspy:becameActive', function($event, $element){
+        //Automaticly update location
+        var hash = $element.prop('hash');
+        if(hash) {
+          $location.hash(hash.substr(1)).replace();
+          $rootScope.$apply();
+        }
+      });
     });
 
 
-    // $stateProvider
-        //     .state('main', {
-        //         url: '/',
-        //         templateUrl: 'views/main.html',
-        //         controller: 'LayoutCtrl as layout'
-        //     })
-        //     .state('about', {
-        //         url: '/about',
-        //         templateUrl: 'views/about.html',
-        //         controller: 'MainCtrl'
-        //     })
-        //     .state('blog', {
-        //         url: '/blog',
-        //         templateUrl: 'views/main.html',
-        //         controller: 'LayoutCtrl as layout'
-        //     })
-        //     .state('/blog/:postname', {
-        //         templateUrl: 'views/main.html',
-        //         controller: 'LayoutCtrl as layout'
-        //     });
-        // $routeProvider.otherwise({
-        //     redirectTo: '/#/'
-        // });

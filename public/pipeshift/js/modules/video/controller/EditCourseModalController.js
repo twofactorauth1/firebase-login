@@ -1,4 +1,4 @@
-angular.module('app.modules.video').controller('EditCourseModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'course', 'templates', 'Course', function ($scope, $modal, $http, $location, $timeout, $modalInstance, course, templates, Course) {
+angular.module('app.modules.video').controller('EditCourseModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'course', 'templates', 'Course', 'Subscriber', function ($scope, $modal, $http, $location, $timeout, $modalInstance, course, templates, Course, Subscriber) {
     $scope.modal = {};
     $scope.isSubdomainChecked = true;
     $scope.isSubdomainFree = true;
@@ -10,9 +10,17 @@ angular.module('app.modules.video').controller('EditCourseModalController', ['$s
     }
     $scope.domain = host + ":" + $location.port();
     $scope.isAdd = false;
-    $scope.title = "Course info"
-    $scope.course = {_id: course._id, title: course.title, description: course.description, template: course.template, videos: course.videos, subtitle: course.subtitle, body: course.body, userId: course.userId, subdomain: course.subdomain, price: course.price};
+    $scope.title = "Course info";
+    $scope.course = $.extend({}, course);
     $scope.templates = templates;
+    $scope.subscribers = [];
+    function refreshSubscribers() {
+        Subscriber.query({id: course._id}, function (response) {
+            $scope.subscribers = response;
+        });
+    }
+
+    refreshSubscribers();
     $scope.close = function () {
         $modalInstance.dismiss();
     }
@@ -58,5 +66,21 @@ angular.module('app.modules.video').controller('EditCourseModalController', ['$s
             }
         }, 250)
     }
+    $scope.showSubscribersCsvUploadModal = function () {
+        var modalInstance = $modal.open({
+            templateUrl: '/pipeshift/views/video/modal/subsCsvUpload.html',
+            controller: 'SubscribersCsvUploadController',
+            resolve: {
+                course: function () {
+                    return $scope.course;
+                }
+            }
+        });
+        modalInstance.result.then(function () {
+            refreshSubscribers();
+        }, function () {
+        });
+    }
+
 }])
 ;

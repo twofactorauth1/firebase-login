@@ -9,7 +9,7 @@
 
                         <div class="blog-entry clearfix">
                             <h2 class="blog-title">
-                                <a data-ng-if="blogpost.post_url" href="#/blog/{{blogpost.post_url}}">
+                                <a data-ng-if="blogpost.post_url" href="/blog/{{blogpost.post_url}}">
                                     <div class="editable" data-class="post_title"
                                          data-ng-if="blogpost.post_title">
                                         {{blogpost.post_title}}
@@ -19,7 +19,7 @@
 
                             <div class="blog-meta">
                                <span data-ng-if="blogpost.created.date">
-                                 • {{blogpost.created.date}}
+                                 • {{blogpost.created.date | amDateFormat:'DD-MM-YYYY'}}
                                 </span>
                                  <span data-ng-if="blogpost.post_author">
                                    Posted by <a href="/page/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a>
