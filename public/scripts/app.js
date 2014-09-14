@@ -58,7 +58,9 @@ var mainApp = angular
 
           function load(){
               var someElement = angular.element(document.getElementById(loc));
-              $document.scrollToElement(someElement, offset, duration);
+              if ($location.hash()) {
+                $document.scrollToElement(someElement, offset, duration);
+              }
           }
         });
     })
