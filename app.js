@@ -154,6 +154,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(app.router);
+
+app.use(function(req, res) {
+    res.sendfile('./public/index.html');
+});
+
 // Handle 404
 app.use(function (req, res) {
     res.status(400);
