@@ -37,7 +37,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         // LOGOUT
         //-------------------------------------------------
-        app.get("/logout", this.setup, this.handleLogout.bind(this));
+        app.get("/logout", this.handleLogout.bind(this));
 
 
         //-------------------------------------------------
@@ -65,7 +65,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
     //region LOGIN / LOGOUT
     showLogin: function (req, resp) {
         var self = this;
-        if (req.isAuthenticated()) {
+        if (req.isAuthenticated()&& req._passport.instance._userProperty != 'user') {
+            console.log('req.isAuthenticated is true.');
             if (self.accountId(req) > 0) {
                 resp.redirect("/admin");
             } else {
@@ -138,7 +139,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
         req.session.accountId = null;
         req.logout();
         req.session.destroy();
+        req.session = null;
+        req.user = null;
 
+        /*
         if (accountId > 0) {
             var appConfig = require('../configs/app.config');
             var redirect = req.protocol + '://' + req.get('host') + "/login";
@@ -149,7 +153,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 return resp.redirect(req.query.redirect);
             }
         }
-
+        */
         return resp.redirect("/login");
     },
     //endregion
