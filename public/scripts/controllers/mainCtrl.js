@@ -1,11 +1,19 @@
 'use strict';
 
-mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 'themeService', 'pagesService', 'ENV',
-    function ($scope, accountService, websiteService, themeService, pagesService, ENV) {
+mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 'themeService', 'pagesService', 'ENV', '$location', '$document', '$anchorScroll',
+    function ($scope, accountService, websiteService, themeService, pagesService, ENV, $location, $document, $anchorScroll) {
 
         var account, pages, website, that = this;
         that.segmentIOWriteKey = ENV.segmentKey;
 
+
+        $scope.isSection = function(value) {
+            if (value == 'section') {
+              return true;
+            } else {
+              return false;
+            }
+        };
 
         accountService(function (err, data) {
             if (err) {
