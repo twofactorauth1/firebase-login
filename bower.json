@@ -47,7 +47,7 @@
     "angular-bootstrap": "~0.11.0",
     "angular-xeditable": "~0.1.8",
     "angular-stepper": "~0.0.1",
-    "angular-scroll": "~0.6.9",
+    "angular-scroll": "~0.6.2",
     "videogular": "~0.4.1",
     "videogular-themes-default": "~0.4.1",
     "videogular-buffering": "~0.4.1",
