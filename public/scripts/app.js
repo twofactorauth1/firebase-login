@@ -18,6 +18,7 @@ var mainApp = angular
         'ngTouch',
         'angular-parallax',
         'config',
+        'dm.style',
         'angularMoment'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {

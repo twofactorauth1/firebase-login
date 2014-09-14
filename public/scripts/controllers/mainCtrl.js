@@ -34,6 +34,7 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
                 console.log('Controller:MainCtrl -> Method:websiteService Error: ' + err);
             } else {
                 website = data;
+                that.website = data;
                 if(website.settings) {
                     $scope.primaryColor = website.settings.primary_color;
                     $scope.primaryHighlight = website.settings.primary_highlight;
