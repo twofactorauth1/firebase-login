@@ -15,8 +15,7 @@
     <link rel="stylesheet" href="/css/style.default.css">
     <link rel="stylesheet" href="/js/libs_misc/jquery.tagsinput/jquery.tagsinput.css" />
 
-    <title ng-cloak>{{layout.website.title}}</title>
-
+    <title ng-cloak>{{main.website.title}}</title>
     <script type="text/javascript">
 
         window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
@@ -41,9 +40,28 @@
         window.analytics.page();
     </script>
 
+    <style type="text/css">
+
+        h1, h2, h3, h4, h5 { font-family: {{fontFamily}} sans-serif!important;}
+        body { font-family: {{fontFamily2}}, sans-serif!important; }
+
+        .navbar-collapse {
+            background: #fff;
+        }
+
+        .btn-primary {
+            background: {{primaryColor}};
+            border-bottom: 4px solid {{secondaryColor}};
+        }
+
+        .navbar-v2 #header .navbar ul.navbar-nav li:hover {
+            border-bottom: 4px solid {{navHover}};
+        }
+
+    </style>
+
 </head>
 <body class="theme-main navbar-v{{layout.website.nav_version}}" ng-controller="LayoutCtrl as layout" ng-cloak>
-
 <div id="fb-root"></div>
 <!--<script>(function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
@@ -134,6 +152,8 @@
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
+<script src="scripts/directives/scrollTo.js"></script>
+<script src="scripts/directives/dmStyle.js"></script>
 <script src="scripts/services/accountService.js"></script>
 <script src="scripts/services/websiteService.js"></script>
 <script src="scripts/services/themeService.js"></script>
@@ -145,7 +165,6 @@
 <script src="scripts/controllers/mainCtrl.js"></script>
 <script src="scripts/controllers/blogCtrl.js"></script>
 <script src="scripts/controllers/layoutCtrl.js"></script>
-<script src="scripts/directives/scrollTo.js"></script>
 <script src="../js/scripts/config.js"></script>
 <!-- endbuild -->
 </body>

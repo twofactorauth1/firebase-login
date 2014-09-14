@@ -1,4 +1,4 @@
-<div class="component" data-ng-show="component" data-class="signup-form" data-id="{{component._id}}" ng-style="background: {{component.bg.color}};color: {{component.txtcolor}};">
+<div class="component" data-ng-show="component" data-class="signup-form" data-id="{{component._id}}" style="background: {{component.bg.color||secondaryColor}}; color: {{component.txtcolor||primary_text_color}};">
     <div id="error-msg" class="alert alert-danger hidden">
         <button type="button" aria-hidden="true" class="close">×</button>
         <span class="message"></span>
