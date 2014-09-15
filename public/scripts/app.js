@@ -33,7 +33,7 @@ var mainApp = angular
                 controller: 'LayoutCtrl as layout'
             })
             .when('/blog', {
-                templateUrl: '../views/main.html',
+                templateUrl: '../views/blog.html',
                 controller: 'BlogCtrl as blog'
             })
             .when('/blog/:postname', {
@@ -70,8 +70,6 @@ var mainApp = angular
 
           function load(){
               var someElement = angular.element(document.getElementById(loc));
-              var contentHeight = angular.element(document.getElementById('content-area'));
-              $rootScope.contentHeight = contentHeight[0].offsetHeight;
               if ($location.hash()) {
                 $document.scrollToElement(someElement, offset, duration);
               }

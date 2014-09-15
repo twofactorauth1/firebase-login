@@ -31,12 +31,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             } else {
                 if (route === '/' || route === '') {
                      route = 'index';
+                    // if (route.indexOf("blog/") > -1) {
+                    //     route = 'single-post';
+                    // }
+                    route = route.replace('/', '');
+                    that.pages = data[route];
                 }
-                if (route.indexOf("blog/") > -1) {
-                    route = 'single-post';
-                }
-                route = route.replace('/', '');
-                that.pages = data[route];
             }
         });
 
