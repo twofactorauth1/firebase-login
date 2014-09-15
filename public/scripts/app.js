@@ -20,6 +20,7 @@ var mainApp = angular
         'config',
         'dm.style',
         'duScroll',
+        'mrPageEnterAnimate',
         'angularMoment'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
@@ -33,22 +34,33 @@ var mainApp = angular
             })
             .when('/blog', {
                 templateUrl: '../views/main.html',
-                controller: 'LayoutCtrl as layout'
+                controller: 'BlogCtrl as blog'
             })
             .when('/blog/:postname', {
                 templateUrl: '../views/blog.html',
                 controller: 'BlogCtrl as blog'
             })
             .when('/tag/:tagname', {
-                templateUrl: '../views/main.html',
+                templateUrl: '../views/blog.html',
+                controller: 'BlogCtrl as blog'
+            })
+            .when('/category/:catname', {
+                templateUrl: '../views/blog.html',
+                controller: 'BlogCtrl as blog'
+            })
+            .when('/author/:authorname', {
+                templateUrl: '../views/blog.html',
                 controller: 'BlogCtrl as blog'
             });
     }])
     .controller('LayoutCtrl', function($scope, parallaxHelper){
         $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);
     })
-    .run(function($rootScope, $location, $anchorScroll, $routeParams, $document) {
-        $rootScope.$on('$viewContentLoaded', function(newRoute, oldRoute) {
+    .run(function( $rootScope, $location, $anchorScroll, $routeParams, $document, $timeout) {
+        $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
+            $rootScope.transitionState = "active"
+        });
+        $rootScope.$on('$viewContentLoaded', function(scope, newRoute, oldRoute) {
 
           var loc = $location.hash();
           var top = 400;
@@ -58,9 +70,12 @@ var mainApp = angular
 
           function load(){
               var someElement = angular.element(document.getElementById(loc));
+              var contentHeight = angular.element(document.getElementById('content-area'));
+              $rootScope.contentHeight = contentHeight[0].offsetHeight;
               if ($location.hash()) {
                 $document.scrollToElement(someElement, offset, duration);
               }
+              $rootScope.$apply();
           }
         });
     })

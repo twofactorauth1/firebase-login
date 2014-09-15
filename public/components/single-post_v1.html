@@ -24,11 +24,11 @@
                                 {{blog.post.created_date}}
                             </div>
                             <div ng-show="blog.post.post_author">
-                                Posted by <a href="/page/author/{{post_author}}">{{blog.post.post_author}}</a>
+                                Posted by <a href="/author/{{blog.post.post_author}}">{{blog.post.post_author}}</a>
                             </div>
 
                             <div ng-show="blog.post.post_category">
-                                in <a href="/page/category/{{layout.singlepost.post_category}}">{{blog.post.post_category}}</a>
+                                in <a href="/category/{{blog.post.post_category}}">{{blog.post.post_category}}</a>
                             </div>
 
                             <!--{{!-- {{#if comment_count}}
@@ -38,7 +38,7 @@
 
                         <div ng-show="blog.post.post_tags">
                             <ul class="post_tags">
-                                <li ng-repeat="tag in blog.post.post_tags track by $index"><a href="#/blog/tag/{{tag}}">{{tag}}</a></li>
+                                <li ng-repeat="tag in blog.post.post_tags track by $index"><a href="/tag/{{tag}}">{{tag}}</a></li>
                             </ul>
                         </div>
 

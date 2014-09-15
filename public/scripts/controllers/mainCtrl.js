@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 'themeService', 'pagesService', 'ENV', '$location', '$document', '$anchorScroll',
-    function ($scope, accountService, websiteService, themeService, pagesService, ENV, $location, $document, $anchorScroll) {
+mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 'themeService', 'pagesService', 'ENV', '$location', '$document', '$anchorScroll', '$window',
+    function ($scope, accountService, websiteService, themeService, pagesService, ENV, $location, $document, $anchorScroll, $window) {
 
         var account, pages, website, that = this;
         that.segmentIOWriteKey = ENV.segmentKey;

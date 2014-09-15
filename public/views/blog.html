@@ -1,4 +1,4 @@
-<div ng-controller="BlogCtrl">
+<div ng-controller="BlogCtrl" class="fragment {{transitionState}}">
 	<div ng-repeat="component in blog.pages.components | createUrlFilter track by $index">
 	    <div ng-include src="component.url"></div>
 	</div>

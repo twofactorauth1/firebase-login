@@ -18,7 +18,7 @@ class="meet-team {{component.bg.img.parallax?'parallax':''}}">
 
             <div class="row">
                 <div class="col-xs-12 col-sm-4 col-md-3 profilepic pull-left" ng-repeat="teamMember in component.teamMembers">
-                    <div class="{{teamMember.become-member}}">
+                    <div class="{{teamMember.becomeMember?'become-member':''}}">
                         <div class="profile-img">
                             <div class="profilepic-hover">
                                 <div style="float:left;clear:left;height:15px;width:115px"></div>
@@ -71,9 +71,11 @@ class="meet-team {{component.bg.img.parallax?'parallax':''}}">
                                 <h4>{{teamMember.name}}</h4>
                             </div>
                         </h4>
-                        <div class="editable" data-class="position">
-                            <span>{{teamMember.position}}</span>
-                        </div>
+                        <span class="profile-position">
+                            <div class="editable" data-class="position">
+                                {{teamMember.position}}
+                            </div>
+                        </span>
                     </div>
                 </div>
             </div>
