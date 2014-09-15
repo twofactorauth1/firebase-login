@@ -1,0 +1,75 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div ng-show="component">
+    <div class="component-body">
+            <div id="{{component.anchor}}" class="meet-team">
+                <div class="inner-page">
+                    <h3 class="title">
+                        <div class="editable" data-class="title" ng-bind-html="component.title">
+                        </div>
+                    </h3>
+                    <div class="mb30"></div>
+                    <div ng-repeat="member in component.teamMembers" class="col-xs-12 col-sm-4 col-md-3 profilepic pull-left {{member.become-member?'become-member':''}}">
+                            <div class="profile-img">
+                                <div class="profilepic-hover">
+                                <div style="float:left;clear:left;height:15px;width:115px"></div>
+                                <div style="float:right;clear:right;height:15px;width:115px"></div>
+                                <div style="float:left;clear:left;height:15px;width: 115px;"></div>
+                                <div style="float:right;clear:right;height:15px;width:115px"></div>
+                                <div style="float:left;clear:left;height:15px;width:40px"></div>
+                                <div style="float:right;clear:right;height:15px;width:40px"></div>
+                                <div style="float:left;clear:left;height:15px;width:25px"></div>
+                                <div style="float:right;clear:right;height:15px;width:25px"></div>
+                                <div style="float:left;clear:left;height:15px;width:20px"></div>
+                                <div style="float:right;clear:right;height:15px;width:20px"></div>
+                                <div style="float:left;clear:left;height:15px;width:10px"></div>
+                                <div style="float:right;clear:right;height:15px;width:10px"></div>
+                                <div style="float:left;clear:left;height:15px;width:10px"></div>
+                                <div style="float:right;clear:right;height:15px;width:10px"></div>
+                                <div style="float:left;clear:left;height:15px;width:5px"></div>
+                                <div style="float:right;clear:right;height:15px;width:5px"></div>
+                                <div style="float:left;clear:left;height:15px;width:10px"></div>
+                                <div style="float:right;clear:right;height:15px;width:10px"></div>
+                                <div style="float:left;clear:left;height:15px;width:15px"></div>
+                                <div style="float:right;clear:right;height:15px;width:15px"></div>
+                                <div style="float:left;clear:left;height:15px;width:20px"></div>
+                                <div style="float:right;clear:right;height:15px;width:20px"></div>
+                                <div style="float:left;clear:left;height:15px;width:25px"></div>
+                                <div style="float:right;clear:right;height:15px;width:25px"></div>
+                                <div style="float:left;clear:left;height:15px;width:35px"></div>
+                                <div style="float:right;clear:right;height:15px;width:35px"></div>
+                                <div style="float:left;clear:left;height:15px;width:45px"></div>
+                                <div style="float:right;clear:right;height:15px;width:45px"></div>
+                                <div style="float:left;clear:left;height:15px;width:115px"></div>
+                                <div style="float:right;clear:right;height:15px;width:115px"></div>
+                                <span class="c" style="font-size: 13px;">
+                                    <div class="editable" data-class="bio">
+                                        {{member.bio}}
+                                    </div>
+                                </span>
+                                <ul class="profile-social" ng-show="member.social">
+                                        <li ng-repeat="(key, val) in member.social"><a href="{{val}}" target="_blank"><span class="fa fa-{{key}}"></span></a></li>
+                                </ul>
+                            </div>
+                            <img src="{{member.profilepic?member.profilepic:'/assets/icons/blank-user.jpg'}}" class="thumbnail img-circle"/>
+                        </div>
+                        <h4 class="name">
+                            <div class="editable" data-class="name">
+                                {{member.name}}
+                            </div>
+                        </h4>
+                        <div class="editable" data-class="position">
+                            <span class="center">{{member.position}}</span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+</div>

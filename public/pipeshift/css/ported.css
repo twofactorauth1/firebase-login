@@ -1,0 +1,35 @@
+.subscribers-list-div {
+    margin-top: 20px;
+}
+
+.subscribers-list {
+    margin-top: 10px;
+    height: 100px;
+    overflow: scroll;
+}
+
+.video-carousel-container .rn-carousel-container {
+    display: block;
+    margin: auto;
+    width: 520px;
+}
+
+.timeline-element-no-border:before {
+    border: none !important;
+}
+
+.drag-drop-target {
+    text-align: center;
+
+}
+
+
+.drag-drop-target h4 {
+    opacity: 0.5;
+}
+
+.drag-drop-target .glyphicon {
+    float: none !important;
+}
+
+

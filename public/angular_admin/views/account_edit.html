@@ -27,7 +27,7 @@
 							<row>
 							<div class="col-xs-5 col-md-6">
 								<div class="hidden-xs hidden-sm">
-									<div class="btn-link btn-edit-photo">Change Photo</div>
+									<div class="btn-link btn-edit-photo" data-toggle="modal" data-target="#modal-change-photo">Change Photo</div>
 								</div>
 								<img id="contact-photo"
 									class="img-responsive img-rounded hand btn-edit-photo"
@@ -64,7 +64,7 @@
 							</div>
 						</div>
 
-						<div id="phone-row" class="row">
+						<div id="phone-row" class="row" ng-repeat="phone in user.details[0].phones">
 							<div class="col-xs-1">
 								<i class="icon-main fa fa-phone"></i>
 							</div>
@@ -79,26 +79,25 @@
 										<div class="form-group col-xs-12 col-sm-8 col-md-10">
 											<div class="input-group">
 												<div class="input-group-addon">+1</div>
-												<input class="input-edit-phone form-control input-lg" value=""
+												<input class="input-edit-phone form-control input-lg" ng-model='phone.number'
 													type="text">
 
 												<div class="btn-group pull-right" style="margin-right: 8px;">
 													<button type="button"
 														class="btn-edit-phone-type btn btn-default dropdown-toggle"
 														data-toggle="dropdown" data-type="">
-														<span class="edit-phone-type-label">mobile</span> <span
-															class="caret"></span>
+														<span class="edit-phone-type-label" id="user-phone-type-{{$index}}" ng-show="phone.type == 'm'">mobile</span>
+														<span class="edit-phone-type-label" id="user-phone-type-{{$index}}" ng-show="phone.type == 'h'">home</span>
+														<span class="edit-phone-type-label" id="user-phone-type-{{$index}}" ng-show="phone.type == 'w'">work</span>
+														<span class="caret"></span>
 													</button>
 													<ul class="dropdown-menu pull-right">
 
-														<li class="li-edit-phone-type" data-type="m"><a
-															href="#">mobile</a></li>
+														<li class="li-edit-phone-type" ng-click="userPhoneTypeSaveFn($index, 'm')"><a>mobile</a></li>
 
-														<li class="li-edit-phone-type" data-type="h"><a
-															href="#">home</a></li>
+														<li class="li-edit-phone-type" ng-click="userPhoneTypeSaveFn($index, 'h')"><a>home</a></li>
 
-														<li class="li-edit-phone-type" data-type="w"><a
-															href="#">work</a></li>
+														<li class="li-edit-phone-type" ng-click="userPhoneTypeSaveFn($index, 'w')"><a>work</a></li>
 
 													</ul>
 												</div>
@@ -126,6 +125,9 @@
 								</small>
 								</span>
 							</div>
+						</div>
+						<div class="row">
+							<button id="btn-new-address" class="btn btn-primary btn-sm" ng-click="addUserContactFn()">Add Contact</button>
 						</div>
 
 						<div id="address-row" class="row">
@@ -178,7 +180,7 @@
 				            <row>
 				                <div class="col-xs-5 col-md-6">
 				                    <div class="hidden-xs hidden-sm">
-				                        <div class="btn-link btn-edit-photo">Change Logo</div>
+				                        <div class="btn-link btn-edit-photo" data-toggle="modal" data-target="#modal-change-logo">Change Logo</div>
 				                    </div>
 				                    <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="/assets/icons/blank-user.jpg">
 				                </div>
@@ -199,7 +201,7 @@
 				            <div class="col-xs-12 form" role="form">
 				                <div class="form-group">
 				                    <label class="">Business Name</label>
-				                    <input id="input-business-name" type="text" class="form-control input-lg" value="" placeholder="business name">
+				                    <input id="input-business-name" type="text" class="form-control input-lg" ng-model='account.business.name' placeholder="business name" name="business-name">
 				                </div>
 				            </div>
 				        </div>
@@ -211,7 +213,7 @@
 				            <div class="col-xs-12 form" role="form">
 				                <div class="form-group">
 				                    <label class="">Business Description</label>
-				                    <input id="input-business-description" type="text" class="form-control input-lg" value="" placeholder="Description">
+				                    <input id="input-business-description" type="text" class="form-control input-lg" ng-model='account.business.description' placeholder="Description" name="business-description">
 				                </div>
 				            </div>
 				        </div>
@@ -221,7 +223,7 @@
 				            <div class="col-xs-12 form" role="form">
 				                <div class="form-group">
 				                    <label class="">Business Category</label>
-				                    <input id="input-business-category" type="text" class="form-control input-lg" value="" placeholder="Category">
+				                    <input id="input-business-category" type="text" class="form-control input-lg" ng-model='account.business.category' placeholder="Category" name="business-category">
 				                </div>
 				            </div>
 				        </div>
@@ -229,17 +231,17 @@
 				        <div class="row">
 				            <div class="form-group col-xs-6">
 				                <label>Business Size</label>
-				                <select id="select-business-size" class="form-control input-lg">
+				                <select id="select-business-size" class="form-control input-lg" ng-model='account.business.size' name="business-size">
 
-				                    <option data-businesssize="1">Single</option>
+				                    <option value="1">Single</option>
 
-				                    <option data-businesssize="2">Small</option>
+				                    <option value="2">Small</option>
 
-				                    <option data-businesssize="3">Medium</option>
+				                    <option value="3">Medium</option>
 
-				                    <option data-businesssize="4">Large</option>
+				                    <option value="4">Large</option>
 
-				                    <option data-businesssize="5">Enterprise</option>
+				                    <option value="5">Enterprise</option>
 
 				                </select>
 				            </div>
@@ -248,13 +250,13 @@
 				        <div class="row">
 				            <div class="form-group col-xs-6">
 				                <label>Business Type</label>
-				                <select id="select-business-type" class="form-control input-lg">
+				                <select id="select-business-type" class="form-control input-lg" ng-model='account.business.type'>
 
-				                    <option data-businesstype="1">Professional</option>
+				                    <option value="1">Professional</option>
 
-				                    <option data-businesstype="2">Business</option>
+				                    <option value="2">Business</option>
 
-				                    <option data-businesstype="3">Enterprise</option>
+				                    <option value="3">Enterprise</option>
 
 				                </select>
 				            </div>
@@ -262,7 +264,7 @@
 
 				        <hr></hr>
 
-				        <div id="phone-row" class="row">
+				        <div id="phone-row" class="row" ng-repeat="phone in account.business.phones">
 				            <div class="col-xs-1"><i class="icon-main fa fa-phone"></i>
 				            </div>
 				            <div class="col-xs-10">
@@ -278,7 +280,7 @@
 				                        <div class="form-group col-xs-12 col-sm-8 col-md-10">
 				                            <div class="input-group">
 				                                <div class="input-group-addon">+1</div>
-				                                <input type="text" class="input-edit-phone form-control input-lg" value="">
+				                                <input type="text" class="input-edit-phone form-control input-lg" ng-model='phone.number'>
 				                            </div>
 				                        </div>
 				                    </div>
@@ -290,6 +292,9 @@
 				            </div>
 
 				        </div>
+						<div class="row">
+							<button id="btn-new-address" class="btn btn-primary btn-sm" ng-click="addBusinessContactFn()">Add Contact</button>
+						</div>
 
 
 
@@ -328,7 +333,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+						<span aria-hidden="true">ï¿½</span><span class="sr-only">Close</span>
 					</button>
 					<h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
 				</div>
@@ -350,8 +355,38 @@
 			<div class="modal-content">
 				<div class="modal-header" data-dismiss="modal">
 					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">×</button>
+						aria-hidden="true">ï¿½</button>
 					<h4 class="modal-title">Add or Remove Photo</h4>
+				</div>
+
+				<div class="modal-body">
+					<div class="row">
+						<div class="btn btn-primary col-xs-12 btn-remove-photo">Remove
+							Photo</div>
+					</div>
+
+					<div class="row" style="margin-top: 6px; margin-bottom: 20px;">
+						<div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload
+							new photo</div>
+					</div>
+
+					<div id="upload-photo-container"></div>
+
+					<img id="contact-photo-modal" src="/assets/icons/blank-user.jpg"
+						style="max-width: 100%; margin-top: 20px;">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="modal-change-logo" tabindex="-1"
+		role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header" data-dismiss="modal">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">ï¿½</button>
+					<h4 class="modal-title">Add or Remove Logo</h4>
 				</div>
 
 				<div class="modal-body">

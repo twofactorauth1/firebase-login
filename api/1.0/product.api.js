@@ -26,6 +26,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('/:id'), this.isAuthApi, this.updateProduct.bind(this));
         app.delete(this.url('/:id'), this.isAuthApi, this.deleteProduct.bind(this));
 
+        app.get(this.url('/type/:type'), this.isAuthApi, this.getProductsByType.bind(this));
+
     },
 
     createProduct: function(req, res) {
@@ -99,6 +101,20 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< deleteProduct');
             self.sendResultOrError(res, err, value, 'Error deleting product');
         });
+    },
+
+    getProductsByType: function(req, res) {
+        var self = this;
+        self.log.debug('>> getProductsByType');
+        var type = req.params.type;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: security
+
+        productManager.getProductsByType(accountId, type, function(err, list){
+            self.log.debug('<< getProductsByType');
+            self.sendResultOrError(res, err, value, 'Error listing products by type');
+        });
+
     }
 });
 

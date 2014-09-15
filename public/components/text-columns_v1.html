@@ -1,0 +1,27 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div class="section text-columns" data-ng-show="component">
+    <div class="component-header container">
+        <div class="editable" data-class="label">
+            <h2 class="section-title">{{component.title}}</h2>
+        </div>
+
+        <div class="editable" data-class="description">
+            <p>{{component.subtitle}}</p>
+        </div>
+    </div>
+
+    <div class="component-body section-colored">
+        <div class="container" data-ng-repeat="column in component.columns track by $index">
+            <div class="col-lg-4 col-md-4 col-sm-6">
+                {{column}}
+            </div>
+        </div>
+    </div>
+</div>

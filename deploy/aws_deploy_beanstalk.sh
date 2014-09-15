@@ -38,6 +38,16 @@ pip list | grep awscli > /dev/null
 # clean build artifacts and create the application archive (also ignore any files named .git* in any folder)
 #git clean -fd
 
+# Generate angular constants file
+if [ "$1" = "master" ]; then
+    echo "Generating constants for production."
+    grunt ngconstant:production
+elif [ "$1" = "develop" ]; then
+    echo "Generating constants for development."
+    grunt ngconstant:development
+else
+	echo "No environment specified.  No constants"
+fi
 # precompile assets, ...
 ########################
 # remove original main file

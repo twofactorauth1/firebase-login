@@ -2,7 +2,8 @@ angular.module('app.modules.video').controller('TimelineItemModalController', ['
     var scheduledTime = new Date();
     scheduledTime.setHours(video.scheduledHour);
     scheduledTime.setMinutes(video.scheduledMinute);
-    $scope.video = {_id: video._id, videoId: video.videoId, subject: video.subject, videoUrl: video.videoUrl, videoTitle: video.videoTitle, videoSubtitle: video.videoSubtitle, videoBody: video.videoBody, videoPreviewUrl: video.videoPreviewUrl, videoBidPreviewUrl: video.videoBidPreviewUrl, scheduledTime: scheduledTime, scheduledDay: video.scheduledDay == null ? 0 : video.scheduledDay, isPremium: video.isPremium};
+    video.scheduledDay = video.scheduledDay == null ? 0 : video.scheduledDay;
+    $scope.video = video;
     $scope.video.embedurl = "http://www.youtube.com/embed/" + $scope.video.videoId + "?autoplay=0&theme=light&color=white&iv_load_policy=3";
     $scope.template = template;
     //

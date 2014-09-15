@@ -13,13 +13,15 @@ define([
 
     var view = EditWebsite.extend({
 
+        page: null,
+        temp_page: null,
+
         subdomain: null,
         websiteSettings: null,
         themeId: null,
         websiteId: null,
         pageId: null,
         postId: null,
-
         //temporary themes
         themes: null,
 
@@ -29,13 +31,16 @@ define([
         events: {
 
             //components
+            "click .ignore-page-changes": "ignorePageChanges",
+            "click .save-page-changes": "savePageChanges",
             "click .dd-item":"scrollToSection",
             "hover .component": "showComponentOptions",
-            "click .add_section": "addSidebarComponent", //addSection
+            "click .btn-add-section": "addSidebarComponent", //addSection
+            "click .edit_section": "editSidebarComponent", //addSection
             "mouseup .dd-item": "onComponentDrag",
             "click .btn-add-component":"addComponent",
             "click .btn-del-component":"removeComponent",
-
+            "click .btn-edit-component":"updateComponent",
             //color palette
             "click #drop-zone": "drop_click",
             "change #file":"upload_color_pic",
@@ -66,6 +71,7 @@ define([
             "click .create-page":"addBlankPage",
             "input #page-title":"urlCreator",
             "input #page-url":"urlCreator",
+            "change .page-select":"changePage",
 
             //import contact modal
             "click .choose-import": "changeImportSection",
@@ -81,7 +87,9 @@ define([
                 , p1 = this.getAccount()
                 , p2 = this.getWebsite()
                 , p3 = this.getAllThemes()
-                , p4 = this.getUser();
+                , p4 = this.getUser()
+                , p5 = $.Deferred();
+
 
             $.when(p1)
                 .done(function () {
@@ -91,15 +99,21 @@ define([
 
             $.when(p2)
                 .done(function () {
-                self.websiteSettings = self.website.attributes.settings;
-                self.websiteId = self.website.attributes._id;
-                console.log('Getting Page on rightpanel');
-                self.getPage().done(function(){
-                    console.log('Page ID: '+JSON.stringify(self.page.attributes._id));
-                    self.pageId = self.page.attributes._id;
-                });
-            });
+                    self.websiteSettings = self.website.attributes.settings;
+                    self.websiteId = self.website.attributes._id;
+                    console.log('Getting Page on rightpanel');
+                    self.getPage()
+                        .done(function(){
+                            console.log('Page ID: ' + JSON.stringify(self.page.get("_id")));
+                            self.pageId = self.page.get("_id");
+                            p5.resolve();
+                        });
 
+                });
+            $.when(p5)
+                .done(function () {
+                    self.getTempPage()
+                })
             $$.e.PageHandleEvent.bind("pageHandle",this.pageHandleEvent.bind(this));
         },
 
@@ -154,7 +168,7 @@ define([
          * - Functions for Edit Website Sidebar
          */
 
-        getPage: function() {
+        /*getPage: function() {
             console.log('GETTING PAGEHANDLE'+this.pageHandle);
             this.page = new Page({
                 websiteId: this.websiteId,
@@ -167,26 +181,17 @@ define([
                     console.log(page);
                 }
             });
-        },
+        },*/
 
-        getPages: function() {
-            if (this.accountId == null) {
-                this.accountId = $$.server.get($$.constants.server_props.ACCOUNT_ID);
-            }
-            this.pages = new $$.c.Pages();
-
-            //return this.pages.getPagesAll(this.accountId, this.websiteId);
-            return this.pages.fetch();
-        },
 
         deletePage:function(){
             var self = this;
             var pageId=$('#myselect option:selected').val();
             var handle=$('#myselect option:selected').text();
             var page = new Page({
-                websiteId : this.websiteId,
+                websiteId : self.websiteId,
                 _id       : pageId,
-                title:handle
+                title     : handle
             });
             /*
             var linklist = self.website.get('linklist');
@@ -197,9 +202,17 @@ define([
 
                 }
             });
-            $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
+            self.refreshIFrame();
         },
 
+        changePage:function(){
+            var handle=$('.page-select option:selected').val();
+           // var handle=$('.page-select option:selected').text();
+
+            //window.location.replace(window.location.origin+"/page/"+handle+'?&editor=true');
+
+            $('#iframe-website').attr("src", "/page/" + handle + "_temp_page?editor=true");
+        },
 
         addBlankPage: function() {
                 var self = this;
@@ -228,8 +241,8 @@ define([
                 console.log('page data: '+data);
                 var temp=$$.u.idutils.generateUUID();
 
-                this.page = new Page({
-                    websiteId:this.websiteId,
+                self.page = new Page({
+                    websiteId:self.websiteId,
                     title: pageTitle,
                     handle: pageUrl,
                     components: [
@@ -246,25 +259,34 @@ define([
                     }
                 });
 
-                this.page.save().done( function() {
-                    console.log('page sved');
-                    self.pageId = self.page.attributes._id;
-                    $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
-                    // var $iframe = $('#iframe-website');
-                    // $iframe.ready(function() {
-                    //     $iframe.contents().find("#main-area .entry").prepend(html);
-                    //     console.log('Blank Post ID: '+self.postId);
-                    //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
-                    //     $iframe.contents().find("#main-area").trigger("click");
-                    // });
+                //SAVE PAGE
+                self.page.save()
+                    .done(function() {
+                        //GETS LIST OF WEBSITE PAGES
+
+                                //UPDATES LIST OF WEBSITE PAGES ON RIGHTPANEL
+                                console.log('PAGE SAVED');
+                                self.pageId = self.page.attributes._id;
+
+
+                                //$('#iframe-website').attr("src", $('#iframe-website').attr("src")+'?editor=true');
+                                self.refreshIFrame();
+                                // var $iframe = $('#iframe-website');
+                                // $iframe.ready(function() {
+                                //     $iframe.contents().find("#main-area .entry").prepend(html);
+                                //     console.log('Blank Post ID: '+self.postId);
+                                //     $iframe.contents().find("#main-area").find('.single-blog').attr('data-postid', self.postId);
+                                //     $iframe.contents().find("#main-area").trigger("click");
+                                // });
+
                 });
             },
 
-            newPageModal: function() {
+        newPageModal: function() {
                 $('#new-page-modal').modal('show');
             },
 
-            deletePageModal: function(){
+        deletePageModal: function(){
                 var self=this;
                 var select = $('#myselect');
                 this.getPages().done(function() {
@@ -294,15 +316,15 @@ define([
             },
 
 
-            urlCreator: function(e) {
-                var postUrl = $(e.currentTarget).val();
-                var scrubbed = postUrl.toLowerCase().replace(/ /g,'-');
-                $('#post-url').val(scrubbed);
-            },
+        urlCreator: function(e) {
+            var postUrl = $(e.currentTarget).val();
+            var scrubbed = postUrl.toLowerCase().replace(/ /g,'-');
+            $('#post-url').val(scrubbed);
+        },
 
-            newPostModal: function() {
-                $('#new-post-modal').modal('show');
-            },
+        newPostModal: function() {
+            $('#new-post-modal').modal('show');
+        },
 
             addBlankPost: function() {
                 var self = this;
@@ -388,66 +410,61 @@ define([
             // WORKING
             addComponent: function () {
                 var self = this;
-                self.getPage().done(function(){
-                    console.log('Page ID: '+JSON.stringify( self.page.attributes._id));
-                    console.log("@%!$%" + self.page.get("handle"));
-                    self.pageId = self.page.attributes._id;
-                    console.log(self.pageId)
-                    //   self.pageId = self.page.get("._id");
 
-                console.log(self);
-                console.log('adding component');
-                //get component name
-                var componentName = $('#component-name').val();
-                //get component type
-                var componentType = $('#component-type').val();
-                //validate
-                var component=new Signup({ pageId:self.pageId,  formName:componentName, type:componentType,title:"temp"});
-                component.save().done(function( ){
-                    console.log(component)
-                    var data = {
-                        "id": component.id,
-                        "name": componentName,
-                        "type": componentType
-                    };
-                    console.log(data);
-                    /*
-                    var data = {
-                        "id": component._id,
-                        "name": component.get('formName'),
-                        "type": component.get('type')
-                    };*/
-                    var tmpl = $$.templateManager.get("draggable-component", self.templateKey);
-                    var html = tmpl(data);
-                    $('#sortable').append(html);
+                //self.getPage()
+                self.getTempPage()
+                    .done(function(){
+                        var componentName,componentType, component;
+                        console.log('Page ID: ' + JSON.stringify( self.page.get("_id")));
+                        self.pageId = self.page.get("_id");
+                        console.log(self.pageId)
+                        console.log('adding component');
+                        //get component name
+                        componentName = $('#component-name').val();
+                        //get component type
+                        componentType = $('#component-type').val();
+                        //validate
 
-                    $('#iframe-website').attr("src", $('#iframe-website').attr("src"));
+                        //component=new Signup({ pageId:self.pageId,  formName:componentName, type:componentType,title:componentName});
+                        component = new Signup({ pageId:self.temp_page.get("_id"),  formName:componentName, type:componentType,title:componentName});
+                        component.save().done(function( ){
+                            var data, tmpl, html;
+                            console.log(component)
+                            data = {
+                                "id": component.id,
+                                "name": componentName,
+                                "type": componentType
+                            };
+                            console.log(data);
+                            /*
+                            var data = {
+                                "id": component._id,
+                                "name": component.get('formName'),
+                                "type": component.get('type')
+                            };*/
+                            tmpl = $$.templateManager.get("draggable-component", self.templateKey);
+                            html = tmpl(data);
+                            $('#sortable').append(html);
 
-                    jQuery.gritter.add({
-                        title: 'Component Added',
-                        text: 'Component was Successfully Added!',
-                        class_name: 'growl-success',
-                        sticky: false,
-                        time: 3000
-                    });
+                            self.temp_page.fetch().done(function(){
 
-                });
-                //$( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
-                //add to mongo
-                //get mongo id
-                //var newComponent = self.getComponent();
-                //console.log('New Component: '+JSON.stringify(newComponent));
-                //add to sidebar
-
+                                //$('#iframe-website').attr("src", $('#iframe-website').attr("src")  + '?editor=true');
+                                self.refreshIFrame();
+                            });
+                        });
+                        //$( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
+                        //add to mongo
+                        //get mongo id
+                        //var newComponent = self.getComponent();
+                        //console.log('New Component: '+JSON.stringify(newComponent));
+                        //add to sidebar
                 });
                 //Backbone.history.loadUrl();
                 //$( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
 
-
                 //add to site
                 //self.updateOrder();
                 //$('#iframe-website').contentWindow.location.reload(true);
-
             },
             // WORKING
             getComponent: function() {
@@ -461,30 +478,57 @@ define([
                 var self=this;
                 var componentID = $(event.currentTarget).data('component-id');
                 console.log('Component Deleted '+componentID);
-                self.getPage().done(function(){
+                //self.getPage()
+                self.getTempPage()
+                    .done(function(){
+                        self.pageId = self.page.get("_id");
 
-                    self.pageId = self.page.attributes._id;
+                        var component=new Signup({ pageId:self.pageId,  _id:componentID});
 
-                    var component=new Signup({ pageId:self.pageId,  _id:componentID});
-
-                    component.destroy({
-                        success: function(err,res) {
-                            console.log(err);
-                            console.log(res)
-                            $( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
-                            jQuery.gritter.add({
-                            title: 'Component Deleted',
-                            text: 'Component was Successfully Removed.',
-                            class_name: 'growl-success',
-                            sticky: false,
-                            time: 3000
-                        });
-                        }
-                    })
+                        component.destroy({
+                            success: function(err,res) {
+                                console.log(err);
+                                console.log(res)
+                                //$( '#iframe-website' ).attr( 'src', function ( i, val ) { return val; });
+                                self.refreshIFrame();
+                            }
+                        })
                 });
                 event.stopImmediatePropagation();
 
             },
+
+            updateComponent:function(){
+                var self=this;
+
+                var componentID=$('#component-edit option:selected').val();
+                var title=$('#component-title').val()
+                    console.log(self.page);
+
+                    self.pageId = self.page.attributes._id;
+                    console.log(self.page);
+                    var newOptions=self.page.get("components").models;
+                    console.log(newOptions);
+
+
+                    $.each(newOptions, function(index, value) {
+
+                        if(componentID==value.id) {
+
+                              value.set('title',title);
+                              value.save({pageId:self.pageId});
+                          //  var option = new Option(title, value.id);
+
+                           // select.append($(option));
+                        }
+
+
+//                    $('#edit-component-modal').modal('show');
+                })
+
+
+            },
+
 
             onComponentDrag: function (event) {
                 var self=this;
@@ -552,12 +596,13 @@ define([
                     self.account.save();
 
                     //refresh theme
-                    document.getElementById('iframe-website').contentWindow.location.reload(true);
+                    //document.getElementById('iframe-website').contentWindow.location.reload(true);
+                    self.refreshIFrame();
                     //replace preview
                     //get theme by name
                     //var previewSrc = '/assets/images/theme-previews/indimain-preview.jpg';
                     //$('.theme-img').attr('src', previewSrc);
-                    self.setThemePreview(self.themeId, $('.theme-img')[0]);
+                    self.setThemePreview(self.account.get('website').themeId, $('.theme-img')[0]);
                 } else {
                     //show validate error
                     console.log('no theme selected ');
@@ -600,6 +645,43 @@ define([
             addSidebarComponent: function() {
                 //initiate modal
                 $('#add-component-modal').modal('show');
+            },
+
+            editSidebarComponent: function(event) {
+            //initiate modal
+                var self = this
+                  , componentID = $(event.currentTarget).data('component-id')
+                  , select = $('#component-edit');
+
+                //self.getPage()
+                self.getTempPage()
+                    .done(function() {
+                        var newOptions, input;
+                        self.pageId = self.page.get("_id");
+                        console.log(self.page);
+                        newOptions = self.page.get("components").models;
+                        console.log(newOptions);
+                        input = $('#component-title');
+
+                        $('option', select).remove();
+                        $.each(newOptions, function(index, value) {
+                            var title, option;
+                            console.log(index);
+                            console.log(value);
+                            if(componentID == value.id) {
+                                title = value.get('type');
+                                input.val(value.get('title'));
+                                //value.set('title',"123");
+                                //value.save({pageId:self.pageId});
+                                option = new Option(title, value.id);
+                                select.append($(option));
+                            }
+                    });
+
+                    $('#edit-component-modal').modal('show');
+                })
+
+         //   $('#edit-component-modal').modal('show');
             },
 
              renderSidebarComponent: function() {
@@ -755,11 +837,29 @@ define([
                 $("#file").trigger('click');
                 return false;
             },
+
             pageHandleEvent: function(options) {
                 var self = this;
                 self.pageHandle = options.pageHandle;
-                console.log("Pagehandle:"+self.pageHandle)
-            }
+                console.log("Pagehandle:" + self.pageHandle)
+            },
+
+
+        refreshIFrame: function () {
+            $("#iframe-website")
+                .attr("src", function(i, src){
+                    return src + "?editor=true";
+                });
+        },
+
+        ignorePageChanges: function (){
+
+            
+        },
+
+        savePageChanges: function () {
+
+        }
     });
 
     $$.v.RightPanel = view;
