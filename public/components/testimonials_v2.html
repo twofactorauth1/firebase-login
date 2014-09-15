@@ -34,17 +34,17 @@
             <!-- Indicators -->
             <ol class="carousel-indicators">
                 <li ng-repeat="testimonial in component.testimonials track by $index"
-                    data-target="#carousel-example-generic" data-slide-to="{{$index}}"
+                    data-target="#{{component.anchor}}" data-slide-to="{{$index}}"
                     class="{{$index==0?'active':'' }}"></li>
             </ol>
 
             <!-- Controls -->
             <span ng-if="component.testimonials.length > 1">
 
-                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <a class="left carousel-control" data-target="#{{component.anchor}}" role="button" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
-                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <a class="right carousel-control" data-target="#{{component.anchor}}" role="button" data-slide="next">
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
 
