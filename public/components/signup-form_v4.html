@@ -12,15 +12,15 @@
             <div class="form-group">
                     <label for="{{field.field_id}}" class="col-sm-3 control-label" style="padding-bottom: 5px">{{field.field_title}}</label>
                     <div class="col-sm-6">
-                        <input style="margin-top: 5px" type="{{field.field_type}}" class="form-control" id="{{field.field_id}}" data-ng-value="field.field_value" data-ng-disabled="field.field_disabled">
+                        <input style="margin-top: 5px" type="{{field.field_type}}" class="form-control" id="{{field.field_id}}" data-ng-value="field.field_value" data-ng-disabled="field.field_disabled" >
                     </div>
             </div>
           </div>
 
             <div class="form-actions">
                 <p class="text-center">
-                    <button class="btn btn-success right" type="button" ng-disabled="!{{component.formName}}.$valid" ng-click="submit()" disabled="disabled"><i class="icon-edit icon-white {{component.btn.icon}}"></i>{{component.btn.text}}</button>
-                    <button class="btn btn-danger right" type="button" ng-click="cancel()"><i class="icon-remove icon-white"></i>Cancel</button>
+                    <button class="btn btn-success right" type="button" disabled="disabled"><i class="icon-edit icon-white {{component.btn.icon}}"></i>{{component.btn.text}}</button>
+                    <button class="btn btn-danger right" type="button"><i class="icon-remove icon-white"></i>Cancel</button>
                 </p>
             </div>
         </form>
