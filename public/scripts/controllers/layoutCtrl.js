@@ -13,7 +13,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         that.segmentIOWriteKey = ENV.segmentKey;
         $window.segmentIOWriteKey = ENV.segmentKey;
         //that.themeUrl = $scope.themeUrl;
-
         accountService(function (err, data) {
             if (err) {
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
@@ -32,12 +31,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             } else {
                 if (route === '/' || route === '') {
                      route = 'index';
+                    // if (route.indexOf("blog/") > -1) {
+                    //     route = 'single-post';
+                    // }
+                    route = route.replace('/', '');
+                    that.pages = data[route];
                 }
-                if (route.indexOf("blog/") > -1) {
-                    route = 'single-post';
-                }
-                route = route.replace('/', '');
-                that.pages = data[route];
             }
         });
 
@@ -54,10 +53,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 console.log('Controller:LayoutCtrl -> Method:postsService Error: ' + err);
             } else {
 
-                if ($route.current.params.tagname) {
-                    console.log('Theres a tag name');
-                     var found = $filter('getByProperty')('post_tags', $route.current.params.tagname, data);
-                } else {
+                if (route === '/' || route === '') {
 
                     that.blogposts = data;
 

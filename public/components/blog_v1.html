@@ -2,9 +2,18 @@
     <div id="content-area">
         <div class="container clearfix row-fluid">
             <div id="main-area" class="col-sm-8">
-                <article class="entry clearfix" data-ng-if="control.blogposts">
+                <div class="currently-viewing" ng-show="blog.currentTag">
+                    <h4> Currently Viewing Tag: <strong>{{blog.currentTag}}</strong> </h4>
+                </div>
+                <div class="currently-viewing" ng-show="blog.currentCat">
+                    <h4> Currently Viewing Category: <strong>{{blog.currentCat}}</strong> </h4>
+                </div>
+                <div class="currently-viewing" ng-show="blog.currentAuthor">
+                    <h4> Currently Viewing Author: <strong>{{blog.currentAuthor}}</strong> </h4>
+                </div>
+                <article class="entry clearfix" data-ng-if="control.blogposts||blog.blogposts">
                     <div class="single-blog responsive clearfix"
-                         data-ng-repeat="blogpost in control.blogposts track by $index"
+                         data-ng-repeat="blogpost in blog.blogposts track by $index"
                          data-postId="{{blogpost._id}}">
 
                         <div class="blog-entry clearfix">
@@ -22,11 +31,11 @@
                                  • {{blogpost.created.date | amDateFormat:'DD-MM-YYYY'}}
                                 </span>
                                  <span data-ng-if="blogpost.post_author">
-                                   Posted by <a href="/page/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a>
+                                   Posted by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a>
                                 </span>
 
                                  <span data-ng-if="blogpost.post_category">
-                                  in <a href="/page/category/{{blogpost.post_category}}">{{blogpost.post_category}}</a>
+                                  in <a href="/category/{{blogpost.post_category}}">{{blogpost.post_category}}</a>
                                 </span>
 
                                 <!-- <span data-ng-if="blogpost.comment_count">
@@ -35,7 +44,7 @@
                             </div>
 
                             <ul class="post_tags" data-ng-if="blogpost.post_tags">
-                                <li data-ng-repeat="post_tags in blogpost.post_tags track by $index"><a href="/page/tag/{{post_tags}}">{{post_tags}}</a></li>
+                                <li data-ng-repeat="post_tags in blogpost.post_tags track by $index"><a href="/tag/{{post_tags}}">{{post_tags}}</a></li>
                             </ul>
 
                             <div class="blog-thumb alignleft" data-ng-if="blogpost.featured_image">
@@ -51,7 +60,7 @@
                                 </div>
                                 </p></div>
                             <a data-ng-if="blogpost.post_url"
-                               href="#/blog/{{blogpost.post_url}}"
+                               href="/blog/{{blogpost.post_url}}"
                                class="btn btn-orange pull-right"><span>READ MORE</span></a>
                                <div class="clearfix"></div>
                                <hr></hr>
@@ -71,11 +80,34 @@
                 </div>
                 <div class="clearfix mb30 hidden"></div>
 
-                <div class="tags" data-ng-if="control.blogpost.tags">
+                <div class="tags" data-ng-if="blog.postTags">
                     <h4><i class="fa fa-tag"></i> Tags</h4>
-                    <ul class="tag-cloud" data-ng-repeat="tag in control.blogpost.tags track by $index">
-                        <li><a href="/page/tag/{{tag}}">{{tag}}</a></li>
+                    <ul class="tag-cloud">
+                        <li data-ng-repeat="tag in blog.postTags track by $index"><a href="/tag/{{tag}}">{{tag}}</a></li>
                     </ul>
+                </div>
+
+                <div class="posts" data-ng-if="blog.latestposts">
+                    <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
+                    <ul data-ng-repeat="blogPost in blog.latestposts|limitTo: 3 track by $index">
+                        <li>
+                            <a href="/blog/{{blogPost.post_url}}">
+                                <span data-ng-if="blogPost.post_title">{{blogPost.post_title}}</span>
+                            </a>
+                            <span data-ng-if="blogPost.post_author"> by <a
+                                    href="/author/{{blogPost.post_author}}">{{blogPost.post_author}}</a></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div data-ng-if="blog.categories">
+                    <div class="clearfix mb30"></div>
+                    <div class="categories">
+                        <h4><i class="fa fa-list-ul"></i> Categories</h4>
+                        <ul class="tag-cloud" data-ng-repeat="category in blog.categories track by $index">
+                            <li><a href="/category/{{category}}">{{category}}</a></li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div data-ng-if="control.blogpost.comments">
@@ -88,30 +120,9 @@
                             <li>Lauren M. on Social Media Design</li>
                         </ul>
                     </div>
+                </div>
 
 
-                    <div class="posts" data-ng-if="control.blogposts">
-                        <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
-                        <ul data-ng-repeat="blogPost in control.blogpost track by $index">
-                            <li>
-                                <a href="/page/blog/{{blogPost.post_url}}">
-                                    <span data-ng-if="blogPost.post_title">{{blogPost.post_title}}</span>
-                                </a>
-                                <span data-ng-if="blogPost.post_author"> by <a
-                                        href="/page/blog/{{blogPost.post_url}}">{{blogPost.post_author}}</a></span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div data-ng-if="control.categories">
-                        <div class="clearfix mb30"></div>
-                        <div class="categories">
-                            <h4><i class="fa fa-list-ul"></i> Categories</h4>
-                            <ul class="tag-cloud" data-ng-repeat="category in component.categories track by $index">
-                                <li><a href="/page/category/{{category}}">{{category}}</a></li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

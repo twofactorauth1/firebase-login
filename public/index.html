@@ -70,7 +70,6 @@
     js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=522744787823977";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>-->
-
 <div id="header">
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
@@ -92,7 +91,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
-                        <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll du-Scrollspy>{{link.label || link.url}}</a>
+                        <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
                         <a data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}">{{link.label || link.url}}</a>
                     </li>
                 </ul>
@@ -103,7 +102,9 @@
     </nav>
 </div>
 
-<div data-ng-view></div>
+<div id="body" class="content" back-animation style="height: {{contentHeight}}px;">
+    <div ng-view class="page"></div>
+</div>
 
 <div id="footer">
     <div class="footer-after section">
@@ -155,6 +156,7 @@
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
 <script src="scripts/directives/dmStyle.js"></script>
+<script src="scripts/directives/ngEnter.js"></script>
 <script src="scripts/services/accountService.js"></script>
 <script src="scripts/services/websiteService.js"></script>
 <script src="scripts/services/themeService.js"></script>

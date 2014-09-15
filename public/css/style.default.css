@@ -15278,9 +15278,6 @@ strong {
   font-family: 'LatoBold';
   font-weight: normal;
 }
-.ng-hide {
-  display: none!important;
-}
 .mb0 {
   margin-bottom: 0px!important;
 }
@@ -22446,9 +22443,6 @@ ul.nav {
   text-shadow: 1px 1px 1px black;
   text-align: center;
 }
-.feature-block.parallax .inner-page {
-  padding: 50px 0;
-}
 /********** Gallery **********/
 .overlay-gallery-image {
   position: relative;
@@ -22583,6 +22577,9 @@ contenthover a {
 }
 .meet-team .profile-social li {
   display: inline-block;
+}
+.meet-team .profile-position {
+  text-align: center;
 }
 /********** Testimonials **********/
 .testimonials-v1 div[data-class="testimonials"] {
@@ -22838,9 +22835,10 @@ div[data-class='image-text'] p {
 .masthead {
   margin-top: 0;
   transition: none;
-  background-size: 100%!important;
-  min-height: 450px;
+  padding: 5em 0;
   height: 100%;
+  overflow: hidden;
+  background-size: cover!important;
 }
 .masthead h4 div,
 .masthead h4 i {
@@ -22867,6 +22865,9 @@ div[data-class='image-text'] p {
 }
 .masthead .btn .fa {
   float: left;
+}
+.masthead .row {
+  margin: 0;
 }
 .masthead .btn-text {
   font-weight: bold;
@@ -23291,9 +23292,46 @@ div[data-class="blog"] .single-blog {
   border-bottom: 5px solid #efa022!important;
   color: #ffffff;
 }
+.currently-viewing {
+  background: #47b1cc;
+  padding: 20px;
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.currently-viewing strong {
+  font-weight: bold;
+  font-size: 28px;
+}
 #sidebar {
   margin-top: 10px;
   padding: 20px;
+}
+#sidebar .fa {
+  background: #47b1cc;
+  border-radius: 40px;
+  padding: 10px;
+  color: #fff;
+  font-size: 20px;
+}
+#sidebar .tags {
+  width: 100%;
+}
+#sidebar .tag-cloud li {
+  display: inline;
+}
+#sidebar .entry-excerpt {
+  margin-bottom: 30px;
+}
+#sidebar .tag-cloud li:nth-child(1) {
+  font-weight: bold;
+}
+#sidebar .tag-cloud li:nth-child(2) {
+  font-size: 2em;
+}
+#sidebar .tag-cloud li:nth-child(4) {
+  font-size: 3em;
 }
 #main-area {
   word-wrap: break-word;
@@ -23396,4 +23434,12 @@ hr {
 }
 .goback p {
   text-align: left;
+}
+#body,
+#main-area,
+#content-area {
+  min-height: 600px;
+}
+.ng-hide {
+  display: none!important;
 }
