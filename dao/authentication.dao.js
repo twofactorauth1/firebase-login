@@ -11,6 +11,7 @@ var accountDao = require('./account.dao');
 var cookies = require('../utils/cookieutil');
 var EmailTemplateUtil = require('../utils/emailtemplateutil');
 var crypto = require('../utils/security/crypto');
+var appConfig = require('../configs/app.config');
 
 var dao = {
 
@@ -35,7 +36,7 @@ var dao = {
             }
 
             //We are at the main indigenous level application, not at a custom subdomain
-            else if (account === true) {
+            else if (account === true || account.id() ===appConfig.mainAccountID) {
                 log.info("Logging into main App");
                 req.session.accountId = 0;
                 userDao.getUserByUsername(username, function (err, value) {

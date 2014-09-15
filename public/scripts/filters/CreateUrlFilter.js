@@ -5,7 +5,7 @@ mainApp.filter('createUrlFilter', [function () {
                 cp['url'] = '/components/' + cp.type + '_v' + cp.version + '.html';
             });
         } else {
-            console.log('CreateUrlFilter Else Check');
+            //console.log('CreateUrlFilter Else Check');
         }
         return obj;
     }
