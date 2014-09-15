@@ -32,6 +32,7 @@
         'app': '/angular_admin/app',
         'userService': '/angular_admin/services/user',
         'paymentService': '/angular_admin/services/payment',
+        'twoNetService': '/angular_admin/services/two_net',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
  	},
  	shim: {

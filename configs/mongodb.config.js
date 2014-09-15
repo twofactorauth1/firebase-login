@@ -8,7 +8,7 @@
 var config = require('./app.config');
 
 //LOCAL
-var connectionString = "mongodb://localhost/bioindigenous";
+ var connectionString = "mongodb://localhost/bioindigenous";
 
 //PROD
 //var connectionString = "mongodb://indiweb:anime1@kahana.mongohq.com:10077/indigenous";

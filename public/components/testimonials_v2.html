@@ -1,12 +1,6 @@
 <div ng-show="component" class="component testimonials-v2 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};'  data-class="testimonials" >
     <div class="component-body">
-        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-
-            <!-- Indicators -->
-            <ol class="carousel-indicators" >
-                <li ng-repeat="testimonial in component.testimonials track by $index"
-                    data-target="#carousel-example-generic" data-slide-to="{{$index}}" class="{{$index==0?'active':'' }}"></li>
-            </ol>
+        <div id="{{component.anchor}}" class="carousel slide" data-ride="carousel">
 
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
@@ -32,6 +26,13 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Indicators -->
+            <ol class="carousel-indicators" >
+                <li ng-repeat="testimonial in component.testimonials track by $index"
+                    data-target="#carousel-example-generic" data-slide-to="{{$index}}" class="{{$index==0?'active':'' }}"></li>
+            </ol>
+
             <!-- Controls -->
             <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
                 <span class="glyphicon glyphicon-chevron-left"></span>

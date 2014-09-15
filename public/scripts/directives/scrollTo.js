@@ -3,8 +3,7 @@ var $scope, $location;
 mainApp.service('anchorSmoothScroll', function() {
 
     this.scrollTo = function(eID) {
-
-        // This scrolling function 
+        // This scrolling function
         // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
 
         var startY = currentYPosition();
@@ -59,18 +58,4 @@ mainApp.service('anchorSmoothScroll', function() {
 
     };
 
-});
-
-mainApp.controller('ScrollCtrl', function($scope, $location, anchorSmoothScroll) {
-
-    $scope.gotoElement = function(eID) {
-        console.log('eID'+eID);
-        // set the location.hash to the id of
-        // the element you wish to scroll to.
-        $location.hash(eID);
-
-        // call $anchorScroll()
-        anchorSmoothScroll.scrollTo(eID);
-
-    };
 });

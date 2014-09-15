@@ -8,15 +8,14 @@
     <meta name="author" content="">
     <base href="/">
 
-    <link data-ng-if="layout.website.settings.favicon" rel="shortcut icon" href="{{layout.website.settings.favicon}}">
-    <link data-ng-if="!layout.website.settings.favicon" rel="shortcut icon" href="https://s3.amazonaws.com/indigenous-themes/assets/icons/favicon.ico"/>
+    <link data-ng-if="main.website.settings.favicon" rel="shortcut icon" href="{{main.website.settings.favicon}}">
+    <link data-ng-if="!main.website.settings.favicon" rel="shortcut icon" href="https://s3.amazonaws.com/indigenous-themes/acct_6/favicon.ico"/>
 
 
     <link rel="stylesheet" href="/css/style.default.css">
     <link rel="stylesheet" href="/js/libs_misc/jquery.tagsinput/jquery.tagsinput.css" />
 
-    <title>{{layout.website.title}}</title>
-
+    <title ng-cloak>{{main.website.title}}</title>
     <script type="text/javascript">
 
         window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
@@ -41,9 +40,28 @@
         window.analytics.page();
     </script>
 
-</head>
-<body class="theme-main navbar-v{{layout.website.nav_version}}" ng-controller="LayoutCtrl as layout">
+    <style type="text/css">
 
+        h1, h2, h3, h4, h5 { font-family: {{fontFamily}} sans-serif!important;}
+        body { font-family: {{fontFamily2}}, sans-serif!important; }
+
+        .navbar-collapse {
+            background: #fff;
+        }
+
+        .btn-primary {
+            background: {{primaryColor}};
+            border-bottom: 4px solid {{secondaryColor}};
+        }
+
+        .navbar-v2 #header .navbar ul.navbar-nav li:hover {
+            border-bottom: 4px solid {{navHover}};
+        }
+
+    </style>
+
+</head>
+<body class="theme-main navbar-v{{layout.website.nav_version}}" ng-controller="LayoutCtrl as layout" ng-cloak>
 <div id="fb-root"></div>
 <!--<script>(function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
@@ -52,7 +70,6 @@
     js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=522744787823977";
     fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>-->
-
 <div id="header">
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
@@ -65,7 +82,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand editable" href="{{layout.account.accountUrl}}" data-name="{{layout.account.company.name}}">
+                <a class="navbar-brand editable" href="/" data-name="{{layout.account.company.name}}">
                     <span class="logo-1"> <img src="{{layout.account.business.logo}}" scale="0"> </span>
                 </a>
 
@@ -74,7 +91,8 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
-                        <a  data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" >{{link.label || link.url}}</a>
+                        <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
+                        <a data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}">{{link.label || link.url}}</a>
                     </li>
                 </ul>
             </div>
@@ -84,7 +102,9 @@
     </nav>
 </div>
 
-<div data-ng-view></div>
+<div id="body" class="content" back-animation style="height: {{contentHeight}}px;">
+    <div ng-view class="page"></div>
+</div>
 
 <div id="footer">
     <div class="footer-after section">
@@ -129,11 +149,14 @@
 <script src="../js/libs/angular-parallax/scripts/angular-parallax.js"></script>
 <script src="../js/libs/moment/moment.js"></script>
 <script src="../js/libs/angular-moment/angular-moment.js"></script>
+<script src="../js/libs/angular-scroll/angular-scroll.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
+<script src="scripts/directives/dmStyle.js"></script>
+<script src="scripts/directives/ngEnter.js"></script>
 <script src="scripts/services/accountService.js"></script>
 <script src="scripts/services/websiteService.js"></script>
 <script src="scripts/services/themeService.js"></script>
@@ -145,7 +168,6 @@
 <script src="scripts/controllers/mainCtrl.js"></script>
 <script src="scripts/controllers/blogCtrl.js"></script>
 <script src="scripts/controllers/layoutCtrl.js"></script>
-<script src="scripts/directives/scrollTo.js"></script>
 <script src="../js/scripts/config.js"></script>
 <!-- endbuild -->
 </body>

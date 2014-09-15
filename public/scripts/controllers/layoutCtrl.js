@@ -1,18 +1,18 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams',
-    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$anchorScroll',
+    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $anchorScroll) {
+        var account, theme, website, pages, teaserposts, route, postname, that = this;
+        route = $location.$$path;
+
         $scope.$route = $route;
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
 
-        var account, theme, website, pages, blogposts, route, postname, that = this;
-        route = $location.$$path;
         //var config = angular.module('config');
         that.segmentIOWriteKey = ENV.segmentKey;
         $window.segmentIOWriteKey = ENV.segmentKey;
         //that.themeUrl = $scope.themeUrl;
-
         accountService(function (err, data) {
             if (err) {
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
@@ -30,13 +30,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
             } else {
                 if (route === '/' || route === '') {
-                    route = 'index';
+                     route = 'index';
+                    // if (route.indexOf("blog/") > -1) {
+                    //     route = 'single-post';
+                    // }
+                    route = route.replace('/', '');
+                    that.pages = data[route];
                 }
-                if (route.indexOf("blog/") > -1) {
-                    route = 'single-post';
-                }
-                route = route.replace('/', '');
-                that.pages = data[route];
             }
         });
 
@@ -52,7 +52,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:postsService Error: ' + err);
             } else {
-                that.blogposts = data;
+                if (that.teaserposts) {
+                    //donothing
+                } else {
+                    if (route === '/' || route === '') {
+                        that.teaserposts = data;
+                    }
+                }
             }
         });
 

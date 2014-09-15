@@ -6,11 +6,8 @@
 *
 -->
 
-<div class="component feature-list feature-list-v2 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};' ng-show="component" id="{{ component.anchor}}"
-     data-class="feature-list"
-     data-id="a21b456q-5564-1g87-6j43-22123j887656"
-     style="background: url({{component.bg.img.url}});">
-    <div class="page">
+<div ng-show="component" id="{{component.anchor}}" class="component feature-list-v2 {{component.bg.img.parallax?'parallax':''}}">
+    <div style='background: url("{{component.bg.img.url}}"); background: {{component.bg.color}}; color: {{component.txtcolor}};' data-class="feature-list" data-id="{{component._id}}" parallax-background parallax-ratio="0.4">
         <div class="row inner-page">
             <div class="row">
 

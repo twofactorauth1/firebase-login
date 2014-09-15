@@ -5,7 +5,7 @@ mainApp.filter('generateURLforLinks', function () {
         var _url = "";
         switch (linkToObject.type) {
             case "page":
-                _url = "#/" + linkToObject.data;
+                _url = linkToObject.data;
                 return _url;
                 break;
             case "home":
@@ -15,7 +15,7 @@ mainApp.filter('generateURLforLinks', function () {
                 return linkToObject.data;
                 break;
             case "section":
-                return '#/#'+linkToObject.data;
+                return '/#'+linkToObject.data;
                 break;
             case "product":
                 _url = ""; //Not yet implemented
