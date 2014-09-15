@@ -1,21 +1,29 @@
 
-<div data-ng-show="component" id="{{component.anchor}}" class="component signup-form-v2" data-class="signup-form-v4"  style="background:{{component.bg.color}};">
+
+<div data-ng-show="component" id="{{component.anchor}}" class="component" data-class="signup-form-v4"  style="'background':'{{component.bg.color}}';">
     <div id="error-msg" class="alert alert-danger hidden">
         <button type="button" aria-hidden="true" class="close">×</button>
         <span class="message"></span>
     </div>
-    <h2 class="ng-binding">{{component.title}}</h2>
-    <div class="component-body">
-        <form name="{{component.formName}}" id="{{component._id}}" class="ng-pristine ng-invalid ng-invalid-required">
-            <div ng-repeat="field in form.form_fields" >
-              {{field.field_title}} <input id="{{field.field_id}}" type="{{field.field_type}}" data-ng-value="field.field_value" data-ng-disabled="field.field_disabled"/><br><br>
+    <h2 class="ng-binding" style="text-align: center">{{component.title}}</h2>
+    <div style="text-align: center">
+        <form name="{{component.formName}}" id="{{component._id}}" class="form-horizontal">
+            <div ng-repeat="field in component.form_fields" >
+            <div class="form-group">
+                    <label for="{{field.field_id}}" class="col-sm-3 control-label" style="padding-bottom: 5px">{{field.field_title}}</label>
+                    <div class="col-sm-6">
+                        <input style="margin-top: 5px" type="{{field.field_type}}" class="form-control" id="{{field.field_id}}" data-ng-value="field.field_value" data-ng-disabled="field.field_disabled">
+                    </div>
             </div>
+          </div>
+
             <div class="form-actions">
                 <p class="text-center">
-                    <button class="btn btn-success right" type="button" ng-disabled="!{{component.formName}}.$valid" ng-click="submit()" disabled="disabled"><i class="icon-edit icon-white {{component.btn.icon}}"></i> {{component.btn.text}}</button>
-                    <button class="btn btn-danger right" type="button" ng-click="cancel()"><i class="icon-remove icon-white"></i> Cancel</button>
+                    <button class="btn btn-success right" type="button" ng-disabled="!{{component.formName}}.$valid" ng-click="submit()" disabled="disabled"><i class="icon-edit icon-white {{component.btn.icon}}"></i>{{component.btn.text}}</button>
+                    <button class="btn btn-danger right" type="button" ng-click="cancel()"><i class="icon-remove icon-white"></i>Cancel</button>
                 </p>
             </div>
         </form>
     </div>
 </div>
+
