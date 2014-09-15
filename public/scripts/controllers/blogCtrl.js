@@ -23,8 +23,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     if (route === 'blog' || route === '/blog' || route.indexOf("tag/") > -1 || route.indexOf("category/") > -1 || route.indexOf("author/") > -1) {
                         route = 'blog';
                     }
-                    console.log('Page: ', data[route]);
-                    console.log('Route: ', route);
                     that.pages = data[route];
             }
         });
@@ -33,7 +31,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             if(err) {
                 console.log('BlogCtrl Error: ' + err);
             } else {
-                console.log('Route: ', route);
                 that.currentTag, that.currentAuthor, that.currentCat = '';
                 //get post tags for sidebar
                     //should be replaced by get tags filter
@@ -69,13 +66,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     that.latestposts.slice(Math.max(data.length - 3, 1));
 
                 if (route.indexOf('blog') > -1)  {
-                    console.log('Blog', data);
                     that.blogposts = data;
                 }
 
                 //if tagname is present, filter the cached posts with the tagname
                 if ($route.current.params.tagname != null) {
-                    console.log('Tag Name');
                     var filterPosts = [];
                     that.currentTag = $route.current.params.tagname;
                     for (var i = 0; i < data.length; i++) {
@@ -94,7 +89,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
                 //if authorname is present, filter the cached posts with the authorname
                 if ($route.current.params.authorname != null) {
-                    console.log('Author: ', $route.current.params.authorname);
                     var filterPosts = [];
                     that.currentAuthor = $route.current.params.authorname;
                     for (var i = 0; i < data.length; i++) {
