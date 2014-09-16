@@ -1,5 +1,5 @@
 define(['app'], function (app) {
-	app.service('TwoNetService', function ($http) {
+	app.register.service('TwoNetService', function ($http) {
 		this.postBodyMeasurement = function (startDate, endDate, fn) {
 			var query = {
 				measureRequest: {

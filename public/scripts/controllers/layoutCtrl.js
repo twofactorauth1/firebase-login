@@ -2,7 +2,7 @@
 
 mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$anchorScroll',
     function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $anchorScroll) {
-        var account, theme, website, pages, blogposts, route, postname, that = this;
+        var account, theme, website, pages, teaserposts, route, postname, that = this;
         route = $location.$$path;
 
         $scope.$route = $route;
@@ -52,11 +52,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:postsService Error: ' + err);
             } else {
-
-                if (route === '/' || route === '') {
-
-                    that.blogposts = data;
-
+                if (that.teaserposts) {
+                    //donothing
+                } else {
+                    if (route === '/' || route === '') {
+                        that.teaserposts = data;
+                    }
                 }
             }
         });
