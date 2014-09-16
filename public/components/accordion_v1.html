@@ -1,5 +1,5 @@
 <div class="example" style="background:lightgray;padding:5px;">
-    <h5 style="text-align: center">{{component.subtitle}}</h5>
+    <h5 style="text-align: center">{{component.title}}</h5>
 
     <div id="accordion" class="panel-group {{component.bg.img.parallax?'parallax':''}}" parallax-background
          parallax-ratio="0.4"
@@ -7,12 +7,12 @@
         <div class="panel pane-default" ng-repeat="accordion in component.panels">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{$index}}" ng-click="accordion[$index]= !accordion[$index]" ng-style="{'background-color':accordion[$index]?'blue':'white'}">
+                    <a data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{$index}}" ng-click="accordion[$index]= !accordion[$index]">
                     <span class="glyphicon glyphicon-plus-sign" ng-hide="accordion[$index]">{{flag}}</span>  <span ng-show="accordion[$index]" class="glyphicon glyphicon-minus-sign"> {{flag}} </span>{{accordion.title}}
                     </a>
                 </h4>
             </div>
-            <div id="collapse{{$index}}" class="panel-collapse collapse" ng-style="{'background-color':accordion[$index]?'blue':'white'}">
+            <div id="collapse{{$index}}" class="panel-collapse collapse">
                 <div class="panel-body">
                   {{accordion.text}}
                 </div>
