@@ -14,33 +14,52 @@
                 <div class="panel-body">
                     <div class="col-sm-6">
                         <div class="search-form-div">
-                            <button href="" class="btn btn-primary btn-square btn-search-options"
-                                    ng-click="showSearchOptionsModal()"><span
-                                    class="glyphicon glyphicon-asterisk"></span>
-                            </button>
-                            <form class="search-form" ng-submit="findVideo(query)">
+                            <div class="input-group">
+                               <div class="input-group-btn">
+                                <button href="" class="btn btn-success btn-lg btn-search-options dropdown-toggle" data-toggle="dropdown">
+                                        <span class="fa fa-youtube"></span>
+                                        <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                  <li><a href="#"><span
+                                        class="fa fa-youtube-square"></span> Youtube</a></li>
+                                  <li><a href="#"><span
+                                        class="fa fa-vimeo-square"></span> Vimeo</a></li>
+                                  <li class="divider"></li>
+                                  <li ><a ng-click="showSearchOptionsModal()"><span
+                                        class="fa fa-search-plus"></span> Advanced Search</a></li>
+                                </ul>
+                              </div><!-- /btn-group -->
+                              </span>
+                              <form class="search-form" ng-submit="findVideo(query)">
                                 <div class="fullwidth-input-wrapper">
-                                    <input ng-model="query" type="text" placeholder="Search">
+                                    <input ng-model="query" type="text" placeholder="Search" class="input-lg">
                                 </div>
                                 <button class="btn btn-search btn-primary btn-square" type="submit"><span
                                         class="glyphicon glyphicon-search"></span>
                                 </button>
                             </form>
+                            </div><!-- /input-group -->
+
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="row">
-                            <button class="btn btn-info btn-primary btn-square"
-                                    ng-click="!courseBlocked && showCourseInfoModal(course)"><span
-                                    class="glyphicon glyphicon-info-sign"></span></button>
-                            <button class="btn btn-add btn-square" ng-click="!courseBlocked && showAddCourseModal()"><span
-                                    class="glyphicon glyphicon-plus"></span></button>
-                            <div class="fullwidth-input-wrapper">
-                                <input disabled class="playlist-selector" placeholder="Add Course" ng-if="courses.length==0"/>
-                                <select ng-model="ui.selectedCourseId" class="playlist-selector"
-                                        ng-change="courseSelected()" ng-if="courses.length>0" ng-disabled="courseBlocked"
-                                        ng-options="course._id as course.title for course in courses | orderBy:'title'">
-                                </select>
+                            <div class="input-group">
+                               <div class="input-group-btn">
+                                    <button class="btn btn-info btn-success btn-lg"
+                                            ng-click="!courseBlocked && showCourseInfoModal(course)"><span
+                                            class="glyphicon glyphicon-info-sign"></span></button>
+                                </div>
+                                        <input disabled class="playlist-selector" placeholder="Add Course" ng-if="courses.length==0"/>
+                                        <select ng-model="ui.selectedCourseId" class="playlist-selector"
+                                                ng-change="courseSelected()" ng-if="courses.length>0" ng-disabled="courseBlocked"
+                                                ng-options="course._id as course.title for course in courses | orderBy:'title'">
+                                        </select>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-add btn-square" ng-click="!courseBlocked && showAddCourseModal()"><span
+                                            class="glyphicon glyphicon-plus"></span></button>
+                                </div>
                             </div>
                         </div>
                     </div>
