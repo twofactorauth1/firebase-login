@@ -213,29 +213,32 @@
   }
 
   #social_dashboard_rightbar {
-    padding: 0 15px 15px;
-    width: 190px;
+    padding: 0;
+    width: 240px;
     position: absolute;
-    top: 0;
-    right: 0;
-//    bottom: 0;
+    top: -56px;
+    right: -240px;
     border-right: 1px solid #d3d3d3;
     box-shadow: 1px 0 0 #f7f7f7;
     background: #e7e7e7;
+    .nav-list {
+      margin-top: 0!important;
+    }
     .header {
-      font-size: 14px;
+      font-size: 18px;
       line-height: 20px;
-      #gradient > .vertical(#eee, #ccc);
-      width: 190px;
-      margin:0 0 0 -15px;
-      padding: 6px 15px;
-      border-bottom: 1px solid #aaa;
-      border-top: 1px solid #fafafa;
+      margin: 0;
       position: relative;
       cursor: pointer;
+      background-color: #1d2939;
+      color: #ccc;
+      border-bottom: 1px solid #273548;
+      padding: 15px;
+      font-weight: bold;
       &:hover {
         opacity: 0.9;
       }
+
       .arrow.open,
       .arrow.closed {
         display: inline-block;
@@ -271,7 +274,7 @@
       & > :first-child {
         margin-top: 10px;
       }
-      & > :last-child {
+      & > :last-child {animation: ;
         margin-bottom: 20px
       }
     }
@@ -280,6 +283,9 @@
       margin-bottom: 8px;
       input { vertical-align: top; }
       label { display: inline; }
+    }
+    .nav-tabs {
+      margin-top: 0!important;
     }
   }
 }
