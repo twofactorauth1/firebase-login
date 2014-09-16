@@ -1,5 +1,5 @@
 define(['app'], function (app) {
-	app.service('UserService', function ($http) {
+	app.register.service('UserService', function ($http) {
 		var baseUrl = '/api/1.0/';
 		this.getUser = function (fn) {
 			var apiUrl = baseUrl + ['user', $$.server.userId].join('/');
