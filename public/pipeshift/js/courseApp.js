@@ -2,7 +2,7 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('var.directives', []);
-var app = angular.module('courseApp', [    'var.directives', 'app.modules.course', 'app.constants',
+var app = angular.module('courseApp', [    'var.directives', 'app.modules.course',
     "ui.bootstrap",
     "com.2fdevs.videogular",
     "com.2fdevs.videogular.plugins.controls",
