@@ -26,8 +26,6 @@ define([
         userId: null,
         user: null,
         account: null,
-        page: null,
-        temp_page: null,
 
         websiteId: null,
         pageId: null,
@@ -45,12 +43,8 @@ define([
         },
 
         events: {
-            "click .btn-cancel-page" : "openSavePageModal",
-            "click .btn-save-page" : "openSavePageModal",
-            "click .ignore-page-changes": "ignorePageChanges",
-            "click .save-page-changes": "savePageChanges",
-            /*"click .btn-save-page":"savePage",*/
-            /*"click .btn-cancel-page":"cancelPage",*/
+            "click .btn-save-page":"savePage",
+            "click .btn-cancel-page":"cancelPage",
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
             "mousemove #sortable":"draggingComponent",
@@ -58,14 +52,11 @@ define([
         },
 
         initialize: function(options) {
-            var self = this;
-
+            console.log(options);
             options = options || {};
-            self.pageHandle = options.page || "index";
-            self.websiteId = options.websiteId;
+            this.pageHandle = options.page || "index";
+            this.websiteId = options.websiteId;
 
-            console.log("options.page: " + options.page);
-            console.log("PageHanlde: " + self.pageHandle);
         },
 
         render: function () {
@@ -75,9 +66,7 @@ define([
                 , p3 = self.getThemeConfig()
                 , p4 = self.getWebsite()
                 , p5 = self.getPages()
-                , p6 = $.Deferred()             //loading image theme Preview
-                , p7 = $.Deferred()             //loading temp page model
-                , p8 = $.Deferred()             //loading      page model
+                , p6 = $.Deferred(); //loading image theme Preview
 
             $.when(p1)
                 .done(function() {
@@ -85,77 +74,58 @@ define([
                         self.currentThemePreviewURL = themePreview;
                         p6.resolve();
                     });
+
                 });
 
             $.when(p4)
                 .done(function() {
-                    self.websiteId = self.website.get("_id");
-                    self.websiteTitle = self.website.get("title");
-                    self.subdomain = self.account.get("subdomain");
-                    self.websiteSettings = self.website.get("settings");
-
-                    self.getTempPage().done(function (){
-                        p7.resolve();
-                        p8.resolve();
-                    });
+                    self.websiteId = self.website.id;
+                    self.websiteTitle = self.website.attributes.title;
+                    self.subdomain = self.attributes.subdomain;
+                    self.websiteSettings = self.website.attributes.settings;
                 });
 
-            $.when(p1, p2, p4, p6, p7)
+            $.when(p1, p2, p4, p6)
                 .done(function () {
-                    var data
-                      , tmpl
-                      , html
-                      , colorPalette
-                      , sidetmpl
-                      , rightPanel;
 
                     data = {
                         websiteId: self.websiteId,
                         websiteTitle: self.websiteTitle,
                         subdomain: self.subdomain
                     };
-                    if (self.pageHandle == "index" || self.pageHandle == "index_temp_page" || self.pageHandle == "null" || self.pageHandle == "/") {
-                        data.page = "/index_temp_page";
+                    if (self.pageHandle == "index" || self.pageHandle == "null" || self.pageHandle == "/") {
+                        data.page = "/index";
                     } else {
-                        if (self.pageHandle && self.pageHandle.indexOf("_temp_page") === -1) {
-                            data.page = "/page/" + self.pageHandle + "_temp_page";
-                        } else {
-                            data.page = "/page/" + self.pageHandle;
-                        }
+                        data.page = "/page/" + self.pageHandle;
                     }
 
 
-                    tmpl = $$.templateManager.get("edit-website", self.templateKey);
-                    html = tmpl(data);
+                    var tmpl = $$.templateManager.get("edit-website", self.templateKey);
+                    var html = tmpl(data);
 
-                    colorPalette = self.websiteSettings;
+                    var colorPalette = self.websiteSettings;
 
                     self.show(html);
 
                     self.check_welcome();
 
-                    //sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
-                    rightPanel = $('#rightpanel');
+                    var sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
+                    var rightPanel = $('#rightpanel');
 
                     //TODO: make main panel avaliable to all views
 
                     self.adjustWindowSize();
 
                     $("#iframe-website", this.el).load(function(pageLoadEvent) {
-                    //$("#iframe-website", this.el).ready(function(pageLoadEvent) {
-
-                        var doc, page;
-                        doc = $(pageLoadEvent.currentTarget)[0].contentDocument ||
+                        var doc = $(pageLoadEvent.currentTarget)[0].contentDocument ||
                                   $(pageLoadEvent.currentTarget)[0].documentWindow;
-
-                        sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
-                        page = "index";
+                        console.log(doc);
+                        var page = "index";
                         if (doc != null) {
-                            page = doc.location.pathname;
+                            var page = doc.location.pathname;
                             if (page.indexOf("/") == 0) {
                                 page = page.substr(1);
                             }
-                            page = page.replace("_temp_page", "");
                             page = page.replace("page/", "");
                             if (page == "" || page == "/") {
                                 page = "index";
@@ -174,41 +144,43 @@ define([
                             $$.e.PageHandleEvent.trigger("pageHandle", { pageHandle: self.pageHandle });
                         }
 
-                        $.when(p3, p4, p5, p6, p7, p8, self.temp_page.fetch())
+                        $.when(p3, p4, p5, p6)
                             .done(function() {
-                                self.getPages()
-                                    .done( function() {
-                                        var key
-                                          , componentsArray = []
-                                          , rawComponents = self.temp_page.get("components").models
-                                          , data;
+                                self.getPage().done(function(){
+                                    self.getPages()
+                                        .done( function() {
+                                            self.pageId = self.page.attributes._id;
+                                            console.log('This Page ID: ' + self.pageId);
 
-                                        self.pageId = self.page.get("_id");
-                                        self.temp_pageId = self.temp_page.get("_id");
-
-                                        for (key in rawComponents) {
-                                            if (rawComponents.hasOwnProperty(key)) {
-                                                componentsArray.push(rawComponents[key]);
+                                            // $("#iframe-website").contents().find('#body').data("pageid", self.pageId);
+                                            // console.log('Body Tag: '+$("#iframe-website").contents().find('#body').data("pageid"));
+                                            var componentsArray = [];
+                                            var rawComponents = self.page.attributes.components.models;
+                                            for (key in rawComponents) {
+                                                if (rawComponents.hasOwnProperty(key)) {
+                                                    componentsArray.push(rawComponents[key]);
+                                                }
                                             }
-                                        }
+                                          
+                                            var data = {
+                                                pages: self.pages.toJSON(),
+                                                components: componentsArray,
+                                                colorPalette: colorPalette,
+                                                account: self.account,
+                                                blog: self.blogBoolean,
+                                                currentThemePreviewURL: self.currentThemePreviewURL
+                                            };
 
-                                        data = {
-                                            pages: self.pages.toJSON(),
-                                            components: componentsArray,
-                                            colorPalette: colorPalette,
-                                            account: self.account,
-                                            blog: self.blogBoolean,
-                                            currentThemePreviewURL: self.currentThemePreviewURL
-                                        };
+                                self.setupSidebar(data, rightPanel, sidetmpl);
 
-                                        self.setupSidebar(data, rightPanel, sidetmpl);
-                                        $(window).on("resize", self.adjustWindowSize);
-                                        self.disableClickableTitles();
-                                        self.disableWaypointsOpacity();
-                                    })
-                            });
+                                $(window).on("resize", self.adjustWindowSize);
+                                self.disableClickableTitles();
+                                self.disableWaypointsOpacity();
+                            })
+                        });
                     });
                 });
+            });
 
             this.proxiedOnWebsiteEdit = $.proxy( this.onWebsiteEdit, this);
             this.$el.on("websiteedit", this.proxiedOnWebsiteEdit);
@@ -442,10 +414,13 @@ define([
             var components=self.page.get("components");
 
             components.filterById(serialize);*/
-            //    this.page.set("components",serialize);
+
+
+        //    this.page.set("components",serialize);
             //this.page.component=serialize;
-            //     console.log(this.page);
-            /* this.page = new Page({
+
+       //     console.log(this.page);
+           /* this.page = new Page({
                 websiteId:this.websiteId,
                 title: pageTitle,
                 handle: pageUrl,
@@ -460,7 +435,8 @@ define([
                     by: self.user.attributes._id
                 }
             });*/
-            /*           this.page.save().done( function(err,res) {
+
+ /*           this.page.save().done( function(err,res) {
                 console.log(err);
                 console.log(res);
                 console.log('page sved');
@@ -645,15 +621,13 @@ define([
         },
 
         getPage: function() {
-            var self = this;
-
-            console.log('Website ID: ' + self.websiteId + ' Page Handle: ' + self.pageHandle);
-            self.page = new Page({
-                websiteId: self.websiteId,
-                handle: self.pageHandle
+            console.log('Website ID: '+this.websiteId+' Page Handle: '+this.pageHandle);
+            this.page = new Page({
+                websiteId: this.websiteId,
+                handle: this.pageHandle
             });
 
-            return self.page.fetch();
+            return this.page.fetch();
         },
 
         getPages: function() {
@@ -718,76 +692,19 @@ define([
             p1.responseType = "arraybuffer";
             p1.done(function (imageData){
                 done((window.URL || window.webkitURL).createObjectURL( new Blob( [ new Uint8Array( imageData ) ], { type: "image/jpeg" } ) ));
-            }).fail(typeof fail === 'function' ? fail : function(){ });
+            }).fail(fail);
 
             return p1;
         },
-
         setThemePreview: function (themeId, imageElement) {
             var self = this;
             self._getThemePreview(themeId, function (themePreview) {
                 if (imageElement) imageElement.src = themePreview;
                 self.currentThemePreviewURL =  themePreview;
-            }, function(resp){
+            },function(resp){
                 $$.viewManager.showAlert("An error occurred retrieving the Theme Preview");
             });
-        },
-
-        getTempPage: function () {
-            var self = this
-                , temp_page
-                , p1 = $.Deferred();
-            if (self.temp_page === null || self.temp_page.get("_id") === null) {
-                if ( self.pageHandle === null ) {
-                    self.pageHandle = "index_temp_page";
-                }
-                else if ( self.pageHandle.indexOf("_temp_page") === -1 ) {
-                    self.pageHandle += "_temp_page";
-                }
-                self.getPage()
-                    .done(function () {
-                        temp_page = self.page.toJSON();
-                        if ( temp_page._id !== null ) {
-                            self.temp_page = new Page(temp_page);
-                            p1.resolve(self.temp_page);
-                        } else {
-                            self.pageHandle = self.pageHandle.replace("_temp_page", "");
-                            self.getPage()
-                                .done(function () {
-                                    temp_page = self.page.toJSON();
-                                    temp_page.handle += "_temp_page";
-                                    temp_page._id = null;
-                                    self.temp_page = new Page(temp_page);
-                                    self.temp_page.save()
-                                        .done(function () {
-                                            p1.resolve(self.temp_page);
-                                        }).fail(function (){
-                                            p1.reject();
-                                        })
-                                })
-                        }
-
-
-                    });
-                return p1;
-            }
-            else {
-                return self.temp_page.fetch();
-            }
-        },
-
-        openSavePageModal: function (){
-            $('#save-page-modal').modal('show');
-        },
-
-        ignorePageChanges: function (){
-            console.log("ignore")
-        },
-
-        savePageChanges: function (){
-            console.log("save")
         }
-
     });
 
 
