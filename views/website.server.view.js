@@ -234,12 +234,7 @@ _.extend(view.prototype, BaseView.prototype, {
             data.title = 'Indigenous.IO';
             data.author = 'Indigenous.IO';
             data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
-            data.website = {
-                'navbar-class':'navbar-v1',
-                'settings': {
-                    'favicon': 'https://s3.amazonaws.com/indigenous-themes/acct_6/favicon.ico'
-                }
-            }
+            data.website = value.website || {};
             data.seo={
                 description: '',
                 keywords: ''

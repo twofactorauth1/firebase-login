@@ -27,11 +27,9 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main")
             meta(name="keywords", content=seo.keywords)
             meta(name="author", content=author)
             base(href="/")
-            link(rel="shortcut icon", href=website.settings.favicon)
+            link(rel="shortcut icon", href=account.website.settings.favicon)
 
-
-
-    body(class="theme-main navbar-v1", ng-controller="LayoutCtrl as layout", ng-cloak)
+    body(class='theme-main navbar-v#{ account.website.nav_version }', ng-controller="LayoutCtrl as layout", ng-cloak)
         block body_content
             div(id='fb-root')
             div(id='header')
