@@ -157,6 +157,7 @@ module.exports = function(grunt) {
             all:['test/**/*_test.js'],
             analytics: ['analytics/tests/*_test.js'],
             api:['api/test/*_test.js'],
+            assets:['assets/test/*_test.js'],
             biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
             cms: ['cms/test/cms_manager_test.js'],
             contacts: ['test/contact.dao_test.js'],
@@ -230,7 +231,7 @@ module.exports = function(grunt) {
     grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
 
     grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
-            'nodeunit:products', 'nodeunit:cms']);
+            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets']);
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
     grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);
@@ -246,5 +247,6 @@ module.exports = function(grunt) {
     grunt.registerTask('testAnalytics', ['nodeunit:analytics']);
     grunt.registerTask('testProducts', ['nodeunit:products']);
     grunt.registerTask('testCms', ['nodeunit:cms']);
+    grunt.registerTask('testAssets', ['nodeunit:assets']);
     
 };

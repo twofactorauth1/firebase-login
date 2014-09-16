@@ -1,5 +1,5 @@
-define(['app', 'userService', 'underscore', 'commonutils'], function(app) {
-    app.controller('AccountEditCtrl', ['$scope', '$routeParams', 'UserService', function ($scope, $routeParams, UserService) {
+define(['app', 'userService', 'underscore', 'commonutils', 'angularRoute'], function(app) {
+    app.register.controller('AccountEditCtrl', ['$scope', '$routeParams', 'UserService', function ($scope, $routeParams, UserService) {
         var phoneCharLimit = 4;
         if ($routeParams.focus)
             $('[name="' + $routeParams.focus + '"]').focus();

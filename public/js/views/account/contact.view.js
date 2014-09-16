@@ -309,7 +309,7 @@ define([
                         //self.skip = $('.people-list .people-item').length;
                         //self.renderContacts();
                         //self.check_welcome();
-                        self.loadMore = !(res.length < 6);
+                        self.loadMore = !(res.length < 8);
 
                         $('.people-list .row').html('');
                         self.appendContacts();
@@ -440,7 +440,7 @@ define([
             }
             self.currentLetter = self.currentLetter.toLowerCase();
 
-            self.limit = 6;
+            self.limit = 8;
 
             if (self.currentLetter == 'all') {
                 return self.contacts.getContactsAll(self.accountId, skip, self.limit);
@@ -531,7 +531,7 @@ define([
                 currentDisplay: self.currentDisplay.toLowerCase()
             };
             data.contacts = contacts
-            data.min = 6;
+            data.min = 8;
             data.count = data.contacts.length;
 
             var tmpl = $$.templateManager.get("contacts-main", self.templateKey);

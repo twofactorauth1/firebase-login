@@ -3,7 +3,7 @@
     *
     * All use or reproduction of any or all of this content must be approved.
     * Please contact info@indigenous.io for approval or questions.
-
-extends snippets/_admin_require_layout
+extends snippets/index_layout
 block content
- div(ui-view)
+    div(id="body", class="content", back-animation, style="height: {{contentHeight}}px;")
+        div(ng-view, class="page")

@@ -21,7 +21,8 @@ var mainApp = angular
         'dm.style',
         'duScroll',
         'mrPageEnterAnimate',
-        'angularMoment'
+        'angularMoment',
+        'mgo-angular-wizard'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){
