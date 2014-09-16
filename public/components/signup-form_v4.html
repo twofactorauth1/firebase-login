@@ -2,8 +2,7 @@
     <div class="col-md-3"></div>
     <div class="col-md-6">
         <wizard on-finish="finishedWizard()" data-ng-show="component" id="{{component.anchor}}" class="component"
-                data-class="signup-form-v4"
-                style="'background':'{{component.bg.color}}';">
+                data-class="signup-form-v4" ng-style="'background':'{{component.bg.color}}'">
 
             <div id="error-msg" class="alert alert-danger hidden">
                 <button type="button" aria-hidden="true" class="close">×</button>
@@ -23,10 +22,8 @@
                                    data-ng-disabled="field.field_disabled"/>
                         </div>
                         <span class="pull-left" style="color: red" ng-show="field.field_required && !field.field_value">* required</span>
-
                     </div>
                 </div>
-
                 <div class="form-actions">
                     <p class="text-center">
                         <button class="btn btn-success left" wz-previous><i
@@ -40,9 +37,8 @@
                     </p>
                 </div>
             </wz-step>
-           <wz-step  data-ng-show=$last title="Signup Completed Successfully">
+           <wz-step ng-if="$last" title="Signup Completed Successfully">
                <h3>Thank You, Signup Completed Successfully</h3>
-
                <div class="form-actions">
                    <p class="text-center">
                        <button class="btn btn-success left" wz-finish>
@@ -52,7 +48,7 @@
                    </p>
                </div>
            </wz-step>
-       </div>
+          </div>
         </wizard>
     </div>
     <div class="col-md-3"></div>
