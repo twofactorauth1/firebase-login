@@ -1,5 +1,5 @@
 (function () {
-    angular.module('app.directives').directive('videoDrop', function () {
+    angular.module('var.directives').directive('videoDrop', function () {
         return {restrict: 'A',
             scope: {
                 from: '=',

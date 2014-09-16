@@ -1,4 +1,4 @@
-angular.module('app.directives').directive('psEditable', function ($compile) {
+angular.module('var.directives').directive('psEditable', function ($compile) {
     return {
         controller: function ($scope) {
 

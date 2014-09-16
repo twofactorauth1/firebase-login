@@ -1,7 +1,8 @@
 /**
  * The controller used when editing video courses
  */
-define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoService', 'addCourseModalController', 'editCourseModalController'], function (angularAMD, app) {
+define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoService', 'addCourseModalController', 'editCourseModalController',
+    'timelineItemController', 'removeModalController', 'searchOptionsModalController', 'videoViewModalController', 'subscribersCvsUploadController'], function (angularAMD, app) {
     app.register.controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', function ($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo) {
         $scope.location = $location;
         $scope.courseBlocked = false;

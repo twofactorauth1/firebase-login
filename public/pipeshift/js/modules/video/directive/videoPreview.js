@@ -1,4 +1,4 @@
-angular.module('app.directives').directive('videoPreview', function ($compile) {
+angular.module('var.directives').directive('videoPreview', function ($compile) {
     var varToPropertiesMapping = [
         {varName: "link", propertyName: "videoUrl"},
         {varName: "percents", propertyName: "percents"},

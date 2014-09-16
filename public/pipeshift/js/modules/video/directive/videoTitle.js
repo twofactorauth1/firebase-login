@@ -1,5 +1,5 @@
 //use only for items which were dropped to course
-angular.module('app.directives').directive('videoTitle', function () {
+angular.module('var.directives').directive('videoTitle', function () {
     return {
         scope: {
             video: "=",

@@ -92,7 +92,17 @@ require.config({
         'youtubeService': {deps: ['angular', 'varModules']},
         'courseService': {deps: ['angular', 'varModules', 'angularResource']},
         'courseVideoService': {deps: ['angular', 'varModules', 'angularResource']},
-        'subscriberService': {deps: ['angular', 'varModules', 'angularResource']}
+        'subscriberService': {deps: ['angular', 'varModules', 'angularResource']},
+        'whenUiScrolledDirective': {deps: ['angular', 'varModules']},
+        'whenScrolledDirective': {deps: ['angular', 'varModules']},
+        'videoDropDirective': {deps: ['angular', 'varModules']},
+        'videoDraggableDirective': {deps: ['angular', 'varModules']},
+        'coursePreviewDirective': {deps: ['angular', 'varModules']},
+        'videoTitleDirective': {deps: ['angular', 'varModules']},
+        'videoPreviewDirecrive': {deps: ['angular', 'varModules']},
+        'videoPlayerDirective': {deps: ['angular', 'varModules']},
+        'psEditableDirective': {deps: ['angular', 'varModules']},
+        'stripeButtonDirective': {deps: ['angular', 'varModules']},
 
     },
     deps: ['adminCommon', 'bootstrap', 'app']
