@@ -20,7 +20,7 @@ angular.module('var.directives').directive('videoPreview', function ($compile) {
     }
 
     function escapeRegExp(string) {
-        console.log(string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1"));
+        //console.log(string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1"));
         return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
     }
 

@@ -1,4 +1,4 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule','whenUiScrolledDirective','whenScrolledDirective', 'videoDropDirective', 'videoDraggableDirective', 'coursePreviewDirective', 'videoTitleDirective', 'videoPreviewDirecrive', 'videoPlayerDirective', 'psEditableDirective', 'stripeButtonDirective'], function (angularAMD) {
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule'], function (angularAMD) {
     var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var']);
 
     //routes

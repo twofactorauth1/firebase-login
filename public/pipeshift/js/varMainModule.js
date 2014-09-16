@@ -1,5 +1,11 @@
 'use strict';
-define(['angularAMD', 'angularSanitize', 'angularResource', 'angularBootstrap', 'securityService', 'xEditable', 'ngCsv', 'ngFileUpload', 'angularStepper', 'angularMoney', 'youtubeService', 'courseService', 'courseVideoService', 'subscriberService'], function (angularAMD) {
+
+define(['angularAMD', 'angularSanitize', 'angularResource', 'angularBootstrap', 'securityService',
+    'xEditable', 'ngCsv', 'ngFileUpload', 'angularStepper', 'angularMoney', 'youtubeService', 'courseService',
+    'courseVideoService', 'subscriberService', 'whenUiScrolledDirective', 'whenScrolledDirective',
+    'videoDropDirective', 'videoDraggableDirective', 'coursePreviewDirective', 'videoTitleDirective',
+    'videoPreviewDirecrive', 'videoPlayerDirective', 'psEditableDirective', 'stripeButtonDirective',
+    'htmlify', 'videogular', 'vgYoutube', 'vgControls', 'vgOverlay', 'vgPoster', 'vgBuffering'], function (angularAMD) {
 // Declare app level module which depends on filters, and services
     var app = angular.module('var', [
         'ngSanitize', 'ui.bootstrap',
