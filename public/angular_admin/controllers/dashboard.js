@@ -1,5 +1,5 @@
-define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService'], function(app, c3) {
-    app.register.controller('DashboardCtrl', ['$scope', 'PaymentService', function ($scope, PaymentService) {
+define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetService'], function(app, c3) {
+    app.register.controller('DashboardCtrl', ['$scope', 'PaymentService', 'TwoNetService', function ($scope, PaymentService, TwoNetService) {
     
     	$('.header.accordion').click(function (e) {
     		var self = $(e.target);
@@ -14,7 +14,7 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService'], function(a
     	
     	var chartGrid = $(".gridster ul").gridster({
     		widget_margins: [2, 2],
-        	widget_base_dimensions: [420, 220]
+        	widget_base_dimensions: [400, 200]
     	}).data('gridster');
     	
     	var charts = {};
@@ -24,7 +24,7 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService'], function(a
     			var xValue = ['Plans'];
     			var chartData = {};
     			plans.data.forEach(function (value, index) {
-    				var d = new Date(value.created);
+    				var d = new Date(value.created*1000);
     				var entryDate = d.toISOString().slice(0, 10);
     				if (entryDate in chartData) {
     					chartData[entryDate] += 1;
@@ -97,6 +97,74 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService'], function(a
     		});
     	};
     	
+        charts.TN_prolific_bio = function (boxId) {
+    		TwoNetService.getBodyMeasurement(824, function (bios) {
+    			var xAxis = ['x'];
+    			var xValue = ['Pounds'];
+    			var chartData = {};
+    			bios.forEach(function (value, index) {
+    				var d = new Date(parseInt(value.time)*1000);
+    				var entryDate = d.toISOString().slice(0, 10);
+                    xAxis.push(entryDate);
+                    xValue.push(parseFloat(value.values[0].value));
+    			});
+    			
+	    		c3.generate({
+					bindto: '.' + boxId,
+					data: {
+						x: 'x',
+	  					columns: [
+	  						xAxis,
+	    					xValue
+	  					]
+					},
+					axis: {
+						x: {
+							type: 'timeseries',
+							tick: {
+                                count: 30,
+								format: '%Y-%m-%d'
+							}
+						}
+					}
+				});
+    		});
+    	};
+
+        charts.TN_debbie_abbot_bio = function (boxId) {
+    		TwoNetService.getBodyMeasurement(515, function (bios) {
+    			var xAxis = ['x'];
+    			var xValue = ['Pounds'];
+    			var chartData = {};
+    			bios.forEach(function (value, index) {
+    				var d = new Date(parseInt(value.time)*1000);
+    				var entryDate = d.toISOString().slice(0, 10);
+                    xAxis.push(entryDate);
+                    xValue.push(parseFloat(value.values[0].value));
+    			});
+    			
+	    		c3.generate({
+					bindto: '.' + boxId,
+					data: {
+						x: 'x',
+	  					columns: [
+	  						xAxis,
+	    					xValue
+	  					]
+					},
+					axis: {
+						x: {
+							type: 'timeseries',
+							tick: {
+                                count: 30,
+								format: '%Y-%m-%d'
+							}
+						}
+					}
+				});
+    		});
+    	};
+
     	$('.gridster').droppable({
     		drop: function (event, ui) {
     			var boxId = ui.draggable.attr('data-name') + '-' + Math.floor((Math.random() * 100) + 1);

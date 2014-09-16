@@ -16,5 +16,13 @@ define(['app'], function (app) {
 				fn(data);
 			});
 		};
+        
+        this.getBodyMeasurement = function (customerId, fn) {
+			$http.get('/api/1.0/biometrics/readings?contactId=' + customerId)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
 	});
 });
