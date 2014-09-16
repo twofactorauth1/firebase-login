@@ -100,7 +100,7 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService'], function(a
     	$('.gridster').droppable({
     		drop: function (event, ui) {
     			var boxId = ui.draggable.attr('data-name') + '-' + Math.floor((Math.random() * 100) + 1);
-    			chartGrid.add_widget('<li style="border: 2px solid red;" class="' + boxId + '"></li>', 1, 1);
+    			chartGrid.add_widget('<li class="' + boxId + '"></li>', 1, 1);
     			charts[ui.draggable.attr('data-name')](boxId);
     		}
     	});
