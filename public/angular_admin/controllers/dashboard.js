@@ -1,5 +1,5 @@
 define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService'], function(app, c3) {
-    app.controller('DashboardCtrl', ['$scope', 'PaymentService', function ($scope, PaymentService) {
+    app.register.controller('DashboardCtrl', ['$scope', 'PaymentService', function ($scope, PaymentService) {
     
     	$('.header.accordion').click(function (e) {
     		var self = $(e.target);
