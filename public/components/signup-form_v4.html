@@ -10,13 +10,16 @@
                 <span class="message"></span>
             </div>
             <h2 class="ng-binding" style="text-align: center">{{component.title}}</h2>
-
             <div ng-repeat="wizard in component.form_fields">
                 <wz-step title="{{wizard.wizard_step_title}}">
-                    <h3 style="text-align: center">{{wizard.wizard_step_title}}</h3>
+                    <div class="row" style="text-align: center">
+                        <div class="col-md-2">  </div>
+                        <div class="col-md-7"><h4>{{wizard.wizard_step_title}}</h4></div>
+                        <div class="col-md-3"> </div>
+                    </div>
 
-                    <div ng-repeat="field in wizard.wizard_fields">
-                        <div class="row">
+                    <div ng-repeat="field in wizard.wizard_fields" >
+                        <div class="row" style="text-align: center">
                             <div class="col-md-2"><label for="{{field.field_id}}"><h5>{{field.field_title}}:</h5>
                             </label>
                             </div>
@@ -35,11 +38,11 @@
                         <p class="text-center">
                             <button class="btn btn-success left" wz-previous><i
                                     class="icon-edit icon-white {{wizard.wizard_step_btn1.icon}}"></i>
-                                {{wizard.wizard_step_btn1.text}}Pre
+                                {{wizard.wizard_step_btn1.text}}
                             </button>
                             <button class="btn btn-success right" wz-next><i
                                     class="icon-edit icon-white {{wizard.wizard_step_btn2.icon}}"></i>
-                                {{wizard.wizard_step_btn2.text}}next
+                                {{wizard.wizard_step_btn2.text}}
                             </button>
                         </p>
                     </div>
@@ -47,10 +50,11 @@
                     <br/>
                 </wz-step>
                 <wz-step ng-if="$last" title="Signup Completed Successfully">
-                    <br/>
-
-                    <h3>Thank You, Signup Completed Successfully</h3>
-
+                    <div class="row" style="text-align: center">
+                        <div class="col-md-2">  </div>
+                        <div class="col-md-7"><h4>Thank You, Signup Completed Successfully !!!</h4></div>
+                        <div class="col-md-3"> </div>
+                    </div>
                     <div class="form-actions">
                         <p class="text-center">
                             <button class="btn btn-success left" wz-finish><i
