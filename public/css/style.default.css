@@ -17697,6 +17697,31 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   width: 170px;
   margin: -14px -14px 0 0;
 }
+.gridster {
+  padding: 30px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.gridster .gs-w {
+  background: #FFF;
+  cursor: pointer;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.gridster .player {
+  -webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+}
+.gridster .gs-w.try {
+  background-image: url(../img/sprite.png);
+  background-repeat: no-repeat;
+  background-position: 37px -169px;
+}
+.gridster .preview-holder {
+  border: none!important;
+  border-radius: 0!important;
+  background: rgba(255, 255, 255, 0.2) !important;
+}
 .ckbox,
 .rdio {
   position: relative;
@@ -20765,29 +20790,29 @@ input[type='file'] {
   display: block;
 }
 #social_dashboard #social_dashboard_rightbar {
-  padding: 0 15px 15px;
-  width: 190px;
+  padding: 0;
+  width: 240px;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -56px;
+  right: -240px;
   border-right: 1px solid #d3d3d3;
   box-shadow: 1px 0 0 #f7f7f7;
   background: #e7e7e7;
 }
+#social_dashboard #social_dashboard_rightbar .nav-list {
+  margin-top: 0!important;
+}
 #social_dashboard #social_dashboard_rightbar .header {
-  font-size: 14px;
+  font-size: 18px;
   line-height: 20px;
-  background-image: -webkit-linear-gradient(top, #eeeeee 0%, #cccccc 100%);
-  background-image: linear-gradient(to bottom, #eeeeee 0%, #cccccc 100%);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffeeeeee', endColorstr='#ffcccccc', GradientType=0);
-  width: 190px;
-  margin: 0 0 0 -15px;
-  padding: 6px 15px;
-  border-bottom: 1px solid #aaa;
-  border-top: 1px solid #fafafa;
+  margin: 0;
   position: relative;
   cursor: pointer;
+  background-color: #1d2939;
+  color: #ccc;
+  border-bottom: 1px solid #273548;
+  padding: 15px;
+  font-weight: bold;
 }
 #social_dashboard #social_dashboard_rightbar .header:hover {
   opacity: 0.9;
@@ -20826,6 +20851,7 @@ input[type='file'] {
   margin-top: 10px;
 }
 #social_dashboard #social_dashboard_rightbar .section > :last-child {
+  animation: ;
   margin-bottom: 20px;
 }
 #social_dashboard #social_dashboard_rightbar .alert {
@@ -20837,6 +20863,9 @@ input[type='file'] {
 }
 #social_dashboard #social_dashboard_rightbar .alert label {
   display: inline;
+}
+#social_dashboard #social_dashboard_rightbar .nav-tabs {
+  margin-top: 0!important;
 }
 path {
   fill: transparent;
