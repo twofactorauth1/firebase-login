@@ -1,5 +1,5 @@
 define(['app'], function (app) {
-	app.service('TwoNetService', function ($http) {
+	app.register.service('TwoNetService', function ($http) {
 		this.postBodyMeasurement = function (startDate, endDate, fn) {
 			var query = {
 				measureRequest: {
@@ -16,5 +16,13 @@ define(['app'], function (app) {
 				fn(data);
 			});
 		};
+        
+        this.getBodyMeasurement = function (customerId, fn) {
+			$http.get('/api/1.0/biometrics/readings?contactId=' + customerId)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
 	});
 });

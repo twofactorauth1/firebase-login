@@ -1,0 +1,24 @@
+link(rel='stylesheet', href='/css/style.default.css')
+link(rel='stylesheet', href='/css/style.inverse.css')
+link(rel='stylesheet', href='/pipeshift/css/animate.css')
+link(rel='stylesheet', href='/pipeshift/css/site.css')
+link(rel="stylesheet", href="/js/libs_misc/jquery.tagsinput/jquery.tagsinput.css")
+
+style(type="text/css").
+
+    h1, h2, h3, h4, h5 { font-family: #{account.website.settings.font_family} sans-serif!important;}
+    body { font-family: #{account.website.settings.font_family_2}, sans-serif!important; }
+
+    .navbar-collapse {
+        background: #fff;
+    }
+
+    .btn-primary {
+        background: #{account.website.settings.primary_color};
+        border-bottom: 4px solid #{account.website.settings.secondary_color};
+    }
+
+    .navbar-v2 #header .navbar ul.navbar-nav li:hover {
+        border-bottom: 4px solid #{account.website.settings.nav_hover};
+    }
+

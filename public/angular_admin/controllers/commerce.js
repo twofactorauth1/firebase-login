@@ -1,5 +1,5 @@
 define(['app', 'paymentService'], function(app) {
-    app.controller('CommerceCtrl', ['$scope', 'PaymentService', function ($scope, PaymentService) {
+    app.register.controller('CommerceCtrl', ['$scope', 'PaymentService', function ($scope, PaymentService) {
     	PaymentService.getListPlans(function (products) {
     		$scope.products = products;
     	});

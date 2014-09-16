@@ -10,8 +10,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.$routeParams = $routeParams;
 
         //var config = angular.module('config');
-        that.segmentIOWriteKey = ENV.segmentKey;
-        $window.segmentIOWriteKey = ENV.segmentKey;
+        //that.segmentIOWriteKey = ENV.segmentKey;
+        //$window.segmentIOWriteKey = ENV.segmentKey;
         //that.themeUrl = $scope.themeUrl;
         accountService(function (err, data) {
             if (err) {

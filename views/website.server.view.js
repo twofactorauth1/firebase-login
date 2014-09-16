@@ -8,6 +8,7 @@
 var BaseView = require('./base.server.view');
 
 var cmsDao = require('../cms/dao/cms.dao.js');
+var segmentioConfig = require('../configs/segmentio.config.js');
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -207,6 +208,58 @@ _.extend(view.prototype, BaseView.prototype, {
                 self._renderWebsite(accountId, path, cacheKey);
             }
         });
+    },
+
+    renderNewIndex: function(accountId) {
+        var data = {}, self = this;
+        console.log('>> renderNewIndex');
+        /*
+        var data = {
+            settings: settings,
+            seo: seo,
+            footer: footer,
+            title: title,
+            segmentIOWriteKey: segmentioConfig.SEGMENT_WRITE_KEY,
+            handle: pageName,
+            linkLists: {},
+            blogposts: null,
+            tags: null,
+            categories: null,
+            accountUrl: account.get('accountUrl'),
+            account: account
+        };
+        */
+        cmsDao.getDataForWebpage(accountId, 'index', function(err, value){
+            data.account = value;
+            data.title = 'Indigenous.IO';
+            data.author = 'Indigenous.IO';
+            data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
+            data.website = value.website || {};
+            data.seo={
+                description: '',
+                keywords: ''
+            };
+            console.log('>> data');
+            console.dir(data);
+            console.log('<< data');
+            console.dir(data.account.website.settings);
+            app.render('index', data, function(err, html){
+                //console.log(err);
+                //console.log('rendering the following:');
+                //console.log(html);
+                //self.res
+                self.resp.send(html);
+                self.cleanUp();
+                self = data = value = null;
+            });
+        });
+
+
+
+        //self.resp.send(value);
+
+
+
     },
 
 
