@@ -1116,6 +1116,20 @@ var dao = {
             });
     },
 
+    getDataForWebpage: function(accountId, pageName, fn){
+        var self = this;
+        self.log.debug('>> getDataForWebpage');
+        //assume index for now
+        accountDao.getAccountByID(accountId, function(err, value){
+            var obj = value.toJSON('public');
+            self.getById(obj.website.websiteId, Website, function(err, website){
+                obj.website = website.toJSON('public');
+                self.log.debug('<< getDataForWebpage');
+                fn(err, obj);
+            });
+        });
+    },
+
 
     getRenderedWebsitePageForAccount: function(accountId, pageName, isEditor, tag, author, category, fn) {
         var self = this,
