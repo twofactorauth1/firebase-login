@@ -65,16 +65,9 @@ require.config({
         "coursePreviewDirective": "/pipeshift/js/modules/video/directive/coursePreview",
         "videoTitleDirective": "/pipeshift/js/modules/video/directive/videoTitle",
         "videoPreviewDirecrive": "/pipeshift/js/modules/video/directive/videoPreview",
-        "videoPlayerDirective": "/pipeshift/js/modules/video/directive/videoPlayerVG",
+        "videoPlayerDirective": "/pipeshift/js/modules/video/directive/videoPlayer",
         "psEditableDirective": "/pipeshift/js/modules/video/directive/psEditable",
         "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
-        //videogular
-        "videogular": "/js/libs/videogular/videogular.min",
-        "vgYoutube": "/js/libs_misc/videogular/youtube",
-        "vgControls": "/js/libs/videogular-controls/controls.min",
-        "vgOverlay": "/js/libs/videogular-overlay-play/overlay-play.min",
-        "vgPoster": "/js/libs/videogular-poster/poster.min",
-        "vgBuffering": "/js/libs/videogular-buffering/buffering.min",
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
@@ -111,12 +104,6 @@ require.config({
         'psEditableDirective': {deps: ['angular', 'varModules']},
         'stripeButtonDirective': {deps: ['angular', 'varModules']},
         'htmlify': {deps: ['angular', 'varModules']},
-        "videogular": {deps: ['angular']},
-        "vgYoutube": {deps: ['angular', 'videogular']},
-        "vgControls": {deps: ['angular', 'videogular']},
-        "vgOverlay": {deps: ['angular', 'videogular']},
-        "vgPoster": {deps: ['angular', 'videogular']},
-        "vgBuffering": {deps: ['angular', 'videogular']},
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
