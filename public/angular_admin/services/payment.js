@@ -1,5 +1,5 @@
 define(['app', 'stripe'], function (app) {
-	app.service('PaymentService', function ($http) {
+	app.register.service('PaymentService', function ($http) {
 		var baseUrl = '/api/1.0/';
 		Stripe.setPublishableKey('pk_test_EuZhZHVourE3RaRxELJaYEya');
 		
