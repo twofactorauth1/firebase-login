@@ -1,30 +1,61 @@
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <wizard on-finish="finishedWizard()" data-ng-show="component" id="{{component.anchor}}" class="component"
+                data-class="signup-form-v4"
+                style="'background':'{{component.bg.color}}';">
 
+            <div id="error-msg" class="alert alert-danger hidden">
+                <button type="button" aria-hidden="true" class="close">×</button>
+                <span class="message"></span>
+            </div>
+            <h2 class="ng-binding" style="text-align: center">{{component.title}}</h2>
 
-<div data-ng-show="component" id="{{component.anchor}}" class="component" data-class="signup-form-v4"  style="'background':'{{component.bg.color}}';">
-    <div id="error-msg" class="alert alert-danger hidden">
-        <button type="button" aria-hidden="true" class="close">×</button>
-        <span class="message"></span>
-    </div>
-    <h2 class="ng-binding" style="text-align: center">{{component.title}}</h2>
-    <div style="text-align: center">
-        <form name="{{component.formName}}" id="{{component._id}}" class="form-horizontal">
-            <div ng-repeat="field in component.form_fields" >
-            <div class="form-group row">
-                    <label for="{{field.field_id}}" class="col-sm-4 control-label" >{{field.field_title}}:</label>
-                    <div class="col-sm-4">
-                        <input style="margin-top:5px" type="{{field.field_type}}" class="form-control" id="{{field.field_id}}" data-ng-value="field.field_value" data-ng-disabled="field.field_disabled" />
+            <wz-step title="{{wizard.wizard_step_title}}" ng-repeat="wizard in component.form_fields">
+                <h3>{{wizard.wizard_step_title}}</h3>
+
+                <div ng-repeat="field in wizard.wizard_fields">
+                    <div class="form-group row">
+                        <label for="{{field.field_id}}" >{{field.field_title}}:</label>
+
+                        <div>
+                            <input style="margin-top:5px" type="{{field.field_type}}" class="form-control"
+                                   id="{{field.field_id}}" data-ng-value="field.field_value"
+                                   data-ng-disabled="field.field_disabled"/>
+                        </div>
+                        <span class="pull-left" style="color: red" ng-show="field.field_required && !field.field_value">* required</span>
+
                     </div>
-                <span class="pull-left" style="color: red" ng-show="field.field_required && !field.field_value">* required</span>
+                </div>
+                <div class="form-actions">
+                    <p class="text-center">
+                        <button class="btn btn-success left" wz-previous><i
+                                class="icon-edit icon-white {{wizard.wizard_step_btn1.icon}}"></i>
+                            {{wizard.wizard_step_btn1.text}}Pre
+                        </button>
+                        <button class="btn btn-success right" wz-next><i
+                                class="icon-edit icon-white {{wizard.wizard_step_btn2.icon}}"></i>
+                            {{wizard.wizard_step_btn2.text}}next
+                        </button>
+                    </p>
+                </div>
+            </wz-step>
+            <!--<wz-step title="Signup Completed Successfully">
+                <h3>Thank You, Signup Completed Successfully</h3>
 
-            </div>
-          </div>
-            <div class="form-actions">
-                <p class="text-center">
-                    <button class="btn btn-success right" type="button" disabled="disabled"><i class="icon-edit icon-white {{component.btn.icon}}"></i>{{component.btn.text}}</button>
-                    <button class="btn btn-danger right" type="button"><i class="icon-remove icon-white"></i>Cancel</button>
-                </p>
-            </div>
-        </form>
+                <div class="form-actions">
+                    <p class="text-center">
+                        <button class="btn btn-success left" wz-finish><i
+                                class="icon-edit icon-white {{wizard.wizard_step_btn1.icon}}"></i>
+                            Finish
+                        </button>
+                    </p>
+                </div>
+            </wz-step>-->
+        </wizard>
     </div>
+    <div class="col-md-3"></div>
 </div>
+
+
 

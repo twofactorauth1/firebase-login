@@ -74,7 +74,8 @@
     "ng-csv": "~0.2.3",
     "angular-carousel": "~0.2.5",
     "angular-file-upload": "~1.1.1",
-    "ouibounce": "~0.0.10"
+    "ouibounce": "~0.0.10",
+    "angular-wizard":"0.4.0"
   },
   "resolutions": {
     "angular": "1.2.24",
