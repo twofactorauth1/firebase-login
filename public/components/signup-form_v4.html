@@ -10,10 +10,9 @@
                 <span class="message"></span>
             </div>
             <h2 class="ng-binding" style="text-align: center">{{component.title}}</h2>
-
-            <wz-step title="{{wizard.wizard_step_title}}" ng-repeat="wizard in component.form_fields">
+       <div ng-repeat="wizard in component.form_fields">
+            <wz-step title="{{wizard.wizard_step_title}}" >
                 <h3>{{wizard.wizard_step_title}}</h3>
-
                 <div ng-repeat="field in wizard.wizard_fields">
                     <div class="form-group row">
                         <label for="{{field.field_id}}" >{{field.field_title}}:</label>
@@ -27,6 +26,7 @@
 
                     </div>
                 </div>
+
                 <div class="form-actions">
                     <p class="text-center">
                         <button class="btn btn-success left" wz-previous><i
@@ -40,18 +40,19 @@
                     </p>
                 </div>
             </wz-step>
-            <!--<wz-step title="Signup Completed Successfully">
-                <h3>Thank You, Signup Completed Successfully</h3>
+           <wz-step  data-ng-show=$last title="Signup Completed Successfully">
+               <h3>Thank You, Signup Completed Successfully</h3>
 
-                <div class="form-actions">
-                    <p class="text-center">
-                        <button class="btn btn-success left" wz-finish><i
-                                class="icon-edit icon-white {{wizard.wizard_step_btn1.icon}}"></i>
-                            Finish
-                        </button>
-                    </p>
-                </div>
-            </wz-step>-->
+               <div class="form-actions">
+                   <p class="text-center">
+                       <button class="btn btn-success left" wz-finish>
+                           <i class="icon-edit icon-white {{wizard.wizard_step_btn1.icon}}"></i>
+                           Finish
+                       </button>
+                   </p>
+               </div>
+           </wz-step>
+       </div>
         </wizard>
     </div>
     <div class="col-md-3"></div>
