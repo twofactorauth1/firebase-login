@@ -29,9 +29,6 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main")
             base(href="/")
             link(rel="shortcut icon", href=account.website.settings.favicon)
 
-
-    //- TODO: fix hardcoded navar-v?
-    - var classes = ['theme-main', '#{website.navbar-class}']
     body(class='theme-main navbar-v#{ account.website.nav_version }', ng-controller="LayoutCtrl as layout", ng-cloak)
         block body_content
             div(id='fb-root')
