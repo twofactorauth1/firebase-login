@@ -22350,7 +22350,7 @@ ul.nav {
   margin-top: 25px!important;
 }
 .navbar-v2 #header .navbar.navbar-default {
-  border-bottom: none!important;
+  border: none!important;
   border-color: 0;
 }
 .navbar-v2 #header .navbar {
