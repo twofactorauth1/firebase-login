@@ -6024,8 +6024,8 @@ h4,
   box-shadow: none;
 }
 .btn-success {
-  background-color: #54C8E8;
-  border-color: #4eb1ca;
+  background-color: #54C8E8!important;
+  border-color: #4eb1ca!important;
 }
 .btn-success:hover,
 .btn-success:active,
@@ -16537,24 +16537,24 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   transform: translate(0, 0);
 }
 .account .integrations-section .thumbnail img {
-  margin-left: auto;
-  margin-right: auto;
-  position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
-  padding: 2em;
+  width: 100%;
+  margin-top: 20px;
 }
 .account .integrations-section .thumbnail h3 {
   margin-top: 5px;
 }
 .account .integrations-section .thumbnail .caption p {
-  height: 60px;
+  height: 70px;
 }
 .account .integrations-section .thumbnail .img-wrap {
   height: 200px;
   position: relative;
   border: 1px solid #e7e7e7;
   overflow: hidden;
+}
+.account .integrations-section .thumbnail .connected {
+  height: 70px;
+  margin-bottom: 10px;
 }
 .account .modal-body h3:first-child {
   margin-top: 0;
