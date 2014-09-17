@@ -15919,6 +15919,9 @@ strong {
   border-top: none;
   border-radius: 0;
 }
+#main-viewport .alert-info {
+  display: none;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
