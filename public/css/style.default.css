@@ -262,6 +262,7 @@ th {
   box-sizing: border-box;
 }
 html {
+  height: 100%!important;
   font-size: 62.5%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -15394,10 +15395,14 @@ body {
   _background: #1d2939;
   line-height: 21px;
   color: #636e7b;
+  height: 100%;
 }
 body.notfound,
 body.signin {
   background: #e4e7ea;
+}
+.body-wrap {
+  height: 100%;
 }
 input,
 select,
@@ -15416,6 +15421,10 @@ a:active {
 strong {
   font-family: 'LatoBold';
   font-weight: normal;
+}
+#main-viewport {
+  background: #e4e7ea;
+  height: 100%;
 }
 .mb0 {
   margin-bottom: 0px!important;
@@ -15732,6 +15741,7 @@ strong {
 }
 .stickyheader .mainpanel {
   padding-top: 50px;
+  height: 100%;
 }
 .stickyheader .header-right {
   margin-right: 240px;
@@ -17263,7 +17273,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .mainpanel {
   margin-left: 240px;
-  background: #e4e7ea;
+  height: 100%;
 }
 .mainpanel .alert {
   margin: 10px 10px 0px;
@@ -20686,6 +20696,9 @@ input[type='file'] {
   line-height: normal;
   border-radius: 2px;
 }
+.rightmenu-open #social_dashboard_rightbar {
+  display: block!important;
+}
 #social_dashboard {
   position: relative;
 }
@@ -20936,11 +20949,9 @@ input[type='file'] {
   padding: 0;
   width: 240px;
   position: absolute;
-  top: -56px;
+  top: -118px;
   right: -240px;
-  border-right: 1px solid #d3d3d3;
-  box-shadow: 1px 0 0 #f7f7f7;
-  background: #e7e7e7;
+  display: none;
 }
 #social_dashboard #social_dashboard_rightbar .nav-list {
   margin-top: 0!important;
