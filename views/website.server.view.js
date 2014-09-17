@@ -229,6 +229,8 @@ _.extend(view.prototype, BaseView.prototype, {
             account: account
         };
         */
+        var isEditor = self.req.query.editor;
+        console.log('isEditor: ', isEditor);
         cmsDao.getDataForWebpage(accountId, 'index', function(err, value){
             data.account = value;
             data.title = 'Indigenous.IO';
@@ -239,6 +241,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 description: '',
                 keywords: ''
             };
+            data.includeEditor = isEditor;
             console.log('>> data');
             console.dir(data);
             console.log('<< data');
@@ -257,11 +260,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
 
         //self.resp.send(value);
-
-
-
     },
-
 
     _renderWebsite: function(accountId, path, cacheKey, isEditor) {
         var data = {}, self = this;

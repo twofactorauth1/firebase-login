@@ -51,7 +51,6 @@ define([
         model: function(attr, options) {
             var type = attr.type;
             var component = components[type];
-            console.log('Component Type: '+type);
 
             return new component(attr, options);
         },

@@ -56,7 +56,6 @@ define([
             options = options || {};
             this.pageHandle = options.page || "index";
             this.websiteId = options.websiteId;
-
         },
 
         render: function () {
@@ -94,10 +93,12 @@ define([
                         subdomain: self.subdomain
                     };
                     if (self.pageHandle == "index" || self.pageHandle == "null" || self.pageHandle == "/") {
-                        data.page = "/index";
+                        data.page = "/";
                     } else {
-                        data.page = "/page/" + self.pageHandle;
+                        data.page = "/" + self.pageHandle;
                     }
+
+                    console.log('Data Page: '+data.page);
 
 
                     var tmpl = $$.templateManager.get("edit-website", self.templateKey);
@@ -196,6 +197,7 @@ define([
             this.$el.on("tagseditdone", this.proxiedOnTagsEditDone);
             return this;
         },
+
         editTagsInit: function () {
             var data  = arguments[1]
               , input = data.input
@@ -416,10 +418,10 @@ define([
             components.filterById(serialize);*/
 
 
-        //    this.page.set("components",serialize);
+            //    this.page.set("components",serialize);
             //this.page.component=serialize;
 
-       //     console.log(this.page);
+            //     console.log(this.page);
            /* this.page = new Page({
                 websiteId:this.websiteId,
                 title: pageTitle,
@@ -436,7 +438,7 @@ define([
                 }
             });*/
 
- /*           this.page.save().done( function(err,res) {
+            /*           this.page.save().done( function(err,res) {
                 console.log(err);
                 console.log(res);
                 console.log('page sved');
@@ -475,7 +477,7 @@ define([
             var content = data.content;
             var page = data.pageId;
 
-            //console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
+            console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
 
             if (componentType == 'blog' || componentType == 'single-post') {
                 var postId = $(target).closest(".single-blog").attr("data-postid");
@@ -687,6 +689,7 @@ define([
             $.cookie('website-setup', 'true', { path: '/' });
             this.render();
         },
+
         _getThemePreview: function (themeId, done, fail) {
             var p1 = CmsService.getThemePreview(themeId);
             p1.responseType = "arraybuffer";
@@ -696,6 +699,7 @@ define([
 
             return p1;
         },
+
         setThemePreview: function (themeId, imageElement) {
             var self = this;
             self._getThemePreview(themeId, function (themePreview) {
