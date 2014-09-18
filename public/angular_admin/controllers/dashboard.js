@@ -13,8 +13,9 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
     	});
     	
     	var chartGrid = $(".gridster ul").gridster({
-    		widget_margins: [2, 2],
-        	widget_base_dimensions: [400, 200]
+    		widget_margins: [20, 20],
+        	widget_base_dimensions: [400, 200],
+            shift_larger_widgets_down: false
     	}).data('gridster');
     	
     	var charts = {};
@@ -168,7 +169,7 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
     	$('.gridster').droppable({
     		drop: function (event, ui) {
     			var boxId = ui.draggable.attr('data-name') + '-' + Math.floor((Math.random() * 100) + 1);
-    			chartGrid.add_widget('<li class="' + boxId + '"></li>', 1, 1);
+    			chartGrid.add_widget('<li class="' + boxId + ' gridster-item"></li>', 1, 1);
     			charts[ui.draggable.attr('data-name')](boxId);
     		}
     	});

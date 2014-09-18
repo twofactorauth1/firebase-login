@@ -15391,6 +15391,12 @@ button[data-action="collapse"] {
   border-bottom-right-radius: 0;
   margin: 0 0 0 34px;
 }
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
 body {
   _background: #1d2939;
   line-height: 21px;
@@ -15422,9 +15428,14 @@ strong {
   font-family: 'LatoBold';
   font-weight: normal;
 }
-#main-viewport {
-  background: #e4e7ea;
+.mainpanel {
+  background: #e7e7e7;
+}
+.ng-scope {
   height: 100%;
+}
+#main-viewport {
+  height: auto;
 }
 .mb0 {
   margin-bottom: 0px!important;
@@ -16137,6 +16148,9 @@ strong {
   margin-bottom: 5px;
   word-wrap: break-word;
 }
+.contacts {
+  background: #e7e7e7;
+}
 #contacts-main-container #contacts-list-container {
   margin-top: 10px;
 }
@@ -16529,6 +16543,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .account {
   overflow: hidden;
+  background: #e4e7ea;
 }
 .account .billing-section .panel-body {
   min-height: 275px;
@@ -17776,6 +17791,41 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .social-list .li-email.first {
   display: block;
 }
+.dashboard {
+  background: #e7e7e7;
+}
+.dashboard .gridster .gs-w {
+  position: absolute!important;
+}
+.dashboard .gridster {
+  padding: 30px;
+  min-height: 600px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.dashboard .gridster .gs-w {
+  background: #FFF;
+  cursor: pointer;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.dashboard .gridster .player {
+  -webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+}
+.dashboard .gridster .gs-w.try {
+  background-image: url(../img/sprite.png);
+  background-repeat: no-repeat;
+  background-position: 37px -169px;
+}
+.dashboard .gridster .preview-holder {
+  border: none!important;
+  background: #999999!important;
+}
+.dashboard .gridster .preview-holder .fa-arrow-down {
+  font-size: 110px;
+  line-height: 100px;
+}
 .panel-stat {
   background: none;
 }
@@ -17849,31 +17899,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   float: right;
   width: 170px;
   margin: -14px -14px 0 0;
-}
-.gridster {
-  padding: 30px;
-  max-width: 960px;
-  margin: 0 auto;
-}
-.gridster .gs-w {
-  background: #FFF;
-  cursor: pointer;
-  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-}
-.gridster .player {
-  -webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
-}
-.gridster .gs-w.try {
-  background-image: url(../img/sprite.png);
-  background-repeat: no-repeat;
-  background-position: 37px -169px;
-}
-.gridster .preview-holder {
-  border: none!important;
-  border-radius: 0!important;
-  background: rgba(255, 255, 255, 0.2) !important;
 }
 .ckbox,
 .rdio {
@@ -20704,7 +20729,6 @@ input[type='file'] {
 }
 #social_dashboard #social_dashboard_panel {
   width: 100%;
-  padding-right: 190px;
 }
 #social_dashboard #social_dashboard_panel .grid1,
 #social_dashboard #social_dashboard_panel .grid2 {
@@ -21490,7 +21514,7 @@ path {
   color: #ccc;
 }
 .commerce {
-  overflow: hidden;
+  background: #e4e7ea;
 }
 .commerce .pageheader .btn {
   margin-top: -5px;
