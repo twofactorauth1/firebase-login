@@ -26,6 +26,10 @@
   left: 0;
 }
 
+ .rightmenu-open #social_dashboard_rightbar {
+    display: block!important;
+  }
+
 #social_dashboard {
 
   position: relative;
@@ -33,7 +37,6 @@
   #social_dashboard_panel {
 
     width: 100%;
-    padding-right: 190px;
 
     .row {
       // padding: 0 20px 20px;
@@ -216,11 +219,9 @@
     padding: 0;
     width: 240px;
     position: absolute;
-    top: -56px;
+    top: -118px;
     right: -240px;
-    border-right: 1px solid #d3d3d3;
-    box-shadow: 1px 0 0 #f7f7f7;
-    background: #e7e7e7;
+    display: none;
     .nav-list {
       margin-top: 0!important;
     }
