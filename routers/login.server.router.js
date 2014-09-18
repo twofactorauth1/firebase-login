@@ -15,6 +15,7 @@ var LoginView = require('../views/login.server.view');
 var ForgotPasswordView = require('../views/forgotpassword.server.view');
 var SignupView = require('../views/signup.server.view');
 
+
 var router = function () {
     this.init.apply(this, arguments);
 };
@@ -209,6 +210,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     handleSignup: function (req, resp) {
         var self = this, user, accountToken, deferred;
+        self.log.debug('>> handleSignup');
 
         var username = req.body.username;
         var password1 = req.body.password;
@@ -241,12 +243,22 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function (err, value) {
             if (!err) {
+
                 req.login(value, function (err) {
                     if (err) {
                         return resp.redirect("/");
                     } else {
-                        req.flash("info", "Account created successfully");
-                        return resp.redirect("/");
+
+                        var accountId = value.getAllAccountIds()[0];
+                        authenticationDao.getAuthenticatedUrlForAccount(accountId, self.userId(req), "admin", function (err, value) {
+                            if (err) {
+                                resp.redirect("/home");
+                                self = null;
+                                return;
+                            }
+                            resp.redirect(value);
+                            self = null;
+                        });
                     }
                 });
             } else {

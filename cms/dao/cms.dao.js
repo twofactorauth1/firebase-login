@@ -1130,6 +1130,64 @@ var dao = {
         });
     },
 
+    createDefaultPageForAccount: function(accountId, websiteId, fn) {
+        var self = this;
+        self.log.debug('>> createDefaultPageForAccount');
+
+        var page = new $$.m.cms.Page({
+
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "index",
+            "title" : 'Home',
+            "seo" : {},
+            "visibility" : {
+                "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : null,
+                "type" : "masthead",
+                "version" : 1,
+                "title" : "Title",
+                "subtitle" : "Subtitle.",
+                "txtcolor" : "#fff",
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : 1235,
+                        "height" : 935,
+                        "parallax" : true,
+                        "blur" : false
+                    },
+                    "color" : ""
+                },
+                "btn" : {
+                    "text" : "",
+                    "url" : "",
+                    "icon" : ""
+                }
+            }
+        ],
+            "created" : new Date(),
+            "modified" : null
+
+        });
+
+        self.saveOrUpdate(page, function(err, value){
+            if(err) {
+                self.log.error('Error creating default page: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< createDefaultPageForAccount');
+                fn(null, value);
+            }
+        });
+    },
+
 
     getRenderedWebsitePageForAccount: function(accountId, pageName, isEditor, tag, author, category, fn) {
         var self = this,
