@@ -1,4 +1,4 @@
-angular.module('app.directives').directive('videoDraggable', function () {
+angular.module('var.directives').directive('videoDraggable', function () {
     return {scope: {
         index: '='
     }, link: function (scope, elm, attr) {

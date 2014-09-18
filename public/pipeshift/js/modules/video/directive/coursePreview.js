@@ -1,4 +1,4 @@
-angular.module('app.directives').directive('coursePreview', function () {
+angular.module('var.directives').directive('coursePreview', function () {
     function getTimezoneOffset() {
         return (new Date()).getTimezoneOffset();
     }
