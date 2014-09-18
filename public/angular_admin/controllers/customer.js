@@ -6,7 +6,6 @@ define(['app', 'customerService'], function(app) {
             $scope.customers = customers;
             $scope.$watch('searchBar', function (newValue, oldValue) {
                 if (newValue) {
-                    console.log(newValue);
                     var searchBarSplit = newValue.split(' ');
                     if (searchBarSplit.length >= 3) {
                         $scope.customerFilter.first = searchBarSplit[0];
