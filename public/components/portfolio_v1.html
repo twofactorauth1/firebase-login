@@ -1,5 +1,4 @@
 <!-- Button trigger modal -->
-        <h1>hello dfdfdsf</h1>
 <div data-ng-init="projectObject={project: {}}" data-ng-model="projectObject">
      <div style="position:relative;width:100%;height:220px;">
         <div class="customview view-fifth" ng-repeat="project in component.projects" >
@@ -7,13 +6,13 @@
             <div class="mask">
                 <h2>{{project.title}}</h2>
                 <p>{{project.subtitle}}</p>
-                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" data-ng-click="projectObject.project=project">
+                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myPortfoilo" data-ng-click="projectObject.project=project">
                     Read More
                 </button>
             </div>
         </div>
     </div>
-  <div id="myModal" class=" portfolio modal fade" aria-hidden="true" style="display: none;">
+  <div id="myPortfoilo" class=" portfolio modal fade" aria-hidden="true" style="display: none;">
     <div class=" portfolio modal-dialog">
         <div class="portfolio modal-content">
             <div class="portfolio modal-header">
