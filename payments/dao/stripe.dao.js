@@ -218,14 +218,22 @@ var dao = {
     /**
      * This permanently removes customer payment info from Stripe and cancels any subscriptions.
      * It cannot be undone.  Care must be taken to ensure that no other account has a reference
-     * to this customer.  Additionally, this removes the stripeId from the contact object.
+     * to this customer.  Additionally, this removes the stripeId from the contact or user object.
      * @param stripeCustomerId
+     * @param contactId
+     * @param userId
      * @param fn
      */
         //TODO: handle customers on a user
-    deleteStripeCustomer: function(stripeCustomerId, contactId, fn) {
+    deleteStripeCustomer: function(stripeCustomerId, contactId, userId, fn) {
         var self = this;
         self.log.debug('>> deleteStripeCustomer');
+        if(fn === null) {
+            fn = userId;
+            userId = null;
+        }
+
+
         stripe.customers.del(stripeCustomerId, function(err, confirmation){
             if(err) {
                 fn(err, confirmation);
@@ -235,16 +243,40 @@ var dao = {
                 self.log.debug('removing stripeId from contact.');
                 contactDao.getById(contactId, $$.m.Contact, function(err, contact){
                     if(err) {
+                        self.log.error('Error removing stripeId from contact: ' + err);
                         fn(err, contact);
                         fn = null;
+                        return;
                     }
                     contact.set('stripeId', null);
                     contactDao.saveOrMerge(contact, function(err, contact){
                         if(err) {
+                            self.log.error('Error removing stripeId from contact: ' + err);
                             fn(err, contact);
                             fn = null;
+                            return;
                         }
                         return fn(null, confirmation);
+                    });
+                });
+            } else if(userId && userId.length > 0) {
+                self.log.debug('removing stripeId from user.');
+                userDao.getById(userId, $$.m.User, function(err, user){
+                    if(err) {
+                        self.log.error('Error removing stripeId from user: ' + err);
+                        fn(err, user);
+                        fn = null;
+                        return;
+                    }
+                    user.set('stripeId', null);
+                    userDao.saveOrUpdate(user, function(err, value){
+                        if(err) {
+                            self.log.error('Error removing stripeId from user: ' + err);
+                            fn(err, value);
+                            fn = null;
+                            return;
+                        }
+                        return fn(null, value);
                     });
                 });
             } else {
