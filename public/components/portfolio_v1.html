@@ -1,109 +1,81 @@
-<div class="component portfolio portfolio-v1 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};' data-class="portfolio" data-id="{{component._id}}">
-    <div class="component-body">
-        <div class="container">
-            <div class="row">
+<!-- Button trigger modal -->
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    Launch demo modal
+</button>
 
-                <h3 class="portfolio-title">
-                    <div class="editable" data-class="title">
-                        Portfolio
-                    </div>
-                </h3>
+<div id="myModal" class="modal fade" aria-hidden="true" style="display: none;">
 
-                <div class="portfolio-subtitle">
-                    <div class="editable" data-class="subtitle">
-                        This is my portfolio
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="container" style="text-align: center">
+                    <button type="button" class="close btn-small btn-lg" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h1 id="hdr-title" class="text-center">Flat iDevices</h1>
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <div id="myCarousel" class="carousel slide">
+                                <ol class="carousel-indicators">
+                                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                                </ol>
+                                <!-- Carousel items -->
+                                <div class="carousel-inner">
+                                    <div class=" active item"><img src="../images/preview_1_1.jpg"/></div>
+                                    <div class="item"><img src="../images/preview_5_1.jpg"/></div>
+                                    <div class="item"><img src="../images/preview_5_2.jpg"/></div>
+                                </div>
+                                <!-- Carousel nav -->
+                                <a class="carousel-control left" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+                                <a class="carousel-control right" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <ul class="portfolio-items col-xs-8 col-xs-offset-2">
-                    <li class="col-sm-4">
-                        <div class="thumbnail">
-                            <div class="caption">
-                                <h4>Thumbnail Headline</h4>
-                                <p>short thumbnail description</p>
-                                <p>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-eye"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-link"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-share"></span></a>
-                                </p>
-                            </div>
-                            <img src="images/portfolio-item.jpg">
-                        </div>
-                    </li>
-                    <li class="col-sm-4">
-                        <div class="thumbnail">
-                            <div class="caption">
-                                <h4>Thumbnail Headline</h4>
-                                <p>short thumbnail description</p>
-                                <p>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-eye"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-link"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-share"></span></a>
-                                </p>
-                            </div>
-                            <img src="images/portfolio-item.jpg">
-                        </div>
-                    </li>
-                    <li class="col-sm-4">
-                        <div class="thumbnail">
-                            <div class="caption">
-                                <h4>Thumbnail Headline</h4>
-                                <p>short thumbnail description</p>
-                                <p>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-eye"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-link"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-share"></span></a>
-                                </p>
-                            </div>
-                            <img src="images/portfolio-item.jpg">
-                        </div>
-                    </li>
-                    <li class="col-sm-4">
-                        <div class="thumbnail">
-                            <div class="caption">
-                                <h4>Thumbnail Headline</h4>
-                                <p>short thumbnail description</p>
-                                <p>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-eye"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-link"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-share"></span></a>
-                                </p>
-                            </div>
-                            <img src="images/portfolio-item.jpg">
-                        </div>
-                    </li>
-                    <li class="col-sm-4">
-                        <div class="thumbnail">
-                            <div class="caption">
-                                <h4>Thumbnail Headline</h4>
-                                <p>short thumbnail description</p>
-                                <p>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-eye"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-link"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-share"></span></a>
-                                </p>
-                            </div>
-                            <img src="images/portfolio-item.jpg">
-                        </div>
-                    </li>
-                    <li class="col-sm-4">
-                        <div class="thumbnail">
-                            <div class="caption">
-                                <h4>Thumbnail Headline</h4>
-                                <p>short thumbnail description</p>
-                                <p>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-eye"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-link"></span></a>
-                                    <a href="" rel="tooltip" title="Zoom"><span class="fa fa-share"></span></a>
-                                </p>
-                            </div>
-                            <img src="images/portfolio-item.jpg">
-                        </div>
-                    </li>
-                </ul>
-
-
             </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div id="project-sidebar" class="col-md-3">
+                            <h2 id="sdbr-title">Flat iDevices</h2>
+
+                            <p id="sdbr-category">Mock-Up</p>
+
+                            <p id="sdbr-date">February 2014</p>
+
+                            <p id="sdbr-client">Google Inc.</p>
+
+                            <p id="sdbr-link"><a href="http://www.google.com" target="_blank">www.google.com</a></p>
+
+                            <p id="sdbr-descr">This is a place for a quick description of the project. Use it or not to
+                                say a little things about the project.</p>
+                        </div>
+                        <div id="project-content" class="col-md-8 col-md-offset-1">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sapien risus, blandit at
+                                fringilla ac, varius sed dolor. Donec augue lacus, vulputate sed consectetur facilisis,
+                                interdum pharetra ligula. Nulla suscipit erat nibh, ut porttitor nisl dapibus eu.</p>
+
+                            <p>Phasellus porta eros vel lacus euismod consequat. Phasellus eleifend, nibh non feugiat
+                                hendrerit, lacus enim adipiscing eros, a pharetra erat neque eget est. Quisque vitae
+                                aliquet urna. Integer suscipit lectus eu enim porttitor fringilla. Ut blandit, urna in
+                                auctor euismod, arcu eros pharetra metus, a porta purus libero a nibh.</p>
+
+                            <p>Nam eget urna pellentesque nisl ultrices dapibus. Mauris accumsan vehicula nisl, sed
+                                tempus mauris facilisis eu. Donec a iaculis nisi, quis malesuada justo. Pellentesque ut
+                                enim sit amet ipsum dignissim egestas. Morbi tincidunt rhoncus urna eget placerat.</p>
+
+                            <p class="text-right"><a class="btn btn-meflat icon-right" href="#external-link">Visit
+                                Website<i class="fa fa-arrow-right"></i></a></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End modal-body -->
         </div>
+        <!-- End modal-content -->
     </div>
+    <!-- End modal-dialog -->
+
 </div>
