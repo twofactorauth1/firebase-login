@@ -1,4 +1,4 @@
-angular.module('app.filters').filter('htmlify', function() {
+angular.module('var.filters').filter('htmlify', function() {
   return function(input) {
     if (!input) {
       return "";

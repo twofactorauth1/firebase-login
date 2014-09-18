@@ -1,4 +1,4 @@
-angular.module('app.directives').directive('videoPlayer', function () {
+angular.module('var.directives').directive('videoPlayer', function () {
     return {
         scope: {
             video: "="

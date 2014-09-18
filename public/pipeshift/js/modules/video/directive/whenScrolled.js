@@ -1,4 +1,4 @@
-angular.module('app.directives').directive('whenScrolled', function() {
+angular.module('var.directives').directive('whenScrolled', function() {
   return function(scope, elm, attr) {
     var raw = elm[0];
 
