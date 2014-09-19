@@ -5,7 +5,6 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
 <div class="container component" data-id="{{component._id}}" ng-show="component">
     <div class="row">
         <div class="col-md-7">
@@ -20,14 +19,19 @@
              </div>-->
         </div>
     </div>
+
     <div class="row">
-        <div class="col-md-4" ng-repeat="image in component.images">
-            <div >
-                <a class="thumbnail" href="{{image['image-url']}}"
-                   title="{{image['image-label']}}" data-gallery>
-                    <img class="img-responsive" alt="{{image['image-label']}}" src="{{image['image-url']}}">
-                    <span class="caption"><i class="fa fa-plus-circle"></i></span>
-                </a>
+        <div class="row">
+            <div isotope-container ng-cloak id="isotopeContainer">
+                <div class="col-md-4 imgHeight" ng-repeat="image in component.images track by $index"
+                     isotope-item>
+                    <a class="thumbnail" href="{{image['image-url']}}"
+                       title="{{image['image-label']}}" data-gallery>
+
+                        <img class="img-responsive" alt="{{image['image-label']}}" src="{{image['image-url']}}">
+                        <span class="caption"><i class="fa fa-plus-circle"></i></span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
