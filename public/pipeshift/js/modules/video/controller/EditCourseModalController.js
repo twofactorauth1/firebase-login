@@ -11,7 +11,7 @@ define(['angularAMD', 'app'], function (angularAMD, app) {
         }
         $scope.domain = host + ":" + $location.port();
         $scope.isAdd = false;
-        $scope.title = "Course info";
+        $scope.title = "Course Edit";
         $scope.course = $.extend({}, course);
         $scope.templates = templates;
         $scope.subscribers = [];
