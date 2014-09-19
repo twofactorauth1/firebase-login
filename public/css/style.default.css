@@ -17307,7 +17307,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   color: #1D2939;
   letter-spacing: -0.5px;
   margin: 0;
-  padding-left: 10px;
+  padding-left: 20px;
 }
 .mainpanel .pageheader h2 span {
   font-size: 13px;
@@ -23308,41 +23308,250 @@ div[data-class='image-text'] p {
 .products-v1 .product-content .btn {
   margin-bottom: 15px;
 }
-.portfolio-v1 .portfolio-title {
+/*--------------------------
+----Project Modal Styles----
+----------------------------*/
+.portfolio.fade.modal {
+  overflow-x: hidden;
+}
+.portfolio.modal {
+  display: none;
+  overflow: auto;
+  overflow-y: scroll;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+.portfolio.modal.fade .modal-dialog {
+  -webkit-transform: translateY(2000px);
+  -moz-transform: translateY(2000px);
+  -ms-transform: translateY(2000px);
+  transform: translateY(2000px);
+  opacity: 0;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.5s;
+}
+.portfolio.modal.in .modal-dialog {
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+  opacity: 1;
+}
+.portfolio.modal-backdrop {
+  background-color: #1D2026;
+}
+.portfolio.modal-backdrop.in {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.portfolio.modal-dialog {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+.portfolio.modal-content {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background-color: #fff;
+}
+.portfolio.modal-header {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  padding-top: 40px;
+  background: #36D9C3 !important;
+  color: #fff;
+  border: none;
   text-align: center;
-  color: #176134;
-  text-transform: uppercase;
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.4);
 }
-.portfolio-v1 .portfolio-subtitle {
-  color: white;
-  text-align: center;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+.portfolio.modal-body {
+  margin: 0;
+  padding: 60px 0 20px;
 }
-.portfolio-v1 .portfolio-items li {
-  margin-bottom: 20px;
-  margin-top: 20px;
+.portfolio.modal-body .project-descr {
+  margin: 0 0 24px;
 }
-.portfolio-v1 .portfolio-items li .thumbnail {
+.portfolio.modal-header .loader {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  margin-top: 32%;
+  margin-left: -18px;
+  width: 36px;
+  height: 36px;
+  z-index: 1;
+}
+.portfolio.modal-header .image-wrapper {
   position: relative;
   overflow: hidden;
 }
-.portfolio-v1 .portfolio-items li .caption {
+.portfolio.modal-header .screen {
+  box-sizing: padding-box;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
   position: absolute;
-  top: 0;
-  right: 0;
-  background: rgba(66, 139, 202, 0.75);
+  top: 10.5%;
   width: 100%;
-  height: 100%;
-  padding: 2%;
-  display: none;
-  text-align: center;
-  color: #fff !important;
+  height: auto;
   z-index: 2;
+  opacity: 0;
+  -webkit-transition: all 0.5s ease-out 0.7s;
+  transition: all 0.5s ease-out 0.7s;
 }
-.portfolio-v1 .portfolio-items li .caption .fa {
-  color: white;
-  font-size: 18px;
+.portfolio.modal-header .screen.done {
+  opacity: 1;
+}
+.portfolio#project-sidebar {
+  margin-bottom: 40px;
+}
+.portfolio#project-sidebar p {
+  margin-bottom: 10px;
+}
+#sdbr-descr {
+  margin-top: 30px;
+}
+#sdbr-category:before {
+  display: inline-block;
+  width: 20px;
+  content: "\f115";
+  font-family: "Fontawesome";
+  margin-right: 10px;
+}
+#hdr-title {
+  margin-bottom: 40px;
+}
+#project-modal .close {
+  float: none !important;
+  font-size: 52px;
+  line-height: 52px;
+  font-weight: 300;
+  margin-top: 0px;
+  margin-bottom: 30px;
+  opacity: 1;
+  color: inherit;
+  text-shadow: none;
+  -webkit-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+#project-modal .close:hover {
+  opacity: .8;
+}
+#sdbr-date:before {
+  display: inline-block;
+  width: 20px;
+  content: "\f073";
+  font-family: "Fontawesome";
+  margin-right: 10px;
+}
+#sdbr-client:before {
+  display: inline-block;
+  width: 20px;
+  content: "\f007";
+  font-family: "Fontawesome";
+  margin-right: 10px;
+}
+#sdbr-link:before {
+  display: inline-block;
+  width: 20px;
+  content: "\f0ac";
+  font-family: "Fontawesome";
+  margin-right: 10px;
+}
+.customview {
+  width: 300px;
+  height: 200px;
+  margin: 10px;
+  float: left;
+  border: 10px solid #fff;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  box-shadow: 1px 1px 2px #e6e6e6;
+  cursor: default;
+  background: #ffffff no-repeat center center;
+}
+.customview .mask,
+.customview .content {
+  width: 300px;
+  height: 200px;
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+}
+.customview img {
+  display: block;
+  position: relative;
+}
+.customview h2 {
+  text-transform: uppercase;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  font-size: 17px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  margin: 20px 0 0 0;
+}
+.customview p {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 12px;
+  position: relative;
+  color: #fff;
+  padding: 10px 20px 20px;
+  text-align: center;
+}
+.customview a.info {
+  display: inline-block;
+  text-decoration: none;
+  padding: 7px 14px;
+  background: #000;
+  color: #fff;
+  text-transform: uppercase;
+  box-shadow: 0 0 1px #000000;
+}
+.customview a.info:hover {
+  box-shadow: 0 0 5px #000000;
+}
+.view-fifth img {
+  transition: all 0.3s ease-in-out;
+}
+.view-fifth .mask {
+  background-color: rgba(146, 96, 91, 0.3);
+  transform: translateX(-300px);
+  opacity: 1;
+  transition: all 0.4s ease-in-out;
+}
+.view-fifth h2 {
+  background: rgba(255, 255, 255, 0.5);
+  color: #000;
+  box-shadow: 0px 1px 3px rgba(159, 141, 140, 0.5);
+}
+.view-fifth p {
+  opacity: 0;
+  color: #333;
+  transition: all 0.2s linear;
+}
+.view-fifth:hover .mask {
+  transform: translateX(0px);
+}
+.view-fifth:hover img {
+  transform: translateX(300px);
+  transition-delay: 0.1s;
+}
+.view-fifth:hover p {
+  opacity: 1;
+  transition-delay: 0.4s;
 }
 /********** Blog Teaser v1 **********/
 .blog-teaser {

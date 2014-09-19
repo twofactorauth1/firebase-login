@@ -75,9 +75,9 @@
     "angular-carousel": "~0.2.5",
     "angular-file-upload": "~1.1.1",
     "ouibounce": "~0.0.10",
-    "angular-wizard": "0.4.0",
+    "angular-wizard":"0.4.0",
     "angular-isotope": "~0.1.14",
-    "isotope": "~2.0.1",
+    "isotope": "2.0.0",
     "components-font-awesome": "~4.2.0",
     "blueimp-bootstrap-image-gallery": "~3.1.1"
   },
