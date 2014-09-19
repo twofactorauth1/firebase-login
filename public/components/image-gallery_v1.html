@@ -6,31 +6,62 @@
 *
 -->
 
-<div class="section image-gallery" data-ng-show="component" data-class="image-gallery" data-id="{{component._id}}">
-    <div class="component-header container">
-        <div class="editable" data-class="label">
-            <h2 class="section-title center">{{component.label}}</h2>
+<div class="container component" data-id="{{component._id}}" ng-show="component">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="text-right">
+                <h1>{{component.title}}</h1>
+            </div>
         </div>
-
-        <div class="editable" data-class="description">
-            <p class="center">{{component.description}}</p>
+        <div class="col-md-5 text-right">
+            <!--Sort By:
+             <div class="btn-group" opt-kind ok-key="sortBy">
+                 <button type="button" class="btn btn-default" ok-sel=".image-label">Name</button>
+             </div>-->
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-4" ng-repeat="image in component.images">
+            <div >
+                <a class="thumbnail" href="{{image['image-url']}}"
+                   title="{{image['image-label']}}" data-gallery>
+                    <img class="img-responsive" alt="{{image['image-label']}}" src="{{image['image-url']}}">
+                    <span class="caption"><i class="fa fa-plus-circle"></i></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="blueimp-gallery" class="blueimp-gallery">
+        <!-- The container for the modal slides -->
+        <div class="slides">
 
-    <div class="component-body section-colored">
-        <div class="container">
-            <div class="row" data-ng-repeat="image in component.images track by $index">
-                <div class="col-lg-4 col-md-4 col-sm-6">
-                    <a href="portfolio-item.html" class="link-gallery-image">
-                        <div class="overlay-gallery-image" style="opacity: 0;">
-                            <h3 class="center">{{image.image-label}}</h3>
-                            <small class="text-muted center">
-                                {{image.image-description}}
-                            </small>
-                        </div>
-                        <!-- /.overlay-portfolio -->
-                        <img class="img-responsive img-home-portfolio" src="{{image.image-url}}" alt="portfolio 1">
-                    </a>
+        </div>
+        <!-- Controls for the borderless lightbox -->
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+        <!-- The modal dialog, which will be used to wrap the lightbox content -->
+        <div class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body next"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left prev">
+                            <i class="glyphicon glyphicon-chevron-left"></i>
+                            Previous
+                        </button>
+                        <button type="button" class="btn btn-primary next">
+                            Next
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
