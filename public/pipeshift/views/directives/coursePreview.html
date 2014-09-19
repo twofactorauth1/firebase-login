@@ -78,7 +78,8 @@
 <!--</tr>-->
 <tr ng-hide="isLoggedInAndSubscribed">
     <td height="110" align="center">
-        <h4>{{course.body}}</h4>
+        <h4 e-style="width:440px" ps-editable="course.body" ps-editable-type="textarea"
+            edit-mode="editMode">{{course.body}}</h4>
     </td>
 </tr>
 <tr ng-hide="isLoggedInAndSubscribed">
