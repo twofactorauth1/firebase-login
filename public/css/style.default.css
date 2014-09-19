@@ -22294,6 +22294,49 @@ path {
 .contact-us-v1 form .form-control {
   border-color: #176134;
 }
+.contact-us-v3 {
+  /* Small devices (tablets, 768px and up) */
+}
+.contact-us-v3 .title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.contact-us-v3 p {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+.contact-us-v3 #contact {
+  background: #2d2e2e;
+}
+.contact-us-v3 .list-contacts {
+  list-style: none;
+  padding-left: 0;
+  margin: 2em 0;
+}
+.contact-us-v3 .list-contacts li {
+  margin-bottom: 10px;
+  display: table;
+}
+.contact-us-v3 .list-contacts .fa {
+  margin-right: 15px;
+  display: table-cell;
+  width: 40px;
+  font-size: 24px;
+}
+.contact-us-v3 .section-title-border {
+  width: 70px;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.13);
+  margin: 0 auto 45px;
+  border-radius: 3px;
+}
+@media (min-width: 768px) {
+  .contact-us-v3 .list-contacts {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 2em;
+  }
+}
 /********** Feature List v1 **********/
 .feature-list-v1 .features-wrap {
   margin: 5%;
@@ -22788,6 +22831,97 @@ contenthover a {
 .meet-team .profile-position {
   text-align: center;
 }
+/********** Meet Team v3 **********/
+.meet-team-v3 {
+  /* 
+     * Social icons
+     * --------------------------------------------------------- */
+  /* Small devices (tablets, 768px and up) */
+}
+.meet-team-v3 .title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.meet-team-v3 .section-title-border {
+  width: 70px;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.13);
+  margin: 0 auto 45px;
+  border-radius: 3px;
+}
+.meet-team-v3 .team-member-container {
+  display: inline-block;
+  margin: 20px 0;
+}
+.meet-team-v3 .team-member-container:first-child {
+  margin-top: 0;
+}
+.meet-team-v3 .team-member-container:last-child {
+  margin-bottom: 0;
+}
+.meet-team-v3 .team-member {
+  max-width: 220px;
+  padding-bottom: 25px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 auto;
+}
+.meet-team-v3 .team-member-profession {
+  color: #ccc;
+  font-size: 12px;
+  margin-top: -3px;
+  display: block;
+  margin-bottom: 5px;
+}
+.meet-team-v3 .team-member .social a {
+  font-size: 12px;
+  width: 26px;
+  height: 26px;
+  line-height: 25px;
+  margin: 0 7px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+.meet-team-v3 .team-member h4 {
+  margin-bottom: 0;
+  margin-top: 15px;
+}
+.meet-team-v3 .team-member p {
+  font-size: 12px;
+  line-height: 18px;
+  margin: 5px 0;
+}
+.meet-team-v3 .team-member h4,
+.meet-team-v3 .team-member p {
+  padding: 0 15px;
+}
+.meet-team-v3 .team-member-meta {
+  background: #434951;
+  color: #fff;
+  padding: 5px 10px;
+}
+.meet-team-v3 .team-member-image img {
+  width: 100%;
+}
+.meet-team-v3 .social {
+  margin-top: 20px;
+  font-size: 14px;
+  list-style-type: none;
+  padding-left: 0;
+}
+.meet-team-v3 .social a {
+  font-size: 1.1em;
+  padding: 0 0.3em;
+  border: 1px solid #fff;
+  margin: 0 5px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  line-height: 28px;
+}
+@media (min-width: 768px) {
+  .meet-team-v3 .team-member-container {
+    margin: 0;
+  }
+}
 /********** Testimonials **********/
 .testimonials-v1 div[data-class="testimonials"] {
   background: url('../assets/images/indimain/wave-bg.jpg');
@@ -22913,6 +23047,51 @@ div[data-class='image-text'] p {
 .image-text-v2 .image-text-text a {
   color: white;
   text-decoration: underline;
+}
+div[data-class='image-text'] h3 {
+  font-weight: bold;
+}
+div[data-class='text'] {
+  font-size: 14px;
+}
+div[data-class='image-text'] p {
+  font-size: 14px;
+}
+.image-text {
+  padding: 0 20px;
+  display: inline-block;
+}
+.image-text .img-responsive {
+  margin: 0 auto;
+}
+/********** Image Text v3 **********/
+.image-text-v3 .image-text-title {
+  color: #444;
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: normal;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+  display: block;
+  position: relative;
+}
+.image-text-v3 .image-text-subtitle {
+  text-shadow: 1px 1px 1px rgba(36, 135, 159, 0.8);
+  margin-top: 0px;
+  font-weight: bold;
+}
+.image-text-v3 .btn {
+  margin: 20px auto;
+}
+.image-text-v3 .image-text-text a {
+  color: white;
+  text-decoration: underline;
+}
+.image-text-v3 .section-title-border {
+  width: 70px;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.13);
+  margin: 0 auto 45px;
+  border-radius: 3px;
 }
 div[data-class='image-text'] h3 {
   font-weight: bold;
@@ -23090,7 +23269,7 @@ div[data-class='image-text'] p {
 .social ul {
   text-align: center;
   padding-left: 0;
-  margin-top: 10px;
+  margin-bottom: 20px;
 }
 .social ul li {
   width: 48px;
@@ -23141,7 +23320,6 @@ div[data-class='image-text'] p {
 }
 /********** SignUp Form v1 **********/
 .signup-form-v1 {
-  background: #4bafca;
   padding: 0px!important;
   margin: 0px!important;
 }
@@ -23858,4 +24036,25 @@ hr {
 }
 .ng-hide {
   display: none!important;
+}
+.coming-soon .logo {
+  margin: 0 auto;
+  display: block;
+}
+.coming-soon .heading {
+  font-size: 50px;
+  margin: 45px 0 10px;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 30px 0 10px;
+}
+.coming-soon .text {
+  margin-bottom: 20px;
+  font-size: 16px;
+  text-align: center;
+}
+.coming-soon .inner-page {
+  padding-bottom: 15px;
 }
