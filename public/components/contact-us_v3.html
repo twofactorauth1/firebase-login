@@ -13,19 +13,16 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <p>
-                            <strong>Integer suscipit</strong> gravida felis quis ornare. 
-                            Pellentesque consectetur dui eu nulla vestibulum, 
-                            ac euismod diam auctor. 
+                            {{component.subtitle}}
                         </p>
                         <ul class="list-contacts">
-                            <li><i class="fa fa-phone"></i> (123) 456-7890</li>
-                            <li><i class="fa fa-mobile-phone"></i> (123) 987-6543</li>
-                            <li><i class="fa fa-map-marker"></i> 1795 Folsom Ave, Suite 600<br> San Francisco, CA 94107</li>
-                            <li><i class="fa fa-envelope-o"></i> <a href="mailto:info@seventytwo.com">info@seventytwo.com</a></li>
+                            <li><i class="fa fa-phone"></i> {{component.contact.phone}}</li>
+                            <li><i class="fa fa-map-marker"></i> {{component.location.address}} {{component.location.city}} {{component.location.state}}, {{component.location.zip}}</li>
+                            <li><i class="fa fa-envelope-o"></i> <a href="mailto:{{component.contact.email}}"></a>{{component.contact.email}}</li>
                         </ul>
                     </div>
                     <div class="col-sm-6">
-                        <form class="form-horizontal bv-form" action="php/contactForm.php" method="post" role="form" id="contactForm" novalidate="novalidate">
+                        <form class="form-horizontal bv-form" action="" method="post" role="form" id="contactForm" novalidate="novalidate">
                             <div class="form-group has-feedback">
                                 <div class="col-sm-6">
                                     <input type="text" name="name" class="form-control" placeholder="Name" data-bv-field="name"><i class="form-control-feedback" data-bv-icon-for="name" style="display: none; top: 0px;"></i>  
