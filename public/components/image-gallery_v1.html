@@ -20,13 +20,13 @@
              </div>-->
         </div>
     </div>
-    <div class="row" >
-        <div class="col-md-4" ng-repeat="image in component.images" >
-            <div class="well">
-                <a href="{{image['image-url']}}"
+    <div class="row">
+        <div class="col-md-4" ng-repeat="image in component.images">
+            <div >
+                <a class="thumbnail" href="{{image['image-url']}}"
                    title="{{image['image-label']}}" data-gallery>
-                    <img class="thumbnail img-responsive" alt="{{image['image-label']}}" src="{{image['image-url']}}">
-                    <span class="caption"><i class="icon-plus-sign"></i></span>
+                    <img class="img-responsive" alt="{{image['image-label']}}" src="{{image['image-url']}}">
+                    <span class="caption"><i class="fa fa-plus-circle"></i></span>
                 </a>
             </div>
         </div>
