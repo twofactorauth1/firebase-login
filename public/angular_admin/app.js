@@ -41,6 +41,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule'], funct
                 templateUrl: '/angular_admin/views/commerce_edit.html',
                 controller: 'CommerceEditCtrl',
                 controllerUrl: '/angular_admin/controllers/commerce_edit.js'
+            }))
+            .state('customer', angularAMD.route({
+                url: '/customer',
+                templateUrl: '/angular_admin/views/customer.html',
+                controller: 'CustomerCtrl',
+                controllerUrl: '/angular_admin/controllers/customer.js'
             }));
     });
 
