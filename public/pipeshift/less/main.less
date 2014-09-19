@@ -282,11 +282,7 @@
     }
 
     .video-container {
-        /*padding-left: 50px;*/
-        // background-color: rgba(0, 0, 0, 0.55);
-        // border-radius: 5px;
-        // padding-left: 15px;
-        // padding-right: 15px;
+        padding: 0;
     }
 
     .btn-send.btn-square {
@@ -339,7 +335,6 @@
     }
 
     .search-form input {
-        height: 52px;
         padding: 5px;
         box-sizing: border-box;
         border: 1px solid #cccccc;
@@ -352,11 +347,19 @@
             margin: 0 0 30px 0;
         }
         .search-form {
+            margin-top: -5px;
             input {
                 text-indent: 10px;
-                border-bottom-left-radius: 0px;
-                border-top-left-radius: 0px;
                 color: black;
+            }
+            .btn-search {
+                position: absolute;
+                right: 0px;
+                top: -6px;
+                background: transparent !important;
+                border: none !important;
+                height: 27px;
+                font-size: 20px;
             }
         }
         .add-course {
@@ -564,22 +567,23 @@
 
 
     .playlist-selector {
-        height: 51px;
+        height: 33px;
         padding: 10px;
         box-sizing: border-box;
         border-bottom-left-radius: 0px;
         border-top-right-radius: 0px;
         margin-bottom: 0;
-        width: 95%;
+        width: 100%;
         float: left;
         color: black;
         margin-left: -3px;
         text-indent: 10px;
+        top: -5px;
+        position: relative;
     }
 
 
     .videos-search-col {
-        width: 50%;
         padding: 0;
         margin-left: 0px;
         margin-right: 0px;
@@ -588,14 +592,29 @@
         .panel-body {
             padding: 0;
         }
+
+        .panel-heading {
+            height: 60px;
+            .dropdown {
+                float: left;
+            }
+        }
     }
 
     .playlist-col {
         padding: 0 0 0 20px;
-        width: 50%;
         margin-left: 0px;
         margin-right: 0px;
         float: left;
+
+        .panel-heading {
+            height: 60px;
+            .fa-edit {
+                float: right;
+                font-size: 24px;
+                cursor: pointer;
+            }
+        }
 
         .panel-body {
             padding: 0;
@@ -740,16 +759,6 @@
     }
 
 
-    .btn-search {
-        position: absolute;
-        right: 0px;
-        top: 0px;
-        background: transparent !important;
-        border: none !important;
-        height: 52px;
-        font-size: 20px;
-    }
-
     .btn-search-options {
         padding: 9px 18px;
         .fa {
@@ -759,5 +768,74 @@
 
     .glyphicon-search {
         color: #535353;
+    }
+}
+
+.panel-btns a {
+   margin-left: 8px;
+   float: right;
+   color: #000;
+   display: inline-block;
+   font-weight: bold;
+   opacity: 0.4;
+   font-size: 16px;
+   -moz-transition: all 0.2s ease-out 0s;
+    -webkit-transition: all 0.2s ease-out 0s;
+    transition: all 0.2s ease-out 0s;
+}
+
+.panel-btns a.minimize {
+   font-size: 18px;
+}
+
+.panel-btns a:hover {
+   text-decoration: none;
+   opacity: 0.5;
+   cursor: pointer;
+}
+
+.panel-btns a.minimize:active,
+.panel-btns a.minimize:focus {
+   text-decoration: none;
+}
+
+#top-shadow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    z-index: 999;
+    -webkit-box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+}
+
+.inset-shadow-bar {
+    width: 100%;
+
+    -moz-box-shadow:    inset  0  8px 8px -8px #696868, 
+                        inset  0 -8px 8px -8px #696868;
+    -webkit-box-shadow: inset  0  8px 8px -8px #696868, 
+                        inset  0 -8px 8px -8px #696868;
+     box-shadow:        inset  0  8px 8px -8px #696868, 
+                        inset  0 -8px 8px -8px #696868; 
+}
+
+.modal-edit-playlist {
+    padding: 0;
+    .nav-tabs {
+        margin-top: 0!important;
+    }
+}
+
+.ckbox-primary input[type="checkbox"]:checked + label:before {
+    border-color: #357EBD;
+    background-color: #428BCA;
+}
+
+.modal-edit-playlist {
+    #body {
+        min-height: 100%;
     }
 }
