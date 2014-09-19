@@ -1,4 +1,4 @@
-angular.module('app.directives').directive('videoPreview', function ($compile) {
+angular.module('var.directives').directive('videoPreview', function ($compile) {
     var varToPropertiesMapping = [
         {varName: "link", propertyName: "videoUrl"},
         {varName: "percents", propertyName: "percents"},
@@ -20,7 +20,7 @@ angular.module('app.directives').directive('videoPreview', function ($compile) {
     }
 
     function escapeRegExp(string) {
-        console.log(string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1"));
+        //console.log(string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1"));
         return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
     }
 

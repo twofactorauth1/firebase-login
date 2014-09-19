@@ -1,4 +1,4 @@
-angular.module('app.directives').directive('stripePayButton', ['$http', function ($http) {
+angular.module('var.directives').directive('stripePayButton', ['$http', function ($http) {
     return {
         restrict: "E",
         scope: {label: '@'},

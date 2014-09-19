@@ -1,7 +1,10 @@
 #pipeshiftDiv {
 
-    padding: 0;
     background: #e4e7ea;
+
+    .ng-scope {
+        height: auto;
+    }
 
     body {
         background: #fafafa;
@@ -279,11 +282,7 @@
     }
 
     .video-container {
-        /*padding-left: 50px;*/
-        // background-color: rgba(0, 0, 0, 0.55);
-        // border-radius: 5px;
-        // padding-left: 15px;
-        // padding-right: 15px;
+        padding: 0;
     }
 
     .btn-send.btn-square {
@@ -314,19 +313,9 @@
         float: right;
     }
 
-    .playlist-video .btn-remove {
-        visibility: hidden;
-    }
-
-    .playlist-video:hover .btn-remove {
-        visibility: visible;
-    }
-
     .btn-square {
-        height: 57px;
+        height: 51px;
         width: 57px;
-        padding-left: 12px;
-        padding-top: 3px;
     }
 
     .btn-square-sm {
@@ -346,7 +335,6 @@
     }
 
     .search-form input {
-        height: 52px;
         padding: 5px;
         box-sizing: border-box;
         border: 1px solid #cccccc;
@@ -354,86 +342,152 @@
         width: 100%;
     }
 
-    .playlist-editor .search-form-div {
-        /*padding-left: 30px;*/
-    }
-
-    .playlist-editor .search-form input {
-        text-indent: 10px;
-        border-bottom-left-radius: 0px;
-        border-top-left-radius: 0px;
-        color: black;
+    .playlist-editor {
+        .panel {
+            margin: 0 0 30px 0;
+        }
+        .search-form {
+            margin-top: -5px;
+            input {
+                text-indent: 10px;
+                color: black;
+            }
+            .btn-search {
+                position: absolute;
+                right: 0px;
+                top: -6px;
+                background: transparent !important;
+                border: none !important;
+                height: 27px;
+                font-size: 20px;
+            }
+        }
+        .add-course {
+            border-radius: 5px;
+            font-size: 22px;
+        }
     }
 
     .video {
-        /*margin-bottom: 10px;*/
         cursor: pointer;
-        /*padding-right: 15px;
-        padding-left: 0px;*/
+        margin: 10px 0;
+        .video-inner {
+            border-radius: 5px;
+            background-color: #e0edf6;
+            border: 2px dashed #cbddea;
+            padding: 10px;
+        }
+
+        .preview-image {
+            width: 100%;
+        }
+
+        .video-title {
+            color: #292929;
+            width: 180px;
+            font-size: 14px;
+            height: 24px;
+            overflow: hidden;
+            font-style: normal;
+            margin: 0 0 5px 0;
+
+            a {
+                width: 100%;
+                color: rgb(255, 255, 255) !important;
+                float: left;
+            }
+            .glyphicon-move {
+                float: left;
+                margin-right: 5px;
+            }
+        }
+
+        .duration {
+            margin-top: 5px;
+            float: right;
+            color: #292929;
+            font-size: 14px;
+            font-weight: bold;
+            font-style: normal;
+        }
     }
 
-    .video-title {
-        /*color: #292929;*/
-        color: #fff;
-        width: 180px;
-        font-size: 20px;
-        height: 24px;
-        overflow: hidden;
-        font-style: normal;
+    .playlist-video {
+        margin-left: 100px;
+        margin-top: 8px;
+        padding: 2px 25px 25px 25px;
+        background-color: #e0edf6;
+        border: 2px dashed #cbddea;
+        border-radius: 5px;
+        .video-title {
+            width: 90%;
+            height: auto;
+            padding-bottom: 5px;
+            line-height: 16px;
+            /* border-bottom: solid 1px rgba(220, 220, 220, 0.8); */
+        }
+        .duration {
+            margin-right: 20px;
+            float: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .preview-image {
+            width: 100%;
+        }
+
+        .preview-image-container {
+            width: 100%;
+            position: relative;
+            .glyphicon-remove {
+                top: 8px;
+            }
+        }
+        .video-comment {
+            width: 48%;
+            height: 114px;
+            font-size: 12px;
+            line-height: 1.25em;
+        }
+
+        .btn-remove {
+            visibility: hidden;
+        }
+
+        &:hover .btn-remove {
+            visibility: visible;
+        }
+        .remove-video {
+            right: -20px;
+            top: -45px;
+            background-color: transparent;
+            color: #abc0cf;
+        }
+
     }
 
-    .video-title a {
-        width: 100%;
-        color: rgb(255, 255, 255) !important;
-        float: left;
+    .drag-drop-target {
+        padding: 40px 0;
+        text-align: center;
+        margin-bottom: 20px;
+
+        .video-title {
+            width: 100%;
+        }
     }
 
-    .video-title .glyphicon-move {
-        float: left;
-        margin-right: 20px;
+    .related {
+        .video-title {
+            width: 100%;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .duration {
+            font-size: 12px;
+        }
     }
 
-    .playlist-video .video-title {
-        width: 90%;
-        height: auto;
-        padding-bottom: 5px;
-        /* border-bottom: solid 1px rgba(220, 220, 220, 0.8); */
-    }
-
-    .video-separator {
-        opacity: 0.5;
-        color: #000;
-        border-top: 1px solid #000;
-        margin-top: 10px;
-        margin-bottom: 26px;
-    }
-
-    .duration {
-        margin-top: 10px;
-        float: right;
-        /*color: black;*/
-        color: #fff;
-        font-size: 20px;
-        font-weight: bold;
-        font-style: normal;
-    }
-
-    .related .video-title {
-        width: 100%;
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .related .duration {
-        font-size: 12px;
-    }
-
-    .playlist-video .duration {
-        margin-right: 20px;
-        float: none;
-        font-size: 16px;
-        font-weight: bold;
-    }
 
     .video-categories {
         padding: 40px;
@@ -505,87 +559,80 @@
         overflow-y: scroll;
         overflow-x: hidden;
         padding-bottom: 20px;
-        padding-left: 0px;
-        padding-right: 0px;
+        padding: 0;
+        border-radius: 5px;
+    }
+
+    .video-list {
+        padding: 0 10px;
     }
 
     .fixed {
         position: relative;
     }
 
-    .playlist {
-        /*background-color: rgba(79, 210, 228, 0.8);*/
-        /*background-color: rgb(255, 255, 255);*/
-        border-radius: 5px;
-        padding-top: 30px;
-        /*opacity: 0.3;*/
-    }
-
-    .playlist-video {
-        margin-left: 100px;
-        margin-top: 20px;
-        padding: 2px 25px 25px 25px;
-        background-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .playlist-video .preview-image {
-        width: 100%;
-    }
-
-    .playlist-video .preview-image-container {
-        width: 100%;
-        position: relative;
-    }
-
-    .video .preview-image {
-        width: 100%;
-    }
 
     .playlist-selector {
-        height: 52px;
+        height: 33px;
         padding: 10px;
         box-sizing: border-box;
         border-bottom-left-radius: 0px;
         border-top-right-radius: 0px;
         margin-bottom: 0;
-        width: 90%;
-        float: left;
         color: black;
         margin-left: -3px;
         text-indent: 10px;
+        top: -5px;
+        position: relative;
     }
 
-    .playlist-video .video-comment {
-        width: 48%;
-        height: 114px;
-        font-size: 12px;
-        line-height: 1.25em;
-    }
 
     .videos-search-col {
-        /*margin-left: -50px;
-        margin-right: 25px;*/
-        width: 50%;
-        padding-left: 10px;
-        padding-right: 10px;
+        padding: 0;
         margin-left: 0px;
         margin-right: 0px;
         float: left;
+
+        .panel-body {
+            padding: 0;
+        }
+
+        .panel-heading {
+            height: 60px;
+            .dropdown {
+                float: left;
+            }
+        }
     }
 
     .playlist-col {
-        padding: 0px 15px;
-        width: 50%;
-        padding-left: 10px;
-        padding-right: 10px;
+        padding: 0 0 0 20px;
         margin-left: 0px;
         margin-right: 0px;
         float: left;
-    }
 
-    .playlist-col .row {
-        margin-left: 0px;
-        margin-right: 0px;
+        .panel-heading {
+            height: 60px;
+            .fa-edit {
+                float: right;
+                font-size: 24px;
+                cursor: pointer;
+            }
+            .course-panel-title {
+                margin: 0 0 0 -10px;
+                padding-left: 0;
+            }
+        }
+
+        .panel-body {
+            padding: 0;
+        }
+
+        .row {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+
     }
 
     body .btn-add, body .btn-search, body .btn-add:hover, body .btn-search:hover, body .btn-remove:hover, body .btn-info, body .btn-info:hover, body .btn-send, body .btn-send:hover, body .btn-link, body .btn-link:hover {
@@ -663,7 +710,7 @@
 
     .timeline-image span {
         display: block;
-        color: white;
+        color: #444;
         font-size: 22px;
         margin: 23px 23px;
     }
@@ -699,6 +746,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: block;
+        line-height: 16px;
     }
 
     .timepicker .btn-default {
@@ -720,16 +768,6 @@
     }
 
 
-    .btn-search {
-        position: absolute;
-        right: 0px;
-        top: 0px;
-        background: transparent !important;
-        border: none !important;
-        height: 52px;
-        font-size: 20px;
-    }
-
     .btn-search-options {
         padding: 9px 18px;
         .fa {
@@ -740,4 +778,127 @@
     .glyphicon-search {
         color: #535353;
     }
+}
+
+.panel-btns a {
+   margin-left: 8px;
+   float: right;
+   color: #000;
+   display: inline-block;
+   font-weight: bold;
+   opacity: 0.4;
+   font-size: 16px;
+   -moz-transition: all 0.2s ease-out 0s;
+    -webkit-transition: all 0.2s ease-out 0s;
+    transition: all 0.2s ease-out 0s;
+}
+
+.panel-btns a.minimize {
+   font-size: 18px;
+}
+
+.panel-btns a:hover {
+   text-decoration: none;
+   opacity: 0.5;
+   cursor: pointer;
+}
+
+.panel-btns a.minimize:active,
+.panel-btns a.minimize:focus {
+   text-decoration: none;
+}
+
+#top-shadow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    z-index: 999;
+    -webkit-box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+}
+
+.inset-shadow-bar {
+    width: 100%;
+
+    -moz-box-shadow:    inset  0  8px 8px -8px #696868, 
+                        inset  0 -8px 8px -8px #696868;
+    -webkit-box-shadow: inset  0  8px 8px -8px #696868, 
+                        inset  0 -8px 8px -8px #696868;
+     box-shadow:        inset  0  8px 8px -8px #696868, 
+                        inset  0 -8px 8px -8px #696868; 
+}
+
+.modal-edit-playlist, .modal-timeline-item {
+    padding: 0;
+    .nav-tabs {
+        margin-top: 0!important;
+    }
+}
+
+.ckbox-primary input[type="checkbox"]:checked + label:before {
+    border-color: #357EBD;
+    background-color: #428BCA;
+}
+
+.modal-edit-playlist {
+    #body {
+        min-height: 100%;
+    }
+}
+
+div[rn-stepper] {
+  border: 1px solid #bbb;
+  display: inline-block;
+  height: 42px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+div[rn-stepper].ng-invalid-out-of-bounds div {
+  color: red;
+}
+
+div[rn-stepper] button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  border: 0;
+  width: 40px;
+  height: 40px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: #f7f7f7;
+  border-color: #ccc;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #444;
+  font-weight: bold;
+  font-size: 20px;
+  outline: none;
+}
+
+div[rn-stepper] button[disabled] {
+  opacity: 0.3;
+}
+
+div[rn-stepper] button:active {
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.25);
+  background: #999;
+}
+
+div[rn-stepper] div {
+  vertical-align: top;
+  padding: 0 10px;
+  background: #fff;
+  text-align: center;
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 50px;
 }

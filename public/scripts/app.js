@@ -22,7 +22,8 @@ var mainApp = angular
         'duScroll',
         'mrPageEnterAnimate',
         'angularMoment',
-        'mgo-angular-wizard'
+        'mgo-angular-wizard',
+        'iso.directives'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){
