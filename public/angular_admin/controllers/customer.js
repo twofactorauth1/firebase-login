@@ -4,6 +4,7 @@ define(['app', 'customerService'], function(app) {
         $scope.customerOrder = 'first';
         CustomerService.getCustomers(function (customers) {
             $scope.customers = customers;
+            
             $scope.$watch('searchBar', function (newValue, oldValue) {
                 if (newValue) {
                     var searchBarSplit = newValue.split(' ');
@@ -19,6 +20,14 @@ define(['app', 'customerService'], function(app) {
                     }
                 }
             });
+
+            $scope.alphaFilter = function (alpha) {
+                if (alpha) {
+                    $scope.customerFilter.first = alpha;
+                } else {
+                    $scope.customerFilter = {};
+                }
+            };
         });
     }]);
 });
