@@ -50,9 +50,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 self = null;
             } else {
 
-                var file = files['file'];
+                //var file = files['file'];
+                var file = files["files[]"];
                 var source = fields['source'] || 'S3';
-                var tagAry = fields['tag'].split(',') || [];
+                var tagAry = (fields['tag'] && fields['tag'].split(','))  || [];
                 var asset = new $$.m.Asset({
                     accountId: accountId,
                     mimeType: file.type,
@@ -69,9 +70,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
             console.dir(asset);
-            assetManager.createAsset(file.path, asset, function(err, value){
+            assetManager.createAsset(file.path, asset, function(err, value, file){
                 self.log.debug('<< createAsset');
-                self.sendResultOrError(res, err, value, "Error creating Asset");
+                file._id = value.get("_id")
+                file.date = value.get("created").date
+                //self.sendResultOrError(res, err, value, "Error creating Asset");
+                self.sendFileUploadResult(res, err, file);
             });
 
         });
@@ -172,6 +176,31 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< getAssetsByTag');
             self.sendResultOrError(res, err, list, "Error getting Assets by tag");
         });
+    },
+
+    sendFileUploadResult: function (resp, err, value) {
+        var result = {};
+        result.files = [];
+
+        if (!err) {
+            var file = {
+                name: value.name,
+                size: value.size,
+                url: value.url,
+                resource: value.resource
+            };
+
+            result.files.push(file);
+        } else {
+            file = {
+                name: value.name,
+                error: err.toString()
+            };
+
+            result.files.push(file);
+        }
+
+        resp.send(result);
     }
 });
 

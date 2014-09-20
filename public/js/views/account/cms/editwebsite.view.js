@@ -15,9 +15,10 @@ define([
     'utils/utils',
     'views/rightpanel.view',
     'libs_misc/jquery.tagsinput/jquery.tagsinput',
-    'collections/cms/pages'
+    'collections/cms/pages',
+    'collections/assets'
 
-], function (User, Account, Website, Page, Post, CmsService, utils, RightPanel, TagsInput,Pages) {
+], function (User, Account, Website, Page, Post, CmsService, utils, RightPanel, TagsInput,Pages, Assets) {
 
     var view = Backbone.View.extend({
 
@@ -54,7 +55,9 @@ define([
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
             "mousemove #sortable":"draggingComponent",
-            "click .blog-title .editable":"updateTitle"
+            "click .blog-title .editable":"updateTitle",
+            "click .upload-media":"uploadMedia",
+            "click .btn-media-manager" :"openMediaModal"
         },
 
         initialize: function(options) {
@@ -78,6 +81,7 @@ define([
                 , p6 = $.Deferred()             //loading image theme Preview
                 , p7 = $.Deferred()             //loading temp page model
                 , p8 = $.Deferred()             //loading      page model
+                , p9 = self.getAssets();
 
             $.when(p1)
                 .done(function() {
@@ -100,7 +104,7 @@ define([
                     });
                 });
 
-            $.when(p1, p2, p4, p6, p7)
+            $.when(p1, p2, p4, p6, p7, p9)
                 .done(function () {
                     var data
                       , tmpl
@@ -112,7 +116,8 @@ define([
                     data = {
                         websiteId: self.websiteId,
                         websiteTitle: self.websiteTitle,
-                        subdomain: self.subdomain
+                        subdomain: self.subdomain,
+                        assets: self.assets.toJSON()
                     };
                     if (self.pageHandle == "index" || self.pageHandle == "index_temp_page" || self.pageHandle == "null" || self.pageHandle == "/") {
                         data.page = "/index_temp_page";
@@ -786,6 +791,55 @@ define([
 
         savePageChanges: function (){
             console.log("save")
+        },
+        openMediaModal: function (){
+
+            $("media-manager-modal").modal("show")
+
+        },
+        uploadMedia: function (){
+            var self = this;
+            require(['libs_misc/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
+                self.uploadView = new uploadView();
+                self.uploadView.maxNumberOfFiles = 1;
+                self.uploadView.uploadType = "assets";
+                $$.viewManager.show(self.uploadView, "#upload-photo-container");
+                self.addSubView(self.uploadView);
+
+                self.vent.off("uploadcomplete");
+                self.vent.on("uploadcomplete", self._onPhotoUploaded.bind(self));
+            });
+        },
+        _onPhotoUploaded: function(result) {
+            var self = this
+              , tmpl
+              , html
+              , data = {}
+              , selector = "#media-manager-modal"
+              , newItem = {
+                    filename: result.files[0].name,
+                    url: result.files[0].url,
+                    date: result.files[0].date,
+                    _id: result.files[0]._id
+
+                };
+
+            data.item = newItem;
+            data.length = $(".media-list > ").length;
+
+            tmpl = $$.templateManager.get("media-list-item", self.templateKey);
+            html = tmpl(data);
+
+            $(".media-list").append(html);
+
+            //self.user.set({photo:url});
+            //self.saveUser();
+        },
+
+        getAssets: function () {
+            var self = this;
+            self.assets = new Assets({accountId:self.account.get("_id")});
+            return self.assets.fetch();
         }
 
     });
