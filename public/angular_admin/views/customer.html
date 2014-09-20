@@ -44,13 +44,11 @@
                 </div>
                 <div class="col-sm-6 form-horizontal">
                     <div class="form-group row">
-                        <select class=" form-control chosen-select input-lg">
-                            <option value="">Filter Customers</option>
-                            <option value="a_to_z">A to Z</option>
-                            <option value="z_to_a">Z to A</option>
-                            <option value="first_last">First, Last</option>
-                            <option value="last_first">Last, First</option>
-                            <option value="date_added">Date Added</option>
+                        <select class="form-control chosen-select input-lg" ng-model="sortOrder">
+                            <option value="0">Filter Customers</option>
+                            <option value="1">A to Z</option>
+                            <option value="2">Z to A</option>
+                            <option value="3">Date Added</option>
                         </select>
                     </div>
                 </div>
@@ -154,7 +152,7 @@
                     <h3>No Contacts Available</h3>
                 </div>
 
-                <div ng-repeat="customer in customers | filter : customerFilter | orderBy : customerOrder" class="col-xs-12 col-sm-4 col-md-3">
+                <div ng-repeat="customer in customers | filter : customerFilter | orderBy : customerOrder : customerSortReverse" class="col-xs-12 col-sm-4 col-md-3">
                     <div data-contactid="1799" class="people-item btn-view-contact-details contact-item animate">
                         <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips">
                         <i class="fa fa-star-o" ng-hide="customer.starred"></i>
