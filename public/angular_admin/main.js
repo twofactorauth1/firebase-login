@@ -40,6 +40,7 @@ require.config({
         'paymentService': '/angular_admin/services/payment',
         'twoNetService': '/angular_admin/services/two_net',
         'customerService': '/angular_admin/services/customer',
+        'websiteService': '/angular_admin/services/website',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
 
         //videoautoresponder
