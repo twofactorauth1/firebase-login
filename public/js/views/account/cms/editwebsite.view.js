@@ -16,9 +16,10 @@ define([
     'views/rightpanel.view',
     'libs_misc/jquery.tagsinput/jquery.tagsinput',
     'collections/cms/pages',
-    'collections/assets'
+    'collections/assets',
+    'models/asset'
 
-], function (User, Account, Website, Page, Post, CmsService, utils, RightPanel, TagsInput,Pages, Assets) {
+], function (User, Account, Website, Page, Post, CmsService, utils, RightPanel, TagsInput,Pages, Assets, Asset) {
 
     var view = Backbone.View.extend({
 
@@ -40,6 +41,7 @@ define([
         is_dragging: false,
         blogBoolean: false,
         currentThemePreviewURL: null,
+        mediaBatch: [],
 
         attributes: {
             id: "edit-website-wrapper"
@@ -57,7 +59,12 @@ define([
             "mousemove #sortable":"draggingComponent",
             "click .blog-title .editable":"updateTitle",
             "click .upload-media":"uploadMedia",
-            "click .btn-media-manager" :"openMediaModal"
+            "click .btn-media-manager" :"openMediaModal",
+            //"change .media.media-list > input[type='checkbox']": "mediaSelected",
+            "change .media-list .ckbox input[type='checkbox']" : "mediaSelected",
+            "click .delete-media": "deleteMedia",
+            "click .deleteBatch": "deleteBatch",
+            "change #selectall": "selectAll"
         },
 
         initialize: function(options) {
@@ -107,11 +114,11 @@ define([
             $.when(p1, p2, p4, p6, p7, p9)
                 .done(function () {
                     var data
-                      , tmpl
-                      , html
-                      , colorPalette
-                      , sidetmpl
-                      , rightPanel;
+                        , tmpl
+                        , html
+                        , colorPalette
+                        , sidetmpl
+                        , rightPanel;
 
                     data = {
                         websiteId: self.websiteId,
@@ -137,7 +144,7 @@ define([
 
                     self.show(html);
 
-                    self.check_welcome();
+                    self.mediaSelected();
 
                     //sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
                     rightPanel = $('#rightpanel');
@@ -227,6 +234,8 @@ define([
             this.$el.on("tagseditstart", this.proxiedOnTagsEditStart);
             this.proxiedOnTagsEditDone = $.proxy( this.editTagsDone, this);
             this.$el.on("tagseditdone", this.proxiedOnTagsEditDone);
+            this.proxiedOnMediaSelected = $.proxy( this.mediaSelected, this);
+            this.$el.on("mediaSelected", this.proxiedOnMediaSelected);
             return this;
         },
         editTagsInit: function () {
@@ -831,7 +840,7 @@ define([
             html = tmpl(data);
 
             $(".media-list").append(html);
-
+            self.mediaSelected()
             //self.user.set({photo:url});
             //self.saveUser();
         },
@@ -840,6 +849,99 @@ define([
             var self = this;
             self.assets = new Assets({accountId:self.account.get("_id")});
             return self.assets.fetch();
+        },
+
+        mediaSelected: function () {
+            var $inputs = $(".ckbox input[type='checkbox']:checked")
+               , $mediaList = $(".media.media-list > div");
+
+            if ( $inputs.length > 0  ) {
+                $(".filemanager-options > li[class!='filter-type'] > a").removeClass("disabled");
+            } else  {
+                $(".filemanager-options > li[class!='filter-type'] > a").addClass("disabled");
+            }
+            if ( $mediaList.length > 0 ) {
+                $("#selectall").prop("disabled", false);
+
+            } else {
+                $("#selectall").prop("disabled", true);
+                $("#selectall").prop("checked", false);
+                $(".filemanager-options > li[class!='filter-type'] > a").addClass("disabled");
+            }
+        },
+
+        _resetMediaBatch: function (){
+            var self = this;
+
+            self.mediaBatch = null;
+        },
+        _addFromMediaBatch: function (mediaId) {
+            var self = this;
+            self.mediaBatch.push(mediaId);
+        },
+
+        _removeFromMediaBatch: function (mediaId) {
+            var self = this;
+
+            self.mediaBatch.splice(mediaId);
+        },
+
+        deleteMedia:function (event){
+            var self = this
+              , $targetElement = $(event.target)
+              , mediaId = $targetElement.data("id")
+              , asset = new Asset({ _id: mediaId});
+
+            asset.destroy().always(function (resp) {
+                console.log("Delete return");
+                console.log(resp);
+                if (resp.status === 1) {
+                    //$targetElement.closest(".image").parent().remove();
+                    $.when($targetElement.parent().parent().parent().parent().parent().parent().remove()).then(function(){
+                        self.mediaSelected();
+                    })
+                }
+            });
+        },
+
+        deleteBatch: function (e) {
+            var self = this
+              , $inuputs = $(".media-list .ckbox input[type='checkbox']:checked")
+              , ids = [];
+            $inuputs.each(function (index, element) {
+                ids.push($(element).attr("id"));
+                var asset = new Asset({ _id: $(element).attr("id")});
+
+                asset.destroy().always(function (resp) {
+                    console.log("Delete return");
+                    console.log(resp);
+                    if (resp.status === 1) {
+                        //console.log($targetElement.parent(".image").parent());
+                        //console.log($targetElement.closest(".image").parent());
+                        //$targetElement.closest(".image").parent().remove();
+                      //  $targetElement.parent().parent().parent().parent().parent().parent().remove();
+                        $.when($(element).parent().parent().parent().parent().remove()).then(function(){
+                            self.mediaSelected();
+                        })
+                    }
+                    //self.mediaSelected()
+                });
+
+                e.preventDefault();
+                e.stopImmediatePropagation();
+            })
+
+        },
+
+        selectAll: function (){
+            var $selectAll = $("#selectall")
+              , $inuputs = $(".media-list .ckbox input[type='checkbox']")
+              , isChecked = $selectAll.prop("checked");
+
+            $inuputs.each(function (){
+                $(this).prop("checked", isChecked);
+            })
+            this.mediaSelected();
         }
 
     });

@@ -571,8 +571,8 @@
         <div class="col-xs-6 col-sm-4 image">
             <div class="thmb checked">
                 <div class="ckbox ckbox-default" style="display: block;">
-                    <input type="checkbox" id="check_{{@index}}" value="image_{{@index}}">
-                    <label for="check_{{@index}}"></label>
+                    <input type="checkbox" id="{{_id}}" value="{{_id}}">
+                    <label for="{{_id}}"></label>
                 </div>
                 <div class="btn-group fm-group" style="display: block;">
                     <button type="button" class="btn btn-default dropdown-toggle fm-toggle" data-toggle="dropdown">
@@ -583,7 +583,7 @@
                         <li><a href="#"><i class="fa fa-envelope-o"></i> Email</a></li>
                         <li><a href="#"><i class="fa fa-pencil"></i> Edit</a></li>
                         <li><a href="" ><i class="fa fa-download"></i> Download</a></li>
-                        <li><a href="#" data-id="{{_id}}"><i class="fa fa-trash-o"></i> Delete</a></li>
+                        <li><a href="#" data-id="{{_id}}" class="delete-media"><i class="fa fa-trash-o"></i> Delete</a></li>
                     </ul>
                 </div><!-- btn-group -->
                 <div class="thmb-prev">
@@ -713,8 +713,8 @@
         <div class="col-xs-6 col-sm-4 image">
             <div class="thmb checked">
                 <div class="ckbox ckbox-default" style="display: block;">
-                    <input type="checkbox" id="check_{{length}}" value="image_{{length}}">
-                    <label for="check_{{length}}"></label>
+                    <input type="checkbox" id="{{item._id}}" value="{{item._id}}">
+                    <label for="{{item._id}}"></label>
                 </div>
                 <div class="btn-group fm-group" style="display: block;">
                     <button type="button" class="btn btn-default dropdown-toggle fm-toggle" data-toggle="dropdown">
@@ -755,21 +755,21 @@
                         <ul class="filemanager-options">
                             <li class="checked">
                                 <div class="ckbox ckbox-default">
-                                    <input type="checkbox" id="selectall" value="1">
+                                    <input type="checkbox" id="selectall" value="1" disabled>
                                     <label for="selectall">Select All</label>
                                 </div>
                             </li>
                             <li>
-                                <a href="" class="itemopt disabled"><i class="fa fa-envelope-o"></i> <span class="hidden-xs">Email</span></a>
+                                <a href="" class="itemopt disabled "><i class="fa fa-envelope-o"></i> <span class="hidden-xs">Email</span></a>
                             </li>
                             <li>
-                                <a href="" class="itemopt disabled"><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a>
+                                <a href="" class="itemopt disabled "><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a>
                             </li>
                             <li>
-                                <a href="" class="itemopt disabled"><i class="fa fa-pencil"></i> <span class="hidden-xs">Edit</span></a>
+                                <a href="" class="itemopt disabled "><i class="fa fa-pencil"></i> <span class="hidden-xs">Edit</span></a>
                             </li>
                             <li>
-                                <a href="" class="itemopt disabled"><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
+                                <a href="" class="itemopt disabled deleteBatch"><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
                             </li>
                             <li class="filter-type">
                                 Show:

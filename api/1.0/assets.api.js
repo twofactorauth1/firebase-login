@@ -187,7 +187,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 name: value.name,
                 size: value.size,
                 url: value.url,
-                resource: value.resource
+                resource: value.resource,
+                date: value.date,
+                _id: value._id
             };
 
             result.files.push(file);

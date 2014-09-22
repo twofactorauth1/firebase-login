@@ -40,25 +40,16 @@ define([
         url: function(method) {
             switch(method) {
                 case "GET":
-                    if (this.get("id")) {
-                        return $$.api.getApiUrl("assets", "/" + this.get("id") );
-                    }
-                    return $$.api.getApiUrl("assets", "/");
+                    return $$.api.getApiUrl("assets", this.get("_id") );
                     break;
                 case "PUT":
                     break;
 
                 case "POST":
-                    if (this.get("id")) {
-                        return $$.api.getApiUrl("assets", "/" + this.get("id") );
-                    }
-                    return $$.api.getApiUrl("assets", "/");
+                    return $$.api.getApiUrl("assets", this.get("_id") );
                     break;
                 case "DELETE":
-                    if (this.get("id")) {
-                        return $$.api.getApiUrl("assets", "/" + this.get("id") );
-                    }
-                    return $$.api.getApiUrl("assets", "/");
+                    return $$.api.getApiUrl("assets", this.get("_id") );
                     break;
             }
         }
