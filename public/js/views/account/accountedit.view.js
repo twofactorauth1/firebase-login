@@ -382,7 +382,7 @@ define([
 
         _showUploadForm: function() {
             var self = this;
-            require(['libs/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
+            require(['libs_misc/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
                 self.uploadView = new uploadView();
                 self.uploadView.maxNumberOfFiles = 1;
                 self.uploadView.uploadType = "contact-photo";

@@ -10,12 +10,17 @@ define(['app'], function (app) {
 			});
 		};
 
-		this.getPage = function (fn) {
-			var apiUrl = baseUrl + ['account', $$.server.userId].join('/');
+		this.getPages = function (accountId, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
+				console.log('Pages: ', data);
 				fn(data);
-			});
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+                fn(err, null);
+            });
 		};
 	});
 });
