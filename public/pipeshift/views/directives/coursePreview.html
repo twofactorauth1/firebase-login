@@ -172,13 +172,13 @@
             bgcolor="#f7f7f7" rn-carousel rn-carousel-control="true" rn-carousel-swipe="false">
             <li style="display: inline-block; width: 520px; cursor: pointer; white-space: nowrap"
                 ng-repeat="pageData in carouselData">
-                <div ng-repeat="video in pageData" style="width:180px;display: inline-block"
+                <div ng-repeat="video in pageData" style="max-width: 180px;float: left;padding: 15px;"
                      ng-click="selectVideo(video)">
                     <p><img ng-src="{{video.videoPreviewUrl}}"
                             width="160" border="0"/>
                     </p>
                     <h4 style="color:#326c94;">
-                        <video-title width="160px" video="video"></video-title>
+                        <video-title width="160px" video="video" style=></video-title>
                     </h4>
 
                     <p style="color:#6c6c6c; padding-right: 12px;white-space: normal">
