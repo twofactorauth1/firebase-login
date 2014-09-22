@@ -57,12 +57,15 @@ define([
         setupUpload: function () {
             var self = this;
 
-            var url = "/api/1.0/upload";
-            switch (this.uploadType) {
-                case "contact-photo":
-                    url += "/contact/photo";
-                    break;
-            }
+                var url = "/api/1.0/upload";
+                switch (this.uploadType) {
+                    case "contact-photo":
+                        url += "/contact/photo";
+                        break;
+                    case "assets":
+                        url = "/api/1.0/assets/";
+                        break;
+                }
 
             $('#fileupload').fileupload({
                 // Uncomment the following to send cross-domain cookies:
