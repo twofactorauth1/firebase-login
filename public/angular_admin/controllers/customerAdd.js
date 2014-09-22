@@ -1,0 +1,5 @@
+define(['app', 'customerService'], function(app) {
+    app.register.controller('CustomerAddCtrl', ['$scope', 'CustomerService', function ($scope, CustomerService) {
+
+    }]);
+});
