@@ -50,21 +50,21 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule'], funct
             }))
             .state('customerAdd', angularAMD.route({
                 url: '/customer/add',
-                templateUrl: '/angular_admin/views/customerAdd.html',
+                templateUrl: '/angular_admin/views/customer_add.html',
                 controller: 'CustomerAddCtrl',
-                controllerUrl: '/angular_admin/controllers/customerAdd.js'
+                controllerUrl: '/angular_admin/controllers/customer_add.js'
             }))
             .state('customerDetail', angularAMD.route({
                 url: '/customer/:id',
-                templateUrl: '/angular_admin/views/customerDetail.html',
+                templateUrl: '/angular_admin/views/customer_detail.html',
                 controller: 'CustomerDetailCtrl',
-                controllerUrl: '/angular_admin/controllers/customerDetail.js'
+                controllerUrl: '/angular_admin/controllers/customer_detail.js'
             }))
             .state('customerEdit', angularAMD.route({
                 url: '/customer/edit/:id',
-                templateUrl: '/angular_admin/views/customerEdit.html',
+                templateUrl: '/angular_admin/views/customer_edit.html',
                 controller: 'CustomerEditCtrl',
-                controllerUrl: '/angular_admin/controllers/customerEdit.js'
+                controllerUrl: '/angular_admin/controllers/customer_edit.js'
             }))
             .state('website', angularAMD.route({
                 url: '/website',
