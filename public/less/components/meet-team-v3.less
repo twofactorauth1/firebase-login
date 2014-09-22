@@ -1,0 +1,115 @@
+/********** Meet Team v3 **********/
+  .meet-team-v3 {
+
+    .title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title-border {
+      width: 70px;
+      height: 3px;
+      background: rgba(0,0,0,0.13);
+      margin: 0 auto 45px;
+      border-radius: 3px;
+    }
+
+    .team-member-container{
+      display: inline-block;
+      margin: 20px 0;
+    }
+
+    .team-member-container:first-child{
+      margin-top: 0;
+    }
+
+    .team-member-container:last-child{
+      margin-bottom: 0;
+    }
+
+    .team-member {
+      max-width: 220px;
+      padding-bottom: 25px;
+      background: rgba(255,255,255,0.2);
+      margin: 0 auto;
+
+      .team-member-profession{
+        color: #ccc;
+        font-size: 12px;
+        margin-top: -3px;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .social a {
+        font-size: 12px;
+        width: 26px;
+        height: 26px;
+        line-height: 25px;
+        margin: 0 7px;
+        border: 1px solid rgba(255,255,255,0.7);
+      }
+
+      h4 {
+        margin-bottom: 0;
+        margin-top: 15px;
+      }
+
+      p{
+        font-size: 12px;
+        line-height: 18px;
+        margin: 5px 0;
+      }
+
+      h4, p {
+        padding: 0 15px;
+      }
+
+      .team-member-meta {
+        background: #434951;
+        color: #fff;
+        padding: 5px 10px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+      }
+
+      .team-member-img {
+        height: 210px;
+        background-size: cover!important;
+        background-repeat: no-repeat;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+        img {
+          width: 100%;
+        }
+      }
+    }
+    /* 
+     * Social icons
+     * --------------------------------------------------------- */
+
+    .social {
+      margin-top: 20px;
+      font-size: 14px;
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .social a {
+      font-size: 1.1em;
+      padding: 0 0.3em;
+      border: 1px solid #fff;
+      margin: 0 5px;
+      width: 30px;
+      height: 30px;
+      display: inline-block;
+      line-height: 28px;
+    }
+     
+    /* Small devices (tablets, 768px and up) */
+    @media (min-width: 768px) { 
+      .team-member-container{
+        margin: 0;
+      }
+    }
+  }

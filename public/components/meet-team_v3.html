@@ -1,0 +1,53 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div ng-show="component" data-class="meet-team-v3" data-id="{{component._id}}">
+
+    <div class="component-body">
+        <div class="meet-team-v3 {{component.bg.img.parallax?'parallax':''}}">
+            <div class="component-body" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='background: url("{{component.bg.img.url}}"); background: {{component.bg.color||secondaryColor}}; color: {{component.txtcolor||primaryTextColor}};'>
+                <div class="inner-page">
+                    <h3 class="title">
+                        <div class="editable" data-class="title">
+                            {{component.title}}
+                        </div>
+                    </h3>
+                    <div class="section-title-border"></div>
+
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-12 text-center team-member-container wow fadeInDown animated" ng-repeat="teamMember in component.teamMembers">
+                            <div class="team-member">
+                                <div class="team-member-img" style="background: url('{{teamMember.profilepic}}') center center;">
+                                </div>
+                                <div class="team-member-meta">
+                                    <h4>Mike Trevino</h4>
+                                    <span class="team-member-profession">
+                                        <div class="editable" data-class="position">
+                                            {{teamMember.position}}
+                                        </div>
+                                    </span>
+                                    <div class="editable" data-class="bio">
+                                        <p>{{teamMember.bio}}</p>
+                                    </div>
+                                     <ul class="social">
+                                        <li ng-repeat="(val, key) in teamMember.social">
+                                            <a href="{{key}}" target="_blank">
+                                                <span class="fa fa-{{val}}"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

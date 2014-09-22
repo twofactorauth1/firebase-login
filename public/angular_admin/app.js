@@ -47,6 +47,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule'], funct
                 templateUrl: '/angular_admin/views/customer.html',
                 controller: 'CustomerCtrl',
                 controllerUrl: '/angular_admin/controllers/customer.js'
+            }))
+            .state('website', angularAMD.route({
+                url: '/website',
+                templateUrl: '/angular_admin/views/website.html',
+                controller: 'WebsiteCtrl',
+                controllerUrl: '/angular_admin/controllers/website.js'
             }));
     });
 
