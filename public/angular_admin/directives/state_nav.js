@@ -1,32 +1,16 @@
-define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function (angularAMD) {
-    angularAMD.directive('indigewebSkeuocard', ['PaymentService', 'UserService', function (PaymentService, UserService) {
+define(['angularAMD'], function (angularAMD) {
+    angularAMD.directive('stateNav', ['$state', function ($state) {
             return {
-                require: [],
-                restrict: 'C',
-                transclude: true,
-                scope: {
-					user: '=user'
-                },
-                templateUrl: '/angular_admin/views/partials/_skeocard.html',
-                link: function (scope, element, attrs, controllers) {
-                    scope.card = new Skeuocard($("#skeuocard"));
-                	
-                    scope.addCardFn = function () {
-                    	var cardInput = {
-                    		number: $('#cc_number').val(), 
-                    		cvc: $('#cc_cvc').val(),
-  			   				exp_month: $('#cc_exp_month').val(),
-  							exp_year: $('#cc_exp_year').val()
-						};
-						
-                		PaymentService.getStripeCardToken(cardInput, function (token) {
-                			PaymentService.postStripeCustomer(token, function (stripeUser) {
-                				UserService.postAccountBilling(stripeUser.id, token, function (billing) {
-                					console.info('Bill: ' + billing._id + ' updated with token: ' + token + ' and stripe customer ID: ' + stripeUser.id);
-                				});
-                			});
-                		});
-                    };
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    //TODO: iterate over attrs to pick other type of attributes.
+                    element.click(function () {
+                        if (attrs.stateId) {
+                            $state.go(attrs.stateNav, {id: attrs.stateId});
+                        } else {
+                            $state.go(attrs.stateNav);
+                        }
+                    });
                 }
             };
     }]);
