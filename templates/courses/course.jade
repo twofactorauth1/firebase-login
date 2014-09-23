@@ -86,7 +86,7 @@ html(data-ng-app="courseApp")
                 var js, fjs = d.getElementsByTagName(s)[0];
                 if (d.getElementById(id)) return;
                 js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/ru_RU/sdk.js#xfbml=1&appId=390601691078573&version=v2.0";
+                js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=390601691078573&version=v2.0";
                 fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));
             course-preview.clearfix.standalone-playlist(course="#{course}",is-logged-in-and-subscribed="#{isLoggedInAndSubscribed}",min-height="minHeight",ng-controller="CourseController")

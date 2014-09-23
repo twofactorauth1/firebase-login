@@ -53,11 +53,16 @@
                     <div class="mb20"></div>
                     <div id="nestable">
                         <h4>Page Components</h4>
-                        <ul ui-sortable ng-model="items">
-						  <li ng-repeat="item in items" class="dd-item dd3-item" data-id="14" data-section="services">
+                        <ul class="list logList well">
+                          <li ng-repeat="entry in sortingLog track by $index" class="logItem">
+                            {{entry}}
+                          </li>
+                        </ul>
+                        <ul ui-sortable="sortableOptions" ng-model="components">
+						  <li ng-repeat="item in components" class="dd-item dd3-item" data-id="14" data-section="services">
                                 <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
                                 </div>
-                                <div class="dd3-content">Services</div>
+                                <div class="dd3-content">{{item.type}}</div>
                                 <div class="dd3-actions">
                                     <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
                                 </div>

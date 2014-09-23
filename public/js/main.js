@@ -44,6 +44,7 @@ require.config({
         moment: 'libs/moment/min/moment.min',
         daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
         jquerydragdrop: 'libs_misc/jquery/jquery.drag-drop.plugin',
+        jqueryFileUpload: 'libs_misc/jqueryfileupload/js/jquery.fileupload.view',
 
         //VIDEO AUTORESPONDER
         angular: 'libs/angular/angular',
@@ -134,6 +135,9 @@ require.config({
         },
 
         gritter: {
+            deps: ['jquery']
+        },
+        jqueryFileUpload: {
             deps: ['jquery']
         },
         angular: {

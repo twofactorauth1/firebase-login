@@ -59,7 +59,7 @@ angular.module("info.vietnamcode.nampnq.videogular.plugins.youtube", [])
                             API.videoElement.css('visibility', 'hidden')
                         }
                         else {
-                            API.videoElement.css('display', 'none');
+                            API.videoElement.css('display', 'block');
                         }
                         //Define some property, method for player
                         API.videoElement[0].__defineGetter__("currentTime", function () {
@@ -100,7 +100,7 @@ angular.module("info.vietnamcode.nampnq.videogular.plugins.youtube", [])
                                 API.videoElement.css('visibility', 'hidden')
                             }
                             else {
-                                API.videoElement.css('display', 'none');
+                                API.videoElement.css('display', 'block');
                             }
                             scope.ytplayer.pauseVideo();
                         };

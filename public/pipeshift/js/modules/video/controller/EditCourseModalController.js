@@ -15,6 +15,7 @@ define(['angularAMD', 'app'], function (angularAMD, app) {
         $scope.course = $.extend({}, course);
         $scope.templates = templates;
         $scope.subscribers = [];
+        $scope.hideVideo = true;
         function refreshSubscribers() {
             Subscriber.query({id: course._id}, function (response) {
                 $scope.subscribers = response;
