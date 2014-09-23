@@ -1,4 +1,4 @@
-define(['app', 'customerService'], function(app) {
+define(['app', 'customerService', 'stateNavDirective'], function(app) {
     app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', function ($scope, CustomerService) {
         $scope.customerFilter = {};
         $scope.customerOrder = 'first';
