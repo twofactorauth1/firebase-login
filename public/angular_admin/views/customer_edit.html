@@ -1,270 +1,348 @@
 <div style="">
-    <div class="pageheader row">
-        <div class="col-xs-8">
-            <button id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
-                <span class="fa fa-chevron-left"></span>
-                <span class="hidden-xs">Back</span>
-            </button>
-            <h2><i class="fa fa-users"></i> Edit Contact</h2>
-        </div>
-
-        <div class="col-xs-4">
-            <div class="btn btn-success pull-right btn-save-contact" type="button">
-                <i class="fa fa-save"></i>
-                <span class="hidden-xs">Save</span>
-            </div>
-
-        </div>
+  <div class="pageheader row">
+    <div class="col-xs-8">
+      <button state-nav="customer" id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
+        <span class="fa fa-chevron-left"></span>
+        <span class="hidden-xs">Back</span>
+      </button>
+      <h2><i class="fa fa-users"></i> Edit Contact</h2>
     </div>
-    <!-- End Page Header -->
+    <div class="col-xs-4">
+      <div class="btn btn-success pull-right btn-save-contact" type="button" ng-click="customerSaveFn()">
+        <i class="fa fa-save"></i>
+        <span class="hidden-xs">Save</span>
+      </div>
+    </div>
 
-    <div style="min-height: 377px;" id="contact-edit-container" class="contentpanel">
-        <div class="row">
+  </div>
+  <!-- End Page Header -->
 
-            <div class="col-md-6">
+  <div style="min-height: 377px;" id="contact-edit-container" class="contentpanel">
+    <div class="row">
 
-                <!-- Name & Photo -->
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Name &amp; Photo</h3>
-                    </div>
-                    <div class="panel-body">
+      <div class="col-md-6">
 
-                        <div class="row">
-                            <!-- UPDATE NAME -->
-                            <div class="col-xs-12 form" role="form">
-                                <div class="form-group">
-                                    <label class="">Contact Name</label>
-                                    <input id="input-fullname" class="form-control input-lg" value="  " placeholder="full name" type="text">
-                                    <small style="margin-left:10px;">
+        <!-- Name & Photo -->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Name &amp; Photo</h3>
+          </div>
+          <div class="panel-body">
+
+            <div class="row">
+              <!-- UPDATE NAME -->
+              <div class="col-xs-12 form" role="form">
+                <div class="form-group">
+                  <label class="">Contact Name</label>
+                  <input id="input-fullname" class="form-control input-lg" value="  " ng-model="fullName" placeholder="full name" type="text">
+                  <small style="margin-left:10px;">
                                         <strong>first:</strong>
                                         <code>
-                                            <span id="hint-first"></span>
+                                            <span id="hint-first">{{customer.first}}</span>
                                         </code>
                                         <strong>middle:</strong>
                                         <code>
-                                            <span id="hint-middle"></span>
+                                            <span id="hint-middle">{{customer.middle}}</span>
                                         </code>
                                         <strong>last:</strong>
                                         <code>
-                                            <span id="hint-last"></span>
+                                            <span id="hint-last">{{customer.last}}</span>
                                         </code>
                                     </small>
-                                </div>
-
-                                <div class="row">
-                                    <div class="form-group col-xs-6">
-                                        <label>Contact Type</label>
-                                        <select id="select-contact-type" class="form-control input-lg">
-
-                                            <option data-contacttype="cu">Customer</option>
-
-                                            <option data-contacttype="co">Colleague</option>
-
-                                            <option data-contacttype="fr">Friend</option>
-
-                                            <option data-contacttype="mb">Member</option>
-
-                                            <option data-contacttype="fa">Family</option>
-
-                                            <option data-contacttype="ad">Admin</option>
-
-                                            <option data-contacttype="ld">Lead</option>
-
-                                            <option data-contacttype="ot">Other</option>
-
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <!-- UPDATE PHOTO -->
-                        <div id="contact-photo-container" class="row">
-                            <row>
-                                <div class="col-xs-5 col-md-6">
-                                    <div class="hidden-xs hidden-sm">
-                                        <div class="btn-link btn-edit-photo">Change Photo</div>
-                                    </div>
-                                    <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="/assets/icons/blank-user.jpg">
-                                </div>
-
-                                <div class="col-xs-7 col-md-6">
-                                    <div class="btn-edit-photo-controls hidden-md hidden-lg">
-                                        <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
-                                        <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
-                                    </div>
-                                </div>
-                            </row>
-                        </div>
-                    </div>
                 </div>
-                <!-- END Name & Photo -->
 
-                <!-- BioMetric Data -->
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">BioMetric Information</h3>
-                    </div>
-                    <div class="panel-body">
+                <div class="row">
+                  <div class="form-group col-xs-6">
+                    <label>Contact Type</label>
+                    <select id="select-contact-type" class="form-control input-lg" ng-model="customer.type">
 
-                        <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
+                      <option value="cu">Customer</option>
 
-                        <hr>
-                        <div id="edit-devices-container">
+                      <option value="co">Colleague</option>
 
-                        </div>
-                        <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
-                    </div>
-                    <!-- End Panel Body -->
+                      <option value="fr">Friend</option>
+
+                      <option value="mb">Member</option>
+
+                      <option value="fa">Family</option>
+
+                      <option value="ad">Admin</option>
+
+                      <option value="ld">Lead</option>
+
+                      <option value="ot">Other</option>
+
+                    </select>
+                  </div>
                 </div>
-                <!-- End BioMetric Data -->
+              </div>
             </div>
 
-            <!-- Contact Information -->
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Contact Information</h3>
-                    </div>
-                    <div class="panel-body">
 
-                        <div id="phone-row" class="row">
-                            <div class="col-xs-1"><i class="icon-main fa fa-phone"></i>
-                            </div>
-                            <div class="col-xs-10">
-                                <div id="edit-phones-container">
+            <!-- UPDATE PHOTO -->
+            <div id="contact-photo-container" class="row">
+              <row>
+                <div class="col-xs-5 col-md-6">
+                  <div class="hidden-xs hidden-sm">
+                    <div class="btn-link btn-edit-photo">Change Photo</div>
+                  </div>
+                  <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="/assets/icons/blank-user.jpg">
+                </div>
 
+                <div class="col-xs-7 col-md-6">
+                  <div class="btn-edit-photo-controls hidden-md hidden-lg">
+                    <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
+                    <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+                  </div>
+                </div>
+              </row>
+            </div>
+          </div>
+        </div>
+        <!-- END Name & Photo -->
 
-                                    <!-- ADD NEW PHONE -->
+        <!-- BioMetric Data -->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">BioMetric Information</h3>
+          </div>
+          <div class="panel-body">
 
-                                    <div class="row edit-phone-container" data-id="" style="margin-top:8px;">
-                                        <div class="form-group col-xs-12 col-sm-8 col-md-10">
-                                            <div class="input-group input-group-lg">
-                                                <div class="input-group-addon">+1</div>
-                                                <input class="input-edit-phone form-control input-lg" value="" type="text">
+            <a class="btn btn-primary btn-sm btn-subscribe-two-net" ng-click="twoNetSubscribeFn()">Subcribe Two Net</a>
 
-                                                <div class="input-group-btn">
-                                                    <button data-toggle="dropdown" class="btn btn-default btn-edit-phone-type dropdown-toggle" data-type="" type="button"><span class="edit-phone-type-label">mobile</span>  <span class="caret"></span>
-                                                    </button>
-                                                    <ul class="dropdown-menu pull-right">
+            <hr>
+            <div id="edit-devices-container">
+              <div class="row edit-device-container" data-id="0" style="margin-top:8px;" ng-repeat="device in customer.devices">
+                <div class="form-group col-xs-12 col-sm-8 col-md-10">
+                  <div class="input-group">
+                    <input class="input-device-phone form-control" value="" placeholder="Enter Device Serial #" type="text" ng-model="device.serial">
+                    <!--
+                                        <div class="btn-group pull-right" style="margin-right:8px;">
+                                            <button type="button" class="btn-edit-device-type btn btn-default dropdown-toggle" data-toggle="dropdown" data-type="0">
+                                                <span class="edit-device-type-label"> </span> <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu pull-right">
 
-                                                        <li class="li-edit-phone-type" data-type="m"><a href="#">mobile</a>
-                                                        </li>
+                                                <li class="li-edit-phone-type" data-type="0"><a href="#">0</a></li>
 
-                                                        <li class="li-edit-phone-type" data-type="h"><a href="#">home</a>
-                                                        </li>
-
-                                                        <li class="li-edit-phone-type" data-type="w"><a href="#">work</a>
-                                                        </li>
-
-                                                    </ul>
-                                                </div>
-                                            </div>
+                                            </ul>
                                         </div>
-                                    </div>
+                                        -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="btn-new-device" class="btn btn-primary btn-sm" ng-click="addDeviceFn()">Add Device</div>
+          </div>
+          <!-- End Panel Body -->
+        </div>
+        <!-- End BioMetric Data -->
+      </div>
 
-                                </div>
-                                <span style="margin-top:-15px;" class="col-xs-10">
+      <!-- Contact Information -->
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Contact Information</h3>
+          </div>
+          <div class="panel-body">
+
+            <div id="phone-row" class="row">
+              <div class="col-xs-1"><i class="icon-main fa fa-phone"></i>
+              </div>
+              <div class="col-xs-10">
+                <div id="edit-phones-container">
+
+
+                  <!-- ADD NEW PHONE -->
+
+                  <div class="row edit-phone-container" data-id="" style="margin-top:8px;" ng-repeat="phone in customer.details[0].phones">
+                    <div class="form-group col-xs-12 col-sm-8 col-md-10">
+                      <div class="input-group input-group-lg">
+                        <div class="input-group-addon">+1</div>
+                        <input class="input-edit-phone form-control input-lg" value="" type="text" ng-model="phone.number">
+
+                        <div class="input-group-btn">
+                          <button data-toggle="dropdown" class="btn btn-default btn-edit-phone-type dropdown-toggle" data-type="" type="button">
+                            <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'm'">mobile</span>
+                            <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'h'">home</span>
+                            <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'w'">work</span>
+                            <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu pull-right">
+
+                            <li class="li-edit-phone-type" ng-click="customerPhoneTypeSaveFn($index, 'm')"><a>mobile</a>
+                            </li>
+
+                            <li class="li-edit-phone-type" ng-click="customerPhoneTypeSaveFn($index, 'h')"><a>home</a>
+                            </li>
+
+                            <li class="li-edit-phone-type" ng-click="customerPhoneTypeSaveFn($index, 'w')"><a>work</a>
+                            </li>
+
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+                <span style="margin-top:-15px;" class="col-xs-10">
                                     <small>e.g. (303-555-5555)</small>
                                 </span>
-                            </div>
+              </div>
+            </div>
+            <div class="row">
+              <div ng-click="addCustomerContactFn()" class="btn btn-primary btn-sm" id="btn-new-device">Add Contact</div>
+            </div>
+            <hr>
+
+            <div class="row" id="address-row">
+              <div class="col-xs-1"><i class="icon-main fa fa-map-marker"></i>
+              </div>
+              <div class="col-xs-10">
+                <div id="edit-addresses-container">
+
+
+
+                  <div data-id="llipzogy7u" class="edit-address-container" ng-repeat="address in customer.details[0].addresses">
+                    <div class="form form-horizontal">
+                      <div class="fg-address-string form-group" ng-hide="getModifyAddressFn($index)">
+                        <input type="text" value="" class="form-control input-address-string input-lg" ng-model="address.displayName">
+                        <small>
+                            <span class="address-display-name hidden"></span>
+
+                            <div class="btn-link btn-edit-address-fields" ng-click="setModifyAddressFn($index, true)">Modify</div>
+                        </small>
+                      </div>
+                      <div class="edit-address-fields" ng-show="getModifyAddressFn($index)">
+                        <div class="form-group">
+                          <label>Street Address</label>
+                          <input type="text" value="" class="form-control input-address input-address-field" ng-model="address.address2">
                         </div>
 
-                        <hr>
-
-                        <div id="address-row" class="row">
-                            <div class="col-xs-1"><i class="icon-main fa fa-map-marker"></i>
-                            </div>
-                            <div class="col-xs-10">
-                                <div id="edit-addresses-container">
-
-                                </div>
-
-                                <br>
-
-                                <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
-
-                            </div>
+                        <div class="form-group">
+                          <label>Suite / Apt</label>
+                          <input type="text" value="" class="form-control input-address2 input-address-field" ng-model="address.address">
                         </div>
 
-                        <hr>
+                        <div class="form-group">
+                          <label>City, State, Zip</label>
+                          <input type="text" value="" class="form-control input-city input-address-field" ng-model="address.city">
+                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="address.state">
+                          <input type="text" value="" class="form-control input-zip input-address-field" ng-model="address.zip">
 
-                        <div id="email-row" class="row">
-                            <div class="col-xs-1"><i class="icon-main fa fa-envelope"></i>
-                            </div>
-                            <div class="col-xs-10">
-                                <div id="edit-emails-container">
+                          <small>
+                            <span class="address-display-name hidden"></span>
 
-                                    <div class="row edit-email-container">
-                                        <div class="form-group">
-                                            <input class="form-control input-edit-email input-lg" placeholder="new email" value="" data-email="" type="email">
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
+                            <div class="btn-link btn-cancel-edit-address-fields" ng-click="setModifyAddressFn($index, false)">Close</div>
+                            </small>
                         </div>
-                        <div class="clearfix mb30"></div>
-                        <div class="col-md-12">
-                            <div class="well well-lg">
-                                <label>This is permanent and cannot be reversed.</label>
-                                <div class="btn btn-danger btn-block btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
-                                    <i class="fa fa-warning"></i>
-                                    <span class="hidden-xs">Delete</span>
-                                </div>
-                            </div>
-                        </div>
+                      </div>
                     </div>
-                    <!-- End Panel Body -->
+
+                    <div class="hidden-xs hidden-sm">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" class="chk-default-shipping" ng-model="address.defaultShipping">Default Shipping
+                        </label>
+                      </div>
+
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" class="chk-default-billing" ng-model="address.defaultBilling">Default Billing
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
-                <!-- End Panel Default -->
+
+                <br>
+
+                <div class="btn btn-primary btn-sm" id="btn-new-address" ng-click="customerAddAddressFn()">Add Address</div>
+
+              </div>
             </div>
 
+            <hr>
 
-            <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span>
-                            </button>
-                            <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
-                            <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
-                        </div>
+            <div id="email-row" class="row">
+              <div class="col-xs-1"><i class="icon-main fa fa-envelope"></i>
+              </div>
+              <div class="col-xs-10">
+                <div id="edit-emails-container">
+
+                  <div class="row edit-email-container" ng-repeat="email in customer.details[0].emails">
+                    <div class="form-group">
+                      <input class="form-control input-edit-email input-lg" placeholder="new email" data-email="" type="email" ng-model="email.email">
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="btn btn-primary btn-sm" id="btn-new-address" ng-click="customerAddEmailFn()">Add Email</div>
+            </div>
+            <div class="clearfix mb30"></div>
+            <div class="col-md-12">
+                <div class="well well-lg" ng-show="currentState == 'customerEdit'">
+                    <label>This is permanent and cannot be reversed.</label>
+                    <div class="btn btn-danger btn-block btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
+                        <i class="fa fa-warning"></i>
+                        <span class="hidden-xs">Delete</span>
                     </div>
                 </div>
             </div>
+          </div>
+          <!-- End Panel Body -->
         </div>
+        <!-- End Panel Default -->
+      </div>
 
 
-        <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header" data-dismiss="modal">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Add or Remove Photo</h4>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
-                        </div>
-
-                        <div class="row" style="margin-top:6px; margin-bottom:20px;">
-                            <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
-                        </div>
-
-                        <div id="upload-photo-container"></div>
-
-                        <img id="contact-photo-modal" src="" style="max-width:100%; margin-top:20px;">
-                    </div>
-                </div>
+      <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span>
+              </button>
+              <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
             </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
+              <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
+            </div>
+          </div>
         </div>
-        <!-- End Change Photo Modal -->
+      </div>
     </div>
+
+
+    <div class="modal fade" id="modal-change-photo" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header" data-dismiss="modal">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Add or Remove Photo</h4>
+          </div>
+
+          <div class="modal-body">
+            <div class="row">
+              <div class="btn btn-primary col-xs-12 btn-remove-photo">Remove Photo</div>
+            </div>
+
+            <div class="row" style="margin-top:6px; margin-bottom:20px;">
+              <div id="btn-upload-photo-modal" class="btn btn-primary col-xs-12">Upload new photo</div>
+            </div>
+
+            <div id="upload-photo-container"></div>
+
+            <img id="contact-photo-modal" src="" style="max-width:100%; margin-top:20px;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Change Photo Modal -->
+  </div>
 </div>
