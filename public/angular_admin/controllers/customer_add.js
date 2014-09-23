@@ -10,6 +10,7 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
                 {
                     _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
                     type: 'lo',
+                    emails: [{_id: $$.u.idutils.generateUniqueAlphaNumericShort(), email: ''}],
                     phones: [
                         {
                             _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
@@ -134,10 +135,11 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
         };
 
         $scope.setModifyAddressFn = function (index, state) {
-
             $scope.modifyAddress[index] = state;
         };
 
-
+        $scope.customerAddEmailFn = function () {
+            $scope.customer.details[0].emails.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), email: ''});
+        };
     }]);
 });
