@@ -74,17 +74,17 @@ define([
                 , p2 = self.getUser()
                 , p3 = self.getThemeConfig()
                 , p4 = self.getWebsite()
-                , p5 = self.getPages()
-                , p6 = $.Deferred()             //loading image theme Preview
-                , p7 = $.Deferred()             //loading temp page model
-                , p8 = $.Deferred()             //loading      page model
-                , p9 = self.getAssets();
+                , p5 = self.getPages();
+                // , p6 = $.Deferred()
+                // , p7 = $.Deferred()
+                // , p8 = $.Deferred()
+                // , p9 = self.getAssets();
 
             $.when(p1)
                 .done(function() {
                     self._getThemePreview(self.account.get("website").themeId, function(themePreview){
                         self.currentThemePreviewURL = themePreview;
-                        p6.resolve();
+                        // p6.resolve();
                     });
 
                 });
@@ -97,7 +97,7 @@ define([
                     self.websiteSettings = self.website.attributes.settings;
                 });
 
-            $.when(p1, p2, p4, p6, p7, p9)
+            $.when(p1, p2, p4)
                 .done(function () {
                     var data
                         , tmpl
@@ -110,7 +110,7 @@ define([
                         websiteId: self.websiteId,
                         websiteTitle: self.websiteTitle,
                         subdomain: self.subdomain,
-                        assets: self.assets.toJSON()
+                        // assets: self.assets.toJSON()
                     };
                     if (self.pageHandle == "index" || self.pageHandle == "null" || self.pageHandle == "/") {
                         data.page = "/";
@@ -165,7 +165,7 @@ define([
                             $$.e.PageHandleEvent.trigger("pageHandle", { pageHandle: self.pageHandle });
                         }
 
-                        $.when(p3, p4, p5, p6)
+                        $.when(p3, p4, p5)
                             .done(function() {
                                 self.getPage().done(function(){
                                     self.getPages()
@@ -182,7 +182,7 @@ define([
                                                     componentsArray.push(rawComponents[key]);
                                                 }
                                             }
-                                          
+
                                             var data = {
                                                 pages: self.pages.toJSON(),
                                                 components: componentsArray,
@@ -787,11 +787,13 @@ define([
         savePageChanges: function (){
             console.log("save")
         },
+
         openMediaModal: function (){
 
             $("media-manager-modal").modal("show")
 
         },
+
         uploadMedia: function (){
             var self = this;
             require(['libs_misc/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
@@ -805,6 +807,7 @@ define([
                 self.vent.on("uploadcomplete", self._onPhotoUploaded.bind(self));
             });
         },
+
         _onPhotoUploaded: function(result) {
             var self = this
               , tmpl
@@ -861,6 +864,7 @@ define([
 
             self.mediaBatch = null;
         },
+
         _addFromMediaBatch: function (mediaId) {
             var self = this;
             self.mediaBatch.push(mediaId);
@@ -916,7 +920,6 @@ define([
                 e.preventDefault();
                 e.stopImmediatePropagation();
             })
-
         },
 
         selectAll: function (){
