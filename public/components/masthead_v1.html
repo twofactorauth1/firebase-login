@@ -16,10 +16,12 @@
                         </div>
 
                         <div class="col-xs-12" ng-show="component.btn.url">
-                            <button class="btn btn-success btn-block center" data-ng-href="{{component.btn.url}}" du-smooth-scroll>
-                                <i class="{{component.btn.icon}}" style="margin-top: 7px"></i>
+                            <a class="btn btn-primary btn-block center" data-ng-href="{{component.btn.url}}" du-smooth-scroll>
+                                <div class="{{component.btn.icon}}"></div>
+                                <div data-class="btn-text" class="editable btn-text">
                                     {{component.btn.text}}
-                            </button>
+                                </div>
+                            </a>
                         </div>
 
                         <div class="clearfix"></div>
