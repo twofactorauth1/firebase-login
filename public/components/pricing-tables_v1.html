@@ -7,9 +7,11 @@
 
     <div ng-repeat="table in component.tables track by $index">
         <div class="col-md-8 col-md-offset-2" id="home-box">
-            <div class="pricing_header" >
+            <div class="pricing_header">
                 <h1>{{table['title']}}</h1>
+
                 <h3>{{table['subtitle']}}</h3>
+
                 <p>{{table['text']}}</p>
 
                 <div class="space"></div>
@@ -18,15 +20,22 @@
                 <li ng-repeat="feature in table['features']"
                     class="list-group-item">
                     <div class="text-center">
-                    <h4><span class="fa fa-check"></span> {{feature.title}}</h4>
+                        <h4><span class="fa fa-check"></span> {{feature.title}}</h4>
                     </div>
                     <p><b>{{feature.subtitle}}</b></p>
                 </li>
             </ul>
 
-            <div class="try">
-                <p class="price">{{table.price}}</p>
-                <a class="btn btn-default" href="{{table.btn.url}}" type="button">{{table.btn.text}}</a>
+            <div class="row">
+                <div class="col-md-12 price text-center">
+                    {{table.price}}
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <a class="btn btn-default" href="{{table.btn.url}}" >{{table.btn.text}}</a>
+                </div>
             </div>
         </div>
     </div>
