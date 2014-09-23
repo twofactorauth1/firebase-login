@@ -24,8 +24,9 @@
                     </div>
                 </div>
 
-                <a ng-show="component.btn.url" class="btn btn-outline btn-lg" href="{{component.btn.url}}"> {{component.btn.text}} <span
-                        class="fa fa-arrow-circle-o-right"></span></a>
+                <a ng-show="component.btn.url" class="btn btn-primary btn-lg" href="{{component.btn.url}}">
+                    <i class="{{component.btn.icon}}"></i>
+                    {{component.btn.text}} </a>
 
             </div>
             <div class="clearfix mb10 visible-xs"></div>
