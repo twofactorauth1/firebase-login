@@ -1,6 +1,6 @@
 <div ng-show="component" class="component testimonials-v2 {{component.bg.img.parallax?'parallax':''}}"
      parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0"
-     style="background: {{(component.bg.img.url||component.bg.img.url!=='')?'url('+component.bg.img.url+') no-repeat fixed;':component.bg.color+';'}} color: {{component.txtcolor}};"
+     style="background:{{(component.bg.img.url||component.bg.img.url!=='')?'url('+component.bg.img.url+') no-repeat fixed;':component.bg.color+';'}} color: {{component.txtcolor}}; background-size:cover;"
      data-class="testimonials-v2" data-id="{{component._id}}">
     <div class="component-body">
         <div id="{{component.anchor}}" class="carousel slide" data-ride="carousel">
@@ -44,7 +44,7 @@
             <!-- Controls -->
             <span ng-if="component.testimonials.length > 1">
 
-                <a class="left carousel-control" data-target="#{{component.anchor}}" role="button" data-slide="prev">
+                <a class="left carousel-control" data-target="#{{component.anchor}}" style="background:none" role="button" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
                 <a class="right carousel-control" data-target="#{{component.anchor}}" role="button" data-slide="next">
