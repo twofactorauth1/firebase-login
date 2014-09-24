@@ -1,0 +1,23 @@
+<div class="container" id="{{component.anchor}}">
+    <div class="col-md-12" >
+        <h1 class="center">{{component.title}}</h1>
+        <div class="well">
+            <div id="myCarousel" class="carousel slide">
+                <div class="carousel-inner">
+                    <div data-ng-repeat="collection in component.collections">
+                    <div class="item">
+                        <div class="row {{$first?'active':''}}">
+                         <div  data-ng-repeat="image in collection">
+                              <div class="col-sm-3" style="float: left"><a data-target=""><img ng-src="{{image.url}}" alt="Image" class="img-responsive"></a>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                 </div>
+                 <a class="left carousel-control" data-target="#myCarousel" data-slide="prev">‹</a>
+                <a class="right carousel-control" data-target="#myCarousel" data-slide="next">›</a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
