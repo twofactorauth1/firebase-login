@@ -11,7 +11,7 @@
             <div class="col-sm-8 col-xs-12 pull-right">
 
                 <h3 class="image-text-title">
-                    <div class="editable" data-class="title">
+                    <div  data-class="title">
                         {{component.title}}
                     </div>
                 </h3>
@@ -19,7 +19,7 @@
 
                 <div class="mb15"></div>
                 <div class="image-text-text">
-                    <div class="editable" data-class="text">
+                    <div  data-class="text">
                         <span ng-bind-html="component.text"></span>
                     </div>
                 </div>
@@ -30,9 +30,9 @@
             </div>
             <div class="clearfix mb10 visible-xs"></div>
 
-            <div class="pull-{{component.imagePosition}} col-sm-4 col-xs-12 image-text-image">
+            <div class="pull-{{component.imagePosition}} col-sm-4 image-text-image">
                 <div class="editable" data-class="url">
-                    <img src="{{component.imgurl}}" class="img-responsive">
+                    <img src="{{component.imgurl}}" class="img-responsive img-circle  col-sm-10">
                 </div>
                 <p class="center editable" data-class="caption">{{component.caption}}</p>
             </div>
