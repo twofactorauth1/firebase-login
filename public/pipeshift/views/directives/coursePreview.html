@@ -6,7 +6,7 @@
     ng-style="{'min-height':minHeight+'px'}">
 <div style="height:130px"></div>
 <!--<img src="/pipeshift/img/smart-blog/landing/logo123.png" alt="logo" width="350" height="130" border="0"-->
-     <!--style="padding: 15px;margin-bottom: 30px;"/>-->
+<!--style="padding: 15px;margin-bottom: 30px;"/>-->
 <table cellpadding="0" cellspacing="0" border="0" align="center" width="800"
        style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; color: #6f6f6f;margin-bottom: 30px;background-color:#fbfbfb;"
        bgcolor="#fbfbfb">
@@ -50,32 +50,32 @@
     </td>
 </tr>
 <!--<tr ng-hide="isLoggedInAndSubscribed">-->
-    <!--<td style="border-bottom: 2px solid #ececec;padding:30px">-->
-        <!--<table cellpadding="0" cellspacing="0" border="0" align="center"-->
-               <!--style="width:50%;float:left;">-->
-            <!--<tr>-->
-                <!--<td>-->
-                    <!--<img src="/pipeshift/img/smart-blog/landing/about123.jpg" style="width: 100%;"/>-->
-                <!--</td>-->
-            <!--</tr>-->
-        <!--</table>-->
-        <!--<table cellpadding="0" cellspacing="0" border="0" align="center"-->
-               <!--style="width:50%;float:left;">-->
-            <!--<tr>-->
-                <!--<td style="padding:0 0 0 30px;text-shadow: 1px 1px 1px white;">-->
-                    <!--<p>I'm the crash test dummy of online business, sharing what works (and what-->
-                        <!--doesn't) so you know exactly how to build your business better.</p>-->
-                    <!--<ul style="margin-top: 10px;padding-left: 40px;color: #777777;text-shadow: 1px 1px 1px white;font-size: 23px;">-->
-                        <!--<li>Feature One</li>-->
-                        <!--<li>Feature Two</li>-->
-                        <!--<li>Feature Three</li>-->
-                        <!--<li>Feature Four</li>-->
-                    <!--</ul>-->
-                <!--</td>-->
-            <!--</tr>-->
-        <!--</table>-->
-        <!--</p>-->
-    <!--</td>-->
+<!--<td style="border-bottom: 2px solid #ececec;padding:30px">-->
+<!--<table cellpadding="0" cellspacing="0" border="0" align="center"-->
+<!--style="width:50%;float:left;">-->
+<!--<tr>-->
+<!--<td>-->
+<!--<img src="/pipeshift/img/smart-blog/landing/about123.jpg" style="width: 100%;"/>-->
+<!--</td>-->
+<!--</tr>-->
+<!--</table>-->
+<!--<table cellpadding="0" cellspacing="0" border="0" align="center"-->
+<!--style="width:50%;float:left;">-->
+<!--<tr>-->
+<!--<td style="padding:0 0 0 30px;text-shadow: 1px 1px 1px white;">-->
+<!--<p>I'm the crash test dummy of online business, sharing what works (and what-->
+<!--doesn't) so you know exactly how to build your business better.</p>-->
+<!--<ul style="margin-top: 10px;padding-left: 40px;color: #777777;text-shadow: 1px 1px 1px white;font-size: 23px;">-->
+<!--<li>Feature One</li>-->
+<!--<li>Feature Two</li>-->
+<!--<li>Feature Three</li>-->
+<!--<li>Feature Four</li>-->
+<!--</ul>-->
+<!--</td>-->
+<!--</tr>-->
+<!--</table>-->
+<!--</p>-->
+<!--</td>-->
 <!--</tr>-->
 <tr ng-hide="isLoggedInAndSubscribed">
     <td height="110" align="center">
@@ -168,24 +168,26 @@
 <tr ng-show="isLoggedInAndSubscribed">
     <td class="video-carousel-container" bgcolor="#f7f7f7"
         style="padding: 35px 0; border-bottom: 2px dotted #bfbfbf;">
-        <ul style="font-size: 13px;"
-            bgcolor="#f7f7f7" rn-carousel rn-carousel-control="true" rn-carousel-swipe="false">
-            <li style="display: inline-block; width: 520px; cursor: pointer; white-space: nowrap"
-                ng-repeat="pageData in carouselData">
-                <div ng-repeat="video in pageData" style="max-width: 180px;float: left;padding: 15px;"
-                     ng-click="selectVideo(video)">
-                    <p><img ng-src="{{video.videoPreviewUrl}}"
-                            width="160" border="0"/>
-                    </p>
-                    <h4 style="color:#326c94;">
-                        <video-title width="160px" video="video" style=></video-title>
-                    </h4>
+        <div style="width: 560px; margin: auto;">
+            <ul style="font-size: 13px;"
+                bgcolor="#f7f7f7" rn-carousel rn-carousel-control="true" rn-carousel-swipe="false">
+                <li style="display: inline-block; width: 560px; cursor: pointer; white-space: nowrap"
+                    ng-repeat="pageData in carouselData">
+                    <div ng-repeat="video in pageData" style="max-width: 180px;float: left;padding: 15px;"
+                         ng-click="selectVideo(video)">
+                        <p><img ng-src="{{video.videoPreviewUrl}}"
+                                width="160" border="0"/>
+                        </p>
+                        <h4 style="color:#326c94;">
+                            <video-title width="160px" video="video" style=></video-title>
+                        </h4>
 
-                    <p style="color:#6c6c6c; padding-right: 12px;white-space: normal">
-                        {{video.videoTitle}}</p>
-                </div>
-            </li>
-        </ul>
+                        <p style="color:#6c6c6c; padding-right: 12px;white-space: normal">
+                            {{video.videoTitle}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </td>
 </tr>
 <tr ng-if="isLoggedInAndSubscribed">
