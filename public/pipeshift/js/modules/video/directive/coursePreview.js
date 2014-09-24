@@ -11,7 +11,7 @@ angular.module('var.directives').directive('coursePreview', function () {
             isLoggedInAndSubscribed: "=",
             standalone: "="
         },
-        controller: function ($scope, $http, $location, $modal) {
+        controller: function ($scope, $http, $location, $modal, $compile) {
             var course = $scope.course;
             $scope.modal = {};
             var carouselData = [];
@@ -53,14 +53,12 @@ angular.module('var.directives').directive('coursePreview', function () {
             }
 
             $scope.selectVideo = function (video) {
-                $http.get("/api/1.0/campaignmanager/pipeshift/courses/" + course._id + "/subscribers/video/" + video._id).success(function (response) {
-                    if (response.success) {
-                        $scope.selectedVideo = response.result;
-                        var $videoPlayerContainer = $("#videoPlayerContainer");
-                        $videoPlayerContainer.empty();
-                        $videoPlayerContainer.html("<div video-player video='selectedVideo' courseDetails='course'></div>");
-                        $compile($videoPlayerContainer)($scope);
-                    }
+                $http.get("/api/1.0/courses/" + course._id + "/subscribers/video/" + video.videoId).success(function (response) {
+                    $scope.selectedVideo = response;
+                    var $videoPlayerContainer = $("#videoPlayerContainer");
+                    $videoPlayerContainer.empty();
+                    $videoPlayerContainer.html("<div video-player video='selectedVideo' course-details='course'></div>");
+                    $compile($videoPlayerContainer)($scope);
                 })
             }
             $scope.videoId = $location.search().videoId;
