@@ -583,7 +583,7 @@ _.extend(api.prototype, baseApi.prototype, {
     updateAllComponents: function (req, res) {
         //TODO: Add Security
         var self = this;
-        self.log.debug('>> updateAllComponents');
+        self.log.debug('>> updateAllComponents', req.body);
         var componentAry = req.body;
 
         var pageId = req.params.id;
