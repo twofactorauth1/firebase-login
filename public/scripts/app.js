@@ -23,7 +23,8 @@ var mainApp = angular
         'mrPageEnterAnimate',
         'angularMoment',
         'mgo-angular-wizard',
-        'iso.directives'
+        'iso.directives',
+        'timer'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){
