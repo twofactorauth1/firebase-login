@@ -1,8 +1,8 @@
-define(['app', 'userService', 'underscore', 'commonutils', 'angularRoute'], function(app) {
-    app.register.controller('AccountEditCtrl', ['$scope', '$routeParams', 'UserService', function ($scope, $routeParams, UserService) {
+define(['app', 'userService', 'underscore', 'commonutils'], function(app) {
+    app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', function ($scope, $stateParams, UserService) {
         var phoneCharLimit = 4;
-        if ($routeParams.focus)
-            $('[name="' + $routeParams.focus + '"]').focus();
+        if ($stateParams.focus)
+            $('[name="' + $stateParams.focus + '"]').focus();
         //back button click function
         $scope.$back = function() {window.history.back();};
 
