@@ -1,0 +1,789 @@
+#pipeshiftDiv {
+  /****************************
+    * Color Themes
+    ****************************/
+  /* Red */
+  /* Yellow */
+  /* Yellow */
+  /* Black */
+}
+#pipeshiftDiv body {
+  min-height: 2000px;
+  font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica';
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+#pipeshiftDiv a:hover {
+  text-decoration: none;
+}
+#pipeshiftDiv body .navbar.navbar-fixed-top {
+  margin-bottom: 0;
+  background-color: #000;
+  opacity: 0.6;
+}
+#pipeshiftDiv body .navbar {
+  background: transparent;
+  -webkit-transition: background .4s ease;
+  -moz-transition: background .4s ease;
+  -o-transition: background .4s ease;
+  transition: background .4s ease;
+}
+#pipeshiftDiv body .navbar.fus-navbar-solid {
+  /*background: rgba(58, 146, 215, 0.87);*/
+}
+#pipeshiftDiv body .navbar.fus-navbar-solid .navbar-brand {
+  padding: 10px 15px;
+}
+#pipeshiftDiv body .navbar.fus-navbar-solid .navbar-nav > li > a {
+  /*margin: 10px 10px;*/
+}
+#pipeshiftDiv body .navbar-brand {
+  padding: 10px 15px;
+}
+#pipeshiftDiv body .navbar .navbar-header a {
+  color: white;
+}
+#pipeshiftDiv body .navbar-nav > li > a {
+  color: white;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 5px;
+  margin: 20px 10px;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+#pipeshiftDiv body .navbar-nav > li > a:hover,
+#pipeshiftDiv body .navbar-nav > li.active > a {
+  background: none;
+  border-bottom: 2px solid white;
+}
+#pipeshiftDiv body .navbar-nav > li > a.btn {
+  padding: 5px 10px;
+  margin-top: 18px;
+  border-bottom: 1px solid white;
+}
+#pipeshiftDiv body .navbar-nav > li > a.btn:hover {
+  border-width: 1px;
+  background: rgba(255, 255, 255, 0.25);
+}
+#pipeshiftDiv body .navbar .navbar-header .navbar-brand {
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 75%;
+}
+#pipeshiftDiv .fus-options {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  background: rgba(51, 51, 51, 0.71);
+  color: white;
+  padding: 10px;
+}
+#pipeshiftDiv .fus-options li {
+  float: left;
+}
+#pipeshiftDiv .fus-options li:first-child a {
+  padding: 4px 10px;
+}
+#pipeshiftDiv .fus-options a {
+  font-family: georgia;
+  font-size: 16px;
+  font-style: italic;
+  line-height: 140%;
+  color: white;
+  display: inline-block;
+}
+#pipeshiftDiv .fus-options a.color {
+  text-indent: -9999999px;
+  width: 25px;
+  height: 25px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: 50px;
+  -o-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+}
+#pipeshiftDiv .fus-options .active a.color {
+  border-color: white;
+}
+#pipeshiftDiv .jumbotron {
+  border-radius: 0;
+  height: 750px;
+  padding-top: 30px;
+  margin: 0;
+  width: 100%;
+  position: relative;
+}
+#pipeshiftDiv .jumbotron .fus-bg {
+  position: absolute;
+  /* TODO: think about background*/
+  background-size: cover;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+#pipeshiftDiv .fus-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /*background:#3A92D7;*/
+  opacity: 0.15;
+  -webkit-transition: all .4s ease;
+  -moz-transition: all .4s ease;
+  -o-transition: all .4s ease;
+  transition: all .4s ease;
+}
+#pipeshiftDiv .jumbotron .pscontainer {
+  display: table;
+  height: 620px;
+}
+#pipeshiftDiv .jumbotron .pscontainer .fus-pitch {
+  text-align: center;
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+}
+#pipeshiftDiv .jumbotron .pscontainer .fus-pitch .fus-call-to-action {
+  position: relative;
+}
+#pipeshiftDiv .jumbotron .pscontainer .fus-pitch h1 {
+  font-weight: 100;
+  font-size: 46px;
+  line-height: 120%;
+  margin: 0 0 5px 0;
+  color: white;
+}
+#pipeshiftDiv .jumbotron .pscontainer .fus-pitch h2 {
+  font-family: georgia;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 140%;
+  margin: 0 0 0 0;
+  font-style: italic;
+  color: white;
+}
+#pipeshiftDiv .jumbotron .pscontainer .fus-pitch a {
+  color: white;
+  font-weight: bold;
+}
+#pipeshiftDiv .fus-btns {
+  text-align: center;
+  margin: 20px 0 0;
+}
+#pipeshiftDiv .fus-btns .btn {
+  display: inline-block;
+  margin: 0 10px;
+  font-size: 14px;
+  padding: 10px 20px;
+}
+#pipeshiftDiv .navbar-brand {
+  height: 72px;
+}
+#pipeshiftDiv .fus-section,
+#pipeshiftDiv .fus-section > .pscontainer {
+  position: relative;
+}
+#pipeshiftDiv .fus-section {
+  padding: 0px;
+}
+#pipeshiftDiv .fus-section.fus-white-bg {
+  background: #17191f;
+  color: #333;
+}
+#pipeshiftDiv .fus-section.fus-white-bg .fus-section-header {
+  /*border-bottom: 1px solid #f1f1f2;*/
+}
+#pipeshiftDiv .fus-section .fus-section-header {
+  margin: 35px 0;
+  margin-bottom: 35px;
+  text-align: center;
+}
+#pipeshiftDiv .fus-section .fus-section-header h3,
+#pipeshiftDiv .fus-section {
+  font-size: 36px;
+  font-weight: 100;
+  line-height: 120%;
+  /*margin: 0 0 5px 0;*/
+  color: #fff;
+}
+#pipeshiftDiv .fus-section .fus-section-header h4,
+#pipeshiftDiv .fus-section {
+  font-size: 18px;
+  font-family: georgia;
+  font-weight: 400;
+  line-height: 140%;
+  /*margin: 0 0 10px 0;*/
+  font-style: italic;
+  color: #fff;
+}
+#pipeshiftDiv .footer-section {
+  padding: 45px 0 25px;
+  /*height: 88px;*/
+  width: 33%;
+  float: left;
+  font-size: 14px;
+  font-style: normal;
+  color: #fff;
+  max-height: 90px;
+}
+#pipeshiftDiv .fus-section .fus-header {
+  text-align: left;
+  margin-bottom: 35px;
+  color: #89c152;
+}
+#pipeshiftDiv .fus-tabs {
+  text-align: center;
+  border: none;
+}
+#pipeshiftDiv .fus-tabs li {
+  display: inline-block;
+  float: none;
+  border: none;
+  background-color: #17191f;
+  margin-bottom: -2px;
+}
+#pipeshiftDiv .fus-tabs li:hover a {
+  background: none;
+  border: none;
+}
+#pipeshiftDiv .nav-tabs.fus-tabs > li.active > a,
+#pipeshiftDiv .nav-tabs.fus-tabs > li.active > a:hover,
+#pipeshiftDiv .nav-tabs.fus-tabs > li.active > a:focus {
+  border: none;
+}
+#pipeshiftDiv #feature .border {
+  border-bottom: solid 3px #000;
+  margin-top: -1px;
+  position: absolute;
+}
+#pipeshiftDiv .fus-tabs li:hover {
+  border-bottom: solid 3px #89c152;
+  z-index: 2;
+}
+#pipeshiftDiv .fus-tabs li {
+  border-bottom: solid 3px #000;
+}
+#pipeshiftDiv .fus-tabs li:hover a .glyphicon {
+  /*background: #f1f1f2;*/
+  color: #89c152;
+}
+#pipeshiftDiv .fus-tabs li:hover .fus-subtitle {
+  /*background: #f1f1f2;*/
+  color: #89c152;
+  display: block;
+  text-align: center;
+}
+#pipeshiftDiv .fus-tabs li.active a {
+  color: #3A92D7;
+  border: none;
+}
+#pipeshiftDiv .fus-tabs li.active a:hover {
+  color: #3A92D7;
+  border: none;
+}
+#pipeshiftDiv .fus-tabs li.active a .glyphicon {
+  color: white;
+  background: #3A92D7;
+  border-color: #3A92D7;
+}
+#pipeshiftDiv .fus-tabs li a {
+  color: #fff;
+  margin-right: 0;
+  border: none;
+}
+#pipeshiftDiv .fus-tabs li a:focus {
+  outline: none;
+}
+#pipeshiftDiv .fus-tabs li a .glyphicon {
+  font-size: 40px;
+  line-height: 100%;
+  /*border: 1px solid #333;
+        border-radius: 50px;
+        -o-border-radius: 50px;
+        -webkit-border-radius: 50px;
+        -moz-border-radius: 50px;
+        -webkit-transition: background .4s ease;
+        -moz-transition: background .4s ease;
+        -o-transition: background .4s ease;
+        transition: background .4s ease;
+        */
+}
+#pipeshiftDiv .feature {
+  width: 145px;
+}
+#pipeshiftDiv .feature > a {
+  cursor: pointer;
+}
+#pipeshiftDiv .feature > a > .glyphicon {
+  display: block;
+  margin: auto;
+}
+#pipeshiftDiv .fus-tabs li a .fus-subtitle {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+  display: block;
+  font-size: 12px;
+  margin-top: 10px;
+  color: #0073c7;
+}
+#pipeshiftDiv .fus-tab-content {
+  padding: 35px 0;
+  margin: 35px 0;
+}
+#pipeshiftDiv .fus-tab-content p {
+  color: #808184;
+  font-size: 18px;
+  line-height: 140%;
+  margin-bottom: 25px;
+}
+#pipeshiftDiv .fus-tab-content > .tab-pane > .row {
+  display: table;
+  vertical-align: middle;
+}
+#pipeshiftDiv .fus-tab-content > .tab-pane > .row > [class*="col-"] {
+  display: table-cell;
+  vertical-align: middle;
+  float: none;
+}
+#pipeshiftDiv .fus-tab-content > .tab-pane > .row > [class*="col-"].fus-photo {
+  text-align: center;
+}
+#pipeshiftDiv .fus-tab-content > .tab-pane > .row > [class*="col-"].fus-photo img {
+  max-width: 400px;
+}
+#pipeshiftDiv .fus-tab-content > .tab-pane > .row > .fus-fullwidth-content {
+  text-align: center;
+}
+#pipeshiftDiv .fus-tab-content > .tab-pane > .row > .fus-fullwidth-content .fus-header {
+  text-align: center;
+}
+#pipeshiftDiv .fus-pricing {
+  color: white;
+}
+#pipeshiftDiv .fus-pricing .fus-overlay {
+  opacity: 0.4;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table {
+  display: table;
+  width: 100%;
+}
+#pipeshiftDiv .clear {
+  clear: both;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table > [class*="col-"].fus-notfocus .media-list {
+  width: 90%;
+  padding: 15px;
+}
+#pipeshiftDiv .border-bottom {
+  border-bottom: solid 1px rgba(0, 0, 0, 0.5);
+  padding-bottom: 20px;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table > [class*="col-"] {
+  display: table-cell;
+  vertical-align: middle;
+  float: none;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table .media-list {
+  /*background: rgba(0,0,0,0.25);*/
+  padding: 25px;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table .media-list .media-list-item {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 10px 10px;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table .media-list .media.disabled {
+  text-decoration: line-through;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table .media-list .media .media-object {
+  padding: 50px;
+  font-size: 22px;
+  font-weight: 400;
+  padding: 18px 8px;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table .media-list .media .media-object.glyphicon-ok {
+  color: #fff;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table .media-list .media .media-object.glyphicon-remove-circle {
+  color: #FFA1AE;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table .media-list .media .media-heading {
+  font-weight: bold;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: left;
+  margin-bottom: 7px;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table .media-list .media .media-text {
+  font-family: georgia;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 140%;
+  margin: 0 0 0 0;
+  font-style: italic;
+  letter-spacing: 0px;
+  color: white;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table .fus-list-header h5 {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: solid 3px #0073c7;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table .fus-list-header p {
+  font-size: 44px;
+  font-weight: 100;
+  text-align: center;
+}
+#pipeshiftDiv .fus-pricing .fus-pricing-table .fus-list-header small {
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+#pipeshiftDiv .thumbnail {
+  border: 1px solid #E6E7E8;
+  background: white;
+  padding: 0;
+}
+#pipeshiftDiv .zs-img {
+  position: absolute;
+}
+#pipeshiftDiv .thumbnail .caption {
+  padding: 20px;
+  position: relative;
+}
+#pipeshiftDiv .thumbnail .caption h3 {
+  font-weight: bold;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: left;
+  margin: 0 0 7px 0;
+}
+#pipeshiftDiv .thumbnail .caption h3 a {
+  color: #333;
+}
+#pipeshiftDiv .thumbnail .caption p {
+  font-family: georgia;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 140%;
+  margin: 0 0 20px 0;
+  font-style: italic;
+  letter-spacing: 0px;
+}
+#pipeshiftDiv body .fus-nobtn {
+  border: none;
+  font-style: normal;
+  -o-border-radius: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  padding: 5px 0;
+  border-bottom: 2px solid transparent;
+}
+#pipeshiftDiv body .fus-nobtn:hover {
+  border-bottom: 2px solid #333;
+  background: none;
+  color: #333;
+}
+#pipeshiftDiv .fus-about {
+  background: url("../img/placeholder7.jpg") center center no-repeat;
+  background-size: cover;
+}
+#pipeshiftDiv .fus-about .thumbnail {
+  background-size: cover;
+  position: relative;
+  border: none;
+}
+#pipeshiftDiv .fus-about .thumbnail.fus-text-on-top .caption {
+  color: white;
+  padding-top: 250px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(90%, rgba(0, 0, 0, 0.69)));
+  background: -webkit-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.69) 90%);
+  background: -moz-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.69) 90%);
+  background: -o-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.69) 90%);
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.69) 90%);
+}
+#pipeshiftDiv .fus-about .thumbnail.fus-text-on-top .caption a {
+  color: white;
+}
+#pipeshiftDiv .fus-about .thumbnail .caption .fus-socials {
+  color: white;
+  font-size: 15px;
+}
+#pipeshiftDiv .fus-as-seen {
+  text-align: center;
+  padding-bottom: 15px;
+}
+#pipeshiftDiv .fus-as-seen > a {
+  display: inline-block;
+  margin: 0 10px;
+}
+#pipeshiftDiv .fus-footer {
+  background: url("../img/bottom-logo1.png") no-repeat right top;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  position: relative;
+}
+#pipeshiftDiv .fus-bottom-logo {
+  background: url("../img/bottom-logo1.png") no-repeat center top;
+}
+#pipeshiftDiv footer ul {
+  text-align: center;
+}
+#pipeshiftDiv footer ul > li > a {
+  color: white;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 5px;
+  margin: 10px;
+  border-bottom: 2px solid transparent;
+}
+#pipeshiftDiv footer ul > li > a:hover {
+  color: white;
+  border-bottom: 2px solid #fff;
+}
+#pipeshiftDiv footer {
+  text-align: center;
+}
+#pipeshiftDiv footer .footer-brand {
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 75%;
+}
+#pipeshiftDiv footer .credit {
+  margin: 40px 0 30px;
+}
+#pipeshiftDiv footer .credit p {
+  font-style: italic;
+  font-family: georgia;
+  font-size: 12px;
+}
+#pipeshiftDiv footer .credit a {
+  color: white;
+  font-weight: bold;
+}
+#pipeshiftDiv body.fus-red .fus-overlay,
+#pipeshiftDiv body.fus-red .fus-tabs li.active a .glyphicon {
+  background: #D73A40;
+  border-color: #D73A40;
+}
+#pipeshiftDiv body.fus-red .btn-primary {
+  color: #FFF;
+  background: #FF0062;
+  border-color: #FF0062;
+}
+#pipeshiftDiv body.fus-red .btn-primary:hover {
+  color: #FFF;
+  background: #C61A5C;
+  border-color: #FF0062;
+}
+#pipeshiftDiv body.fus-red .fus-tabs li.active a .fus-subtitle {
+  color: #FF0062;
+}
+#pipeshiftDiv body.fus-red .navbar.fus-navbar-solid {
+  background: rgba(215, 58, 64, 0.88);
+}
+@media (max-width: 768px) {
+  #pipeshiftDiv body.fus-red .navbar-collapse {
+    background: rgba(215, 58, 64, 0.88);
+  }
+}
+#pipeshiftDiv body.fus-yellow .fus-overlay,
+#pipeshiftDiv body.fus-yellow .fus-tabs li.active a .glyphicon {
+  background: #FFD600;
+  border-color: #FFD600;
+}
+#pipeshiftDiv body.fus-yellow .btn-primary {
+  color: #000 !important;
+  background: #FFD600;
+  border-color: #FFD600;
+}
+#pipeshiftDiv body.fus-yellow .btn-primary:hover {
+  color: #000 !important;
+  background: #FFC200;
+  border-color: #FFD600;
+}
+#pipeshiftDiv body.fus-yellow .fus-tabs li.active a .fus-subtitle {
+  color: #FFD600;
+}
+#pipeshiftDiv body.fus-yellow .navbar.fus-navbar-solid {
+  background: rgba(255, 173, 0, 0.93);
+}
+@media (max-width: 768px) {
+  #pipeshiftDiv body.fus-yellow .navbar-collapse {
+    background: rgba(255, 173, 0, 0.93);
+  }
+  #pipeshiftDiv .fus-footer {
+    margin-top: -25px;
+  }
+  #pipeshiftDiv .footer-section {
+    padding: 40px 0 30px;
+    font-size: 13px;
+  }
+}
+@media (max-width: 480px) {
+  #pipeshiftDiv .footer-section {
+    padding: 38px 0 32px;
+    font-size: 10px;
+  }
+  #pipeshiftDiv .fus-footer {
+    background-position-x: -1080px;
+  }
+}
+#pipeshiftDiv body.fus-green .fus-overlay,
+#pipeshiftDiv body.fus-green .fus-tabs li.active a .glyphicon {
+  background: #46C994;
+  border-color: #46C994;
+}
+#pipeshiftDiv body.fus-green .btn-primary {
+  color: #fff;
+  background: #46C994;
+  border-color: #46C994;
+}
+#pipeshiftDiv body.fus-green .btn-primary:hover {
+  color: #fff;
+  background: #10AF6F;
+  border-color: #46C994;
+}
+#pipeshiftDiv body.fus-green .fus-tabs li.active a .fus-subtitle {
+  color: #46C994;
+}
+#pipeshiftDiv body.fus-green .navbar.fus-navbar-solid {
+  background: rgba(70, 201, 148, 0.93);
+}
+#pipeshiftDiv body.fus-black .fus-overlay,
+#pipeshiftDiv body.fus-black .fus-tabs li.active a .glyphicon {
+  background: #333;
+  border-color: #333;
+}
+#pipeshiftDiv body.fus-black .btn-primary {
+  color: #fff;
+  background: #333;
+  border-color: #333;
+}
+#pipeshiftDiv body.fus-black .btn-primary:hover {
+  color: #fff;
+  background: #000;
+  border-color: #333;
+}
+#pipeshiftDiv body.fus-black .fus-tabs li.active a .fus-subtitle {
+  color: #333;
+}
+#pipeshiftDiv body.fus-black .navbar.fus-navbar-solid {
+  background: rgba(0, 0, 0, 0.43);
+}
+@media (max-width: 769px) {
+  #pipeshiftDiv .pscontainer {
+    width: 100%;
+  }
+  #pipeshiftDiv body .jumbotron .fus-bg {
+    position: fixed;
+  }
+  #pipeshiftDiv body #pricing {
+    /*background: url("../img/jumbotron.jpg") center center no-repeat;
+            background-size: cover;*/
+  }
+  #pipeshiftDiv body footer {
+    background: url("../img/jumbotron.jpg") center center no-repeat;
+    background-size: cover;
+  }
+  #pipeshiftDiv .border {
+    display: none;
+  }
+  #pipeshiftDiv .fus-tabs li {
+    border-bottom: solid 0px #000;
+  }
+}
+@media (max-width: 500px) {
+  #pipeshiftDiv body .fus-tab-content > .tab-pane > .row > [class*="col-"].fus-photo img {
+    width: 100%;
+  }
+  #pipeshiftDiv body #select-options li:first-child {
+    display: none;
+  }
+}
+@media (max-width: 767px) {
+  #pipeshiftDiv body .navbar-collapse {
+    background: rgba(58, 146, 215, 0.87);
+  }
+  #pipeshiftDiv body .fus-btns .btn {
+    margin-bottom: 15px;
+  }
+  #pipeshiftDiv body.fus-black .navbar-collapse {
+    background: rgba(0, 0, 0, 0.43);
+  }
+  #pipeshiftDiv .pscontainer {
+    width: 100%;
+  }
+}
+@media (max-width: 989px) {
+  #pipeshiftDiv body .navbar-toggle .icon-bar {
+    background: #FFF;
+    height: 4px;
+  }
+  #pipeshiftDiv body .fus-tab-content > .tab-pane > .row > [class*="col-"] {
+    display: block;
+    width: 100%;
+    margin-bottom: 25px;
+  }
+  #pipeshiftDiv body .fus-tab-content p,
+  #pipeshiftDiv body .fus-section .fus-header {
+    text-align: center;
+  }
+  #pipeshiftDiv body .fus-tab-content .btn {
+    display: block;
+  }
+  #pipeshiftDiv body .fus-tab-content img {
+    max-width: 100%;
+  }
+  #pipeshiftDiv body .fus-pricing .fus-pricing-table > [class*="col-"] {
+    display: block;
+    width: 100%;
+    margin-bottom: 25px;
+    float: left;
+  }
+  #pipeshiftDiv body .fus-pricing .fus-pricing-table > [class*="col-"].fus-notfocus .media-list {
+    width: 100%;
+    padding: 25px;
+  }
+  #pipeshiftDiv body .fus-pricing .fus-pricing-table {
+    display: block;
+    margin: 0;
+    width: 100%;
+  }
+  #pipeshiftDiv body .fus-as-seen > a {
+    margin-bottom: 10px;
+  }
+  #pipeshiftDiv body .fus-tab-content > .tab-pane > .row > [class*="col-"].fus-photo img {
+    max-width: 100%;
+  }
+  #pipeshiftDiv body footer ul > li > a {
+    margin-bottom: 0;
+    display: inline-block;
+  }
+}
+.youtube_player iframe {
+  min-height: 450px;
+  display: block!important;
+}

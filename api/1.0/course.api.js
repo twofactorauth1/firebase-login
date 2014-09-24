@@ -234,20 +234,25 @@ _.extend(api.prototype, baseApi.prototype, {
     getVideoForCurrentUser: function (req, resp) {
         var courseId = req.params.id;
         var videoId = req.params.videoId;
+        //
+        if (!courseId) {
+            return this.wrapError(resp, 400, null, "Invalid parameter for ID");
+        }
+        courseId = parseInt(courseId);
+        //
         var self = this;
         if (courseId) {
-            courseDao.findById(courseId, function (error, course) {
+            courseDao.getCourseByIdForSubscriber(courseId, function (error, course) {
                     if (error || !course) {
                         var msg = "Error getting course: " + (error != null ? error.message : "");
                         return self.wrapError(resp, 500, msg, msg, msg);
                     } else {
-                        subscriberDao.find({courseId: courseId, email: self.user.email}, function (error, docs) {
+                        subscriberDao.findOne({courseId: courseId, email: req.user.get("email")}, function (error, subscriber) {
                             if (error) {
                                 return self.wrapError(resp, 500, error);
-                            } else if (docs == null || docs.length == 0) {
+                            } else if (subscriber == null) {
                                 return self.wrapError(resp, 500, "Error: not subscribed.");
                             } else {
-                                var subscriber = docs[0];
                                 var video = getVideoById(course, videoId);
                                 if (video == null) {
                                     return self.wrapError(resp, 500, "Error: video not found.");
@@ -287,7 +292,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     var emailsCount = emailsToSubscribe.length;
                     for (var i = 0; i < emailsCount; i++) {
                         var email = emailsToSubscribe[i];
-                        courseDao.findById(courseId, function (error, course) {
+                        courseDao.getCourseById(courseId, null, function (error, course) {
                             if (error || !course) {
                                 self.wrapError(resp, 500, error, "Error finding course");
                             } else {
@@ -320,9 +325,10 @@ function isUserPaidForCourse(user, course) {
 
 function getVideoById(course, videoId) {
     var result = null;
-    for (var i = 0; i < course.videos.length; i++) {
-        var video = course.videos[i];
-        if (video._id == videoId) {
+    var videos = course.get("videos");
+    for (var i = 0; i < videos.length; i++) {
+        var video = videos[i];
+        if (video.videoId == videoId) {
             result = video;
             break;
         }
@@ -331,12 +337,15 @@ function getVideoById(course, videoId) {
 }
 
 function checkIfVideoAlreadySent(subscriber, video) {
-    var subscribeDate = subscriber.subscribeDate;
-    var timezoneOffset = subscriber.timezoneOffset == null ? 0 : subscriber.timezoneOffset;
+    var subscribeDate = subscriber.get("subscribeDate");
+    var timezoneOffset = subscriber.get("timezoneOffset") == null ? 0 : subscriber.get("timezoneOffset");
     return checkIfDateAlreadyPassed(subscribeDate, video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
 }
 
 function checkIfDateAlreadyPassed(startDate, daysShift, hoursValue, minutesValue, timezoneOffset) {
+    if (typeof startDate == 'string' || startDate instanceof String) {
+        startDate = new Date(startDate);
+    }
     var shiftedUtcDate = new Date(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate() + daysShift, startDate.getUTCHours(), startDate.getUTCMinutes(), startDate.getUTCSeconds());
     shiftedUtcDate.setUTCHours(hoursValue);
     shiftedUtcDate.setUTCMinutes(minutesValue + timezoneOffset);

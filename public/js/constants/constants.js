@@ -216,6 +216,13 @@ define([], function () {
                 PHONE: "p",
                 EMAIL: "e"
             }
+        },
+
+        known_file_types: {
+            IMAGE: [ "png", "jpg", "jpeg"],
+            DOCUMENT: [ "doc", "txt"],
+            VIDEO: [ "mp4" ],
+            AUDIO: [ "mp3" ]
         }
     };
 

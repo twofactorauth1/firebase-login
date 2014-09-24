@@ -8,7 +8,7 @@
 <div ng-show="component" class="component image-text-v1 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};' data-class="image-text" data-id="{{component._id}}">
     <div class="component-body" id="{{component.anchor}}">
         <div class="inner-page row">
-            <div class="col-sm-8 col-xs-12 pull-right">
+            <div class="col-sm-8 col-xs-12 pull-right" style="padding-left:30px;">
 
                 <h3 class="image-text-title">
                     <div class="editable" data-class="title">
@@ -24,8 +24,9 @@
                     </div>
                 </div>
 
-                <a ng-show="component.btn.url" class="btn btn-outline btn-lg" href="{{component.btn.url}}"> {{component.btn.text}} <span
-                        class="fa fa-arrow-circle-o-right"></span></a>
+                <a ng-show="component.btn.url" class="btn btn-primary btn-lg" href="{{component.btn.url}}">
+                    <i class="{{component.btn.icon}}"></i>
+                    {{component.btn.text}} </a>
 
             </div>
             <div class="clearfix mb10 visible-xs"></div>
@@ -41,6 +42,3 @@
         <div class="clearfix"></div>
     </div>
 </div>
-
-
-

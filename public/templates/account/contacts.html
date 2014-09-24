@@ -407,7 +407,7 @@ CONTACT DETAILS VIEW
                 {{> contact-details}}
             </div>
 
-            <div class="col-md-6 activity-section">
+            <div class="col-sm-6 row hidden-xs activity-section">
                 <h3 class="profile-name col-xs-6">Activity with {{contact.first}}</h3>
                 <div class="col-xs-6">
                     <select class="pull-right form-control chosen-select activity-select" data-placeholder="Activity Type">
@@ -421,9 +421,108 @@ CONTACT DETAILS VIEW
                         <option value="reviews">Reviews</option>
                     </select>
                 </div>
-                <hr class="clearfix mb30"></hr>
+                <hr class="clearfix mb30">
                 <div class="smart-timeline">
                     <ul class="smart-timeline-list">
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>just now</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <a href="javascript:void(0);">
+                                        <span class="label label-default">Email</span> from Sarah K.
+                                    </a>
+                                </p>
+                                <p>
+                                    Promotion email based on {{contact.first}} birthday.
+                                </p>
+                                <p>
+                                    <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a>
+                                </p>
+
+
+
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <img src="../images/photos/loggeduser.png" width="32" height="32">
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>12 Mar, 2013</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <span class="label label-default">Tweet</span> by {{contact.first}} {{contact.last}}.
+                                </p>
+                                <p>
+                                    I Love <strong>Yoga One</strong>!
+                                </p>
+                                <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Reply to Tweet</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>1 min ago</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <span class="label label-default">Call</span> from Sarah K.
+                                </p>
+
+                                <p>
+                                    Successful Thank you call and get feedback on Customer Service.
+                                </p>
+                                <p>
+                                    <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-phone-square"></i> Listen to the Call</a>
+                                </p>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>5 hrs ago</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <span class="label label-default">Viewed</span> Profile
+                                </p>
+
+                                <br>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                               <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>yesterday</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <a href="javascript:void(0);">
+                                       <span class="label label-default">Update</span> phone number
+                                    </a>
+                                </p>
+                                <p>
+                                    <span class="strike">619-568-4989</span><br>
+                                    619-574-5849
+                                </p>
+                            </div>
+                        </li>
+                        <li class="text-center">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-default"><i class="fa fa-arrow-down text-muted"></i> LOAD MORE</a>
+                        </li>
                     </ul>
                 </div>
             </div>

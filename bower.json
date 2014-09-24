@@ -79,7 +79,8 @@
     "angular-isotope": "~0.1.14",
     "isotope": "2.0.0",
     "components-font-awesome": "~4.2.0",
-    "blueimp-bootstrap-image-gallery": "~3.1.1"
+    "blueimp-bootstrap-image-gallery": "~3.1.1",
+     "angular-timer":"1.1.7"
   },
   "resolutions": {
     "angular": "1.2.25",

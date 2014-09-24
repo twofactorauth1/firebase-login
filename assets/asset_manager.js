@@ -46,7 +46,7 @@ module.exports = {
                     self.log.debug('S3 upload complete');
                     console.dir(value);
                     asset.set('url', value.url);
-                    uploadPromise.resolve();
+                    uploadPromise.resolve(value);
                 }
             });
 
@@ -54,14 +54,14 @@ module.exports = {
             uploadPromise.resolve();
         }
         //create record
-        $.when(uploadPromise).done(function(){
+        $.when(uploadPromise).done(function(file){
             assetDao.saveOrUpdate(asset, function(err, value){
                 if(err) {
                     self.log.error('Exception during asset creation: ' + err);
                     fn(err, null);
                 } else {
                     self.log.debug('<< createAsset');
-                    fn(null, value);
+                    fn(null, value, file);
                 }
             });
         });

@@ -29,7 +29,7 @@ mainApp.factory('pagesService', ['websiteService','$http', function (websiteServ
                                 callback("page not found",null);
                             }
                         }).error(function (err) {
-                            console.log(err, "PageService >> DB-Hit >> ERROR");
+                            console.log("PageService >> DB-Hit >> ERROR");
                             callback(err,null);
                         });
                 }

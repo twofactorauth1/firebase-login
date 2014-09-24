@@ -15,6 +15,8 @@ require.config({
         'angularRoute': 'libs/angular-route/angular-route',
         'angularSanitize': 'libs/angular-sanitize/angular-sanitize.min',
         'angularResource': 'libs/angular-resource/angular-resource.min',
+        'angularUI': 'libs/angular-ui/build/angular-ui.min',
+        'angularSortable': 'libs/angular-ui/modules/directives/sortable/sortable',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
         'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
         'underscore': 'libs/underscore/underscore',
@@ -42,6 +44,7 @@ require.config({
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
+        'stateNavDirective': '/angular_admin/directives/state_nav',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -79,6 +82,8 @@ require.config({
         'angularRoute': {deps: ['angular']},
         'angularSanitize': {deps: ['angular']},
         'angularResource': {deps: ['angular']},
+        'angularUI': {deps: ['angular']},
+        'angularSortable': {deps: ['angular']},
         'angularAMD': {deps: ['angular']},
         'bootstrap': {deps: ['jquery']},
         'underscore': {deps: ['jquery']},

@@ -1,4 +1,7 @@
-<div class="component feature-list-v3 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};' data-class="feature-list-v3" data-id="{{component._id}}" >
+<div class="component feature-list-v3 {{component.bg.img.parallax?'parallax':''}}" parallax-background
+     parallax-ratio="0.4"
+     style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};'
+     data-class="feature-list-v3" data-id="{{component._id}}">
 
     <div class="page">
         <div class="row inner-page">
@@ -19,7 +22,8 @@
                 <div ng-repeat="feature in component.features track by $index">
                     <div class="col-sm-4 feature">
                         <div class="feature-single feature-single-0">
-                            <span ng-show="feature['feature-icon']" class="feature-icon {{feature['feature-icon']}}"></span>
+                            <span ng-show="feature['feature-icon']"
+                                  class="feature-icon {{feature['feature-icon']}}"></span>
 
                             <img ng-show="feature['feature-image']" src="{{feature['feature-image']}}"/>
 
@@ -30,12 +34,12 @@
                             </h3>
                             <div class="feature-subtitle">
                                 <div class="editable" data-class="feature-subtitle">
-                                   <span ng-bind-html="feature['feature-subtitle']"></span>
+                                    <span ng-bind-html="feature['feature-subtitle']"></span>
                                 </div>
                             </div>
-                            <div ng-show="feature.btn.url">
+                            <div class="text-center" ng-show="feature.btn.url">
                                 <a href="{{feature.btn.url}}"
-                                   class="btn btn-primary feature-btn">{{feature.btn.text}}</a>
+                                   class="btn btn-primary">{{feature.btn.text}}</a>
                             </div>
                         </div>
                     </div>

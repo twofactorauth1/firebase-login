@@ -6,6 +6,6 @@ angular.module('var.directives').directive('videoTitle', function () {
             width: "@"
         },
         restrict: 'E',
-        template: '<div style="width:{{width}}" class="single-line-text" tooltip="{{video.videoTitle}}" tooltip-placement="bottom">{{video.videoTitle}}</div>'
+        template: '<div style="width:{{width}};color: #326c94;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;width: 160px;" class="single-line-text" tooltip="{{video.videoTitle}}" tooltip-placement="bottom">{{video.videoTitle}}</div>'
     }
 });
