@@ -1,7 +1,11 @@
 <div style="">
   <div class="pageheader row">
     <div class="col-xs-8">
-      <button state-nav="customer" id="btn-back-to-contact" class="btn btn-success pull-left" type="button">
+      <button state-nav="customer" id="btn-back-to-contact" class="btn btn-success pull-left" type="button" ng-show="currentState == 'customerAdd'">
+        <span class="fa fa-chevron-left"></span>
+        <span class="hidden-xs">Back</span>
+      </button>
+      <button state-nav="customerDetail" state-id="{{customerId}}" id="btn-back-to-contact" class="btn btn-success pull-left" type="button" ng-show="currentState == 'customerEdit'">
         <span class="fa fa-chevron-left"></span>
         <span class="hidden-xs">Back</span>
       </button>
@@ -310,7 +314,7 @@
               <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal">OK</button>
+              <button type="button" class="btn btn-primary btn-delete-contact-ok" id="" data-dismiss="modal" ng-click="customerDeleteFn()">OK</button>
               <button type="button" class="btn btn-primary" id="" data-dismiss="modal">cancel</button>
             </div>
           </div>

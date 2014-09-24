@@ -18,6 +18,14 @@ define(['app'], function (app) {
             });
         };
 
+        this.deleteCustomer = function (id, fn) {
+            var apiUrl = baseUrl + ['contact', id].join('/');
+            $http.delete(apiUrl)
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
+        };
+
         this.postCustomer = function (customer, fn) {
             var apiUrl = baseUrl + ['contact'].join('/');
             $http.post(apiUrl, customer)

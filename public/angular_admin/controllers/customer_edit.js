@@ -1,6 +1,6 @@
 define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutils'], function(app) {
     app.register.controller('CustomerEditCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', function ($scope, CustomerService, $stateParams, $state) {
-        var displayAddressCharLimit = 8;
+        var displayAddressCharLimit = 2;
         $scope.currentState = $state.current.name;
         $scope.customerId = $stateParams.id;
         $scope.modifyAddress = {};
@@ -75,11 +75,16 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
 
         $scope.customerAddressWatchFn = function (index) {
             $scope.$watch('customer.details[0].addresses[' + index + '].displayName', function (newValue, oldValue) {
-                if (newValue && newValue.length > displayAddressCharLimit) {
+                if (newValue && (newValue.length % displayAddressCharLimit === 0)) {
                     CustomerService.getGeoSearchAddress(newValue, function (data) {
                         if (data.error === undefined) {
-                            data['displayName'] = newValue;
-                            $scope.customer.details[0].addresses[index] = data;
+                            $scope.customer.details[0].addresses[index].address = data.address;
+                            $scope.customer.details[0].addresses[index].address2 = data.address2;
+                            $scope.customer.details[0].addresses[index].state = data.state;
+                            $scope.customer.details[0].addresses[index].country = data.country;
+                            $scope.customer.details[0].addresses[index].countryCode = data.countryCode;
+                            $scope.customer.details[0].addresses[index].lat = data.lat;
+                            $scope.customer.details[0].addresses[index].lon = data.lon;
                         }
                     });
                 }
@@ -117,6 +122,11 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
 
         $scope.customerAddEmailFn = function () {
             $scope.customer.details[0].emails.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), email: ''});
+        };
+
+        $scope.customerDeleteFn = function () {
+            CustomerService.deleteCustomer($scope.customerId, function (customer) {});
+            $state.go('customer');
         };
 
         if ($scope.customerId) {
