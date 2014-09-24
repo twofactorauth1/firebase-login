@@ -23,7 +23,7 @@
     </div>
 </div>
 
-<iframe id="iframe-website" name="iframe-website" onLoad="alert('Test');" src="/?editor=true" style="width: 100%; height: 100%; border: 1px solid; min-height: 371px;"></iframe>
+<iframe id="iframe-website" name="iframe-website" onload="addAttachment()" src="/?editor=true" style="width: 100%; height: 100%; border: 1px solid; min-height: 371px;"></iframe>
 
 <div class="rightpanel rightpanel-website">
     <!-- Nav tabs -->
@@ -53,13 +53,8 @@
                     <div class="mb20"></div>
                     <div id="nestable">
                         <h4>Page Components</h4>
-                        <ul class="list logList well">
-                          <li ng-repeat="entry in sortingLog track by $index" class="logItem">
-                            {{entry}}
-                          </li>
-                        </ul>
                         <ul ui-sortable="sortableOptions" ng-model="components">
-						  <li ng-repeat="item in components" class="dd-item dd3-item" data-id="14" data-section="services">
+						  <li ng-repeat="item in components" class="dd-item dd3-item" data-id="14" data-section="services" data-componentId="{{item._id}}">
                                 <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
                                 </div>
                                 <div class="dd3-content">{{item.type}}</div>

@@ -50,9 +50,9 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule'], funct
             }))
             .state('customerAdd', angularAMD.route({
                 url: '/customer/add',
-                templateUrl: '/angular_admin/views/customer_add.html',
-                controller: 'CustomerAddCtrl',
-                controllerUrl: '/angular_admin/controllers/customer_add.js'
+                templateUrl: '/angular_admin/views/customer_edit.html',
+                controller: 'CustomerEditCtrl',
+                controllerUrl: '/angular_admin/controllers/customer_edit.js'
             }))
             .state('customerDetail', angularAMD.route({
                 url: '/customer/:id',
