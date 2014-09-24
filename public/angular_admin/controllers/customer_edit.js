@@ -1,8 +1,8 @@
 define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutils'], function(app) {
     app.register.controller('CustomerEditCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', function ($scope, CustomerService, $stateParams, $state) {
-        console.log($stateParams, $state.current.name);
         var displayAddressCharLimit = 8;
         $scope.currentState = $state.current.name;
+        $scope.customerId = $stateParams.id;
         $scope.modifyAddress = {};
         $scope.customer = {
             _id: null,
@@ -42,29 +42,6 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
                 }
             ],
         };
-
-        $scope.$watch('fullName', function (newValue, oldValue) {
-            if (newValue) {
-                var nameSplit = newValue.split(' ');
-                if (nameSplit.length >= 3) {
-                    $scope.customer.first = nameSplit[0];
-                    $scope.customer.middle = nameSplit[1];
-                    $scope.customer.last = nameSplit[2];
-                } else if (nameSplit.length == 2) {
-                    $scope.customer.first = nameSplit[0];
-                    $scope.customer.middle = '';
-                    $scope.customer.last = nameSplit[1];
-                } else if (nameSplit.length == 1) {
-                    $scope.customer.first = nameSplit[0];
-                    $scope.customer.middle = '';
-                    $scope.customer.last = '';
-                } else {
-                    $scope.customer.first = '';
-                    $scope.customer.middle = '';
-                    $scope.customer.last = '';
-                }
-            }
-        });
 
         $scope.twoNetSubscribeFn = function () {
             CustomerService.postTwoNetSubscribe($scope.customer._id, function (data) {
@@ -109,8 +86,6 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
             });
         };
 
-        $scope.customerAddressWatchFn(0);
-
         $scope.customerAddAddressFn = function () {
             $scope.customer.details[0].addresses.push(
                 {
@@ -143,5 +118,46 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
         $scope.customerAddEmailFn = function () {
             $scope.customer.details[0].emails.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), email: ''});
         };
+
+        if ($scope.customerId) {
+            CustomerService.getCustomer($scope.customerId, function (customer) {
+                $scope.customer = customer;
+                $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
+                if ($scope.customer.details[0].addresses.length) {
+                    $scope.customer.details[0].addresses.forEach(function (value, index) {
+                        $scope.customerAddressWatchFn(index);
+                    });
+                } else {
+                    $scope.customerAddAddressFn();
+                }
+
+            });
+        } else {
+            $scope.customerAddressWatchFn(0);
+        }
+
+        $scope.$watch('fullName', function (newValue, oldValue) {
+            if (newValue) {
+                var nameSplit = newValue.split(' ');
+                if (nameSplit.length >= 3) {
+                    $scope.customer.first = nameSplit[0];
+                    $scope.customer.middle = nameSplit[1];
+                    $scope.customer.last = nameSplit[2];
+                } else if (nameSplit.length == 2) {
+                    $scope.customer.first = nameSplit[0];
+                    $scope.customer.middle = '';
+                    $scope.customer.last = nameSplit[1];
+                } else if (nameSplit.length == 1) {
+                    $scope.customer.first = nameSplit[0];
+                    $scope.customer.middle = '';
+                    $scope.customer.last = '';
+                } else {
+                    $scope.customer.first = '';
+                    $scope.customer.middle = '';
+                    $scope.customer.last = '';
+                }
+            }
+        });
+
     }]);
 });
