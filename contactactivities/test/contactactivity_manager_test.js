@@ -45,6 +45,10 @@ exports.subscription_dao_test = {
     },
 
     testCreateContactActivity: function(test) {
+
+        var date = new Date();
+        testContext.date = date;
+
         var ca = new $$.m.ContactActivity({
             accountId: 0,
             contactId: 0,
@@ -52,8 +56,8 @@ exports.subscription_dao_test = {
             note: "Page View",
             detail:"Viewed page",
             duration:null,
-            start:new Date(), //datestamp
-            end:new Date()   //datestamp
+            start:date, //datestamp
+            end:date   //datestamp
         });
 
         manager.createActivity(ca, function(err, value){
@@ -96,15 +100,52 @@ exports.subscription_dao_test = {
     },
 
     testFindActivitiesByActivityType: function(test) {
-        test.done();
+        test.expect(2);
+        var activityTypeAry = [$$.m.ContactActivity.types.PAGE_VIEW];
+
+        manager.findActivities(null, null, activityTypeAry, null, null, null, null, null, null, function(err, list){
+            if(err) {
+                test.ok(false, 'list activities by activity type failed.');
+                test.done();
+            } else {
+                test.equals(1, list.length);
+                test.equals(0, list[0].get('contactId'));
+                test.done();
+            }
+        });
+
     },
 
     testFindActivitiesByText: function(test) {
-        test.done();
+        var text = 'ge';
+        test.expect(2);
+        manager.findActivities(null, null, null, text, null, null, null, null, null, function(err, list){
+            if(err) {
+                test.ok(false, 'list activities by text failed.');
+                test.done();
+            } else {
+                test.equals(1, list.length);
+                test.equals(0, list[0].get('contactId'));
+                test.done();
+            }
+        });
     },
 
     testFindActivitiesByDateRange: function(test) {
-        test.done();
+        var date = testContext.date;
+
+        manager.findActivities(null, null, null, null, null, date, date, null, null, function(err, list){
+            if(err) {
+                test.ok(false, 'list activities by date range.');
+                test.done();
+            } else {
+                test.equals(1, list.length);
+                test.equals(0, list[0].get('contactId'));
+                test.done();
+            }
+        });
+
+
     }
 
 

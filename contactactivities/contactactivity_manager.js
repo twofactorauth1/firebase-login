@@ -75,13 +75,14 @@ module.exports = {
         if(contactId) {
             queryObj.contactId = contactId;
         }
-        if(activityTypeAry && isArray(activityTypeAry)) {
+        if(activityTypeAry && $.isArray(activityTypeAry)) {
             queryObj.activityType = {'$in' : activityTypeAry};
         } else if(activityTypeAry) {
             queryObj.activityType = activityTypeAry;
         }
         if(noteText) {
-            queryObj.note = '/' + noteText + '/';
+            //queryObj.note = '/' + noteText + '/';
+            queryObj.note = {'$regex': noteText, '$options':'i'};
         }
         if(detailText) {
             queryObj.detail = '/' + detailText + '/';
