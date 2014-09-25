@@ -1,23 +1,20 @@
-<div class="container" id="{{component.anchor}}">
-    <div class="col-md-12" >
-        <h1 class="center">{{component.title}}</h1>
+<div class="container">
+    <div class="col-md-12"><br>
+        <h1 class="center editable">{{component.title}}</h1><br>
         <div class="well">
             <div id="myCarousel" class="carousel slide">
                 <div class="carousel-inner">
-                    <div data-ng-repeat="collection in component.collections">
-                    <div class="item">
-                        <div class="row {{$first?'active':''}}">
-                         <div  data-ng-repeat="image in collection">
-                              <div class="col-sm-3" style="float: left"><a data-target=""><img ng-src="{{image.url}}" alt="Image" class="img-responsive"></a>
+                    <div class="item {{$first?'active':''}}" data-ng-repeat="collection in component.collections">
+                        <div class="row">
+                            <div class="col-sm-3" data-ng-repeat="image in collection"><a href="" class="{{isFirst?'':'thumbnail'}}">
+                                <img src="{{image.url}}" alt="Image" class="img-responsive"/></a>
                             </div>
                         </div>
                     </div>
-                    </div>
-                 </div>
-                 <a class="left carousel-control" data-target="#myCarousel" data-slide="prev">‹</a>
-                <a class="right carousel-control" data-target="#myCarousel" data-slide="next">›</a>
+               </div>
+                <a class="left carousel-control glyphicon glyphicon-chevron-left" href="#myCarousel"style="background: none" data-slide="prev"></a>
+                <a class="right carousel-control glyphicon glyphicon-chevron-right" href="#myCarousel" data-slide="next"></a>
             </div>
         </div>
     </div>
-</div>
 </div>
