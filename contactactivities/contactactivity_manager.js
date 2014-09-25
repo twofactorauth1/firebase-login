@@ -30,6 +30,21 @@ module.exports = {
         //TODO
     },
 
+    getActivityById: function(activityId, fn) {
+        var self = this;
+        log.debug('>> getActivityById');
+
+        dao.getById(activityId, $$.m.ContactActivity, function(err, value){
+            if(err) {
+                log.error('Error getting activity: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< getActivityById');
+                fn(null, value);
+            }
+        });
+    },
+
     listActivities: function(accountId, skip, limit, fn) {
         var self = this;
         log.debug('>> listActivities');
