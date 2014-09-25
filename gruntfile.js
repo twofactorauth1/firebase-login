@@ -231,8 +231,12 @@ module.exports = function(grunt) {
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
     grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
 
+    /*
+     * This task is run by CI.
+     */
     grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
-            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets']);
+            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities']);
+
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
     grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);
