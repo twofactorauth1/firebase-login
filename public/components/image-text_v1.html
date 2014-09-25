@@ -5,40 +5,53 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div ng-show="component" class="component image-text-v1 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};' data-class="image-text" data-id="{{component._id}}">
-    <div class="component-body" id="{{component.anchor}}">
-        <div class="inner-page row">
-            <div class="col-sm-8 col-xs-12 pull-right" style="padding-left:30px;">
 
+<style>
+    /*title*/
+    #paradata span h4{
+        font-size: 22px;
+        color:{{ component.textcolor.title || 'inherit'}};
+    }
+    /*subtitle*/
+    #paradata span h5{
+       color:{{ component.textcolor.subtitle || 'inherit'}};
+       font-size: 18px;
+    }
+    /*para-body*/
+    #paradata span p{
+       color:{{ component.textcolor.body || 'inherit'}};
+    }
+</style>
+<div ng-show="component" class="component image-text-v1 {{component.bg.img.parallax?'parallax':''}}" parallax-background
+     parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0"
+     style='width: 100%;height:100%;background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'
+     data-class="image-text" data-id="{{component._id}}">
+    <div class="component-body" id="{{component.anchor}}">
+        <div class="row">
+            <div class="col-md-12 ">
                 <h3 class="image-text-title">
-                    <div class="editable" data-class="title">
+                    <div class="editable text-center" data-class="title">
                         {{component.title}}
                     </div>
                 </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <img src="{{component.imgurl}}" class="img-circle">
+            </div>
+            <div class="col-md-8">
 
-
-                <div class="mb15"></div>
-                <div class="image-text-text">
-                    <div class="editable" data-class="text">
-                        <span ng-bind-html="component.text"></span>
-                    </div>
+                <div id="paradata" class="editable text-left" data-class="text" >
+                    <span ng-bind-html="component.text"></span>
                 </div>
-
                 <a ng-show="component.btn.url" class="btn btn-primary btn-lg" href="{{component.btn.url}}">
                     <i class="{{component.btn.icon}}"></i>
                     {{component.btn.text}} </a>
-
             </div>
-            <div class="clearfix mb10 visible-xs"></div>
-
-            <div class="pull-{{component.imagePosition}} col-sm-4 col-xs-12 image-text-image">
-                <div class="editable" data-class="url">
-                    <img src="{{component.imgurl}}" class="img-responsive">
-                </div>
-                <p class="center editable" data-class="caption">{{component.caption}}</p>
-            </div>
-
         </div>
-        <div class="clearfix"></div>
     </div>
 </div>
+
+
+
