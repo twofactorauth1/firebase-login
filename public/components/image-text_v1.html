@@ -5,6 +5,7 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
+
 <div ng-show="component" class="component image-text-v1
 {{component.bg.img.parallax?'parallax':''}}" parallax-background
      parallax-ratio=".4" parallax-vertical-offset="0"
@@ -27,7 +28,7 @@ url("{{component.bg.img.url}}") no-repeat fixed; background:
 
                 <div class="mb15"></div>
                 <div class="image-text-text">
-                    <div class="editable" data-class="text">
+                    <div class="editable" data-class="text" >
                         <span ng-bind-html="component.text"></span>
                     </div>
                 </div>
@@ -43,7 +44,7 @@ btn-lg" href="{{component.btn.url}}">
             <div class="pull-{{component.imagePosition}} col-sm-4
 col-xs-12 image-text-image">
                 <div class="editable" data-class="url">
-                    <img src="{{component.imgurl}}" class="img-responsive">
+                    <img src="{{component.imgurl}}" class="img-responsive {{component.imagestyle}}">
                 </div>
                 <p class="center editable"
                    data-class="caption">{{component.caption}}</p>
