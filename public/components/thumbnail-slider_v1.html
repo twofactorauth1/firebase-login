@@ -10,7 +10,7 @@
                     <div class="item {{$first?'active':''}}" data-ng-repeat="collection in component.collections">
                         <div class="row">
                             <div class="col-sm-3 hideText" data-ng-repeat="image in collection"> <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center">
-                                <img style="width: {{image.width}};height: {{image.height}};" src="{{image.url}}" alt="Image" class="img-responsive hover"/> <span class="text">{{image.text}}</span> </a>
+                                <img style="width: {{image.width}};height: {{image.height}};" src="{{image.url}}" alt="Image" class="img-responsive hover"/> <span style="color: {{collection.imagetextcolor}};" >{{image.text}}</span> </a>
                             </div>
                         </div>
                     </div>
