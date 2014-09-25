@@ -43,6 +43,7 @@ require.config({
         'twoNetService': '/angular_admin/services/two_net',
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
+        'customerHelperService': '/angular_admin/services/customer_helper',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         
