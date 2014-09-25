@@ -41,5 +41,22 @@ define(['app'], function (app) {
             });
 		};
 
+		//page/:id/components/all
+		this.updateAllComponents = function(pageId, componentId, componentJSON, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', 'all'].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: JSON.stringify(componentJSON)
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+                fn(err);
+            });
+		};
+
 	});
 });

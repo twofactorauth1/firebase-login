@@ -77,6 +77,16 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             $scope.sortingLog.push('Stop: ' + logEntry);
         };
 
+        $scope.savePage = function() {
+            var componentJSON = that.currentPageContents.components;
+            console.log('componentJSON >>> ', componentJSON);
+            var pageId = that.currentPageContents._id;
+            console.log('pageId >>> ', pageId);
+            WebsiteService.updateAllComponents(pageId, componentJSON, function(data) {
+                console.log('Success: ', data);
+            });
+        };
+
         var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
         console.log('iFrame Contents: ', iframe_contents);
 
