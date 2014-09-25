@@ -51,6 +51,11 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
         $scope.customerSaveFn = function () {
             CustomerService.saveCustomer($scope.customer, function (customer) {
                 $scope.customer = customer;
+                if ($scope.currentState == 'customerAdd') {
+                    $state.go('customer');
+                } else {
+                    $state.go('customerDetail', {id: $scope.customerId});
+                }
             });
         };
         $scope.addDeviceFn = function () {

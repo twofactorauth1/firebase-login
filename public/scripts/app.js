@@ -54,7 +54,8 @@ var mainApp = angular
             .when('/author/:authorname', {
                 templateUrl: '../views/blog.html',
                 controller: 'BlogCtrl as blog'
-            });
+            })
+            .otherwise({redirectTo: '/'});
     }])
     .controller('LayoutCtrl', function($scope, parallaxHelper){
         $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);
