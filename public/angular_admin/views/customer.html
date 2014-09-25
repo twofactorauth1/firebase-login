@@ -178,7 +178,7 @@
                             <div class="media-body col-xs-12 hidden-xs">
 
 
-                                <h4 class="person-name">{{customer.first}} {{customer.middle}} {{customer.last}}</h4>
+                                <h4 class="person-name">{{customer.first + ' ' + customer.middle + ' ' + customer.last | limitTo : 20}}{{(customer.first + ' ' + customer.middle + ' ' + customer.last).length > 20 ? '...' : ''}}</h4>
 
 
 
