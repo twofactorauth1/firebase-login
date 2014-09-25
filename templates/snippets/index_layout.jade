@@ -32,6 +32,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main")
     body(class='theme-main navbar-v#{ account.website.nav_version }', ng-controller="LayoutCtrl as layout", ng-cloak)
         block body_content
             div(id='fb-root')
+            div(id='toolbar')
         block content
         block body_scripts
             include index_body_scripts
