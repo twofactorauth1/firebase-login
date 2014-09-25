@@ -1,13 +1,13 @@
 <div class="container">
     <div class="col-md-12"><br>
         <h1 class="center editable">{{component.title}}</h1><br>
-        <div class="well">
+        <div class="well" style="background: none">
             <div id="myCarousel" class="carousel slide">
                 <div class="carousel-inner">
                     <div class="item {{$first?'active':''}}" data-ng-repeat="collection in component.collections">
                         <div class="row">
-                            <div class="col-sm-3" data-ng-repeat="image in collection"><a href="" class="{{isFirst?'':'thumbnail'}}">
-                                <img src="{{image.url}}" alt="Image" class="img-responsive"/></a>
+                            <div class="col-sm-3 hideText" data-ng-repeat="image in collection"> <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center">
+                                <img src="{{image.url}}" alt="Image" class="img-responsive hover"/> <span class="text">{{image.text}}</span> </a>
                             </div>
                         </div>
                     </div>
