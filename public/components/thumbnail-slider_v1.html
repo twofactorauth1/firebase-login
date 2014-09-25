@@ -3,6 +3,9 @@
         <h1 class="center editable">{{component.title}}</h1><br>
         <div class="well" style="background: none">
             <div id="myCarousel" class="carousel slide">
+                <ol class="carousel-indicators" style="margin-top: 20px">
+                    <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in component.collections"></li>
+                </ol>
                 <div class="carousel-inner">
                     <div class="item {{$first?'active':''}}" data-ng-repeat="collection in component.collections">
                         <div class="row">
