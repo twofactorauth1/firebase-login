@@ -13,5 +13,10 @@ define(['app', 'customerService', 'stateNavDirective'], function(app) {
                 $(id).addClass('hidden');
             }
         };
+        $scope.importContactFn = function () {
+            CustomerService.postFullContact($scope.customerId, function (data) {
+                console.info(data);
+            });
+        };
     }]);
 });
