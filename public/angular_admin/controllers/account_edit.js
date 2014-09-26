@@ -1,4 +1,4 @@
-define(['app', 'userService', 'underscore', 'commonutils'], function(app) {
+define(['app', 'userService', 'underscore', 'commonutils','formValidationDirective'], function(app) {
     app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', function ($scope, $stateParams, UserService) {
         var phoneCharLimit = 4;
         if ($stateParams.focus)
