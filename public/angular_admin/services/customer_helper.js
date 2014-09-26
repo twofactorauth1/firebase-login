@@ -8,7 +8,7 @@ define(['app', 'constants'], function(app) {
 			return type == null ? "" : type.label;
 		};
 
-		this.getBestEmail = function(contact) {
+		this.checkBestEmail = function(contact) {
 			if (contact.details != null && contact.details.length > 0) {
 				//see if we have a google contact, that's the best source of email
 				var details = _.findWhere(contact.details, {
@@ -27,7 +27,7 @@ define(['app', 'constants'], function(app) {
 			}
 		};
 
-		this.getFacebookId = function(contact) {
+		this.checkFacebookId = function(contact) {
 			if (contact.details != null && contact.details.length > 0) {
 				//see if we have a google contact, that's the best source of email
 				var details = _.findWhere(contact.details, {
@@ -41,7 +41,7 @@ define(['app', 'constants'], function(app) {
 			}
 		}
 
-		this.getTwitterId = function(contact) {
+		this.checkTwitterId = function(contact) {
 			if (contact.details != null && contact.details.length > 0) {
 				//see if we have a google contact, that's the best source of email
 				var details = _.findWhere(contact.details, {
@@ -55,7 +55,7 @@ define(['app', 'constants'], function(app) {
 			}
 		}
 
-		this.getLinkedInId = function(contact) {
+		this.checkLinkedInId = function(contact) {
 			if (contact.details != null && contact.details.length > 0) {
 				//see if we have a google contact, that's the best source of email
 				var details = _.findWhere(contact.details, {
@@ -77,7 +77,7 @@ define(['app', 'constants'], function(app) {
 			}
 		}
 
-		this.getAddress = function(contact) {
+		this.checkAddress = function(contact) {
 			var _address = null;
 			if (contact.details != null && contact.details.length > 0) {
 				for (var i = 0; i < contact.details.length; i++) {

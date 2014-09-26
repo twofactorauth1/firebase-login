@@ -46,6 +46,7 @@ require.config({
         'customerHelperService': '/angular_admin/services/customer_helper',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'stateNavDirective': '/angular_admin/directives/state_nav',
+        'formValidationDirective': '/angular_admin/directives/form_validations',
         
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",

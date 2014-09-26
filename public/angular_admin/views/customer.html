@@ -210,19 +210,19 @@
                             <div class="clearfix mb10"></div>
                             <ul class="social-list hidden-xs">
                                         <li>
-                                             <a ng-show="getBestEmail(customer)" href="mailto:{{email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
+                                             <a ng-show="checkBestEmail(customer)" href="mailto:{{email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
                                         </li>
                                         <li>
-                                        	<a ng-show="getFacebookId(customer)" href="https://www.facebook.com/{{facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                        	<a ng-show="checkFacebookId(customer)" href="https://www.facebook.com/{{facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
                                         </li>
                                          <li>
-                                        	<a ng-show="getTwitterId(customer)" href="https://twitter.com/intent/user?user_id={{twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                        	<a ng-show="checkTwitterId(customer)" href="https://twitter.com/intent/user?user_id={{twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
                                         </li>
                                          <li>
-                                        	<a ng-show="getLinkedInId(customer)" href="{{ linkedInUrl ? linkedInUrl : 'http://www.linkedin.com/profile/view?id='+ linkedInId }}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                        	<a ng-show="checkLinkedInId(customer)" href="{{ linkedInUrl ? linkedInUrl : 'http://www.linkedin.com/profile/view?id='+ linkedInId }}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
                                         </li>         
                                 <li>
-                                    <a ng-show="getAddress(customer)" href="https://www.google.com/maps?q={{address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                                    <a ng-show="checkAddress(customer)" href="https://www.google.com/maps?q={{address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
                                 </li>
                             </ul>
                             <div class="pull-right">

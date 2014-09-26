@@ -8,33 +8,33 @@ define(['app', 'customerService', 'stateNavDirective','customerHelperService'], 
 			return CustomerHelperService.contactLabel(contact);
 		}; 
 		
-		$scope.getBestEmail = function(contact) {
-			var returnVal =  CustomerHelperService.getBestEmail(contact);
+		$scope.checkBestEmail = function(contact) {
+			var returnVal =  CustomerHelperService.checkBestEmail(contact);
 			this.email = contact.email;
 			return returnVal;
 		}; 
 		
-		$scope.getFacebookId = function(contact) {
-			var returnVal =  CustomerHelperService.getFacebookId(contact);
+		$scope.checkFacebookId = function(contact) {
+			var returnVal =  CustomerHelperService.checkFacebookId(contact);
 			this.facebookId = contact.facebookId;
 			return returnVal;
 		}; 
 		
-		$scope.getTwitterId = function(contact) {
-			var returnVal =   CustomerHelperService.getTwitterId(contact);
+		$scope.checkTwitterId = function(contact) {
+			var returnVal =   CustomerHelperService.checkTwitterId(contact);
 			this.twitterId = contact.twitterId;
 			return returnVal;
 		}; 
 		
-		$scope.getLinkedInId = function(contact) {
-			var returnVal = CustomerHelperService.getLinkedInId(contact);
+		$scope.checkLinkedInId = function(contact) {
+			var returnVal = CustomerHelperService.checkLinkedInId(contact);
 			this.linkedInUrl = contact.linkedInUrl;
 			this.linkedInId = contact.linkedInId;
 			return returnVal;
 		}; 
 		
-		$scope.getAddress = function(contact) {
-			var returnVal = CustomerHelperService.getAddress(contact);
+		$scope.checkAddress = function(contact) {
+			var returnVal = CustomerHelperService.checkAddress(contact);
 			this.address = contact.address;
 			return returnVal;
 		}; 
