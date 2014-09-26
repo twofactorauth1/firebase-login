@@ -45,6 +45,7 @@ require.config({
         'websiteService': '/angular_admin/services/website',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'stateNavDirective': '/angular_admin/directives/state_nav',
+        'truncateDirective': '/angular_admin/directives/truncate',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
