@@ -207,6 +207,7 @@ module.exports = function(grunt) {
                     'public/js/ng-indigenous.js':['public/scripts/app.js',
                         'public/scripts/directives/dmStyle.js',
                         'public/scripts/directives/ngEnter.js',
+                        'public/scripts/directives/convertHtml.js',
                         'public/scripts/services/accountService.js',
                         'public/scripts/services/websiteService.js',
                         'public/scripts/services/themeService.js',
