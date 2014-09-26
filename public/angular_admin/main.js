@@ -31,7 +31,7 @@ require.config({
         "xEditable": "libs/angular-xeditable/dist/js/xeditable",
         "ngCsv": "libs/ng-csv/build/ng-csv.min",
         "ngFileUpload": "libs/angular-file-upload/angular-file-upload",
-
+		
         //application related
         'storageutils': 'utils/storageutils',
         'namespaces': 'utils/namespaces',
@@ -43,10 +43,11 @@ require.config({
         'twoNetService': '/angular_admin/services/two_net',
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
+        'customerHelperService': '/angular_admin/services/customer_helper',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'truncateDirective': '/angular_admin/directives/truncate',
-
+        'formValidationDirective': '/angular_admin/directives/form_validations',
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
         "varModules": "/pipeshift/js/varModules",
@@ -74,6 +75,7 @@ require.config({
         "videoPlayerDirective": "/pipeshift/js/modules/video/directive/videoPlayer",
         "psEditableDirective": "/pipeshift/js/modules/video/directive/psEditable",
         "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
+        "constants": 'constants/constants'
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},

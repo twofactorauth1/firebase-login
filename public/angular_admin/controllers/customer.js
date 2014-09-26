@@ -1,8 +1,43 @@
-define(['app', 'customerService', 'stateNavDirective', 'truncateDirective'], function(app) {
-    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', function ($scope, CustomerService) {
+define(['app', 'customerService', 'stateNavDirective','customerHelperService', 'truncateDirective'], function(app) {
+    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService','CustomerHelperService', function ($scope, CustomerService,CustomerHelperService) {
         $scope.customerFilter = {};
         $scope.customerOrder = 'first';
         $scope.customerSortReverse = false;
+		
+		$scope.contactLabel = function(contact) {
+			return CustomerHelperService.contactLabel(contact);
+		}; 
+		
+		$scope.checkBestEmail = function(contact) {
+			var returnVal =  CustomerHelperService.checkBestEmail(contact);
+			this.email = contact.email;
+			return returnVal;
+		}; 
+		
+		$scope.checkFacebookId = function(contact) {
+			var returnVal =  CustomerHelperService.checkFacebookId(contact);
+			this.facebookId = contact.facebookId;
+			return returnVal;
+		}; 
+		
+		$scope.checkTwitterId = function(contact) {
+			var returnVal =   CustomerHelperService.checkTwitterId(contact);
+			this.twitterId = contact.twitterId;
+			return returnVal;
+		}; 
+		
+		$scope.checkLinkedInId = function(contact) {
+			var returnVal = CustomerHelperService.checkLinkedInId(contact);
+			this.linkedInUrl = contact.linkedInUrl;
+			this.linkedInId = contact.linkedInId;
+			return returnVal;
+		}; 
+		
+		$scope.checkAddress = function(contact) {
+			var returnVal = CustomerHelperService.checkAddress(contact);
+			this.address = contact.address;
+			return returnVal;
+		}; 
 
         CustomerService.getCustomers(function (customers) {
             $scope.customers = customers;
@@ -30,7 +65,11 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective'], fun
                     $scope.customerFilter = {};
                 }
             };
+            
+            
 
+
+			
             $scope.$watch('sortOrder', function (newValue, oldValue) {
                 if (newValue) {
                     newValue = parseInt(newValue);
