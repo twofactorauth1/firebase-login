@@ -31,7 +31,7 @@
     "log4js": ">=0.6.10",
     "mandrill-api": "^1.0.39",
     "moment": "2.6.0",
-    "mongoskin": "0.6.1",
+    "mongoskin": "1.4.4",
     "node-uuid": "1.4.1",
     "nodemailer": "0.6.0",
     "oauth": "~0.9.11",
