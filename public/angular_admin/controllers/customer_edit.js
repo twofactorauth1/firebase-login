@@ -1,4 +1,4 @@
-define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutils'], function(app) {
+define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutils','formValidationDirective'], function(app) {
     app.register.controller('CustomerEditCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', function ($scope, CustomerService, $stateParams, $state) {
         var displayAddressCharLimit = 2;
         $scope.currentState = $state.current.name;

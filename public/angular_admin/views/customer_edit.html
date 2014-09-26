@@ -21,7 +21,7 @@
   </div>
   <!-- End Page Header -->
 
-  <div style="min-height: 377px;" id="contact-edit-container" class="contentpanel">
+  <div style="min-height: 377px;" id="contact-edit-container" class="contentpanel">	
     <div class="row">
 
       <div class="col-md-6">
@@ -53,6 +53,7 @@
                                             <span id="hint-last">{{customer.last}}</span>
                                         </code>
                                     </small>
+                                    
                 </div>
 
                 <div class="row">
@@ -161,12 +162,12 @@
                   <!-- ADD NEW PHONE -->
 
                   <div class="row edit-phone-container" data-id="" style="margin-top:8px;" ng-repeat="phone in customer.details[0].phones">
+                   
                     <div class="form-group col-xs-12 col-sm-8 col-md-10">
                       <div class="input-group input-group-lg">
                         <div class="input-group-addon">+1</div>
-                        <input class="input-edit-phone form-control input-lg" value="" type="text" ng-model="phone.number">
-
-                        <div class="input-group-btn">
+                        <input class="input-edit-phone form-control input-lg" validation-type="phone" validate-form-fields value="" type="text" ng-model="phone.number">
+						 <div class="input-group-btn">
                           <button data-toggle="dropdown" class="btn btn-default btn-edit-phone-type dropdown-toggle" data-type="" type="button">
                             <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'm'">mobile</span>
                             <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'h'">home</span>
@@ -188,6 +189,7 @@
                         </div>
                       </div>
                     </div>
+                 
                   </div>
 
 
@@ -195,6 +197,7 @@
                 <span style="margin-top:-15px;" class="col-xs-10">
                                     <small>e.g. (303-555-5555)</small>
                                 </span>
+                                
               </div>
             </div>
             <div class="row">
@@ -207,9 +210,6 @@
               </div>
               <div class="col-xs-10">
                 <div id="edit-addresses-container">
-
-
-
                   <div data-id="llipzogy7u" class="edit-address-container" ng-repeat="address in customer.details[0].addresses">
                     <div class="form form-horizontal">
                       <div class="fg-address-string form-group" ng-hide="getModifyAddressFn($index)">
@@ -279,11 +279,10 @@
                 <div id="edit-emails-container">
 
                   <div class="row edit-email-container" ng-repeat="email in customer.details[0].emails">
-                    <div class="form-group">
-                      <input class="form-control input-edit-email input-lg" placeholder="new email" data-email="" type="email" ng-model="email.email">
+                  	 <div class="form-group">
+                      <input class="form-control input-edit-email  input-lg" validate-form-fields validation-type="email" placeholder="new email" check_email="" data-email="" type="email" ng-model="email.email">                                           
                     </div>
                   </div>
-
                 </div>
               </div>
               <div class="btn btn-primary btn-sm" id="btn-new-address" ng-click="customerAddEmailFn()">Add Email</div>
@@ -349,4 +348,5 @@
     </div>
     <!-- End Change Photo Modal -->
   </div>
+
 </div>

@@ -1,16 +1,20 @@
+<style>
+
+</style>
+
 <div class="container thumbnail-slider-v1">
     <div class="col-md-12"><br>
         <h1 class="center editable">{{component.title}}</h1><br>
         <div class="well" style="background: none">
             <div id="myCarousel" class="carousel slide">
-                <ol class="carousel-indicators" style="margin-top: 20px">
+                <ol class="carousel-indicators">
                     <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in component.collections"></li>
                 </ol>
                 <div class="carousel-inner">
                     <div class="item {{$first?'active':''}}" data-ng-repeat="collection in component.collections">
                         <div class="row">
                             <div class="col-sm-3 hideText" data-ng-repeat="image in collection"> <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center">
-                                <img style="width: {{image.width}};height: {{image.height}};" src="{{image.url}}" alt="Image" class="img-responsive hover"/> <span style="color: {{collection.imagetextcolor}};" >{{image.text}}</span> </a>
+                                <img style="width: {{image.width}}px;height: {{image.height}}px" src="{{image.url}}" alt="Image" class="img-responsive hover"/> <span style="color: {{collection.imagetextcolor}};" >{{image.text}}</span> </a>
                             </div>
                         </div>
                     </div>
