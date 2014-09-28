@@ -535,7 +535,7 @@ _.extend(api.prototype, baseApi.prototype, {
     addComponentToPage: function (req, res) {
         //TODO: Add Security
         var self = this;
-        self.log.debug('>> addComponentToPage');
+        self.log.debug('>> addComponentToPage', req.body);
         var componentObj = req.body;
         //var componentObj = $$.m.cms.modules[req.body.type];
 

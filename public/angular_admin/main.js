@@ -45,6 +45,8 @@ require.config({
         'websiteService': '/angular_admin/services/website',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'stateNavDirective': '/angular_admin/directives/state_nav',
+        'hoverClassDirective': '/angular_admin/directives/hover_class',
+        'confirmClickDirective': '/angular_admin/directives/confirm_click',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",

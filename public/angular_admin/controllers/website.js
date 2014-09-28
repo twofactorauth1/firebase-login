@@ -1,8 +1,9 @@
-define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'userService'], function(app) {
+define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'userService', 'confirmClickDirective
+'], function(app) {
     app.register.controller('WebsiteCtrl', ['$scope', '$window', 'WebsiteService', 'UserService', function ($scope, $window, WebsiteService, UserService) {
-        var user, account, components, currentPageContents, previousComponentOrder = that = this;
+        var user, account, components, currentPageContents, previousComponentOrder, allPages = that = this;
         var iFrame = document.getElementById("iframe-website");
-        console.log('iFrame: ', iFrame);
+        var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
 
          //get user
         UserService.getUser(function (user) {
@@ -18,11 +19,24 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         });
 
         //put iframe contents in scope when loaded
-        $window.addAttachment = function(){
+        $window.iframeLoaded = function(){
+            // $scope.addNoOutlineClass();
+            //console.log('iFrame: ', iFrameContents.getElementById('body').querySelectorAll('.editable'));
             // console.log('Inner HTML: ', frames["iframe-website"].document.getElementsByTagName("body")[0].innerHTML);
             // $scope.attachments.push(JSON.parse(frames["iframe-website"].document.getElementsByTagName("body")[0].innerHTML));
             // console.log($scope.attachments);
             // $scope.$apply();
+
+            // var elements = document.getElementsByTagName('sd');
+            // for (var i in elements) {
+            //     if (!elements.hasOwnProperty(i)) continue;
+            //     elements[i].addEventListener( 'mouseover', function() {
+            //         this.className += 'a';
+            //     }
+            //     elements[i].addEventListener( 'mouseout', function() {
+            //         this.className = this.className.replace( /(?:^|\s)a(?!\S)/g , '' );
+            //     }
+            // }
         }
 
         $scope.sortableOptions = {
@@ -67,42 +81,137 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         $scope.sortingLog = [];
 
         $scope.resfeshIframe = function() {
-            iFrame.attr("src",iFrame.attr("src"));
+            document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
+            $scope.components = that.currentPageContents.components;
         };
 
-        function logModels () {
-            var logEntry = $scope.components.map(function(i){
-                return i.type+'(pos:'+i.i+')';
-            }).join(', ');
-            $scope.sortingLog.push('Stop: ' + logEntry);
+        //if website has been edited
+        $scope.isEditing = false;
+
+        $scope.editPage = function() {
+            $scope.isEditing = true;
+            document.getElementById("iframe-website").src = "/?editor=true";
+        };
+
+        $scope.cancelPage = function() {
+            document.getElementById("iframe-website").src = "/";
+            $scope.isEditing = false;
         };
 
         $scope.savePage = function() {
             var componentJSON = that.currentPageContents.components;
-            console.log('componentJSON >>> ', componentJSON);
             var pageId = that.currentPageContents._id;
-            console.log('pageId >>> ', pageId);
-            WebsiteService.updateAllComponents(pageId, componentJSON, function(data) {
+            var iFrame = document.getElementById("iframe-website");
+            var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
+            //foreach components by class .component
+            var editedPageComponents = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
+            for (var i = 0; i < editedPageComponents.length; i++) {
+                    var componentId = editedPageComponents[i].attributes['data-id'].value;
+                    var componentType = editedPageComponents[i].attributes['data-class'].value;
+                    var matchingComponent = _.findWhere(that.currentPageContents.components, { _id: componentId });
+                    var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
+
+                    if (componentEditable.length > 1) {
+                        for (var i2 = 0; i2 < componentEditable.length; i2++) {
+                            var componentVar = componentEditable[i2].attributes['data-class'].value;
+                            var componentVarContents = componentEditable[i2].innerHTML;
+                            if (componentEditable[i2].querySelectorAll('.ng-binding').length >= 1) {
+                                var span = componentEditable[i2].querySelectorAll('.ng-binding')[0]; // get the span
+                                componentVarContents = span.innerHTML.replace(/(\r\n|\n|\r)/gm,"");
+                            }
+
+                            var setterKey, pa;
+                            //if contains an array of variables
+                            if (componentVar.indexOf('.item') > 0) {
+                                //get index in array
+                                var first = componentVar.split(".")[0];
+                                var second = componentEditable[i2].attributes['data-index'].value;
+                                var third = componentVar.split(".")[2];
+                                console.log('Component with (.item) >>> '+ first+' '+third);
+                                matchingComponent[first][second][third] = componentVarContents;
+                            }
+                            //if needs to traverse a single
+                            if (componentVar.indexOf('-') > 0) {
+                                var first = componentVar.split("-")[0];
+                                var second = componentVar.split("-")[1];
+                                console.log('Component with (-) >>> '+ first+' '+second);
+                                matchingComponent[first][second] = componentVarContents;
+                            }
+                            //simple
+                            if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                                console.log('Component >>> '+ componentVar);
+                                matchingComponent[componentVar] = componentVarContents;
+                            }
+                        }
+                    }
+            };
+
+            console.log('After Components >>> ', that.currentPageContents.components);
+
+            //after updating components scope update the whole page
+            WebsiteService.updateAllComponents(pageId, that.currentPageContents.components, function(data) {
                 console.log('Success: ', data);
             });
         };
 
-        var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
-        console.log('iFrame Contents: ', iframe_contents);
+        $scope.updatePage = function() {
+            console.log($scope.selectedPage);
+            //change the iframe src
+            var route;
+            var sPage = $scope.selectedPage;
+            if (sPage === 'index') {
+                route = '';
+            }
+            if (sPage === 'single-post') {
+                route = '';
+            }
+            if (sPage === 'blog') {
+                route = "/"+sPage;
+            } else {
+                route = '/page/'+sPage;
+            }
+
+            document.getElementById("iframe-website").setAttribute("src", route+"/?editor=true");
+
+            WebsiteService.getPages(that.account.website.websiteId, function (pages) {
+                currentPage = $scope.selectedPage;
+                that.allPages = pages;
+                $scope.allPages = pages;
+                that.currentPageContents = _.findWhere(pages, {handle: currentPage});
+                //get components from page
+                if (that.currentPageContents.components) {
+                    $scope.components = that.currentPageContents.components;
+                }
+            });
+        };
+
+        $scope.addComponent = function(component) {
+            console.log(angular.copy(component));
+            WebsiteService.addNewComponent(that.currentPageContents._id, component.title, component.type, function(data){
+                //send 
+            });
+        };
+
+        $scope.deleteComponent = function(componentId) {
+            console.log(componentId);
+            WebsiteService.deleteComponent(that.currentPageContents._id, componentId, function(data){
+                $scope.resfeshIframe();
+            });
+        };
+
 
         //get account
         UserService.getAccount(function (account) {
             $scope.account = account;
             that.account = account;
-            console.log('The Account: ', account);
             //get pages and find this page
             WebsiteService.getPages(account.website.websiteId, function (pages) {
-                var currentPage = 'index';
+                currentPage = 'index';
+                that.allPages = pages;
+                $scope.allPages = pages;
                 that.currentPageContents = _.findWhere(pages, {handle: currentPage});
-                console.log('currentPageContents >>> ', that.currentPageContents);
                 //get components from page
                 if (that.currentPageContents.components) {
-                    console.log('components >>>', that.currentPageContents.components);
                     $scope.components = that.currentPageContents.components;
                 }
             });

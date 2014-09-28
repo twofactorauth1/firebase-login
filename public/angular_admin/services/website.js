@@ -42,19 +42,57 @@ define(['app'], function (app) {
 		};
 
 		//page/:id/components/all
-		this.updateAllComponents = function(pageId, componentId, componentJSON, fn) {
+		this.updateAllComponents = function(pageId, componentJSON, fn) {
 			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', 'all'].join('/');
 			$http({
 			    url: apiUrl,
 			    method: "POST",
-			    data: JSON.stringify(componentJSON)
+			    //angular.toJson() used instead of JSON.stringify to remove $$hashkey value
+			    data: angular.toJson(componentJSON)
 			})
 			.success(function (data, status, headers, config) {
-				fn(data);
+				console.log('Data >>> ',data);
 			})
 			.error(function (err) {
                 console.log('END:Website Service with ERROR');
                 fn(err);
+            });
+		};
+
+		//page/:id/components
+		this.addNewComponent = function(pageId, title, type, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components'].join('/');
+			var data = {
+				title : title,
+				type : type
+			};
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(data)
+			})
+			.success(function (data, status, headers, config) {
+				console.log('Added New PAge: ', data);
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+            });
+		};
+
+		//page/:id/components/:componentId
+		this.deleteComponent = function(pageId, componentId, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', componentId].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "DELETE"
+			})
+			.success(function (data, status, headers, config) {
+				console.log('Deleted Component: ', data);
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
             });
 		};
 
