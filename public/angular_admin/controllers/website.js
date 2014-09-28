@@ -1,9 +1,10 @@
-define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'userService', 'confirmClickDirective
-'], function(app) {
-    app.register.controller('WebsiteCtrl', ['$scope', '$window', 'WebsiteService', 'UserService', function ($scope, $window, WebsiteService, UserService) {
+define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'userService', 'confirmClickDirective', 'colorpicker'], function(app) {
+    app.register.controller('WebsiteCtrl', ['$scope', '$window', '$timeout', 'WebsiteService', 'UserService', function ($scope, $window, $timeout, WebsiteService, UserService) {
         var user, account, components, currentPageContents, previousComponentOrder, allPages = that = this;
         var iFrame = document.getElementById("iframe-website");
         var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
+
+        $scope.selectedPage;
 
          //get user
         UserService.getUser(function (user) {
@@ -14,29 +15,44 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
 
         $scope.components = [];
 
+        $scope.hey = null;
+
         $scope.components.sort(function (a, b) {
             return a.i > b.i;
         });
 
         //put iframe contents in scope when loaded
         $window.iframeLoaded = function(){
-            // $scope.addNoOutlineClass();
-            //console.log('iFrame: ', iFrameContents.getElementById('body').querySelectorAll('.editable'));
-            // console.log('Inner HTML: ', frames["iframe-website"].document.getElementsByTagName("body")[0].innerHTML);
-            // $scope.attachments.push(JSON.parse(frames["iframe-website"].document.getElementsByTagName("body")[0].innerHTML));
-            // console.log($scope.attachments);
-            // $scope.$apply();
 
-            // var elements = document.getElementsByTagName('sd');
-            // for (var i in elements) {
-            //     if (!elements.hasOwnProperty(i)) continue;
-            //     elements[i].addEventListener( 'mouseover', function() {
-            //         this.className += 'a';
-            //     }
-            //     elements[i].addEventListener( 'mouseout', function() {
-            //         this.className = this.className.replace( /(?:^|\s)a(?!\S)/g , '' );
-            //     }
-            // }
+            var iFrame = document.getElementById("iframe-website");
+            var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
+            //when component is on hover show on sidebar
+            // $timeout(function() {
+            //      var components = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
+            //         console.log('Elements >>> ', components);
+            //     for (var i in components) {
+            //         if (!components.hasOwnProperty(i)) continue;
+            //         components[i].addEventListener( 'mouseover', function(event) {
+            //             var target = event.currentTarget;
+            //             if (target.getAttribute('data-id').length > -1) {
+            //                 var componentId = target.getAttribute('data-id').value;
+            //                 var matchingSidebar = document.getElementsByClassName("rightpanel-website").querySelectorAll('.dd-item[data-component-id="'+componentId+'"]');
+            //                 console.log('Match >>> ', matchingSidebar);
+            //                 if (matchingSidebar.length > -1) {
+            //                     matchingSidebar.setAttribute("class", "hover");
+            //                 }
+            //             }
+            //         });
+            //         components[i].addEventListener('mouseout', function(event) {
+            //             var target = event.currentTarget;
+            //             if (target.getAttribute('data-id').length > -1) {
+            //                 var componentId = target.getAttribute('data-id').value;
+            //                 var d = document.querySelectorAll('.dd-item[data-component-id="'+componentId+'"]');
+            //                 d.className=d.className.replace("hover","");
+            //             }
+            //         });
+            //     };
+            // }, 1000);
         }
 
         $scope.sortableOptions = {
@@ -77,8 +93,6 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                 });
             }//end stor
         };
-
-        $scope.sortingLog = [];
 
         $scope.resfeshIframe = function() {
             document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
@@ -174,12 +188,13 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             document.getElementById("iframe-website").setAttribute("src", route+"/?editor=true");
 
             WebsiteService.getPages(that.account.website.websiteId, function (pages) {
-                currentPage = $scope.selectedPage;
+                var currentPage = $scope.selectedPage || 'index';
+                console.log('Current Page Selected >>> ', currentPage);
                 that.allPages = pages;
                 $scope.allPages = pages;
                 that.currentPageContents = _.findWhere(pages, {handle: currentPage});
                 //get components from page
-                if (that.currentPageContents.components) {
+                if (that.currentPageContents && that.currentPageContents.components.length > -1) {
                     $scope.components = that.currentPageContents.components;
                 }
             });
@@ -197,6 +212,10 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             WebsiteService.deleteComponent(that.currentPageContents._id, componentId, function(data){
                 $scope.resfeshIframe();
             });
+        };
+
+        $scope.editComponent = function() {
+            console.log('edit component');
         };
 
 

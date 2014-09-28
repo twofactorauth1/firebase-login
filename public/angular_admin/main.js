@@ -17,6 +17,8 @@ require.config({
         'angularResource': 'libs/angular-resource/angular-resource.min',
         'angularUI': 'libs/angular-ui/build/angular-ui.min',
         'angularSortable': 'libs/angular-ui/modules/directives/sortable/sortable',
+        'spectrum': 'libs/spectrum/spectrum',
+        'colorpicker': 'libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
         'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
         'underscore': 'libs/underscore/underscore',
@@ -47,6 +49,7 @@ require.config({
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'hoverClassDirective': '/angular_admin/directives/hover_class',
         'confirmClickDirective': '/angular_admin/directives/confirm_click',
+        'resizeHeightDirective': '/angular_admin/directives/resize_height',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -89,6 +92,8 @@ require.config({
         'angularAMD': {deps: ['angular']},
         'bootstrap': {deps: ['jquery']},
         'underscore': {deps: ['jquery']},
+        'spectrum': {deps: ['jquery']},
+        'colorpicker': {deps: ['spectrum']},
         'commonutils': {deps: ['underscore']},
         'jqueryGridster': {deps: ['jquery']},
         'c3': {deps: ['d3']},
