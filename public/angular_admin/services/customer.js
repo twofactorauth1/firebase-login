@@ -85,17 +85,17 @@ define(['app','constants'], function (app) {
 		};
 
 		this.checkBestEmail = function(contact) {
-			if (contact.details !== null && contact.details.length > 0) {
+			if (contact.details && contact.details.length > 0) {
 				//see if we have a google contact, that's the best source of email
 				var details = _.findWhere(contact.details, {
 					type : $$.constants.social.types.GOOGLE
 				});
-				if (details !== null && details.emails !== null && details.emails.length > 0) {
+				if (details && details.emails.length > 0) {
 					contact.email = details.emails[0].email;
 					return true;
 				}
 				var details = contact.details[0];
-				if (details !== null && details.emails !== null && details.emails.length > 0) {
+				if (details && details.emails.length > 0) {
 					contact.email = details.emails[0].email;
 					return true;
 				}
@@ -104,11 +104,11 @@ define(['app','constants'], function (app) {
 		};
 
 		this.checkFacebookId = function(contact) {
-			if (contact.details !== null && contact.details.length > 0) {
+			if (contact.details && contact.details.length > 0) {
 				var details = _.findWhere(contact.details, {
 					type : $$.constants.social.types.FACEBOOK
 				});
-				if (details !== null) {
+				if (details && details !== null) {
 					contact.facebookId = details.socialId;
 					return true;
 				}
@@ -117,11 +117,11 @@ define(['app','constants'], function (app) {
 		};
 
 		this.checkTwitterId = function(contact) {
-			if (contact.details !== null && contact.details.length > 0) {
+			if (contact.details && contact.details.length > 0) {
 				var details = _.findWhere(contact.details, {
 					type : $$.constants.social.types.TWITTER
 				});
-				if (details !== null) {
+				if (details) {
 					contact.twitterId = details.socialId;
 					return true;
 				}
@@ -130,11 +130,11 @@ define(['app','constants'], function (app) {
 		};
 
 		this.checkLinkedInId = function(contact) {
-			if (contact.details !== null && contact.details.length > 0) {
+			if (contact.details && contact.details.length > 0) {
 				var details = _.findWhere(contact.details, {
 					type : $$.constants.social.types.LINKEDIN
 				});
-				if (details !== null) {
+				if (details) {
 					if (details.websites !== null && details.websites.length > 0) {
 						var _value = _.find(details.websites, function(num){ return num !== null; });
 						if(_value)
@@ -153,9 +153,9 @@ define(['app','constants'], function (app) {
 
 		this.checkAddress = function(contact) {
 			var _address = null;
-			if (contact.details !== null && contact.details.length > 0) {
-				if (contact.details[0].addresses && contact.details[0].addresses.length > 0) {
-						var _address = contact.details[0].addresses[0];
+			if (contact.details && contact.details.length > 0) {
+				if (contact.details && contact.details[0].addresses && contact.details[0].addresses.length > 0) {
+						_address = contact.details[0].addresses[0];
 						var address_str = "";
 						if(_address.lat !== '' && _address.lon !== '')
 						{
