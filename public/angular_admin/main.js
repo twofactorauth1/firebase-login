@@ -17,6 +17,8 @@ require.config({
         'angularResource': 'libs/angular-resource/angular-resource.min',
         'angularUI': 'libs/angular-ui/build/angular-ui.min',
         'angularSortable': 'libs/angular-ui/modules/directives/sortable/sortable',
+        'spectrum': 'libs/spectrum/spectrum',
+        'colorpicker': 'libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
         'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
         'underscore': 'libs/underscore/underscore',
@@ -31,7 +33,9 @@ require.config({
         "xEditable": "libs/angular-xeditable/dist/js/xeditable",
         "ngCsv": "libs/ng-csv/build/ng-csv.min",
         "ngFileUpload": "libs/angular-file-upload/angular-file-upload",
-		
+        "ngAnimate":"libs/angular-animate/angular-animate.min",
+        "toaster": "libs/AngularJS-Toaster/toaster",
+
         //application related
         'storageutils': 'utils/storageutils',
         'namespaces': 'utils/namespaces',
@@ -45,9 +49,13 @@ require.config({
         'websiteService': '/angular_admin/services/website',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'stateNavDirective': '/angular_admin/directives/state_nav',
+        'hoverClassDirective': '/angular_admin/directives/hover_class',
+        'confirmClickDirective': '/angular_admin/directives/confirm_click',
+        'resizeHeightDirective': '/angular_admin/directives/resize_height',
         'truncateDirective': '/angular_admin/directives/truncate',
         'formValidationDirective': '/angular_admin/directives/form_validations',
         "constants": 'constants/constants',
+
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
         "varModules": "/pipeshift/js/varModules",
@@ -86,9 +94,13 @@ require.config({
         'angularResource': {deps: ['angular']},
         'angularUI': {deps: ['angular']},
         'angularSortable': {deps: ['angular']},
+        'ngAnimate':{deps: ['angular']},
+        'toaster': {deps: ['angular', 'ngAnimate']},
         'angularAMD': {deps: ['angular']},
         'bootstrap': {deps: ['jquery']},
         'underscore': {deps: ['jquery']},
+        'spectrum': {deps: ['jquery']},
+        'colorpicker': {deps: ['spectrum']},
         'commonutils': {deps: ['underscore']},
         'jqueryGridster': {deps: ['jquery']},
         'c3': {deps: ['d3']},

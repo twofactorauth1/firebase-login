@@ -34,31 +34,56 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "feature-blocks",
+            type: "feature-block",
 
             /**
-             * The label for the component
+             * The version of the component
+             *
+             */
+            version: 1,
+
+            /**
+             * The Title of the component that shows up on the top
              * (optional)
              */
-            label:"",
+            title:"Feature Block",
 
             /**
-             * A description that appears at the top of the component
-             * (optional)
+             *
+             *
              */
-            description:"",
+            subtitle:"This is the subtitle.",
 
             /**
-             * An array of features of the form
-             * [{
-             *      label: "",              //The label to display beneat the icon
-             *      description: "",        //The description to display beneath th elabel
-             *      url: null               //The URL of the icon / image
-             *      iconClass: null         //The classname of the icon to display
-             * ]}
+             *
+             *
              */
-            features: [],
-            title:""
+            text: "This is the main text for the feature block.",
+
+            /**
+             *
+             *
+             */
+            bg: {
+                img : {
+                    url : "",
+                    width : null,
+                    height : null,
+                    parallax : false,
+                    blur : false
+                },
+                color : ""
+            },
+
+            /**
+             *
+             *
+             */
+            btn : {
+                text : "Button Text",
+                url : "#",
+                icon : "fa fa-rocket"
+            }
         }
     },
 
@@ -77,6 +102,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.FeatureBlocks = component;
+$$.m.cms.modules.FeatureBlock = component;
 
 module.exports = component;
