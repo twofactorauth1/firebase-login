@@ -43,11 +43,11 @@ require.config({
         'twoNetService': '/angular_admin/services/two_net',
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
-        'customerHelperService': '/angular_admin/services/customer_helper',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'truncateDirective': '/angular_admin/directives/truncate',
         'formValidationDirective': '/angular_admin/directives/form_validations',
+        "constants": 'constants/constants',
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
         "varModules": "/pipeshift/js/varModules",
@@ -74,8 +74,7 @@ require.config({
         "videoPreviewDirecrive": "/pipeshift/js/modules/video/directive/videoPreview",
         "videoPlayerDirective": "/pipeshift/js/modules/video/directive/videoPlayer",
         "psEditableDirective": "/pipeshift/js/modules/video/directive/psEditable",
-        "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
-        "constants": 'constants/constants'
+        "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton"
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
