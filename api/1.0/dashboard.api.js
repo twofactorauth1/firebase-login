@@ -108,7 +108,7 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< getDashboardForAccount');
             self.sendResultOrError(res, err, value, 'Error getting dashboard for account.');
         });
-        
+
     }
 });
 
