@@ -428,14 +428,14 @@ _.extend(api.prototype, baseApi.prototype, {
         var metadata = req.body.metadata;
         var accountId = self.accountId(req);
         var contactId = req.body.contactId;//TODO: determine if this is best way
-        var userId = req.userId; //FIXME: handle user
+        var userId = req.userId;
 
         if(!planId || planId.length < 1) {
             return self.wrapError(resp, 400, null, "Invalid planId parameter.");
         }
 
         stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
-                    application_fee_percent, metadata, accountId, contactId, accessToken, function(err, value){
+                    application_fee_percent, metadata, accountId, contactId, userId, accessToken, function(err, value){
                 self.log.debug('<< createSubscription');
                 return self.sendResultOrError(resp, err, value, "Error creating subscription");
                 self = value = null;
@@ -646,13 +646,13 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!card && !customerId) {
             return self.wrapError(resp, 400, null, "Missing card or customer parameter.");
         }
-        //FIXME handle Users
-        if(!contactId) {
-            return self.wrapError(resp, 400, null, "Invalid contact parameter.");
+
+        if(!contactId && !userId) {
+            return self.wrapError(resp, 400, null, "Invalid contact or user parameter.");
         }
 
         stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata, capture,
-            statement_description, receipt_email, application_fee, accessToken, function(err, value){
+            statement_description, receipt_email, application_fee, userId, accessToken, function(err, value){
                 self.log.debug('<< createCharge');
                 return self.sendResultOrError(resp, err, value, "Error creating a charge.");
                 self = value = null;

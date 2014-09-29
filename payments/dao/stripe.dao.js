@@ -425,9 +425,8 @@ var dao = {
      *
      * Returns Stripe Subscription object.  *Note* An internal subscription object has also been created.
      */
-        //TODO: handle subs on User
     createStripeSubscription: function(customerId, planId, coupon, trial_end, card, quantity, application_fee_percent,
-                                       metadata, accountId, contactId, accessToken, fn) {
+                                       metadata, accountId, contactId, userId, accessToken, fn) {
         var self = this;
         self.log.debug('>> createStripeSubscription');
         var params = {};
@@ -451,6 +450,7 @@ var dao = {
                 var sub = new $$.m.Subscription({
                     accountId: accountId,
                     contactId: contactId,
+                    userId: userId,
                     stripeCustomerId: customerId,
                     stripeSubscriptionId: subscription.id,
                     stripePlanId: planId
@@ -746,9 +746,9 @@ var dao = {
      *
      * @return result object containing charge and payment objects
      */
-        //TODO: handle charges for User
+
     createStripeCharge: function(amount, currency, card, customerId, contactId, description, metadata, capture,
-                                 statement_description, receipt_email, application_fee, accessToken, fn) {
+                                 statement_description, receipt_email, application_fee, userId, accessToken, fn) {
         var self = this;
         self.log.debug('>> createStripeCharge');
         var paymentId = $$.u.idutils.generateUUID();//create the id for the local object
@@ -792,6 +792,7 @@ var dao = {
                 balance_transaction: charge.balance_transaction,
                 customerId: customerId,
                 contactId: contactId,
+                userId: userId,
                 failure_code: charge.failure_code,
                 failure_message: charge.failure_message,
                 invoiceId: charge.invoice,
