@@ -1,17 +1,29 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="pageheader row">
-    <div class="col-xs-6">
+    <div class="col-xs-5">
         <h2><i class="fa fa-desktop"></i> Editing
             <span id="current-url"><i class="fa fa-edit"></i>
             </span>
         </h2>
     </div>
-    <div class="col-xs-6">
+    <div class="col-xs-2">
+        <ul class="screen-type hidden">
+            <li tooltip-placement="bottom" tooltip="Desktop View" ng-click="showDesktop()"><h4><i class="fa fa-desktop"></i></h4></li>
+            <li tooltip-placement="bottom" tooltip="Mobile View" ng-click="showMobile()"><h4><i class="fa fa-mobile"></i></h4></li>
+        </ul>
+    </div>
+    <div class="col-xs-5">
 
-        <a class="btn btn-success pull-right btn-save-page" type="button">
+        <a class="btn btn-success pull-right btn-edit-page" type="button" ng-click="editPage()" ng-hide="isEditing">
+            <span class="fa fa-edit"></span>
+            <span class="hidden-xs">Edit</span>
+        </a>
+
+        <a class="btn btn-success pull-right btn-save-page" type="button" ng-click="savePage()" ng-show="isEditing">
             <span class="fa fa-save"></span>
             <span class="hidden-xs">Save</span>
         </a>
-        <a class="btn btn-warning pull-right btn-cancel-page" type="button" style="margin-right:10px">
+        <a class="btn btn-warning pull-right btn-cancel-page" type="button" ng-click="cancelPage()" style="margin-right:10px" ng-show="isEditing">
             <span class="fa fa-times"></span>
             <span class="hidden-xs">Cancel</span>
         </a>
@@ -23,76 +35,225 @@
     </div>
 </div>
 
-<iframe id="iframe-website" name="iframe-website" onload="addAttachment()" src="/?editor=true" style="width: 100%; height: 100%; border: 1px solid; min-height: 371px;"></iframe>
+<img ng-show="isMobile" src="https://s3-us-west-2.amazonaws.com/indigenous-admin/iphone-background.png">
+<iframe id="iframe-website" name="iframe-website" onload="iframeLoaded()" src="/" style="width: 100%;" ng-style="style()" resize></iframe>
 
 <div class="rightpanel rightpanel-website">
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs nav-justified">
-        <li class="active"><a href="#rp-theme" data-toggle="tab" id="rp-domain-theme">Theme</a>
-        </li>
-        <li><a href="#rp-domain" data-toggle="tab" id="rp-domain-tab">Domain</a>
-        </li>
-    </ul>
-
-    <!-- Tab panes -->
-
-    <div class="tab-content">
-        <div class="tab-pane pane-settings active" id="rp-theme">
+    <tabset>
+        <tab heading="Page" active="tab.active">
             <div class="leftpanelinner">
+                <button class="btn btn-success btn-block" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
+                    <span> Page</span>
+                </button>
+                <h4>Current Page</h4>
+                 <select id="pageSelection" class="form-control input-lg" ng-model="pageSelected" ng-change="updatePage()">
+                    <option ng-repeat="page in allPages" value="{{page.handle}}" ng-selected="pageSelected">{{page.handle}}</option>
+                </select>
+
+                <div class="mb20"></div>
+
+                <div id="nestable">
+                    <h4>Components ({{components.length}})</h4>
+                    <button class="btn btn-orange btn-block" data-toggle="modal" data-target="#add-component-modal"><i class="fa fa-plus"></i>
+                        <span> Component</span>
+                    </button>
+                    <div class="mb10"></div>
+                    <ul ui-sortable="sortableOptions" ng-model="components">
+                        <li ng-repeat="(key, val) in components" class="dd-item dd3-item" data-id="14" data-section="services" data-componentId="{{val._id}}" ng-mouseenter="showActions = true" ng-mouseleave="showActions = false">
+                            <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
+                            </div>
+                            <div class="dd3-content">{{val.handle||val.type}}</div>
+                            <div class="dd3-actions" ng-show="showActions">
+                                <i class="fa fa-edit" tooltip-placement="top" tooltip="Edit" ng-click="editComponent(val._id)"></i>
+                                <i class="fa fa-trash-o tooltips" tooltip-placement="top" tooltip="Delete" ng-click="deleteComponent(val._id)"></i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="well">
+                    <p>Danger Zone</p>
+                    <button class="btn btn-block btn-danger" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                </div>
+                <!-- leftpanelinner -->
+            </div>
+        </tab>
+        <tab heading="Theme">
+            <div class="leftpanelinner">
+
                 <div id="current-theme">
                     <h4>Current Theme</h4>
                     <div class="row">
                         <div class="col-xs-6">
-                            <img class="theme-img" src="../images/theme-preview.jpg">
+                            <!-- <img ng-show="../images/theme-preview.jpg" class="theme-img" ng-src="../images/theme-preview.jpg"> -->
                         </div>
                         <div class="col-xs-6">
                             <button type="button" class="btn btn-primary btn-block">Edit</button>
                             <button type="button" class="btn btn-default btn-block">Change</button>
                         </div>
                     </div>
-                    <div class="mb20"></div>
-                    <div id="nestable">
-                        <h4>Page Components</h4>
-                        <ul ui-sortable="sortableOptions" ng-model="components">
-						  <li ng-repeat="item in components" class="dd-item dd3-item" data-id="14" data-section="services" data-componentId="{{item._id}}">
-                                <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
-                                </div>
-                                <div class="dd3-content">{{item.type}}</div>
-                                <div class="dd3-actions">
-                                    <i class="fa fa-trash-o tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"></i>
-                                </div>
-                            </li>
-						</ul>
-                        <div class="mb10"></div>
-                        <div class="add_section"><i class="fa fa-plus"></i>
-                            <span>&nbsp; Add Section</span>
-                        </div>
+                    <div class="mb30"></div>
+                    <div class="form-group">
+                        <label for="colorpicker">Color Primary:  </label>
+                        <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" ng-model="website.settings.primary_color" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                     </div>
-
+                    <div class="form-group">
+                        <label for="colorpicker">Color Secondary:  </label>
+                        <spectrum-colorpicker format="'hex'" ng-model="secondaryColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="colorpicker">Highlight Primary:  </label>
+                        <spectrum-colorpicker format="'hex'" ng-model="primaryHighlight" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="colorpicker">Text Color Primary:  </label>
+                        <spectrum-colorpicker format="'hex'" ng-model="primaryTextColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="colorpicker">Font Family Primary:  </label>
+                    </div>
                 </div>
-                <!-- leftpanelinner -->
             </div>
-            <!-- leftpanel -->
-        </div>
-        <div class="tab-pane pane-settings" id="rp-domain">
+        </tab>
+        <tab heading="Domain">
             <div class="leftpanelinner">
 
                 <div class="form-group">
                     <label for="current-domain" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="This is the domain that was automatically created when you signed up.">Indigenous Domain</label>
-                    <input id="current-domain" class="form-control input-lg" type="text" value="ronflutes@INDIGENOUS SOFTWARE, INC.">
+                    <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.subdomain">
                 </div>
                 <div class="form-group">
                     <label for="current-domain" class="tooltips col-xs-7" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can turn on your custom domain.">Custom Domain</label>
                     <div class="col-xs-5 control-label">
-                        <div class="toggle toggle-success" style="height: 20px; width: 50px;"><div class="toggle-slide active"><div class="toggle-inner" style="width: 80px; margin-left: 0px;"><div class="toggle-on active" style="height: 20px; width: 40px; text-align: center; text-indent: -10px; line-height: 20px;">ON</div><div class="toggle-blob" style="height: 20px; width: 20px; margin-left: -10px;"></div><div class="toggle-off" style="height: 20px; width: 40px; margin-left: -10px; text-align: center; text-indent: 10px; line-height: 20px;">OFF</div></div></div></div>
+                        <div class="toggle toggle-success" style="height: 20px; width: 50px;">
+                            <div class="toggle-slide active">
+                                <div class="toggle-inner" style="width: 80px; margin-left: 0px;">
+                                    <div class="toggle-on active" style="height: 20px; width: 40px; text-align: center; text-indent: -10px; line-height: 20px;">ON</div>
+                                    <div class="toggle-blob" style="height: 20px; width: 20px; margin-left: -10px;"></div>
+                                    <div class="toggle-off" style="height: 20px; width: 40px; margin-left: -10px; text-align: center; text-indent: 10px; line-height: 20px;">OFF</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="mb15"></div>
                 <label for="current-domain">Custom Domain Name</label>
-                <input id="current-domain" class="form-control input-lg" type="text" value="ronflutes.com">
+                <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.accountUrl">
             </div>
-        </div>
-        <!-- leftpanelinner -->
-    </div>
-    <!-- leftpanel -->
+        </tab>
+    </tabset>
 </div>
+
+<!-- Add Component Modal -->
+<div class="modal fade" id="add-component-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add Component</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="component-name" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Enter the Name of the component.">Component Name</label>
+                        <input id="component-name" class="form-control input-lg" type="text" value="" ng-model="component.title">
+                    </div>
+                    <div class="form-group">
+                        <label for="component-name" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Enter the Name of the component.">Component Type</label>
+                        <select id="component-type" class=" form-control chosen-select" data-placeholder="Contact Us" ng-model="component.type">
+                            <option value=""></option>
+                            <option value="blog">Blog</option>
+                            <option value="contact-us">Contact Us</option>
+                            <option value="feature-block">Feature Block</option>
+                            <option value="meet-team">Meet Team</option>
+                            <option value="feature-list-Compare">Feature List Compare</option>
+                            <option value="feature-list">Feature List</option>
+                            <option value="freeform">Freeform</option>
+                            <option value="footer">Footer</option>
+                            <option value="image-gallery">Image Gallery</option>
+                            <option value="image-slider">Image Slider</option>
+                            <option value="image-text-left">Image Text Left</option>
+                            <option value="image-text-right">Image Text Right</option>
+                            <option value="image-text">Image Text</option>
+                            <option value="link-button-text">Link Button Text</option>
+                            <option value="logo-list">Logo List</option>
+                            <option value="navigation">Navigation</option>
+                            <option value="signup-form">Sign Up Form</option>
+                            <option value="single-post">Single Post</option>
+                            <option value="social-feed">Social Feed</option>
+                            <option value="video-text">Video Text</option>
+                            <option value="video-text-left">Video Text Left</option>
+                            <option value="video-text-right">Video Text Right</option>
+                        </select>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-add-component" data-dismiss="modal" ng-click="addComponent(component)">Add</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- Edit Component Modal -->
+<div class="modal fade" id="edit-component-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Edit Component</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="component-title" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Enter the Name of the component.">Component Name</label>
+                    <input id="component-title" class="form-control input-lg" type="text" value="">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="component-name" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Enter the Name of the component.">Component Type</label>
+                    <select id="component-edit" class=" form-control chosen-select" data-placeholder="Contact Us">
+
+                    </select>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-edit-component" data-dismiss="modal">Update</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<!-- Create Page Modal -->
+<div class="modal fade" id="create-page-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Create Page</h4>
+          </div>
+          <div class="modal-body">
+            <div id="new_page">
+                <div class="form-group">
+                    <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
+                    <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title">
+                </div>
+                <div class="form-group">
+                    <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
+                    <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" ng-click="createPage(page)" data-dismiss="modal">Create Page</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->

@@ -25,21 +25,24 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
         app.get("/", this.setup, this.index.bind(this));
+
+        //send all routes to index and let the app router to navigate to the appropiate view
         app.get("/index", this.setup, this.index.bind(this));
         app.get("/blog", this.setup, this.index.bind(this));
         app.get("/blog/*", this.setup, this.index.bind(this));
         app.get("/tag/*", this.setup, this.index.bind(this));
         app.get("/category/*", this.setup, this.index.bind(this));
         app.get("/author/*", this.setup, this.index.bind(this));
+        app.get("/page/*", this.setup, this.index.bind(this));
 
         app.get("/index_temp_page", this.setup, this.indexTempPage.bind(this));
-        app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
-        app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
+        // app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
+        // app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
 
-        app.get("/page/blog/:posturl", this.setup, this.showBlogPage.bind(this));
-        app.get("/page/tag/:tag", this.setup, this.showTagPage.bind(this));
-        app.get("/page/author/:author", this.setup, this.showAuthorPage.bind(this));
-        app.get("/page/category/:category", this.setup, this.showCategoryPage.bind(this));
+        // app.get("/page/blog/:posturl", this.setup, this.showBlogPage.bind(this));
+        // app.get("/page/tag/:tag", this.setup, this.showTagPage.bind(this));
+        // app.get("/page/author/:author", this.setup, this.showAuthorPage.bind(this));
+        // app.get("/page/category/:category", this.setup, this.showCategoryPage.bind(this));
 
 //        app.post("/signupnews", this.signUpNews.bind(this));
 
