@@ -49,8 +49,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/home", this.isAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isAuth.bind(this), this.showHome.bind(this));
 
-        app.get("/admin", this.isAuth, this.showAdmin.bind(this));
-        app.get("/admin/*", this.isAuth, this.showAdmin.bind(this));
+        app.get("/admin", this.isAuth, this.showAngularAdmin.bind(this));
+        app.get("/admin/*", this.isAuth, this.showAngularAdmin.bind(this));
         
         app.get("/admin1", this.isAuth, this.showAngularAdmin.bind(this));
         app.get("/admin1/*", this.isAuth, this.showAngularAdmin.bind(this));
