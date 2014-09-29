@@ -12,6 +12,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
 
         $scope.components = [];
 
+        $scope.pageSelected = 'index';
+
 
         $scope.components.sort(function (a, b) {
             return a.i > b.i;
@@ -169,7 +171,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             var box = document.getElementById('pageSelection');
 
             conceptName = box.options[box.selectedIndex].text;
-            console.log('Selected >>> ',conceptName);
+            $scope.pageSelected = conceptName;
             var route;
             var sPage = conceptName;
             if (sPage === 'index') {
@@ -193,8 +195,10 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                 $scope.allPages = pages;
                 that.currentPageContents = _.findWhere(pages, {handle: currentPage});
                 //get components from page
-                if (that.currentPageContents && that.currentPageContents.components.length > -1) {
+                if (that.currentPageContents && that.currentPageContents.components) {
                     $scope.components = that.currentPageContents.components;
+                } else {
+                    $scope.components = [];
                 }
             });
         };
@@ -202,10 +206,13 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         $scope.addComponent = function(component) {
             var pageId = that.currentPageContents._id;
             WebsiteService.addNewComponent(pageId, component.title, component.type, function(data){
-                var newComponent = data.components[data.components.length - 1];;
-                $scope.resfeshIframe();
-                $scope.components.push(newComponent);
-                toaster.pop('success', "Component Added", "The "+newComponent.type+" component was added successfully.");
+                console.log('data >>> ', data);
+                if (data.components) {
+                    var newComponent = data.components[data.components.length - 1];
+                    $scope.components.push(newComponent);
+                    $scope.resfeshIframe();
+                    toaster.pop('success', "Component Added", "The "+newComponent.type+" component was added successfully.");
+                }
             });
 
         };
@@ -230,18 +237,42 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             console.log('edit component');
         };
 
-        $scope.createPage = function() {
+        $scope.createPage = function(page) {
             console.log('create page');
 
             var websiteId = that.currentPageContents.websiteId;
 
             var pageData = {
-                title: "hey",
-                handle: "hey"
+                title: page.title,
+                handle: page.handle
             };
 
-            WebsiteService.createPage(websiteId, pageData, function(data) {
-                console.log('Add Page Data: ', data);
+            WebsiteService.createPage(websiteId, pageData, function(newpage) {
+                console.log('Data >>> ', newpage);
+                toaster.pop('success', "Page Created", "The "+newpage.title+" page was created successfully.");
+                $scope.page = null;
+                $scope.allPages.push(newpage);
+                document.getElementById("iframe-website").setAttribute("src", "/page/"+newpage.handle);
+                that.currentPageContents = newpage;
+                //get components from page
+                if (that.currentPageContents && that.currentPageContents.components) {
+                    $scope.components = that.currentPageContents.components;
+                } else {
+                    $scope.components = [];
+                }
+            });
+        };
+
+        $scope.deletePage = function() {
+
+            var pageId = that.currentPageContents._id;
+            var websiteId = that.currentPageContents.websiteId;
+            var title = that.currentPageContents.title;
+
+            WebsiteService.deletePage(websiteId, pageId, title, function(data) {
+                console.log('Data >>> ', data);
+                toaster.pop('success', "Page Deleted", "The "+title+" page was deleted successfully.");
+                document.getElementById("iframe-website").setAttribute("src", "/");
             });
         };
 

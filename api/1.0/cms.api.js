@@ -282,22 +282,25 @@ _.extend(api.prototype, baseApi.prototype, {
         var websiteId = req.params.websiteId;
         var accountId = parseInt(self.accountId(req));
         var pageObj = req.body;
+        self.log.debug('>> page body');
         var page = require('../../cms/model/page');
         var temp = $$.u.idutils.generateUUID();
         if (page != null) {
-        page = new Page({
-            _id: temp,
-            title: pageObj.title,
-            handle: pageObj.handle
-        });
-
-        pageObj.set('websiteId', websiteId);
-        pageObj.set('accountId', accountId);
-        cmsManager.createPage(pageObj, function (err, value) {
-            self.log.debug('<< createPage');
-            self.sendResultOrError(res, err, value, "Error creating Page");
-            self = null;
-        });
+            self.log.debug('>> page not null');
+            page = new Page({
+                _id: temp,
+                title: pageObj.title,
+                handle: pageObj.handle
+            });
+            page.set('websiteId', websiteId);
+            page.set('accountId', accountId);
+            self.log.debug('>> page created');
+            cmsManager.createPage(page, function (err, value) {
+                self.log.debug('<< createPage');
+                self.sendResultOrError(res, err, value, "Error creating Page");
+                self = null;
+            });
+        }
     },
 
     updatePage: function (req, res) {
@@ -325,49 +328,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var label = req.params.label;
 
         cmsManager.deletePage(pageId, function (err, value) {
-            self.log.debug('<< deletePage');
-            if (!err && value) {
-
-                cmsManager.getWebsiteLinklistsByHandle(websiteId, "head-menu", function (err, list) {
-
-                    //      var links=  list["links"];
-
-                    var spliceIndex = -1;
-                    for (var i = 0; i < list.links.length; i++) {
-                        if (list.links[i].label === label) {
-                            spliceIndex = i;
-                        }
-                    }
-
-                    if (spliceIndex > 0) {
-                        list.links.splice(spliceIndex, 1);
-                    }
-
-                    cmsManager.updateWebsiteLinklists(websiteId, "head-menu", list, function (err, value) {
-                        if (err) {
-                            console.log(err)
-                        } else {
-                            console.log(value)
-                        }
-                    });
-                })
-                /*
-                 cmsManager.deleteWebsiteLinklists(websiteId, "head-menu", function(err, value){
-                 self.log.debug('<< deleteWebsiteLinklists');
-                 self.sendResultOrError(res, err, value, "Error adding website Linklists");
-                 self = value = null;
-                 });
-                 */
-                /*
-                 cmsManager.updateWebsiteLinklists(websiteId, "head-menu", linkList, function(err, value){
-                 self.log.debug('<< deletePageLink');
-                 self.sendResultOrError(res, err, value, "Error deleting Page Link");
-                 self = value = null;
-                 });
-                 */
-            }
-            else
-                self.sendResultOrError(res, err, value, "Error deleting Page");
+            self.log.debug('<< deletePage', err);
+            self.sendResultOrError(res, err, value, "Error deleting Page");
             self = null;
         });
 

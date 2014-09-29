@@ -108,7 +108,24 @@ define(['app'], function (app) {
 				fn(data);
 			})
 			.error(function (err) {
-                console.log('END:Website Service with ERROR');
+                console.log('END:Create Page with ERROR');
+            });
+		};
+
+		//website/:websiteId/page/:id/:label
+		this.deletePage = function(websiteId, pageId, label, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId, label].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "DELETE"
+			})
+			.success(function (data, status, headers, config) {
+
+				console.log('page deleted');
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Delete Page with ERROR', err);
             });
 		};
 
