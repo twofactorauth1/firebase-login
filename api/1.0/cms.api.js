@@ -281,8 +281,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var websiteId = req.params.websiteId;
         var accountId = parseInt(self.accountId(req));
-        var _page = req.body;
-        var pageObj = new Page(_page);
+        var pageObj = req.body;
+        var page = require('../../cms/model/page');
+        var temp = $$.u.idutils.generateUUID();
+        if (page != null) {
+        page = new Page({
+            _id: temp,
+            title: pageObj.title,
+            handle: pageObj.handle
+        });
+
         pageObj.set('websiteId', websiteId);
         pageObj.set('accountId', accountId);
         cmsManager.createPage(pageObj, function (err, value) {

@@ -1,3 +1,4 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="pageheader row">
     <div class="col-xs-6">
         <h2><i class="fa fa-desktop"></i> Editing
@@ -34,31 +35,38 @@
     <tabset>
         <tab heading="Page" active="tab.active">
             <div class="leftpanelinner">
+                <button class="btn btn-success btn-block" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
+                    <span>&nbsp; Create Page</span>
+                </button>
                 <h4>Current Page</h4>
-                <select class="form-control input-lg" ng-model="selectedPage" ng-change="updatePage()">
-                    <option ng-repeat="page in allPages">{{page.handle}}</option>
+                 <select id="pageSelection" ng-init="pageSelected = index" class="form-control input-lg" ng-model="pageSelected" ng-change="updatePage()">
+                    <option ng-repeat="page in allPages" value="{{page.handle}}">{{page.handle}}</option>
                 </select>
 
                 <div class="mb20"></div>
 
                 <div id="nestable">
-                    <h4>Page Components</h4>
-                    <div class="add_section" data-toggle="modal" data-target="#add-component-modal"><i class="fa fa-plus"></i>
+                    <h4>Page Components ({{components.length}})</h4>
+                    <button class="btn btn-orange btn-block" data-toggle="modal" data-target="#add-component-modal"><i class="fa fa-plus"></i>
                         <span>&nbsp; Add New Component</span>
-                    </div>
+                    </button>
                     <div class="mb10"></div>
                     <ul ui-sortable="sortableOptions" ng-model="components">
-                        <li ng-repeat="item in components" class="dd-item dd3-item" data-id="14" data-section="services" data-componentId="{{item._id}}" ng-mouseenter="showActions = true" ng-mouseleave="showActions = false">
+                        <li ng-repeat="(key, val) in components" class="dd-item dd3-item" data-id="14" data-section="services" data-componentId="{{val._id}}" ng-mouseenter="showActions = true" ng-mouseleave="showActions = false">
                             <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
                             </div>
-                            <div class="dd3-content">{{item.handle||item.type}}</div>
+                            <div class="dd3-content">{{val.handle||val.type}}</div>
                             <div class="dd3-actions" ng-show="showActions">
-                                <i class="fa fa-edit" tooltip-placement="top" tooltip="Edit" ng-click="editComponent(item._id)"></i>
-                                <i class="fa fa-trash-o tooltips" tooltip-placement="top" tooltip="Delete" confirmed-click="deleteComponent(item._id)" 
-    ng-confirm-click="Are you sure you want to delete the {{item.handle}} component?"></i>
+                                <i class="fa fa-edit" tooltip-placement="top" tooltip="Edit" ng-click="editComponent(val._id)"></i>
+                                <i class="fa fa-trash-o tooltips" tooltip-placement="top" tooltip="Delete" ng-click="deleteComponent(val._id)"></i>
                             </div>
                         </li>
                     </ul>
+                </div>
+
+                <div class="well">
+                    <p>Danger Zone</p>
+                    <button class="btn btn-block btn-danger"><i class="fa fa-trash"></i> Delete Page</button>
                 </div>
                 <!-- leftpanelinner -->
             </div>
@@ -70,7 +78,7 @@
                     <h4>Current Theme</h4>
                     <div class="row">
                         <div class="col-xs-6">
-                            <img class="theme-img" src="../images/theme-preview.jpg">
+                            <!-- <img ng-show="../images/theme-preview.jpg" class="theme-img" ng-src="../images/theme-preview.jpg"> -->
                         </div>
                         <div class="col-xs-6">
                             <button type="button" class="btn btn-primary btn-block">Edit</button>
@@ -129,13 +137,13 @@
                         <select id="component-type" class=" form-control chosen-select" data-placeholder="Contact Us" ng-model="component.type">
                             <option value=""></option>
                             <option value="blog">Blog</option>
-                            <option value="single-post">Single Post</option>
                             <option value="contact-us">Contact Us</option>
                             <option value="feature-block">Feature Block</option>
                             <option value="meet-team">Meet Team</option>
                             <option value="feature-list-Compare">Feature List Compare</option>
                             <option value="feature-list">Feature List</option>
                             <option value="freeform">Freeform</option>
+                            <option value="footer">Footer</option>
                             <option value="image-gallery">Image Gallery</option>
                             <option value="image-slider">Image Slider</option>
                             <option value="image-text-left">Image Text Left</option>
@@ -143,11 +151,13 @@
                             <option value="image-text">Image Text</option>
                             <option value="link-button-text">Link Button Text</option>
                             <option value="logo-list">Logo List</option>
+                            <option value="navigation">Navigation</option>
+                            <option value="signup-form">Sign Up Form</option>
+                            <option value="single-post">Single Post</option>
                             <option value="social-feed">Social Feed</option>
                             <option value="video-text">Video Text</option>
                             <option value="video-text-left">Video Text Left</option>
                             <option value="video-text-right">Video Text Right</option>
-                            <option value="signup-form">Sign Up Form</option>
                         </select>
                     </div>
                     <div class="clearfix"></div>
@@ -193,3 +203,33 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+<!-- Create Page Modal -->
+<div class="modal fade" id="create-page-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Create Page</h4>
+          </div>
+          <div class="modal-body">
+            <div id="new_page">
+                <div class="form-group">
+                    <label for="page-title" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Provide the title of the page you want to create">Page Title</label>
+                    <input id="page-title" class="form-control input-lg" type="text" value="">
+                </div>
+                <div class="form-group">
+                    <label for="page-url" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Modify the url where your page will be reached">Page Url</label>
+                    <input id="page-url" class="form-control input-lg" type="text" value="">
+                </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" ng-click="createPage()">Create Page</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->

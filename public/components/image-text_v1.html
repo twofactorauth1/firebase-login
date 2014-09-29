@@ -33,7 +33,7 @@
 
             <div ng-show="component.imgurl" class="pull-{{component.imagePosition}} col-sm-4 col-xs-12 image-text-image">
                 <div class="editable" data-class="url">
-                    <img src="{{component.imgurl}}" class="img-responsive">
+                    <img ng-src="{{component.imgurl}}" class="img-responsive">
                 </div>
                 <p class="center editable" data-class="caption">{{component.caption}}</p>
             </div>

@@ -15,7 +15,6 @@ define(['app'], function (app) {
 			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
-				console.log('Pages: ', data);
 				fn(data);
 			})
 			.error(function (err) {
@@ -51,7 +50,7 @@ define(['app'], function (app) {
 			    data: angular.toJson(componentJSON)
 			})
 			.success(function (data, status, headers, config) {
-				console.log('Data >>> ',data);
+				fn(data);
 			})
 			.error(function (err) {
                 console.log('END:Website Service with ERROR');
@@ -72,7 +71,7 @@ define(['app'], function (app) {
 			    data: angular.toJson(data)
 			})
 			.success(function (data, status, headers, config) {
-				console.log('Added New PAge: ', data);
+				console.log('Added New Component: ', data);
 				fn(data);
 			})
 			.error(function (err) {
@@ -82,19 +81,37 @@ define(['app'], function (app) {
 
 		//page/:id/components/:componentId
 		this.deleteComponent = function(pageId, componentId, fn) {
+			console.log('PageID: '+pageId+' ComponentID: '+componentId);
 			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', componentId].join('/');
 			$http({
 			    url: apiUrl,
 			    method: "DELETE"
 			})
 			.success(function (data, status, headers, config) {
-				console.log('Deleted Component: ', data);
+				console.log('Component Successfully Deleted from the DB.');
 				fn(data);
 			})
 			.error(function (err) {
                 console.log('END:Website Service with ERROR');
             });
 		};
+
+		//website/:websiteId/page
+		this.createPage = function(websiteId, data, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page'].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(data)
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+            });
+		};
+
 
 	});
 });

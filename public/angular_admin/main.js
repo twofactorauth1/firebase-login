@@ -33,6 +33,8 @@ require.config({
         "xEditable": "libs/angular-xeditable/dist/js/xeditable",
         "ngCsv": "libs/ng-csv/build/ng-csv.min",
         "ngFileUpload": "libs/angular-file-upload/angular-file-upload",
+        "ngAnimate":"libs/angular-animate/angular-animate.min",
+        "toaster": "libs/AngularJS-Toaster/toaster",
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -89,6 +91,8 @@ require.config({
         'angularResource': {deps: ['angular']},
         'angularUI': {deps: ['angular']},
         'angularSortable': {deps: ['angular']},
+        'ngAnimate':{deps: ['angular']},
+        'toaster': {deps: ['angular', 'ngAnimate']},
         'angularAMD': {deps: ['angular']},
         'bootstrap': {deps: ['jquery']},
         'underscore': {deps: ['jquery']},

@@ -1,21 +1,17 @@
-define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'userService', 'confirmClickDirective', 'colorpicker'], function(app) {
-    app.register.controller('WebsiteCtrl', ['$scope', '$window', '$timeout', 'WebsiteService', 'UserService', function ($scope, $window, $timeout, WebsiteService, UserService) {
+define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'userService', 'ngAnimate', 'toaster', 'confirmClickDirective', 'colorpicker'], function(app) {
+    app.register.controller('WebsiteCtrl', ['$scope', '$window', '$timeout', 'WebsiteService', 'UserService', 'toaster',  function ($scope, $window, $timeout, WebsiteService, UserService, toaster) {
         var user, account, components, currentPageContents, previousComponentOrder, allPages = that = this;
         var iFrame = document.getElementById("iframe-website");
         var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
-
-        $scope.selectedPage;
 
          //get user
         UserService.getUser(function (user) {
             $scope.user = user;
             that.user = user;
-            console.log('The User: ', user);
         });
 
         $scope.components = [];
 
-        $scope.hey = null;
 
         $scope.components.sort(function (a, b) {
             return a.i > b.i;
@@ -104,7 +100,9 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
 
         $scope.editPage = function() {
             $scope.isEditing = true;
-            document.getElementById("iframe-website").src = "/?editor=true";
+            var iframe = document.getElementById("iframe-website");
+            var src = iframe.src;
+            iframe.setAttribute("src", src+"/?editor=true");
         };
 
         $scope.cancelPage = function() {
@@ -141,38 +139,39 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                                 var first = componentVar.split(".")[0];
                                 var second = componentEditable[i2].attributes['data-index'].value;
                                 var third = componentVar.split(".")[2];
-                                console.log('Component with (.item) >>> '+ first+' '+third);
                                 matchingComponent[first][second][third] = componentVarContents;
                             }
                             //if needs to traverse a single
                             if (componentVar.indexOf('-') > 0) {
                                 var first = componentVar.split("-")[0];
                                 var second = componentVar.split("-")[1];
-                                console.log('Component with (-) >>> '+ first+' '+second);
                                 matchingComponent[first][second] = componentVarContents;
                             }
                             //simple
                             if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
-                                console.log('Component >>> '+ componentVar);
                                 matchingComponent[componentVar] = componentVarContents;
                             }
                         }
                     }
             };
 
-            console.log('After Components >>> ', that.currentPageContents.components);
 
             //after updating components scope update the whole page
             WebsiteService.updateAllComponents(pageId, that.currentPageContents.components, function(data) {
-                console.log('Success: ', data);
+                toaster.pop('success', "Page Saved", "The "+that.currentPageContents.handle+" page was saved successfully.");
+                $scope.isEditing = false;
+                $scope.resfeshIframe();
             });
         };
 
         $scope.updatePage = function() {
-            console.log($scope.selectedPage);
-            //change the iframe src
+            console.log('Selected Page >>> '+ $scope.pageSelected);
+            var box = document.getElementById('pageSelection');
+
+            conceptName = box.options[box.selectedIndex].text;
+            console.log('Selected >>> ',conceptName);
             var route;
-            var sPage = $scope.selectedPage;
+            var sPage = conceptName;
             if (sPage === 'index') {
                 route = '';
             }
@@ -185,10 +184,10 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                 route = '/page/'+sPage;
             }
 
-            document.getElementById("iframe-website").setAttribute("src", route+"/?editor=true");
+            document.getElementById("iframe-website").setAttribute("src", route);
 
             WebsiteService.getPages(that.account.website.websiteId, function (pages) {
-                var currentPage = $scope.selectedPage || 'index';
+                var currentPage = conceptName || 'index';
                 console.log('Current Page Selected >>> ', currentPage);
                 that.allPages = pages;
                 $scope.allPages = pages;
@@ -201,21 +200,49 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         };
 
         $scope.addComponent = function(component) {
-            console.log(angular.copy(component));
-            WebsiteService.addNewComponent(that.currentPageContents._id, component.title, component.type, function(data){
-                //send 
+            var pageId = that.currentPageContents._id;
+            WebsiteService.addNewComponent(pageId, component.title, component.type, function(data){
+                var newComponent = data.components[data.components.length - 1];;
+                $scope.resfeshIframe();
+                $scope.components.push(newComponent);
+                toaster.pop('success', "Component Added", "The "+newComponent.type+" component was added successfully.");
             });
+
         };
 
         $scope.deleteComponent = function(componentId) {
-            console.log(componentId);
+            var pageId = that.currentPageContents._id;
+            var deletedType;
             WebsiteService.deleteComponent(that.currentPageContents._id, componentId, function(data){
                 $scope.resfeshIframe();
+                for(var i = 0; i < $scope.components.length; i++) {
+                    if($scope.components[i]._id == componentId) {
+                        deletedType = $scope.components[i].type;
+                        $scope.components.splice(i, 1);
+                        break;
+                    }
+                }
+                toaster.pop('success', "Component Deleted", "The "+deletedType+" component was deleted successfully.");
             });
         };
 
         $scope.editComponent = function() {
             console.log('edit component');
+        };
+
+        $scope.createPage = function() {
+            console.log('create page');
+
+            var websiteId = that.currentPageContents.websiteId;
+
+            var pageData = {
+                title: "hey",
+                handle: "hey"
+            };
+
+            WebsiteService.createPage(websiteId, pageData, function(data) {
+                console.log('Add Page Data: ', data);
+            });
         };
 
 
@@ -227,7 +254,13 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             WebsiteService.getPages(account.website.websiteId, function (pages) {
                 currentPage = 'index';
                 that.allPages = pages;
-                $scope.allPages = pages;
+                var parsed = angular.fromJson(pages);
+                var arr = [];
+
+                for(var x in parsed){
+                  arr.push(parsed[x]);
+                }
+                $scope.allPages = arr;
                 that.currentPageContents = _.findWhere(pages, {handle: currentPage});
                 //get components from page
                 if (that.currentPageContents.components) {
