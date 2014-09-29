@@ -299,10 +299,12 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         contactId = parseInt(contactId);
+        var skip = req.query['skip'];
+        var limit = req.query['limit'];
 
         contactActivityManager.listActivitiesByContactId(accountId, contactId, skip, limit, function(err, value){
             self.log.debug('<< getActivityByContactId');
-            self.sendResultOrError(res, err, value, "Error getting activity by contactId.");
+            self.sendResultOrError(resp, err, value, "Error getting activity by contactId.");
             self = null;
         });
 
