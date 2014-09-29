@@ -112,7 +112,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         productManager.getProductsByType(accountId, type, function(err, list){
             self.log.debug('<< getProductsByType');
-            self.sendResultOrError(res, err, value, 'Error listing products by type');
+            self.sendResultOrError(res, err, list, 'Error listing products by type');
         });
 
     }
