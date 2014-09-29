@@ -36,6 +36,7 @@ define([
             "click .btn-add-component":"addComponent",
             "click .btn-del-component":"removeComponent",
             "click .btn-edit-component":"updateComponent",
+
             //color palette
             "click #drop-zone": "drop_click",
             "change #file":"upload_color_pic",

@@ -178,13 +178,13 @@
                             <div class="media-body col-xs-12 hidden-xs">
 
 
-                                <h4 class="person-name">{{customer.first}} {{customer.middle}} {{customer.last}}</h4>
+                              <h4 class="person-name" truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
 
 
 
                                 <!-- <h4 class="person-name">  Jaideep Das</h4>-->
 
-                                <span class="label label-info contact-cat"></span>
+                                <span class="label label-info contact-cat">{{contactLabel(customer)}}</span>
 
                                 <div class="hidden">
                                     <div class="last-active text-muted">Last Active: n/a
@@ -209,31 +209,20 @@
                             </div>
                             <div class="clearfix mb10"></div>
                             <ul class="social-list hidden-xs">
-
-
-
-
+                                        <li>
+                                             <a ng-show="checkBestEmail(customer)" href="mailto:{{email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
+                                        </li>
+                                        <li>
+                                        	<a ng-show="checkFacebookId(customer)" href="https://www.facebook.com/{{facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                        </li>
+                                         <li>
+                                        	<a ng-show="checkTwitterId(customer)" href="https://twitter.com/intent/user?user_id={{twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                        </li>
+                                         <li>
+                                        	<a ng-show="checkLinkedInId(customer)" href="{{ linkedInUrl ? linkedInUrl : 'http://www.linkedin.com/profile/view?id='+ linkedInId }}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                        </li>         
                                 <li>
-
-
-
-                                </li>
-
-                                <li>
-
-
-
-                                </li>
-
-                                <li>
-
-
-                                </li>
-
-
-                                <li>
-                                    <a target="_blank" ng-show="customer.details[0].addresses.length" data-original-title="Location" title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="https://www.google.com/maps?q="><i class="fa fa-map-marker"></i></a>
-
+                                    <a ng-show="checkAddress(customer)" href="https://www.google.com/maps?q={{address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
                                 </li>
                             </ul>
                             <div class="pull-right">

@@ -92,7 +92,7 @@ var page = $$.m.ModelBase.extend({
              *      array of data from each component
              * ]
              */
-            components: null,
+            components: [],
 
             /**
              * Created by data

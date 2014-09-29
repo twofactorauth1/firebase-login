@@ -1,8 +1,43 @@
-define(['app', 'customerService', 'stateNavDirective'], function(app) {
+define(['app', 'customerService', 'stateNavDirective','truncateDirective'], function(app) {
     app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', function ($scope, CustomerService) {
         $scope.customerFilter = {};
         $scope.customerOrder = 'first';
         $scope.customerSortReverse = false;
+		
+		$scope.contactLabel = function(contact) {
+			return CustomerService.contactLabel(contact);
+		}; 
+		
+		$scope.checkBestEmail = function(contact) {
+			var returnVal =  CustomerService.checkBestEmail(contact);
+			this.email = contact.email;
+			return returnVal;
+		}; 
+		
+		$scope.checkFacebookId = function(contact) {
+			var returnVal =  CustomerService.checkFacebookId(contact);
+			this.facebookId = contact.facebookId;
+			return returnVal;
+		}; 
+		
+		$scope.checkTwitterId = function(contact) {
+			var returnVal =   CustomerService.checkTwitterId(contact);
+			this.twitterId = contact.twitterId;
+			return returnVal;
+		}; 
+		
+		$scope.checkLinkedInId = function(contact) {
+			var returnVal = CustomerService.checkLinkedInId(contact);
+			this.linkedInUrl = contact.linkedInUrl;
+			this.linkedInId = contact.linkedInId;
+			return returnVal;
+		}; 
+		
+		$scope.checkAddress = function(contact) {
+			var returnVal = CustomerService.checkAddress(contact);
+			this.address = contact.address;
+			return returnVal;
+		}; 
 
         CustomerService.getCustomers(function (customers) {
             $scope.customers = customers;
@@ -30,7 +65,11 @@ define(['app', 'customerService', 'stateNavDirective'], function(app) {
                     $scope.customerFilter = {};
                 }
             };
+            
+            
 
+
+			
             $scope.$watch('sortOrder', function (newValue, oldValue) {
                 if (newValue) {
                     newValue = parseInt(newValue);
