@@ -21,10 +21,10 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         app.post(this.url(''), this.isAuthApi, this.createDashboard.bind(this));
-        app.get(this.url('/:id'), this.isAuthApi, this.getDashboard.bind(this));
+        app.get(this.url(':id'), this.isAuthApi, this.getDashboard.bind(this));
         app.get(this.url(''), this.isAuthApi, this.getDashboardForAccount.bind(this));
-        app.post(this.url('/:id'), this.isAuthApi, this.updateDashboard.bind(this));
-        app.delete(this.url('/:id'), this.isAuthApi, this.deleteDashboard.bind(this));
+        app.post(this.url(':id'), this.isAuthApi, this.updateDashboard.bind(this));
+        app.delete(this.url(':id'), this.isAuthApi, this.deleteDashboard.bind(this));
 
 
     },
@@ -40,8 +40,9 @@ _.extend(api.prototype, baseApi.prototype, {
         dashboard.accountId = self.accountId(req);
         dashboard.created = {
             date: new Date(),
-            by: req.user
+            by: req.user.id()
         };
+        dashboard = new $$.m.Dashboard(dashboard);
         //TODO: security
         manager.createDashboard(dashboard, function(err, value){
             self.log.debug('<< createDashboard');
