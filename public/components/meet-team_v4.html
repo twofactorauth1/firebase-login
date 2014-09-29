@@ -1,0 +1,27 @@
+<div ng-show="component" data-class="container meet-team-v4" data-id="{{component._id}}">
+    <div class="row text-center">
+        <h2>{{component.title}}</h2>
+        <br/>
+    </div>
+    <div class="row" ng-repeat="teamMember in component.teamMembers">
+        <div class="col-md-4 text-center">
+            <img ng-src="{{teamMember.profilepic}}" class="{{component.imgstyle}} profile-img"
+                 style="width: 200px;height: 200px"/>
+            <br/> <br/> <br/>
+        </div>
+        <div class="col-md-8">
+            <h3 style="color: {{component.headcolor}}">{{teamMember.name}}</h3>
+            <h4>{{teamMember.position}}</h4>
+
+            <p>{{teamMember.bio}}</p>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <button class="btn btn-primary">{{teamMember.btn.text}} <i
+                            class="{{teamMember.btn.icon}}"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
