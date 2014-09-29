@@ -5,16 +5,19 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-require('./base.model.js');
+require('./../../models/base.model.js');
 
 var contactActivity = $$.m.ModelBase.extend({
+
+
+
 
     defaults: function() {
         return {
             _id: null,
-
+            accountId: 0,
             contactId: 0,
-            activityType:0,
+            activityType:'',
             note: "",
             detail:"",
             duration:null,
@@ -34,6 +37,11 @@ var contactActivity = $$.m.ModelBase.extend({
         storage: "mongo",
         table: "contactactivities",
         idStrategy: "uuid"
+    },
+    types: {
+        PAGE_VIEW: 'PAGE_VIEW',
+        SUBSCRIBE: 'SUBSCRIBE',
+        ACCOUNT_CREATED: 'ACCOUNT_CREATED'
     }
 });
 

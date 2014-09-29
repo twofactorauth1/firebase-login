@@ -5,9 +5,9 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-var baseDao = require('./base.dao');
+var baseDao = require('./../../dao/base.dao.js');
 requirejs('constants/constants');
-require('../models/contactactivity');
+require('../model/contactactivity');
 
 
 var dao = {
@@ -26,6 +26,6 @@ var dao = {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.ContactDao = dao;
+$$.dao.ContactActivityDao = dao;
 
 module.exports = dao;

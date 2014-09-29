@@ -67,5 +67,13 @@ define(['app'], function (app) {
                 fn(data);
             });
         };
+
+        this.postFullContact = function (customerId, fn) {
+            var apiUrl = baseUrl + ['contact', customerId, 'fullcontact'].join('/');
+            $http.post(apiUrl, {_id: customerId})
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
+        };
     });
 });
