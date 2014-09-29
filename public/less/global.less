@@ -1,11 +1,21 @@
+html, body {
+   margin:0;
+   padding:0;
+   height:100%;
+}
 body {
     _background: #1d2939;
     // font-family:'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif !important;
     line-height: 21px;
     color: #636e7b;
+    height: 100%;
 }
 body.notfound, body.signin {
     background: #e4e7ea;
+}
+
+.body-wrap {
+    height: 100%;
 }
 input, select, textarea {
     // font-family:'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif !important;
@@ -25,6 +35,15 @@ h1, h2, h3, h4, h5 {
 strong {
     font-family:'LatoBold';
     font-weight: normal;
+}
+.mainpanel {
+    background: #e7e7e7;
+}
+.ng-scope {
+    height: 100%;
+}
+#main-viewport {
+    height: auto;
 }
 .mb0 {
     margin-bottom: 0px!important;
@@ -347,13 +366,11 @@ strong {
     }
     .mainpanel {
         padding-top: 50px;
+        height: 100%;
     }
     .header-right {
         margin-right: 240px;
     }
-}
-#main-viewport {
-
 }
 .stickyheader.leftpanel-collapsed {
     .headerbar {
@@ -573,4 +590,12 @@ font-weight: 900;
 .template-btns .btn {
     border-top: none;
     border-radius: 0;
+}
+
+#main-viewport .alert-info {
+    display: none;
+}
+
+#toast-container {
+    height: auto!important;
 }

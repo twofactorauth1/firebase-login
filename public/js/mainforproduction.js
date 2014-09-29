@@ -6,7 +6,7 @@
  */
 
 if (typeof CACHEBUSTER === 'undefined') {
-    CACHEBUSTER = '2014.02.25' //Modify this before a deploy to production.
+    CACHEBUSTER = '2014.09.26' //Modify this before a deploy to production.
 }
 
 require.config({
@@ -36,14 +36,15 @@ require.config({
         usersData: 'global/users.data',
         app: 'app',
         text: "libs/requirejs-plugins/lib/text",
-        leaflet: 'libs/leaflet/dist/leaflet',
         colorthief: 'libs/color-thief/dist/color-thief.min',
         waypoints: 'libs/jquery-waypoints/waypoints',
         nestable: 'libs/nestable/jquery.nestable',
         date: 'libs/datejs/build/production/date.min',
-        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
         d3: 'libs/d3/d3',
         moment: 'libs/moment/min/moment.min',
+        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
+        jquerydragdrop: 'libs_misc/jquery/jquery.drag-drop.plugin',
+        jqueryFileUpload: 'libs_misc/jqueryfileupload/js/jquery.fileupload.view',
 
         //VIDEO AUTORESPONDER
         angular: 'libs/angular/angular',
@@ -61,7 +62,7 @@ require.config({
         toggles: 'libs_misc/toggles.min',
         datepicker: 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         leaflet: 'libs/leaflet/dist/leaflet',
-        tagsinput: 'libs/jquery.tagsinput/jquery.tagsinput.min',
+        tagsinput: 'libs_misc/jquery.tagsinput/jquery.tagsinput.min',
         gritter: 'libs/jquery.gritter/js/jquery.gritter.min'
     },
 
@@ -125,12 +126,18 @@ require.config({
         daterangepicker: {
             deps: ['jquery', 'moment']
         },
+        jquerydragdrop: {
+            deps: ['jquery']
+        },
 
         tagsinput: {
             deps: ['jquery']
         },
 
         gritter: {
+            deps: ['jquery']
+        },
+        jqueryFileUpload: {
             deps: ['jquery']
         },
         angular: {

@@ -15,9 +15,11 @@ define([
     'utils/utils',
     'views/rightpanel.view',
     'libs_misc/jquery.tagsinput/jquery.tagsinput',
-    'collections/cms/pages'
+    'collections/cms/pages',
+    'collections/assets',
+    'models/asset'
 
-], function (User, Account, Website, Page, Post, CmsService, utils, RightPanel, TagsInput,Pages) {
+], function (User, Account, Website, Page, Post, CmsService, utils, RightPanel, TagsInput,Pages, Assets, Asset) {
 
     var view = Backbone.View.extend({
 
@@ -37,6 +39,7 @@ define([
         is_dragging: false,
         blogBoolean: false,
         currentThemePreviewURL: null,
+        mediaBatch: [],
 
         attributes: {
             id: "edit-website-wrapper"
@@ -48,7 +51,14 @@ define([
             "click .close":"close_welcome",
             "click .launch-btn":"end_setup",
             "mousemove #sortable":"draggingComponent",
-            "click .blog-title .editable":"updateTitle"
+            "click .blog-title .editable":"updateTitle",
+            "click .upload-media":"uploadMedia",
+            "click .btn-media-manager" :"openMediaModal",
+            //"change .media.media-list > input[type='checkbox']": "mediaSelected",
+            "change .media-list .ckbox input[type='checkbox']" : "mediaSelected",
+            "click .delete-media": "deleteMedia",
+            "click .deleteBatch": "deleteBatch",
+            "change #selectall": "selectAll"
         },
 
         initialize: function(options) {
@@ -56,7 +66,6 @@ define([
             options = options || {};
             this.pageHandle = options.page || "index";
             this.websiteId = options.websiteId;
-
         },
 
         render: function () {
@@ -65,14 +74,17 @@ define([
                 , p2 = self.getUser()
                 , p3 = self.getThemeConfig()
                 , p4 = self.getWebsite()
-                , p5 = self.getPages()
-                , p6 = $.Deferred(); //loading image theme Preview
+                , p5 = self.getPages();
+                // , p6 = $.Deferred()
+                // , p7 = $.Deferred()
+                // , p8 = $.Deferred()
+                // , p9 = self.getAssets();
 
             $.when(p1)
                 .done(function() {
                     self._getThemePreview(self.account.get("website").themeId, function(themePreview){
                         self.currentThemePreviewURL = themePreview;
-                        p6.resolve();
+                        // p6.resolve();
                     });
 
                 });
@@ -85,19 +97,28 @@ define([
                     self.websiteSettings = self.website.attributes.settings;
                 });
 
-            $.when(p1, p2, p4, p6)
+            $.when(p1, p2, p4)
                 .done(function () {
+                    var data
+                        , tmpl
+                        , html
+                        , colorPalette
+                        , sidetmpl
+                        , rightPanel;
 
                     data = {
                         websiteId: self.websiteId,
                         websiteTitle: self.websiteTitle,
-                        subdomain: self.subdomain
+                        subdomain: self.subdomain,
+                        // assets: self.assets.toJSON()
                     };
                     if (self.pageHandle == "index" || self.pageHandle == "null" || self.pageHandle == "/") {
-                        data.page = "/index";
+                        data.page = "/";
                     } else {
-                        data.page = "/page/" + self.pageHandle;
+                        data.page = "/" + self.pageHandle;
                     }
+
+                    console.log('Data Page: '+data.page);
 
 
                     var tmpl = $$.templateManager.get("edit-website", self.templateKey);
@@ -107,7 +128,7 @@ define([
 
                     self.show(html);
 
-                    self.check_welcome();
+                    self.mediaSelected();
 
                     var sidetmpl = $$.templateManager.get("sidebar-edit-website", self.templateKey);
                     var rightPanel = $('#rightpanel');
@@ -144,7 +165,7 @@ define([
                             $$.e.PageHandleEvent.trigger("pageHandle", { pageHandle: self.pageHandle });
                         }
 
-                        $.when(p3, p4, p5, p6)
+                        $.when(p3, p4, p5)
                             .done(function() {
                                 self.getPage().done(function(){
                                     self.getPages()
@@ -161,7 +182,7 @@ define([
                                                     componentsArray.push(rawComponents[key]);
                                                 }
                                             }
-                                          
+
                                             var data = {
                                                 pages: self.pages.toJSON(),
                                                 components: componentsArray,
@@ -194,8 +215,11 @@ define([
             this.$el.on("tagseditstart", this.proxiedOnTagsEditStart);
             this.proxiedOnTagsEditDone = $.proxy( this.editTagsDone, this);
             this.$el.on("tagseditdone", this.proxiedOnTagsEditDone);
+            this.proxiedOnMediaSelected = $.proxy( this.mediaSelected, this);
+            this.$el.on("mediaSelected", this.proxiedOnMediaSelected);
             return this;
         },
+
         editTagsInit: function () {
             var data  = arguments[1]
               , input = data.input
@@ -416,10 +440,10 @@ define([
             components.filterById(serialize);*/
 
 
-        //    this.page.set("components",serialize);
+            //    this.page.set("components",serialize);
             //this.page.component=serialize;
 
-       //     console.log(this.page);
+            //     console.log(this.page);
            /* this.page = new Page({
                 websiteId:this.websiteId,
                 title: pageTitle,
@@ -436,7 +460,7 @@ define([
                 }
             });*/
 
- /*           this.page.save().done( function(err,res) {
+            /*           this.page.save().done( function(err,res) {
                 console.log(err);
                 console.log(res);
                 console.log('page sved');
@@ -475,7 +499,7 @@ define([
             var content = data.content;
             var page = data.pageId;
 
-            //console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
+            console.log('data '+data+' target '+target+' parent '+parent+' componentType '+componentType+' componentId '+componentId+' component '+component+' dataClass '+dataClass+' content '+content+' page '+page);
 
             if (componentType == 'blog' || componentType == 'single-post') {
                 var postId = $(target).closest(".single-blog").attr("data-postid");
@@ -687,6 +711,7 @@ define([
             $.cookie('website-setup', 'true', { path: '/' });
             this.render();
         },
+
         _getThemePreview: function (themeId, done, fail) {
             var p1 = CmsService.getThemePreview(themeId);
             p1.responseType = "arraybuffer";
@@ -696,6 +721,7 @@ define([
 
             return p1;
         },
+
         setThemePreview: function (themeId, imageElement) {
             var self = this;
             self._getThemePreview(themeId, function (themePreview) {
@@ -704,6 +730,207 @@ define([
             },function(resp){
                 $$.viewManager.showAlert("An error occurred retrieving the Theme Preview");
             });
+
+        },
+
+        getTempPage: function () {
+            var self = this
+                , temp_page
+                , p1 = $.Deferred();
+            if (self.temp_page === null || self.temp_page.get("_id") === null) {
+                if ( self.pageHandle === null ) {
+                    self.pageHandle = "index_temp_page";
+                }
+                else if ( self.pageHandle.indexOf("_temp_page") === -1 ) {
+                    self.pageHandle += "_temp_page";
+                }
+                self.getPage()
+                    .done(function () {
+                        temp_page = self.page.toJSON();
+                        if ( temp_page._id !== null ) {
+                            self.temp_page = new Page(temp_page);
+                            p1.resolve(self.temp_page);
+                        } else {
+                            self.pageHandle = self.pageHandle.replace("_temp_page", "");
+                            self.getPage()
+                                .done(function () {
+                                    temp_page = self.page.toJSON();
+                                    temp_page.handle += "_temp_page";
+                                    temp_page._id = null;
+                                    self.temp_page = new Page(temp_page);
+                                    self.temp_page.save()
+                                        .done(function () {
+                                            p1.resolve(self.temp_page);
+                                        }).fail(function (){
+                                            p1.reject();
+                                        })
+                                })
+                        }
+
+
+                    });
+                return p1;
+            }
+            else {
+                return self.temp_page.fetch();
+            }
+        },
+
+        openSavePageModal: function (){
+            $('#save-page-modal').modal('show');
+        },
+
+        ignorePageChanges: function (){
+            console.log("ignore")
+        },
+
+        savePageChanges: function (){
+            console.log("save")
+        },
+
+        openMediaModal: function (){
+
+            $("media-manager-modal").modal("show")
+
+        },
+
+        uploadMedia: function (){
+            var self = this;
+            require(['libs_misc/jqueryfileupload/js/jquery.fileupload.view'], function(uploadView) {
+                self.uploadView = new uploadView();
+                self.uploadView.maxNumberOfFiles = 1;
+                self.uploadView.uploadType = "assets";
+                $$.viewManager.show(self.uploadView, "#upload-photo-container");
+                self.addSubView(self.uploadView);
+
+                self.vent.off("uploadcomplete");
+                self.vent.on("uploadcomplete", self._onPhotoUploaded.bind(self));
+            });
+        },
+
+        _onPhotoUploaded: function(result) {
+            var self = this
+              , tmpl
+              , html
+              , data = {}
+              , selector = "#media-manager-modal"
+              , newItem = {
+                    filename: result.files[0].name,
+                    url: result.files[0].url,
+                    date: result.files[0].date,
+                    _id: result.files[0]._id
+
+                };
+
+            data.item = newItem;
+            data.length = $(".media-list > ").length;
+
+            tmpl = $$.templateManager.get("media-list-item", self.templateKey);
+            html = tmpl(data);
+
+            $(".media-list").append(html);
+            self.mediaSelected()
+            //self.user.set({photo:url});
+            //self.saveUser();
+        },
+
+        getAssets: function () {
+            var self = this;
+            self.assets = new Assets({accountId:self.account.get("_id")});
+            return self.assets.fetch();
+        },
+
+        mediaSelected: function () {
+            var $inputs = $(".ckbox input[type='checkbox']:checked")
+               , $mediaList = $(".media.media-list > div");
+
+            if ( $inputs.length > 0  ) {
+                $(".filemanager-options > li[class!='filter-type'] > a").removeClass("disabled");
+            } else  {
+                $(".filemanager-options > li[class!='filter-type'] > a").addClass("disabled");
+            }
+            if ( $mediaList.length > 0 ) {
+                $("#selectall").prop("disabled", false);
+
+            } else {
+                $("#selectall").prop("disabled", true);
+                $("#selectall").prop("checked", false);
+                $(".filemanager-options > li[class!='filter-type'] > a").addClass("disabled");
+            }
+        },
+
+        _resetMediaBatch: function (){
+            var self = this;
+
+            self.mediaBatch = null;
+        },
+
+        _addFromMediaBatch: function (mediaId) {
+            var self = this;
+            self.mediaBatch.push(mediaId);
+        },
+
+        _removeFromMediaBatch: function (mediaId) {
+            var self = this;
+
+            self.mediaBatch.splice(mediaId);
+        },
+
+        deleteMedia:function (event){
+            var self = this
+              , $targetElement = $(event.target)
+              , mediaId = $targetElement.data("id")
+              , asset = new Asset({ _id: mediaId});
+
+            asset.destroy().always(function (resp) {
+                console.log("Delete return");
+                console.log(resp);
+                if (resp.status === 1) {
+                    //$targetElement.closest(".image").parent().remove();
+                    $.when($targetElement.parent().parent().parent().parent().parent().parent().remove()).then(function(){
+                        self.mediaSelected();
+                    })
+                }
+            });
+        },
+
+        deleteBatch: function (e) {
+            var self = this
+              , $inuputs = $(".media-list .ckbox input[type='checkbox']:checked")
+              , ids = [];
+            $inuputs.each(function (index, element) {
+                ids.push($(element).attr("id"));
+                var asset = new Asset({ _id: $(element).attr("id")});
+
+                asset.destroy().always(function (resp) {
+                    console.log("Delete return");
+                    console.log(resp);
+                    if (resp.status === 1) {
+                        //console.log($targetElement.parent(".image").parent());
+                        //console.log($targetElement.closest(".image").parent());
+                        //$targetElement.closest(".image").parent().remove();
+                      //  $targetElement.parent().parent().parent().parent().parent().parent().remove();
+                        $.when($(element).parent().parent().parent().parent().remove()).then(function(){
+                            self.mediaSelected();
+                        })
+                    }
+                    //self.mediaSelected()
+                });
+
+                e.preventDefault();
+                e.stopImmediatePropagation();
+            })
+        },
+
+        selectAll: function (){
+            var $selectAll = $("#selectall")
+              , $inuputs = $(".media-list .ckbox input[type='checkbox']")
+              , isChecked = $selectAll.prop("checked");
+
+            $inuputs.each(function (){
+                $(this).prop("checked", isChecked);
+            })
+            this.mediaSelected();
         }
     });
 

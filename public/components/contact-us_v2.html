@@ -1,46 +1,48 @@
-
-<div class="component contact-us contact-us-v1" data-class="contact-us" data-id="" ng-style="background: {{component.bg.color}};color: {{component.txtcolor}};">
+<div class="component contact-us contact-us-v2" data-class="contact-us-v2" data-id="{{component._id}}"
+     style="background: {{component.bg.color}};color: {{component.txtcolor}};">
 
     <div class="component-body">
         <div class="container">
             <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h3 class="contact-us-title">
+                        <div class="editable text-center" data-class="title">
+                            {{component.title}}
+                        </div>
+                    </h3>
 
-                <h3 class="contact-us-title">
-                    <div class="editable" data-class="title">
-                        Contact
+                    <div class="contact-us-subtitle">
+                        <div class="editable text-center" data-class="subtitle">
+                            {{component.subtitle}}
+                        </div>
                     </div>
-                </h3>
 
-                <div class="contact-us-subtitle">
-                    <div class="editable" data-class="subtitle">
-                        Send me a Messgage
-                    </div>
-                </div>
+                    <form class="form-horizontal" action="" method="post">
+                        <fieldset>
 
-
-                <form class="form-horizontal" action="" method="post">
-                    <fieldset>
-
-                        <div class="form-group">
-                            <input id="name" name="name" type="text" placeholder="Name" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <input id="email" name="email" type="text" placeholder="Email" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <textarea class="form-control" id="message" name="message" placeholder="Message" rows="5"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-outline btn-lg">Send</button>
+                            <div class="form-group">
+                                <input id="name" name="name" type="text" placeholder="Name" class="form-control">
                             </div>
-                        </div>
-                    </fieldset>
-                </form>
 
+                            <div class="form-group">
+                                <input id="email" name="email" type="text" placeholder="Email" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <textarea class="form-control" id="message" name="message" placeholder="Message"
+                                          rows="5"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg">Send</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="col-md-3"></div>
             </div>
         </div>
     </div>

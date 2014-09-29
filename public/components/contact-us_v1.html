@@ -5,7 +5,7 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div id="contact-us" data-ng-show="component" ng-style="background: {{component.bg.color}};color: {{component.txtcolor}};">
+<div id="contact-us" data-ng-show="component" data-class="contact-us" data-id="{{component._id}}" style="background: {{component.bg.color}}; color: {{component.txtcolor}};">
     <h3 class="editable title" data-class="label">
         <span data-ng-show="component.title">{{component.title}}</span>
         <span data-ng-show="!component.title">Contact us Title</span>

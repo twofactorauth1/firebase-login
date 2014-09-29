@@ -14,7 +14,7 @@ var uploadApi = require('./1.0/upload.api');
 var geoApi = require('./1.0/geo.api');
 var emailDataApi = require('./1.0/emaildata.api');
 
-//CME
+//CMS
 var cmsApi = require('./1.0/cms.api');
 
 //Integrations
@@ -42,6 +42,9 @@ var analyticsApi = require('./1.0/analytics.api');
 
 //Assets
 var assetsApi = require('./1.0/assets.api');
+
+//Dashboard
+var dashboardApi = require('./1.0/dashboard.api');
 
 module.exports = {
 

@@ -1,0 +1,23 @@
+<div class="component" data-ng-show="component" data-class="coming-soon" data-id="{{component._id}}" style="height:{{minHeight}}px">
+    <div class="component-body" id="{{component.anchor}}">
+	        <div class="coming-soon {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") center center no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
+	        	<div class="coming-soon-wrap">
+		            <div class="inner-page">
+			            <div>
+			                <img src="{{layout.account.business.logo}}" alt="Logo" class="logo">
+			                <h1 class="heading">{{component.title}}</h1>
+			                <p class="text">
+			                    {{component.text}}
+			                </p>
+			                <div class="row">
+			                    <!--div id="countdown"></div-->
+			                </div>
+			                <div class="arrow-down">
+								<a data-ng-href="{{component.btn.url}}" du-smooth-scroll><i class="fa fa-angle-double-down" style="color: {{component.txtcolor||primaryTextColor}};"></i></a>
+							</div>
+			            </div>
+			        </div>
+			</div>
+        </div>
+    </div>
+</div>

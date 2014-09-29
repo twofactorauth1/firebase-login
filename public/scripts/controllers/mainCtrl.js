@@ -6,6 +6,13 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
         var account, pages, website, that = this;
         that.segmentIOWriteKey = ENV.segmentKey;
 
+        var body = document.body,
+        html = document.documentElement;
+
+        var height = Math.max(body.scrollHeight, body.offsetHeight,
+            html.clientHeight, html.scrollHeight, html.offsetHeight);
+        $scope.minHeight = height;
+
 
         $scope.isSection = function(value) {
             if (value == 'section') {

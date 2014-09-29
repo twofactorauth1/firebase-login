@@ -1,6 +1,6 @@
 <a class="video clearfix" ng-click="showVideo(video)">
-    <h3 class="video-title"><span class="glyphicon glyphicon-move"></span><span tooltip="{{video.title.$t}}" tooltip-placement="bottom" class="single-line-text">{{video.title.$t}}</span>
-    </h3>
+    <h4 class="video-title"><span class="glyphicon glyphicon-move"></span><span tooltip="{{video.title.$t}}" tooltip-placement="bottom" class="single-line-text">{{video.title.$t}}</span>
+    </h4>
     <img ng-src="{{video.media$group.media$thumbnail[1].url}}" class="preview-image"/>
 
     <div class="duration">{{formatDuration(video.media$group.yt$duration.seconds)}}</div>

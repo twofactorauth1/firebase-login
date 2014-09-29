@@ -1,4 +1,4 @@
-angular.module('app.services').service('youtube', ['$http', function ($http) {
+angular.module('var.services').service('youtube', ['$http', function ($http) {
 
     var urlBase = "https://gdata.youtube.com/feeds/api/";
 

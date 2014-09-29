@@ -5,77 +5,82 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div ng-show="component"
-class="meet-team {{component.bg.img.parallax?'parallax':''}}">
-    <div class="component-body" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='background: url("{{component.bg.img.url}}"); background: {{component.bg.color||secondaryColor}}; color: {{component.txtcolor||primaryTextColor}};'>
-        <div class="inner-page">
-            <h3 class="title">
-                <div class="editable" data-class="title">
-                    {{component.title}}
-                </div>
-            </h3>
-            <div class="mb30"></div>
+<div class="component" ng-show="component" data-class="meet-team" data-id="{{component._id}}">
+    <div class="component-body">
+        <div class="meet-team {{component.bg.img.parallax?'parallax':''}}">
+            <div class="component-body" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='background: url("{{component.bg.img.url}}"); background: {{component.bg.color||secondaryColor}}; color: {{component.txtcolor||primaryTextColor}};'>
+                <div class="inner-page">
+                    <h3 class="title">
+                        <div class="editable" data-class="title">
+                            {{component.title}}
+                        </div>
+                    </h3>
+                    <div class="mb30"></div>
 
-            <div class="row">
-                <div class="col-xs-12 col-sm-4 col-md-3 profilepic pull-left" ng-repeat="teamMember in component.teamMembers">
-                    <div class="{{teamMember.becomeMember?'become-member':''}}">
-                        <div class="profile-img">
-                            <div class="profilepic-hover">
-                                <div style="float:left;clear:left;height:15px;width:115px"></div>
-                                <div style="float:right;clear:right;height:15px;width:115px"></div>
-                                <div style="float:left;clear:left;height:15px;width: 115px;"></div>
-                                <div style="float:right;clear:right;height:15px;width:115px"></div>
-                                <div style="float:left;clear:left;height:15px;width:40px"></div>
-                                <div style="float:right;clear:right;height:15px;width:40px"></div>
-                                <div style="float:left;clear:left;height:15px;width:25px"></div>
-                                <div style="float:right;clear:right;height:15px;width:25px"></div>
-                                <div style="float:left;clear:left;height:15px;width:20px"></div>
-                                <div style="float:right;clear:right;height:15px;width:20px"></div>
-                                <div style="float:left;clear:left;height:15px;width:10px"></div>
-                                <div style="float:right;clear:right;height:15px;width:10px"></div>
-                                <div style="float:left;clear:left;height:15px;width:10px"></div>
-                                <div style="float:right;clear:right;height:15px;width:10px"></div>
-                                <div style="float:left;clear:left;height:15px;width:5px"></div>
-                                <div style="float:right;clear:right;height:15px;width:5px"></div>
-                                <div style="float:left;clear:left;height:15px;width:10px"></div>
-                                <div style="float:right;clear:right;height:15px;width:10px"></div>
-                                <div style="float:left;clear:left;height:15px;width:15px"></div>
-                                <div style="float:right;clear:right;height:15px;width:15px"></div>
-                                <div style="float:left;clear:left;height:15px;width:20px"></div>
-                                <div style="float:right;clear:right;height:15px;width:20px"></div>
-                                <div style="float:left;clear:left;height:15px;width:25px"></div>
-                                <div style="float:right;clear:right;height:15px;width:25px"></div>
-                                <div style="float:left;clear:left;height:15px;width:35px"></div>
-                                <div style="float:right;clear:right;height:15px;width:35px"></div>
-                                <div style="float:left;clear:left;height:15px;width:45px"></div>
-                                <div style="float:right;clear:right;height:15px;width:45px"></div>
-                                <div style="float:left;clear:left;height:15px;width:115px"></div>
-                                <div style="float:right;clear:right;height:15px;width:115px"></div>
-                                <span class="c" style="font-size: 13px;">
-                                    <div class="editable" data-class="bio">
-                                        <p>{{teamMember.bio}}</p>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-3 profilepic pull-left" ng-repeat="teamMember in component.teamMembers">
+                            <div class="{{teamMember.becomeMember?'become-member':''}}">
+                                <div class="profile-img">
+                                    <div class="profilepic-hover">
+                                        <div style="float:left;clear:left;height:15px;width:115px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:115px"></div>
+                                        <div style="float:left;clear:left;height:15px;width: 115px;"></div>
+                                        <div style="float:right;clear:right;height:15px;width:115px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:40px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:40px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:25px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:25px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:20px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:20px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:10px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:10px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:10px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:10px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:5px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:5px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:10px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:10px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:15px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:15px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:20px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:20px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:25px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:25px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:35px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:35px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:45px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:45px"></div>
+                                        <div style="float:left;clear:left;height:15px;width:115px"></div>
+                                        <div style="float:right;clear:right;height:15px;width:115px"></div>
+                                        <span class="c" style="font-size: 13px;">
+                                            <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}">
+                                                <span ng-bind-html="teamMember.bio"/>
+                                            </div>
+                                        </span>
+                                        <ul class="profile-social">
+                                            <li ng-repeat="(val, key) in teamMembers.social">
+                                                <a href="{{key}}" target="_blank">
+                                                    <span class="fa fa-{{val}}"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <img ng-show="teamMember.profilepic" ng-src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img" />
+
+                                </div>
+                                <h4 class="name">
+                                    <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}">
+                                        <span ng-bind-html="teamMember.name"/>
+                                    </div>
+                                    <div class="name-border"></div>
+                                </h4>
+                                <span class="profile-position">
+                                    <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}">
+                                        <span ng-bind-html="teamMember.position"/>
                                     </div>
                                 </span>
-                                <ul class="profile-social">
-                                    <li ng-repeat="(val, key) in teamMember.social">
-                                        <a href="{{key}}" target="_blank">
-                                            <span class="fa fa-{{val}}"></span>
-                                        </a>
-                                    </li>
-                                </ul>
                             </div>
-                            <img src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img" />
                         </div>
-                        <h4 class="name">
-                            <div class="editable" data-class="name">
-                                <h4>{{teamMember.name}}</h4>
-                            </div>
-                        </h4>
-                        <span class="profile-position">
-                            <div class="editable" data-class="position">
-                                {{teamMember.position}}
-                            </div>
-                        </span>
                     </div>
                 </div>
             </div>

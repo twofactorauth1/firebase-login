@@ -1,0 +1,43 @@
+<style>
+
+</style>
+
+<div class="container thumbnail-slider-v1">
+    <div class="col-md-12"><br>
+        <h1 class="center editable">{{component.title}}</h1><br>
+        <div class="well" style="background: none">
+            <div id="myCarousel-{{component.anchor}}" class="carousel slide">
+                <ol class="carousel-indicators" ng-hide="component.collections[0][0].detail">
+                    <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in component.collections"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="item {{$first?'active':''}}" data-ng-repeat="collection in component.collections">
+                        <div class="row">
+                            <div class="col-sm-3 hideText" data-ng-repeat="image in collection"> <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center">
+                                <img style="width: {{image.width}}px;height: {{image.height}}px" src="{{image.url}}" alt="Image" class="img-responsive hover"/>
+                                <!--<span style="color: {{collection.imagetextcolor}};" >{{image.text}}</span> -->
+                            </a>
+                                <h4 ng-show="component.collections[0][0].detail" style="color: {{component.imagetextcolor}};text-align: center" >{{image.text}}</h4>
+                                <p ng-show="image.detail">{{image.detail}}</p>
+                                <div class="row">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-6">
+                                        <a ng-show="image.btn.text" class="btn btn-primary btn-block center" data-ng-href="{{image.btn.url}}" du-smooth-scroll>
+                                            <div class="{{collection.btn.icon}}"></div>
+                                            <div data-class="btn-text" class="editable btn-text">
+                                                {{image.btn.text}}
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+                <a class="left carousel-control glyphicon glyphicon-chevron-left" href="#myCarousel-{{component.anchor}}"style="background: none" data-slide="prev"></a>
+                <a class="right carousel-control glyphicon glyphicon-chevron-right" href="#myCarousel-{{component.anchor}}" data-slide="next"></a>
+            </div>
+        </div>
+    </div>
+</div>

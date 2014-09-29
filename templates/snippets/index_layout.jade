@@ -32,33 +32,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main")
     body(class='theme-main navbar-v#{ account.website.nav_version }', ng-controller="LayoutCtrl as layout", ng-cloak)
         block body_content
             div(id='fb-root')
-            div(id='header')
-                nav(class="navbar navbar-default", role="navigation")
-                    div(class='container-fluid')
-                        div(class='navbar-header')
-                            button(type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1")
-                                span(class='sr-only') Toggle navigation
-                                span(class='icon-bar')
-                                span(class='icon-bar')
-                                span(class='icon-bar')
-                            a(class="navbar-brand editable", href=account.accountUrl data-name=account.company.name)
-                                span(class="logo-1")
-                                    img(src=account.business.logo scale="0")
-                        div(class='collapse navbar-collapse', id='bs-example-navbar-collapse-1')
-                            ul(class='nav navbar-nav navbar-right', data-ng-repeat="mainMenu in layout.website.linkLists track by $index", data-ng-if="mainMenu.handle=='head-menu' ")
-                                li(data-ng-repeat="link in mainMenu.links track by $index")
-                                    a(data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll) {{link.label || link.url}}
-                                    a(data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}") {{link.label || link.url}}
+            div(id='toolbar')
         block content
-        block footer
-            div#footer
-                div(class='footer-after section')
-                div.row
-                p(class="col-sm-8 copyright") Copyright © 2014.  All Rights reserved.
-                    div(class="clear mb15 visible-xs")
-                    p(class="col-sm-4 powered-by")
-                        a(href='//www.indigenous.io' rel="nofollow") Powered by  Indigenous
-                        img(class="footer-logo" src="/assets/images/footer-logo.png")
-
         block body_scripts
             include index_body_scripts

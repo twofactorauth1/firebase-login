@@ -44,6 +44,7 @@ require.config({
         moment: 'libs/moment/min/moment.min',
         daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
         jquerydragdrop: 'libs_misc/jquery/jquery.drag-drop.plugin',
+        jqueryFileUpload: 'libs_misc/jqueryfileupload/js/jquery.fileupload.view',
 
         //VIDEO AUTORESPONDER
         angular: 'libs/angular/angular',
@@ -62,7 +63,7 @@ require.config({
         datepicker: 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         leaflet: 'libs/leaflet/dist/leaflet',
         tagsinput: 'libs_misc/jquery.tagsinput/jquery.tagsinput.min',
-        gritter: 'libs/jquery.gritter/js/jquery.gritter.min',
+        toaster: 'libs/AngularJS-Toaster/toaster.js',
     },
 
     shim: {
@@ -136,6 +137,9 @@ require.config({
         gritter: {
             deps: ['jquery']
         },
+        jqueryFileUpload: {
+            deps: ['jquery']
+        },
         angular: {
             exports: "angular"
         },
@@ -192,7 +196,7 @@ require.config({
                 'datepicker',
                 'tagsinput',
                 'd3',
-                'gritter',
+                'toaster',
             ]
         }
     },

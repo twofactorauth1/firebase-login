@@ -29,6 +29,16 @@ var dao = {
             });
         },
 
+        getCourseByIdForSubscriber: function (courseId, fn) {
+            this.getById(courseId, function (err, course) {
+                if (!err && course) {
+                    var videos = course.get("videos");
+
+                }
+                return fn(err, course);
+            });
+        },
+
         listUserCourses: function (userId, fn) {
             this.findMany({userId: userId, _id: { $ne: "__counter__" }}, fn);
         },

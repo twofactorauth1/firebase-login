@@ -1,0 +1,52 @@
+//- script(src="../js/libs/imperavi-redactor-widget/assets/redactor.min.js")
+
+
+//- script(type='text/javascript') $(document).ready(function(){setTimeout(function(){$("div.editable").redactor({toolbarFixed:true,toolbarExternal:"#toolbar",focusEnd: true,buttons:["html","formatting","bold","italic","deleted","unorderedlist","orderedlist","outdent","indent","image","file","link","alignment","horizontalrule"]})},1e3)});
+script(src="/js/libs/requirejs/require.js")
+
+script(type='text/javascript') Aloha = {}; Aloha.settings = { sidebar: { disabled: true } };
+
+script(src='http://aloha-editor.org/latest/lib/aloha.js', data-aloha-plugins=' common/ui, common/format, common/table, common/list, common/link, common/highlighteditables, common/block, common/undo, common/image, common/contenthandler, common/paste, common/characterpicker, common/commands, common/align, common/abbr')
+
+link(href='http://aloha-editor.org/latest/css/aloha.css', rel='stylesheet', type='text/css')
+
+script(type="text/javascript").
+  Aloha.ready( function() {
+  var $ = Aloha.jQuery;
+  $('.editable').aloha();
+  $('#main-area').on('click','.add-post',function() {
+  $('.editable').aloha();
+  });
+  $(document).on('click', '.blog-title', function(e) {
+  e.preventDefault();
+  });
+  $('#main-area').bind('contentchanged', function() {
+  alert('main-area changed');
+  $('.editable').aloha();
+  });
+  Aloha.bind('aloha-editable-deactivated', function(){
+  var content = Aloha.activeEditable.getContents();
+  var contentId = Aloha.activeEditable.obj[0].id;
+  var pageId = window.location.pathname;
+  if ( contentId.match(/-aloha$/gi) ) {
+  contentId = contentId.replace( /-aloha/gi, '' );
+  }
+  parent.$('#edit-website-wrapper').trigger("websiteedit", {
+  content: content,
+  contentId: contentId,
+  pageId: pageId,
+  target: Aloha.activeEditable.obj[0],
+  dataClass: Aloha.activeEditable.obj[0].attributes['data-class'].value
+  });
+  return;
+  });
+  $('a').on('click', function(e){
+  var href = $(this).attr('href');
+  if (href.indexOf('?editor=true') > -1) {
+  } else if (href.indexOf('?') > -1) {
+  $(this).attr('href', this + "&editor=true")
+  } else {
+  $(this).attr('href', this + "?editor=true")
+  }
+  });
+  });
