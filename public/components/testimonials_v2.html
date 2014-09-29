@@ -38,7 +38,7 @@
             <ol class="carousel-indicators">
                 <li ng-repeat="testimonial in component.testimonials track by $index"
                     data-target="#{{component.anchor}}" data-slide-to="{{$index}}"
-                    class="{{$index==0?'active':'' }}"></li>
+                    class="{{$index==0?'active':'' }}" style="background-color: {{component.ovalcolor}};"></li>
             </ol>
 
             <!-- Controls -->
