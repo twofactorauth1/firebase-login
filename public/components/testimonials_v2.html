@@ -21,7 +21,7 @@
                             </div>
                             <h4 class="name">
                                 <div class="editable" data-class="name">
-                                    {{testimonial.name}}
+                                    <convert-html contents="{{testimonial.name}}">  </convert-html>
                                 </div>
                             </h4>
                             <div class="site">
@@ -38,7 +38,7 @@
             <ol class="carousel-indicators">
                 <li ng-repeat="testimonial in component.testimonials track by $index"
                     data-target="#{{component.anchor}}" data-slide-to="{{$index}}"
-                    class="{{$index==0?'active':'' }}"></li>
+                    class="{{$index==0?'active':'' }}" style="background-color: {{component.ovalcolor}};"></li>
             </ol>
 
             <!-- Controls -->
@@ -57,3 +57,4 @@
     </div>
     <div class="clearfix"></div>
 </div>
+

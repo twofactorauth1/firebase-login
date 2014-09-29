@@ -152,6 +152,79 @@ module.exports = function(grunt) {
         },
 
 
+        /*
+         * This activity is called as part of the 'production' grunt task.
+         * Put all non-angular js files here.
+         */
+         concat: {
+            js: {
+                src: ['public/js/libs/jquery/dist/jquery.js',
+                    'public/js/libs/bootstrap/dist/js/bootstrap.js',
+                    'public/js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
+                    'public/js/libs/angular/angular.js',
+                    'public/js/scripts/config.js',
+                    'public/js/libs/json3/lib/json3.js',
+                    'public/js/libs/underscore/underscore.js',
+                    'public/js/libs/angular-resource/angular-resource.js',
+                    'public/js/libs/angular-cookies/angular-cookies.js',
+                    'public/js/libs/angular-sanitize/angular-sanitize.js',
+                    'public/js/libs/angular-animate/angular-animate.js',
+                    'public/js/libs/angular-touch/angular-touch.js',
+                    'public/js/libs/angular-route/angular-route.js',
+                    'public/js/libs/angular-ui-router/release/angular-ui-router.js',
+                    'public/js/libs/jquery-waypoints/waypoints.js',
+                    'public/js/libs/angular-parallax/scripts/angular-parallax.js',
+                    'public/js/libs/moment/moment.js',
+                    'public/js/libs/angular-moment/angular-moment.js',
+                    'public/js/libs/angular-scroll/angular-scroll.js',
+                    'public/js/libs/angular-wizard/dist/angular-wizard.js',
+                    'public/js/libs/isotope/jquery.isotope.js',
+                    'public/js/libs/angular-isotope/dist/angular-isotope.js',
+                    'public/js/libs/angular-timer/dist/angular-timer.js',
+                    'public/js/scripts/utils.js'],
+                dest: 'public/js/indigenous.js'
+            }
+        },
+
+        uglify: {
+            js: {
+                files: {
+                    'public/js/indigenous.js': ['public/js/indigenous.js']
+                }
+            }
+        },
+
+        /*
+         * This is called as part of the production task.
+         * Please put all angular files here.
+         */
+        ngAnnotate: {
+            options: {
+
+            },
+            app1: {
+                files: {
+                    'public/js/ng-indigenous.js':['public/scripts/app.js',
+                        'public/scripts/directives/dmStyle.js',
+                        'public/scripts/directives/ngEnter.js',
+                        'public/scripts/directives/convertHtml.js',
+                        'public/scripts/services/accountService.js',
+                        'public/scripts/services/websiteService.js',
+                        'public/scripts/services/themeService.js',
+                        'public/scripts/services/pagesService.js',
+                        'public/scripts/services/postsService.js',
+                        'public/scripts/filters/CreateUrlFilter.js',
+                        'public/scripts/filters/generateURLforLinks.js',
+                        'public/scripts/filters/getByProperty.js',
+                        'public/scripts/controllers/mainCtrl.js',
+                        'public/scripts/controllers/blogCtrl.js',
+                        'public/scripts/controllers/layoutCtrl.js'
+                    ]
+                }
+            }
+        },
+
+
         //TESTING
         nodeunit: {
             all:['test/**/*_test.js'],
@@ -161,6 +234,7 @@ module.exports = function(grunt) {
             biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
             cms: ['cms/test/cms_manager_test.js'],
             contacts: ['test/contact.dao_test.js'],
+            contactActivities: ['contactactivities/test/*_test.js'],
             contextio:['test/contextio_test.js'],
             facebook: ['test/facebook_test.js'],
             products: ['products/tests/*_test.js'],
@@ -224,14 +298,21 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
     grunt.loadNpmTasks('grunt-ng-constant');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-ng-annotate');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
-    grunt.registerTask('production',['clean:prebuild','less','requirejs','clean:postbuild']);
+    grunt.registerTask('production',['clean:prebuild','less','requirejs','concat', 'uglify', 'ngAnnotate','clean:postbuild']);
 
+    /*
+     * This task is run by CI.
+     */
     grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
-            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets']);
+            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities']);
+
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
     grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);
@@ -248,5 +329,6 @@ module.exports = function(grunt) {
     grunt.registerTask('testProducts', ['nodeunit:products']);
     grunt.registerTask('testCms', ['nodeunit:cms']);
     grunt.registerTask('testAssets', ['nodeunit:assets']);
+    grunt.registerTask('testContactActivities', ['nodeunit:contactActivities']);
     
 };

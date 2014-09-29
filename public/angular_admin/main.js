@@ -52,6 +52,9 @@ require.config({
         'hoverClassDirective': '/angular_admin/directives/hover_class',
         'confirmClickDirective': '/angular_admin/directives/confirm_click',
         'resizeHeightDirective': '/angular_admin/directives/resize_height',
+        'truncateDirective': '/angular_admin/directives/truncate',
+        'formValidationDirective': '/angular_admin/directives/form_validations',
+        "constants": 'constants/constants',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -79,7 +82,7 @@ require.config({
         "videoPreviewDirecrive": "/pipeshift/js/modules/video/directive/videoPreview",
         "videoPlayerDirective": "/pipeshift/js/modules/video/directive/videoPlayer",
         "psEditableDirective": "/pipeshift/js/modules/video/directive/psEditable",
-        "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
+        "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton"
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},

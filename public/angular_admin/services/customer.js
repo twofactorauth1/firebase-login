@@ -1,4 +1,4 @@
-define(['app'], function (app) {
+define(['app','constants'], function (app) {
     app.register.service('CustomerService', function ($http) {
         var baseUrl = '/api/1.0/';
 
@@ -67,5 +67,105 @@ define(['app'], function (app) {
                 fn(data);
             });
         };
+
+        this.postFullContact = function (customerId, fn) {
+            var apiUrl = baseUrl + ['contact', customerId, 'fullcontact'].join('/');
+            $http.post(apiUrl, {_id: customerId})
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
+        };
+
+        this.contactLabel = function(contact) {
+			var contactTypes = $$.constants.contact.contact_types.dp;
+			var type = _.find(contactTypes, function(type) {
+				return type.data === contact.type;
+			});
+			return type == null ? "" : type.label;
+		};
+
+		this.checkBestEmail = function(contact) {
+			if (contact.details && contact.details.length > 0) {
+				//see if we have a google contact, that's the best source of email
+				var details = _.findWhere(contact.details, {
+					type : $$.constants.social.types.GOOGLE
+				});
+				if (details && details.emails.length > 0) {
+					contact.email = details.emails[0].email;
+					return true;
+				}
+				var details = contact.details[0];
+				if (details && details.emails.length > 0) {
+					contact.email = details.emails[0].email;
+					return true;
+				}
+			return false;
+			}
+		};
+
+		this.checkFacebookId = function(contact) {
+			if (contact.details && contact.details.length > 0) {
+				var details = _.findWhere(contact.details, {
+					type : $$.constants.social.types.FACEBOOK
+				});
+				if (details && details !== null) {
+					contact.facebookId = details.socialId;
+					return true;
+				}
+				return false;
+			}
+		};
+
+		this.checkTwitterId = function(contact) {
+			if (contact.details && contact.details.length > 0) {
+				var details = _.findWhere(contact.details, {
+					type : $$.constants.social.types.TWITTER
+				});
+				if (details) {
+					contact.twitterId = details.socialId;
+					return true;
+				}
+				return false;
+			}
+		};
+
+		this.checkLinkedInId = function(contact) {
+			if (contact.details && contact.details.length > 0) {
+				var details = _.findWhere(contact.details, {
+					type : $$.constants.social.types.LINKEDIN
+				});
+				if (details) {
+					if (details.websites !== null && details.websites.length > 0) {
+						var _value = _.find(details.websites, function(num){ return num !== null; });
+						if(_value)
+						{
+							contact.linkedInUrl = _value;
+							return true;
+						}
+					}
+					contact.linkedInId = details.socialId;
+					return true;
+				}
+				return false;
+			}
+		};
+
+
+		this.checkAddress = function(contact) {
+			var _address = null;
+			if (contact.details && contact.details.length > 0) {
+				if (contact.details && contact.details[0].addresses && contact.details[0].addresses.length > 0) {
+						_address = contact.details[0].addresses[0];
+						var address_str = "";
+						if(_address.lat !== '' && _address.lon !== '')
+						{
+							address_str = _address.lat.concat(",",_address.lon);
+						}
+				     contact.address = encodeURIComponent(address_str);
+					return true;
+				}
+			}
+			return false;
+		};
     });
 });

@@ -5,5 +5,18 @@ define(['app', 'customerService', 'stateNavDirective'], function(app) {
             $scope.customer = customer;
             $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
         });
+        $scope.moreToggleFn = function (type) {
+            var id = '.li-' + type + '.more';
+            if ($(id).hasClass('hidden')) {
+                $(id).removeClass('hidden');
+            } else {
+                $(id).addClass('hidden');
+            }
+        };
+        $scope.importContactFn = function () {
+            CustomerService.postFullContact($scope.customerId, function (data) {
+                console.info(data);
+            });
+        };
     }]);
 });
