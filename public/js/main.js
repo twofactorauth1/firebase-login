@@ -63,7 +63,7 @@ require.config({
         datepicker: 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         leaflet: 'libs/leaflet/dist/leaflet',
         tagsinput: 'libs_misc/jquery.tagsinput/jquery.tagsinput.min',
-        gritter: 'libs/jquery.gritter/js/jquery.gritter.min',
+        toaster: 'libs/AngularJS-Toaster/toaster.js',
     },
 
     shim: {
@@ -196,7 +196,7 @@ require.config({
                 'datepicker',
                 'tagsinput',
                 'd3',
-                'gritter',
+                'toaster',
             ]
         }
     },

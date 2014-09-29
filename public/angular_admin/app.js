@@ -1,4 +1,4 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule'], function (angularAMD) {
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective'], function (angularAMD) {
     var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var']);
 
     //routes
@@ -75,6 +75,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule'], funct
     });
 
     $('#preloader').fadeOut();
+
     angularAMD.bootstrap(app);
     return app;
 });

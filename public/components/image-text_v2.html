@@ -22,9 +22,9 @@
             </div>
             <div class="clearfix mb10 visible-xs"></div>
 
-             <div class="pull-{{component.imagePosition}} col-sm-3 col-xs-12 image-text-image">
+             <div ng-show="component.imgurl" class="pull-{{component.imagePosition}} col-sm-3 col-xs-12 image-text-image">
                 <div class="editable" data-class="url">
-                    <img src="{{component.imgurl}}" class="img-responsive img-circle">
+                    <img ng-src="{{component.imgurl}}" class="img-responsive img-circle">
                 </div>
                 <p class="center editable" data-class="caption">{{component.caption}}</p>
             </div>

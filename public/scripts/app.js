@@ -55,6 +55,10 @@ var mainApp = angular
                 templateUrl: '../views/blog.html',
                 controller: 'BlogCtrl as blog'
             })
+            .when('/page/:pagename', {
+                templateUrl: '../views/main.html',
+                controller: 'LayoutCtrl as layout'
+            })
             .otherwise({redirectTo: '/'});
     }])
     .controller('LayoutCtrl', function($scope, parallaxHelper){
