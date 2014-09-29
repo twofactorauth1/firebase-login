@@ -36,7 +36,7 @@
         <tab heading="Page" active="tab.active">
             <div class="leftpanelinner">
                 <button class="btn btn-success btn-block" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
-                    <span>&nbsp; Create Page</span>
+                    <span> Page</span>
                 </button>
                 <h4>Current Page</h4>
                  <select id="pageSelection" class="form-control input-lg" ng-model="pageSelected" ng-change="updatePage()">
@@ -46,9 +46,9 @@
                 <div class="mb20"></div>
 
                 <div id="nestable">
-                    <h4>Page Components ({{components.length}})</h4>
+                    <h4>Components ({{components.length}})</h4>
                     <button class="btn btn-orange btn-block" data-toggle="modal" data-target="#add-component-modal"><i class="fa fa-plus"></i>
-                        <span>&nbsp; Add New Component</span>
+                        <span> Component</span>
                     </button>
                     <div class="mb10"></div>
                     <ul ui-sortable="sortableOptions" ng-model="components">
