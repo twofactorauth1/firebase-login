@@ -1,12 +1,18 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="pageheader row">
-    <div class="col-xs-6">
+    <div class="col-xs-5">
         <h2><i class="fa fa-desktop"></i> Editing
             <span id="current-url"><i class="fa fa-edit"></i>
             </span>
         </h2>
     </div>
-    <div class="col-xs-6">
+    <div class="col-xs-2">
+        <ul class="screen-type hidden">
+            <li tooltip-placement="bottom" tooltip="Desktop View" ng-click="showDesktop()"><h4><i class="fa fa-desktop"></i></h4></li>
+            <li tooltip-placement="bottom" tooltip="Mobile View" ng-click="showMobile()"><h4><i class="fa fa-mobile"></i></h4></li>
+        </ul>
+    </div>
+    <div class="col-xs-5">
 
         <a class="btn btn-success pull-right btn-edit-page" type="button" ng-click="editPage()" ng-hide="isEditing">
             <span class="fa fa-edit"></span>
@@ -29,6 +35,7 @@
     </div>
 </div>
 
+<img ng-show="isMobile" src="https://s3-us-west-2.amazonaws.com/indigenous-admin/iphone-background.png">
 <iframe id="iframe-website" name="iframe-website" onload="iframeLoaded()" src="/" style="width: 100%;" ng-style="style()" resize></iframe>
 
 <div class="rightpanel rightpanel-website">
@@ -85,7 +92,26 @@
                             <button type="button" class="btn btn-default btn-block">Change</button>
                         </div>
                     </div>
-                    <spectrum-colorpicker ng-model="hey"></spectrum-colorpicker>
+                    <div class="mb30"></div>
+                    <div class="form-group">
+                        <label for="colorpicker">Color Primary:  </label>
+                        <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" ng-model="website.settings.primary_color" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="colorpicker">Color Secondary:  </label>
+                        <spectrum-colorpicker format="'hex'" ng-model="secondaryColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="colorpicker">Highlight Primary:  </label>
+                        <spectrum-colorpicker format="'hex'" ng-model="primaryHighlight" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="colorpicker">Text Color Primary:  </label>
+                        <spectrum-colorpicker format="'hex'" ng-model="primaryTextColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="colorpicker">Font Family Primary:  </label>
+                    </div>
                 </div>
             </div>
         </tab>
@@ -94,7 +120,7 @@
 
                 <div class="form-group">
                     <label for="current-domain" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="This is the domain that was automatically created when you signed up.">Indigenous Domain</label>
-                    <input id="current-domain" class="form-control input-lg" type="text" value="ronflutes@INDIGENOUS SOFTWARE, INC.">
+                    <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.subdomain">
                 </div>
                 <div class="form-group">
                     <label for="current-domain" class="tooltips col-xs-7" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can turn on your custom domain.">Custom Domain</label>
@@ -112,7 +138,7 @@
                 </div>
                 <div class="mb15"></div>
                 <label for="current-domain">Custom Domain Name</label>
-                <input id="current-domain" class="form-control input-lg" type="text" value="ronflutes.com">
+                <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.accountUrl">
             </div>
         </tab>
     </tabset>

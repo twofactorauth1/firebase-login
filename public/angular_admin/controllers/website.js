@@ -10,10 +10,48 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             that.user = user;
         });
 
+        //get account
+        UserService.getAccount(function (account) {
+            $scope.account = account;
+            that.account = account;
+            //get pages and find this page
+            WebsiteService.getPages(account.website.websiteId, function (pages) {
+                currentPage = 'index';
+                that.allPages = pages;
+                var parsed = angular.fromJson(pages);
+                var arr = [];
+
+                for(var x in parsed){
+                  arr.push(parsed[x]);
+                }
+                $scope.allPages = arr;
+                that.currentPageContents = _.findWhere(pages, {handle: currentPage});
+                //get components from page
+                if (that.currentPageContents.components) {
+                    $scope.components = that.currentPageContents.components;
+                }
+            });
+
+            //get website
+            WebsiteService.getWebsite(account.website.websiteId, function (website) {
+                $scope.website = website;
+                $scope.primaryColor = $scope.website.settings.primary_color;
+                $scope.secondaryColor = $scope.website.settings.secondary_color;
+                $scope.primaryHighlight = $scope.website.settings.primary_highlight;
+                $scope.primaryTextColor = $scope.website.settings.primary_text_color;
+                $scope.primaryFontFamily = $scope.website.settings.font_family;
+                $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
+            });
+
+        });
+
         $scope.components = [];
 
         $scope.pageSelected = 'index';
 
+        $scope.isEditing = false;
+
+        $scope.isMobile = false;
 
         $scope.components.sort(function (a, b) {
             return a.i > b.i;
@@ -96,9 +134,6 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
             $scope.components = that.currentPageContents.components;
         };
-
-        //if website has been edited
-        $scope.isEditing = false;
 
         $scope.editPage = function() {
             $scope.isEditing = true;
@@ -214,7 +249,6 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                     toaster.pop('success', "Component Added", "The "+newComponent.type+" component was added successfully.");
                 }
             });
-
         };
 
         $scope.deleteComponent = function(componentId) {
@@ -269,37 +303,30 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             var websiteId = that.currentPageContents.websiteId;
             var title = that.currentPageContents.title;
 
-            WebsiteService.deletePage(websiteId, pageId, title, function(data) {
+            WebsiteService.deletePage(pageId, websiteId, title, function(data) {
                 console.log('Data >>> ', data);
                 toaster.pop('success', "Page Deleted", "The "+title+" page was deleted successfully.");
                 document.getElementById("iframe-website").setAttribute("src", "/");
             });
         };
 
+        $scope.showMobile = function() {
+            console.log('show mobile');
+            $scope.isMobile = true;
+        };
 
-        //get account
-        UserService.getAccount(function (account) {
-            $scope.account = account;
-            that.account = account;
-            //get pages and find this page
-            WebsiteService.getPages(account.website.websiteId, function (pages) {
-                currentPage = 'index';
-                that.allPages = pages;
-                var parsed = angular.fromJson(pages);
-                var arr = [];
+        $scope.updateThemeSettings = function() {
+            console.log('update theme', $scope.website.settings);
+            var data = {
+                _id: $scope.website._id,
+                accountId: $scope.website.accountId,
+                settings: $scope.website.settings
+            };
 
-                for(var x in parsed){
-                  arr.push(parsed[x]);
-                }
-                $scope.allPages = arr;
-                that.currentPageContents = _.findWhere(pages, {handle: currentPage});
-                //get components from page
-                if (that.currentPageContents.components) {
-                    $scope.components = that.currentPageContents.components;
-                }
+            WebsiteService.updateWebsite(data, function(data) {
+                console.log('updated website settings');
             });
-        });
-
+        };
 
     }]);
 });

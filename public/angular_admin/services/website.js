@@ -2,13 +2,30 @@ define(['app'], function (app) {
 	app.register.service('WebsiteService', function ($http) {
 		var baseUrl = '/api/1.0/';
 
-		this.getWebsite = function (fn) {
-			var apiUrl = baseUrl + ['cms/website/', $$.server.websiteId].join('/');
+		this.getWebsite = function (websiteID, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId].join('/');
 			console.log('Getting Website '+apiUrl);
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
 			});
+		};
+
+		//website
+		this.updateWebsite = function(data, fn) {
+			var apiUrl = baseUrl + ['cms', 'website'].join('/');
+			$http.get({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(data)
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+                fn(err, null);
+            });
 		};
 
 		this.getPages = function (accountId, fn) {
@@ -113,12 +130,9 @@ define(['app'], function (app) {
 		};
 
 		//website/:websiteId/page/:id/:label
-		this.deletePage = function(websiteId, pageId, label, fn) {
+		this.deletePage = function(pageId, websiteId, label, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId, label].join('/');
-			$http({
-			    url: apiUrl,
-			    method: "DELETE"
-			})
+			$http.delete(apiUrl)
 			.success(function (data, status, headers, config) {
 
 				console.log('page deleted');

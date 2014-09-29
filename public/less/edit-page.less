@@ -8,6 +8,32 @@ border-radius: 0;
 margin: 0
 }
 
+.screen-type {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 0;
+  margin-top: -16px;
+  text-align: center;
+
+    li {
+      display: inline-block;
+      padding: 10px 15px;
+      color: #999;
+      font-size: 24px;
+      cursor: pointer;
+      &.active {
+        color: #444;
+      }
+      &.not-active {
+        color:#999;
+      }
+      .fa-mobile {
+        font-size: 24px;
+      }
+    }
+
+}
+
 
 .add_section {
   padding: 10px;
