@@ -41,7 +41,11 @@ var contactActivity = $$.m.ModelBase.extend({
     types: {
         PAGE_VIEW: 'PAGE_VIEW',
         SUBSCRIBE: 'SUBSCRIBE',
-        ACCOUNT_CREATED: 'ACCOUNT_CREATED'
+        ACCOUNT_CREATED: 'ACCOUNT_CREATED',
+        EMAIL: 'EMAIL',
+        PHONECALL: 'PHONECALL',
+        FACEBOOK_LIKE: 'FACEBOOK_LIKE',
+        TWEET: 'TWEET'
     }
 });
 
