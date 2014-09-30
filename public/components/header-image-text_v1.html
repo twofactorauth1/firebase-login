@@ -3,19 +3,13 @@
         <div class="col-md-12" style="background:url('assets/images/acct_16/Resized-NE81F.png') no-repeat;height:235px;">
             <div class="container-fluid component-text">
                 <div class="row">
-                    <div class="col-md-9 col-md-offset-3"><h3>NEED HELP REACHING YOUR RACING WEIGHT?</h3></div>
+                    <div class="col-md-9 col-md-offset-3"><h3>{{component.title}}</h3></div>
                 </div>
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
 
-                        <h5>We can help! Racing Weight Coaching is one-on-one service designed to help athletes develop
-                            lean
-                            habits for a life time.Administered
-                            by Racing Weight Cookbook coauthor George Fear,RD and her team of trained
-                            professionals,Racing
-                            Weight Coaching is delivered through email,the internet
-                            and the phone and is based on the idea that connection and support not information and empty
-                            cheer-leading are the true keys successfully weight management.
+                        <h5>
+                            {{component.text}}
                         </h5>
                     </div>
                     <div class="col-md-1">&nbsp;</div>
@@ -24,24 +18,19 @@
         </div>
     </div>
     <div class="row   top-buffer">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-10 col-md-offset-1" ng-repeat="content in component.contents track by $index">
             <div class="row row-xs-height">
                 <div class="col-md-3 col-xs-height">
-                    <img src="assets/images/acct_16/Layer30.png" class="img-rounded" height="250px" width="250px"/>
+                    <img src="{{content.imgurl}}" class="img-rounded" height="250px" width="250px"/>
                 </div>
                 <div class="col-md-9 img-rounded image-text-background col-xs-height  col-top">
-                    <h5>RACING WEIGHT COOKBOOK</h5><br/>
+                    <h5>{{content.title}}</h5><br/>
 
-                    <p>Racing Weight Cookbook delivers more than 100 flavour,easy receipes for atheletes
-                        that will help you to hit your ideal weight without compormising your performance.Whatever
-                        your training demands,Racing weight meals make it easy to dial in the right mix of crabs,fat and
-                        protein
-                        and satisfy you apetitie.Put high-quality,well-balanced meals on your table in as little as 15
-                        minutes with
-                        time-saving tips for food prepration and grocery shopping.
+                    <p>{{content.data}}
                     </p>
                 </div>
             </div>
+            <br/>
         </div>
         <div class="col-md-1">
         </div>
