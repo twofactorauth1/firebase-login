@@ -4,6 +4,7 @@ define(['app', 'customerService', 'stateNavDirective'], function(app) {
         CustomerService.getCustomer($scope.customerId, function (customer) {
             $scope.customer = customer;
             $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
+            $scope.contactLabel = CustomerService.contactLabel(customer);            
         });
         CustomerService.getCustomerActivities($scope.customerId, function (activities) {
             $scope.activities = activities;
