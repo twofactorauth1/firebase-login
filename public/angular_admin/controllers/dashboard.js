@@ -1,6 +1,6 @@
-define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetService'], function(app, c3) {
-    app.register.controller('DashboardCtrl', ['$scope', 'PaymentService', 'TwoNetService', function ($scope, PaymentService, TwoNetService) {
-    
+define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetService', 'ngProgress'], function(app, c3) {
+    app.register.controller('DashboardCtrl', ['$scope', 'PaymentService', 'TwoNetService', 'ngProgress', function ($scope, PaymentService, TwoNetService, ngProgress) {
+        ngProgress.start();
     	$('.header.accordion').click(function (e) {
     		var self = $(e.target);
             self.next().toggleClass('open');
@@ -173,5 +173,6 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
     			charts[ui.draggable.attr('data-name')](boxId);
     		}
     	});
+        ngProgress.complete();
     }]);
 });
