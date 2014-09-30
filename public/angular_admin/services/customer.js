@@ -167,5 +167,13 @@ define(['app','constants'], function (app) {
 			}
 			return false;
 		};
+
+        this.getCustomerActivities = function (customerId, fn) {
+            var apiUrl = baseUrl + ['contact', customerId, 'activity'].join('/');
+            $http.get(apiUrl)
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
+        };
     });
 });
