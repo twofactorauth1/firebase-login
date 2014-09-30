@@ -1,3 +1,8 @@
+<style>
+    .information-list-v1{
+        color:{{component.textcolor || 'inherit'}};
+    }
+</style>
 <div class="container information-list-v1 {{component.bg.img.parallax?'parallax':''}}"
      parallax-background parallax-ratio="0.4" style='width: 100%;background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
     <div class="row" style="width: 100%;">
