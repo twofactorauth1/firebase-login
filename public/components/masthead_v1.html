@@ -16,13 +16,10 @@
                                 </div>
                             </div>
 
-                            <div class="col-xs-12" ng-show="component.btn.url">
-                                <a class="btn btn-primary btn-block center" data-ng-href="{{component.btn.url}}" du-smooth-scroll>
-                                    <div class="{{component.btn.icon}}"></div>
-                                    <div data-class="btn-text" class="editable btn-text" data-index="{{$index}}">
-                                        {{component.btn.text}}
-                                    </div>
-                                </a>
+                            <h1>{{data}}</h1>
+
+                            <div class="col-xs-12" ng-show="component.btn.visibility">
+                                <a class="btn btn-primary btn-block center editable" data-index="{{$index}}" ng-bind="component.btn.text" data-class="btn.text" data-ng-href="{{component.btn.url}}" du-smooth-scroll></a>
                             </div>
 
                             <div class="clearfix"></div>

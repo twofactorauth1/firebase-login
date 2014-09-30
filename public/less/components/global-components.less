@@ -44,11 +44,56 @@ hr {
 }
 #body {
   .aloha-editable-highlight {
-    outline: #444444 dashed 2px!important;
+    outline: none!important;
+    border: 0!important
   }
-  .aloha-editable-active {
-    outline: #999999 dashed 2px!important;
-  }
+  .aloha-editable {
+  outline: none;
+  border: 0;
+}
+.aloha-editable:after {
+  opacity: 0;
+  background: transparent;
+  color: transparent;
+  content: '';
+  height: 0;
+  bottom: -8px;
+  left: 0;
+  width: 35px;
+  padding: 0 7px;
+  position: absolute;
+  display: block;
+}
+.aloha-editable-active {
+  outline: none!important;
+  border: 1px dashed #444;
+  transition: all .2s linear;
+}
+.aloha-editable-active:after{
+  content: "Editing";
+  background: #999;
+  color: #ffffff;
+  position: relative;
+  padding: 0;
+  width: 75px;
+  font-size: 12px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 300;
+  line-height: 24px;
+  bottom: -24px;
+  left: 0;
+  -webkit-border-radius:0 0 4px 4px;
+  -moz-border-radius:0 0 4px 4px;
+  border-radius: 0 0 4px 4px;
+  opacity: 1;
+  transition: all .2s linear;
+  height: 24px;
+  z-index: 9999;
+}
+.aloha-editable-active.writing:after{
+  content: "Writing...";
+  width: 45px;
+}
 }
 
 #body.no-outline {

@@ -1,8 +1,10 @@
-define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'userService', 'ngAnimate', 'toaster', 'confirmClickDirective', 'colorpicker'], function(app) {
+define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'userService', 'ngAnimate', 'toaster', 'confirmClickDirective', 'colorpicker', 'angularBootstrapSwitch'], function(app) {
     app.register.controller('WebsiteCtrl', ['$scope', '$window', '$timeout', 'WebsiteService', 'UserService', 'toaster',  function ($scope, $window, $timeout, WebsiteService, UserService, toaster) {
         var user, account, components, currentPageContents, previousComponentOrder, allPages = that = this;
         var iFrame = document.getElementById("iframe-website");
         var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
+
+        $scope.iframeData = {};
 
          //get user
         UserService.getUser(function (user) {
@@ -47,8 +49,6 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
 
         $scope.components = [];
 
-        $scope.pageSelected = 'index';
-
         $scope.isEditing = false;
 
         $scope.isMobile = false;
@@ -59,36 +59,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
 
         //put iframe contents in scope when loaded
         $window.iframeLoaded = function(){
-
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
-            //when component is on hover show on sidebar
-            // $timeout(function() {
-            //      var components = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
-            //         console.log('Elements >>> ', components);
-            //     for (var i in components) {
-            //         if (!components.hasOwnProperty(i)) continue;
-            //         components[i].addEventListener( 'mouseover', function(event) {
-            //             var target = event.currentTarget;
-            //             if (target.getAttribute('data-id').length > -1) {
-            //                 var componentId = target.getAttribute('data-id').value;
-            //                 var matchingSidebar = document.getElementsByClassName("rightpanel-website").querySelectorAll('.dd-item[data-component-id="'+componentId+'"]');
-            //                 console.log('Match >>> ', matchingSidebar);
-            //                 if (matchingSidebar.length > -1) {
-            //                     matchingSidebar.setAttribute("class", "hover");
-            //                 }
-            //             }
-            //         });
-            //         components[i].addEventListener('mouseout', function(event) {
-            //             var target = event.currentTarget;
-            //             if (target.getAttribute('data-id').length > -1) {
-            //                 var componentId = target.getAttribute('data-id').value;
-            //                 var d = document.querySelectorAll('.dd-item[data-component-id="'+componentId+'"]');
-            //                 d.className=d.className.replace("hover","");
-            //             }
-            //         });
-            //     };
-            // }, 1000);
         }
 
         $scope.sortableOptions = {
@@ -115,17 +87,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                 //page/:id/components/:componentId/order/:newOrder
                 WebsiteService.updateComponentOrder(pageId, componentId, newOrder, function(data) {
                     console.log('Success: ', data);
-                    iFrame.contentWindow.location.reload();
-                    //update the dom inside the iframe
-                    // var iFrameContents = iFrame.contentDocument || iFrame.contentWindow.document;
-                    // var iFrameBody = iFrameContents.getElementById('body');
-                    // var matchingComponent = angular.element(iFrameBody.querySelectorAll('.component[data-id="'+componentId+'"]'));
-                    // matchingComponent.remove();
-                    // iFrameContents.getElementById('body').querySelectorAll('.component[data-id="'+appendComponentAfter+'"]').insertAdjacentHTML('beforebegin', matchingComponent[0].innerHTML);
-                    //element.appendChild(para);
-                        //get the element in the iframe by component id
-                        //get the id of the next ui
-                        //append component of next ui componentid
+                    $scope.updateIframeComponents();
+                    $scope.scrollToIframeComponent(componentId);
                 });
             }//end stor
         };
@@ -137,13 +100,15 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
 
         $scope.editPage = function() {
             $scope.isEditing = true;
-            var iframe = document.getElementById("iframe-website");
-            var src = iframe.src;
-            iframe.setAttribute("src", src+"/?editor=true");
+            console.log('activate aloha');
+            $scope.activateAloha();
+            // var iframe = document.getElementById("iframe-website");
+            // var src = iframe.src;
+            // iframe.setAttribute("src", src+"/?editor=true");
         };
 
         $scope.cancelPage = function() {
-            document.getElementById("iframe-website").src = "/";
+            $scope.deactivateAloha();
             $scope.isEditing = false;
         };
 
@@ -197,7 +162,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             WebsiteService.updateAllComponents(pageId, that.currentPageContents.components, function(data) {
                 toaster.pop('success', "Page Saved", "The "+that.currentPageContents.handle+" page was saved successfully.");
                 $scope.isEditing = false;
-                $scope.resfeshIframe();
+                $scope.deactivateAloha();
             });
         };
 
@@ -245,7 +210,9 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                 if (data.components) {
                     var newComponent = data.components[data.components.length - 1];
                     $scope.components.push(newComponent);
-                    $scope.resfeshIframe();
+                    $scope.updateIframeComponents();
+                    console.log('newComponent >>> ', newComponent);
+                    $scope.scrollToIframeComponent(newComponent.anchor);
                     toaster.pop('success', "Component Added", "The "+newComponent.type+" component was added successfully.");
                 }
             });
@@ -255,7 +222,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             var pageId = that.currentPageContents._id;
             var deletedType;
             WebsiteService.deleteComponent(that.currentPageContents._id, componentId, function(data){
-                $scope.resfeshIframe();
+                // $scope.resfeshIframe();
                 for(var i = 0; i < $scope.components.length; i++) {
                     if($scope.components[i]._id == componentId) {
                         deletedType = $scope.components[i].type;
@@ -263,12 +230,51 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                         break;
                     }
                 }
+                $scope.updateIframeComponents();
                 toaster.pop('success', "Component Deleted", "The "+deletedType+" component was deleted successfully.");
             });
         };
 
-        $scope.editComponent = function() {
+        $scope.updateIframeComponents = function() {
+            console.log('>>> ', $scope.components);
+            document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
+        };
+
+        $scope.scrollToIframeComponent = function(section) {
+            console.log('scrollToIframeComponent ', section);
+            document.getElementById("iframe-website").contentWindow.scrollTo(section);
+        };
+
+        $scope.activateAloha = function() {
+            document.getElementById("iframe-website").contentWindow.activateAloha();
+        };
+
+        $scope.deactivateAloha = function() {
+            document.getElementById("iframe-website").contentWindow.deactivateAloha();
+        };
+
+        $scope.editComponent = function(componentId) {
             console.log('edit component');
+            $scope.componentEditing = _.findWhere($scope.components, { _id: componentId });
+        };
+
+        $scope.saveComponent = function() {
+            var componentId = $scope.componentEditing._id;
+            var componentIndex;
+
+            for (var i = 0; i < $scope.components.length; i++) {
+
+                if ($scope.components._id === componentId) {
+                    $scope.components[i] = $scope.componentEditing
+                }
+            }
+
+            // $scope.components[componentIndex] = $scope.componentEditing;
+            var pageId = that.currentPageContents._id;
+            WebsiteService.updateComponent(pageId, $scope.componentEditing._id, $scope.componentEditing, function(data) {
+                toaster.pop('success', "Component Saved", "The component was saved successfully.");
+                $scope.updateIframeComponents();
+            });
         };
 
         $scope.createPage = function(page) {

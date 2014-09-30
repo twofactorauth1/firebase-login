@@ -34,46 +34,14 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "contact-us",
+            type: "footer",
+
 
             /**
              * The version of the component
              *
              */
             version: 1,
-
-            /**
-             * The hours a business is open, array
-             *[
-             *  "mon-friday: 8-5",
-             *  "saturday: 9-4",
-             *  "sunday: "closed"
-             * ]
-             */
-            hours: [],
-
-            /**
-             * The location object
-             */
-            location: {
-                address:"",
-                address2:"",
-                city:"",
-                state:"",
-                zip:"",
-                lat:"",
-                lon:"",
-                showMap: false,         // true | false
-                addressDisplayLabel: ""
-            },
-
-            /**
-             * Email and phone
-             */
-            contact: {
-                email: "",
-                phone: ""
-            },
 
             /**
              *
@@ -95,6 +63,7 @@ var component = $$.m.ModelBase.extend({
                 },
                 color : ""
             }
+
         }
     },
 
@@ -113,6 +82,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.ContactUs = component;
+$$.m.cms.modules.Footer = component;
 
 module.exports = component;
