@@ -1,10 +1,7 @@
-//- link(href='../js/libs/redactor/redactor/redactor.css', rel='stylesheet', type='text/css')
-//- script(src="../js/libs/redactor/redactor/redactor.min.js")
+//- script(src="../js/libs/imperavi-redactor-widget/assets/redactor.min.js")
 
 
-//- script(type='text/javascript') $(document).ready( function() { setTimeout(function(){ console.log('ready to edit', $("div.editable").length); $(function() { $('div.editable').redactor({focus: true, toolbarExternal: '#toolbar', buttons: ['html', 'formatting', 'bold', 'italic', 'deleted', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'image', 'file', 'link', 'alignment', 'horizontalrule']}); }); }, 1000); });
-
-
+//- script(type='text/javascript') $(document).ready(function(){setTimeout(function(){$("div.editable").redactor({toolbarFixed:true,toolbarExternal:"#toolbar",focusEnd: true,buttons:["html","formatting","bold","italic","deleted","unorderedlist","orderedlist","outdent","indent","image","file","link","alignment","horizontalrule"]})},1e3)});
 script(src="/js/libs/requirejs/require.js")
 
 script(type='text/javascript') Aloha = {}; Aloha.settings = { sidebar: { disabled: true } };

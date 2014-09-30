@@ -267,6 +267,10 @@ _.extend(api.prototype, baseApi.prototype, {
             });
         } else {
             var contactId = req.body.contactId;//TODO: Is this the right way to do it?
+            var userId = req.body.userId;
+            //FIXME: handle users
+
+
             //delete Stripe Customer AND all links
             stripeDao.deleteStripeCustomer(customerId, contactId, function(err, value){
                 if(err) {
@@ -424,13 +428,14 @@ _.extend(api.prototype, baseApi.prototype, {
         var metadata = req.body.metadata;
         var accountId = self.accountId(req);
         var contactId = req.body.contactId;//TODO: determine if this is best way
+        var userId = req.userId;
 
         if(!planId || planId.length < 1) {
             return self.wrapError(resp, 400, null, "Invalid planId parameter.");
         }
 
         stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
-                    application_fee_percent, metadata, accountId, contactId, accessToken, function(err, value){
+                    application_fee_percent, metadata, accountId, contactId, userId, accessToken, function(err, value){
                 self.log.debug('<< createSubscription');
                 return self.sendResultOrError(resp, err, value, "Error creating subscription");
                 self = value = null;
@@ -622,7 +627,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var currency = req.body.currency || 'usd';//REQUIRED
         var card = req.body.card; //card or customer REQUIRED
         var customerId = req.body.customerId; //card or customer REQUIRED
-        var contactId = req.body.contactId;//REQUIRED
+        var contactId = req.body.contactId;//contact or user REQUIRED
+        var userId = req.body.userId; //contact or user REQUIRED
         var description = req.body.description;
         var metadata = req.body.metadata;
         var capture = req.body.capture;
@@ -640,12 +646,13 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!card && !customerId) {
             return self.wrapError(resp, 400, null, "Missing card or customer parameter.");
         }
-        if(!contactId) {
-            return self.wrapError(resp, 400, null, "Invalid contact parameter.");
+
+        if(!contactId && !userId) {
+            return self.wrapError(resp, 400, null, "Invalid contact or user parameter.");
         }
 
         stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata, capture,
-            statement_description, receipt_email, application_fee, accessToken, function(err, value){
+            statement_description, receipt_email, application_fee, userId, accessToken, function(err, value){
                 self.log.debug('<< createCharge');
                 return self.sendResultOrError(resp, err, value, "Error creating a charge.");
                 self = value = null;

@@ -36,3 +36,5 @@ public/css/style.default.css
 =======
 *.7z
 >>>>>>> origin/zeeshan_dev2
+
+configs/mongodb.config.js
