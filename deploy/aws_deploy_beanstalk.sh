@@ -62,12 +62,13 @@ mv public/js/mainforproduction.js public/js/main.js
 grunt compiletemplates
 
 # run grunt
+echo Running grunt production
 grunt production --optimize=uglify
 
 # rename /min to /js directory
 mv public/min public/js
 ########################
-
+echo Starting zip
 # zip the application
 zip -x *.git* node_modules/ -r "${APP_NAME}-${APP_VERSION}.zip" .
 
