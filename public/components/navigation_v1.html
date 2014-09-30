@@ -1,8 +1,3 @@
-<style>
-    .navbar-v2 #header .navbar ul.navbar-nav li a {
-        color:{{component.txtcolor || 'white'}};
-    }
-</style>
 <div id="header">
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
@@ -16,7 +11,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand editable" href="/" data-name="{{layout.account.company.name}}">
-                    <span class="logo-1"> <img ng-src="{{layout.account.business.logo}}" scale="0"> </span>
+                    <span class="logo-1"> <img data-ng-show="{{layout.account.business.logo}}" src="{{layout.account.business.logo}}" scale="0"><span data-ng-show="!{{layout.account.business.logo}}" ><convert-html contents="{{layout.account.business.name}}">  </convert-html> </span></span>
                 </a>
 
             </div>
