@@ -1,5 +1,6 @@
-define(['app', 'customerService', 'stateNavDirective'], function(app) {
-    app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', function ($scope, CustomerService, $stateParams, $state) {
+define(['app', 'customerService', 'stateNavDirective', 'ngProgress'], function(app) {
+    app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', function ($scope, CustomerService, $stateParams, $state, ngProgress) {
+        ngProgress.start();
         $scope.customerId = $stateParams.id;
         CustomerService.getCustomer($scope.customerId, function (customer) {
             $scope.customer = customer;
@@ -8,6 +9,7 @@ define(['app', 'customerService', 'stateNavDirective'], function(app) {
         });
         CustomerService.getCustomerActivities($scope.customerId, function (activities) {
             $scope.activities = activities;
+            ngProgress.complete();
         });
         $scope.moreToggleFn = function (type) {
             var id = '.li-' + type + '.more';

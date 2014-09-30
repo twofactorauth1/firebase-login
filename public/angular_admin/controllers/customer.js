@@ -1,5 +1,6 @@
-define(['app', 'customerService', 'stateNavDirective','truncateDirective'], function(app) {
-    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', function ($scope, CustomerService) {
+define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngProgress'], function(app) {
+    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', function ($scope, CustomerService, ngProgress) {
+        ngProgress.start();
         $scope.customerFilter = {};
         $scope.customerOrder = 'first';
         $scope.customerSortReverse = false;
@@ -41,7 +42,7 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective'], func
 
         CustomerService.getCustomers(function (customers) {
             $scope.customers = customers;
-            
+            ngProgress.complete();
             $scope.$watch('searchBar', function (newValue, oldValue) {
                 if (newValue) {
                     var searchBarSplit = newValue.split(' ');
