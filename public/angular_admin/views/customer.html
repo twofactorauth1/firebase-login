@@ -148,9 +148,7 @@
 
 
 
-                <div ng-hide="customers.length" class="col-xs-10">
-                    <h3>No Contacts Available</h3>
-                </div>
+                
 
                 <div state-nav="customerDetail" state-id="{{customer._id}}" ng-repeat="customer in customers | filter : customerFilter | orderBy : customerOrder : customerSortReverse" class="col-xs-12 col-sm-4 col-md-3">
                     <div data-contactid="1799" class="people-item btn-view-contact-details contact-item animate">
@@ -162,7 +160,7 @@
                         <div class="media">
                             <div class="col-xs-12f">
                                 <!--//  //  // -->
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail standard">
+                                <img ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}" class="img-circle media-object thumbnail standard">
                                 <!-- //  //  -->
 
                                 <span class="name visible-xs">
