@@ -46,7 +46,6 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                 $scope.primaryFontFamily = $scope.website.settings.font_family;
                 $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
             });
-
         });
 
         $scope.components = [];
@@ -85,13 +84,14 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                 };
 
                 console.log('appendComponentAfter >>> '+ appendComponentAfter);
+                $scope.updateIframeComponents();
 
                 //page/:id/components/:componentId/order/:newOrder
-                WebsiteService.updateComponentOrder(pageId, componentId, newOrder, function(data) {
-                    console.log('Success: ', data);
-                    $scope.updateIframeComponents();
-                    $scope.scrollToIframeComponent(componentId);
-                });
+                // WebsiteService.updateComponentOrder(pageId, componentId, newOrder, function(data) {
+                //     console.log('Success: ', data);
+                //     $scope.updateIframeComponents();
+                //     $scope.scrollToIframeComponent(componentId);
+                // });
             }//end stor
         };
 

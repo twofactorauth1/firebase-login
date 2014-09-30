@@ -17,6 +17,14 @@ define(['angularAMD'], function (angularAMD) {
                     };
                 };
 
+                scope.styleMarketing = function () {
+                    return { 
+                        'height': (newValue.h)-215 + 'px',
+                        'width': '100%',
+                        'overflow-x' : 'hidden'
+                    };
+                };
+
             }, true);
 
             w.bind('resize', function () {
