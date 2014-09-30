@@ -1,21 +1,19 @@
 <div class="container-fluid information-list-v2">
     <div class="row top-buffer">
-        <div class="col-md-2 col-md-offset-2">
-            <h6 class="customColor">WHAT IS COSTS</h6>Racing Weight Coach is bargain.After an initial $99 signup fee you
-            just
-            pay $49 per month.There are no long term contacts to worry about.
+        <div class="col-md-4 text-center" ng-repeat="content in component.contents track by $index">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <h6 class="customColor">{{content.title}}</h6><b>{{content.data}}</b>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <br/>
+                    <a ng-show="content.btn.text" href="{{content.btn.url}}" class="btn btn-primary btn-md">{{content.btn.text}}</a>
+                </div>
+            </div>
         </div>
-        <div class="col-md-2 col-md-offset-1"><h6 class="customColor">NEED MORE INFORMATION?</h6>Racing Weight Coach is
-            bargain.After an
-            initial $99 signup fee you just pay $49 per month.There are no long term contacts to worry about.<br/><br/>
-            <a href="#" class="btn btn-primary btn-md">CONTACT</a>
-        </div>
-        <div class="col-md-2 col-md-offset-1">
-            <h6 class="customColor">GET STARTED NOW</h6>Racing Weight Coach is bargain.After an initial $99 signup fee
-            you just pay
-            $49 per month.There are no long term contacts to worry about.<br/><br/>
-            <a href="#" class="btn btn-primary btn-md">SIGN UP</a>
-        </div>
-        <div class="col-md-2">&nbsp;</div>
     </div>
 </div>
