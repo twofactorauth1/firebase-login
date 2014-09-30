@@ -192,7 +192,7 @@
                         <span class="btn btn-success btn-full-contacts" ng-click="importContactFn()">Import Contact</span>
 
 
-                        <img class="img-circle media-object thumbnail standard thumb-lg" src="/assets/icons/blank-user.jpg">
+                        <img class="img-circle media-object thumbnail standard thumb-lg" ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}">
 
 
                     </div>
@@ -210,7 +210,7 @@
                         </h3>
                             <div class="mb20"></div>
                             <h4 class="center">
-                            <span class="label label-info contact-cat center"></span>
+                            <span class="label label-info contact-cat center">{{contactLabel}}</span>
                         </h4>
                             <hr class="clear mb20">
                             <!-- Key Performance Indicators -->

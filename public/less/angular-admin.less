@@ -1,0 +1,23 @@
+#leftnav {
+    position: fixed;
+}
+#headerbar {
+    left: 240px;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    right:0;
+}
+body.leftpanel-collapsed {
+    #headerbar {
+        left: 52px;
+    }
+}
+body.leftpanel-collapsed.rightmenu-open {
+    #headerbar {
+        right: 240px;
+    }
+}
+#main-viewport {
+    padding: 52px 0 0 0;
+}
