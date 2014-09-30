@@ -1,0 +1,40 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+<div ng-show="component" class="component meet-team-v5 container-fluid
+{{component.bg.img.parallax?'parallax':''}}" parallax-background
+     parallax-ratio=".4" parallax-vertical-offset="0"
+     parallax-horizontal-offset="0" style='background:url("{{component.bg.img.url}}") no-repeat fixed; background:{{component.bg.color}}; color:{{component.txtcolor||primaryTextColor}};' data-class="image-text"
+     data-id="{{component._id}}">
+    <div class="row text-center top-buffer">
+        <div class="col-md-12 text-center">
+            <h3> {{component.title}}</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-6 text-center" ng-repeat="member in component.teamMembers">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <img ng-src="{{member.profilepic}}" height="250px" width="250px" class="{{component.imagestyle}}"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center para">
+                        <h4>{{member.name}}</h4>
+                        <h5>{{member.position}}</h5>
+                        <span ng-bind-html="member.bio"></span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">&nbsp;</div>
+
+    </div>
+</div>

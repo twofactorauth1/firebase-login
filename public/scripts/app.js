@@ -24,7 +24,8 @@ var mainApp = angular
         'angularMoment',
         'mgo-angular-wizard',
         'iso.directives',
-        'timer'
+        'timer',
+        'google-maps'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){

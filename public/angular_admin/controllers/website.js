@@ -1,5 +1,6 @@
-define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'userService', 'ngAnimate', 'toaster', 'confirmClickDirective', 'colorpicker', 'angularBootstrapSwitch'], function(app) {
-    app.register.controller('WebsiteCtrl', ['$scope', '$window', '$timeout', 'WebsiteService', 'UserService', 'toaster',  function ($scope, $window, $timeout, WebsiteService, UserService, toaster) {
+define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'userService', 'ngAnimate', 'toaster', 'confirmClickDirective', 'colorpicker', 'angularBootstrapSwitch', 'ngProgress'], function(app) {
+    app.register.controller('WebsiteCtrl', ['$scope', '$window', '$timeout', 'WebsiteService', 'UserService', 'toaster',  function ($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress) {
+        ngProgress.start();
         var user, account, components, currentPageContents, previousComponentOrder, allPages = that = this;
         var iFrame = document.getElementById("iframe-website");
         var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
@@ -15,6 +16,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         //get account
         UserService.getAccount(function (account) {
             $scope.account = account;
+            ngProgress.complete();
             that.account = account;
             //get pages and find this page
             WebsiteService.getPages(account.website.websiteId, function (pages) {
