@@ -35,6 +35,7 @@ require.config({
         "ngFileUpload": "libs/angular-file-upload/angular-file-upload",
         "ngAnimate":"libs/angular-animate/angular-animate.min",
         "toaster": "libs/AngularJS-Toaster/toaster",
+        "ngProgress": "libs/ngprogress/build/ngProgress.min",
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -82,7 +83,7 @@ require.config({
         "videoPreviewDirecrive": "/pipeshift/js/modules/video/directive/videoPreview",
         "videoPlayerDirective": "/pipeshift/js/modules/video/directive/videoPlayer",
         "psEditableDirective": "/pipeshift/js/modules/video/directive/psEditable",
-        "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton"
+        "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
@@ -125,6 +126,7 @@ require.config({
         'psEditableDirective': {deps: ['angular', 'varModules']},
         'stripeButtonDirective': {deps: ['angular', 'varModules']},
         'htmlify': {deps: ['angular', 'varModules']},
+        'ngProgress': {deps: ['angular']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

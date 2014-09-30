@@ -1,7 +1,9 @@
-define(['app', 'paymentService'], function(app) {
-    app.register.controller('CommerceCtrl', ['$scope', 'PaymentService', function ($scope, PaymentService) {
+define(['app', 'paymentService', 'ngProgress'], function(app) {
+    app.register.controller('CommerceCtrl', ['$scope', 'PaymentService', 'ngProgress', function ($scope, PaymentService, ngProgress) {
+        ngProgress.start();
     	PaymentService.getListPlans(function (products) {
     		$scope.products = products;
+            ngProgress.complete();
     	});
     	$scope.addProductFn = function () {
     		PaymentService.postCreatePlan($scope.newProduct, function (product) {

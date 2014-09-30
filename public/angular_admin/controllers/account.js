@@ -1,5 +1,6 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective'], function(app) {
-    app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', function ($scope, UserService, PaymentService) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress'], function(app) {
+    app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', function ($scope, UserService, PaymentService, ngProgress) {
+        ngProgress.start();
     	UserService.getUser(function (user) {
     		$scope.user = user;
     		$scope.activeTab = 'account';
@@ -7,6 +8,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective'], function(
 
         UserService.getAccount(function (account) {
             $scope.account = account;
+            ngProgress.complete();
         });
     }]);
 });
