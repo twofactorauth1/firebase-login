@@ -65,7 +65,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
 
         window.updateComponents = function(data) {
-            console.log('>>> ', data);
+            console.log('>>> updateIframe', data);
           $scope.$apply(function(){
             $scope.currentpage.components = data;
           });

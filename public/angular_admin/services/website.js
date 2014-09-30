@@ -70,7 +70,7 @@ define(['app'], function (app) {
 				fn(data);
 			})
 			.error(function (err) {
-                console.log('END:Website Service with ERROR');
+                console.log('END:updateAllComponents with ERROR', err);
                 fn(err);
             });
 		};

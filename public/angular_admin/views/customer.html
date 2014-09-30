@@ -40,10 +40,10 @@
         <div class="panel panel-default row">
             <div class="panel-body">
                 <div class="col-sm-6">
-                    <input ng-model="searchBar" placeholder="Search Customers" class="form-control mb15 input-lg  search-contacts" type="text">
+                    <input ng-model="searchBar" placeholder="Search Customers" class="form-control input-lg  search-contacts" type="text">
                 </div>
                 <div class="col-sm-6 form-horizontal">
-                    <div class="form-group row">
+                    <div class="form-group row mb0">
                         <select class="form-control chosen-select input-lg" ng-model="sortOrder">
                             <option value="0" selected>Filter Customers</option>
                             <option value="1">A to Z</option>
@@ -143,7 +143,7 @@
 
         </div>
         <!-- panel -->
-        <div class="people-list">
+        <div class="people-list" ng-style="style()" resize>
             <div class="row">
 
 
@@ -243,6 +243,99 @@
 
             </div>
 
+        </div>
+    </div>
+
+    <div class="rightpanel rightpanel-website">
+       <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+
+        <div class="tab-content">
+            <div class="tab-pane pane-settings active" id="rp-settings">
+
+                <div class="form-group mb20">
+                    <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#import-contacts-modal"><i class="fa fa-cloud-upload"></i> Import Contacts</button>
+                </div>
+
+
+                <div class="form-group hidden">
+                    <a href="#" class="btn btn-success btn-block"><i class="fa fa-cloud-download"></i> Export Contacts</a>
+                </div>
+
+                <div class="form-group hidden">
+                    <a href="#" class="btn btn-primary btn-block"><i class="fa fa-files-o"></i> Fix Duplicates</a>
+                </div>
+
+                <div class="btn-group pull-right hidden" style="margin-right:8px;">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                        Import
+                        <span class="caret" />
+                    </button>
+
+                    <ul class="dropdown-menu " role="menu">
+                        <li class="btn-import-facebook"><a href="#">Import Facebook friends</a>
+                        </li>
+                        <li class="btn-import-gmail hidden"><a href="#">Import Gmail contacts</a>
+                        </li>
+                        <li class="btn-import-linkedin hidden"><a href="#">Import LinkedIn connections</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <h5 class="sidebartitle mb20">Display Settings</h5>
+                <div class="form-group row">
+                    <label class="col-xs-12 control-label">Contacts List Display</label>
+                    <div class="col-xs-12">
+                        <select class=" form-control chosen-select sort-display" data-placeholder="Sort Contacts" name="one">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-xs-12 control-label">Contacts List Ordering</label>
+                    <div class="col-xs-12">
+                        <select class=" form-control chosen-select sort-ordering" data-placeholder="Sort Contacts"  name="two">
+                            <option value="first">First Last</option>
+                            <option value="last">Last, First</option>
+                            <option value="created.date">Date Added</option>
+                            <option value="lastActiviy">Last Activity</option>
+                            -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 control-label">Show / Hide Attributes</label>
+                    <div class="col-xs-12 ckbox ckbox-success">
+                        <input type="checkbox" id="contact-cat" checked="checked">
+                        <label for="contact-cat">Category</label>
+                    </div>
+                    <div class="col-xs-12 ckbox ckbox-success">
+                        <input type="checkbox" id="last-active" checked="checked">
+                        <label for="last-active">Last Active</label>
+                    </div>
+                    <div class="col-xs-12 ckbox ckbox-success">
+                        <input type="checkbox" id="purchased" checked="checked">
+                        <label for="purchased">Purchased</label>
+                    </div>
+                    <div class="col-xs-12 ckbox ckbox-success">
+                        <input type="checkbox" id="emails-opened" checked="checked">
+                        <label for="emails-opened">Emails Opened</label>
+                    </div>
+                    <div class="col-xs-12 ckbox ckbox-success">
+                        <input type="checkbox" id="calls-made" checked="checked">
+                        <label for="calls-made">Calls Made</label>
+                    </div>
+                    <div class="col-xs-12 ckbox ckbox-success">
+                        <input type="checkbox" id="customer-since" checked="checked">
+                        <label for="customer-since">Customer Since</label>
+                    </div>
+                </div>
+            </div>        <!-- tab-pane -->
         </div>
     </div>
 </div>

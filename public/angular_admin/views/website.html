@@ -50,6 +50,11 @@
                     <option ng-repeat="page in allPages" value="{{page.handle}}">{{page.handle}}</option>
                 </select>
 
+                <div class="form-group">
+                        <label for="colorpicker">Page Name:  </label>
+                        <input class="form-control input-lg" type="text" ng-model="currentPageContents.title">
+                    </div>
+
                 <div class="mb20"></div>
 
                 <div id="nestable">
@@ -253,6 +258,10 @@
                         </select>
                     </div> -->
                         <div class="form-group">
+                                <label for="colorpicker">Show Component: </label>
+                                <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right">
+                            </div>
+                        <div class="form-group">
                             <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
                             <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor">
                         </div>
@@ -273,6 +282,7 @@
                                 <label for="colorpicker">Show Button: </label>
                                 <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right">
                             </div>
+
                         </div>
                         <div class="clearfix"></div>
                         <div class="form-group">
