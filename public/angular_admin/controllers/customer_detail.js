@@ -5,6 +5,9 @@ define(['app', 'customerService', 'stateNavDirective'], function(app) {
             $scope.customer = customer;
             $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
         });
+        CustomerService.getCustomerActivities($scope.customerId, function (activities) {
+            $scope.activities = activities;
+        });
         $scope.moreToggleFn = function (type) {
             var id = '.li-' + type + '.more';
             if ($(id).hasClass('hidden')) {

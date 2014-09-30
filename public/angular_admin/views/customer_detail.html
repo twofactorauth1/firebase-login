@@ -442,20 +442,23 @@
             <div class="col-md-6 activity-section">
                 <h3 class="profile-name col-xs-6">Activity with {{customer.first}}</h3>
                 <div class="col-xs-6">
-                    <select class="pull-right form-control chosen-select activity-select" data-placeholder="Activity Type">
+                    <select class="pull-right form-control chosen-select activity-select" data-placeholder="Activity Type" ng-model="activityTypeFilter.activityType">
                         <option value=""></option>
-                        <option value="email">Email</option>
-                        <option value="phone">Phone</option>
+                        <option value="e">Email</option>
+                        <option value="p">Phone</option>
+                        <!--
                         <option value="appointment">Appointment</option>
                         <option value="form-entry">Form Entry</option>
                         <option value="visits">Visits</option>
                         <option value="twitter">Twitter</option>
                         <option value="reviews">Reviews</option>
+                        -->
                     </select>
                 </div>
                 <hr class="clearfix mb30">
                 <div class="smart-timeline">
                     <ul class="smart-timeline-list">
+                      <li ng-repeat="activity in activities | filter : activityTypeFilter">{{activity.detail}}</li>
                     </ul>
                 </div>
             </div>
