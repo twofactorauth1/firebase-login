@@ -1,5 +1,4 @@
-<div class="component contact-us contact-us-v2" data-class="contact-us-v2" data-id="{{component._id}}"
-     style="background: {{component.bg.color}};color: {{component.txtcolor}};">
+<div class="component contact-us contact-us-v2{{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};background-size:cover;' data-id="{{component._id}}">
 
     <div class="component-body">
         <div class="container">
@@ -35,9 +34,9 @@
                             </div>
 
                             <div class="form-group">
-                                <div class="col-md-12 text-center">
-                                    <button type="submit" class="btn btn-primary btn-lg">Send</button>
-                                </div>
+                                    <button type="submit" class="form-control btn btn-primary btn-lg">
+                                          <convert-html contents="{{component.btn.text}}">  </convert-html>
+                                    </button>
                             </div>
                         </fieldset>
                     </form>
