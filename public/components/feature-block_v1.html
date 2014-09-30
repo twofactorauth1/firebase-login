@@ -7,7 +7,7 @@
 -->
 <div class="component" ng-show="component" data-class="feature-block" data-id="{{component._id}}">
     <div class="component-body">
-        <div class="feature-block {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='color: {{component.txtcolor}}; background: url("{{component.bg.img.url}}") no-repeat fixed; background-size: cover; background: {{component.bg.color||primaryColor}}; color: {{component.txtcolor||primaryTextColor}};'>
+        <div class="feature-block {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='color: {{component.txtcolor}}; background: url("{{component.bg.img.url}}") no-repeat fixed; background-size: cover; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
             <div class="inner-page" id="{{component.anchor}}">
 
                 <h1 class="feature-block-title">
@@ -25,7 +25,7 @@
                     </div>
                 </div>
 
-                <div class="col-xs-12" ng-show="component.btn.url">
+                <div class="col-xs-12" ng-show="component.btn.visibility">
                     <a class="btn btn-primary btn-block center" data-ng-href="{{component.btn.url}}" du-smooth-scroll>
                         <div class="{{component.btn.icon}}"></div>
                         <div data-class="btn-text" class="editable btn-text" data-index="{{$index}}">

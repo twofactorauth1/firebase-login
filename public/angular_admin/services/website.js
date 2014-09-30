@@ -75,6 +75,24 @@ define(['app'], function (app) {
             });
 		};
 
+		//page/:id/components/:componentId
+		this.updateComponent = function(pageId, componentId, componentJSON, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', componentId].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    //angular.toJson() used instead of JSON.stringify to remove $$hashkey value
+			    data: angular.toJson(componentJSON)
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+                fn(err);
+            });
+		};
+
 		//page/:id/components
 		this.addNewComponent = function(pageId, title, type, fn) {
 			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components'].join('/');

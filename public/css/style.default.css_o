@@ -5843,7 +5843,6 @@ URL: http://themepixels.com/
 */
 label {
   font-weight: normal;
-  margin-bottom: 5px !important;
   color: #4a535e;
 }
 code {
