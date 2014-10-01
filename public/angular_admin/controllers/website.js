@@ -13,6 +13,10 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             that.user = user;
         });
 
+        window.getUpdatediFrameRoute = function(data) {
+            console.log('getUpdatediFrameRoute', data);
+        };
+
         //get account
         UserService.getAccount(function (account) {
             $scope.account = account;
@@ -72,6 +76,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             },
             stop: function(e, ui) {
                 console.log('drag ui', ui );
+                $scope.isEditing = true;
+                $scope.$apply();
                 var pageId = $scope.currentPage._id;
                 var componentId = ui.item[0].attributes['data-componentId'].value;
                 var newOrder = ui.item.index();
@@ -79,14 +85,13 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
 
                 for (var i = 0; i < $scope.currentPage.components.length; i++) {
                     if (i === newOrder) {
-                      appendComponentAfter = $scope.currentPage.components[i]._id
+                      appendComponentAfter = $scope.currentPage.components[i]._id;
+                      return;
                     }
                 };
 
-                console.log('appendComponentAfter >>> '+ appendComponentAfter);
                 $scope.updateIframeComponents();
-                $scope.scrollToIframeComponent(componentId);
-                $scope.isEditing = true;
+                //$scope.scrollToIframeComponent(componentId);
 
             }//end stor
         };
@@ -184,7 +189,9 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                 route = '/page/'+sPage;
             }
 
-            document.getElementById("iframe-website").setAttribute("src", route);
+
+            //TODO - replace with sending route through scope to update without iframe refresh
+            document.getElementById("iframe-website").setAttribute("src", route+'?editor=true');
 
             WebsiteService.getPages(that.account.website.websiteId, function (pages) {
                 var currentPage = conceptName || 'index';
@@ -210,7 +217,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                     $scope.components.push(newComponent);
                     $scope.updateIframeComponents();
                     console.log('newComponent >>> ', newComponent);
-                    $scope.scrollToIframeComponent(newComponent.anchor);
+                    //$scope.scrollToIframeComponent(newComponent.anchor);
                     toaster.pop('success', "Component Added", "The "+newComponent.type+" component was added successfully.");
                 }
             });
