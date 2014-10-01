@@ -37,6 +37,6 @@ function clearVideoFieldsForUnauthorizedUser(video) {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.UserDao = dao;
+$$.dao.SubscriberDao = dao;
 
 module.exports = dao;

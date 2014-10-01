@@ -237,6 +237,11 @@ var dao = {
     getUserForAccountBySocialProfile: function(accountId, socialType, socialId, fn) {
         var query = { "accounts.accountId":accountId, "credentials.type":socialType, "credentials.socialId":socialId };
         return this.findOne(query, fn);
+    },
+
+    getUsersForAccount: function(accountId, fn) {
+        var query = {'accounts.accountId':accountId};
+        return this.findMany(query, $$.m.User, fn);
     }
 };
 

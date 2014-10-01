@@ -245,6 +245,11 @@ var dao = {
                 }
                 return fn(err, course, video);
             });
+        },
+
+        deleteCourseByUser: function(userId, fn) {
+            var self = this;
+            self.removeByQuery({'userId': userId}, $$.m.Course, fn);
         }
 
 
@@ -258,6 +263,6 @@ function clearVideoFieldsForUnauthorizedUser(video) {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.UserDao = dao;
+$$.dao.CourseDao = dao;
 
 module.exports = dao;

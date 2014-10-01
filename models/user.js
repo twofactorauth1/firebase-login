@@ -713,6 +713,22 @@ var user = $$.m.ModelBase.extend({
         return _.pluck(accounts, "accountId");
     },
 
+    removeAccount: function(accountId) {
+        var accounts = this.get('accounts');
+        if(accounts == null) {
+            return this;
+        }
+        _.each(accounts, function(account, index, list){
+            if(account.id() === accountId) {
+
+            }
+        });
+
+        var updatedAccounts = _.filter(accounts, function(account){return account.id() !== accountId});
+        this.set('accounts', updatedAccounts);
+        return this;
+    },
+
 
     createUserAccount: function (accountId, username, password, permissions) {
         if (_.isArray(password)) {
