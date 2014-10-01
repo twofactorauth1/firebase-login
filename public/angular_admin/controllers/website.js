@@ -29,10 +29,10 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                   arr.push(parsed[x]);
                 }
                 $scope.allPages = arr;
-                that.currentPageContents = _.findWhere(pages, {handle: currentPage});
+                $scope.currentPage = _.findWhere(pages, {handle: currentPage});
                 //get components from page
-                if (that.currentPageContents.components) {
-                    $scope.components = that.currentPageContents.components;
+                if ($scope.currentPage.components) {
+                    $scope.components = $scope.currentPage.components;
                 }
             });
 
@@ -68,36 +68,32 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             start: function(e, ui) {
                 //get previous element component id
                  // var componentId = ui.item[0].attributes['data-componentId'].value;
-                that.previousComponentOrder= that.currentPageContents.components;
+                that.previousComponentOrder= $scope.currentPage.components;
             },
             stop: function(e, ui) {
                 console.log('drag ui', ui );
-                var pageId = that.currentPageContents._id;
+                var pageId = $scope.currentPage._id;
                 var componentId = ui.item[0].attributes['data-componentId'].value;
                 var newOrder = ui.item.index();
                 var appendComponentAfter;
 
-                for (var i = 0; i < that.currentPageContents.components.length; i++) {
+                for (var i = 0; i < $scope.currentPage.components.length; i++) {
                     if (i === newOrder) {
-                      appendComponentAfter = that.currentPageContents.components[i]._id
+                      appendComponentAfter = $scope.currentPage.components[i]._id
                     }
                 };
 
                 console.log('appendComponentAfter >>> '+ appendComponentAfter);
                 $scope.updateIframeComponents();
+                $scope.scrollToIframeComponent(componentId);
+                $scope.isEditing = true;
 
-                //page/:id/components/:componentId/order/:newOrder
-                // WebsiteService.updateComponentOrder(pageId, componentId, newOrder, function(data) {
-                //     console.log('Success: ', data);
-                //     $scope.updateIframeComponents();
-                //     $scope.scrollToIframeComponent(componentId);
-                // });
             }//end stor
         };
 
         $scope.resfeshIframe = function() {
             document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
-            $scope.components = that.currentPageContents.components;
+            $scope.components = $scope.currentPage.components;
         };
 
         $scope.editPage = function() {
@@ -115,8 +111,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         };
 
         $scope.savePage = function() {
-            var componentJSON = that.currentPageContents.components;
-            var pageId = that.currentPageContents._id;
+            var componentJSON = $scope.currentPage.components;
+            var pageId = $scope.currentPage._id;
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
             //foreach components by class .component
@@ -124,7 +120,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             for (var i = 0; i < editedPageComponents.length; i++) {
                     var componentId = editedPageComponents[i].attributes['data-id'].value;
                     var componentType = editedPageComponents[i].attributes['data-class'].value;
-                    var matchingComponent = _.findWhere(that.currentPageContents.components, { _id: componentId });
+                    var matchingComponent = _.findWhere($scope.currentPage.components, { _id: componentId });
                     var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
 
                     if (componentEditable.length > 1) {
@@ -161,8 +157,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
 
 
             //after updating components scope update the whole page
-            WebsiteService.updateAllComponents(pageId, that.currentPageContents.components, function(data) {
-                toaster.pop('success', "Page Saved", "The "+that.currentPageContents.handle+" page was saved successfully.");
+            WebsiteService.updateAllComponents(pageId, $scope.currentPage.components, function(data) {
+                toaster.pop('success', "Page Saved", "The "+$scope.currentPage.handle+" page was saved successfully.");
                 $scope.isEditing = false;
                 $scope.deactivateAloha();
             });
@@ -195,10 +191,10 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                 console.log('Current Page Selected >>> ', currentPage);
                 that.allPages = pages;
                 $scope.allPages = pages;
-                that.currentPageContents = _.findWhere(pages, {handle: currentPage});
+                $scope.currentPage = _.findWhere(pages, {handle: currentPage});
                 //get components from page
-                if (that.currentPageContents && that.currentPageContents.components) {
-                    $scope.components = that.currentPageContents.components;
+                if ($scope.currentPage && $scope.currentPage.components) {
+                    $scope.components = $scope.currentPage.components;
                 } else {
                     $scope.components = [];
                 }
@@ -206,7 +202,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         };
 
         $scope.addComponent = function(component) {
-            var pageId = that.currentPageContents._id;
+            var pageId = $scope.currentPage._id;
             WebsiteService.addNewComponent(pageId, component.title, component.type, function(data){
                 console.log('data >>> ', data);
                 if (data.components) {
@@ -221,9 +217,9 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         };
 
         $scope.deleteComponent = function(componentId) {
-            var pageId = that.currentPageContents._id;
+            var pageId = $scope.currentPage._id;
             var deletedType;
-            WebsiteService.deleteComponent(that.currentPageContents._id, componentId, function(data){
+            WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data){
                 // $scope.resfeshIframe();
                 for(var i = 0; i < $scope.components.length; i++) {
                     if($scope.components[i]._id == componentId) {
@@ -238,7 +234,6 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         };
 
         $scope.updateIframeComponents = function() {
-            console.log('>>> ', $scope.components);
             document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
         };
 
@@ -256,33 +251,35 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         };
 
         $scope.editComponent = function(componentId) {
-            console.log('edit component');
             $scope.componentEditing = _.findWhere($scope.components, { _id: componentId });
         };
 
-        $scope.saveComponent = function() {
+        $scope.saveComponent = function(data) {
             var componentId = $scope.componentEditing._id;
             var componentIndex;
-
             for (var i = 0; i < $scope.components.length; i++) {
-
-                if ($scope.components._id === componentId) {
+                console.log($scope.components[i]._id);
+                if ($scope.components[i]._id === componentId) {
                     $scope.components[i] = $scope.componentEditing
                 }
             }
 
-            // $scope.components[componentIndex] = $scope.componentEditing;
-            var pageId = that.currentPageContents._id;
-            WebsiteService.updateComponent(pageId, $scope.componentEditing._id, $scope.componentEditing, function(data) {
-                toaster.pop('success', "Component Saved", "The component was saved successfully.");
-                $scope.updateIframeComponents();
-            });
+            $scope.updateIframeComponents();
+            $scope.isEditing = true;
+
+            //update the scope as the temppage until save
+
+            // var pageId = $scope.currentPage._id;
+            // WebsiteService.updateComponent(pageId, $scope.componentEditing._id, $scope.componentEditing, function(data) {
+            //     toaster.pop('success', "Component Saved", "The component was saved successfully.");
+            //     $scope.updateIframeComponents();
+            // });
         };
 
         $scope.createPage = function(page) {
             console.log('create page');
 
-            var websiteId = that.currentPageContents.websiteId;
+            var websiteId = $scope.currentPage.websiteId;
 
             var pageData = {
                 title: page.title,
@@ -295,10 +292,10 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                 $scope.page = null;
                 $scope.allPages.push(newpage);
                 document.getElementById("iframe-website").setAttribute("src", "/page/"+newpage.handle);
-                that.currentPageContents = newpage;
+                $scope.currentPage = newpage;
                 //get components from page
-                if (that.currentPageContents && that.currentPageContents.components) {
-                    $scope.components = that.currentPageContents.components;
+                if ($scope.currentPage && $scope.currentPage.components) {
+                    $scope.components = $scope.currentPage.components;
                 } else {
                     $scope.components = [];
                 }
@@ -307,9 +304,9 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
 
         $scope.deletePage = function() {
 
-            var pageId = that.currentPageContents._id;
-            var websiteId = that.currentPageContents.websiteId;
-            var title = that.currentPageContents.title;
+            var pageId = $scope.currentPage._id;
+            var websiteId = $scope.currentPage.websiteId;
+            var title = $scope.currentPage.title;
 
             WebsiteService.deletePage(pageId, websiteId, title, function(data) {
                 console.log('Data >>> ', data);

@@ -65,28 +65,33 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
 
         window.updateComponents = function(data) {
-            console.log('>>> updateIframe', data);
-          $scope.$apply(function(){
-            $scope.currentpage.components = data;
-          });
+            $scope.$apply(function() {
+                $scope.currentpage.components = data;
+            });
         };
 
-        window.scrollTo = function(section) {
-            console.log('>>> ', section);
-            if(section) {
-                $location.hash(section);
-                $anchorScroll();
+        $scope.$on('$locationChangeStart', function(event, next, current) {
+            console.log('location changed '+event+' '+next+' '+current);
+            var cleanLoc = next.replace("?editor=true", "").substr(next.lastIndexOf('/') + 1);
+            console.log('cleanLoc ', cleanLoc);
+        });
 
-                //TODO scrollTo on click
+        // window.scrollTo = function(section) {
+        //     console.log('>>> ', section);
+        //     if(section) {
+        //         $location.hash(section);
+        //         $anchorScroll();
 
-                // var offset = 0;
-                // var duration = 2000;
-                // var someElement = angular.element(document.getElementById(section));
-                // console.log('someElement >>>', document);
-                // console.log('>>> scrollTo '+ document.body.getElementById(section));
-                // $document.scrollToElementAnimated(someElement);
-            }
-        };
+        //         //TODO scrollTo on click
+
+        //         // var offset = 0;
+        //         // var duration = 2000;
+        //         // var someElement = angular.element(document.getElementById(section));
+        //         // console.log('someElement >>>', document);
+        //         // console.log('>>> scrollTo '+ document.body.getElementById(section));
+        //         // $document.scrollToElementAnimated(someElement);
+        //     }
+        // };
 
         window.activateAloha = function() {
             console.log('aloha');
