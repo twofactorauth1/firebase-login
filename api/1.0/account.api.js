@@ -293,8 +293,11 @@ _.extend(api.prototype, baseApi.prototype, {
         //  from the main account.
         var accountId = parseInt(self.accountId(req));
         var accountIdParam = parseInt(req.params.id);
-
-        if(accountId === accountIdParam || accountId === appConfig.mainAccountID) {
+        //make sure we are not trying to delete main
+        if(accountIdParam === appConfig.mainAccountID) {
+            self.log.warn('Attempt to delete main denied.  This must be done manually.');
+            self.wrapError(res, 401, null, 'Unauthorized', 'You are not authorized to perform this operation');
+        } else if(accountId === accountIdParam || accountId === appConfig.mainAccountID) {
             accountDao.deleteAccountAndArtifacts(accountId, function(err, value){
                 self.log.debug('<< deleteAccount');
                 self.send200(res);
