@@ -37,112 +37,115 @@
     </div>
 
     <div style="background: #e7e7e7;" class="contentpanel" ng-style="styleCustomers()" resize>
-        <div class="panel panel-default filter-bar">
-            <div class="panel-body">
-                <div class="col-sm-6">
-                    <input ng-model="searchBar" placeholder="Search Customers" class="form-control input-lg  search-contacts" type="text">
-                </div>
-                <div class="col-sm-6 form-horizontal">
-                    <div class="form-group row mb0">
-                        <select class="form-control chosen-select input-lg" ng-model="sortOrder">
-                            <option value="0" selected>Filter Customers</option>
-                            <option value="1">A to Z</option>
-                            <option value="2">Z to A</option>
-                            <option value="3">Date Added</option>
-                        </select>
+
+    <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
+         <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-sm-6">
+                        <input ng-model="searchBar" placeholder="Search Customers" class="form-control input-lg  search-contacts" type="text">
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="mb0">
+                            <select class="form-control chosen-select input-lg" ng-model="sortOrder">
+                                <option value="0" selected>Filter Customers</option>
+                                <option value="1">A to Z</option>
+                                <option value="2">Z to A</option>
+                                <option value="3">Date Added</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div style="width:100%; text-align:center">
-                <ul class="pagination hidden-xs letter-list">
+                <div style="width:100%; text-align:center">
+                    <ul class="pagination hidden-xs letter-list">
 
-                    <li class="active"><a class="btn-letter" ng-click="alphaFilter()">all</a>
-                    </li>
+                        <li class="active"><a class="btn-letter" ng-click="alphaFilter()">all</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('a')">A</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('a')">A</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('b')">B</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('b')">B</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('c')">C</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('c')">C</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('d')">D</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('d')">D</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('e')">E</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('e')">E</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('f')">F</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('f')">F</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('g')">G</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('g')">G</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('h')">H</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('h')">H</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('i')">I</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('i')">I</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('j')">J</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('j')">J</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('k')">K</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('k')">K</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('l')">L</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('l')">L</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('m')">M</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('m')">M</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('n')">N</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('n')">N</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('o')">O</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('o')">O</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('p')">P</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('p')">P</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('q')">Q</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('q')">Q</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('r')">R</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('r')">R</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('s')">S</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('s')">S</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('t')">T</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('t')">T</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('u')">U</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('u')">U</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('v')">V</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('v')">V</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('w')">W</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('w')">W</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('x')">X</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('x')">X</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('y')">Y</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('y')">Y</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('z')">Z</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('z')">Z</a>
+                        </li>
 
-                </ul>
-            </div>
-
+                    </ul>
+                </div>
         </div>
         <!-- panel -->
+    </headroom>
+
         <div class="people-list" >
             <div class="row">
 
