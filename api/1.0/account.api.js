@@ -309,10 +309,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
     saveOrUpdateTmpAccount: function(req,resp) {
         var self = this;
+        self.log.debug('>> saveOrUpdateTmpAccount');
+
         var account = new $$.m.Account(req.body);
+        
         accountDao.saveOrUpdateTmpAccount(account, function(err, value) {
            if (!err && value != null) {
                cookies.setAccountToken(resp, value.get("token"));
+               self.log.debug('<< saveOrUpdateTmpAccount')
                resp.send(value.toJSON("public"));
            } else {
                self.wrapError(resp, 500, null, err, value);

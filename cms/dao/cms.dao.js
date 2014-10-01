@@ -1147,31 +1147,58 @@ var dao = {
                 "displayOn" : null
             },
             "components" : [
-            {
-                "_id" : $$.u.idutils.generateUUID(),
-                "anchor" : null,
-                "type" : "masthead",
-                "version" : 1,
-                "title" : "Title",
-                "subtitle" : "Subtitle.",
-                "txtcolor" : "#fff",
-                "bg" : {
-                    "img" : {
-                        "url" : "",
-                        "width" : 1235,
-                        "height" : 935,
-                        "parallax" : true,
-                        "blur" : false
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "coming-soon",
+                    "version" : 1,
+                    "title" : "Coming Soon",
+                    "subtitle" : "Subtitle.",
+                    "text" : "Coming soon",
+                    "txtcolor" : "#2aa9c9",
+                    "logo" : "",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
                     },
-                    "color" : ""
+                    "btn" : {
+                        "text" : "",
+                        "url" : "#signup",
+                        "icon" : ""
+                    }
                 },
-                "btn" : {
-                    "text" : "",
-                    "url" : "",
-                    "icon" : ""
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "footer",
+                    "version" : 1,
+                    "title" : "Title",
+                    "subtitle" : "Subtitle.",
+                    "txtcolor" : "#fff",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "btn" : {
+                        "text" : "",
+                        "url" : "",
+                        "icon" : ""
+                    }
                 }
-            }
-        ],
+
+            ],
             "created" : new Date(),
             "modified" : null
 
