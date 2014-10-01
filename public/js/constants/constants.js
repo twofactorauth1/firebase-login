@@ -145,6 +145,25 @@ define([], function () {
             activity_types: {
                 PHONE: "p",
                 EMAIL: "e"
+            },
+
+            customer_activity_types: {
+					PAGE_VIEW: "PAGE_VIEW",
+					SUBSCRIBE: "SUBSCRIBE",
+					ACCOUNT_CREATED:"ACCOUNT_CREATED",
+					EMAIL: "EMAIL",
+					PHONECALL: "PHONECALL",
+					FACEBOOK_LIKE: "FACEBOOK_LIKE",
+					TWEET: "TWEET",
+
+                   dp: [ {label: "Page View",data:"PAGE_VIEW"},
+	                    {label:"Subscribe", data:"SUBSCRIBE"},
+	                    {label:"Account Created", data:"ACCOUNT_CREATED"},
+	                    {label:"Emails", data:"EMAIL"},
+	                    {label:"Phone Calls", data:"PHONECALL"},
+	                    {label:"Facebook Likes", data:"FACEBOOK_LIKE"},
+	                    {label:"Tweets", data:"TWEET"}
+                    ]
             }
         },
 
