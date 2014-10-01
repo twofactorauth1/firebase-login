@@ -64,7 +64,7 @@
                     </button>
                     <div class="mb10"></div>
                     <ul ui-sortable="sortableOptions" ng-model="components">
-                        <li ng-repeat="(key, val) in components" class="dd-item dd3-item" data-id="14" data-section="services" data-componentId="{{val._id}}" ng-mouseenter="showActions = true" ng-mouseleave="showActions = false" ng-click="scrollToIframeComponent(val._id)">
+                        <li ng-repeat="(key, val) in components" class="dd-item dd3-item" data-id="14" data-section="services" data-componentId="{{val._id}}" ng-mouseenter="showActions = true" ng-mouseleave="showActions = false">
                             <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
                             </div>
                             <div class="dd3-content">{{val.handle||val.type}}</div>
@@ -301,16 +301,12 @@
                             </div>
                         </div>
                         <div class="clearfix mb15"></div>
-                        <div class="well">
-                            <label>Danger Zone</label>
-                            <button class="btn btn-danger btn-block btn-lg">
-                                <i class="fa fa-trash-o" ng-click="deleteComponent(val._id)"></i>Delete Component
-
-                            </button>
-                        </div>
                     <div class="clearfix"></div>
                 </div>
                 <div class="modal-footer">
+                    <button class="btn btn-danger pull-left" data-dismiss="modal" ng-click="deleteComponent(componentEditing._id)">
+                        <i class="fa fa-trash-o"></i> Delete
+                    </button>
                     <button type="button" class="btn btn-primary btn-edit-component" data-dismiss="modal" ng-click="saveComponent(componentEditing)">Update</button>
                 </div>
             </div><!-- /.modal-content -->

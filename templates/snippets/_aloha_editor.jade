@@ -1,14 +1,9 @@
-//- script(src="../js/libs/imperavi-redactor-widget/assets/redactor.min.js")
-
-
-//- script(type='text/javascript') $(document).ready(function(){setTimeout(function(){$("div.editable").redactor({toolbarFixed:true,toolbarExternal:"#toolbar",focusEnd: true,buttons:["html","formatting","bold","italic","deleted","unorderedlist","orderedlist","outdent","indent","image","file","link","alignment","horizontalrule"]})},1e3)});
 script(src="/js/libs/requirejs/require.js")
 
 script(type='text/javascript') Aloha = {}; Aloha.settings = { sidebar: { disabled: true } };
+script(src='js/libs/aloha-editor/src/lib/aloha.js', data-aloha-plugins=' common/ui, common/format, common/table, common/list, common/link, common/highlighteditables, common/block, common/undo, common/image, common/contenthandler, common/paste, common/characterpicker, common/commands, common/align, common/abbr')
 
-script(src='http://aloha-editor.org/latest/lib/aloha.js', data-aloha-plugins=' common/ui, common/format, common/table, common/list, common/link, common/highlighteditables, common/block, common/undo, common/image, common/contenthandler, common/paste, common/characterpicker, common/commands, common/align, common/abbr')
-
-link(href='http://aloha-editor.org/latest/css/aloha.css', rel='stylesheet', type='text/css')
+link(href='js/libs/aloha-editor/src/css/aloha.css', rel='stylesheet', type='text/css')
 
 script(type="text/javascript").
   Aloha.ready( function() {
