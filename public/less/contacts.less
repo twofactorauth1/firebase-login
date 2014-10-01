@@ -308,14 +308,50 @@
 }
 
 .people-list {
-  margin-top: 160px;
+  margin-top: 140px;
 }
 
 .filter-bar {
-  position: fixed;
-  margin-right: 34px;
+  margin-right: 16px;
   z-index: 999;
-  background: rgba(252,252,252,0.7);
+  background: #fff;
+  border: 1px solid #d3d7db;
+  position: fixed;
+  right: 0;
+  left: 52px;
+  top: 113px;
+  .panel-body {
+    padding: 20px 10px;
+  }
+}
+
+.slide {
+    -webkit-transition: -webkit-transform.5s ease-in-out; -moz-transition: -moz-transform.5s ease-in-out; -o-transition: -o-transform.5s ease-in-out;
+    transition: transform.5s ease-in-out;
+}
+.slide--reset {
+    -webkit-transform: translateY(0); -ms-transform: translateY(0);
+    transform: translateY(0);
+}
+.slide--up {
+    -webkit-transform: translateY(-100% ); -ms-transform: translateY(-100% );
+    transform: translateY(-100% );
+}
+
+.header--fixed {
+  position: fixed;
+  z-index: 10;
+  right: 16px;
+  left: 241px;
+  top: 114px;
+}
+
+.rightmenu-open .header--fixed {
+  right: 256px;
+}
+
+.leftpanel-collapsed .header--fixed {
+  left: 53px;
 }
 
 .rightmenu-open .filter-bar {

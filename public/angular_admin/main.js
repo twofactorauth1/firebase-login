@@ -38,6 +38,8 @@ require.config({
         "ngAnimate":"libs/angular-animate/angular-animate.min",
         "toaster": "libs/AngularJS-Toaster/toaster",
         "ngProgress": "libs/ngprogress/build/ngProgress.min",
+        "headroom":"libs/headroom.js/dist/headroom.min",
+        "ngHeadroom":"libs/headroom.js/dist/angular.headroom.min",
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -106,6 +108,7 @@ require.config({
         'underscore': {deps: ['jquery']},
         'spectrum': {deps: ['jquery']},
         'colorpicker': {deps: ['spectrum']},
+        'ngHeadroom': {deps: ['headroom']},
         'commonutils': {deps: ['underscore']},
         'jqueryGridster': {deps: ['jquery']},
         'c3': {deps: ['d3']},
