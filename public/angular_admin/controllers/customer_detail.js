@@ -11,6 +11,9 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress'], function(a
             $scope.activities = activities;
             ngProgress.complete();
         });
+        CustomerService.getActivityTypes(function (activity_types) {
+            $scope.activity_types = activity_types;
+        });
         $scope.moreToggleFn = function (type) {
             var id = '.li-' + type + '.more';
             if ($(id).hasClass('hidden')) {

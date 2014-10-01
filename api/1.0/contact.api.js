@@ -25,12 +25,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
         //GET
+        app.get(this.url('shortform'), this.isAuthApi, this.getContactsShortForm.bind(this));
+        app.get(this.url('shortform/:letter'), this.isAuthApi, this.getContactsShortForm.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getContactById.bind(this));
         app.post(this.url(''), this.isAuthApi, this.createContact.bind(this));
         app.put(this.url(''), this.isAuthApi, this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteContact.bind(this));
         app.get(this.url(''), this.isAuthApi, this.listContacts.bind(this)); // for all contacts
         app.get(this.url('filter/:letter'), this.isAuthApi, this.getContactsByLetter.bind(this)); // for individual letter
+
 
         //  app.post("/signupnews", this.signUpNews.bind(this));
         //app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
@@ -158,6 +161,23 @@ _.extend(api.prototype, baseApi.prototype, {
         contactDao.getContactsShort(accountId, skip, letter, limit, function (err, value) {
             self.log.debug('<< getContactsByLetter');
             self.sendResultOrError(res, err, value, "Error listing contacts by letter [" + letter + "]");
+            self = null;
+        });
+
+    },
+
+    getContactsShortForm: function(req, res) {
+        var self = this;
+        self.log.debug('>> getContactsShortForm');
+        var accountId = parseInt(self.accountId(req));
+        var skip = parseInt(req.query['skip'] || 0);
+        var limit = parseInt(req.query['limit'] || 0);
+        var letter = req.params.letter || 'all';
+
+
+        contactDao.findContactsShortForm(accountId, letter, skip, limit, function(err, list){
+            self.log.debug('<< getContactsShortForm');
+            self.sendResultOrError(res, err, list, "Error getting contact short form by letter [" + letter + "]");
             self = null;
         });
 

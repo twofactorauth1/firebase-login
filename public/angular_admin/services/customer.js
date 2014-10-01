@@ -175,5 +175,10 @@ define(['app','constants'], function (app) {
                 fn(data);
             });
         };
+
+        this.getActivityTypes = function (fn) {
+            var activityTypes = $$.constants.contact.customer_activity_types.dp;
+            fn(activityTypes);
+        };
     });
 });

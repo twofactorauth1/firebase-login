@@ -444,14 +444,7 @@
                 <div class="col-xs-6">
                     <select class="pull-right form-control chosen-select activity-select" data-placeholder="Activity Type" ng-model="activityTypeFilter.activityType">
                         <option value=""></option>
-                        <option value="e">Email</option>
-                        <option value="p">Phone</option>
-                        <!--
-                        <option value="appointment">Appointment</option>
-                        <option value="form-entry">Form Entry</option>
-                        <option value="visits">Visits</option>
-                        <option value="twitter">Twitter</option>
-                        <option value="reviews">Reviews</option>
+                        <option ng-repeat="item in activity_types" value="{{item.data}}">{{item.label}}</option>
                         -->
                     </select>
                 </div>
