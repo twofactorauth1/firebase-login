@@ -52,7 +52,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 var file = files['file'];
                 var source = fields['source'] || 'S3';
-                var tagAry = fields['tag'].split(',') || [];
+                //var tagAry = fields['tag'].split(',') || [];
+                var tagAry = (fields['tag'] && fields['tag'].split(','))  || [];
                 var asset = new $$.m.Asset({
                     accountId: accountId,
                     mimeType: file.type,

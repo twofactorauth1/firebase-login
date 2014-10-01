@@ -24,6 +24,7 @@ require.config({
         'c3': 'libs/c3/c3.min',
         'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
         'angularUiRouter': 'libs/angular-ui-router/release/angular-ui-router.min',
+        'angularFileUpload': 'libs_misc/angular-file-upload/angular-file-upload',
         
         //application related
         'storageutils': 'utils/storageutils',
@@ -34,7 +35,9 @@ require.config({
         'userService': '/angular_admin/services/user',
         'paymentService': '/angular_admin/services/payment',
         'twoNetService': '/angular_admin/services/two_net',
+        'assetsService': '/angular_admin/services/assets',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
+        'mediaDirective': '/angular_admin/directives/mediadirective'
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
@@ -50,7 +53,8 @@ require.config({
         'commonutils': {deps: ['underscore']},
         'jqueryGridster': {deps: ['jquery']},
         'c3': {deps: ['d3']},
-        'angularUiRouter': {deps: ['angular']}
+        'angularUiRouter': {deps: ['angular']},
+        'angularFileUpload': {deps: ['angular']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

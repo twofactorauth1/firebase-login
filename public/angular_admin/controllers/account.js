@@ -1,4 +1,4 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective'], function(app) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective','mediaDirective'], function(app) {
     app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', function ($scope, UserService, PaymentService) {
     	UserService.getUser(function (user) {
     		$scope.user = user;
