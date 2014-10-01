@@ -1,4 +1,4 @@
-<div style="">
+<div class="customer">
 
     <div class="pageheader row">
         <h2 class="col-xs-8"><i class="fa fa-users"></i> Customers</h2>
@@ -36,8 +36,8 @@
         <div class="clearfix mb30"></div>
     </div>
 
-    <div style="min-height: 356px;" class="contentpanel">
-        <div class="panel panel-default row">
+    <div style="background: #e7e7e7;" class="contentpanel" ng-style="styleCustomers()" resize>
+        <div class="panel panel-default filter-bar">
             <div class="panel-body">
                 <div class="col-sm-6">
                     <input ng-model="searchBar" placeholder="Search Customers" class="form-control input-lg  search-contacts" type="text">
@@ -143,12 +143,8 @@
 
         </div>
         <!-- panel -->
-        <div class="people-list" ng-style="style()" resize>
+        <div class="people-list" >
             <div class="row">
-
-
-
-                
 
                 <div state-nav="customerDetail" state-id="{{customer._id}}" ng-repeat="customer in customers | filter : customerFilter | orderBy : customerOrder : customerSortReverse" class="col-xs-12 col-sm-4 col-md-3">
                     <div data-contactid="1799" class="people-item btn-view-contact-details contact-item animate">
