@@ -86,7 +86,6 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
                 for (var i = 0; i < $scope.currentPage.components.length; i++) {
                     if (i === newOrder) {
                       appendComponentAfter = $scope.currentPage.components[i]._id;
-                      return;
                     }
                 };
 
@@ -171,6 +170,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
 
         $scope.updatePage = function() {
             console.log('Selected Page >>> '+ $scope.pageSelected);
+            $scope.isEditing = false;
             var box = document.getElementById('pageSelection');
 
             conceptName = box.options[box.selectedIndex].text;
@@ -224,6 +224,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         };
 
         $scope.deleteComponent = function(componentId) {
+            console.log('deleteComponent >>> ', componentId);
             var pageId = $scope.currentPage._id;
             var deletedType;
             WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data){
