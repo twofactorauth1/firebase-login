@@ -73,7 +73,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.$on('$locationChangeStart', function(event, next, current) {
             console.log('location changed '+event+' '+next+' '+current);
             $scope.currentLoc = next.replace("?editor=true", "").substr(next.lastIndexOf('/') + 1);
-            parent.document.getUpdatediFrameRoute($scope.currentLoc);
+            // parent.document.getUpdatediFrameRoute($scope.currentLoc);
         });
 
         // window.scrollTo = function(section) {
