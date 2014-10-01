@@ -25,6 +25,14 @@ define(['angularAMD'], function (angularAMD) {
                     };
                 };
 
+                scope.styleCustomers = function () {
+                    return { 
+                        'height': (newValue.h)-115 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
             }, true);
 
             w.bind('resize', function () {
