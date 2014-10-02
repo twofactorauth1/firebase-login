@@ -1,17 +1,16 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="pageheader row">
     <div class="col-xs-6">
-        <h2><i class="fa fa-desktop"></i> Editing
-            <span id="current-url"><i class="fa fa-edit"></i>
-            </span>
-        </h2>
+        <h2 class="pull-left" style="margin-right: 15px;"><i class="fa fa-desktop"></i> Editing</h2>
+        <div class="btn-group pull-left" dropdown is-open="status.isopen" >
+          <button type="button" class="btn btn-orange dropdown-toggle" ng-disabled="disabled">
+            {{pageSelected || 'index'}} <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="page in allPages track by $index" ><a href="" ng-click="updatePage(page.handle)">{{page.handle}}</a></li>
+          </ul>
+        </div>
     </div>
-    <!-- <div class="col-xs-2">
-        <ul class="screen-type hidden">
-            <li tooltip-placement="bottom" tooltip="Desktop View" ng-click="showDesktop()"><h4><i class="fa fa-desktop"></i></h4></li>
-            <li tooltip-placement="bottom" tooltip="Mobile View" ng-click="showMobile()"><h4><i class="fa fa-mobile"></i></h4></li>
-        </ul>
-    </div> -->
     <div class="col-xs-6">
 
         <a class="btn btn-success pull-right btn-edit-page" type="button" ng-click="editPage()" ng-show="!isEditing">
@@ -31,6 +30,10 @@
             <span class="fa fa-image"></span>
             <span class="hidden-xs">Media</span>
         </a>
+
+        <a class="btn btn-success pull-right btn-create-page" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
+            <span> Page</span>
+        </a>
         <div class="clearfix"></div>
     </div>
 </div>
@@ -42,13 +45,6 @@
     <tabset>
         <tab heading="Page" active="tab.active">
             <div class="leftpanelinner">
-                <button class="btn btn-success btn-block" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
-                    <span> Page</span>
-                </button>
-                <h4>Current Page</h4>
-                 <select id="pageSelection" class="form-control input-lg" ng-model="pageSelected" ng-change="updatePage()">
-                    <option ng-repeat="page in allPages" value="{{page.handle}}">{{page.handle}}</option>
-                </select>
 
                 <div class="form-group">
                         <label>Page Title:  </label>

@@ -65,16 +65,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
 
         window.updateComponents = function(data) {
+            console.log('data recieved >>> ', data);
             $scope.$apply(function() {
                 $scope.currentpage.components = data;
+                console.log('data applied', $scope.currentpage.components);
             });
         };
 
-        $scope.$on('$locationChangeStart', function(event, next, current) {
-            console.log('location changed '+event+' '+next+' '+current);
-            $scope.currentLoc = next.replace("?editor=true", "").substr(next.lastIndexOf('/') + 1);
-            // parent.document.getUpdatediFrameRoute($scope.currentLoc);
-        });
+        // $scope.$on('$locationChangeStart', function(event, next, current) {
+        //     console.log('location changed '+event+' '+next+' '+current);
+        //     $scope.currentLoc = next.replace("?editor=true", "").substr(next.lastIndexOf('/') + 1);
+        //     // parent.document.getUpdatediFrameRoute($scope.currentLoc);
+        // });
 
         // window.scrollTo = function(section) {
         //     console.log('>>> ', section);
