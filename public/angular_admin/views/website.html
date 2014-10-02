@@ -59,12 +59,7 @@
 
                 <div class="mb20"></div>
 
-                <div class="well">
-                    <p>Danger Zone</p>
-                    <button class="btn btn-block btn-danger" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
-                </div>
-
-                <div id="nestable" class="hidden">
+                <div id="nestable">
                     <h4>Components ({{components.length}})</h4>
                     <button class="btn btn-orange btn-block" data-toggle="modal" data-target="#add-component-modal"><i class="fa fa-plus"></i>
                         <span>Component</span>
@@ -80,6 +75,11 @@
                             </div>
                         </li>
                     </ul>
+                </div>
+
+                <div class="well">
+                    <p>Danger Zone</p>
+                    <button class="btn btn-block btn-danger" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
                 </div>
                 <!-- leftpanelinner -->
             </div>
