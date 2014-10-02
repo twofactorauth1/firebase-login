@@ -77,6 +77,14 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = this.accountId(req);
 
+        //check if we have an access token
+        var user = req.user;
+        if(user.getCredentials($$.constants.user.credential_types.FACEBOOK) === null) {
+            self.wrapError(resp, 401, "Unauthorized action", "User has not authorized Indigenous to access Facebook data.");
+            self = null;
+            return;
+        }
+
         if (accountId > 0) {
             facebookDao.importFriendsAsContactsForUser(accountId, req.user, function(err, value) {
                 console.log("Facebook import succeeded");
