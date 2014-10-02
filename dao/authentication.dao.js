@@ -430,10 +430,14 @@ var dao = {
                 return fn("URL Provided is null");
             }
 
+            /*
+             * Removing the parameter for authtoken.  Not sure if it is necessary
             if (url.indexOf("?") == -1) {
                 url += "?";
             }
             url += "&authtoken=value";
+            */
+
             fn(null, url);
         });
     },
@@ -546,7 +550,7 @@ var dao = {
                 serverUrl += path;
             }
 
-            serverUrl += "?authtoken=" + authToken;
+            //serverUrl += "?authtoken=" + authToken;
 
             fn(null, serverUrl);
         });
