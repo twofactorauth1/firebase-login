@@ -14,6 +14,31 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //$window.segmentIOWriteKey = ENV.segmentKey;
         //that.themeUrl = $scope.themeUrl;
 
+        $scope.sortingLog = [];
+
+        $scope.wait;
+
+        $scope.sortableOptions = {
+            start: function(e, ui) {
+                console.log('ui >>> ', ui);
+                ui.item[0].parentNode.className += ' active';
+                ui.item[0].className += ' dragging';
+                clearTimeout($scope.wait);
+                ui.placeholder.height('60px');
+                // ui.item.sortable('refreshPositions');
+                angular.element(ui.item[0].parentNode).sortable( "refresh" );
+            },
+            update: function(e, ui) {
+              console.log('sorting update');
+            },
+            stop: function(e, ui) {
+                ui.item[0].classList.remove('dragging');
+                $scope.wait = setTimeout(function () {
+                    ui.item[0].parentNode.classList.remove('active');
+                }, 1500);
+            }
+        };
+
         accountService(function (err, data) {
             if (err) {
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
@@ -70,6 +95,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 $scope.currentpage.components = data;
                 console.log('data applied', $scope.currentpage.components);
             });
+        };
+
+        window.triggerEditMode = function() {
+            document.getElementsByTagName('body')[0].className+=' editing'
         };
 
         // $scope.$on('$locationChangeStart', function(event, next, current) {
