@@ -1,7 +1,7 @@
 define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'userService', 'ngAnimate', 'toaster', 'confirmClickDirective', 'colorpicker', 'angularBootstrapSwitch', 'ngProgress'], function(app) {
     app.register.controller('WebsiteCtrl', ['$scope', '$window', '$timeout', 'WebsiteService', 'UserService', 'toaster',  'ngProgress', function ($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress) {
         ngProgress.start();
-        var user, account, components, currentPageContents, previousComponentOrder, allPages = that = this;
+        var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
         var iFrame = document.getElementById("iframe-website");
         var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
 
@@ -62,6 +62,20 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             return a.i > b.i;
         });
 
+        $scope.status = {
+            isopen: false
+          };
+
+          $scope.toggled = function(open) {
+            console.log('Dropdown is now: ', open);
+          };
+
+          $scope.toggleDropdown = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.status.isopen = !$scope.status.isopen;
+          };
+
         //put iframe contents in scope when loaded
         $window.iframeLoaded = function(){
             var iFrame = document.getElementById("iframe-website");
@@ -110,6 +124,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         };
 
         $scope.cancelPage = function() {
+            // $scope.components = that.originalCurrentPageComponents;
+            $scope.updateIframeComponents();
             $scope.deactivateAloha();
             $scope.isEditing = false;
         };
@@ -168,15 +184,13 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             });
         };
 
-        $scope.updatePage = function() {
-            console.log('Selected Page >>> '+ $scope.pageSelected);
+        $scope.updatePage = function(handle) {
             $scope.isEditing = false;
-            var box = document.getElementById('pageSelection');
+            console.log(handle);
+            $scope.pageSelected = handle || 'index';
 
-            conceptName = box.options[box.selectedIndex].text;
-            $scope.pageSelected = conceptName;
             var route;
-            var sPage = conceptName;
+            var sPage = $scope.pageSelected;
             if (sPage === 'index') {
                 route = '';
             }
@@ -194,17 +208,21 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             document.getElementById("iframe-website").setAttribute("src", route+'?editor=true');
 
             WebsiteService.getPages(that.account.website.websiteId, function (pages) {
-                var currentPage = conceptName || 'index';
+                var currentPage = $scope.pageSelected;
                 console.log('Current Page Selected >>> ', currentPage);
                 that.allPages = pages;
                 $scope.allPages = pages;
                 $scope.currentPage = _.findWhere(pages, {handle: currentPage});
+
+                var localPage = _.findWhere(pages, {handle: currentPage});
                 //get components from page
                 if ($scope.currentPage && $scope.currentPage.components) {
                     $scope.components = $scope.currentPage.components;
                 } else {
                     $scope.components = [];
                 }
+
+                that.originalCurrentPageComponents = localPage.components;
             });
         };
 
