@@ -41,6 +41,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                 that.user = user;
             });
 
+
             window.getUpdatediFrameRoute = function(data) {
                 console.log('getUpdatediFrameRoute', data);
             };
@@ -148,6 +149,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     $scope.primaryFontFamily = $scope.website.settings.font_family;
                     $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
                 });
+
             });
 
             /*

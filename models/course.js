@@ -41,7 +41,8 @@ var course = $$.m.ModelBase.extend({
             videos: [
 
             ],
-            userId: null
+            userId: null,
+            accountId: null
         };
     },
 

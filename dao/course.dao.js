@@ -43,10 +43,11 @@ var dao = {
             this.findMany({userId: userId, _id: { $ne: "__counter__" }}, fn);
         },
 
-        createCourse: function (courseData, userId, fn) {
+        createCourse: function (courseData, userId, accountId, fn) {
             var newCourse = new $$.m.Course(courseData);
             newCourse.set('_id', null);
             newCourse.set('userId', userId);
+            newCourse.set('accountId', accountId);
             this.saveOrUpdate(newCourse, fn);
         },
 

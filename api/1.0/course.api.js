@@ -68,7 +68,8 @@ _.extend(api.prototype, baseApi.prototype, {
     createCourse: function (req, resp) {
         var self = this;
         var userId = self.userId(req);
-        courseDao.createCourse(req.body, userId, function (err, createdCourse) {
+        var accountId = parseInt(self.accountId(req));
+        courseDao.createCourse(req.body, userId, accountId, function (err, createdCourse) {
             self.sendResultOrError(resp, err, createdCourse, "Error creating course");
         });
 
