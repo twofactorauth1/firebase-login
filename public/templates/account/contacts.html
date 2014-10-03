@@ -9,214 +9,79 @@
 CONTACTS MAIN VIEW
 -->
 <script type="text/x-handlebars-template" name="contacts-main">
+    <div class="contacts">
+        <div class="pageheader row">
+            <h2 class="col-xs-8"><i class="fa fa-users"></i> Customers</h2>
 
-    <div class="pageheader row">
-        <h2 class="col-xs-8"><i class="fa fa-users"></i> Customers</h2>
+            <div class="col-xs-4">
+                <div class="btn btn-success pull-right btn-create-contact" type="button">
+                    <i class="fa fa-plus" />
+                    <span class="hidden-xs">Add</span>
+                </div>
 
-        <div class="col-xs-4">
-            <div class="btn btn-success pull-right btn-create-contact" type="button">
-                <i class="fa fa-plus" />
-                <span class="hidden-xs">Add</span>
             </div>
-
         </div>
-    </div>
 
-    <div class="alert alert-info fade in">
-        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-        <h4 class="center">Hi Robin, Welcome to Customers!</h4>
-        <p class="center">Okay, it&#39;s time to start managing your products. If you need assitance use any of the three ways below.</p>
-        <hr class="mb30"></hr>
-        <div class="col-sm-6">
-            <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about managing customers.</h4>
-            <img class="onboard-vid" src="/assets/images/video-holder.jpg">
-        </div>
-        <div class="mb30"></div>
-        <div class="col-sm-6">
-            <h4><i class="fa fa-compass"></i> Schedule a Demo</h4>
-            <p>Schedule a personal demo with one of our customer support representatives who can show you via screen share how to manage your contacts.</p>
-            <button class="btn btn-primary btn-lg">Schedule Now <i class="fa fa-caret-right"></i>
-            </button>
+        <div class="alert alert-info fade in">
+            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+            <h4 class="center">Hi Robin, Welcome to Customers!</h4>
+            <p class="center">Okay, it&#39;s time to start managing your products. If you need assitance use any of the three ways below.</p>
             <hr class="mb30"></hr>
-            <h4><i class="fa fa-file-text-o"></i> Read the Documentation</h4>
-            <p>If you prefer a list of steps to read, then head over to our detailed documentation about all the aspects of managing your contacts.</p>
-            <button class="btn btn-primary btn-lg">View Docs <i class="fa fa-caret-right"></i>
-            </button>
-        </div>
-        <div class="clearfix mb30"></div>
-    </div>
-
-    <div class="contentpanel">
-        <div class="panel panel-default row">
-            <div class="panel-body">
-                <div class="col-sm-6">
-                    <input type="text" placeholder="Search Customers" class="form-control mb15 input-lg  search-contacts">
-                </div>
-                <div class="col-sm-6 form-horizontal">
-                    <div class="form-group row">
-                        <select class=" form-control chosen-select input-lg">
-                            <option value="">Filter Customers</option>
-                            <option value="a_to_z">A to Z</option>
-                            <option value="z_to_a">Z to A</option>
-                            <option value="first_last">First, Last</option>
-                            <option value="last_first">Last, First</option>
-                            <option value="date_added">Date Added</option>
-                        </select>
-                    </div>
-                </div>
+            <div class="col-sm-6">
+                <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about managing customers.</h4>
+                <img class="onboard-vid" src="/assets/images/video-holder.jpg">
             </div>
-
-            {{> contact-paginator}}
+            <div class="mb30"></div>
+            <div class="col-sm-6">
+                <h4><i class="fa fa-compass"></i> Schedule a Demo</h4>
+                <p>Schedule a personal demo with one of our customer support representatives who can show you via screen share how to manage your contacts.</p>
+                <button class="btn btn-primary btn-lg">Schedule Now <i class="fa fa-caret-right"></i>
+                </button>
+                <hr class="mb30"></hr>
+                <h4><i class="fa fa-file-text-o"></i> Read the Documentation</h4>
+                <p>If you prefer a list of steps to read, then head over to our detailed documentation about all the aspects of managing your contacts.</p>
+                <button class="btn btn-primary btn-lg">View Docs <i class="fa fa-caret-right"></i>
+                </button>
+            </div>
+            <div class="clearfix mb30"></div>
         </div>
-        <!-- panel -->
 
-        <div class="people-list">
-            <div class="row">
- {{#if contacts}}
-
-    {{#each contacts}}
-
-                <div class="col-xs-12 col-sm-3">
-                    <div class="people-item btn-view-contact-details contact-item" data-contactid="{{_id}}">
-                        <span class="important-star tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Important Contact">
-                            <i class="fa {{#if starred}}fa-star{{else}}fa-star-o{{/if}}" />
-                        </span>
-
-                        <div class="media">
-                            <div class="col-xs-12f">
-                                <!--// {{#if photoSquare}} // {{#isGoogleImage photoSquare}} //-->
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" /><!-- // {{else}} // -->
-                                <img class="img-circle media-object thumbnail" src="{{photoSquare}}">
-                                <!--// {{/isGoogleImage}} // {{else}} // {{#isGoogleImage photo}} // -->
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader" data-img-src="{{photo}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" />// <!-- {{else}} // -->
-                                <img class="img-circle media-object thumbnail standard" src="{{#if photo}}{{photo}}{{else}}/assets/icons/blank-user.jpg{{/if}}">
-                                <!-- // {{/isGoogleImage}} // {{/if}} -->
-
-                                <span class="name visible-xs">
-
-                                    <h4>
-                                        {{first}} {{middle}} {{last}}
-                                        <span class="label label-info contact-cat pull-right hidden-xs">{{contactTypeLabel this}}</span>
-                                    </h4>
-                                </span>
-
-                                <div class="clear"></div>
-                                <ul class="social-list hidden-xs">
-                                    <li>
-                                        {{#getBestEmail this}}
-                                        <a href="mailto:{{$email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
-                                        {{else}}
-                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Email Address"><i class="fa fa-envelope-o"></i></a>
-                                        {{/getBestEmail}}
-                                    </li>
-
-
-                                    <li>
-                                        {{#getFacebookId this}}
-                                        <a href="https://www.facebook.com/{{$facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
-                                        {{else}}
-                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Facebook Link"><i class="fa fa-facebook"></i></a>
-                                        {{/getFacebookId}}
-                                    </li>
-
-                                    <li>
-                                        {{#getTwitterId this}}
-                                        <a href="https://twitter.com/intent/user?user_id={{$twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
-                                        {{else}}
-                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No Twitter Account"><i class="fa fa-twitter"></i></a>
-                                        {{/getTwitterId}}
-                                    </li>
-
-                                    <li>
-                                        {{#getLinkedInId this}}
-                                        <a href="{{#if $linkedInUrl}}{{$linkedInUrl}}{{else}}http://www.linkedin.com/profile/view?id={{$linkedInId}}{{/if}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
-                                        {{else}}
-                                        <a href="#" class="tooltips disabled" data-toggle="tooltip" data-placement="top" title="" data-original-title="No LinkedIn Account" target="_blank"><i class="fa fa-linkedin"></i></a>
-                                        {{/getLinkedInId}}
-                                    </li>
-
-                                    {{#getAddress this}}
-                                    <li>
-                                        <a href="https://www.google.com/maps?q={{$this.address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-                                    </li>
-                                    {{/getAddress}}
-
-                                </ul>
-                            </div>
-                            <div class="media-body col-xs-12 hidden-xs">
-                                {{#ifCond ../account.displaysettings.display_type}}
-                                <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
-                                {{else}}
-                                <h4 class="person-name">{{last}} {{middle}} {{first}}</h4>
-                                {{/ifCond}}
-
-
-                               <!-- <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>-->
-
-                                <span class="label label-info contact-cat">{{contactTypeLabel this}}</span>
-
-                                <div class="hidden">
-                                    <div class="last-active text-muted">Last Active: {{#if lastActive}} {{lastActive}} days ago {{else}} n/a {{/if}}
-                                    </div>
-
-                                    <div class="purchased text-muted">
-                                        {{#if purchased}} Purchased: Yes {{else}} Purchased: n/a {{/if}}
-                                    </div>
-
-                                    <div class="emails-opened text-muted">
-                                        {{#if totalEmails}} Emails Opened: {{#if emailsOpened}} {{emailsOpened}}/{{totalEmails}} {{else}} 0/{{totalEmails}} {{/if}} {{else}} Emails Opened: n/a {{/if}}
-                                    </div>
-
-                                    <div class="calls-made text-muted">
-                                        Calls Made: {{#if callsMade}} {{callsMade}} {{else}} n/a {{/if}}
-                                    </div>
-
-                                    <div class="customer-since text-muted">
-                                        Customer since: {{#if firstPurchase}} {{formatDate fistPurchase}} {{else}} n/a {{/if}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pull-right">
-                                <span class="visible-inline-xs">
-                                    type: {{contactTypeLabel this}} |
-                                </span>
-
-                                <span class="tooltips hidden" data-toggle="tooltip" data-placement="top" title="" data-original-title="Sources where this contact information came from">sources:</span>
-                                {{#each details}}
-                                <span><i class="{{iconFromSocialType type}}" />
-                                </span>
-                                {{/each}}
-
-
-                            </div>
-                            <div class="clear clearfix" />
+        <div class="contentpanel">
+            <div class="panel panel-default row">
+                <div class="panel-body">
+                    <div class="col-sm-6">
+                        <input type="text" placeholder="Search Customers" class="form-control mb15 input-lg  search-contacts">
+                    </div>
+                    <div class="col-sm-6 form-horizontal">
+                        <div class="form-group row">
+                            <select class=" form-control chosen-select input-lg">
+                                <option value="">Filter Customers</option>
+                                <option value="a_to_z">A to Z</option>
+                                <option value="z_to_a">Z to A</option>
+                                <option value="first_last">First, Last</option>
+                                <option value="last_first">Last, First</option>
+                                <option value="date_added">Date Added</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-            {{/each}}
-          {{else}}
-
-                <div class="col-xs-10">
-                    <h3>No Contacts Available</h3>
+                {{> contact-paginator}}
+            </div>
+            <!-- panel -->
+            <div class="people-list">
+                <div class="row">
+                    {{>people-list-partial}}
                 </div>
-
-                    <div class="visible-xs btn btn-success col-xs-12">Add a new contact</div>
-            {{/if}}
             </div>
         </div>
+        {{> fixDuplicates-modal}}
+        {{> importContacts-modal}}
     </div>
-
-    {{> fixDuplicates-modal}}
-    {{> importContacts-modal}}
-
 </script>
-
 <script type="text/x-handlebars-template" name="contact-sidebar">
   <div class="rightpanel rightpanel-website">
        <ul class="nav nav-tabs nav-justified">
         <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
-        </li>
-        <li><a href="#" data-toggle="tab"></a>
         </li>
     </ul>
 
@@ -259,7 +124,7 @@ CONTACTS MAIN VIEW
                 <label class="col-xs-12 control-label">Contacts List Display</label>
                 <div class="col-xs-12">
                     <select class=" form-control chosen-select sort-display" data-placeholder="Sort Contacts" name="one">
-                        <option value=""></option>
+                        <!--<option value=""></option>-->
                         {{#isSelected account.displaysettings.display_type 'first' 'First, Last'}}{{/isSelected}}
                         {{#isSelected account.displaysettings.display_type  'last' 'Last, First'}}{{/isSelected}}
                             <!--
@@ -275,9 +140,9 @@ CONTACTS MAIN VIEW
                 <div class="col-xs-12">
                     <select class=" form-control chosen-select sort-ordering" data-placeholder="Sort Contacts"  name="two">
 
-                        <option value="">{{../currentOrder}}</option>
-                        {{#isSelected account.settings.sort_type 'first' 'First, Last'}}{{/isSelected}}
-                        {{#isSelected account.settings.sort_type 'last' 'Last, First'}}{{/isSelected}}
+        <!--                        <option value="">{{../currentOrder}}</option>-->
+                        {{#isSelected account.settings.sort_type 'first' 'First'}}{{/isSelected}}
+                        {{#isSelected account.settings.sort_type 'last' 'Last'}}{{/isSelected}}
                         {{#isSelected account.settings.sort_type 'created.date' 'Date Added'}}{{/isSelected}}
 
                         <!--
@@ -317,18 +182,10 @@ CONTACTS MAIN VIEW
                     <label for="customer-since">Customer Since</label>
                 </div>
             </div>
-
-        </div>
-        <!-- tab-pane -->
-
-
+        </div>        <!-- tab-pane -->
+    </div>    <!-- tab-content -->
     </div>
-    <!-- tab-content -->
-    </div>
-
 </script>
-
-
 <script type="text/x-handlebars-template" name="contact-paginator" partial="true">
     <div style="width:100%; text-align:center">
         <ul class="pagination hidden-xs letter-list">
@@ -338,13 +195,12 @@ CONTACTS MAIN VIEW
         </ul>
     </div>
 </script>
-
 <script type="text/x-handlebars-template" name="people-list">
     {{> people-list-partial}}
 </script>
-
 <script type="text/x-handlebars-template" name="people-list-partial" partial="true">
-        {{#each contacts}}
+    {{#if contacts}}
+        {{#each ../contacts}}
             <div class="col-xs-12 col-sm-4 col-md-3">
                 <div class="people-item btn-view-contact-details contact-item" data-contactid="{{_id}}">
                     <span class="important-star tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Important Contact">
@@ -377,7 +233,7 @@ CONTACTS MAIN VIEW
 
                             <h4 class="person-name">{{first}} {{middle}} {{last}}</h4>
                             {{else}}
-                            <h4 class="person-name">{{last}} {{middle}} {{first}}</h4>
+                            <h4 class="person-name">{{last}}  {{first}} {{middle}}</h4>
                             {{/ifCond}}
 
 
@@ -464,6 +320,15 @@ CONTACTS MAIN VIEW
                 </div>
             </div>
         {{/each}}
+    {{else}}
+        {{#if ../contactsLength}}
+        {{else}}
+        <div class="col-xs-10">
+            <h3>No Contacts Available</h3>
+        </div>
+        {{/if}}
+    {{/if}}
+
 </script>
 <!-- END CONTACTS MAIN -->
 
@@ -542,7 +407,7 @@ CONTACT DETAILS VIEW
                 {{> contact-details}}
             </div>
 
-            <div class="col-md-6 activity-section">
+            <div class="col-sm-6 row hidden-xs activity-section">
                 <h3 class="profile-name col-xs-6">Activity with {{contact.first}}</h3>
                 <div class="col-xs-6">
                     <select class="pull-right form-control chosen-select activity-select" data-placeholder="Activity Type">
@@ -556,9 +421,108 @@ CONTACT DETAILS VIEW
                         <option value="reviews">Reviews</option>
                     </select>
                 </div>
-                <hr class="clearfix mb30"></hr>
+                <hr class="clearfix mb30">
                 <div class="smart-timeline">
                     <ul class="smart-timeline-list">
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>just now</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <a href="javascript:void(0);">
+                                        <span class="label label-default">Email</span> from Sarah K.
+                                    </a>
+                                </p>
+                                <p>
+                                    Promotion email based on {{contact.first}} birthday.
+                                </p>
+                                <p>
+                                    <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a>
+                                </p>
+
+
+
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <img src="../images/photos/loggeduser.png" width="32" height="32">
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>12 Mar, 2013</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <span class="label label-default">Tweet</span> by {{contact.first}} {{contact.last}}.
+                                </p>
+                                <p>
+                                    I Love <strong>Yoga One</strong>!
+                                </p>
+                                <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Reply to Tweet</a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>1 min ago</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <span class="label label-default">Call</span> from Sarah K.
+                                </p>
+
+                                <p>
+                                    Successful Thank you call and get feedback on Customer Service.
+                                </p>
+                                <p>
+                                    <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-phone-square"></i> Listen to the Call</a>
+                                </p>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                                <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>5 hrs ago</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <span class="label label-default">Viewed</span> Profile
+                                </p>
+
+                                <br>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="smart-timeline-icon">
+                               <img src="../images/theme-1/woman-1.jpg" width="32" height="32">
+                            </div>
+                            <div class="smart-timeline-time">
+                                <small>yesterday</small>
+                            </div>
+                            <div class="smart-timeline-content">
+                                <p>
+                                    <a href="javascript:void(0);">
+                                       <span class="label label-default">Update</span> phone number
+                                    </a>
+                                </p>
+                                <p>
+                                    <span class="strike">619-568-4989</span><br>
+                                    619-574-5849
+                                </p>
+                            </div>
+                        </li>
+                        <li class="text-center">
+                            <a href="javascript:void(0)" class="btn btn-sm btn-default"><i class="fa fa-arrow-down text-muted"></i> LOAD MORE</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -566,8 +530,6 @@ CONTACT DETAILS VIEW
 
     </div>
 </script>
-
-
 <script type="text/x-handlebars-template" name="contact-details" partial="true">
     <div class="old-contact hidden">
         <div id="contact-type">
@@ -659,6 +621,7 @@ CONTACT DETAILS VIEW
 
     <div class="profile">
                 <div class="col-xs-12">
+                    <span class="btn btn-success btn-full-contacts">Import Contact</span>
                     {{#if photoSquare}}
                         {{#isGoogleImage photoSquare}}
                             <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail batched-image-loader thumb-lg" data-img-src="{{photoSquare}}" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'"/>
@@ -989,7 +952,6 @@ CONTACT DETAILS VIEW
         </div>
     </li>
 </script>
-
 <script type="text/x-handlebars-template" name="contact-activity-default">
     <li>
         <div class="smart-timeline-icon">
@@ -1235,31 +1197,20 @@ CONTACTS EDIT VIEW
                                 </div>
                             </div>
                         </div>
-
+                        <div class="clearfix mb30"></div>
+                        <div class="col-md-12">
+                            <div class="well well-lg">
+                                <label>This is permanent and cannot be reversed.</label>
+                                <div class="btn btn-danger btn-block btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
+                                   <i class="fa fa-warning"/>
+                                   <span class="hidden-xs">Delete</span>
+                               </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- End Panel Body -->
                 </div>
                 <!-- End Panel Default -->
-        </div>
-        <div class="col-md-6">
-            <h4>BioMetric Information</h4>
-            {{#unless contact.devices.length}}
-             <a href="#" class="btn btn-primary btn-sm btn-subscribe-two-net">Subcribe Two Net</a>
-            {{/unless}}
-            <hr/>
-            <div id="edit-devices-container">
-                {{#each contact.devices}}
-                    {{serialNumber}}
-                    {{deviceTypeId}}
-                {{/each}}
-            </div>
-            <div id="btn-new-device" class="btn btn-primary btn-sm">Add Device</div>
-        </div>
-        <div class="col-md-12">
-            <div class="btn btn-danger pull-right btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
-               <i class="fa fa-warning"/>
-               <span class="hidden-xs">Delete</span>
-           </div>
         </div>
 
 
@@ -1307,13 +1258,9 @@ CONTACTS EDIT VIEW
     <!-- End Change Photo Modal -->
 </script>
 <!-- END CONTACT EDIT VIEW -->
-
-
 <script type="text/x-handlebars-template" name="new-phone">
     {{> edit-phone}}
 </script>
-
-
 <script type="text/x-handlebars-template" name="edit-phone" partial="true">
     <div class="row edit-phone-container" data-id="{{_id}}" style="margin-top:8px;">
         <div class="form-group col-xs-12 col-sm-8 col-md-10">
@@ -1338,8 +1285,6 @@ CONTACTS EDIT VIEW
 <script type="text/x-handlebars-template" name="new-email">
     {{> new-email-partial}}
 </script>
-
-
 <script type="text/x-handlebars-template" name="edit-email" partial="true">
     <div class="row edit-email-container">
         <div class="form-group">
@@ -1347,8 +1292,6 @@ CONTACTS EDIT VIEW
         </div>
     </div>
 </script>
-
-
 <script type="text/x-handlebars-template" name="new-email-partial" partial="true">
     <div class="row edit-email-container">
         <div class="form-group">
@@ -1368,8 +1311,6 @@ CONTACTS EDIT VIEW
     {{> edit-address}}
     {{/each}}
 </script>
-
-
 <script type="text/x-handlebars-template" name="edit-address" partial="true">
     <div class="edit-address-container" data-id="{{_id}}">
         <div class="form form-horizontal">
@@ -1481,7 +1422,7 @@ CONTACTS EDIT VIEW
                 <div class="clearfix mb30"></div>
             </div>
 
-            <div class="row hidden" data-import-section="progress">
+            <div class="row " data-import-section="progress">
                 <h3 class="center">Importing <span class="num"></span> contacts from <span class="source"></span></h3>
                 <div class="clearfix mb30"></div>
                 <div class="progress progress-striped active">
@@ -1507,7 +1448,6 @@ CONTACTS EDIT VIEW
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 </script>
-
 <script type="text/x-handlebars-template" name="fixDuplicates-modal" partial="true">
   <div class="modal fade" id="fix-duplicates-modal">
       <div class="modal-dialog modal-lg">

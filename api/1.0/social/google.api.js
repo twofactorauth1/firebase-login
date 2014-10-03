@@ -101,6 +101,13 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = this.accountId(req);
         var groupIdAry = (req.query['groupIDs'] || '').split(',');
+
+        var user = req.user;
+        if(user.getCredentials($$.constants.user.credential_types.GOOGLE) === null) {
+            self.wrapError(resp, 401, "Unauthorized action", "User has not authorized Indigenous to access Google data.");
+            self = null;
+            return;
+        }
         if (accountId > 0) {
             googleDao.importContactsForUser(accountId, req.user, groupIdAry, function(err, value) {
                 if (err) {

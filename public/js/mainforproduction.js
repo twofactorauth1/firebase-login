@@ -6,12 +6,12 @@
  */
 
 if (typeof CACHEBUSTER === 'undefined') {
-    CACHEBUSTER = '2014.02.25' //Modify this before a deploy to production.
+    CACHEBUSTER = '2014.09.26' //Modify this before a deploy to production.
 }
 
 require.config({
     paths: {
-        jquery: 'libs_misc/jquery/dist/jquery',
+        jquery: 'libs/jquery/dist/jquery',
         jqueryvalidate: 'libs/jquery-validate/dist/jquery.validate',
         jqueryeasing: 'libs/jquery-easing/jquery.easing',
         jqueryUI: 'libs/jquery-ui/jquery-ui.min',
@@ -36,16 +36,17 @@ require.config({
         usersData: 'global/users.data',
         app: 'app',
         text: "libs/requirejs-plugins/lib/text",
-        leaflet: 'libs/leaflet/dist/leaflet',
         colorthief: 'libs/color-thief/dist/color-thief.min',
         waypoints: 'libs/jquery-waypoints/waypoints',
         nestable: 'libs/nestable/jquery.nestable',
         date: 'libs/datejs/build/production/date.min',
-        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
         d3: 'libs/d3/d3',
         moment: 'libs/moment/min/moment.min',
+        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
+        jquerydragdrop: 'libs_misc/jquery/jquery.drag-drop.plugin',
+        jqueryFileUpload: 'libs_misc/jqueryfileupload/js/jquery.fileupload.view',
 
-        //PIPESHIFT
+        //VIDEO AUTORESPONDER
         angular: 'libs/angular/angular',
         angularBootstrap: "libs/angular-bootstrap/ui-bootstrap-tpls",
         angularRoute: "libs/angular-route/angular-route",
@@ -54,12 +55,14 @@ require.config({
         angularStepper: "libs/angular-stepper/src/angular-stepper",
         angularMoney: "libs/angular-money-directive/angular-money-directive",
         xEditable: "libs/angular-xeditable/dist/js/xeditable",
+        ngCsv: "libs/ng-csv/build/ng-csv.min",
+        ngFileUpload: "libs/angular-file-upload/angular-file-upload",
 
         //UI SPECIFIC
         toggles: 'libs_misc/toggles.min',
         datepicker: 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         leaflet: 'libs/leaflet/dist/leaflet',
-        tagsinput: 'libs/jquery.tagsinput/jquery.tagsinput.min',
+        tagsinput: 'libs_misc/jquery.tagsinput/jquery.tagsinput.min',
         gritter: 'libs/jquery.gritter/js/jquery.gritter.min'
     },
 
@@ -123,12 +126,18 @@ require.config({
         daterangepicker: {
             deps: ['jquery', 'moment']
         },
+        jquerydragdrop: {
+            deps: ['jquery']
+        },
 
         tagsinput: {
             deps: ['jquery']
         },
 
         gritter: {
+            deps: ['jquery']
+        },
+        jqueryFileUpload: {
             deps: ['jquery']
         },
         angular: {
@@ -142,6 +151,8 @@ require.config({
         angularStepper: {deps: ['angular']},
         angularMoney: {deps: ['angular']},
         xEditable: {deps: ['angular']},
+        ngCsv: {deps: ['angular']},
+        ngFileUpload: {deps: ['angular']},
 
         waypoints: {
             deps: ['jquery']
@@ -170,6 +181,8 @@ require.config({
                 'angularStepper',
                 'angularMoney',
                 'xEditable',
+                'ngCsv',
+                'ngFileUpload',
 
                 //UI SPECIFIC
                 'toggles',

@@ -11,7 +11,7 @@ if (typeof CACHEBUSTER === 'undefined') {
 
 require.config({
     paths: {
-        jquery: 'libs_misc/jquery/dist/jquery',
+        jquery: 'libs/jquery/dist/jquery',
         jqueryvalidate: 'libs/jquery-validate/dist/jquery.validate',
         jqueryeasing: 'libs/jquery-easing/jquery.easing',
         jqueryUI: 'libs/jquery-ui/jquery-ui.min',
@@ -43,9 +43,10 @@ require.config({
         d3: 'libs/d3/d3',
         moment: 'libs/moment/min/moment.min',
         daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
-        jquerydragdrop: 'libs/jquerydraganddrop/jquery.drag-drop.plugin',
+        jquerydragdrop: 'libs_misc/jquery/jquery.drag-drop.plugin',
+        jqueryFileUpload: 'libs_misc/jqueryfileupload/js/jquery.fileupload.view',
 
-        //PIPESHIFT
+        //VIDEO AUTORESPONDER
         angular: 'libs/angular/angular',
         angularBootstrap: "libs/angular-bootstrap/ui-bootstrap-tpls",
         angularRoute: "libs/angular-route/angular-route",
@@ -54,13 +55,15 @@ require.config({
         angularStepper: "libs/angular-stepper/src/angular-stepper",
         angularMoney: "libs/angular-money-directive/angular-money-directive",
         xEditable: "libs/angular-xeditable/dist/js/xeditable",
+        ngCsv: "libs/ng-csv/build/ng-csv.min",
+        ngFileUpload: "libs/angular-file-upload/angular-file-upload",
 
         //UI SPECIFIC
         toggles: 'libs_misc/toggles.min',
         datepicker: 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         leaflet: 'libs/leaflet/dist/leaflet',
         tagsinput: 'libs_misc/jquery.tagsinput/jquery.tagsinput.min',
-        gritter: 'libs/jquery.gritter/js/jquery.gritter.min',
+        toaster: 'libs/AngularJS-Toaster/toaster'
     },
 
     shim: {
@@ -134,6 +137,9 @@ require.config({
         gritter: {
             deps: ['jquery']
         },
+        jqueryFileUpload: {
+            deps: ['jquery']
+        },
         angular: {
             exports: "angular"
         },
@@ -145,6 +151,8 @@ require.config({
         angularStepper: {deps: ['angular']},
         angularMoney: {deps: ['angular']},
         xEditable: {deps: ['angular']},
+        ngCsv: {deps: ['angular']},
+        ngFileUpload: {deps: ['angular']},
 
         waypoints: {
             deps: ['jquery']
@@ -173,6 +181,8 @@ require.config({
                 'angularStepper',
                 'angularMoney',
                 'xEditable',
+                'ngCsv',
+                'ngFileUpload',
 
                 //UI SPECIFIC
                 'toggles',
@@ -186,7 +196,7 @@ require.config({
                 'datepicker',
                 'tagsinput',
                 'd3',
-                'gritter',
+                'toaster',
             ]
         }
     },

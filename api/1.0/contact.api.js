@@ -6,12 +6,14 @@
  */
 
 var baseApi = require('../base.api');
+var accountDao = require('../../dao/account.dao');
 var contactDao = require('../../dao/contact.dao');
-var contactActivityDao = require('../../dao/contactactivity.dao');
+var contactActivityManager = require('../../contactactivities/contactactivity_manager.js');
 var cookies = require('../../utils/cookieutil');
 var Contact = require('../../models/contact');
-
-var api = function() {
+var request = require('request');
+var fullContactConfig = require('../../configs/fullcontact.config');
+var api = function () {
     this.init.apply(this, arguments);
 };
 
@@ -21,20 +23,21 @@ _.extend(api.prototype, baseApi.prototype, {
 
     dao: contactDao,
 
-    initialize: function() {
+    initialize: function () {
         //GET
+        app.get(this.url('shortform'), this.isAuthApi, this.getContactsShortForm.bind(this));
+        app.get(this.url('shortform/:letter'), this.isAuthApi, this.getContactsShortForm.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getContactById.bind(this));
         app.post(this.url(''), this.isAuthApi, this.createContact.bind(this));
         app.put(this.url(''), this.isAuthApi, this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteContact.bind(this));
-        app.get(this.url(''), this.isAuthApi, this.listContacts.bind(this));
-        app.get(this.url('filter/:letter'), this.isAuthApi, this.getContactsByLetter.bind(this));
+        app.get(this.url(''), this.isAuthApi, this.listContacts.bind(this)); // for all contacts
+        app.get(this.url('filter/:letter'), this.isAuthApi, this.getContactsByLetter.bind(this)); // for individual letter
 
 
-
-      //  app.post("/signupnews", this.signUpNews.bind(this));
-        app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
-
+        //  app.post("/signupnews", this.signUpNews.bind(this));
+        //app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
+        app.post(this.url('signupnews'), this.setup, this.signUpNews.bind(this));
 
         app.get(this.url(':accountId/contacts/:letter/:skip', "account"), this.isAuthApi, this.getContactsForAccountByLetter.bind(this));
 
@@ -43,13 +46,17 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id/activity'), this.isAuthApi, this.getActivityByContactId.bind(this));
         app.get(this.url('activity/:id'), this.isAuthApi, this.getActivityById.bind(this));
         app.post(this.url('activity'), this.isAuthApi, this.createActivity.bind(this));
-        app.put(this.url('activity'), this.isAuthApi, this.updateActivity.bind(this));
+        app.post(this.url('activity/:id'), this.isAuthApi, this.updateActivity.bind(this));
+        //searching
+        app.get(this.url('activity'), this.isAuthApi, this.findActivities.bind(this));
+
+        // http://localhost:3000/api/1.0/contact/:id/fullcontact
+        app.post(this.url(':id/fullcontact'), this.isAuthApi, this.updateContactByFullContactApi.bind(this));
 
         //duplicate check
         app.get(this.url('duplicates/check'), this.isAuthApi, this.checkForDuplicates.bind(this));
         app.post(this.url('duplicates/merge'), this.isAuthApi, this.mergeDuplicates.bind(this));
     },
-
 
 
     //region CONTACT
@@ -64,6 +71,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         contactId = parseInt(contactId);
+
         contactDao.getById(contactId, function(err, value) {
             self.log.debug('<< getContactById');
             if(!err && !value) {
@@ -79,7 +87,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
-    createContact: function(req,resp) {
+    createContact: function (req, resp) {
         var self = this;
         self.log.debug('>> createContact');
         var accountId = parseInt(self.accountId(req));
@@ -88,7 +96,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
-    updateContact: function(req,resp) {
+    updateContact: function (req, resp) {
         var self = this;
         self.log.debug('>> updateContact');
         var accountId = parseInt(self.accountId(req));
@@ -97,7 +105,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
-    _saveOrUpdateContact: function(req, resp, isNew) {
+    _saveOrUpdateContact: function (req, resp, isNew) {
         //TODO - add granular security
         var self = this;
         var accountId = parseInt(self.accountId(req));
@@ -109,7 +117,7 @@ _.extend(api.prototype, baseApi.prototype, {
             contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
         }
 
-        contactDao.saveOrUpdate(contact, function(err, value) {
+        contactDao.saveOrUpdate(contact, function (err, value) {
             if (!err) {
                 self.sendResult(resp, value);
             } else {
@@ -119,7 +127,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
-    deleteContact: function(req,resp) {
+    deleteContact: function (req, resp) {
 
         //TODO - add granular security
         var self = this;
@@ -132,7 +140,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         contactId = parseInt(contactId);
-        contactDao.removeById(contactId, function(err, value) {
+        contactDao.removeById(contactId, function (err, value) {
             if (!err && value != null) {
                 self.sendResult(resp, value);
             } else {
@@ -141,10 +149,9 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
-
     },
 
-    listContacts: function(req, res) {
+    listContacts: function (req, res) {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var skip = parseInt(req.query['skip'] || 0);
@@ -152,14 +159,14 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> listContacts');
         //TODO: Add Security - VIEW_CONTACT
 
-        contactDao.getContactsAll(accountId, skip, limit, function(err, value){
+        contactDao.getContactsAll(accountId, skip, limit, function (err, value) {
             self.log.debug('<< listContacts');
             self.sendResultOrError(res, err, value, "Error listing Contacts");
             self = null;
         });
     },
 
-    getContactsByLetter: function(req, res) {
+    getContactsByLetter: function (req, res) {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var skip = parseInt(req.query['skip'] || 0);
@@ -168,7 +175,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getContactsByLetter');
         //TODO: Add Security - VIEW_CONTACT
 
-        contactDao.getContactsShort(accountId, letter, limit, function (err, value) {
+        contactDao.getContactsShort(accountId, skip, letter, limit, function (err, value) {
             self.log.debug('<< getContactsByLetter');
             self.sendResultOrError(res, err, value, "Error listing contacts by letter [" + letter + "]");
             self = null;
@@ -176,8 +183,25 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    getContactsShortForm: function(req, res) {
+        var self = this;
+        self.log.debug('>> getContactsShortForm');
+        var accountId = parseInt(self.accountId(req));
+        var skip = parseInt(req.query['skip'] || 0);
+        var limit = parseInt(req.query['limit'] || 0);
+        var letter = req.params.letter || 'all';
 
-    getContactsForAccountByLetter: function(req,resp) {
+
+        contactDao.findContactsShortForm(accountId, letter, skip, limit, function(err, list){
+            self.log.debug('<< getContactsShortForm');
+            self.sendResultOrError(res, err, list, "Error getting contact short form by letter [" + letter + "]");
+            self = null;
+        });
+
+    },
+
+
+    getContactsForAccountByLetter: function (req, resp) {
         //TODO - add granular security
 
         var self = this;
@@ -201,8 +225,8 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.wrapError(resp, 401, null, "Invalid parameter for :letter");
         }
 
-        if(letter == "all" ) {
-            contactDao.getContactsAll(accountId,skip, limit, function(err, value) {
+        if (letter == "all") {
+            contactDao.getContactsAll(accountId, skip, limit, function (err, value) {
                 if (!err) {
                     return self.sendResult(resp, value);
                 } else {
@@ -221,14 +245,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
-    checkForDuplicates: function(req, res) {
+    checkForDuplicates: function (req, res) {
         var self = this;
         self.log.debug('>> checkForDuplicates');
 
         var accountId = parseInt(self.accountId(req));
         //TODO: Add Security - VIEW_CONTACT
 
-        contactDao.findDuplicates(accountId, function(err, value){
+        contactDao.findDuplicates(accountId, function (err, value) {
             self.log.debug('<< checkForDuplicates');
             self.sendResultOrError(res, err, value, "Error checking for duplicate contacts");
             self = null;
@@ -239,7 +263,7 @@ _.extend(api.prototype, baseApi.prototype, {
      *
      * Body of request can be empty or an array of contact IDs to merge.
      */
-    mergeDuplicates:function(req, res) {
+    mergeDuplicates: function (req, res) {
         var self = this;
         self.log.debug('>> mergeDuplicates');
 
@@ -247,7 +271,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: Add Security - MODIFY_CONTACT
         var dupeAry = _.toArray(req.body);
 
-        contactDao.mergeDuplicates(dupeAry, accountId, function(err, value){
+        contactDao.mergeDuplicates(dupeAry, accountId, function (err, value) {
             self.log.debug('<< mergeDuplicates');
             self.sendResultOrError(res, err, value, "Error merging duplicate contacts");
             self = null;
@@ -256,68 +280,215 @@ _.extend(api.prototype, baseApi.prototype, {
     },
     //endregion CONTACT
 
-    signUpNews: function(req, resp) {
+    signUpNews: function (req, resp) {
         var self = this, contact, accountToken, deferred;
         self.log.debug('>> signUpNews');
-        console.log(req.body);
-        var email = req.body.email;
-        console.log('Email: '+JSON.stringify(email));
-        var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_CONTACT
 
-        var accountToken = cookies.getAccountToken(req);
-        console.log('Account Token: '+accountToken);
-
-        contactDao.createContactFromData(req.body, accountToken, function (err, value) {
-            if (!err) {
-                req.flash("info", "Account created successfully");
-            return self.sendResult(resp, value);
-         //       return resp.redirect("/");
-            } else {
+        accountDao.getAccountByHost(req.get("host"), function(err, value) {
+            if(err) {
+                self.log.error('Error signing up: ' + err);
                 req.flash("error", value.toString());
-            return self.wrapError(resp, 500, "account already Exists", err, value);
-           //     return resp.redirect("/");
+                return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
+            } else {
+                self.log.debug('signing up contact with account: ' + value.get('token'));
+                var contact = new $$.m.Contact(req.body);
+                contact.set('accountId', value.id());
+                contact.set('type', 'ld');
+                contactDao.saveOrUpdate(contact, function(err, savedContact){
+                    if(err) {
+                        self.log.error('Error signing up: ' + err);
+                        req.flash("error", 'There was a problem signing up.  Please try again later.');
+                        return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
+                    } else {
+                        req.flash("info", "Thank you for subscribing.");
+                        return self.sendResult(resp, savedContact);
+                    }
+                });
             }
         });
-    },
 
+    },
 
 
     //region CONTACT ACTIVITY
-    getActivityByContactId: function(req,resp) {
+    getActivityByContactId: function (req, resp) {
         //TODO - add granular security
 
         var self = this;
-        var contactId = req.params.id;
+        self.log.debug('>> getActivityByContactId');
 
+        var contactId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
         if (!contactId) {
             return self.wrapError(resp, 400, null, "Invalid parameter for contact id");
         }
-
         contactId = parseInt(contactId);
-        var accountId = parseInt(self.accountId(req));
         //TODO: Add Security - VIEW_CONTACT
-        contactActivityDao.getByContactId(contactId, function(err, value) {
-            if (!err) {
-                return self.sendResult(resp, value);
-            } else {
-                return self.wrapError(resp, 500, "failed to retrieve activity by contact id", err, value);
+
+        var skip = req.query['skip'];
+        var limit = req.query['limit'];
+
+        contactActivityManager.listActivitiesByContactId(accountId, contactId, skip, limit, function(err, value){
+            self.log.debug('<< getActivityByContactId');
+            self.sendResultOrError(resp, err, value, "Error getting activity by contactId.");
+            self = null;
+        });
+
+    },
+
+
+    getActivityById: function (req, resp) {
+        var self = this;
+        self.log.debug('>> getActivityById');
+        var activityId = req.params.id;
+
+        if (!activityId) {
+            return self.wrapError(resp, 400, null, "Invalid parameter for activity id");
+        }
+
+        contactActivityManager.getActivityById(activityId, function(err, value){
+            self.log.debug('<< getActivityById');
+            self.sendResultOrError(resp, err, value, "Error getting activity by ID.");
+            self = null;
+        });
+
+
+    },
+
+
+    createActivity: function (req, resp) {
+        var self = this;
+        self.log.debug('>> createActivity');
+
+        var accountId = parseInt(self.accountId(req));
+        var contactActivity = new $$.m.ContactActivity(req.body);
+        contactActivity.set('accountId', accountId);
+
+        contactActivityManager.createActivity(contactActivity, function(err, value){
+            self.log.debug('<< getActivityById');
+            self.sendResultOrError(resp, err, value, "Error getting activity by ID.");
+            self = null;
+        });
+
+
+    },
+
+    /**
+     * The following query parameters are allowed (but none are required):
+     * - contactId
+     * - activityType (multiple types can be passed separated by a comma)
+     * - note (the search will be a substring match.  No need to pass wildcards)
+     * - detail (the search will be a substring match.  No need to pass wildcards)
+     * - before (a timestamp for searching.  All results will have a start time <= this parameter)
+     * - after (a timestamp for searching.  All results will have a start time >= this parameter)
+     * - skip
+     * - limit
+     *
+     */
+    findActivities: function(req, res) {
+        var self = this;
+        self.log.debug('>> findActivities');
+
+        var accountId = parseInt(self.accountId(req));
+        var contactId = req.query['contactId'];
+        var activityTypes = req.query['activityType'];
+        var activityTypeAry = [];
+        if(activityTypes.indexOf(',') != -1) {
+            activityTypeAry = activityTypes.split(',');
+        } else {
+            activityTypeAry.push(activityTypes);
+        }
+        var noteText = req.query['note'];
+        var detailText = req.query['detail'];
+        var beforeTimestamp = req.query['before'];
+        var afterTimestamp = req.query['after'];
+        var skip = req.query['skip'];
+        var limit = req.query['limit'];
+
+        contactActivityManager.findActivities(accountId, contactId, activityTypeAry, noteText, detailText,
+            beforeTimestamp, afterTimestamp, skip, limit, function(err, list){
+                self.log.debug('<< findActivities');
+                self.sendResultOrError(res, err, list, "Error finding activities");
+                self = null;
+            });
+    },
+
+    //Update data from FullContact API
+    updateContactByFullContactApi: function (req, resp) {
+        var self = this,
+            email,
+            flag = true,
+            contactId;
+
+        self.log.debug('>> updateContactByFullContactApi');
+
+        contactId = parseInt(req.param('id'));
+        //Getting Contact Data via ContactId
+        if (!contactId) {
+            this.wrapError(resp, 400, null, "Invalid paramater for ID");
+        }
+
+        contactDao.getById(contactId, function (err, value) {
+            var flag = true;
+            if (!err && value != null && value.attributes.details.length > 0) {
+
+                value.attributes.details.forEach(function (obj) {
+                    if (obj.emails && obj.emails.length) {
+                        obj.emails.forEach(function (eml) {
+                            email = eml;
+                        })
+                    }
+                });
+
+                //Get EmailId via req.body (Presently it is working only for one record in an array)
+                if (email) {
+                    // Hit FullContactAPI
+                    // https://api.fullcontact.com/v2/person.json?email=your-email-id&apiKey=your-key
+
+                    request('https://api.fullcontact.com/v2/person.json?email=' + email + '&apiKey=' + fullContactConfig.key, function (error, response, body) {
+
+                        if (!error && response.statusCode == 200) {
+                            body = JSON.parse(body);
+                            body["type"] = "fullcontact";
+
+                            value.attributes.details.forEach(function (detail) {
+                                if (detail.type == "fullcontact") {
+                                    flag = false;
+                                    detail = body;
+                                }
+                            });
+
+                            if (flag) {
+                                value.attributes.details.push(body);
+                            }
+
+                            //Update the Contact Data into DataBase
+                            contactDao.saveOrUpdate(value, function (err, vl) {
+                                if (!err) {
+                                    self.sendResult(resp, vl);
+                                } else {
+                                    self.wrapError(resp, 500, "There was an error updating contact", err, vl);
+                                }
+                            });
+                        } else {
+                            console.log('FullContact has no data related to this user');
+                            resp.send({status: 'No Data Found with FullContact API'});
+                        }
+                    });
+                } else {
+                    self.log.debug('>> updateContactByFullContactApi: email not found');
+                    resp.send({status: 'email not found'});
+                }
+            }
+            else {
+                self.wrapError(resp, 401, null, err, value);
             }
         });
-    },
 
-
-    getActivityById: function(req,resp) {
 
     },
 
-
-    createActivity: function(req,resp) {
-
-    },
-
-
-    updateActivity: function(req,resp) {
+    updateActivity: function (req, resp) {
 
     }
     //endregion CONTACT ACTIVITY

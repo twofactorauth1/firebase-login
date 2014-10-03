@@ -9,15 +9,94 @@ html(data-ng-app="courseApp")
         title #{title}
         link(href='/js/libs/bootstrap/dist/css/bootstrap-theme.css?v=#{cacheBuster}', rel='stylesheet')
         link(href='/js/libs/bootstrap/dist/css/bootstrap.css?v=#{cacheBuster}', rel='stylesheet')
+        link(href='/js/libs/videogular-themes-default/videogular.min.css?v=#{cacheBuster}', rel='stylesheet')
+        link(href='/js/libs/font-awesome/css/font-awesome.min.css?v=#{cacheBuster}', rel='stylesheet')
         link(href='/pipeshift/css/theme.css?v=#{cacheBuster}', rel='stylesheet')
         link(href='/pipeshift/css/main.css', rel='stylesheet')
+        link(href="/js/libs/angular-carousel/dist/angular-carousel.css",rel="stylesheet")
+        script(src="/js/libs/jquery/dist/jquery.min.js")
+        script(src="/js/libs/bootstrap/dist/js/bootstrap.min.js")
         script(src="/js/libs/angular/angular.js")
-        script(src="/pipeshift/js/constants.js")
+        script(src="/js/libs/videogular/videogular.min.js")
+        script(src="/js/libs_misc/videogular/youtube.js")
+        script(src="/js/libs/videogular-controls/controls.min.js")
+        script(src="/js/libs/videogular-overlay-play/overlay-play.min.js")
+        script(src="/js/libs/videogular-poster/poster.min.js")
+        script(src="/js/libs/videogular-buffering/buffering.min.js")
+        script(src="/js/libs/angular-sanitize/angular-sanitize.min.js")
+        script(src="/js/libs/angular-touch/angular-touch.js")
+        script(src="/js/libs/angular-carousel/dist/angular-carousel.js")
+        script(src="/js/libs/ouibounce/build/ouibounce.js")
+        script(src="/js/libs/angular-bootstrap/ui-bootstrap-tpls.js")
         script(src="/pipeshift/js/courseApp.js")
         script(src="/pipeshift/js/modules/video/directive/coursePreview.js")
         script(src="/pipeshift/js/modules/course/controller/CourseController.js")
+        script(src="/pipeshift/js/modules/course/controller/CourseSubscribeModalController.js")
         script(src="https://checkout.stripe.com/checkout.js")
         script(src="/pipeshift/js/directive/stripePayButton.js")
+        script(src="/pipeshift/js/modules/video/directive/videoPlayerVG.js")
         script(src="/pipeshift/js/modules/video/directive/videoTitle.js")
+        script.
+            $(document).ready(function(){
+                $('body').on('click', function() {
+                    $('#exit_intent_modal').hide();
+                });
+
+                $('#exit_intent_modal .modal-footer').on('click', function() {
+                    $('#exit_intent_modal').hide();
+                });
+
+                $('#exit_intent_modal .modal').on('click', function(e) {
+                    e.stopPropagation();
+                });
+            });
+        style.
+            * {
+                margin: 0;
+            }
+            .share42-counter {
+                display: inline-block;
+                vertical-align: top;
+                margin-left: 9px;
+                position: relative;
+                background: #FFF;
+                color: #666;
+            }
+            .share42-counter:before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -8px;
+                width: 8px;
+                height: 100%;
+            }
+            .share42-counter {
+                height: 24px;
+                padding: 0 7px 0 3px;
+                font: 12px/25px Arial, sans-serif;
+                background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAAYCAYAAAAMAljuAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIxJREFUeNrs2rENgCAQQNHDyBBWDMFULmFjnMGlYAgKoy01BR5xB6H4P7mE+l7JmRBCFerdrXN673dTNfbRt1KKpJQk57xNrKN/1lpxzrXnCshAKNoCyGABAggBAggBAggBAggBAggBQoAAQoAAQoAAQr/U/tW1B5BBMNqRg3bOMUY20r9LvjOg4xVgABtzIxFP3JZkAAAAAElFTkSuQmCC) 100% 0;
+            }
+            .share42-counter:before {
+                background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAYCAYAAADH2bwQAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJlJREFUeNrEks0NwyAMhU0kdmi4MARTZYh0jS4FE3DiAjvA4dVUjZQ/p+qlfZKFrPcJPYMVANorhDDzMXGN1IF1ee/nGCNqrega6KjJWkta61dzBoyLKQEb/Rrg+WGM2RKr+ZFzxl6XJj6Z0kseQiq+gUop8hScXIQG5xx1U4ROvvv7kH8ASmvtEniklGiBlLD29/fa354CDAC6sL9OAqehCgAAAABJRU5ErkJggg==);
+            }
         body.standalone-playlist-body
-            course-preview.clearfix.standalone-playlist(course="#{course}",min-height="minHeight",ng-controller="CourseController")
+            div#fb-root
+            script.
+                (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=390601691078573&version=v2.0";
+                fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
+            course-preview.clearfix.standalone-playlist(course="#{course}",is-logged-in-and-subscribed="#{isLoggedInAndSubscribed}",min-height="minHeight",ng-controller="CourseController")
+            div#exit_intent_modal
+                div.underlay
+                div.modal
+                    div.modal-title
+                        h3 Thank you for stopping by!
+                    div.modal-body
+                        p Sample text
+                        p Sample text
+                    div.modal-footer
+                        p no thanks

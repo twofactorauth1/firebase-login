@@ -44,40 +44,39 @@
 <script type="text/javascript">
     Aloha.ready( function() {
         var $ = Aloha.jQuery;
-        $('.editable').aloha();
 
-        $('#main-area').on('click','.add-post',function() {
-            $('.editable').aloha();
-        });
+        // $('#main-area').on('click','.add-post',function() {
+        //     $('.editable').aloha();
+        // });
 
-        $(document).on('click', '.blog-title', function(e) {
-            e.preventDefault();
-        });
+        // $(document).on('click', '.blog-title', function(e) {
+        //     e.preventDefault();
+        // });
 
 
-        $('#main-area').bind('contentchanged', function() {
-             alert('main-area changed');
-            $('.editable').aloha();
-        });
+        // $('#main-area').bind('contentchanged', function() {
+        //      alert('main-area changed');
+        //     $('.editable').aloha();
+        // });
 
-        Aloha.bind('aloha-editable-deactivated', function(){
-            var content = Aloha.activeEditable.getContents();
-            var contentId = Aloha.activeEditable.obj[0].id;
-            var pageId = window.location.pathname;
+        // Aloha.bind('aloha-editable-deactivated', function(){
+        //     var content = Aloha.activeEditable.getContents();
+        //     var contentId = Aloha.activeEditable.obj[0].id;
+        //     var pageId = window.location.pathname;
 
-            // textarea handling -- html id is "xy" and will be "xy-aloha" for the aloha editable
-            if ( contentId.match(/-aloha$/gi) ) {
-                contentId = contentId.replace( /-aloha/gi, '' );
-            }
+        //     // textarea handling -- html id is "xy" and will be "xy-aloha" for the aloha editable
+        //     if ( contentId.match(/-aloha$/gi) ) {
+        //         contentId = contentId.replace( /-aloha/gi, '' );
+        //     }
 
-            parent.$('#edit-website-wrapper').trigger("websiteedit", {
-                content: content,
-                contentId: contentId,
-                pageId: pageId,
-                target: Aloha.activeEditable.obj[0],
-                dataClass: Aloha.activeEditable.obj[0].attributes['data-class'].value
-            });
-            return;
-        });
+        //     parent.$('#edit-website-wrapper').trigger("websiteedit", {
+        //         content: content,
+        //         contentId: contentId,
+        //         pageId: pageId,
+        //         target: Aloha.activeEditable.obj[0],
+        //         dataClass: Aloha.activeEditable.obj[0].attributes['data-class'].value
+        //     });
+        //     return;
+        // });
     });
 </script>

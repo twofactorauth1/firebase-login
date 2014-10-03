@@ -22,12 +22,13 @@ define([
         },
 
 
-        getContactsByLetter: function(accountId, letter) {
-            var url = $$.api.getApiUrl("account", accountId + "/contacts/" + letter);
+        getContactsByLetter: function(accountId, letter,skip,limit) {
+        //    var url = $$.api.getApiUrl("account", accountId + "/contacts/" + letter);
+            var url = $$.api.getApiUrl("contact","filter/"+ letter+ "?skip=" + skip + "&limit=" + limit);
             return this.fetchCustomUrl(url);
         },
-        getContactsAll: function(accountId, skip) {
-            var url = $$.api.getApiUrl("contact", "?skip="+skip);
+        getContactsAll: function(accountId, skip, limit) {
+            var url = $$.api.getApiUrl("contact", "?skip=" + skip + "&limit=" + limit);
             return this.fetchCustomUrl(url);
         },
 

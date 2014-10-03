@@ -286,7 +286,12 @@ var dao = {
     getPageById: function(pageId, fn) {
         return this.getById(pageId, $$.m.cms.Page, fn);
     },
-
+    getPagesById: function(accountId, fn) {
+      //  accountId = accountId.toString();
+        var query = {accountId: accountId};
+      //  return this.getById(accountId, $$.m.cms.Page, fn);
+        this.findMany(query, Page, fn);
+    },
 
     getPageForWebsite: function(websiteId, pageName, fn) {
         var query = {
@@ -1109,6 +1114,105 @@ var dao = {
                     });
                 });
             });
+    },
+
+    getDataForWebpage: function(accountId, pageName, fn){
+        var self = this;
+        self.log.debug('>> getDataForWebpage');
+        //assume index for now
+        accountDao.getAccountByID(accountId, function(err, value){
+            var obj = value.toJSON('public');
+            self.getById(obj.website.websiteId, Website, function(err, website){
+                obj.website = website.toJSON('public');
+                self.log.debug('<< getDataForWebpage');
+                fn(err, obj);
+            });
+        });
+    },
+
+    createDefaultPageForAccount: function(accountId, websiteId, fn) {
+        var self = this;
+        self.log.debug('>> createDefaultPageForAccount');
+
+        var page = new $$.m.cms.Page({
+
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "index",
+            "title" : 'Home',
+            "seo" : {},
+            "visibility" : {
+                "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "coming-soon",
+                    "version" : 1,
+                    "title" : "Coming Soon",
+                    "subtitle" : "Subtitle.",
+                    "text" : "Coming soon",
+                    "txtcolor" : "#2aa9c9",
+                    "logo" : "",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "btn" : {
+                        "text" : "",
+                        "url" : "#signup",
+                        "icon" : ""
+                    }
+                },
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "footer",
+                    "version" : 1,
+                    "title" : "Title",
+                    "subtitle" : "Subtitle.",
+                    "txtcolor" : "#fff",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "btn" : {
+                        "text" : "",
+                        "url" : "",
+                        "icon" : ""
+                    }
+                }
+
+            ],
+            "created" : new Date(),
+            "modified" : null
+
+        });
+
+        self.saveOrUpdate(page, function(err, value){
+            if(err) {
+                self.log.error('Error creating default page: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< createDefaultPageForAccount');
+                fn(null, value);
+            }
+        });
     },
 
 

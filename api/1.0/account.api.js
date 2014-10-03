@@ -9,6 +9,8 @@ var baseApi = require('../base.api');
 var accountDao = require('../../dao/account.dao');
 var cookies = require('../../utils/cookieutil');
 var Account = require('../../models/account');
+var userDao = require('../../dao/user.dao');
+var appConfig = require('../../configs/app.config');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -25,9 +27,13 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('tmp'), this.getTempAccount.bind(this));
         app.post(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
         app.put(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
-
+        app.get(this.url(':subdomain/available'), this.checkSubdomainAvailability.bind(this));
         //GET
-        app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
+        //app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
+        app.get(this.url(''), this.getCurrentAccount.bind(this)); //Temp Added
+
+        app.get(this.url('billing'), this.isAuthApi, this.getCurrentAccountBilling.bind(this));
+        app.post(this.url('billing'), this.isAuthApi, this.updateCurrentAccountBilling.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getAccountById.bind(this));
         app.post(this.url(''), this.isAuthApi, this.createAccount.bind(this));
         app.put(this.url(':id'), this.isAuthApi, this.updateAccount.bind(this));
@@ -38,6 +44,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id'), this.isAuthApi, this.deleteAccount.bind(this));
 
         app.get(this.url(':userid/accounts', 'user'), this.isAuthApi, this.getAllAccountsForUserId.bind(this));
+
+
     },
 
 
@@ -58,6 +66,48 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             } else {
                 return self.wrapError(resp, 500, null, err, value);
+            }
+        });
+    },
+
+    getCurrentAccountBilling: function(req, res) {
+        var self = this;
+        self.log.debug('>> getCurrentAccountBilling');
+        var accountId = self.accountId(req);
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err || account===null) {
+                self.log.debug('<< getCurrentAccountBilling');
+                return self.wrapError(res, 500, null, err, account);
+            } else {
+                self.log.debug('<< getCurrentAccountBilling');
+                return res.send(account.get('billing'));
+            }
+        });
+    },
+
+    updateCurrentAccountBilling: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateCurrentAccountBilling');
+        var accountId = self.accountId(req);
+        //TODO: add security - MODIFY_ACCOUNT
+        var userId = self.userId(req);
+        var billingObj = req.body;
+        billingObj.userId = userId;
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err) {
+                self.log.error('Exception retrieving current account: ' + err);
+                return self.wrapError(res, 500, null, err, err);
+            } else {
+                account.set('billing', billingObj);
+                accountDao.saveOrUpdate(account, function(err, updatedAccount){
+                    if(err) {
+                        self.log.error('Exception updating billing object on account: ' + err);
+                        return self.wrapError(res, 500, null, err, err);
+                    } else {
+                        self.log.debug('<< updateCurrentAccountBilling');
+                        return res.send(updatedAccount);
+                    }
+                });
             }
         });
     },
@@ -242,7 +292,26 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
-    deleteAccount: function(req,resp) {
+    deleteAccount: function(req,res) {
+        var self = this;
+        self.log.debug('>> deleteAccount');
+        //TODO: Add real security.  For now, make sure the logged in user is either from the account being deleted or
+        //  from the main account.
+        var accountId = parseInt(self.accountId(req));
+        var accountIdParam = parseInt(req.params.id);
+        //make sure we are not trying to delete main
+        if(accountIdParam === appConfig.mainAccountID) {
+            self.log.warn('Attempt to delete main denied.  This must be done manually.');
+            self.wrapError(res, 401, null, 'Unauthorized', 'You are not authorized to perform this operation');
+        } else if(accountId === accountIdParam || accountId === appConfig.mainAccountID) {
+            accountDao.deleteAccountAndArtifacts(accountId, function(err, value){
+                self.log.debug('<< deleteAccount');
+                self.send200(res);
+            });
+        } else {
+            self.log.debug('<< deleteAccount');
+            self.wrapError(res, 401, null, 'Unauthorized', 'You are not authorized to perform this operation');
+        }
 
     },
 
@@ -267,15 +336,49 @@ _.extend(api.prototype, baseApi.prototype, {
 
     saveOrUpdateTmpAccount: function(req,resp) {
         var self = this;
+        self.log.debug('>> saveOrUpdateTmpAccount');
+
         var account = new $$.m.Account(req.body);
+
         accountDao.saveOrUpdateTmpAccount(account, function(err, value) {
            if (!err && value != null) {
                cookies.setAccountToken(resp, value.get("token"));
+               self.log.debug('<< saveOrUpdateTmpAccount')
                resp.send(value.toJSON("public"));
            } else {
                self.wrapError(resp, 500, null, err, value);
            }
         });
+    },
+
+    getAccountBySubdomain:function(req,resp){
+           accountDao.getAccountBySubdomain(req.query.subdomain,function(err,value){
+            if(!err){
+               if(value!=null)
+                  resp.send(value.toJSON("public"));
+               else
+                  resp.send({});
+            }
+            else{
+                  resp.wrapError(resp,500,null,err,value);
+            }
+        });
+    },
+
+    checkSubdomainAvailability: function(req, res) {
+        var self = this;
+        self.log.debug('>> checkSubdomainAvailability');
+        var subdomain = req.params.subdomain;
+        accountDao.getAccountBySubdomain(subdomain, function(err, value){
+            if(err) {
+                res.wrapError(resp,500,null,err,value);
+            } else if(value === null) {
+                res.send('true');
+            } else {
+                res.send('false');
+            }
+        });
+
     }
 });
 

@@ -97,7 +97,8 @@ var dao = {
     getAccountByHost: function (host, fn) {
         var parsed = urlUtils.getSubdomainFromHost(host);
         if (parsed.isMainApp) {
-            return fn(null, true);
+            return this.getAccountByID(appConfig.mainAccountID, fn);
+            //return fn(null, true);
         }
 
         if (parsed.subdomain != null || parsed.domain != null) {
@@ -207,6 +208,79 @@ var dao = {
         } else {
             return this.createAccount(fn);
         }
+    },
+
+    deleteAccountAndArtifacts: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> deleteAccountAndArtifacts');
+        //delete account
+        //delete websites by accountId
+        //delete pages by accountId
+        //delete users by accountId
+        //delete posts by accountId
+        //delete courses by userId
+        //delete contacts by accountId
+        //delete contactactivities by accountId
+        //delete assets by accountId
+
+
+
+        //find users by accountId.  If user has other accounts, remove this one.  Otherwise, delete user courses and then user.
+        $$.dao.UserDao.getUsersForAccount(accountId, function(err, list){
+            if(err) {
+                self.log.error('Error getting users for account: ' + err);
+            } else {
+                _.each(list, function(user, index, list){
+                    if(user.get('accounts').length > 1) {
+                        user = user.removeAccount(accountId);
+                        $$.dao.UserDao.saveOrUpdate(user, function(err, value){
+                            if(err) {
+                                self.log.error('Error removing account from user: ' + err);
+                            } else {
+                                self.log.debug('Removed account ' + accountId + ' from user ' + user.id());
+                            }
+                        });
+                    } else {
+                        $$.dao.CourseDao.deleteCourseByUser(user.id(), function(err, value){
+                            if(err) {
+                                self.log.error('Error removing courses for user: ' + err);
+                            } else {
+                                self.log.debug('Removed courses for user ' + user.id());
+                                $$.dao.UserDao.remove(user, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error deleting user: ' + err);
+                                    } else {
+                                        self.log.debug('Removed user: ' + user.id());
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        //delete the account stuff here (websites, pages, posts, contacts, contactactivites, assets)
+        var query = {'accountId': accountId};
+        self.removeByQuery(query, $$.m.cms.Website, function(err,val){self.log.debug('removed websites');});
+        self.removeByQuery(query, $$.m.cms.Page, function(err,val){self.log.debug('removed pages');});
+        self.removeByQuery(query, $$.m.cms.Post, function(err,val){self.log.debug('removed posts');});
+        self.removeByQuery(query, $$.m.Contact, function(err,val){self.log.debug('removed contacts');});
+        self.removeByQuery(query, $$.m.ContactActivity, function(err,val){self.log.debug('removed contact activities');});
+        self.removeByQuery(query, $$.m.Asset, function(err,val){self.log.debug('removed digital asset records');});
+        self.removeByQuery(query, $$.m.Course, function(err,val){self.log.debug('removed course records');});
+
+        self.removeById(accountId, $$.m.Account, function(err, val){
+            if(err) {
+                self.log.error('Error removing account: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('Removed account.');
+                self.log.debug('<< deleteAccountAndArtifacts');
+                fn(null, 'success');
+            }
+        });
+
     }
     //endregion
 };

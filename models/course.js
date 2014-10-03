@@ -20,6 +20,7 @@ var course = $$.m.ModelBase.extend({
             body: null,
             description: null,
             price: 0,
+            showExitIntentModal: false,
             /**
              * @videos
              * [{
@@ -40,7 +41,8 @@ var course = $$.m.ModelBase.extend({
             videos: [
 
             ],
-            userId: null
+            userId: null,
+            accountId: null
         };
     },
 

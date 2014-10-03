@@ -6,6 +6,137 @@
 -->
 
 <script type="text/x-handlebars-template" name="signup-main">
+    <section>
+        <span class="logo"></span>
+        <div class="container">
+            <div class="signuppanel row">
+                <div class="col-xs-8 col-xs-offset-2">
+                        <h3 class="center">Sign Up</h3>
+                        <hr class="mb30"></hr>
+                         <div class="form-group">
+                            <label for="input-company-name">Business Name</label>
+                            <input class="form-control input-lg" type="text" id="input-company-name" value="{{account.company.name}}" placeholder="My Business Name"/>
+                         </div>
+                         <span id="help-company-name" class="error" />
+                         <hr></hr>
+                        <p class="description center">Choose one of the ways to register below</p>
+                        <div class="form form-inner">
+                            <div class="row social">
+
+                                <div class="social-btn-wrap">
+                                    <a href="/signup/facebook" class="btn btn-large btn-default fb-color">
+                                        <i class="fa fa-facebook" />
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p>Facebook</p>
+                                </div>
+
+                                <div class="social-btn-wrap">
+                                    <a href="/signup/twitter" class="btn btn-large btn-default twitter-color">
+                                        <i class="fa fa-twitter" />
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p>Twitter</p>
+                                </div>
+
+                                <div class="social-btn-wrap">
+                                    <a href="/signup/google" class="btn btn-large btn-default google-color">
+                                        <i class="fa fa-google-plus" />
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p>Google Plus</p>
+                                </div>
+
+                                <div class="social-btn-wrap">
+                                    <a href="/signup/linkedin" class="btn btn-large btn-default linkedin-color">
+                                        <i class="fa fa-linkedin" />
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p>LinkedIn</p>
+                                </div>
+
+                                <div class="social-btn-wrap">
+                                    <a href="#" class="btn btn-large btn-default showEmailForm email-color">
+                                        <i class="fa fa-envelope" />
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p>Email</p>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <form role="form" id="form-create-account" action="/signup" method="post">
+                                <div class="form-group row">
+                                    <div class="">
+                                        <label>Email</label>
+                                        <div class="input-group">
+                                            <input class="form-control input-lg" id="input-username" type="text" name="username" placeholder="username" />
+                                            <span class="input-group-addon"><i class="fa fa-user" />
+                                            </span>
+                                        </div>
+                                        <span id="help-username" class="error" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="">
+                                        <label>Password</label>
+                                        <div class="input-group">
+                                            <input class="form-control input-lg" id="input-password" type="password" name="password" placeholder="password" />
+                                            <span class="input-group-addon"><i class="fa fa-lock" />
+                                            </span>
+                                        </div>
+                                        <span id="help-password" class="error" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="">
+                                        <label>Re-enter Password</label>
+
+                                        <div class="input-group">
+                                            <input class="form-control input-lg" id="input-password2" type="password" name="password2" placeholder="password" />
+                                            <span class="input-group-addon"><i class="fa fa-lock" />
+                                            </span>
+                                        </div>
+                                        <span id="help-password2" class="error" />
+                                    </div>
+                                </div>
+
+                                <p class="termsOfuse">By continuing below you agree to the <a href="/terms">Terms of Use</a>
+                                    <p>
+                                        <button class="btn btn-primary btn-default btn-block btn-lg" type="submit" value="Create Account" role="button">Create Account</button>
+                            </form>
+                        </div>
+                </div>
+                <div class="hidden">
+                    <h3>Benefits</h3>
+                    <hr></hr>
+                    <ul class="benefits">
+                        <li><span class="fa fa-clock-o"></span> <h4>Saves Time</h4></li>
+                        <li><span class="fa fa-rocket"></span> <h4>Your Secret Business Weapon</h4></li>
+                        <li><span class="fa fa-money"></span> <h4>Saves you Money</h4></li>
+                    </ul>
+                    <hr>
+                    <div class="testimonial row">
+                        <div class="col-xs-3">
+                            <img src="http://api.randomuser.me/portraits/med/women/17.jpg" class="img-circle"/>
+                        </div>
+                        <div class="col-xs-9 text">
+                            <p>"Indigenous is my secret weapon against my competiton and it is so intutive."</p>
+                            <div class="clearfix"></div>
+                            <span>- Rachel Montgomery</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</script>
+
+<script type="text/x-handlebars-template" name="signup-main-old">
     <section class="mainpanel">
         <span class="logo"></span>
         <div class="signup-inner row">
@@ -78,6 +209,7 @@
                                 {{#if isProfessional}}Does your professional business have a name?{{/if}}
                             </label>
                             <input class="form-control" type="text" id="input-company-name" value="{{account.company.name}}" />
+                            <span id="help-subdomain" class="error"/>
                         </div>
                     </div>
 

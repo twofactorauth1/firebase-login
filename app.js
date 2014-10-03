@@ -6,13 +6,13 @@
  */
 
 /*
-//Do not delete this
-//requires: "nodetime": "~0.8.15" to run
-require('nodetime').profile({
-    accountKey: 'bdd766862005ebc9c88fc409cef27c60921f2774',
-    appName: 'Node.js Application'
-});
-*/
+ //Do not delete this
+ //requires: "nodetime": "~0.8.15" to run
+ require('nodetime').profile({
+ accountKey: 'bdd766862005ebc9c88fc409cef27c60921f2774',
+ appName: 'Node.js Application'
+ });
+ */
 
 //---------------------------------------------------------
 //  SETUP REQUIREJS FOR SHARED RESOURCES
@@ -40,7 +40,8 @@ var express = require('express')
     , mongoConfig = require('./configs/mongodb.config')
     , MongoStore = require('connect-mongo-store')(express)
     , mongoStore = new MongoStore(mongoConfig.MONGODB_CONNECT)
-    , consolidate= require('consolidate');
+    , consolidate = require('consolidate')
+    , busboy = require('connect-busboy');
 
 
 //---------------------------------------------------------
@@ -68,7 +69,6 @@ var log = $$.g.getLogger("app");
 log.info("Log4js setup successfully");
 
 
-
 //-----------------------------------------------------
 //  CONFIGURE PASSPORT & STRATEGIES
 //-----------------------------------------------------
@@ -86,11 +86,11 @@ log.info("Global App Cache setup");
 //  LIST FOR CONNECTIONS TO MONGODB SESSION STORE
 //---------------------------------------------------------
 
-mongoStore.on('connect', function() {
+mongoStore.on('connect', function () {
     log.info("Session store is ready for use");
 });
 
-mongoStore.on('error', function() {
+mongoStore.on('error', function () {
     log.error("An error occurred connecting to MongoDB Session Storage");
 });
 
@@ -117,7 +117,7 @@ app = express();
 global.app = app;
 
 // View engine
-app.set('view options', { layout:false });
+app.set('view options', { layout: false });
 
 var hbs = consolidate.handlebars;
 app.engine('html', hbs);
@@ -130,6 +130,7 @@ app.set('view engine', 'jade');
 app.set('views', path.join(__dirname, 'templates'));
 
 app.use(express.favicon());
+app.use(busboy());
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
@@ -138,11 +139,11 @@ app.use(express.cookieParser('mys3cr3tco00k13s'));
 app.use(express.session({
     store: mongoStore,
     secret: 'mys3cr3t',
-    cookie: {maxAge:24*60*60*1000} //stay open for 1 day of inactivity
+    cookie: {maxAge: 24 * 60 * 60 * 1000} //stay open for 1 day of inactivity
 }));
 
 //Middle ware to refresh the session cookie expiration on every hit
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     req.session._garbage = Date();
     req.session.touch();
     next();
@@ -153,29 +154,36 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(app.router);
+
 // Handle 404
-app.use(function(req, res) {
+app.use(function (req, res) {
     res.status(400);
     res.render('404.html', {title: '404: File Not Found'});
 });
 
 // Handle 500
-app.use(function(error, req, res, next) {
+app.use(function (error, req, res, next) {
     res.status(500);
-    res.render('500.html', {title:'500: Internal Server Error', error: error});
+    res.render('500.html', {title: '500: Internal Server Error', error: error});
 });
+
+/*
+app.use(function(req, res) {
+    res.sendfile('./public/index.html');
+});
+*/
 app.use(connect.compress());
 
-app.configure('development', function() {
+app.configure('development', function () {
     app.use(express.errorHandler());
 });
 
-app.configure('staging', function() {
+app.configure('staging', function () {
     //TODO - Set up proper error handling for production environments
     app.use(express.errorHandler());
 });
 
-app.configure('production', function() {
+app.configure('production', function () {
     //TODO - Set up proper error handling for production environments
     app.use(express.errorHandler());
 });
@@ -184,9 +192,9 @@ app.configure('production', function() {
 // SETUP CROSS-DOMAIN SCRIPTING WHITELIST
 //-----------------------------------------------------
 
-var allowCrossDomain = function(req, res, next) {
+var allowCrossDomain = function (req, res, next) {
     var allowedHost = appConfig.xdhost_whitelist;
-    if(allowedHost.indexOf(req.headers.origin) !== -1 || allowedHost.indexOf(req.headers.host) !== -1) {
+    if (allowedHost.indexOf(req.headers.origin) !== -1 || allowedHost.indexOf(req.headers.host) !== -1) {
         res.header('Access-Control-Allow-Credentials', true);
         res.header('Access-Control-Allow-Origin', req.headers.origin)
         res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -204,8 +212,8 @@ app.use(allowCrossDomain);
 //  START LISTENING
 //-----------------------------------------------------
 servers = [];  //global
-var setUpListener = function(app) {
-    var server = app.listen(appConfig.port, function(){
+var setUpListener = function (app) {
+    var server = app.listen(appConfig.port, function () {
         log.info("Express server listening on port " + appConfig.port);
         if (cluster != null) {
             if (cluster.worker != null) {
@@ -238,11 +246,11 @@ if (appConfig.cluster == true) {
             cluster.fork();
         }
 
-        cluster.on('listening', function(worker, address) {
+        cluster.on('listening', function (worker, address) {
             log.info("A worker is now connected to " + address.address + ":" + address.port);
         });
 
-        cluster.on('disconnect', function(worker) {
+        cluster.on('disconnect', function (worker) {
             log.info('The worker #' + worker.id + ' has disconnected');
         });
 
@@ -331,7 +339,7 @@ process.on('uncaughtException', function (err) {
     log.error('Caught exception: ' + err);
 
     //$$.g.mailer.sendMail("errors@indigenous.io", "{ENTER YOUR EMAIL ADDRESS HERE}", null, "Uncaught Error occurred - " + process.env.NODE_ENV, null, err + ":  " + err.stack, function(err, value) {
-        process.exit(1);
+    process.exit(1);
     //});
 });
 

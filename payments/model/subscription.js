@@ -16,6 +16,7 @@ var subscription = $$.m.ModelBase.extend({
             _id: null,
             accountId: 0,               //int
             contactId:null,             //internal contact Id
+            userId: null,               //internal userId
             stripeCustomerId:null,      //stripe customerId
             stripeSubscriptionId:null,  //stripe subscription Id
             stripePlanId:null,          //stripe plan Id

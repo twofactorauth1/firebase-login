@@ -21,9 +21,19 @@ var dao = {
             this.getById(courseId, function (err, course) {
                 if (!err && course) {
                     var videos = course.get("videos");
-                    if (course.userId != curUserId) {
+                    if (course.get("userId") != curUserId) {
                         _.forEach(videos, clearVideoFieldsForUnauthorizedUser);
                     }
+                }
+                return fn(err, course);
+            });
+        },
+
+        getCourseByIdForSubscriber: function (courseId, fn) {
+            this.getById(courseId, function (err, course) {
+                if (!err && course) {
+                    var videos = course.get("videos");
+
                 }
                 return fn(err, course);
             });
@@ -33,10 +43,11 @@ var dao = {
             this.findMany({userId: userId, _id: { $ne: "__counter__" }}, fn);
         },
 
-        createCourse: function (courseData, userId, fn) {
+        createCourse: function (courseData, userId, accountId, fn) {
             var newCourse = new $$.m.Course(courseData);
             newCourse.set('_id', null);
             newCourse.set('userId', userId);
+            newCourse.set('accountId', accountId);
             this.saveOrUpdate(newCourse, fn);
         },
 
@@ -54,6 +65,7 @@ var dao = {
                         course.set('description', updatedCourseData.description);
                         course.set('subdomain', updatedCourseData.subdomain);
                         course.set('price', updatedCourseData.price);
+                        course.set('showExitIntentModal', updatedCourseData.showExitIntentModal);
                         self.saveOrUpdate(course, fn);
                     }
                 } else {
@@ -217,7 +229,7 @@ var dao = {
             this.findOne(query, function (err, course) {
                 if (!err && course) {
                     var videos = course.get("videos");
-                    if (course.userId != curUserId) {
+                    if (course.get("userId") != curUserId) {
                         _.forEach(videos, clearVideoFieldsForUnauthorizedUser);
                     }
                 }
@@ -234,6 +246,11 @@ var dao = {
                 }
                 return fn(err, course, video);
             });
+        },
+
+        deleteCourseByUser: function(userId, fn) {
+            var self = this;
+            self.removeByQuery({'userId': userId}, $$.m.Course, fn);
         }
 
 
@@ -247,6 +264,6 @@ function clearVideoFieldsForUnauthorizedUser(video) {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.UserDao = dao;
+$$.dao.CourseDao = dao;
 
 module.exports = dao;

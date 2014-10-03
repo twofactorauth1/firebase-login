@@ -1,0 +1,70 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+<div style="background-color:{{component.bg.color}};background-size: cover">
+    <div class="container component image-gallery-v1" data-id="{{component._id}}" ng-show="component">
+        <div class="row">
+              <div class="center">
+                    <h1>{{component.title}}</h1>
+              </div>
+        </div>
+        <div data-ng-show="component.subtitle" class="row">
+            <div class="center " data-ng-bind-html="component.subtitle">
+            </div>
+        </div><br><br>
+        <div class="row">
+            <div class="row">
+                <div isotope-container ng-cloak id="isotopeContainer">
+                    <div class="col-md-3 imgHeight" ng-repeat="image in component.images track by $index"
+                         isotope-item>
+                        <a class="thumbnail" href="{{image['image-url']}}"
+                           title="{{image['image-label']}}" data-gallery>
+
+                            <img class="img-responsive" alt="{{image['image-label']}}" src="{{image['image-url']}}">
+                            <span class="caption"><i class="fa fa-plus-circle"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="blueimp-gallery" class="blueimp-gallery">
+            <!-- The container for the modal slides -->
+            <div class="slides">
+
+            </div>
+            <!-- Controls for the borderless lightbox -->
+            <h3 class="title"></h3>
+            <a class="prev">‹</a>
+            <a class="next">›</a>
+            <a class="close">×</a>
+            <a class="play-pause"></a>
+            <ol class="indicator"></ol>
+            <!-- The modal dialog, which will be used to wrap the lightbox content -->
+            <div class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title"></h4>
+                        </div>
+                        <div class="modal-body next"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left prev">
+                                <i class="glyphicon glyphicon-chevron-left"></i>
+                                Previous
+                            </button>
+                            <button type="button" class="btn btn-primary next">
+                                Next
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

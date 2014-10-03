@@ -11,6 +11,7 @@ var accountDao = require('./account.dao');
 var cookies = require('../utils/cookieutil');
 var EmailTemplateUtil = require('../utils/emailtemplateutil');
 var crypto = require('../utils/security/crypto');
+var appConfig = require('../configs/app.config');
 
 var dao = {
 
@@ -35,7 +36,7 @@ var dao = {
             }
 
             //We are at the main indigenous level application, not at a custom subdomain
-            else if (account === true) {
+            else if (account === true || account.id() ===appConfig.mainAccountID) {
                 log.info("Logging into main App");
                 req.session.accountId = 0;
                 userDao.getUserByUsername(username, function (err, value) {
@@ -429,10 +430,14 @@ var dao = {
                 return fn("URL Provided is null");
             }
 
+            /*
+             * Removing the parameter for authtoken.  Not sure if it is necessary
             if (url.indexOf("?") == -1) {
                 url += "?";
             }
             url += "&authtoken=value";
+            */
+
             fn(null, url);
         });
     },
@@ -545,7 +550,7 @@ var dao = {
                 serverUrl += path;
             }
 
-            serverUrl += "?authtoken=" + authToken;
+            //serverUrl += "?authtoken=" + authToken;
 
             fn(null, serverUrl);
         });

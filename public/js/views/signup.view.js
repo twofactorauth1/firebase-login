@@ -22,17 +22,20 @@ define([
         emailvalid: false,
         passwordsvalid: false,
         usernamevalid: false,
+        businessNameValid: false,
 
         events: {
             "click #btn-business,#btn-professional,#btn-enterprise": "onCompanyTypeChanged",
             "change .radio-company-size": "onCompanySizeChanged",
-            "onkeytimer #input-company-name": "onCompanyNameKeyTimer",
+             "onkeytimer #input-company-name": "onCompanyNameKeyTimer",
             "onkeytimer #input-username": "onUsernameKeyTimer",
             "onkeytimer #input-password": "onPasswordKeyTimer",
             "onkeytimer #input-password2": "onPasswordKeyTimer",
             "submit #form-create-account": "onCreateAccount",
             "click .right-nav": "nextPanel",
-            "click .left-nav": "prevPanel"
+            "click .left-nav": "prevPanel",
+            "blur #input-company-name":"checkForSubdomain",
+            "click .showEmailForm": "showEmailForm"
         },
 
 
@@ -47,6 +50,9 @@ define([
             return this;
         },
 
+        showEmailForm: function () {
+            $('#form-create-account').fadeIn();
+        },
 
         _getData: function () {
             return {
@@ -65,7 +71,6 @@ define([
             if (!this._isFirstPlace(this.place) && (data.account === null || data.account.company.type === null || data.account.company.type === 0)) {
                 return $$.r.mainAppRouter.navigate("/start", {trigger:true});
             }
-
             var tmpl = $$.templateManager.get("signup-main", this.templateKey);
             var html = tmpl(data);
             this.show(html);
@@ -94,6 +99,7 @@ define([
 
 
         onCompanyNameKeyTimer: function (event) {
+
             var name = $(event.currentTarget).val();
 
             this.tmpAccount.get("company").name = name;
@@ -102,6 +108,7 @@ define([
             this.tmpAccount.set({subdomain: subdomain});
 
             this.tmpAccount.saveOrUpdateTmpAccount();
+
         },
 
 
@@ -377,6 +384,25 @@ define([
 
         onClose: function() {
             this.stopKeyTimers();
+        },
+
+        checkForSubdomain:function(){
+
+            var companyName = $("#input-company-name").val().trim();
+            $.getJSON('/api/1.0/account/' + companyName +'/available', function(data, status, xhr){
+
+                if(data === true) {
+                    $("#help-company-name").html('');
+                } else {
+                    $("#input-company-name").val('');
+                    $("#help-company-name").html("Subdomain Already Exists");
+                }
+            }).error(function(xhr,status,err){
+                //alert(err);
+                console.err(err);
+                //$('#help-company-name').html('Error checking for account availability.');
+            });
+
         }
 
     });

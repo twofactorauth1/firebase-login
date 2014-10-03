@@ -1,6 +1,6 @@
 .mainpanel {
     margin-left: 240px;
-    background: #e4e7ea;
+    height: 100%;
     .alert {
         margin: 10px 10px 0px;
     }
@@ -12,12 +12,13 @@
     position: relative;
     margin: 0;
     height: 62px;
+    z-index: 11;
     h2 {
         font-size: 28px;
         color: #1D2939;
         letter-spacing: -0.5px;
         margin: 0;
-        padding-left: 10px;
+        padding-left: 20px;
         span {
             font-size: 13px;
             text-transform: none;
@@ -65,6 +66,11 @@
     }
     .fa-clock-o {
         padding: 6px 8px;
+    }
+    .btn {
+        &:last-child {
+            margin-right: 10px;
+        }
     }
     .breadcrumb-wrapper {
         position: absolute;

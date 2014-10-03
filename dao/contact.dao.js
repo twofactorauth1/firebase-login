@@ -19,14 +19,58 @@ var dao = {
         defaultModel: $$.m.Contact
     },
 
-    getContactsShort: function (accountId, letter, limit, fn) {
+    getContactsShort: function (accountId,skip, letter, limit, fn) {
+        var self=this;
         var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
         var query = {accountId: accountId, _last: { $gte: letter, $lt: nextLetter } };
         //var fields = {_id:1, accountId:1, first:1, last:1, photo:1, photoSquare:1, type:1, siteActivity:1, details:1};
         var fields = null;
         var obj = {query: query, fields: fields};
         //this.findManyWithFields(query, fields, fn);
-        this.findManyWithLimit(query, limit, $$.m.Contact, fn);
+    //    this.findManyWithLimit(query, limit, $$.m.Contact, fn);
+
+
+        accountDao.getAccountByID(accountId, function (err, res) {
+
+            var sort = res.get('settings')
+
+            if (sort)
+                sort = sort.sort_type;
+            else
+                sort = 'last';
+
+            //['sort_type'] || 'last';
+
+            //self.findAllWithFields(query, skip, sort, fields, fn);
+            self.findAllWithFieldsAndLimit(query, skip, limit, sort, fields, $$.m.Contact, fn);
+        });
+    },
+
+    findContactsShortForm: function(accountId, letter, skip, limit, fn) {
+        var self=this;
+        self.log.debug('>> findContactsShortForm');
+        var query = {};
+        if(letter !='all') {
+            var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
+            query = {accountId: accountId, _last: { $gte: letter, $lt: nextLetter } };
+        } else {
+            query = {accountId: accountId};
+        }
+
+        var fields = {_id:1, first:1, last:1, photo:1};
+
+        accountDao.getAccountByID(accountId, function (err, res) {
+
+            var sort = res.get('settings')
+
+            if (sort) {
+                sort = sort.sort_type;
+            } else {
+                sort = 'last';
+            }
+
+            self.findAllWithFieldsAndLimit(query, skip, limit, sort, fields, $$.m.Contact, fn);
+        });
     },
 
     getContactsAll: function (accountId, skip, limit, fn) {

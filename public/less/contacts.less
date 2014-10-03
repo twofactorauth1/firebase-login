@@ -1,3 +1,6 @@
+.contacts {
+  background: #e7e7e7;
+}
 #contacts-main-container {
   #contacts-list-container {
     margin-top: 10px;
@@ -244,27 +247,6 @@
   }
 }
 
-.fb-color {
-  background: rgb(59, 89, 152);
-  &:hover {
-    background: rgb(70, 108, 187);
-  }
-}
-
-.linkedin-color {
-    background: rgb(0, 123, 182);
-    &:hover {
-      background: rgb(3, 147, 216);
-    }
-}
-
-.google-color {
-    background: rgb(221, 75, 57);
-    &:hover {
-      background: rgb(248, 83, 63);
-    }
-}
-
 .import-success {
   text-align: center;
   .fa-check {
@@ -325,6 +307,57 @@
   }
 }
 
+.people-list {
+  margin-top: 140px;
+}
+
+.filter-bar {
+  margin-right: 16px;
+  z-index: 999;
+  background: #fff;
+  border: 1px solid #d3d7db;
+  position: fixed;
+  right: 0;
+  left: 52px;
+  top: 113px;
+  .panel-body {
+    padding: 20px 10px;
+  }
+}
+
+.slide {
+    -webkit-transition: -webkit-transform.5s ease-in-out; -moz-transition: -moz-transform.5s ease-in-out; -o-transition: -o-transform.5s ease-in-out;
+    transition: transform.5s ease-in-out;
+}
+.slide--reset {
+    -webkit-transform: translateY(0); -ms-transform: translateY(0);
+    transform: translateY(0);
+}
+.slide--up {
+    -webkit-transform: translateY(-100% ); -ms-transform: translateY(-100% );
+    transform: translateY(-100% );
+}
+
+.header--fixed {
+  position: fixed;
+  z-index: 10;
+  right: 16px;
+  left: 241px;
+  top: 114px;
+}
+
+.rightmenu-open .header--fixed {
+  right: 256px;
+}
+
+.leftpanel-collapsed .header--fixed {
+  left: 53px;
+}
+
+.rightmenu-open .filter-bar {
+  margin-right: 274px;
+}
+
 
 /***** Infinite Scroll Effects *****/
 
@@ -334,6 +367,7 @@
       min-height: 100px!important;
     }
 }
+
 
 .people-item.shown {
   opacity: 1;

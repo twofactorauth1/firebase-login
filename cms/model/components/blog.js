@@ -34,23 +34,43 @@ var component = $$.m.ModelBase.extend({
             type: "blog",
 
             /**
-             * The label for the component
-             * (optional)
+             * The version of the component
+             *
              */
-            label:"",
+            version: 1,
 
             /**
-             * A description that appears at the top of the component
+             * The Title of the component that shows up on the top
              * (optional)
              */
-            description:"",
+            title:"Blog",
 
             /**
-             * the HTML formatted value
+             *
+             *
              */
-            value: "",
+            subtitle:"This is the subtitle.",
 
-            posts: []
+            /**
+             *
+             *
+             */
+            text: "This is the main text for the blog.",
+
+            /**
+             *
+             *
+             */
+            bg: {
+                img : {
+                    url : "",
+                    width : null,
+                    height : null,
+                    parallax : false,
+                    blur : false
+                },
+                color : ""
+            }
         }
     },
 

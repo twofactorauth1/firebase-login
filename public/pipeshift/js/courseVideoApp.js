@@ -1,8 +1,8 @@
 'use strict';
 
 // Declare app level module which depends on filters, and services
-angular.module('app.directives', []);
-var app = angular.module('courseVideoApp', ['app.directives',
+angular.module('var.directives', []);
+var app = angular.module('courseVideoApp', ['var.directives',
     'app.modules.coursevideo',
     'app.constants',
     "com.2fdevs.videogular",

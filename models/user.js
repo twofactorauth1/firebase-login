@@ -145,6 +145,7 @@ var user = $$.m.ModelBase.extend({
              * }]
              */
             details: [],
+            stripeId: "",           //stripe CustomerID if available.  This is separate from login credentials
             welcome_alert: {
                 editwebsite: true,
                 commerce: true,
@@ -710,6 +711,22 @@ var user = $$.m.ModelBase.extend({
         }
 
         return _.pluck(accounts, "accountId");
+    },
+
+    removeAccount: function(accountId) {
+        var accounts = this.get('accounts');
+        if(accounts == null) {
+            return this;
+        }
+        _.each(accounts, function(account, index, list){
+            if(account.id() === accountId) {
+
+            }
+        });
+
+        var updatedAccounts = _.filter(accounts, function(account){return account.id() !== accountId});
+        this.set('accounts', updatedAccounts);
+        return this;
     },
 
 

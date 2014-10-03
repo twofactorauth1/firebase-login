@@ -1,0 +1,68 @@
+/********** Feature List v1 **********/
+
+.feature-list-v1 {
+    .row {
+        margin: 0;
+    }
+    .features-wrap {
+            margin: 2%;
+        }
+    .feature-list-title {
+        text-align: center;
+        text-transform: uppercase;
+        color: #444444;
+    }
+    .feature-list-subtitle {
+        color: #bbbbbb;
+        text-align: center;
+    }
+    .feature-single {
+        background: #4bb0cb;
+        min-height: 320px;
+        margin: 10px;
+        padding: 20px;
+        border-radius: 5px;
+        border-bottom: 4px solid #2f93b6;
+        color: white;
+        .feature-icon {
+            color: #3b9db7;
+            font-size: 14em;
+            position: absolute;
+            margin: 15px 0;
+            z-index: 1;
+            text-align: center;
+            width: 85%;
+        }
+        .feature-title {
+            font-size: 24px;
+            text-align: center;
+            z-index: 9999;
+            position: relative;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+        }
+        .feature-subtitle {
+            text-align: center;
+            z-index: 9999;
+            position: relative;
+            ul {
+                padding: 0px;
+                margin-top: 30px;
+            }
+            li {
+                list-style-type: disc;
+                list-style-position: inside;
+                line-height: 14px;
+                margin-bottom: 15px;
+                font-size: 14px;
+            }
+        }
+    }
+    .feature-single {
+        transition: none!important
+    }
+    div[data-class="feature-list"] {
+        background: url('../assets/images/indimain/wave-bg.jpg');
+        background-size: 15% auto;
+    }
+}

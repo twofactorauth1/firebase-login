@@ -1,11 +1,21 @@
+html, body {
+   margin:0;
+   padding:0;
+   height:100%;
+}
 body {
     _background: #1d2939;
     // font-family:'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif !important;
     line-height: 21px;
     color: #636e7b;
+    height: 100%;
 }
 body.notfound, body.signin {
     background: #e4e7ea;
+}
+
+.body-wrap {
+    height: 100%;
 }
 input, select, textarea {
     // font-family:'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif !important;
@@ -25,6 +35,18 @@ h1, h2, h3, h4, h5 {
 strong {
     font-family:'LatoBold';
     font-weight: normal;
+}
+.mainpanel {
+    background: #e7e7e7;
+}
+.ng-scope {
+    height: 100%;
+}
+#main-viewport {
+    height: auto;
+}
+.mb0 {
+    margin-bottom: 0px!important;
 }
 .mb5 {
     margin-bottom: 5px;
@@ -344,13 +366,11 @@ strong {
     }
     .mainpanel {
         padding-top: 50px;
+        height: 100%;
     }
     .header-right {
         margin-right: 240px;
     }
-}
-#main-viewport {
-
 }
 .stickyheader.leftpanel-collapsed {
     .headerbar {
@@ -530,4 +550,80 @@ font-weight: 900;
     background: -webkit-linear-gradient(top,#FFF,#FFF 30%,rgba(255,255,255,0));
     background: -moz-linear-gradient(top,#FFF,#FFF 30%,rgba(255,255,255,0));
     background: linear-gradient(to bottom,#FFF,#FFF 30%,rgba(255,255,255,0));
+}
+
+.fb-color {
+  background: rgb(59, 89, 152);
+  &:hover {
+    background: rgb(70, 108, 187);
+  }
+}
+
+.linkedin-color {
+    background: rgb(0, 123, 182);
+    &:hover {
+      background: rgb(3, 147, 216);
+    }
+}
+
+.google-color {
+    background: rgb(221, 75, 57);
+    &:hover {
+      background: rgb(248, 83, 63);
+    }
+}
+
+.twitter-color {
+    background: rgb(64,153,255);
+    &:hover {
+      background: rgb(55, 132, 220);
+    }
+}
+
+.email-color {
+    background: rgb(153,153,153);
+    &:hover {
+      background: rgb(102, 102, 102);
+    }
+}
+
+.template-btns .btn {
+    border-top: none;
+    border-radius: 0;
+}
+
+#main-viewport .alert-info {
+    display: none;
+}
+
+#toast-container {
+    height: auto!important;
+}
+
+#ngProgress {
+    margin: 0;
+    padding: 0;
+    z-index: 99998;
+    background-color: #44b2cc!important;
+    color: #44b2cc!important;
+    box-shadow: 0 0 10px 0; /* Inherits the font color */
+    height: 2px;
+    opacity: 0;
+
+    /* Add CSS3 styles for transition smoothing */
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+/* Styling for the ngProgress-container */
+#ngProgress-container {
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
 }

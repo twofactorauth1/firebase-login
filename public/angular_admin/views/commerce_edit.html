@@ -1,0 +1,332 @@
+<div>
+    <div class="pageheader row">
+        <div class="col-xs-9">
+            <button id="btn-back-to-commerce" ng-click="$back()" class="btn btn-success pull-left" type="button">
+                <span class="fa fa-chevron-left"></span>
+                <span class="hidden-xs">Back</span>
+            </button>
+            <h2><i class="fa fa-shopping-cart"></i> Single Product</h2>
+        </div>
+        <div class="col-xs-3">
+            <a class="btn btn-success pull-right btn-save-single-product" type="button">
+                <span class="fa fa-save"></span>
+                <span class="hidden-xs">Save</span>
+            </a>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="product-performance">
+        <div>
+            <div class="col-sm-4 col-xs-12 detail-single">
+                <div class="campaign-overview">
+                    <h4>Product Performance</h4>
+                    <p># Sold:
+                        </p><p class="subtle-gray">200</p>
+                    <p></p>
+                    <div class="clearfix"></div>
+                    <p># Sold this Month:
+                        </p><p class="subtle-gray">100</p>
+                    <p></p>
+                    <div class="clearfix"></div>
+                    <p>New Customers:
+                        </p><p class="subtle-gray">10</p>
+                    <p></p>
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-12 detail-single">
+                <div class="campaign-overview">
+                    <div class="mb40"></div>
+                    <p>Metric:
+                        </p><p class="subtle-gray">200</p>
+                    <p></p>
+                    <div class="clearfix"></div>
+                    <p>Metric:
+                        </p><p class="subtle-gray">100</p>
+                    <p></p>
+                    <div class="clearfix"></div>
+                    <p>Metric:
+                        </p><p class="subtle-gray">10</p>
+                    <p></p>
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-12 detail-single">
+                <h4>Circle Graph</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="contentpanel product-details" style="min-height: 378px;">
+        <h3>Manage Product</h3>
+        <div class="mb15 clearfix"></div>
+        <div class="row">
+            <div class="col-xs-3">
+                <div class="product-gallery">
+                    <div class="panel panel-success">
+                        <div class="panel-heading padding5">
+                            <p class="product-img"><i class="fa fa-picture-o"></i>
+                            </p>
+
+                            <p class="center">
+                                </p><h4><i class="fa fa-plus"></i> Add Image</h4>
+                            <p></p>
+                            <p class="center">
+                                </p><h4><i class="fa fa-plus"></i> Add Icon</h4>
+                            <p></p>
+                        </div>
+                        <div class="panel-body">
+                            <h4 class="center">Purple Summer Yoga Top</h4>
+                            <p class="subtle-gray center">$0.00</p>
+                        </div>
+                    </div>
+                    <div class="remaining-product-images">
+                        <div class="sml-img"><i class="fa fa-picture-o"></i>
+                        </div>
+                        <div class="sml-img"><i class="fa fa-picture-o"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-9">
+                <div>
+                    <div class="col-xs-6">
+                        <h4>Product Details</h4>
+                        <input class="form-control input-lg mb20" type="text" placeholder="Product Title">
+                        <select class="form-control input-lg">
+                            <option>Product Type</option>
+                            <option>Physical</option>
+                            <option>Digital</option>
+                            <option>Subscription</option>
+                        </select>
+                        <textarea class="form-control input-lg mb15" rows="4" placeholder="Product Description"></textarea>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="mb35"></div>
+                        <select class="form-control input-lg">
+                            <option>Status</option>
+                            <option>Active</option>
+                            <option>Backorder</option>
+                            <option>Inactive</option>
+                        </select>
+                        <input class="form-control input-lg mb20" type="text" placeholder="Price">
+                        <input class="form-control input-lg mb20" type="text" placeholder="Cost">
+                        <input class="form-control input-lg mb20" type="text" placeholder="Sku">
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <hr>
+                <div class="col-xs-6">
+                    <h4>Categories</h4>
+                    <div class="categories form-group panel panel-default">
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                            <label for="checkboxPrimary">Cateogry One</label>
+                        </div>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                            <label for="checkboxPrimary">Cateogry Two</label>
+                        </div>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                            <label for="checkboxPrimary">Cateogry Three</label>
+                        </div>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+                            <label for="checkboxPrimary">Cateogry Four</label>
+                        </div>
+                    </div>
+                    <button class="btn btn-info pull-right">Add</button>
+                </div>
+                <div class="col-xs-6">
+                    <h4>Tags</h4>
+                    <input name="tags" id="tags" class="form-control" value="foo,bar,baz">
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row product-sections">
+            <ul>
+                <li id="subscription-section" class="panel panel-message">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h3>Subscriptions</h3>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="toggle-modern">
+                                    <div class="toggles on" style="height: 35px; width: 110px;"><div class="toggle-slide"><div class="toggle-inner" style="width: 185px; margin-left: -75px;"><div class="toggle-on" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div><div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div><div class="toggle-off active" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="display: none;">
+                            <div class="form-horizontal well row" role="form">
+                                    <h4>New Subscription</h4>
+                                    <hr>
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-sm-7">
+                                        <label for="inputBilling" class="col-sm-3 control-label">Bill Every</label>
+                                        <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="number" class="form-control input-lg spinner-input ui-spinner-input" id="inputBilling" placeholder="Enter Number" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span></a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a></span>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <select class="form-control input-lg" id="selectDuration">
+                                            <option>Day</option>
+                                            <option>Week</option>
+                                            <option>Month</option>
+                                            <option>Year</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-7">
+                                        <label for="inputCycles" class="col-sm-3 control-label"># of Cycles</label>
+                                        <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" placeholder="Cycles" id="inputCycles" class="col-sm-9 form-control input-lg spinner-input ui-spinner-input" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span></a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a></span>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <input type="text" placeholder="Price" class="form-control input-lg">
+                                    </div>
+
+                                    <div class="clearfix mb30"></div>
+
+                                    <button class="btn btn-lg btn-block btn-success"><span class="fa fa-plus"></span> Add</button>
+
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <table class="table table-hover table-primary all-subscriptions">
+                              <thead>
+                                <tr>
+                                  <th>Active</th>
+                                  <th>Bill Every</th>
+                                  <th>Cycles</th>
+                                  <th>$45.00</th>
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td><span class="fa fa-check"></span></td>
+                                  <td>Month for 12 Months</td>
+                                  <td>3</td>
+                                  <td>$45.00</td>
+                                  <td class="table-action">
+                                    <a href="#"><i class="fa fa-pencil"></i></a>
+                                    <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                                   </td>
+                                </tr>
+                                <tr>
+                                  <td><span class="fa fa-check"></span></td>
+                                  <td>Month for 12 Months</td>
+                                  <td>3</td>
+                                  <td>$45.00</td>
+                                  <td class="table-action">
+                                    <a href="#"><i class="fa fa-pencil"></i></a>
+                                    <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                                   </td>
+                                </tr>
+                                <tr>
+                                  <td><span class="fa fa-check"></span></td>
+                                  <td>Month for 12 Months</td>
+                                  <td>3</td>
+                                  <td>$45.00</td>
+                                  <td class="table-action">
+                                    <a href="#"><i class="fa fa-pencil"></i></a>
+                                    <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                                   </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                    </div>
+                </li>
+                <li id="shipping-section" class="panel panel-message">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h3>Shipping</h3>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="toggle-modern">
+                                    <div class="toggles on" style="height: 35px; width: 110px;"><div class="toggle-slide"><div class="toggle-inner" style="width: 185px; margin-left: -75px;"><div class="toggle-on" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div><div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div><div class="toggle-off active" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="display: none;">
+                        <div class="row">
+                            <div class="form-horizontal col-xs-9" role="form">
+
+                                <div class="form-group">
+                                    <label for="inputWeight" class="col-sm-3 control-label">Weight (kg)</label>
+                                    <div class="col-sm-9">
+                                        <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" class="form-control input-lg spinner-input ui-spinner-input" id="inputWeight" placeholder="Enter Weight" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span></a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Dimensions (cm)</label>
+                                    <div class="col-sm-3">
+                                        <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" placeholder="Length" class="form-control input-lg spinner-input ui-spinner-input" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span></a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a></span>
+                                        <span class="help-block">Length</span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" placeholder="Width" class="form-control input-lg spinner-input ui-spinner-input" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span></a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a></span>
+                                        <span class="help-block">Width</span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" placeholder="Height" class="form-control input-lg spinner-input ui-spinner-input" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span></a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a></span>
+                                        <span class="help-block">Height</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li id="attributes-section" class="panel panel-message">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h3>Attributes</h3>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="form-group">
+                                    <div class="control-label">
+                                        <div class="toggles toggle-modern" data-toggle-on="true" data-toggle-height="20" data-toggle-width="60"><div class="toggle-slide"><div class="toggle-inner" style="width: 185px; margin-left: -75px;"><div class="toggle-on" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div><div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div><div class="toggle-off active" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div></div></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="display: none;">
+                        <div class="form-horizontal">
+                            <div class="attribute">
+                                <h4>Color</h4>
+                                <input name="tags" id="tags1409493917144" class="form-control tags col-xs-12" value="red,green,blue" style="display: none;"><div id="tags1409493917144_tagsinput" class="tagsinput" style="width: auto; min-height: 100px; height: 100%;"><span class="tag"><span>red&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a></span><span class="tag"><span>green&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a></span><span class="tag"><span>blue&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a></span><div id="tags1409493917144_addTag"><input id="tags1409493917144_tag" value="" data-default="add a color" style="color: rgb(102, 102, 102); width: 68px;"></div><div class="tags_clear"></div></div>
+                            </div>
+                            <div class="clearfix mb15"></div>
+                        </div>
+                            <button class="btn btn-info pull-right btn-create-attribute">Create Attribute</button>
+                    </div>
+                </li>
+                <li id="variations-section" class="panel panel-message">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h3>Variations</h3>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="form-group">
+                                    <div class="toggles toggle-modern" data-toggle-on="true" data-toggle-height="20" data-toggle-width="60"><div class="toggle-slide"><div class="toggle-inner" style="width: 185px; margin-left: -75px;"><div class="toggle-on" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div><div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div><div class="toggle-off active" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body" style="display: none;">
+                        Panel content
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

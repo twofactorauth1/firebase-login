@@ -9,6 +9,7 @@ var baseApi = require('../../base.api.js');
 var stripeDao = require('../../../payments/dao/stripe.dao.js');
 var userDao = require('../../../dao/user.dao.js');
 var customerLinkDao = require('../../../payments/dao/customer_link.dao.js');
+var stripeEventHandler = require('../../../payments/stripe.event.handler.js');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -87,6 +88,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('events/:id'), this.isAuthApi, this.getEvent.bind(this));
         app.get(this.url('events'), this.isAuthApi, this.listEvents.bind(this));
 
+        // ------------------------------------------------
+        //  Webhook
+        // ------------------------------------------------
+        app.post('stripe/webhook', this.verifyEvent.bind(this), this.handleEvent.bind(this));
+
     },
 
     listCustomers: function(req, resp) {
@@ -160,26 +166,36 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> createCustomer');
         //TODO: security
-        var cardToken = req.body.cardToken;
-        var contact = req.body.contact;
+        var cardToken = req.cardToken;
+        var contact = req.contact;
+        var user = req.body.user || req.user;
         var _accountId = self.accountId(req);
         //TODO: Add Security - MODIFY_PAYMENTS
         //validate arguments
         if(cardToken && cardToken.length ===0) {
             return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
         }
-        if (!contact) {
-            return this.wrapError(resp, 400, null, "Invalid parameter for contact.");
+        if (!contact && !user) {
+            return this.wrapError(resp, 400, null, "Must have either contact or user");
         }
-        if(contact.stripeId && contact.stripeId.length > 0) {
+        if(contact && contact.stripeId && contact.stripeId.length > 0) {
             return this.wrapError(resp, 409, null, "Customer already exists.");
         }
 
-        stripeDao.createStripeCustomer(cardToken, contact, _accountId, function(err, value){
-            self.log.debug('<< createCustomer');
-            self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
-            self = value = null;
-        });
+        if(contact) {
+            stripeDao.createStripeCustomer(cardToken, contact, _accountId, function(err, value){
+                self.log.debug('<< createCustomer');
+                self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
+                self = value = null;
+            });
+        } else {
+            stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, function(err, value){
+                self.log.debug('<< createCustomer');
+                self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
+                self = value = null;
+            });
+        }
+
     },
 
     updateCustomer: function(req, resp) {
@@ -255,6 +271,10 @@ _.extend(api.prototype, baseApi.prototype, {
             });
         } else {
             var contactId = req.body.contactId;//TODO: Is this the right way to do it?
+            var userId = req.body.userId;
+            //FIXME: handle users
+
+
             //delete Stripe Customer AND all links
             stripeDao.deleteStripeCustomer(customerId, contactId, function(err, value){
                 if(err) {
@@ -426,13 +446,14 @@ _.extend(api.prototype, baseApi.prototype, {
         var metadata = req.body.metadata;
         var accountId = self.accountId(req);
         var contactId = req.body.contactId;//TODO: determine if this is best way
+        var userId = req.userId;
 
         if(!planId || planId.length < 1) {
             return self.wrapError(resp, 400, null, "Invalid planId parameter.");
         }
 
         stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
-                    application_fee_percent, metadata, accountId, contactId, accessToken, function(err, value){
+                    application_fee_percent, metadata, accountId, contactId, userId, accessToken, function(err, value){
                 self.log.debug('<< createSubscription');
                 return self.sendResultOrError(resp, err, value, "Error creating subscription");
                 self = value = null;
@@ -487,8 +508,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var customerId = req.params.id;
         var subscriptionId = req.params.subId;
         var at_period_end = req.body.at_period_end;
+        var accountId = self.accountId(req);
 
-        stripeDao.cancelStripeSubscription(customerId, subscriptionId, at_period_end, accessToken, function(err, value){
+        stripeDao.cancelStripeSubscription(accountId, customerId, subscriptionId, at_period_end, accessToken, function(err, value){
             self.log.debug('<< cancelSubscription');
             return self.sendResultOrError(resp, err, value, "Error cancelling subscription");
             self = value = null;
@@ -623,7 +645,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var currency = req.body.currency || 'usd';//REQUIRED
         var card = req.body.card; //card or customer REQUIRED
         var customerId = req.body.customerId; //card or customer REQUIRED
-        var contactId = req.body.contactId;//REQUIRED
+        var contactId = req.body.contactId;//contact or user REQUIRED
+        var userId = req.body.userId; //contact or user REQUIRED
         var description = req.body.description;
         var metadata = req.body.metadata;
         var capture = req.body.capture;
@@ -641,12 +664,13 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!card && !customerId) {
             return self.wrapError(resp, 400, null, "Missing card or customer parameter.");
         }
-        if(!contactId) {
-            return self.wrapError(resp, 400, null, "Invalid contact parameter.");
+
+        if(!contactId && !userId) {
+            return self.wrapError(resp, 400, null, "Invalid contact or user parameter.");
         }
 
         stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata, capture,
-            statement_description, receipt_email, application_fee, accessToken, function(err, value){
+            statement_description, receipt_email, application_fee, userId, accessToken, function(err, value){
                 self.log.debug('<< createCharge');
                 return self.sendResultOrError(resp, err, value, "Error creating a charge.");
                 self = value = null;
@@ -995,6 +1019,50 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.sendResultOrError(resp, err, value, "Error listing events.");
         });
         self = accessToken = null;
+    },
+
+    verifyEvent: function(req, res, next) {
+        var self = this;
+        self.log.debug('>> verifyEvent');
+        // first, make sure the posted data looks like we expect
+        if(req.body.object!=='event') {
+            self.log.error('could not recognize event object');
+            return res.send(400); // respond with HTTP bad request
+        }
+
+        // we only care about the event id - we use it to query the Stripe API
+        var eventId = req.body.id;
+        stripeDao.getEvent(eventId, null, function(err, value){
+            // the request to Stripe was signed - so if the event id is invalid
+            //  (eg it doesnt belong to our account), the API will respond with an error,
+            //  & if there was a problem on Stripe's side, we might get no data.
+            if(err || !event) {
+                self.log.error('Error verifying event with stripe.');
+                return res.send(401); // respond with HTTP forbidden
+            }
+            // store the validated, confirmed from Stripe event for use by our next middleware
+            req.modeled.stripeEvent = event;
+            self.log.debug('<< verifyEvent');
+            next();
+        });
+
+    },
+
+    handleEvent: function(req, res) {
+        var self = this;
+        self.log.debug('>> handleEvent');
+        var stripeEvent = req.modeled.stripeEvent;
+        stripeEventHandler.handleEvent(stripeEvent, function(err, value){
+            if(err) {
+                //determine response code.  It may not matter.  For now... 500?
+                self.log.error('Error handling event: ' + err);
+                res.send(500);
+            } else {
+                self.log.debug('<< handleEvent');
+                res.send(200);
+            }
+        });
+
     },
 
     _getAccessToken: function(req) {

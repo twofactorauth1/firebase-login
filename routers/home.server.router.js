@@ -8,6 +8,7 @@
 var BaseRouter = require('./base.server.router.js');
 var HomeView = require('../views/home.server.view');
 var AdminView = require('../views/admin.server.view');
+var AngularAdminView = require('../views/angular.admin.server.view');
 var WebsiteView = require('../views/website.server.view');
 
 var contactDao = require('../dao/contact.dao');
@@ -24,22 +25,37 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
         app.get("/", this.setup, this.index.bind(this));
-        app.get("/index", this.setup, this.index.bind(this));
-        app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
-        app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
 
-        app.get("/page/blog/:posturl", this.setup, this.showBlogPage.bind(this));
-        app.get("/page/tag/:tag", this.setup, this.showTagPage.bind(this));
-        app.get("/page/author/:author", this.setup, this.showAuthorPage.bind(this));
-        app.get("/page/category/:category", this.setup, this.showCategoryPage.bind(this));
+        //send all routes to index and let the app router to navigate to the appropiate view
+        app.get("/index", this.setup, this.index.bind(this));
+        app.get("/blog", this.setup, this.index.bind(this));
+        app.get("/blog/*", this.setup, this.index.bind(this));
+        app.get("/tag/*", this.setup, this.index.bind(this));
+        app.get("/category/*", this.setup, this.index.bind(this));
+        app.get("/author/*", this.setup, this.index.bind(this));
+        app.get("/page/*", this.setup, this.index.bind(this));
+
+        app.get("/index_temp_page", this.setup, this.indexTempPage.bind(this));
+        // app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
+        // app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
+
+        // app.get("/page/blog/:posturl", this.setup, this.showBlogPage.bind(this));
+        // app.get("/page/tag/:tag", this.setup, this.showTagPage.bind(this));
+        // app.get("/page/author/:author", this.setup, this.showAuthorPage.bind(this));
+        // app.get("/page/category/:category", this.setup, this.showCategoryPage.bind(this));
 
 //        app.post("/signupnews", this.signUpNews.bind(this));
 
         app.get("/home", this.isAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isAuth.bind(this), this.showHome.bind(this));
 
-        app.get("/admin", this.isAuth, this.showAdmin.bind(this));
-        app.get("/admin/*", this.isAuth, this.showAdmin.bind(this));
+        app.get("/admin", this.isAuth, this.showAngularAdmin.bind(this));
+        app.get("/admin/*", this.isAuth, this.showAngularAdmin.bind(this));
+        
+        app.get("/admin1", this.isAuth, this.showAngularAdmin.bind(this));
+        app.get("/admin1/*", this.isAuth, this.showAngularAdmin.bind(this));
+
+        app.get("/demo", this.setup, this.demo.bind(this));
 
         return this;
     },
@@ -48,13 +64,29 @@ _.extend(router.prototype, BaseRouter.prototype, {
     index: function(req,resp) {
         var self = this
             , accountId = this.accountId(req);
+        self.log.debug('>> index');
+        if (accountId > 0)  {
+            //new WebsiteView(req, resp).show(accountId);
+            new WebsiteView(req, resp).renderNewIndex(accountId);
+        } else {
+            //resp.redirect("/home");
+            new WebsiteView(req, resp).renderNewIndex(appConfig.mainAccountID);
+        }
+    },
+    indexTempPage: function(req,resp) {
+        var self = this
+            , accountId = this.accountId(req);
 
         if (accountId > 0)  {
-            new WebsiteView(req, resp).show(accountId);
+            new WebsiteView(req, resp).showTempPage(accountId);
         } else {
             //resp.redirect("/home");
             new WebsiteView(req, resp).show(appConfig.mainAccountID);
         }
+    },
+
+    demo: function(req, res) {
+        res.redirect('/dist');
     },
 
     showWebsitePage: function(req, resp) {
@@ -153,6 +185,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var accountId = this.accountId(req);
         if (accountId > 0) {
             new AdminView(req,resp).show();
+        } else {
+            //send them back to the main home
+            resp.redirect("/admin");
+        }
+    },
+
+    showAngularAdmin: function(req,resp) {
+        var accountId = this.accountId(req);
+        if (accountId > 0) {
+            new AngularAdminView(req,resp).show();
         } else {
             //send them back to the main home
             resp.redirect("/admin");

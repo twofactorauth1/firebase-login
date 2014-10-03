@@ -43,7 +43,7 @@ var stripeEvent = $$.m.ModelBase.extend({
     db: {
         storage: "mongo",
         table: "events",
-        idStrategy: "increment"
+        idStrategy: "uuid"
     }
 });
 

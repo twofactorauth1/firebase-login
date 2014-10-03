@@ -1,0 +1,89 @@
+<style type="text/css">
+    .container {
+        padding-top: 40px;
+    }
+
+    #details {
+        font-family: "Quicksand", sans-serif;
+        font-size: 60px;
+    }
+
+    #home-box > h2 {
+        font-family: "Quicksand", sans-serif;
+        font-weight: 400;
+        line-height: 1.1;
+        color: #75b1ae;
+    }
+
+    .price {
+        font-size: 25px;
+        float: left;
+    }
+
+    .pricing_header {
+        background: none repeat scroll 0% 0% rgb(44, 62, 80);
+        border-radius: 5px 5px 0px 0px;
+        transition: background 0.4s ease-out 0s;
+    }
+
+    .pricing_header h2 {
+        text-align: center;
+        line-height: 25px;
+        padding: 15px 0px;
+        margin: 0px;
+        font-family: "Quicksand", sans-serif;
+        font-weight: 400;
+        color: #75b1ae;
+    }
+
+    .list-group-item:first-child {
+        border-top-right-radius: 0px;
+        border-top-left-radius: 0px;
+    }
+
+    .btn {
+        float: right;
+        font-family: "Quicksand", sans-serif;
+        font-weight: 500;
+    }
+
+    .off {
+        text-decoration: line-through;
+        color: rgb(86, 86, 86);
+    }
+
+    .space {
+        height: 2px;
+        background-color: #75b1ae;
+    }
+</style>
+
+<!-- price & service -->
+<div ng-show="component" class="container" data-class="freeform" data-id="{{component._id}}">
+    <div class="row">
+        <h2 id="details">{{component.title}}</h2>
+    </div>
+    <br>
+
+    <div ng-repeat="assessment in component.assessments track by $index">
+        <div class="col-md-3" id="home-box">
+            <div class="pricing_header">
+                <h2>{{assessment['title']}}</h2>
+
+                <div class="space"></div>
+            </div>
+            <ul class="list-group">
+                <li ng-repeat="txt in assessment.text.split(',')"
+                    class="list-group-item">
+                    <span class="glyphicon glyphicon-ok"></span> {{txt}}
+                </li>
+            </ul>
+
+            <div class="try">
+                <p class="price">{{assessment.subtitle}}</p>
+                <a class="btn btn-default" href="{{component.btn.url}}" type="button">{{component.btn.text}}</a>
+            </div>
+        </div>
+    </div>
+
+</div>

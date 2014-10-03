@@ -1,28 +1,85 @@
 /* sign up */
 
 .signuppanel {
-  max-width: 450px;
-  margin: 50px auto;
-  text-align: center;
   position: relative;
   width: 100%;
+  margin-top: 0;
+
+  .benefits {
+    list-style-type: none;
+    padding: 0;
+    li {
+      margin-bottom: 20px;
+      span {
+        font-size: 48px;
+        padding-right: 20px;
+        float: left;
+        color: #444;
+      }
+      h4 {
+        text-align: left;
+        line-height: 50px;
+      }
+    }
+  }
+
+  .testimonial {
+    img {
+      width: 75px;
+      float: left;
+      margin: 5px 15px 0 0;
+    }
+    p {
+      font-style: italic;
+      font-size: 18px;
+      margin-top: 10px;
+    }
+    span {
+      font-weight: bold;
+    }
+
+    .text {
+      border-left: 5px solid #444;
+    }
+  }
+
+  .description {
+    margin-bottom: 25px;
+  }
+
+  #form-create-account {
+    display: none;
+    margin-top: 10px;
+  }
+
+  .social-btn-wrap {
+    float: left;
+
+    i {
+      color: white;
+    }
+
+    p {
+      line-height: 30px;
+    }
+  }
+
+  .social.row {
+    max-width: 450px;
+    margin: 0 auto;
+  }
 }
 
-.mainpanel .signuppanel  {
-  display: none;
-}
-
-.mainpanel .logo {
-  padding: 15px;
-  margin: 15px auto 30px;
-  display: block;
-  width: 100%;
-  max-width: 300px;
-}
 
 .signuppanel .row {
   margin-left: -5px;
   margin-right: -5px;
+
+  a span {
+    text-indent: -14px;
+    margin-top: -32px;
+    display: block;
+  }
 }
 
 .signuppanel h4 {
@@ -38,8 +95,21 @@
 
 
 .signuppanel .social {
+  text-align: center;
   .btn {
-    min-width:75px;
+    width: 60px;
+    height: 60px;
+    border-radius: 60px;
+    line-height: 65px;
+    margin: 0 15px;
+    &.email-color {
+      width: 60px;
+      height: 60px;
+      border-radius: 60px;
+      line-height: 61px;
+      margin: 0 15px;
+      padding-left: 11px;
+    }
   }
   i.fa {
     font-size:36px;
@@ -58,15 +128,13 @@
   padding-right: 20px;
 }
 
-.signuppanel .form {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid #ccc;
-  .box-shadow(0 0 5px 1px rgba(0, 0, 0, 0.1));
-  border-radius: 3px;
-  padding: 20px;
+
+.mainpanel .logo {
+  padding: 15px;
+  margin: 45px auto 30px;
+  display: block;
   width: 100%;
-  margin: 0 auto 50px;
-  position: absolute;
+  max-width: 300px;
 }
 
 .signup-footer {
@@ -74,6 +142,34 @@
   margin-top: 30px;
   padding-top: 10px;
   font-size: 12px;
+}
+
+.signuppanel .row {
+  margin-left: -5px;
+  margin-right: -5px;
+}
+.signuppanel .logopanel {
+  float: none;
+  width: auto;
+  padding: 0;
+  background: none;
+}
+.signuppanel .signup-info {
+  padding-right: 20px;
+}
+.signuppanel form {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid #ccc;
+  .box-shadow(0 3px 0 rgba(12, 12, 12, 0.03));
+  border-radius: 3px;
+  padding: 30px;
+}
+.signuppanel .col-sm-6,
+.signuppanel .col-sm-5,
+.signuppanel .col-sm-3,
+.signuppanel .col-sm-4 {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .models {
@@ -100,7 +196,7 @@
 }
 
 .left-nav {
-  background: url(../assets/images/left-nav.png) 0 0 no-repeat;
+  background: url(../app/app/assets/images/left-nav.png) 0 0 no-repeat;
   background-size: cover;
   width: 60px;
   height: 60px;
@@ -110,7 +206,7 @@
   margin-top: 180px;
 }
 .right-nav {
-  background: url(../assets/images/right-nav.png) 0 0 no-repeat;
+  background: url(../app/app/assets/images/right-nav.png) 0 0 no-repeat;
   background-size: cover;
   width: 60px;
   height: 60px;

@@ -73,7 +73,8 @@ var component = $$.m.ModelBase.extend({
              *      url:                        // The url of the image
              * }]
              */
-            images: []
+            images: [],
+            title:""
         }
     },
 

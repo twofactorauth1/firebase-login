@@ -9,12 +9,13 @@ var baseDao = require('../../dao/base.dao.js');
 var stripeConfigs = require('../../configs/stripe.config.js');
 var appConfig = require('../../configs/app.config.js');
 var contactDao = require('../../dao/contact.dao.js');
+var userDao = require('../../dao/user.dao.js');
 var subscriptionDao = require('./subscription.dao.js');
 var paymentDao = require('./payment.dao.js');
 var customerLinkDao = require('./customer_link.dao.js');
 
 /*-- for stripe api--*/
-var stripe = require("stripe")( stripeConfigs.KM_STRIPE_TEST_SECRET_KEY);//TODO: app config
+var stripe = require("stripe")( stripeConfigs.STRIPE_SECRET_KEY);//TODO: app config
 
 var dao = {
 
@@ -65,14 +66,71 @@ var dao = {
 
             customerLinkDao.safeCreate(accountId, contact.get('_id'), customer.id, function(err, value){
                 if (err) {
-                    fn(err, value);
-                    fn = null;
+                    self.log.warn('attempted to create a customer link that already exists.');
+                    //fn(err, value);
+                    //fn = null;
                 }
                 p2.resolve();
             });
 
             $.when(p1,p2).done(function(){
                 self.log.debug('<< createStripeCustomer');
+                return fn(err, savedCustomer);
+            });
+
+        });
+    },
+
+    createStripeCustomerForUser: function(cardToken, user, accountId, fn) {
+        //TODO: check if this is already a customer and add accountId
+        var self = this;
+        self.log.debug(">> createStripeCustomerForUser");
+        var params = {};
+        params.email = user.get('email');
+        params.description = 'Customer for ' + user.get('email');
+        params.metadata = {};
+        params.metadata.contactId = user.id();
+        params.metadata.accountId_0 = accountId;
+        if(cardToken && cardToken.length > 0) {
+            params.cardToken = cardToken;
+        }
+
+        stripe.customers.create(params, function(err, customer) {
+
+            if(err) {
+                fn(err, customer);
+                fn = null;
+                return;
+            }
+            user.set('stripeId', customer.id);
+            self.log.debug('Setting user stripeId to ' + user.get('stripeId'));
+            var p1 = $.Deferred(), p2 = $.Deferred();
+            var savedCustomer = customer;
+            userDao.saveOrUpdate(user, function(err, value){
+                if (err) {
+                    fn(err, value);
+                    fn = null;
+                    return;
+                }
+                p1.resolve();
+            });
+
+
+            customerLinkDao.safeCreateWithUser(accountId, user.id(), customer.id, function(err, value){
+                if (err) {
+                    if(err.toString() === 'The customer link already exists.') {
+                        //that's ok.
+                    } else {
+                        fn(err, value);
+                        fn = null;
+                        return;
+                    }
+                }
+                p2.resolve();
+            });
+
+            $.when(p1,p2).done(function(){
+                self.log.debug('<< createStripeCustomerForUser');
                 return fn(err, savedCustomer);
             });
 
@@ -87,11 +145,13 @@ var dao = {
     listStripeCustomers: function(accountId, limit, fn) {
         var self = this;
         self.log.debug('>> listStripeCustomers');
-        stripe.customers.list({ limit: 10 }, function(err, customers) {
+        var _limit = limit ||10;
+        stripe.customers.list({ limit: _limit }, function(err, customers) {
             // asynchronously called
             if (err) {
                 fn(err, customers);
                 fn = null;
+                return;
             }
 
             self.log.debug('<< listStripeCustomers');
@@ -113,6 +173,7 @@ var dao = {
             if (err) {
                 fn(err, customer);
                 fn = null;
+                return;
             }
 
             self.log.debug('<< getStripeCustomer');
@@ -143,8 +204,10 @@ var dao = {
 
         stripe.customers.update(stripeCustomerId, params, function(err, customer){
             if (err) {
+                self.log.error('error updating customer: ' + err);
                 fn(err, customer);
                 fn = null;
+                return;
             }
             self.log.debug('<< updateStripeCustomer');
             return fn(err, customer);
@@ -155,13 +218,22 @@ var dao = {
     /**
      * This permanently removes customer payment info from Stripe and cancels any subscriptions.
      * It cannot be undone.  Care must be taken to ensure that no other account has a reference
-     * to this customer.  Additionally, this removes the stripeId from the contact object.
+     * to this customer.  Additionally, this removes the stripeId from the contact or user object.
      * @param stripeCustomerId
+     * @param contactId
+     * @param userId
      * @param fn
      */
-    deleteStripeCustomer: function(stripeCustomerId, contactId, fn) {
+        //TODO: handle customers on a user
+    deleteStripeCustomer: function(stripeCustomerId, contactId, userId, fn) {
         var self = this;
         self.log.debug('>> deleteStripeCustomer');
+        if(fn === null) {
+            fn = userId;
+            userId = null;
+        }
+
+
         stripe.customers.del(stripeCustomerId, function(err, confirmation){
             if(err) {
                 fn(err, confirmation);
@@ -171,16 +243,40 @@ var dao = {
                 self.log.debug('removing stripeId from contact.');
                 contactDao.getById(contactId, $$.m.Contact, function(err, contact){
                     if(err) {
+                        self.log.error('Error removing stripeId from contact: ' + err);
                         fn(err, contact);
                         fn = null;
+                        return;
                     }
                     contact.set('stripeId', null);
                     contactDao.saveOrMerge(contact, function(err, contact){
                         if(err) {
+                            self.log.error('Error removing stripeId from contact: ' + err);
                             fn(err, contact);
                             fn = null;
+                            return;
                         }
                         return fn(null, confirmation);
+                    });
+                });
+            } else if(userId && userId.length > 0) {
+                self.log.debug('removing stripeId from user.');
+                userDao.getById(userId, $$.m.User, function(err, user){
+                    if(err) {
+                        self.log.error('Error removing stripeId from user: ' + err);
+                        fn(err, user);
+                        fn = null;
+                        return;
+                    }
+                    user.set('stripeId', null);
+                    userDao.saveOrUpdate(user, function(err, value){
+                        if(err) {
+                            self.log.error('Error removing stripeId from user: ' + err);
+                            fn(err, value);
+                            fn = null;
+                            return;
+                        }
+                        return fn(null, value);
                     });
                 });
             } else {
@@ -219,9 +315,9 @@ var dao = {
         if(metadata) {params.metadata = metadata;}
         if(statement_description) {params.statement_description = statement_description};
 
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.plans.create(params, function(err, plan) {
+        stripe.plans.create(params, apiToken, function(err, plan) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, plan);
@@ -236,9 +332,9 @@ var dao = {
     getStripePlan : function(planId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getStripePlan');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.plans.retrieve(planId, function(err, plan) {
+        stripe.plans.retrieve(planId, apiToken, function(err, plan) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, plan);
@@ -267,9 +363,9 @@ var dao = {
         if(metadata) {params.metadata = metadata;}
         if(statement_description && statement_description.length > 0) {params.statement_description = statement_description;}
 
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.plans.update(planId, params, function(err, plan) {
+        stripe.plans.update(planId, params, apiToken, function(err, plan) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, plan);
@@ -283,9 +379,10 @@ var dao = {
     deleteStripePlan: function(planId, accessToken, fn) {
         var self = this;
         self.log.debug('>> deleteStripePlan');
-        var _stripe = self.delegateStripe(accessToken);
 
-        _stripe.plans.del(planId, function(err, confirmation) {
+        var apiToken = self.delegateStripe(accessToken);
+
+        stripe.plans.del(planId, apiToken, function(err, confirmation) {
                 if(err) {
                     self.log.error('error: ' + err);
                     return fn(err, confirmation);
@@ -299,9 +396,9 @@ var dao = {
     listStripePlans: function(accessToken, fn) {
         var self = this;
         self.log.debug('>> listStripePlans');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.plans.list(function(err, plans) {
+        stripe.plans.list(apiToken, function(err, plans) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, plans);
@@ -329,11 +426,11 @@ var dao = {
      * Returns Stripe Subscription object.  *Note* An internal subscription object has also been created.
      */
     createStripeSubscription: function(customerId, planId, coupon, trial_end, card, quantity, application_fee_percent,
-                                       metadata, accountId, contactId, accessToken, fn) {
+                                       metadata, accountId, contactId, userId, accessToken, fn) {
         var self = this;
         self.log.debug('>> createStripeSubscription');
         var params = {};
-        params.planId = planId;
+        params.plan = planId;
         if(coupon && coupon.length>0) {params.coupon = coupon;}
         if(trial_end && trial_end.length>0){params.trial_end = trial_end;}
         if(card) {params.card = card;}
@@ -342,9 +439,9 @@ var dao = {
         if(metadata) {params.metadata = metadata;} else {params.metadata = {};}
         params.metadata.accountId = accountId;
 
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.customers.createSubscription(customerId, params, function(err, subscription) {
+        stripe.customers.createSubscription(customerId, params, apiToken, function(err, subscription) {
                 if(err) {
                     self.log.error('error: ' + err);
                     return fn(err, subscription);
@@ -353,6 +450,7 @@ var dao = {
                 var sub = new $$.m.Subscription({
                     accountId: accountId,
                     contactId: contactId,
+                    userId: userId,
                     stripeCustomerId: customerId,
                     stripeSubscriptionId: subscription.id,
                     stripePlanId: planId
@@ -373,9 +471,9 @@ var dao = {
     getStripeSubscription: function(customerId, subscriptionId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getStripeSubscription');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.customers.retrieveSubscription( customerId, subscriptionId,
+        stripe.customers.retrieveSubscription( customerId, subscriptionId, apiToken,
             function(err, subscription) {
                 if(err) {
                     self.log.error('error: ' + err);
@@ -394,7 +492,7 @@ var dao = {
         self.log.debug('>> updateStripeSubscription');
         var params = {};
         var updateLocal = false;
-        if(planId && planId.length>0){params.planId = planId; updateLocal=true;}
+        if(planId && planId.length>0){params.plan = planId; updateLocal=true;}
         if(coupon && coupon.length>0) {params.coupon = coupon;}
         if(trial_end && trial_end.length>0){params.trial_end = trial_end;}
         if(card) {params.card = card;}
@@ -402,9 +500,9 @@ var dao = {
         if(application_fee_percent && application_fee_percent.length>0) {params.application_fee_percent = application_fee_percent;}
         if(metadata) {params.metadata = metadata;}
 
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.customers.updateSubscription( customerId, subscriptionId, params,
+        stripe.customers.updateSubscription( customerId, subscriptionId, params, apiToken,
             function(err, subscription) {
                 if(err) {
                     self.log.error('error: ' + err);
@@ -420,22 +518,23 @@ var dao = {
     /**
      * Cancels the subscription in Stripe and updates the local record of it.
      * Can be cancelled immediately or at the end of the the current period
+     * @param accountId
      * @param customerId
      * @param subscriptionId
      * @param at_period_end     Boolean defaults to false.
      * @param accessToken
      * @param fn
      */
-    cancelStripeSubscription: function(customerId, subscriptionId, at_period_end, accessToken, fn) {
+    cancelStripeSubscription: function(accountId, customerId, subscriptionId, at_period_end, accessToken, fn) {
         var self = this;
-        self.log.debug('>> updateStripeSubscription');
+        self.log.debug('>> cancelStripeSubscription');
         var params = {};
         if(at_period_end === true) {
             params.at_period_end = true;
         }
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.customers.cancelSubscription(customerId, subscriptionId, params, function(err, confirmation) {
+        stripe.customers.cancelSubscription(customerId, subscriptionId, params, apiToken, function(err, confirmation) {
                 if(err) {
                     self.log.error('error: ' + err);
                     return fn(err, confirmation);
@@ -471,7 +570,7 @@ var dao = {
      * Lists all subscriptions for a Stripe customer.  *Note* This may return subscriptions for multiple accounts.
      * Care should be taken to filter out non-relevant subs.  Additionally, a limit may be applied to limit the number
      * of results.  If it is not specified, the default (from Stripe) of 10 is applied.  If the limit is set to 0,
-     * all results will be returned.
+     * all results will be returned.  Additionally, this is an operation on a customer... no accessToken is needed.
      * @param customerId
      * @param limit
      * @param fn
@@ -647,12 +746,13 @@ var dao = {
      *
      * @return result object containing charge and payment objects
      */
+
     createStripeCharge: function(amount, currency, card, customerId, contactId, description, metadata, capture,
-                                 statement_description, receipt_email, application_fee, accessToken, fn) {
+                                 statement_description, receipt_email, application_fee, userId, accessToken, fn) {
         var self = this;
         self.log.debug('>> createStripeCharge');
         var paymentId = $$.u.idutils.generateUUID();//create the id for the local object
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
 
 
@@ -670,7 +770,7 @@ var dao = {
         if(receipt_email && receipt_email.length>0) {params.receipt_email = receipt_email;}
         if(application_fee && application_fee > 0) {params.application_fee = application_fee;}
 
-        _stripe.charges.create(params, function(err, charge) {
+        stripe.charges.create(params, apiToken, function(err, charge) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, charge);
@@ -692,13 +792,14 @@ var dao = {
                 balance_transaction: charge.balance_transaction,
                 customerId: customerId,
                 contactId: contactId,
+                userId: userId,
                 failure_code: charge.failure_code,
                 failure_message: charge.failure_message,
                 invoiceId: charge.invoice,
                 _id:paymentId
 
             });
-            paymentDao.saveOrUpdate(payment, $$.m.Payment, function(err, payment){
+            paymentDao.saveOrUpdate(payment, function(err, payment){
                 if(err) {
                     self.log.error('error creating payment record for charge: ' + err);
                     return fn(err, charge);
@@ -715,9 +816,9 @@ var dao = {
     getStripeCharge: function(chargeId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getStripeCharge');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.charges.retrieve(chargeId, function(err, charge) {
+        stripe.charges.retrieve(chargeId, apiToken, function(err, charge) {
                 if(err) {
                     self.log.error('error: ' + err);
                     return fn(err, charge);
@@ -731,13 +832,13 @@ var dao = {
     updateStripeCharge: function(chargeId, description, metadata, accessToken, fn) {
         var self = this;
         self.log.debug('>> getStripeCharge');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
 
         if(description && description.length>0) {params.description = description;}
         if(metadata) {params.metadata = metadata;}
 
-        _stripe.charges.update( chargeId, params,  function(err, charge) {
+        stripe.charges.update( chargeId, params, apiToken, function(err, charge) {
                 if(err) {
                     self.log.error('error: ' + err);
                     return fn(err, charge);
@@ -761,13 +862,13 @@ var dao = {
     captureStripeCharge: function(chargeId, amount, application_fee, receipt_email, accessToken, fn) {
         var self = this;
         self.log.debug('>> captureStripeCharge');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
         if(amount) {params.amount = amount;}
         if(application_fee) {params.application_fee = application_fee;}
         if(receipt_email && receipt_email.length>0) {params.receipt_email = receipt_email;}
 
-        _stripe.charges.capture(chargeId, params, function(err, charge) {
+        stripe.charges.capture(chargeId, params, apiToken, function(err, charge) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, charge);
@@ -814,7 +915,7 @@ var dao = {
     listStripeCharges: function(created, customerId, ending_before, limit, starting_after, accessToken, fn) {
         var self = this;
         self.log.debug('>> listStripeCharges');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
 
         if(created) {params.created = created;}
@@ -829,7 +930,7 @@ var dao = {
         }
         if(starting_after && starting_after.length>0) {params.starting_after = starting_after;}
 
-        _stripe.charges.list(params, function(err, charges) {
+        stripe.charges.list(params, apiToken, function(err, charges) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, charges);
@@ -843,7 +944,7 @@ var dao = {
                 var _charges = [];
                 var p1 = $.Deferred();
                 _charges.push(charges.data);
-                self._getAllStripeCharges(params, _charges, _stripe, p1);
+                self._getAllStripeCharges(params, _charges, apiToken, p1);
                 $.when(p1).done(function() {
                     charges.data = _charges;
                     self.log.debug('<< listStripeCharges');
@@ -857,9 +958,9 @@ var dao = {
 
     },
 
-    _getAllStripeCharges: function(params, _charges, delegatedStripe, deferred) {
+    _getAllStripeCharges: function(params, _charges, apiToken, deferred) {
         self.log.debug('>> _getAllStripeCharges ... adding more charges.');
-        delegatedStripe.charges.list(params, function(err, charges) {
+        stripe.charges.list(params, apiToken, function(err, charges) {
             if (err) {
                 self.log.error('error: ' + err);
                 deferred.reject();
@@ -869,7 +970,7 @@ var dao = {
             _charges.push(charges.data);
             if(charges.has_more === true) {
                 params.starting_after = charges.data[charges.data.length-1].id;
-                self._getAllStripeCharges(params, _charges, delegatedStripe, deferred);
+                self._getAllStripeCharges(params, _charges, apiToken, deferred);
             } else {
                 //we're done.
                 deferred.resolve();
@@ -896,7 +997,7 @@ var dao = {
     createInvoiceItem: function(customerId, amount, currency, invoiceId, subscriptionId, description, metadata, accessToken, fn) {
         var self = this;
         self.log.debug('>> createInvoiceItem');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
 
         params.customer = customerId;
@@ -907,7 +1008,7 @@ var dao = {
         if(description && description.length > 0) {params.description = description;}
         if(metadata) {params.metadata = metadata;}
 
-        _stripe.invoiceItems.create(params, function(err, invoiceItem) {
+        stripe.invoiceItems.create(params, apiToken, function(err, invoiceItem) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, invoiceItem);
@@ -921,9 +1022,9 @@ var dao = {
     getInvoiceItem: function(invoiceItemId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getInvoiceItem');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.invoiceItems.retrieve(invoiceItemId, function(err, invoiceItem) {
+        stripe.invoiceItems.retrieve(invoiceItemId, apiToken, function(err, invoiceItem) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, invoiceItem);
@@ -937,13 +1038,13 @@ var dao = {
     updateInvoiceItem: function(invoiceItemId, amount, description, metadata, accessToken, fn) {
         var self = this;
         self.log.debug('>> updateInvoiceItem');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
         if(amount) {params.amount = amount;}
         if(description) {params.description=description;}
         if(metadata) {params.metadata = metadata;}
 
-        _stripe.invoiceItems.update( invoiceItemId, params,  function(err, invoiceItem) {
+        stripe.invoiceItems.update( invoiceItemId, params, apiToken, function(err, invoiceItem) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, invoiceItem);
@@ -956,9 +1057,9 @@ var dao = {
     deleteInvoiceItem: function(invoiceItemId, accessToken, fn) {
         var self = this;
         self.log.debug('>> deleteInvoiceItem');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.invoiceItems.del(invoiceItemId, function(err, confirmation) {
+        stripe.invoiceItems.del(invoiceItemId, apiToken, function(err, confirmation) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, confirmation);
@@ -971,7 +1072,7 @@ var dao = {
     listInvoiceItems: function(created, customerId, ending_before, limit, starting_after, accessToken, fn) {
         var self = this;
         self.log.debug('>> listInvoiceItems');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
 
         if(created) {params.created = created;}
@@ -980,7 +1081,7 @@ var dao = {
         if(limit) {params.limit = limit;}
         if(starting_after) {params.starting_after = starting_after;}
 
-        _stripe.invoiceItems.list(params, function(err, invoiceItems) {
+        stripe.invoiceItems.list(params, apiToken, function(err, invoiceItems) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, invoiceItems);
@@ -996,7 +1097,7 @@ var dao = {
                             accessToken, fn) {
         var self = this;
         self.log.debug('>> createInvoice');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
         params.customer = customerId;
         if(application_fee) {params.application_fee = application_fee;}
@@ -1005,7 +1106,7 @@ var dao = {
         if(statement_description) {params.statement_description = statement_description;}
         if(subscriptionId) {params.subscription = subscriptionId;}
 
-        _stripe.invoices.create(params, function(err, invoice) {
+        stripe.invoices.create(params, apiToken, function(err, invoice) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, invoice);
@@ -1018,9 +1119,9 @@ var dao = {
     getInvoice: function(invoiceId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getInvoice');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.invoices.retrieve(invoiceId, function(err, invoice) {
+        stripe.invoices.retrieve(invoiceId, apiToken, function(err, invoice) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, invoice);
@@ -1033,9 +1134,13 @@ var dao = {
     getUpcomingInvoice: function(customerId, subscriptionId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getUpcomingInvoice');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
+        var params = {};
+        if(subscriptionId) {
+            params.subscription = subscriptionId;
+        }
 
-        _stripe.invoices.retrieveUpcoming(customerId, subscriptionId, function(err, invoice) {
+        stripe.invoices.retrieveUpcoming(customerId, params, apiToken, function(err, invoice) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, invoice);
@@ -1048,9 +1153,9 @@ var dao = {
     payInvoice: function(invoiceId, accessToken, fn) {
         var self = this;
         self.log.debug('>> payInvoice');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.invoices.pay(invoiceId, function(err, invoice) {
+        stripe.invoices.pay(invoiceId, apiToken, function(err, invoice) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, invoice);
@@ -1064,7 +1169,7 @@ var dao = {
                             accessToken, fn) {
         var self = this;
         self.log.debug('>> updateInvoice');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
         if(application_fee) {params.application_fee = application_fee;}
         if(closed !== null) {params.closed = closed;}
@@ -1073,7 +1178,7 @@ var dao = {
         if(metadata) {params.metadata = metadata;}
         if(statement_description) {params.statement_description = statement_description;}
 
-        _stripe.invoices.update(invoiceId, params, function(err, invoice) {
+        stripe.invoices.update(invoiceId, params, apiToken, function(err, invoice) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, invoice);
@@ -1086,7 +1191,7 @@ var dao = {
     listInvoices: function(customerId, dateFilter, ending_before, limit, starting_after, accessToken, fn) {
         var self = this;
         self.log.debug('>> listInvoices');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
 
         if(customerId) {params.customer = customerId;}
@@ -1096,13 +1201,13 @@ var dao = {
         if(starting_after) {params.starting_after = starting_after;}
 
 
-        _stripe.invoices.list(params, function(err, invoices){
+        stripe.invoices.list(params, apiToken, function(err, invoices){
             if(err) {
                 self.log.error('error: ' + err);
-                return fn(err, invoice);
+                return fn(err, invoices);
             }
             self.log.debug('<< listInvoices');
-            return fn(err, invoice);
+            return fn(err, invoices);
         });
 
 
@@ -1124,12 +1229,12 @@ var dao = {
     createToken: function(cardId, customerId, accessToken, fn) {
         var self = this;
         self.log.debug('>> createToken');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
         params.card = cardId;
         params.customer = customerId;
 
-        _stripe.tokens.create(params, function(err, token) {
+        stripe.tokens.create(params, apiToken, function(err, token) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, token);
@@ -1140,11 +1245,11 @@ var dao = {
 
     },
 
-    getToken: function(tokenId, fn) {
+    getToken: function(tokenId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getToken');
-
-        stripe.tokens.retrieve(tokenId, function(err, token) {
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.tokens.retrieve(tokenId, apiToken, function(err, token) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, token);
@@ -1158,9 +1263,9 @@ var dao = {
     getEvent: function(eventId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getEvent');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
 
-        _stripe.events.retrieve(eventId, function(err, event) {
+        stripe.events.retrieve(eventId, apiToken, function(err, event) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, charges);
@@ -1189,7 +1294,7 @@ var dao = {
     listEvents: function(created, ending_before, limit, starting_after, type, accessToken, fn) {
         var self = this;
         self.log.debug('>> listEvents');
-        var _stripe = self.delegateStripe(accessToken);
+        var apiToken = self.delegateStripe(accessToken);
         var params = {};
         if(created) {params.created = created;}
         if(ending_before) {params.ending_before = ending_before;}
@@ -1197,7 +1302,7 @@ var dao = {
         if(starting_after) {params.starting_after = starting_after;}
         if(type) {params.type = type;}
 
-        _stripe.events.list(params, function(err, events) {
+        stripe.events.list(params, apiToken, function(err, events) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, charges);
@@ -1209,12 +1314,13 @@ var dao = {
     },
 
     delegateStripe: function(accessToken) {
+        var self = this;
         if(accessToken && accessToken.length > 0) {
             self.log.debug('delegating stripe to ' + accessToken);
-            return require("stripe")( accessToken);
+            return accessToken;
         } else {
             //no accessToken, no delegation.
-            return stripe;
+            return stripeConfigs.STRIPE_SECRET_KEY;
         }
     }
 

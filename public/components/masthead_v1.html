@@ -1,0 +1,33 @@
+<div>
+    <div class="component" data-ng-show="component.visibility" data-class="masthead" data-id="{{component._id}}">
+        <div class="component-body" id="{{component.anchor}}">
+            <div class="masthead {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="home-text">
+                            <h1 class="masthead-title">
+                                <div class="editable" data-class="title" data-index="{{$index}}">
+                                    <span ng-bind-html="component.title"/>
+                                </div>
+                            </h1>
+                            <div class="masthead-subtitle">
+                                <div class="editable" data-class="subtitle" data-index="{{$index}}">
+                                    <span ng-bind-html="component.subtitle"/>
+                                </div>
+                            </div>
+
+                            <h1>{{data}}</h1>
+
+                            <div class="col-xs-12" ng-show="component.btn.visibility">
+                                <a class="btn btn-primary btn-block center editable" data-index="{{$index}}" ng-bind="component.btn.text" data-class="btn-text" data-ng-href="{{component.btn.url}}" du-smooth-scroll></a>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

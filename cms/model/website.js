@@ -50,7 +50,7 @@ var website = $$.m.ModelBase.extend({
              *      backgroundImage: {url}
              * }
              */
-            settings: null,
+            settings: {},
 
 
             /**
@@ -78,7 +78,7 @@ var website = $$.m.ModelBase.extend({
              *      keywords: "xyz, testing, cool"
              * }
              */
-            seo: null,
+            seo: {},
 
 
             /**
@@ -144,6 +144,8 @@ var website = $$.m.ModelBase.extend({
              * }
              */
             footer: null,
+
+            nav_version: 2,
 
 
             /**

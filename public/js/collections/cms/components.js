@@ -9,7 +9,7 @@ define([
     'models/cms/components/freeform',
     'models/cms/components/masthead',
     'models/cms/components/contact-us',
-    'models/cms/components/feature-blocks',
+    'models/cms/components/feature-block',
     'models/cms/components/feature-list',
     'models/cms/components/image-gallery',
     'models/cms/components/image-slider',
@@ -23,13 +23,15 @@ define([
     'models/cms/components/single-page',
     'models/cms/components/testimonials',
     'models/cms/components/social',
-], function(Freeform, MastHead, ContactUs, FeatureBlocks, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost, SignupForm, Blog, BlogTeaser, Products, SinglePage, Testimonials, Social) {
+    'models/cms/components/navigation',
+    'models/cms/components/footer',
+], function(Freeform, MastHead, ContactUs, FeatureBlock, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost, SignupForm, Blog, BlogTeaser, Products, SinglePage, Testimonials, Social, Navigation, Footer) {
 
     var components = {
         "freeform": Freeform,
         "masthead": MastHead,
         "contact-us": ContactUs,
-        "feature-blocks": FeatureBlocks,
+        "feature-block": FeatureBlock,
         "feature-list": FeatureList,
         "image-gallery": ImageGallery,
         "image-slider": ImageSlider,
@@ -43,7 +45,9 @@ define([
         "products": Products,
         "single-page": SinglePage,
         "testimonials": Testimonials,
-        "social": Social
+        "social": Social,
+        "navigation": Navigation,
+        "footer": Footer
     };
 
     var collection = Backbone.Collection.extend({
@@ -51,7 +55,6 @@ define([
         model: function(attr, options) {
             var type = attr.type;
             var component = components[type];
-
             return new component(attr, options);
         },
 

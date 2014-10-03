@@ -8,13 +8,13 @@
 define([
     'routers/account/contact.router',
     'routers/account/account.router',
-    'routers/account/pipeshift.router',
     'routers/account/commerce.router',
     'routers/account/social_dashboard.router',
     'routers/account/cms.router',
     'views/account/admin.view',
-    'views/account/dashboard.view'
-], function (contactRouter, accountRouter, pipeshiftRouter, commerceRouter, cmsRouter, social_dashboardRouter, AdminView, DashboardView) {
+    'views/account/dashboard.view',
+    'views/account/contact.view'
+], function (contactRouter, accountRouter, commerceRouter, cmsRouter, social_dashboardRouter, AdminView, DashboardView, ContactView) {
 
     var router = Backbone.Router.extend({
 
@@ -29,7 +29,7 @@ define([
         showMain: function () {
             $$.v.leftNav.updateActiveNav("");
             //var view = new AdminView();
-            var view = new DashboardView();
+            var view = new ContactView();
             $$.viewManager.replaceMain(view);
         },
 

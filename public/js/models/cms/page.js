@@ -50,14 +50,7 @@ define([
         },
 
 
-        toJSON: function() {
-            var json = _.clone(this.attributes);
-            var collection = json.components;
-            if (collection) {
-                json.components = json.components.toJSON();
-            }
-            return json;
-        },
+
 
 
         getComponentById: function(id) {
@@ -102,7 +95,7 @@ define([
                     return $$.api.getApiUrl("cms", "page");
                     break;
                 case "DELETE":
-                    return $$.api.getApiUrl("cms", "page/" + this.id);
+                    return $$.api.getApiUrl("cms","website/" + this.get("websiteId") + "/page/" + this.id+"/"+this.get('title'));
                     break;
             }
         }

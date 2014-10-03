@@ -15,6 +15,7 @@ var LoginView = require('../views/login.server.view');
 var ForgotPasswordView = require('../views/forgotpassword.server.view');
 var SignupView = require('../views/signup.server.view');
 
+
 var router = function () {
     this.init.apply(this, arguments);
 };
@@ -37,7 +38,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         // LOGOUT
         //-------------------------------------------------
-        app.get("/logout", this.setup, this.handleLogout.bind(this));
+        app.get("/logout", this.handleLogout.bind(this));
 
 
         //-------------------------------------------------
@@ -65,7 +66,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
     //region LOGIN / LOGOUT
     showLogin: function (req, resp) {
         var self = this;
-        if (req.isAuthenticated()) {
+        if (req.isAuthenticated()&& req._passport.instance._userProperty != 'user') {
+            console.log('req.isAuthenticated is true.');
             if (self.accountId(req) > 0) {
                 resp.redirect("/admin");
             } else {
@@ -138,7 +140,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
         req.session.accountId = null;
         req.logout();
         req.session.destroy();
+        req.session = null;
+        req.user = null;
 
+        /*
         if (accountId > 0) {
             var appConfig = require('../configs/app.config');
             var redirect = req.protocol + '://' + req.get('host') + "/login";
@@ -149,7 +154,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 return resp.redirect(req.query.redirect);
             }
         }
-
+        */
         return resp.redirect("/login");
     },
     //endregion
@@ -195,9 +200,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
     showSignup: function (req, resp) {
         if (req.isAuthenticated()) {
             return resp.redirect("/");
-        } else if (this.accountId(req) > 0) {
+        }/* else if (this.accountId(req) > 0) {
             return resp.redirect("/login");
-        }
+        }*/
 
         new SignupView(req, resp).show();
     },
@@ -205,6 +210,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     handleSignup: function (req, resp) {
         var self = this, user, accountToken, deferred;
+        self.log.debug('>> handleSignup');
 
         var username = req.body.username;
         var password1 = req.body.password;
@@ -237,12 +243,22 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function (err, value) {
             if (!err) {
+
                 req.login(value, function (err) {
                     if (err) {
                         return resp.redirect("/");
                     } else {
-                        req.flash("info", "Account created successfully");
-                        return resp.redirect("/");
+
+                        var accountId = value.getAllAccountIds()[0];
+                        authenticationDao.getAuthenticatedUrlForAccount(accountId, self.userId(req), "admin", function (err, value) {
+                            if (err) {
+                                resp.redirect("/home");
+                                self = null;
+                                return;
+                            }
+                            resp.redirect(value);
+                            self = null;
+                        });
                     }
                 });
             } else {

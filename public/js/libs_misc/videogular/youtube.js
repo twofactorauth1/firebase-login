@@ -17,13 +17,12 @@ angular.module("info.vietnamcode.nampnq.videogular.plugins.youtube", [])
         }
     ])
     .directive(
-    "vgYoutube", ["VG_EVENTS", "VG_STATES", "$rootScope", "$window", "$timeout", "$interval",
-        function (VG_EVENTS, VG_STATES, $rootScope, $window, $timeout, $interval) {
+    "vgYoutube", ["VG_EVENTS", "VG_STATES", "$rootScope", "$window", "$timeout", "$interval", "$interpolate",
+        function (VG_EVENTS, VG_STATES, $rootScope, $window, $timeout, $interval, $interpolate) {
             return {
                 restrict: "E",
                 require: "^videogular",
                 templateUrl: "/js/libs_misc/videogular/youtube.html",
-                scope: {},
                 link: function (scope, elem, attr, API) {
                     var result = {
                         method: "",
@@ -143,6 +142,10 @@ angular.module("info.vietnamcode.nampnq.videogular.plugins.youtube", [])
                         });
                     }
                     scope.parseSrc = function (src) {
+                        if (src.substring(0, 2) == "{{") {
+                            src = $interpolate(src)(scope);
+                        }
+
                         if (src) {
                             // Regex to parse the video ID
                             var regId = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
