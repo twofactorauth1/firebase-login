@@ -81,6 +81,14 @@ var component = $$.m.ModelBase.extend({
              */
             txtcolor: null,
 
+            title: "Title",
+
+            subtitle: "subtitle",
+
+            text: "",
+
+            imgurl: "",
+
             /**
              *
              *
