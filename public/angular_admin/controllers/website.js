@@ -42,9 +42,48 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             console.log('getUpdatediFrameRoute', data);
         };
 
+        window.activateSettings = function() {
+            console.log('Activate Settings!');
+        };
+
+
         document.getElementById("iframe-website").onload= function() {
             ngProgress.complete();
-            document.getElementById("iframe-website").contentWindow.triggerEditMode();
+            var iframe = document.getElementById("iframe-website");
+            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            iframe.contentWindow.triggerEditMode();
+
+            //wait for iframe to load completely
+            $timeout(function() {
+                //add click events for all the settings buttons
+                var settingsBtns = iframeDoc.querySelectorAll('.componentActions .settings');
+                console.log('settingsBtns >>> ', settingsBtns.length);
+                for (var i = 0; i < settingsBtns.length; i++) {
+                    if (typeof settingsBtns[i].addEventListener != "undefined") {
+                        settingsBtns[i].addEventListener("click", function(e) {
+                            $scope.editComponent(e.currentTarget.attributes['data-id'].value);
+                        });
+                    } else if (typeof settingsBtns.attachEvent != "undefined") {
+                        settingsBtns[i].attachEvent ("onclick", iframeClickHandler);
+                    }
+                };
+
+                //add click events for all the add component buttons
+                var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
+                console.log('addComponentBtns >>> ', addComponentBtns.length);
+                for (var i = 0; i < addComponentBtns.length; i++) {
+                    if (typeof addComponentBtns[i].addEventListener != "undefined") {
+                        addComponentBtns[i].addEventListener("click", function(e) {
+                            var element = angular.element('#add-component-modal');
+                            element.modal('show');
+                        });
+                    } else if (typeof addComponentBtns.attachEvent != "undefined") {
+                        addComponentBtns[i].attachEvent ("onclick", iframeClickHandler);
+                    }
+                };
+
+            }, 500);
+
         };
 
         //get account
@@ -99,23 +138,17 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
 
         $scope.status = {
             isopen: false
-          };
+        };
 
-          $scope.toggled = function(open) {
+        $scope.toggled = function(open) {
             console.log('Dropdown is now: ', open);
-          };
+        };
 
-          $scope.toggleDropdown = function($event) {
+        $scope.toggleDropdown = function($event) {
             $event.preventDefault();
             $event.stopPropagation();
             $scope.status.isopen = !$scope.status.isopen;
-          };
-
-        //put iframe contents in scope when loaded
-        $window.iframeLoaded = function(){
-            var iFrame = document.getElementById("iframe-website");
-            var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
-        }
+        };
 
         $scope.sortableOptions = {
             start: function(e, ui) {
@@ -313,10 +346,18 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
         };
 
         $scope.editComponent = function(componentId) {
-            $scope.componentEditing = _.findWhere($scope.components, { _id: componentId });
+            $scope.$apply(function() {
+                $scope.componentEditing = _.findWhere($scope.components, { _id: componentId });
+            });
+            //open right sidebar and component tab
+                document.body.className += ' leftpanel-collapsed rightmenu-open';
+                var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
+                var last = nodes[nodes.length- 1];
+                console.log('last', last);
+                angular.element(last).triggerHandler('click');
         };
 
-        $scope.saveComponent = function(data) {
+        $scope.saveComponent = function() {
             var componentId = $scope.componentEditing._id;
             var componentIndex;
             for (var i = 0; i < $scope.components.length; i++) {

@@ -59,7 +59,7 @@
 
                 <div class="mb20"></div>
 
-                <div id="nestable">
+                <div id="nestable" class="hidden">
                     <h4>Components ({{components.length}})</h4>
                     <button class="btn btn-orange btn-block" data-toggle="modal" data-target="#add-component-modal"><i class="fa fa-plus"></i>
                         <span>Component</span>
@@ -109,15 +109,15 @@
                     </div>
                     <div class="form-group">
                         <label for="colorpicker">Color Secondary:</label>
-                        <spectrum-colorpicker format="'hex'" ng-model="secondaryColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="secondaryColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                     </div>
                     <div class="form-group">
                         <label for="colorpicker">Highlight Primary:</label>
-                        <spectrum-colorpicker format="'hex'" ng-model="primaryHighlight" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="primaryHighlight" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                     </div>
                     <div class="form-group">
                         <label for="colorpicker">Text Color Primary:</label>
-                        <spectrum-colorpicker format="'hex'" ng-model="primaryTextColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="primaryTextColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                     </div>
                     <div class="form-group">
                         <label for="colorpicker">Font Family Primary:</label>
@@ -161,36 +161,36 @@
                 <hr/>
                 <div class="form-group">
                     <label for="colorpicker">Show:</label>
-                    <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right">
+                    <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
                 </div>
                 <div class="form-group">
                     <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
-                    <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor">
+                    <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor" ng-change="saveComponent()">
                 </div>
                 <div class="form-group">
                     <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
-                    <input class="form-control input-lg" type="text" ng-model="componentEditing.version">
+                    <input class="form-control input-lg" type="text" ng-model="componentEditing.version" ng-change="saveComponent()">
                 </div>
                 <div class="form-group">
                     <label for="colorpicker">Text Color:</label>
-                    <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" class="pull-right" ng-model="componentEditing.txtcolor"></spectrum-colorpicker>
+                    <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                 </div>
                 <div class="form-group">
                     <label for="colorpicker">Background Color:</label>
-                    <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false , allowEmpty:true,}" class="pull-right" ng-model="componentEditing.bg.color"></spectrum-colorpicker>
+                    <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false , allowEmpty:true,}" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
                 </div>
                 <div class="form-group">
                     <label for="colorpicker">Show Button:</label>
-                    <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right">
+                    <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
                 </div>
                 <div class="clearfix"></div>
                 <div class="form-group">
                     <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
-                    <input class="form-control input-lg" type="text" ng-model="componentEditing.bg.img.url">
+                    <input class="form-control input-lg" type="text" ng-model="componentEditing.bg.img.url" ng-change="saveComponent()">
                 </div>
                 <div class="form-group">
                     <label for="colorpicker">Show Background Image as Parallax:</label>
-                    <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right">
+                    <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
                 </div>
 
                 <button class="btn btn-danger pull-left" data-dismiss="modal" ng-click="deleteComponent(componentEditing._id)">

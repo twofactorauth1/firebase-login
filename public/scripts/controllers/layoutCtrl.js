@@ -14,11 +14,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //$window.segmentIOWriteKey = ENV.segmentKey;
         //that.themeUrl = $scope.themeUrl;
 
+        // $scope.activateSettings = function() {
+        //     console.log('>>>>> ', window.parent);
+        //     window.parent.frames[0].parentNode.activateSettings();
+        // };
+
         $scope.sortingLog = [];
 
         $scope.wait;
 
         $scope.sortableOptions = {
+            handle: '.reorder',
             start: function(e, ui) {
                 console.log('ui >>> ', ui);
                 ui.item[0].parentNode.className += ' active';

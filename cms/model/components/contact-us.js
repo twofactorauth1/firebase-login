@@ -63,7 +63,7 @@ var component = $$.m.ModelBase.extend({
                 zip:"",
                 lat:"",
                 lon:"",
-                showMap: false,         // true | false
+                showMap: false,
                 addressDisplayLabel: ""
             },
 
@@ -100,7 +100,6 @@ var component = $$.m.ModelBase.extend({
 
 
     initialize: function(options) {
-
     }
 
 

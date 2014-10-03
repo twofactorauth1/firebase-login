@@ -5,7 +5,7 @@ mainApp.filter('generateURLforLinks', function () {
         var _url = "";
         switch (linkToObject.type) {
             case "page":
-                _url = linkToObject.data;
+                _url = '/page/'+linkToObject.data;
                 return _url;
                 break;
             case "home":
