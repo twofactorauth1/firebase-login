@@ -5,56 +5,87 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div id="contact-us" data-ng-show="component" data-class="contact-us" data-id="{{component._id}}" style="background: {{component.bg.color}}; color: {{component.txtcolor}};">
-    <h3 class="editable title" data-ng-show="component.title" data-class="title" ng-bind-html="component.title"></h3>
+<div id="contact-us">
+    <div class="component" data-ng-show="component.visibility" data-class="contact-us" data-id="{{component._id}}">
+        <div class="component-body" id="{{component.anchor}}">
+            <div class="contact-us-v1 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4"
+                 style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
+                <div class="row inner-page">
+                    <div class="col-sm-6">
+                        <div class="map-wrap">
+                            <div id="map-marker" style="height: 150px; width:100%"></div>
+                        </div>
+                    </div>
 
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="map-wrap">
-                <div id="map-marker" style="height: 150px; width:100%"></div>
-            </div>
-        </div>
+                    <div class="col-sm-6">
 
-        <div class="col-sm-6">
-            <strong data-ng-show="component.title" class="editable" data-class="title" ng-bind-html="component.title"></strong>
+                        <div class="contact-us-title" ng-bind-html="component.title">
+                            <div class="editable" data-class="title" data-index="{{$index}}">
+                                <span ng-bind-html="component.title"/>
+                            </div>
+                        </div>
 
-            <div class="editable ">
-                <span data-ng-show="component.subtitle" class="editable" data-class="subtitle" ng-bind-html="component.subtitle"></span>
-                <span data-ng-show="!component.subtitle"><strong>Contact us description</strong></span>
-            </div>
+                        <div class="contact-us-subtitle" ng-bind-html="component.subtitle">
+                            <div class="editable" data-class="subtitle" data-index="{{$index}}">
+                                <span ng-bind-html="component.subtitle"/>
+                            </div>
+                        </div>
 
-            <div class="editable">
-                <span data-ng-show="component.location.addressDisplayLabel">{{component.location.addressDisplayLabel}}</span>
-                <!-- <span>{{component.location}}1111</span>
-                 <span>{{component.location.displayLabel}}2222</span>-->
-                <span data-ng-show="!component.location.addressDisplayLabel">Enter your Address type here</span>
-            </div>
+                        <div class="contact-us-description">
+                            <div class="editable" data-class="description" data-index="{{$index}}">
+                                <span ng-bind-html="component.description"/>
+                                <span data-ng-show="!component.description"><strong>Contact us description</strong></span>
+                            </div>
+                        </div>
 
-            <div>
-                <span class="editable">
-                 <span data-ng-show="component.location.address">{{component.location.address}}</span>
-                 <span data-ng-show="!component.location.address">Address</span>
-                </span>
+                        <div class="contact-us-address-display-label">
+                            <div class="editable" data-class="addressDisplayLabel" data-index="{{$index}}">
+                                <span ng-bind-html="component.location.addressDisplayLabel"/>
+                                <span data-ng-show="!component.location.addressDisplayLabel">Enter your Address type here</span>
+                            </div>
+                        </div>
+                        
 
-                <span class="editable">
-                    <span data-ng-show="component.location.address2">{{component.location.address2}}</span>
-                    <span data-ng-show="!component.location.address2"> Address Suite or Apartment</span>
-                </span>
-            </div>
-            <div>
-                <span class="editable">
-                 <span data-ng-show="component.location.city">{{component.location.city}}</span>
-                 <span data-ng-show="!component.location.city">City</span>
-                </span>
 
-                <span class="editable">
-                     <span data-ng-show="component.location.state">{{component.location.state}}</span>
-                     <span data-ng-show="!component.location.state">State</span>
-                </span>
-                <span class="editable">
-                    <span data-ng-show="component.location.zip">{{component.location.zip}}</span>
-                     <span data-ng-show="!component.location.zip">Zip Code</span>
-                </span>
+                        <div>
+                            <div class="contact-us-location-address">
+                                <div class="editable" data-class="address" data-index="{{$index}}">
+                                    <span ng-bind-html="component.location.address"/>
+                                    <span data-ng-show="!component.location.address">Address</span>
+                                </div>
+                            </div>
+                            <div class="contact-us-location-address2">
+                                <div class="editable" data-class="address2" data-index="{{$index}}">
+                                    <span ng-bind-html="component.location.address2"/>
+                                    <span data-ng-show="!component.location.address2"> Address Suite or Apartment</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="contact-us-location-city">
+                                <div class="editable" data-class="city" data-index="{{$index}}">
+                                    <span ng-bind-html="component.location.city"/>
+                                    <span data-ng-show="!component.location.city">City</span>
+                                </div>
+                            </div>
+                            <div class="contact-us-location-state">
+                                <div class="editable" data-class="state" data-index="{{$index}}">
+                                    <span ng-bind-html="component.location.state"/>
+                                    <span data-ng-show="!component.location.state">State</span>
+                                </div>
+                            </div>
+                            <div class="contact-us-location-zip">
+                                <div class="editable" data-class="zip" data-index="{{$index}}">
+                                    <span ng-bind-html="component.location.zip"/>
+                                    <span data-ng-show="!component.location.zip">Zip Code</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
