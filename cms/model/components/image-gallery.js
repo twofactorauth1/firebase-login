@@ -66,27 +66,23 @@ var component = $$.m.ModelBase.extend({
              *      url:                        // The url of the image
              * }]
              */
-            images : {
-                [
+            images : [
                     {
-                        image-label : "Project A",
-                        image-description : "Image Description",
-                        image-url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
+                        label : "Project A",
+                        description : "Image Description",
+                        url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
                     },
                     {
-                        image-label : "Project A",
-                        image-description : "Image Description",
-                        image-url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
+                        label : "Project A",
+                        description : "Image Description",
+                        url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
                     },
                     {
-                        image-label : "Project A",
-                        image-description : "Image Description",
-                        image-url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
+                        label : "Project A",
+                        description : "Image Description",
+                        url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
                     }
-                ],
-                imageSize : "medium",
-                source : null
-            },
+            ],
 
             /**
              *
