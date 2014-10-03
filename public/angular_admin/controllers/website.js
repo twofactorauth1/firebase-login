@@ -98,8 +98,10 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
 
                     iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
                         console.log('dom changed');
-                        $scope.$apply(function() {
-                            $scope.editPage;
+                        setTimeout(function(){
+                            $scope.$apply(function() {
+                                $scope.editPage;
+                            });
                         });
                     }, false);
 
