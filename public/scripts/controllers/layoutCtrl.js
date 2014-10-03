@@ -42,6 +42,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 $scope.wait = setTimeout(function () {
                     ui.item[0].parentNode.classList.remove('active');
                 }, 1500);
+                // var componentId = ui.item[0].querySelectorAll('.component')[0].attributes['data-id'].value;
+                // var newOrder = ui.item.index();
             }
         };
 
