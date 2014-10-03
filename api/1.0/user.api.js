@@ -62,6 +62,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         userDao.getById(userId, function(err, value) {
             if (!err) {
+                //TODO: granular security - VIEW_USER
+                //TODO: get accountIds from user
                 if (value == null) {
                     return self.wrapError(resp, 404, null, "No User found with ID: [" + userId + "]");
                 }
@@ -98,6 +100,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = req.params.accountId;
 
         accountId = parseInt(accountId);
+        //TODO: granular security - VIEW_USER
 
         userDao.usernameExistsForAccount(accountId, username, function(err, value) {
             if (err) {
@@ -131,7 +134,8 @@ _.extend(api.prototype, baseApi.prototype, {
             if (!err && value != null) {
                 value.set("welcome_alert",req.body.welcome_alert);
                 console.log(value);
-                user.set("credentials",value.get("credentials"))
+                user.set("credentials",value.get("credentials"));
+                //TODO: granular security - MODIFY_USER
 
                 userDao.saveOrUpdate(user, function(err, value) {
                     if (!err && value != null) {

@@ -90,11 +90,12 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     listCustomers: function(req, resp) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> listCustomers');
         var accountId = self.accountId(req);
         var limit = req.body.limit;
+        //TODO: Add Security - VIEW_PAYMENTS
 
         stripeDao.listStripeCustomers(accountId, limit, function(err, customers){
 
@@ -133,6 +134,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getCustomer');
         var customerId = req.params.id;
         var accountId = self.accountId(req);
+        //TODO: Add Security - VIEW_PAYMENTS
 
         var p1 = $.Deferred();
         customerLinkDao.getLinkByAccountAndCustomer(accountId, customerId, function(err, link){
@@ -161,6 +163,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var cardToken = req.body.cardToken;
         var contact = req.body.contact;
         var _accountId = self.accountId(req);
+        //TODO: Add Security - MODIFY_PAYMENTS
         //validate arguments
         if(cardToken && cardToken.length ===0) {
             return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
@@ -182,7 +185,8 @@ _.extend(api.prototype, baseApi.prototype, {
     updateCustomer: function(req, resp) {
         var self = this;
         self.log.debug('>> updateCustomer');
-        //TODO: security
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_PAYMENTS
         var hasUpdates = false;
         var customerId = req.params.id;
         var params = {};
@@ -240,9 +244,9 @@ _.extend(api.prototype, baseApi.prototype, {
     deleteCustomer: function(req, resp) {
         var self = this;
         self.log.debug('>> deleteCustomer');
-        //TODO: security
 
         var accountId = self.accountId(req);
+        //TODO: Add Security - MODIFY_PAYMENTS
         var customerId = req.params.id;
         if(accountId > 0) {
             customerLinkDao.removeLinkByAccountAndCustomer(accountId, customerId, function(err, value){
@@ -270,7 +274,8 @@ _.extend(api.prototype, baseApi.prototype, {
     listPlans: function(req, resp) {
         var self = this;
         self.log.debug('>> listPlans');
-        //TODO: Security
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_PAYMENTS
         var accessToken = self._getAccessToken(req);
         stripeDao.listStripePlans(accessToken, function(err, value){
             self.log.debug('<< listPlans');
@@ -282,7 +287,8 @@ _.extend(api.prototype, baseApi.prototype, {
     getPlan: function(req, resp) {
         var self = this;
         self.log.debug('>> getPlan');
-        //TODO: Security
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - VIEW_PAYMENTS
         var planId = req.params.id;
         var accessToken = self._getAccessToken(req);
         stripeDao.getStripePlan(planId, accessToken, function(err, value){
@@ -293,9 +299,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     createPlan: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> createPlan');
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_PAYMENTS
         var accessToken = self._getAccessToken(req);
 
         var planId = req.body.planId;
@@ -334,9 +342,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     updatePlan: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> updatePlan');
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_PAYMENTS
         var accessToken = self._getAccessToken(req);
         //validate params
         var needsUpdate = false;
@@ -361,9 +371,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     deletePlan: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> deletePlan');
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_PAYMENTS
         var accessToken = self._getAccessToken(req);
         //validate params
         var planId = req.params.id;//REQUIRED
@@ -379,14 +391,18 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     listSubscriptions: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> listSubscriptions');
+        var accountId = parseInt(self.accountId(req));
+
         var accessToken = self._getAccessToken(req);
         var customerId = req.params.id;
         var limit = req.body.limit;
 
         stripeDao.listStripeSubscriptions(customerId, limit, function(err, value){
+            //TODO: Add Security - VIEW_PAYMENTS
+            //TODO: get accountId from subs
             self.log.debug('<< listSubscriptions');
             return self.sendResultOrError(resp, err, value, "Error listing subscriptions");
             self = value = null;
@@ -394,9 +410,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     createSubscription: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> createSubscription');
+        var accountId = parseInt(self.accountId(req));
+        //TODO: Add Security - MODIFY_PAYMENTS
         var accessToken = self._getAccessToken(req);
         var customerId = req.params.id;
         var planId = req.body.planId;//REQUIRED

@@ -33,8 +33,10 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createProduct');
 
         var product = req.body;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: security - MODIFY_PRODUCT
         product.accountId = self.accountId(req);
-        //TODO: security
+
         productManager.createProduct(product, function(err, value){
             self.log.debug('<< createProduct');
             self.sendResultOrError(res, err, value, "Error creating product");
@@ -47,9 +49,12 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getProduct');
 
         var productId = req.params.id;
-        //TODO: security
 
         productManager.getProduct(productId, function(err, value){
+            if(!err && value != null) {
+                var accountId = value.get('accountId');
+                //TODO: security - VIEW_PRODUCT
+            }
             self.log.debug('<< getProduct');
             self.sendResultOrError(res, err, value, "Error retrieving product");
         });
@@ -61,9 +66,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var skip = req.query['skip'];
         var limit = req.query['limit'];
-        var accountId = self.accountId(req);
-
-        //TODO: security
+        var accountId = parseInt(self.accountId(req));
+        //TODO: security - VIEW_PRODUCT
 
         productManager.listProducts(accountId, limit, skip, function(err, list){
             self.log.debug('<< listProducts');
@@ -84,6 +88,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: security
 
         productManager.updateProduct(product, function(err, value){
+            //TODO: get accountId from value
+            //TODO: security - MODIFY_PRODUCT
             self.log.debug('<< updateProduct');
             self.sendResultOrError(res, err, value, 'Error updating product');
         });
@@ -94,7 +100,8 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> deleteProduct');
         var productId = req.params.id;
 
-        //TODO: security
+        //TODO: get accountId from product
+        //TODO: security - MODIFY_PRODUCT
         productManager.deleteProduct(productId, function(err, value){
             self.log.debug('<< deleteProduct');
             self.sendResultOrError(res, err, value, 'Error deleting product');

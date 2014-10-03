@@ -16,7 +16,7 @@ var privilege = $$.m.ModelBase.extend({
             userId: null,
             userName: null,
             roles:[],
-            accountIDs: [],
+            accountIds: [],
             privs: [],
             created: {
                 date: new Date(),
