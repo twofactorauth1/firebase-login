@@ -59,6 +59,18 @@ var component = $$.m.ModelBase.extend({
             source: null,
 
             /**
+             *
+             *
+             */
+            title : "",
+
+            /**
+             *
+             *
+             */
+            subtitle : "",
+
+            /**
              * An array of objects that contain image and caption data:
              * [{
              *      label:                      // The caption that appears beneath or aside from the image

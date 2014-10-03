@@ -24,8 +24,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.wait;
 
         $scope.trustSrc = function(src) {
-        return $sce.trustAsResourceUrl(src);
-      }
+            return $sce.trustAsResourceUrl(src);
+          }
 
         $scope.sortableOptions = {
             handle: '.reorder',
@@ -110,7 +110,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         window.triggerEditMode = function() {
-            document.getElementsByTagName('body')[0].className+=' editing'
+            console.log('trigger edit');
+            document.getElementsByTagName('body')[0].className+=' editing';
         };
 
         // $scope.$on('$locationChangeStart', function(event, next, current) {

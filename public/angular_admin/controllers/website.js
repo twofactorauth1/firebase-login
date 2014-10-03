@@ -57,14 +57,12 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                 ngProgress.complete();
                 var iframe = document.getElementById("iframe-website");
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                iframe.contentWindow.triggerEditMode();
                 $scope.bindEvents();
             }
 
             $scope.bindEvents = function() {
                 var iframe = document.getElementById("iframe-website");
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                iframe.contentWindow.triggerEditMode();
 
                 //wait for iframe to load completely
                 $timeout(function() {
@@ -94,6 +92,15 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                             addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
                         }
                     };
+
+                    //TODO get event from stop
+
+                    iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
+                        console.log('dom changed');
+                        $scope.$apply(function() {
+                            $scope.editPage;
+                        });
+                    }, false);
 
                 }, 500);
             };
@@ -223,7 +230,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                 $scope.isEditing = true;
                 console.log('activate aloha');
                 $scope.activateAloha();
-                // var iframe = document.getElementById("iframe-website");
+                var iframe = document.getElementById("iframe-website");
+                iframe.contentWindow.triggerEditMode();
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");
             };

@@ -9,12 +9,13 @@
     <div class="component" data-ng-show="component.visibility" data-class="image-gallery" data-id="{{component._id}}">
         <div class="component-body" id="{{component.anchor}}">
             <div class="image-gallery-v1 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
-                <div class="row">
-                    <div class="col-xs-12">
+                <div class="row container">
+                    <div class="col-xs-12 inner-page">
 
-                        <div class="image-gallery-title" data-ng-show="component.maintitle">
+                        <div class="image-gallery-title">
                             <div class="editable" data-class="maintitle" data-index="{{$index}}">
-                                <div data-ng-bind-html="component.maintitle"></div>
+                                <div data-ng-bind-html="component.maintitle" data-ng-show="component.maintitle"></div>
+                                <div ng-show="!component.maintitle"><h1>Image Gallery Title</h1></div>
                             </div>
                         </div>
 
@@ -24,18 +25,17 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="row">
-                                <div isotope-container ng-cloak id="isotopeContainer">
-                                    <div class="col-sm-3 imgHeight" ng-repeat="image in component.images track by $index"
-                                         isotope-item>
-                                        <a class="thumbnail" href="{{image.url}}"
-                                           title="{{image.label}}" data-gallery>
+                        <div class=" clearfix mb20"></div>
 
-                                            <img class="img-responsive" alt="{{image.label}}" src="{{image.url}}">
-                                            <span class="caption"><i class="fa fa-plus-circle"></i></span>
-                                        </a>
-                                    </div>
+                        <div class="">
+                            <div ng-cloak class="row">
+                                <div class="col-xs-3 imgHeight single-image" ng-repeat="image in component.images track by $index">
+                                    <a class="thumbnail" href="{{image.url}}"
+                                       title="{{image.label}}" data-gallery>
+
+                                        <img class="img-responsive" alt="{{image.label}}" src="{{image.url}}">
+                                        <span class="caption"><i class="fa fa-plus-circle"></i></span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
