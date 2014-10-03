@@ -5,41 +5,45 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div ng-show="component" class="component feature-list-v1 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") {{component.bg.img.pattern?'':'no-repeat'}} fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};' data-id="{{component._id}}" background-image="url('{{component.bg.img.url}}')">
-    <div class="row inner-page" id="{{component.anchor}}">
-        <div class="row">
-            <h1 class="feature-list-title">
-                <div class="editable" data-class="title">
-                    <h1><span ng-bind-html="component.title"/></h1>
-                </div>
-            </h1>
-            <div class="feature-list-subtitle col-xs-8 col-xs-offset-2">
-                <div class="editable" data-class="subtitle">
-                    <span ng-bind-html="component.subtitle"/>
-                </div>
-            </div>
-            <div class="clearfix mb15"></div>
 
-            <div class="row features-wrap">
-                <div class="col-sm-6 feature" data-ng-repeat="feature in component.features track by $index">
-                    <div class="feature-single feature-single-{{$index}}">
-                        <span class="feature-icon {{feature['feature-icon']}}"></span>
+<div ng-show="component" class="component" data-class="feature-list" data-id="{{component._id}}">
+    <div class="feature-list-v1 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") {{component.bg.img.pattern?' ':'no-repeat '}} fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};' background-image="url('{{component.bg.img.url}}')">
+        <div class="row inner-page" id="{{component.anchor}}">
+            <div class="row">
+                <h1 class="feature-list-title">
+                    <div class="editable" data-class="title">
+                        <h1>
+                            <span ng-bind-html="component.title" />
+                        </h1>
+                    </div>
+                </h1>
+                <div class="feature-list-subtitle col-xs-8 col-xs-offset-2">
+                    <div class="editable" data-class="subtitle">
+                        <span ng-bind-html="component.subtitle" />
+                    </div>
+                </div>
+                <div class="clearfix mb15"></div>
 
-                        <h3 class="feature-title">
-                            <div class="editable" data-class="feature-title">
-                                {{feature['feature-title']}}
-                            </div>
-                        </h3>
-                        <div class="feature-subtitle">
-                            <div class="editable" data-class="feature-subtitle">
-                                <span ng-bind-html="feature['feature-subtitle']" />
+                <div class="row features-wrap">
+                    <div class="col-sm-6 feature" data-ng-repeat="feature in component.features track by $index">
+                        <div class="feature-single feature-single-{{$index}}">
+                            <span class="feature-icon {{feature['icon']}}"></span>
+
+                            <h3 class="feature-title">
+                                <div class="editable" data-class="features.item.title" data-index="{{$index}}">
+                                    {{feature['title']}}
+                                </div>
+                            </h3>
+                            <div class="feature-subtitle">
+                                <div class="editable" data-class="features.item.subtitle" data-index="{{$index}}">
+                                    <span ng-bind-html="feature['subtitle']" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
 </div>
-

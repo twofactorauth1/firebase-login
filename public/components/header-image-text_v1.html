@@ -1,0 +1,41 @@
+<div class="containter-fluid header-image-text-v1">
+    <div class="row">
+        <div class="col-md-12" style="background:url('{{component.bg.img.url}}');background-size:100%;height:235px;">
+            <div class="container-fluid component-text">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2 align-text-center"><h3>{{component.title}}</h3></div>
+                 <div class="col-md-2"></div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+
+                        <h5>
+                            {{component.text}}
+                        </h5>
+                    </div>
+                    <div class="col-md-1">&nbsp;</div>
+                </div>
+            </div>i
+        </div>
+    </div>
+    <div class="row   top-buffer">
+        <div class="col-md-10 col-md-offset-1" ng-repeat="content in component.contents track by $index">
+            <div class="row row-xs-height">
+                <div class="col-md-3 col-xs-height">
+                    <img src="{{content.imgurl}}" class="img-rounded" height="250px" width="250px"/>
+                </div>
+                <div class="col-md-9 img-rounded image-text-background col-xs-height  col-top">
+                    <h5>{{content.title}}</h5><br/>
+
+                    <p>{{content.data}}
+                    </p>
+                </div>
+            </div>
+            <br/>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+

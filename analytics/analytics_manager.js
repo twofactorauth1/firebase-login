@@ -45,6 +45,8 @@ module.exports = {
                 fn(null, value);
             }
         });
+        //associate the event to a contact.
+
     },
 
     createEvent: function(analyticsEvent, fn) {

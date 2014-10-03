@@ -8,6 +8,7 @@
 var BaseView = require('./base.server.view');
 
 var cmsDao = require('../cms/dao/cms.dao.js');
+var segmentioConfig = require('../configs/segmentio.config.js');
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -15,6 +16,7 @@ var view = function(req,resp,options) {
 
 _.extend(view.prototype, BaseView.prototype, {
 
+    log: null,
     show: function(accountId) {
             this._show(accountId, "index");
     },
@@ -24,168 +26,6 @@ _.extend(view.prototype, BaseView.prototype, {
 
     showPage: function(accountId, page) {
         this._show(accountId, page);
-    },
-
-    showTag: function(accountId, tag) {
-        this._showTag(accountId, tag);
-    },
-
-    showAuthor: function(accountId, author) {
-        this._showAuthor(accountId, author);
-    },
-
-    showCategory: function(accountId, category) {
-        this._showCategory(accountId, category);
-    },
-
-    showPost: function(accountId, blogPostUrl) {
-        console.log('showPost '+blogPostUrl+' Account ID:'+accountId);
-        this._showPost(accountId, blogPostUrl);
-    },
-
-    _showPost: function(accountId, blogPostUrl) {
-        console.log('Post ID:(_showPost) '+blogPostUrl+' Account ID: '+accountId);
-        var self = this;
-
-        cmsDao.getBlogPostForWebsite(accountId, blogPostUrl, function(err, blogPost) {
-            console.log('Blog Post :(_showPost) '+blogPost+' Post Url: '+blogPostUrl+' Account ID: '+accountId);
-
-            var path = 'single-post';
-
-            var isEditor = self.req.query.editor == "true";
-
-            var cacheKey = "web-" + accountId + "-" + blogPost;
-
-            if (blogPost == null) {
-                self.resp.render('404.html');
-                self.cleanUp();
-                self = data = null;
-                return;
-            }
-
-            cmsDao.getRenderedWebsitePagewithPostForAccount(accountId, path, blogPost, isEditor, function(err, value) {
-                if (err) {
-                    if (err.error && err.error.code && err.error.code == 404) {
-                        self.resp.render('404.html');
-                    } else {
-                        self.resp.render('500.html');
-                    }
-
-                    self.cleanUp();
-                    self = data = null;
-                    return;
-                }
-
-                if (isEditor !== true) {
-                    $$.g.cache.set(cacheKey, value, "websites");
-                }
-
-
-                self.resp.send(value);
-
-                self.cleanUp();
-                self = data = value = null;
-            });
-        });
-    },
-
-    _showTag: function(accountId, tag) {
-        console.log('Tag:(_showPost) '+tag+' Account ID: '+accountId);
-        var self = this;
-
-        var path = 'blog';
-        var isEditor = 'false';
-
-        var cacheKey = "web-" + accountId + "-" + path;
-
-        cmsDao.getRenderedWebsitePageForAccount(accountId, path, isEditor, tag, null, null, function(err, value) {
-            if (err) {
-                if (err.error && err.error.code && err.error.code == 404) {
-                    self.resp.render('404.html');
-                } else {
-                    self.resp.render('500.html');
-                }
-
-                self.cleanUp();
-                self = data = null;
-                return;
-            }
-
-            if (isEditor !== true) {
-                $$.g.cache.set(cacheKey, value, "websites-tag");
-            }
-
-            self.resp.send(value);
-
-            self.cleanUp();
-            self = data = value = null;
-        });
-    },
-
-    _showAuthor: function(accountId, author) {
-        console.log('Author:(_showPost) '+author+' Account ID: '+accountId);
-        var self = this;
-
-        var path = 'blog';
-        var isEditor = 'false';
-
-        var cacheKey = "web-" + accountId + "-" + path;
-
-        cmsDao.getRenderedWebsitePageForAccount(accountId, path, isEditor, null, author, null, function(err, value) {
-            if (err) {
-                if (err.error && err.error.code && err.error.code == 404) {
-                    self.resp.render('404.html');
-                } else {
-                    self.resp.render('500.html');
-                }
-
-                self.cleanUp();
-                self = data = null;
-                return;
-            }
-
-            if (isEditor !== true) {
-                $$.g.cache.set(cacheKey, value, "websites-author");
-            }
-
-            self.resp.send(value);
-
-            self.cleanUp();
-            self = data = value = null;
-        });
-    },
-
-    _showCategory: function(accountId, category) {
-        console.log('Category:(_showPost) '+category+' Account ID: '+accountId);
-        var self = this;
-
-        var path = 'blog';
-        var isEditor = 'false';
-
-        var cacheKey = "web-" + accountId + "-" + path;
-
-        cmsDao.getRenderedWebsitePageForAccount(accountId, path, isEditor, null, null, category, function(err, value) {
-            if (err) {
-                if (err.error && err.error.code && err.error.code == 404) {
-                    self.resp.render('404.html');
-                } else {
-                    self.resp.render('500.html');
-                }
-
-                self.cleanUp();
-                self = data = null;
-                return;
-            }
-
-            if (isEditor !== true) {
-                $$.g.cache.set(cacheKey, value, "websites-category");
-            }
-
-            self.resp.send(value);
-
-            self.cleanUp();
-            self = data = value = null;
-        });
     },
 
     _show: function(accountId, path) {
@@ -209,6 +49,57 @@ _.extend(view.prototype, BaseView.prototype, {
         });
     },
 
+    renderNewIndex: function(accountId) {
+        var data = {}, self = this;
+        console.log('>> renderNewIndex');
+        /*
+        var data = {
+            settings: settings,
+            seo: seo,
+            footer: footer,
+            title: title,
+            segmentIOWriteKey: segmentioConfig.SEGMENT_WRITE_KEY,
+            handle: pageName,
+            linkLists: {},
+            blogposts: null,
+            tags: null,
+            categories: null,
+            accountUrl: account.get('accountUrl'),
+            account: account
+        };
+        */
+        var isEditor = self.req.query.editor;
+        console.log('isEditor: ', isEditor);
+        cmsDao.getDataForWebpage(accountId, 'index', function(err, value){
+            data.account = value;
+            data.title = 'Indigenous.IO';
+            data.author = 'Indigenous.IO';
+            data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
+            data.website = value.website || {};
+            data.seo={
+                description: '',
+                keywords: ''
+            };
+            data.includeEditor = isEditor;
+            console.log('>> data');
+            console.dir(data);
+            console.log('<< data');
+            console.dir(data.account.website.settings);
+            app.render('index', data, function(err, html){
+                // console.log('Error: ', err);
+                //console.log('rendering the following:');
+                //console.log(html);
+                //self.res
+                self.resp.send(html);
+                self.cleanUp();
+                self = data = value = null;
+            });
+        });
+
+
+
+        //self.resp.send(value);
+    },
 
     _renderWebsite: function(accountId, path, cacheKey, isEditor) {
         var data = {}, self = this;
@@ -218,9 +109,9 @@ _.extend(view.prototype, BaseView.prototype, {
         cmsDao.getRenderedWebsitePageForAccount(accountId, path, isEditor, null, null, null, function(err, value) {
             if (err) {
                 if (err.error && err.error.code && err.error.code == 404) {
-                    self.resp.render('404.html');
+                    self.resp.render('index.html');
                 } else {
-                    self.resp.render('500.html');
+                    self.resp.render('index.html');
                 }
 
                 self.cleanUp();

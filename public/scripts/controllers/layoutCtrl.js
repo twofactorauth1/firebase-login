@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$anchorScroll',
-    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $anchorScroll) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll',
+    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
         route = $location.$$path;
 
@@ -10,9 +10,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.$routeParams = $routeParams;
 
         //var config = angular.module('config');
-        that.segmentIOWriteKey = ENV.segmentKey;
-        $window.segmentIOWriteKey = ENV.segmentKey;
+        //that.segmentIOWriteKey = ENV.segmentKey;
+        //$window.segmentIOWriteKey = ENV.segmentKey;
         //that.themeUrl = $scope.themeUrl;
+
         accountService(function (err, data) {
             if (err) {
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
@@ -31,12 +32,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             } else {
                 if (route === '/' || route === '') {
                      route = 'index';
-                    // if (route.indexOf("blog/") > -1) {
-                    //     route = 'single-post';
-                    // }
-                    route = route.replace('/', '');
+                     route = route.replace('/', '');
+                     that.pages = data[route];
+                } else {
+                    route = $route.current.params.pagename;
                     that.pages = data[route];
                 }
+                $scope.currentpage = that.pages;
             }
         });
 
@@ -61,5 +63,46 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 }
             }
         });
+
+        window.updateComponents = function(data) {
+            console.log('data recieved >>> ', data);
+            $scope.$apply(function() {
+                $scope.currentpage.components = data;
+                console.log('data applied', $scope.currentpage.components);
+            });
+        };
+
+        // $scope.$on('$locationChangeStart', function(event, next, current) {
+        //     console.log('location changed '+event+' '+next+' '+current);
+        //     $scope.currentLoc = next.replace("?editor=true", "").substr(next.lastIndexOf('/') + 1);
+        //     // parent.document.getUpdatediFrameRoute($scope.currentLoc);
+        // });
+
+        // window.scrollTo = function(section) {
+        //     console.log('>>> ', section);
+        //     if(section) {
+        //         $location.hash(section);
+        //         $anchorScroll();
+
+        //         //TODO scrollTo on click
+
+        //         // var offset = 0;
+        //         // var duration = 2000;
+        //         // var someElement = angular.element(document.getElementById(section));
+        //         // console.log('someElement >>>', document);
+        //         // console.log('>>> scrollTo '+ document.body.getElementById(section));
+        //         // $document.scrollToElementAnimated(someElement);
+        //     }
+        // };
+
+        window.activateAloha = function() {
+            console.log('aloha');
+            $('.editable').aloha();
+        };
+
+        window.deactivateAloha = function() {
+            console.log('mahalo');
+            $('.editable').mahalo();
+        };
 
     }]);

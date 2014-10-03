@@ -155,10 +155,6 @@ app.use(passport.session());
 app.use(flash());
 app.use(app.router);
 
-app.use(function(req, res) {
-    res.sendfile('./public/index.html');
-});
-
 // Handle 404
 app.use(function (req, res) {
     res.status(400);
@@ -170,6 +166,12 @@ app.use(function (error, req, res, next) {
     res.status(500);
     res.render('500.html', {title: '500: Internal Server Error', error: error});
 });
+
+/*
+app.use(function(req, res) {
+    res.sendfile('./public/index.html');
+});
+*/
 app.use(connect.compress());
 
 app.configure('development', function () {

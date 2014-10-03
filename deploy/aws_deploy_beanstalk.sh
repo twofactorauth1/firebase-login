@@ -42,6 +42,8 @@ pip list | grep awscli > /dev/null
 if [ "$1" = "master" ]; then
     echo "Generating constants for production."
     grunt ngconstant:production
+    # copy the minimized jade file
+    mv templates/snippets/index_body_scripts_minimized.jade templates/snippets/index_body_scripts.jade
 elif [ "$1" = "develop" ]; then
     echo "Generating constants for development."
     grunt ngconstant:development
@@ -60,12 +62,13 @@ mv public/js/mainforproduction.js public/js/main.js
 grunt compiletemplates
 
 # run grunt
+echo Running grunt production
 grunt production --optimize=uglify
 
 # rename /min to /js directory
 mv public/min public/js
 ########################
-
+echo Starting zip
 # zip the application
 zip -x *.git* node_modules/ -r "${APP_NAME}-${APP_VERSION}.zip" .
 
@@ -78,4 +81,7 @@ aws s3 cp ${APP_NAME}-${APP_VERSION}.zip s3://${S3_BUCKET}/${APP_NAME}-${APP_VER
 
 # create a new version and update the environment to use this version
 aws elasticbeanstalk create-application-version --application-name "${APP_NAME}" --version-label "${APP_VERSION}" --source-bundle S3Bucket="${S3_BUCKET}",S3Key="${APP_NAME}-${APP_VERSION}.zip"
-aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}"
+
+interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready > /dev/null` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
+
+[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0

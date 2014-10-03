@@ -9,6 +9,7 @@ var baseDao = require('./base.dao');
 var accountDao = require('./account.dao');
 var constants = requirejs('constants/constants');
 var crypto = require('../utils/security/crypto');
+var cmsDao = require('../cms/dao/cms.dao');
 require('../models/user');
 
 
@@ -93,8 +94,25 @@ var dao = {
 
                     user.createOrUpdateLocalCredentials(password);
                     user.createUserAccount(accountId, username, password, ["super","admin","member"]);
+                    cmsDao.createWebsiteForAccount(accountId, 'admin', function(err, value){
+                        if(err) {
+                            self.log.error('Error creating website for account: ' + err);
+                            fn(err, null);
+                        } else {
+                            cmsDao.createDefaultPageForAccount(accountId, value.id(), function(err, value){
+                                if(err) {
+                                    self.log.error('Error creating default page for account: ' + err);
+                                    fn(err, null);
+                                } else {
+                                    self.saveOrUpdate(user, fn);
+                                }
 
-                    self.saveOrUpdate(user, fn);
+                            });
+                        }
+
+
+                    });
+
                 });
         });
     },
@@ -219,6 +237,11 @@ var dao = {
     getUserForAccountBySocialProfile: function(accountId, socialType, socialId, fn) {
         var query = { "accounts.accountId":accountId, "credentials.type":socialType, "credentials.socialId":socialId };
         return this.findOne(query, fn);
+    },
+
+    getUsersForAccount: function(accountId, fn) {
+        var query = {'accounts.accountId':accountId};
+        return this.findMany(query, $$.m.User, fn);
     }
 };
 

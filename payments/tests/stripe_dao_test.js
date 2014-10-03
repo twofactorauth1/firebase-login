@@ -281,7 +281,7 @@ exports.stripe_dao_test = {
                     }
                 }
                 stripeDao.createStripeSubscription(customerId, planId, null, null, null, 1,
-                    null, null, accountId, contactId, null, function(err, sub){
+                    null, null, accountId, contactId, null, null, function(err, sub){
                         if(err) {
                             test.ok(false, err);
                             test.done();
@@ -453,7 +453,7 @@ exports.stripe_dao_test = {
         var statement_description = 'Test Charge';
 
         stripeDao.createStripeCharge(amount, currency, null, customerId, contactId, description, metadata, capture,
-            statement_description, null, null, null, function(err, charge){
+            statement_description, null, null, null, null, function(err, charge){
                 if(err) {
                     test.ok(false, err);
                     test.done();
@@ -480,7 +480,7 @@ exports.stripe_dao_test = {
         var statement_description = 'Test Charge';
 
         stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata, capture,
-            statement_description, null, null, null, function(err, charge){
+            statement_description, null, null, null, null, function(err, charge){
                 if(err) {
                     test.ok(false, err);
                     test.done();

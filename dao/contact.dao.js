@@ -46,6 +46,33 @@ var dao = {
         });
     },
 
+    findContactsShortForm: function(accountId, letter, skip, limit, fn) {
+        var self=this;
+        self.log.debug('>> findContactsShortForm');
+        var query = {};
+        if(letter !='all') {
+            var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
+            query = {accountId: accountId, _last: { $gte: letter, $lt: nextLetter } };
+        } else {
+            query = {accountId: accountId};
+        }
+
+        var fields = {_id:1, first:1, last:1, photo:1};
+
+        accountDao.getAccountByID(accountId, function (err, res) {
+
+            var sort = res.get('settings')
+
+            if (sort) {
+                sort = sort.sort_type;
+            } else {
+                sort = 'last';
+            }
+
+            self.findAllWithFieldsAndLimit(query, skip, limit, sort, fields, $$.m.Contact, fn);
+        });
+    },
+
     getContactsAll: function (accountId, skip, limit, fn) {
         //var query = {accountId: accountId, _last: { $gte: "a", $lt: "z" } };
         var self = this;

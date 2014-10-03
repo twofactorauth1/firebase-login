@@ -1,22 +1,24 @@
-<div class="example" style="background:lightgray;padding:5px;">
+<div class="example" style="background:lightgray;padding:5px;"  data-id="{{component._id}}">
     <h5 style="text-align: center">{{component.title}}</h5>
 
-    <div id="accordion" class="panel-group {{component.bg.img.parallax?'parallax':''}}" parallax-background
+    <div  class="{{component.bg.img.parallax?'parallax':''}}" parallax-background
          parallax-ratio="0.4"
-         style="background: url({{component.bg.img.url}}) no-repeat fixed; background: {{component.bg.color}}">
-        <div class="panel pane-default" ng-repeat="accordion in component.panels">
+        style="'background': url({{component.bg.img.url}}) no-repeat fixed; 'background-color':{{component.bg.color}}">
+        <div  class="panel-group"  id="accordion" ng-repeat="element in component.panels">
+          <div class="panel pane-default" >
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{$index}}" ng-click="accordion[$index]= !accordion[$index]">
-                    <span class="glyphicon glyphicon-plus-sign" ng-hide="accordion[$index]">{{flag}}</span>  <span ng-show="accordion[$index]" class="glyphicon glyphicon-minus-sign"> {{flag}} </span>{{accordion.title}}
+                    <a data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{$index}}" ng-click="element[$index]= !element[$index]" ng-style="{'background-color':element[$index]?component.bg.color:''}" class="collapsed">
+                    <span class="glyphicon glyphicon-plus-sign"  ng-hide="element[$index]">{{flag}}</span>  <span ng-show="element[$index]" class="glyphicon glyphicon-minus-sign" > {{flag}} </span>{{element.title}}
                     </a>
                 </h4>
             </div>
-            <div id="collapse{{$index}}" class="panel-collapse collapse">
+            <div id="collapse{{$index}}" class="panel-collapse collapse" ng-style="{'background-color':element[$index]?component.bg.color:''}">
                 <div class="panel-body">
-                  {{accordion.text}}
+                  {{element.text}}
                 </div>
             </div>
+          </div>
         </div>
     </div>
 </div>

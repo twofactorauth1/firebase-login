@@ -36,18 +36,11 @@ var component = $$.m.ModelBase.extend({
              */
             type: "contact-us",
 
-
             /**
-             * The label for the component
-             * (optional)
+             * The version of the component
+             *
              */
-            label:"",
-
-            /**
-             * A description that appears at the top of the component
-             * (optional)
-             */
-            description:"",
+            version: 1,
 
             /**
              * The hours a business is open, array
@@ -81,7 +74,27 @@ var component = $$.m.ModelBase.extend({
                 email: "",
                 phone: ""
             },
-            title:""
+
+            /**
+             *
+             *
+             */
+            txtcolor: null,
+
+            /**
+             *
+             *
+             */
+            bg: {
+                img : {
+                    url : "",
+                    width : null,
+                    height : null,
+                    parallax : false,
+                    blur : false
+                },
+                color : ""
+            }
         }
     },
 

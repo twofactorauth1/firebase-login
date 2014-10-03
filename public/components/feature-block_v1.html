@@ -5,19 +5,35 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
+<div class="component" ng-show="component" data-class="feature-block" data-id="{{component._id}}">
+    <div class="component-body">
+        <div class="feature-block {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='color: {{component.txtcolor}}; background: url("{{component.bg.img.url}}") no-repeat fixed; background-size: cover; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
+            <div class="inner-page" id="{{component.anchor}}">
 
-<div ng-show="component" class="feature-block {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio=".4" parallax-vertical-offset="0" parallax-horizontal-offset="0" style='color: {{component.txtcolor}}; background: url("{{component.bg.img.url}}") no-repeat fixed; background-size: cover; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};;'>
-    <div class="inner-page" id="{{component.anchor}}">
-        <h1 class="feature-block-title">
-            <div class="editable" data-class="feature-title" ng-bind-html="component.title">
-            </div>
-        </h1>
-        <h3 ng-show="component.subtitle" class="feature-block-subtitle">
-            <div class="editable" data-class="feature-subtitle" ng-bind-html="component.subtitle">
-            </div>
-        </h3>
-        <div ng-show="component.text" class="feature-block-text">
-            <div class="editable" data-class="feature-text" ng-bind-html="component.text">
+                <h1 class="feature-block-title">
+                    <div class="editable" data-class="title" ng-bind-html="component.title">
+                    </div>
+                </h1>
+
+                <h3 ng-show="component.subtitle" class="feature-block-subtitle">
+                    <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle">
+                    </div>
+                </h3>
+
+                <div ng-show="component.text" class="feature-block-text">
+                    <div class="editable" data-class="text" ng-bind-html="component.text">
+                    </div>
+                </div>
+
+                <div class="col-xs-12" ng-show="component.btn.visibility">
+                    <a class="btn btn-primary btn-block center" data-ng-href="{{component.btn.url}}" du-smooth-scroll>
+                        <div class="{{component.btn.icon}}"></div>
+                        <div data-class="btn-text" class="editable btn-text" data-index="{{$index}}">
+                            {{component.btn.text}}
+                        </div>
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>

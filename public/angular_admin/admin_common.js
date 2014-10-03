@@ -13,7 +13,7 @@ $(document).ready(function () {
 	    } else {
 	        body.addClass('leftpanel-show');
 	        storageutils.set("state_leftnav", "open", "session");
-	        adjustmainpanelheight();
+	        // adjustmainpanelheight();
 	    }
     }
     
@@ -29,7 +29,7 @@ $(document).ready(function () {
             } else {
                 body.removeClass('leftpanel-show');
                 storageutils.set("state_leftnav", "closed", "session");
-                adjustmainpanelheight();
+                // adjustmainpanelheight();
             }
     }
     
@@ -67,7 +67,7 @@ $(document).ready(function () {
                     body.removeClass('rightmenu-open');
 
                     if (!$('.menutoggle').hasClass('menu-collapsed')) {
-                        $('body').removeClass('leftpanel-collapsed');
+                        $('body').removeClass('leftpanel-collapsed').addClass('leftpanel-open');
                         $('.nav-bracket li.active ul').css({
                             display: 'block'
                         });

@@ -1,8 +1,9 @@
-define(['app', 'userService', 'underscore', 'commonutils', 'angularRoute'], function(app) {
-    app.register.controller('AccountEditCtrl', ['$scope', '$routeParams', 'UserService', function ($scope, $routeParams, UserService) {
+define(['app', 'userService', 'underscore', 'commonutils','formValidationDirective', 'ngProgress'], function(app) {
+    app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', function ($scope, $stateParams, UserService, ngProgress) {
+        ngProgress.start();
         var phoneCharLimit = 4;
-        if ($routeParams.focus)
-            $('[name="' + $routeParams.focus + '"]').focus();
+        if ($stateParams.focus)
+            $('[name="' + $stateParams.focus + '"]').focus();
         //back button click function
         $scope.$back = function() {window.history.back();};
 
@@ -20,6 +21,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'angularRoute'], func
         //account API call for object population
         UserService.getAccount(function (account) {
             $scope.account = account;
+            ngProgress.complete();
             if (!$scope.account.business.phones.length)
                 $scope.account.business.phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false});
             $scope.account.business.phones.forEach(function (value, index) {

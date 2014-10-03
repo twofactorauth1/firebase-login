@@ -10,6 +10,7 @@ var accountDao = require('../../dao/account.dao');
 var cookies = require('../../utils/cookieutil');
 var Account = require('../../models/account');
 var userDao = require('../../dao/user.dao');
+var appConfig = require('../../configs/app.config');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -30,6 +31,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //GET
         //app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
         app.get(this.url(''), this.getCurrentAccount.bind(this)); //Temp Added
+
         app.get(this.url('billing'), this.isAuthApi, this.getCurrentAccountBilling.bind(this));
         app.post(this.url('billing'), this.isAuthApi, this.updateCurrentAccountBilling.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getAccountById.bind(this));
@@ -284,7 +286,26 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
-    deleteAccount: function(req,resp) {
+    deleteAccount: function(req,res) {
+        var self = this;
+        self.log.debug('>> deleteAccount');
+        //TODO: Add real security.  For now, make sure the logged in user is either from the account being deleted or
+        //  from the main account.
+        var accountId = parseInt(self.accountId(req));
+        var accountIdParam = parseInt(req.params.id);
+        //make sure we are not trying to delete main
+        if(accountIdParam === appConfig.mainAccountID) {
+            self.log.warn('Attempt to delete main denied.  This must be done manually.');
+            self.wrapError(res, 401, null, 'Unauthorized', 'You are not authorized to perform this operation');
+        } else if(accountId === accountIdParam || accountId === appConfig.mainAccountID) {
+            accountDao.deleteAccountAndArtifacts(accountId, function(err, value){
+                self.log.debug('<< deleteAccount');
+                self.send200(res);
+            });
+        } else {
+            self.log.debug('<< deleteAccount');
+            self.wrapError(res, 401, null, 'Unauthorized', 'You are not authorized to perform this operation');
+        }
 
     },
 
@@ -309,10 +330,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
     saveOrUpdateTmpAccount: function(req,resp) {
         var self = this;
+        self.log.debug('>> saveOrUpdateTmpAccount');
+
         var account = new $$.m.Account(req.body);
+
         accountDao.saveOrUpdateTmpAccount(account, function(err, value) {
            if (!err && value != null) {
                cookies.setAccountToken(resp, value.get("token"));
+               self.log.debug('<< saveOrUpdateTmpAccount')
                resp.send(value.toJSON("public"));
            } else {
                self.wrapError(resp, 500, null, err, value);

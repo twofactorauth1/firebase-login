@@ -20,7 +20,6 @@ Logs/
 
 public/css/style.default.css
 
-public/css/style.default.css
 
 public/js/libs
 dump/
@@ -29,3 +28,13 @@ indigeweb.njsproj
 indigeweb.sln
 .project
 public/app/app/schema_temp
+<<<<<<< HEAD
+
+public/css/style.default.css
+
+public/css/style.default.css
+=======
+*.7z
+>>>>>>> origin/zeeshan_dev2
+
+configs/mongodb.config.js

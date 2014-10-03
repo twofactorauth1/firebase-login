@@ -1,4 +1,4 @@
-<div class="component" data-ng-show="component" data-class="signup-form" data-id="{{component._id}}" style="background: {{component.bg.color||secondaryColor}}; color: {{component.txtcolor||primary_text_color}};">
+<div class="component" data-ng-show="component" data-class="signup-form-v3" data-id="{{component._id}}" style="background: {{component.bg.color||secondaryColor}}; color: {{component.txtcolor||primary_text_color}};">
     <div id="error-msg" class="alert alert-danger hidden">
         <button type="button" aria-hidden="true" class="close">×</button>
         <span class="message"></span>
@@ -6,9 +6,9 @@
     <div class="component-body">
         <div class="signup-form-v1">
             <div class="inner-page row">
-                <h3 ng-bind-html="component.title"></h3>
+                <h3 ng-bind-html="component.title" ng-show="component.title"></h3>
 
-                <form method="post" name="mc-embedded-subscribe-form" action="http://indigenous.us4.list-manage1.com/subscribe/post?u=5eca79c5c3979f0f11b3fd8a5&amp;id=ef3fecaf28" id="mc-embedded-subscribe-form" class="form validate" target="_blank" novalidate="">
+                <form method="post" name="mc-embedded-subscribe-form" action="http://indigenous.us4.list-manage1.com/subscribe/post?u=5eca79c5c3979f0f11b3fd8a5&amp;id=ef3fecaf28" id="mc-embedded-subscribe-form" class="form validate" target="_blank" novalidate="" onsubmit="indigenous.utils.trackSubscriptionEvent()">
                     <div class="col-sm-9">
                         <div class="left-inner-addon">
                             <span><i class="fa fa-envelope"></i>

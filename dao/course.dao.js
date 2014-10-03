@@ -29,6 +29,16 @@ var dao = {
             });
         },
 
+        getCourseByIdForSubscriber: function (courseId, fn) {
+            this.getById(courseId, function (err, course) {
+                if (!err && course) {
+                    var videos = course.get("videos");
+
+                }
+                return fn(err, course);
+            });
+        },
+
         listUserCourses: function (userId, fn) {
             this.findMany({userId: userId, _id: { $ne: "__counter__" }}, fn);
         },
@@ -235,6 +245,11 @@ var dao = {
                 }
                 return fn(err, course, video);
             });
+        },
+
+        deleteCourseByUser: function(userId, fn) {
+            var self = this;
+            self.removeByQuery({'userId': userId}, $$.m.Course, fn);
         }
 
 
@@ -248,6 +263,6 @@ function clearVideoFieldsForUnauthorizedUser(video) {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.UserDao = dao;
+$$.dao.CourseDao = dao;
 
 module.exports = dao;

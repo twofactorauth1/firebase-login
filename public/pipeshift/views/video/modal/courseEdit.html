@@ -1,82 +1,113 @@
 <div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button" ng-click="close()">×</button>
     <h3 class="modal-title">{{title}}</h3>
 </div>
-<div class="modal-body modal-edit-playlist row">
-    <form name="$parent.courseForm" class="col-md-12">
-        <div class="form-group">
-            <label class="control-label" for="template">Template:</label>
-            <select id="template" class="form-control" ng-model="course.template.name"
-                    ng-options="template.name as template.name for template in templates">
-            </select>
-        </div>
-        <div class="form-group"
-             ng-class="{'has-error':courseForm.subdomain.$invalid&&(courseForm.subdomain.$dirty)}">
-            <label class="control-label" for="subdomain">Subdomain:</label>
-            <input name="subdomain" id="subdomain" class="form-control " type="text" ng-model="course.subdomain"
-                   ng-change="onSubdomainChange()" tooltip="{{isSubdomainFree?'':'Subdomain is already taken'}}">
-            <!--ng-href="{{protocol+(hostHasWWW?'www.':'')+playlist.subdomain+'.'+domain}}"-->
-            <a ng-href="{{protocol + domain + '/course/' + course.subdomain }}" target="_blank"
-               class="btn btn-primary form-control"
-               ng-disabled="!isSubdomainChecked || !isSubdomainFree || course.subdomain==null || course.subdomain.trim().length==0">Course
-                Link</a>
-        </div>
-        <div class="form-group">
-            <label class="control-label" for="price">Price:</label>
-            <input id="price" class="form-control" ng-model="course.price" money>
-        </div>
-        <div class="form-group" ng-show="isAdd">
-            <label class="control-label" for="title">Title:</label>
-            <input id="title" class="form-control" type="text" ng-model="course.title">
-        </div>
-        <div class="form-group" ng-show="isAdd">
-            <label class="control-label" for="subtitle">Sub Title:</label>
-            <input id="subtitle" class="form-control" type="text" ng-model="course.subtitle">
-        </div>
-        <div class="form-group">
-            <label class="control-label" for="description">Description:</label>
-            <textarea id="description" class="form-control" ng-model="course.description"></textarea>
-        </div>
-        <div class="form-group" ng-show="isAdd">
-            <label class="control-label" for="body">Body:</label>
-            <textarea id="body" class="form-control" ng-model="course.body"></textarea>
-        </div>
-        <div class="checkbox">
-            <label>
-                <input id="showExitIntentModal" type="checkbox" ng-model="playlist.showExitIntentModal"> Show exit
-                intent modal
-            </label>
-        </div>
-    </form>
-    <div class="col-md-12" ng-hide="isAdd">
-        <button type="button" class="btn btn-primary" ng-click="editMode=!editMode" data-toggle="button">Edit template
-        </button>
-        <course-preview course="course" edit-mode="editMode"></course-preview>
-    </div>
-    <div class="col-md-12 subscribers-list-div" ng-hide="isAdd">
-        <div class="clearfix">
-            Subscribers({{subscribers.length}}):
-            <button class="pull-right" type="button" ng-click="showSubscribersCsvUploadModal()">Upload</button>
-            <button class="pull-right" type="button" ng-csv="subscribers" filename="test.csv">Export</button>
-        </div>
-        <div class="well subscribers-list">
-            <table>
-                <tr ng-repeat="subscriber in subscribers">
-                    <td>{{($index+1)+'. '+subscriber.email+'['+(subscriber.subscribeDate | date:'yyyy-MM-dd hh:mm a')+']'}}
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+<div class="modal-body modal-edit-playlist">
+    <tabset>
+        <tab >
+            <tab-heading>
+                <span class='fa fa-info-circle'></span> Course Info
+            </tab-heading>
+            <form name="$parent.courseForm" class="col-md-12">
+                <div class="row">
+                    <div class="form-group col-xs-6">
+                        <label class="control-label" for="title">Title:</label>
+                        <input id="title" class="form-control input-lg" type="text" ng-model="course.title">
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label class="control-label" for="subtitle">Sub Title:</label>
+                        <input id="subtitle" class="form-control input-lg" type="text" ng-model="course.subtitle">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="description">Description:</label>
+                    <textarea id="description" class="form-control input-lg" ng-model="course.description" rows="3"></textarea>
+                </div>
+                <div class="form-group"
+                     ng-class="{'has-error':courseForm.subdomain.$invalid&&(courseForm.subdomain.$dirty)}">
+                     <div class="row">
+                         <div class="col-xs-6">
+                            <label class="control-label" for="subdomain">Subdomain:</label>
+                            <input name="subdomain" id="subdomain" class="form-control input-lg mb30" type="text" ng-model="course.subdomain"
+                                   ng-change="onSubdomainChange()" tooltip="{{isSubdomainFree?'':'Subdomain is already taken'}}">
+                            <!--ng-href="{{protocol+(hostHasWWW?'www.':'')+playlist.subdomain+'.'+domain}}"-->
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="mb25"></div>
+                            <a ng-href="{{protocol + domain + '/course/' + course.subdomain }}" target="_blank"
+                               class="btn btn-primary btn-block btn-lg"
+                               ng-disabled="!isSubdomainChecked || !isSubdomainFree || course.subdomain==null || course.subdomain.trim().length==0">Course
+                                Link</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb30" ng-hide="isAdd">
+                    <label class="control-label" for="price">Price:</label>
+                    <input id="price" class="form-control input-lg" ng-model="course.price" money>
+                </div>
+
+                <div class="ckbox ckbox-primary form-group" ng-hide="isAdd">
+                    <input  id="showExitIntentModal" type="checkbox" ng-model="playlist.showExitIntentModal"/>
+                    <label for="checkboxPrimary">Show Exit Intent Modal</label>
+                    <p class="help-block">An Exit Intent Modal enables you to display a modal before a user leaves your website, helping you increase your landing page conversion rates. From experience, you can expect a 7% to 15% conversion rate increase - depending on your audience, traffic quality and offer.</p>
+                  </div>
+            </form>
+        </tab>
+        <tab disabled="tab.disabled" ng-hide="isAdd">
+            <tab-heading>
+                <span class='fa fa-edit' ng-click="editMode=!editMode"></span> Edit Template
+            </tab-heading>
+                <div class="form-group col-xs-12" ng-hide="isAdd">
+                    <label class="control-label" for="body">Body:</label>
+                    <textarea id="body" class="form-control" ng-model="course.body" rows="3"></textarea>
+                </div>
+                <div class="col-xs-12 row">
+                    <div class="form-group col-xs-6">
+                        <label class="control-label" for="template">Template:</label>
+                        <select id="template" class="form-control input-lg" ng-model="course.template.name"
+                                ng-options="template.name as template.name for template in templates">
+                        </select>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="mb25"></div>
+                        <button type="button" class="btn btn-primary btn-block btn-lg mb30" ng-click="editMode=!editMode" data-toggle="button">Make Editable
+                        </button>
+                    </div>
+                    <div class="col-xs-12">
+                        <course-preview course="course" edit-mode="editMode" standalone="true"></course-preview>
+                    </div>
+                </div>
+        </tab>
+        <tab disabled="tab.disabled" ng-hide="isAdd">
+            <tab-heading>
+                <span class='fa fa-users'></span> Subscribers <span class="badge">{{subscribers.length}}</span>
+            </tab-heading>
+            <div class="col-md-12 subscribers-list-div">
+                    <div class="btn-group pull-right">
+                      <button class="btn btn-default" type="button" ng-click="showSubscribersCsvUploadModal()"><span class="fa fa-upload"></span> Upload</button>
+                        <button class="btn btn-default" type="button" ng-csv="subscribers" filename="test.csv"><span class="fa fa-download"></span> Export</button>
+                    </div>
+                    <div class="clearfix mb20"></div>
+                    <div class="well subscribers-list">
+                        <div ng-show="subscribers.length==0" class="center"><h1>No subscribers have been added.</h1></div>
+                        <table>
+                            <tr ng-repeat="subscriber in subscribers">
+                                <td>{{($index+1)+'. '+subscriber.email+'['+(subscriber.subscribeDate | date:'yyyy-MM-dd hh:mm a')+']'}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+        </tab>
+    </tabset>
 
 </div>
 <div class="modal-footer">
-    <button type="submit" class="btn btn-remove pull-left" ng-show="!isAdd" ng-click="removeCourse()">Remove</button>
-    <button class="btn btn-primary" ng-click="close()">Close</button>
-    <div class="h-spacer-15"></div>
-    <button type="submit" class="btn btn-add" ng-show="isAdd" ng-click="submit()"
+    <button type="submit" class="btn btn-remove pull-left btn-danger" ng-show="!isAdd" ng-click="removeCourse()">Remove</button>
+    <button type="submit" class="btn btn-success btn-add" ng-show="isAdd" ng-click="submit()"
             ng-disabled="!isSubdomainChecked || !isSubdomainFree">Add
     </button>
-    <button type="submit" class="btn btn-add" ng-show="!isAdd" ng-click="submit()"
+    <button type="submit" class="btn btn-success btn-add" ng-show="!isAdd" ng-click="submit()"
             ng-disabled="!isSubdomainChecked || !isSubdomainFree">Save
     </button>
 </div>

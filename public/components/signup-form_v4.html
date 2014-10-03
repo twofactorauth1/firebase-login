@@ -1,30 +1,82 @@
+<div class="row" style='width: 100%; background: {{component.bg.color}};'>
+    <div class="col-md-3"></div>
+    <div class="col-md-7">
+        <wizard on-finish="finishedWizard()" data-ng-show="component" id="{{component.anchor}}" class="component"
+                data-class="signup-form-v4" data-id="{{component._id}}"
+                style="'background':'{{component.bg.color}}';">
 
-
-<div data-ng-show="component" id="{{component.anchor}}" class="component" data-class="signup-form-v4"  style="'background':'{{component.bg.color}}';">
-    <div id="error-msg" class="alert alert-danger hidden">
-        <button type="button" aria-hidden="true" class="close">×</button>
-        <span class="message"></span>
-    </div>
-    <h2 class="ng-binding" style="text-align: center">{{component.title}}</h2>
-    <div style="text-align: center">
-        <form name="{{component.formName}}" id="{{component._id}}" class="form-horizontal">
-            <div ng-repeat="field in component.form_fields" >
-            <div class="form-group row">
-                    <label for="{{field.field_id}}" class="col-sm-4 control-label" >{{field.field_title}}:</label>
-                    <div class="col-sm-4">
-                        <input style="margin-top:5px" type="{{field.field_type}}" class="form-control" id="{{field.field_id}}" data-ng-value="field.field_value" data-ng-disabled="field.field_disabled" />
+            <div id="error-msg" class="alert alert-danger hidden">
+                <button type="button" aria-hidden="true" class="close">×</button>
+                <span class="message"></span>
+            </div>
+            <h2 class="ng-binding" style="text-align: center">{{component.title}}</h2>
+            <div ng-repeat="wizard in component.form_fields">
+                <wz-step title="{{wizard.wizard_step_title}}">
+                    <div class="row" style="text-align: center">
+                        <div class="col-md-2">  </div>
+                        <div class="col-md-7"><h4>{{wizard.wizard_step_title}}</h4></div>
+                        <div class="col-md-3"> </div>
                     </div>
-                <span class="pull-left" style="color: red" ng-show="field.field_required && !field.field_value">* required</span>
 
+                    <div ng-repeat="field in wizard.wizard_fields" >
+                        <div class="row" style="text-align: center">
+                            <div class="col-md-2"><label for="{{field.field_id}}"><h5>{{field.field_title}}:</h5>
+                            </label>
+                            </div>
+                            <div class="col-md-7"><input style="margin-top:5px" type="{{field.field_type}}"
+                                                         class="form-control"
+                                                         id="{{field.field_id}}" data-ng-value="field.field_value"
+                                                         data-ng-disabled="field.field_disabled"/></div>
+                            <div class="col-md-3"><span class="pull-left" style="color: red"
+                                                        ng-show="field.field_required && !field.field_value">* required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="form-actions">
+                        <p class="text-center">
+                            <button class="btn btn-success left" wz-previous><i
+                                    class="icon-edit icon-white {{wizard.wizard_step_btn1.icon}}"></i>
+                                {{wizard.wizard_step_btn1.text}}
+                            </button>
+                            <button class="btn btn-success right" wz-next><i
+                                    class="icon-edit icon-white {{wizard.wizard_step_btn2.icon}}"></i>
+                                {{wizard.wizard_step_btn2.text}}
+                            </button>
+                        </p>
+                    </div>
+                    <br/>
+                    <br/>
+                </wz-step>
+                <wz-step ng-if="$last" title="Signup Completed Successfully">
+                    <div class="row" style="text-align: center">
+                        <div class="col-md-2">  </div>
+                        <div class="col-md-7"><h4>Thank You, Signup Completed Successfully !!!</h4></div>
+                        <div class="col-md-3"> </div>
+                    </div>
+                    <div class="form-actions">
+                        <p class="text-center">
+                            <button class="btn btn-success left" wz-finish><i
+                                    class="icon-edit icon-white {{wizard.wizard_step_btn1.icon}}"></i>
+                                Finish
+                            </button>
+                        </p>
+                    </div>
+                    <br/>
+                    <br/>
+
+                </wz-step>
             </div>
-          </div>
-            <div class="form-actions">
-                <p class="text-center">
-                    <button class="btn btn-success right" type="button" disabled="disabled"><i class="icon-edit icon-white {{component.btn.icon}}"></i>{{component.btn.text}}</button>
-                    <button class="btn btn-danger right" type="button"><i class="icon-remove icon-white"></i>Cancel</button>
-                </p>
-            </div>
-        </form>
+        </wizard>
     </div>
+    <div class="col-md-2"></div>
 </div>
+<div class="row" style='width: 100%; background: {{component.bg.color}};'> <br/>
+    <br/>
+    <br/>
+</div>
+
+
+
 

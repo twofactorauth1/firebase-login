@@ -5,11 +5,8 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div id="contact-us" data-ng-show="component" ng-style="background: {{component.bg.color}};color: {{component.txtcolor}};">
-    <h3 class="editable title" data-class="label">
-        <span data-ng-show="component.title">{{component.title}}</span>
-        <span data-ng-show="!component.title">Contact us Title</span>
-    </h3>
+<div id="contact-us" data-ng-show="component" data-class="contact-us" data-id="{{component._id}}" style="background: {{component.bg.color}}; color: {{component.txtcolor}};">
+    <h3 class="editable title" data-ng-show="component.title" data-class="title" ng-bind-html="component.title"></h3>
 
     <div class="row">
         <div class="col-sm-6">
@@ -19,10 +16,10 @@
         </div>
 
         <div class="col-sm-6">
-            <strong>Our location</strong>
+            <strong data-ng-show="component.title" class="editable" data-class="title" ng-bind-html="component.title"></strong>
 
             <div class="editable ">
-                <span data-ng-show="component.subtitle">{{component.subtitle}}</span>
+                <span data-ng-show="component.subtitle" class="editable" data-class="subtitle" ng-bind-html="component.subtitle"></span>
                 <span data-ng-show="!component.subtitle"><strong>Contact us description</strong></span>
             </div>
 
