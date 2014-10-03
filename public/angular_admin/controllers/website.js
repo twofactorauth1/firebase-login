@@ -43,6 +43,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'angularSortable', 'us
             //get website
             WebsiteService.getWebsite(account.website.websiteId, function (website) {
                 $scope.website = website;
+                $scope.website.settings = $scope.website.settings || {};
                 $scope.primaryColor = $scope.website.settings.primary_color;
                 $scope.secondaryColor = $scope.website.settings.secondary_color;
                 $scope.primaryHighlight = $scope.website.settings.primary_highlight;

@@ -157,7 +157,7 @@ define(['app','constants'], function (app) {
 				if (contact.details && contact.details[0].addresses && contact.details[0].addresses.length > 0) {
 						_address = contact.details[0].addresses[0];
 						var address_str = "";
-						if(_address.lat !== '' && _address.lon !== '')
+						if(_address.lat && _address.lat !== '' && _address.lon !== '')
 						{
 							address_str = _address.lat.concat(",",_address.lon);
 						}
