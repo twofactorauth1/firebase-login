@@ -5,14 +5,19 @@
 		            <div class="inner-page">
 			            <div>
 			                <img ng-src="{{layout.account.business.logo}}" alt="Logo" class="logo">
-			                <h1 class="heading">{{component.title}}</h1>
-			                <p class="text">
-			                    {{component.text}}
-			                </p>
+			                <h1 class="heading">
+			                	<div class="editable" data-class="title" ng-bind-html="component.title"></div>
+			                </h1>
+			                <h5 class="heading">
+			                	<div class="editable" data-class="subtitle" ng-bind-html="component.subtitle"></div>
+			                </h5>
+			                <div class="text">
+			                	<div class="editable" data-class="text" ng-bind-html="component.text"></div>
+			                </div>
 			                <div class="row">
 			                    <!--div id="countdown"></div-->
 			                </div>
-			                <div class="arrow-down">
+			                <div class="arrow-down" ng-show="component.btn.visibility">
 								<a data-ng-href="{{component.btn.url}}" du-smooth-scroll><i class="fa fa-angle-double-down" style="color: {{component.txtcolor||primaryTextColor}};"></i></a>
 							</div>
 			            </div>

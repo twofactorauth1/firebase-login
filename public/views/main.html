@@ -1,3 +1,29 @@
-<div ng-repeat="component in currentpage.components | createUrlFilter track by $index" class="fragment {{transitionState}}">
-    <div ng-include src="component.url"></div>
-</div>
+<!-- <div>
+	<div ng-repeat="component in currentpage.components | createUrlFilter track by $index" class="fragment {{transitionState}}">
+	    <div ng-include src="component.url"></div>
+	</div>
+</div> -->
+
+<ul ui-sortable="sortableOptions">
+	<li ng-repeat="component in currentpage.components | createUrlFilter track by $index" class="fragment {{transitionState}}">
+		<div class="componentActions">
+			<span class="reorder fa fa-arrows"></span>
+			<h4 class="pull-left">{{component.type}}</h4>
+			<span class="settings fa fa-cogs" data-id="{{component._id}}" ng-click="activateSettings()"></span>
+		</div>
+	    <div ng-include src="component.url"></div>
+	    <div class="add-component">
+	    	<a href="">
+	    	<i class="fa fa-plus-circle"></i>
+	    	</a>
+	    </div>
+	</li>
+	<li ng-show="!currentpage.components.length" class="no-component">
+		No Components
+		<div class="add-component">
+	    	<a href="">
+	    		<i class="fa fa-plus-circle"></i>
+	    	</a>
+	    </div>
+	</li>
+</ul>

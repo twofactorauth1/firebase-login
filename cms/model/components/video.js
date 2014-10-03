@@ -34,7 +34,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "masthead",
+            type: "video",
 
             /**
              * Version
@@ -45,7 +45,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            title : "<h1>Masthead Title</h1>",
+            title : "<h1>Video Title</h1>",
 
             /**
              *
@@ -57,7 +57,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            text : "<p>Ullam molestiae est, recusandae ratione rem sit, praesentium laborum corporis. Molestiae quidem libero minima earum error minus voluptatum eligendi cum culpa impedit, dicta tenetur quis similique magni rerum doloribus excepturi aspernatur saepe dignissimos ad est aliquid? Voluptas inventore dignissimos possimus perspiciatis enim.</p>",
+            video : "",
 
             /**
              *
@@ -85,7 +85,6 @@ var component = $$.m.ModelBase.extend({
              *
              */
             btn : {
-                visibility: true,
                 text : "Learn More",
                 url : "#features",
                 icon : "fa fa-rocket"
@@ -111,6 +110,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.MastHead = component;
+$$.m.cms.modules.Video = component;
 
 module.exports = component;
