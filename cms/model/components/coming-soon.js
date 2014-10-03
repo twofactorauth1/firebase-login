@@ -34,10 +34,11 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "masthead",
+            type: "coming-soon",
 
             /**
-             * Version
+             * The version of the component
+             *
              */
             version: 1,
 
@@ -45,25 +46,37 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            title : "<h1>Masthead Title</h1>",
+            txtcolor: "#ffffff",
 
             /**
              *
              *
              */
-            subtitle : "<h4>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </h4>",
+            title : "Coming Soon",
 
             /**
              *
              *
              */
-            text : "<p>Ullam molestiae est, recusandae ratione rem sit, praesentium laborum corporis. Molestiae quidem libero minima earum error minus voluptatum eligendi cum culpa impedit, dicta tenetur quis similique magni rerum doloribus excepturi aspernatur saepe dignissimos ad est aliquid? Voluptas inventore dignissimos possimus perspiciatis enim.</p>",
+            subtitle : "We are getting everything ready.",
 
             /**
              *
              *
              */
-            txtcolor : "#ffffff",
+            text : "This site will be avaliable soon.",
+
+            /**
+             *
+             *
+             */
+            txtcolor : "#2aa9c9",
+
+            /**
+             *
+             *
+             */
+            logo : "https://s3.amazonaws.com/indigenous-account-websites/acct_30/logo.png",
 
             /**
              *
@@ -78,27 +91,12 @@ var component = $$.m.ModelBase.extend({
                     blur : false
                 },
                 color : "#4bb0cb"
-            },
-
-            /**
-             *
-             *
-             */
-            btn : {
-                visibility: true,
-                text : "Learn More",
-                url : "#features",
-                icon : "fa fa-rocket"
-            },
-
-            visibility: true
-
+            }
         }
     },
 
 
     initialize: function(options) {
-
     }
 
 
@@ -111,6 +109,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.MastHead = component;
+$$.m.cms.modules.ComingSoon = component;
 
 module.exports = component;

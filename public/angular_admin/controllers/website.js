@@ -1,4 +1,4 @@
-define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnimate', 'toaster', 'colorpicker', 'angularBootstrapSwitch', 'ngProgress'], function(app) {
+define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnimate', 'toaster', 'colorpicker', 'angularBootstrapSwitch', 'ngProgress', 'unsafeHtml'], function(app) {
     app.register.controller('WebsiteCtrl', ['$scope', '$window', '$timeout', 'WebsiteService', 'UserService', 'toaster', 'ngProgress',
         function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress) {
             ngProgress.start();
@@ -7,6 +7,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
 
             $scope.iframeData = {};
+
+            $scope.allPages = [];
 
             $scope.spectrum = {
                 options: {
@@ -53,6 +55,13 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
 
             document.getElementById("iframe-website").onload = function() {
                 ngProgress.complete();
+                var iframe = document.getElementById("iframe-website");
+                var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                iframe.contentWindow.triggerEditMode();
+                $scope.bindEvents();
+            }
+
+            $scope.bindEvents = function() {
                 var iframe = document.getElementById("iframe-website");
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                 iframe.contentWindow.triggerEditMode();
@@ -161,7 +170,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
             });
 
             /*
-             * Open Status 
+             * Open Status
              */
 
             $scope.status = {
@@ -251,10 +260,12 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                         for (var i2 = 0; i2 < componentEditable.length; i2++) {
                             var componentVar = componentEditable[i2].attributes['data-class'].value;
                             var componentVarContents = componentEditable[i2].innerHTML;
-                            if (componentEditable[i2].querySelectorAll('.ng-binding').length >= 1) {
-                                var span = componentEditable[i2].querySelectorAll('.ng-binding')[0]; // get the span
-                                componentVarContents = span.innerHTML.replace(/(\r\n|\n|\r)/gm, "");
-                            }
+                            // console.log('componentVarContents before >>> ', componentVarContents);
+                            // if (componentEditable[i2].querySelectorAll('.ng-binding').length >= 1) {
+                            //     var span = componentEditable[i2].querySelectorAll('.ng-binding')[0]; // get the span
+                            //     componentVarContents = span.innerHTML.replace(/(\r\n|\n|\r)/gm, "");
+                            // }
+                            // console.log('componentVarContents after >>> ', componentVarContents);
 
                             var setterKey, pa;
                             //if contains an array of variables
@@ -285,9 +296,13 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                 var newComponentOrder = [];
 
                 for (var i = 0; i < componentIdArr.length; i++) {
-                    var matchedComponent = _.findWhere($scope.currentPage.components, { _id: componentIdArr[i]});
+                    var matchedComponent = _.findWhere($scope.currentPage.components, {
+                        _id: componentIdArr[i]
+                    });
                     newComponentOrder.push(matchedComponent);
                 };
+
+                 console.log('newComponentOrder >>> ', newComponentOrder);
 
 
                 //after updating components scope update the whole page
@@ -353,6 +368,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                         var newComponent = data.components[data.components.length - 1];
                         $scope.components.push(newComponent);
                         $scope.updateIframeComponents();
+                        $scope.bindEvents();
                         console.log('newComponent >>> ', newComponent);
                         //$scope.scrollToIframeComponent(newComponent.anchor);
                         toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
@@ -442,12 +458,13 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                 };
 
                 WebsiteService.createPage(websiteId, pageData, function(newpage) {
-                    console.log('Data >>> ', newpage);
+                    console.log('Data >>> ', newpage.title);
                     toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
                     $scope.page = null;
                     $scope.allPages.push(newpage);
                     document.getElementById("iframe-website").setAttribute("src", "/page/" + newpage.handle);
                     $scope.currentPage = newpage;
+                    $scope.pageSelected = newpage.handle;
                     //get components from page
                     if ($scope.currentPage && $scope.currentPage.components) {
                         $scope.components = $scope.currentPage.components;

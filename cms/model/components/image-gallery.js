@@ -35,16 +35,9 @@ var component = $$.m.ModelBase.extend({
             type: "image-gallery",
 
             /**
-             * The label for the component
-             * (optional)
+             * Version
              */
-            label:"",
-
-            /**
-             * A description that appears at the top of the component
-             * (optional)
-             */
-            description:"",
+            version: 1,
 
             /**
              * The image size of the images to display:
@@ -73,8 +66,60 @@ var component = $$.m.ModelBase.extend({
              *      url:                        // The url of the image
              * }]
              */
-            images: [],
-            title:""
+            images : {
+                [
+                    {
+                        image-label : "Project A",
+                        image-description : "Image Description",
+                        image-url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
+                    },
+                    {
+                        image-label : "Project A",
+                        image-description : "Image Description",
+                        image-url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
+                    },
+                    {
+                        image-label : "Project A",
+                        image-description : "Image Description",
+                        image-url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
+                    }
+                ],
+                imageSize : "medium",
+                source : null
+            },
+
+            /**
+             *
+             *
+             */
+            txtcolor : "#ffffff",
+
+            /**
+             *
+             *
+             */
+            bg: {
+                img : {
+                    url : "",
+                    width : null,
+                    height : null,
+                    parallax : false,
+                    blur : false
+                },
+                color : "#4bb0cb"
+            },
+
+            /**
+             *
+             *
+             */
+            btn : {
+                text : "Learn More",
+                url : "#features",
+                icon : "fa fa-rocket"
+            },
+
+            visibility: true
         }
     },
 

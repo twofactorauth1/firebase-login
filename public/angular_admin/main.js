@@ -61,6 +61,7 @@ require.config({
         'formValidationDirective': '/angular_admin/directives/form_validations',
         "constants": 'constants/constants',
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
+        'unsafeHtml': '/angular_admin/filters/unsafe-html',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -133,7 +134,8 @@ require.config({
         'psEditableDirective': {deps: ['angular', 'varModules']},
         'stripeButtonDirective': {deps: ['angular', 'varModules']},
         'htmlify': {deps: ['angular', 'varModules']},
-        'ngProgress': {deps: ['angular']}
+        'ngProgress': {deps: ['angular']},
+        'unsafeHtml': {deps: ['angular']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

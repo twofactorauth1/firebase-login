@@ -13,8 +13,16 @@
 		</div>
 	    <div ng-include src="component.url"></div>
 	    <div class="add-component">
-	    	<a href="#">
+	    	<a href="">
 	    	<i class="fa fa-plus-circle"></i>
+	    	</a>
+	    </div>
+	</li>
+	<li ng-show="!currentpage.components.length" class="no-component">
+		No Components
+		<div class="add-component">
+	    	<a href="">
+	    		<i class="fa fa-plus-circle"></i>
 	    	</a>
 	    </div>
 	</li>

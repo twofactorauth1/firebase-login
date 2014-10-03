@@ -1,23 +1,27 @@
-/********** MastHead **********/
-  .navbar-v2 {
-    .masthead {
-       .home-text {
-        margin-top: 210px!important;
-      }
-    }
-  }
+/********** Video **********/
 
-.masthead .btn .fa {
+.video .btn .fa {
   margin-top: 8px;
 }
 
-  .masthead {
+  .video {
     margin-top: 0;
     transition:none;
     padding: 5em 0;
     height: 100%;
     overflow: hidden;
     background-size: cover!important;
+
+      .videoblock {
+        iframe {
+          margin: 0 auto;
+          display: block;
+        }
+      }
+
+      .aloha-video-block {
+        margin: 0 auto;
+      }
 
       h4  {
         div, i {
@@ -27,9 +31,14 @@
         }
       }
 
-      .masthead-subtitle {
+      .video-title {
+        text-align: center;
+      }
+
+      .video-subtitle {
         max-width: 60%;
         margin: 0 auto;
+        text-align: center;
       }
 
 
@@ -51,11 +60,5 @@
       .btn-text {
         font-weight: bold;
         text-shadow: none;
-      }
-
-      .home-text {
-        padding: 50px 30px;
-        text-shadow: 2px 1px 0px rgba(62, 92, 111, .8);
-        text-align: center;
       }
   }
