@@ -114,6 +114,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             document.getElementsByTagName('body')[0].className+=' editing';
         };
 
+        window.triggerEditModeOff = function() {
+            console.log('trigger edit off');
+            var body = document.getElementsByTagName('body')[0];
+            body.className = body.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
+        };
+
         // $scope.$on('$locationChangeStart', function(event, next, current) {
         //     console.log('location changed '+event+' '+next+' '+current);
         //     $scope.currentLoc = next.replace("?editor=true", "").substr(next.lastIndexOf('/') + 1);

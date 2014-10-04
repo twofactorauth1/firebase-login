@@ -126,20 +126,28 @@ hr {
     }
 }
 
-.editing .fragment {
-  border: none; overflow: hidden;
-  &:hover {
-    border: 2px dashed #34495e;
-    .componentActions {
-      display: block;
-      visibility: visible;
-    }
-    .add-component {
-      display: block;
-      visibility: visible;
+.editing {
+  .no-component {
+    display: block;
+    visibility: visible;
+  }
+  .fragment {
+    border: none; overflow: hidden;
+    &:hover {
+      border: 2px dashed #34495e;
+      .componentActions {
+        display: block;
+        visibility: visible;
+      }
+      .add-component {
+        display: block;
+        visibility: visible;
+      }
     }
   }
 }
+
+
 
 .ui-sortable {
   .dragging {
@@ -167,7 +175,7 @@ ul.ui-sortable.active {
   }
 }
 
-.componentActions, .add-component {
+.componentActions, .add-component, .no-component {
   display: none;
   visibility: hidden;
 }

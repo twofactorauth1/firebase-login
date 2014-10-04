@@ -322,6 +322,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                     $scope.isEditing = false;
                     $scope.deactivateAloha();
+                    iFrame.contentWindow.triggerEditModeOff();
                 });
             };
 
