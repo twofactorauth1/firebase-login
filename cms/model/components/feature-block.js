@@ -46,19 +46,25 @@ var component = $$.m.ModelBase.extend({
              * The Title of the component that shows up on the top
              * (optional)
              */
-            title:"Feature Block",
+            maintitle:"<h2>Feature Block Title</h2>",
 
             /**
              *
              *
              */
-            subtitle:"This is the subtitle.",
+            subtitle:"<h4>This is the subtitle.</h4>",
 
             /**
              *
              *
              */
-            text: "This is the main text for the feature block.",
+            text: "<p>This is the main text for the feature block.</p>",
+
+            /**
+             *
+             *
+             */
+            txtcolor: "#444",
 
             /**
              *
@@ -72,7 +78,7 @@ var component = $$.m.ModelBase.extend({
                     parallax : false,
                     blur : false
                 },
-                color : ""
+                color : "#f7f7f7"
             },
 
             /**

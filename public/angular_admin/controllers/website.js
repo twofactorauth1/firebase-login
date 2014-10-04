@@ -67,6 +67,13 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
 
                 //wait for iframe to load completely
                 $timeout(function() {
+                    //unhide no-component
+
+                    console.log('style >>>', iframeDoc.body.querySelectorAll('.no-component'));
+
+                    iframeDoc.body.querySelectorAll('.no-component')[0].style.display="block";
+                    iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility="visible";
+
                     //add click events for all the settings buttons
                     var settingsBtns = iframeDoc.querySelectorAll('.componentActions .settings');
                     console.log('settingsBtns >>> ', settingsBtns.length);
@@ -98,8 +105,10 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
 
                     iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
                         console.log('dom changed');
-                        $scope.$apply(function() {
-                            $scope.editPage;
+                        setTimeout(function(){
+                            $scope.$apply(function() {
+                                $scope.editPage;
+                            });
                         });
                     }, false);
 
@@ -195,33 +204,6 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                 $event.stopPropagation();
                 $scope.status.isopen = !$scope.status.isopen;
             };
-
-            // $scope.sortableOptions = {
-            //     start: function(e, ui) {
-            //         //get previous element component id
-            //          // var componentId = ui.item[0].attributes['data-componentId'].value;
-            //         that.previousComponentOrder= $scope.currentPage.components;
-            //     },
-            //     stop: function(e, ui) {
-            //         console.log('drag ui', ui );
-            //         $scope.isEditing = true;
-            //         $scope.$apply();
-            //         var pageId = $scope.currentPage._id;
-            //         var componentId = ui.item[0].attributes['data-componentId'].value;
-            //         var newOrder = ui.item.index();
-            //         var appendComponentAfter;
-
-            //         for (var i = 0; i < $scope.currentPage.components.length; i++) {
-            //             if (i === newOrder) {
-            //               appendComponentAfter = $scope.currentPage.components[i]._id;
-            //             }
-            //         };
-
-            //         $scope.updateIframeComponents();
-            //         //$scope.scrollToIframeComponent(componentId);
-
-            //     }//end stor
-            // };
 
             $scope.resfeshIframe = function() {
                 document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
@@ -320,6 +302,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                     $scope.isEditing = false;
                     $scope.deactivateAloha();
+                    iFrame.contentWindow.triggerEditModeOff();
                 });
             };
 
@@ -380,6 +363,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
                         console.log('newComponent >>> ', newComponent);
+                        $scope.deactivateAloha();
+                        $scope.activateAloha();
                         //$scope.scrollToIframeComponent(newComponent.anchor);
                         toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
                     }

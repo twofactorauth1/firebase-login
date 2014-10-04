@@ -311,6 +311,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     getTempAccount: function(req,resp) {
+        self.log.debug(' getTempAccount >>>');
         var self = this;
         var token = cookies.getAccountToken(req);
 
