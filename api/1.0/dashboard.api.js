@@ -72,6 +72,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var dashboard = req.body;
         var dashboardId = req.params.id;
         dashboard._id = dashboardId;
+        var accountId = parseInt(self.accountId(req));
+        dashboard.accountId = accountId;
 
         dashboard.modified = {
             date: new Date(),
