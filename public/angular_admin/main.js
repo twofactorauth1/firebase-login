@@ -58,7 +58,7 @@ require.config({
         'confirmClickDirective': '/angular_admin/directives/confirm_click',
         'resizeHeightDirective': '/angular_admin/directives/resize_height',
         'truncateDirective': '/angular_admin/directives/truncate',
-        'formValidationDirective': '/angular_admin/directives/form_validations',
+        'adminValidationDirective': '/angular_admin/directives/form_validations',
         "constants": 'constants/constants',
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',

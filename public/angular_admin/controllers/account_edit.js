@@ -1,4 +1,4 @@
-define(['app', 'userService', 'underscore', 'commonutils','formValidationDirective', 'ngProgress'], function(app) {
+define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress'], function(app) {
     app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', function ($scope, $stateParams, UserService, ngProgress) {
         ngProgress.start();
         var phoneCharLimit = 4;
