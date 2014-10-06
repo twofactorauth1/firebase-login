@@ -27,7 +27,7 @@ define(['app', 'jqueryGridster', 'jqueryUI', 'ngProgress', 'userService', 'chart
     	}).data('gridster');
 
     	var charts = {};
-    	
+
     	charts.ST_plan_creations = function (boxId) {
     		ChartStripService.getPlanCreations(boxId);
     	};
@@ -84,7 +84,7 @@ define(['app', 'jqueryGridster', 'jqueryUI', 'ngProgress', 'userService', 'chart
     	});
 
         UserService.getUserDashboard(function (dashboard) {
-            $.each(dashboard, function(key, value) {
+            dashboard.config.forEach(function(value, index) {
                 if (value.create) {
                     var setId = value.class.split(' ')[0];
                     var setType = setId.split('-')[0];
