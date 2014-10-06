@@ -171,7 +171,16 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
 		        bindto : '.' + boxId,
 		        data : {
 		        	type : 'bar',
-		            columns : [['friends', 30, 40, 55, 58], ['likes', 130, 340, 400, 500]]
+		            x : 'x',
+		            columns : [['x', '2014-06-20', '2014-07-20', '2014-08-20', '2014-09-20'], ['friends', 30, 40, 55, 58], ['likes', 130, 340, 400, 500]]
+		        },
+		        axis : {
+		            x : {
+		                type : 'timeseries',
+		                tick : {
+		                    format : '%Y-%m-%d'
+		                }
+		            }
 		        }
 		    });
 		};
@@ -425,33 +434,18 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
 		                organic: 7000, 
 		                viral: 6000
 		            }
-		            , {
-		                date: '2014-06-10', 
-		                paid: 6000, 
-		                organic: 6000, 
-		                viral: 1500
-		            }
-		            , {
-		                date: '2014-06-11', 
-		                paid: 5000, 
-		                organic: 7000, 
-		                viral: 1600
-		            }
-		            , {
-		                date: '2014-06-12', 
-		                paid: 7000, 
-		                organic: 8000, 
-		                viral: 1700
-		            }
-		            , {
-		                date: '2014-06-13', 
-		                paid: 2000, 
-		                organic: 9000, 
-		                viral: 1800
-		            }],
+		            ],
 		            keys: {
-		             //   x: 'date',
+		                x: 'date',
 		                value: ['paid', 'organic','viral']
+		            }
+		        },
+		        axis : {
+		            x : {
+		                type : 'timeseries',
+		                tick : {
+		                    format : '%Y-%m-%d'
+		                }
 		            }
 		        }
 		    });
