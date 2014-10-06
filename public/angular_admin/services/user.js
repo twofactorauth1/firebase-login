@@ -72,5 +72,21 @@ define(['app'], function (app) {
 				fn(data);
 			});
 		};
+
+		this.postUserDashboard = function (dashboard, fn) {
+			var apiUrl = baseUrl + ['dashboard'].join('/');
+			$http.post(apiUrl, {config: dashboard})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
+		this.getUserDashboard = function (fn) {
+			var apiUrl = baseUrl + ['dashboard'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
 	});
 });
