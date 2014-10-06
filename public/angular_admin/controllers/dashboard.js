@@ -11,9 +11,7 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
     		helper: 'clone',
     		revert: true,
             stop: function (event, ui) {
-                console.log(chartGrid.serialize());
                 UserService.postUserDashboard(chartGrid.serialize(), function (data) {
-                    console.info(data);
                 });
             }
     	});
@@ -655,7 +653,14 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
     	});
 
         UserService.getUserDashboard(function (dashboard) {
-            console.log(dashboard);
+            $.each(dashboard, function(key, value) {
+                if (value.create) {
+                    var setId = value.class.split(' ')[0];
+                    var setType = setId.split('-')[0];
+                    chartGrid.add_widget('<li class="' + setId + ' gridster-item"></li>', value.size_x, value.size_y, value.col, value.row);
+                    charts[setType](setId);
+                }
+            });
             ngProgress.complete();
         });
 
