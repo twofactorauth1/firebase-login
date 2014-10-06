@@ -279,6 +279,13 @@
                     </div>
                     <div class="panel-body">
                         <div class="indigeweb-skeuocard" user='user'></div>
+                        <div class="row"></div>
+                        <div class="row">
+                            <button id="btn-new-address" class="btn btn-primary btn-sm"
+                                ng-click="subscribeMonthlyFn()" ng-show="billing.stripeCustomerId">Subscribe Monthly</button>
+                            <button id="btn-new-address" class="btn btn-primary btn-sm"
+                                ng-click="subscribeAnnuallyFn()" ng-show="billing.stripeCustomerId">Subscribe Annually</button>
+                        </div>
                     </div>
                 </div>
             </div>
