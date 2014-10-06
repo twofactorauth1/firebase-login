@@ -1,5 +1,5 @@
 define(['angularAMD'], function (angularAMD) {
-    angularAMD.directive('stateNav', ['$state', function ($state) {
+    angularAMD.directive('indigewebStateNav', ['$state', function ($state) {
             return {
                 restrict: 'A',
                 link: function (scope, element, attrs) {

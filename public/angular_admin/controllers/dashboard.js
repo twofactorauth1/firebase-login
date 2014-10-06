@@ -170,16 +170,8 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
 		    c3.generate({
 		        bindto : '.' + boxId,
 		        data : {
-		            x : 'x',
-		            columns : [['x', '2014-06-20', '2014-07-20', '2014-08-20', '2014-09-20'], ['friends', 30, 40, 55, 58], ['likes', 130, 340, 400, 500]]
-		        },
-		        axis : {
-		            x : {
-		                type : 'timeseries',
-		                tick : {
-		                    format : '%Y-%m-%d'
-		                }
-		            }
+		        	type : 'bar',
+		            columns : [['friends', 30, 40, 55, 58], ['likes', 130, 340, 400, 500]]
 		        }
 		    });
 		};
@@ -233,6 +225,7 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
 		    c3.generate({
 		        bindto : '.' + boxId,
 		        data : {
+		        	type : 'pie',
 		            json:[ {
 		                date: '2014-06-21', 
 		                likes: '2', 
@@ -269,16 +262,7 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
 		                title: 'Post title'
 		            }],
 		            keys: {
-		                x: 'date',
 		                value: ['likes', 'shares','comments']
-		            }
-		        },
-		        axis : {
-		            x : {
-		                type : 'timeseries',
-		                tick : {
-		                    format : '%Y-%m-%d'
-		                }
 		            }
 		        }
 		    });
@@ -386,6 +370,7 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
 		    c3.generate({
 		        bindto : '.' + boxId,
 		        data : {
+		        	type: 'bar',
 		            json:[{
 		                date: '2014-06-21', 
 		                paid: 5000, 
@@ -465,16 +450,8 @@ define(['app', 'c3', 'jqueryGridster', 'jqueryUI', 'paymentService', 'twoNetServ
 		                viral: 1800
 		            }],
 		            keys: {
-		                x: 'date',
+		             //   x: 'date',
 		                value: ['paid', 'organic','viral']
-		            }
-		        },
-		        axis : {
-		            x : {
-		                type : 'timeseries',
-		                tick : {
-		                    format : '%Y-%m-%d'
-		                }
 		            }
 		        }
 		    });
