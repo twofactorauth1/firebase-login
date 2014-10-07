@@ -305,6 +305,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
 
                  console.log('newComponentOrder >>> ', newComponentOrder);
 
+                 $scope.currentPage.components = newComponentOrder;
+
 
 
                 WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id,  $scope.currentPage, function(data) {
