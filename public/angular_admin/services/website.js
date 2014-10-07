@@ -132,12 +132,12 @@ define(['app'], function (app) {
 		};
 
 		//website/:websiteId/page
-		this.createPage = function(websiteId, data, fn) {
+		this.createPage = function(websiteId, pagedata, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page'].join('/');
 			$http({
 			    url: apiUrl,
 			    method: "POST",
-			    data: angular.toJson(data)
+			    data: angular.toJson(pagedata)
 			})
 			.success(function (data, status, headers, config) {
 				fn(data);

@@ -502,7 +502,7 @@ module.exports = {
         self.log = log;
 
 
-        self.log.debug('>> createPage');
+        self.log.debug('>> createPage', page);
         cmsDao.saveOrUpdate(page, function(err, value){
             if(err) {
                 self.log.error('Error creating page: ' + err);
@@ -512,34 +512,37 @@ module.exports = {
                 self.log.debug('created page.  Updating Linklists');
                 //console.dir(page);
                 //console.dir(value);
-                self.getWebsiteLinklistsByHandle(value.get('websiteId'),"head-menu",function(err,list){
-                    if(err) {
-                        self.log.error('Error getting website linklists by handle: ' + err);
-                        fn(err, value);
-                    } else {
-                        var link={
-                            label:page.get('title'),
-                            type:"link",
-                            linkTo:{
-                                type:"page",
-                                data:page.get('handle')
-                            }
-                        };
-                        list.links.push(link);
-                        self.updateWebsiteLinklists(value.get('websiteId'),"head-menu",list,function(err, linkLists){
-                            if(err) {
-                                self.log.error('Error updating website linklists by handle: ' + err);
-                                fn(err, value);
-                            } else {
-                                self.log.debug('<< createPage');
-                                fn(null, value);
-                            }
-                        });
-                    }
+                if (page.get('mainmenu') == true) {
+                    self.getWebsiteLinklistsByHandle(value.get('websiteId'),"head-menu",function(err,list){
+                        if(err) {
+                            self.log.error('Error getting website linklists by handle: ' + err);
+                            fn(err, value);
+                        } else {
+                            var link={
+                                label:page.get('title'),
+                                type:"link",
+                                linkTo:{
+                                    type:"page",
+                                    data:page.get('handle')
+                                }
+                            };
+                            list.links.push(link);
+                            self.updateWebsiteLinklists(value.get('websiteId'),"head-menu",list,function(err, linkLists){
+                                if(err) {
+                                    self.log.error('Error updating website linklists by handle: ' + err);
+                                    fn(err, value);
+                                } else {
+                                    self.log.debug('<< createPage');
+                                    fn(null, value);
+                                }
+                            });
+                        }
 
-                })
-
-
+                    });
+                } else {
+                    self.log.debug('<< without mainmenu');
+                    fn(null, value);
+                }
             }
         });
     },
