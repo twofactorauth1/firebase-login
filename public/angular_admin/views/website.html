@@ -57,6 +57,14 @@
                     <label>Title:</label>
                     <input class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">
                 </div>
+                <div class="form-group">
+                    <label>URL:</label>
+                    <input class="form-control input-lg" type="text" ng-model="currentPage.handle" ng-change="editPage()">
+                </div>
+                <div class="form-group">
+                    <label>Show:</label>
+                    <input bs-switch ng-model="currentPage.visible.visibility" type="checkbox" class="pull-right" ng-change="editPage()">
+                </div>
 
                 <div class="mb20"></div>
 

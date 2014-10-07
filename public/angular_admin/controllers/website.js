@@ -307,8 +307,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                  console.log('newComponentOrder >>> ', newComponentOrder);
 
 
-                //after updating components scope update the whole page
-                WebsiteService.updateAllComponents(pageId, newComponentOrder, function(data) {
+
+                WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id,  $scope.currentPage, function(data) {
                     toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                     $scope.isEditing = false;
                     $scope.deactivateAloha();
