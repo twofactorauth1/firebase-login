@@ -5,6 +5,10 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
         ngProgress.start();
 
+        $scope.updateBilling = function (billing) {
+            $scope.billing = billing;
+        };
+
         $scope.subscribeMonthlyFn = function () {
             if ($scope.billing.stripeCustomerId) {
                 UserService.postUserSubscriptions($scope.billing.stripeCustomerId, 'monthly_access', function (data) {
