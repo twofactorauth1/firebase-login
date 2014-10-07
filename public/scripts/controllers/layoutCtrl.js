@@ -111,7 +111,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         window.triggerEditMode = function() {
             console.log('trigger edit');
-            document.getElementsByTagName('body')[0].className+=' editing';
+            var body = document.getElementsByTagName('body')[0];
+            var hasClass = body.classList.contains('editing');
+            if(hasClass === false)
+            {
+                 body.className+=' editing';
+            }
         };
 
         window.triggerEditModeOff = function() {

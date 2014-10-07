@@ -20663,11 +20663,23 @@ input[type='file'] {
   z-index: 99999;
   box-shadow: 0 0 12px -1px #000000;
 }
-#edit-component-modal #bootstrap-switch {
+.website-controls #edit-component-modal #bootstrap-switch {
   float: right;
 }
-.btn-create-page {
+.website-controls .btn-add {
   margin-right: 10px;
+}
+.website-controls.editing {
+  background: #2ecc71;
+}
+.website-controls.editing h2 {
+  color: white!important;
+}
+.website-controls.editing .btn {
+  background: none!important;
+  border: 2px solid #fff!important;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3) !important;
+  color: #ffffff!important;
 }
 .blog-item {
   background: #fcfcfc;

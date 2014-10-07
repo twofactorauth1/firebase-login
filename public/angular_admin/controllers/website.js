@@ -104,7 +104,6 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     //TODO get event from stop
 
                     iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
-                        console.log('dom changed');
                         setTimeout(function(){
                             $scope.$apply(function() {
                                 $scope.editPage;
