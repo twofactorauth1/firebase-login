@@ -1,4 +1,4 @@
-define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutils','formValidationDirective', 'ngProgress'], function(app) {
+define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress'], function(app) {
     app.register.controller('CustomerEditCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', function ($scope, CustomerService, $stateParams, $state, ngProgress) {
         ngProgress.start();
         var displayAddressCharLimit = 2;

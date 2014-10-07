@@ -1,5 +1,5 @@
 define(['angularAMD'], function (angularAMD) {
-    angularAMD.directive('resize', function ($window) {
+    angularAMD.directive('indigewebResize', function ($window) {
         return function (scope, element) {
             var w = angular.element($window);
             scope.getWindowDimensions = function () {

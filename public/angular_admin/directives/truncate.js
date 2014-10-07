@@ -1,5 +1,5 @@
 define(['angularAMD'], function (angularAMD) {
-    angularAMD.directive('truncate', [function () {
+    angularAMD.directive('indigewebTruncate', [function () {
             return {
                 restrict: 'A',
                 scope: {
