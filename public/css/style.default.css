@@ -15955,7 +15955,7 @@ strong {
   color: #44b2cc!important;
   box-shadow: 0 0 10px 0;
   /* Inherits the font color */
-  height: 2px;
+  height: 4px!important;
   opacity: 0;
   /* Add CSS3 styles for transition smoothing */
   -webkit-transition: all 0.5s ease-in-out;
@@ -17180,9 +17180,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .leftpanel-collapsed .leftpanelinner {
   padding: 0;
-}
-.leftpanel-collapsed .leftpanelinner .sidebartitle {
-  display: none;
 }
 .leftpanel-collapsed .nav-bracket {
   margin: 5px;
@@ -20501,6 +20498,46 @@ body {
   width: 100%;
   max-width: 241px;
 }
+.rightpanel-website .tab-content {
+  padding: 10px 15px;
+}
+.rightpanel-website .leftpanelinner {
+  margin-top: 0;
+}
+.rightpanel-website .nav-tabs > li > a {
+  padding: 15px 20px 20px 20px!important;
+}
+.componentActions {
+  position: absolute;
+  z-index: 99999;
+  width: 100%;
+  margin-right: 10px;
+}
+.componentActions span {
+  background: rgba(44, 62, 80, 0.8);
+  padding: 20px;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+.componentActions .reorder {
+  float: left;
+}
+.componentActions .reorder:hover {
+  color: #54C8E8;
+}
+.componentActions .delete {
+  float: right;
+}
+.componentActions .delete:hover {
+  color: #d9534f;
+}
+.componentActions .settings {
+  float: right;
+}
+.componentActions .settings:hover {
+  color: #efa022;
+}
 .fixed {
   position: fixed;
   top: 0;
@@ -22386,12 +22423,10 @@ path {
 }
 .contact-us-v1 .contact-us-title {
   text-align: center;
-  color: #176134;
   text-transform: uppercase;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.4);
 }
 .contact-us-v1 .contact-us-subtitle {
-  color: white;
   text-align: center;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
 }
@@ -22470,9 +22505,6 @@ path {
   margin-right: 50px;
 }
 /********** Feature List v1 **********/
-.feature-list-v1 .row {
-  margin: 0;
-}
 .feature-list-v1 .features-wrap {
   margin: 2%;
 }
@@ -22780,6 +22812,7 @@ ul.nav {
 /********** Feature Block **********/
 .feature-block {
   padding: 40px 0px;
+  min-height: 400px;
 }
 .feature-block .feature-block-title {
   text-align: center;
@@ -22801,12 +22834,14 @@ ul.nav {
 .feature-block .feature-block-subtitle {
   max-width: 600px;
   margin: 15px auto;
-  color: white;
   text-align: center;
 }
 .feature-block .feature-block-subtitle a {
   color: white;
   text-decoration: underline;
+}
+.feature-block .feature-block-text {
+  text-align: center;
 }
 .feature-block .inner-page {
   padding: 10px 0;
@@ -23411,7 +23446,6 @@ div[data-class='image-text'] p {
 .masthead .masthead-subtitle {
   max-width: 60%;
   margin: 0 auto;
-  font-size: 18px;
 }
 .masthead .btn {
   width: 200px;
@@ -24283,6 +24317,73 @@ hr {
 #body.no-outline .aloha-editable-active {
   outline: none!important;
 }
+.fragment {
+  display: block;
+}
+.add-component {
+  font-size: 50px;
+  height: 40px;
+  background: #fff;
+  border-radius: 25px;
+  position: absolute;
+  margin-top: -25px;
+  left: 50%;
+  z-index: 999;
+}
+.add-component i {
+  margin-top: -3px;
+}
+.add-component:hover {
+  background: #4eb1ca;
+  pointer-events: auto;
+}
+.editing .no-component {
+  display: block;
+  visibility: visible;
+}
+.editing .fragment {
+  border: none;
+  overflow: hidden;
+}
+.editing .fragment:hover {
+  border: 2px dashed #34495e;
+}
+.editing .fragment:hover .componentActions {
+  display: block;
+  visibility: visible;
+}
+.editing .fragment:hover .add-component {
+  display: block;
+  visibility: visible;
+}
+.ui-sortable .dragging {
+  height: 60px!important;
+}
+.ui-sortable .componentActions h4 {
+  display: none;
+}
+ul.ui-sortable.active .fragment {
+  height: 60px!important;
+}
+ul.ui-sortable.active .fragment .componentActions {
+  display: block;
+  visibility: visible;
+  border: 1px solid #ccc;
+  background: #fafafa;
+}
+ul.ui-sortable.active .fragment .componentActions h4 {
+  display: block;
+}
+.componentActions,
+.add-component,
+.no-component {
+  display: none;
+  visibility: hidden;
+}
+.no-component .add-component {
+  display: block;
+  visibility: visible;
+}
 .coming-soon {
   height: 100%;
 }
@@ -24409,6 +24510,16 @@ hr {
   -ms-animation: arrowBounce 2.5s infinite;
   animation: arrowBounce 2.5s infinite;
 }
+.image-gallery-v1 .image-gallery-title {
+  text-align: center;
+}
+.image-gallery-v1 .image-gallery-subtitle {
+  text-align: center;
+}
+.image-gallery-v1 .single-image {
+  padding: 0;
+  margin: 0;
+}
 .image-gallery-v1 a.thumbnail .caption {
   display: block;
   background: #222;
@@ -24457,8 +24568,8 @@ hr {
   transition: all 0.2s ease-in-out;
 }
 .image-gallery-v1 .thumbnail img {
-  height: 260px;
-  width: 350px;
+  height: 240px;
+  width: 310px;
 }
 .image-gallery-v1 .imgHeight {
   height: 285px;
@@ -24705,4 +24816,53 @@ hr {
 .contact-us-v5 .map {
   height: 344px;
   margin-right: 50px;
+}
+/********** Video **********/
+.video-block .btn .fa {
+  margin-top: 8px;
+}
+.video-block {
+  margin-top: 0;
+  transition: none;
+  padding: 5em 0;
+  height: 100%;
+  overflow: hidden;
+  background-size: cover!important;
+}
+.video-block .videoblock iframe {
+  margin: 0 auto;
+  display: block;
+}
+.video-block .aloha-video-block {
+  margin: 0 auto;
+}
+.video-block h4 div,
+.video-block h4 i {
+  float: left;
+  text-indent: 17px;
+  line-height: 18px;
+}
+.video-block .video-title {
+  text-align: center;
+}
+.video-block .video-subtitle {
+  max-width: 60%;
+  margin: 0 auto;
+  text-align: center;
+}
+.video-block .btn {
+  width: 200px;
+  height: 50px;
+  margin-top: 30px;
+  line-height: 30px;
+}
+.video-block .btn .fa {
+  float: left;
+}
+.video-block .row {
+  margin: 0;
+}
+.video-block .btn-text {
+  font-weight: bold;
+  text-shadow: none;
 }
