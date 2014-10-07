@@ -88,5 +88,13 @@ define(['app'], function (app) {
 				fn(data);
 			});
 		};
+
+		this.postUserDashboardUpdate = function (id, dashboard, fn) {
+			var apiUrl = baseUrl + ['dashboard', id].join('/');
+			$http.post(apiUrl, {config: dashboard})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
 	});
 });
