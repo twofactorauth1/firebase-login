@@ -1,4 +1,4 @@
-define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnimate', 'toaster', 'colorpicker', 'angularBootstrapSwitch', 'ngProgress', 'unsafeHtml'], function(app) {
+define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnimate', 'toaster', 'colorpicker', 'angularBootstrapSwitch', 'ngProgress', 'unsafeHtml','mediaDirective'], function(app) {
     app.register.controller('WebsiteCtrl', ['$scope', '$window', '$timeout', 'WebsiteService', 'UserService', 'toaster', 'ngProgress',
         function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress) {
             ngProgress.start();
@@ -104,12 +104,16 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     //TODO get event from stop
 
                     iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
-                        console.log('dom changed');
                         setTimeout(function(){
                             $scope.$apply(function() {
                                 $scope.editPage;
                             });
                         });
+                    }, false);
+
+                    iframeDoc.addEventListener("dblclick", function(e) {
+                        console.log('double click');
+                        $scope.editPage();
                     }, false);
 
                 }, 500);
@@ -225,6 +229,11 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                 $scope.updateIframeComponents();
                 $scope.deactivateAloha();
                 $scope.isEditing = false;
+                iFrame.contentWindow.triggerEditModeOff();
+            };
+
+            $scope.doubleClick = function() {
+                console.log('doubleClick');
             };
 
             //TODO: use scope connection 
@@ -297,13 +306,15 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                  console.log('newComponentOrder >>> ', newComponentOrder);
 
 
-                //after updating components scope update the whole page
-                WebsiteService.updateAllComponents(pageId, newComponentOrder, function(data) {
+
+                WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id,  $scope.currentPage, function(data) {
                     toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                     $scope.isEditing = false;
                     $scope.deactivateAloha();
                     iFrame.contentWindow.triggerEditModeOff();
                 });
+
+                //website service - save page data
             };
 
             $scope.updatePage = function(handle) {
@@ -333,8 +344,14 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                 WebsiteService.getPages(that.account.website.websiteId, function(pages) {
                     var currentPage = $scope.pageSelected;
                     console.log('Current Page Selected >>> ', currentPage);
-                    that.allPages = pages;
-                    $scope.allPages = pages;
+                    var parsed = angular.fromJson(pages);
+                    var arr = [];
+
+                    for (var x in parsed) {
+                        arr.push(parsed[x]);
+                    }
+                    $scope.allPages = arr;
+                    that.allPages = arr;
                     $scope.currentPage = _.findWhere(pages, {
                         handle: currentPage
                     });
@@ -443,17 +460,18 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
             };
 
             $scope.createPage = function(page) {
-                console.log('create page');
+                console.log('create page', page);
 
                 var websiteId = $scope.currentPage.websiteId;
 
                 var pageData = {
                     title: page.title,
-                    handle: page.handle
+                    handle: page.handle,
+                    mainmenu: page.mainmenu
                 };
 
                 WebsiteService.createPage(websiteId, pageData, function(newpage) {
-                    console.log('Data >>> ', newpage.title);
+                    console.log('$scope.allPages >>> ', $scope.allPages);
                     toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
                     $scope.page = null;
                     $scope.allPages.push(newpage);

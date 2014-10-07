@@ -1,5 +1,5 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective'], function (angularAMD) {
-    var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var']);
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective','angularFileUpload'], function (angularAMD) {
+    var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var','angularFileUpload']);
 
     //routes
     app.config(function ($stateProvider, $urlRouterProvider) {

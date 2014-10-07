@@ -40,6 +40,23 @@ define(['app'], function (app) {
             });
 		};
 
+		// website/:websiteId/page/:id
+		this.updatePage = function(websiteId, pageId, pagedata, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(pagedata)
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service updatePage with ERROR');
+                fn(err, null);
+            });
+		};
+
 		//page/:id/components/all
 		this.updateComponentOrder = function(pageId, componentId, newOrder, fn) {
 			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', componentId, 'order', newOrder].join('/');
@@ -132,12 +149,12 @@ define(['app'], function (app) {
 		};
 
 		//website/:websiteId/page
-		this.createPage = function(websiteId, data, fn) {
+		this.createPage = function(websiteId, pagedata, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page'].join('/');
 			$http({
 			    url: apiUrl,
 			    method: "POST",
-			    data: angular.toJson(data)
+			    data: angular.toJson(pagedata)
 			})
 			.success(function (data, status, headers, config) {
 				fn(data);

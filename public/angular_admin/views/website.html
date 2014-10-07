@@ -1,7 +1,8 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
-<div class="pageheader row">
+<div class="pageheader row website-controls" ng-class="{true: 'editing', false: ''}[isEditing == true]">
     <div class="col-xs-6">
-        <h2 class="pull-left" style="margin-right: 15px;"><i class="fa fa-desktop"></i> Editing</h2>
+        <h2 class="pull-left" style="margin-right: 15px;" ng-show="isEditing"><i class="fa fa-desktop"></i> Editing</h2>
+        <h2 class="pull-left" style="margin-right: 15px;" ng-show="!isEditing"><i class="fa fa-desktop"></i> Viewing</h2>
         <div class="btn-group pull-left" dropdown is-open="status.isopen">
             <button type="button" class="btn btn-orange dropdown-toggle" ng-disabled="disabled">
                 {{pageSelected || 'index'}}
@@ -28,62 +29,37 @@
             <span class="fa fa-times"></span>
             <span class="hidden-xs">Cancel</span>
         </a>
-        <a class="btn btn-success pull-right btn-media-manager" type="button" data-toggle="modal" data-target="#media-manager-modal">
-            <span class="fa fa-image"></span>
-            <span class="hidden-xs">Media</span>
-        </a>
+        <!--<a class="btn btn-success pull-right btn-media-manager" type="button" data-toggle="modal" data-target="#media-manager-modal">-->
+            <!--<span class="fa fa-image"></span>-->
+            <!--<span class="hidden-xs">Media</span>-->
+            <span class="mediaModal" user='user'></span>
+        <!--</a>-->
 
-        <a class="btn btn-success pull-right btn-create-page" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
+        <!-- <a class="btn btn-success pull-right btn-create-page" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
             <span> Page</span>
         </a>
+
+        <a class="btn btn-success pull-right btn-create-post" data-toggle="modal" data-target="#create-post-modal"><i class="fa fa-plus"></i>
+            <span> Post</span>
+        </a> -->
+
+        <div class="btn-group pull-right btn-add">
+          <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"> Add <span class="caret"></span></button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#" data-toggle="modal" data-target="#create-page-modal"> Page</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#create-post-modal"> Post</a></li>
+          </ul>
+        </div>
+
         <div class="clearfix"></div>
     </div>
 </div>
 
 <img ng-show="isMobile" src="https://s3-us-west-2.amazonaws.com/indigenous-admin/iphone-background.png">
-<iframe id="iframe-website" name="iframe-website" onload="iframeLoaded()" src="/?editor=true" style="width: 100%;" ng-style="style()" indigeweb-resize></iframe>
+<iframe ng-dblclick="doubleClick()" id="iframe-website" name="iframe-website" onload="iframeLoaded()" src="/?editor=true" style="width: 100%;" ng-style="style()" indigeweb-resize></iframe>
 
 <div class="rightpanel rightpanel-website">
     <tabset>
-        <tab active="tab.active">
-            <tab-heading>
-                <i class="fa fa-file-text-o" tooltip-placement="bottom" tooltip="Page"></i>
-            </tab-heading>
-            <div class="leftpanelinner">
-                <h5 class="sidebartitle">Page</h5>
-                <hr/>
-                <div class="form-group">
-                    <label>Title:</label>
-                    <input class="form-control input-lg" type="text" ng-model="currentPage.title">
-                </div>
-
-                <div class="mb20"></div>
-
-                <div id="nestable" class="hidden">
-                    <h4>Components ({{components.length}})</h4>
-                    <button class="btn btn-orange btn-block" data-toggle="modal" data-target="#add-component-modal"><i class="fa fa-plus"></i>
-                        <span>Component</span>
-                    </button>
-                    <div class="mb10"></div>
-                    <ul ui-sortable="sortableOptions" ng-model="components">
-                        <li ng-repeat="(key, val) in components" class="dd-item dd3-item" data-id="14" data-section="services" data-componentId="{{val._id}}" ng-mouseenter="showActions = true" ng-mouseleave="showActions = false">
-                            <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
-                            </div>
-                            <div class="dd3-content">{{val.handle||val.type}}</div>
-                            <div class="dd3-actions">
-                                <i class="fa fa-edit" tooltip-placement="top" tooltip="Edit" data-toggle="modal" data-target="#edit-component-modal" ng-click="editComponent(val._id)"></i>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="well">
-                    <p>Danger Zone</p>
-                    <button class="btn btn-block btn-danger" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
-                </div>
-                <!-- leftpanelinner -->
-            </div>
-        </tab>
         <tab>
             <tab-heading>
                 <i class="fa fa-paint-brush" tooltip-placement="bottom" tooltip="Theme"></i>
@@ -150,6 +126,53 @@
                 <div class="mb15"></div>
                 <label for="current-domain">Custom Domain Name</label>
                 <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.accountUrl">
+            </div>
+        </tab>
+        <tab active="tab.active">
+            <tab-heading>
+                <i class="fa fa-file-text-o" tooltip-placement="bottom" tooltip="Page"></i>
+            </tab-heading>
+            <div class="leftpanelinner">
+                <h5 class="sidebartitle">Page</h5>
+                <hr/>
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">
+                </div>
+                <div class="form-group" ng-hide="currentPage.handle == 'index'">
+                    <label>URL:</label>
+                    <input class="form-control input-lg" type="text" ng-model="currentPage.handle" ng-change="editPage()">
+                </div>
+                <div class="form-group" ng-hide="currentPage.handle == 'index'">
+                    <label>Show:</label>
+                    <input bs-switch ng-model="currentPage.visible.visibility" type="checkbox" class="pull-right" ng-change="editPage()">
+                </div>
+
+                <div class="mb20"></div>
+
+                <div id="nestable" class="hidden">
+                    <h4>Components ({{components.length}})</h4>
+                    <button class="btn btn-orange btn-block" data-toggle="modal" data-target="#add-component-modal"><i class="fa fa-plus"></i>
+                        <span>Component</span>
+                    </button>
+                    <div class="mb10"></div>
+                    <ul ui-sortable="sortableOptions" ng-model="components">
+                        <li ng-repeat="(key, val) in components" class="dd-item dd3-item" data-id="14" data-section="services" data-componentId="{{val._id}}" ng-mouseenter="showActions = true" ng-mouseleave="showActions = false">
+                            <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
+                            </div>
+                            <div class="dd3-content">{{val.handle||val.type}}</div>
+                            <div class="dd3-actions">
+                                <i class="fa fa-edit" tooltip-placement="top" tooltip="Edit" data-toggle="modal" data-target="#edit-component-modal" ng-click="editComponent(val._id)"></i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="well">
+                    <p>Danger Zone</p>
+                    <button class="btn btn-block btn-danger" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                </div>
+                <!-- leftpanelinner -->
             </div>
         </tab>
         <tab>
@@ -274,6 +297,13 @@
                         <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
                         <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle">
                     </div>
+                    <div class="clearfix mb15"></div>
+                    <div class="form-group">
+                        <div class="ckbox ckbox-success">
+                            <input type="checkbox" id="add-to-menu" ng-model="page.mainmenu" checked>
+                            <label for="add-to-menu">Add to Main Menu?</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -362,9 +392,9 @@
                 </button>
                 <button type="button" class="btn btn-primary btn-edit-component" data-dismiss="modal" ng-click="saveComponent(componentEditing)">Update</button>
             </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+<div id="model_container"></div>

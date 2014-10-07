@@ -18,7 +18,7 @@ define(['app'], function (app) {
 		};
 
 		this.getAccount = function (fn) {
-			var apiUrl = baseUrl + ['account', $$.server.userId].join('/');
+			var apiUrl = baseUrl + ['account', $$.server.accountId].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
