@@ -1,4 +1,4 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress'], function(app) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress','mediaDirective'], function(app) {
     app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', function ($scope, UserService, PaymentService, ngProgress) {
         var billing = {};
         var subscriptions = {};

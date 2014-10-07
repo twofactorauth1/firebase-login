@@ -16,6 +16,7 @@ var view = function(req,resp,options) {
 
 _.extend(view.prototype, BaseView.prototype, {
 
+    log: null,
     show: function(accountId) {
             this._show(accountId, "index");
     },

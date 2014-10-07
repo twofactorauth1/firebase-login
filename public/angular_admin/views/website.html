@@ -28,10 +28,11 @@
             <span class="fa fa-times"></span>
             <span class="hidden-xs">Cancel</span>
         </a>
-        <a class="btn btn-success pull-right btn-media-manager" type="button" data-toggle="modal" data-target="#media-manager-modal">
-            <span class="fa fa-image"></span>
-            <span class="hidden-xs">Media</span>
-        </a>
+        <!--<a class="btn btn-success pull-right btn-media-manager" type="button" data-toggle="modal" data-target="#media-manager-modal">-->
+            <!--<span class="fa fa-image"></span>-->
+            <!--<span class="hidden-xs">Media</span>-->
+            <span class="mediaModal" user='user'></span>
+        <!--</a>-->
 
         <a class="btn btn-success pull-right btn-create-page" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
             <span> Page</span>
@@ -362,9 +363,9 @@
                 </button>
                 <button type="button" class="btn btn-primary btn-edit-component" data-dismiss="modal" ng-click="saveComponent(componentEditing)">Update</button>
             </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+<div id="model_container"></div>
