@@ -25,7 +25,7 @@ define(['app', 'constants'], function(app) {
 						path = "friends/import/"
 						break;
 					case $$.constants.social.types.GOOGLE:
-						api += "google";
+						api += "google/";
 						path = "contacts/import/";
 						break;
 					case $$.constants.social.types.LINKEDIN:
