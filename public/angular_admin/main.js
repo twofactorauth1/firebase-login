@@ -55,6 +55,7 @@ require.config({
         'chartFacebookService': '/angular_admin/services/chart_facebook',
         'chartStripService': '/angular_admin/services/chart_strip',
         'chartTwoNetService': '/angular_admin/services/chart_two_net',
+        'importContactService': '/angular_admin/services/import_contacts',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'hoverClassDirective': '/angular_admin/directives/hover_class',
