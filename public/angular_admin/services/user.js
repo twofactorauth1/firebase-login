@@ -66,7 +66,7 @@ define(['app'], function (app) {
 		};
 
 		this.postUserSubscriptions = function (stripeCustomerId, planId, fn) {
-			var apiUrl = baseUrl + ['customers', stripeCustomerId, 'subscriptions'].join('/');
+			var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeCustomerId, 'subscriptions'].join('/');
 			$http.post(apiUrl, {plan: planId})
 			.success(function (data, status, headers, config) {
 				fn(data);

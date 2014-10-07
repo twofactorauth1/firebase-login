@@ -84,14 +84,16 @@ define(['app', 'jqueryGridster', 'jqueryUI', 'ngProgress', 'userService', 'chart
     	});
 
         UserService.getUserDashboard(function (dashboard) {
-            dashboard.config.forEach(function(value, index) {
-                if (value.create) {
-                    var setId = value.class.split(' ')[0];
-                    var setType = setId.split('-')[0];
-                    chartGrid.add_widget('<li class="' + setId + ' gridster-item"></li>', value.size_x, value.size_y, value.col, value.row);
-                    charts[setType](setId);
-                }
-            });
+            if (dashboard.config) {
+                dashboard.config.forEach(function(value, index) {
+                    if (value.create) {
+                        var setId = value.class.split(' ')[0];
+                        var setType = setId.split('-')[0];
+                        chartGrid.add_widget('<li class="' + setId + ' gridster-item"></li>', value.size_x, value.size_y, value.col, value.row);
+                        charts[setType](setId);
+                    }
+                });
+            }
             ngProgress.complete();
         });
 
