@@ -43,7 +43,7 @@ var dao = {
         params.metadata.contactId = contact.get('id');
         params.metadata.accountId_0 = accountId;
         if(cardToken && cardToken.length > 0) {
-            params.cardToken = cardToken;
+            params.card = cardToken;
         }
 
         stripe.customers.create(params, function(err, customer) {
@@ -92,7 +92,7 @@ var dao = {
         params.metadata.contactId = user.id();
         params.metadata.accountId_0 = accountId;
         if(cardToken && cardToken.length > 0) {
-            params.cardToken = cardToken;
+            params.card = cardToken;
         }
 
         stripe.customers.create(params, function(err, customer) {

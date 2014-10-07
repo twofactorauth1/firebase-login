@@ -66,7 +66,7 @@ define(['app'], function (app) {
 		};
 
 		this.postUserSubscriptions = function (stripeCustomerId, planId, fn) {
-			var apiUrl = baseUrl + ['customers', stripeCustomerId, 'subscriptions'].join('/');
+			var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeCustomerId, 'subscriptions'].join('/');
 			$http.post(apiUrl, {plan: planId})
 			.success(function (data, status, headers, config) {
 				fn(data);
@@ -84,6 +84,14 @@ define(['app'], function (app) {
 		this.getUserDashboard = function (fn) {
 			var apiUrl = baseUrl + ['dashboard'].join('/');
 			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
+		this.postUserDashboardUpdate = function (id, dashboard, fn) {
+			var apiUrl = baseUrl + ['dashboard', id].join('/');
+			$http.post(apiUrl, {config: dashboard})
 			.success(function (data, status, headers, config) {
 				fn(data);
 			});

@@ -163,13 +163,14 @@ _.extend(api.prototype, baseApi.prototype, {
     createCustomer: function(req, resp) {
         var self = this;
         self.log.debug('>> createCustomer');
+
         //TODO: security
-        var cardToken = req.cardToken;
-        var contact = req.contact;
+        var cardToken = req.body.cardToken;
+        var contact = req.body.contact;
         var user = req.body.user || req.user;
         var _accountId = self.accountId(req);
         //validate arguments
-        if(cardToken && cardToken.length ===0) {
+        if(!cardToken && cardToken.length ===0) {
             return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
         }
         if (!contact && !user) {
@@ -419,7 +420,9 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createSubscription');
         var accessToken = self._getAccessToken(req);
         var customerId = req.params.id;
-        var planId = req.body.planId;//REQUIRED
+        self.log.debug('req.planId: ' + req.plan);
+
+        var planId = req.body.plan;//REQUIRED
         var coupon = req.body.coupon;
         var trial_end = req.body.trial_end;
         var card = req.body.card;//this will overwrite customer default card if specified

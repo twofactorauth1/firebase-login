@@ -65,12 +65,8 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
                 } else {
                     $scope.customerFilter = {};
                 }
-            };
-            
-            
+            }; 
 
-
-			
             $scope.$watch('sortOrder', function (newValue, oldValue) {
                 if (newValue) {
                     newValue = parseInt(newValue);
@@ -87,7 +83,71 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
                         $scope.customerOrder = 'created.date';
                         $scope.customerSortReverse = false;
                     }
+                    else if (newValue == 4) {
+                        $scope.customerOrder = 'last';
+                        $scope.customerSortReverse = false;
+                    }
+                    else if (newValue == 5) {
+                        $scope.customerOrder = 'lastActivity';
+                        $scope.customerSortReverse = true;
+                    }
                 }
+            });
+            
+            
+            $scope.importFacebookFriends = function() {
+				CustomerService.importFacebookFriends(function (data) {
+					// alert(data.detail); in progress
+				})
+			}
+			
+			$scope.importLinkedInConnections = function() {
+				CustomerService.importLinkedInConnections(function (data) {
+					// alert(data.detail); in progress
+				})
+			}
+
+			$scope.importGmailContacts = function() {
+				CustomerService.importGmailContacts(function (data) {
+					// alert(data.detail); in progress
+				})
+			}
+            
+            $scope.$watch('toggleCategory', function (value) {
+               if(angular.isDefined(value))
+               		$scope.showContactLabel = value;
+               	else
+               		$scope.showContactLabel = true;
+            });
+            $scope.$watch('toggleEmail', function (value) {
+               if(angular.isDefined(value))
+               		$scope.showEmail = value;
+               	else
+               		$scope.showEmail = true;
+            });
+            $scope.$watch('toggleFacebook', function (value) {
+               if(angular.isDefined(value))
+               		$scope.showFacebookId = value;
+               	else
+               		$scope.showFacebookId = true;
+            });
+            $scope.$watch('toggleTwitter', function (value) {
+               if(angular.isDefined(value))
+               		$scope.showTwitterId = value;
+               	else
+               		$scope.showTwitterId = true;
+            });
+            $scope.$watch('toggleLinkedInId', function (value) {
+               if(angular.isDefined(value))
+               		$scope.showLinkedInId = value;
+               	else
+               		$scope.showLinkedInId = true;
+            });
+            $scope.$watch('toggleAddress', function (value) {
+               if(angular.isDefined(value))
+               		$scope.showAddress = value;
+               	else
+               		$scope.showAddress = true;
             });
         });
     }]);
