@@ -13,16 +13,9 @@ define(['app', 'jqueryGridster', 'jqueryUI', 'ngProgress', 'userService', 'chart
     		helper: 'clone',
     		revert: true,
             stop: function (event, ui) {
-                if (dashboard._id) {
-                    UserService.postUserDashboardUpdate(dashboard._id, chartGrid.serialize(), function (data) {
+                UserService.postUserDashboard(chartGrid.serialize(), function (data) {
                         dashboard = data;
-                    });
-
-                } else {
-                    UserService.postUserDashboard(chartGrid.serialize(), function (data) {
-                        dashboard = data;
-                    });
-                }
+                });
             }
     	});
 
