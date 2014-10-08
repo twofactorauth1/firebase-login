@@ -21682,6 +21682,12 @@ path {
 .commerce .pageheader .btn {
   margin-top: -5px;
 }
+.commerce .commerce-filter {
+  margin: 0;
+}
+.commerce .products-list {
+  margin-top: 100px;
+}
 .commerce .commerce-item {
   cursor: pointer;
   background: #fcfcfc;

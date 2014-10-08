@@ -56,6 +56,7 @@ require.config({
         'mediaDirective': '/angular_admin/directives/mediadirective',
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
+        'productService': '/angular_admin/services/product',
         'chartFacebookService': '/angular_admin/services/chart_facebook',
         'chartStripService': '/angular_admin/services/chart_strip',
         'chartTwoNetService': '/angular_admin/services/chart_two_net',

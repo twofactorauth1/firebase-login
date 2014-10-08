@@ -1,4 +1,4 @@
-define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngProgress', 'headroom','ngHeadroom', 'ngProgress'], function(app) {
+define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngProgress', 'headroom','ngHeadroom'], function(app) {
     app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', function ($scope, CustomerService, ngProgress) {
         ngProgress.start();
         $scope.customerFilter = {};

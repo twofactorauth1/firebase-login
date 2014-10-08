@@ -53,23 +53,25 @@
 		<div class="clearfix mb30"></div>
 	</div>
 
-	<div class="contentpanel" style="min-height: 378px;">
-		<div class="panel panel-default row">
-			<div class="panel-body">
-				<div class="col-sm-6">
-					<input type="text" placeholder="Search Products"
-						class="form-control input-lg" ng-model="productSearch.name"/>
-				</div>
-				<div class="col-sm-6 form-horizontal">
-					<div class="form-group row">
-						<select class=" form-control chosen-select input-lg">
-							<option value="">Filter Products</option>
-						</select>
+	<div class="contentpanel" ng-style="styleCommerce()" indigeweb-resize>
+		<headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
+			<div class="panel panel-default row commerce-filter">
+				<div class="panel-body">
+					<div class="col-sm-6">
+						<input type="text" placeholder="Search Products"
+							class="form-control input-lg" ng-model="productSearch.name"/>
+					</div>
+					<div class="col-sm-6 form-horizontal">
+						<div class="form-group row">
+							<select class=" form-control chosen-select input-lg">
+								<option value="">Filter Products</option>
+							</select>
+						</div>
 					</div>
 				</div>
+				<!-- panel-body -->
 			</div>
-			<!-- panel-body -->
-		</div>
+		</headroom>
 		<div class="products-list">
 			<div class="row">
 
@@ -196,7 +198,21 @@
 
 			<div class="modal-body">
 				<form role="form">
-					<div class="form-group">
+				<div class="form-group">
+					<label for="productName">Title</label> <input type="text"
+						class="form-control" id="productName"
+						placeholder="Enter a name for your product"
+						ng-model='newProduct.product_name' />
+				</div>
+				<div class="form-group">
+					<label for="productType">Product Type</label> <select id="productType"
+							ng-model="newProduct.product_type" class="form-control">
+							<option value="subscription">Subscription</option>
+							<option value="physical">Physical</option>
+							<option value="digital">Digital</option>
+						</select>
+				</div>
+		<!-- 			<div class="form-group">
 						<label for="planId">Unique ID</label> <input type="text"
 							class="form-control" id="planId"
 							placeholder="Enter a unique ID for the plan"
@@ -239,7 +255,7 @@
 							type="text" class="form-control" id="statement_description"
 							placeholder="Enter statement description for plan"
 							ng-model='newProduct.statement_description' maxlength="15" />
-					</div>
+					</div> -->
 					<button type="submit" class="btn btn-default"
 						ng-click="addProductFn()">Submit</button>
 				</form>
