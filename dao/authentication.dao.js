@@ -106,6 +106,7 @@ var dao = {
 
     authenticateBySocialLogin: function (req, socialType, socialId, email, username, socialUrl, accessToken, refreshToken, expires, scope, fn) {
         var self = this;
+        self.log.debug('>> authenticateBySocialLogin');
         var host = req.get("host");
         accountDao.getAccountByHost(host, function (err, value) {
             if (err) {
@@ -120,7 +121,7 @@ var dao = {
             }
 
             //We are at the main indigenous level application, not at a custom subdomain
-            else if (account === true) {
+            else if (account === true || account.id() === appConfig.mainAccountID) {
                 req.session.accountId = 0;
                 //Lets look up the user by socialId
                 userDao.getUserBySocialId(socialType, socialId, function (err, value) {
@@ -550,7 +551,7 @@ var dao = {
                 serverUrl += path;
             }
 
-            //serverUrl += "?authtoken=" + authToken;
+            serverUrl += "?authtoken=" + authToken;
 
             fn(null, serverUrl);
         });

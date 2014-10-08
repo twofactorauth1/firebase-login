@@ -70,9 +70,10 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     //unhide no-component
 
                     console.log('style >>>', iframeDoc.body.querySelectorAll('.no-component'));
-
-                    iframeDoc.body.querySelectorAll('.no-component')[0].style.display="block";
-                    iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility="visible";
+                    if(iframeDoc.body.querySelectorAll('.no-component')[0]) {
+                        iframeDoc.body.querySelectorAll('.no-component')[0].style.display="block";
+                        iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility="visible";
+                    }
 
                     //add click events for all the settings buttons
                     var settingsBtns = iframeDoc.querySelectorAll('.componentActions .settings');
@@ -155,6 +156,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                 //get website
                 WebsiteService.getWebsite(account.website.websiteId, function(website) {
                     $scope.website = website;
+                    $scope.website.settings = $scope.website.settings || {};
                     $scope.primaryColor = $scope.website.settings.primary_color;
                     $scope.secondaryColor = $scope.website.settings.secondary_color;
                     $scope.primaryHighlight = $scope.website.settings.primary_highlight;

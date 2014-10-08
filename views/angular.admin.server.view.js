@@ -6,6 +6,8 @@
  */
 
 var BaseView = require('./base.server.view');
+var logger = $$.g.getLogger('angular.admin.server.veiw');
+var segmentioConfig = require('../configs/segmentio.config.js')
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -14,6 +16,7 @@ var view = function(req,resp,options) {
 _.extend(view.prototype, BaseView.prototype, {
 
     show: function(root) {
+        logger.debug('>> show');
         var data = {
             router:"account/admin",
             root:root || "admin",
@@ -26,12 +29,17 @@ _.extend(view.prototype, BaseView.prototype, {
         this.getAccount(function(err, value) {
             if (!err && value != null) {
                 data.account = value.toJSON();
+            } else {
+                logger.warn('Error or null in getAccount');
+                logger.error('Error: ' + err);
             }
+            
+            data.segmentIOWriteKey=segmentioConfig.SEGMENT_WRITE_KEY;
 
             data.showPreloader = false;
             data.includeJs = false;
             data = self.baseData(data);
-
+            logger.debug('<< show');
             self.resp.render('admin', data);
             self.cleanUp();
             data = self = null;
