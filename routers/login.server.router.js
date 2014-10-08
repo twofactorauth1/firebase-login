@@ -96,13 +96,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
     onLogin: function (req, resp) {
+        var self = this;
         if (req.body.remembermepresent != null && req.body.rememberme == null) {
             req.session.cookie.expires = false;
         }
 
         var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
+        self.log.debug('onLogin: ' + redirectUrl);
         if (redirectUrl != null) {
             authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function (err, value) {
+                self.log.debug('onLogin-> getAuthenticatedUrl: ' + redirectUrl);
                 return resp.redirect(redirectUrl);
             });
             return;
@@ -126,6 +129,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
                         self = null;
                         return;
                     }
+
+                    //remove auth token
+                    value = value.replace(/\?authtoken.*/g, "");
                     resp.redirect(value);
                     self = null;
                 });
