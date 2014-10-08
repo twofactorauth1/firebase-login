@@ -660,7 +660,25 @@ var dao = {
         var myFacebookId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
     },
-
+    
+    getAppInsights: function (user, metric, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+        var apiOptions = {access_token: accessToken};
+        var url = [myFacebookId, 'insights'];
+        if (metric) {
+            url.push(metric);
+        }
+        url = url.join('/');
+        console.info('Fetch App Insights : ' + url);
+        FB.api(url, 'get', apiOptions, function (res) {
+            console.info('Received insight data');
+            console.log(res);
+            fn(res.error, res.data || [])
+        });
+    },
+    
     //region PRIVATE
     _batchRequest: function(batchName, options, fn){
         // default == last 7 days
