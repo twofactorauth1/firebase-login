@@ -80,20 +80,18 @@ _.extend(api.prototype, baseApi.prototype, {
             by: req.user
         };
 
+        var dashboardObj = new $$.m.Dashboard(dashboard);
         //TODO: security
-        manager.getDashboardByAccount(accountId, function(err, value){
+        manager.updateDashboard(dashboardObj, function(err, value){
             if(err) {
                 self.log.error('Error getting dashboard by account: ' + err);
                 self.wrapError(res, 500, null, 'Error getting dashboard');
             } else {
-                dashboard.set('_id', value.id());
-                manager.updateDashboard(dashboard, function(err, value){
-                    self.log.debug('<< updateDashboard');
-                    self.sendResultOrError(res, err, value, 'Error updating dashboard');
-                });
+                self.log.debug('<< updateDashboard');
+                self.sendResultOrError(res, err, value, 'Error updating dashboard');
             }
         });
-
+       
     },
 
     deleteDashboard: function(req, res) {
