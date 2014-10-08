@@ -2,6 +2,7 @@
 @import '../js/libs/spectrum/spectrum.css';
 @import '../js/libs/AngularJS-Toaster/toaster.css';
 @import '../js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css';
+@import '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -15525,6 +15526,9 @@ strong {
 .width30 {
   width: 30px;
 }
+.p20 {
+  padding: 20px;
+}
 #preloader {
   position: fixed;
   top: 0;
@@ -21782,6 +21786,16 @@ path {
   -webkit-box-shadow: 0 3px 5px 0 #d8dbde;
   box-shadow: 0 3px 5px 0 #d8dbde;
   border: 1px solid #e4e7ea;
+}
+.single-product .iconpicker {
+  cursor: pointer;
+}
+.single-product .iconpicker .caret {
+  margin-left: 10px!important;
+  border-top: 10px solid;
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+  color: white;
 }
 .single-product .product-gallery .panel-heading {
   padding: 40px 0;

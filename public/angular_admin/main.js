@@ -18,11 +18,12 @@ require.config({
         'angularResource': 'libs/angular-resource/angular-resource.min',
         'angularUI': 'libs/angular-ui/build/angular-ui.min',
         'angularSortable': 'libs/angular-ui/modules/directives/sortable/sortable',
+        'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
         'bootstrapSwitch':'libs/bootstrap-switch/dist/js/bootstrap-switch.min',
+        "bootstrap-iconpicker":"libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min",
         'spectrum': 'libs/spectrum/spectrum',
         'colorpicker': 'libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
-        'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
         'underscore': 'libs/underscore/underscore',
         'skeuocard': 'libs/skeuocard/javascripts/skeuocard.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
@@ -145,6 +146,7 @@ require.config({
         'stripeButtonDirective': {deps: ['angular', 'varModules']},
         'htmlify': {deps: ['angular', 'varModules']},
         'ngProgress': {deps: ['angular']},
+        'bootstrap-iconpicker': {deps: ['jquery']},
         'unsafeHtml': {deps: ['angular']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
