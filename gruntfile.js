@@ -183,6 +183,7 @@ module.exports = function(grunt) {
                     'public/js/libs/isotope/jquery.isotope.js',
                     'public/js/libs/angular-isotope/dist/angular-isotope.js',
                     'public/js/libs/angular-timer/dist/angular-timer.js',
+                    'public/js/libs/jquery-ui/jquery-ui.min.js',
                     'public/js/scripts/utils.js'],
                 dest: 'public/js/indigenous.js'
             }
@@ -206,7 +207,10 @@ module.exports = function(grunt) {
             },
             app1: {
                 files: {
-                    'public/js/ng-indigenous.js':['public/scripts/app.js',
+                    'public/js/ng-indigenous.js':[
+                        'public/js/libs/angular-ui/build/angular-ui.min.js',
+                        'public/js/libs/angular-ui/modules/directives/sortable/sortable.js',
+                        'public/scripts/app.js',
                         'public/scripts/directives/dmStyle.js',
                         'public/scripts/directives/ngEnter.js',
                         'public/scripts/directives/convertHtml.js',
