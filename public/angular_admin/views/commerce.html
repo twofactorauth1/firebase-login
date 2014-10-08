@@ -82,8 +82,8 @@
 				<div class="visible-xs btn btn-success col-xs-12">Add a new
 					contact</div>
 
-				<div class="col-xs-12 col-sm-4" ng-repeat="product in products.data | filter:productSearch">
-					<a href="#/commerce/edit/{{product.id}}">
+				<div class="col-xs-12 col-sm-4" ng-repeat="product in products | filter:productSearch">
+					<a href="#/commerce/edit/{{product._id}}">
 						<div class="commerce-item btn-view-product-details"
 							data-productid="1">
 							<div class="media">
@@ -100,14 +100,14 @@
 										<hr class="clearfix mb15">
 										<div class="customer-stats">
 											<div class="last-active">
-												<i class="fa fa-bolt"></i> Sku: <span class="data">NA</span>
+												<i class="fa fa-bolt"></i> Sku: <span class="data">{{product.sku}}</span>
 											</div>
 											<div class="purchased">
-												<i class="fa fa-money"></i> Price: <span class="data">${{product.amount}}</span>
+												<i class="fa fa-money"></i> Price: <span class="data">${{product.regular_price}}</span>
 											</div>
 											<div class="emails-opened">
 												<i class="fa fa-envelope"></i> Product Type: <span
-													class="data">Plan</span>
+													class="data">{{product.type}}</span>
 											</div>
 										</div>
 									</div>
@@ -186,80 +186,37 @@
     </div><!-- rightpanel -->
 </div>
 
-<div class="modal fade" id="commerce-add-product" tabindex="-1"
-	role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header" data-dismiss="modal">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">�</button>
-				<h4 class="modal-title">Add New Product</h4>
-			</div>
+<div class="modal fade" id="commerce-add-product">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add New Product</h4>
+            </div>
+            <div class="modal-body">
 
-			<div class="modal-body">
+
 				<form role="form">
 				<div class="form-group">
 					<label for="productName">Title</label> <input type="text"
-						class="form-control" id="productName"
+						class="form-control input-lg" id="productName"
 						placeholder="Enter a name for your product"
-						ng-model='newProduct.product_name' />
+						ng-model='newProduct.name' />
 				</div>
 				<div class="form-group">
-					<label for="productType">Product Type</label> <select id="productType"
-							ng-model="newProduct.product_type" class="form-control">
+					<label for="productType">Type</label> <select id="productType"
+							ng-model="newProduct.type" class="form-control input-lg">
 							<option value="subscription">Subscription</option>
-							<option value="physical">Physical</option>
-							<option value="digital">Digital</option>
+							<option value="physical" disabled="">Physical</option>
+							<option value="digital" disabled="">Digital</option>
 						</select>
 				</div>
-		<!-- 			<div class="form-group">
-						<label for="planId">Unique ID</label> <input type="text"
-							class="form-control" id="planId"
-							placeholder="Enter a unique ID for the plan"
-							ng-model='newProduct.planId' />
-					</div>
-					<div class="form-group">
-						<label for="amount">Amount</label> <input type="text"
-							class="form-control" id="amount"
-							placeholder="Enter amount for the plan"
-							ng-model='newProduct.amount' />
-					</div>
-					<div class="form-group">
-						<label for="interval">Interval</label> <select id="interval"
-							ng-model="newProduct.interval" class="form-control">
-							<option value="day">Day</option>
-							<option value="week">Week</option>
-							<option value="month">Month</option>
-							<option value="year">Year</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="interval_count">Interval Count</label> <input
-							type="text" class="form-control" id="interval_count"
-							placeholder="Enter a interval count for the interval type"
-							ng-model='newProduct.interval_count' />
-					</div>
-					<div class="form-group">
-						<label for="name">Name</label> <input type="text"
-							class="form-control" id="name" placeholder="Enter name for plan"
-							ng-model='newProduct.name' />
-					</div>
-					<div class="form-group">
-						<label for="trial_period_days">Trial Period Days</label> <input
-							type="text" class="form-control" id="trial_period_days"
-							placeholder="Enter trial period days for plan"
-							ng-model='newProduct.trial_period_days' />
-					</div>
-					<div class="form-group">
-						<label for="statement_description">Statement Description</label> <input
-							type="text" class="form-control" id="statement_description"
-							placeholder="Enter statement description for plan"
-							ng-model='newProduct.statement_description' maxlength="15" />
-					</div> -->
-					<button type="submit" class="btn btn-default"
-						ng-click="addProductFn()">Submit</button>
 				</form>
 			</div>
+			<div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+						ng-click="addProductFn()"><i class="fa fa-plus"/> Add</button>
+            </div>
 		</div>
 	</div>
 </div>

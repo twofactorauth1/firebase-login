@@ -6,21 +6,8 @@ define(['app', 'productService', 'paymentService', 'headroom','ngHeadroom', 'ngP
             ngProgress.complete();
     	});
     	$scope.addProductFn = function () {
-            $scope.newProduct.websiteId = 'bogusID';
-            $scope.newProduct.sku = 'sku-0001';
-            $scope.newProduct.regular_price = 100;
-            $scope.newProduct.sales_price = 90;
-            /*
-            accountId: 1,
-            websiteId: 'bogusID',
-            sku: 'sku-0001',
-            product_name: 'Test Product',
-            product_type: 'digital',
-            regular_price: 100,
-            sales_price: 90
-            */
     		ProductService.postProduct($scope.newProduct, function (product) {
-    			$scope.products.data.push(product);
+    			$scope.products.push(product);
     			$('#commerce-add-product').modal('hide');
     		});
     	};

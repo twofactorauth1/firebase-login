@@ -1,4 +1,4 @@
-<div>
+<div class="single-product">
     <div class="pageheader row">
         <div class="col-xs-9">
             <button id="btn-back-to-commerce" ng-click="$back()" class="btn btn-success pull-left" type="button">
@@ -56,8 +56,7 @@
         </div>
     </div>
 
-    <div class="contentpanel product-details" style="min-height: 378px;">
-        <p>{{productId}}<p>
+    <div class="contentpanel product-details" ng-style="styleCommerce()" indigeweb-resize>
         <div class="row">
             <div class="col-xs-3">
                 <div class="mb15"></div>
@@ -92,26 +91,51 @@
                 <div>
                     <div class="col-xs-6">
                         <h4>Product Details</h4>
-                        <input class="form-control input-lg mb20" type="text" placeholder="Product Title">
-                        <select class="form-control input-lg">
-                            <option>Product Type</option>
-                            <option>Physical</option>
-                            <option>Digital</option>
-                            <option>Subscription</option>
-                        </select>
-                        <textarea class="form-control input-lg mb15" rows="4" placeholder="Product Description"></textarea>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control input-lg">
+                                <option>Status</option>
+                                <option>Active</option>
+                                <option>Backorder</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input class="form-control input-lg mb20" type="text" placeholder="Product Title" ng-model="product.name">
+                        </div>
+                        <div class="form-group">
+                            <label>Type</label>
+                            <select class="form-control input-lg" ng-model="product.type">
+                                <option value="product_type">Product Type</option>
+                                <option value="physical">Physical</option>
+                                <option value="digital">Digital</option>
+                                <option value="subscription">Subscription</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control input-lg mb15" rows="4" placeholder="Product Description" ng-model="product.description"></textarea>
+                        </div>
                     </div>
                     <div class="col-xs-6">
                         <div class="mb35"></div>
-                        <select class="form-control input-lg">
-                            <option>Status</option>
-                            <option>Active</option>
-                            <option>Backorder</option>
-                            <option>Inactive</option>
-                        </select>
-                        <input class="form-control input-lg mb20" type="text" placeholder="Price">
-                        <input class="form-control input-lg mb20" type="text" placeholder="Cost">
-                        <input class="form-control input-lg mb20" type="text" placeholder="Sku">
+                        <div class="form-group">
+                            <label>Regular Price</label>
+                            <input class="form-control input-lg mb20" type="text" placeholder="Price" ng-model="product.regular_price">
+                        </div>
+                        <div class="form-group">
+                            <label>Sale Price</label>
+                            <input class="form-control input-lg mb20" type="text" placeholder="Sales Price" ng-model="product.sale_price">
+                        </div>
+                        <div class="form-group">
+                            <label>Cost</label>
+                            <input class="form-control input-lg mb20" type="text" placeholder="Cost">
+                        </div>
+                        <div class="form-group">
+                            <label>Sku</label>
+                            <input class="form-control input-lg mb20" type="text" placeholder="Sku">
+                        </div>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -155,12 +179,17 @@
                             </div>
                             <div class="col-xs-2">
                                 <div class="toggle-modern">
-                                    <div class="toggles on" style="height: 35px; width: 110px;"><div class="toggle-slide"><div class="toggle-inner" style="width: 185px; margin-left: -75px;"><div class="toggle-on" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div><div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div><div class="toggle-off active" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div></div></div></div>
+                                    <div class="toggles on" style="height: 35px; width: 110px;"><div class="toggle-slide active"><div class="toggle-inner" style="width: 185px; margin-left: -8px;"><div class="toggle-on active" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div><div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div><div class="toggle-off" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div></div></div></div>
                                 </div>
+                                <!-- NEW SWITCH NOT FUNCTIONAL -->
+                                <!-- <div class="form-group" ng-hide="currentPage.handle == 'index'">
+                                    <label>Show:</label>
+                                    <input bs-switch ng-model="currentPage.visible.visibility" type="checkbox" class="pull-right" ng-change="editPage()">
+                                </div> -->
                             </div>
                         </div>
                     </div>
-                    <div class="panel-body" style="display: none;">
+                    <div class="panel-body" style="display: block;">
                             <div class="form-horizontal well row" role="form">
                                     <h4>New Subscription</h4>
                                     <hr>
@@ -240,7 +269,7 @@
                             </table>
                     </div>
                 </li>
-                <li id="shipping-section" class="panel panel-message">
+                <li id="shipping-section" class="panel panel-message hidden">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-10">
@@ -283,7 +312,7 @@
                         </div>
                     </div>
                 </li>
-                <li id="attributes-section" class="panel panel-message">
+                <li id="attributes-section" class="panel panel-message hidden">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-10">
@@ -309,7 +338,7 @@
                             <button class="btn btn-info pull-right btn-create-attribute">Create Attribute</button>
                     </div>
                 </li>
-                <li id="variations-section" class="panel panel-message">
+                <li id="variations-section" class="panel panel-message hidden">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-10">

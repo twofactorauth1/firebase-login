@@ -26,13 +26,13 @@ define(['app'], function (app) {
             });
         };
 
-        // this.getCustomer = function (id, fn) {
-        //     var apiUrl = baseUrl + ['contact', id].join('/');
-        //     $http.get(apiUrl)
-        //     .success(function (data, status, headers, config) {
-        //         fn(data);
-        //     });
-        // };
+        this.getProduct = function (productId, fn) {
+            var apiUrl = baseUrl + ['products', productId].join('/');
+            $http.get(apiUrl)
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
+        };
 
         // this.deleteCustomer = function (id, fn) {
         //     var apiUrl = baseUrl + ['contact', id].join('/');

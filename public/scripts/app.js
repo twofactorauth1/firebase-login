@@ -25,7 +25,6 @@ var mainApp = angular
         'mgo-angular-wizard',
         'iso.directives',
         'timer',
-        'google-maps',
         'ui'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {

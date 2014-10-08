@@ -1,5 +1,5 @@
-define(['app', 'ngProgress', 'stateNavDirective'], function(app) {
-    app.register.controller('CommerceEditCtrl', ['$scope', 'ngProgress', '$stateParams', function ($scope, ngProgress, $stateParams) {
+define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch'], function(app) {
+    app.register.controller('CommerceEditCtrl', ['$scope', 'ngProgress', '$stateParams', 'ProductService', function ($scope, ngProgress, $stateParams, ProductService) {
         ngProgress.start();
     	//back button click function
         $scope.$back = function() {window.history.back();};
@@ -7,6 +7,9 @@ define(['app', 'ngProgress', 'stateNavDirective'], function(app) {
 
 
         $scope.productId = $stateParams.id;
+        ProductService.getProduct($scope.productId, function (product) {
+            $scope.product = product;
+        });
 
     }]);
 });
