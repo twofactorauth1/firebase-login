@@ -213,23 +213,24 @@
                                     </div>
 
                                     <div class="clearfix mb30"></div> -->
+                                <form>
                                 <div class="col-xs-6">
                                     <div class="p20">
                                         <div class="form-group">
                                             <label for="planId">Unique ID</label> <input type="text"
                                                 class="form-control input-lg" id="planId"
                                                 placeholder="Enter a unique ID for the plan"
-                                                ng-model='newProduct.planId' />
+                                                ng-model='newSubscription.planId' />
                                         </div>
                                         <div class="form-group">
                                             <label for="amount">Amount</label> <input type="text"
                                                 class="form-control input-lg" id="amount"
                                                 placeholder="Enter amount for the plan"
-                                                ng-model='newProduct.amount' />
+                                                ng-model='newSubscription.amount' />
                                         </div>
                                         <div class="form-group">
                                             <label for="interval">Interval</label> <select id="interval"
-                                                ng-model="newProduct.interval" class="form-control input-lg">
+                                                ng-model="newSubscription.interval" class="form-control input-lg">
                                                 <option value="day">Day</option>
                                                 <option value="week">Week</option>
                                                 <option value="month">Month</option>
@@ -240,7 +241,7 @@
                                             <label for="interval_count">Interval Count</label> <input
                                                 type="text" class="form-control input-lg" id="interval_count"
                                                 placeholder="Enter a interval count for the interval type"
-                                                ng-model='newProduct.interval_count' />
+                                                ng-model='newSubscription.interval_count' />
                                         </div>
                                     </div>
                                 </div>
@@ -249,24 +250,25 @@
                                         <div class="form-group">
                                             <label for="name">Name</label> <input type="text"
                                                 class="form-control input-lg" id="name" placeholder="Enter name for plan"
-                                                ng-model='newProduct.name' />
+                                                ng-model='newSubscription.name' />
                                         </div>
                                         <div class="form-group">
                                             <label for="trial_period_days">Trial Period Days</label> <input
                                                 type="text" class="form-control input-lg" id="trial_period_days"
                                                 placeholder="Enter trial period days for plan"
-                                                ng-model='newProduct.trial_period_days' />
+                                                ng-model='newSubscription.trial_period_days' />
                                         </div>
                                         <div class="form-group">
                                             <label for="statement_description">Statement Description</label> <input
                                                 type="text" class="form-control input-lg" id="statement_description"
                                                 placeholder="Enter statement description for plan"
-                                                ng-model='newProduct.statement_description' maxlength="15" />
+                                                ng-model='newSubscription.statement_description' maxlength="15" />
                                         </div>
                                     </div>
                                 </div>
 
-                                    <button class="btn btn-lg btn-block btn-success"><span class="fa fa-plus"></span> Add</button>
+                                    <button class="btn btn-lg btn-block btn-success" ng-click="addSubscriptionFn()"><span class="fa fa-plus"></span> Add</button>
+                                </form>
 
                             </div>
 
@@ -276,38 +278,18 @@
                               <thead>
                                 <tr>
                                   <th>Active</th>
-                                  <th>Bill Every</th>
-                                  <th>Cycles</th>
-                                  <th>$45.00</th>
-                                  <th></th>
+                                  <th>Name</th>
+                                  <th>Interval</th>
+                                  <th>Amount</th>
+                                  <th>Actions</th>
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
+                                <tr ng-repeat="plan in plans.data">
                                   <td><span class="fa fa-check"></span></td>
-                                  <td>Month for 12 Months</td>
-                                  <td>3</td>
-                                  <td>$45.00</td>
-                                  <td class="table-action">
-                                    <a href="#"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
-                                   </td>
-                                </tr>
-                                <tr>
-                                  <td><span class="fa fa-check"></span></td>
-                                  <td>Month for 12 Months</td>
-                                  <td>3</td>
-                                  <td>$45.00</td>
-                                  <td class="table-action">
-                                    <a href="#"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
-                                   </td>
-                                </tr>
-                                <tr>
-                                  <td><span class="fa fa-check"></span></td>
-                                  <td>Month for 12 Months</td>
-                                  <td>3</td>
-                                  <td>$45.00</td>
+                                  <td>{{plan.name}}</td>
+                                  <td>{{plan.interval_count}}</td>
+                                  <td>${{plan.amount}}</td>
                                   <td class="table-action">
                                     <a href="#"><i class="fa fa-pencil"></i></a>
                                     <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>

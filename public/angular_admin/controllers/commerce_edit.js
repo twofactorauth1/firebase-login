@@ -1,9 +1,13 @@
-define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker'], function(app) {
-    app.register.controller('CommerceEditCtrl', ['$scope', 'ngProgress', '$stateParams', 'ProductService', function ($scope, ngProgress, $stateParams, ProductService) {
+define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker'], function(app) {
+    app.register.controller('CommerceEditCtrl', ['$scope', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', function ($scope, ngProgress, $stateParams, ProductService, PaymentService) {
         ngProgress.start();
     	//back button click function
         $scope.$back = function() {window.history.back();};
         ngProgress.complete();
+
+        PaymentService.getListPlans(function (plans) {
+            $scope.plans = plans;
+        });
 
         $('#convert').iconpicker({ 
 		    iconset: 'fontawesome',
@@ -18,6 +22,14 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'angularUI',
 				$scope.product.icon = 'fa '+e.icon;
 			});
 		});
+
+		$scope.addSubscriptionFn = function () {
+			console.log('$scope.newSubscription >>> ', $scope.newSubscription);
+    		PaymentService.postCreatePlan($scope.newSubscription, function (subscription) {
+    			$scope.plans.push(subscription);
+    			$scope.newSubscription = {};
+    		});
+    	};
 
 
 
