@@ -24368,6 +24368,9 @@ hr {
   display: block;
   visibility: visible;
 }
+.ui-sortable {
+  margin-bottom: 0;
+}
 .ui-sortable .dragging {
   height: 60px!important;
 }
