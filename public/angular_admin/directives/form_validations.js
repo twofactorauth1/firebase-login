@@ -1,5 +1,5 @@
 define(['angularAMD'], function(angularAMD) {'use strict';
-	angularAMD.directive('validateFormFields', function() {
+	angularAMD.directive('indigewebValidateFormFields', function() {
 		return {
 			restrict : 'A',
 			require : 'ngModel',

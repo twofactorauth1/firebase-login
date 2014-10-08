@@ -67,7 +67,7 @@ $(document).ready(function () {
                     body.removeClass('rightmenu-open');
 
                     if (!$('.menutoggle').hasClass('menu-collapsed')) {
-                        $('body').removeClass('leftpanel-collapsed');
+                        $('body').removeClass('leftpanel-collapsed').addClass('leftpanel-open');
                         $('.nav-bracket li.active ul').css({
                             display: 'block'
                         });

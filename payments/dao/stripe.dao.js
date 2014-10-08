@@ -43,7 +43,7 @@ var dao = {
         params.metadata.contactId = contact.get('id');
         params.metadata.accountId_0 = accountId;
         if(cardToken && cardToken.length > 0) {
-            params.cardToken = cardToken;
+            params.card = cardToken;
         }
 
         stripe.customers.create(params, function(err, customer) {
@@ -92,7 +92,7 @@ var dao = {
         params.metadata.contactId = user.id();
         params.metadata.accountId_0 = accountId;
         if(cardToken && cardToken.length > 0) {
-            params.cardToken = cardToken;
+            params.card = cardToken;
         }
 
         stripe.customers.create(params, function(err, customer) {
@@ -218,14 +218,22 @@ var dao = {
     /**
      * This permanently removes customer payment info from Stripe and cancels any subscriptions.
      * It cannot be undone.  Care must be taken to ensure that no other account has a reference
-     * to this customer.  Additionally, this removes the stripeId from the contact object.
+     * to this customer.  Additionally, this removes the stripeId from the contact or user object.
      * @param stripeCustomerId
+     * @param contactId
+     * @param userId
      * @param fn
      */
         //TODO: handle customers on a user
-    deleteStripeCustomer: function(stripeCustomerId, contactId, fn) {
+    deleteStripeCustomer: function(stripeCustomerId, contactId, userId, fn) {
         var self = this;
         self.log.debug('>> deleteStripeCustomer');
+        if(fn === null) {
+            fn = userId;
+            userId = null;
+        }
+
+
         stripe.customers.del(stripeCustomerId, function(err, confirmation){
             if(err) {
                 fn(err, confirmation);
@@ -235,16 +243,40 @@ var dao = {
                 self.log.debug('removing stripeId from contact.');
                 contactDao.getById(contactId, $$.m.Contact, function(err, contact){
                     if(err) {
+                        self.log.error('Error removing stripeId from contact: ' + err);
                         fn(err, contact);
                         fn = null;
+                        return;
                     }
                     contact.set('stripeId', null);
                     contactDao.saveOrMerge(contact, function(err, contact){
                         if(err) {
+                            self.log.error('Error removing stripeId from contact: ' + err);
                             fn(err, contact);
                             fn = null;
+                            return;
                         }
                         return fn(null, confirmation);
+                    });
+                });
+            } else if(userId && userId.length > 0) {
+                self.log.debug('removing stripeId from user.');
+                userDao.getById(userId, $$.m.User, function(err, user){
+                    if(err) {
+                        self.log.error('Error removing stripeId from user: ' + err);
+                        fn(err, user);
+                        fn = null;
+                        return;
+                    }
+                    user.set('stripeId', null);
+                    userDao.saveOrUpdate(user, function(err, value){
+                        if(err) {
+                            self.log.error('Error removing stripeId from user: ' + err);
+                            fn(err, value);
+                            fn = null;
+                            return;
+                        }
+                        return fn(null, value);
                     });
                 });
             } else {
@@ -393,9 +425,8 @@ var dao = {
      *
      * Returns Stripe Subscription object.  *Note* An internal subscription object has also been created.
      */
-        //TODO: handle subs on User
     createStripeSubscription: function(customerId, planId, coupon, trial_end, card, quantity, application_fee_percent,
-                                       metadata, accountId, contactId, accessToken, fn) {
+                                       metadata, accountId, contactId, userId, accessToken, fn) {
         var self = this;
         self.log.debug('>> createStripeSubscription');
         var params = {};
@@ -419,6 +450,7 @@ var dao = {
                 var sub = new $$.m.Subscription({
                     accountId: accountId,
                     contactId: contactId,
+                    userId: userId,
                     stripeCustomerId: customerId,
                     stripeSubscriptionId: subscription.id,
                     stripePlanId: planId
@@ -714,9 +746,9 @@ var dao = {
      *
      * @return result object containing charge and payment objects
      */
-        //TODO: handle charges for User
+
     createStripeCharge: function(amount, currency, card, customerId, contactId, description, metadata, capture,
-                                 statement_description, receipt_email, application_fee, accessToken, fn) {
+                                 statement_description, receipt_email, application_fee, userId, accessToken, fn) {
         var self = this;
         self.log.debug('>> createStripeCharge');
         var paymentId = $$.u.idutils.generateUUID();//create the id for the local object
@@ -760,6 +792,7 @@ var dao = {
                 balance_transaction: charge.balance_transaction,
                 customerId: customerId,
                 contactId: contactId,
+                userId: userId,
                 failure_code: charge.failure_code,
                 failure_message: charge.failure_message,
                 invoiceId: charge.invoice,

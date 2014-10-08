@@ -290,7 +290,8 @@ _.extend(api.prototype, baseApi.prototype, {
             page = new Page({
                 _id: temp,
                 title: pageObj.title,
-                handle: pageObj.handle
+                handle: pageObj.handle,
+                mainmenu: pageObj.mainmenu,
             });
             page.set('websiteId', websiteId);
             page.set('accountId', accountId);

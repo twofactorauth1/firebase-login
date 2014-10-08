@@ -1,5 +1,5 @@
-define(['app','constants'], function (app) {
-    app.register.service('CustomerService', function ($http) {
+define(['app','constants','importContactService'], function (app) {
+    app.register.service('CustomerService', function ($http, ImportContactService) {
         var baseUrl = '/api/1.0/';
 
         this.getCustomers = function (fn) {
@@ -157,7 +157,7 @@ define(['app','constants'], function (app) {
 				if (contact.details && contact.details[0].addresses && contact.details[0].addresses.length > 0) {
 						_address = contact.details[0].addresses[0];
 						var address_str = "";
-						if(_address.lat !== '' && _address.lon !== '')
+						if(_address.lat && _address.lat !== '' && _address.lon !== '')
 						{
 							address_str = _address.lat.concat(",",_address.lon);
 						}
@@ -167,5 +167,38 @@ define(['app','constants'], function (app) {
 			}
 			return false;
 		};
+
+        this.getCustomerActivities = function (customerId, fn) {
+            var apiUrl = baseUrl + ['contact', customerId, 'activity'].join('/');
+            $http.get(apiUrl)
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
+        };
+
+        this.getActivityTypes = function (fn) {
+            var activityTypes = $$.constants.contact.customer_activity_types.dp;
+            fn(activityTypes);
+        };
+
+
+			//region IMPORT
+			this.importFacebookFriends = function(fn) {
+				ImportContactService.importContacts($$.constants.social.types.FACEBOOK, fn, function(data) {
+					fn(data);
+				})
+			}
+
+			this.importLinkedInConnections = function(fn) {
+				ImportContactService.importContacts($$.constants.social.types.LINKEDIN, fn, function(data) {
+					fn(data);
+				})
+			}
+
+			this.importGmailContacts = function(fn) {
+				ImportContactService.importContacts($$.constants.social.types.GOOGLE, fn, function(data) {
+					fn(data);
+				})
+			}
     });
 });

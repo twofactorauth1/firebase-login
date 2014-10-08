@@ -18,7 +18,7 @@ define(['app'], function (app) {
 		};
 
 		this.getAccount = function (fn) {
-			var apiUrl = baseUrl + ['account', $$.server.userId].join('/');
+			var apiUrl = baseUrl + ['account', $$.server.accountId].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
@@ -32,7 +32,7 @@ define(['app'], function (app) {
 				fn(data);
 			});
 		};
-		
+
 		this.postAccountBilling = function (stripeCustomerId, cardToken, fn) {
 			var apiUrl = baseUrl + ['account', 'billing'].join('/');
 			$http.post(apiUrl, {stripeCustomerId: stripeCustomerId, cardToken: cardToken})
@@ -40,10 +40,58 @@ define(['app'], function (app) {
 				fn(data);
 			});
 		};
-		
+
 		this.getAccountBilling = function (fn) {
 			var apiUrl = baseUrl + ['account', 'billing'].join('/');
 			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
+		this.postUserSubscribe = function (fn) {
+			var apiUrl = baseUrl + ['account', 'billing'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
+		this.getUserSubscriptions = function (stripeCustomerId, fn) {
+			var apiUrl = baseUrl + ['customers', stripeCustomerId, 'subscriptions'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
+		this.postUserSubscriptions = function (stripeCustomerId, planId, fn) {
+			var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeCustomerId, 'subscriptions'].join('/');
+			$http.post(apiUrl, {plan: planId})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
+		this.postUserDashboard = function (dashboard, fn) {
+			var apiUrl = baseUrl + ['dashboard'].join('/');
+			$http.post(apiUrl, {config: dashboard})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
+		this.getUserDashboard = function (fn) {
+			var apiUrl = baseUrl + ['dashboard'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
+		this.postUserDashboardUpdate = function (id, dashboard, fn) {
+			var apiUrl = baseUrl + ['dashboard', id].join('/');
+			$http.post(apiUrl, {config: dashboard})
 			.success(function (data, status, headers, config) {
 				fn(data);
 			});

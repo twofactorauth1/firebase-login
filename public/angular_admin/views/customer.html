@@ -1,10 +1,10 @@
-<div style="">
+<div class="customer">
 
     <div class="pageheader row">
         <h2 class="col-xs-8"><i class="fa fa-users"></i> Customers</h2>
 
         <div class="col-xs-4">
-            <div state-nav="customerAdd" class="btn btn-success pull-right btn-create-contact" type="button">
+            <div indigeweb-state-nav="customerAdd" class="btn btn-success pull-right btn-create-contact" type="button">
                 <i class="fa fa-plus"></i>
                   <span class="hidden-xs">Add</span>
             </div>
@@ -36,123 +36,120 @@
         <div class="clearfix mb30"></div>
     </div>
 
-    <div style="min-height: 356px;" class="contentpanel">
-        <div class="panel panel-default row">
-            <div class="panel-body">
-                <div class="col-sm-6">
-                    <input ng-model="searchBar" placeholder="Search Customers" class="form-control mb15 input-lg  search-contacts" type="text">
-                </div>
-                <div class="col-sm-6 form-horizontal">
-                    <div class="form-group row">
-                        <select class="form-control chosen-select input-lg" ng-model="sortOrder">
-                            <option value="0" selected>Filter Customers</option>
-                            <option value="1">A to Z</option>
-                            <option value="2">Z to A</option>
-                            <option value="3">Date Added</option>
-                        </select>
+    <div style="background: #e7e7e7;" class="contentpanel" ng-style="styleCustomers()" indigeweb-resize>
+
+    <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
+         <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-sm-6">
+                        <input ng-model="searchBar" placeholder="Search Customers" class="form-control input-lg  search-contacts" type="text">
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="mb0">
+                            <select class="form-control chosen-select input-lg" ng-model="sortOrder">
+                                <option value="0" selected>Filter Customers</option>
+                                <option value="1">A to Z</option>
+                                <option value="2">Z to A</option>
+                                <option value="3">Date Added</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div style="width:100%; text-align:center">
-                <ul class="pagination hidden-xs letter-list">
+                <div style="width:100%; text-align:center">
+                    <ul class="pagination hidden-xs letter-list">
 
-                    <li class="active"><a class="btn-letter" ng-click="alphaFilter()">all</a>
-                    </li>
+                        <li class="active"><a class="btn-letter" ng-click="alphaFilter()">all</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('a')">A</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('a')">A</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('b')">B</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('b')">B</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('c')">C</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('c')">C</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('d')">D</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('d')">D</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('e')">E</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('e')">E</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('f')">F</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('f')">F</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('g')">G</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('g')">G</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('h')">H</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('h')">H</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('i')">I</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('i')">I</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('j')">J</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('j')">J</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('k')">K</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('k')">K</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('l')">L</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('l')">L</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('m')">M</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('m')">M</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('n')">N</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('n')">N</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('o')">O</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('o')">O</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('p')">P</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('p')">P</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('q')">Q</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('q')">Q</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('r')">R</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('r')">R</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('s')">S</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('s')">S</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('t')">T</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('t')">T</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('u')">U</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('u')">U</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('v')">V</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('v')">V</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('w')">W</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('w')">W</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('x')">X</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('x')">X</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('y')">Y</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('y')">Y</a>
+                        </li>
 
-                    <li class=""><a class="btn-letter" ng-click="alphaFilter('z')">Z</a>
-                    </li>
+                        <li class=""><a class="btn-letter" ng-click="alphaFilter('z')">Z</a>
+                        </li>
 
-                </ul>
-            </div>
-
+                    </ul>
+                </div>
         </div>
         <!-- panel -->
-        <div class="people-list">
+    </headroom>
+
+        <div class="people-list" >
             <div class="row">
 
-
-
-                <div ng-hide="customers.length" class="col-xs-10">
-                    <h3>No Contacts Available</h3>
-                </div>
-
-                <div state-nav="customerDetail" state-id="{{customer._id}}" ng-repeat="customer in customers | filter : customerFilter | orderBy : customerOrder : customerSortReverse" class="col-xs-12 col-sm-4 col-md-3">
+                <div indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}" ng-repeat="customer in customers | filter : customerFilter | orderBy : customerOrder : customerSortReverse" class="col-xs-12 col-sm-4 col-md-3">
                     <div data-contactid="1799" class="people-item btn-view-contact-details contact-item animate">
                         <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips">
                         <i class="fa fa-star-o" ng-hide="customer.starred"></i>
@@ -162,7 +159,7 @@
                         <div class="media">
                             <div class="col-xs-12f">
                                 <!--//  //  // -->
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle media-object thumbnail standard">
+                                <img ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}" class="img-circle media-object thumbnail standard">
                                 <!-- //  //  -->
 
                                 <span class="name visible-xs">
@@ -178,13 +175,13 @@
                             <div class="media-body col-xs-12 hidden-xs">
 
 
-                              <h4 class="person-name" truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                              <h4 class="person-name" indigeweb-truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
 
 
 
                                 <!-- <h4 class="person-name">  Jaideep Das</h4>-->
 
-                                <span class="label label-info contact-cat">{{contactLabel(customer)}}</span>
+                                <span class="label label-info contact-cat" ng-show="showContactLabel">{{contactLabel(customer)}}</span>
 
                                 <div class="hidden">
                                     <div class="last-active text-muted">Last Active: n/a
@@ -210,19 +207,19 @@
                             <div class="clearfix mb10"></div>
                             <ul class="social-list hidden-xs">
                                         <li>
-                                             <a ng-show="checkBestEmail(customer)" href="mailto:{{email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
+                                             <a ng-show="showEmail && checkBestEmail(customer)" href="mailto:{{email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
                                         </li>
                                         <li>
-                                        	<a ng-show="checkFacebookId(customer)" href="https://www.facebook.com/{{facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                        	<a ng-show="showFacebookId && checkFacebookId(customer)" href="https://www.facebook.com/{{facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
                                         </li>
                                          <li>
-                                        	<a ng-show="checkTwitterId(customer)" href="https://twitter.com/intent/user?user_id={{twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                        	<a ng-show="showTwitterId && checkTwitterId(customer)" href="https://twitter.com/intent/user?user_id={{twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
                                         </li>
                                          <li>
-                                        	<a ng-show="checkLinkedInId(customer)" href="{{ linkedInUrl ? linkedInUrl : 'http://www.linkedin.com/profile/view?id='+ linkedInId }}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
-                                        </li>         
+                                        	<a ng-show="showLinkedInId && checkLinkedInId(customer)" href="{{ linkedInUrl ? linkedInUrl : 'http://www.linkedin.com/profile/view?id='+ linkedInId }}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                        </li>
                                 <li>
-                                    <a ng-show="checkAddress(customer)" href="https://www.google.com/maps?q={{address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                                    <a ng-show="showAddress && checkAddress(customer)" href="https://www.google.com/maps?q={{address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
                                 </li>
                             </ul>
                             <div class="pull-right">
@@ -245,6 +242,100 @@
 
             </div>
 
+        </div>
+    </div>
+
+    <div class="rightpanel rightpanel-website">
+       <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+
+        <div class="tab-content">
+            <div class="tab-pane pane-settings active" id="rp-settings">
+
+                <div class="form-group mb20">
+                    <button class="btn btn-warning btn-block import-contacts" data-toggle="modal" data-target="#import-contacts-modal"><i class="fa fa-cloud-upload"></i> Import Contacts</button>
+                </div>
+
+
+                <div class="form-group hidden">
+                    <a href="#" class="btn btn-success btn-block"><i class="fa fa-cloud-download"></i> Export Contacts</a>
+                </div>
+
+                <div class="form-group hidden">
+                    <a href="#" class="btn btn-primary btn-block"><i class="fa fa-files-o"></i> Fix Duplicates</a>
+                </div>
+
+                <div class="btn-group pull-right hidden" style="margin-right:8px;">
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                        Import
+                        <span class="caret" />
+                    </button>
+
+                    <ul class="dropdown-menu " role="menu">
+                        <li class="btn-import-facebook"><a href="#">Import Facebook friends</a>
+                        </li>
+                        <li class="btn-import-gmail hidden"><a href="#">Import Gmail contacts</a>
+                        </li>
+                        <li class="btn-import-linkedin hidden"><a href="#">Import LinkedIn connections</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <h5 class="sidebartitle mb20">Display Settings</h5>
+                <div class="form-group row">
+                    <label class="col-xs-12 control-label">Contacts List Display</label>
+                    <div class="col-xs-12">
+                        <select class=" form-control chosen-select sort-display" data-placeholder="Sort Contacts" name="one">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-xs-12 control-label">Contacts List Ordering</label>
+                    <div class="col-xs-12">
+                        <select class=" form-control chosen-select sort-ordering" ng-model = "sortOrder" data-placeholder="Sort Contacts"  name="two">
+                        	<option value="1">A to Z</option>
+                            <option value="2">Z to A</option>
+                            <option value="3">Date Added</option>
+                            -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                	
+                	 <label class="col-xs-12 control-label">Show / Hide Attributes</label>
+                	
+                    <div class="col-xs-12 ckbox ckbox-success">
+                    	<input type="checkbox" id="contact-cat" ng-checked="true" ng-model="toggleCategory">                        
+                        <label for="contact-cat">Category</label>
+                    </div>
+                    <div class="col-xs-12 ckbox ckbox-success">
+                        <input type="checkbox" id="email_id" ng-checked="true" ng-model="toggleEmail">
+                        <label for="email_id">Email</label>
+                    </div>
+                    <div class="col-xs-12 ckbox ckbox-success">
+                        <input type="checkbox" id="facebook_id" ng-checked="true" ng-model="toggleFacebook">
+                        <label for="facebook_id">Facebook</label>
+                    </div>
+                    <div class="col-xs-12 ckbox ckbox-success">
+                        <input type="checkbox" id="twitter_id" ng-checked="true" ng-model="toggleTwitter">
+                        <label for="twitter_id">Twitter</label>
+                    </div>
+                    <div class="col-xs-12 ckbox ckbox-success">
+                        <input type="checkbox" id="linked_id" ng-checked="true" ng-model="toggleLinkedId">
+                        <label for="linked_id">LinkedIn</label>
+                    </div>
+                    <div class="col-xs-12 ckbox ckbox-success">
+                        <input type="checkbox" id="address_id" ng-checked="true" ng-model="toggleAddress">
+                        <label for="address_id">Address</label>
+                    </div>
+                </div>
+            </div>        <!-- tab-pane -->
         </div>
     </div>
 </div>
@@ -295,11 +386,11 @@
                 <div class="row choose-import" data-import-section="choose">
                     <p>Choose one of the import options from below:</p>
                     <div class="clearfix mb30"></div>
-                    <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook"><span class="fa fa-facebook"></span> 
+                    <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook" ng-click="importFacebookFriends()" ><span class="fa fa-facebook"></span>
                         <div class="clearfix mb5"></div>Facebook</button>
-                    <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin"><span class="fa fa-linkedin"></span> 
+                    <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin" ng-click="importLinkedInConnections()"><span class="fa fa-linkedin"></span>
                         <div class="clearfix mb5"></div>LinkedIn</button>
-                    <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus"><span class="fa fa-google"></span> 
+                    <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus" ng-click="importGmailContacts()"><span class="fa fa-google"></span>
                         <div class="clearfix mb5"></div>Gmail</button>
                     <div class="clearfix mb30"></div>
                 </div>

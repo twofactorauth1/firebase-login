@@ -20,9 +20,9 @@ script(type="text/javascript").
         }
     }, window.analytics.SNIPPET_VERSION = "2.0.9",
             window.analytics.load('#{segmentIOWriteKey}');
-    window.analytics.page();
+    window.analytics.page('Index', {accountId:#{account._id}});
     WebFont.load({
                       google: {
-                             families: ['Spinnaker', 'Lato']
+                             families: ['Spinnaker', 'Lato','Dancing Script']
                        }
            });

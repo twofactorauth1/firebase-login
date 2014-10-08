@@ -100,8 +100,8 @@ _.extend(baseDao.prototype, mongoBaseDao, {
 
     removeByQuery: function (query, type, fn) {
         if (this.useCache(type)) {
-            var key = this.getTable(type) + "_" + id;
-            $$.g.cache.remove(key);
+            //var key = this.getTable(type) + "_" + id;
+            //$$.g.cache.remove(key);
         }
 
         if (this.getStorage(type) === "mongo") {

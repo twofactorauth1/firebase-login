@@ -16,8 +16,8 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand editable" href="/" data-name="{{layout.account.company.name}}" data-class="logo">
-                        <span class="logo-1"> <img ng-show="layout.account.business.logo" src="{{layout.account.business.logo}}" scale="0"> </span>
+                    <a class="navbar-brand editable" href="/" data-name="{{layout.account.company.name}}">
+                        <span class="logo-1"> <img data-ng-show="layout.account.business.logo" ng-src="{{layout.account.business.logo}}" scale="0"><span data-ng-show="!layout.account.business.logo" ><convert-html contents="{{layout.account.business.name}}">  </convert-html> </span></span>
                     </a>
 
                 </div>
@@ -32,7 +32,8 @@
                 </div>
                 <!-- /.navbar-collapse -->
             </div>
-            <!-- /.container-fluid -->
+            <!-- Collect the nav links, forms, and other content for toggling -->
+           <!-- /.container-fluid -->
         </nav>
     </div>
 </div>

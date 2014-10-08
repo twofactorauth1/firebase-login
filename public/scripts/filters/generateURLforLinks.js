@@ -5,7 +5,11 @@ mainApp.filter('generateURLforLinks', function () {
         var _url = "";
         switch (linkToObject.type) {
             case "page":
-                _url = linkToObject.data;
+                if (linkToObject.data != 'blog') {
+                    _url = '/page/'+linkToObject.data;
+                } else {
+                    _url = '/'+linkToObject.data;
+                }
                 return _url;
                 break;
             case "home":

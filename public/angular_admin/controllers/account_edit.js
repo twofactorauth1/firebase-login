@@ -1,5 +1,6 @@
-define(['app', 'userService', 'underscore', 'commonutils','formValidationDirective'], function(app) {
-    app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', function ($scope, $stateParams, UserService) {
+define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress'], function(app) {
+    app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', function ($scope, $stateParams, UserService, ngProgress) {
+        ngProgress.start();
         var phoneCharLimit = 4;
         if ($stateParams.focus)
             $('[name="' + $stateParams.focus + '"]').focus();
@@ -20,6 +21,7 @@ define(['app', 'userService', 'underscore', 'commonutils','formValidationDirecti
         //account API call for object population
         UserService.getAccount(function (account) {
             $scope.account = account;
+            ngProgress.complete();
             if (!$scope.account.business.phones.length)
                 $scope.account.business.phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false});
             $scope.account.business.phones.forEach(function (value, index) {

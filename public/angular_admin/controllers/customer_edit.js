@@ -1,5 +1,6 @@
-define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutils','formValidationDirective'], function(app) {
-    app.register.controller('CustomerEditCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', function ($scope, CustomerService, $stateParams, $state) {
+define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress'], function(app) {
+    app.register.controller('CustomerEditCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', function ($scope, CustomerService, $stateParams, $state, ngProgress) {
+        ngProgress.start();
         var displayAddressCharLimit = 2;
         $scope.currentState = $state.current.name;
         $scope.customerId = $stateParams.id;
@@ -137,6 +138,7 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
         if ($scope.customerId) {
             CustomerService.getCustomer($scope.customerId, function (customer) {
                 $scope.customer = customer;
+                ngProgress.complete();
                 $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
                 if ($scope.customer.details[0].addresses.length) {
                     $scope.customer.details[0].addresses.forEach(function (value, index) {

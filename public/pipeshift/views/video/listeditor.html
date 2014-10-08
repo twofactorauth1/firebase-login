@@ -8,6 +8,8 @@
     </div>
 </div>
 
+{{}}
+
 <div id="pipeshiftDiv" class="contentpanel">
     <div class="col-md-12 pscontainer video-container">
         <div class="playlist-editor">
@@ -44,7 +46,7 @@
 
                     <div class="panel-body">
                         <div class="videos-search-wrap">
-                            <div when-ui-scrolled="loadMore()" class="col-md-12 video-list">
+                            <div when-ui-scrolled="loadMore()" class="col-md-12 video-list" ng-style="styleMarketing()" resize>
                                 <div ng-include src="'/pipeshift/views/video/videos.html'"></div>
                             </div>
                         </div>
@@ -70,7 +72,7 @@
                         </div>
 
                         <div class="panel-body">
-                            <div class="playlist timeline" video-drop from="videos" ng-disabled="courseBlocked" to="course.videos" videos="course.videos" remove-video="showRemoveVideoModal" add-video="addVideo" video-sort="dayTimeSort">
+                            <div class="playlist timeline" video-drop from="videos" ng-disabled="courseBlocked" to="course.videos" videos="course.videos" remove-video="showRemoveVideoModal" add-video="addVideo" video-sort="dayTimeSort" ng-style="styleMarketing()" resize>
                             </div>
                         </div>
                     </div>

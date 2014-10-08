@@ -68,9 +68,13 @@ util.inherits(Strategy, OAuth2Strategy);
  * @param {Object} req
  * @api protected
  */
-OAuth2Strategy.prototype.authenticate = function(req, options) {
+Strategy.prototype.authenticate = function(req, options) {
     options = options || {};
     var self = this;
+
+    if(req.user === undefined) {
+        return OAuth2Strategy.prototype.authenticate.call(this, req, options);
+    }
 
     if (req.query && req.query.error) {
         // TODO: Error information pertaining to OAuth 2.0 flows is encoded in the
