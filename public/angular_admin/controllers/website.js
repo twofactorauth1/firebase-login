@@ -263,12 +263,21 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                         for (var i2 = 0; i2 < componentEditable.length; i2++) {
                             var componentVar = componentEditable[i2].attributes['data-class'].value;
                             var componentVarContents = componentEditable[i2].innerHTML;
-                            // console.log('componentVarContents before >>> ', componentVarContents);
-                            // if (componentEditable[i2].querySelectorAll('.ng-binding').length >= 1) {
-                            //     var span = componentEditable[i2].querySelectorAll('.ng-binding')[0]; // get the span
-                            //     componentVarContents = span.innerHTML.replace(/(\r\n|\n|\r)/gm, "");
-                            // }
-                            // console.log('componentVarContents after >>> ', componentVarContents);
+
+                            //if innerhtml contains a span with the class ng-binding then remove it
+                            var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+                            if (span) {
+                                var spanParent = span.parentNode;
+                                var spanInner = span.innerHTML;
+                                if (spanParent.classList.contains('editable')) {
+                                    componentVarContents = spanInner;
+                                } else {
+                                    spanParent.innerHTML = spanInner;
+                                    componentVarContents = spanParent.parentNode.innerHTML;
+                                }
+                            }
+                            //remove "/n"
+                            componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
 
                             var setterKey, pa;
                             //if contains an array of variables
@@ -380,7 +389,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     console.log('data >>> ', data);
                     if (data.components) {
                         var newComponent = data.components[data.components.length - 1];
-                        $scope.components.push(newComponent);
+                        $scope.currentPage.components.push(newComponent);
+                        //$scope.components.push(newComponent);
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
                         console.log('newComponent >>> ', newComponent);
