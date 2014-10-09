@@ -67,6 +67,7 @@ _.extend(baseRouter.prototype, {
 
     isAuth: function(req, resp, next) {
         var self = this;
+        logger.debug('>> isAuth');
         var path = req.url;
         if (req.isAuthenticated()) {
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
@@ -74,17 +75,20 @@ _.extend(baseRouter.prototype, {
                 authenticationDao.getAuthenticatedUrlForRedirect(req.session.accountId, req.user.id(), req.url,
                     function(err, value){
                         if (err) {
-                            console.dir(err);
+                            logger.error('Error getting authenticated url for redirect: ' + err);
+                            logger.debug('redirecting to /home');
                             resp.redirect("/home");
                             self = null;
                             return;
                         } else {
+                            logger.debug('redirecting to ' + value);
                             resp.redirect(value);
                             self = null;
                         }
                     }
                 );
             } else {
+                logger.debug('<< isAuth');
                 return next();
             }
         }
@@ -104,7 +108,7 @@ _.extend(baseRouter.prototype, {
                         if (err) {
                             return fn(err);
                         }
-                        return fn(null, value);
+                        return fn(null, value);//here
                     });
                 });
             } else {
@@ -125,9 +129,14 @@ _.extend(baseRouter.prototype, {
 
                 checkAuthToken(req, function(err, value) {
                     if (!err) {
-                        return next();
+                        //need to remove the auth token here.
+                        var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
+                        logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
+                        return resp.redirect(redirectUrl);
                     } else {
+                        logger.error('Error in checkAuthToken: ' + err);
                         cookies.setRedirectUrl(req, resp);
+                        logger.debug('Redirecting to /login');
                         return resp.redirect("/login");
                     }
                 });
@@ -135,9 +144,14 @@ _.extend(baseRouter.prototype, {
         } else {
             checkAuthToken(req, function(err, value) {
                 if (!err) {
-                    return next();
+                    //need to remove the auth token here.
+                    var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
+                    logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
+                    return resp.redirect(redirectUrl);
                 } else {
+                    logger.error('Error in checkAuthToken: ' + err);
                     cookies.setRedirectUrl(req, resp);
+                    logger.debug('Redirecting to /login');
                     return resp.redirect("/login");
                 }
             });
