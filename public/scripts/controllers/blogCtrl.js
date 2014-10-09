@@ -26,8 +26,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     that.pages = data[route];
             }
         });
-
+        console.log('BlogCtrl: postsService >>> ');
         postsService(function(err, data){
+            console.log('BlogCtrl: postsService >>> ', post);
             if(err) {
                 console.log('BlogCtrl Error: ' + err);
             } else {

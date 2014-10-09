@@ -1,5 +1,5 @@
 define(['angularAMD'], function (angularAMD) {
-    angularAMD.directive('resize', function ($window) {
+    angularAMD.directive('indigewebResize', function ($window) {
         return function (scope, element) {
             var w = angular.element($window);
             scope.getWindowDimensions = function () {
@@ -26,6 +26,14 @@ define(['angularAMD'], function (angularAMD) {
                 };
 
                 scope.styleCustomers = function () {
+                    return { 
+                        'height': (newValue.h)-115 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleCommerce = function () {
                     return { 
                         'height': (newValue.h)-115 + 'px',
                         'width': '100%',

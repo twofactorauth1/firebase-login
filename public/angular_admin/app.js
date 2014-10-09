@@ -3,7 +3,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
 
     //routes
     app.config(function ($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise("/customer");
+        $urlRouterProvider.otherwise("/website");
 
         $stateProvider
             .state('dashboard', angularAMD.route({

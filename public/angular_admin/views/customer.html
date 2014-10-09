@@ -4,7 +4,7 @@
         <h2 class="col-xs-8"><i class="fa fa-users"></i> Customers</h2>
 
         <div class="col-xs-4">
-            <div state-nav="customerAdd" class="btn btn-success pull-right btn-create-contact" type="button">
+            <div indigeweb-state-nav="customerAdd" class="btn btn-success pull-right btn-create-contact" type="button">
                 <i class="fa fa-plus"></i>
                   <span class="hidden-xs">Add</span>
             </div>
@@ -36,7 +36,7 @@
         <div class="clearfix mb30"></div>
     </div>
 
-    <div style="background: #e7e7e7;" class="contentpanel" ng-style="styleCustomers()" resize>
+    <div style="background: #e7e7e7;" class="contentpanel" ng-style="styleCustomers()" indigeweb-resize>
 
     <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
          <div class="panel panel-default">
@@ -149,7 +149,7 @@
         <div class="people-list" >
             <div class="row">
 
-                <div state-nav="customerDetail" state-id="{{customer._id}}" ng-repeat="customer in customers | filter : customerFilter | orderBy : customerOrder : customerSortReverse" class="col-xs-12 col-sm-4 col-md-3">
+                <div indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}" ng-repeat="customer in customers | filter : customerFilter | orderBy : customerOrder : customerSortReverse" class="col-xs-12 col-sm-4 col-md-3">
                     <div data-contactid="1799" class="people-item btn-view-contact-details contact-item animate">
                         <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips">
                         <i class="fa fa-star-o" ng-hide="customer.starred"></i>
@@ -175,13 +175,13 @@
                             <div class="media-body col-xs-12 hidden-xs">
 
 
-                              <h4 class="person-name" truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                              <h4 class="person-name" indigeweb-truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
 
 
 
                                 <!-- <h4 class="person-name">  Jaideep Das</h4>-->
 
-                                <span class="label label-info contact-cat">{{contactLabel(customer)}}</span>
+                                <span class="label label-info contact-cat" ng-show="showContactLabel">{{contactLabel(customer)}}</span>
 
                                 <div class="hidden">
                                     <div class="last-active text-muted">Last Active: n/a
@@ -207,19 +207,19 @@
                             <div class="clearfix mb10"></div>
                             <ul class="social-list hidden-xs">
                                         <li>
-                                             <a ng-show="checkBestEmail(customer)" href="mailto:{{email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
+                                             <a ng-show="showEmail && checkBestEmail(customer)" href="mailto:{{email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
                                         </li>
                                         <li>
-                                        	<a ng-show="checkFacebookId(customer)" href="https://www.facebook.com/{{facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                        	<a ng-show="showFacebookId && checkFacebookId(customer)" href="https://www.facebook.com/{{facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
                                         </li>
                                          <li>
-                                        	<a ng-show="checkTwitterId(customer)" href="https://twitter.com/intent/user?user_id={{twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                                        	<a ng-show="showTwitterId && checkTwitterId(customer)" href="https://twitter.com/intent/user?user_id={{twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
                                         </li>
                                          <li>
-                                        	<a ng-show="checkLinkedInId(customer)" href="{{ linkedInUrl ? linkedInUrl : 'http://www.linkedin.com/profile/view?id='+ linkedInId }}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
-                                        </li>         
+                                        	<a ng-show="showLinkedInId && checkLinkedInId(customer)" href="{{ linkedInUrl ? linkedInUrl : 'http://www.linkedin.com/profile/view?id='+ linkedInId }}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                        </li>
                                 <li>
-                                    <a ng-show="checkAddress(customer)" href="https://www.google.com/maps?q={{address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                                    <a ng-show="showAddress && checkAddress(customer)" href="https://www.google.com/maps?q={{address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
                                 </li>
                             </ul>
                             <div class="pull-right">
@@ -297,41 +297,42 @@
                 <div class="form-group row">
                     <label class="col-xs-12 control-label">Contacts List Ordering</label>
                     <div class="col-xs-12">
-                        <select class=" form-control chosen-select sort-ordering" data-placeholder="Sort Contacts"  name="two">
-                            <option value="first">First Last</option>
-                            <option value="last">Last, First</option>
-                            <option value="created.date">Date Added</option>
-                            <option value="lastActiviy">Last Activity</option>
+                        <select class=" form-control chosen-select sort-ordering" ng-model = "sortOrder" data-placeholder="Sort Contacts"  name="two">
+                        	<option value="1">A to Z</option>
+                            <option value="2">Z to A</option>
+                            <option value="3">Date Added</option>
                             -->
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-xs-12 control-label">Show / Hide Attributes</label>
+                	
+                	 <label class="col-xs-12 control-label">Show / Hide Attributes</label>
+                	
                     <div class="col-xs-12 ckbox ckbox-success">
-                        <input type="checkbox" id="contact-cat" checked="checked">
+                    	<input type="checkbox" id="contact-cat" ng-checked="true" ng-model="toggleCategory">                        
                         <label for="contact-cat">Category</label>
                     </div>
                     <div class="col-xs-12 ckbox ckbox-success">
-                        <input type="checkbox" id="last-active" checked="checked">
-                        <label for="last-active">Last Active</label>
+                        <input type="checkbox" id="email_id" ng-checked="true" ng-model="toggleEmail">
+                        <label for="email_id">Email</label>
                     </div>
                     <div class="col-xs-12 ckbox ckbox-success">
-                        <input type="checkbox" id="purchased" checked="checked">
-                        <label for="purchased">Purchased</label>
+                        <input type="checkbox" id="facebook_id" ng-checked="true" ng-model="toggleFacebook">
+                        <label for="facebook_id">Facebook</label>
                     </div>
                     <div class="col-xs-12 ckbox ckbox-success">
-                        <input type="checkbox" id="emails-opened" checked="checked">
-                        <label for="emails-opened">Emails Opened</label>
+                        <input type="checkbox" id="twitter_id" ng-checked="true" ng-model="toggleTwitter">
+                        <label for="twitter_id">Twitter</label>
                     </div>
                     <div class="col-xs-12 ckbox ckbox-success">
-                        <input type="checkbox" id="calls-made" checked="checked">
-                        <label for="calls-made">Calls Made</label>
+                        <input type="checkbox" id="linked_id" ng-checked="true" ng-model="toggleLinkedId">
+                        <label for="linked_id">LinkedIn</label>
                     </div>
                     <div class="col-xs-12 ckbox ckbox-success">
-                        <input type="checkbox" id="customer-since" checked="checked">
-                        <label for="customer-since">Customer Since</label>
+                        <input type="checkbox" id="address_id" ng-checked="true" ng-model="toggleAddress">
+                        <label for="address_id">Address</label>
                     </div>
                 </div>
             </div>        <!-- tab-pane -->
@@ -385,11 +386,11 @@
                 <div class="row choose-import" data-import-section="choose">
                     <p>Choose one of the import options from below:</p>
                     <div class="clearfix mb30"></div>
-                    <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook"><span class="fa fa-facebook"></span> 
+                    <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook" ng-click="importFacebookFriends()" ><span class="fa fa-facebook"></span>
                         <div class="clearfix mb5"></div>Facebook</button>
-                    <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin"><span class="fa fa-linkedin"></span> 
+                    <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin" ng-click="importLinkedInConnections()"><span class="fa fa-linkedin"></span>
                         <div class="clearfix mb5"></div>LinkedIn</button>
-                    <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus"><span class="fa fa-google"></span> 
+                    <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus" ng-click="importGmailContacts()"><span class="fa fa-google"></span>
                         <div class="clearfix mb5"></div>Gmail</button>
                     <div class="clearfix mb30"></div>
                 </div>

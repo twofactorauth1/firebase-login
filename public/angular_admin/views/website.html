@@ -1,14 +1,17 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
-<div class="pageheader row">
+<div class="pageheader row website-controls" ng-class="{true: 'editing', false: ''}[isEditing == true]">
     <div class="col-xs-6">
-        <h2 class="pull-left" style="margin-right: 15px;"><i class="fa fa-desktop"></i> Editing</h2>
-        <div class="btn-group pull-left" dropdown is-open="status.isopen" >
-          <button type="button" class="btn btn-orange dropdown-toggle" ng-disabled="disabled">
-            {{pageSelected || 'index'}} <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li ng-repeat="page in allPages track by $index" ><a href="" ng-click="updatePage(page.handle)">{{page.handle}}</a></li>
-          </ul>
+        <h2 class="pull-left" style="margin-right: 15px;" ng-show="isEditing"><i class="fa fa-desktop"></i> Editing</h2>
+        <h2 class="pull-left" style="margin-right: 15px;" ng-show="!isEditing"><i class="fa fa-desktop"></i> Viewing</h2>
+        <div class="btn-group pull-left" dropdown is-open="status.isopen">
+            <button type="button" class="btn btn-orange dropdown-toggle" ng-disabled="disabled">
+                {{pageSelected || 'index'}}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="page in allPages track by $index"><a href="" ng-click="updatePage(page.handle)">{{page.handle}}</a>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="col-xs-6">
@@ -32,56 +35,38 @@
             <span class="mediaModal" user='user'></span>
         <!--</a>-->
 
-        <a class="btn btn-success pull-right btn-create-page" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
+        <!-- <a class="btn btn-success pull-right btn-create-page" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
             <span> Page</span>
         </a>
+
+        <a class="btn btn-success pull-right btn-create-post" data-toggle="modal" data-target="#create-post-modal"><i class="fa fa-plus"></i>
+            <span> Post</span>
+        </a> -->
+
+        <div class="btn-group pull-right btn-add">
+          <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"> Add <span class="caret"></span></button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#" data-toggle="modal" data-target="#create-page-modal"> Page</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#create-post-modal"> Post</a></li>
+          </ul>
+        </div>
+
         <div class="clearfix"></div>
     </div>
 </div>
 
 <img ng-show="isMobile" src="https://s3-us-west-2.amazonaws.com/indigenous-admin/iphone-background.png">
-<iframe id="iframe-website" name="iframe-website" onload="iframeLoaded()" src="/?editor=true" style="width: 100%;" ng-style="style()" resize></iframe>
+<iframe ng-dblclick="doubleClick()" id="iframe-website" name="iframe-website" onload="iframeLoaded()" src="/?editor=true" style="width: 100%;" ng-style="style()" indigeweb-resize></iframe>
 
 <div class="rightpanel rightpanel-website">
     <tabset>
-        <tab heading="Page" active="tab.active">
+        <tab>
+            <tab-heading>
+                <i class="fa fa-paint-brush" tooltip-placement="bottom" tooltip="Theme"></i>
+            </tab-heading>
             <div class="leftpanelinner">
-
-                <div class="form-group">
-                        <label>Page Title:  </label>
-                        <input class="form-control input-lg" type="text" ng-model="currentPage.title">
-                    </div>
-
-                <div class="mb20"></div>
-
-                <div id="nestable">
-                    <h4>Components ({{components.length}})</h4>
-                    <button class="btn btn-orange btn-block" data-toggle="modal" data-target="#add-component-modal"><i class="fa fa-plus"></i>
-                        <span> Component</span>
-                    </button>
-                    <div class="mb10"></div>
-                    <ul ui-sortable="sortableOptions" ng-model="components">
-                        <li ng-repeat="(key, val) in components" class="dd-item dd3-item" data-id="14" data-section="services" data-componentId="{{val._id}}" ng-mouseenter="showActions = true" ng-mouseleave="showActions = false">
-                            <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
-                            </div>
-                            <div class="dd3-content">{{val.handle||val.type}}</div>
-                            <div class="dd3-actions">
-                                <i class="fa fa-edit" tooltip-placement="top" tooltip="Edit" data-toggle="modal" data-target="#edit-component-modal" ng-click="editComponent(val._id)"></i>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="well">
-                    <p>Danger Zone</p>
-                    <button class="btn btn-block btn-danger" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
-                </div>
-                <!-- leftpanelinner -->
-            </div>
-        </tab>
-        <tab heading="Theme">
-            <div class="leftpanelinner">
-
+                <h5 class="sidebartitle">Theme</h5>
+                <hr/>
                 <div id="current-theme">
                     <h4>Current Theme</h4>
                     <div class="row">
@@ -95,34 +80,30 @@
                     </div>
                     <div class="mb30"></div>
                     <div class="form-group">
-                        <label for="colorpicker">Color Primary:  </label>
-                        <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" ng-model="website.settings.primary_color" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                        <label for="colorpicker">Color Primary:</label>
+                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primary_color" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                     </div>
                     <div class="form-group">
-                        <label for="colorpicker">Color Secondary:  </label>
-                        <spectrum-colorpicker format="'hex'" ng-model="secondaryColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                        <label for="colorpicker">Color Secondary:</label>
+                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="secondaryColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                     </div>
                     <div class="form-group">
-                        <label for="colorpicker">Highlight Primary:  </label>
-                        <spectrum-colorpicker format="'hex'" ng-model="primaryHighlight" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                        <label for="colorpicker">Highlight Primary:</label>
+                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="primaryHighlight" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                     </div>
                     <div class="form-group">
-                        <label for="colorpicker">Text Color Primary:  </label>
-                        <spectrum-colorpicker format="'hex'" ng-model="primaryTextColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                        <label for="colorpicker">Text Color Primary:</label>
+                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="primaryTextColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                     </div>
                     <div class="form-group">
-                        <label for="colorpicker">Font Family Primary:  </label>
+                        <label for="colorpicker">Font Family Primary:</label>
                         <input class="form-control input-lg" type="text" ng-model="primaryFontFamily">
                     </div>
                     <div class="form-group">
-                        <label for="colorpicker">Font Family Secondary:  </label>
+                        <label for="colorpicker">Font Family Secondary:</label>
                         <input class="form-control input-lg" type="text" ng-model="secondaryFontFamily">
                     </div>
                 </div>
-            </div>
-        </tab>
-        <tab heading="Domain">
-            <div class="leftpanelinner">
 
                 <div class="form-group">
                     <label for="current-domain" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="This is the domain that was automatically created when you signed up.">Indigenous Domain</label>
@@ -145,6 +126,100 @@
                 <div class="mb15"></div>
                 <label for="current-domain">Custom Domain Name</label>
                 <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.accountUrl">
+            </div>
+        </tab>
+        <tab active="tab.active">
+            <tab-heading>
+                <i class="fa fa-file-text-o" tooltip-placement="bottom" tooltip="Page"></i>
+            </tab-heading>
+            <div class="leftpanelinner">
+                <h5 class="sidebartitle">Page</h5>
+                <hr/>
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">
+                </div>
+                <div class="form-group" ng-hide="currentPage.handle == 'index'">
+                    <label>URL:</label>
+                    <input class="form-control input-lg" type="text" ng-model="currentPage.handle" ng-change="editPage()">
+                </div>
+                <div class="form-group" ng-hide="currentPage.handle == 'index'">
+                    <label>Show:</label>
+                    <input bs-switch ng-model="currentPage.visible.visibility" type="checkbox" class="pull-right" ng-change="editPage()">
+                </div>
+
+                <div class="mb20"></div>
+
+                <div id="nestable" class="hidden">
+                    <h4>Components ({{components.length}})</h4>
+                    <button class="btn btn-orange btn-block" data-toggle="modal" data-target="#add-component-modal"><i class="fa fa-plus"></i>
+                        <span>Component</span>
+                    </button>
+                    <div class="mb10"></div>
+                    <ul ui-sortable="sortableOptions" ng-model="components">
+                        <li ng-repeat="(key, val) in components" class="dd-item dd3-item" data-id="14" data-section="services" data-componentId="{{val._id}}" ng-mouseenter="showActions = true" ng-mouseleave="showActions = false">
+                            <div class="dd-handle dd3-handle"><i class="fa fa-arrows"></i>
+                            </div>
+                            <div class="dd3-content">{{val.handle||val.type}}</div>
+                            <div class="dd3-actions">
+                                <i class="fa fa-edit" tooltip-placement="top" tooltip="Edit" data-toggle="modal" data-target="#edit-component-modal" ng-click="editComponent(val._id)"></i>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="well">
+                    <p>Danger Zone</p>
+                    <button class="btn btn-block btn-danger" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                </div>
+                <!-- leftpanelinner -->
+            </div>
+        </tab>
+        <tab>
+            <tab-heading>
+                <i class="fa fa-puzzle-piece" tooltip-placement="bottom" tooltip="Component"></i>
+            </tab-heading>
+            <div class="leftpanelinner">
+                <h5 class="sidebartitle">Component</h5>
+                <hr/>
+                <div class="form-group">
+                    <label for="colorpicker">Show:</label>
+                    <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                </div>
+                <div class="form-group">
+                    <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
+                    <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor" ng-change="saveComponent()">
+                </div>
+                <div class="form-group">
+                    <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
+                    <input class="form-control input-lg" type="text" ng-model="componentEditing.version" ng-change="saveComponent()">
+                </div>
+                <div class="form-group">
+                    <label for="colorpicker">Text Color:</label>
+                    <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                </div>
+                <div class="form-group">
+                    <label for="colorpicker">Background Color:</label>
+                    <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false , allowEmpty:true,}" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
+                </div>
+                <div class="form-group">
+                    <label for="colorpicker">Show Button:</label>
+                    <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
+                    <input class="form-control input-lg" type="text" ng-model="componentEditing.bg.img.url" ng-change="saveComponent()">
+                </div>
+                <div class="form-group">
+                    <label for="colorpicker">Show Background Image as Parallax:</label>
+                    <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                </div>
+
+                <button class="btn btn-danger pull-left" data-dismiss="modal" ng-click="deleteComponent(componentEditing._id)">
+                    <i class="fa fa-trash-o"></i> Delete
+                </button>
+                <div class="clearfix mb15"></div>
             </div>
         </tab>
     </tabset>
@@ -170,26 +245,25 @@
                             <option value=""></option>
                             <option value="blog">Blog</option>
                             <option value="contact-us">Contact Us</option>
+                            <option value="coming-soon">Coming Soon</option>
                             <option value="feature-block">Feature Block</option>
-                            <option value="meet-team">Meet Team</option>
-                            <option value="feature-list-Compare">Feature List Compare</option>
-                            <option value="feature-list">Feature List</option>
-                            <option value="freeform">Freeform</option>
+                            <option value="feature-list-Compare" disabled>Feature List Compare</option>
+                            <option value="feature-list" disabled>Feature List</option>
+                            <option value="freeform" disabled>Freeform</option>
                             <option value="footer">Footer</option>
                             <option value="image-gallery">Image Gallery</option>
-                            <option value="image-slider">Image Slider</option>
-                            <option value="image-text-left">Image Text Left</option>
-                            <option value="image-text-right">Image Text Right</option>
-                            <option value="image-text">Image Text</option>
-                            <option value="link-button-text">Link Button Text</option>
-                            <option value="logo-list">Logo List</option>
+                            <option value="image-slider" disabled>Image Slider</option>
+                            <option value="image-text" disabled>Image Text</option>
+                            <option value="link-button-text" disabled>Link Button Text</option>
+                            <option value="logo-list" disabled>Logo List</option>
+                            <option value="masthead">Masthead</option>
+                            <option value="meet-team" disabled>Meet Team</option>
                             <option value="navigation">Navigation</option>
-                            <option value="signup-form">Sign Up Form</option>
-                            <option value="single-post">Single Post</option>
-                            <option value="social-feed">Social Feed</option>
-                            <option value="video-text">Video Text</option>
-                            <option value="video-text-left">Video Text Left</option>
-                            <option value="video-text-right">Video Text Right</option>
+                            <option value="signup-form" disabled>Sign Up Form</option>
+                            <option value="single-post" disabled>Single Post</option>
+                            <option value="social-feed" disabled>Social Feed</option>
+                            <option value="video">Video</option>
+                            <option value="video-text" disabled>Video Text</option>
                         </select>
                     </div>
                     <div class="clearfix"></div>
@@ -207,42 +281,52 @@
 
 <!-- Create Page Modal -->
 <div class="modal fade" id="create-page-modal">
-      <div class="modal-dialog">
+    <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Create Page</h4>
-          </div>
-          <div class="modal-body">
-            <div id="new_page">
-                <div class="form-group">
-                    <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
-                    <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title">
-                </div>
-                <div class="form-group">
-                    <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
-                    <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle">
-                </div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Create Page</h4>
             </div>
-            <div class="clearfix"></div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" ng-click="createPage(page)" data-dismiss="modal">Create Page</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+            <div class="modal-body">
+                <div id="new_page">
+                    <div class="form-group">
+                        <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
+                        <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title">
+                    </div>
+                    <div class="form-group">
+                        <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
+                        <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle">
+                    </div>
+                    <div class="clearfix mb15"></div>
+                    <div class="form-group">
+                        <div class="ckbox ckbox-success">
+                            <input type="checkbox" id="add-to-menu" ng-model="page.mainmenu" checked>
+                            <label for="add-to-menu">Add to Main Menu?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="createPage(page)" data-dismiss="modal">Create Page</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 <!-- Edit Component Modal -->
 <div class="modal fade" id="edit-component-modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Edit Component</h4>
-                </div>
-                <div class="modal-body">
-                    <!-- <div class="form-group">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Edit Component</h4>
+            </div>
+            <div class="modal-body">
+                <!-- <div class="form-group">
                         <label for="component-title" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Enter the Name of the component.">Component Name</label>
                         <input id="component-title" class="form-control input-lg" type="text" value="">
                         </select>
@@ -253,59 +337,61 @@
 
                         </select>
                     </div> -->
-                        <div class="form-group">
-                                <label for="colorpicker">Show Component: </label>
-                                <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right">
-                            </div>
-                        <div class="form-group">
-                            <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
-                            <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor">
-                        </div>
-                        <div class="form-group">
-                            <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
-                            <input class="form-control input-lg" type="text" ng-model="componentEditing.version">
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label for="colorpicker">Text Color:  </label>
-                                <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" class="pull-right" ng-model="componentEditing.txtcolor"></spectrum-colorpicker>
-                            </div>
-                            <div class="form-group">
-                                <label for="colorpicker">Background Color:  </label>
-                                <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false , allowEmpty:true,}" class="pull-right" ng-model="componentEditing.bg.color"></spectrum-colorpicker>
-                            </div>
-                            <div class="form-group">
-                                <label for="colorpicker">Show Button: </label>
-                                <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right">
-                            </div>
-
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="form-group">
-                            <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
-                            <input class="form-control input-lg" type="text" ng-model="componentEditing.bg.img.url">
-                        </div>
-                        <div class="form-group">
-                                <label for="colorpicker">Show Background Image as Parallax: </label>
-                                <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right">
-                            </div>
-
-                        <div class="input-group spinner">
-                            <input type="text" class="form-control" value="42">
-                            <div class="input-group-btn-vertical">
-                              <button class="btn btn-default"><i class="fa fa-caret-up"></i></button>
-                              <button class="btn btn-default"><i class="fa fa-caret-down"></i></button>
-                            </div>
-                        </div>
-                        <div class="clearfix mb15"></div>
-                    <div class="clearfix"></div>
+                <div class="form-group">
+                    <label for="colorpicker">Show Component:</label>
+                    <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right">
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger pull-left" data-dismiss="modal" ng-click="deleteComponent(componentEditing._id)">
-                        <i class="fa fa-trash-o"></i> Delete
-                    </button>
-                    <button type="button" class="btn btn-primary btn-edit-component" data-dismiss="modal" ng-click="saveComponent(componentEditing)">Update</button>
+                <div class="form-group">
+                    <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
+                    <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor">
                 </div>
+                <div class="form-group">
+                    <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
+                    <input class="form-control input-lg" type="text" ng-model="componentEditing.version">
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group">
+                        <label for="colorpicker">Text Color:</label>
+                        <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" class="pull-right" ng-model="componentEditing.txtcolor"></spectrum-colorpicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="colorpicker">Background Color:</label>
+                        <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false , allowEmpty:true,}" class="pull-right" ng-model="componentEditing.bg.color"></spectrum-colorpicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="colorpicker">Show Button:</label>
+                        <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right">
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
+                    <input class="form-control input-lg" type="text" ng-model="componentEditing.bg.img.url">
+                </div>
+                <div class="form-group">
+                    <label for="colorpicker">Show Background Image as Parallax:</label>
+                    <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right">
+                </div>
+
+                <div class="input-group spinner">
+                    <input type="text" class="form-control" value="42">
+                    <div class="input-group-btn-vertical">
+                        <button class="btn btn-default"><i class="fa fa-caret-up"></i>
+                        </button>
+                        <button class="btn btn-default"><i class="fa fa-caret-down"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="clearfix mb15"></div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger pull-left" data-dismiss="modal" ng-click="deleteComponent(componentEditing._id)">
+                    <i class="fa fa-trash-o"></i> Delete
+                </button>
+                <button type="button" class="btn btn-primary btn-edit-component" data-dismiss="modal" ng-click="saveComponent(componentEditing)">Update</button>
+            </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->

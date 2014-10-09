@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll',
-    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce',
+    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
         route = $location.$$path;
 
@@ -13,6 +13,43 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //that.segmentIOWriteKey = ENV.segmentKey;
         //$window.segmentIOWriteKey = ENV.segmentKey;
         //that.themeUrl = $scope.themeUrl;
+
+        // $scope.activateSettings = function() {
+        //     console.log('>>>>> ', window.parent);
+        //     window.parent.frames[0].parentNode.activateSettings();
+        // };
+
+        $scope.sortingLog = [];
+
+        $scope.wait;
+
+        $scope.trustSrc = function(src) {
+            return $sce.trustAsResourceUrl(src);
+          }
+
+        $scope.sortableOptions = {
+            handle: '.reorder',
+            start: function(e, ui) {
+                console.log('ui >>> ', ui);
+                ui.item[0].parentNode.className += ' active';
+                ui.item[0].className += ' dragging';
+                clearTimeout($scope.wait);
+                ui.placeholder.height('60px');
+                // ui.item.sortable('refreshPositions');
+                angular.element(ui.item[0].parentNode).sortable( "refresh" );
+            },
+            update: function(e, ui) {
+              console.log('sorting update');
+            },
+            stop: function(e, ui) {
+                ui.item[0].classList.remove('dragging');
+                $scope.wait = setTimeout(function () {
+                    ui.item[0].parentNode.classList.remove('active');
+                }, 1500);
+                // var componentId = ui.item[0].querySelectorAll('.component')[0].attributes['data-id'].value;
+                // var newOrder = ui.item.index();
+            }
+        };
 
         accountService(function (err, data) {
             if (err) {
@@ -70,6 +107,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 $scope.currentpage.components = data;
                 console.log('data applied', $scope.currentpage.components);
             });
+        };
+
+        window.triggerEditMode = function() {
+            console.log('trigger edit');
+            var body = document.getElementsByTagName('body')[0];
+            var hasClass = body.classList.contains('editing');
+            if(hasClass === false)
+            {
+                 body.className+=' editing';
+            }
+        };
+
+        window.triggerEditModeOff = function() {
+            console.log('trigger edit off');
+            var body = document.getElementsByTagName('body')[0];
+            body.className = body.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
         };
 
         // $scope.$on('$locationChangeStart', function(event, next, current) {

@@ -104,3 +104,92 @@ hr {
       outline: none!important;
     }
 }
+.fragment {
+    display: block;
+}
+
+.add-component {
+    font-size: 50px;
+    height: 40px;
+    background: #fff;
+    border-radius: 25px;
+    position: absolute;
+    margin-top: -25px;
+    left: 50%;
+    z-index: 999;
+    i {
+      margin-top: -3px;
+    }
+    &:hover {
+      background: #4eb1ca;
+      pointer-events: auto;
+    }
+}
+
+.editing {
+  .no-component {
+    display: block;
+    visibility: visible;
+  }
+  .fragment {
+    border: none; overflow: hidden;
+    &:hover {
+      border: 2px dashed #34495e;
+      .componentActions {
+        display: block;
+        visibility: visible;
+      }
+      .add-component {
+        display: block;
+        visibility: visible;
+      }
+    }
+  }
+}
+
+
+
+.ui-sortable {
+  margin-bottom: 0;
+  .dragging {
+    height: 60px!important;
+  }
+  .componentActions {
+    h4 {
+        display: none;
+      }
+  }
+}
+
+ul.ui-sortable.active {
+  .fragment {
+    height: 60px!important;
+    .componentActions {
+      display: block;
+      visibility: visible;
+      border: 1px solid #ccc;
+      background: #fafafa;
+      h4 {
+        display: block;
+      }
+    }
+  }
+}
+
+.componentActions, .add-component, .no-component {
+  display: none;
+  visibility: hidden;
+}
+
+.no-component {
+  .add-component {
+    display: block;
+    visibility: visible;
+  }
+}
+
+.empty-page {
+  max-width: 440px;
+  margin: 40px auto;
+  padding: 30px 0;
+}

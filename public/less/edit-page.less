@@ -1033,6 +1033,50 @@ font-weight: bold;
   max-width: 241px;
 }
 
+.rightpanel-website  {
+  .tab-content {
+    padding: 10px 15px;
+  }
+  .leftpanelinner {
+    margin-top:0;
+  }
+  .nav-tabs > li > a {
+    padding: 15px 20px 20px 20px!important;
+  }
+}
+
+.componentActions {
+  position: absolute;
+  z-index: 99999;
+  width: 100%;
+  margin-right: 10px;
+  span {
+    background: rgba(44,62,80,0.8);
+    padding: 20px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;;
+  }
+  .reorder {
+    float: left;
+    &:hover {
+      color: #54C8E8;
+    }
+  }
+  .delete {
+    float: right;
+    &:hover {
+      color: #d9534f;
+    }
+  }
+  .settings {
+    float: right;
+    &:hover {
+      color: #efa022;
+    }
+  }
+}
+
 .fixed {
   position: fixed;
   top:0;
@@ -1191,12 +1235,29 @@ input[type='file'] {
   box-shadow: 0 0 12px -1px black;
 }
 
-#edit-component-modal #bootstrap-switch {
-  float: right;
+.website-controls {
+
+  #edit-component-modal #bootstrap-switch {
+    float: right;
+  }
+
+  .btn-add {
+    margin-right: 10px;
+  }
+
 }
 
-.btn-create-page {
-  margin-right: 10px;
+.website-controls.editing  {
+  background: #2ecc71;
+  h2 {
+    color: white!important;
+  }
+  .btn {
+    background: none!important;
+    border: 2px solid #fff!important;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3)!important;
+    color: #ffffff!important;
+  }
 }
 
 

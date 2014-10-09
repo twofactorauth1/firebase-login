@@ -268,6 +268,7 @@ var dao = {
         self.removeByQuery(query, $$.m.Contact, function(err,val){self.log.debug('removed contacts');});
         self.removeByQuery(query, $$.m.ContactActivity, function(err,val){self.log.debug('removed contact activities');});
         self.removeByQuery(query, $$.m.Asset, function(err,val){self.log.debug('removed digital asset records');});
+        self.removeByQuery(query, $$.m.Course, function(err,val){self.log.debug('removed course records');});
 
         self.removeById(accountId, $$.m.Account, function(err, val){
             if(err) {

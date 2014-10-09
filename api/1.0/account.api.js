@@ -311,7 +311,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     getTempAccount: function(req,resp) {
+
         var self = this;
+        self.log.debug(' getTempAccount >>>');
         var token = cookies.getAccountToken(req);
 
         accountDao.getTempAccount(token, function(err, value) {

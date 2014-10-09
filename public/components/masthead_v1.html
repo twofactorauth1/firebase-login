@@ -5,21 +5,28 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="home-text">
-                            <h1 class="masthead-title">
+
+                            <div class="masthead-title">
                                 <div class="editable" data-class="title" data-index="{{$index}}">
                                     <span ng-bind-html="component.title"/>
                                 </div>
-                            </h1>
+                            </div>
+
                             <div class="masthead-subtitle">
                                 <div class="editable" data-class="subtitle" data-index="{{$index}}">
                                     <span ng-bind-html="component.subtitle"/>
                                 </div>
                             </div>
 
-                            <h1>{{data}}</h1>
+                            <div class="masthead-text">
+                                <div class="editable" data-class="text" data-index="{{$index}}">
+                                    <span ng-bind-html="component.text"/>
+                                </div>
+                            </div>
+
 
                             <div class="col-xs-12" ng-show="component.btn.visibility">
-                                <a class="btn btn-primary btn-block center editable" data-index="{{$index}}" ng-bind="component.btn.text" data-class="btn-text" data-ng-href="{{component.btn.url}}" du-smooth-scroll></a>
+                                <a class="btn btn-success btn-block center editable" data-index="{{$index}}" ng-bind="component.btn.text" data-class="btn-text" data-ng-href="{{component.btn.url}}" du-smooth-scroll></a>
                             </div>
 
                             <div class="clearfix"></div>

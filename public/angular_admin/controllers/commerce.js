@@ -1,13 +1,13 @@
-define(['app', 'paymentService', 'ngProgress'], function(app) {
-    app.register.controller('CommerceCtrl', ['$scope', 'PaymentService', 'ngProgress', function ($scope, PaymentService, ngProgress) {
+define(['app', 'productService', 'paymentService', 'headroom','ngHeadroom', 'ngProgress'], function(app) {
+    app.register.controller('CommerceCtrl', ['$scope', 'ProductService', 'PaymentService', 'ngProgress', function ($scope, ProductService, PaymentService, ngProgress) {
         ngProgress.start();
-    	PaymentService.getListPlans(function (products) {
+    	ProductService.getProducts(function (products) {
     		$scope.products = products;
             ngProgress.complete();
     	});
     	$scope.addProductFn = function () {
-    		PaymentService.postCreatePlan($scope.newProduct, function (product) {
-    			$scope.products.data.push(product);
+    		ProductService.postProduct($scope.newProduct, function (product) {
+    			$scope.products.push(product);
     			$('#commerce-add-product').modal('hide');
     		});
     	};

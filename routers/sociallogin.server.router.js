@@ -193,7 +193,7 @@ _.extend(router.prototype, baseRouter.prototype, {
                 resp.redirect(value);
             }
         });
-        console.log(state);
+        //console.log(state);
     },
 
 

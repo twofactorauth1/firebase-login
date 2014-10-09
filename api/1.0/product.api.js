@@ -36,8 +36,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var product = req.body;
         product.accountId = self.accountId(req);
+        var productObj = new $$.m.Product(product);
         //TODO: security
-        productManager.createProduct(product, function(err, value){
+        productManager.createProduct(productObj, function(err, value){
             self.log.debug('<< createProduct');
             self.sendResultOrError(res, err, value, "Error creating product");
         });

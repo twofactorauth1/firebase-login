@@ -88,3 +88,5 @@ html(class="no-js", lang="en")
             #rightpanel
 
         include _serverprops
+        script(type="text/javascript").
+            window.analytics.identify(#{user._id}, {accountId:#{account._id}});

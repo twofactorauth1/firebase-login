@@ -18,11 +18,12 @@ require.config({
         'angularResource': 'libs/angular-resource/angular-resource.min',
         'angularUI': 'libs/angular-ui/build/angular-ui.min',
         'angularSortable': 'libs/angular-ui/modules/directives/sortable/sortable',
+        'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
         'bootstrapSwitch':'libs/bootstrap-switch/dist/js/bootstrap-switch.min',
+        "bootstrap-iconpicker":"libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min",
         'spectrum': 'libs/spectrum/spectrum',
         'colorpicker': 'libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
-        'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
         'underscore': 'libs/underscore/underscore',
         'skeuocard': 'libs/skeuocard/javascripts/skeuocard.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
@@ -56,15 +57,21 @@ require.config({
         'mediaDirective': '/angular_admin/directives/mediadirective',
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
+        'productService': '/angular_admin/services/product',
+        'chartFacebookService': '/angular_admin/services/chart_facebook',
+        'chartStripService': '/angular_admin/services/chart_strip',
+        'chartTwoNetService': '/angular_admin/services/chart_two_net',
+        'importContactService': '/angular_admin/services/import_contacts',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'hoverClassDirective': '/angular_admin/directives/hover_class',
         'confirmClickDirective': '/angular_admin/directives/confirm_click',
         'resizeHeightDirective': '/angular_admin/directives/resize_height',
         'truncateDirective': '/angular_admin/directives/truncate',
-        'formValidationDirective': '/angular_admin/directives/form_validations',
+        'adminValidationDirective': '/angular_admin/directives/form_validations',
         "constants": 'constants/constants',
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
+        'unsafeHtml': '/angular_admin/filters/unsafe-html',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -138,7 +145,9 @@ require.config({
         'psEditableDirective': {deps: ['angular', 'varModules']},
         'stripeButtonDirective': {deps: ['angular', 'varModules']},
         'htmlify': {deps: ['angular', 'varModules']},
-        'ngProgress': {deps: ['angular']}
+        'ngProgress': {deps: ['angular']},
+        'bootstrap-iconpicker': {deps: ['jquery']},
+        'unsafeHtml': {deps: ['angular']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

@@ -36,6 +36,63 @@ var component = $$.m.ModelBase.extend({
              */
             type: "masthead",
 
+            /**
+             * Version
+             */
+            version: 1,
+
+            /**
+             *
+             *
+             */
+            title : "<h1>Masthead Title</h1>",
+
+            /**
+             *
+             *
+             */
+            subtitle : "<h4>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </h4>",
+
+            /**
+             *
+             *
+             */
+            text : "<p>Ullam molestiae est, recusandae ratione rem sit, praesentium laborum corporis. Molestiae quidem libero minima earum error minus voluptatum eligendi cum culpa impedit, dicta tenetur quis similique magni rerum doloribus excepturi aspernatur saepe dignissimos ad est aliquid? Voluptas inventore dignissimos possimus perspiciatis enim.</p>",
+
+            /**
+             *
+             *
+             */
+            txtcolor : "#ffffff",
+
+            /**
+             *
+             *
+             */
+            bg: {
+                img : {
+                    url : "",
+                    width : null,
+                    height : null,
+                    parallax : false,
+                    blur : false
+                },
+                color : "#4bb0cb"
+            },
+
+            /**
+             *
+             *
+             */
+            btn : {
+                visibility: true,
+                text : "Learn More",
+                url : "#features",
+                icon : "fa fa-rocket"
+            },
+
+            visibility: true
+
         }
     },
 
