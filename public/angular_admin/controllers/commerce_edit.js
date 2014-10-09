@@ -5,6 +5,11 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentServ
         $scope.$back = function() {window.history.back();};
         ngProgress.complete();
 
+        $scope.productId = $stateParams.id;
+        ProductService.getProduct($scope.productId, function (product) {
+            $scope.product = product;
+        });
+
         PaymentService.getListPlans(function (plans) {
             $scope.plans = plans;
         });
@@ -31,12 +36,13 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentServ
     		});
     	};
 
+        $scope.saveProductFn = function () {
+            console.log('$scope.product >>> ', $scope.product);
+            ProductService.saveProduct($scope.product, function (product) {
+                console.log('Save Product >>> ', product);
+            });
+        };
 
-
-        $scope.productId = $stateParams.id;
-        ProductService.getProduct($scope.productId, function (product) {
-            $scope.product = product;
-        });
 
     }]);
 });

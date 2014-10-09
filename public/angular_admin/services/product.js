@@ -34,6 +34,18 @@ define(['app'], function (app) {
             });
         };
 
+        this.saveProduct = function (product, fn) {
+            var apiUrl = baseUrl + ['products', productObj._id].join('/');
+            $http({
+                url: apiUrl,
+                method: "POST",
+                data: angular.toJson(product)
+            })
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
+        };
+
         // this.deleteCustomer = function (id, fn) {
         //     var apiUrl = baseUrl + ['contact', id].join('/');
         //     $http.delete(apiUrl)
