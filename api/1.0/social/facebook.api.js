@@ -30,6 +30,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
         //facebook api
         app.get(this.url('likesperday'), this.isAuthApi, this.getLikesPerDay.bind(this));
+        app.get(this.url('insights/'), this.isAuthApi, this.getAppInsights.bind(this));
+        app.get(this.url('insights/:metric'), this.isAuthApi, this.getAppInsights.bind(this));
+        app.get(this.url('insights/:metric/:period'), this.isAuthApi, this.getAppInsights.bind(this));
+        app.get(this.url('insights/:metric/:period/:breakdown'), this.isAuthApi, this.getAppInsights.bind(this));
     },
 
 
@@ -225,6 +229,22 @@ _.extend(api.prototype, baseApi.prototype, {
                 resp.send(value);
             } else {
                 self.wrapError(resp, 500, "Error getting facebook top five fans", err, value);
+                self = null;
+            }
+        });
+    },
+
+    getAppInsights: function (req, resp) {
+        var self= this;
+        var urlOptions = {};
+        urlOptions.metric = req.params.metric || null;
+        urlOptions.period = req.params.period || null;
+        urlOptions.breakdown = req.params.breakdown || null;
+        facebookDao.getAppInsights(req.user, urlOptions, function(err, value) {
+            if (!err) {
+                resp.send(value);
+            } else {
+                self.wrapError(resp, 500, "Error getting facebook app insights", err, value);
                 self = null;
             }
         });

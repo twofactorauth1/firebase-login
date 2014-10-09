@@ -538,7 +538,7 @@ var dao = {
                     var mergedContactAry = [];
                     //value is an array of duplicate Arrays.
 
-                    async.each(value,
+                    async.eachSeries(value,
                         function(ary, callback){
 
                             self.mergeDuplicates(ary, accountId, function(err, mergedContact){
@@ -577,7 +577,7 @@ var dao = {
                     return;
                 } else {
                     mainContact = value;
-                    async.each(dupeAry,
+                    async.eachSeries(dupeAry,
                         function(item, callback){
                             self._safeMergeByContactAndID(mainContact, item, function(err, value){
                                 if(err) {

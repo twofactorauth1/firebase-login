@@ -86,7 +86,8 @@ _.extend(view.prototype, BaseView.prototype, {
             //console.dir(data);
             //self.log.debug('<< data');
             if(!data.account.website.settings) {
-                self.log.warn('Website Settings is null!');
+                self.log.warn('Website Settings is null for account ' + accountId);
+                data.account.website.settings = {};
             }
 
             app.render('index', data, function(err, html){
