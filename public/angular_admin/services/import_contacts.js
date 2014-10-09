@@ -15,8 +15,7 @@ define(['app', 'constants'], function(app) {
 					break;
 			}
 			var apiUrl = baseUrl + api + ['checkaccess'].join('/');
-			$http.get(apiUrl)
-			.success(function(data, status, headers, config) {
+			$http.get(apiUrl).success(function(data, status, headers, config) {
 				var path = "";
 				api = "social/";
 				switch(socialType) {
@@ -35,13 +34,11 @@ define(['app', 'constants'], function(app) {
 				}
 				apiUrl = baseUrl + api + path;
 				$http.get(apiUrl).success(function(data, status, headers, config) {
-					fn(data);
-				}).error(function(data, status, headers, config) {
-					fn(data);
+					fn(data, true);
 				});
 			}).error(function(data, status, headers, config) {
-					fn(data);
-				});
+				fn(data, false);
+			});
 		}
 	});
 });
