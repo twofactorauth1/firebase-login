@@ -64,7 +64,7 @@
             <tab-heading>
                 <i class="fa fa-paint-brush" tooltip-placement="bottom" tooltip="Theme"></i>
             </tab-heading>
-            <div class="leftpanelinner">
+            <div class="rightpanelinner">
                 <h5 class="sidebartitle">Theme</h5>
                 <hr/>
                 <div id="current-theme">
@@ -128,14 +128,14 @@
                 <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.accountUrl">
             </div>
         </tab>
-        <tab active="tab.active">
+        <tab>
             <tab-heading>
-                <i class="fa fa-file-text-o" tooltip-placement="bottom" tooltip="Page"></i>
+                <i class="fa fa-file-text-o"></i>
             </tab-heading>
-            <div class="leftpanelinner">
+            <div class="rightpanelinner">
                 <h5 class="sidebartitle">Page</h5>
                 <hr/>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label>Title:</label>
                     <input class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">
                 </div>
@@ -171,7 +171,7 @@
                 <div class="well">
                     <p>Danger Zone</p>
                     <button class="btn btn-block btn-danger" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
-                </div>
+                </div> -->
                 <!-- leftpanelinner -->
             </div>
         </tab>
@@ -179,7 +179,7 @@
             <tab-heading>
                 <i class="fa fa-puzzle-piece" tooltip-placement="bottom" tooltip="Component"></i>
             </tab-heading>
-            <div class="leftpanelinner">
+            <div class="rightpanelinner">
                 <h5 class="sidebartitle">Component</h5>
                 <hr/>
                 <div class="form-group">
