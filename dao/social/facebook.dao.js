@@ -666,7 +666,7 @@ var dao = {
         var myFacebookId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
         var apiOptions = {access_token: accessToken};
-        var url = [myFacebookId, 'insights'];
+        var url = [facebookConfig.CLIENT_ID, 'insights'];
         if (metric) {
             url.push(metric);
         }
