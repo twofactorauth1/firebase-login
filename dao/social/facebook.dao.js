@@ -289,8 +289,16 @@ var dao = {
                                     importFriends(friends, pagingInfo.nextPage);
                                 });
                             } else {
-                                self.log.info("Facebook friend import succeed. " + totalImported + " imports");
-                                fn(null);
+                                self.log.info("Facebook friend import succeed. " + totalImported + " imports. Now merging duplicates.");
+                                contactDao.mergeDuplicates(null, accountId, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error occurred during duplicate merge: ' + err);
+                                        fn(null);
+                                    } else {
+                                        self.log.info('Duplicate merge successful.');
+                                        fn(null);
+                                    }
+                                });
                             }
                         });
                     });
