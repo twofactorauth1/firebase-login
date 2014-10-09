@@ -661,14 +661,16 @@ var dao = {
         var accessToken = this._getAccessToken(user);
     },
     
-    getAppInsights: function (user, metric, fn) {
+    getAppInsights: function (user, urlOptions, fn) {
         var self = this;
         var myFacebookId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
         var apiOptions = {access_token: accessToken};
         var url = [facebookConfig.CLIENT_ID, 'insights'];
-        if (metric) {
-            url.push(metric);
+        if (urlOptions.metric) {
+            url.push(urlOptions.metric);
+            url.push(urlOptions.period);
+            url.push(urlOptions.breakdown);
         }
         url = url.join('/');
         console.info('Fetch App Insights : ' + url);
