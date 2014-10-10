@@ -9,8 +9,8 @@
     <div class="component" data-ng-show="component.visibility" data-class="image-gallery" data-id="{{component._id}}">
         <div class="component-body" id="{{component.anchor}}">
             <div class="image-gallery-v1 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
-                <div class="row container">
-                    <div class="col-xs-12 inner-page">
+                <div class="container inner-page">
+                    <div class="col-xs-12">
 
                         <div class="image-gallery-title">
                             <div class="editable" data-class="maintitle" data-index="{{$index}}">
@@ -18,6 +18,8 @@
                                 <div ng-show="!component.maintitle"><h1>Image Gallery Title</h1></div>
                             </div>
                         </div>
+
+                        <hr></hr>
 
                         <div class="image-gallery-subtitle" data-ng-show="component.subtitle">
                             <div class="editable" data-class="subtitle" data-index="{{$index}}">
@@ -29,13 +31,17 @@
 
                         <div class="">
                             <div ng-cloak class="row">
-                                <div class="col-xs-3 imgHeight single-image" ng-repeat="image in component.images track by $index">
-                                    <a class="thumbnail" href="{{image.url}}"
-                                       title="{{image.label}}" data-gallery>
+                                <div  ng-repeat="image in component.images track by $index">
+                                    <div class="col-sm-3 col-xs-12">
+                                        <div class="imgHeight single-image">
+                                            <a class="thumbnail" href="{{image.url}}"
+                                               title="{{image.label}}" data-gallery>
 
-                                        <img class="img-responsive" alt="{{image.label}}" src="{{image.url}}">
-                                        <span class="caption"><i class="fa fa-plus-circle"></i></span>
-                                    </a>
+                                                <img class="img-responsive" alt="{{image.label}}" ng-src="{{image.url}}">
+                                                <span class="caption"><i class="fa fa-plus-circle"></i></span>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
