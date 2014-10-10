@@ -1,3 +1,4 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="customer">
 
     <div class="pageheader row">
@@ -393,16 +394,6 @@
                     <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus" ng-click="importGmailContacts()"><span class="fa fa-google"></span>
                         <div class="clearfix mb5"></div>Gmail</button>
                     <div class="clearfix mb30"></div>
-                </div>
-
-                <div class="row " data-import-section="progress">
-                    <h3 class="center">Importing <span class="num"></span> contacts from <span class="source"></span></h3>
-                    <div class="clearfix mb30"></div>
-                    <div class="progress progress-striped active">
-                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                            <span class="sr-only">40% Complete (success)</span>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="row import-success hidden" data-import-section="success">

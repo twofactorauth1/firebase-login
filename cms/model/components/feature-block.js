@@ -46,13 +46,13 @@ var component = $$.m.ModelBase.extend({
              * The Title of the component that shows up on the top
              * (optional)
              */
-            maintitle:"<h2>Feature Block Title</h2>",
+            maintitle:"<h1>Feature Block Title</h1>",
 
             /**
              *
              *
              */
-            subtitle:"<h4>This is the subtitle.</h4>",
+            subtitle:"<h3>This is the subtitle.</h3>",
 
             /**
              *

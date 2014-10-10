@@ -1,22 +1,47 @@
 define(['app','c3'], function (app,c3) {
-	app.register.service('ChartFacebookService', function ($http) {
+	app.register.service('ChartFacebookService', function ($http, $q) {
+        var baseUrl = '/api/1.0/';
+        this.getInsightsApi = function (apiOptions, fn) {
+			var apiUrl = ['social', 'facebook', 'insights'];
+            if (apiOptions.metric) {
+                apiUrl.push(apiOptions.metric);
+                apiUrl.push(apiOptions.period);
+                apiUrl.push(apiOptions.breakdown);
+            }
+            apiUrl = baseUrl + apiUrl.join('/');
+			return $http.get(apiUrl);
+		};
+
 		this.getOverview = function(boxId) {
-		    c3.generate({
-		        bindto : '.' + boxId,
-		        data : {
-				type : 'bar',
-		            x : 'x',
-		            columns : [['x', '2014-06-20', '2014-07-20', '2014-08-20', '2014-09-20'], ['friends', 30, 40, 55, 58], ['likes', 130, 340, 400, 500]]
-		        },
-		        axis : {
-		            x : {
-		                type : 'timeseries',
-		                tick : {
-		                    format : '%Y-%m-%d'
-		                }
-		            }
-		        }
-		    });
+            $q.all([this.getInsightsApi({metric: 'application_installation_adds_unique', period: 'lifetime'}), 
+                    this.getInsightsApi({metric: 'application_block_adds_unique', period: 'lifetime'})])
+            .then(function (data) {
+                console.info(data);
+                var installCount = 0;
+                var blockCount = 0;
+                
+                if (data[0].data.values) {
+                    data[0].data.values.forEach(function (value) {
+                        installCount += value.value;
+                    });
+                }
+                
+                if (data[1].data.values) {
+                    data[1].data.values.forEach(function (value) {
+                        blockCount += value.value;
+                    });
+                }
+                c3.generate({
+                    bindto: '.' + boxId,
+                    data: {
+                        columns: [
+                            ['Installation', installCount],
+                            ['Block', blockCount],
+                        ],
+                        type : 'pie'
+                    }
+                });
+            });
 		};
 		this.getLikesPerDay = function(boxId) {
 		    c3.generate({

@@ -16,7 +16,8 @@ var view = function(req,resp,options) {
 
 _.extend(view.prototype, BaseView.prototype, {
 
-    log: null,
+    log: $$.g.getLogger('website.server.view'),
+
     show: function(accountId) {
             this._show(accountId, "index");
     },
@@ -51,7 +52,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
     renderNewIndex: function(accountId) {
         var data = {}, self = this;
-        console.log('>> renderNewIndex');
+        self.log.debug('>> renderNewIndex');
         /*
         var data = {
             settings: settings,
@@ -69,7 +70,7 @@ _.extend(view.prototype, BaseView.prototype, {
         };
         */
         var isEditor = self.req.query.editor;
-        console.log('isEditor: ', isEditor);
+        self.log.debug('isEditor: ', isEditor);
         cmsDao.getDataForWebpage(accountId, 'index', function(err, value){
             data.account = value;
             data.title = 'Indigenous.IO';
@@ -81,15 +82,19 @@ _.extend(view.prototype, BaseView.prototype, {
                 keywords: ''
             };
             data.includeEditor = isEditor;
-            console.log('>> data');
-            console.dir(data);
-            console.log('<< data');
-            console.dir(data.account.website.settings);
+            //self.log.debug('>> data');
+            //console.dir(data);
+            //self.log.debug('<< data');
+            if(!data.account.website.settings) {
+                self.log.warn('Website Settings is null for account ' + accountId);
+                data.account.website.settings = {};
+            }
+
             app.render('index', data, function(err, html){
-                // console.log('Error: ', err);
-                //console.log('rendering the following:');
-                //console.log(html);
-                //self.res
+                if(err) {
+                    self.log.error('Error during render: ' + err);
+                }
+
                 self.resp.send(html);
                 self.cleanUp();
                 self = data = value = null;
@@ -104,7 +109,7 @@ _.extend(view.prototype, BaseView.prototype, {
     _renderWebsite: function(accountId, path, cacheKey, isEditor) {
         var data = {}, self = this;
 
-        console.log('Path: '+path);
+        self.log.debug('Path: '+path);
 
         cmsDao.getRenderedWebsitePageForAccount(accountId, path, isEditor, null, null, null, function(err, value) {
             if (err) {

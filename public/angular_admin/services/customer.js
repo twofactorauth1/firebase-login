@@ -182,23 +182,29 @@ define(['app','constants','importContactService'], function (app) {
         };
 
 
-			//region IMPORT
-			this.importFacebookFriends = function(fn) {
-				ImportContactService.importContacts($$.constants.social.types.FACEBOOK, fn, function(data) {
-					fn(data);
-				})
-			}
+			
+		//region IMPORT
+		
+		this.importFacebookFriends = function(fn) {
+			ImportContactService.importContacts($$.constants.social.types.FACEBOOK, fn, function(data, success) {
+				fn(data, success);
+			})
+		}
+	
+		
+		this.importLinkedInConnections = function(fn) {
+			ImportContactService.importContacts($$.constants.social.types.LINKEDIN, fn, function(data, success) {
+				fn(data, success);
+			})
+		}
+	
+		
+		this.importGmailContacts = function(fn) {
+			ImportContactService.importContacts($$.constants.social.types.GOOGLE, fn, function(data, success) {
+				fn(data, success);
+			})
+		}
 
-			this.importLinkedInConnections = function(fn) {
-				ImportContactService.importContacts($$.constants.social.types.LINKEDIN, fn, function(data) {
-					fn(data);
-				})
-			}
-
-			this.importGmailContacts = function(fn) {
-				ImportContactService.importContacts($$.constants.social.types.GOOGLE, fn, function(data) {
-					fn(data);
-				})
-			}
-    });
+	
+	});
 });

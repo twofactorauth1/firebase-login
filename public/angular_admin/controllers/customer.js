@@ -1,5 +1,5 @@
-define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngProgress', 'headroom','ngHeadroom', 'ngProgress'], function(app) {
-    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', function ($scope, CustomerService, ngProgress) {
+define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngProgress', 'headroom','ngHeadroom','toaster'], function(app) {
+    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'toaster', '$window', function ($scope, CustomerService, ngProgress, toaster, $window) {
         ngProgress.start();
         $scope.customerFilter = {};
         $scope.customerOrder = 'first';
@@ -95,23 +95,38 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
             });
             
             
-            $scope.importFacebookFriends = function() {
-				CustomerService.importFacebookFriends(function (data) {
-					// alert(data.detail); in progress
+            
+			
+			$scope.importFacebookFriends = function() {
+				CustomerService.importFacebookFriends(function(data, success) {
+					if (success) {
+						$('#import-contacts-modal').modal('hide');
+						toaster.pop('success', "Contacts being imported.");
+					} else
+						$window.location.href = "/login/facebook";
 				})
 			}
-			
+
 			$scope.importLinkedInConnections = function() {
-				CustomerService.importLinkedInConnections(function (data) {
-					// alert(data.detail); in progress
+				CustomerService.importLinkedInConnections(function(data, success) {
+					if (success) {
+						$('#import-contacts-modal').modal('hide');
+						toaster.pop('success', "Contacts being imported.");
+					} else
+						$window.location.href = "/login/linkedin";
 				})
 			}
 
 			$scope.importGmailContacts = function() {
-				CustomerService.importGmailContacts(function (data) {
-					// alert(data.detail); in progress
+				CustomerService.importGmailContacts(function(data, success) {
+					if (success) {
+						$('#import-contacts-modal').modal('hide');
+						toaster.pop('success', "Contacts being imported.");
+					} else
+						$window.location.href = "/login/google";
 				})
 			}
+
             
             $scope.$watch('toggleCategory', function (value) {
                if(angular.isDefined(value))

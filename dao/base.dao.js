@@ -122,7 +122,7 @@ _.extend(baseDao.prototype, mongoBaseDao, {
             var key = this.getTable(type) + "_" + id;
             $$.g.cache.get(key, null, null, null, function(err, value) {
                 if (!err && value != null) {
-                    console.log("FOUND IN CACHE: " + key);
+                    //console.log("FOUND IN CACHE: " + key);
                     fn(null, value);
 
                     fn = type = id = null;
