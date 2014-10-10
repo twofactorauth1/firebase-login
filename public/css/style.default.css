@@ -17285,7 +17285,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   top: 0;
   right: -240px;
   display: none;
-  z-index: 99999999;
+  z-index: 9999991;
 }
 .rightpanel .nav-tabs {
   border-radius: 0;
@@ -22438,6 +22438,176 @@ path {
   top: 100%;
   left: -100px;
 }
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #eeeeee;
+}
+.goback {
+  background: #d0ecf6;
+  padding: 38px;
+  height: 100px;
+  -webkit-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
+  -moz-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
+  box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
+}
+.goback span {
+  color: black;
+  cursor: pointer;
+}
+.goback:hover {
+  background: #7caaba;
+}
+.goback:hover span {
+  color: white!important;
+}
+.goback p {
+  text-align: left;
+}
+#body,
+#main-area,
+#content-area {
+  min-height: 600px;
+}
+.ng-hide {
+  display: none!important;
+}
+.component-body {
+  height: 100%;
+}
+#body .aloha-editable-highlight {
+  outline: none!important;
+  border: 0 !important;
+}
+#body .aloha-editable {
+  outline: none;
+  border: 0;
+}
+#body .aloha-editable:after {
+  opacity: 0;
+  background: transparent;
+  color: transparent;
+  content: '';
+  height: 0;
+  bottom: -8px;
+  left: 0;
+  width: 35px;
+  padding: 0 7px;
+  position: absolute;
+  display: block;
+}
+#body .aloha-editable-active {
+  outline: none!important;
+  border: 2px dashed #efa022;
+  transition: all .2s linear;
+}
+#body .aloha-editable-active:after {
+  content: "Editing";
+  background: #efa022;
+  color: #ffffff;
+  position: relative;
+  padding: 0;
+  width: 75px;
+  font-size: 12px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 300;
+  line-height: 24px;
+  bottom: -24px;
+  left: 0;
+  -webkit-border-radius: 0 0 4px 4px;
+  -moz-border-radius: 0 0 4px 4px;
+  border-radius: 0 0 4px 4px;
+  opacity: 1;
+  transition: all .2s linear;
+  height: 24px;
+  z-index: 9999;
+}
+#body .aloha-editable-active.writing:after {
+  content: "Writing...";
+  width: 45px;
+}
+#body.no-outline .aloha-editable-highlight {
+  outline: none!important;
+}
+#body.no-outline .aloha-editable-active {
+  outline: none!important;
+}
+.fragment {
+  display: block;
+}
+.add-component {
+  font-size: 50px;
+  height: 40px;
+  background: #fff;
+  border-radius: 25px;
+  position: absolute;
+  margin-top: -25px;
+  left: 50%;
+  z-index: 999;
+}
+.add-component i {
+  margin-top: -3px;
+}
+.add-component:hover {
+  background: #4eb1ca;
+  pointer-events: auto;
+}
+.editing .no-component {
+  display: block;
+  visibility: visible;
+}
+.editing .fragment {
+  border: none;
+  overflow: hidden;
+}
+.editing .fragment:hover {
+  border: 2px dashed #34495e;
+}
+.editing .fragment:hover .componentActions {
+  display: block;
+  visibility: visible;
+}
+.editing .fragment:hover .add-component {
+  display: block;
+  visibility: visible;
+}
+.ui-sortable {
+  margin-bottom: 0;
+}
+.ui-sortable .dragging {
+  height: 60px!important;
+}
+.ui-sortable .componentActions h4 {
+  display: none;
+}
+ul.ui-sortable.active .fragment {
+  height: 60px!important;
+}
+ul.ui-sortable.active .fragment .componentActions {
+  display: block;
+  visibility: visible;
+  border: 1px solid #ccc;
+  background: #fafafa;
+}
+ul.ui-sortable.active .fragment .componentActions h4 {
+  display: block;
+}
+.componentActions,
+.add-component,
+.no-component {
+  display: none;
+  visibility: hidden;
+}
+.no-component .add-component {
+  display: block;
+  visibility: visible;
+}
+.empty-page {
+  max-width: 440px;
+  margin: 40px auto;
+  padding: 30px 0;
+}
 .inner-page {
   padding: 50px 0;
   max-width: 1000px;
@@ -22841,6 +23011,34 @@ ul.nav {
     height: 100px;
     width: 250px;
   }
+}
+/********** Navbar v3 **********/
+.navbar-v3 {
+  background-color: rgba(54, 155, 217, 0.8);
+  border-bottom: 3px solid #18477a !important;
+}
+.navbar-v3 .maintitle {
+  float: left;
+  font-size: 24px;
+  color: white;
+  text-shadow: 1px 1px 1px black;
+  font-weight: bold;
+  line-height: 60px;
+  margin: 0;
+  text-indent: 20px;
+  text-align: center;
+}
+.navbar-v3 img {
+  height: 40px;
+  width: 40px;
+  border: 2px solid #195490;
+}
+.navbar-v3 .pull-right {
+  padding: 10px;
+}
+.navbar-v3 .btn {
+  background: #195490;
+  border-bottom: 4px solid #154474;
 }
 /********** Feature Block **********/
 .feature-block {
@@ -24255,176 +24453,6 @@ div[data-class="blog"] .single-blog {
   height: 2px;
   background-color: #75b1ae;
 }
-hr {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border: 0;
-  border-top: 1px solid #eeeeee;
-}
-.goback {
-  background: #d0ecf6;
-  padding: 38px;
-  height: 100px;
-  -webkit-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
-  -moz-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
-  box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
-}
-.goback span {
-  color: black;
-  cursor: pointer;
-}
-.goback:hover {
-  background: #7caaba;
-}
-.goback:hover span {
-  color: white!important;
-}
-.goback p {
-  text-align: left;
-}
-#body,
-#main-area,
-#content-area {
-  min-height: 600px;
-}
-.ng-hide {
-  display: none!important;
-}
-.component-body {
-  height: 100%;
-}
-#body .aloha-editable-highlight {
-  outline: none!important;
-  border: 0 !important;
-}
-#body .aloha-editable {
-  outline: none;
-  border: 0;
-}
-#body .aloha-editable:after {
-  opacity: 0;
-  background: transparent;
-  color: transparent;
-  content: '';
-  height: 0;
-  bottom: -8px;
-  left: 0;
-  width: 35px;
-  padding: 0 7px;
-  position: absolute;
-  display: block;
-}
-#body .aloha-editable-active {
-  outline: none!important;
-  border: 2px dashed #efa022;
-  transition: all .2s linear;
-}
-#body .aloha-editable-active:after {
-  content: "Editing";
-  background: #efa022;
-  color: #ffffff;
-  position: relative;
-  padding: 0;
-  width: 75px;
-  font-size: 12px;
-  font-family: 'Source Sans Pro', sans-serif;
-  font-weight: 300;
-  line-height: 24px;
-  bottom: -24px;
-  left: 0;
-  -webkit-border-radius: 0 0 4px 4px;
-  -moz-border-radius: 0 0 4px 4px;
-  border-radius: 0 0 4px 4px;
-  opacity: 1;
-  transition: all .2s linear;
-  height: 24px;
-  z-index: 9999;
-}
-#body .aloha-editable-active.writing:after {
-  content: "Writing...";
-  width: 45px;
-}
-#body.no-outline .aloha-editable-highlight {
-  outline: none!important;
-}
-#body.no-outline .aloha-editable-active {
-  outline: none!important;
-}
-.fragment {
-  display: block;
-}
-.add-component {
-  font-size: 50px;
-  height: 40px;
-  background: #fff;
-  border-radius: 25px;
-  position: absolute;
-  margin-top: -25px;
-  left: 50%;
-  z-index: 999;
-}
-.add-component i {
-  margin-top: -3px;
-}
-.add-component:hover {
-  background: #4eb1ca;
-  pointer-events: auto;
-}
-.editing .no-component {
-  display: block;
-  visibility: visible;
-}
-.editing .fragment {
-  border: none;
-  overflow: hidden;
-}
-.editing .fragment:hover {
-  border: 2px dashed #34495e;
-}
-.editing .fragment:hover .componentActions {
-  display: block;
-  visibility: visible;
-}
-.editing .fragment:hover .add-component {
-  display: block;
-  visibility: visible;
-}
-.ui-sortable {
-  margin-bottom: 0;
-}
-.ui-sortable .dragging {
-  height: 60px!important;
-}
-.ui-sortable .componentActions h4 {
-  display: none;
-}
-ul.ui-sortable.active .fragment {
-  height: 60px!important;
-}
-ul.ui-sortable.active .fragment .componentActions {
-  display: block;
-  visibility: visible;
-  border: 1px solid #ccc;
-  background: #fafafa;
-}
-ul.ui-sortable.active .fragment .componentActions h4 {
-  display: block;
-}
-.componentActions,
-.add-component,
-.no-component {
-  display: none;
-  visibility: hidden;
-}
-.no-component .add-component {
-  display: block;
-  visibility: visible;
-}
-.empty-page {
-  max-width: 440px;
-  margin: 40px auto;
-  padding: 30px 0;
-}
 .coming-soon {
   height: 100%;
 }
@@ -24560,6 +24588,9 @@ ul.ui-sortable.active .fragment .componentActions h4 {
 .image-gallery-v1 .single-image {
   padding: 0;
   margin: 0;
+}
+.image-gallery-v1 .thumbnail {
+  position: relative;
 }
 .image-gallery-v1 a.thumbnail .caption {
   display: block;
@@ -24863,12 +24894,13 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   margin-top: 8px;
 }
 .video-block {
-  margin-top: 0;
   transition: none;
   padding: 5em 0;
   height: 100%;
   overflow: hidden;
   background-size: cover!important;
+  max-width: 800px;
+  margin: 0 auto;
 }
 .video-block .videoblock iframe {
   margin: 0 auto;
