@@ -1,5 +1,26 @@
-define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnimate', 'toaster', 'colorpicker', 'angularBootstrapSwitch', 'ngProgress', 'unsafeHtml','mediaDirective'], function(app) {
-    app.register.controller('WebsiteCtrl', ['$scope', '$window', '$timeout', 'WebsiteService', 'UserService', 'toaster', 'ngProgress',
+define([
+    'app',
+    'websiteService',
+    'jqueryUI',
+    'angularUI',
+    'userService',
+    'ngAnimate',
+    'toaster',
+    'colorpicker',
+    'angularBootstrapSwitch',
+    'ngProgress',
+    'unsafeHtml',
+    'mediaDirective',
+    'confirmClick2'
+], function(app) {
+    app.register.controller('WebsiteCtrl', [
+        '$scope',
+        '$window',
+        '$timeout',
+        'WebsiteService',
+        'UserService',
+        'toaster',
+        'ngProgress',
         function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress) {
             ngProgress.start();
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -34,6 +55,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     ]
                 }
             };
+
 
             //get user
             UserService.getUser(function(user) {

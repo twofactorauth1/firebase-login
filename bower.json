@@ -91,7 +91,8 @@
     "underscore": "~1.5.2",
     "angular-google-maps": "~1.2.2",
     "lodash": "~2.4.1",
-    "ngprogress": "~1.0.7"
+    "ngprogress": "~1.0.7",
+    "bootstrap-confirmation":"https://github.com/Tavicu/bootstrap-confirmation.git"
   },
   "resolutions": {
     "angular": "1.2.26",
