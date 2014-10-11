@@ -495,7 +495,7 @@ define([
                 // });
             };
 
-            $scope.createPage = function(page) {
+            $scope.createPage = function(page, $event) {
                 console.log('create page', page);
 
                 var websiteId = $scope.currentPage.websiteId;
@@ -506,21 +506,35 @@ define([
                     mainmenu: page.mainmenu
                 };
 
-                WebsiteService.createPage(websiteId, pageData, function(newpage) {
-                    console.log('$scope.allPages >>> ', $scope.allPages);
-                    toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
-                    $scope.page = null;
-                    $scope.allPages.push(newpage);
-                    document.getElementById("iframe-website").setAttribute("src", "/page/" + newpage.handle);
-                    $scope.currentPage = newpage;
-                    $scope.pageSelected = newpage.handle;
-                    //get components from page
-                    if ($scope.currentPage && $scope.currentPage.components) {
-                        $scope.components = $scope.currentPage.components;
-                    } else {
-                        $scope.components = [];
+                var hasHandle = false;
+                $scope.allPages.forEach(function (v, i) {
+                    if ( page.handle === v.handle ) {
+                        hasHandle = true;
                     }
                 });
+
+                if (!hasHandle) {
+                    WebsiteService.createPage(websiteId, pageData, function (newpage) {
+                        console.log('$scope.allPages >>> ', $scope.allPages);
+                        toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
+                        $scope.page = null;
+                        $scope.allPages.push(newpage);
+                        document.getElementById("iframe-website").setAttribute("src", "/page/" + newpage.handle);
+                        $scope.currentPage = newpage;
+                        $scope.pageSelected = newpage.handle;
+                        //get components from page
+                        if ($scope.currentPage && $scope.currentPage.components) {
+                            $scope.components = $scope.currentPage.components;
+                        } else {
+                            $scope.components = [];
+                        }
+                    });
+                } else {
+                    toaster.pop('error', "Page URL " + page.handle, "Already exists");
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                }
+
             };
 
             $scope.deletePage = function() {
