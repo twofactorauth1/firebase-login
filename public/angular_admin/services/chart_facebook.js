@@ -80,51 +80,39 @@ define(['app','c3'], function (app,c3) {
             });
 		};
 
-		this.getPostTimeline = function(boxId) {
-		    c3.generate({
-		        bindto : '.' + boxId,
-		        data : {
-				type : 'pie',
-		            json:[ {
-		                date: '2014-06-21',
-		                likes: '2',
-		                shares: '2',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-22',
-		                likes: '4',
-		                shares: '1',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-23',
-		                likes: '7',
-		                shares: '2',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-24',
-		                likes: '5',
-		                shares: '3',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-25',
-		                likes: '1',
-		                shares: '1',
-		                comments: '1',
-		                title: 'Post title'
-		            }],
-		            keys: {
-		                value: ['likes', 'shares','comments']
-		            }
-		        }
-		    });
+		this.getInstallationsPerDay = function (boxId) {
+            this.getInsightsApi({metric: 'application_installation_adds_unique', period: 'lifetime'})
+            .then(function (data) {
+                console.debug('FB getInstallationsPerDay');
+                console.debug(data);
+                var dates = ['x'];
+                var values = ['Installations'];
+                
+                if (data.length) {
+                    data[0].values.forEach(function (value, index) {
+                        values.push(value.value);
+                        dates.push(value.end_time.slice(0, 10));
+                    });
+                }
+		        c3.generate({
+		            bindto : '.' + boxId,
+		            data: {
+                        x: 'x',
+                        columns: [
+                            dates,
+                            values
+                        ]
+                    },
+                    axis: {
+                        x: {
+                            type: 'timeseries',
+                            tick: {
+                                format: '%Y-%m-%d'
+                            }
+                        }
+                    }
+		        });
+            });
 		};
 
 		this.getPostInteractionsPerDay = function(boxId) {
