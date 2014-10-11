@@ -51,8 +51,8 @@ define(['app', 'jqueryGridster', 'jqueryUI', 'ngProgress', 'userService', 'chart
 		    ChartFacebookService.getOverview(boxId);
 		};
 
-		charts.FB_likesPerDay = function(boxId) {
-		    ChartFacebookService.getLikesPerDay(boxId);
+		charts.FB_blocksPerDay = function(boxId) {
+		    ChartFacebookService.getBlocksPerDay(boxId);
 		};
 
 		charts.FB_postTimeline = function(boxId) {
