@@ -67,7 +67,7 @@ _.extend(baseRouter.prototype, {
 
     isAuth: function(req, resp, next) {
         var self = this;
-        logger.debug('>> isAuth');
+        logger.debug('>> isAuth (' + req.originalUrl + ')');
         var path = req.url;
         if (req.isAuthenticated()) {
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
@@ -81,6 +81,7 @@ _.extend(baseRouter.prototype, {
                             self = null;
                             return;
                         } else {
+                            value.replace(/\?authtoken.*/g, "");
                             logger.debug('redirecting to ' + value);
                             resp.redirect(value);
                             self = null;
@@ -88,8 +89,16 @@ _.extend(baseRouter.prototype, {
                     }
                 );
             } else {
-                logger.debug('<< isAuth');
-                return next();
+                if(req.originalUrl.indexOf('authtoken') === -1) {
+                    logger.debug('<< isAuth');
+                    return next();
+                } else {
+
+                    var redirectUrl = req.originalUrl.replace(/\?authtoken.*/g, "");
+                    logger.debug('redirecting to ' + redirectUrl);
+                    return resp.redirect(redirectUrl);
+                }
+
             }
         }
 

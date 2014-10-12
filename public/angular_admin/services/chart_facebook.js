@@ -1,113 +1,118 @@
 define(['app','c3'], function (app,c3) {
-	app.register.service('ChartFacebookService', function ($http) {
-		this.getOverview = function(boxId) {
-		    c3.generate({
-		        bindto : '.' + boxId,
-		        data : {
-				type : 'bar',
-		            x : 'x',
-		            columns : [['x', '2014-06-20', '2014-07-20', '2014-08-20', '2014-09-20'], ['friends', 30, 40, 55, 58], ['likes', 130, 340, 400, 500]]
-		        },
-		        axis : {
-		            x : {
-		                type : 'timeseries',
-		                tick : {
-		                    format : '%Y-%m-%d'
-		                }
-		            }
-		        }
-		    });
-		};
-		this.getLikesPerDay = function(boxId) {
-		    c3.generate({
-		        bindto : '.' + boxId,
-		        data : {
-		            json:[{
-		                date: '2014-06-20',
-		                likes: '2',
-		                unlikes: '0'
-		            }
-		            , {
-		                date: '2014-06-21',
-		                likes: '4',
-		                unlikes: '1'
-		            }
-		            , {
-		                date: '2014-06-22',
-		                likes: '7',
-		                unlikes: '2'
-		            }
-		            , {
-		                date: '2014-06-24',
-		                likes: '5',
-		                unlikes: '2'
-		            }
-		            , {
-		                date: '2014-06-25',
-		                likes: '6',
-		                unlikes: '1'
-		            }],
-		            keys: {
-		                x: 'date',
-		                value: ['likes', 'unlikes']
-		            }
-		        },
-		        axis : {
-		            x : {
-		                type : 'timeseries',
-		                tick : {
-		                    format : '%Y-%m-%d'
-		                }
-		            }
-		        }
-		    });
+	app.register.service('ChartFacebookService', function ($http, $q) {
+        var baseUrl = '/api/1.0/';
+        this.getInsightsApi = function (apiOptions, fn) {
+			var apiUrl = ['social', 'facebook', 'insights'];
+            if (apiOptions.metric) {
+                apiUrl.push(apiOptions.metric);
+                apiUrl.push(apiOptions.period);
+                apiUrl.push(apiOptions.breakdown);
+            }
+            apiUrl = baseUrl + apiUrl.join('/');
+			return $http.get(apiUrl);
 		};
 
-		this.getPostTimeline = function(boxId) {
-		    c3.generate({
-		        bindto : '.' + boxId,
-		        data : {
-				type : 'pie',
-		            json:[ {
-		                date: '2014-06-21',
-		                likes: '2',
-		                shares: '2',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-22',
-		                likes: '4',
-		                shares: '1',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-23',
-		                likes: '7',
-		                shares: '2',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-24',
-		                likes: '5',
-		                shares: '3',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-25',
-		                likes: '1',
-		                shares: '1',
-		                comments: '1',
-		                title: 'Post title'
-		            }],
-		            keys: {
-		                value: ['likes', 'shares','comments']
-		            }
-		        }
-		    });
+		this.getOverview = function (boxId) {
+            $q.all([this.getInsightsApi({metric: 'application_installation_adds_unique', period: 'lifetime'}), 
+                    this.getInsightsApi({metric: 'application_block_adds_unique', period: 'lifetime'})])
+            .then(function (data) {
+                console.debug('FB getOverview');
+                console.debug(data);
+                var installCount = 0;
+                var blockCount = 0;
+                
+                if (data[0].data.length) {
+                    data[0].data[0].values.forEach(function (value) {
+                        installCount += value.value;
+                    });
+                }
+                
+                if (data[1].data.length) {
+                    data[1].data[0].values.forEach(function (value) {
+                        blockCount += value.value;
+                    });
+                }
+                c3.generate({
+                    bindto: '.' + boxId,
+                    data: {
+                        columns: [
+                            ['Installation', installCount],
+                            ['Block', blockCount],
+                        ],
+                        type : 'pie'
+                    }
+                });
+            });
+		};
+
+		this.getBlocksPerDay = function (boxId) {
+            this.getInsightsApi({metric: 'application_block_adds_unique', period: 'lifetime'})
+            .then(function (data) {
+                console.debug('FB getBlocksPerDay');
+                console.debug(data);
+                var dates = ['x'];
+                var values = ['Blocks'];
+                
+                if (data.length) {
+                    data[0].values.forEach(function (value, index) {
+                        values.push(value.value);
+                        dates.push(value.end_time.slice(0, 10));
+                    });
+                }
+		        c3.generate({
+		            bindto : '.' + boxId,
+		            data: {
+                        x: 'x',
+                        columns: [
+                            dates,
+                            values
+                        ]
+                    },
+                    axis: {
+                        x: {
+                            type: 'timeseries',
+                            tick: {
+                                format: '%Y-%m-%d'
+                            }
+                        }
+                    }
+		        });
+            });
+		};
+
+		this.getInstallationsPerDay = function (boxId) {
+            this.getInsightsApi({metric: 'application_installation_adds_unique', period: 'lifetime'})
+            .then(function (data) {
+                console.debug('FB getInstallationsPerDay');
+                console.debug(data);
+                var dates = ['x'];
+                var values = ['Installations'];
+                
+                if (data.length) {
+                    data[0].values.forEach(function (value, index) {
+                        values.push(value.value);
+                        dates.push(value.end_time.slice(0, 10));
+                    });
+                }
+		        c3.generate({
+		            bindto : '.' + boxId,
+		            data: {
+                        x: 'x',
+                        columns: [
+                            dates,
+                            values
+                        ]
+                    },
+                    axis: {
+                        x: {
+                            type: 'timeseries',
+                            tick: {
+                                format: '%Y-%m-%d'
+                            }
+                        }
+                    }
+		        });
+            });
 		};
 
 		this.getPostInteractionsPerDay = function(boxId) {
