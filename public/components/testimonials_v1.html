@@ -3,11 +3,13 @@
         <div id="{{component.anchor}}" class="component-body ">
             <div>
                 <div class="inner-page">
-                    <h1 class="title">
+
+                    <div class="title">
                         <div class="editable" data-class="title">
-                            {{component.title}}
+                            <span ng-html-bind="component.title"></span>
                         </div>
-                    </h1>
+                    </div>
+
                     <div class="col-xs-12" ng-repeat="testimonial in component.testimonials track by $index">
 
                         <div ng-show="$index % 2 == 0" class="single-testimonial row">
