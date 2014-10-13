@@ -156,7 +156,10 @@
 
                 <div class="well">
                     <p>Danger Zone</p>
-                    <button class="btn btn-block btn-danger" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                    <button class="btn btn-block btn-danger"
+                            confirm-click2
+                            data-placement="top"
+                            confirm="deletePage()" ><i class="fa fa-trash"></i> Delete Page</button>
                 </div>
             </div>
         </tab>
@@ -293,7 +296,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" ng-click="createPage(page)" data-dismiss="modal">Create Page</button>
+                <button type="button" class="btn btn-primary" ng-click="createPage(page, $event)" data-dismiss="modal">Create Page</button>
             </div>
         </div>
         <!-- /.modal-content -->
