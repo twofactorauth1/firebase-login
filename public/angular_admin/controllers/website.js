@@ -56,7 +56,6 @@ define([
                 }
             };
 
-
             //get user
             UserService.getUser(function(user) {
                 $scope.user = user;
@@ -186,7 +185,6 @@ define([
                     $scope.primaryFontFamily = $scope.website.settings.font_family;
                     $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
                 });
-
             });
 
             /*
@@ -253,6 +251,7 @@ define([
                 $scope.updateIframeComponents();
                 $scope.deactivateAloha();
                 $scope.isEditing = false;
+                $scope.componentEditing = '';
                 iFrame.contentWindow.triggerEditModeOff();
             };
 
@@ -349,6 +348,16 @@ define([
                     iFrame.contentWindow.triggerEditModeOff();
                 });
 
+                var data = {
+                    _id: $scope.website._id,
+                    accountId: $scope.website.accountId,
+                    settings: $scope.website.settings
+                };
+
+                WebsiteService.updateWebsite(data, function(data) {
+                    console.log('updated website settings', data);
+                });
+
                 //website service - save page data
             };
 
@@ -411,7 +420,8 @@ define([
                     console.log('data >>> ', data);
                     if (data.components) {
                         var newComponent = data.components[data.components.length - 1];
-                        $scope.currentPage.components.push(newComponent);
+                        $scope.currentPage.components.splice(1, 0, newComponent);
+                        //$scope.currentPage.components.push(newComponent);
                         //$scope.components.push(newComponent);
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
@@ -534,7 +544,6 @@ define([
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-
             };
 
             $scope.deletePage = function() {
@@ -557,15 +566,8 @@ define([
 
             $scope.updateThemeSettings = function() {
                 console.log('update theme', $scope.website.settings);
-                var data = {
-                    _id: $scope.website._id,
-                    accountId: $scope.website.accountId,
-                    settings: $scope.website.settings
-                };
-
-                WebsiteService.updateWebsite(data, function(data) {
-                    console.log('updated website settings');
-                });
+                document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
+                $scope.editPage();
             };
 
         }
