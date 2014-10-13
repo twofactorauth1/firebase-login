@@ -16686,6 +16686,21 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .account #billSummaryModal .summary h4 {
   margin: 0;
 }
+.panel-selected .panel-heading {
+  background-color: #27ae60;
+}
+.panel-selected .panel-heading .panel-title {
+  color: white;
+}
+.plan-selected {
+  border: 3px solid #27ae60;
+  border-radius: 7px;
+}
+.selected-plan {
+  color: #27ae60;
+  text-align: center;
+  margin: 5px 0;
+}
 .headerbar {
   border-left: 1px solid #eee;
   background: #fff;
