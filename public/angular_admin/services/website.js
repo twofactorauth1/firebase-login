@@ -13,8 +13,9 @@ define(['app'], function (app) {
 
 		//website
 		this.updateWebsite = function(data, fn) {
+			console.log('updateWebsite >>>');
 			var apiUrl = baseUrl + ['cms', 'website'].join('/');
-			$http.get({
+			$http({
 			    url: apiUrl,
 			    method: "POST",
 			    data: angular.toJson(data)
