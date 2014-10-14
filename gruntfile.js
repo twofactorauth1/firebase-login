@@ -230,6 +230,17 @@ module.exports = function(grunt) {
             }
         },
 
+        jsdoc2md: {
+
+            separateOutputFilePerInput: {
+                files: [
+                    { src: "api/1.0/cms.api.js", dest: "../wiki-indigeweb/API-CMS.md" },
+                    { src: "api/1.0/product.api.js", dest: "../wiki-indigeweb/API-Product.md" }
+                ]
+            }
+
+        },
+
 
         //TESTING
         nodeunit: {
@@ -307,6 +318,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-ng-annotate');
+    grunt.loadNpmTasks("grunt-jsdoc-to-markdown");
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
@@ -336,5 +348,6 @@ module.exports = function(grunt) {
     grunt.registerTask('testCms', ['nodeunit:cms']);
     grunt.registerTask('testAssets', ['nodeunit:assets']);
     grunt.registerTask('testContactActivities', ['nodeunit:contactActivities']);
+    grunt.registerTask('updateDocs', 'jsdoc2md');
     
 };

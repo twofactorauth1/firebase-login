@@ -68,8 +68,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('theme/website/:websiteId'), this.isAuthApi, this.createThemeFromWebsite.bind(this));
         app.post(this.url('theme/:id'), this.isAuthApi, this.updateTheme.bind(this));
         app.delete(this.url('theme/:id'), this.isAuthApi, this.deleteTheme.bind(this));
-        app.post(this.url('website/theme/:id'), this.isAuthApi, this.createWebsiteFromTheme.bind(this));
-        app.post(this.url('website/:websiteId/theme/:themeId'), this.isAuthApi, this.setTheme.bind(this));
+        app.put(this.url('theme/:id/website'), this.isAuthApi, this.createWebsiteFromTheme.bind(this));
+        app.post(this.url('theme/:id/website/:websiteId/page/:handle'), this.isAuthApi, this.createPageFromTheme.bind(this));
+        app.post(this.url('theme/:themeId/website/:websiteId'), this.isAuthApi, this.setTheme.bind(this));
 
 
         // COMPONENTS
@@ -81,6 +82,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('page/:id/components/:componentId'), this.isAuthApi, this.updateComponent.bind(this));
         app.delete(this.url('page/:id/components/:componentId'), this.isAuthApi, this.deleteComponent.bind(this));
         app.post(this.url('page/:id/components/:componentId/order/:newOrder'), this.isAuthApi, this.updateComponentOrder.bind(this));
+        app.get(this.url('component/:type/versions'), this.isAuthApi, this.getAvailableComponentVersions.bind(this));
 
         // BLOG POSTS
         app.post(this.url('page/:id/blog'), this.isAuthApi, this.createBlogPost.bind(this));
@@ -412,16 +414,28 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    /**
+     * This function creates a new theme from an existing website object.
+     * @param {websiteId} websiteID in URL
+     * @param {theme} theme object in body of POST.  The name field MUST be populated.
+     */
     createThemeFromWebsite: function(req, res) {
         var self = this;
         self.log.debug('>> createThemeFromWebsite');
+
         var websiteId = req.params.websiteId;
         var accountId = parseInt(self.accountId(req));
         var themeObj = new $$.m.cms.Theme(req.body);
+        if(themeObj.get('name') === '') {
+            self.wrapError(res, 400, 'Invalid Parameter', 'Invalid parameter provided for Theme Name');
+        }
         themeObj.set('accountId', accountId);
         themeObj.set('created.by', self.userId(req));
 
-        //TODO: this
+        cmsManager.createThemeFromWebsite(themeObj, websiteId, null, function(err, value){
+            self.log.debug('<< createThemeFromWebsite');
+            self.sendResultOrError(res, err, value, 'Error creating theme from website.');
+        });
     },
 
     updateTheme: function(req, res) {
@@ -458,6 +472,16 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createWebsiteFromTheme');
         var themeId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        //TODO: this
+    },
+
+    createPageFromTheme: function(req, res) {
+        var self = this;
+        self.log.debug('>> createPageFromTheme');
+        var themeId = req.params.id;
+        var websiteId = req.params.websiteId;
+        var accountId = parseInt(self.accountId(req));
+        var handle = req.params.handle;
         //TODO: this
     },
 
@@ -607,6 +631,20 @@ _.extend(api.prototype, baseApi.prototype, {
         cmsManager.modifyComponentOrder(pageId, componentId, newOrder, function (err, value) {
             self.log.debug('<< updateComponentOrder');
             self.sendResultOrError(res, err, value, "Error deleting component");
+            self = null;
+        });
+
+    },
+
+    getAvailableComponentVersions: function(req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> getAvailableComponentVersions');
+        var type = req.params.type;
+
+        cmsManager.getComponentVersions(type, function(err, value){
+            self.log.debug('<< getAvailableComponentVersions');
+            self.sendResultOrError(res, err, value, "Error getting component versions");
             self = null;
         });
 

@@ -281,6 +281,34 @@ var dao = {
     },
     //endregion
 
+    //region COMPONENT
+
+    getComponentVersions: function(type, fn) {
+        //TODO: This should be in the DB eventually.
+        var self = this;
+        self.log.debug('>> getComponentVersions');
+        fs.readdir(themesConfig.PATH_TO_COMPONENTS, function(err, files){
+            if(err) {
+                self.log.error('Exception in getComponentVersions: ' + err);
+                fn(err, null);
+            } else {
+                var numVersions = _.reduce(files, function(memo, filename){
+                    if(filename.indexOf(type) ===0) {
+                        memo++;
+                    }
+                    return memo;
+                }, 0);
+                self.log.debug('<< getComponentVersions');
+
+                fn(null, ""+numVersions);
+                return;
+            }
+
+        });
+    },
+
+    //endregion
+
 
     //region PAGE
     getPageById: function(pageId, fn) {
