@@ -69,6 +69,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('theme/:id'), this.isAuthApi, this.updateTheme.bind(this));
         app.delete(this.url('theme/:id'), this.isAuthApi, this.deleteTheme.bind(this));
         app.post(this.url('website/theme/:id'), this.isAuthApi, this.createWebsiteFromTheme.bind(this));
+        app.post(this.url('page/theme/:id'), this.isAuthApi, this.createPageFromTheme.bind(this));
         app.post(this.url('website/:websiteId/theme/:themeId'), this.isAuthApi, this.setTheme.bind(this));
 
 
@@ -412,9 +413,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    /**
+     * This function creates a new theme from an existing website object.
+     * @param {websiteId} websiteID in URL
+     * @param {theme} theme object in body of POST.  The name field MUST be populated.
+     */
     createThemeFromWebsite: function(req, res) {
         var self = this;
         self.log.debug('>> createThemeFromWebsite');
+
         var websiteId = req.params.websiteId;
         var accountId = parseInt(self.accountId(req));
         var themeObj = new $$.m.cms.Theme(req.body);
@@ -462,6 +469,14 @@ _.extend(api.prototype, baseApi.prototype, {
     createWebsiteFromTheme: function(req, res) {
         var self = this;
         self.log.debug('>> createWebsiteFromTheme');
+        var themeId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: this
+    },
+
+    createPageFromTheme: function(req, res) {
+        var self = this;
+        self.log.debug('>> createPageFromTheme');
         var themeId = req.params.id;
         var accountId = parseInt(self.accountId(req));
         //TODO: this

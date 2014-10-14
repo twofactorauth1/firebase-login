@@ -61,6 +61,7 @@
     "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-copy-to": "0.0.10",
+    "grunt-jsdoc-to-markdown": "^0.4.2",
     "grunt-ng-annotate": "^0.4.0",
     "grunt-ng-constant": "^1.0.0",
     "superagent": "0.18.1",
