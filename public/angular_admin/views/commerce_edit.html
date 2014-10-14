@@ -117,11 +117,11 @@
                     </div>
                     <div class="col-xs-6">
                         <div class="mb35"></div>
-                        <div class="form-group">
+                        <div class="form-group" ng-hide="product.type == 'subscription'">
                             <label>Regular Price</label>
                             <input class="form-control input-lg mb20" type="text" placeholder="Price" ng-model="product.regular_price">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-hide="product.type == 'subscription'">
                             <label>Sale Price</label>
                             <input class="form-control input-lg mb20" type="text" placeholder="Sales Price" ng-model="product.sale_price">
                         </div>

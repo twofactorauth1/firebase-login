@@ -117,6 +117,7 @@ define([
                             addComponentBtns[i].addEventListener("click", function(e) {
                                 var element = angular.element('#add-component-modal');
                                 element.modal('show');
+                                //get the current index of the component pressed
                             });
                         } else if (typeof addComponentBtns.attachEvent != "undefined") {
                             addComponentBtns[i].attachEvent("onclick", iframeClickHandler);

@@ -24,6 +24,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
                 controller: 'AccountEditCtrl',
                 controllerUrl: '/angular_admin/controllers/account_edit.js'
             }))
+            .state('accountChoosePlan', angularAMD.route({
+                url: '/account/choosePlan',
+                templateUrl: '/angular_admin/views/account_choose_plan.html',
+                controller: 'AccountChoosePlanCtrl',
+                controllerUrl: '/angular_admin/controllers/account_choose_plan.js'
+            }))
             .state('marketing', angularAMD.route({
                 url: '/marketing',
                 templateUrl: '/pipeshift/views/video/listeditor.html',
