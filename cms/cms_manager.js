@@ -552,6 +552,22 @@ module.exports = {
         });
     },
 
+    getComponentVersions: function(type, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> getComponentVersions');
+        cmsDao.getComponentVersions(type, function(err, value){
+            if(err) {
+                self.log.error('Exception getting component versions: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< getComponentVersions');
+                fn(null, value);
+            }
+        });
+    },
+
     updatePage: function(pageId, page, fn) {
         var self = this;
         self.log = log;
