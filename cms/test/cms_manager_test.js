@@ -9,10 +9,11 @@ process.env.NODE_ENV = "testing";
 var app = require('../../app');
 var async = require('async');
 var testHelpers = require('../../testhelpers/testhelpers');
-var themeConfigDao = require('../dao/theme.dao.js');
+var themeDao = require('../dao/theme.dao.js');
 var cmsManager = require('../cms_manager');
 var _log = $$.g.getLogger("cms_manager.test");
 var testcontext = {};
+var testAccountId = 0;
 
 module.exports.group =  {
 
@@ -29,14 +30,15 @@ module.exports.group =  {
         _log.debug('<< tearDown');
     },
 
-    testGetThemeConfigById: function(test) {
+    testGetThemeById: function(test) {
         test.expect(1);
-        var themeConfig = new $$.m.cms.ThemeConfig({
+        var theme = new $$.m.cms.Theme({
             name: 'testConfig',
+            accountId: testAccountId,
             config: {'stuff': 'stuff', 'more_stuff': 'more stuff here'}
         });
 
-        themeConfigDao.saveOrUpdate(themeConfig, function(err, value){
+        themeDao.saveOrUpdate(theme, function(err, value){
             if(err) {
                 test.ok(false,'could not save test config');
                 test.done();
@@ -44,7 +46,7 @@ module.exports.group =  {
                 testcontext.themeId = value.id();
                 testcontext.themeName = value.get('name');
                 testcontext.themeConfig = value;
-                cmsManager.getThemeConfigById(testcontext.themeId, function(err, value){
+                cmsManager.getThemeById(testcontext.themeId, function(err, value){
                     if(err) {
                         test.ok(false, 'could not get theme config');
                         test.done();
@@ -57,9 +59,9 @@ module.exports.group =  {
         });
     },
 
-    testGetThemeConfigByName: function(test) {
+    testGetThemeByName: function(test) {
         test.expect(1);
-        cmsManager.getThemeConfigByName(testcontext.themeName, function(err, value){
+        cmsManager.getThemeByName(testcontext.themeName, function(err, value){
             if(err) {
                 test.ok(false, 'could not get theme config by name: ' + err);
                 test.done();
@@ -70,8 +72,8 @@ module.exports.group =  {
         });
     },
 
-    testGetAllThemeConfigs: function(test) {
-        cmsManager.getAllThemeConfigs(function(err, value){
+    testGetAllThemes: function(test) {
+        cmsManager.getAllThemes(testAccountId, function(err, value){
             if(err) {
                 test.ok(false, 'could not get all theme configs: ' + err);
                 test.done();
@@ -82,12 +84,12 @@ module.exports.group =  {
         });
     },
 
-    testUpdateThemeConfig: function(test) {
+    testUpdateTheme: function(test) {
         test.expect(1);
         var themeConfig = testcontext.themeConfig;
         themeConfig.set('name', 'newName');
 
-        cmsManager.updateThemeConfig(themeConfig, function(err, value){
+        cmsManager.updateTheme(themeConfig, function(err, value){
             if(err) {
                 test.ok(false, 'could not update theme config');
                 test.done();
