@@ -59,22 +59,16 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
         app.delete(this.url('website/:websiteId/page/:id/:label'), this.deletePage.bind(this));
 
-        // THEME
-        //app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));()
-        app.get(this.url('theme/:id'), this.getThemeConfigById.bind(this));
-        app.get(this.url(':accountId/cms/theme', "account"), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
-        app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
-        app.get(this.url('theme/:id/preview'), this.isAuthApi, this.getThemePreview.bind(this));
-        app.post(this.url('theme/:id'), this.isAuthApi, this.setTheme.bind(this));
-        /*
-         What it should be:
-         */
-        app.get(this.url('themeconfig/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
-        app.get(this.url('themeconfig/account/:accountId'), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
-        app.get(this.url('themeconfig/name/:name'), this.isAuthApi, this.getThemeConfigByName.bind(this));
-        app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
-        app.get(this.url('themes/:id/preview'), this.isAuthApi, this.getThemePreview.bind(this));
-        app.post(this.url('themes/:id'), this.isAuthApi, this.modifyTheme.bind(this));
+        //THEME 2.0
+
+        app.get(this.url('theme'), this.isAuthApi, this.listThemes.bind(this));
+        app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeById.bind(this));
+        app.get(this.url('theme/name/:name'), this.isAuthApi, this.getThemeByName.bind(this));
+        app.post(this.url('theme'), this.isAuthApi, this.createTheme.bind(this));
+        app.post(this.url('theme/website/:websiteId'), this.isAuthApi, this.createThemeFromWebsite.bind(this));
+        app.post(this.url('theme/:id'), this.isAuthApi, this.updateTheme.bind(this));
+        app.delete(this.url('theme/:id'), this.isAuthApi, this.deleteTheme.bind(this));
+        app.post(this.url('website/theme/:id'), this.isAuthApi, this.createWebsiteFromTheme.bind(this));
         app.post(this.url('website/:websiteId/theme/:themeId'), this.isAuthApi, this.setTheme.bind(this));
 
 
@@ -291,7 +285,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 _id: temp,
                 title: pageObj.title,
                 handle: pageObj.handle,
-                mainmenu: pageObj.mainmenu,
+                mainmenu: pageObj.mainmenu
             });
             page.set('websiteId', websiteId);
             page.set('accountId', accountId);
@@ -353,6 +347,124 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     //region THEME
+    /*
+     app.get(this.url('theme'), this.isAuthApi, this.listThemes.bind(this));
+     app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeById.bind(this));
+     app.get(this.url('theme/name/:name'), this.isAuthApi, this.getThemeByName.bind(this));
+     app.post(this.url('theme'), this.isAuthApi, this.createTheme.bind(this));
+     app.post(this.url('theme/website/:websiteId'), this.isAuthApi, this.createThemeFromWebsite.bind(this));
+     app.post(this.url('theme/:id'), this.isAuthApi, this.updateTheme.bind(this));
+     app.delete(this.url('theme/:id'), this.isAuthApi, this.deleteTheme.bind(this));
+     app.post(this.url('website/theme/:id'), this.isAuthApi, this.createWebsiteFromTheme.bind(this));
+     app.post(this.url('website/:websiteId/theme/:themeId'), this.isAuthApi, this.setTheme.bind(this));
+     */
+
+    listThemes: function(req, res) {
+        var self = this;
+        self.log.debug('>> listThemes');
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getAllThemes(accountId, function(err, value){
+            self.log.debug('<< listThemes');
+            self.sendResultOrError(res, err, value, 'Error retrieving all themes.');
+        });
+    },
+
+    getThemeById: function(req, res) {
+        var self = this;
+        self.log.debug('>> getThemeById');
+        var themeId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getThemeById(themeId, function(err, value){
+            //TODO: Security
+            self.log.debug('<< getThemeById');
+            self.sendResultOrError(res, err, value, 'Error retrieving theme by id.');
+        });
+    },
+
+    getThemeByName: function(req, res) {
+        var self = this;
+        self.log.debug('>> getThemeByName');
+        var themeName = req.params.name;
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getThemeByName(themeName, function(err, value){
+            //TODO: Security
+            self.log.debug('<< getThemeByName');
+            self.sendResultOrError(res, err, value, 'Error retrieving theme by name.');
+        });
+
+    },
+
+    createTheme: function(req, res) {
+        var self = this;
+        self.log.debug('>> createTheme');
+        var themeObj = new $$.m.cms.Theme(req.body);
+
+
+    },
+
+    createThemeFromWebsite: function(req, res) {
+        var self = this;
+        self.log.debug('>> createThemeFromWebsite');
+        var websiteId = req.params.websiteId;
+        var accountId = parseInt(self.accountId(req));
+    },
+
+    updateTheme: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateTheme');
+        var themeId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+    },
+
+    deleteTheme: function(req, res) {
+        var self = this;
+        self.log.debug('>> deleteTheme');
+        var themeId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+    },
+
+    createWebsiteFromTheme: function(req, res) {
+        var self = this;
+        self.log.debug('>> createWebsiteFromTheme');
+        var themeId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+    },
+
+    setTheme: function(req, res) {
+        var self = this;
+        self.log.debug('>> setTheme');
+        var themeId = req.params.themeId;
+        var websiteId = req.params.websiteId;
+        var accountId = parseInt(self.accountId(req));
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     getThemeConfigById: function (req, resp) {
         //TODO: Add Security
         var self = this;

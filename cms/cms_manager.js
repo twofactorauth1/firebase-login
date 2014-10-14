@@ -3,7 +3,7 @@ require('./dao/cms.dao.js');
 var blogPostDao = require('./dao/blogpost.dao.js');
 var cmsDao = require('./dao/cms.dao.js');
 var accountDao = require('../dao/account.dao.js');
-var themeConfigDao = require('./dao/themeconfig.dao.js');
+var themeDao = require('./dao/theme.dao.js');
 
 var log = $$.g.getLogger("cms_manager");
 var Blog = require('./model/components/blog');
@@ -11,30 +11,30 @@ var Blog = require('./model/components/blog');
 module.exports = {
 
     /*
-     * ThemeConfig
+     * Theme
      */
 
-    getThemeConfigById: function(themeId, fn) {
-        log.debug('>> getThemeConfigById');
-        themeConfigDao.getById(themeId, $$.m.cms.ThemeConfig, function(err, value){
+    getThemeById: function(themeId, fn) {
+        log.debug('>> getThemeById');
+        themeDao.getById(themeId, $$.m.cms.Theme, function(err, value){
             if(err) {
                 log.error('Exception thrown getting config: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< getThemeConfigById');
+                log.debug('<< getThemeById');
                 fn(null, value);
             }
         });
     },
 
-    getThemeConfigByName: function(name, fn) {
-        log.debug('>> getThemeConfigByName');
-        themeConfigDao.findOne({'name': name}, $$.m.cms.ThemeConfig, function(err, value){
+    getThemeByName: function(name, fn) {
+        log.debug('>> getThemeByName');
+        themeDao.findOne({'name': name}, $$.m.cms.Theme, function(err, value){
             if(err) {
-                log.error('Exception thrown getting config: ' + err);
+                log.error('Exception thrown getting theme: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< getThemeConfigByName');
+                log.debug('<< getThemeByName');
                 fn(null, value);
             }
         });
@@ -44,17 +44,23 @@ module.exports = {
         //TODO: later
     },
 
-    getAllThemeConfigs: function(fn) {
-        log.debug('>> getAllThemeConfigs');
-        themeConfigDao.findMany({}, $$.m.cms.ThemeConfig, function(err, list){
+    getAllThemes: function(accountId, fn) {
+        log.debug('>> getAllThemes');
+        themeDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}]}, $$.m.cms.Theme, function(err, list){
             if(err) {
-                log.error('Exception thrown listing theme configs: ' + err);
+                log.error('Exception thrown listing themes: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< getAllThemeConfigs');
+                log.debug('<< getAllThemes');
                 fn(null, list);
             }
         });
+    },
+
+    createTheme: function(theme, fn) {
+        log.debug('>> createTheme');
+        //validate
+        //TODO: check name is unique
     },
 
     updateThemeConfig: function(themeConfig, fn) {
@@ -70,9 +76,7 @@ module.exports = {
         });
     },
 
-    getAllThemes: function(fn) {
-        $$.dao.CmsDao.getAllThemes(fn);
-    },
+
 
     getThemePreview: function(themeId, fn) {
         cmsDao.getThemePreview(themeId, fn);
