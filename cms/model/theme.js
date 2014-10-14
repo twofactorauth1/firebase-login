@@ -39,7 +39,7 @@ var theme = $$.m.ModelBase.extend({
              * @default {}
              */
             created: {
-                date: "",
+                date: new Date(),
                 by: null
             },
 
@@ -52,7 +52,7 @@ var theme = $$.m.ModelBase.extend({
              * @default {}
              */
             modified: {
-                date: "",
+                date: null,
                 by: null
             }
         }

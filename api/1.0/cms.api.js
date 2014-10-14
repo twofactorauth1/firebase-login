@@ -59,7 +59,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
         app.delete(this.url('website/:websiteId/page/:id/:label'), this.deletePage.bind(this));
 
-        //THEME 2.0
+        //THEME Updated URLs
 
         app.get(this.url('theme'), this.isAuthApi, this.listThemes.bind(this));
         app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeById.bind(this));
@@ -400,8 +400,15 @@ _.extend(api.prototype, baseApi.prototype, {
     createTheme: function(req, res) {
         var self = this;
         self.log.debug('>> createTheme');
+        var accountId = parseInt(self.accountId(req));
         var themeObj = new $$.m.cms.Theme(req.body);
+        themeObj.set('accountId', accountId);
+        themeObj.set('created.by', self.userId(req));
 
+        cmsManager.createTheme(themeObj, function(err, value){
+            self.log.debug('<< createTheme');
+            self..sendResultOrError(res, err, value, 'Error creating theme.');
+        });
 
     },
 
@@ -410,6 +417,11 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createThemeFromWebsite');
         var websiteId = req.params.websiteId;
         var accountId = parseInt(self.accountId(req));
+        var themeObj = new $$.m.cms.Theme(req.body);
+        themeObj.set('accountId', accountId);
+        themeObj.set('created.by', self.userId(req));
+
+        //TODO: this
     },
 
     updateTheme: function(req, res) {
@@ -417,6 +429,16 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updateTheme');
         var themeId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        var themeObj = new $$.m.cms.Theme(req.body);
+        themeObj.set('modified.by', self.userId(req));
+        themeObj.set('modified.date', new Date());
+        themeObj.set('_id', themeId);
+        //TODO: Security
+        cmsManager.updateTheme(themeObj, function(err, value){
+            self.log.debug('<< updateTheme');
+            self.sendResultOrError(res, err, value, 'Error updating theme.');
+        });
+
     },
 
     deleteTheme: function(req, res) {
@@ -424,6 +446,11 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> deleteTheme');
         var themeId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+
+        cmsManager.deleteTheme(themeId, function(err, value){
+            self.log.debug('<< deleteTheme');
+            self.sendResultOrError(res, err, value, 'Error deleting theme.');
+        });
     },
 
     createWebsiteFromTheme: function(req, res) {
@@ -431,6 +458,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createWebsiteFromTheme');
         var themeId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        //TODO: this
     },
 
     setTheme: function(req, res) {
@@ -439,142 +467,11 @@ _.extend(api.prototype, baseApi.prototype, {
         var themeId = req.params.themeId;
         var websiteId = req.params.websiteId;
         var accountId = parseInt(self.accountId(req));
-    },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    getThemeConfigById: function (req, resp) {
-        //TODO: Add Security
-        var self = this;
-        self.log.debug('>> getThemeConfigById');
-        var themeId = req.params.id;
-
-        cmsManager.getThemeConfigById(themeId, function(err, value){
-            self.log.debug('<< getThemeConfigById');
-            self.sendResultOrError(resp, err, value, "Error retrieving Theme Config for ID: [" + themeId + "]");
-            self = null;
-        });
-        /*
-
-        cmsDao.getThemeConfig(themeId, function (err, value) {
-            self.sendResultOrError(resp, err, value, "Error retrieving Theme Config for ID: [" + themeId + "]");
-            self = null;
-        });
-        */
-    },
-
-    getAllThemes: function (req, res) {
-        var self = this;
-        self.log.debug('>> getAllThemes');
-        cmsManager.getAllThemeConfigs(function(err, value){
-            self.log.debug('<< getAllThemes');
-            self.sendResultOrError(res, err, value, 'Error retrieving all theme configs.');
-        });
-
-        /*
-
-        cmsManager.getAllThemes(function (err, value) {
-            if (err) {
-                self.wrapError(res, 500, "Error retrieving all themes", err, value);
-            } else {
-                self.sendResult(res, value);
-            }
-        })
-        */
-    },
-
-    getThemeConfigForAccountId: function (req, resp) {
-        //TODO: Add Security
-        var self = this;
-        var accountId = req.params.accountId;
-
-        accountId = parseInt(accountId);
-
-        if (isNaN(accountId)) {
-            this.sendResultOrError(resp, "Account Id is not valid", "");
-            self = null;
-            return;
-        }
-        cmsDao.getThemeConfigSignedByAccountId(accountId, function (err, value) {
-            self.sendResultOrError(resp, err, value, "Error retrieving Theme Config for AccountId: [" + accountId + "]");
-            self = null;
-        });
-    },
-
-    getThemePreview: function (req, res) {
-        //TODO: Add Security
-        var self = this;
-        self.log.debug('>> getThemePreview');
-        var accountId = parseInt(self.accountId(req));
-        var themeId = req.params.id;
-
-        cmsManager.getThemePreview(themeId, function (err, value) {
-            self.sendResultOrError(res, err, value, "Error retrieving Theme Preview for ThemeId: [" + themeId + "]");
-            self = null;
-        });
-
-    },
-
-    setTheme: function (req, res) {
-        //TODO: Add Security
-        var self = this;
-        self.log.debug('>> setTheme');
-        var accountId = parseInt(self.accountId(req));
-        var themeId = req.params.themeId;
-        var websiteId = req.params.websiteId;
-
-        cmsManager.setThemeForAccount(accountId, themeId, function (err, value) {
-            self.sendResultOrError(res, err, value, "Error setting theme for account.");
-            self = null;
-        });
-
-    },
-
-    getThemeConfigByName: function(req, res) {
-        var self = this;
-        self.log.debug('>> getThemeConfigByName');
-        var name = req.params.name;
-        cmsManager.getThemeConfigByName(name, function(err, value){
-            self.log.debug('<< getThemeConfigByName');
-            self.sendResultOrError(res, err, value, 'Error getting theme by name.');
-            self = null;
-        });
-    },
-
-    modifyTheme: function (req, res) {
-        var self = this;
-        self.log.debug('>> modifyTheme');
-        var themeId = req.params.id;
-        var accountId = parseInt(self.accountId(req));
-        var themeConfig = req.body;
-        themeConfig._id = themeId;
-        //TODO: Add Security
-        cmsManager.updateThemeConfig(themeConfig, function(err, value){
-            self.log.debug('<< modifyTheme');
-            self.sendResultOrError(res, err, value, 'Error modifying theme.');
-            self = null;
+        //TODO: validate this method.
+        cmsManager.setThemeForAccount(accountId, themeId, function(err, value){
+            self.log.debug('<< setTheme');
+            self.sendResultOrError(res, err, value, 'Error setting theme on account.');
         });
     },
 

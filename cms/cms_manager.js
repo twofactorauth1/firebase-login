@@ -60,17 +60,43 @@ module.exports = {
     createTheme: function(theme, fn) {
         log.debug('>> createTheme');
         //validate
-        //TODO: check name is unique
+        var nameCheckQuery = {'name': theme.get('name')};
+        themeDao.exists(nameCheckQuery, $$.m.cms.Theme, function(err, value){
+            if(err) {
+                log.error('Exception thrown checking for uniqueness: ' + err);
+                fn(err, null);
+            } else if(value === true) {
+                log.warn('Attempted to create a theme with a name that already exists.');
+                fn('Name already exists', null);
+            } else {
+                themeDao.saveOrUpdate(theme, function(err, savedTheme){
+                    log.debug('<< createTheme');
+                    fn(null, savedTheme);
+                });
+            }
+        });
     },
 
-    updateThemeConfig: function(themeConfig, fn) {
-        log.debug('>> updateThemeConfig');
-        themeConfigDao.saveOrUpdate(themeConfig, function(err, value){
+    updateTheme: function(theme, fn) {
+        log.debug('>> updateTheme');
+        themeDao.saveOrUpdate(theme, function(err, value){
             if(err) {
-                log.error('Exception thrown updating themeconfig: ' + err);
+                log.error('Exception thrown updating theme: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< updateThemeConfig');
+                log.debug('<< updateTheme');
+                fn(null, value);
+            }
+        });
+    },
+
+    deleteTheme: function(themeId, fn) {
+        log.debug('>> deleteTheme');
+        themeDao.removeById(themeId, $$.m.cms.Theme, function(err, value){
+            if(err) {
+                log.error('Exception thrown while deleting theme: ' + err);
+            } else {
+                log.debug('<< deleteTheme');
                 fn(null, value);
             }
         });
@@ -83,6 +109,7 @@ module.exports = {
     },
 
     setThemeForAccount: function(accountId, themeId, fn) {
+        log.debug('>> setThemeForAccount');
         //validateThemeId
         var p1 = $.Deferred();
         cmsDao.themeExists(themeId, function(err, value){
@@ -99,15 +126,20 @@ module.exports = {
         $.when(p1).done(function(){
             accountDao.getById(accountId, $$.m.Account, function(err, account){
                 if(err) {
-                    fn(err, null);
+                    log.error('Error getting account by ID: ' + err);
+                    return fn(err, null);
                 }
                 var website = account.get('website');
                 website.themeId = themeId;
                 accountDao.saveOrUpdate(account, function(err, value){
                     if(err) {
-                        fn(err, null);
+                        log.error('Error updating Account: ' + err);
+                        return fn(err, null);
+                    } else {
+                        log.debug('<< setThemeForAccount');
+                        fn(null, 'SUCCESS');
                     }
-                    fn(null, 'SUCCESS');
+
                 });
             });
         });
