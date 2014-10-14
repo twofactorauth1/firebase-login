@@ -418,10 +418,16 @@ _.extend(api.prototype, baseApi.prototype, {
         var websiteId = req.params.websiteId;
         var accountId = parseInt(self.accountId(req));
         var themeObj = new $$.m.cms.Theme(req.body);
+        if(themeObj.get('name') === '') {
+            self.wrapError(res, 400, 'Invalid Parameter', 'Invalid parameter provided for Theme Name');
+        }
         themeObj.set('accountId', accountId);
         themeObj.set('created.by', self.userId(req));
 
-        //TODO: this
+        cmsManager.createThemeFromWebsite(themeObj, websiteId, null, function(err, value){
+            self.log.debug('<< createThemeFromWebsite');
+            self.sendResultOrError(res, err, value, 'Error creating theme from website.');
+        });
     },
 
     updateTheme: function(req, res) {

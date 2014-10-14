@@ -40,10 +40,6 @@ module.exports = {
         });
     },
 
-    getThemeConfigByAccountId: function(accountId, fn) {
-        //TODO: later
-    },
-
     getAllThemes: function(accountId, fn) {
         log.debug('>> getAllThemes');
         themeDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}]}, $$.m.cms.Theme, function(err, list){
@@ -102,6 +98,65 @@ module.exports = {
         });
     },
 
+    createThemeFromWebsite: function(themeObj, websiteId, pageHandle, fn) {
+        log.debug('>> createThemeFromWebsite');
+        if(fn===null) {
+            fn = pageHandle;
+            pageHandle = null;
+        }
+        //use the index page if no handle is specified
+        if(pageHandle === null) {
+            pageHandle = 'index';
+        }
+
+        var p1 = $.Deferred(), p2 = $.Deferred();
+        var website = null, componentAry = null;
+
+        cmsDao.getWebsiteById(websiteId, function(err, _website){
+            if(err) {
+                log.error('Error getting website: ' + err);
+                p1.reject();
+            } else {
+                website = _website;
+                p1.resolve();
+            }
+        });
+
+        cmsDao.getPageForWebsite(websiteId, pageHandle, function(err, page){
+            if(err) {
+                log.error('Error getting page[' + pageHandle + '] for websiteId[' + websiteId + ']: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('Got page.  Getting components.');
+                cmsDao.getComponentsByPage(page.id(), function(err, _componentAry){
+                    if(err) {
+                        log.error('Error getting components for page: ' + err);
+                        p2.reject();
+                    } else {
+                        log.debug('Got components.');
+                        componentAry = _componentAry;
+                        p2.resolve();
+                    }
+                });
+            }
+        });
+
+        $.when(p1,p2).done(function(){
+            log.debug('updating themeObj with settings and components');
+            themeObj.set('settings', website.get('settings'));
+            themeObj.set('components', componentAry);
+            cmsDao.saveOrUpdate(themeObj, function(err, newTheme){
+                if(err) {
+                    log.error('Error saving theme: ' + err);
+                    fn(err, null);
+                } else {
+                    log.debug('<< createThemeFromWebsite');
+                    fn(null, newTheme);
+                }
+            });
+        });
+
+    },
 
 
     getThemePreview: function(themeId, fn) {
