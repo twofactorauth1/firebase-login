@@ -407,7 +407,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         cmsManager.createTheme(themeObj, function(err, value){
             self.log.debug('<< createTheme');
-            self..sendResultOrError(res, err, value, 'Error creating theme.');
+            self.sendResultOrError(res, err, value, 'Error creating theme.');
         });
 
     },
