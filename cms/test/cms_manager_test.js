@@ -269,7 +269,8 @@ module.exports.group =  {
                     test.ok(false, 'Error creating Theme from website: ' + err);
                     test.done();
                 } else {
-                    objectsToDelete.push(value);
+                    //objectsToDelete.push(value);
+                    testcontext.theme = value;
                     //console.dir(value);
                     test.ok(value.id() !== null);
                     test.done();
@@ -278,7 +279,24 @@ module.exports.group =  {
 
         });
 
+    },
 
+    testCreateWebsiteFromTheme: function(test) {
+        test.expect(1);
+        var accountId = 1;
+        var themeId = testcontext.theme.id();
+        var userId = 1;
+        cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, userId, null, null, function(err, value){
+            if(err) {
+                test.ok(false, 'Error creating website from theme: ' + err);
+                test.done();
+            } else {
+                console.dir(value);
+                objectsToDelete.push(testcontext.theme);
+                test.ok(true);
+                test.done();
+            }
+        });
     }
 
 };
