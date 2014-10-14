@@ -14,18 +14,18 @@
                     <div class="single-testimonial row carousel-caption">
                         <div class="col-sm-12">
                             <div class="text">
-                                <div class="editable" data-class="text">
-                                    {{testimonial.text}}
+                                <div class="editable" data-class="testimonials.item.text" data-index="{{$index}}">
+                                    <span ng-bind-html="testimonial.text"></span>
                                 </div>
                             </div>
                             <h4 class="name">
-                                <div class="editable" data-class="name">
+                                <div class="editable" data-class="testimonials.item.name" data-index="{{$index}}">
                                     <convert-html contents="{{testimonial.name}}"></convert-html>
                                 </div>
                             </h4>
                             <div class="site">
-                                <div class="editable" data-class="site">
-                                    {{testimonial.site}}
+                                <div class="editable" data-class="testimonials.item.site" data-index="{{$index}}">
+                                    <span ng-bind-html="testimonial.site"></span>
                                 </div>
                             </div>
                         </div>
@@ -39,7 +39,7 @@
             </ol>
 
             <!-- Controls -->
-            <span ng-if="component.testimonials.length > 1">
+            <!-- <span ng-if="component.testimonials.length > 1">
 
                 <a class="left carousel-control" data-target="#{{component.anchor}}" style="background:none" role="button" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left"></span>
@@ -48,7 +48,7 @@
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
 
-            </span>
+            </span> -->
         </div>
     </div>
     <div class="clearfix"></div>
