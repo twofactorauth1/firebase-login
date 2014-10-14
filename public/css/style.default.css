@@ -22097,7 +22097,6 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   line-height: 14px;
   margin-bottom: 15px;
   font-size: 14px;
-  color: black;
 }
 /********** Navbar **********/
 .navbar-nav li.social a {
@@ -22206,6 +22205,7 @@ ul.nav {
   float: none;
   text-align: center;
   display: inline-block;
+  border-bottom: 4px solid rgba(0, 0, 0, 0);
 }
 .navbar-v2 #header .navbar ul.navbar-nav li .fa {
   line-height: 36px;
@@ -22213,7 +22213,7 @@ ul.nav {
 .navbar-v2 #header .navbar ul.navbar-nav li > a {
   height: 48px;
   font-family: 'Lato', sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   text-shadow: none;
   line-height: 35px;
 }
@@ -22626,12 +22626,6 @@ contenthover a {
 .testimonials-v2 .title {
   text-align: center;
 }
-.testimonials-v2 .text .editable {
-  color: #848484;
-}
-.testimonials-v2 .name {
-  color: #58ACFA;
-}
 .testimonials-v2 .carousel {
   height: 260px;
   display: block;
@@ -22642,21 +22636,23 @@ contenthover a {
 .testimonials-v2 .carousel-caption {
   position: absolute;
   z-index: 10;
-  color: #A4A4A4;
   text-align: center;
-  top: 80px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  top: 0px;
+  text-shadow: none;
 }
 .testimonials-v2 .carousel-indicators li {
   display: inline-block;
   width: 15px;
   height: 15px;
-  margin: 1px;
+  margin: 4px;
   text-indent: -999px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   background-color: #d7d7d7;
+}
+.testimonials-v2 .right.carousel-control {
+  background: none!important;
 }
 /********** Image Text v1 **********/
 .image-text-v1 .image-text-title {
@@ -23179,6 +23175,9 @@ div[data-class='image-text'] p {
 .portfolio.fade.modal {
   overflow-x: hidden;
 }
+.portfolio-title {
+  text-align: center;
+}
 .portfolio.modal {
   display: none;
   overflow: auto;
@@ -23505,7 +23504,8 @@ div[data-class='image-text'] p {
   text-decoration: none;
 }
 .footer-logo {
-  margin: -50px 5px 0 0;
+  margin: -35px 5px 0 0;
+  float: right;
 }
 /********** Single Blog ***********/
 .single-blog .blog-meta {
@@ -23635,8 +23635,8 @@ div[data-class="blog"] .single-blog {
   font-family: "Quicksand", sans-serif;
   font-size: 60px;
 }
-.pricing-tables-v1 #title {
-  margin-top: 16px;
+.pricing-tables-v1 .pricing-table-title {
+  text-align: center;
 }
 .pricing-tables-v1 #home-box > h2 {
   font-family: "Quicksand", sans-serif;
@@ -23646,7 +23646,6 @@ div[data-class="blog"] .single-blog {
 }
 .pricing-tables-v1 .price {
   font-size: 25px;
-  float: left;
 }
 .pricing-tables-v1 .pricing_header {
   background: #FAFAFA;
