@@ -6,13 +6,13 @@
  */
 
 var baseDao = require('./../../dao/base.dao.js');
-var themeConfig = require('../model/themeconfig.js');
+var theme = require('../model/theme.js');
 
 var dao = {
 
     options: {
-        name: "themeconfig.dao",
-        defaultModel: $$.m.cms.ThemeConfig
+        name: "theme.dao",
+        defaultModel: $$.m.cms.Theme
     }
 
 };
@@ -20,6 +20,6 @@ var dao = {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.ThemeConfigDao = dao;
+$$.dao.ThemeDao = dao;
 
 module.exports = dao;
