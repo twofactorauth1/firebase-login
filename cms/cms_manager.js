@@ -143,8 +143,9 @@ module.exports = {
 
         $.when(p1,p2).done(function(){
             log.debug('updating themeObj with settings and components');
-            themeObj.set('settings', website.get('settings'));
-            themeObj.set('components', componentAry);
+            var config = {'settings': website.get('settings'), 'components': componentAry};
+            themeObj.set('config', config);
+
             cmsDao.saveOrUpdate(themeObj, function(err, newTheme){
                 if(err) {
                     log.error('Error saving theme: ' + err);
