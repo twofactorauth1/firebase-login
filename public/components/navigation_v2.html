@@ -1,0 +1,39 @@
+<style>
+    .navbar-v2 #header .navbar ul.navbar-nav li a {
+        color:{{component.txtcolor || 'white'}};
+    }
+</style>
+<div id="header">
+    <div class="component" data-ng-show="component" data-class="navigation" data-id="{{component._id}}">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand editable" href="/" data-name="{{layout.account.company.name}}">
+                        <span class="logo-1"> <img data-ng-show="layout.account.business.logo" ng-src="{{layout.account.business.logo}}" scale="0"><span data-ng-show="!layout.account.business.logo" ><convert-html contents="{{layout.account.business.name}}">  </convert-html> </span></span>
+                    </a>
+
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="background:{{component.bg.color}}">
+                    <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                        <li data-ng-repeat="link in mainMenu.links track by $index">
+                            <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
+                            <a data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}">{{link.label || link.url}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+           <!-- /.container-fluid -->
+        </nav>
+    </div>
+</div>
