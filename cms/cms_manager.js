@@ -671,21 +671,59 @@ module.exports = {
     },
 
     deletePage: function(pageId, fn) {
-        var self = this;
-        self.log = log;
+		var self = this;
+		self.log = log;
 
-        self.log.debug('>> deletePage');
-        cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value){
-            if (err) {
-                self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
-                fn(err, null);
-            } else {
-                self.log.debug('<< deletePage');
+		self.log.debug('>> deletePage');
 
-                fn(null, value);
-            }
-        });
-    },
+		cmsDao.getPageById(pageId, function(err, page) {
+
+			if (page && page.get('mainmenu') == true) {
+				self.getWebsiteLinklistsByHandle(page.get('websiteId'), "head-menu", function(err, list) {
+					if (err) {
+						self.log.error('Error getting website linklists by handle: ' + err);
+						fn(err, value);
+					} else {
+						var link = {
+							label : page.get('title'),
+							type : "link",
+							linkTo : {
+								type : "page",
+								data : page.get('handle')
+							}
+						};
+						list.links.pop(link);
+						self.updateWebsiteLinklists(page.get('websiteId'), "head-menu", list, function(err, linkLists) {
+							if (err) {
+								self.log.error('Error updating website linklists by handle: ' + err);
+								fn(err, page);
+							} else {
+								cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+									if (err) {
+										self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+										fn(err, null);
+									} else {
+										self.log.debug('<< deletePage');
+										fn(null, value);
+									}
+								});
+							}
+						});
+					}
+				});
+			} else {
+				cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+					if (err) {
+						self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+						fn(err, null);
+					} else {
+						self.log.debug('<< deletePage');
+						fn(null, value);
+					}
+				});
+			}
+		})
+	},
 
     createPage: function(page, fn) {
         var self = this;
