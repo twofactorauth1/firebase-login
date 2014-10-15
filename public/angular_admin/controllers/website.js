@@ -1,5 +1,26 @@
-define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnimate', 'toaster', 'colorpicker', 'angularBootstrapSwitch', 'ngProgress', 'unsafeHtml','mediaDirective'], function(app) {
-    app.register.controller('WebsiteCtrl', ['$scope', '$window', '$timeout', 'WebsiteService', 'UserService', 'toaster', 'ngProgress',
+define([
+    'app',
+    'websiteService',
+    'jqueryUI',
+    'angularUI',
+    'userService',
+    'ngAnimate',
+    'toaster',
+    'colorpicker',
+    'angularBootstrapSwitch',
+    'ngProgress',
+    'unsafeHtml',
+    'mediaDirective',
+    'confirmClick2'
+], function(app) {
+    app.register.controller('WebsiteCtrl', [
+        '$scope',
+        '$window',
+        '$timeout',
+        'WebsiteService',
+        'UserService',
+        'toaster',
+        'ngProgress',
         function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress) {
             ngProgress.start();
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -96,6 +117,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                             addComponentBtns[i].addEventListener("click", function(e) {
                                 var element = angular.element('#add-component-modal');
                                 element.modal('show');
+                                //get the current index of the component pressed
                             });
                         } else if (typeof addComponentBtns.attachEvent != "undefined") {
                             addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
@@ -164,7 +186,6 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     $scope.primaryFontFamily = $scope.website.settings.font_family;
                     $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
                 });
-
             });
 
             /*
@@ -231,6 +252,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                 $scope.updateIframeComponents();
                 $scope.deactivateAloha();
                 $scope.isEditing = false;
+                $scope.componentEditing = '';
                 iFrame.contentWindow.triggerEditModeOff();
             };
 
@@ -327,6 +349,16 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     iFrame.contentWindow.triggerEditModeOff();
                 });
 
+                var data = {
+                    _id: $scope.website._id,
+                    accountId: $scope.website.accountId,
+                    settings: $scope.website.settings
+                };
+
+                WebsiteService.updateWebsite(data, function(data) {
+                    console.log('updated website settings', data);
+                });
+
                 //website service - save page data
             };
 
@@ -389,7 +421,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     console.log('data >>> ', data);
                     if (data.components) {
                         var newComponent = data.components[data.components.length - 1];
-                        $scope.currentPage.components.push(newComponent);
+                        $scope.currentPage.components.splice(1, 0, newComponent);
+                        //$scope.currentPage.components.push(newComponent);
                         //$scope.components.push(newComponent);
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
@@ -473,7 +506,7 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                 // });
             };
 
-            $scope.createPage = function(page) {
+            $scope.createPage = function(page, $event) {
                 console.log('create page', page);
 
                 var websiteId = $scope.currentPage.websiteId;
@@ -484,21 +517,34 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
                     mainmenu: page.mainmenu
                 };
 
-                WebsiteService.createPage(websiteId, pageData, function(newpage) {
-                    console.log('$scope.allPages >>> ', $scope.allPages);
-                    toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
-                    $scope.page = null;
-                    $scope.allPages.push(newpage);
-                    document.getElementById("iframe-website").setAttribute("src", "/page/" + newpage.handle);
-                    $scope.currentPage = newpage;
-                    $scope.pageSelected = newpage.handle;
-                    //get components from page
-                    if ($scope.currentPage && $scope.currentPage.components) {
-                        $scope.components = $scope.currentPage.components;
-                    } else {
-                        $scope.components = [];
+                var hasHandle = false;
+                $scope.allPages.forEach(function (v, i) {
+                    if ( page.handle === v.handle ) {
+                        hasHandle = true;
                     }
                 });
+
+                if (!hasHandle) {
+                    WebsiteService.createPage(websiteId, pageData, function (newpage) {
+                        console.log('$scope.allPages >>> ', $scope.allPages);
+                        toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
+                        $scope.page = null;
+                        $scope.allPages.push(newpage);
+                        document.getElementById("iframe-website").setAttribute("src", "/page/" + newpage.handle);
+                        $scope.currentPage = newpage;
+                        $scope.pageSelected = newpage.handle;
+                        //get components from page
+                        if ($scope.currentPage && $scope.currentPage.components) {
+                            $scope.components = $scope.currentPage.components;
+                        } else {
+                            $scope.components = [];
+                        }
+                    });
+                } else {
+                    toaster.pop('error', "Page URL " + page.handle, "Already exists");
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                }
             };
 
             $scope.deletePage = function() {
@@ -521,15 +567,8 @@ define(['app', 'websiteService', 'jqueryUI', 'angularUI', 'userService', 'ngAnim
 
             $scope.updateThemeSettings = function() {
                 console.log('update theme', $scope.website.settings);
-                var data = {
-                    _id: $scope.website._id,
-                    accountId: $scope.website.accountId,
-                    settings: $scope.website.settings
-                };
-
-                WebsiteService.updateWebsite(data, function(data) {
-                    console.log('updated website settings');
-                });
+                document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
+                $scope.editPage();
             };
 
         }

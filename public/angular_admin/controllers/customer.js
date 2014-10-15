@@ -103,9 +103,9 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
 						$('#import-contacts-modal').modal('hide');
 						toaster.pop('success', "Contacts being imported.");
 					} else
-						$window.location.href = "/login/facebook";
-				})
-			}
+						$window.location.href = "/inapplogin/facebook?redirectTo=" + encodeURIComponent('/admin#/customer');
+				});
+			};
 
 			$scope.importLinkedInConnections = function() {
 				CustomerService.importLinkedInConnections(function(data, success) {
@@ -113,9 +113,9 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
 						$('#import-contacts-modal').modal('hide');
 						toaster.pop('success', "Contacts being imported.");
 					} else
-						$window.location.href = "/login/linkedin";
-				})
-			}
+						$window.location.href = "/inapplogin/linkedin?redirectTo=" + encodeURIComponent('/admin#/customer');
+				});
+			};
 
 			$scope.importGmailContacts = function() {
 				CustomerService.importGmailContacts(function(data, success) {
@@ -123,9 +123,9 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
 						$('#import-contacts-modal').modal('hide');
 						toaster.pop('success', "Contacts being imported.");
 					} else
-						$window.location.href = "/login/google";
-				})
-			}
+						$window.location.href = "/inapplogin/google?redirectTo=" + encodeURIComponent('/admin#/customer');;
+				});
+			};
 
             
             $scope.$watch('toggleCategory', function (value) {

@@ -42,6 +42,7 @@ require.config({
         "ngProgress": "libs/ngprogress/build/ngProgress.min",
         "headroom":"libs/headroom.js/dist/headroom.min",
         "ngHeadroom":"libs/headroom.js/dist/angular.headroom.min",
+        "bootstrap-confirmation": "libs/bootstrap-confirmation/bootstrap-confirmation",
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -72,6 +73,7 @@ require.config({
         "constants": 'constants/constants',
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',
+        'confirmClick2':'/angular_admin/directives/confirm_click2',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -147,7 +149,8 @@ require.config({
         'htmlify': {deps: ['angular', 'varModules']},
         'ngProgress': {deps: ['angular']},
         'bootstrap-iconpicker': {deps: ['jquery']},
-        'unsafeHtml': {deps: ['angular']}
+        'unsafeHtml': {deps: ['angular']},
+        "bootstrap-confirmation" : {deps: ['bootstrap']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

@@ -72,16 +72,16 @@
                 <h5 class="sidebartitle">Theme</h5>
                 <hr/>
                 <div id="current-theme">
-                    <h4>Current Theme</h4>
+                    <!-- <h4>Current Theme</h4>
                     <div class="row">
                         <div class="col-xs-6">
-                            <!-- <img ng-show="../images/theme-preview.jpg" class="theme-img" ng-src="../images/theme-preview.jpg"> -->
+                            <img ng-show="../images/theme-preview.jpg" class="theme-img" ng-src="../images/theme-preview.jpg">
                         </div>
                         <div class="col-xs-6">
                             <button type="button" class="btn btn-primary btn-block">Edit</button>
                             <button type="button" class="btn btn-default btn-block">Change</button>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="mb30"></div>
                     <div class="form-group">
                         <label for="colorpicker">Color Primary:</label>
@@ -89,23 +89,23 @@
                     </div>
                     <div class="form-group">
                         <label for="colorpicker">Color Secondary:</label>
-                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="secondaryColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.secondaryColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                     </div>
                     <div class="form-group">
                         <label for="colorpicker">Highlight Primary:</label>
-                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="primaryHighlight" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primaryHighlight" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                     </div>
                     <div class="form-group">
                         <label for="colorpicker">Text Color Primary:</label>
-                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="primaryTextColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                        <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primaryTextColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                     </div>
                     <div class="form-group">
                         <label for="colorpicker">Font Family Primary:</label>
-                        <input class="form-control input-lg" type="text" ng-model="primaryFontFamily">
+                        <input class="form-control input-lg" type="text" ng-model="website.settings.primaryFontFamily" ng-change="updateThemeSettings()">
                     </div>
                     <div class="form-group">
                         <label for="colorpicker">Font Family Secondary:</label>
-                        <input class="form-control input-lg" type="text" ng-model="secondaryFontFamily">
+                        <input class="form-control input-lg" type="text" ng-model="website.settings.secondaryFontFamily" ng-change="updateThemeSettings()">
                     </div>
                 </div>
 
@@ -113,7 +113,7 @@
                     <label for="current-domain" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="This is the domain that was automatically created when you signed up.">Indigenous Domain</label>
                     <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.subdomain">
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="current-domain" class="tooltips col-xs-7" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="You can turn on your custom domain.">Custom Domain</label>
                     <div class="col-xs-5 control-label">
                         <div class="toggle toggle-success" style="height: 20px; width: 50px;">
@@ -129,7 +129,7 @@
                 </div>
                 <div class="mb15"></div>
                 <label for="current-domain">Custom Domain Name</label>
-                <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.accountUrl">
+                <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.accountUrl"> -->
             </div>
         </tab>
         <tab>
@@ -156,54 +156,77 @@
 
                 <div class="well">
                     <p>Danger Zone</p>
-                    <button class="btn btn-block btn-danger" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                    <button class="btn btn-block btn-danger"
+                            confirm-click2
+                            data-placement="top"
+                            confirm="deletePage()" ><i class="fa fa-trash"></i> Delete Page</button>
                 </div>
             </div>
         </tab>
-        <tab>
+        <tab ng-show="componentEditing">
             <tab-heading>
                 <i class="fa fa-puzzle-piece" tooltip-placement="bottom" tooltip="Component"></i>
             </tab-heading>
             <div class="rightpanelinner">
                 <h5 class="sidebartitle">Component</h5>
                 <hr/>
-                <div class="form-group">
-                    <label for="colorpicker">Show:</label>
-                    <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                </div>
-                <div class="form-group">
-                    <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
-                    <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor" ng-change="saveComponent()">
-                </div>
-                <div class="form-group">
-                    <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
-                    <input class="form-control input-lg" type="text" ng-model="componentEditing.version" ng-change="saveComponent()">
-                </div>
-                <div class="form-group">
-                    <label for="colorpicker">Text Color:</label>
-                    <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
-                </div>
-                <div class="form-group">
-                    <label for="colorpicker">Background Color:</label>
-                    <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false , allowEmpty:true,}" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
-                </div>
-                <div class="form-group">
-                    <label for="colorpicker">Show Button:</label>
-                    <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                </div>
-                <div class="clearfix"></div>
-                <div class="form-group">
-                    <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
-                    <input class="form-control input-lg" type="text" ng-model="componentEditing.bg.img.url" ng-change="saveComponent()">
-                </div>
-                <div class="form-group">
-                    <label for="colorpicker">Show Background Image as Parallax:</label>
-                    <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                </div>
+                <accordion close-others="true">
 
-                <button class="btn btn-danger pull-left" data-dismiss="modal" ng-click="deleteComponent(componentEditing._id)">
-                    <i class="fa fa-trash-o"></i> Delete
-                </button>
+                    <accordion-group is-open="status.open">
+                        <accordion-heading>
+                            Basic <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                        </accordion-heading>
+                        <div class="form-group">
+                            <label for="colorpicker">Show:</label>
+                            <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                        </div>
+                        <div class="form-group">
+                            <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
+                            <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor" ng-change="saveComponent()">
+                        </div>
+                        <div class="form-group">
+                            <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
+                            <input class="form-control input-lg" type="text" ng-model="componentEditing.version" ng-change="saveComponent()">
+                        </div>
+                        <div class="form-group">
+                            <label for="colorpicker">Text Color:</label>
+                            <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                        </div>
+                        <div class="form-group">
+                            <label for="colorpicker">Background Color:</label>
+                            <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false , allowEmpty:true,}" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
+                        </div>
+                        <div class="form-group">
+                            <label for="colorpicker">Show Button:</label>
+                            <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group">
+                            <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
+                            <input class="form-control input-lg" type="text" ng-model="componentEditing.bg.img.url" ng-change="saveComponent()">
+                        </div>
+                        <div class="form-group">
+                            <label for="colorpicker">Show Background Image as Parallax:</label>
+                            <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                        </div>
+                    </accordion-group>
+                    <accordion-group is-open="status2.open">
+                      <accordion-heading>
+                            Advanced <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+                        </accordion-heading>
+                        <div class="well">
+                                <p>Danger Zone</p>
+                                    <button
+                                        class="btn btn-danger btn-block"
+                                        confirm-click2
+                                        data-placement="top"
+                                        confirm="deleteComponent(componentEditing._id)">
+                                        <i class="fa fa-trash-o"></i> Delete
+                                    </button>
+                            </div>
+                    </accordion-group>
+                  </accordion>
+
                 <div class="clearfix mb15"></div>
             </div>
         </tab>
@@ -293,7 +316,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" ng-click="createPage(page)" data-dismiss="modal">Create Page</button>
+                <button type="button" class="btn btn-primary" ng-click="createPage(page, $event)" data-dismiss="modal">Create Page</button>
             </div>
         </div>
         <!-- /.modal-content -->

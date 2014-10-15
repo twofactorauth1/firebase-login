@@ -12,22 +12,23 @@ define(['app','c3'], function (app,c3) {
 			return $http.get(apiUrl);
 		};
 
-		this.getOverview = function(boxId) {
+		this.getOverview = function (boxId) {
             $q.all([this.getInsightsApi({metric: 'application_installation_adds_unique', period: 'lifetime'}), 
                     this.getInsightsApi({metric: 'application_block_adds_unique', period: 'lifetime'})])
             .then(function (data) {
-                console.info(data);
+                console.debug('FB getOverview');
+                console.debug(data);
                 var installCount = 0;
                 var blockCount = 0;
                 
-                if (data[0].data.values) {
-                    data[0].data.values.forEach(function (value) {
+                if (data[0].data.length) {
+                    data[0].data[0].values.forEach(function (value) {
                         installCount += value.value;
                     });
                 }
                 
-                if (data[1].data.values) {
-                    data[1].data.values.forEach(function (value) {
+                if (data[1].data.length) {
+                    data[1].data[0].values.forEach(function (value) {
                         blockCount += value.value;
                     });
                 }
@@ -43,96 +44,75 @@ define(['app','c3'], function (app,c3) {
                 });
             });
 		};
-		this.getLikesPerDay = function(boxId) {
-		    c3.generate({
-		        bindto : '.' + boxId,
-		        data : {
-		            json:[{
-		                date: '2014-06-20',
-		                likes: '2',
-		                unlikes: '0'
-		            }
-		            , {
-		                date: '2014-06-21',
-		                likes: '4',
-		                unlikes: '1'
-		            }
-		            , {
-		                date: '2014-06-22',
-		                likes: '7',
-		                unlikes: '2'
-		            }
-		            , {
-		                date: '2014-06-24',
-		                likes: '5',
-		                unlikes: '2'
-		            }
-		            , {
-		                date: '2014-06-25',
-		                likes: '6',
-		                unlikes: '1'
-		            }],
-		            keys: {
-		                x: 'date',
-		                value: ['likes', 'unlikes']
-		            }
-		        },
-		        axis : {
-		            x : {
-		                type : 'timeseries',
-		                tick : {
-		                    format : '%Y-%m-%d'
-		                }
-		            }
-		        }
-		    });
+
+		this.getBlocksPerDay = function (boxId) {
+            this.getInsightsApi({metric: 'application_block_adds_unique', period: 'lifetime'})
+            .then(function (data) {
+                console.debug('FB getBlocksPerDay');
+                console.debug(data);
+                var dates = ['x'];
+                var values = ['Blocks'];
+                
+                if (data.length) {
+                    data[0].values.forEach(function (value, index) {
+                        values.push(value.value);
+                        dates.push(value.end_time.slice(0, 10));
+                    });
+                }
+		        c3.generate({
+		            bindto : '.' + boxId,
+		            data: {
+                        x: 'x',
+                        columns: [
+                            dates,
+                            values
+                        ]
+                    },
+                    axis: {
+                        x: {
+                            type: 'timeseries',
+                            tick: {
+                                format: '%Y-%m-%d'
+                            }
+                        }
+                    }
+		        });
+            });
 		};
 
-		this.getPostTimeline = function(boxId) {
-		    c3.generate({
-		        bindto : '.' + boxId,
-		        data : {
-				type : 'pie',
-		            json:[ {
-		                date: '2014-06-21',
-		                likes: '2',
-		                shares: '2',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-22',
-		                likes: '4',
-		                shares: '1',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-23',
-		                likes: '7',
-		                shares: '2',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-24',
-		                likes: '5',
-		                shares: '3',
-		                comments: '1',
-		                title: 'Post title'
-		            }
-		            , {
-		                date: '2014-06-25',
-		                likes: '1',
-		                shares: '1',
-		                comments: '1',
-		                title: 'Post title'
-		            }],
-		            keys: {
-		                value: ['likes', 'shares','comments']
-		            }
-		        }
-		    });
+		this.getInstallationsPerDay = function (boxId) {
+            this.getInsightsApi({metric: 'application_installation_adds_unique', period: 'lifetime'})
+            .then(function (data) {
+                console.debug('FB getInstallationsPerDay');
+                console.debug(data);
+                var dates = ['x'];
+                var values = ['Installations'];
+                
+                if (data.length) {
+                    data[0].values.forEach(function (value, index) {
+                        values.push(value.value);
+                        dates.push(value.end_time.slice(0, 10));
+                    });
+                }
+		        c3.generate({
+		            bindto : '.' + boxId,
+		            data: {
+                        x: 'x',
+                        columns: [
+                            dates,
+                            values
+                        ]
+                    },
+                    axis: {
+                        x: {
+                            type: 'timeseries',
+                            tick: {
+                                format: '%Y-%m-%d'
+                            }
+                        }
+                    }
+		        });
+            });
 		};
 
 		this.getPostInteractionsPerDay = function(boxId) {

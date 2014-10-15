@@ -64,4 +64,17 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
             }
         });
 
+         window.updateWebsite = function(data) {
+            console.log('data recieved >>> ', data);
+            $scope.$apply(function() {
+                $scope.primaryColor = data.settings.primary_color;
+                $scope.primaryHighlight = data.settings.primary_highlight;
+                $scope.secondaryColor = data.settings.secondary_color;
+                $scope.navHover = data.settings.nav_hover;
+                $scope.primaryTextColor = data.settings.primary_text_color;
+                $scope.fontFamily = data.settings.font_family;
+                $scope.fontFamily2 = data.settings.font_family_2;
+            });
+        };
+
     }]);

@@ -13,6 +13,7 @@ module.exports = {
 
     PATH_TO_THEMES: "templates/cms/themes",
     SUBPATH_TO_PREVIEW: "assets/images/theme-preview.jpg",
+    PATH_TO_COMPONENTS: 'public/components',
 
     DEFAULT_ENGINE: "handlebars",
 

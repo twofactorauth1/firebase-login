@@ -260,31 +260,48 @@
         </div>
 
         <div class="billing-section" ng-switch-when="billing">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Current Bill</h3>
+                        <h3 class="panel-title">Your Plan</h3>
                     </div>
                     <div class="panel-body">
-                        <h2 class="center total">$107.84</h2>
-                        <p class="center">Total Due by September 12th, 2014</p>
-                        <hr></hr>
-                        <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
-                        <div class="cleatfix mb30"></div>
-                        <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#payBillModal">Pay Bill</button>
-                        <!-- Add Auto Pay Option Toggle-->
+                        <div class="col-sm-6">
+                            <div class="has-plan">
+                                <h2 class="center">Monthly Plan</h2>
+                                <hr></hr>
+                                <h2 class="center total">$49.95 <span>/month</span></h2>
+                                <p class="center">Next Billing Date:  September 12th, 2014</p>
+                            </div>
+                            <div class="no-plan well hidden">
+                                <h3 class="center">No Subscription Plan Selected</h3>
+                                <div class="cleatfix mb15"></div>
+                                <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
+                                <div class="cleatfix mb30"></div>
+                                <a class="btn btn-lg btn-orange btn-block" href="admin#/account/choosePlan">Choose Plan</a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
+                                <div class="cleatfix mb20"></div>
+                                <!-- <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#payBillModal">Pay Bill</button> -->
+                                <button class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#changePlan">Change Plan</button>
+                                <div class="cleatfix mb20"></div>
+                                <!-- Add Auto Pay Option Toggle-->
+                                <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changePlan">Modify Payment Method</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <!-- <div class="col-sm-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Credit Card</h3>
+                        <h3 class="panel-title">Payment Method</h3>
                     </div>
                     <div class="panel-body">
                         <div class="indigeweb-skeuocard" user='user' update='updateBilling'></div>
                         <div class="row"></div>
-                        <div class="row">
+                        <div class="row hidden">
                             <button id="btn-new-address" class="btn btn-primary btn-sm"
                                 ng-click="subscribeMonthlyFn()" ng-show="billing.stripeCustomerId">Subscribe Monthly</button>
                             <button id="btn-new-address" class="btn btn-primary btn-sm"
@@ -292,7 +309,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="col-sm-12">
                 <div class="panel panel-default">
