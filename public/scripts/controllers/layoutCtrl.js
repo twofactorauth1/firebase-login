@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce',
-    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService',
+    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
         route = $location.$$path;
 
@@ -76,6 +76,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
+                PostService.getAllPostsByPageId($scope.currentpage._id, function (posts){
+                    that.blogposts = posts;
+                });
             }
         });
 
@@ -158,4 +161,26 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $('.editable').mahalo();
         };
 
+        $scope.createPost = function(postData) {
+
+
+//            var data = {
+//                _id: $scope.website._id,
+//                accountId: $scope.website.accountId,
+//                settings: $scope.website.settings
+//            };
+            console.log(postData);
+            PostService.createPost($scope.currentpage._id,postData, function(data) {
+            });
+        };
+
+        $scope.deletePost = function(postId) {
+            PostService.deletePost($scope.currentpage._id, postId, function(data) {
+
+            });
+        };
+
+        $scope.resfeshIframe = function() {
+            //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
+        };
     }]);

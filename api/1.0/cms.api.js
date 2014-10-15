@@ -90,7 +90,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         // BLOG POSTS
         app.post(this.url('page/:id/blog'), this.isAuthApi, this.createBlogPost.bind(this));
-        app.get(this.url('page/:id/blog'), this.setup, this.listBlogPosts.bind(this));
+        app.get(this.url('page/:id/blog'), this.setup, this.listBlogPostsByPageId.bind(this));
         app.get(this.url('blog'), this.setup, this.listBlogPosts.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup, this.getBlogPost.bind(this));
         app.post(this.url('page/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
@@ -609,7 +609,12 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: Add Security
         var self = this;
         self.log.debug('>> createBlogPost');
-        var blogPost = new $$.m.BlogPost(req.body);
+        var blog=req.body;
+        if(!Array.isArray(blog.post_tags))
+            blog.post_tags=blog.post_tags.split(',');
+
+        var blogPost = new $$.m.BlogPost(blog);
+        //var blogPost = new $$.m.BlogPost(req.body);
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
@@ -685,6 +690,20 @@ _.extend(api.prototype, baseApi.prototype, {
 
         cmsManager.listBlogPosts(accountId, limit, function (err, value) {
             self.log.debug('<< listBlogPosts '+value);
+            self.sendResultOrError(res, err, value, "Error listing Blog Posts");
+            self = null;
+        });
+    },
+    listBlogPostsByPageId: function (req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> listBlogPostsByPageId');
+        var pageId = req.params.id;
+        var limit = parseInt(req.query['limit'] || 0); //suitable default?
+        var skip = parseInt(req.query['skip'] || 0);   //TODO: use skip for paging
+
+        cmsManager.listBlogPostsByPageId(pageId, limit, function (err, value) {
+            self.log.debug('<< listBlogPostsByPageId ' + value);
             self.sendResultOrError(res, err, value, "Error listing Blog Posts");
             self = null;
         });
