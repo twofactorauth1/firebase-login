@@ -23,10 +23,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.wait;
 
-        $scope.trustSrc = function(src) {
-            return $sce.trustAsResourceUrl(src);
-          }
-
         $scope.sortableOptions = {
             handle: '.reorder',
             start: function(e, ui) {
@@ -124,6 +120,31 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var body = document.getElementsByTagName('body')[0];
             body.className = body.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
         };
+
+        $scope.trustSrc = function (src) {
+            return $sce.trustAsResourceUrl(src);
+        }
+
+        $scope.config = {
+            width: 740,
+            height: 380,
+            autoHide: true,
+            autoPlay: false,
+            autoHideTime: 1500,
+            responsive: false,
+            theme: {
+              url: "../../js/libs/videogular-themes-default/videogular.css",
+              playIcon: "&#xe000;",
+              pauseIcon: "&#xe001;",
+              volumeLevel3Icon: "&#xe002;",
+              volumeLevel2Icon: "&#xe003;",
+              volumeLevel1Icon: "&#xe004;",
+              volumeLevel0Icon: "&#xe005;",
+              muteIcon: "&#xe006;",
+              enterFullScreenIcon: "&#xe007;",
+              exitFullScreenIcon: "&#xe008;"
+            }
+        }
 
         // $scope.$on('$locationChangeStart', function(event, next, current) {
         //     console.log('location changed '+event+' '+next+' '+current);

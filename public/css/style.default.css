@@ -24145,6 +24145,9 @@ div[data-class="blog"] .single-blog {
   max-width: 800px;
   margin: 0 auto;
 }
+.video-block vg-controls {
+  bottom: 0;
+}
 .video-block .videoblock iframe {
   margin: 0 auto;
   display: block;
