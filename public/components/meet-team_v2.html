@@ -6,34 +6,47 @@
 *
 -->
 
-<div ng-show="component" data-class="meet-team-v2" data-id="{{component._id}}">
+<div class="title">
+    <div class="editable" data-class="title">
+        <span ng-bind-html="component.title"/>
+    </div>
+</div>
 
-    <div class="component-body">
-        <div class="masthead {{component.bg.img.parallax?'parallax':''}}" data-image="{{component.bg.img.url}}" data-width="{{component.bg.img.width}}" data-height="{{component.bg.img.height}}">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="home-text">
-                        <h1>
-                            <div class="editable" data-class="title">{{component.title}}</div>
-                        </h1>
+<div class="subtitle">
+    <div class="editable" data-class="subtitle">
+        <span ng-bind-html="component.subtitle"/>
+    </div>
+</div>
 
-                        <p>
-                        <div class="editable" data-class="subtitle">{{component.subtitle}}</div>
-                        </p>
+<div class="mb30"></div>
 
-                        <div class="col-xs-12">
-                            <div class="btn-wrap">
-                                <a class="btn btn-success btn-block center col-xs-3 scrollto" href="{{component.btn.url}}">
-                                    <h4 class="btn-text"><div class="editable" data-class="btn-text">{{component.btn.text}}</div> <i class="fa fa-arrow-circle-o-down"></i></h4>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="clearfix">
-                        </div>
-                    </div>
-                </div>
+<div class="row text-center">
+    <div class="col-md-6 text-center" ng-repeat="teamMember in component.teamMembers">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <img ng-src="{{teamMember.profilepic}}" height="250px" width="250px" />
             </div>
         </div>
+        <div class="row">
 
+            <div class="name">
+                <div class="editable" data-class="teamMember.item.name">
+                    <span ng-bind-html="teamMember.name"/>
+                </div>
+            </div>
+
+            <div class="position">
+                <div class="editable" data-class="teamMember.item.position">
+                    <span ng-bind-html="teamMember.position"/>
+                </div>
+            </div>
+
+            <div class="bio">
+                <div class="editable" data-class="teamMember.item.bio">
+                    <span ng-bind-html="teamMember.bio"/>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>

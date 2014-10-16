@@ -1,40 +1,28 @@
-<div>
-    <div class="component" data-ng-show="component.visibility" data-class="masthead" data-id="{{component._id}}">
-        <div class="component-body" id="{{component.anchor}}">
-            <div class="masthead {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="home-text">
+<div class="home-text">
 
-                            <div class="masthead-title">
-                                <div class="editable" data-class="maintitle" data-index="{{$index}}">
-                                    <span ng-bind-html="component.maintitle"/>
-                                </div>
-                            </div>
-
-                            <div class="masthead-subtitle">
-                                <div class="editable" data-class="subtitle" data-index="{{$index}}">
-                                    <span ng-bind-html="component.subtitle"/>
-                                </div>
-                            </div>
-
-                            <div class="masthead-text">
-                                <div class="editable" data-class="text" data-index="{{$index}}">
-                                    <span ng-bind-html="component.text"/>
-                                </div>
-                            </div>
-
-
-                            <div class="col-xs-12" ng-show="component.btn.visibility">
-                                <a class="btn btn-success btn-block center editable" data-index="{{$index}}"  data-class="btn-text" data-ng-href="{{component.btn.url}}" du-smooth-scroll><i class="{{component.btn.icon}}"></i>{{component.btn.text}}</a>
-                            </div>
-
-                            <div class="clearfix"></div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="masthead-title">
+        <div class="editable" data-class="maintitle" data-index="{{$index}}">
+            <span ng-bind-html="component.maintitle"/>
         </div>
     </div>
+
+    <div class="masthead-subtitle">
+        <div class="editable" data-class="subtitle" data-index="{{$index}}">
+            <span ng-bind-html="component.subtitle"/>
+        </div>
+    </div>
+
+    <div class="masthead-text">
+        <div class="editable" data-class="text" data-index="{{$index}}">
+            <span ng-bind-html="component.text"/>
+        </div>
+    </div>
+
+
+    <div class="col-xs-12" ng-show="component.btn.visibility">
+        <a class="btn btn-success btn-lg center editable" data-index="{{$index}}"  data-class="btn-text" data-ng-href="{{component.btn.url}}" du-smooth-scroll><i class="{{component.btn.icon}}"></i>{{component.btn.text}}</a>
+    </div>
+
+    <div class="clearfix"></div>
+
 </div>

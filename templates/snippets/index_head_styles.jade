@@ -12,17 +12,16 @@ style(type="text/css").
     h1, h2, h3, h4, h5 { font-family: #{account.website.settings.font_family}!important;}
     body { font-family: #{account.website.settings.font_family_2}!important; }
 
-    .navbar-collapse {
-        background: #fff;
-    }
-
     .btn-primary {
         background: #{account.website.settings.primary_color};
-        border-bottom: 4px solid #{account.website.settings.secondary_color};
+        border-bottom: 4px solid;
+        border-color: #{account.website.settings.primary_highlight};
     }
 
-    .navbar-v2 #header .navbar ul.navbar-nav li:hover {
-        border-bottom: 4px solid #{account.website.settings.nav_hover};
+    .btn-primary:hover {
+        background: #{account.website.settings.primary_color};
+        border-bottom: 1px solid;
+        border-color: #{account.website.settings.primary_highlight};
     }
 
     [ng\:cloak], [ng-cloak], .ng-cloak {
