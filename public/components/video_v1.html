@@ -6,84 +6,76 @@
 *
 -->
 
-<div>
-    <div class="component" data-ng-show="component.visibility" data-class="video" data-id="{{component._id}}">
-        <div class="component-body" id="{{component.anchor}}">
-            <div class="{{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
-                <div class="video-block">
-                    <div class="row">
-                        <div class="col-xs-12">
 
-                            <div class="video-title">
-                                <div class="editable" data-class="maintitle" data-index="{{$index}}">
-                                    <span ng-bind-html="component.maintitle"/>
-                                </div>
-                            </div>
+<div class="video-block">
+    <div class="row">
+        <div class="col-xs-12">
 
-                            <div class="video-subtitle">
-                                <div class="editable" data-class="subtitle" data-index="{{$index}}">
-                                    <span ng-bind-html="component.subtitle"/>
-                                </div>
-                            </div>
+            <div class="video-title">
+                <div class="editable" data-class="maintitle" data-index="{{$index}}">
+                    <span ng-bind-html="component.maintitle" />
+                </div>
+            </div>
 
-                            <div class="mb20"></div>
+            <div class="video-subtitle">
+                <div class="editable" data-class="subtitle" data-index="{{$index}}">
+                    <span ng-bind-html="component.subtitle" />
+                </div>
+            </div>
 
-                            <div class="videoblock">
-                                <div class="embed-responsive embed-responsive-16by9">
-                                    <!-- <iframe width="{{component.video.width}}" height="{{component.video.height}}" src="{{trustSrc(component.video.src)}}" frameborder="0"></iframe> -->
+            <div class="mb20"></div>
 
-                                    <!-- <videogular vg-responsive="config.responsive" vg-autoPlay="config.autoPlay">
+            <div class="videoblock">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <!-- <iframe width="{{component.video.width}}" height="{{component.video.height}}" src="{{trustSrc(component.video.src)}}" frameborder="0"></iframe> -->
+
+                    <!-- <videogular vg-responsive="config.responsive" vg-autoPlay="config.autoPlay">
                                         <video class='videoPlayer' controls preload='metadata'>
                                             <source src='{{trustSrc(component.video.src)}}' type='video/mp4'>
                                         </video>
                                         <vg-overlay-play></vg-overlay-play>
                                     </videogular> -->
 
-                                    <videogular vg-theme="config.theme.url" vg-autoplay="config.autoPlay">
-                                        <video class='videoPlayer' controls preload='metadata'>
-                                            <source src='{{trustSrc(component.video.src)}}' type='video/mp4'>
-                                        </video>
+                    <videogular vg-theme="config.theme.url" vg-autoplay="config.autoPlay">
+                        <video class='videoPlayer' controls preload='metadata'>
+                            <source src='{{trustSrc(component.video.src)}}' type='video/mp4'>
+                        </video>
 
-                                        <vg-overlay-play></vg-overlay-play>
+                        <vg-overlay-play></vg-overlay-play>
 
-                                        <vg-controls vg-autohide="config.autoHide" vg-autohide-time="config.autoHideTime">
-                                            <!-- First element from the left -->
-                                            <vg-play-pause-button></vg-play-pause-button>
+                        <vg-controls vg-autohide="config.autoHide" vg-autohide-time="config.autoHideTime">
+                            <!-- First element from the left -->
+                            <vg-play-pause-button></vg-play-pause-button>
 
-                                            <!-- Second element from the left -->
-                                            <vg-scrubBar>
-                                                <vg-scrubbarcurrenttime></vg-scrubbarcurrenttime>
-                                            </vg-scrubBar>
+                            <!-- Second element from the left -->
+                            <vg-scrubBar>
+                                <vg-scrubbarcurrenttime></vg-scrubbarcurrenttime>
+                            </vg-scrubBar>
 
-                                            <!-- Third element from the left -->
-                                            <vg-timedisplay>{{ currentTime }} / {{ totalTime }}</vg-timedisplay>
+                            <!-- Third element from the left -->
+                            <vg-timedisplay>{{ currentTime }} / {{ totalTime }}</vg-timedisplay>
 
-                                            <!-- Fourth element from the left -->
-                                            <vg-volume>
-                                                <vg-mutebutton></vg-mutebutton>
-                                                <vg-volumebar></vg-volumebar>
-                                            </vg-volume>
+                            <!-- Fourth element from the left -->
+                            <vg-volume>
+                                <vg-mutebutton></vg-mutebutton>
+                                <vg-volumebar></vg-volumebar>
+                            </vg-volume>
 
-                                            <!-- Fifth element from the left -->
-                                            <vg-fullscreenButton></vg-fullscreenButton>
-                                        </vg-controls>
-                                    </videogular>
+                            <!-- Fifth element from the left -->
+                            <vg-fullscreenButton></vg-fullscreenButton>
+                        </vg-controls>
+                    </videogular>
 
-                                </div>
-                            </div>
-
-
-                            <div class="col-xs-12" ng-show="component.btn.visibility">
-                                <a class="btn btn-primary btn-block center editable" data-index="{{$index}}" ng-bind="component.btn.text" data-class="btn-text" data-ng-href="{{component.btn.url}}" du-smooth-scroll></a>
-                            </div>
-
-                            <div class="clearfix"></div>
-
-                        </div>
-                    </div>
                 </div>
             </div>
+
+
+            <div class="col-xs-12" ng-show="component.btn.visibility">
+                <a class="btn btn-primary btn-block center editable" data-index="{{$index}}" ng-bind="component.btn.text" data-class="btn-text" data-ng-href="{{component.btn.url}}" du-smooth-scroll></a>
+            </div>
+
+            <div class="clearfix"></div>
+
         </div>
     </div>
 </div>
-
