@@ -7,6 +7,10 @@
 var STRIPE_CONFIG = require('./configs/stripe.config.js');
 var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
 
+//var wiredepJSAry = require('wiredep')().js;
+
+var hostfileGenerator = require('./utils/hostfile.generator');
+
 module.exports = function(grunt) {
 
     grunt.initConfig({
@@ -190,6 +194,7 @@ module.exports = function(grunt) {
                     'public/js/libs/videogular-overlay-play/overlay-play.js',
                     'public/js/libs/videogular-buffering/buffering.js',
                     'public/js/libs/videogular-poster/poster.js'],
+                /*src: wiredepJSAry,*/
                 dest: 'public/js/indigenous.js'
             }
         },
@@ -310,6 +315,11 @@ module.exports = function(grunt) {
         }
 
 
+    });
+
+    grunt.registerTask('generateHostfile', 'A simple task that generates host file entries based upon the database', function(){
+        var done = this.async();
+        hostfileGenerator.buildHostEntriesFromDB(done);
     });
 
     grunt.loadNpmTasks('grunt-contrib-watch');
