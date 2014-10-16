@@ -1,6 +1,5 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective','angularFileUpload'], function (angularAMD) {
-    var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var','angularFileUpload']);
-
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective','angularFileUpload','jdfontselect'], function (angularAMD) {
+    var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var','angularFileUpload','jdFontselect'])
     //routes
     app.config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/website");
