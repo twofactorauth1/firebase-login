@@ -267,13 +267,13 @@
                     </div>
                     <div class="panel-body">
                         <div class="col-sm-6">
-                            <div class="has-plan" ng-show="billing.customerId">
+                            <div class="has-plan" ng-show="billing.stripeCustomerId">
                                 <h2 class="center">Monthly Plan</h2>
                                 <hr></hr>
                                 <h2 class="center total">$49.95 <span>/month</span></h2>
                                 <p class="center">Next Billing Date:  September 12th, 2014</p>
                             </div>
-                            <div class="no-plan well" ng-hide="billing.customerId">
+                            <div class="no-plan well" ng-hide="billing.stripeCustomerId">
                                 <h3 class="center">No Subscription Plan Selected</h3>
                                 <div class="cleatfix mb15"></div>
                                 <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
