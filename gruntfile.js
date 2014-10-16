@@ -333,7 +333,7 @@ module.exports = function(grunt) {
     /*
      * This task is run by CI.
      */
-    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
+    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:utils',
             'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities']);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);

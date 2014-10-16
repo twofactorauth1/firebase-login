@@ -202,6 +202,88 @@ module.exports = {
 
     },
 
+    createWebsiteAndPageFromTheme: function(accountId, themeId, userId, websiteId, pageHandle, fn) {
+        log.debug('>> createWebsiteFromTheme');
+        if(fn === null) {
+            fn = pageHanle;
+            pageHandle = null;
+        }
+        //default to index page if none is specified
+        if(pageHandle === null) {
+            pageHandle = 'index';
+        }
+
+        var theme, website, page;
+
+        var p1 = $.Deferred();
+        themeDao.getById(themeId, $$.m.cms.Theme, function(err, _theme) {
+            if (err) {
+                log.error('Exception getting theme: ' + err);
+                p1.reject();
+            } else {
+                log.debug('Got theme.');
+                theme = _theme;
+
+                if(websiteId === null) {
+                    log.debug('creating website');
+                    //create it
+                    var settings = theme.get('config')['settings'];
+                    website = new $$.m.cms.Website({
+                        'accountId': accountId,
+                        'settings': settings,
+                        'created': {
+                            'by': userId,
+                            'date': new Date()
+                        }
+                    });
+                    cmsDao.saveOrUpdate(website, function(err, savedWebsite) {
+                        if (err) {
+                            log.error('Exception saving new website: ' + err);
+                            p1.reject();
+                        } else {
+                            log.debug('Created website.');
+                            websiteId = savedWebsite.id();
+                            website = savedWebsite;
+                            p1.resolve();
+                        }
+                    });
+                } else {
+                    //don't need to do anything.
+                    log.debug('Skip website creation.');
+                    p1.resolve();
+                }
+            }
+        });
+
+
+        $.when(p1).done(function(){
+            //at this point we have the theme and website.
+            log.debug('Creating Page');
+            var componentAry = theme.get('config')['components'];
+            page = new $$.m.cms.Page({
+                'accountId': accountId,
+                'handle': pageHandle,
+                'websiteId': websiteId,
+                'components': componentAry,
+                'created': {
+                    'by': userId,
+                    'date': new Date()
+                }
+            });
+            cmsDao.saveOrUpdate(page, function(err, savedPage){
+                if(err) {
+                    log.error('Exception saving new page: ' + err);
+                    fn(err, null);
+                } else {
+                    log.debug('<< createWebsiteFromTheme');
+                    fn(null, {'website': website, 'page': savedPage});
+                }
+            });
+
+        });
+
+    },
+
     _createBlogPost: function(accountId, blogPost, fn) {
         blogPostDao.saveOrUpdate(blogPost, fn);
     },
@@ -589,21 +671,59 @@ module.exports = {
     },
 
     deletePage: function(pageId, fn) {
-        var self = this;
-        self.log = log;
+		var self = this;
+		self.log = log;
 
-        self.log.debug('>> deletePage');
-        cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value){
-            if (err) {
-                self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
-                fn(err, null);
-            } else {
-                self.log.debug('<< deletePage');
+		self.log.debug('>> deletePage');
 
-                fn(null, value);
-            }
-        });
-    },
+		cmsDao.getPageById(pageId, function(err, page) {
+
+			if (page && page.get('mainmenu') == true) {
+				self.getWebsiteLinklistsByHandle(page.get('websiteId'), "head-menu", function(err, list) {
+					if (err) {
+						self.log.error('Error getting website linklists by handle: ' + err);
+						fn(err, value);
+					} else {
+						var link = {
+							label : page.get('title'),
+							type : "link",
+							linkTo : {
+								type : "page",
+								data : page.get('handle')
+							}
+						};
+						list.links.pop(link);
+						self.updateWebsiteLinklists(page.get('websiteId'), "head-menu", list, function(err, linkLists) {
+							if (err) {
+								self.log.error('Error updating website linklists by handle: ' + err);
+								fn(err, page);
+							} else {
+								cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+									if (err) {
+										self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+										fn(err, null);
+									} else {
+										self.log.debug('<< deletePage');
+										fn(null, value);
+									}
+								});
+							}
+						});
+					}
+				});
+			} else {
+				cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+					if (err) {
+						self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+						fn(err, null);
+					} else {
+						self.log.debug('<< deletePage');
+						fn(null, value);
+					}
+				});
+			}
+		})
+	},
 
     createPage: function(page, fn) {
         var self = this;

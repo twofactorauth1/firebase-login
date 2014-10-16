@@ -472,7 +472,12 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createWebsiteFromTheme');
         var themeId = req.params.id;
         var accountId = parseInt(self.accountId(req));
-        //TODO: this
+
+        //TODO: security
+        cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), null, null, function(err, websiteAndPage){
+            self.log.debug('<< createWebsiteFromTheme');
+            self.sendResultOrError(res, err, websiteAndPage.website, 'Error creating website from theme.');
+        });
     },
 
     createPageFromTheme: function(req, res) {
@@ -482,7 +487,12 @@ _.extend(api.prototype, baseApi.prototype, {
         var websiteId = req.params.websiteId;
         var accountId = parseInt(self.accountId(req));
         var handle = req.params.handle;
-        //TODO: this
+
+        //TODO: security
+        cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), websiteId, handle, function(err, websiteAndPage){
+            self.log.debug('<< createWebsiteFromTheme');
+            self.sendResultOrError(res, err, websiteAndPage.page, 'Error creating website from theme.');
+        });
     },
 
     setTheme: function(req, res) {
