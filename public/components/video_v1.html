@@ -30,7 +30,45 @@
 
                             <div class="videoblock">
                                 <div class="embed-responsive embed-responsive-16by9">
-                                    <iframe width="{{component.video.width}}" height="{{component.video.height}}" src="{{trustSrc(component.video.src)}}" frameborder="0"></iframe>
+                                    <!-- <iframe width="{{component.video.width}}" height="{{component.video.height}}" src="{{trustSrc(component.video.src)}}" frameborder="0"></iframe> -->
+
+                                    <!-- <videogular vg-responsive="config.responsive" vg-autoPlay="config.autoPlay">
+                                        <video class='videoPlayer' controls preload='metadata'>
+                                            <source src='{{trustSrc(component.video.src)}}' type='video/mp4'>
+                                        </video>
+                                        <vg-overlay-play></vg-overlay-play>
+                                    </videogular> -->
+
+                                    <videogular vg-theme="config.theme.url" vg-autoplay="config.autoPlay">
+                                        <video class='videoPlayer' controls preload='metadata'>
+                                            <source src='{{trustSrc(component.video.src)}}' type='video/mp4'>
+                                        </video>
+
+                                        <vg-overlay-play></vg-overlay-play>
+
+                                        <vg-controls vg-autohide="config.autoHide" vg-autohide-time="config.autoHideTime">
+                                            <!-- First element from the left -->
+                                            <vg-play-pause-button></vg-play-pause-button>
+
+                                            <!-- Second element from the left -->
+                                            <vg-scrubBar>
+                                                <vg-scrubbarcurrenttime></vg-scrubbarcurrenttime>
+                                            </vg-scrubBar>
+
+                                            <!-- Third element from the left -->
+                                            <vg-timedisplay>{{ currentTime }} / {{ totalTime }}</vg-timedisplay>
+
+                                            <!-- Fourth element from the left -->
+                                            <vg-volume>
+                                                <vg-mutebutton></vg-mutebutton>
+                                                <vg-volumebar></vg-volumebar>
+                                            </vg-volume>
+
+                                            <!-- Fifth element from the left -->
+                                            <vg-fullscreenButton></vg-fullscreenButton>
+                                        </vg-controls>
+                                    </videogular>
+
                                 </div>
                             </div>
 
