@@ -47,7 +47,8 @@
     "requirejs": "2.1.10",
     "stripe": "~2.4.0",
     "tldtools": "0.0.9",
-    "underscore": ">=1.6.0"
+    "underscore": ">=1.6.0",
+    "wiredep": "^1.8.6"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
