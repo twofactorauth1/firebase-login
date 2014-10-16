@@ -1,4 +1,4 @@
-define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress'], function(app) {
+define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress', 'skeuocard'], function(app) {
     app.register.controller('AccountChoosePlanCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', function ($scope, $stateParams, UserService, ngProgress) {
         ngProgress.start();
 
@@ -16,6 +16,13 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
             ngProgress.complete();
         });
 
+        UserService.getAccountBilling(function (billing) {
+            $scope.billing = billing;
+        });
 
+        $scope.$watch('selectedPlan', function (newValue, oldValue) {
+            console.log(newValue, oldValue);
+        });
+        var card = new Skeuocard($("#skeuocard"));
     }]);
 });
