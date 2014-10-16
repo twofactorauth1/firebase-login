@@ -184,7 +184,12 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-isotope/dist/angular-isotope.js',
                     'public/js/libs/angular-timer/dist/angular-timer.js',
                     'public/js/libs/jquery-ui/jquery-ui.min.js',
-                    'public/js/scripts/utils.js'],
+                    'public/js/scripts/utils.js',
+                    'public/js/libs/videogular/videogular.js',
+                    'public/js/libs/videogular-controls/controls.js',
+                    'public/js/libs/videogular-overlay-play/overlay-play.js',
+                    'public/js/libs/videogular-buffering/buffering.js',
+                    'public/js/libs/videogular-poster/poster.js'],
                 dest: 'public/js/indigenous.js'
             }
         },
