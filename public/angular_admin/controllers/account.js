@@ -4,6 +4,13 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
         $scope.billing = {};
 
+        $scope.activeSkeuocard = false;
+
+        $scope.updateBillingFn = function (billing) {
+            $scope.billing = billing;
+            $scope.activeSkeuocard = false;
+        };
+
         $scope.$watch('billing', function (newValue, oldValue) {
             if (newValue && newValue.customerId) {
                 UserService.getUserSubscriptions(newValue.customerId, function (subscriptions) {
