@@ -268,10 +268,10 @@
                 <div class="panel-body">
                     <div class="col-sm-6">
                         <div class="has-plan" ng-show="billing.stripeCustomerId">
-                            <h2 class="center">Monthly Plan</h2>
+                            <h2 class="center">{{subscription.plan.name}} Plan</h2>
                             <hr></hr>
-                            <h2 class="center total">$49.95 <span>/month</span></h2>
-                            <p class="center">Next Billing Date:  September 12th, 2014</p>
+                            <h2 class="center total">${{upcomingInvoice.amount_due}} <span>/{{subscription.plan.interval}}</span></h2>
+                            <p class="center">Next Billing Date:  {{nextBillingDate}}</p>
                         </div>
                         <div class="no-plan well" ng-hide="billing.stripeCustomerId">
                             <h3 class="center">No Subscription Plan Selected</h3>
@@ -485,13 +485,13 @@
                         <div class="col-xs-6">
                             <div class="mb40"></div>
                             <h4 class="center">Amount Due</h4>
-                            <h1 class="center total">$107.84</h1>
+                            <h1 class="center total">${{upcomingInvoice.amount_due}}</h1>
                         </div>
                         <div class="col-xs-6">
                             <h4>Current Payment:</h4>
-                            <span>due 01SEP14</span>
-                            <h4>Last Payment:</h4>
-                            <span>recieved 01AUG14</span>
+                            <span>due {{dueDate}}</span>
+                            <!--<h4>Last Payment:</h4>-->
+                            <!--<span>recieved 01AUG14</span>-->
                         </div>
                     </div>
                     <div class="mb30"></div>
@@ -504,34 +504,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Business Subscription</td>
-                                    <td>$99.98</td>
-                                </tr>
-                                <tr>
-                                    <td>Stripe Widget</td>
-                                    <td>$4.00</td>
+                                <tr ng-repeat="item in upcomingInvoice.lines.data">
+                                    <td>{{item.type}}</td>
+                                    <td>${{item.amount}}</td>
                                 </tr>
                                 <tr>
                                     <td><span class="pull-right"><h4>Sub-Total</h4></span></td>
-                                    <td><h4>$103.98</h4></td>
+                                    <td><h4>${{upcomingInvoice.subtotal}}</h4></td>
                                 </tr>
-                                <tr>
-                                    <td><span class="pull-right"><h4>Taxes</h4></span></td>
-                                    <td><h4>3.86</h4></td>
-                                </tr>
+                                <!--<tr>-->
+                                    <!--<td><span class="pull-right"><h4>Taxes</h4></span></td>-->
+                                    <!--<td><h4>3.86</h4></td>-->
+                                <!--</tr>-->
                                 <tr>
                                     <td><span class="pull-right"><h4>TOTAL</h4></span></td>
-                                    <td><h4>$107.84</h4></td>
+                                    <td><h4>${{upcomingInvoice.total}}</h4></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-lg btn-make-payment"
-                                          id="" data-dismiss="modal" data-toggle="modal" data-target="#payBillModal"><span class="fa fa-credit-card"></span> Pay Bill</button>
-                </div>
+                <!--<div class="modal-footer">-->
+                    <!--<button type="button" class="btn btn-primary btn-lg btn-make-payment"-->
+                                          <!--id="" data-dismiss="modal" data-toggle="modal" data-target="#payBillModal"><span class="fa fa-credit-card"></span> Pay Bill</button>-->
+                <!--</div>-->
             </div>
         </div>
     </div>
