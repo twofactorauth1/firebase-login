@@ -242,7 +242,9 @@ define([], function () {
             DOCUMENT: [ "doc", "txt"],
             VIDEO: [ "mp4" ],
             AUDIO: [ "mp3" ]
-        }
+        },
+        
+        googleApiKey : 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
     };
 
     if (typeof $$ === 'undefined') {

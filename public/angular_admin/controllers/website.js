@@ -11,8 +11,8 @@ define([
     'ngProgress',
     'unsafeHtml',
     'mediaDirective',
-    'confirmClick2',
-], function(app) {
+    'confirmClick2'
+], function(app) {	
     app.register.controller('WebsiteCtrl', [
         '$scope',
         '$window',
