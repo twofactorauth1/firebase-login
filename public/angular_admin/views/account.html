@@ -340,7 +340,7 @@
                                         <td ng-show="invoice.paid">PAID</td>
                                         <td ng-hide="invoice.paid">NOT PAID</td>
                                         <td class="table-action">
-                                            <a href="" data-toggle="modal" data-target="#viewTransactionModal"><i class="fa fa-eye"></i></a>
+                                            <a href="" data-toggle="modal" data-target="#viewTransactionModal{{$index + 1}}"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
                             </table>
@@ -557,29 +557,29 @@
         </div>
     </div>
 
-    <div class="modal fade" id="viewTransactionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="viewTransactionModal{{$index + 1}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-repeat="invoice in invoices.data">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">×</span><span class="sr-only">Close</span>
                     </button>
-                    <h4 class="modal-title" id="myModalLabel">Transaction #1</h4>
+                    <h4 class="modal-title" id="myModalLabel">Transaction #{{$index + 1}}</h4>
                 </div>
                 <div class="modal-body">
                     <img src="../assets/images/paid-in-full.png" class="center paid" />
                     <h4>Pay To: <span class="pull-right">Indigenous Software Inc.</span></h4>
-                    <h4>Payment Method: <span class="pull-right">Visa xxxx-xxxx-xxxx-2345 06/15</span></h4>
-                    <h4>Date: <span class="pull-right">Monday, September 1st, 2014</span></h4>
-                    <h4>Period: <span class="pull-right">01AUG14 - 31AUG14</span></h4>
-                    <h4>Amount Paid: <span class="pull-right">$99.98</span></h4>
+                    <!--<h4>Payment Method: <span class="pull-right">Visa xxxx-xxxx-xxxx-2345 06/15</span></h4>-->
+                    <h4>Date: <span class="pull-right">{{invoice.date * 1000 | date : 'longDate'}}</span></h4>
+                    <h4>Period: <span class="pull-right">{{invoice.period_start * 1000 | date : 'longDate'}} - {{invoice.period_end * 1000 | date : 'longDate'}}</span></h4>
+                    <h4>Amount Paid: <span class="pull-right">${{invoice.total}}</span></h4>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-lg btn-download-bill"
-                                          id="" data-dismiss="modal"><span class="fa fa-download"></span> Download</button>
-                    <button type="button" class="btn btn-primary btn-lg btn-print-bill"
-                                          id="" data-dismiss="modal"><span class="fa fa-print"></span> Print</button>
-                </div>
+                <!--<div class="modal-footer">-->
+                    <!--<button type="button" class="btn btn-primary btn-lg btn-download-bill"-->
+                                          <!--id="" data-dismiss="modal"><span class="fa fa-download"></span> Download</button>-->
+                    <!--<button type="button" class="btn btn-primary btn-lg btn-print-bill"-->
+                                          <!--id="" data-dismiss="modal"><span class="fa fa-print"></span> Print</button>-->
+                <!--</div>-->
             </div>
         </div>
     </div>
