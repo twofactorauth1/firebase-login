@@ -11,7 +11,7 @@ define([
     'ngProgress',
     'unsafeHtml',
     'mediaDirective',
-    'confirmClick2'
+    'confirmClick2',
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -177,14 +177,17 @@ define([
 
                 //get website
                 WebsiteService.getWebsite(account.website.websiteId, function(website) {
+                	
                     $scope.website = website;
                     $scope.website.settings = $scope.website.settings || {};
+                   
                     $scope.primaryColor = $scope.website.settings.primary_color;
                     $scope.secondaryColor = $scope.website.settings.secondary_color;
                     $scope.primaryHighlight = $scope.website.settings.primary_highlight;
                     $scope.primaryTextColor = $scope.website.settings.primary_text_color;
                     $scope.primaryFontFamily = $scope.website.settings.font_family;
                     $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
+                    $scope.googleFontFamily = $scope.website.settings.google_font_family;
                 });
             });
 
@@ -262,6 +265,7 @@ define([
 
             //TODO: use scope connection 
             $scope.savePage = function() {
+            	
                 var componentJSON = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
                 var iFrame = document.getElementById("iframe-website");
@@ -564,13 +568,12 @@ define([
                 console.log('show mobile');
                 $scope.isMobile = true;
             };
-
+            
             $scope.updateThemeSettings = function() {
                 console.log('update theme', $scope.website.settings);
                 document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
                 $scope.editPage();
             };
-
         }
     ]);
 });

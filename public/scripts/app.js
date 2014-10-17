@@ -25,7 +25,12 @@ var mainApp = angular
         'mgo-angular-wizard',
         'iso.directives',
         'timer',
-        'ui'
+        'ui',
+        "com.2fdevs.videogular",
+        "com.2fdevs.videogular.plugins.controls",
+        "com.2fdevs.videogular.plugins.overlayplay",
+        "com.2fdevs.videogular.plugins.buffering",
+        "com.2fdevs.videogular.plugins.poster"
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){

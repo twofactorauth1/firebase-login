@@ -5,82 +5,73 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div>
-    <div class="component" data-ng-show="component.visibility" data-class="image-gallery" data-id="{{component._id}}">
-        <div class="component-body" id="{{component.anchor}}">
-            <div class="image-gallery-v1 {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
-                <div class="container inner-page">
-                    <div class="col-xs-12">
 
-                        <div class="image-gallery-title">
-                            <div class="editable" data-class="maintitle" data-index="{{$index}}">
-                                <div data-ng-bind-html="component.maintitle" data-ng-show="component.maintitle"></div>
-                                <div ng-show="!component.maintitle"><h1>Image Gallery Title</h1></div>
-                            </div>
-                        </div>
 
-                        <hr></hr>
+<div class="image-gallery-title">
+    <div class="editable" data-class="maintitle" data-index="{{$index}}">
+        <div data-ng-bind-html="component.maintitle" data-ng-show="component.maintitle"></div>
+        <div ng-show="!component.maintitle">
+            <h1>Image Gallery Title</h1>
+        </div>
+    </div>
+</div>
 
-                        <div class="image-gallery-subtitle" data-ng-show="component.subtitle">
-                            <div class="editable" data-class="subtitle" data-index="{{$index}}">
-                                <div data-ng-bind-html="component.subtitle"></div>
-                            </div>
-                        </div>
+<hr></hr>
 
-                        <div class=" clearfix mb20"></div>
+<div class="image-gallery-subtitle" data-ng-show="component.subtitle">
+    <div class="editable" data-class="subtitle" data-index="{{$index}}">
+        <div data-ng-bind-html="component.subtitle"></div>
+    </div>
+</div>
 
-                        <div class="">
-                            <div ng-cloak class="row">
-                                <div  ng-repeat="image in component.images track by $index">
-                                    <div class="col-sm-3 col-xs-12">
-                                        <div class="imgHeight single-image">
-                                            <a class="thumbnail" href="{{image.url}}"
-                                               title="{{image.label}}" data-gallery>
+<div class=" clearfix mb20"></div>
 
-                                                <img class="img-responsive" alt="{{image.label}}" ng-src="{{image.url}}">
-                                                <span class="caption"><i class="fa fa-plus-circle"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="blueimp-gallery" class="blueimp-gallery">
-                            <!-- The container for the modal slides -->
-                            <div class="slides">
+<div class="">
+    <div ng-cloak class="row">
+        <div ng-repeat="image in component.images track by $index">
+            <div class="col-sm-3 col-xs-12">
+                <div class="imgHeight single-image">
+                    <a class="thumbnail" href="{{image.url}}" title="{{image.label}}" data-gallery>
 
-                            </div>
-                            <!-- Controls for the borderless lightbox -->
-                            <h3 class="title"></h3>
-                            <a class="prev">‹</a>
-                            <a class="next">›</a>
-                            <a class="close">×</a>
-                            <a class="play-pause"></a>
-                            <ol class="indicator"></ol>
-                            <!-- The modal dialog, which will be used to wrap the lightbox content -->
-                            <div class="modal fade">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title"></h4>
-                                        </div>
-                                        <div class="modal-body next"></div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default pull-left prev">
-                                                <i class="glyphicon glyphicon-chevron-left"></i>
-                                                Previous
-                                            </button>
-                                            <button type="button" class="btn btn-primary next">
-                                                Next
-                                                <i class="glyphicon glyphicon-chevron-right"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <img class="img-responsive" alt="{{image.label}}" ng-src="{{image.url}}">
+                        <span class="caption"><i class="fa fa-plus-circle"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="blueimp-gallery" class="blueimp-gallery">
+    <!-- The container for the modal slides -->
+    <div class="slides">
+
+    </div>
+    <!-- Controls for the borderless lightbox -->
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+    <!-- The modal dialog, which will be used to wrap the lightbox content -->
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body next"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left prev">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                        Previous
+                    </button>
+                    <button type="button" class="btn btn-primary next">
+                        Next
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </div>

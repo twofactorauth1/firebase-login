@@ -1,51 +1,37 @@
-<div class="component feature-list-v3 {{component.bg.img.parallax?'parallax':''}}" parallax-background
-     parallax-ratio="0.4"
-     style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};'
-     data-class="feature-list-v3" data-id="{{component._id}}">
+<div class="feature-list-title">
+    <div class="editable" data-class="title">
+        <span ng-bind-html="component.title"></span>
+    </div>
+</div>
 
-    <div class="page" id="{{component.anchor}}">
-        <div class="row inner-page">
-            <div class="row">
+<div class="feature-list-subtitle col-xs-8 col-xs-offset-2">
+    <div class="editable" data-class="subtitle">
+        <span ng-bind-html="component.subtitle"></span>
+    </div>
+</div>
 
-                <div class="feature-list-title">
-                    <div class="editable" data-class="title">
-                        <span ng-bind-html="component.title"></span>
-                    </div>
+<div class="clearfix mb15"></div>
+<div ng-repeat="feature in component.features track by $index">
+    <div class="col-sm-4 feature">
+        <div class="feature-single feature-single-0">
+            <span ng-show="feature.icon" class="feature-icon {{feature.icon}}"></span>
+
+            <img ng-show="feature.image" src="{{feature.image}}" />
+
+            <div class="feature-title">
+                <div class="editable" data-class="feature.item.title" data-index="{{$index}}">
+                    <span ng-bind-html="feature.title"></span>
                 </div>
+            </div>
 
-                <div class="feature-list-subtitle col-xs-8 col-xs-offset-2">
-                    <div class="editable" data-class="subtitle">
-                        <span ng-bind-html="component.subtitle"></span>
-                    </div>
+            <div class="feature-subtitle">
+                <div class="editable" data-class="feature.item.subtitle" data-index="{{$index}}">
+                    <span ng-bind-html="feature.subtitle"></span>
                 </div>
+            </div>
 
-                <div class="clearfix mb15"></div>
-                <div ng-repeat="feature in component.features track by $index">
-                    <div class="col-sm-4 feature">
-                        <div class="feature-single feature-single-0">
-                            <span ng-show="feature.icon" class="feature-icon {{feature.icon}}"></span>
-
-                            <img ng-show="feature.image" src="{{feature.image}}"/>
-
-                            <div class="feature-title">
-                                <div class="editable" data-class="feature.item.title" data-index="{{$index}}">
-                                    <span ng-bind-html="feature.title"></span>
-                                </div>
-                            </div>
-
-                            <div class="feature-subtitle">
-                                <div class="editable" data-class="feature.item.subtitle" data-index="{{$index}}">
-                                    <span ng-bind-html="feature.subtitle"></span>
-                                </div>
-                            </div>
-
-                            <div class="text-center" ng-show="feature.btn.url">
-                                <a href="{{feature.btn.url}}"
-                                   class="btn btn-primary">{{feature.btn.text}}</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="text-center" ng-show="feature.btn.url">
+                <a href="{{feature.btn.url}}" class="btn btn-primary">{{feature.btn.text}}</a>
             </div>
         </div>
     </div>
