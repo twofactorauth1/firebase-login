@@ -4,7 +4,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
         route = $location.$$path;
-
+        window.oldScope;
         $scope.$route = $route;
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
@@ -18,7 +18,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     console.log('>>>>> ', window.parent);
         //     window.parent.frames[0].parentNode.activateSettings();
         // };
-
+        if(!window.oldScope)
+            window.oldScope = $scope;
         $scope.sortingLog = [];
 
         $scope.wait;
@@ -116,12 +117,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             {
                  body.className+=' editing';
             }
+            window.oldScope.isEditing = true;
+            window.oldScope.$digest();
         };
 
         window.triggerEditModeOff = function() {
             console.log('trigger edit off');
             var body = document.getElementsByTagName('body')[0];
             body.className = body.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
+
+            window.oldScope.isEditing = false;
+            window.oldScope.$digest();
         };
 
         $scope.trustSrc = function (src) {

@@ -561,8 +561,8 @@ _.extend(api.prototype, baseApi.prototype, {
             component = new component({
                 _id: temp,
                 anchor: temp,
-                title: componentObj.title
-
+                title: componentObj.title,
+                visibility : true
             });
 
         }
