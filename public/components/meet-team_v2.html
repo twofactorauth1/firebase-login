@@ -21,10 +21,10 @@
 <div class="mb30"></div>
 
 <div class="row text-center">
-    <div class="col-md-6 text-center" ng-repeat="teamMember in component.teamMembers">
+    <div class="col-md-6 text-center teamMember" ng-repeat="teamMember in component.teamMembers">
         <div class="row">
             <div class="col-md-12 text-center">
-                <img ng-src="{{teamMember.profilepic}}" height="250px" width="250px" />
+                <div class="profile-pic" style="background: url('{{teamMember.profilepic}}') no-repeat;"></div>
             </div>
         </div>
         <div class="row">

@@ -1,4 +1,4 @@
-<div ng-show="component.title" class="portfolio-title col-xs-12 mb30">
+<div class="portfolio-title col-xs-12 mb30">
     <span class="editable" data-class="title" data-ng-bind-html="component.title">
     </span>
 </div>
@@ -19,7 +19,7 @@
     <div id="myPortfoilo" class=" portfolio modal fade" aria-hidden="true" style="display: none;">
         <div class=" portfolio modal-dialog">
             <div class="portfolio modal-content">
-                <div class="portfolio modal-header">
+                <div class="portfolio modal-header" ng-style="{'background':secondaryColor}">
                     <div class="container">
                         <button type="button" class="close" style="float:none;font-size:52px;" data-dismiss="modal" aria-hidden="true">×</button>
                         <h1 id="hdr-title" class="text-center">{{projectObject.project.title}}</h1>

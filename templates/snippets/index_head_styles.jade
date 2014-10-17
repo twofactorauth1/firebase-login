@@ -20,8 +20,24 @@ style(type="text/css").
 
     .btn-primary:hover {
         background: #{account.website.settings.primary_color};
-        border-bottom: 1px solid;
-        border-color: #{account.website.settings.primary_highlight};
+        border-bottom: 4px solid;
+        border-color: transparent;
+    }
+
+    .btn-success {
+        background: #{account.website.settings.secondary_color};
+        border-bottom: 4px solid;
+        border-color: #{account.website.settings.secondary_highlight};
+    }
+
+    .btn-success:hover {
+        background: #{account.website.settings.secondary_color};
+        border-bottom: 4px solid;
+        border-color: transparent;
+    }
+
+    .btn-outline:hover {
+        background-color: #{account.website.settings.secondary_color}!important;
     }
 
     [ng\:cloak], [ng-cloak], .ng-cloak {
