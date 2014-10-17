@@ -7,7 +7,7 @@
 
 require('../../models/base.model.js');
 
-var themeconfig = $$.m.ModelBase.extend({
+var theme = $$.m.ModelBase.extend({
 
     defaults: function() {
         return {
@@ -23,10 +23,13 @@ var themeconfig = $$.m.ModelBase.extend({
 
             name: '',
 
+            accountId: 0,
+
+            isPublic: false,
+
+            previewUrl: '',
+
             config: {},
-
-
-
 
             /**
              * Created by data
@@ -36,7 +39,7 @@ var themeconfig = $$.m.ModelBase.extend({
              * @default {}
              */
             created: {
-                date: "",
+                date: new Date(),
                 by: null
             },
 
@@ -49,7 +52,7 @@ var themeconfig = $$.m.ModelBase.extend({
              * @default {}
              */
             modified: {
-                date: "",
+                date: null,
                 by: null
             }
         }
@@ -72,12 +75,12 @@ var themeconfig = $$.m.ModelBase.extend({
 }, {
     db: {
         storage: "mongo",
-        table: "themeconfigs",
+        table: "themes",
         idStrategy: "uuid"
     }
 });
 
 $$.m.cms = $$.m.cms || {};
-$$.m.cms.ThemeConfig = themeconfig;
+$$.m.cms.Theme = theme;
 
-module.exports = themeconfig;
+module.exports = theme;

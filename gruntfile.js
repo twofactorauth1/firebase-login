@@ -7,6 +7,10 @@
 var STRIPE_CONFIG = require('./configs/stripe.config.js');
 var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
 
+//var wiredepJSAry = require('wiredep')().js;
+
+var hostfileGenerator = require('./utils/hostfile.generator');
+
 module.exports = function(grunt) {
 
     grunt.initConfig({
@@ -184,7 +188,13 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-isotope/dist/angular-isotope.js',
                     'public/js/libs/angular-timer/dist/angular-timer.js',
                     'public/js/libs/jquery-ui/jquery-ui.min.js',
-                    'public/js/scripts/utils.js'],
+                    'public/js/scripts/utils.js',
+                    'public/js/libs/videogular/videogular.js',
+                    'public/js/libs/videogular-controls/controls.js',
+                    'public/js/libs/videogular-overlay-play/overlay-play.js',
+                    'public/js/libs/videogular-buffering/buffering.js',
+                    'public/js/libs/videogular-poster/poster.js'],
+                /*src: wiredepJSAry,*/
                 dest: 'public/js/indigenous.js'
             }
         },
@@ -228,6 +238,17 @@ module.exports = function(grunt) {
                     ]
                 }
             }
+        },
+
+        jsdoc2md: {
+
+            separateOutputFilePerInput: {
+                files: [
+                    { src: "api/1.0/cms.api.js", dest: "../wiki-indigeweb/API-CMS.md" },
+                    { src: "api/1.0/product.api.js", dest: "../wiki-indigeweb/API-Product.md" }
+                ]
+            }
+
         },
 
 
@@ -296,6 +317,11 @@ module.exports = function(grunt) {
 
     });
 
+    grunt.registerTask('generateHostfile', 'A simple task that generates host file entries based upon the database', function(){
+        var done = this.async();
+        hostfileGenerator.buildHostEntriesFromDB(done);
+    });
+
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -307,6 +333,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-ng-annotate');
+    grunt.loadNpmTasks("grunt-jsdoc-to-markdown");
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
@@ -316,7 +343,7 @@ module.exports = function(grunt) {
     /*
      * This task is run by CI.
      */
-    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
+    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:utils',
             'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities']);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
@@ -336,5 +363,6 @@ module.exports = function(grunt) {
     grunt.registerTask('testCms', ['nodeunit:cms']);
     grunt.registerTask('testAssets', ['nodeunit:assets']);
     grunt.registerTask('testContactActivities', ['nodeunit:contactActivities']);
+    grunt.registerTask('updateDocs', 'jsdoc2md');
     
 };

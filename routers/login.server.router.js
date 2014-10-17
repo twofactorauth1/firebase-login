@@ -14,6 +14,7 @@ var FacebookConfig = require('../configs/facebook.config');
 var LoginView = require('../views/login.server.view');
 var ForgotPasswordView = require('../views/forgotpassword.server.view');
 var SignupView = require('../views/signup.server.view');
+var urlUtils = require('../utils/urlutils');
 
 
 var router = function () {
@@ -97,27 +98,31 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     onLogin: function (req, resp) {
         var self = this;
+        self.log.debug('>> onLogin');
         if (req.body.remembermepresent != null && req.body.rememberme == null) {
             req.session.cookie.expires = false;
         }
 
         var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
-        self.log.debug('onLogin: ' + redirectUrl);
+        self.log.debug('onLogin redirectUrl from cookie: ' + redirectUrl);
         if (redirectUrl != null) {
             authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function (err, value) {
-                self.log.debug('onLogin-> getAuthenticatedUrl: ' + redirectUrl);
+                self.log.debug('onLogin authenticatedUrl: ' + redirectUrl);
+                self.log.debug('<< onLogin');
                 return resp.redirect(redirectUrl);
             });
             return;
         }
-        var self = this;
+
         this.setup(req, resp, function (err, value) {
             if (self.accountId(value) > 0) {
+                self.log.debug('redirecting to /admin');
                 resp.redirect("/admin");
                 self = req = resp = null;
             } else {
                 var accountIds = req.user.getAllAccountIds();
                 if (accountIds.length > 1) {
+                    self.log.debug('redirecting to /home');
                     resp.redirect("/home");
                     self = req = resp = null;
                     return;
@@ -125,13 +130,13 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                 authenticationDao.getAuthenticatedUrlForAccount(accountIds[0], self.userId(req), "admin", function (err, value) {
                     if (err) {
+                        self.log.debug('redirecting to /home');
                         resp.redirect("/home");
                         self = null;
                         return;
                     }
 
-                    //remove auth token
-                    value = value.replace(/\?authtoken.*/g, "");
+                    self.log.debug('redirecting to ' + value);
                     resp.redirect(value);
                     self = null;
                 });

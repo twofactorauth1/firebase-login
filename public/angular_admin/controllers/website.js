@@ -11,7 +11,7 @@ define([
     'ngProgress',
     'unsafeHtml',
     'mediaDirective',
-    'confirmClick2'
+    'confirmClick2',
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -55,7 +55,6 @@ define([
                     ]
                 }
             };
-
 
             //get user
             UserService.getUser(function(user) {
@@ -118,6 +117,7 @@ define([
                             addComponentBtns[i].addEventListener("click", function(e) {
                                 var element = angular.element('#add-component-modal');
                                 element.modal('show');
+                                //get the current index of the component pressed
                             });
                         } else if (typeof addComponentBtns.attachEvent != "undefined") {
                             addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
@@ -177,16 +177,18 @@ define([
 
                 //get website
                 WebsiteService.getWebsite(account.website.websiteId, function(website) {
+                	
                     $scope.website = website;
                     $scope.website.settings = $scope.website.settings || {};
+                   
                     $scope.primaryColor = $scope.website.settings.primary_color;
                     $scope.secondaryColor = $scope.website.settings.secondary_color;
                     $scope.primaryHighlight = $scope.website.settings.primary_highlight;
                     $scope.primaryTextColor = $scope.website.settings.primary_text_color;
                     $scope.primaryFontFamily = $scope.website.settings.font_family;
                     $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
+                    $scope.googleFontFamily = $scope.website.settings.google_font_family;
                 });
-
             });
 
             /*
@@ -253,6 +255,7 @@ define([
                 $scope.updateIframeComponents();
                 $scope.deactivateAloha();
                 $scope.isEditing = false;
+                $scope.componentEditing = '';
                 iFrame.contentWindow.triggerEditModeOff();
             };
 
@@ -262,6 +265,7 @@ define([
 
             //TODO: use scope connection 
             $scope.savePage = function() {
+            	
                 var componentJSON = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
                 var iFrame = document.getElementById("iframe-website");
@@ -349,6 +353,16 @@ define([
                     iFrame.contentWindow.triggerEditModeOff();
                 });
 
+                var data = {
+                    _id: $scope.website._id,
+                    accountId: $scope.website.accountId,
+                    settings: $scope.website.settings
+                };
+
+                WebsiteService.updateWebsite(data, function(data) {
+                    console.log('updated website settings', data);
+                });
+
                 //website service - save page data
             };
 
@@ -411,7 +425,8 @@ define([
                     console.log('data >>> ', data);
                     if (data.components) {
                         var newComponent = data.components[data.components.length - 1];
-                        $scope.currentPage.components.push(newComponent);
+                        $scope.currentPage.components.splice(1, 0, newComponent);
+                        //$scope.currentPage.components.push(newComponent);
                         //$scope.components.push(newComponent);
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
@@ -534,7 +549,6 @@ define([
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-
             };
 
             $scope.deletePage = function() {
@@ -554,20 +568,12 @@ define([
                 console.log('show mobile');
                 $scope.isMobile = true;
             };
-
+            
             $scope.updateThemeSettings = function() {
                 console.log('update theme', $scope.website.settings);
-                var data = {
-                    _id: $scope.website._id,
-                    accountId: $scope.website.accountId,
-                    settings: $scope.website.settings
-                };
-
-                WebsiteService.updateWebsite(data, function(data) {
-                    console.log('updated website settings');
-                });
+                document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
+                $scope.editPage();
             };
-
         }
     ]);
 });

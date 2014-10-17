@@ -26,6 +26,7 @@ require.config({
         'angularAMD': 'libs/angularAMD/angularAMD.min',
         'underscore': 'libs/underscore/underscore',
         'skeuocard': 'libs/skeuocard/javascripts/skeuocard.min',
+        'jdfontselect': 'libs/jd-fontselect/dist/angular-fontselect.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
         'd3': 'libs/d3/d3',
         'c3': 'libs/c3/c3.min',
@@ -125,7 +126,7 @@ require.config({
         'ngHeadroom': {deps: ['headroom']},
         'commonutils': {deps: ['underscore']},
         'jqueryGridster': {deps: ['jquery']},
-        'c3': {deps: ['d3']},
+        'c3': {deps: ['d3']},        
         'angularUiRouter': {deps: ['angular']},
         'angularFileUpload': {deps: ['angular']},
         'xEditable': {deps: ['angular']},
@@ -151,7 +152,8 @@ require.config({
         'ngProgress': {deps: ['angular']},
         'bootstrap-iconpicker': {deps: ['jquery']},
         'unsafeHtml': {deps: ['angular']},
-        "bootstrap-confirmation" : {deps: ['bootstrap']}
+        "bootstrap-confirmation" : {deps: ['bootstrap']},
+        'jdfontselect': {deps: ['angular']},
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

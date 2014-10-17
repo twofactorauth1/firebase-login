@@ -3,7 +3,7 @@ require('./dao/cms.dao.js');
 var blogPostDao = require('./dao/blogpost.dao.js');
 var cmsDao = require('./dao/cms.dao.js');
 var accountDao = require('../dao/account.dao.js');
-var themeConfigDao = require('./dao/themeconfig.dao.js');
+var themeDao = require('./dao/theme.dao.js');
 
 var log = $$.g.getLogger("cms_manager");
 var Blog = require('./model/components/blog');
@@ -11,74 +11,161 @@ var Blog = require('./model/components/blog');
 module.exports = {
 
     /*
-     * ThemeConfig
+     * Theme
      */
 
-    getThemeConfigById: function(themeId, fn) {
-        log.debug('>> getThemeConfigById');
-        themeConfigDao.getById(themeId, $$.m.cms.ThemeConfig, function(err, value){
+    getThemeById: function(themeId, fn) {
+        log.debug('>> getThemeById');
+        themeDao.getById(themeId, $$.m.cms.Theme, function(err, value){
             if(err) {
                 log.error('Exception thrown getting config: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< getThemeConfigById');
+                log.debug('<< getThemeById');
                 fn(null, value);
             }
         });
     },
 
-    getThemeConfigByName: function(name, fn) {
-        log.debug('>> getThemeConfigByName');
-        themeConfigDao.findOne({'name': name}, $$.m.cms.ThemeConfig, function(err, value){
+    getThemeByName: function(name, fn) {
+        log.debug('>> getThemeByName');
+        themeDao.findOne({'name': name}, $$.m.cms.Theme, function(err, value){
             if(err) {
-                log.error('Exception thrown getting config: ' + err);
+                log.error('Exception thrown getting theme: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< getThemeConfigByName');
+                log.debug('<< getThemeByName');
                 fn(null, value);
             }
         });
     },
 
-    getThemeConfigByAccountId: function(accountId, fn) {
-        //TODO: later
-    },
-
-    getAllThemeConfigs: function(fn) {
-        log.debug('>> getAllThemeConfigs');
-        themeConfigDao.findMany({}, $$.m.cms.ThemeConfig, function(err, list){
+    getAllThemes: function(accountId, fn) {
+        log.debug('>> getAllThemes');
+        themeDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}]}, $$.m.cms.Theme, function(err, list){
             if(err) {
-                log.error('Exception thrown listing theme configs: ' + err);
+                log.error('Exception thrown listing themes: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< getAllThemeConfigs');
+                log.debug('<< getAllThemes');
                 fn(null, list);
             }
         });
     },
 
-    updateThemeConfig: function(themeConfig, fn) {
-        log.debug('>> updateThemeConfig');
-        themeConfigDao.saveOrUpdate(themeConfig, function(err, value){
+    createTheme: function(theme, fn) {
+        log.debug('>> createTheme');
+        //validate
+        var nameCheckQuery = {'name': theme.get('name')};
+        themeDao.exists(nameCheckQuery, $$.m.cms.Theme, function(err, value){
             if(err) {
-                log.error('Exception thrown updating themeconfig: ' + err);
+                log.error('Exception thrown checking for uniqueness: ' + err);
+                fn(err, null);
+            } else if(value === true) {
+                log.warn('Attempted to create a theme with a name that already exists.');
+                fn('Name already exists', null);
+            } else {
+                themeDao.saveOrUpdate(theme, function(err, savedTheme){
+                    log.debug('<< createTheme');
+                    fn(null, savedTheme);
+                });
+            }
+        });
+    },
+
+    updateTheme: function(theme, fn) {
+        log.debug('>> updateTheme');
+        themeDao.saveOrUpdate(theme, function(err, value){
+            if(err) {
+                log.error('Exception thrown updating theme: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< updateThemeConfig');
+                log.debug('<< updateTheme');
                 fn(null, value);
             }
         });
     },
 
-    getAllThemes: function(fn) {
-        $$.dao.CmsDao.getAllThemes(fn);
+    deleteTheme: function(themeId, fn) {
+        log.debug('>> deleteTheme');
+        themeDao.removeById(themeId, $$.m.cms.Theme, function(err, value){
+            if(err) {
+                log.error('Exception thrown while deleting theme: ' + err);
+            } else {
+                log.debug('<< deleteTheme');
+                fn(null, value);
+            }
+        });
     },
+
+    createThemeFromWebsite: function(themeObj, websiteId, pageHandle, fn) {
+        log.debug('>> createThemeFromWebsite');
+        if(fn===null) {
+            fn = pageHandle;
+            pageHandle = null;
+        }
+        //use the index page if no handle is specified
+        if(pageHandle === null) {
+            pageHandle = 'index';
+        }
+
+        var p1 = $.Deferred(), p2 = $.Deferred();
+        var website = null, componentAry = null;
+
+        cmsDao.getWebsiteById(websiteId, function(err, _website){
+            if(err) {
+                log.error('Error getting website: ' + err);
+                p1.reject();
+            } else {
+                website = _website;
+                p1.resolve();
+            }
+        });
+
+        cmsDao.getPageForWebsite(websiteId, pageHandle, function(err, page){
+            if(err) {
+                log.error('Error getting page[' + pageHandle + '] for websiteId[' + websiteId + ']: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('Got page.  Getting components.');
+                cmsDao.getComponentsByPage(page.id(), function(err, _componentAry){
+                    if(err) {
+                        log.error('Error getting components for page: ' + err);
+                        p2.reject();
+                    } else {
+                        log.debug('Got components.');
+                        componentAry = _componentAry;
+                        p2.resolve();
+                    }
+                });
+            }
+        });
+
+        $.when(p1,p2).done(function(){
+            log.debug('updating themeObj with settings and components');
+            var config = {'settings': website.get('settings'), 'components': componentAry};
+            themeObj.set('config', config);
+
+            cmsDao.saveOrUpdate(themeObj, function(err, newTheme){
+                if(err) {
+                    log.error('Error saving theme: ' + err);
+                    fn(err, null);
+                } else {
+                    log.debug('<< createThemeFromWebsite');
+                    fn(null, newTheme);
+                }
+            });
+        });
+
+    },
+
 
     getThemePreview: function(themeId, fn) {
         cmsDao.getThemePreview(themeId, fn);
     },
 
     setThemeForAccount: function(accountId, themeId, fn) {
+        log.debug('>> setThemeForAccount');
         //validateThemeId
         var p1 = $.Deferred();
         cmsDao.themeExists(themeId, function(err, value){
@@ -95,17 +182,104 @@ module.exports = {
         $.when(p1).done(function(){
             accountDao.getById(accountId, $$.m.Account, function(err, account){
                 if(err) {
-                    fn(err, null);
+                    log.error('Error getting account by ID: ' + err);
+                    return fn(err, null);
                 }
                 var website = account.get('website');
                 website.themeId = themeId;
                 accountDao.saveOrUpdate(account, function(err, value){
                     if(err) {
-                        fn(err, null);
+                        log.error('Error updating Account: ' + err);
+                        return fn(err, null);
+                    } else {
+                        log.debug('<< setThemeForAccount');
+                        fn(null, 'SUCCESS');
                     }
-                    fn(null, 'SUCCESS');
+
                 });
             });
+        });
+
+    },
+
+    createWebsiteAndPageFromTheme: function(accountId, themeId, userId, websiteId, pageHandle, fn) {
+        log.debug('>> createWebsiteFromTheme');
+        if(fn === null) {
+            fn = pageHanle;
+            pageHandle = null;
+        }
+        //default to index page if none is specified
+        if(pageHandle === null) {
+            pageHandle = 'index';
+        }
+
+        var theme, website, page;
+
+        var p1 = $.Deferred();
+        themeDao.getById(themeId, $$.m.cms.Theme, function(err, _theme) {
+            if (err) {
+                log.error('Exception getting theme: ' + err);
+                p1.reject();
+            } else {
+                log.debug('Got theme.');
+                theme = _theme;
+
+                if(websiteId === null) {
+                    log.debug('creating website');
+                    //create it
+                    var settings = theme.get('config')['settings'];
+                    website = new $$.m.cms.Website({
+                        'accountId': accountId,
+                        'settings': settings,
+                        'created': {
+                            'by': userId,
+                            'date': new Date()
+                        }
+                    });
+                    cmsDao.saveOrUpdate(website, function(err, savedWebsite) {
+                        if (err) {
+                            log.error('Exception saving new website: ' + err);
+                            p1.reject();
+                        } else {
+                            log.debug('Created website.');
+                            websiteId = savedWebsite.id();
+                            website = savedWebsite;
+                            p1.resolve();
+                        }
+                    });
+                } else {
+                    //don't need to do anything.
+                    log.debug('Skip website creation.');
+                    p1.resolve();
+                }
+            }
+        });
+
+
+        $.when(p1).done(function(){
+            //at this point we have the theme and website.
+            log.debug('Creating Page');
+            var componentAry = theme.get('config')['components'];
+            page = new $$.m.cms.Page({
+                'accountId': accountId,
+                'handle': pageHandle,
+                'websiteId': websiteId,
+                'components': componentAry,
+                'created': {
+                    'by': userId,
+                    'date': new Date()
+                }
+            });
+            cmsDao.saveOrUpdate(page, function(err, savedPage){
+                if(err) {
+                    log.error('Exception saving new page: ' + err);
+                    fn(err, null);
+                } else {
+                    log.debug('<< createWebsiteFromTheme');
+                    fn(null, {'website': website, 'page': savedPage});
+                }
+            });
+
         });
 
     },
@@ -463,6 +637,22 @@ module.exports = {
         });
     },
 
+    getComponentVersions: function(type, fn) {
+        var self = this;
+        self.log = log;
+
+        self.log.debug('>> getComponentVersions');
+        cmsDao.getComponentVersions(type, function(err, value){
+            if(err) {
+                self.log.error('Exception getting component versions: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< getComponentVersions');
+                fn(null, value);
+            }
+        });
+    },
+
     updatePage: function(pageId, page, fn) {
         var self = this;
         self.log = log;
@@ -484,21 +674,59 @@ module.exports = {
     },
 
     deletePage: function(pageId, fn) {
-        var self = this;
-        self.log = log;
+		var self = this;
+		self.log = log;
 
-        self.log.debug('>> deletePage');
-        cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value){
-            if (err) {
-                self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
-                fn(err, null);
-            } else {
-                self.log.debug('<< deletePage');
+		self.log.debug('>> deletePage');
 
-                fn(null, value);
-            }
-        });
-    },
+		cmsDao.getPageById(pageId, function(err, page) {
+
+			if (page && page.get('mainmenu') == true) {
+				self.getWebsiteLinklistsByHandle(page.get('websiteId'), "head-menu", function(err, list) {
+					if (err) {
+						self.log.error('Error getting website linklists by handle: ' + err);
+						fn(err, value);
+					} else {
+						var link = {
+							label : page.get('title'),
+							type : "link",
+							linkTo : {
+								type : "page",
+								data : page.get('handle')
+							}
+						};
+						list.links.pop(link);
+						self.updateWebsiteLinklists(page.get('websiteId'), "head-menu", list, function(err, linkLists) {
+							if (err) {
+								self.log.error('Error updating website linklists by handle: ' + err);
+								fn(err, page);
+							} else {
+								cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+									if (err) {
+										self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+										fn(err, null);
+									} else {
+										self.log.debug('<< deletePage');
+										fn(null, value);
+									}
+								});
+							}
+						});
+					}
+				});
+			} else {
+				cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+					if (err) {
+						self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+						fn(err, null);
+					} else {
+						self.log.debug('<< deletePage');
+						fn(null, value);
+					}
+				});
+			}
+		})
+	},
 
     createPage: function(page, fn) {
         var self = this;

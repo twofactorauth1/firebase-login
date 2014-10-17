@@ -45,7 +45,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            title : "<h1>Masthead Title</h1>",
+            maintitle : "<h1>Masthead Title</h1>",
 
             /**
              *
