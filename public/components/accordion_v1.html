@@ -9,9 +9,9 @@
         <div class="panel pane-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{$index}}" ng-click="element[$index]= !element[$index]" ng-style="{'background-color':element[$index]?component.bg.color:''}" class="collapsed">
+                    <a data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{$index}}" ng-click="element[$index]= !element[$index]" ng-style="{'background-color':element[$index]?primaryColor:'', 'color':element[$index]?'white':''}" class="collapsed">
                         <span class="glyphicon glyphicon-plus-sign" ng-hide="element[$index]">{{flag}}</span>
-                        <span ng-show="element[$index]" class="glyphicon glyphicon-minus-sign">{{flag}}</span>{{element.title}}
+                        <span ng-show="element[$index]" class="glyphicon glyphicon-minus-sign">{{flag}}</span> {{element.title}}
                     </a>
                 </h4>
             </div>

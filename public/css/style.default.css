@@ -6028,8 +6028,8 @@ h4,
   box-shadow: none;
 }
 .btn-success {
-  background-color: #54C8E8!important;
-  border-color: #4eb1ca!important;
+  background-color: #54C8E8;
+  border-color: #4eb1ca;
 }
 .btn-success:hover,
 .btn-success:active,
@@ -22113,7 +22113,6 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   padding-right: 0px;
 }
 .feature-list-v4 .row div div div h5 {
-  color: orange;
   font-size: 18px;
 }
 .feature-list-v4 .row-xs-height {
@@ -22179,6 +22178,9 @@ ul.ui-sortable.active .fragment .componentActions h4 {
 }
 .feature-list-v4 .demo {
   background-color: white;
+  border: 1px solid #e5e6e1;
+  border-bottom: 3px solid #e5e6e1;
+  padding: 15px;
 }
 /********** Navbar **********/
 .navbar-nav li.social a {
@@ -22546,6 +22548,16 @@ contenthover a {
   font-weight: bold;
   text-align: center;
   text-transform: uppercase;
+}
+.meet-team-v2 .profile-pic {
+  width: 250px;
+  height: 250px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+.meet-team-v2 .teamMember {
+  padding: 20px;
 }
 /********** Meet Team v3 **********/
 .meet-team-v3 {
@@ -22999,7 +23011,7 @@ div[data-class='image-text'] p {
   line-height: 18px;
 }
 .masthead-v1 .masthead-subtitle {
-  max-width: 60%;
+  max-width: 70%;
   margin: 0 auto;
 }
 .masthead-v1 .masthead-title {
@@ -23009,7 +23021,6 @@ div[data-class='image-text'] p {
 .masthead-v1 .btn {
   height: 50px;
   margin-top: 30px;
-  line-height: 30px;
 }
 .masthead-v1 .btn .fa {
   float: left;
@@ -23320,7 +23331,6 @@ div[data-class='image-text'] p {
   margin: 0;
   padding: 0;
   padding-top: 40px;
-  background: #36D9C3 !important;
   color: #fff;
   border: none;
   text-align: center;
