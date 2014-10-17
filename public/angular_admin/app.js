@@ -26,7 +26,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
                 controllerUrl: '/angular_admin/controllers/account_edit.js'
             }))
             .state('accountChoosePlan', angularAMD.route({
-                url: '/account/choosePlan',
+                url: '/account/choose/plan',
                 templateUrl: '/angular_admin/views/account_choose_plan.html',
                 controller: 'AccountChoosePlanCtrl',
                 controllerUrl: '/angular_admin/controllers/account_choose_plan.js'

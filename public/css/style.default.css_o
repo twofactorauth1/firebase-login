@@ -6021,8 +6021,8 @@ h4,
   box-shadow: none;
 }
 .btn-success {
-  background-color: #54C8E8!important;
-  border-color: #4eb1ca!important;
+  background-color: #54C8E8;
+  border-color: #4eb1ca;
 }
 .btn-success:hover,
 .btn-success:active,
