@@ -26,6 +26,7 @@ require.config({
         'angularAMD': 'libs/angularAMD/angularAMD.min',
         'underscore': 'libs/underscore/underscore',
         'skeuocard': 'libs/skeuocard/javascripts/skeuocard.min',
+        'webfontloader': 'libs/jd-fontselect/dist/libs/webfontloader',
         'jdfontselect': 'libs/jd-fontselect/dist/angular-fontselect.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
         'd3': 'libs/d3/d3',
@@ -74,7 +75,7 @@ require.config({
         "constants": 'constants/constants',
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',
-        'confirmClick2':'/angular_admin/directives/confirm_click2',
+        'confirmClick2':'/angular_admin/directives/confirm_click2',        
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -152,7 +153,7 @@ require.config({
         'bootstrap-iconpicker': {deps: ['jquery']},
         'unsafeHtml': {deps: ['angular']},
         "bootstrap-confirmation" : {deps: ['bootstrap']},
-        'jdfontselect': {deps: ['angular']},
+        'jdfontselect': {deps: ['angular','webfontloader']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
