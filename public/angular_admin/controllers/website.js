@@ -177,10 +177,10 @@ define([
 
                 //get website
                 WebsiteService.getWebsite(account.website.websiteId, function(website) {
-                	
+
                     $scope.website = website;
                     $scope.website.settings = $scope.website.settings || {};
-                   
+
                     $scope.primaryColor = $scope.website.settings.primary_color;
                     $scope.secondaryColor = $scope.website.settings.secondary_color;
                     $scope.primaryHighlight = $scope.website.settings.primary_highlight;
@@ -189,6 +189,16 @@ define([
                     $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
                     $scope.googleFontFamily = $scope.website.settings.google_font_family;
                 });
+
+                //get themes
+                WebsiteService.getThemes(function(themes) {
+                    $scope.themes = themes;
+                    $scope.currentTheme = _.findWhere($scope.themes, {
+                        name: account.website.themeId
+                    });
+                    console.log('Current Theme >>> ', $scope.currentTheme);
+                });
+
             });
 
             /*

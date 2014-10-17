@@ -179,6 +179,16 @@ define(['app'], function (app) {
             });
 		};
 
+		this.getThemes = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'theme'].join('/');
+			console.log('Getting Theme '+apiUrl);
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				console.log('Theme Data >>> ', data);
+				fn(data);
+			});
+		};
+
 
 	});
 });
