@@ -23588,7 +23588,7 @@ div[data-class='image-text'] p {
 }
 .footer-after {
   background: #292929;
-  padding: 20px;
+  padding: 20px 20px 0 20px;
   font-size: 12px;
 }
 .footer-after p {
@@ -23673,6 +23673,10 @@ div[data-class="blog"] .single-blog {
   background-color: #efa022!important;
   border-bottom: 5px solid #efa022!important;
   color: #ffffff;
+}
+.blog-v1 .inner-page {
+  padding: 0;
+  max-width: 100%;
 }
 .currently-viewing {
   background: #47b1cc;
