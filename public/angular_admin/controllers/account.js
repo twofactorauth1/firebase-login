@@ -36,11 +36,10 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             });
             PaymentService.getUpcomingInvoice(billing.stripeCustomerId, function (upcomingInvoice) {
                 $scope.upcomingInvoice = upcomingInvoice;
-                $scope.nextBillingDate = new Date(upcomingInvoice.next_payment_attempt*1000).toDateString();
-                $scope.dueDate = new Date(upcomingInvoice.period_end*1000).toDateString();
             });
-
         });
-
+        PaymentService.getAllInvoices(function (invoices) {
+            $scope.invoices = invoices;
+        });
     }]);
 });

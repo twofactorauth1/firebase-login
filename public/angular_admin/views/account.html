@@ -271,7 +271,7 @@
                             <h2 class="center">{{subscription.plan.name}} Plan</h2>
                             <hr></hr>
                             <h2 class="center total">${{upcomingInvoice.amount_due}} <span>/{{subscription.plan.interval}}</span></h2>
-                            <p class="center">Next Billing Date:  {{nextBillingDate}}</p>
+                            <p class="center">Next Billing Date:  {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
                         </div>
                         <div class="no-plan well" ng-hide="billing.stripeCustomerId">
                             <h3 class="center">No Subscription Plan Selected</h3>
@@ -326,43 +326,23 @@
                                         <th>#</th>
                                         <th>Date</th>
                                         <th>Amount</th>
-                                        <th>Card</th>
+                                        <!--<th>Card</th>-->
                                         <th>Status</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>August 10th, 2014</td>
-                                        <td>$99.98</td>
-                                        <td>Visa - 8943</td>
-                                        <td>PAID</td>
+                                    <tr ng-repeat="invoice in invoices.data">
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{invoice.date * 1000 | date : 'longDate'}}</td>
+                                        <td>${{invoice.total}}</td>
+                                        <!--<td>Visa - 8943</td>-->
+                                        <td ng-show="invoice.paid">PAID</td>
+                                        <td ng-hide="invoice.paid">NOT PAID</td>
                                         <td class="table-action">
                                             <a href="" data-toggle="modal" data-target="#viewTransactionModal"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>July 10th, 2014</td>
-                                        <td>$99.98</td>
-                                        <td>Visa - 8943</td>
-                                        <td>PAID</td>
-                                        <td class="table-action">
-                                            <a href="" data-toggle="modal" data-target="#viewTransactionModal"><i class="fa fa-eye"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>June 10th, 2014</td>
-                                        <td>$99.98</td>
-                                        <td>Visa - 8943</td>
-                                        <td>PAID</td>
-                                        <td class="table-action">
-                                            <a href="" data-toggle="modal" data-target="#viewTransactionModal"><i class="fa fa-eye"></i></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -489,7 +469,7 @@
                         </div>
                         <div class="col-xs-6">
                             <h4>Current Payment:</h4>
-                            <span>due {{dueDate}}</span>
+                            <span>due {{upcomingInvoice.period_end*1000 | date : 'longDate'}}</span>
                             <!--<h4>Last Payment:</h4>-->
                             <!--<span>recieved 01AUG14</span>-->
                         </div>
