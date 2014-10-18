@@ -105,6 +105,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 for (var i = 0; i < $scope.currentpage.components.length; i++) {
                     if($scope.currentpage.components[i].type == 'navigation')  {
                         var body = document.getElementsByTagName('body')[0];
+                        body.className = body.className.replace('navbar-v', '');
                         body.className = body.className + ' navbar-v'+ $scope.currentpage.components[i].version;
                     }
                 };

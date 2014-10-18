@@ -21804,7 +21804,6 @@ hr {
 }
 .editing .fragment {
   border: none;
-  overflow: hidden;
 }
 .editing .fragment:hover {
   border: 2px dashed #34495e;
@@ -22079,7 +22078,6 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   width: 100%;
 }
 .feature-list-v3 .feature-single .feature-icon {
-  color: #3b9db7;
   font-size: 14em;
   position: absolute;
   margin: 15px 0;
