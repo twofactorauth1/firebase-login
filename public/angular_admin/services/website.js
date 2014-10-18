@@ -4,7 +4,6 @@ define(['app'], function (app) {
 
 		this.getWebsite = function (websiteID, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId].join('/');
-			console.log('Getting Website '+apiUrl);
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
@@ -181,10 +180,8 @@ define(['app'], function (app) {
 
 		this.getThemes = function (fn) {
 			var apiUrl = baseUrl + ['cms', 'theme'].join('/');
-			console.log('Getting Theme '+apiUrl);
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
-				console.log('Theme Data >>> ', data);
 				fn(data);
 			});
 		};

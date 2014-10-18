@@ -64,16 +64,12 @@ define([
 
 
             window.getUpdatediFrameRoute = function(data) {
-                console.log('getUpdatediFrameRoute', data);
+                // console.log('getUpdatediFrameRoute', data);
             };
 
             window.activateSettings = function() {
-                console.log('Activate Settings!');
+                // console.log('Activate Settings!');
             };
-
-            /*
-             * On iFrame Loads
-             */
 
             document.getElementById("iframe-website").onload = function() {
                 ngProgress.complete();
@@ -90,18 +86,18 @@ define([
                 $timeout(function() {
                     //unhide no-component
 
-                    console.log('style >>>', iframeDoc.body.querySelectorAll('.no-component'));
+
                     if(iframeDoc.body.querySelectorAll('.no-component')[0]) {
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.display="block";
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility="visible";
                     }
 
                     //add click events for all the settings buttons
-                    var settingsBtns = iframeDoc.querySelectorAll('.componentActions .settings');
-                    console.log('settingsBtns >>> ', settingsBtns.length);
+                    var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
                     for (var i = 0; i < settingsBtns.length; i++) {
                         if (typeof settingsBtns[i].addEventListener != "undefined") {
                             settingsBtns[i].addEventListener("click", function(e) {
+                                console.log('e.currentTarget.attributes >>> ', e.currentTarget.attributes);
                                 $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                             });
                         } else if (typeof settingsBtns.attachEvent != "undefined") {
@@ -111,7 +107,6 @@ define([
 
                     //add click events for all the add component buttons
                     var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
-                    console.log('addComponentBtns >>> ', addComponentBtns.length);
                     for (var i = 0; i < addComponentBtns.length; i++) {
                         if (typeof addComponentBtns[i].addEventListener != "undefined") {
                             addComponentBtns[i].addEventListener("click", function(e) {
@@ -135,16 +130,11 @@ define([
                     }, false);
 
                     iframeDoc.addEventListener("dblclick", function(e) {
-                        console.log('double click');
                         $scope.editPage();
                     }, false);
 
-                }, 500);
+                }, 5000);
             };
-
-            /*
-             * Get Account, Pages, & Components from services
-             */
 
             UserService.getAccount(function(account) {
                 $scope.account = account;
@@ -196,47 +186,25 @@ define([
                     $scope.currentTheme = _.findWhere($scope.themes, {
                         name: account.website.themeId
                     });
-                    console.log('Current Theme >>> ', $scope.currentTheme);
                 });
-
             });
-
-            /*
-             * Components Array
-             */
 
             $scope.components = [];
 
-            /*
-             * Set Initial isEditing
-             */
-
             $scope.isEditing = false;
 
-            /*
-             * Set isMobile
-             */
-
             $scope.isMobile = false;
-
-            /*
-             * Sort the Components
-             */
 
             $scope.components.sort(function(a, b) {
                 return a.i > b.i;
             });
-
-            /*
-             * Open Status
-             */
 
             $scope.status = {
                 isopen: false
             };
 
             $scope.toggled = function(open) {
-                console.log('Dropdown is now: ', open);
+                // console.log('Dropdown is now: ', open);
             };
 
             $scope.toggleDropdown = function($event) {
@@ -252,7 +220,6 @@ define([
 
             $scope.editPage = function() {
                 $scope.isEditing = true;
-                console.log('activate aloha');
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
                 iframe.contentWindow.triggerEditMode();
@@ -270,12 +237,12 @@ define([
             };
 
             $scope.doubleClick = function() {
-                console.log('doubleClick');
+                // console.log('doubleClick');
             };
 
-            //TODO: use scope connection 
+            //TODO: use scope connection
             $scope.savePage = function() {
-            	
+
                 var componentJSON = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
                 var iFrame = document.getElementById("iframe-website");
@@ -338,7 +305,6 @@ define([
                     }
                 };
 
-                console.log('componentIdArr >>> ', componentIdArr);
                 //sort the components in currentPage to match iframe
 
                 var newComponentOrder = [];
@@ -350,7 +316,6 @@ define([
                     newComponentOrder.push(matchedComponent);
                 };
 
-                 console.log('newComponentOrder >>> ', newComponentOrder);
 
                  $scope.currentPage.components = newComponentOrder;
 
@@ -370,7 +335,7 @@ define([
                 };
 
                 WebsiteService.updateWebsite(data, function(data) {
-                    console.log('updated website settings', data);
+                    // console.log('updated website settings', data);
                 });
 
                 //website service - save page data
@@ -378,8 +343,7 @@ define([
 
             $scope.updatePage = function(handle) {
                 $scope.isEditing = false;
-                console
-                    .log(handle);
+
                 $scope.pageSelected = handle || 'index';
 
                 var route;
@@ -402,7 +366,6 @@ define([
 
                 WebsiteService.getPages(that.account.website.websiteId, function(pages) {
                     var currentPage = $scope.pageSelected;
-                    console.log('Current Page Selected >>> ', currentPage);
                     var parsed = angular.fromJson(pages);
                     var arr = [];
 
@@ -432,7 +395,6 @@ define([
             $scope.addComponent = function(component) {
                 var pageId = $scope.currentPage._id;
                 WebsiteService.addNewComponent(pageId, component.title, component.type, function(data) {
-                    console.log('data >>> ', data);
                     if (data.components) {
                         var newComponent = data.components[data.components.length - 1];
                         $scope.currentPage.components.splice(1, 0, newComponent);
@@ -440,7 +402,7 @@ define([
                         //$scope.components.push(newComponent);
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
-                        console.log('newComponent >>> ', newComponent);
+
                         $scope.deactivateAloha();
                         $scope.activateAloha();
                         //$scope.scrollToIframeComponent(newComponent.anchor);
@@ -450,7 +412,6 @@ define([
             };
 
             $scope.deleteComponent = function(componentId) {
-                console.log('deleteComponent >>> ', componentId);
                 var pageId = $scope.currentPage._id;
                 var deletedType;
                 WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
@@ -472,7 +433,6 @@ define([
             };
 
             $scope.scrollToIframeComponent = function(section) {
-                console.log('scrollToIframeComponent ', section);
                 document.getElementById("iframe-website").contentWindow.scrollTo(section);
             };
 
@@ -494,7 +454,6 @@ define([
                 document.body.className += ' leftpanel-collapsed rightmenu-open';
                 var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
                 var last = nodes[nodes.length - 1];
-                console.log('last', last);
                 angular.element(last).triggerHandler('click');
             };
 
@@ -502,7 +461,6 @@ define([
                 var componentId = $scope.componentEditing._id;
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
-                    console.log($scope.components[i]._id);
                     if ($scope.components[i]._id === componentId) {
                         $scope.components[i] = $scope.componentEditing
                     }
@@ -521,7 +479,6 @@ define([
             };
 
             $scope.createPage = function(page, $event) {
-                console.log('create page', page);
 
                 var websiteId = $scope.currentPage.websiteId;
 
@@ -540,7 +497,6 @@ define([
 
                 if (!hasHandle) {
                     WebsiteService.createPage(websiteId, pageData, function (newpage) {
-                        console.log('$scope.allPages >>> ', $scope.allPages);
                         toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
                         $scope.page = null;
                         $scope.allPages.push(newpage);
@@ -568,25 +524,21 @@ define([
                 var title = $scope.currentPage.title;
 
                 WebsiteService.deletePage(pageId, websiteId, title, function(data) {
-                    console.log('Data >>> ', data);
                     toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
                     document.getElementById("iframe-website").setAttribute("src", "/");
                 });
             };
 
             $scope.showMobile = function() {
-                console.log('show mobile');
                 $scope.isMobile = true;
             };
 
             $scope.updateThemeSettings = function() {
-                console.log('update theme', $scope.website.settings);
                 document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
                 $scope.editPage();
             };
 
             $scope.changeSelectedTheme = function(theme) {
-                console.log('change theme');
                 $scope.selectedTheme = theme;
             };
 
@@ -604,10 +556,6 @@ define([
                     });
                     var current = $scope.currentPage.components[i];
                     if (matching) {
-                        // console.log('matching.type >>> ', matching.type);
-                        // console.log('matching.version >>> ', matching.version);
-                        // console.log('current.type >>> ', current.type);
-                        // console.log('current.version >>> ', current.version);
                         current.version = matching.version;
                         if (current.bg.img.url == '') {
                             current.bg.color = matching.bg.color;
