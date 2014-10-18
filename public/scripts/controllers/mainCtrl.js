@@ -29,7 +29,7 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
                 account = data;
 
                 //Include Layout For Theme
-                that.themeUrl = 'components/layout/layout_' + account.website.themeId + '.html';
+                // that.themeUrl = 'components/layout/layout_' + account.website.themeId + '.html';
             }
         });
 

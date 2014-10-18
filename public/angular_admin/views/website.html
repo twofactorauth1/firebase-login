@@ -75,7 +75,7 @@
                     <h4>Current Theme</h4>
                     <div class="row">
                         <div class="col-xs-6">
-                            <img src="{{currentTheme.previewUrl}}" class="theme-img" >
+                            <img ng-src="{{currentTheme.previewUrl}}" class="theme-img"/>
                         </div>
                         <div class="col-xs-6">
                             <button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#change-theme-modal">Change</button>
@@ -259,7 +259,7 @@
                         <div class="thumbnail" data-themeid="">
                             <div class="check-theme" style="display:none"><i class="fa fa-check-circle"></i>
                             </div>
-                            <img src="{{theme.previewUrl}}">
+                            <img ng-src="{{theme.previewUrl}}">
                             <div class="caption">
                                 <h5>{{theme.name}}</h5>
                             </div>
