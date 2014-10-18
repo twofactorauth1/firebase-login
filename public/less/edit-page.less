@@ -300,13 +300,17 @@ input[type='file'] {
 
 .check-theme {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -12px;
+  right: -2px;
   z-index: 9999;
-  margin: -15px 1px 0 0;
+  margin: 0 1px 0 0;
   color: green;
   font-size: 29px;
-  width: 25px;
+  background: #fff;
+  width: 24px;
+  height: 26px;
+  border-radius: 55px;
+  line-height: 10px;
 }
 
 .component.dragging {
@@ -338,5 +342,26 @@ input[type='file'] {
     border: 2px solid #fff!important;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3)!important;
     color: #ffffff!important;
+  }
+}
+
+.theme {
+  .thumbnail {
+    border: 3px solid #CFCFCF;
+  }
+}
+
+.theme.selected {
+  .thumbnail {
+    border:3px solid #4bb0cb;
+  }
+}
+
+.theme.success {
+  .thumbnail {
+    border:3px solid green;
+  }
+  .check-theme {
+    display: block!important;
   }
 }

@@ -177,10 +177,10 @@ define([
 
                 //get website
                 WebsiteService.getWebsite(account.website.websiteId, function(website) {
-                	
+
                     $scope.website = website;
                     $scope.website.settings = $scope.website.settings || {};
-                   
+
                     $scope.primaryColor = $scope.website.settings.primary_color;
                     $scope.secondaryColor = $scope.website.settings.secondary_color;
                     $scope.primaryHighlight = $scope.website.settings.primary_highlight;
@@ -189,6 +189,16 @@ define([
                     $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
                     $scope.googleFontFamily = $scope.website.settings.google_font_family;
                 });
+
+                //get themes
+                WebsiteService.getThemes(function(themes) {
+                    $scope.themes = themes;
+                    $scope.currentTheme = _.findWhere($scope.themes, {
+                        name: account.website.themeId
+                    });
+                    console.log('Current Theme >>> ', $scope.currentTheme);
+                });
+
             });
 
             /*
@@ -568,11 +578,46 @@ define([
                 console.log('show mobile');
                 $scope.isMobile = true;
             };
-            
+
             $scope.updateThemeSettings = function() {
                 console.log('update theme', $scope.website.settings);
                 document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
                 $scope.editPage();
+            };
+
+            $scope.changeSelectedTheme = function(theme) {
+                console.log('change theme');
+                $scope.selectedTheme = theme;
+            };
+
+            $scope.changeTheme = function() {
+
+                $scope.currentTheme = $scope.selectedTheme;
+
+                $scope.website.settings = $scope.selectedTheme.config.settings;
+
+                //change all components to the themes versions
+                var theme = $scope.selectedTheme.config.components;
+                for (var i = 0; i < $scope.currentPage.components.length; i++) {
+                    var matching = _.findWhere(theme, {
+                        type: $scope.currentPage.components[i].type
+                    });
+                    var current = $scope.currentPage.components[i];
+                    if (matching) {
+                        // console.log('matching.type >>> ', matching.type);
+                        // console.log('matching.version >>> ', matching.version);
+                        // console.log('current.type >>> ', current.type);
+                        // console.log('current.version >>> ', current.version);
+                        current.version = matching.version;
+                        if (current.bg.img.url == '') {
+                            current.bg.color = matching.bg.color;
+                            current.txtcolor = matching.txtcolor;
+                        }
+                    }
+                };
+                $scope.components = $scope.currentPage.components;
+                $scope.updateIframeComponents();
+                $scope.updateThemeSettings();
             };
         }
     ]);
