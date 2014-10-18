@@ -105,6 +105,7 @@
     "components-font-awesome": "~4.2.0",
     "es5-shim": ">=3.4.0",
     "isotope": "2.0.0",
-    "bootstrap": "~3.2.0"
+    "bootstrap": "~3.2.0",
+    "jquery": "~2.1.1"
   }
 }
