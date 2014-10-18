@@ -19883,13 +19883,17 @@ input[type='file'] {
 }
 .check-theme {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -12px;
+  right: -2px;
   z-index: 9999;
-  margin: -15px 1px 0 0;
+  margin: 0 1px 0 0;
   color: green;
   font-size: 29px;
-  width: 25px;
+  background: #fff;
+  width: 24px;
+  height: 26px;
+  border-radius: 55px;
+  line-height: 10px;
 }
 .component.dragging {
   overflow: hidden;
@@ -19914,6 +19918,18 @@ input[type='file'] {
   border: 2px solid #fff!important;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3) !important;
   color: #ffffff!important;
+}
+.theme .thumbnail {
+  border: 3px solid #CFCFCF;
+}
+.theme.selected .thumbnail {
+  border: 3px solid #4bb0cb;
+}
+.theme.success .thumbnail {
+  border: 3px solid green;
+}
+.theme.success .check-theme {
+  display: block!important;
 }
 .blog-item {
   background: #fcfcfc;
@@ -22079,6 +22095,8 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   margin: 0;
   line-height: 196px;
   text-transform: uppercase;
+  z-index: 999;
+  position: relative;
 }
 .feature-list-v3 .feature-single .feature-title:hover {
   color: #44af6e;
@@ -22549,7 +22567,7 @@ contenthover a {
   text-align: center;
   text-transform: uppercase;
 }
-.meet-team-v2 .profile-pic {
+.meet-team-v2 .profile-img {
   width: 250px;
   height: 250px;
   display: block;

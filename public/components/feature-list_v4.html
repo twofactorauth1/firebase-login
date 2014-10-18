@@ -1,29 +1,31 @@
-<div class="title">
-    <div class="editable" data-class="title">
-        <span ng-bind-html="component.title"/>
-    </div>
-</div>
-
-<div class="subtitle">
-    <div class="editable" data-class="subtitle">
-        <span ng-bind-html="component.subtitle"/>
-    </div>
-</div>
-
-<div class="mb30"></div>
-
-<div class="row ">
-    <div ng-repeat="feature in component.features track by $index">
-        <div class="row row-xs-height">
-            <div class="col-sm-3 col-xs-12 col-xs-height">
-                <img src="{{feature.imgurl}}" class="img-rounded" height="250px" width="250px" />
-            </div>
-            <div class="col-sm-9 img-rounded demo col-top col-xs-12 col-xs-height">
-                <h5>{{feature.title}}</h5>
-                <p>{{feature.body}}</p>
-                <a href="{{feature.btn.url}}" class="btn btn-primary btn-sm"><i class="{{feature.btn.icon}}"></i>&nbsp;{{feature.btn.text}} </a>
-            </div>
+<div ng-class="component.type+'-v'+component.version">
+    <div class="title">
+        <div class="editable" data-class="title">
+            <span ng-bind-html="component.title"/>
         </div>
-        <hr ng-if="!$last" />
+    </div>
+
+    <div class="subtitle">
+        <div class="editable" data-class="subtitle">
+            <span ng-bind-html="component.subtitle"/>
+        </div>
+    </div>
+
+    <div class="mb30"></div>
+
+    <div class="row ">
+        <div ng-repeat="feature in component.features track by $index">
+            <div class="row row-xs-height">
+                <div class="col-sm-3 col-xs-12 col-xs-height">
+                    <img src="{{feature.imgurl}}" class="img-rounded" height="250px" width="250px" />
+                </div>
+                <div class="col-sm-9 img-rounded demo col-top col-xs-12 col-xs-height">
+                    <h5>{{feature.title}}</h5>
+                    <p>{{feature.body}}</p>
+                    <a href="{{feature.btn.url}}" class="btn btn-primary btn-sm"><i class="{{feature.btn.icon}}"></i>&nbsp;{{feature.btn.text}} </a>
+                </div>
+            </div>
+            <hr ng-if="!$last" />
+        </div>
     </div>
 </div>
