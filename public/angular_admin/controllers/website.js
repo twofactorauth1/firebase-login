@@ -12,7 +12,7 @@ define([
     'unsafeHtml',
     'mediaDirective',
     'confirmClick2'
-], function(app) {	
+], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
         '$window',
@@ -30,6 +30,10 @@ define([
             $scope.iframeData = {};
 
             $scope.allPages = [];
+
+            $scope.selectedGoogleFontFn = function (font) {
+              $scope.googleFontFamily = font.stack;
+            };
 
             $scope.spectrum = {
                 options: {
