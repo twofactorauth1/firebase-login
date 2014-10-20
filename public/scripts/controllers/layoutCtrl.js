@@ -176,14 +176,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     }
         // };
 
+       
         window.activateAloha = function() {
             console.log('aloha');
-            $('.editable').aloha();
+            aloha.dom.query('.editable', document).forEach(aloha);
         };
 
         window.deactivateAloha = function() {
-            console.log('mahalo');
-            $('.editable').mahalo();
+           console.log('mahalo');
+           aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
 
     }]);
