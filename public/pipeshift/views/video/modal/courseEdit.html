@@ -6,7 +6,7 @@
     <tabset>
         <tab >
             <tab-heading>
-                <span class='fa fa-info-circle'></span> Course Info
+                <span class='fa fa-info-circle'></span> Campaign Info
             </tab-heading>
             <form name="$parent.courseForm" class="col-md-12">
                 <div class="row">
@@ -34,9 +34,9 @@
                         </div>
                         <div class="col-xs-6">
                             <div class="mb25"></div>
-                            <a ng-href="{{protocol + domain + '/course/' + course.subdomain }}" target="_blank"
+                            <a ng-href="{{protocol + domain + '/campaign/' + course.subdomain }}" target="_blank"
                                class="btn btn-primary btn-block btn-lg"
-                               ng-disabled="!isSubdomainChecked || !isSubdomainFree || course.subdomain==null || course.subdomain.trim().length==0">Course
+                               ng-disabled="!isSubdomainChecked || !isSubdomainFree || course.subdomain==null || course.subdomain.trim().length==0">Campaign
                                 Link</a>
                         </div>
                     </div>
