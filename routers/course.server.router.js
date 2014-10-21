@@ -21,8 +21,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         //  COURSE
         //-------------------------------------------------
-        app.get("/course/:courseSubdomain", this.setup, this.showCourse.bind(this));
-        app.get("/course/:courseSubdomain/video/:videoId", this.setup, this.showVideo.bind(this));
+        app.get("/campaign/:courseSubdomain", this.setup, this.showCourse.bind(this));
+        app.get("/campaign /:courseSubdomain/video/:videoId", this.setup, this.showVideo.bind(this));
 
         return this;
     },

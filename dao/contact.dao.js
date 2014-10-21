@@ -46,9 +46,10 @@ var dao = {
         });
     },
 
-    findContactsShortForm: function(accountId, letter, skip, limit, fn) {
+    findContactsShortForm: function(accountId, letter, skip, limit, fields, fn) {
         var self=this;
         self.log.debug('>> findContactsShortForm');
+
         var query = {};
         if(letter !='all') {
             var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
@@ -57,7 +58,7 @@ var dao = {
             query = {accountId: accountId};
         }
 
-        var fields = {_id:1, first:1, last:1, photo:1};
+        //var fields = {_id:1, first:1, last:1, photo:1};
 
         accountDao.getAccountByID(accountId, function (err, res) {
 
