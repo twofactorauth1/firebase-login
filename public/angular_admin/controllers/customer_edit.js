@@ -1,4 +1,4 @@
-define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress'], function(app) {
+define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress', 'confirmClick2'], function(app) {
     app.register.controller('CustomerEditCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', function ($scope, CustomerService, $stateParams, $state, ngProgress) {
         ngProgress.start();
         var displayAddressCharLimit = 2;
@@ -50,6 +50,11 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
         };
 
         $scope.customerSaveFn = function () {
+        	if ($scope.customer.details[0].phones) {
+				$scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
+					return num.number !== "";
+				});
+			}
             CustomerService.saveCustomer($scope.customer, function (customer) {
                 $scope.customer = customer;
                 if ($scope.currentState == 'customerAdd') {
@@ -62,7 +67,9 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
         $scope.addDeviceFn = function () {
             $scope.customer.devices.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), serial: ''});
         };
-
+		$scope.removeItem = function (index,obj) {
+            obj.splice(index,1);
+        };
         $scope.customerPhoneTypeSaveFn = function (index, type) {
             var typeLabel = null;
             if (type == 'm')

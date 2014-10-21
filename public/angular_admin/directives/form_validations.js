@@ -32,6 +32,19 @@ define(['angularAMD'], function(angularAMD) {'use strict';
 								parent_div.removeClass('has-error');
 								parent_div.find('span.error').remove();
 							}
+							break;
+						case "zip":
+						var regex = /(^\s*$|^\d{5}$)|(^\d{5}-\d{4}$)/;
+						var result = regex.test(el.val());
+						if (!result) {
+							parent_div.addClass('has-error');
+							parent_div.find('span.error').remove();
+							parent_div.append("<span class='error help-block'>Please enter a valid Zip code</span>")
+						} else {
+							parent_div.removeClass('has-error');
+							parent_div.find('span.error').remove();
+						}
+						break;
 					}
 				});
 			}

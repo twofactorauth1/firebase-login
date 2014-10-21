@@ -31,6 +31,29 @@ var theme = $$.m.ModelBase.extend({
 
             config: {},
 
+            initial : {
+                index : {
+                    header : 1,
+                    'image-text' : 1,
+                    'feature-list' : 3,
+                    footer: 1
+                },
+                blog : {
+                    header : 1,
+                    blog : 1,
+                    footer : 1
+                },
+                'single-post' : {
+                    'header' : 1,
+                    'single-post' : 1,
+                    'footer' : 1
+                },
+                landing : {
+                    'feature-block' : 1
+                }
+            },
+
+
             /**
              * Created by data
              *
