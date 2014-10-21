@@ -10,6 +10,18 @@ define(['app','constants','importContactService'], function (app) {
             });
         };
 
+        this.getCustomersShortForm = function (fields, fn) {
+            var apiUrl = baseUrl + ['contact', 'shortform'].join('/');
+            $http({
+              url: apiUrl,
+              method: 'GET',
+              params: {fields: fields}
+            })
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
+        };
+
         this.getCustomer = function (id, fn) {
             var apiUrl = baseUrl + ['contact', id].join('/');
             $http.get(apiUrl)
@@ -182,29 +194,29 @@ define(['app','constants','importContactService'], function (app) {
         };
 
 
-			
+
 		//region IMPORT
-		
+
 		this.importFacebookFriends = function(fn) {
 			ImportContactService.importContacts($$.constants.social.types.FACEBOOK, fn, function(data, success) {
 				fn(data, success);
 			})
 		}
-	
-		
+
+
 		this.importLinkedInConnections = function(fn) {
 			ImportContactService.importContacts($$.constants.social.types.LINKEDIN, fn, function(data, success) {
 				fn(data, success);
 			})
 		}
-	
-		
+
+
 		this.importGmailContacts = function(fn) {
 			ImportContactService.importContacts($$.constants.social.types.GOOGLE, fn, function(data, success) {
 				fn(data, success);
 			})
 		}
 
-	
+
 	});
 });
