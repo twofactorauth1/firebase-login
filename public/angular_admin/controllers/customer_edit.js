@@ -50,6 +50,11 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
         };
 
         $scope.customerSaveFn = function () {
+        	if ($scope.customer.details[0].phones) {
+				$scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
+					return num.number !== "";
+				});
+			}
             CustomerService.saveCustomer($scope.customer, function (customer) {
                 $scope.customer = customer;
                 if ($scope.currentState == 'customerAdd') {
