@@ -19638,7 +19638,9 @@ div.error label.error:before {
     width: 310px;
   }
 }
-/* Global Styles */
+.website .pageheader .btn-group {
+  margin-bottom: 0;
+}
 #nestable-menu {
   z-index: 999;
   width: 100%;

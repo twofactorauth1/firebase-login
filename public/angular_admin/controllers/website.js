@@ -254,7 +254,8 @@ define([
                 for (var i = 0; i < editedPageComponents.length; i++) {
                     var componentId = editedPageComponents[i].attributes['data-id'].value;
                     componentIdArr.push(componentId);
-                    var componentType = editedPageComponents[i].attributes['data-class'].value;
+                    console.log('attributes >>> ', editedPageComponents[i].attributes);
+                    var componentType = editedPageComponents[i].attributes['data-type'].value;
                     var matchingComponent = _.findWhere($scope.currentPage.components, {
                         _id: componentId
                     });
@@ -264,6 +265,7 @@ define([
 
                     if (componentEditable.length > 1) {
                         for (var i2 = 0; i2 < componentEditable.length; i2++) {
+                            console.log('attributes >>> ', editedPageComponents[i].attributes);
                             var componentVar = componentEditable[i2].attributes['data-class'].value;
                             var componentVarContents = componentEditable[i2].innerHTML;
 
