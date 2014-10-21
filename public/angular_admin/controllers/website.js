@@ -227,6 +227,7 @@ define([
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
                 iframe.contentWindow.triggerEditMode();
+                iframe.contentWindow.copyPostMode();
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");
             };
@@ -238,6 +239,7 @@ define([
                 $scope.isEditing = false;
                 $scope.componentEditing = '';
                 iFrame.contentWindow.triggerEditModeOff();
+                iFrame.contentWindow.updatePostMode();
             };
 
             $scope.doubleClick = function() {

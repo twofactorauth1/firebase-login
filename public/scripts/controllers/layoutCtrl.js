@@ -3,11 +3,13 @@
 mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService',
     function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
+        console.log("running");
         route = $location.$$path;
         window.oldScope;
         $scope.$route = $route;
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
+        $scope.$url=$location.$$url;
 
         //var config = angular.module('config');
         //that.segmentIOWriteKey = ENV.segmentKey;
@@ -74,6 +76,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 }
                 $scope.currentpage = that.pages;
                 PostService.getAllPostsByPageId($scope.currentpage._id, function (posts){
+                    console.log("$$$$$")
+                    console.log(posts);
+
                     that.blogposts = posts;
                 });
             }
@@ -125,6 +130,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                  body.className+=' editing';
             }
             window.oldScope.isEditing = true;
+
             window.oldScope.$digest();
         };
 
@@ -132,7 +138,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.log('trigger edit off');
             var body = document.getElementsByTagName('body')[0];
             body.className = body.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
-
+           console.log(window.oldScope);
             window.oldScope.isEditing = false;
             window.oldScope.$digest();
         };

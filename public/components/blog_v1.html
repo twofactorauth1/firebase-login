@@ -1,5 +1,6 @@
-<div ng-class="component.type+'-v'+component.version">
-<div ng-controller="LayoutCtrl as control" data-class="blog" data-id="{{component._id}}">
+<div ng-class="component.type+'-v'+component.version" >
+<div ng-controller="LayoutCtrl as blog" data-class="blog" data-id="{{component._id}}">
+
     <div id="content-area">
         <div class="container clearfix row-fluid">
             <div id="main-area" class="col-sm-8">
@@ -132,13 +133,18 @@
             </div>
         </div>
         <!-- .container -->
+
     </div>
+    {{$url}}
     <!-- #content-area -->
+    <button ng-if="$url!='/'" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+        Add Post
+    </button>
 </div>
-</div>
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-    Add Post
-</button>
+
+
+
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

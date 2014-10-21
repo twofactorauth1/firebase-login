@@ -46,17 +46,22 @@ mainApp.service('PostService', function ($http) {
             });
     };
 
-    this.updatePost = function (pageId, postId, fn) {
+
+    //page/:pageId/blog/:postId'
+    this.updatePost = function(pageId, postId, postdata, fn) {
         var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog', postId].join('/');
         $http({
             url: apiUrl,
-            method: "PUT"
+            method: "POST",
+            data: angular.toJson(postdata)
         })
-            .success(function(resp){
-            // when delete is successful api returns status code 1
-                fn();
-            }).error(function (err) {
-                console.log('END:Create Page with ERROR');
+            .success(function (data, status, headers, config) {
+                fn(data);
+            })
+            .error(function (err) {
+                console.log('END:Website Service updatePage with ERROR');
+                fn(err, null);
             });
     };
+
 });

@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter',
-    function ($scope, postsService, pagesService, $location, $route, $routeParams, $filter) {
+mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter','PostService',
+    function ($scope, postsService, pagesService, $location, $route, $routeParams, $filter,PostService) {
 
         var account, pages, website, route, postTags, currentTag, categories, currentCat, authors, currentAuthor, latestposts, that = this;
         var post = {};
@@ -24,6 +24,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                         route = 'blog';
                     }
                     that.pages = data[route];
+                    console.log("current Page");
+                   // console.log($scope.$parent)
             }
         });
         console.log('BlogCtrl: postsService >>> ');
@@ -130,5 +132,28 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             }
         });
 
+        window.copyPostMode=function(){
+            console.log(that.post);
+            that.tempPost=angular.copy(that.post);
+
+
+        }
+
+        window.savePostMode=function(){
+            console.log(that.post);
+            PostService.updatePost()
+
+
+        }
+
+
+        window.updatePostMode = function() {
+            console.log('post cancel');
+            console.log(that.post);
+            console.log(that.tempPost);
+            that.post=that.tempPost;
+            $scope.$$phase||$scope.$digest();
+
+        };
 
     }]);
