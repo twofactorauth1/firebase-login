@@ -23,6 +23,8 @@ define([
         'ngProgress',
         function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress) {
             ngProgress.start();
+            $scope.primaryFontStack = '';
+            $scope.secondaryFontStack = '';
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
@@ -178,6 +180,9 @@ define([
                     $scope.primaryFontFamily = $scope.website.settings.font_family;
                     $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
                     $scope.googleFontFamily = $scope.website.settings.google_font_family;
+
+                    $scope.primaryFontStack = $scope.website.settings.font_family;
+                    $scope.secondaryFontStack = $scope.website.settings.font_family_2;
                 });
 
                 //get themes
@@ -254,7 +259,6 @@ define([
                 for (var i = 0; i < editedPageComponents.length; i++) {
                     var componentId = editedPageComponents[i].attributes['data-id'].value;
                     componentIdArr.push(componentId);
-                    console.log('attributes >>> ', editedPageComponents[i].attributes);
                     var componentType = editedPageComponents[i].attributes['data-type'].value;
                     var matchingComponent = _.findWhere($scope.currentPage.components, {
                         _id: componentId
@@ -265,7 +269,6 @@ define([
 
                     if (componentEditable.length > 1) {
                         for (var i2 = 0; i2 < componentEditable.length; i2++) {
-                            console.log('attributes >>> ', editedPageComponents[i].attributes);
                             var componentVar = componentEditable[i2].attributes['data-class'].value;
                             var componentVarContents = componentEditable[i2].innerHTML;
 
@@ -536,7 +539,9 @@ define([
             };
 
             $scope.updateThemeSettings = function() {
-                document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
+                console.log('$scope.primaryFontStack >>> ', $scope.primaryFontStack);
+                //$scope.website.settings.font_family = myFontName;
+                //document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
                 $scope.editPage();
             };
 

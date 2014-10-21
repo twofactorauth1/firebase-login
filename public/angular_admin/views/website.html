@@ -100,16 +100,12 @@
                             <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primaryTextColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                         </div>
                         <div class="form-group">
-                            <label for="colorpicker">Font Family Primary:</label>
-                            <input class="form-control input-lg" type="text" ng-model="website.settings.primaryFontFamily" ng-change="updateThemeSettings()">
+                            <label for="colorpicker">Font Family Primary: {{primaryFontStack}}</label>
+                            <jd-fontselect stack="primaryFontStack" current="myStateObject" on-change="updateThemeSettings()"></jd-fontselect>
                         </div>
                         <div class="form-group">
                             <label for="colorpicker">Font Family Secondary:</label>
-                            <input class="form-control input-lg" type="text" ng-model="website.settings.secondaryFontFamily" ng-change="updateThemeSettings()">
-                        </div>
-                        <div class="form-group">
-                            <label for="colorpicker">Google Fonts:</label>
-                            <jd-fontselect stack="font" on-change="updateThemeSettings()"></jd-fontselect>
+                            <jd-fontselect stack="secondaryFontStack" on-change="updateThemeSettings()"></jd-fontselect>
                         </div>
                     </div>
 
