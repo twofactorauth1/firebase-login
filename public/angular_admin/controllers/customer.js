@@ -39,8 +39,8 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
 			this.address = contact.address;
 			return returnVal;
 		};
-
-        CustomerService.getCustomersShortForm(['_id', 'first', 'last'], function (customers) {
+        var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
+        CustomerService.getCustomersShortForm(fetchFields, function (customers) {
             $scope.customers = customers;
             ngProgress.complete();
             $scope.$watch('searchBar', function (newValue, oldValue) {

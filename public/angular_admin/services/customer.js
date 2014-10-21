@@ -11,7 +11,7 @@ define(['app','constants','importContactService'], function (app) {
         };
 
         this.getCustomersShortForm = function (fields, fn) {
-            var apiUrl = baseUrl + ['contacts', 'shortform'].join('/');
+            var apiUrl = baseUrl + ['contact', 'shortform'].join('/');
             $http({
               url: apiUrl,
               method: 'GET',
