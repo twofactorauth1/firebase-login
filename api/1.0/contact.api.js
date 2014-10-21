@@ -176,7 +176,11 @@ _.extend(api.prototype, baseApi.prototype, {
         var fields = {_id:1, first:1, last:1, photo:1};
 
         if(req.query['fields'] !== undefined) {
-            var fieldsList = req.query['fields'].split(',');
+            if (req.query['fields'] instanceof Array) {
+              var fieldsList = req.query['fields'];
+            } else {
+                var fieldsList = req.query['fields'].split(',');
+            }
             fields = {};
             _.each(fieldsList, function(element, index, list){
                 fields[element] = 1;
@@ -499,4 +503,3 @@ _.extend(api.prototype, baseApi.prototype, {
 });
 
 module.exports = new api();
-
