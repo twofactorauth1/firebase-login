@@ -107,6 +107,7 @@
         <!-- END Name & Photo -->
 
         <!-- BioMetric Data -->
+        
         <div class="panel panel-default" ng-hide="true">
           <div class="panel-heading">
             <h3 class="panel-title">BioMetric Information</h3>
@@ -137,13 +138,14 @@
                   </div>
 
                 </div>
-                <div ng-click="removeDeviceFn($index)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
+                <div ng-click="removeItem($index, customer.devices)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
               </div>
             </div>
             <div id="btn-new-device" class="btn btn-primary btn-sm" ng-click="addDeviceFn()">Add Device</div>
           </div>
           <!-- End Panel Body -->
         </div>
+      
         <!-- End BioMetric Data -->
       </div>
 
@@ -193,7 +195,7 @@
                         </div>
                       </div>
                     </div>
-					 <div ng-click="removeCustomerContactFn($index)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
+					 <div ng-click="removeItem($index, customer.details[0].phones)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
 
 
@@ -263,7 +265,7 @@
                         </label>
                       </div>                       
                     </div>
-                    <div ng-click="customerRemoveAddressFn($index)" ng-show="$index > 0" style="float:right" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
+                    <div ng-click="removeItem($index, customer.details[0].addresses)" style="float:right" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
 
                 </div>
@@ -287,7 +289,7 @@
                   	 <div class="form-group col-md-10">
                       <input class="form-control input-edit-email  input-lg" indigeweb-validate-form-fields validation-type="email" placeholder="new email" check_email="" data-email="" type="email" ng-model="email.email">
                     </div>
-					 <div ng-click="customerRemoveEmailFn($index)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
+					 <div ng-click="removeItem($index, customer.details[0].emails)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
                 </div>
               </div>
