@@ -297,10 +297,7 @@
             <div class="col-md-12">
                 <div class="well well-lg" ng-show="currentState == 'customerEdit'">
                     <label>This is permanent and cannot be reversed.</label>
-                    <div class="btn btn-danger btn-block btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
-                        <i class="fa fa-warning"></i>
-                        <span class="hidden-xs">Delete</span>
-                    </div>
+                    <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" data-href="#/customer" confirm="customerDeleteFn()"><i class="fa fa-trash"></i>Delete</button>
                 </div>
             </div>
           </div>
