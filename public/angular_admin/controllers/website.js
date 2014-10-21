@@ -33,10 +33,6 @@ define([
 
             $scope.allPages = [];
 
-            $scope.selectedGoogleFontFn = function (font) {
-              $scope.googleFontFamily = font.stack;
-            };
-
             $scope.spectrum = {
                 options: {
                     showPalette: true,
@@ -542,11 +538,9 @@ define([
                 $scope.isMobile = true;
             };
 
-            $scope.updateThemeSettings = function() {
-                console.log('$scope.primaryFontStack >>> ', $scope.primaryFontStack);
-                //$scope.website.settings.font_family = myFontName;
-                //document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
-                $scope.editPage();
+            $scope.updatePrimaryFont = function(font) {
+                $scope.website.settings.font_family = font.name;
+                document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
             };
 
             $scope.changeSelectedTheme = function(theme) {

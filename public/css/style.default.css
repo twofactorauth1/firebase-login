@@ -15977,6 +15977,12 @@ strong {
   right: 0;
   z-index: 99999;
 }
+.aloha-ui.btn-toolbar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -19640,6 +19646,10 @@ div.error label.error:before {
 }
 .website .pageheader .btn-group {
   margin-bottom: 0;
+}
+.website #iframe-website {
+  border: none;
+  width: 100%;
 }
 #nestable-menu {
   z-index: 999;

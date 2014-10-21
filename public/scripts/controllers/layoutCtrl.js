@@ -187,4 +187,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
            aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
 
+        window.updateWebsite = function(data) {
+            console.log('data recieved >>> ', data);
+            that.account.website = data;
+            // $scope.$apply(function() {
+            //     $scope.primaryColor = data.settings.primary_color;
+            //     $scope.primaryHighlight = data.settings.primary_highlight;
+            //     $scope.secondaryColor = data.settings.secondary_color;
+            //     $scope.navHover = data.settings.nav_hover;
+            //     $scope.primaryTextColor = data.settings.primary_text_color;
+            //     $scope.fontFamily = data.settings.font_family;
+            //     $scope.fontFamily2 = data.settings.font_family_2;
+            // });
+        };
+
     }]);
