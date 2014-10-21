@@ -67,7 +67,9 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
         $scope.addDeviceFn = function () {
             $scope.customer.devices.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), serial: ''});
         };
-
+		$scope.removeDeviceFn = function (index) {
+            $scope.customer.devices.splice(index,1);
+        };
         $scope.customerPhoneTypeSaveFn = function (index, type) {
             var typeLabel = null;
             if (type == 'm')
@@ -82,6 +84,10 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
 
         $scope.addCustomerContactFn = function () {
             $scope.customer.details[0].phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false, type: 'm'});
+        };
+
+        $scope.removeCustomerContactFn = function (index) {
+            $scope.customer.details[0].phones.splice(index,1)
         };
 
         $scope.customerAddressWatchFn = function (index) {
@@ -123,6 +129,10 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
             $scope.customerAddressWatchFn($scope.customer.details[0].addresses.length-1);
         };
 
+        $scope.customerRemoveAddressFn = function (index) {
+            $scope.customer.details[0].addresses.splice(index,1)
+        };
+
         $scope.getModifyAddressFn = function (index) {
             return $scope.modifyAddress[index];
         };
@@ -133,6 +143,10 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
 
         $scope.customerAddEmailFn = function () {
             $scope.customer.details[0].emails.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), email: ''});
+        };
+
+        $scope.customerRemoveEmailFn = function (index) {
+            $scope.customer.details[0].emails.splice(index,1)
         };
 
         $scope.customerDeleteFn = function () {
