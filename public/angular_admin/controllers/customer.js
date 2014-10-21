@@ -4,43 +4,43 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
         $scope.customerFilter = {};
         $scope.customerOrder = 'first';
         $scope.customerSortReverse = false;
-		
+
 		$scope.contactLabel = function(contact) {
 			return CustomerService.contactLabel(contact);
-		}; 
-		
+		};
+
 		$scope.checkBestEmail = function(contact) {
 			var returnVal =  CustomerService.checkBestEmail(contact);
 			this.email = contact.email;
 			return returnVal;
-		}; 
-		
+		};
+
 		$scope.checkFacebookId = function(contact) {
 			var returnVal =  CustomerService.checkFacebookId(contact);
 			this.facebookId = contact.facebookId;
 			return returnVal;
-		}; 
-		
+		};
+
 		$scope.checkTwitterId = function(contact) {
 			var returnVal =   CustomerService.checkTwitterId(contact);
 			this.twitterId = contact.twitterId;
 			return returnVal;
-		}; 
-		
+		};
+
 		$scope.checkLinkedInId = function(contact) {
 			var returnVal = CustomerService.checkLinkedInId(contact);
 			this.linkedInUrl = contact.linkedInUrl;
 			this.linkedInId = contact.linkedInId;
 			return returnVal;
-		}; 
-		
+		};
+
 		$scope.checkAddress = function(contact) {
 			var returnVal = CustomerService.checkAddress(contact);
 			this.address = contact.address;
 			return returnVal;
-		}; 
+		};
 
-        CustomerService.getCustomers(function (customers) {
+        CustomerService.getCustomersShortForm(['_id', 'first', 'last'], function (customers) {
             $scope.customers = customers;
             ngProgress.complete();
             $scope.$watch('searchBar', function (newValue, oldValue) {
@@ -65,7 +65,7 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
                 } else {
                     $scope.customerFilter = {};
                 }
-            }; 
+            };
 
             $scope.$watch('sortOrder', function (newValue, oldValue) {
                 if (newValue) {
@@ -93,10 +93,10 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
                     }
                 }
             });
-            
-            
-            
-			
+
+
+
+
 			$scope.importFacebookFriends = function() {
 				CustomerService.importFacebookFriends(function(data, success) {
 					if (success) {
@@ -127,7 +127,7 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
 				});
 			};
 
-            
+
             $scope.$watch('toggleCategory', function (value) {
                if(angular.isDefined(value))
                		$scope.showContactLabel = value;
