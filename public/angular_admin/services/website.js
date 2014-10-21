@@ -4,7 +4,6 @@ define(['app'], function (app) {
 
 		this.getWebsite = function (websiteID, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId].join('/');
-			console.log('Getting Website '+apiUrl);
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
@@ -177,6 +176,14 @@ define(['app'], function (app) {
 			.error(function (err) {
                 console.log('END:Delete Page with ERROR', err);
             });
+		};
+
+		this.getThemes = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'theme'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
 		};
 
 

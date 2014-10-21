@@ -1,90 +1,90 @@
 <div class="account">
-    <div class="pageheader row">
-        <div class="col-xs-9">
-            <h2>
-                <i class="fa fa-cog"></i> Account
-            </h2>
-        </div>
-        <div class=" col-xs-offset-1 col-xs-1">
-            <span class="mediaModal" user='user'></span>
-        </div>
-
-        <div class="col-xs-1">
-            <a href="#/account/edit" class="btn btn-success pull-right" type="button">
-                <span class="fa fa-edit"></span>
-                <span class="hidden-xs">Edit</span>
-            </a>
-        </div>
-        <div class="clear"></div>
+<div class="pageheader row">
+    <div class="col-xs-9">
+        <h2>
+            <i class="fa fa-cog"></i> Account
+        </h2>
+    </div>
+    <div class=" col-xs-offset-1 col-xs-1">
+        <span class="mediaModal" user='user'></span>
     </div>
 
-    <div class="row">
-        <div class="btn-group col-xs-12 template-btns">
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info active" ng-class="{'active': activeTab === 'account'}" ng-click="activeTab = 'account'">
-                <i class="fa fa-user"></i>
-                <span class="hidden-xs">Account Information
-                </span>
-            </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-billing" ng-class="{'active': activeTab === 'billing'}" ng-click="activeTab = 'billing'">
-                <i class="fa fa-credit-card"></i>
-                <span class="hidden-xs">Billing</span>
-            </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-integrations" ng-class="{'active': activeTab === 'integrations'}" ng-click="activeTab = 'integrations'">
-                <i class="fa fa-rocket"></i>
-                <span class="hidden-xs">Integrations</span>
-            </button>
-        </div>
+    <div class="col-xs-1">
+        <a href="#/account/edit" class="btn btn-success pull-right" type="button">
+            <span class="fa fa-edit"></span>
+            <span class="hidden-xs">Edit</span>
+        </a>
     </div>
+    <div class="clear"></div>
+</div>
+
+<div class="row">
+    <div class="btn-group col-xs-12 template-btns">
+        <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info active" ng-class="{'active': activeTab === 'account'}" ng-click="activeTab = 'account'">
+            <i class="fa fa-user"></i>
+            <span class="hidden-xs">Account Information
+            </span>
+        </button>
+        <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-billing" ng-class="{'active': activeTab === 'billing'}" ng-click="activeTab = 'billing'">
+            <i class="fa fa-credit-card"></i>
+            <span class="hidden-xs">Billing</span>
+        </button>
+        <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-integrations" ng-class="{'active': activeTab === 'integrations'}" ng-click="activeTab = 'integrations'">
+            <i class="fa fa-rocket"></i>
+            <span class="hidden-xs">Integrations</span>
+        </button>
+    </div>
+</div>
 
 
-    <div class="contentpanel" ng-switch="activeTab">
+<div class="contentpanel" ng-switch="activeTab">
 
-        <div class="account-info-section" ng-switch-when="account">
-            <div class="col-sm-6">
-                <div class=" panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Owner Info</h3>
+    <div class="account-info-section" ng-switch-when="account">
+        <div class="col-sm-6">
+            <div class=" panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Owner Info</h3>
+                </div>
+
+                <div class="profile panel-body">
+                    <!--
+                        <div class="col-xs-12">
+                        <img alt="" src="../images/photos/loggeduser.png" class="thumbnail thumb-lg img-circle media-object">
+                        </div>
+                    -->
+                    <div class="col-xs-12">
+                        <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
+                        <div class="clear"></div>
                     </div>
-
-                    <div class="profile panel-body">
-                        <!--
-						<div class="col-xs-12">
-						    <img alt="" src="../images/photos/loggeduser.png" class="thumbnail thumb-lg img-circle media-object">
-						</div>
-										-->
+                    <div class="col-xs-12">
                         <div class="col-xs-12">
-                            <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
-                            <div class="clear"></div>
+                            <div class="mb20"></div>
+                            <!--
+                                <h3 class="profile-name"{{user.first}} {{user.last}}Jaideep Das</h3>
+                            -->
+                            <!--
+                                <h4 class="center">
+                                <span class="label label-info contact-cat">Das</span>
+                                </h4>
+                            -->
+                            <h3 class="profile-name">{{user.first}} {{user.last}}</h3>
+                            <div class="mb20"></div>
+
                         </div>
-                        <div class="col-xs-12">
-                            <div class="col-xs-12">
-                                <div class="mb20"></div>
-                                <!--
-						        <h3 class="profile-name"{{user.first}} {{user.last}}Jaideep Das</h3>
-						        -->
-                                <!--
-						        <h4 class="center">
-						            <span class="label label-info contact-cat">Das</span>
-						        </h4>
-						        -->
-                                <h3 class="profile-name">{{user.first}} {{user.last}}</h3>
-                                <div class="mb20"></div>
-
+                    </div>
+                    <div class="clearfix mb20"></div>
+                    <div class="col-xs-12">
+                        <!-- <div class="profile-location"><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy DriveSan Diego, CA 92102</a>  <a href="#" class="label label-warning"> + 5 More</a>
                             </div>
-                        </div>
-                        <div class="clearfix mb20"></div>
-                        <div class="col-xs-12">
-                            <!-- <div class="profile-location"><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy DriveSan Diego, CA 92102</a>  <a href="#" class="label label-warning"> + 5 More</a>
-						        </div>
-						        <div class="profile-position"><i class="fa fa-briefcase"></i> News Anchor at <a href="">Channel 9 News</a>
-						        </div>
-						        <div class="profile-position"><i class="fa fa-briefcase"></i> Owner of <a href="">Burgandy Flutes</a>
-						        </div>
-						        <div class="profile-phone"><i class="fa fa-phone"></i>  <a href=""><a href="tel:619-564-2827"> 619-564-2827</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
-						        </div>
+                            <div class="profile-position"><i class="fa fa-briefcase"></i> News Anchor at <a href="">Channel 9 News</a>
+                            </div>
+                            <div class="profile-position"><i class="fa fa-briefcase"></i> Owner of <a href="">Burgandy Flutes</a>
+                            </div>
+                            <div class="profile-phone"><i class="fa fa-phone"></i>  <a href=""><a href="tel:619-564-2827"> 619-564-2827</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
+                            </div>
 
-						        <div class="profile-email"><i class="fa fa-envelope"></i>  <a href=""><a href="mailto:jaideep.jdof@gmail.com"> jaideep.jdof@gmail.com</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
-						        </div> -->
+                            <div class="profile-email"><i class="fa fa-envelope"></i>  <a href=""><a href="mailto:jaideep.jdof@gmail.com"> jaideep.jdof@gmail.com</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
+                            </div> -->
                             <ul class="social-list right row">
                                 <li class="col-xs-12">
                                     <div class="col-xs-2">
@@ -96,58 +96,58 @@
                                     <div class="col-xs-2"></div>
                                 </li>
                                 <!--
-						        <li class="col-xs-12">
+                                    <li class="col-xs-12">
 
-						            <div class="col-xs-2">
-						                <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-						            </div>
-						            <div class="col-xs-8">
-						                <p>123 Burgandy DriveSan Diego, CA 92102</p>
-						            </div>
-						            <div class="col-xs-2">
-						                <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
-						                    <span class="hidden-xs">5 More</span>
-						                </button>
-						            </div>
-						        </li>
-						        -->
-
-
-                                <!--
-						        <li class="col-xs-12">
-						            <div class="col-xs-2">
-						                <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
-						            </div>
-						            <div class="col-xs-8">
-						                <p>619-675-2927</p>
-						            </div>
-						            <div class="col-xs-2">
-						                <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
-						                    <span class="hidden-xs">2 More</span>
-						                </button>
-						            </div>
-						            </a>
-						        </li>
-						        -->
-
+                                    <div class="col-xs-2">
+                                    <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                                    </div>
+                                    <div class="col-xs-8">
+                                    <p>123 Burgandy DriveSan Diego, CA 92102</p>
+                                    </div>
+                                    <div class="col-xs-2">
+                                    <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                                    <span class="hidden-xs">5 More</span>
+                                    </button>
+                                    </div>
+                                    </li>
+                                -->
 
 
                                 <!--
-						        <li class="col-xs-12">
-						            <div class="col-xs-2">
-						                <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope"></i></a>
-						            </div>
-						            <div class="col-xs-8">
-						                <p>jaideep.jdof@gmail.com</p>
-						            </div>
-						            <div class="col-xs-2">
-						                <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
-						                    <span class="hidden-xs">1 More</span>
-						                </button>
-						            </div>
-						            </a>
-						        </li>
-						        -->
+                                    <li class="col-xs-12">
+                                    <div class="col-xs-2">
+                                    <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
+                                    </div>
+                                    <div class="col-xs-8">
+                                    <p>619-675-2927</p>
+                                    </div>
+                                    <div class="col-xs-2">
+                                    <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                                    <span class="hidden-xs">2 More</span>
+                                    </button>
+                                    </div>
+                                    </a>
+                                    </li>
+                                -->
+
+
+
+                                <!--
+                                    <li class="col-xs-12">
+                                    <div class="col-xs-2">
+                                    <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope"></i></a>
+                                    </div>
+                                    <div class="col-xs-8">
+                                    <p>jaideep.jdof@gmail.com</p>
+                                    </div>
+                                    <div class="col-xs-2">
+                                    <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                                    <span class="hidden-xs">1 More</span>
+                                    </button>
+                                    </div>
+                                    </a>
+                                    </li>
+                                -->
 
 
 
@@ -170,274 +170,256 @@
 
                             <div class="mb20"></div>
 
-                        </div>
-                        <div class="clearfix"></div>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Business Info</h3>
-                    </div>
-
-                    <div class="profile panel-body">
-
-                        <div class="col-xs-12">
-                            <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
-                            <div class="clear"></div>
-                        </div>
-                        <div class="col-xs-12">
-                            <div class="col-xs-12">
-                                <div class="mb20"></div>
-
-                                <h3 class="profile-name"></h3>
-                                <div class="mb20"></div>
-
-                            </div>
-                        </div>
-                        <div class="clearfix mb20"></div>
-                        <div class="col-xs-12">
-                            <ul class="social-list right row">
-
-                                <li class="col-xs-12">
-                                    <div class="col-xs-2">
-                                        <a href="#/account/edit/?focus=business-name" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-wrench"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <p>{{account.business.name}}</p>
-                                    </div>
-                                    <div class="col-xs-2"></div>
-
-                                </li>
-                                <li class="col-xs-12">
-                                    <div class="col-xs-2">
-                                        <a href="#/account/edit/?focus=business-size" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-arrows"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <p ng-show="account.business.size==1">Single</p>
-                                        <p ng-show="account.business.size==2">Small</p>
-                                        <p ng-show="account.business.size==3">medium</p>
-                                        <p ng-show="account.business.size==4">Large</p>
-                                        <p ng-show="account.business.size==5">Enterprise</p>
-                                    </div>
-                                    <div class="col-xs-2"></div>
-
-                                </li>
-                                <li class="col-xs-12">
-                                    <div class="col-xs-2">
-                                        <a href="#/account/edit/?focus=business-description" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-file-o"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <p>{{account.business.description}}</p>
-                                    </div>
-                                    <div class="col-xs-2"></div>
-
-                                </li>
-                                <li class="col-xs-12">
-                                    <div class="col-xs-2">
-                                        <a href="#/account/edit/?focus=business-category" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-bars"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <p>{{account.business.category}}</p>
-                                    </div>
-                                    <div class="col-xs-2"></div>
-
-                                </li>
-                            </ul>
-
-                            <div class="mb20"></div>
-
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
+                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Business Info</h3>
+                </div>
 
-        <div class="billing-section" ng-switch-when="billing">
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Your Plan</h3>
+                <div class="profile panel-body">
+
+                    <div class="col-xs-12">
+                        <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
+                        <div class="clear"></div>
                     </div>
-                    <div class="panel-body">
-                        <div class="col-sm-6">
-                            <div class="has-plan" ng-show="billing.stripeCustomerId">
-                                <h2 class="center">Monthly Plan</h2>
-                                <hr></hr>
-                                <h2 class="center total">$49.95 <span>/month</span></h2>
-                                <p class="center">Next Billing Date:  September 12th, 2014</p>
-                            </div>
-                            <div class="no-plan well" ng-hide="billing.stripeCustomerId">
-                                <h3 class="center">No Subscription Plan Selected</h3>
-                                <div class="cleatfix mb15"></div>
-                                <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
-                                <div class="cleatfix mb30"></div>
-                                <a class="btn btn-lg btn-orange btn-block" indigeweb-state-nav="accountChoosePlan">Choose Plan</a>
-                            </div>
+                    <div class="col-xs-12">
+                        <div class="col-xs-12">
+                            <div class="mb20"></div>
+
+                            <h3 class="profile-name"></h3>
+                            <div class="mb20"></div>
+
                         </div>
-                        <div class="col-sm-6">
-                            <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
-                                <div class="cleatfix mb20"></div>
-                                <!-- <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#payBillModal">Pay Bill</button> -->
-                                <button class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#changePlan" indigeweb-state-nav="accountChoosePlan">Change Plan</button>
-                                <div class="cleatfix mb20"></div>
-                                <!-- Add Auto Pay Option Toggle-->
-                                <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changePlan">Modify Payment Method</button>
+                    </div>
+                    <div class="clearfix mb20"></div>
+                    <div class="col-xs-12">
+                        <ul class="social-list right row">
+
+                            <li class="col-xs-12">
+                                <div class="col-xs-2">
+                                    <a href="#/account/edit/?focus=business-name" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-wrench"></i>
+                                    </a>
+                                </div>
+                                <div class="col-xs-8">
+                                    <p>{{account.business.name}}</p>
+                                </div>
+                                <div class="col-xs-2"></div>
+
+                            </li>
+                            <li class="col-xs-12">
+                                <div class="col-xs-2">
+                                    <a href="#/account/edit/?focus=business-size" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-arrows"></i>
+                                    </a>
+                                </div>
+                                <div class="col-xs-8">
+                                    <p ng-show="account.business.size==1">Single</p>
+                                    <p ng-show="account.business.size==2">Small</p>
+                                    <p ng-show="account.business.size==3">medium</p>
+                                    <p ng-show="account.business.size==4">Large</p>
+                                    <p ng-show="account.business.size==5">Enterprise</p>
+                                </div>
+                                <div class="col-xs-2"></div>
+
+                            </li>
+                            <li class="col-xs-12">
+                                <div class="col-xs-2">
+                                    <a href="#/account/edit/?focus=business-description" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-file-o"></i>
+                                    </a>
+                                </div>
+                                <div class="col-xs-8">
+                                    <p>{{account.business.description}}</p>
+                                </div>
+                                <div class="col-xs-2"></div>
+
+                            </li>
+                            <li class="col-xs-12">
+                                <div class="col-xs-2">
+                                    <a href="#/account/edit/?focus=business-category" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-bars"></i>
+                                    </a>
+                                </div>
+                                <div class="col-xs-8">
+                                    <p>{{account.business.category}}</p>
+                                </div>
+                                <div class="col-xs-2"></div>
+
+                            </li>
+                        </ul>
+
+                        <div class="mb20"></div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="billing-section" ng-switch-when="billing">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Your Plan</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-sm-6">
+                        <div class="has-plan" ng-show="billing.stripeCustomerId">
+                            <h2 class="center">{{subscription.plan.name}} Plan</h2>
+                            <hr></hr>
+                            <h2 class="center total">${{upcomingInvoice.amount_due}} <span>/{{subscription.plan.interval}}</span></h2>
+                            <p class="center">Next Billing Date:  {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
                         </div>
+                        <div class="no-plan well" ng-hide="billing.stripeCustomerId">
+                            <h3 class="center">No Subscription Plan Selected</h3>
+                            <div class="cleatfix mb15"></div>
+                            <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
+                            <div class="cleatfix mb30"></div>
+                            <a class="btn btn-lg btn-orange btn-block" indigeweb-state-nav="accountChoosePlan">Choose Plan</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" ng-hide="activeSkeuocard">
+                        <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
+                        <div class="cleatfix mb20"></div>
+                        <!-- <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#payBillModal">Pay Bill</button> -->
+                        <button class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#changePlan" indigeweb-state-nav="accountChoosePlan">Change Plan</button>
+                        <div class="cleatfix mb20"></div>
+                        <!-- Add Auto Pay Option Toggle-->
+                        <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changePlan" ng-click="activeSkeuocard = true">Modify Payment Method</button>
+                    </div>
+                    <div class="col-sm-6" ng-show="activeSkeuocard">
+                        <div class="indigeweb-skeuocard" user='user' update='updateBillingFn'></div>
                     </div>
                 </div>
             </div>
             <!-- <div class="col-sm-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Payment Method</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="indigeweb-skeuocard" user='user' update='updateBilling'></div>
-                        <div class="row"></div>
-                        <div class="row hidden">
-                            <button id="btn-new-address" class="btn btn-primary btn-sm"
-                                ng-click="subscribeMonthlyFn()" ng-show="billing.stripeCustomerId">Subscribe Monthly</button>
-                            <button id="btn-new-address" class="btn btn-primary btn-sm"
-                                ng-click="subscribeAnnuallyFn()" ng-show="billing.stripeCustomerId">Subscribe Annually</button>
+                <div class="panel-heading">
+                <h3 class="panel-title">Payment Method</h3>
+                </div>
+                <div class="panel-body">
+                <div class="indigeweb-skeuocard" user='user' update='updateBilling'></div>
+                <div class="row"></div>
+                <div class="row hidden">
+                <button id="btn-new-address" class="btn btn-primary btn-sm"
+                ng-click="subscribeMonthlyFn()" ng-show="billing.stripeCustomerId">Subscribe Monthly</button>
+                <button id="btn-new-address" class="btn btn-primary btn-sm"
+                ng-click="subscribeAnnuallyFn()" ng-show="billing.stripeCustomerId">Subscribe Annually</button>
+                </div>
+                </div>
+                </div>
+                </div> -->
+
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Transactions</h3>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table mb30">
+                                <thead>
+                                    <tr class="info">
+                                        <th>#</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <!--<th>Card</th>-->
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="invoice in invoices.data">
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{invoice.date * 1000 | date : 'longDate'}}</td>
+                                        <td>${{invoice.total}}</td>
+                                        <!--<td>Visa - 8943</td>-->
+                                        <td ng-show="invoice.paid">PAID</td>
+                                        <td ng-hide="invoice.paid">NOT PAID</td>
+                                        <td class="table-action">
+                                            <a href="" data-toggle="modal" data-target="#viewTransactionModal{{$index + 1}}"><i class="fa fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </div> -->
-
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Transactions</h3>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="table mb30">
-                            <thead>
-                                <tr class="info">
-                                    <th>#</th>
-                                    <th>Date</th>
-                                    <th>Amount</th>
-                                    <th>Card</th>
-                                    <th>Status</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>August 10th, 2014</td>
-                                    <td>$99.98</td>
-                                    <td>Visa - 8943</td>
-                                    <td>PAID</td>
-                                    <td class="table-action">
-					                  <a href="" data-toggle="modal" data-target="#viewTransactionModal"><i class="fa fa-eye"></i></a>
-					                </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>July 10th, 2014</td>
-                                    <td>$99.98</td>
-                                    <td>Visa - 8943</td>
-                                    <td>PAID</td>
-                                    <td class="table-action">
-					                  <a href="" data-toggle="modal" data-target="#viewTransactionModal"><i class="fa fa-eye"></i></a>
-					                </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>June 10th, 2014</td>
-                                    <td>$99.98</td>
-                                    <td>Visa - 8943</td>
-                                    <td>PAID</td>
-                                    <td class="table-action">
-					                  <a href="" data-toggle="modal" data-target="#viewTransactionModal"><i class="fa fa-eye"></i></a>
-					                </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="integrations-section" ng-switch-when="integrations">
 
             <div class="row">
-              <div class="col-sm-3 col-md-4">
-                <div class="thumbnail">
-                    <div class="img-wrap">
-                        <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/fb-lofo.jpg" alt="...">
-                    </div>
-                  <div class="caption">
-                    <h3>Facebook</h3>
-                    <div class="clearfix mb5"></div>
-                    <div class="connected">
-                        <span>You are logged in as: </span>
-                        <div class="clearfix"></div>
-                        <img src="/assets/icons/blank-user.jpg" class="img-circle" />
-                        <span>{{user.first}} {{user.last}}</span>
-                    </div>
-                        <div class="btn-group btn-group-justified">
-                            <div class="btn-group">
-                              <button class="btn btn-success btn-lg" role="button" data-toggle="modal" data-target="#facebookSettingsModal"><span class="fa fa-wrench"></span> Settings</button>
+                <div class="col-sm-3 col-md-4">
+                    <div class="thumbnail">
+                        <div class="img-wrap">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/fb-lofo.jpg" alt="...">
+                        </div>
+                        <div class="caption">
+                            <h3>Facebook</h3>
+                            <div class="clearfix mb5"></div>
+                            <div class="connected">
+                                <span>You are logged in as: </span>
+                                <div class="clearfix"></div>
+                                <img src="/assets/icons/blank-user.jpg" class="img-circle" />
+                                <span>{{user.first}} {{user.last}}</span>
                             </div>
-                            <div class="btn-group">
-                               <button class="btn btn-danger btn-lg" role="button"><span class="fa fa-trash-o"></span> Delete</button>
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group">
+                                    <button class="btn btn-success btn-lg" role="button" data-toggle="modal" data-target="#facebookSettingsModal"><span class="fa fa-wrench"></span> Settings</button>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-danger btn-lg" role="button"><span class="fa fa-trash-o"></span> Delete</button>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-4">
+                    <div class="thumbnail">
+                        <div class="img-wrap">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/reveille-logo.jpg" alt="Reveille">
+                        </div>
+                        <div class="caption">
+                            <h3>Reveille</h3>
+                            <p>Find it first.  Fix it fast</p>
+                            <p><a href="http://reveillesoftware.com/" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-4">
+                    <div class="thumbnail">
+                        <div class="img-wrap">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" alt="...">
+                        </div>
+                        <div class="caption">
+                            <h3>Google +</h3>
+                            <p>Import customers, plan posts in advance.</p>
+                            <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
+                            <div class="toggle-modern">
+                                <div class="toggles on"></div>
                             </div>
                         </div>
-                        <div class="clearfix"></div>
-                  </div>
+                    </div>
                 </div>
-              </div>
-              <div class="col-sm-3 col-md-4">
-                <div class="thumbnail">
-                    <div class="img-wrap">
-                        <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/reveille-logo.jpg" alt="Reveille">
+                <div class="col-sm-3 col-md-4">
+                    <div class="thumbnail">
+                        <div class="img-wrap">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg" alt="...">
+                        </div>
+                        <div class="caption">
+                            <h3>LinkedIn</h3>
+                            <p>Import contacts</p>
+                            <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
+                            <div class="toggle-modern">
+                                <div class="toggles on"></div>
+                            </div>
+                        </div>
                     </div>
-                  <div class="caption">
-                    <h3>Reveille</h3>
-                    <p>Find it first.  Fix it fast</p>
-                    <p><a href="http://reveillesoftware.com/" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
-                  </div>
                 </div>
-              </div>
-              <div class="col-sm-3 col-md-4">
-                <div class="thumbnail">
-                    <div class="img-wrap">
-                        <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" alt="...">
-                    </div>
-                  <div class="caption">
-                    <h3>Google +</h3>
-                    <p>Import customers, plan posts in advance.</p>
-                    <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
-                    <div class="toggle-modern">
-                        <div class="toggles on"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-3 col-md-4">
-                <div class="thumbnail">
-                    <div class="img-wrap">
-                        <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg" alt="...">
-                    </div>
-                  <div class="caption">
-                    <h3>LinkedIn</h3>
-                    <p>Import contacts</p>
-                    <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
-                    <div class="toggle-modern">
-                        <div class="toggles on"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
                 <div class="col-sm-3 col-md-4">
                     <div class="thumbnail">
                         <div class="img-wrap">
@@ -450,50 +432,50 @@
                         </div>
                     </div>
                 </div>
-              <div class="col-sm-3 col-md-4">
-                <div class="thumbnail">
-                    <div class="img-wrap">
-                        <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" alt="...">
+                <div class="col-sm-3 col-md-4">
+                    <div class="thumbnail">
+                        <div class="img-wrap">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" alt="...">
+                        </div>
+                        <div class="caption">
+                            <h3>Stripe</h3>
+                            <p>Stripe Allows you to recieve payments on your website.</p>
+                            <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
+                            <div class="toggle-modern">
+                                <div class="toggles on"></div>
+                            </div>
+                        </div>
                     </div>
-                  <div class="caption">
-                    <h3>Stripe</h3>
-                    <p>Stripe Allows you to recieve payments on your website.</p>
-                    <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
-                    <div class="toggle-modern">
-                        <div class="toggles on"></div>
-                    </div>
-                  </div>
                 </div>
-              </div>
             </div>
         </div>
     </div>
 
     <div class="modal fade" id="billSummaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    	<div class="modal-dialog">
-    		<div class="modal-content">
-    			<div class="modal-header">
-    				<button type="button" class="close" data-dismiss="modal">
-    					<span aria-hidden="true">×</span><span class="sr-only">Close</span>
-    				</button>
-    				<h4 class="modal-title" id="myModalLabel">Bill Summary</h4>
-    			</div>
-    			<div class="modal-body">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Bill Summary</h4>
+                </div>
+                <div class="modal-body">
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="mb40"></div>
                             <h4 class="center">Amount Due</h4>
-                            <h1 class="center total">$107.84</h1>
+                            <h1 class="center total">${{upcomingInvoice.amount_due}}</h1>
                         </div>
                         <div class="col-xs-6">
                             <h4>Current Payment:</h4>
-                            <span>due 01SEP14</span>
-                            <h4>Last Payment:</h4>
-                            <span>recieved 01AUG14</span>
+                            <span>due {{upcomingInvoice.period_end*1000 | date : 'longDate'}}</span>
+                            <!--<h4>Last Payment:</h4>-->
+                            <!--<span>recieved 01AUG14</span>-->
                         </div>
                     </div>
                     <div class="mb30"></div>
-    				<div class="table-responsive summary">
+                    <div class="table-responsive summary">
                         <table class="table mb30">
                             <thead>
                                 <tr class="info">
@@ -502,36 +484,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Business Subscription</td>
-                                    <td>$99.98</td>
-                                </tr>
-                                <tr>
-                                    <td>Stripe Widget</td>
-                                    <td>$4.00</td>
+                                <tr ng-repeat="item in upcomingInvoice.lines.data">
+                                    <td>{{item.type}}</td>
+                                    <td>${{item.amount}}</td>
                                 </tr>
                                 <tr>
                                     <td><span class="pull-right"><h4>Sub-Total</h4></span></td>
-                                    <td><h4>$103.98</h4></td>
+                                    <td><h4>${{upcomingInvoice.subtotal}}</h4></td>
                                 </tr>
-                                <tr>
-                                    <td><span class="pull-right"><h4>Taxes</h4></span></td>
-                                    <td><h4>3.86</h4></td>
-                                </tr>
+                                <!--<tr>-->
+                                    <!--<td><span class="pull-right"><h4>Taxes</h4></span></td>-->
+                                    <!--<td><h4>3.86</h4></td>-->
+                                <!--</tr>-->
                                 <tr>
                                     <td><span class="pull-right"><h4>TOTAL</h4></span></td>
-                                    <td><h4>$107.84</h4></td>
+                                    <td><h4>${{upcomingInvoice.total}}</h4></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-    			</div>
-    			<div class="modal-footer">
-    				<button type="button" class="btn btn-primary btn-lg btn-make-payment"
-    					id="" data-dismiss="modal" data-toggle="modal" data-target="#payBillModal"><span class="fa fa-credit-card"></span> Pay Bill</button>
-    			</div>
-    		</div>
-    	</div>
+                </div>
+                <!--<div class="modal-footer">-->
+                    <!--<button type="button" class="btn btn-primary btn-lg btn-make-payment"-->
+                                          <!--id="" data-dismiss="modal" data-toggle="modal" data-target="#payBillModal"><span class="fa fa-credit-card"></span> Pay Bill</button>-->
+                <!--</div>-->
+            </div>
+        </div>
     </div>
 
     <div class="modal fade" id="payBillModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -579,29 +557,29 @@
         </div>
     </div>
 
-    <div class="modal fade" id="viewTransactionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="viewTransactionModal{{$index + 1}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-repeat="invoice in invoices.data">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">×</span><span class="sr-only">Close</span>
                     </button>
-                    <h4 class="modal-title" id="myModalLabel">Transaction #1</h4>
+                    <h4 class="modal-title" id="myModalLabel">Transaction #{{$index + 1}}</h4>
                 </div>
                 <div class="modal-body">
                     <img src="../assets/images/paid-in-full.png" class="center paid" />
                     <h4>Pay To: <span class="pull-right">Indigenous Software Inc.</span></h4>
-                    <h4>Payment Method: <span class="pull-right">Visa xxxx-xxxx-xxxx-2345 06/15</span></h4>
-                    <h4>Date: <span class="pull-right">Monday, September 1st, 2014</span></h4>
-                    <h4>Period: <span class="pull-right">01AUG14 - 31AUG14</span></h4>
-                    <h4>Amount Paid: <span class="pull-right">$99.98</span></h4>
+                    <!--<h4>Payment Method: <span class="pull-right">Visa xxxx-xxxx-xxxx-2345 06/15</span></h4>-->
+                    <h4>Date: <span class="pull-right">{{invoice.date * 1000 | date : 'longDate'}}</span></h4>
+                    <h4>Period: <span class="pull-right">{{invoice.period_start * 1000 | date : 'longDate'}} - {{invoice.period_end * 1000 | date : 'longDate'}}</span></h4>
+                    <h4>Amount Paid: <span class="pull-right">${{invoice.total}}</span></h4>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-lg btn-download-bill"
-                        id="" data-dismiss="modal"><span class="fa fa-download"></span> Download</button>
-                    <button type="button" class="btn btn-primary btn-lg btn-print-bill"
-                        id="" data-dismiss="modal"><span class="fa fa-print"></span> Print</button>
-                </div>
+                <!--<div class="modal-footer">-->
+                    <!--<button type="button" class="btn btn-primary btn-lg btn-download-bill"-->
+                                          <!--id="" data-dismiss="modal"><span class="fa fa-download"></span> Download</button>-->
+                    <!--<button type="button" class="btn btn-primary btn-lg btn-print-bill"-->
+                                          <!--id="" data-dismiss="modal"><span class="fa fa-print"></span> Print</button>-->
+                <!--</div>-->
             </div>
         </div>
     </div>
@@ -616,28 +594,28 @@
                     <h4 class="modal-title" id="myModalLabel">Facebook Settings</h4>
                 </div>
                 <div class="modal-body">
-                <h4>Facebook Admins: <span class="fa fa-info-circle"></span></h4>
-                <input type="text" placeholder="Facebook Admin ID" class="form-control mb15 input-lg">
-                <div class="well">
-                    <h4>Facebook App: <span class="fa fa-info-circle"></span></h4>
-                    <input type="text" placeholder="Facebook App ID" class="form-control mb15 input-lg">
-                    <input type="text" placeholder="Facebook App Secret" class="form-control mb15 input-lg">
-                </div>
-                <h4>Facebook Page: <span class="fa fa-info-circle"></span></h4>
-                <input type="text" placeholder="Facebook Page Url" class="form-control mb15 input-lg">
+                    <h4>Facebook Admins: <span class="fa fa-info-circle"></span></h4>
+                    <input type="text" placeholder="Facebook Admin ID" class="form-control mb15 input-lg">
+                    <div class="well">
+                        <h4>Facebook App: <span class="fa fa-info-circle"></span></h4>
+                        <input type="text" placeholder="Facebook App ID" class="form-control mb15 input-lg">
+                        <input type="text" placeholder="Facebook App Secret" class="form-control mb15 input-lg">
+                    </div>
+                    <h4>Facebook Page: <span class="fa fa-info-circle"></span></h4>
+                    <input type="text" placeholder="Facebook Page Url" class="form-control mb15 input-lg">
 
-                <h4>Landing Page Redirect: <span class="fa fa-info-circle"></span></h4>
-                <select class="form-control input-lg">
-                    <option>Landing Page 1</option>
-                    <option>Landing Page 2</option>
-                    <option>Landing Page 3</option>
-                </select>
+                    <h4>Landing Page Redirect: <span class="fa fa-info-circle"></span></h4>
+                    <select class="form-control input-lg">
+                        <option>Landing Page 1</option>
+                        <option>Landing Page 2</option>
+                        <option>Landing Page 3</option>
+                    </select>
 
                 </div>
                 <div class="modal-footer">
                     <span>Last synced 3hrs ago </span>
                     <button type="button" class="btn btn-primary btn-lg btn-print-bill"
-                        id="" data-dismiss="modal"><span class="fa fa-repeat"></span> Sync</button>
+                                          id="" data-dismiss="modal"><span class="fa fa-repeat"></span> Sync</button>
                 </div>
             </div>
         </div>

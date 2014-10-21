@@ -106,6 +106,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $scope.$apply(function() {
                 $scope.currentpage.components = data;
                 console.log('data applied', $scope.currentpage.components);
+                for (var i = 0; i < $scope.currentpage.components.length; i++) {
+                    if($scope.currentpage.components[i].type == 'navigation')  {
+                        var body = document.getElementsByTagName('body')[0];
+                        body.className = body.className.replace('navbar-v', '');
+                        body.className = body.className + ' navbar-v'+ $scope.currentpage.components[i].version;
+                    }
+                };
             });
         };
 
@@ -178,14 +185,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     }
         // };
 
+       
         window.activateAloha = function() {
             console.log('aloha');
-            $('.editable').aloha();
+            aloha.dom.query('.editable', document).forEach(aloha);
         };
 
         window.deactivateAloha = function() {
-            console.log('mahalo');
-            $('.editable').mahalo();
+           console.log('mahalo');
+           aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
 
         $scope.createPost = function(postData) {

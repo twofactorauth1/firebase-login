@@ -1,3 +1,4 @@
+<div ng-class="component.type+'-v'+component.version">
 <div ng-controller="LayoutCtrl as control" data-class="blog" data-id="{{component._id}}">
     <div id="content-area">
         <div class="container clearfix row-fluid">
@@ -13,7 +14,7 @@
                 </div>
                 <article class="entry clearfix" data-ng-if="control.blogposts||blog.blogposts">
                     <div class="single-blog responsive clearfix"
-                         ng-repeat="blogpost in control.blogposts track by $index"
+                         ng-repeat="blogpost in blog.blogposts track by $index"
                          data-postId="{{blogpost._id}}">
 
                         <div class="blog-entry clearfix">
@@ -133,6 +134,7 @@
         <!-- .container -->
     </div>
     <!-- #content-area -->
+</div>
 </div>
 <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
     Add Post

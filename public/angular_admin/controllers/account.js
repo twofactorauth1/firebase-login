@@ -4,6 +4,13 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
         $scope.billing = {};
 
+        $scope.activeSkeuocard = false;
+
+        $scope.updateBillingFn = function (billing) {
+            $scope.billing = billing;
+            $scope.activeSkeuocard = false;
+        };
+
         $scope.$watch('billing', function (newValue, oldValue) {
             if (newValue && newValue.customerId) {
                 UserService.getUserSubscriptions(newValue.customerId, function (subscriptions) {
@@ -12,10 +19,10 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             }
         });
 
-    	UserService.getUser(function (user) {
-    		$scope.user = user;
-    		$scope.activeTab = 'account';
-    	});
+        UserService.getUser(function (user) {
+            $scope.user = user;
+            $scope.activeTab = 'account';
+        });
 
         UserService.getAccount(function (account) {
             $scope.account = account;
@@ -24,6 +31,15 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
         UserService.getAccountBilling(function (billing) {
             $scope.billing = billing;
+            PaymentService.getListStripeSubscriptions(billing.stripeCustomerId, function (subscriptions) {
+                $scope.subscription = subscriptions.data[0];
+            });
+            PaymentService.getUpcomingInvoice(billing.stripeCustomerId, function (upcomingInvoice) {
+                $scope.upcomingInvoice = upcomingInvoice;
+            });
+        });
+        PaymentService.getAllInvoices(function (invoices) {
+            $scope.invoices = invoices;
         });
     }]);
 });

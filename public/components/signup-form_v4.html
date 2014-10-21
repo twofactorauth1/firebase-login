@@ -26,7 +26,7 @@
                                     </label>
                                 </div>
                                 <div class="col-md-7">
-                                    <input style="margin-top:5px" type="{{field.field_type}}" class="form-control" id="{{field.field_id}}" data-ng-value="field.field_value" data-ng-disabled="field.field_disabled" />
+                                    <input style="margin-top:5px" type="{{field.field_type}}" class="form-control" id="{{field.field_id}}" data-ng-value="field.field_value" data-ng-disabled="field.field_disabled" ng-non-bindable/>
                                 </div>
                                 <div class="col-md-3">
                                     <span class="pull-left" style="color: red" ng-show="field.field_required && !field.field_value">* required</span>

@@ -5,22 +5,22 @@
 </div> -->
 
 <ul ui-sortable="sortableOptions">
-	<li ng-repeat="component in currentpage.components | createUrlFilter track by $index" class="fragment {{transitionState}}" style="position: relative;">
+	<li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;">
 		<div class="componentActions">
 			<span class="reorder fa fa-arrows"></span>
             <span class="" ng-if="!component.visibility">Hidden</span>
 			<h4 class="pull-left">{{component.type}}</h4>
-			<span class="settings fa fa-cogs" data-id="{{component._id}}" ng-click="activateSettings()"></span>
+			<span class="settings fa fa-cogs" data-id="{{component._id}}"></span>
 		</div>
-	    <div ng-include src="'/components/component-wrap.html'" ></div>
-        <div ng-class="{'zee-blur': !component.visibility}"></div>
+	    <div ng-include="'/components/component-wrap.html'"></div>
+	    <div ng-class="{'zee-blur': !component.visibility}"></div>
 	    <div class="add-component">
 	    	<a href="">
 	    	<i class="fa fa-plus-circle"></i>
 	    	</a>
 	    </div>
 	</li>
-	<li ng-show="!currentpage.components.length" class="no-component">
+	<li ng-if="!currentpage.components.length" class="no-component">
 		<div class="well empty-page">
 			<h1 class="center">This Page is Empty.</h1>
 			<h4 class="center">Add some components and start editing!</h4>

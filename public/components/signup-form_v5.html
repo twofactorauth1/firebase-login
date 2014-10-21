@@ -3,18 +3,18 @@
     <h3 ng-bind-html="component.title" ng-show="component.title"></h3>
     <p ng-bind-html="component.subtitle" ng-show="component.subtitle"></p>
 
-    <form method="post" name="mc-embedded-subscribe-form" action="http://indigenous.us4.list-manage1.com/subscribe/post?u=5eca79c5c3979f0f11b3fd8a5&amp;id=4427b3f747" id="mc-embedded-subscribe-form" class="form validate" target="_blank" novalidate="" onsubmit="indigenous.utils.trackSubscriptionEvent()">
+    <form method="post" name="mc-embedded-subscribe-form" action="http://indigenous.us4.list-manage1.com/subscribe/post?u=5eca79c5c3979f0f11b3fd8a5&amp;id=4427b3f747" id="mc-embedded-subscribe-form" class="form validate" target="_blank" novalidate="" onsubmit="indigenous.utils.trackSubscriptionEvent()" ng-non-bindable>
         <div class="col-sm-9">
             <div class="left-inner-addon">
                 <span><i class="fa fa-envelope"></i>
                 </span>
-                <input type="email" id="mce-EMAIL" placeholder="Enter your email" name="EMAIL" class="subscribe" required="">
+                <input type="email" id="mce-EMAIL" placeholder="Enter your email" name="EMAIL" class="subscribe" required="" ng-non-bindable>
             </div>
         </div>
         <div class="clearfix mb15 visible-xs"></div>
         <div class="col-sm-3">
             <div style="position: absolute; left: -5000px;">
-                <input type="text" name="b_5eca79c5c3979f0f11b3fd8a5_4427b3f747" tabindex="-1" value="">
+                <input type="text" name="b_5eca79c5c3979f0f11b3fd8a5_4427b3f747" tabindex="-1" value="" ng-non-bindable>
             </div>
             <div class="clear">
                 <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="btn btn-outline pull-right btn-block ">IM INTERESTED <i class="fa fa-arrow-circle-o-right"></i>

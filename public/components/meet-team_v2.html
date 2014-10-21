@@ -5,48 +5,49 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
-<div class="title">
-    <div class="editable" data-class="title">
-        <span ng-bind-html="component.title"/>
-    </div>
-</div>
-
-<div class="subtitle">
-    <div class="editable" data-class="subtitle">
-        <span ng-bind-html="component.subtitle"/>
-    </div>
-</div>
-
-<div class="mb30"></div>
-
-<div class="row text-center">
-    <div class="col-md-6 text-center teamMember" ng-repeat="teamMember in component.teamMembers">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="profile-pic" style="background: url('{{teamMember.profilepic}}') no-repeat;"></div>
-            </div>
+<div ng-class="component.type+'-v'+component.version">
+    <div class="title">
+        <div class="editable" data-class="title">
+            <span ng-bind-html="component.title"/>
         </div>
-        <div class="row">
+    </div>
 
-            <div class="name">
-                <div class="editable" data-class="teamMember.item.name">
-                    <span ng-bind-html="teamMember.name"/>
+    <div class="subtitle">
+        <div class="editable" data-class="subtitle">
+            <span ng-bind-html="component.subtitle"/>
+        </div>
+    </div>
+
+    <div class="mb30"></div>
+
+    <div class="row text-center">
+        <div class="col-sm-6 text-center teamMember" ng-repeat="teamMember in component.teamMembers">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="profile-img" style="background: url('{{teamMember.profilepic}}') center center no-repeat;"></div>
                 </div>
             </div>
+            <div class="row">
 
-            <div class="position">
-                <div class="editable" data-class="teamMember.item.position">
-                    <span ng-bind-html="teamMember.position"/>
+                <div class="name">
+                    <div class="editable" data-class="teamMember.item.name">
+                        <span ng-bind-html="teamMember.name"/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="bio">
-                <div class="editable" data-class="teamMember.item.bio">
-                    <span ng-bind-html="teamMember.bio"/>
+                <div class="position">
+                    <div class="editable" data-class="teamMember.item.position">
+                        <span ng-bind-html="teamMember.position"/>
+                    </div>
                 </div>
-            </div>
 
+                <div class="bio">
+                    <div class="editable" data-class="teamMember.item.bio">
+                        <span ng-bind-html="teamMember.bio"/>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>

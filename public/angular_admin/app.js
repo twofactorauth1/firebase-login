@@ -1,5 +1,8 @@
 define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective','angularFileUpload','jdfontselect'], function (angularAMD) {
-    var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var','angularFileUpload','jdFontselect'])
+    var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var','angularFileUpload','jdFontselect']);
+    app.constant('jdFontselectConfig', {
+      googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
+    });
     //routes
     app.config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/website");

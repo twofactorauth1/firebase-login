@@ -173,9 +173,19 @@ _.extend(api.prototype, baseApi.prototype, {
         var skip = parseInt(req.query['skip'] || 0);
         var limit = parseInt(req.query['limit'] || 0);
         var letter = req.params.letter || 'all';
+        var fields = {_id:1, first:1, last:1, photo:1};
 
+        if(req.query['fields'] !== undefined) {
+            var fieldsList = req.query['fields'].split(',');
+            fields = {};
+            _.each(fieldsList, function(element, index, list){
+                fields[element] = 1;
+            });
+            //fields = _.object(fieldsList, [1]);
+            console.dir(fields);
+        }
 
-        contactDao.findContactsShortForm(accountId, letter, skip, limit, function(err, list){
+        contactDao.findContactsShortForm(accountId, letter, skip, limit, fields, function(err, list){
             self.log.debug('<< getContactsShortForm');
             self.sendResultOrError(res, err, list, "Error getting contact short form by letter [" + letter + "]");
             self = null;

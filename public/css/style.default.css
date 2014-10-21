@@ -19883,13 +19883,17 @@ input[type='file'] {
 }
 .check-theme {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -12px;
+  right: -2px;
   z-index: 9999;
-  margin: -15px 1px 0 0;
+  margin: 0 1px 0 0;
   color: green;
   font-size: 29px;
-  width: 25px;
+  background: #fff;
+  width: 24px;
+  height: 26px;
+  border-radius: 55px;
+  line-height: 10px;
 }
 .component.dragging {
   overflow: hidden;
@@ -19914,6 +19918,18 @@ input[type='file'] {
   border: 2px solid #fff!important;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3) !important;
   color: #ffffff!important;
+}
+.theme .thumbnail {
+  border: 3px solid #CFCFCF;
+}
+.theme.selected .thumbnail {
+  border: 3px solid #4bb0cb;
+}
+.theme.success .thumbnail {
+  border: 3px solid green;
+}
+.theme.success .check-theme {
+  display: block!important;
 }
 .blog-item {
   background: #fcfcfc;
@@ -21788,7 +21804,6 @@ hr {
 }
 .editing .fragment {
   border: none;
-  overflow: hidden;
 }
 .editing .fragment:hover {
   border: 2px dashed #34495e;
@@ -22063,7 +22078,6 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   width: 100%;
 }
 .feature-list-v3 .feature-single .feature-icon {
-  color: #3b9db7;
   font-size: 14em;
   position: absolute;
   margin: 15px 0;
@@ -22079,6 +22093,8 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   margin: 0;
   line-height: 196px;
   text-transform: uppercase;
+  z-index: 999;
+  position: relative;
 }
 .feature-list-v3 .feature-single .feature-title:hover {
   color: #44af6e;
@@ -22549,7 +22565,7 @@ contenthover a {
   text-align: center;
   text-transform: uppercase;
 }
-.meet-team-v2 .profile-pic {
+.meet-team-v2 .profile-img {
   width: 250px;
   height: 250px;
   display: block;
@@ -23809,20 +23825,26 @@ div[data-class="blog"] .single-blog {
   height: 2px;
   background-color: #75b1ae;
 }
-.coming-soon {
+.coming-soon-v1 {
   height: 100%;
 }
-.coming-soon .logo {
+.coming-soon-v1 .container.inner-page {
+  padding: 0;
+  max-width: 100%;
+  margin: 0!important;
+  width: 100%;
+}
+.coming-soon-v1 .logo {
   margin: 5% auto 0;
   display: block;
 }
-.coming-soon div[ng-transclude] {
+.coming-soon-v1 div[ng-transclude] {
   height: 100%;
 }
-.coming-soon .coming-soon-wrap {
+.coming-soon-v1 .coming-soon-wrap {
   background: rgba(255, 255, 255, 0.9);
 }
-.coming-soon .heading {
+.coming-soon-v1 .heading {
   font-size: 50px;
   margin: 45px 0 10px;
   text-align: center;
@@ -23830,12 +23852,12 @@ div[data-class="blog"] .single-blog {
   font-weight: 700;
   margin: 30px 0 10px;
 }
-.coming-soon .text {
+.coming-soon-v1 .text {
   margin-bottom: 20px;
   font-size: 16px;
   text-align: center;
 }
-.coming-soon .inner-page {
+.coming-soon-v1 .inner-page {
   padding-bottom: 15px;
 }
 @-webkit-keyframes arrowBounce {
@@ -23918,12 +23940,12 @@ div[data-class="blog"] .single-blog {
     transform: translateY(-20px);
   }
 }
-.coming-soon .arrow-down {
+.coming-soon-v1 .arrow-down {
   margin-top: 40px;
   width: 100%;
   text-align: center;
 }
-.coming-soon .arrow-down i {
+.coming-soon-v1 .arrow-down i {
   width: 30px;
   height: 30px;
   border-radius: 50%;

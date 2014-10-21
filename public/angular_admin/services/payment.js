@@ -25,8 +25,8 @@ define(['app', 'stripe'], function (app) {
             });
         };
 
-        this.getUpcomingInvoice = function (fn) {
-            var apiUrl = baseUrl + ['integrations', 'payments', 'customers', $$.server.userId, 'upcomingInvoice'].join('/');
+        this.getUpcomingInvoice = function (stripeId, fn) {
+            var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'upcomingInvoice'].join('/');
             $http.get(apiUrl)
             .success(function (data, status, headers, config) {
                 fn(data);
