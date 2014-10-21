@@ -75,7 +75,8 @@ require.config({
         "constants": 'constants/constants',
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',
-        'confirmClick2':'/angular_admin/directives/confirm_click2',        
+        'confirmClick2':'/angular_admin/directives/confirm_click2',
+        'img':'/angular_admin/directives/img_adv',        
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -126,7 +127,7 @@ require.config({
         'ngHeadroom': {deps: ['headroom']},
         'commonutils': {deps: ['underscore']},
         'jqueryGridster': {deps: ['jquery']},
-        'c3': {deps: ['d3']},        
+        'c3': {deps: ['d3']},
         'angularUiRouter': {deps: ['angular']},
         'angularFileUpload': {deps: ['angular']},
         'xEditable': {deps: ['angular']},
