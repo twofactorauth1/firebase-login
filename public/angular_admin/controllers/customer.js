@@ -1,5 +1,5 @@
-define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngProgress', 'headroom','ngHeadroom','toaster'], function(app) {
-    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'toaster', '$window', function ($scope, CustomerService, ngProgress, toaster, $window) {
+define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngProgress', 'headroom','ngHeadroom','toasterService'], function(app) {
+    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', function ($scope, CustomerService, ngProgress, ToasterService, $window) {
         ngProgress.start();
         $scope.customerFilter = {};
         $scope.customerOrder = 'first';
@@ -43,6 +43,7 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
         CustomerService.getCustomersShortForm(fetchFields, function (customers) {
             $scope.customers = customers;
             ngProgress.complete();
+            ToasterService.processPending();
             $scope.$watch('searchBar', function (newValue, oldValue) {
                 if (newValue) {
                     var searchBarSplit = newValue.split(' ');
@@ -102,7 +103,7 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
 				CustomerService.importFacebookFriends(function(data, success) {
 					if (success) {
 						$('#import-contacts-modal').modal('hide');
-						toaster.pop('success', "Contacts being imported.");
+						ToasterService.show('success', "Contacts being imported.");
 					} else
 						$window.location.href = "/inapplogin/facebook?redirectTo=" + encodeURIComponent('/admin#/customer');
 				});
@@ -112,7 +113,7 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
 				CustomerService.importLinkedInConnections(function(data, success) {
 					if (success) {
 						$('#import-contacts-modal').modal('hide');
-						toaster.pop('success', "Contacts being imported.");
+						ToasterService.show('success', "Contacts being imported.");
 					} else
 						$window.location.href = "/inapplogin/linkedin?redirectTo=" + encodeURIComponent('/admin#/customer');
 				});
@@ -122,7 +123,7 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
 				CustomerService.importGmailContacts(function(data, success) {
 					if (success) {
 						$('#import-contacts-modal').modal('hide');
-						toaster.pop('success', "Contacts being imported.");
+						ToasterService.show('success', "Contacts being imported.");
 					} else
 						$window.location.href = "/inapplogin/google?redirectTo=" + encodeURIComponent('/admin#/customer');;
 				});

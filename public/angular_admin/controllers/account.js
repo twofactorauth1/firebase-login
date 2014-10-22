@@ -1,5 +1,5 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective'], function(app) {
-  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', function($scope, UserService, PaymentService, ngProgress) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService'], function(app) {
+  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', function($scope, UserService, PaymentService, ngProgress, ToasterService) {
     ngProgress.start();
 
     $scope.activeSkeuocard = false;
@@ -32,11 +32,12 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
     UserService.getAccount(function(account) {
       $scope.account = account;
-      ngProgress.complete();
     });
 
     PaymentService.getAllInvoices(function(invoices) {
       $scope.invoices = invoices;
+      ngProgress.complete();
+      ToasterService.processPending();
     });
 
   }]);
