@@ -157,6 +157,7 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
 
             });
         } else {
+        	ngProgress.complete();
             $scope.customerAddressWatchFn(0);
         }
 
