@@ -19,7 +19,6 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
                     console.log('Method:accountService Error: ' + err);
                     callback(err, null);
                 } else {
-                    console.log('data >>> ', data);
                     // API URL: http://yoursubdomain.indigenous.local/api/1.0/cms/website/yourid
                     $http.get('/api/1.0/cms/website/' + data.website.websiteId)
                     .success(function (data) {
