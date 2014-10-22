@@ -51,6 +51,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         accountService(function (err, data) {
+            console.log('account service');
             if (err) {
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
             } else {
@@ -71,12 +72,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                      route = route.replace('/', '');
                      that.pages = data[route];
                 } else {
-                    that.pages = data[$scope.$location.$$path.replace('/', '')];
+                    that.pages = data[$scope.$location.$$path];
                 }
                 $scope.currentpage = that.pages;
 
                 PostService.getAllPosts(function (posts){
-                     console.log('posts >>> ', $scope.currentpage._id);
+
+                     console.log('posts >>> ', $scope.$location.$$path);
                     that.blogposts = posts;
                 });
             }
@@ -108,7 +110,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.log('data recieved >>> ', data);
             $scope.$apply(function() {
                 $scope.currentpage.components = data;
-                console.log('data applied', $scope.currentpage.components);
                 for (var i = 0; i < $scope.currentpage.components.length; i++) {
                     if($scope.currentpage.components[i].type == 'navigation')  {
                         var body = document.getElementsByTagName('body')[0];

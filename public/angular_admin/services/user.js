@@ -1,5 +1,6 @@
 define(['app'], function (app) {
 	app.register.service('UserService', function ($http) {
+		var account, that = this;
 		var baseUrl = '/api/1.0/';
 		this.getUser = function (fn) {
 			var apiUrl = baseUrl + ['user', $$.server.userId].join('/');
@@ -18,11 +19,17 @@ define(['app'], function (app) {
 		};
 
 		this.getAccount = function (fn) {
-			var apiUrl = baseUrl + ['account', $$.server.accountId].join('/');
-			$http.get(apiUrl)
-			.success(function (data, status, headers, config) {
-				fn(data);
-			});
+			if (that.account) {
+				console.log('cached account');
+	            fn(that.account);
+	        } else {
+				var apiUrl = baseUrl + ['account', $$.server.accountId].join('/');
+				$http.get(apiUrl)
+				.success(function (data, status, headers, config) {
+					that.account = data;
+					fn(data);
+				});
+			}
 		};
 
 		this.putAccount = function (user, fn) {
