@@ -40,3 +40,7 @@ body.leftpanel-collapsed.rightmenu-open #headerbar {
   position: absolute;
   padding: .5em;
 }
+.glyphicon-remove-icon {
+  color: #c7254e;
+  padding-bottom: 10px;
+}

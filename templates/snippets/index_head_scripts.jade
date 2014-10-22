@@ -23,6 +23,6 @@ script(type="text/javascript").
     window.analytics.page('Index', {accountId:#{account._id}});
     WebFont.load({
                       google: {
-                             families: ['Spinnaker', 'Lato','Dancing Script']
+                             families: [#{"'"+account.website.settings.font_family+"'"}, #{"'"+account.website.settings.font_family_2+"'"}]
                        }
            });

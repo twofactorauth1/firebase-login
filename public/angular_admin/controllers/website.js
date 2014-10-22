@@ -23,6 +23,8 @@ define([
         'ngProgress',
         function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress) {
             ngProgress.start();
+            $scope.primaryFontStack = '';
+            $scope.secondaryFontStack = '';
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
@@ -30,10 +32,6 @@ define([
             $scope.iframeData = {};
 
             $scope.allPages = [];
-
-            $scope.selectedGoogleFontFn = function (font) {
-              $scope.googleFontFamily = font.stack;
-            };
 
             $scope.spectrum = {
                 options: {
@@ -182,6 +180,9 @@ define([
                     $scope.primaryFontFamily = $scope.website.settings.font_family;
                     $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
                     $scope.googleFontFamily = $scope.website.settings.google_font_family;
+
+                    $scope.primaryFontStack = $scope.website.settings.font_family;
+                    $scope.secondaryFontStack = $scope.website.settings.font_family_2;
                 });
 
                 //get themes
@@ -227,6 +228,7 @@ define([
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
                 iframe.contentWindow.triggerEditMode();
+                // iframe.contentWindow.copyPostMode();
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");
             };
@@ -238,6 +240,7 @@ define([
                 $scope.isEditing = false;
                 $scope.componentEditing = '';
                 iFrame.contentWindow.triggerEditModeOff();
+                iFrame.contentWindow.updatePostMode();
             };
 
             $scope.doubleClick = function() {
@@ -258,7 +261,7 @@ define([
                 for (var i = 0; i < editedPageComponents.length; i++) {
                     var componentId = editedPageComponents[i].attributes['data-id'].value;
                     componentIdArr.push(componentId);
-                    var componentType = editedPageComponents[i].attributes['data-class'].value;
+                    var componentType = editedPageComponents[i].attributes['data-type'].value;
                     var matchingComponent = _.findWhere($scope.currentPage.components, {
                         _id: componentId
                     });
@@ -537,9 +540,9 @@ define([
                 $scope.isMobile = true;
             };
 
-            $scope.updateThemeSettings = function() {
-                document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
-                $scope.editPage();
+            $scope.updatePrimaryFont = function(font) {
+                $scope.website.settings.font_family = font.name;
+                //document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
             };
 
             $scope.changeSelectedTheme = function(theme) {

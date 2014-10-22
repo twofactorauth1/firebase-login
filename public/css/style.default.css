@@ -15977,6 +15977,49 @@ strong {
   right: 0;
   z-index: 99999;
 }
+.aloha-ui.btn-toolbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99999;
+  background: #2ecc71;
+  display: none;
+  right: 0;
+  height: 50px;
+}
+.aloha-ui.btn-toolbar.editing {
+  display: block;
+}
+.aloha-ui.btn-toolbar .btn-group {
+  margin-bottom: 0;
+}
+.aloha-ui.btn-toolbar .btn {
+  background: none;
+  border: none;
+  color: white;
+  padding: 12px 20px 15px 20px;
+  height: 50px;
+}
+.aloha-ui.btn-toolbar .btn:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+}
+.aloha-link-toolbar {
+  background-color: #4ea9de !important;
+}
+.aloha-link-toolbar input::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.aloha-link-toolbar input::-moz-placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.aloha-link-toolbar input:-moz-placeholder {
+  /* Older versions of Firefox */
+  color: rgba(255, 255, 255, 0.5);
+}
+.aloha-link-toolbar input:-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -17303,7 +17346,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   top: 0;
   right: -240px;
   display: none;
-  z-index: 9999991;
+  z-index: 999;
 }
 .rightpanel .nav-tabs {
   border-radius: 0;
@@ -18792,6 +18835,10 @@ div.error label.error:before {
 .filemanager .thmb-prev a {
   display: block;
 }
+.filemanager .thmb-prev img {
+  max-height: 150px;
+  width: 100%;
+}
 .filemanager .fm-title {
   margin-bottom: 0;
   font-size: 13px;
@@ -19638,7 +19685,13 @@ div.error label.error:before {
     width: 310px;
   }
 }
-/* Global Styles */
+.website .pageheader .btn-group {
+  margin-bottom: 0;
+}
+.website #iframe-website {
+  border: none;
+  width: 100%;
+}
 #nestable-menu {
   z-index: 999;
   width: 100%;
@@ -21798,21 +21851,28 @@ hr {
   background: #4eb1ca;
   pointer-events: auto;
 }
-.editing .no-component {
+body.editing {
+  margin-top: 50px;
+}
+body.editing .no-component {
   display: block;
   visibility: visible;
 }
-.editing .fragment {
+body.editing .component-inner {
+  padding: 2px;
+}
+body.editing .fragment {
   border: none;
 }
-.editing .fragment:hover {
+body.editing .fragment:hover .component-inner {
   border: 2px dashed #34495e;
+  padding: 0px;
 }
-.editing .fragment:hover .componentActions {
+body.editing .fragment:hover .componentActions {
   display: block;
   visibility: visible;
 }
-.editing .fragment:hover .add-component {
+body.editing .fragment:hover .add-component {
   display: block;
   visibility: visible;
 }

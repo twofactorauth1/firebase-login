@@ -422,6 +422,9 @@ module.exports = {
     listBlogPosts: function(accountId, limit, fn) {
         blogPostDao.findManyWithLimit({'accountId':accountId}, limit, $$.m.BlogPost, fn);
     },
+    listBlogPostsByPageId: function(pageId, limit, fn) {
+        blogPostDao.findManyWithLimit({'pageId':pageId}, limit, $$.m.BlogPost, fn);
+    },
 
     listPostIdsByPage: function(accountId, pageId, fn) {
         var self = this;

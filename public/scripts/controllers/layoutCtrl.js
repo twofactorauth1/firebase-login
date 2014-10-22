@@ -1,13 +1,15 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce',
-    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService',
+    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
+        console.log("running");
         route = $location.$$path;
-
+        window.oldScope;
         $scope.$route = $route;
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
+        $scope.$url=$location.$$url;
 
         //var config = angular.module('config');
         //that.segmentIOWriteKey = ENV.segmentKey;
@@ -18,7 +20,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     console.log('>>>>> ', window.parent);
         //     window.parent.frames[0].parentNode.activateSettings();
         // };
-
+        if(!window.oldScope)
+            window.oldScope = $scope;
         $scope.sortingLog = [];
 
         $scope.wait;
@@ -48,6 +51,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         accountService(function (err, data) {
+            console.log('account service');
             if (err) {
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
             } else {
@@ -63,15 +67,20 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
             } else {
-                if (route === '/' || route === '') {
+                if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
                      route = 'index';
                      route = route.replace('/', '');
                      that.pages = data[route];
                 } else {
-                    route = $route.current.params.pagename;
-                    that.pages = data[route];
+                    that.pages = data[$scope.$location.$$path];
                 }
                 $scope.currentpage = that.pages;
+
+                PostService.getAllPosts(function (posts){
+
+                     console.log('posts >>> ', $scope.$location.$$path);
+                    that.blogposts = posts;
+                });
             }
         });
 
@@ -101,7 +110,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.log('data recieved >>> ', data);
             $scope.$apply(function() {
                 $scope.currentpage.components = data;
-                console.log('data applied', $scope.currentpage.components);
                 for (var i = 0; i < $scope.currentpage.components.length; i++) {
                     if($scope.currentpage.components[i].type == 'navigation')  {
                         var body = document.getElementsByTagName('body')[0];
@@ -116,16 +124,25 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.log('trigger edit');
             var body = document.getElementsByTagName('body')[0];
             var hasClass = body.classList.contains('editing');
-            if(hasClass === false)
-            {
-                 body.className+=' editing';
-            }
+            if(hasClass === false) { body.className+=' editing'; }
+
+            var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            if(toolbar.classList.contains('editing') === false) { toolbar.className+=' editing'; }
+            window.oldScope.isEditing = true;
+
+            window.oldScope.$digest();
         };
 
         window.triggerEditModeOff = function() {
             console.log('trigger edit off');
             var body = document.getElementsByTagName('body')[0];
             body.className = body.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
+
+            var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            toolbar.className = toolbar.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
+           console.log(window.oldScope);
+            window.oldScope.isEditing = false;
+            window.oldScope.$digest();
         };
 
         $scope.trustSrc = function (src) {
@@ -187,4 +204,40 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
            aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
 
+        window.updateWebsite = function(data) {
+            console.log('data recieved >>> ', data);
+            that.account.website = data;
+            // $scope.$apply(function() {
+            //     $scope.primaryColor = data.settings.primary_color;
+            //     $scope.primaryHighlight = data.settings.primary_highlight;
+            //     $scope.secondaryColor = data.settings.secondary_color;
+            //     $scope.navHover = data.settings.nav_hover;
+            //     $scope.primaryTextColor = data.settings.primary_text_color;
+            //     $scope.fontFamily = data.settings.font_family;
+            //     $scope.fontFamily2 = data.settings.font_family_2;
+            // });
+        };
+
+        $scope.createPost = function(postData) {
+
+
+//            var data = {
+//                _id: $scope.website._id,
+//                accountId: $scope.website.accountId,
+//                settings: $scope.website.settings
+//            };
+            console.log(postData);
+            PostService.createPost($scope.currentpage._id,postData, function(data) {
+            });
+        };
+
+        $scope.deletePost = function(postId) {
+            PostService.deletePost($scope.currentpage._id, postId, function(data) {
+
+            });
+        };
+
+        $scope.resfeshIframe = function() {
+            //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
+        };
     }]);

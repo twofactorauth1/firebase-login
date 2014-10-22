@@ -5,13 +5,15 @@
 </div> -->
 
 <ul ui-sortable="sortableOptions">
-	<li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}">
+	<li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;">
 		<div class="componentActions">
 			<span class="reorder fa fa-arrows"></span>
+            <span class="" ng-if="!component.visibility">Hidden</span>
 			<h4 class="pull-left">{{component.type}}</h4>
 			<span class="settings fa fa-cogs" data-id="{{component._id}}"></span>
 		</div>
 	    <div ng-include="'/components/component-wrap.html'"></div>
+	    <div ng-class="{'zee-blur': !component.visibility}"></div>
 	    <div class="add-component">
 	    	<a href="">
 	    	<i class="fa fa-plus-circle"></i>
@@ -31,3 +33,14 @@
 	    </div>
 	</li>
 </ul>
+<style>
+    .zee-blur {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        opacity: .4;
+        background-color: black;
+    }
+</style>
