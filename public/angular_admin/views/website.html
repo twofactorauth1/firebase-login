@@ -6,11 +6,11 @@
             <h2 class="pull-left" style="margin-right: 15px;" ng-show="!isEditing"><i class="fa fa-desktop"></i> Viewing</h2>
             <div class="btn-group pull-left" dropdown is-open="status.isopen">
                 <button type="button" class="btn btn-orange dropdown-toggle" ng-disabled="disabled">
-                    {{pageSelected || 'index'}}
+                    {{pageSelected || 'Home'}}
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li ng-repeat="page in allPages track by $index"><a href="" ng-click="updatePage(page.handle)">{{page.handle}}</a>
+                    <li ng-repeat="page in allPages track by $index"><a href="" ng-click="updatePage(page.handle)">{{page.title}}</a>
                     </li>
                 </ul>
             </div>
