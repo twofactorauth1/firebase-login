@@ -66,19 +66,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
             } else {
-                if (route === '/' || route === '') {
+                if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
                      route = 'index';
                      route = route.replace('/', '');
                      that.pages = data[route];
                 } else {
-                    route = $route.current.params.pagename;
-                    that.pages = data[route];
+                    that.pages = data[$scope.$location.$$path.replace('/', '')];
                 }
                 $scope.currentpage = that.pages;
-                PostService.getAllPostsByPageId($scope.currentpage._id, function (posts){
-                    console.log("$$$$$")
-                    console.log(posts);
 
+                PostService.getAllPosts(function (posts){
+                     console.log('posts >>> ', $scope.currentpage._id);
                     that.blogposts = posts;
                 });
             }
