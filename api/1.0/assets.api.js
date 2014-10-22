@@ -185,11 +185,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
         if (!err) {
             var file = {
-                name: value.name,
+                filename: value.name,
                 size: value.size,
                 url: value.url,
                 resource: value.resource,
-                date: value.date,
+                created: {
+                    date: value.date
+                },
                 _id: value._id
             };
 

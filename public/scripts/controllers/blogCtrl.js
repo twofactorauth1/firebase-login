@@ -137,14 +137,14 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             that.tempPost=angular.copy(that.post);
 
 
-        }
+        };
 
         window.savePostMode=function(){
             console.log(that.post);
             PostService.updatePost()
 
 
-        }
+        };
 
 
         window.updatePostMode = function() {

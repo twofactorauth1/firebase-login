@@ -228,7 +228,7 @@ define([
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
                 iframe.contentWindow.triggerEditMode();
-                iframe.contentWindow.copyPostMode();
+                // iframe.contentWindow.copyPostMode();
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");
             };

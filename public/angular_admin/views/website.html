@@ -200,7 +200,8 @@
                             <div class="clearfix"></div>
                             <div class="form-group">
                                 <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
-                                <input class="form-control input-lg" type="text" ng-model="componentEditing.bg.img.url" ng-change="saveComponent()">
+                                <!-- <input class="form-control input-lg" type="text" ng-model="componentEditing.bg.img.url" ng-change="saveComponent()"> -->
+                                <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()">
                             </div>
                             <div class="form-group">
                                 <label for="colorpicker">Show Background Image as Parallax:</label>
