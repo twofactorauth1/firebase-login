@@ -92,8 +92,10 @@
     "angular-google-maps": "~1.2.2",
     "lodash": "~2.4.1",
     "ngprogress": "~1.0.7",
-    "bootstrap-confirmation": "https://github.com/Tavicu/bootstrap-confirmation.git",
-    "jd-fontselect": "~0.8.13"
+    "bootstrap-confirmation":"https://github.com/Tavicu/bootstrap-confirmation.git",
+    "jd-fontselect": "~0.8.13",
+    "ng-tags-input":"2.1.0",
+    "angular-input-date":"1.0.4"
   },
   "resolutions": {
     "angular": "1.2.26",

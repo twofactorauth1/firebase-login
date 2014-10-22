@@ -1,13 +1,15 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce',
-    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService',
+    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
+        console.log("running");
         route = $location.$$path;
-
+        window.oldScope;
         $scope.$route = $route;
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
+        $scope.$url=$location.$$url;
 
         //var config = angular.module('config');
         //that.segmentIOWriteKey = ENV.segmentKey;
@@ -18,7 +20,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     console.log('>>>>> ', window.parent);
         //     window.parent.frames[0].parentNode.activateSettings();
         // };
-
+        if(!window.oldScope)
+            window.oldScope = $scope;
         $scope.sortingLog = [];
 
         $scope.wait;
@@ -72,6 +75,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
+                PostService.getAllPostsByPageId($scope.currentpage._id, function (posts){
+                    console.log("$$$$$")
+                    console.log(posts);
+
+                    that.blogposts = posts;
+                });
             }
         });
 
@@ -120,6 +129,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
             var toolbar = body.querySelectorAll('.btn-toolbar')[0];
             if(toolbar.classList.contains('editing') === false) { toolbar.className+=' editing'; }
+            window.oldScope.isEditing = true;
+
+            window.oldScope.$digest();
         };
 
         window.triggerEditModeOff = function() {
@@ -129,6 +141,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
             var toolbar = body.querySelectorAll('.btn-toolbar')[0];
             toolbar.className = toolbar.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
+           console.log(window.oldScope);
+            window.oldScope.isEditing = false;
+            window.oldScope.$digest();
         };
 
         $scope.trustSrc = function (src) {
@@ -204,4 +219,26 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             // });
         };
 
+        $scope.createPost = function(postData) {
+
+
+//            var data = {
+//                _id: $scope.website._id,
+//                accountId: $scope.website.accountId,
+//                settings: $scope.website.settings
+//            };
+            console.log(postData);
+            PostService.createPost($scope.currentpage._id,postData, function(data) {
+            });
+        };
+
+        $scope.deletePost = function(postId) {
+            PostService.deletePost($scope.currentpage._id, postId, function(data) {
+
+            });
+        };
+
+        $scope.resfeshIframe = function() {
+            //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
+        };
     }]);
