@@ -94,47 +94,63 @@ var dao = {
         if(cardToken && cardToken.length > 0) {
             params.card = cardToken;
         }
+        //TODO: CHeck
+        if(user.get('stripeId') === '') {
+            stripe.customers.create(params, function(err, customer) {
 
-        stripe.customers.create(params, function(err, customer) {
-
-            if(err) {
-                fn(err, customer);
-                fn = null;
-                return;
-            }
-            user.set('stripeId', customer.id);
-            self.log.debug('Setting user stripeId to ' + user.get('stripeId'));
-            var p1 = $.Deferred(), p2 = $.Deferred();
-            var savedCustomer = customer;
-            userDao.saveOrUpdate(user, function(err, value){
-                if (err) {
-                    fn(err, value);
+                if(err) {
+                    fn(err, customer);
                     fn = null;
                     return;
                 }
-                p1.resolve();
-            });
-
-
-            customerLinkDao.safeCreateWithUser(accountId, user.id(), customer.id, function(err, value){
-                if (err) {
-                    if(err.toString() === 'The customer link already exists.') {
-                        //that's ok.
-                    } else {
+                user.set('stripeId', customer.id);
+                self.log.debug('Setting user stripeId to ' + user.get('stripeId'));
+                var p1 = $.Deferred(), p2 = $.Deferred();
+                var savedCustomer = customer;
+                userDao.saveOrUpdate(user, function(err, value){
+                    if (err) {
                         fn(err, value);
                         fn = null;
                         return;
                     }
+                    p1.resolve();
+                });
+
+
+                customerLinkDao.safeCreateWithUser(accountId, user.id(), customer.id, function(err, value){
+                    if (err) {
+                        if(err.toString() === 'The customer link already exists.') {
+                            //that's ok.
+                        } else {
+                            fn(err, value);
+                            fn = null;
+                            return;
+                        }
+                    }
+                    p2.resolve();
+                });
+
+                $.when(p1,p2).done(function(){
+                    self.log.debug('<< createStripeCustomerForUser');
+                    return fn(err, savedCustomer);
+                });
+
+            });
+        } else {
+            self.log.warn('Attempted to create customer that already exists.');
+            stripe.customers.retrieve(user.get('stripeId'), function(err, customer) {
+                // asynchronously called
+                if (err) {
+                    fn(err, customer);
+                    fn = null;
+                    return;
                 }
-                p2.resolve();
-            });
 
-            $.when(p1,p2).done(function(){
                 self.log.debug('<< createStripeCustomerForUser');
-                return fn(err, savedCustomer);
+                return fn(err, customer);
             });
+        }
 
-        });
     },
 
     /*
