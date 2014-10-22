@@ -1,43 +1,43 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress','mediaDirective', 'stateNavDirective'], function(app) {
-    app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', function ($scope, UserService, PaymentService, ngProgress) {
-        ngProgress.start();
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective'], function(app) {
+  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', function($scope, UserService, PaymentService, ngProgress) {
+    ngProgress.start();
 
-        $scope.activeSkeuocard = false;
+    $scope.activeSkeuocard = false;
 
-        $scope.updateStripeIdFn = function (billing) {
-            $scope.user.stripeId = billing.billing.stripeCustomerId;
-            $scope.activeSkeuocard = false;
-        };
+    $scope.updateStripeIdFn = function(billing) {
+      $scope.user.stripeId = billing.billing.stripeCustomerId;
+      $scope.activeSkeuocard = false;
+    };
 
-        $scope.$watch('user.stripeId', function (newValue, oldValue) {
-            if (newValue) {
-                UserService.getUserSubscriptions(newValue, function (subscriptions) {
-                    $scope.subscriptions = subscriptions;
-                });
+    $scope.activeSkeuocardFn = function(status) {
+      $scope.activeSkeuocard = status;
+    };
 
-                PaymentService.getListStripeSubscriptions(newValue, function (subscriptions) {
-                    $scope.subscription = subscriptions.data[0];
-                });
-
-                PaymentService.getUpcomingInvoice(newValue, function (upcomingInvoice) {
-                    $scope.upcomingInvoice = upcomingInvoice;
-                });
-            }
+    $scope.$watch('user.stripeId', function(newValue, oldValue) {
+      if (newValue) {
+        PaymentService.getListStripeSubscriptions(newValue, function(subscriptions) {
+          $scope.subscription = subscriptions.data[0];
         });
 
-        UserService.getUser(function (user) {
-            $scope.user = user;
-            $scope.activeTab = 'account';
+        PaymentService.getUpcomingInvoice(newValue, function(upcomingInvoice) {
+          $scope.upcomingInvoice = upcomingInvoice;
         });
+      }
+    });
 
-        UserService.getAccount(function (account) {
-            $scope.account = account;
-            ngProgress.complete();
-        });
+    UserService.getUser(function(user) {
+      $scope.user = user;
+      $scope.activeTab = 'account';
+    });
 
-        PaymentService.getAllInvoices(function (invoices) {
-            $scope.invoices = invoices;
-        });
+    UserService.getAccount(function(account) {
+      $scope.account = account;
+      ngProgress.complete();
+    });
 
-    }]);
+    PaymentService.getAllInvoices(function(invoices) {
+      $scope.invoices = invoices;
+    });
+
+  }]);
 });

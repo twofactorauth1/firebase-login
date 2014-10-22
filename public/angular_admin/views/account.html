@@ -288,7 +288,7 @@
                         <button class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#changePlan" indigeweb-state-nav="accountChoosePlan">Change Plan</button>
                         <div class="cleatfix mb20"></div>
                         <!-- Add Auto Pay Option Toggle-->
-                        <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changePlan" ng-click="activeSkeuocard = true">Modify Payment Method</button>
+                        <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changePlan" ng-click="activeSkeuocardFn(true)">Modify Payment Method</button>
                     </div>
                     <div class="col-sm-6" ng-show="activeSkeuocard">
                         <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn'></div>
