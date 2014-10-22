@@ -56,20 +56,22 @@ var dao = {
             self.log.debug('Setting contact stripeId to ' + contact.get('stripeId'));
             var p1 = $.Deferred(), p2 = $.Deferred();
             var savedCustomer = customer;
-            contactDao.saveOrMerge(contact, function(err, value){
+            contactDao.saveOrUpdate(contact, function(err, value){
                 if (err) {
                     fn(err, value);
                     fn = null;
                 }
+                self.log.debug('updated contact');
                 p1.resolve();
             });
 
-            customerLinkDao.safeCreate(accountId, contact.get('_id'), customer.id, function(err, value){
+            customerLinkDao.safeCreate(accountId, contact.id(), customer.id, function(err, value){
                 if (err) {
                     self.log.warn('attempted to create a customer link that already exists.');
                     //fn(err, value);
                     //fn = null;
                 }
+                self.log.debug('Created link');
                 p2.resolve();
             });
 
