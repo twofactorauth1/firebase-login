@@ -1,3 +1,4 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="account">
 <div class="pageheader row">
     <div class="col-xs-9">
@@ -267,13 +268,13 @@
                 </div>
                 <div class="panel-body">
                     <div class="col-sm-6">
-                        <div class="has-plan" ng-show="billing.stripeCustomerId">
+                        <div class="has-plan" ng-show="user.stripeId">
                             <h2 class="center">{{subscription.plan.name}} Plan</h2>
                             <hr></hr>
                             <h2 class="center total">${{upcomingInvoice.amount_due}} <span>/{{subscription.plan.interval}}</span></h2>
                             <p class="center">Next Billing Date:  {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
                         </div>
-                        <div class="no-plan well" ng-hide="billing.stripeCustomerId">
+                        <div class="no-plan well" ng-hide="user.stripeId">
                             <h3 class="center">No Subscription Plan Selected</h3>
                             <div class="cleatfix mb15"></div>
                             <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
@@ -288,10 +289,10 @@
                         <button class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#changePlan" indigeweb-state-nav="accountChoosePlan">Change Plan</button>
                         <div class="cleatfix mb20"></div>
                         <!-- Add Auto Pay Option Toggle-->
-                        <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changePlan" ng-click="activeSkeuocard = true">Modify Payment Method</button>
+                        <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changePlan" ng-click="activeSkeuocardFn(true)">Modify Payment Method</button>
                     </div>
                     <div class="col-sm-6" ng-show="activeSkeuocard">
-                        <div class="indigeweb-skeuocard" user='user' update='updateBillingFn'></div>
+                        <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn'></div>
                     </div>
                 </div>
             </div>

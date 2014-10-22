@@ -66,6 +66,7 @@ require.config({
         'chartStripService': '/angular_admin/services/chart_strip',
         'chartTwoNetService': '/angular_admin/services/chart_two_net',
         'importContactService': '/angular_admin/services/import_contacts',
+        'toasterService': '/angular_admin/services/toaster',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'hoverClassDirective': '/angular_admin/directives/hover_class',
@@ -77,7 +78,7 @@ require.config({
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',
         'confirmClick2':'/angular_admin/directives/confirm_click2',
-        'img':'/angular_admin/directives/img_adv',        
+        'img':'/angular_admin/directives/img_adv',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
