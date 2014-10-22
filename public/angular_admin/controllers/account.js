@@ -5,7 +5,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
         $scope.activeSkeuocard = false;
 
         $scope.updateStripeIdFn = function (billing) {
-            $scope.user.stripeId = billing.stripeCustomerId;
+            $scope.user.stripeId = billing.billing.stripeCustomerId;
             $scope.activeSkeuocard = false;
         };
 
