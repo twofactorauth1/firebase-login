@@ -2,19 +2,25 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
     app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', function ($scope, UserService, PaymentService, ngProgress) {
         ngProgress.start();
 
-        $scope.billing = {};
-
         $scope.activeSkeuocard = false;
 
-        $scope.updateBillingFn = function (billing) {
-            $scope.billing = billing;
+        $scope.updateStripeIdFn = function (billing) {
+            $scope.user.stripeId = billing.stripeCustomerId;
             $scope.activeSkeuocard = false;
         };
 
-        $scope.$watch('billing', function (newValue, oldValue) {
-            if (newValue && newValue.customerId) {
-                UserService.getUserSubscriptions(newValue.customerId, function (subscriptions) {
+        $scope.$watch('user.stripeId', function (newValue, oldValue) {
+            if (newValue) {
+                UserService.getUserSubscriptions(newValue, function (subscriptions) {
                     $scope.subscriptions = subscriptions;
+                });
+
+                PaymentService.getListStripeSubscriptions(newValue, function (subscriptions) {
+                    $scope.subscription = subscriptions.data[0];
+                });
+
+                PaymentService.getUpcomingInvoice(newValue, function (upcomingInvoice) {
+                    $scope.upcomingInvoice = upcomingInvoice;
                 });
             }
         });
@@ -29,17 +35,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             ngProgress.complete();
         });
 
-        UserService.getAccountBilling(function (billing) {
-            $scope.billing = billing;
-            PaymentService.getListStripeSubscriptions(billing.stripeCustomerId, function (subscriptions) {
-                $scope.subscription = subscriptions.data[0];
-            });
-            PaymentService.getUpcomingInvoice(billing.stripeCustomerId, function (upcomingInvoice) {
-                $scope.upcomingInvoice = upcomingInvoice;
-            });
-        });
         PaymentService.getAllInvoices(function (invoices) {
             $scope.invoices = invoices;
         });
+
     }]);
 });
