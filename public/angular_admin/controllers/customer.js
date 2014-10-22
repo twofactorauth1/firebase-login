@@ -62,6 +62,7 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
             $scope.alphaFilter = function (alpha) {
                 if (alpha) {
                     $scope.customerFilter.first = alpha;
+                    $(".contentpanel").scrollTop(0);
                 } else {
                     $scope.customerFilter = {};
                 }
