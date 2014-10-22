@@ -235,12 +235,15 @@ define([
 
             $scope.cancelPage = function() {
                 // $scope.components = that.originalCurrentPageComponents;
+
                 $scope.updateIframeComponents();
-                $scope.deactivateAloha();
+                //$scope.deactivateAloha();
                 $scope.isEditing = false;
                 $scope.componentEditing = '';
                 iFrame.contentWindow.triggerEditModeOff();
-                iFrame.contentWindow.updatePostMode();
+
+                //TODO Only use on single post
+                //iFrame.contentWindow.updatePostMode();
             };
 
             $scope.doubleClick = function() {
