@@ -631,8 +631,49 @@ font-weight: 900;
     z-index: 99999;
 }
 .aloha-ui.btn-toolbar {
-    position: absolute;
+    position: fixed;
     top: 0;
     width: 100%;
-    z-index: 999;
+    z-index: 99999;
+    background: #2ecc71;
+    display: none;
+    right: 0;
+    height: 50px;
+
+    &.editing {
+        display: block;
+    }
+
+    .btn-group {
+        margin-bottom: 0;
+    }
+
+    .btn {
+        background: none;
+        border: none;
+        color: white;
+        padding: 12px 20px 15px 20px;
+        height: 50px;
+
+        &:hover {
+            color: white;
+            background: rgba(255,255,255,0.2);
+        }
+    }
+}
+
+.aloha-link-toolbar {
+    background-color: rgb(78, 169, 222)!important;
+    input::-webkit-input-placeholder {
+        color: rgba(255,255,255,.5);
+    }
+    input::-moz-placeholder {
+        color: rgba(255,255,255,.5);
+    }
+    input:-moz-placeholder {   /* Older versions of Firefox */
+        color: rgba(255,255,255,.5);
+    }
+    input:-ms-input-placeholder { 
+        color: rgba(255,255,255,.5);
+    }
 }

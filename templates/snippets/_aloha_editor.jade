@@ -18,7 +18,7 @@ div.aloha-ui.btn-toolbar(role='toolbar')
                         </div
   div.btn-group
     button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown')
-      | Paragraph
+      | Paragraph 
       span.caret
     ul.dropdown-menu.funky(role='menu', style='background-color: rgb(146, 204, 143);')
       li
@@ -35,11 +35,21 @@ div.aloha-ui.btn-toolbar(role='toolbar')
     button.aloha-action-A.btn.btn-default(type='button', data-activeon='a', title='Create Link')
       span.glyphicon.glyphicon-link
 
+.aloha-3d.aloha-ui
+    .aloha-link-toolbar.btn-toolbar.funky(role='toolbar')
+        input(type='text', name='href', placeholder='http://www.indigenous.io', value='')
+        button.aloha-action-target.btn.btn-default(title='Toggle to open link in new window')
+          span.glyphicon.glyphicon-new-window
+        a.aloha-link-follow.btn.btn-default(href='#', target='_blank', rel='noreferrer', title='Follow this link')
+          span.glyphicon.glyphicon-share-alt
+
 
 script(src="/js/libs/requirejs/require.js")
 
 
 script(src="js/vendor/aloha-editor/js/aloha.min.js")
 script(src="js/vendor/aloha-editor/js/aloha-ui.js")
+script(src="js/vendor/aloha-editor/js/aloha-ui-links.js")
 
 link(href='js/vendor/aloha-editor/css/aloha.css', rel='stylesheet', type='text/css')
+link(href='js/vendor/aloha-editor/css/aloha-ui.css', rel='stylesheet', type='text/css')

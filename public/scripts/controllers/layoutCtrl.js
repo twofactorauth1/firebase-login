@@ -116,16 +116,19 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.log('trigger edit');
             var body = document.getElementsByTagName('body')[0];
             var hasClass = body.classList.contains('editing');
-            if(hasClass === false)
-            {
-                 body.className+=' editing';
-            }
+            if(hasClass === false) { body.className+=' editing'; }
+
+            var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            if(toolbar.classList.contains('editing') === false) { toolbar.className+=' editing'; }
         };
 
         window.triggerEditModeOff = function() {
             console.log('trigger edit off');
             var body = document.getElementsByTagName('body')[0];
             body.className = body.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
+
+            var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            toolbar.className = toolbar.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
         };
 
         $scope.trustSrc = function (src) {

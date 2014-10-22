@@ -540,7 +540,7 @@ define([
 
             $scope.updatePrimaryFont = function(font) {
                 $scope.website.settings.font_family = font.name;
-                document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
+                //document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
             };
 
             $scope.changeSelectedTheme = function(theme) {
