@@ -265,6 +265,7 @@ module.exports = function(grunt) {
             contactActivities: ['contactactivities/test/*_test.js'],
             contextio:['test/contextio_test.js'],
             facebook: ['test/facebook_test.js'],
+            payments: ['payments/tests/*_test.js'],
             products: ['products/tests/*_test.js'],
             twonet:['biometrics/twonet/adapter/test/**/*_test.js', 'biometrics/twonet/client/test/**/*_test.js',
                 'biometrics/twonet/adapter/test/twonet_test_poll.js'],
@@ -420,6 +421,7 @@ module.exports = function(grunt) {
     grunt.registerTask('testCms', ['nodeunit:cms']);
     grunt.registerTask('testAssets', ['nodeunit:assets']);
     grunt.registerTask('testContactActivities', ['nodeunit:contactActivities']);
+    grunt.registerTask('testPayments', ['nodeunit:payments']);
     grunt.registerTask('updateDocs', 'jsdoc2md');
     
 };

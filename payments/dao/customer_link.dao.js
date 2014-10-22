@@ -110,7 +110,7 @@ var dao = {
             });
             return self.saveOrUpdate(link, fn);
         };
-        return self.getLinkByIds(accountId, customerId, contactId, safetyFunction);
+        return self.getLinkByIds(accountId, customerId, contactId, null, safetyFunction);
     },
 
     safeCreateWithUser: function(accountId, userId, customerId, fn) {

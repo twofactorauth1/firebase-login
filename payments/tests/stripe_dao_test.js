@@ -8,6 +8,7 @@ process.env.NODE_ENV = "testing";
 var app = require('../../app');
 var contactDao = require('../../dao/contact.dao.js');
 var testHelpers = require('../../testhelpers/testhelpers.js');
+var userDao = require('../../dao/user.dao.js');
 
 
 var stripeDao = require('../dao/stripe.dao.js');
@@ -50,7 +51,7 @@ exports.stripe_dao_test = {
         var self = this;
         test.expect(1);
         _log.info('>>testCreateStripeCustomer');
-        stripeDao.createStripeCustomer(null, testContext.contact, '0', function(err, contact){
+        stripeDao.createStripeCustomer(null, testContext.contact, 0, function(err, contact){
             if (err) {
                 test.ok(false, err);
                 return test.done();
@@ -59,6 +60,56 @@ exports.stripe_dao_test = {
             test.notEqual(contact.stripeId, "", 'StripeId was not set.');
             test.done();
         });
+    },
+
+    testCreateStripeCustomerForUser: function(test) {
+        var self = this;
+        var args = {};
+        test.expect(2);
+        testHelpers.createTestUser(args, function(err, user){
+            if(err) {
+                test.ok(false, err);
+                return test.done();
+            }
+            var accountId = args.accountId;
+            var user = args.user;
+            stripeDao.createStripeCustomerForUser(null, user, accountId, function(err, customer){
+                if(err) {
+                    test.ok(false, err);
+                    return test.done();
+                }
+                _log.debug('created customer:');
+                console.dir(customer);
+                var customerId = customer.id;
+                //verify user.stripeId
+                userDao.getById(user.id(), $$.m.User, function(err, user1){
+                    if(err) {
+                        test.ok(false, err);
+                        return test.done();
+                    }
+                    test.equals(customerId, user1.get('stripeId'));
+                    stripeDao.createStripeCustomerForUser(null, user, accountId, function(err, customer) {
+                        if (err) {
+                            test.ok(false, err);
+                            return test.done();
+                        }
+                        _log.debug('called create customer again....');
+                        userDao.getById(user.id(), $$.m.User, function(err, user1) {
+                            if (err) {
+                                test.ok(false, err);
+                                return test.done();
+                            }
+                            test.equals(customerId, user1.get('stripeId'));
+                            test.done();
+                        });
+                    });
+                });
+            });
+        });
+
+
+
+
     },
 
     testListStripeCustomers: function(test) {
@@ -826,7 +877,7 @@ exports.stripe_dao_test = {
                 return test.done();
             }
             _log.info('got customer... now try to delete it.');
-            stripeDao.deleteStripeCustomer(testContext.customerId, null, function(err, confirmation){
+            stripeDao.deleteStripeCustomer(testContext.customerId, null, null, function(err, confirmation){
                 if (err) {
                     test.ok(false, err);
                     return test.done();

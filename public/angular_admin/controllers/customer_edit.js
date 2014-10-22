@@ -58,7 +58,7 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
             CustomerService.saveCustomer($scope.customer, function (customer) {
                 $scope.customer = customer;
                 if ($scope.currentState == 'customerAdd') {
-                    $state.go('customer');
+                   $state.go('customerDetail', {id: $scope.customer._id});
                 } else {
                     $state.go('customerDetail', {id: $scope.customerId});
                 }
@@ -157,6 +157,7 @@ define(['app', 'customerService', 'stateNavDirective', 'underscore', 'commonutil
 
             });
         } else {
+        	ngProgress.complete();
             $scope.customerAddressWatchFn(0);
         }
 
