@@ -14,14 +14,20 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
             };
 
             PaymentService.getStripeCardToken(cardInput, function (token) {
-                PaymentService.postStripeCustomer(token, function (stripeUser) {
-                    UserService.postAccountBilling(stripeUser.id, token, function (billing) {
-                        console.info('Bill: ' + billing._id + ' updated with token: ' + token + ' and stripe customer ID: ' + stripeUser.id);
-                    });
-                    PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function (subscription) {
-                        $state.go('account');
-                    });
-                });
+                if ($scope.user.stripeId) {
+                  UserService.postAccountBilling($scope.user.stripeId, token, function (billing) {});
+                  PaymentService.postCreateStripeSubscription($scope.user.stripeId, $scope.selectedPlan, function (subscription) {
+                      $state.go('account');
+                  });
+                } else {
+                  PaymentService.postStripeCustomer(token, function (stripeUser) {
+                      $scope.user.stripeId = stripeUser.id;
+                      UserService.postAccountBilling(stripeUser.id, token, function (billing) {});
+                      PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function (subscription) {
+                          $state.go('account');
+                      });
+                  });
+                }
             });
         };
 
@@ -34,10 +40,6 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
         UserService.getAccount(function (account) {
             $scope.account = account;
             ngProgress.complete();
-        });
-
-        UserService.getAccountBilling(function (billing) {
-            $scope.billing = billing;
         });
 
         var card = new Skeuocard($("#skeuocard"));
