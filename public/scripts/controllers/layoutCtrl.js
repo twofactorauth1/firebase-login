@@ -3,7 +3,7 @@
 mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService',
     function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
-        console.log("running");
+
         route = $location.$$path;
         window.oldScope;
         $scope.$route = $route;
@@ -51,7 +51,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         accountService(function (err, data) {
-            console.log('account service');
             if (err) {
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
             } else {
@@ -67,6 +66,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
             } else {
+
                 if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
                      route = 'index';
                      route = route.replace('/', '');
@@ -77,8 +77,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 $scope.currentpage = that.pages;
 
                 PostService.getAllPosts(function (posts){
-
-                     console.log('posts >>> ', $scope.$location.$$path);
                     that.blogposts = posts;
                 });
             }
@@ -107,7 +105,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
 
         window.updateComponents = function(data) {
-            console.log('data recieved >>> ', data);
             $scope.$apply(function() {
                 $scope.currentpage.components = data;
                 for (var i = 0; i < $scope.currentpage.components.length; i++) {
@@ -121,7 +118,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         window.triggerEditMode = function() {
-            console.log('trigger edit');
             var body = document.getElementsByTagName('body')[0];
             var hasClass = body.classList.contains('editing');
             if(hasClass === false) { body.className+=' editing'; }
@@ -134,7 +130,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         window.triggerEditModeOff = function() {
-            console.log('trigger edit off');
             var body = document.getElementsByTagName('body')[0];
             body.className = body.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
 
@@ -193,19 +188,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     }
         // };
 
-       
         window.activateAloha = function() {
-            console.log('aloha');
             aloha.dom.query('.editable', document).forEach(aloha);
         };
 
         window.deactivateAloha = function() {
-           console.log('mahalo');
            aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
 
         window.updateWebsite = function(data) {
-            console.log('data recieved >>> ', data);
             that.account.website = data;
             // $scope.$apply(function() {
             //     $scope.primaryColor = data.settings.primary_color;
@@ -221,12 +212,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.createPost = function(postData) {
 
 
-//            var data = {
-//                _id: $scope.website._id,
-//                accountId: $scope.website.accountId,
-//                settings: $scope.website.settings
-//            };
-            console.log(postData);
+            //            var data = {
+            //                _id: $scope.website._id,
+            //                accountId: $scope.website.accountId,
+            //                settings: $scope.website.settings
+            //            };
             PostService.createPost($scope.currentpage._id,postData, function(data) {
             });
         };
