@@ -336,7 +336,7 @@ var dao = {
 
                                         updateContactFromContactObj(contact, googleContact);
 
-                                        contactDao.saveOrUpdate(contact, function(err, value) {
+                                        contactDao.saveOrUpdateContact(contact, function(err, value) {
                                             if (err) {
                                                 self.log.error("An error occurred updating contact during Google import", err);
                                             }

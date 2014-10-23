@@ -56,7 +56,7 @@ var dao = {
             self.log.debug('Setting contact stripeId to ' + contact.get('stripeId'));
             var p1 = $.Deferred(), p2 = $.Deferred();
             var savedCustomer = customer;
-            contactDao.saveOrUpdate(contact, function(err, value){
+            contactDao.saveOrUpdateContact(contact, function(err, value){
                 if (err) {
                     fn(err, value);
                     fn = null;

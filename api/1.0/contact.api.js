@@ -104,7 +104,7 @@ _.extend(api.prototype, baseApi.prototype, {
             contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
         }
 
-        contactDao.saveOrUpdate(contact, function (err, value) {
+        contactDao.saveOrUpdateContact(contact, function (err, value) {
             if (!err) {
                 self.sendResult(resp, value);
             } else {
@@ -287,7 +287,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var contact = new $$.m.Contact(req.body);
                 contact.set('accountId', value.id());
                 contact.set('type', 'ld');
-                contactDao.saveOrUpdate(contact, function(err, savedContact){
+                contactDao.saveOrUpdateContact(contact, function(err, savedContact){
                     if(err) {
                         self.log.error('Error signing up: ' + err);
                         req.flash("error", 'There was a problem signing up.  Please try again later.');
@@ -471,7 +471,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             }
 
                             //Update the Contact Data into DataBase
-                            contactDao.saveOrUpdate(value, function (err, vl) {
+                            contactDao.saveOrUpdateContact(value, function (err, vl) {
                                 if (!err) {
                                     self.sendResult(resp, vl);
                                 } else {
