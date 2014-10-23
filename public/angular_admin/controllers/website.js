@@ -576,6 +576,70 @@ define([
                 $scope.updateIframeComponents();
                 $scope.updateThemeSettings();
             };
+
+            //an array of component types and icons for the add component modal
+            $scope.componentTypes = {
+                'blog': {
+                    title: 'Blog',
+                    icon: 'custom blog'
+                },
+                'masthead' : {
+                    title: 'Masthead',
+                    icon: 'custom masthead'
+                },
+                'feature-list' : {
+                    title: 'Feature List',
+                    icon: 'fa fa-list-ul'
+                },
+                'contact-us' : {
+                    title: 'Contact Us',
+                    icon: 'fa fa-map-marker'
+                },
+                'coming-soon' : {
+                    title: 'Coming Soon',
+                    icon: 'fa fa-clock-o'
+                },
+                'feature-block' : {
+                    title: 'Feature block',
+                    icon: 'custom feature-block'
+                },
+                'footer' : {
+                    title: 'Footer',
+                    icon: 'custom footer'
+                },
+                'image-gallery' : {
+                    title: 'Image Gallery',
+                    icon: 'fa fa-image'
+                },
+                'image-slider' : {
+                    title: 'Image Slider',
+                    icon: 'custom image-slider'
+                },
+                'image-text' : {
+                    title: 'Image Text',
+                    icon: 'custom image-text'
+                },
+                'logo-list' : {
+                    title: 'Logo List',
+                    icon: 'custom logo-list'
+                },
+                'meet-team' : {
+                    title: 'Meet Team',
+                    icon: 'fa fa-users'
+                },
+                'sign-up' : {
+                    title: 'Sign Up form',
+                    icon: 'custom sign-up-form'
+                },
+                'single-post' : {
+                    title: 'Single Post',
+                    icon: 'custom single-post'
+                },
+                'social' : {
+                    title: 'Social Links',
+                    icon: 'custom social-links'
+                }
+            };
         }
     ]);
 });
