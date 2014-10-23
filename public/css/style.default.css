@@ -19708,6 +19708,68 @@ div.error label.error:before {
 .website .componentOption .thumbnail:hover {
   background: #dddddd;
 }
+.website #add-component-modal .modal-body {
+  height: 300px;
+  overflow-y: auto;
+}
+.website .component-icon i.custom {
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/component-icons-sprite.png') no-repeat;
+  margin: 0 auto;
+  display: block;
+}
+.website .component-icon i.masthead {
+  background-position: -87px 22px;
+  width: 70px;
+  height: 78px;
+}
+.website .component-icon i.blog {
+  background-position: -28px 22px;
+  width: 55px;
+  height: 78px;
+}
+.website .component-icon i.feature-block {
+  background-position: -155px 22px;
+  width: 70px;
+  height: 78px;
+}
+.website .component-icon i.footer {
+  background-position: -223px 22px;
+  width: 68px;
+  height: 78px;
+}
+.website .component-icon i.image-slider {
+  background-position: -223px 22px;
+  width: 68px;
+  height: 78px;
+}
+.website .component-icon i.image-text {
+  background-position: 20px -46px;
+  width: 88px;
+  height: 58px;
+  margin: 10px 0;
+}
+.website .component-icon i.logo-list {
+  background-position: -212px -49px;
+  width: 93px;
+  height: 58px;
+  margin: 10px 0;
+}
+.website .component-icon i.sign-up-form {
+  background-position: -69px -46px;
+  width: 97px;
+  height: 60px;
+  margin: 10px 0;
+}
+.website .component-icon i.single-post {
+  background-position: -165px -48px;
+  width: 50px;
+  height: 78px;
+}
+.website .component-icon i.social-links {
+  background-position: -306px -48px;
+  width: 60px;
+  height: 78px;
+}
 #nestable-menu {
   z-index: 999;
   width: 100%;
