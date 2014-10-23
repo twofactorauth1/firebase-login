@@ -253,7 +253,7 @@ module.exports = {
             ]
         });
 
-        contactDao.saveOrUpdate(_c, function(err, value){
+        contactDao.saveOrUpdateContact(_c, function(err, value){
             if(err) {
                 throw Error("Failed to create test contact: " + err.toString());
             }

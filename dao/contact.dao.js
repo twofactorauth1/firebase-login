@@ -673,12 +673,14 @@ var dao = {
     },
 
     //Wrapper to create contactActivity
-    saveOrUpdate: function(contact, fn) {
+    saveOrUpdateContact: function(contact, fn) {
         var self = this;
-        self.log.debug('>> saveOrUpdate');
+        self.log.debug('>> saveOrUpdateContact');
         if ((contact.id() === null || contact.id() === 0 || contact.id() == "")) {
+
             //need to create the contactActivity
-            baseDao.saveOrUpdate(contact, function(err, savedContact){
+            self.saveOrUpdate(contact, function(err, savedContact){
+
                 if(err) {
                     self.log.error('Error creating contact: ' + err);
                     fn(err, null);
@@ -698,16 +700,18 @@ var dao = {
                             self.log.debug('created contactActivity for new contact with id: ' + savedContact.id());
                         }
                     });
-                    self.log.debug('<< saveOrUpdate');
+                    self.log.debug('<< saveOrUpdateContact');
                     fn(null, savedContact);
                 }
             });
         } else {
             // just an update
-            baseDao.saveOrUpdate(contact, fn);
+            self.saveOrUpdate(contact, fn);
         }
 
     }
+
+
 };
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();

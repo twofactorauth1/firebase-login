@@ -238,7 +238,7 @@ var dao = {
 
                                         updateContactFromFacebookFriend(contact, facebookFriend);
 
-                                        contactDao.saveOrUpdate(contact, function (err, value) {
+                                        contactDao.saveOrUpdateContact(contact, function (err, value) {
                                             if (err) {
                                                 self.log.error("An error occurred updating contact during Facebook import", err);
                                                 ;

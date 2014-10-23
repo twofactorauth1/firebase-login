@@ -93,14 +93,14 @@ exports.payment_dao_test = {
             ]
         });
 
-        contactDao.saveOrUpdate(c1, function(err, contact){
+        contactDao.saveOrUpdateContact(c1, function(err, contact){
             if(err) {
                 test.ok(false);
                 test.done();
             } else {
                 _log.debug('saved 1.');
                 contactsToDelete.push(contact);
-                contactDao.saveOrUpdate(c2, function(err, contact){
+                contactDao.saveOrUpdateContact(c2, function(err, contact){
                     if(err) {
                         test.ok(false);
                         test.done();
