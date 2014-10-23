@@ -640,6 +640,11 @@ define([
                     icon: 'custom social-links'
                 }
             };
+
+            $scope.selectComponent = function() {
+                console.log('selectComponent');
+            };
+
         }
     ]);
 });

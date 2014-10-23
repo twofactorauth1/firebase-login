@@ -2,11 +2,14 @@
   position: fixed;
 }
 #headerbar {
-  left: 240px;
+  left: 0px;
   position: fixed;
   z-index: 200;
   top: 0;
   right: 0;
+}
+.leftpanel-show #headerbar {
+  left: 240px;
 }
 body.leftpanel-collapsed #headerbar {
   left: 52px;
