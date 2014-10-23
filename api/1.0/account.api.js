@@ -61,8 +61,11 @@ _.extend(api.prototype, baseApi.prototype, {
                     return resp.send({});
                 } else {
                     //TODO: add security - VIEW_ACCOUNT
+
                     self.log.debug('<< getCurrentAccount');
-                    return resp.send(value.toJSON("public"));
+                    return self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_ACCOUNT, resp, value.toJSON('public'));
+
+                    //return resp.send(value.toJSON("public"));
                 }
             } else {
                 return self.wrapError(resp, 500, null, err, value);

@@ -23,6 +23,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
+        app.get(this.url('security'), this.isAuthApi, this.initializeSecurity.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.post(this.url(''), this.createUser.bind(this));
         app.put(this.url(':id'), this.isAuthApi, this.updateUser.bind(this));
@@ -44,6 +45,14 @@ _.extend(api.prototype, baseApi.prototype, {
            } else {
                return self.wrapError(resp, 500, null, err, value);
            }
+        });
+    },
+
+    initializeSecurity: function(req, res) {
+        var self = this;
+        var user = req.user;
+        self.sm.initializeUserPrivileges(user.id(), user.get('username'), user.get('accounts')[0].permissions, self.accountId(req), function(err, result){
+            res.send(result);
         });
     },
 

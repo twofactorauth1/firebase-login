@@ -39,40 +39,31 @@ var securityManager = {
     initializeUserPrivileges: function(userId, userName, rolesAry, accountId, cb) {
         var self = this;
         log.debug('>> initializeUserPrivileges');
-        self.getPrivilegesByUserId(userId, function(err, value){
+        self.getPrivilegesByUserAndAccount(userId, accountId, function(err, value){
             if(err) {
                 log.error('Exception while getting privileges: ' + err);
                 cb(err, null);
-            } else {
-                var priv = null;
-                if(value === null) {
-                    priv = new $$.m.Privilege({
-                        'userId': userId,
-                        'userName': userName,
-                        'roles': rolesAry,
-                        'accountIds': [accountId],
-                        'privs': defaultPrivileges
-                    });
-                } else {
-                    //add accountId
-                    var accountIdAry = priv.get('accountIds');
-                    if(accountIdAry.indexOf(accountId) != -1) {
-                        accountIdAry.push(accountId);
-                    } else {
-                        //already have privilege record for user and account
-                        log.debug('<< initializeUserPrivileges');
-                        cb(null, priv);
-                    }
-                }
-                dao.saveOrUpdate(priv, function(err, updatedPrivilege){
+            } else if(value === null){
+                var priv = new $$.m.Privilege({
+                    'userId': userId,
+                    'userName': userName,
+                    'roles': rolesAry,
+                    'accountId': accountId,
+                    'privs': defaultPrivileges
+                });
+                dao.saveOrUpdate(priv, function(err, privilege){
                     if(err) {
                         log.error('Exception while saving privilege: ' + err);
                         cb(err, null);
                     } else {
                         log.debug('<< initializeUserPrivileges');
-                        cb(null, updatedPrivilege);
+                        cb(null, privilege);
                     }
                 });
+
+            } else {
+                log.warn('attempting to reinitialize a privilege for user [' + userId + '] and account [' + accountId + ']');
+                cb(null, value);
             }
         });
     },
@@ -80,19 +71,48 @@ var securityManager = {
     getPrivilegesByUserId: function(userId, cb) {
         var self = this;
         log.debug('>> getPrivilegesByUserId');
-        dao.findOne({'userId': userId}, $$.m.Privilege, function(err, priv){
+        dao.findMany({'userId': userId}, $$.m.Privilege, function(err, privList){
             if(err) {
                 log.error('Exception while finding privilege by userId[' + userId + ']: ' + err );
                 cb(err, null);
             } else {
                 log.debug('<< getPrivilegesByUserId');
-                cb(null, priv);
+                cb(null, privList);
             }
         });
     },
 
-    hasPermission: function(userId, accountId, priv) {
+    getPrivilegesByUserAndAccount: function(userId, accountId, cb) {
         var self = this;
+        log.debug('>> getPrivilegesByUserAndAccount');
+        dao.findOne({'userId': userId, accountId: accountId}, $$.m.Privilege, function(err, privilege){
+            if(err) {
+                log.error('Exception while finding privilege by userId[' + userId + '] and account[' + accountId + ']: ' + err );
+                cb(err, null);
+            } else {
+                log.debug('<< getPrivilegesByUserAndAccount');
+                cb(null, privilege);
+            }
+        });
+    },
+
+    hasPermission: function(userId, accountId, priv, cb) {
+        var self = this;
+        log.debug('>> hasPermission');
+        self.getPrivilegesByUserAndAccount(userId, accountId, function(err, privilege){
+            if(err) {
+                log.error('Exception while finding privilege by userId[' + userId + '] and account[' + accountId + ']: ' + err );
+                cb(null, false);
+            } else {
+                if(privilege != null && _.contains(privilege.get('privs'), priv)) {
+                    log.debug('<< hasPermission(true)');
+                    cb(null, true);
+                } else {
+                    log.debug('<< hasPermission(false)');
+                    cb(null, false);
+                }
+            }
+        });
 
 
     }

@@ -5,7 +5,11 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-var securityManager = require('../security/securitymanager');
+//var securityManager = require('../security/securitymanager');
+
+var securityManager = require('../security/sm');
+var securityConstants = require('../security/utils/security.constants');
+
 
 
 var apiBase = function(options) {
@@ -17,6 +21,7 @@ _.extend(apiBase.prototype, {
     log: null,
 
     sm: securityManager,
+    sc: securityConstants,
 
     init: function(options) {
         options = options || {};
@@ -210,7 +215,22 @@ _.extend(apiBase.prototype, {
             result.pingDao = "No DAO Defined";
             resp.send(result);
         }
+    },
+
+    checkPermission: function(req, priv, cb) {
+        this.sm.hasPermission(this.userId(req), this.accountId(req), priv, cb);
+    },
+
+    checkPermissionAndSendResponse: function(req, priv, res, successObj) {
+        this.checkPermission(req, priv, function(err, isAllowed){
+            if(isAllowed === true) {
+                res.send(successObj);
+            } else {
+                res.send(403, {code:403, status:'fail', message:'Unauthorized', detail:'You are not authorized to complete this action.'});
+            }
+        });
     }
+
 });
 
 

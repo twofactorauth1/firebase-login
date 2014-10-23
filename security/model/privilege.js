@@ -6,17 +6,20 @@
  */
 
 require('../../models/base.model.js');
-
+/**
+ * There is one privilege record per user per account.
+ *
+ */
 var privilege = $$.m.ModelBase.extend({
 
-    //userId, userName, roleAry, accountAry, privAry
+    //userId, userName, roleAry, accountId, privAry
     defaults: function() {
         return {
             _id: null,
             userId: null,
             userName: null,
             roles:[],
-            accountIds: [],
+            accountId: 0,
             privs: [],
             created: {
                 date: new Date(),
@@ -39,7 +42,8 @@ var privilege = $$.m.ModelBase.extend({
     db: {
         storage: "mongo",
         table: "privileges",
-        idStrategy: "uuid"
+        idStrategy: "uuid",
+        cache: true
     }
 });
 
