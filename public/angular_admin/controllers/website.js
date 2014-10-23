@@ -421,6 +421,7 @@ define([
             };
 
             $scope.deleteComponent = function(componentId) {
+                console.log('deleting component');
                 var pageId = $scope.currentPage._id;
                 var deletedType;
                 WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
@@ -644,6 +645,11 @@ define([
                     title: 'Meet Team',
                     type: 'meet-team',
                     icon: 'fa fa-users'
+                },
+                {
+                    title: 'Navigation',
+                    type: 'navigation',
+                    icon: 'fa fa-location-arrow'
                 },
                 {
                     title: 'Sign Up form',

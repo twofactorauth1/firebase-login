@@ -18,7 +18,7 @@
         <div class="col-sm-4" ng-repeat="blogpost in layout.teaserposts|limitTo: 3">
             <a class="single-blog" data-ng-href="/blog/{{blogpost['post_url']}}">
 
-                <div class="featured-image" ng-show="blogpost.featured_image">
+                <div class="featured-image" ng-if="blogpost.featured_image">
                     <div class="editable" data-class="featimage">
                         <img ng-src="{{blogpost.featured_image}}" />
                     </div>

@@ -19743,10 +19743,10 @@ div.error label.error:before {
   height: 78px;
 }
 .website .component-icon i.image-text {
-  background-position: 20px -46px;
-  width: 88px;
+  background-position: 0px -46px;
+  width: 65px;
   height: 58px;
-  margin: 10px 0;
+  margin: 10px auto;
 }
 .website .component-icon i.logo-list {
   background-position: -212px -49px;
