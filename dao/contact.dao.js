@@ -8,6 +8,7 @@
 var baseDao = require('./base.dao');
 var accountDao = require('./account.dao');
 var userDao = require('./user.dao');
+var contactActivityManager = require('../contactactivities/contactactivity_manager');
 requirejs('constants/constants');
 require('../models/contact');
 var async = require('async');
@@ -29,7 +30,7 @@ var dao = {
         //this.findManyWithFields(query, fields, fn);
     //    this.findManyWithLimit(query, limit, $$.m.Contact, fn);
 
-
+        //TODO: this can be refactored into a parameter to this method.
         accountDao.getAccountByID(accountId, function (err, res) {
 
             var sort = res.get('settings')
@@ -669,6 +670,43 @@ var dao = {
                 });
             }
         });
+    },
+
+    //Wrapper to create contactActivity
+    saveOrUpdate: function(contact, fn) {
+        var self = this;
+        self.log.debug('>> saveOrUpdate');
+        if ((contact.id() === null || contact.id() === 0 || contact.id() == "")) {
+            //need to create the contactActivity
+            baseDao.saveOrUpdate(contact, function(err, savedContact){
+                if(err) {
+                    self.log.error('Error creating contact: ' + err);
+                    fn(err, null);
+                } else {
+                    var activity = new $$.m.ContactActivity({
+                        accountId: savedContact.get('accountId'),
+                        contactId: savedContact.id(),
+                        activityType: $$.m.ContactActivity.types.ACCOUNT_CREATED,
+                        note: "Contact created.",
+                        start:new Date() //datestamp
+
+                    });
+                    contactActivityManager.createActivity(activity, function(err, value){
+                        if(err) {
+                            self.log.error('Error creating contactActivity for new contact with id: ' + savedContact.id());
+                        } else {
+                            self.log.debug('created contactActivity for new contact with id: ' + savedContact.id());
+                        }
+                    });
+                    self.log.debug('<< saveOrUpdate');
+                    fn(null, savedContact);
+                }
+            });
+        } else {
+            // just an update
+            baseDao.saveOrUpdate(contact, fn);
+        }
+
     }
 };
 

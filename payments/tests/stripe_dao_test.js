@@ -16,7 +16,10 @@ var _log = $$.g.getLogger("stripe.dao.test");
 var testContext = {};
 testContext.plans = [];
 
-var testAccessToken = 'sk_test_4NTU0RVH2SV3VumrAW1uZQYR';
+//var testAccessToken = 'sk_test_4NTU0RVH2SV3VumrAW1uZQYR';
+var stripeConfig = require('../../configs/stripe.config');
+var testAccessToken = stripeConfig.STRIPE_TEST_SECRET_KEY;
+
 var initialized = false;
 
 exports.stripe_dao_test = {
@@ -765,6 +768,8 @@ exports.stripe_dao_test = {
         });
     },
 
+    /*
+     * Comment out these tests for now.  We need to create an access token for testing.
     testCreateToken: function(test) {
 
         stripeDao.createToken(testContext.cardId, testContext.customerId, testAccessToken, function(err, token){
@@ -792,6 +797,7 @@ exports.stripe_dao_test = {
             }
         });
     },
+    */
 
     testListEvents: function(test) {
         stripeDao.listEvents(null, null, null, null, null, null, function(err, events){
