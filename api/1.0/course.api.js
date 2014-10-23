@@ -68,7 +68,6 @@ _.extend(api.prototype, baseApi.prototype, {
         courseDao.getCourseById(courseId, self.userId(req), function (err, course) {
             var accountId = parseInt(self.accountId(req));
             //TODO: Add Security - VIEW_COURSE
-            //TODO: ADD accountId to course
             self.log.debug('<< getCourseById');
             self.sendResultOrError(resp, err, course, "Error getting course");
         });
