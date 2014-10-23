@@ -16,5 +16,7 @@ module.exports = {
     STRIPE_SECRET_KEY: stripeSecretKey,
     STRIPE_PUBLISHABLE_KEY: stripePublishableKey,
     STRIPE_CLIENT_ID: stripeClientId,
-    CALLBACK_URL_LOGIN: appConfig.server_url + "/stripe/connect/callback"
+    CALLBACK_URL_LOGIN: appConfig.server_url + "/stripe/connect/callback",
+    //adding test key just to ensure its there if we need it.
+    STRIPE_TEST_SECRET_KEY: 'sk_test_iXKiJJ80BnXlAXnOqCX4FxjQ'
 }
