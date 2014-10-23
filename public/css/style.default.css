@@ -17378,6 +17378,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .rightpanel .pane-settings {
   font-size: 13px;
 }
+.rightpanel .bootstrap-switch {
+  float: right;
+}
 #post-url {
   text-transform: lowercase;
 }

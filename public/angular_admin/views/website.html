@@ -152,6 +152,7 @@
                 <div class="rightpanelinner">
                     <h5 class="sidebartitle">Component</h5>
                     <hr/>
+                    <p>Type: {{componentEditing.type}}</p>
                     <accordion close-others="true">
 
                         <accordion-group is-open="status.open">
@@ -159,7 +160,33 @@
                                 Basic <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
                             </accordion-heading>
                             <div class="form-group">
-                                <label for="colorpicker">Show:</label>
+                                <label for="colorpicker">Text Color:</label>
+                                <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                            <div class="form-group">
+                                <label for="colorpicker">Background Color:</label>
+                                <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false , allowEmpty:true,}" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
+                                <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
+                            </div>
+                            <div class="form-group">
+                                <label for="colorpicker">Parallax:</label>
+                                <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                            </div>
+                            <div class="form-group">
+                                <label for="colorpicker">Button:</label>
+                                <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                            </div>
+                        </accordion-group>
+                        <accordion-group is-open="status2.open">
+                            <accordion-heading>
+                                Advanced <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+                            </accordion-heading>
+                            <div class="form-group">
+                                <label for="colorpicker">Visibility:</label>
                                 <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
                             </div>
                             <div class="form-group">
@@ -170,32 +197,6 @@
                                 <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
                                 <input class="form-control input-lg" type="text" ng-model="componentEditing.version" ng-change="saveComponent()">
                             </div>
-                            <div class="form-group">
-                                <label for="colorpicker">Text Color:</label>
-                                <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
-                            </div>
-                            <div class="form-group">
-                                <label for="colorpicker">Background Color:</label>
-                                <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false , allowEmpty:true,}" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
-                            </div>
-                            <div class="form-group">
-                                <label for="colorpicker">Show Button:</label>
-                                <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="form-group">
-                                <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
-                                <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()">
-                            </div>
-                            <div class="form-group">
-                                <label for="colorpicker">Show Background Image as Parallax:</label>
-                                <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                            </div>
-                        </accordion-group>
-                        <accordion-group is-open="status2.open">
-                            <accordion-heading>
-                                Advanced <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
-                            </accordion-heading>
                             <div class="well">
                                 <p>Danger Zone</p>
                                 <button class="btn btn-danger btn-block" confirm-click2 data-placement="top" confirm="deleteComponent(componentEditing._id)">

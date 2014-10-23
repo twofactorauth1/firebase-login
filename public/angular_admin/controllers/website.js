@@ -23,15 +23,29 @@ define([
         'ngProgress',
         function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress) {
             ngProgress.start();
-            $scope.primaryFontStack = '';
-            $scope.secondaryFontStack = '';
+
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
 
+            $scope.primaryFontStack = '';
+            $scope.secondaryFontStack = '';
             $scope.iframeData = {};
-
             $scope.allPages = [];
+
+            $scope.components = [];
+
+            $scope.isEditing = false;
+
+            $scope.isMobile = false;
+
+            $scope.components.sort(function(a, b) {
+                return a.i > b.i;
+            });
+
+            $scope.status = {
+                isopen: false
+            };
 
             $scope.spectrum = {
                 options: {
@@ -63,7 +77,6 @@ define([
                 $scope.user = user;
                 that.user = user;
             });
-
 
             window.getUpdatediFrameRoute = function(data) {
                 // console.log('getUpdatediFrameRoute', data);
@@ -193,20 +206,6 @@ define([
                     });
                 });
             });
-
-            $scope.components = [];
-
-            $scope.isEditing = false;
-
-            $scope.isMobile = false;
-
-            $scope.components.sort(function(a, b) {
-                return a.i > b.i;
-            });
-
-            $scope.status = {
-                isopen: false
-            };
 
             $scope.toggled = function(open) {
                 // console.log('Dropdown is now: ', open);
