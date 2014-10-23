@@ -401,9 +401,9 @@ define([
                 });
             };
 
-            $scope.addComponent = function(component) {
+            $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
-                WebsiteService.addNewComponent(pageId, component.title, component.type, function(data) {
+                WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, function(data) {
                     if (data.components) {
                         var newComponent = data.components[data.components.length - 1];
                         $scope.currentPage.components.splice(1, 0, newComponent);
@@ -458,6 +458,12 @@ define([
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: componentId
                     });
+                    $scope.componentEditing.icon = _.findWhere($scope.componentTypes, {
+                        type: $scope.componentEditing.type
+                    }).icon;
+                    $scope.componentEditing.title = _.findWhere($scope.componentTypes, {
+                        type: $scope.componentEditing.type
+                    }).title;
                 });
                 //open right sidebar and component tab
                 document.body.className += ' leftpanel-collapsed rightmenu-open';
@@ -578,71 +584,87 @@ define([
             };
 
             //an array of component types and icons for the add component modal
-            $scope.componentTypes = {
-                'blog': {
+            $scope.componentTypes = [
+                {
                     title: 'Blog',
+                    type: 'blog',
                     icon: 'custom blog'
                 },
-                'masthead' : {
+                {
                     title: 'Masthead',
+                    type: 'masthead',
                     icon: 'custom masthead'
                 },
-                'feature-list' : {
+                {
                     title: 'Feature List',
+                    type: 'feature-list',
                     icon: 'fa fa-list-ul'
                 },
-                'contact-us' : {
+                {
                     title: 'Contact Us',
+                    type: 'contact-us',
                     icon: 'fa fa-map-marker'
                 },
-                'coming-soon' : {
+                {
                     title: 'Coming Soon',
+                    type: 'coming-soon',
                     icon: 'fa fa-clock-o'
                 },
-                'feature-block' : {
+                {
                     title: 'Feature block',
+                    type: 'feature-block',
                     icon: 'custom feature-block'
                 },
-                'footer' : {
+                {
                     title: 'Footer',
+                    type: 'footer',
                     icon: 'custom footer'
                 },
-                'image-gallery' : {
+                {
                     title: 'Image Gallery',
+                    type: 'image-gallery',
                     icon: 'fa fa-image'
                 },
-                'image-slider' : {
+                {
                     title: 'Image Slider',
+                    type: 'image-slider' ,
                     icon: 'custom image-slider'
                 },
-                'image-text' : {
+                {
                     title: 'Image Text',
+                    type: 'image-text',
                     icon: 'custom image-text'
                 },
-                'logo-list' : {
+                {
                     title: 'Logo List',
+                    type: 'logo-list',
                     icon: 'custom logo-list'
                 },
-                'meet-team' : {
+                {
                     title: 'Meet Team',
+                    type: 'meet-team',
                     icon: 'fa fa-users'
                 },
-                'sign-up' : {
+                {
                     title: 'Sign Up form',
+                    type: 'sign-up',
                     icon: 'custom sign-up-form'
                 },
-                'single-post' : {
+                {
                     title: 'Single Post',
+                    type: 'single-post',
                     icon: 'custom single-post'
                 },
-                'social' : {
+                {
                     title: 'Social Links',
+                    type: 'social',
                     icon: 'custom social-links'
                 }
-            };
+            ];
 
-            $scope.selectComponent = function() {
-                console.log('selectComponent');
+            $scope.selectComponent = function(type) {
+                console.log('selectComponent', type);
+                $scope.selectedComponent = type;
             };
 
         }

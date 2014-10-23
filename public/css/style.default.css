@@ -20012,7 +20012,8 @@ input[type='file'] {
 #change-theme-modal .thumbnail img {
   max-width: 150px;
 }
-.check-theme {
+.check-theme,
+.check-component {
   position: absolute;
   top: -12px;
   right: -2px;
@@ -20049,6 +20050,21 @@ input[type='file'] {
   border: 1px solid #fff!important;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3) !important;
   color: #ffffff!important;
+}
+.componentOption .thumbnail {
+  border: 3px solid #CFCFCF;
+}
+.componentOption .caption {
+  padding: 5px;
+}
+.componentOption.selected .thumbnail {
+  border: 3px solid #4bb0cb;
+}
+.componentOption.success .thumbnail {
+  border: 3px solid green;
+}
+.componentOption.success .check-component {
+  display: block!important;
 }
 .theme .thumbnail {
   border: 3px solid #CFCFCF;

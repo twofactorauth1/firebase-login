@@ -402,7 +402,7 @@ input[type='file'] {
   max-width: 150px;
 }
 
-.check-theme {
+.check-theme, .check-component {
   position: absolute;
   top: -12px;
   right: -2px;
@@ -449,23 +449,50 @@ input[type='file'] {
   }
 }
 
+.componentOption {
+  .thumbnail {
+    border: 3px solid #CFCFCF;
+  }
+  .caption {
+    padding: 5px;
+  }
+
+  &.selected {
+    .thumbnail {
+      border:3px solid #4bb0cb;
+    }
+  }
+
+  &.success {
+    .thumbnail {
+      border:3px solid green;
+    }
+    .check-component {
+      display: block!important;
+    }
+  }
+
+}
+
+
 .theme {
   .thumbnail {
     border: 3px solid #CFCFCF;
   }
-}
 
-.theme.selected {
-  .thumbnail {
-    border:3px solid #4bb0cb;
+  &.selected {
+    .thumbnail {
+      border:3px solid #4bb0cb;
+    }
   }
-}
 
-.theme.success {
-  .thumbnail {
-    border:3px solid green;
+  &.success {
+    .thumbnail {
+      border:3px solid green;
+    }
+    .check-theme {
+      display: block!important;
+    }
   }
-  .check-theme {
-    display: block!important;
-  }
+
 }
