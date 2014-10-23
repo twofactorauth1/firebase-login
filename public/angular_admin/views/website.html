@@ -204,9 +204,9 @@
                             </div>
                             <div class="well">
                                 <p>Danger Zone</p>
-                                <button class="btn btn-danger btn-block" confirm-click2 data-placement="top" confirm="deleteComponent(componentEditing._id)">
-                                    <i class="fa fa-trash-o"></i> Delete
-                                </button>
+    
+                                <!-- <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm="deleteComponent(componentEditing._id)" data-original-title="" title=""><i class="fa fa-trash"></i> Delete Component</button> -->
+                                <button class="btn btn-block btn-danger" ng-click="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete Component</button>
                             </div>
                         </accordion-group>
                     </accordion>
@@ -243,7 +243,7 @@
                         </li>
                     </ul>
                     <div class="row">
-                        <div class="col-sm-6 col-md-4 theme" ng-class="{success: theme.name == currentTheme.name, selected: theme.name == selectedTheme.name}" ng-repeat="theme in themes" ng-click="changeSelectedTheme(theme)">
+                        <div class="col-sm-6 col-md-4 theme" ng-class="{selected: theme.name == currentTheme.name, success: theme.name == selectedTheme.name}" ng-repeat="theme in themes" ng-click="changeSelectedTheme(theme)">
                             <div class="thumbnail" data-themeid="">
                                 <div class="check-theme" style="display:none"><i class="fa fa-check-circle"></i>
                                 </div>
@@ -257,7 +257,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-primary change-theme" ng-click="changeTheme()">Change Theme</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-primary change-theme" ng-click="changeTheme()" ng-disabled="!selectedTheme">Change Theme <span ng-if="selectedTheme.name"> to {{selectedTheme.name}}</span></button>
                 </div>
             </div>
         </div>
