@@ -1,3 +1,4 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div style="">
   <div class="pageheader row">
     <div class="col-xs-8">
@@ -228,22 +229,22 @@
                           <label>Address Line 2</label>
                           <input type="text" value="" class="form-control input-address2 input-address-field" ng-model="address.address2">
                         </div>
-                        
+
                         <div class="form-group">
                           <label>City</label>
                           <input type="text" value="" class="form-control input-city input-address-field" ng-model="address.city">
                         </div>
-                        
+
                         <div class="form-group">
                           <label>State</label>
                           <input type="text" value="" class="form-control input-state input-address-field" ng-model="address.state">
                         </div>
-                        
+
                         <div class="form-group">
                           <label>Country</label>
                           <input type="text" value="" class="form-control input-state input-address-field" ng-model="address.country">
                         </div>
-                        
+
                         <div class="form-group">
                           <label>Zip Code</label>
                           <input type="text" value="" validation-type="zip" indigeweb-validate-form-fields class="form-control input-zip input-address-field" ng-model="address.zip">
@@ -263,7 +264,7 @@
                         <label>
                           <input type="checkbox" class="chk-default-billing" ng-model="address.defaultBilling">Default Billing
                         </label>
-                      </div>                       
+                      </div>
                     </div>
                     <div ng-click="removeItem($index, customer.details[0].addresses)" style="float:right" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
