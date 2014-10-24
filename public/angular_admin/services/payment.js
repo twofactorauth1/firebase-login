@@ -94,5 +94,13 @@ define(['app', 'stripe'], function(app) {
         });
     };
 
+    this.deleteStripeSubscription = function(stripeId, subId, fn) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'subscriptions', subId].join('/');
+      $http.delete(apiUrl)
+        .success(function(data, status, headers, config) {
+          fn(data);
+        });
+    };
+
   });
 });

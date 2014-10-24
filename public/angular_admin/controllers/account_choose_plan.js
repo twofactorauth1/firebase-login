@@ -9,6 +9,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
 
     $scope.switchPlanFn = function (planId) {
       PaymentService.postCreateStripeSubscription($scope.user.stripeId, planId, function(subscription) {
+        $scope.cancelOldSubscriptionsFn();
         $state.go('account');
       });
     };
@@ -23,15 +24,19 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
 
       PaymentService.getStripeCardToken(cardInput, function(token) {
         if ($scope.user.stripeId) {
+          PaymentService.putCustomerCard($scope.user.stripeId, token, function (card) {});
           UserService.postAccountBilling($scope.user.stripeId, token, function(billing) {});
           PaymentService.postCreateStripeSubscription($scope.user.stripeId, $scope.selectedPlan, function(subscription) {
+            $scope.cancelOldSubscriptionsFn();
             $state.go('account');
           });
         } else {
           PaymentService.postStripeCustomer(token, function(stripeUser) {
             $scope.user.stripeId = stripeUser.id;
+            PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
             UserService.postAccountBilling(stripeUser.id, token, function(billing) {});
             PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
+              $scope.cancelOldSubscriptionsFn();
               $state.go('account');
             });
           });
@@ -40,11 +45,21 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     };
 
     $scope.cards = {};
+    $scope.subscriptions = {};
+
+    $scope.cancelOldSubscriptionsFn = function () {
+      $scope.subscriptions.data.forEach(function (value, index) {
+        PaymentService.deleteStripeSubscription(value.customer, value.id, function (subscription) {});
+      });
+    };
 
     $scope.$watch('user.stripeId', function (newValue, oldValue) {
       if (newValue) {
         PaymentService.getCustomerCards(newValue, function (cards) {
           $scope.cards = cards;
+        });
+        PaymentService.getListStripeSubscriptions(newValue, function (subscriptions) {
+          $scope.subscriptions = subscriptions;
         });
       }
     });
