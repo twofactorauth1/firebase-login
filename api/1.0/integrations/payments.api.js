@@ -508,7 +508,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createCard');
         var accessToken = self._getAccessToken(req);
         var customerId = req.params.id;
-        var cardToken = req.body.cardToken;
+        var cardToken = req.params.cardToken;
         if(!cardToken || cardToken.length < 1) {
             return self.wrapError(resp, 400, null, "Invalid cardToken parameter.");
         }
