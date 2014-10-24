@@ -25,12 +25,14 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
               UserService.postAccountBilling(scope.user.stripeId, token, function(billing) {
                 scope.updateFn(billing);
               });
+              PaymentService.putCustomerCard(scope.user.stripeId, token, function (card) {});
             } else {
               PaymentService.postStripeCustomer(token, function(stripeUser) {
                 scope.user.stripeId = stripeUser.id;
                 UserService.postAccountBilling(stripeUser.id, token, function(billing) {
                   scope.updateFn(billing);
                 });
+                PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
               });
             }
           });

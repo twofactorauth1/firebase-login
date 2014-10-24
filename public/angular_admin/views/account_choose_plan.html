@@ -68,7 +68,8 @@
                             </table>
                         </div>
                         <div class="panel-footer">
-                            <a class="btn btn-success btn-lg btn-block" role="button" ng-click="selectedPlan = 'monthly_access'" data-target="#payment-info" data-toggle="modal">Select</a>
+                            <a class="btn btn-success btn-lg btn-block" role="button" ng-click="selectedPlan = 'monthly_access'" data-target="#payment-info" data-toggle="modal"  ng-hide="user.stripeId">Select</a>
+                            <a class="btn btn-success btn-lg btn-block" role="button" ng-click="switchPlanFn('monthly_access')" ng-show="user.stripeId">Select</a>
                         </div>
                     </div>
                 </div>
@@ -120,7 +121,8 @@
                             </table>
                         </div>
                         <div class="panel-footer">
-                            <a class="btn btn-success btn-lg btn-block" role="button" ng-click="selectedPlan = 'yearly_access'" data-target="#payment-info" data-toggle="modal">Select</a> 
+                            <a class="btn btn-success btn-lg btn-block" role="button" ng-click="selectedPlan = 'yearly_access'" data-target="#payment-info" data-toggle="modal"  ng-hide="user.stripeId">Select</a>
+                            <a class="btn btn-success btn-lg btn-block" role="button" ng-click="switchPlanFn('yearly_access')" ng-show="user.stripeId">Select</a>
                         </div>
                     </div>
                 </div>

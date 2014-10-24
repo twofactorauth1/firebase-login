@@ -7,6 +7,12 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
       window.history.back();
     };
 
+    $scope.switchPlanFn = function (planId) {
+      PaymentService.postCreateStripeSubscription($scope.user.stripeId, planId, function(subscription) {
+        $state.go('account');
+      });
+    };
+
     $scope.buyPlanFn = function() {
       var cardInput = {
         number: $('#cc_number').val(),
@@ -32,6 +38,16 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         }
       });
     };
+
+    $scope.cards = {};
+
+    $scope.$watch('user.stripeId', function (newValue, oldValue) {
+      if (newValue) {
+        PaymentService.getCustomerCards(newValue, function (cards) {
+          $scope.cards = cards;
+        });
+      }
+    });
 
     //user API call for object population
     UserService.getUser(function(user) {
