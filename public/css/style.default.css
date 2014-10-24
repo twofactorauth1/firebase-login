@@ -19712,6 +19712,28 @@ div.error label.error:before {
   height: 300px;
   overflow-y: auto;
 }
+.website #add-component-modal .modal-footer {
+  margin-top: 0;
+}
+.website #change-theme-modal .modal-body {
+  max-height: 450px;
+  overflow-y: auto;
+}
+.website #change-theme-modal .modal-footer {
+  margin-top: 0;
+}
+.website #change-theme-modal .thumbnail {
+  padding: 15px;
+}
+.website #change-theme-modal .thumbnail:hover {
+  background-color: #54C8E8;
+  border-color: #4eb1ca;
+  cursor: pointer;
+}
+.website #change-theme-modal .thumbnail img {
+  max-width: 100%;
+  border: 1px solid #ccc;
+}
 .website .component-icon i.custom {
   background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/component-icons-sprite.png') no-repeat;
   margin: 0 auto;
@@ -20003,14 +20025,6 @@ input[type='file'] {
 }
 #contact-us .title {
   text-align: center;
-}
-#change-theme-modal .thumbnail:hover {
-  background-color: #54C8E8;
-  border-color: #4eb1ca;
-  cursor: pointer;
-}
-#change-theme-modal .thumbnail img {
-  max-width: 150px;
 }
 .check-theme,
 .check-component {
@@ -21955,8 +21969,14 @@ body.editing .no-component {
 body.editing .component-inner {
   padding: 2px;
 }
+body.editing .ui-sortable.active .fragment {
+  overflow: hidden;
+}
 body.editing .fragment {
   border: none;
+}
+body.editing .fragment.dragging {
+  z-index: 999999!important;
 }
 body.editing .fragment:hover .component-inner {
   border: 2px dashed #34495e;
@@ -21964,6 +21984,7 @@ body.editing .fragment:hover .component-inner {
 }
 body.editing .fragment:hover .componentActions {
   display: block;
+  line-height: 39px;
   visibility: visible;
 }
 body.editing .fragment:hover .add-component {

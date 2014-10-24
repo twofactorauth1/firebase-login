@@ -54,20 +54,22 @@ define([
                     showInitial: true,
                     showInput: true,
                     showButtons: false,
-                    hideAfterPaletteSelect: true,
+                    allowEmpty:true,
+                    hideAfterPaletteSelect: false,
                     showPaletteOnly: true,
                     togglePaletteOnly: true,
                     togglePaletteMoreText: 'more',
                     togglePaletteLessText: 'less',
                     palette: [
-                        ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
-                        ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
-                        ["#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc"],
-                        ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
-                        ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
-                        ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
-                        ["#900", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#0b5394", "#351c75", "#741b47"],
-                        ["#600", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"]
+                        ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
+                        ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
+                        ["#89729E", "#763568", "#8D608C", "#A87CA0", "#5B3256", "#BF55EC", "#8E44AD", "#9B59B6", "#BE90D4", "#4D8FAC"],
+                        ["#5D8CAE", "#22A7F0", "#19B5FE", "#59ABE3", "#48929B", "#317589", "#89C4F4", "#4B77BE", "#1F4788", "#003171"],
+                        ["#044F67", "#264348", "#7A942E", "#8DB255", "#5B8930", "#6B9362", "#407A52", "#006442", "#87D37C", "#26A65B"],
+                        ["#26C281", "#049372", "#2ABB9B", "#16A085", "#36D7B7", "#03A678", "#4DAF7C", "#D9B611", "#F3C13A", "#F7CA18"],
+                        ["#E2B13C", "#A17917", "#F5D76E", "#F4D03F", "#FFA400", "#E08A1E", "#FFB61E", "#FAA945", "#FFA631", "#FFB94E"],
+                        ["#E29C45", "#F9690E", "#CA6924", "#F5AB35", "#BFBFBF", "#F2F1EF", "#BDC3C7", "#ECF0F1", "#D2D7D3", "#757D75"],
+                        ["#EEEEEE", "#ABB7B7", "#6C7A89", "#95A5A6"]
                     ]
                 }
             };
@@ -208,7 +210,9 @@ define([
             });
 
             $scope.toggled = function(open) {
-                // console.log('Dropdown is now: ', open);
+
+                //console.log('Dropdown is now: ', open);
+
             };
 
             $scope.toggleDropdown = function($event) {
@@ -434,6 +438,7 @@ define([
                         }
                     }
                     $scope.updateIframeComponents();
+                    $scope.componentEditing = null;
                     toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
                 });
             };
@@ -466,6 +471,7 @@ define([
                         type: $scope.componentEditing.type
                     }).title;
                 });
+                $scope.bindEvents();
                 //open right sidebar and component tab
                 document.body.className += ' leftpanel-collapsed rightmenu-open';
                 var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');

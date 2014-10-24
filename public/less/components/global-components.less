@@ -136,8 +136,16 @@ body.editing {
   .component-inner {
     padding: 2px;
   }
+  .ui-sortable.active {
+    .fragment {
+      overflow: hidden;
+    }
+  }
   .fragment {
     border: none;
+    &.dragging {
+      z-index: 999999!important;
+    }
     &:hover {
       .component-inner {
         border: 2px dashed #34495e;
@@ -145,6 +153,7 @@ body.editing {
       }
       .componentActions {
         display: block;
+        line-height: 39px;
         visibility: visible;
       }
       .add-component {

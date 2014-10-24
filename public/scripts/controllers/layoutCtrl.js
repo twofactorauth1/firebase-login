@@ -66,13 +66,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
             } else {
-
                 if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
                      route = 'index';
                      route = route.replace('/', '');
                      that.pages = data[route];
+                     console.log('that.pages >>> ', that.pages);
                 } else {
-                    that.pages = data[$scope.$location.$$path];
+                    route = $scope.$location.$$path.replace('/page/', '');
+                    that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
 

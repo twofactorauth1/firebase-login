@@ -28,6 +28,32 @@
       height: 300px;
       overflow-y: auto;
     }
+    .modal-footer {
+      margin-top: 0;
+    }
+  }
+
+  #change-theme-modal {
+    .modal-body {
+      max-height: 450px;
+      overflow-y: auto;
+    }
+    .modal-footer {
+      margin-top: 0;
+    }
+    .thumbnail {
+      padding: 15px;
+      &:hover {
+        background-color: #54C8E8;
+        border-color: #4eb1ca;
+        cursor: pointer;
+      }
+      img {
+        max-width: 100%;
+        border: 1px solid #ccc;
+      }
+    }
+
   }
 
   .component-icon {
@@ -390,16 +416,6 @@ input[type='file'] {
 
 #contact-us .title {
   text-align: center;
-}
-
-#change-theme-modal .thumbnail:hover {
-  background-color: #54C8E8;
-  border-color: #4eb1ca;
-  cursor: pointer;
-}
-
-#change-theme-modal .thumbnail img {
-  max-width: 150px;
 }
 
 .check-theme, .check-component {
