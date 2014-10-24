@@ -3,7 +3,7 @@ define(['app', 'toaster'], function (app) {
     var queue = [];
 
     this.show = function (status, msg) {
-      toaster.pop(status, pending);
+      toaster.pop(status, msg);
     };
 
     this.setPending = function (status, msg) {
@@ -16,6 +16,6 @@ define(['app', 'toaster'], function (app) {
       });
       queue = [];
     };
-    
+
   }]);
 });

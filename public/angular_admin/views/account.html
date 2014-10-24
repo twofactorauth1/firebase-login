@@ -271,7 +271,7 @@
                         <div class="has-plan" ng-show="user.stripeId">
                             <h2 class="center">{{subscription.plan.name}} Plan</h2>
                             <hr></hr>
-                            <h2 class="center total">${{upcomingInvoice.amount_due}} <span>/{{subscription.plan.interval}}</span></h2>
+                            <h2 class="center total">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}} <span>/{{subscription.plan.interval}}</span></h2>
                             <p class="center">Next Billing Date:  {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
                         </div>
                         <div class="no-plan well" ng-hide="user.stripeId">
@@ -336,7 +336,7 @@
                                     <tr ng-repeat="invoice in invoices.data">
                                         <td>{{$index + 1}}</td>
                                         <td>{{invoice.date * 1000 | date : 'longDate'}}</td>
-                                        <td>${{invoice.total}}</td>
+                                        <td>${{(invoice.total/100).toFixed( 2 )}}</td>
                                         <!--<td>Visa - 8943</td>-->
                                         <td ng-show="invoice.paid">PAID</td>
                                         <td ng-hide="invoice.paid">NOT PAID</td>
@@ -466,7 +466,7 @@
                         <div class="col-xs-6">
                             <div class="mb40"></div>
                             <h4 class="center">Amount Due</h4>
-                            <h1 class="center total">${{upcomingInvoice.amount_due}}</h1>
+                            <h1 class="center total">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}</h1>
                         </div>
                         <div class="col-xs-6">
                             <h4>Current Payment:</h4>
@@ -486,12 +486,12 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="item in upcomingInvoice.lines.data">
-                                    <td>{{item.type}}</td>
-                                    <td>${{item.amount}}</td>
+                                    <td>{{item.plan.statement_description}}</td>
+                                    <td>${{(item.amount/100).toFixed( 2 )}}</td>
                                 </tr>
                                 <tr>
                                     <td><span class="pull-right"><h4>Sub-Total</h4></span></td>
-                                    <td><h4>${{upcomingInvoice.subtotal}}</h4></td>
+                                    <td><h4>${{(upcomingInvoice.subtotal/100).toFixed( 2 )}}</h4></td>
                                 </tr>
                                 <!--<tr>-->
                                     <!--<td><span class="pull-right"><h4>Taxes</h4></span></td>-->
@@ -499,7 +499,7 @@
                                 <!--</tr>-->
                                 <tr>
                                     <td><span class="pull-right"><h4>TOTAL</h4></span></td>
-                                    <td><h4>${{upcomingInvoice.total}}</h4></td>
+                                    <td><h4>${{(upcomingInvoice.total/100).toFixed( 2 )}}</h4></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -572,8 +572,8 @@
                     <h4>Pay To: <span class="pull-right">Indigenous Software Inc.</span></h4>
                     <!--<h4>Payment Method: <span class="pull-right">Visa xxxx-xxxx-xxxx-2345 06/15</span></h4>-->
                     <h4>Date: <span class="pull-right">{{invoice.date * 1000 | date : 'longDate'}}</span></h4>
-                    <h4>Period: <span class="pull-right">{{invoice.period_start * 1000 | date : 'longDate'}} - {{invoice.period_end * 1000 | date : 'longDate'}}</span></h4>
-                    <h4>Amount Paid: <span class="pull-right">${{invoice.total}}</span></h4>
+                    <h4>Period: <span class="pull-right">{{invoice.lines.data[0].period.start * 1000 | date : 'longDate'}} - {{invoice.lines.data[0].period.end * 1000 | date : 'longDate'}}</span></h4>
+                    <h4>Amount Paid: <span class="pull-right">${{(invoice.total/100).toFixed( 2 )}}</span></h4>
                 </div>
                 <!--<div class="modal-footer">-->
                     <!--<button type="button" class="btn btn-primary btn-lg btn-download-bill"-->
