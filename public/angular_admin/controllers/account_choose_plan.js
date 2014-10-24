@@ -1,5 +1,5 @@
-define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'skeuocard', 'paymentService'], function(app) {
-  app.register.controller('AccountChoosePlanCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', 'PaymentService', '$state', function($scope, $stateParams, UserService, ngProgress, PaymentService, $state) {
+define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'skeuocard', 'paymentService', 'toasterService'], function(app) {
+  app.register.controller('AccountChoosePlanCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', 'PaymentService', '$state', 'ToasterService', function($scope, $stateParams, UserService, ngProgress, PaymentService, $state, ToasterService) {
     ngProgress.start();
 
     //back button click function
@@ -10,6 +10,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     $scope.switchPlanFn = function (planId) {
       PaymentService.postCreateStripeSubscription($scope.user.stripeId, planId, function(subscription) {
         $scope.cancelOldSubscriptionsFn();
+        ToasterService.setPending('success', 'Subscribed to new plan.');
         $state.go('account');
       });
     };
@@ -28,6 +29,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
           UserService.postAccountBilling($scope.user.stripeId, token, function(billing) {});
           PaymentService.postCreateStripeSubscription($scope.user.stripeId, $scope.selectedPlan, function(subscription) {
             $scope.cancelOldSubscriptionsFn();
+            ToasterService.setPending('success', 'Subscribed to new plan.');
             $state.go('account');
           });
         } else {
@@ -37,6 +39,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
             UserService.postAccountBilling(stripeUser.id, token, function(billing) {});
             PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
               $scope.cancelOldSubscriptionsFn();
+              ToasterService.setPending('success', 'Subscribed to new plan.');
               $state.go('account');
             });
           });
@@ -73,6 +76,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     UserService.getAccount(function(account) {
       $scope.account = account;
       ngProgress.complete();
+      ToasterService.processPending();
     });
 
     var card = new Skeuocard($("#skeuocard"));

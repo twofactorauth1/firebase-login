@@ -1,10 +1,15 @@
-define(['app', 'stripe'], function(app) {
-  app.register.service('PaymentService', function($http) {
+define(['app', 'stripe', 'toasterService'], function(app) {
+  app.register.service('PaymentService', ['$http', 'ToasterService', function($http, ToasterService) {
     var baseUrl = '/api/1.0/';
     Stripe.setPublishableKey('pk_test_EuZhZHVourE3RaRxELJaYEya');
 
     this.getStripeCardToken = function(cardInput, fn) {
       Stripe.card.createToken(cardInput, function(status, response) {
+        if (status !== 200) {
+          ToasterService.show('error', response.error.message);
+        } else {
+          ToasterService.show('success', 'Card added successfully.');
+        }
         fn(response.id);
       });
     };
@@ -23,6 +28,7 @@ define(['app', 'stripe'], function(app) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards', cardToken].join('/');
       $http.put(apiUrl)
         .success(function(data, status, headers, config) {
+          ToasterService.show('success', 'Card saved.');
           fn(data);
         });
     };
@@ -64,6 +70,7 @@ define(['app', 'stripe'], function(app) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'plans'].join('/');
       $http.post(apiUrl, newProduct)
         .success(function(data, status, headers, config) {
+          ToasterService.show('success', 'Plan product created.');
           fn(data);
         });
     };
@@ -90,6 +97,7 @@ define(['app', 'stripe'], function(app) {
           plan: planId
         })
         .success(function(data, status, headers, config) {
+          ToasterService.show('success', 'Subscribed to plan.');
           fn(data);
         });
     };
@@ -98,9 +106,10 @@ define(['app', 'stripe'], function(app) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'subscriptions', subId].join('/');
       $http.delete(apiUrl)
         .success(function(data, status, headers, config) {
+          ToasterService.show('warning', 'Unsubscribed from old plan.');
           fn(data);
         });
     };
 
-  });
+  }]);
 });
