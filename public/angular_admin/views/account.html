@@ -486,7 +486,7 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="item in upcomingInvoice.lines.data">
-                                    <td>{{item.type}}</td>
+                                    <td>{{item.plan.statement_description}}</td>
                                     <td>${{(item.amount/100).toFixed( 2 )}}</td>
                                 </tr>
                                 <tr>
