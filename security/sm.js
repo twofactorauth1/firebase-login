@@ -31,7 +31,9 @@ var defaultPrivileges = [
     'MODIFY_PRODUCT',
     'VIEW_PRODUCT',
     'VIEW_PAYMENTS',
-    'MODIFY_PAYMENTS'
+    'MODIFY_PAYMENTS',
+    'VIEW_ASSET',
+    'MODIFY_ASSET'
 ];
 
 var securityManager = {
