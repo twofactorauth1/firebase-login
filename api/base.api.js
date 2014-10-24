@@ -160,6 +160,10 @@ _.extend(apiBase.prototype, {
         res.send({});
     },
 
+    send403: function(res) {
+        res.send(403, {code:403, status:'fail', message:'Unauthorized', detail:'You are not authorized to complete this action.'});
+    },
+
 
     wrapError: function(resp, code, status, message, detail) {
         if (_.isObject(message)) {
@@ -221,12 +225,16 @@ _.extend(apiBase.prototype, {
         this.sm.hasPermission(this.userId(req), this.accountId(req), priv, cb);
     },
 
+    checkPermissionForAccount: function(req, priv, accountId, cb) {
+        this.sm.hasPermission(this.userId(req), accountId, priv, cb);
+    },
+
     checkPermissionAndSendResponse: function(req, priv, res, successObj) {
         this.checkPermission(req, priv, function(err, isAllowed){
             if(isAllowed === true) {
                 res.send(successObj);
             } else {
-                res.send(403, {code:403, status:'fail', message:'Unauthorized', detail:'You are not authorized to complete this action.'});
+                this.send403(res);
             }
         });
     }
