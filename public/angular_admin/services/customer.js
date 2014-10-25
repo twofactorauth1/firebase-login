@@ -52,9 +52,19 @@ define(['app', 'constants', 'importContactService'], function(app) {
     };
 
     this.deleteCustomer = function(id, fn) {
+      var customers = this.getCache().get('customers');
+
       var apiUrl = baseUrl + ['contact', id].join('/');
       $http.delete(apiUrl)
         .success(function(data, status, headers, config) {
+          if (customers) {
+            customers.forEach(function(value, index) {
+              if (value._id == id) {
+                customers.splice(index, 1);
+              }
+            });
+            cache.put('customers', customers);
+          }
           fn(data);
         });
     };
@@ -74,9 +84,19 @@ define(['app', 'constants', 'importContactService'], function(app) {
     };
 
     this.putCustomer = function(cache, customer, fn) {
+      var customers = cache.get('customers');
+
       var apiUrl = baseUrl + ['contact'].join('/');
       $http.put(apiUrl, customer)
         .success(function(data, status, headers, config) {
+          if (customers) {
+            customers.forEach(function(value, index) {
+              if (value._id == customer._id) {
+                customers[index] = customer;
+              }
+            });
+            cache.put('customers', customers);
+          }
           fn(data);
         });
     };
