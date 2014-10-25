@@ -1,6 +1,15 @@
 define(['app', 'constants', 'importContactService'], function(app) {
-  app.register.service('CustomerService', function($http, ImportContactService) {
+  app.register.service('CustomerService', ['$http', '$cacheFactory', function($http, $cacheFactory, ImportContactService) {
     var baseUrl = '/api/1.0/';
+
+    this.getCache = function() {
+      var cache = $cacheFactory.get('CustomerService');
+      if (cache) {
+        return cache;
+      } else {
+        return $cacheFactory('CustomerService');
+      }
+    };
 
     this.getCustomers = function(fn) {
       var apiUrl = baseUrl + ['contact'].join('/');
@@ -12,16 +21,26 @@ define(['app', 'constants', 'importContactService'], function(app) {
 
     this.getCustomersShortForm = function(fields, fn) {
       var apiUrl = baseUrl + ['contact', 'shortform'].join('/');
-      $http({
-          url: apiUrl,
-          method: 'GET',
-          params: {
-            fields: fields
-          }
-        })
-        .success(function(data, status, headers, config) {
-          fn(data);
-        });
+      var data = this.getCache().get('customers');
+      var cache = this.getCache();
+
+      if (data) {
+        console.info('Customers call hit cache');
+        fn(data);
+      } else {
+        $http({
+            url: apiUrl,
+            method: 'GET',
+            params: {
+              fields: fields
+            }
+          })
+          .success(function(data, status, headers, config) {
+            cache.put('customers', data);
+            console.info('Customers call set in cache');
+            fn(data);
+          });
+      }
     };
 
     this.getCustomer = function(id, fn) {
@@ -40,15 +59,21 @@ define(['app', 'constants', 'importContactService'], function(app) {
         });
     };
 
-    this.postCustomer = function(customer, fn) {
+    this.postCustomer = function(cache, customer, fn) {
+      var customers = cache.get('customers');
+
       var apiUrl = baseUrl + ['contact'].join('/');
       $http.post(apiUrl, customer)
         .success(function(data, status, headers, config) {
+          if (customers) {
+            customers.push(data);
+            cache.put('customers', customers);
+          }
           fn(data);
         });
     };
 
-    this.putCustomer = function(customer, fn) {
+    this.putCustomer = function(cache, customer, fn) {
       var apiUrl = baseUrl + ['contact'].join('/');
       $http.put(apiUrl, customer)
         .success(function(data, status, headers, config) {
@@ -63,7 +88,7 @@ define(['app', 'constants', 'importContactService'], function(app) {
       } else {
         apiFn = this.postCustomer;
       }
-      apiFn(customer, fn);
+      apiFn(this.getCache(), customer, fn);
     };
 
     this.postTwoNetSubscribe = function(customerId, fn) {
@@ -224,5 +249,5 @@ define(['app', 'constants', 'importContactService'], function(app) {
     };
 
 
-  });
+  }]);
 });
