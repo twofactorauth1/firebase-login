@@ -95,6 +95,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     _saveOrUpdateContact: function (req, resp, isNew) {
+        self.log.debug('>> _saveOrUpdateContact');
         //TODO - add granular security
         var self = this;
         var contact = new $$.m.Contact(req.body);
@@ -106,6 +107,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         contactDao.saveOrUpdateContact(contact, function (err, value) {
             if (!err) {
+                self.log.debug('>> saveOrUpdate', value);
                 self.sendResult(resp, value);
             } else {
                 self.wrapError(resp, 500, "There was an error updating contact", err, value);
