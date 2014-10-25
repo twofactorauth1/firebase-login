@@ -54,9 +54,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         // SIGNUP
         //-------------------------------------------------
-        app.get("/signup", this.setup, this.showSignup.bind(this));
-        app.get("/signup/*", this.setup, this.showSignup.bind(this)); //catch all routed routes
-        app.post("/signup", this.setup, this.handleSignup.bind(this));
+        // app.get("/signup", this.setup, this.showSignup.bind(this));
+        // app.get("/signup/*", this.setup, this.showSignup.bind(this)); //catch all routed routes
+        // app.post("/signup", this.setup, this.handleSignup.bind(this));
 
         app.get("/current-user", this.setup, this.getCurrentUser.bind(this));
 

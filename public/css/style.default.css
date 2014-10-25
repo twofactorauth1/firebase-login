@@ -15635,8 +15635,10 @@ strong {
   color: #666;
 }
 .signuppanel {
-  margin: 5% auto 0 auto;
-  width: 780px;
+  margin: 0 auto;
+  max-width: 780px;
+  border: 2px solid #dddddd;
+  padding: 23px;
 }
 .signuppanel .row {
   margin-left: -5px;
@@ -24329,6 +24331,43 @@ div[data-class="blog"] .single-blog {
 }
 .triangle-text-v1 .align-text-center {
   text-align: center;
+}
+.payment-form-v1 .panel {
+  padding: 15px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+.payment-form-v1 .panel .wrap {
+  margin: 0 auto;
+  max-width: 780px;
+  border: 1px solid #dddddd;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+.payment-form-v1 .panel .panel-header {
+  padding: 30px;
+  background: #f0fafb;
+  border-bottom: 1px solid #e4f3f6;
+}
+.payment-form-v1 .panel .panel-header h1 {
+  color: #57b0cf;
+}
+.payment-form-v1 .panel .panel-header h3 {
+  color: #444444;
+}
+.payment-form-v1 .panel .panel-header .row {
+  text-align: center;
+}
+.payment-form-v1 .panel .panel-body {
+  padding: 23px;
+}
+.payment-form-v1 .panel .submit-signup {
+  margin: 15px auto;
+  text-align: center;
+}
+.payment-form-v1 .panel .credit-card-input {
+  margin: 0 auto;
 }
 .thumbnail-slider-v1 .hideText .text {
   position: relative;
