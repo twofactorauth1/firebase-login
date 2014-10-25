@@ -3,7 +3,8 @@
 
         <div class="masthead-title">
             <div class="editable" data-class="maintitle" data-index="{{$index}}">
-                <span ng-bind-html="component.maintitle"/>
+                <span ng-bind-html="component.maintitle"/></span>
+                <span ng-if="!component.maintitle"/></span>
             </div>
         </div>
 

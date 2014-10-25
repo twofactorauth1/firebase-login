@@ -4,6 +4,7 @@
     }
 </style>
 <div ng-class="component.type+'-v'+component.version">
+
     <div class="feature-list-title">
         <div class="editable" data-class="title">
             <span ng-bind-html="component.title"></span>
@@ -17,9 +18,10 @@
     </div>
 
     <div class="clearfix mb15"></div>
+
     <div ng-repeat="feature in component.features track by $index">
         <div class="col-sm-4 feature">
-            <div class="feature-single feature-single-0">
+            <div class="feature-single">
                 <span ng-show="feature.icon" class="feature-icon {{feature.icon}}"></span>
 
                 <img ng-src="{{feature.image}}" />
@@ -42,4 +44,5 @@
             </div>
         </div>
     </div>
+
 </div>

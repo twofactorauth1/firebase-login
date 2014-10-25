@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService',
-    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService',
+    function ($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, indigewebSkeuocard) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
 
         route = $location.$$path;
@@ -66,13 +66,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
             } else {
-
                 if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
                      route = 'index';
                      route = route.replace('/', '');
                      that.pages = data[route];
+                     console.log('that.pages >>> ', that.pages);
                 } else {
-                    that.pages = data[$scope.$location.$$path];
+                    route = $scope.$location.$$path.replace('/page/', '');
+                    console.log('route ', route);
+                    that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
 
@@ -230,4 +232,30 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.resfeshIframe = function() {
             //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
         };
+
+        //SIGNUP SECTION
+
+        $scope.createUser = function(user) {
+            console.log('user', user);
+
+            //create contact
+            userService.addContact(user, function (data) {
+               console.log('data ', data);
+            });
+
+            //redirect to signup with details
+            window.location.href = "http://app.indigenous.local:3000/signup";
+        };
+
+        $scope.createAccount = function(accountInfo) {
+            console.log('createAccount', accountInfo);
+            var cardInput = {
+                number: accountInfo.card.number,
+                cvc: accountInfo.card.cvc,
+                exp_month: accountInfo.card.expmonth,
+                exp_year: accountInfo.card.expyear
+            };
+            console.log('cardinput >>> ', cardInput);
+        };
+
     }]);

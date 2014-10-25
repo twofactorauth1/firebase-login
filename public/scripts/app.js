@@ -19,6 +19,7 @@ var mainApp = angular
         'angular-parallax',
         'config',
         'dm.style',
+        'mainApp.directives',
         'duScroll',
         'mrPageEnterAnimate',
         'angularMoment',
@@ -64,6 +65,10 @@ var mainApp = angular
                 controller: 'BlogCtrl as blog'
             })
             .when('/page/:pagename', {
+                templateUrl: '../views/main.html',
+                controller: 'LayoutCtrl as layout'
+            })
+            .when('/signup', {
                 templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })

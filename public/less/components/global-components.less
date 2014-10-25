@@ -136,8 +136,16 @@ body.editing {
   .component-inner {
     padding: 2px;
   }
+  .ui-sortable.active {
+    .fragment {
+      overflow: hidden;
+    }
+  }
   .fragment {
     border: none;
+    &.dragging {
+      z-index: 999999!important;
+    }
     &:hover {
       .component-inner {
         border: 2px dashed #34495e;
@@ -145,6 +153,7 @@ body.editing {
       }
       .componentActions {
         display: block;
+        line-height: 39px;
         visibility: visible;
       }
       .add-component {
@@ -245,6 +254,7 @@ ul.ui-sortable.active {
 @import "components/information-list-v2.less";
 @import "components/triangle-text-v1.less";
 @import "components/appointment-v1.less";
+@import "components/payment-form-v1.less";
 // @import "components/coming-soon.less";
 // @import "components/contact-us-v2.less";
 @import "components/thumbnail-slider-v1.less";
