@@ -67,7 +67,6 @@ require.config({
         'chartTwoNetService': '/angular_admin/services/chart_two_net',
         'importContactService': '/angular_admin/services/import_contacts',
         'toasterService': '/angular_admin/services/toaster',
-        'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'hoverClassDirective': '/angular_admin/directives/hover_class',
         'confirmClickDirective': '/angular_admin/directives/confirm_click',
@@ -77,6 +76,7 @@ require.config({
         "constants": 'constants/constants',
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',
+        'iStartsWithFilter' : '/angular_admin/filters/i_starts_with',
         'confirmClick2':'/angular_admin/directives/confirm_click2',
         'img':'/angular_admin/directives/img_adv',
 
