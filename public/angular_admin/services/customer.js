@@ -53,18 +53,18 @@ define(['app', 'constants', 'importContactService'], function(app) {
 
     this.deleteCustomer = function(id, fn) {
       var customers = this.getCache().get('customers');
+      if (customers) {
+        customers.forEach(function(value, index) {
+          if (value._id == id) {
+            customers.splice(index, 1);
+          }
+        });
+        this.getCache().put('customers', customers);
+      }
 
       var apiUrl = baseUrl + ['contact', id].join('/');
       $http.delete(apiUrl)
         .success(function(data, status, headers, config) {
-          if (customers) {
-            customers.forEach(function(value, index) {
-              if (value._id == id) {
-                customers.splice(index, 1);
-              }
-            });
-            cache.put('customers', customers);
-          }
           fn(data);
         });
     };
