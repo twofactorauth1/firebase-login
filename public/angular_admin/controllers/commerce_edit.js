@@ -14,18 +14,16 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentServ
             $scope.plans = plans;
         });
 
-        $('#convert').iconpicker({ 
+        $('#convert').iconpicker({
 		    iconset: 'fontawesome',
-		    icon: 'fa-key', 
+		    icon: 'fa-key',
 		    rows: 5,
 		    cols: 5,
 		    placement: 'right',
 		});
 
 		$('#convert').on('change', function(e) {
-			$scope.$apply(function() {
-				$scope.product.icon = 'fa '+e.icon;
-			});
+      $scope.product.icon = 'fa '+e.icon;
 		});
 
 		$scope.addSubscriptionFn = function () {
