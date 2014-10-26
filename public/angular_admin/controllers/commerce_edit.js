@@ -1,4 +1,4 @@
-define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker'], function(app) {
+define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker'], function(app) {
   app.register.controller('CommerceEditCtrl', ['$scope', '$q', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', function($scope, $q, ngProgress, $stateParams, ProductService, PaymentService) {
     ngProgress.start();
     //back button click function
@@ -12,6 +12,8 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentServ
     $scope.plans = [];
 
     $scope.planEdit = false;
+
+    $scope.newSubscription = {planId: $$.u.idutils.generateUniqueAlphaNumericShort()};
 
     ProductService.getProduct($scope.productId, function(product) {
       $scope.product = product;
@@ -55,7 +57,7 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentServ
           $scope.product.product_attributes.stripePlans = [subscription.id];
         }
         $scope.saveProductFn();
-        $scope.newSubscription = {};
+        $scope.newSubscription = {planId: $$.u.idutils.generateUniqueAlphaNumericShort()};
       });
     };
 
@@ -89,7 +91,7 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentServ
 
     $scope.editCancelFn = function () {
       $scope.planEdit = false;
-      $scope.newSubscription = {};
+      $scope.newSubscription = {planId: $$.u.idutils.generateUniqueAlphaNumericShort()};
     };
 
     $scope.planDeleteFn = function(planId) {
