@@ -96,10 +96,11 @@ define(['app', 'stripe', 'toasterService'], function(app) {
         });
     };
 
-    this.postPlanUpdate = function(planId, plan, fn) {
+    this.postUpdatePlan = function(planId, plan, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'plans', planId].join('/');
       $http.post(apiUrl, plan)
         .success(function(data, status, headers, config) {
+          ToasterService.show('success', 'Plan updated.');
           fn(data);
         });
     };

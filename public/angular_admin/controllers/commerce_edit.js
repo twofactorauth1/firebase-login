@@ -11,6 +11,8 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentServ
 
     $scope.plans = [];
 
+    $scope.planEdit = false;
+
     ProductService.getProduct($scope.productId, function(product) {
       $scope.product = product;
       var promises = [];
@@ -57,6 +59,17 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentServ
       });
     };
 
+    $scope.editSubscriptionFn = function (planId) {
+      PaymentService.postUpdatePlan(planId, $scope.newSubscription, function (subscription) {
+        $scope.plans.forEach(function (value, index) {
+          if (value.id == planId) {
+            $scope.plans[index] = subscription;
+            $scope.editCancelFn();
+          }
+        });
+      });
+    };
+
     $scope.saveProductFn = function() {
       console.log('$scope.product >>> ', $scope.product);
       ProductService.saveProduct($scope.product, function(product) {
@@ -64,15 +77,30 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentServ
       });
     };
 
-    $scope.planDeleteFn = function (planId) {
-      PaymentService.deletePlan(planId, function () {});
-      $scope.plans.forEach(function (value, index) {
+    $scope.planEditFn = function(planId) {
+      $scope.planEdit = true;
+      $scope.plans.forEach(function(value, index) {
+        if (value.id == planId) {
+          $scope.newSubscription = value;
+          $scope.newSubscription.planId = value.id;
+        }
+      });
+    };
+
+    $scope.editCancelFn = function () {
+      $scope.planEdit = false;
+      $scope.newSubscription = {};
+    };
+
+    $scope.planDeleteFn = function(planId) {
+      PaymentService.deletePlan(planId, function() {});
+      $scope.plans.forEach(function(value, index) {
         if (value.id == planId) {
           $scope.plans.splice(index, 1);
         }
       });
 
-      $scope.product.product_attributes.stripePlans.forEach(function (value, index) {
+      $scope.product.product_attributes.stripePlans.forEach(function(value, index) {
         if (value == planId) {
           $scope.product.product_attributes.stripePlans.splice(index, 1);
         }

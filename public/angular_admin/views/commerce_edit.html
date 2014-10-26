@@ -267,8 +267,11 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                    <button class="btn btn-lg btn-block btn-success" ng-click="addSubscriptionFn()"><span class="fa fa-plus"></span> Add</button>
+                                <div class="col-xs-6">
+                                    <button class="btn btn-lg btn-block btn-success" ng-click="addSubscriptionFn()" ng-hide="planEdit"><span class="fa fa-plus"></span> Add</button>
+                                    <button class="btn btn-lg btn-block btn-success" ng-click="editSubscriptionFn(newSubscription.id)" ng-show="planEdit"><span class="fa fa-plus"></span> Update</button>
+                                    <button class="btn btn-lg btn-block btn-success" ng-click="editCancelFn()" ng-show="planEdit"><span class="fa fa-plus"></span> Cancel</button>
+                                </div>
                                 </form>
 
                             </div>
@@ -292,7 +295,7 @@
                                   <td>{{plan.interval_count}}</td>
                                   <td>${{plan.amount}}</td>
                                   <td class="table-action">
-                                    <a ><i class="fa fa-pencil"></i></a>
+                                    <a ng-click="planEditFn(plan.id)"><i class="fa fa-pencil"></i></a>
                                     <a ng-click="planDeleteFn(plan.id)" class="delete-row"><i class="fa fa-trash-o"></i></a>
                                    </td>
                                 </tr>
