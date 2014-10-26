@@ -64,6 +64,21 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentServ
       });
     };
 
+    $scope.planDeleteFn = function (planId) {
+      PaymentService.deletePlan(planId, function () {});
+      $scope.plans.forEach(function (value, index) {
+        if (value.id == planId) {
+          $scope.plans.splice(index, 1);
+        }
+      });
 
+      $scope.product.product_attributes.stripePlans.forEach(function (value, index) {
+        if (value == planId) {
+          $scope.product.product_attributes.stripePlans.splice(index, 1);
+        }
+      });
+
+      $scope.saveProductFn();
+    };
   }]);
 });

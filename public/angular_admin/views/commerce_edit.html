@@ -292,8 +292,8 @@
                                   <td>{{plan.interval_count}}</td>
                                   <td>${{plan.amount}}</td>
                                   <td class="table-action">
-                                    <a href="#"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                                    <a ><i class="fa fa-pencil"></i></a>
+                                    <a ng-click="planDeleteFn(plan.id)" class="delete-row"><i class="fa fa-trash-o"></i></a>
                                    </td>
                                 </tr>
                               </tbody>

@@ -96,6 +96,23 @@ define(['app', 'stripe', 'toasterService'], function(app) {
         });
     };
 
+    this.postPlanUpdate = function(planId, plan, fn) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'plans', planId].join('/');
+      $http.post(apiUrl, plan)
+        .success(function(data, status, headers, config) {
+          fn(data);
+        });
+    };
+
+    this.deletePlan = function(planId, fn) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'plans', planId].join('/');
+      $http.delete(apiUrl)
+        .success(function(data, status, headers, config) {
+          fn(data);
+        });
+      ToasterService.show('warning', 'Plan deleted.');
+    };
+
     this.getListStripeSubscriptions = function(stripeId, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'subscriptions'].join('/');
       $http.get(apiUrl)
