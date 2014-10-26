@@ -35,7 +35,7 @@ define(['app'], function (app) {
         };
 
         this.saveProduct = function (product, fn) {
-            var apiUrl = baseUrl + ['products', productObj._id].join('/');
+            var apiUrl = baseUrl + ['products', product._id].join('/');
             $http({
                 url: apiUrl,
                 method: "POST",
