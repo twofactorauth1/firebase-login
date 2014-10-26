@@ -83,6 +83,19 @@ define(['app', 'stripe', 'toasterService'], function(app) {
         });
     };
 
+    this.getPlanPromise = function(planId) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'plans', planId].join('/');
+      return $http.get(apiUrl);
+    };
+
+    this.getPlan = function(planId, fn) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'plans', planId].join('/');
+      $http.get(apiUrl)
+        .success(function(data, status, headers, config) {
+          fn(data);
+        });
+    };
+
     this.getListStripeSubscriptions = function(stripeId, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'subscriptions'].join('/');
       $http.get(apiUrl)
