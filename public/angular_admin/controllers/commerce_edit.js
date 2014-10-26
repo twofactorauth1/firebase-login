@@ -21,7 +21,6 @@ define(['app', 'ngProgress', 'stateNavDirective', 'productService', 'paymentServ
         });
         $q.all(promises)
           .then(function(data) {
-            console.log(data);
             data.forEach(function(value, index) {
               $scope.plans.push(value.data);
             });
