@@ -23,8 +23,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
+        app.get(this.url('preferences'), this.isAuthApi, this.getUserPreferences.bind(this));
+        app.post(this.url('preferences'), this.isAuthApi, this.updateUserPreferences.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.post(this.url(''), this.createUser.bind(this));
+
         app.put(this.url(':id'), this.isAuthApi, this.updateUser.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteUser.bind(this));
 
@@ -131,7 +134,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if (!err && value != null) {
                 value.set("welcome_alert",req.body.welcome_alert);
                 console.log(value);
-                user.set("credentials",value.get("credentials"))
+                user.set("credentials",value.get("credentials"));
 
                 userDao.saveOrUpdate(user, function(err, value) {
                     if (!err && value != null) {
@@ -147,6 +150,48 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+    },
+
+    getUserPreferences: function(req, res) {
+        var self = this;
+        self.log.debug('>> getUserPreferences');
+
+        var user = req.user;
+
+        userDao.getById(user.id(), function(err, value) {
+            if (!err) {
+                self.log.debug('<< getUserPreferences');
+                return resp.send(value.get('user_preferences').toJSON('public'));
+            } else {
+                self.log.error('Error getting user: ' + err);
+                return self.wrapError(res, 500, null, err, value);
+            }
+        });
+    },
+
+    updateUserPreferences: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateUserPreferences');
+
+        var user = req.user;
+        var preferences = req.body;
+        userDao.getById(user.id(), function(err, savedUser) {
+            if(err) {
+                self.log.error('Error getting user: ' + err);
+                return self.wrapError(res, 500, null, err, value);
+            } else {
+                savedUser.set('user_preferences', preferences);
+                userDao.saveOrUpdate(savedUser, function(err, updatedUser){
+                    if(err) {
+                        self.log.error('Error updating user preferences: ' + err);
+                        return self.wrapError(res, 500, null, err, value);
+                    } else {
+                        self.log.debug('<< updateUserPreferences');
+                        return resp.send(updatedUser.get('user_preferences').toJSON('public'));
+                    }
+                });
+            }
+        });
     },
 
 
