@@ -161,7 +161,7 @@ _.extend(api.prototype, baseApi.prototype, {
         userDao.getById(user.id(), function(err, value) {
             if (!err) {
                 self.log.debug('<< getUserPreferences');
-                return resp.send(value.get('user_preferences').toJSON('public'));
+                return res.send(value.get('user_preferences'));
             } else {
                 self.log.error('Error getting user: ' + err);
                 return self.wrapError(res, 500, null, err, value);
@@ -187,7 +187,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         return self.wrapError(res, 500, null, err, value);
                     } else {
                         self.log.debug('<< updateUserPreferences');
-                        return resp.send(updatedUser.get('user_preferences').toJSON('public'));
+                        return res.send(updatedUser.get('user_preferences'));
                     }
                 });
             }
