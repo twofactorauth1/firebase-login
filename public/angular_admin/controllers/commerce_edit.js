@@ -64,14 +64,9 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
     };
 
     $scope.editSubscriptionFn = function (planId) {
-      PaymentService.postUpdatePlan(planId, $scope.newSubscription, function (subscription) {
-        $scope.plans.forEach(function (value, index) {
-          if (value.id == planId) {
-            $scope.plans[index] = subscription;
-            $scope.editCancelFn();
-          }
-        });
-      });
+      $scope.planDeleteFn(planId);
+      $scope.addSubscriptionFn();
+      $scope.editCancelFn();
     };
 
     $scope.saveProductFn = function() {
