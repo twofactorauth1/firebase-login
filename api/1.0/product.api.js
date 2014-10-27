@@ -80,9 +80,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> updateProduct');
 
-        var product = req.body;
+        console.dir(req.body);
+        var product = new $$.m.Product(req.body);
         var productId = req.params.id;
-        product._id = productId;
+        product.set('_id', productId);
 
         //TODO: security
 
