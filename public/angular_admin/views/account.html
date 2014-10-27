@@ -333,7 +333,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="invoice in invoices.data">
+                                    <tr ng-repeat="invoice in pagedInvoices">
                                         <td>{{$index + 1}}</td>
                                         <td>{{invoice.date * 1000 | date : 'longDate'}}</td>
                                         <td>${{(invoice.total/100).toFixed( 2 )}}</td>
@@ -341,12 +341,15 @@
                                         <td ng-show="invoice.paid">PAID</td>
                                         <td ng-hide="invoice.paid">NOT PAID</td>
                                         <td class="table-action">
-                                            <a href="" data-toggle="modal" data-target="#viewTransactionModal{{$index + 1}}"><i class="fa fa-eye"></i></a>
+                                            <a href="" data-toggle="modal" data-target="#viewTransactionModal-{{invoice.id}}"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
                             </table>
                         </div>
                     </div>
+                </div>
+                <div class="col-sm-12">
+                  <pagination total-items="invoices.data.length" ng-model="invoiceCurrentPage" ng-change="invoicePageChangeFn(invoiceCurrentPage, invoiceTotalPages)" items-per-page="invoicePageLimit" num-pages="invoiceTotalPages"></pagination>
                 </div>
         </div>
     </div>
@@ -474,6 +477,9 @@
                             <!--<h4>Last Payment:</h4>-->
                             <!--<span>recieved 01AUG14</span>-->
                         </div>
+                        <div class="col-xs-6">
+                          {{subscription.plan.name}} Plan
+                        </div>
                     </div>
                     <div class="mb30"></div>
                     <div class="table-responsive summary">
@@ -558,7 +564,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="viewTransactionModal{{$index + 1}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-repeat="invoice in invoices.data">
+    <div class="modal fade" id="viewTransactionModal-{{invoice.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-repeat="invoice in invoices.data">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

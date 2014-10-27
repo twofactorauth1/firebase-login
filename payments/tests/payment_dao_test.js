@@ -23,8 +23,9 @@ exports.payment_dao_test = {
     tearDown: function (cb) {
         var self = this;
         cb();
-    },
+    }//,
 
+    /*
     testGetPaymentByChargeId: function(test) {
         var self = this;
         var chargeId = 'charge_' + Date.now();
@@ -61,4 +62,5 @@ exports.payment_dao_test = {
             });
         });
     }
+    */
 }

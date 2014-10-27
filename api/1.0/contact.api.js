@@ -95,9 +95,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     _saveOrUpdateContact: function (req, resp, isNew) {
-        self.log.debug('>> _saveOrUpdateContact');
+
         //TODO - add granular security
         var self = this;
+        self.log.debug('>> _saveOrUpdateContact');
         var contact = new $$.m.Contact(req.body);
 
         if (isNew === true) {

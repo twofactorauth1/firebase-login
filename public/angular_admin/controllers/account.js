@@ -4,6 +4,8 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
     $scope.activeSkeuocard = false;
 
+    $scope.invoicePageLimit = 5;
+
     $scope.updateStripeIdFn = function(billing) {
       $scope.user.stripeId = billing.billing.stripeCustomerId;
       $scope.activeSkeuocard = false;
@@ -11,6 +13,12 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
     $scope.activeSkeuocardFn = function(status) {
       $scope.activeSkeuocard = status;
+    };
+
+    $scope.invoicePageChangeFn = function (invoiceCurrentPage, invoiceTotalPages) {
+       var begin = ((invoiceCurrentPage - 1) * $scope.invoicePageLimit);
+       var end = begin + $scope.invoicePageLimit;
+       $scope.pagedInvoices = $scope.invoices.data.slice(begin, end);
     };
 
     $scope.$watch('user.stripeId', function(newValue, oldValue) {
@@ -36,6 +44,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
     PaymentService.getAllInvoices(function(invoices) {
       $scope.invoices = invoices;
+      $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
       ngProgress.complete();
       ToasterService.processPending();
     });
