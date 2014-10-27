@@ -22,8 +22,6 @@ mainApp.service('userService', function ($http) {
         });
     };
 
-    //createUserFromUsernamePassword: function(username, password, email, accountToken, fn) {
-
     this.createUser = function (user, fn) {
         var apiUrl = baseUrl + ['user'].join('/');
         $http({
@@ -32,7 +30,6 @@ mainApp.service('userService', function ($http) {
             data: angular.toJson(user)
         })
         .success(function (data, status, headers, config) {
-            console.log('success created ', data);
             fn(data);
         })
         .error(function (err) {
@@ -40,8 +37,7 @@ mainApp.service('userService', function ($http) {
         });
     };
 
-    //account/' + companyName +'/available
-    this.checkDomainExisits = function(businessName, fn) {
+    this.checkDomainExists = function(businessName, fn) {
         var apiUrl = baseUrl + ['account', businessName, 'available'].join('/');
         $http({
             url: apiUrl,
@@ -53,6 +49,22 @@ mainApp.service('userService', function ($http) {
         })
         .error(function (err) {
             console.log('END:userService with ERROR');
+        });
+    };
+
+    this.checkEmailExists = function(email, fn) {
+        var apiUrl = baseUrl + ['user', 'exists', email].join('/');
+        console.log('api url >>> ', apiUrl);
+        $http({
+            url: apiUrl,
+            method: "GET"
+        })
+        .success(function (data, status, headers, config) {
+            console.log('checkEmailExisits ', data);
+            fn(data);
+        })
+        .error(function (err) {
+            console.log('END:checkEmailExisits with ERROR');
         });
     };
 

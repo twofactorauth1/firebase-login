@@ -10,6 +10,7 @@ var userDao = require('../../dao/user.dao');
 var accountDao = require('../../dao/account.dao');
 var passport = require('passport');
 var cookies = require('../../utils/cookieutil');
+var authenticationDao = require('../../dao/authentication.dao');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -77,13 +78,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
 
         var username = req.params.username;
+        self.log.debug('>> userExists ', username);
 
-        var accountId = this.accountId(req);
-        if (accountId > 0) {
-            req.params.accountId = accountId;
-            return this.userExistsForAccount(req, resp);
-        }
+        // var accountId = this.accountId(req);
+        // if (accountId > 0) {
+        //     req.params.accountId = accountId;
+        //     return this.userExistsForAccount(req, resp);
+        // }
         userDao.usernameExists(username, function(err, value) {
+            self.log.debug('>> usernameExists ', value);
             if (err) {
                 return self.wrapError(resp, 500, "An error occurred checking username", err, value);
             }
@@ -149,7 +152,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function (err, value) {
-            self.log.debug('inside createUserFromUsernamePassword ');
+            self.log.debug('createUserFromUsernamePassword >>>');
                 if (!err) {
 
                     req.login(value, function (err) {
@@ -158,19 +161,22 @@ _.extend(api.prototype, baseApi.prototype, {
                         } else {
 
                             var accountId = value.getAllAccountIds()[0];
+                            self.log.debug('createUserFromUsernamePassword accountId >>>', accountId);
                             authenticationDao.getAuthenticatedUrlForAccount(accountId, self.userId(req), "admin", function (err, value) {
+                                console.log('value url >>> ', value);
                                 if (err) {
                                     resp.redirect("/home");
                                     self = null;
                                     return;
                                 }
                                 console.log('redirect value ', value);
-                                resp.redirect(value);
+                                resp.send(value);
                                 self = null;
                             });
                         }
                     });
                 } else {
+                    self.log.debug('createUserFromUsernamePassword >>> ERROR');
                     req.flash("error", value.toString());
                     return resp.redirect("/page/signup");
                 }

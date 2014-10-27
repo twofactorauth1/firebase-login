@@ -295,7 +295,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             userService.getTmpAccount( function (data) {
                 var tmpAccount = data;
                console.log('createAccount ', data);
-               tmpAccount.subdomain = newAccount.businessName;
+               tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@","");
                userService.saveOrUpdateTmpAccount(tmpAccount,  function (data) {
                     console.log('saveOrUpdateTmpAccount', data);
                     //username, password, email, accountToken
@@ -307,13 +307,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     };
                     console.log('newUser Data >>> ', newUser);
                     userService.createUser(newUser, function (data) {
-                        console.log('saveOrUpdateTmpAccount', data);
-
+                        console.log('created user successfully', data);
+                        window.location.replace(data);
                     });
                 });
             });
-            //create account with email, password, and business name
-            //add card and subscribe new user to chosen 
+            //add card and subscribe new user to chosen
             //redirect to their new admin account
         };
 
@@ -321,15 +320,50 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.checkDomainExists = function(newAccount) {
             console.log('checking to see if the domiain exists ', newAccount.businessName);
-            var name = newAccount.businessName.replace(' ', '');
-            userService.checkDomainExisits(newAccount.businessName, function (data) {
-               if(data === 'true') {
-                    $("#help-company-name").html('');
+            var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@","");
+            userService.checkDomainExists(name, function (data) {
+               if(data != 'true') {
+                    $("#business-name .error").html("Domain Already Exists");
+                    $("#business-name").addClass('has-error');
+                    $("#business-name .glyphicon").addClass('glyphicon-remove');
                 } else {
-                    $("#input-company-name").val('');
-                    $("#help-company-name").html("Subdomain Already Exists");
+                    $("#business-name .error").html("");
+                    $("#business-name").removeClass('has-error').addClass('has-success');
+                    $("#business-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
             });
+        };
+
+        $scope.checkEmailExists = function(newAccount) {
+            console.log('checking to see if the username exists ', newAccount.email);
+            userService.checkEmailExists(newAccount.email, function (data) {
+               if(data === 'true') {
+                    // $("#input-company-name").val('');
+                    $("#email .error").html("Email Already Exists");
+                    $("#email").addClass('has-error');
+                    $("#email .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    console.log('email avaliable');
+                    $("#email .error").html("");
+                    $("#email").removeClass('has-error').addClass('has-success');
+                    $("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            });
+        };
+
+        $scope.checkPasswordLength = function(newAccount) {
+            console.log('checking to see if the password exists ', newAccount.password);
+
+               if(newAccount.password.length < 5) {
+                    // $("#input-company-name").val('');
+                    $("#password .error").html("Password must contain at least 5 characters");
+                    $("#password").addClass('has-error');
+                    $("#password .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    $("#password .error").html("");
+                    $("#password").removeClass('has-error').addClass('has-success');
+                    $("#password .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
         };
 
 

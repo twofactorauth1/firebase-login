@@ -24388,6 +24388,9 @@ div[data-class="blog"] .single-blog {
   color: #444;
   text-shadow: 1px 1px 1px #ffffff;
 }
+.payment-form-v1 .panel .has-feedback .form-control-feedback {
+  top: 5px;
+}
 .thumbnail-slider-v1 .hideText .text {
   position: relative;
   width: 100%;

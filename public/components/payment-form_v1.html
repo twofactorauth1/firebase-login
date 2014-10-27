@@ -22,33 +22,34 @@
 
                     <!-- EMAIL AND PASSOWORD -->
 
-                    <div class="form-group col-sm-6">
+                    <div id="email" class="form-group col-sm-6 has-feedback">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-envelope" />
-                            </span>
-                            <input class="form-control input-lg" type="text" ng-model="newAccount.email" placeholder="Email" />
+                            <span class="input-group-addon"><i class="fa fa-envelope" /></span>
+                            <input class="form-control input-lg" type="text" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)"/>
+                            <span class="glyphicon form-control-feedback"></span>
                         </div>
-                        <span id="help-username" class="error" />
+                        <span class="error help-block" />
                     </div>
 
-                    <div class="form-group col-sm-6">
+
+                    <div id="password" class="form-group col-sm-6 has-feedback">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-lock" />
-                            </span>
-                            <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="password" />
+                            <span class="input-group-addon"><i class="fa fa-lock" /></span>
+                            <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="password" ng-blur="checkPasswordLength(newAccount)"/>
+                            <span class="glyphicon form-control-feedback"></span>
                         </div>
-                        <span id="help-password" class="error" />
+                        <span class="error" />
                     </div>
 
                     <!-- Business Name -->
 
-                    <div class="form-group col-xs-12">
+                    <div id="business-name" class="form-group col-xs-12 has-feedback">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-building" />
-                            </span>
+                            <span class="input-group-addon"><i class="fa fa-building" /></span>
                             <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)"/>
+                            <span class="glyphicon form-control-feedback"></span>
                         </div>
-                        <span id="help-company-name" class="error" />
+                        <span class="error" />
                     </div>
 
                     <div class="clearfix"></div>
@@ -62,7 +63,7 @@
                             <h4 class="center">Monthly Membership</h4>
                             <h2 class="center">97.00 <span>/ month</span></h2>
                             <div class="mb30"></div>
-                            <a type="button" class="btn btn-primary btn-block" ng-click="newAccount.membership = 'monthly'">Choose</a>
+                            <a type="button" class="btn btn-primary" ng-click="newAccount.membership = 'monthly'">Choose</a>
                         </div>
                     </div>
 
@@ -71,7 +72,7 @@
                             <h4 class="center">Yearly Membership</h4>
                             <h2 class="center">74.00 <span>/ month</span></h2>
                             <div class="mb30"></div>
-                            <a type="button" class="btn btn-primary btn-block" ng-click="newAccount.membership = 'yearly'">Choose</a>
+                            <a type="button" class="btn btn-primary" ng-click="newAccount.membership = 'yearly'">Choose</a>
                         </div>
                     </div>
 

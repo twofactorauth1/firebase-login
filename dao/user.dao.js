@@ -23,7 +23,7 @@ var dao = {
 
     //Global LEVEL METHODS
     usernameExists: function(username, fn) {
-        this.exists({'_username':username.toLowerCase()}, fn);
+        this.exists({'username':username.toLowerCase()}, fn);
     },
 
 
