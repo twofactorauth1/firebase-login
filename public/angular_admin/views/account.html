@@ -333,7 +333,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="invoice in invoices.data">
+                                    <tr ng-repeat="invoice in pagedInvoices">
                                         <td>{{$index + 1}}</td>
                                         <td>{{invoice.date * 1000 | date : 'longDate'}}</td>
                                         <td>${{(invoice.total/100).toFixed( 2 )}}</td>
@@ -347,6 +347,9 @@
                             </table>
                         </div>
                     </div>
+                </div>
+                <div class="col-sm-12">
+                  <pagination total-items="invoices.data.length" ng-model="invoiceCurrentPage" ng-change="invoicePageChangeFn(invoiceCurrentPage, invoiceTotalPages)" items-per-page="invoicePageLimit" num-pages="invoiceTotalPages"></pagination>
                 </div>
         </div>
     </div>
