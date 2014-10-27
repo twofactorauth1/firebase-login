@@ -1,7 +1,7 @@
 'use strict';
 
 mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService',
-    function ($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, indigewebSkeuocard) {
+    function ($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
 
         route = $location.$$path;
@@ -247,15 +247,90 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             window.location.href = "http://app.indigenous.local:3000/signup";
         };
 
-        $scope.createAccount = function(accountInfo) {
-            console.log('createAccount', accountInfo);
-            var cardInput = {
-                number: accountInfo.card.number,
-                cvc: accountInfo.card.cvc,
-                exp_month: accountInfo.card.expmonth,
-                exp_year: accountInfo.card.expyear
-            };
-            console.log('cardinput >>> ', cardInput);
+        /*
+            {
+                "_id": null,
+                "company": {
+                    "name": "",
+                    "type": 0,
+                    "size": 0,
+                    "logo": ""
+                },
+                "subdomain": "",
+                "domain": "",
+                "token": "b3729701-bbce-435d-b60d-7e1a9c46ff07",
+                "website": {
+                    "settings": null,
+                    "websiteId": null,
+                    "themeId": "default"
+                },
+                "business": {
+                    "logo": "",
+                    "name": "",
+                    "description": "",
+                    "category": "",
+                    "size": "",
+                    "phones": [],
+                    "addresses": [],
+                    "type": ""
+                },
+                "billing": {
+                    "userId": "",
+                    "customerId": "",
+                    "cardToken": ""
+                },
+                "_v": "0.1",
+                "accountUrl": "http://.indigenous.local:3000"
+            }
+        */
+
+        $scope.createAccount = function(newAccount) {
+            newAccount.card = {
+                number: $('#cc_number').val(),
+                cvc: $('#cc_cvc').val(),
+                exp_month: $('#cc_exp_month').val(),
+                exp_year: $('#cc_exp_year').val()
+              };
+            console.log('newAccount', newAccount);
+            userService.getTmpAccount( function (data) {
+                var tmpAccount = data;
+               console.log('createAccount ', data);
+               tmpAccount.subdomain = newAccount.businessName;
+               userService.saveOrUpdateTmpAccount(tmpAccount,  function (data) {
+                    console.log('saveOrUpdateTmpAccount', data);
+                    //username, password, email, accountToken
+                    var newUser = {
+                        username: newAccount.email,
+                        password: newAccount.password,
+                        email: newAccount.email,
+                        accountToken: data.token
+                    };
+                    console.log('newUser Data >>> ', newUser);
+                    userService.createUser(newUser, function (data) {
+                        console.log('saveOrUpdateTmpAccount', data);
+
+                    });
+                });
+            });
+            //create account with email, password, and business name
+            //add card and subscribe new user to chosen 
+            //redirect to their new admin account
         };
+
+        $scope.newAccount = {};
+
+        $scope.checkDomainExists = function(newAccount) {
+            console.log('checking to see if the domiain exists ', newAccount.businessName);
+            var name = newAccount.businessName.replace(' ', '');
+            userService.checkDomainExisits(newAccount.businessName, function (data) {
+               if(data === 'true') {
+                    $("#help-company-name").html('');
+                } else {
+                    $("#input-company-name").val('');
+                    $("#help-company-name").html("Subdomain Already Exists");
+                }
+            });
+        };
+
 
     }]);
