@@ -19,6 +19,8 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
       $scope.product = product;
       var promises = [];
 
+      $('#convert').iconpicker('setIcon', $scope.product.icon);
+
       if ('stripePlans' in $scope.product.product_attributes) {
         $scope.product.product_attributes.stripePlans.forEach(function(value, index) {
           promises.push(PaymentService.getPlanPromise(value));
@@ -44,7 +46,7 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
     });
 
     $('#convert').on('change', function(e) {
-      $scope.product.icon = 'fa ' + e.icon;
+      $scope.product.icon = e.icon;
     });
 
     $scope.addSubscriptionFn = function() {
