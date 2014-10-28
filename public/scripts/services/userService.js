@@ -99,4 +99,12 @@ mainApp.service('userService', function ($http) {
         });
     };
 
+    this.postAccountBilling = function (stripeCustomerId, cardToken, fn) {
+            var apiUrl = baseUrl + ['account', 'billing'].join('/');
+            $http.post(apiUrl, {stripeCustomerId: stripeCustomerId, cardToken: cardToken})
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
+        };
+
 });
