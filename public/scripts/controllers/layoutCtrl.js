@@ -310,17 +310,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     userService.createUser(newUser, function (data) {
                         var adminUrl = data;
                         console.log('created user successfully', data);
+                        window.location.replace(adminUrl);
 
                         PaymentService.getStripeCardToken(newAccount.card, function(token) {
                               PaymentService.postStripeCustomer(token, function(stripeUser) {
                                 console.log('stripuser >>> ', stripeUser);
                                 console.log('stripuser ID >>> ', stripeUser.id);
-                                $scope.user.stripeId = stripeUser.id;
                                 PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
                                 console.log('successfully added card ', card);
-                                // PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
-                                //     window.location.replace(adminUrl);
-                                // });
+                                PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
+                                    window.location.replace(adminUrl);
+                                });
                               });
                         });
                     });
