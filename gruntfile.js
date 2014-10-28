@@ -231,7 +231,7 @@ module.exports = function(grunt) {
                         'public/scripts/directives/dmStyle.js',
                         'public/scripts/directives/ngEnter.js',
                         'public/scripts/directives/convertHtml.js',
-			            'public/scripts/directives/scrollTo.js',
+			'public/scripts/directives/scrollTo.js',
                         'public/scripts/services/accountService.js',
                         'public/scripts/services/websiteService.js',
                         'public/scripts/services/themeService.js',
