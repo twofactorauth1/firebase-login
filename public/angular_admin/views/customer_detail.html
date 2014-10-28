@@ -341,11 +341,12 @@
 
 
                                 <li ng-class="{hidden: !($first), more: !($first)}" class="col-xs-12 li-address" ng-repeat="address in customer.details[0].addresses">
+                                  
                                     <div class="col-xs-2">
-                                        <a target="_blank" data-original-title="Location" title="" data-placement="top" data-toggle="tooltip" class="tooltips pull-left" href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@{{address.lat}},{{address.lon}},17z/"><i class="fa fa-map-marker"></i></a>
+                                        <a target="_blank" data-original-title="Location" title="" data-placement="top" data-toggle="tooltip" class="tooltips pull-left"  href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@{{address.lat}},{{address.lon}},17z/"><i class="fa fa-map-marker"></i></a>
                                     </div>
                                     <div class="col-xs-8">
-                                        <p>{{address.displayName}}</p>
+                                        <p>{{displayAddressFormat(address)}}</p>
                                     </div>
                                     <div class="col-xs-2">
 
@@ -357,7 +358,7 @@
 
 
                                     </div>
-
+								
                                 </li>
                                 <li ng-class="{hidden: !($first), more: !($first)}" class="col-xs-12 li-phone" ng-repeat="phone in customer.details[0].phones">
                                     <div class="col-xs-2">
