@@ -19,7 +19,6 @@ var mainApp = angular
         'angular-parallax',
         'config',
         'dm.style',
-        'mainApp.directives',
         'duScroll',
         'mrPageEnterAnimate',
         'angularMoment',

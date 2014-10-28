@@ -24369,6 +24369,28 @@ div[data-class="blog"] .single-blog {
 .payment-form-v1 .panel .credit-card-input {
   margin: 0 auto;
 }
+.payment-form-v1 .panel .well.well-calm {
+  background: #f0fafb;
+  border: 1px solid #e5f3f6;
+  padding: 0;
+}
+.payment-form-v1 .panel .well.well-calm h2 {
+  background: #53afce;
+  padding: 10px 0;
+  color: white;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+.payment-form-v1 .panel .well.well-calm h2 span {
+  font-size: 14px;
+}
+.payment-form-v1 .panel .well.well-calm h4 {
+  padding: 10px 0;
+  color: #444;
+  text-shadow: 1px 1px 1px #ffffff;
+}
+.payment-form-v1 .panel .has-feedback .form-control-feedback {
+  top: 5px;
+}
 .thumbnail-slider-v1 .hideText .text {
   position: relative;
   width: 100%;

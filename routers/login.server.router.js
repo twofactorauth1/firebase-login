@@ -230,23 +230,23 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         if (username == null || username.trim() == "") {
             req.flash("error", "You must enter a valid username");
-            return resp.redirect("/signup/create");
+            return resp.redirect("/signup");
         }
 
         if (password1 !== password2) {
             req.flash("error", "Passwords do not match");
-            return resp.redirect("/signup/create");
+            return resp.redirect("/signup");
         }
 
         if (password1 == null || password1.trim() == "" || password1.length < 5) {
             req.flash("error", "You must enter a valid password at least 5 characters long");
-            return resp.redirect("/signup/create");
+            return resp.redirect("/signup");
         }
 
         var isEmail = $$.u.validate(email, { required: true, email: true }).success;
         if (isEmail === false) {
             req.flash("error", "You must enter a valid email");
-            return resp.redirect("/signup/create");
+            return resp.redirect("/signup");
         }
 
         //ensure we don't have another user with this username;

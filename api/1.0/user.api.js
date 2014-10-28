@@ -10,6 +10,7 @@ var userDao = require('../../dao/user.dao');
 var accountDao = require('../../dao/account.dao');
 var passport = require('passport');
 var cookies = require('../../utils/cookieutil');
+var authenticationDao = require('../../dao/authentication.dao');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -80,13 +81,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
 
         var username = req.params.username;
+        self.log.debug('>> userExists ', username);
 
-        var accountId = this.accountId(req);
-        if (accountId > 0) {
-            req.params.accountId = accountId;
-            return this.userExistsForAccount(req, resp);
-        }
+        // var accountId = this.accountId(req);
+        // if (accountId > 0) {
+        //     req.params.accountId = accountId;
+        //     return this.userExistsForAccount(req, resp);
+        // }
         userDao.usernameExists(username, function(err, value) {
+            self.log.debug('>> usernameExists ', value);
             if (err) {
                 return self.wrapError(resp, 500, "An error occurred checking username", err, value);
             }
@@ -112,7 +115,82 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     createUser: function(req,resp) {
+        var self = this, user, accountToken, deferred;
+        self.log.debug('>> handleSignup');
 
+        var username = req.body.username;
+        var password1 = req.body.password;
+        var password2 = req.body.password2;
+        var email = req.body.username;
+        var accountToken = req.body.accountToken;
+
+        // if (username == null || username.trim() == "") {
+        //     req.flash("error", "You must enter a valid username");
+        //     return resp.redirect("/signup/create");
+        // }
+
+        // if (password1 !== password2) {
+        //     req.flash("error", "Passwords do not match");
+        //     return resp.redirect("/signup/create");
+        // }
+
+        // if (password1 == null || password1.trim() == "" || password1.length < 5) {
+        //     req.flash("error", "You must enter a valid password at least 5 characters long");
+        //     return resp.redirect("/signup/create");
+        // }
+
+        // var isEmail = $$.u.validate(email, { required: true, email: true }).success;
+        // if (isEmail === false) {
+        //     req.flash("error", "You must enter a valid email");
+        //     return resp.redirect("/signup/create");
+        // }
+
+        //ensure we don't have another user with this username;
+        var accountToken = cookies.getAccountToken(req);
+
+        self.log.debug('>> username', username);
+        self.log.debug('>> password1', password1);
+        self.log.debug('>> email', email);
+        self.log.debug('>> accountToken', accountToken);
+
+
+        userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function (err, value) {
+            self.log.debug('createUserFromUsernamePassword >>>');
+                if (!err) {
+
+                    req.login(value, function (err) {
+                        if (err) {
+                            return resp.redirect("/");
+                        } else {
+
+                            var accountId = value.getAllAccountIds()[0];
+                            self.log.debug('createUserFromUsernamePassword accountId >>>', accountId);
+                            authenticationDao.getAuthenticatedUrlForAccount(accountId, self.userId(req), "admin", function (err, value) {
+                                console.log('value url >>> ', value);
+                                if (err) {
+                                    resp.redirect("/home");
+                                    self = null;
+                                    return;
+                                }
+                                console.log('redirect value ', value);
+                                resp.send(value);
+                                self = null;
+                            });
+                        }
+                    });
+                } else {
+                    self.log.debug('createUserFromUsernamePassword >>> ERROR');
+                    req.flash("error", value.toString());
+                    return resp.redirect("/page/signup");
+                }
+        });
+
+        // userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function(err, value) {
+        //     if (err) {
+        //         return self.wrapError(resp, 500, "An error occurred checking username", err, value);
+        //     }
+        //     return resp.send(value);
+        // });
     },
 
 

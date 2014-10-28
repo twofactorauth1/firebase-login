@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService',
-    function ($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, indigewebSkeuocard) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService', 'PaymentService',
+    function ($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
 
         route = $location.$$path;
@@ -20,6 +20,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     console.log('>>>>> ', window.parent);
         //     window.parent.frames[0].parentNode.activateSettings();
         // };
+
         if(!window.oldScope)
             window.oldScope = $scope;
         $scope.sortingLog = [];
@@ -247,15 +248,133 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             window.location.href = "http://app.indigenous.local:3000/signup";
         };
 
-        $scope.createAccount = function(accountInfo) {
-            console.log('createAccount', accountInfo);
-            var cardInput = {
-                number: accountInfo.card.number,
-                cvc: accountInfo.card.cvc,
-                exp_month: accountInfo.card.expmonth,
-                exp_year: accountInfo.card.expyear
-            };
-            console.log('cardinput >>> ', cardInput);
+        /*
+            {
+                "_id": null,
+                "company": {
+                    "name": "",
+                    "type": 0,
+                    "size": 0,
+                    "logo": ""
+                },
+                "subdomain": "",
+                "domain": "",
+                "token": "b3729701-bbce-435d-b60d-7e1a9c46ff07",
+                "website": {
+                    "settings": null,
+                    "websiteId": null,
+                    "themeId": "default"
+                },
+                "business": {
+                    "logo": "",
+                    "name": "",
+                    "description": "",
+                    "category": "",
+                    "size": "",
+                    "phones": [],
+                    "addresses": [],
+                    "type": ""
+                },
+                "billing": {
+                    "userId": "",
+                    "customerId": "",
+                    "cardToken": ""
+                },
+                "_v": "0.1",
+                "accountUrl": "http://.indigenous.local:3000"
+            }
+        */
+
+        $scope.createAccount = function(newAccount) {
+            newAccount.card = {
+                number: $('#cc_number').val(),
+                cvc: $('#cc_cvc').val(),
+                exp_month: $('#cc_exp_month').val(),
+                exp_year: $('#cc_exp_year').val()
+              };
+            console.log('newAccount', newAccount);
+            userService.getTmpAccount( function (data) {
+                var tmpAccount = data;
+               console.log('createAccount ', data);
+               tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@","");
+               userService.saveOrUpdateTmpAccount(tmpAccount,  function (data) {
+                    console.log('saveOrUpdateTmpAccount', data);
+                    //username, password, email, accountToken
+                    var newUser = {
+                        username: newAccount.email,
+                        password: newAccount.password,
+                        email: newAccount.email,
+                        accountToken: data.token
+                    };
+                    console.log('newUser Data >>> ', newUser);
+                    userService.createUser(newUser, function (data) {
+                        var adminUrl = data;
+                        console.log('created user successfully', data);
+
+                        PaymentService.getStripeCardToken(newAccount.card, function(token) {
+                              PaymentService.postStripeCustomer(token, function(stripeUser) {
+                                $scope.user.stripeId = stripeUser.id;
+                                PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
+                                console.log('successfully added card ', card);
+                                // PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
+                                //     window.location.replace(adminUrl);
+                                // });
+                              });
+                        });
+                    });
+                });
+            });
         };
+
+        $scope.newAccount = {};
+
+        $scope.checkDomainExists = function(newAccount) {
+            console.log('checking to see if the domiain exists ', newAccount.businessName);
+            var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@","");
+            userService.checkDomainExists(name, function (data) {
+               if(data != 'true') {
+                    $("#business-name .error").html("Domain Already Exists");
+                    $("#business-name").addClass('has-error');
+                    $("#business-name .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    $("#business-name .error").html("");
+                    $("#business-name").removeClass('has-error').addClass('has-success');
+                    $("#business-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            });
+        };
+
+        $scope.checkEmailExists = function(newAccount) {
+            console.log('checking to see if the username exists ', newAccount.email);
+            userService.checkEmailExists(newAccount.email, function (data) {
+               if(data === 'true') {
+                    // $("#input-company-name").val('');
+                    $("#email .error").html("Email Already Exists");
+                    $("#email").addClass('has-error');
+                    $("#email .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    console.log('email avaliable');
+                    $("#email .error").html("");
+                    $("#email").removeClass('has-error').addClass('has-success');
+                    $("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            });
+        };
+
+        $scope.checkPasswordLength = function(newAccount) {
+            console.log('checking to see if the password exists ', newAccount.password);
+
+               if(newAccount.password.length < 5) {
+                    // $("#input-company-name").val('');
+                    $("#password .error").html("Password must contain at least 5 characters");
+                    $("#password").addClass('has-error');
+                    $("#password .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    $("#password .error").html("");
+                    $("#password").removeClass('has-error').addClass('has-success');
+                    $("#password .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+        };
+
 
     }]);
