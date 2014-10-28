@@ -4,7 +4,8 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
         $scope.customerFilter = {};
         $scope.customerOrder = 'first';
         $scope.customerSortReverse = false;
-
+		$scope.customerDisplayFormat = 'first';
+		
 		$scope.contactLabel = function(contact) {
 			return CustomerService.contactLabel(contact);
 		};
@@ -68,6 +69,23 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
                     $scope.customerFilter = {};
                 }
             };
+            
+            
+			$scope.$watch('changeDisplayFormat', function(newValue, oldValue) {
+
+				if (newValue) {
+					newValue = parseInt(newValue);
+					if (newValue == 1) {
+						$scope.customerDisplayFormat = 'first';
+					} else if (newValue == 2) {
+						$scope.customerDisplayFormat = 'last';
+
+					}
+				}
+			}); 
+
+            
+            
 
             $scope.$watch('sortOrder', function (newValue, oldValue) {
                 if (newValue) {
