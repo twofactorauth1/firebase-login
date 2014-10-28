@@ -2,17 +2,10 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
   app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', function($scope, UserService, PaymentService, ngProgress, ToasterService) {
     ngProgress.start();
 
-    $scope.activeSkeuocard = false;
-
     $scope.invoicePageLimit = 5;
 
     $scope.updateStripeIdFn = function(billing) {
       $scope.user.stripeId = billing.billing.stripeCustomerId;
-      $scope.activeSkeuocard = false;
-    };
-
-    $scope.activeSkeuocardFn = function(status) {
-      $scope.activeSkeuocard = status;
     };
 
     $scope.invoicePageChangeFn = function(invoiceCurrentPage, invoiceTotalPages) {
