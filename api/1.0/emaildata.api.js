@@ -34,14 +34,21 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         var accountId = this.accountId(req);
-        //TODO: Implement Security - VIEW_EMAIL_SOURCE
+
         if (accountId == null) {
             return this.wrapError(resp, 403, "Cannot retrieve ContextIO information", "An account id must be specific to return this information");
         }
-
-        emailDataDao.getEmailSources(req.user, accountId, function(err, value) {
-            self.sendResultOrError(resp, err, value, "Error retrieving email sources");
+        self.checkPermission(req, self.sc.privs.VIEW_EMAIL_SOURCE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                emailDataDao.getEmailSources(req.user, accountId, function(err, value) {
+                    self.sendResultOrError(resp, err, value, "Error retrieving email sources");
+                });
+            }
         });
+
+
     },
 
 
@@ -52,12 +59,19 @@ _.extend(api.prototype, baseApi.prototype, {
         if (accountId == null) {
             return this.wrapError(resp, 403, "Cannot create Email Source", "An account id must be specific to return this information");
         }
-        //TODO: Implement Security - MODIFY_EMAIL_SOURCE
 
-        var body = req.body;
-        emailDataDao.createEmailSource(req.user, accountId, body.email, body.username, body.password, body.imapServer, body.port, function(err, value) {
-            self.sendResultOrError(resp, err, value, "Error creating email source");
+        self.checkPermission(req, self.sc.privs.MODIFY_EMAIL_SOURCE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var body = req.body;
+                emailDataDao.createEmailSource(req.user, accountId, body.email, body.username, body.password, body.imapServer, body.port, function(err, value) {
+                    self.sendResultOrError(resp, err, value, "Error creating email source");
+                });
+            }
         });
+
+
     },
 
 
@@ -66,21 +80,28 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var sourceId = req.params.sourceid;
         var accountId = this.accountId(req);
-        //TODO: Implement Security - VIEW_EMAIL_MESSAGE
 
-        var includeBody = req.query.includebody;
-        var options = {
-            email: req.query.email,
-            limit: req.query.limit,
-            offset: req.query.offset,
-            start: req.query.start,
-            end: req.query.end,
-            includeBody: (includeBody == "t" || includeBody == "true" || includeBody == 1 || includeBody == "1" || includeBody == true)
-        };
+        self.checkPermission(req, self.sc.privs.VIEW_EMAIL_SOURCE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var includeBody = req.query.includebody;
+                var options = {
+                    email: req.query.email,
+                    limit: req.query.limit,
+                    offset: req.query.offset,
+                    start: req.query.start,
+                    end: req.query.end,
+                    includeBody: (includeBody == "t" || includeBody == "true" || includeBody == 1 || includeBody == "1" || includeBody == true)
+                };
 
-        emailDataDao.getMessages(req.user, accountId, sourceId, options, function(err, value) {
-            this.sendResultOrError(resp, err, value, "Error retrieving messages for source");
+                emailDataDao.getMessages(req.user, accountId, sourceId, options, function(err, value) {
+                    this.sendResultOrError(resp, err, value, "Error retrieving messages for source");
+                });
+            }
         });
+
+
     },
 
 
@@ -90,11 +111,18 @@ _.extend(api.prototype, baseApi.prototype, {
         var sourceId = req.params.sourceid;
         var messageId = req.paams.messageid;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Implement Security - VIEW_EMAIL_MESSAGE
-
-        emailDataDao.getMessageById(req.user, accountId, sourceId, messageId, function(err, value) {
-            self.sendResultOrError(resp, err, value, "Error retrieving message by id");
+        
+        self.checkPermission(req, self.sc.privs.VIEW_EMAIL_MESSAGE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                emailDataDao.getMessageById(req.user, accountId, sourceId, messageId, function(err, value) {
+                    self.sendResultOrError(resp, err, value, "Error retrieving message by id");
+                });
+            }
         });
+
+
     }
 });
 

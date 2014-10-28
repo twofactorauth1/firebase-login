@@ -127,7 +127,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getDashboardForAccount');
 
         var accountId = parseInt(self.accountId(req));
-        
+
         self.checkPermission(req, self.sc.privs.VIEW_DASHBOARD, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
