@@ -68,7 +68,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService'], function (angularAM
                 });
 
                 uploader.onSuccessItem = function(fileItem, response, status, headers) {
-                    $scope.uploadComplete = true;
+                    $scope.uploadComplete = false;
                     response.files[0].filename = fileItem.file.name;
                     $scope.assets.push( response.files[0] )
                 };
