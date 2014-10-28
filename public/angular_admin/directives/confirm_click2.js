@@ -1,23 +1,23 @@
 define([
-    'angularAMD',
-    'bootstrap-confirmation'
+    "angularAMD",
+    "bootstrap-confirmation"
 ], function (angularAMD) {
-    angularAMD.directive('confirmClick2', function () {
+    angularAMD.directive("confirmClick2", function () {
         return {
-            restrict: 'A',
+            restrict: "A",
             scope: {
-                confirm: "&",
-                cancel: "&"
+                confirmClick2Confirm: "&",
+                confirmClick2Cancel: "&"
             },
             link: function (scope, element) {
                 $(element).confirmation({
                     onConfirm: function() {
-                        scope.confirm && scope.confirm();
+                        scope.confirmClick2Confirm && scope.confirmClick2Confirm();
                     },
                     onCancel: function() {
-                        scope.cancel && scope.cancel();
+                        scope.confirmClick2Cancel && scope.confirmClick2Cancel();
                     }
-                });
+                }).off("show");
             }
         };
     });
