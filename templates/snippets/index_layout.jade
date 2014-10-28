@@ -29,7 +29,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main")
             base(href="/")
             link(rel="shortcut icon", href=account.website.settings.favicon)
 
-    body(class='theme-main navbar-v#{ account.website.nav_version }', ng-controller="LayoutCtrl as layout", ng-cloak)
+    body(class='theme-main navbar-v#{ account.website.nav_version } ng-cloak', ng-controller="LayoutCtrl as layout", ng-cloak)
         block body_content
             div(id='fb-root')
             div(id='toolbar')
