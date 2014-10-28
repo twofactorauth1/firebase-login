@@ -315,9 +315,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                               PaymentService.postStripeCustomer(token, newUser, newUser.accounts[0].accountId, function(stripeUser) {
                                 console.log('stripuser >>> ', stripeUser);
                                 console.log('stripuser ID >>> ', stripeUser.id);
-                                PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
-                                userService.postAccountBilling(stripeUser.id, token, function(billing) {});
+                                //PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
+                                userService.postAccountBilling(stripeUser.id, token, function(billing) {
+                                    console.log('postAccountBilling ', billing);
+                                });
                                 console.log('successfully added card ', card);
+                                window.location.replace(adminUrl);
                                 // PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
                                 //     window.location.replace(adminUrl);
                                 // });
