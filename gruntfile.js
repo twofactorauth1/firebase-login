@@ -190,11 +190,17 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-timer/dist/angular-timer.js',
                     'public/js/libs/jquery-ui/jquery-ui.min.js',
                     'public/js/scripts/utils.js',
+                    'public/js/libs/ng-tags-input/ng-tags-input.js',
                     'public/js/libs/videogular/videogular.js',
                     'public/js/libs/videogular-controls/controls.js',
                     'public/js/libs/videogular-overlay-play/overlay-play.js',
                     'public/js/libs/videogular-buffering/buffering.js',
-                    'public/js/libs/videogular-poster/poster.js'],
+                    'public/js/libs/videogular-poster/poster.js',
+                    'public/js/libs/angular-input-date/src/angular-input-date.js',
+                    'public/js/libs/skeuocard/javascripts/skeuocard.min.js'
+
+
+                    ],
                 /*src: wiredepJSAry,*/
                 dest: 'public/js/indigenous.js'
             }
@@ -225,17 +231,22 @@ module.exports = function(grunt) {
                         'public/scripts/directives/dmStyle.js',
                         'public/scripts/directives/ngEnter.js',
                         'public/scripts/directives/convertHtml.js',
+			            'public/scripts/directives/scrollTo.js',
                         'public/scripts/services/accountService.js',
                         'public/scripts/services/websiteService.js',
                         'public/scripts/services/themeService.js',
                         'public/scripts/services/pagesService.js',
                         'public/scripts/services/postsService.js',
+                        'public/scripts/services/postService.js',
                         'public/scripts/filters/CreateUrlFilter.js',
                         'public/scripts/filters/generateURLforLinks.js',
                         'public/scripts/filters/getByProperty.js',
                         'public/scripts/controllers/mainCtrl.js',
                         'public/scripts/controllers/blogCtrl.js',
-                        'public/scripts/controllers/layoutCtrl.js'
+                        'public/scripts/controllers/layoutCtrl.js',
+                        'public/scripts/directives/skeuocard.js',
+                        'public/scripts/services/paymentService.js',
+                        'public/scripts/services/userService.js'
                     ]
                 }
             }

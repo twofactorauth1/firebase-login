@@ -308,16 +308,19 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     };
                     console.log('newUser Data >>> ', newUser);
                     userService.createUser(newUser, function (data) {
-                        var adminUrl = data;
-                        console.log('created user successfully', data);
-
+                        var newUser = data;
+                        console.log('newUser', newUser);
                         PaymentService.getStripeCardToken(newAccount.card, function(token) {
-                              PaymentService.postStripeCustomer(token, function(stripeUser) {
+                            console.log('newUser.accounts[0].accountId >>> ', newUser.accounts[0].accountId);
+                              PaymentService.postStripeCustomer(token, newUser, newUser.accounts[0].accountId, function(stripeUser) {
                                 console.log('stripuser >>> ', stripeUser);
                                 console.log('stripuser ID >>> ', stripeUser.id);
-                                $scope.user.stripeId = stripeUser.id;
-                                PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
+                                //PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
+                                userService.postAccountBilling(stripeUser.id, token, function(billing) {
+                                    console.log('postAccountBilling ', billing);
+                                });
                                 console.log('successfully added card ', card);
+                                window.location.replace(newUser.accountUrl);
                                 // PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
                                 //     window.location.replace(adminUrl);
                                 // });

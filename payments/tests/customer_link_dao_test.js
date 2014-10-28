@@ -12,7 +12,8 @@ var linkDao = require('../dao/customer_link.dao.js');
 var _log = $$.g.getLogger("customer.link.dao.test");
 var testContext = {};
 testContext.plans = [];
-
+var linkIDsToDelete = [];
+var async = require('async');
 
 exports.payment_dao_test = {
     setUp: function (cb) {
@@ -51,7 +52,18 @@ exports.payment_dao_test = {
 
     tearDown: function (cb) {
         var self = this;
-        cb();
+        if(linkIDsToDelete.length > 0) {
+            async.eachSeries(linkIDsToDelete, function(link, cb){
+                linkDao.removeById(link, $$.m.CustomerLink, function(err, obj){
+                    cb();
+                });
+            }, function(err){
+                cb();
+            });
+        } else {
+            cb();
+        }
+
     },
 
     testSafeCreate: function(test) {
@@ -70,6 +82,7 @@ exports.payment_dao_test = {
             }
             _log.info('saved link with id of ' + savedLink.get('_id'));
             console.dir(savedLink);
+            linkIDsToDelete.push(savedLink.id());
             p1.resolve();
         });
         var link2 = new $$.m.CustomerLink({
@@ -111,6 +124,7 @@ exports.payment_dao_test = {
                 test.done();
             }
             savedId = savedLink.get('_id');
+            linkIDsToDelete.push(savedId);
             _log.info('saved link with id of ' + savedLink.get('_id'));
             p1.resolve();
         });
@@ -162,6 +176,7 @@ exports.payment_dao_test = {
                 test.done();
             }
             _log.info('saved link with id of ' + savedLink.get('_id'));
+            linkIDsToDelete.push(savedLink.id());
             p1.resolve();
         });
         linkDao.saveOrUpdate(link1,  function(err, savedLink){
@@ -171,6 +186,7 @@ exports.payment_dao_test = {
                 test.done();
             }
             _log.info('saved link with id of ' + savedLink.get('_id'));
+            linkIDsToDelete.push(savedLink.id());
             p2.resolve();
         });
         linkDao.saveOrUpdate(link2,  function(err, savedLink){
@@ -180,6 +196,7 @@ exports.payment_dao_test = {
                 test.done();
             }
             _log.info('saved link with id of ' + savedLink.get('_id'));
+            linkIDsToDelete.push(savedLink.id());
             p3.resolve();
         });
 
@@ -225,6 +242,7 @@ exports.payment_dao_test = {
                 test.done();
             }
             _log.info('saved link with id of ' + savedLink.get('_id'));
+            linkIDsToDelete.push(savedLink.id());
             p1.resolve();
         });
         linkDao.saveOrUpdate(link1,  function(err, savedLink){
@@ -234,6 +252,7 @@ exports.payment_dao_test = {
                 test.done();
             }
             _log.info('saved link with id of ' + savedLink.get('_id'));
+            linkIDsToDelete.push(savedLink.id());
             p2.resolve();
         });
         linkDao.saveOrUpdate(link2,  function(err, savedLink){
@@ -243,6 +262,7 @@ exports.payment_dao_test = {
                 test.done();
             }
             _log.info('saved link with id of ' + savedLink.get('_id'));
+            linkIDsToDelete.push(savedLink.id());
             p3.resolve();
         });
 
@@ -288,6 +308,7 @@ exports.payment_dao_test = {
                 test.done();
             }
             _log.info('saved link with id of ' + savedLink.get('_id'));
+            linkIDsToDelete.push(savedLink.id());
             p1.resolve();
         });
         linkDao.saveOrUpdate(link1,  function(err, savedLink){
@@ -297,6 +318,7 @@ exports.payment_dao_test = {
                 test.done();
             }
             _log.info('saved link with id of ' + savedLink.get('_id'));
+            linkIDsToDelete.push(savedLink.id());
             p2.resolve();
         });
         linkDao.saveOrUpdate(link2,  function(err, savedLink){
@@ -306,6 +328,7 @@ exports.payment_dao_test = {
                 test.done();
             }
             _log.info('saved link with id of ' + savedLink.get('_id'));
+            linkIDsToDelete.push(savedLink.id());
             p3.resolve();
         });
 
@@ -361,6 +384,7 @@ exports.payment_dao_test = {
                 test.done();
             }
             _log.info('saved link with id of ' + savedLink.get('_id'));
+            linkIDsToDelete.push(savedLink.id());
             p1.resolve();
         });
         linkDao.saveOrUpdate(link1,  function(err, savedLink){

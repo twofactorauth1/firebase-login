@@ -23801,6 +23801,12 @@ div[data-class='image-text'] p {
   float: right;
 }
 /********** Single Blog ***********/
+div[data-type=single-post] .container {
+  padding: 0;
+  margin: 0;
+  max-width: none;
+  width: 100%;
+}
 .single-post-v1 .inner-page {
   padding: 0;
   max-width: 100%;
@@ -23875,6 +23881,13 @@ div[data-class="blog"] .single-blog {
   background-color: #efa022!important;
   border-bottom: 5px solid #efa022!important;
   color: #ffffff;
+}
+div[data-type=blog] .container {
+  width: auto;
+  padding: 0;
+  max-width: none;
+  width: 100%;
+  margin: 0;
 }
 .blog-v1 .inner-page {
   padding: 0;
