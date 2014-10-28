@@ -162,6 +162,11 @@ var user = $$.m.ModelBase.extend({
                     state:'',
                     zip:'',
                     country:''
+                },
+                "app_preferences": {
+                    "account":{
+                        "default_tab": "account_information" //"account_information", "billing", "integration"
+                    }
                 }
             }
         };
