@@ -32,8 +32,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //app.get(this.url('website/:id'), this.isAuthApi, this.getWebsiteById.bind(this));
         app.get(this.url('website/:id'), this.getWebsiteById.bind(this)); //Temp Added
         app.get(this.url(':accountid/cms/website', "account"), this.isAuthApi, this.getWebsiteForAccountId.bind(this));
-        app.post(this.url('website'), this.saveOrUpdateWebsite.bind(this));
-        app.put(this.url('website'), this.saveOrUpdateWebsite.bind(this));
+        app.post(this.url('website'), this.isAuthApi, this.saveOrUpdateWebsite.bind(this));
+        app.put(this.url('website'), this.isAuthApi, this.saveOrUpdateWebsite.bind(this));
 
         // WEBSITE LINKS
         app.get(this.url('website/:id/linklists'), this.isAuthApi, this.getWebsiteLinklists.bind(this));
@@ -45,7 +45,7 @@ _.extend(api.prototype, baseApi.prototype, {
         // PAGE
         app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
         app.get(this.url('page/:id'), this.getPageById.bind(this));
-        app.put(this.url('page'), this.saveOrUpdatePage.bind(this));
+        app.put(this.url('page'), this.isAuthApi, this.saveOrUpdatePage.bind(this));
 
 
         //consistent URLs
@@ -53,11 +53,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteId/pages/:id'), this.getPagesById.bind(this));
         app.get(this.url('website/:websiteId/pages'), this.getAllPages.bind(this));
         app.get(this.url('website/:websiteId/page/:id'), this.getPageById.bind(this));
-        app.post(this.url('website/:websiteId/page'), this.createPage.bind(this));
-        app.post(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
-        app.put(this.url('website/:websiteId/page'), this.createPage.bind(this));
-        app.put(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
-        app.delete(this.url('website/:websiteId/page/:id/:label'), this.deletePage.bind(this));
+        app.post(this.url('website/:websiteId/page'), this.isAuthApi, this.createPage.bind(this));
+        app.post(this.url('website/:websiteId/page/:id'), this.isAuthApi, this.updatePage.bind(this));
+        app.put(this.url('website/:websiteId/page'), this.isAuthApi, this.createPage.bind(this));
+        app.put(this.url('website/:websiteId/page/:id'), this.isAuthApi, this.updatePage.bind(this));
+        app.delete(this.url('website/:websiteId/page/:id/:label'), this.isAuthApi, this.deletePage.bind(this));
 
         // THEME
         //app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));()
@@ -112,7 +112,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var websiteId = req.params.id;
         var accountId = self.accountId(req);
-        //TODO: Add security - VIEW_WEBSITE
+        //TODO: Add security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
 
         cmsDao.getWebsiteById(websiteId, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Website by Id");
@@ -127,13 +127,19 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = req.body.accountId;
         var websiteId = req.body._id;
         //console.log('Other Data: '+JSON.stringify(req.body));
-        //TODO: Add Security - MODIFY_WEBSITE
 
-
-        cmsDao.updateWebsiteSettings(settings, accountId, websiteId, function (err, value) {
-            self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
-            self = value = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsDao.updateWebsiteSettings(settings, accountId, websiteId, function (err, value) {
+                    self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
+                    self = value = null;
+                });
+            }
         });
+
+
 
     },
 
@@ -141,12 +147,18 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         var accountId = parseInt(req.params.accountid);
-        //TODO: Add Security - VIEW_WEBSITE
 
-        cmsDao.getOrCreateWebsiteByAccountId(accountId, req.user.id(), true, function (err, value) {
-            self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
-            self = value = null;
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsDao.getOrCreateWebsiteByAccountId(accountId, req.user.id(), true, function (err, value) {
+                    self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
+                    self = value = null;
+                });
+            }
         });
+
     },
 
     getWebsiteLinklists: function(req, res) {
@@ -154,14 +166,21 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getWebsiteLinklists');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
 
-        var websiteId = req.params.id;
-        cmsManager.getWebsiteLinklists(websiteId, function (err, value) {
-            self.log.debug('<< getWebsiteLinklists');
-            self.sendResultOrError(res, err, value, "Error retrieving website Linklists");
-            self = value = null;
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var websiteId = req.params.id;
+                cmsManager.getWebsiteLinklists(websiteId, function (err, value) {
+                    self.log.debug('<< getWebsiteLinklists');
+                    self.sendResultOrError(res, err, value, "Error retrieving website Linklists");
+                    self = value = null;
+                });
+            }
         });
+
+
 
     },
 
@@ -173,13 +192,20 @@ _.extend(api.prototype, baseApi.prototype, {
         var handle = req.params.handle;
 
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
 
-        cmsManager.getWebsiteLinklistsByHandle(websiteId, handle, function (err, value) {
-            self.log.debug('<< getWebsiteLinklistsByHandle');
-            self.sendResultOrError(res, err, value, "Error retrieving website Linklists");
-            self = value = null;
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.getWebsiteLinklistsByHandle(websiteId, handle, function (err, value) {
+                    self.log.debug('<< getWebsiteLinklistsByHandle');
+                    self.sendResultOrError(res, err, value, "Error retrieving website Linklists");
+                    self = value = null;
+                });
+            }
         });
+
+
     },
 
     addWebsiteLinklists: function(req, res) {
@@ -189,13 +215,20 @@ _.extend(api.prototype, baseApi.prototype, {
         var websiteId = req.params.id;
         var linkLists = req.body;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
 
-        cmsManager.addWebsiteLinklists(websiteId, linkLists, function (err, value) {
-            self.log.debug('<< addWebsiteLinklists');
-            self.sendResultOrError(res, err, value, "Error adding website Linklists");
-            self = value = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.addWebsiteLinklists(websiteId, linkLists, function (err, value) {
+                    self.log.debug('<< addWebsiteLinklists');
+                    self.sendResultOrError(res, err, value, "Error adding website Linklists");
+                    self = value = null;
+                });
+            }
         });
+
+
     },
 
     updateWebsiteLinklists: function(req, res) {
@@ -206,13 +239,20 @@ _.extend(api.prototype, baseApi.prototype, {
         var handle = req.params.handle;
         var linkLists = req.body;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
 
-        cmsManager.updateWebsiteLinklists(websiteId, handle, linkLists, function (err, value) {
-            self.log.debug('<< updateWebsiteLinklists');
-            self.sendResultOrError(res, err, value, "Error adding website Linklists");
-            self = value = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.updateWebsiteLinklists(websiteId, handle, linkLists, function (err, value) {
+                    self.log.debug('<< updateWebsiteLinklists');
+                    self.sendResultOrError(res, err, value, "Error adding website Linklists");
+                    self = value = null;
+                });
+            }
         });
+
+
     },
 
     deleteWebsiteLinklists: function(req, res) {
@@ -222,13 +262,20 @@ _.extend(api.prototype, baseApi.prototype, {
         var websiteId = req.params.id;
         var handle = req.params.handle;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
 
-        cmsManager.deleteWebsiteLinklists(websiteId, handle, function (err, value) {
-            self.log.debug('<< deleteWebsiteLinklists');
-            self.sendResultOrError(res, err, value, "Error adding website Linklists");
-            self = value = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.deleteWebsiteLinklists(websiteId, handle, function (err, value) {
+                    self.log.debug('<< deleteWebsiteLinklists');
+                    self.sendResultOrError(res, err, value, "Error adding website Linklists");
+                    self = value = null;
+                });
+            }
         });
+
+
     },
 
     //endregion
@@ -255,7 +302,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
         self.log.debug('>> getPagesById');
-        //TODO: Add Security - VIEW_WEBSITE
+        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
 
         cmsDao.getPagesById(accountId, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page by Id");
@@ -270,7 +317,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.log.debug('>> getPageById');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
+        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
 
         cmsDao.getPageById(pageId, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page by Id");
@@ -280,18 +327,24 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     saveOrUpdatePage: function (req, resp) {
-        //TODO: Add Security
         var self = this;
         self.log.debug('>> saveOrUpdatePage');
         var _page = req.body;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
 
-        var page = new Page(_page);
-        cmsDao.saveOrUpdate(page, function (err, value) {
-            self.sendResultOrError(resp, err, value, "Error saving website Page");
-            self = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var page = new Page(_page);
+                cmsDao.saveOrUpdate(page, function (err, value) {
+                    self.sendResultOrError(resp, err, value, "Error saving website Page");
+                    self = null;
+                });
+            }
         });
+
+
     },
 
     createPage: function (req, res) {
@@ -301,27 +354,37 @@ _.extend(api.prototype, baseApi.prototype, {
         var websiteId = req.params.websiteId;
         var accountId = parseInt(self.accountId(req));
 
-        //TODO: Add Security - MODIFY_WEBSITE
-        var pageObj = req.body;
-        self.log.debug('>> page body');
-        var page = require('../../cms/model/page');
-        var temp = $$.u.idutils.generateUUID();
-        if (page != null) {
-            self.log.debug('>> page not null');
-            page = new Page({
-                _id: temp,
-                title: pageObj.title,
-                handle: pageObj.handle
-            });
-            page.set('websiteId', websiteId);
-            page.set('accountId', accountId);
-            self.log.debug('>> page created');
-            cmsManager.createPage(page, function (err, value) {
-                self.log.debug('<< createPage');
-                self.sendResultOrError(res, err, value, "Error creating Page");
-                self = null;
-            });
-        }
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var pageObj = req.body;
+                self.log.debug('>> page body');
+                var page = require('../../cms/model/page');
+                var temp = $$.u.idutils.generateUUID();
+                if (page != null) {
+                    self.log.debug('>> page not null');
+                    page = new Page({
+                        _id: temp,
+                        title: pageObj.title,
+                        handle: pageObj.handle
+                    });
+                    page.set('websiteId', websiteId);
+                    page.set('accountId', accountId);
+                    self.log.debug('>> page created');
+                    cmsManager.createPage(page, function (err, value) {
+                        self.log.debug('<< createPage');
+                        self.sendResultOrError(res, err, value, "Error creating Page");
+                        self = null;
+                    });
+                } else {
+                    self.log.error('Cannot create null page.');
+                    self.wrapError(res, 400, 'Bad Parameter', 'Cannot create a null page.');
+                    self = null;
+                }
+            }
+        });
+
     },
 
     updatePage: function (req, res) {
@@ -329,16 +392,23 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updatePage');
 
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
 
-        var pageId = req.params.id;
-        var _page = req.body;
-        var pageObj = new Page(_page);
-        cmsManager.updatePage(pageId, pageObj, function (err, value) {
-            self.log.debug('<< updatePage');
-            self.sendResultOrError(res, err, value, "Error updating Page");
-            self = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var pageId = req.params.id;
+                var _page = req.body;
+                var pageObj = new Page(_page);
+                cmsManager.updatePage(pageId, pageObj, function (err, value) {
+                    self.log.debug('<< updatePage');
+                    self.sendResultOrError(res, err, value, "Error updating Page");
+                    self = null;
+                });
+            }
         });
+
+
     },
 
     deletePage: function(req, res) {
@@ -346,17 +416,24 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> deletePage');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
 
-        var pageId = req.params.id;
-        var websiteId = req.params.websiteId;
-        var label = req.params.label;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var pageId = req.params.id;
+                var websiteId = req.params.websiteId;
+                var label = req.params.label;
 
-        cmsManager.deletePage(pageId, function (err, value) {
-            self.log.debug('<< deletePage', err);
-            self.sendResultOrError(res, err, value, "Error deleting Page");
-            self = null;
+                cmsManager.deletePage(pageId, function (err, value) {
+                    self.log.debug('<< deletePage', err);
+                    self.sendResultOrError(res, err, value, "Error deleting Page");
+                    self = null;
+                });
+            }
         });
+
+
 
     },
 
@@ -399,7 +476,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getAllThemes');
 
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_THEME
+        //TODO: Add Security - VIEW_THEME *CURRENTLY GLOBALLY READ*
 
         cmsManager.getAllThemeConfigs(function(err, value){
             self.log.debug('<< getAllThemes');
@@ -418,19 +495,26 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = req.params.accountId;
 
         accountId = parseInt(accountId);
-        //TODO: Add Security - VIEW_THEME
+
 
         if (isNaN(accountId)) {
             this.sendResultOrError(resp, "Account Id is not valid", "");
             self = null;
             return;
         }
-        cmsDao.getThemeConfigSignedByAccountId(accountId, function(err, value) {
-            self.log.debug('<< getThemeConfigForAccountId');
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsDao.getThemeConfigSignedByAccountId(accountId, function(err, value) {
+                    self.log.debug('<< getThemeConfigForAccountId');
 
-            self.sendResultOrError(resp, err, value, "Error retrieving Theme Config for AccountId: [" + accountId + "]");
-            self = null;
+                    self.sendResultOrError(resp, err, value, "Error retrieving Theme Config for AccountId: [" + accountId + "]");
+                    self = null;
+                });
+            }
         });
+
     },
 
     getThemePreview: function(req, res) {
@@ -438,15 +522,22 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getThemePreview');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_THEME
+
         var themeId = req.params.id;
 
-        cmsManager.getThemePreview(themeId, function(err, value){
-            self.log.debug('<< getThemePreview');
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.getThemePreview(themeId, function(err, value){
+                    self.log.debug('<< getThemePreview');
 
-            self.sendResultOrError(res, err, value, "Error retrieving Theme Preview for ThemeId: [" + themeId + "]");
-            self = null;
+                    self.sendResultOrError(res, err, value, "Error retrieving Theme Preview for ThemeId: [" + themeId + "]");
+                    self = null;
+                });
+            }
         });
+
 
     },
 
@@ -454,15 +545,22 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> setTheme');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_THEME
+
         var themeId = req.params.themeId;
         var websiteId = req.params.websiteId;
 
-        cmsManager.setThemeForAccount(accountId, themeId, function(err, value){
-            self.log.debug('<< setTheme');
-            self.sendResultOrError(res, err, value, "Error setting theme for account.");
-            self = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_THEME, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.setThemeForAccount(accountId, themeId, function(err, value){
+                    self.log.debug('<< setTheme');
+                    self.sendResultOrError(res, err, value, "Error setting theme for account.");
+                    self = null;
+                });
+            }
         });
+
 
     },
 
@@ -470,11 +568,18 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getThemeConfigByName');
         var name = req.params.name;
-        cmsManager.getThemeConfigByName(name, function(err, value){
-            self.log.debug('<< getThemeConfigByName');
-            self.sendResultOrError(res, err, value, 'Error getting theme by name.');
-            self = null;
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.getThemeConfigByName(name, function(err, value){
+                    self.log.debug('<< getThemeConfigByName');
+                    self.sendResultOrError(res, err, value, 'Error getting theme by name.');
+                    self = null;
+                });
+            }
         });
+
     },
 
     modifyTheme: function (req, res) {
@@ -484,12 +589,19 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var themeConfig = req.body;
         themeConfig._id = themeId;
-        //TODO: Add Security
-        cmsManager.updateThemeConfig(themeConfig, function(err, value){
-            self.log.debug('<< modifyTheme');
-            self.sendResultOrError(res, err, value, 'Error modifying theme.');
-            self = null;
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_THEME, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.updateThemeConfig(themeConfig, function(err, value){
+                    self.log.debug('<< modifyTheme');
+                    self.sendResultOrError(res, err, value, 'Error modifying theme.');
+                    self = null;
+                });
+            }
         });
+
     },
 
     //endregion
@@ -501,16 +613,24 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getComponentsByPage');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
+
         var pageId = req.params.id;
 
         accountId = parseInt(accountId);
 
-        cmsManager.getPageComponents(pageId, function (err, value) {
-            self.log.debug('<< getComponentsByPage');
-            self.sendResultOrError(res, err, value, "Error retrieving components");
-            self = null;
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.getPageComponents(pageId, function (err, value) {
+                    self.log.debug('<< getComponentsByPage');
+                    self.sendResultOrError(res, err, value, "Error retrieving components");
+                    self = null;
+                });
+            }
         });
+
+
     },
 
     getComponentsByType: function(req, res) {
@@ -518,21 +638,28 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getComponentsByType');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
+
         var pageId = req.params.id;
         var type = req.params.type;
 
         accountId = parseInt(accountId);
-
-        cmsManager.getPageComponentsByType(pageId, type, function (err, value) {
-            self.log.debug('<< getComponentsByType');
-            self.sendResultOrError(res, err, value, "Error retrieving components by type");
-            self = null;
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.getPageComponentsByType(pageId, type, function (err, value) {
+                    self.log.debug('<< getComponentsByType');
+                    self.sendResultOrError(res, err, value, "Error retrieving components by type");
+                    self = null;
+                });
+            }
         });
+
+
     },
 
     addComponentToPage: function (req, res) {
-        //TODO: Add Security
+
         var self = this;
         self.log.debug('>> addComponentToPage', req.body);
         var componentObj = req.body;
@@ -540,25 +667,32 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
-        var component = require('../../cms/model/components/' + componentObj.type);
-        var temp = $$.u.idutils.generateUUID();
-        if (component != null) {
-            component = new component({
-                _id: temp,
-                anchor: temp,
-                title: componentObj.title
 
-            });
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var component = require('../../cms/model/components/' + componentObj.type);
+                var temp = $$.u.idutils.generateUUID();
+                if (component != null) {
+                    component = new component({
+                        _id: temp,
+                        anchor: temp,
+                        title: componentObj.title
 
-        }
+                    });
 
-        cmsManager.addPageComponent(pageId, component.attributes, function (err, value) {
-            self.log.debug('<< addComponentToPageID' + pageId);
-            self.log.debug('<< addComponentToPageComponent' + componentObj);
-            self.sendResultOrError(res, err, value, "Error adding components to page");
-            self = null;
+                }
+
+                cmsManager.addPageComponent(pageId, component.attributes, function (err, value) {
+                    self.log.debug('<< addComponentToPageID' + pageId);
+                    self.log.debug('<< addComponentToPageComponent' + componentObj);
+                    self.sendResultOrError(res, err, value, "Error adding components to page");
+                    self = null;
+                });
+            }
         });
+
     },
 
     updateComponent: function(req, res) {
@@ -570,14 +704,21 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
-        var componentId = req.params.componentId;
 
-        cmsManager.updatePageComponent(pageId, componentObj, function (err, value) {
-            self.log.debug('<< updateComponent');
-            self.sendResultOrError(res, err, value, "Error updating a component on a page");
-            self = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var componentId = req.params.componentId;
+
+                cmsManager.updatePageComponent(pageId, componentObj, function (err, value) {
+                    self.log.debug('<< updateComponent');
+                    self.sendResultOrError(res, err, value, "Error updating a component on a page");
+                    self = null;
+                });
+            }
         });
+
 
     },
 
@@ -589,13 +730,20 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
 
-        cmsManager.updateAllPageComponents(pageId, componentAry, function (err, value) {
-            self.log.debug('<< updateAllComponents');
-            self.sendResultOrError(res, err, value, "Error updating components");
-            self = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.updateAllPageComponents(pageId, componentAry, function (err, value) {
+                    self.log.debug('<< updateAllComponents');
+                    self.sendResultOrError(res, err, value, "Error updating components");
+                    self = null;
+                });
+            }
         });
+
+
     },
 
     deleteComponent: function(req, res) {
@@ -605,14 +753,21 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
-        var componentId = req.params.componentId;
 
-        cmsManager.deleteComponent(pageId, componentId, function (err, value) {
-            self.log.debug('<< deleteComponent');
-            self.sendResultOrError(res, err, value, "Error deleting component");
-            self = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var componentId = req.params.componentId;
+
+                cmsManager.deleteComponent(pageId, componentId, function (err, value) {
+                    self.log.debug('<< deleteComponent');
+                    self.sendResultOrError(res, err, value, "Error deleting component");
+                    self = null;
+                });
+            }
         });
+
 
     },
 
@@ -623,15 +778,22 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
-        var componentId = req.params.componentId;
-        var newOrder = req.params.newOrder;
 
-        cmsManager.modifyComponentOrder(pageId, componentId, newOrder, function (err, value) {
-            self.log.debug('<< updateComponentOrder');
-            self.sendResultOrError(res, err, value, "Error deleting component");
-            self = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var componentId = req.params.componentId;
+                var newOrder = req.params.newOrder;
+
+                cmsManager.modifyComponentOrder(pageId, componentId, newOrder, function (err, value) {
+                    self.log.debug('<< updateComponentOrder');
+                    self.sendResultOrError(res, err, value, "Error deleting component");
+                    self = null;
+                });
+            }
         });
+
 
     },
 
@@ -644,16 +806,23 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
 
-        blogPost.set('accountId', accountId);
-        blogPost.set('pageId', pageId);
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                blogPost.set('accountId', accountId);
+                blogPost.set('pageId', pageId);
 
-        cmsManager.createBlogPost(accountId, blogPost, function (err, value) {
-            self.log.debug('<< createBlogPost' + JSON.stringify(blogPost));
-            self.sendResultOrError(res, err, value, "Error creating Blog Post");
-            self = null;
+                cmsManager.createBlogPost(accountId, blogPost, function (err, value) {
+                    self.log.debug('<< createBlogPost' + JSON.stringify(blogPost));
+                    self.sendResultOrError(res, err, value, "Error creating Blog Post");
+                    self = null;
+                });
+            }
         });
+
+
     },
 
     getBlogPost: function(req, res) {
@@ -661,7 +830,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getBlogPost');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
+        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var blogPostId = req.params.postId;
         self.log.debug('Account ID: ' + accountId + ' Blog Post ID: ' + blogPostId);
         cmsManager.getBlogPost(accountId, blogPostId, function (err, value) {
@@ -679,41 +848,55 @@ _.extend(api.prototype, baseApi.prototype, {
         var postId = req.params.postId;
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
-        blogPost.set('accountId', accountId.toString());
-        blogPost.set('_id', postId);
-        blogPost.set('pageId', pageId);
 
-        console.dir(req.body);
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                blogPost.set('accountId', accountId.toString());
+                blogPost.set('_id', postId);
+                blogPost.set('pageId', pageId);
 
-        cmsManager.updateBlogPost(accountId, blogPost, function (err, value) {
-            self.log.debug('<< updateBlogPost');
-            self.sendResultOrError(res, err, value, "Error updating Blog Post");
-            self = null;
+                console.dir(req.body);
+
+                cmsManager.updateBlogPost(accountId, blogPost, function (err, value) {
+                    self.log.debug('<< updateBlogPost');
+                    self.sendResultOrError(res, err, value, "Error updating Blog Post");
+                    self = null;
+                });
+            }
         });
+
     },
 
     deleteBlogPost: function(req, res) {
         var self = this;
         self.log.debug('>> deleteBlogPost');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
-        var blogPostId = req.params.postId;
-        var pageId = req.params.id;
-        self.log.debug('deleting post with id: ' + blogPostId);
 
-        cmsManager.deleteBlogPost(accountId, pageId, blogPostId, function (err, value) {
-            self.log.debug('<< deleteBlogPost');
-            self.sendResultOrError(res, err, value, "Error deleting Blog Post");
-            self = null;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var blogPostId = req.params.postId;
+                var pageId = req.params.id;
+                self.log.debug('deleting post with id: ' + blogPostId);
+
+                cmsManager.deleteBlogPost(accountId, pageId, blogPostId, function (err, value) {
+                    self.log.debug('<< deleteBlogPost');
+                    self.sendResultOrError(res, err, value, "Error deleting Blog Post");
+                    self = null;
+                });
+            }
         });
+
     },
 
     listBlogPosts: function (req, res) {
         var self = this;
         self.log.debug('>> listBlogPosts');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
+        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var limit = parseInt(req.query['limit'] || 0);//suitable default?
         var skip = parseInt(req.query['skip'] || 0);//TODO: use skip for paging
 
@@ -729,7 +912,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getPostsByAuthor');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
+        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var author = req.params.author;
 
         cmsManager.getPostsByAuthor(accountId, author, function (err, value) {
@@ -745,7 +928,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getPostsByTitle');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
+        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var title = req.params.title;
 
         cmsManager.getPostsByTitle(accountId, title, function (err, value) {
@@ -760,7 +943,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getPostsByContent');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
+        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var content = req.params.content;
 
         cmsManager.getPostsByData(accountId, content, function (err, value) {
@@ -775,7 +958,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getPostsByCategory');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
+        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var category = req.params.category;
 
         cmsManager.getPostsByCategory(accountId, category, function (err, value) {
@@ -790,7 +973,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getPostsByTag');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
+        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var tag = req.params.tag;
 
         cmsManager.getPostsByTag(accountId, [tag], function (err, value) {
@@ -805,16 +988,23 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> reorderPosts');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
-        var pageId = req.params.id;
 
-        var blogComponent = new $$.m.cms.components.Blog(req.body);
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var pageId = req.params.id;
 
-        cmsManager.updatePageComponent(pageId, blogComponent, function (err, value) {
-            self.log.debug('<< reorderPosts');
-            self.sendResultOrError(res, err, value, "Error reordering Blog Posts");
-            self = null;
+                var blogComponent = new $$.m.cms.components.Blog(req.body);
+
+                cmsManager.updatePageComponent(pageId, blogComponent, function (err, value) {
+                    self.log.debug('<< reorderPosts');
+                    self.sendResultOrError(res, err, value, "Error reordering Blog Posts");
+                    self = null;
+                });
+            }
         });
+
 
     },
 
@@ -823,16 +1013,23 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> reorderBlogPost');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_WEBSITE
-        var pageId = req.params.id;
-        var postId = "" + req.params.postId;
-        var newOrder = req.params.newOrder;
+        
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var pageId = req.params.id;
+                var postId = "" + req.params.postId;
+                var newOrder = req.params.newOrder;
 
-        cmsManager.modifyPostOrder(accountId, postId, pageId, newOrder, function (err, value) {
-            self.log.debug('<< reorderBlogPost');
-            self.sendResultOrError(res, err, value, "Error reordering Blog Posts");
-            self = null;
+                cmsManager.modifyPostOrder(accountId, postId, pageId, newOrder, function (err, value) {
+                    self.log.debug('<< reorderBlogPost');
+                    self.sendResultOrError(res, err, value, "Error reordering Blog Posts");
+                    self = null;
+                });
+            }
         });
+
     }
 
 });

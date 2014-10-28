@@ -34,7 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         if (accountId == null) {
             return this.wrapError(resp, 400, "Invalid parameter", "Invalid parameter provided for accountId");
         }
-        
+
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_ACCOUNT, accountId, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(req);
