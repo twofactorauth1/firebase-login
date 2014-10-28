@@ -35,7 +35,9 @@ var securityconstants = {
         'VIEW_PAYMENTS': 'VIEW_PAYMENTS',
         'MODIFY_PAYMENTS':'MODIFY_PAYMENTS',
         'VIEW_ASSET':'VIEW_ASSET',
-        'MODIFY_ASSET':'MODIFY_ASSET'
+        'MODIFY_ASSET':'MODIFY_ASSET',
+        'VIEW_DASHBOARD':'VIEW_DASHBOARD',
+        'MODIFY_DASHBOARD':'MODIFY_DASHBOARD'
     }
 
 };

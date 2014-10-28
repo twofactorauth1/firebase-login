@@ -33,7 +33,9 @@ var defaultPrivileges = [
     'VIEW_PAYMENTS',
     'MODIFY_PAYMENTS',
     'VIEW_ASSET',
-    'MODIFY_ASSET'
+    'MODIFY_ASSET',
+    'VIEW_DASHBOARD',
+    'MODIFY_DASHBOARD'
 ];
 
 var securityManager = {
