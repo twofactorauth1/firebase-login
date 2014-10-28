@@ -65,6 +65,7 @@
     "grunt-jsdoc-to-markdown": "^0.4.2",
     "grunt-ng-annotate": "^0.4.0",
     "grunt-ng-constant": "^1.0.0",
+    "grunt-prompt": "^1.2.1",
     "superagent": "0.18.1",
     "supertest": "0.13.0"
   },

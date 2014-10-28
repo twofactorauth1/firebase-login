@@ -13,124 +13,86 @@
                 <div class="col-xs-8 col-xs-offset-2">
                         <h3 class="center">Sign Up</h3>
                         <hr class="mb30"></hr>
-                         <div class="form-group">
-                            <label for="input-company-name">Business Name</label>
-                            <input class="form-control input-lg" type="text" id="input-company-name" value="{{account.company.name}}" placeholder="My Business Name"/>
-                         </div>
-                         <span id="help-company-name" class="error" />
-                         <hr></hr>
-                        <p class="description center">Choose one of the ways to register below</p>
-                        <div class="form form-inner">
-                            <div class="row social">
 
-                                <div class="social-btn-wrap">
-                                    <a href="/signup/facebook" class="btn btn-large btn-default fb-color">
-                                        <i class="fa fa-facebook" />
-                                    </a>
-                                    <div class="clearfix"></div>
-                                    <p>Facebook</p>
+                        <!-- EMAIL AND PASSOWORD -->
+
+                         <div class="form-group row col-sm-6">
+                                <label>Email</label>
+                                <div class="input-group">
+                                    <input class="form-control input-lg" id="input-username" type="text" name="username" placeholder="username" />
+                                    <span class="input-group-addon"><i class="fa fa-user" />
+                                    </span>
                                 </div>
-
-                                <div class="social-btn-wrap">
-                                    <a href="/signup/twitter" class="btn btn-large btn-default twitter-color">
-                                        <i class="fa fa-twitter" />
-                                    </a>
-                                    <div class="clearfix"></div>
-                                    <p>Twitter</p>
-                                </div>
-
-                                <div class="social-btn-wrap">
-                                    <a href="/signup/google" class="btn btn-large btn-default google-color">
-                                        <i class="fa fa-google-plus" />
-                                    </a>
-                                    <div class="clearfix"></div>
-                                    <p>Google Plus</p>
-                                </div>
-
-                                <div class="social-btn-wrap">
-                                    <a href="/signup/linkedin" class="btn btn-large btn-default linkedin-color">
-                                        <i class="fa fa-linkedin" />
-                                    </a>
-                                    <div class="clearfix"></div>
-                                    <p>LinkedIn</p>
-                                </div>
-
-                                <div class="social-btn-wrap">
-                                    <a href="#" class="btn btn-large btn-default showEmailForm email-color">
-                                        <i class="fa fa-envelope" />
-                                    </a>
-                                    <div class="clearfix"></div>
-                                    <p>Email</p>
-                                </div>
-                            </div>
-
-                            <div class="clearfix"></div>
-
-                            <form role="form" id="form-create-account" action="/signup" method="post">
-                                <div class="form-group row">
-                                    <div class="">
-                                        <label>Email</label>
-                                        <div class="input-group">
-                                            <input class="form-control input-lg" id="input-username" type="text" name="username" placeholder="username" />
-                                            <span class="input-group-addon"><i class="fa fa-user" />
-                                            </span>
-                                        </div>
-                                        <span id="help-username" class="error" />
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <div class="">
-                                        <label>Password</label>
-                                        <div class="input-group">
-                                            <input class="form-control input-lg" id="input-password" type="password" name="password" placeholder="password" />
-                                            <span class="input-group-addon"><i class="fa fa-lock" />
-                                            </span>
-                                        </div>
-                                        <span id="help-password" class="error" />
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <div class="">
-                                        <label>Re-enter Password</label>
-
-                                        <div class="input-group">
-                                            <input class="form-control input-lg" id="input-password2" type="password" name="password2" placeholder="password" />
-                                            <span class="input-group-addon"><i class="fa fa-lock" />
-                                            </span>
-                                        </div>
-                                        <span id="help-password2" class="error" />
-                                    </div>
-                                </div>
-
-                                <p class="termsOfuse">By continuing below you agree to the <a href="/terms">Terms of Use</a>
-                                    <p>
-                                        <button class="btn btn-primary btn-default btn-block btn-lg" type="submit" value="Create Account" role="button">Create Account</button>
-                            </form>
+                                <span id="help-username" class="error" />
                         </div>
+
+                        <div class="form-group row col-sm-6">
+                                <label>Password</label>
+                                <div class="input-group">
+                                    <input class="form-control input-lg" id="input-password" type="password" name="password" placeholder="password" />
+                                    <span class="input-group-addon"><i class="fa fa-lock" />
+                                    </span>
+                                </div>
+                                <span id="help-password" class="error" />
+                        </div>
+
+                        <hr></hr>
+
+                        <!-- MEMBERSHIP -->
+
+                        <div class="col-xs-6">
+                            <h5 class="center">Monthly Membership</h5>
+                            <a type="button" class="btn btn-primary btn-block">Choose</a>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <h5 class="center">Yearly Membership</h5>
+                            <a type="button" class="btn btn-primary btn-block">Choose</a>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <hr></hr>
+
+                        <!-- PAYMENT DETAILS -->
+
+                        <div class="credit-card-input no-js" id="skeuocard">
+                          <label for="cc_type">Card Type</label>
+                          <select name="cc_type">
+                            <option value="">...</option>
+                            <option value="visa">Visa</option>
+                            <option value="discover">Discover</option>
+                            <option value="mastercard">MasterCard</option>
+                            <option value="maestro">Maestro</option>
+                            <option value="jcb">JCB</option>
+                            <option value="unionpay">China UnionPay</option>
+                            <option value="amex">American Express</option>
+                            <option value="dinersclubintl">Diners Club</option>
+                          </select>
+                          <label for="cc_number">Card Number</label>
+                          <input type="text" name="cc_number" id="cc_number" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" size="19">
+                          <label for="cc_exp_month">Expiration Month</label>
+                          <input type="text" name="cc_exp_month" id="cc_exp_month" placeholder="00">
+                          <label for="cc_exp_year">Expiration Year</label>
+                          <input type="text" name="cc_exp_year" id="cc_exp_year" placeholder="00">
+                          <label for="cc_name">Cardholders Name</label>
+                          <input type="text" name="cc_name" id="cc_name" placeholder="John Doe">
+                          <label for="cc_cvc">Card Validation Code</label>
+                          <input type="text" name="cc_cvc" id="cc_cvc" placeholder="123" maxlength="3" size="3">
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <hr></hr>
+
+
+                        <!-- BUY -->
+
+                        <a type="button" class="btn btn-primary btn-block">Buy Now</a>
+
+
+
                 </div>
-                <div class="hidden">
-                    <h3>Benefits</h3>
-                    <hr></hr>
-                    <ul class="benefits">
-                        <li><span class="fa fa-clock-o"></span> <h4>Saves Time</h4></li>
-                        <li><span class="fa fa-rocket"></span> <h4>Your Secret Business Weapon</h4></li>
-                        <li><span class="fa fa-money"></span> <h4>Saves you Money</h4></li>
-                    </ul>
-                    <hr>
-                    <div class="testimonial row">
-                        <div class="col-xs-3">
-                            <img src="http://api.randomuser.me/portraits/med/women/17.jpg" class="img-circle"/>
-                        </div>
-                        <div class="col-xs-9 text">
-                            <p>"Indigenous is my secret weapon against my competiton and it is so intutive."</p>
-                            <div class="clearfix"></div>
-                            <span>- Rachel Montgomery</span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </section>

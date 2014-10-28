@@ -1,23 +1,25 @@
-<div class="title">
-    <div class="editable" data-class="title" data-index="{{$index}}">
-        <span ng-bind-html="component.title" />
+<div ng-class="component.type+'-v'+component.version">
+    <div class="title">
+        <div class="editable" data-class="title" data-index="{{$index}}">
+            <span ng-bind-html="component.title" />
+        </div>
     </div>
-</div>
 
-<div class="{{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style="'background': url({{component.bg.img.url}}) no-repeat fixed; 'background-color':{{component.bg.color}}">
-    <div class="panel-group" id="accordion" ng-repeat="element in component.panels">
-        <div class="panel pane-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{$index}}" ng-click="element[$index]= !element[$index]" ng-style="{'background-color':element[$index]?primaryColor:'', 'color':element[$index]?'white':''}" class="collapsed">
-                        <span class="glyphicon glyphicon-plus-sign" ng-hide="element[$index]">{{flag}}</span>
-                        <span ng-show="element[$index]" class="glyphicon glyphicon-minus-sign">{{flag}}</span> {{element.title}}
-                    </a>
-                </h4>
-            </div>
-            <div id="collapse{{$index}}" class="panel-collapse collapse" ng-style="{'background-color':element[$index]?component.bg.color:''}">
-                <div class="panel-body">
-                    {{element.text}}
+    <div class="{{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style="'background': url({{component.bg.img.url}}) no-repeat fixed; 'background-color':{{component.bg.color}}">
+        <div class="panel-group" id="accordion" ng-repeat="element in component.panels">
+            <div class="panel pane-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{$index}}" ng-click="element[$index]= !element[$index]" ng-style="{'background-color':element[$index]?primaryColor:'', 'color':element[$index]?'white':''}" class="collapsed">
+                            <span class="glyphicon glyphicon-plus-sign" ng-hide="element[$index]">{{flag}}</span>
+                            <span ng-show="element[$index]" class="glyphicon glyphicon-minus-sign">{{flag}}</span> {{element.title}}
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse{{$index}}" class="panel-collapse collapse" ng-style="{'background-color':element[$index]?component.bg.color:''}">
+                    <div class="panel-body">
+                        {{element.text}}
+                    </div>
                 </div>
             </div>
         </div>

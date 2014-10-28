@@ -153,6 +153,16 @@ var user = $$.m.ModelBase.extend({
                 dashboard: true,
                 marketing: true,
                 marketingsingle: true
+            },
+            user_preferences: {
+                default_contact_address: {
+                    address1:'',
+                    address2:'',
+                    city:'',
+                    state:'',
+                    zip:'',
+                    country:''
+                }
             }
         };
     },

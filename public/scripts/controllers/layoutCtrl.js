@@ -1,13 +1,15 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce',
-    function ($scope, pagesService, websiteService, postsService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService', 'PaymentService',
+    function ($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
-        route = $location.$$path;
 
+        route = $location.$$path;
+        window.oldScope;
         $scope.$route = $route;
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
+        $scope.$url=$location.$$url;
 
         //var config = angular.module('config');
         //that.segmentIOWriteKey = ENV.segmentKey;
@@ -19,6 +21,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     window.parent.frames[0].parentNode.activateSettings();
         // };
 
+        if(!window.oldScope)
+            window.oldScope = $scope;
         $scope.sortingLog = [];
 
         $scope.wait;
@@ -63,15 +67,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
             } else {
-                if (route === '/' || route === '') {
+                if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
                      route = 'index';
                      route = route.replace('/', '');
                      that.pages = data[route];
+                     console.log('that.pages >>> ', that.pages);
                 } else {
-                    route = $route.current.params.pagename;
+                    route = $scope.$location.$$path.replace('/page/', '');
+                    console.log('route ', route);
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
+
+                PostService.getAllPosts(function (posts){
+                    that.blogposts = posts;
+                });
             }
         });
 
@@ -98,27 +108,39 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
 
         window.updateComponents = function(data) {
-            console.log('data recieved >>> ', data);
             $scope.$apply(function() {
                 $scope.currentpage.components = data;
-                console.log('data applied', $scope.currentpage.components);
+                for (var i = 0; i < $scope.currentpage.components.length; i++) {
+                    if($scope.currentpage.components[i].type == 'navigation')  {
+                        var body = document.getElementsByTagName('body')[0];
+                        body.className = body.className.replace('navbar-v', '');
+                        body.className = body.className + ' navbar-v'+ $scope.currentpage.components[i].version;
+                    }
+                };
             });
         };
 
         window.triggerEditMode = function() {
-            console.log('trigger edit');
             var body = document.getElementsByTagName('body')[0];
             var hasClass = body.classList.contains('editing');
-            if(hasClass === false)
-            {
-                 body.className+=' editing';
-            }
+            if(hasClass === false) { body.className+=' editing'; }
+
+            var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            if(toolbar.classList.contains('editing') === false) { toolbar.className+=' editing'; }
+            window.oldScope.isEditing = true;
+
+            window.oldScope.$digest();
         };
 
         window.triggerEditModeOff = function() {
-            console.log('trigger edit off');
             var body = document.getElementsByTagName('body')[0];
             body.className = body.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
+
+            var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            toolbar.className = toolbar.className.replace( /(?:^|\s)editing(?!\S)/ , '' );
+           console.log(window.oldScope);
+            window.oldScope.isEditing = false;
+            window.oldScope.$digest();
         };
 
         $scope.trustSrc = function (src) {
@@ -170,13 +192,191 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         // };
 
         window.activateAloha = function() {
-            console.log('aloha');
-            $('.editable').aloha();
+            aloha.dom.query('.editable', document).forEach(aloha);
         };
 
         window.deactivateAloha = function() {
-            console.log('mahalo');
-            $('.editable').mahalo();
+           aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
+
+        window.updateWebsite = function(data) {
+            that.account.website = data;
+            // $scope.$apply(function() {
+            //     $scope.primaryColor = data.settings.primary_color;
+            //     $scope.primaryHighlight = data.settings.primary_highlight;
+            //     $scope.secondaryColor = data.settings.secondary_color;
+            //     $scope.navHover = data.settings.nav_hover;
+            //     $scope.primaryTextColor = data.settings.primary_text_color;
+            //     $scope.fontFamily = data.settings.font_family;
+            //     $scope.fontFamily2 = data.settings.font_family_2;
+            // });
+        };
+
+        $scope.createPost = function(postData) {
+
+
+            //            var data = {
+            //                _id: $scope.website._id,
+            //                accountId: $scope.website.accountId,
+            //                settings: $scope.website.settings
+            //            };
+            PostService.createPost($scope.currentpage._id,postData, function(data) {
+            });
+        };
+
+        $scope.deletePost = function(postId) {
+            PostService.deletePost($scope.currentpage._id, postId, function(data) {
+
+            });
+        };
+
+        $scope.resfeshIframe = function() {
+            //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
+        };
+
+        //SIGNUP SECTION
+
+        $scope.createUser = function(user) {
+            console.log('user', user);
+
+            //create contact
+            userService.addContact(user, function (data) {
+               console.log('data ', data);
+            });
+
+            //redirect to signup with details
+            window.location.href = "http://app.indigenous.local:3000/signup";
+        };
+
+        /*
+            {
+                "_id": null,
+                "company": {
+                    "name": "",
+                    "type": 0,
+                    "size": 0,
+                    "logo": ""
+                },
+                "subdomain": "",
+                "domain": "",
+                "token": "b3729701-bbce-435d-b60d-7e1a9c46ff07",
+                "website": {
+                    "settings": null,
+                    "websiteId": null,
+                    "themeId": "default"
+                },
+                "business": {
+                    "logo": "",
+                    "name": "",
+                    "description": "",
+                    "category": "",
+                    "size": "",
+                    "phones": [],
+                    "addresses": [],
+                    "type": ""
+                },
+                "billing": {
+                    "userId": "",
+                    "customerId": "",
+                    "cardToken": ""
+                },
+                "_v": "0.1",
+                "accountUrl": "http://.indigenous.local:3000"
+            }
+        */
+
+        $scope.createAccount = function(newAccount) {
+            newAccount.card = {
+                number: $('#cc_number').val(),
+                cvc: $('#cc_cvc').val(),
+                exp_month: $('#cc_exp_month').val(),
+                exp_year: $('#cc_exp_year').val()
+              };
+            console.log('newAccount', newAccount);
+            userService.getTmpAccount( function (data) {
+                var tmpAccount = data;
+               console.log('createAccount ', data);
+               tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@","");
+               userService.saveOrUpdateTmpAccount(tmpAccount,  function (data) {
+                    console.log('saveOrUpdateTmpAccount', data);
+                    //username, password, email, accountToken
+                    var newUser = {
+                        username: newAccount.email,
+                        password: newAccount.password,
+                        email: newAccount.email,
+                        accountToken: data.token
+                    };
+                    console.log('newUser Data >>> ', newUser);
+                    userService.createUser(newUser, function (data) {
+                        var adminUrl = data;
+                        console.log('created user successfully', data);
+
+                        PaymentService.getStripeCardToken(newAccount.card, function(token) {
+                              PaymentService.postStripeCustomer(token, function(stripeUser) {
+                                console.log('stripuser >>> ', stripeUser);
+                                console.log('stripuser ID >>> ', stripeUser.id);
+                                $scope.user.stripeId = stripeUser.id;
+                                PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
+                                console.log('successfully added card ', card);
+                                // PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
+                                //     window.location.replace(adminUrl);
+                                // });
+                              });
+                        });
+                    });
+                });
+            });
+        };
+
+        $scope.newAccount = {};
+
+        $scope.checkDomainExists = function(newAccount) {
+            console.log('checking to see if the domiain exists ', newAccount.businessName);
+            var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@","");
+            userService.checkDomainExists(name, function (data) {
+               if(data != 'true') {
+                    $("#business-name .error").html("Domain Already Exists");
+                    $("#business-name").addClass('has-error');
+                    $("#business-name .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    $("#business-name .error").html("");
+                    $("#business-name").removeClass('has-error').addClass('has-success');
+                    $("#business-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            });
+        };
+
+        $scope.checkEmailExists = function(newAccount) {
+            console.log('checking to see if the username exists ', newAccount.email);
+            userService.checkEmailExists(newAccount.email, function (data) {
+               if(data === 'true') {
+                    // $("#input-company-name").val('');
+                    $("#email .error").html("Email Already Exists");
+                    $("#email").addClass('has-error');
+                    $("#email .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    console.log('email avaliable');
+                    $("#email .error").html("");
+                    $("#email").removeClass('has-error').addClass('has-success');
+                    $("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            });
+        };
+
+        $scope.checkPasswordLength = function(newAccount) {
+            console.log('checking to see if the password exists ', newAccount.password);
+
+               if(newAccount.password.length < 5) {
+                    // $("#input-company-name").val('');
+                    $("#password .error").html("Password must contain at least 5 characters");
+                    $("#password").addClass('has-error');
+                    $("#password .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    $("#password .error").html("");
+                    $("#password").removeClass('has-error').addClass('has-success');
+                    $("#password .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+        };
+
 
     }]);

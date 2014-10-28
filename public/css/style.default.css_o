@@ -6622,6 +6622,12 @@ h4,
 .modal-backdrop.in {
   opacity: 0.65;
 }
+.modal {
+  z-index: 9999999;
+}
+.modal-backdrop {
+  z-index: 9999998;
+}
 .modal-footer {
   background: #eeeeee;
   border-bottom-left-radius: 5px;

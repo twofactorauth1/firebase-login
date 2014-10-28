@@ -79,7 +79,7 @@ exports.payment_dao_test = {
         });
         $.when(p1).done(function(){
             //try to save it again
-            linkDao.safeCreate(0, 'contactId', 'customerId',  function(err, savedLink){
+            linkDao.safeCreate(0, 'contactId', 'customerId', function(err, savedLink){
                 _log.info('saved link2');
                if(err) {
                     test.done();
@@ -116,7 +116,7 @@ exports.payment_dao_test = {
         });
 
         $.when(p1).done(function() {
-            linkDao.getLinkByIds(0, 'contactId', 'customerId', function(err, savedLink){
+            linkDao.getLinkByIds(0, 'contactId', 'customerId', null, function(err, savedLink){
                 if(err) {
                     test.ok(false, 'Error retrieving link: ' + err);
                     test.done();

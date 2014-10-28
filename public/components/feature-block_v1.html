@@ -5,25 +5,34 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div class="feature-block-title">
-    <div class="editable" data-class="title" ng-bind-html="component.title"></div>
-</div>
-
-<div ng-show="component.subtitle" class="feature-block-subtitle">
-    <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle">
+<style type="text/css">
+    .feature-block-v1 .feature-block-title .fa {
+        background: {{primaryHighlight}};
+        border: 10px solid {{primaryTextColor}};
+        color: {{primaryTextColor}};
+    }
+</style>
+<div ng-class="component.type+'-v'+component.version">
+    <div class="feature-block-title">
+        <div class="editable" data-class="title" ng-bind-html="component.title"></div>
     </div>
-</div>
 
-<div ng-show="component.text" class="feature-block-text">
-    <div class="editable" data-class="text" ng-bind-html="component.text">
-    </div>
-</div>
-
-<div class="col-xs-12" ng-show="component.btn.visibility">
-    <a class="btn btn-primary btn-block center" data-ng-href="{{component.btn.url}}" du-smooth-scroll>
-        <div class="{{component.btn.icon}}"></div>
-        <div data-class="btn-text" class="editable btn-text" data-index="{{$index}}">
-            {{component.btn.text}}
+    <div ng-show="component.subtitle" class="feature-block-subtitle">
+        <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle">
         </div>
-    </a>
+    </div>
+
+    <div ng-show="component.text" class="feature-block-text">
+        <div class="editable" data-class="text" ng-bind-html="component.text">
+        </div>
+    </div>
+
+    <div class="col-xs-12" ng-show="component.btn.visibility">
+        <a class="btn btn-primary btn-block center" data-ng-href="{{component.btn.url}}" du-smooth-scroll>
+            <div class="{{component.btn.icon}}"></div>
+            <div data-class="btn-text" class="editable btn-text" data-index="{{$index}}">
+                {{component.btn.text}}
+            </div>
+        </a>
+    </div>
 </div>

@@ -32,8 +32,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //app.get(this.url('website/:id'), this.isAuthApi, this.getWebsiteById.bind(this));
         app.get(this.url('website/:id'), this.getWebsiteById.bind(this)); //Temp Added
         app.get(this.url(':accountid/cms/website', "account"), this.isAuthApi, this.getWebsiteForAccountId.bind(this));
-        app.post(this.url('website'), this.saveOrUpdateWebsite.bind(this));
-        app.put(this.url('website'), this.saveOrUpdateWebsite.bind(this));
+        app.post(this.url('website'), this.isAuthApi, this.saveOrUpdateWebsite.bind(this));
+        app.put(this.url('website'), this.isAuthApi, this.saveOrUpdateWebsite.bind(this));
 
         // WEBSITE LINKS
         app.get(this.url('website/:id/linklists'), this.isAuthApi, this.getWebsiteLinklists.bind(this));
@@ -45,7 +45,7 @@ _.extend(api.prototype, baseApi.prototype, {
         // PAGE
         app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
         app.get(this.url('page/:id'), this.getPageById.bind(this));
-        app.put(this.url('page'), this.saveOrUpdatePage.bind(this));
+        app.put(this.url('page'), this.isAuthApi, this.saveOrUpdatePage.bind(this));
 
 
         //consistent URLs
@@ -53,11 +53,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteId/pages/:id'), this.getPagesById.bind(this));
         app.get(this.url('website/:websiteId/pages'), this.getAllPages.bind(this));
         app.get(this.url('website/:websiteId/page/:id'), this.getPageById.bind(this));
-        app.post(this.url('website/:websiteId/page'), this.createPage.bind(this));
-        app.post(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
-        app.put(this.url('website/:websiteId/page'), this.createPage.bind(this));
-        app.put(this.url('website/:websiteId/page/:id'), this.updatePage.bind(this));
-        app.delete(this.url('website/:websiteId/page/:id/:label'), this.deletePage.bind(this));
+        app.post(this.url('website/:websiteId/page'), this.isAuthApi, this.createPage.bind(this));
+        app.post(this.url('website/:websiteId/page/:id'), this.isAuthApi, this.updatePage.bind(this));
+        app.put(this.url('website/:websiteId/page'), this.isAuthApi, this.createPage.bind(this));
+        app.put(this.url('website/:websiteId/page/:id'), this.isAuthApi, this.updatePage.bind(this));
+        app.delete(this.url('website/:websiteId/page/:id/:label'), this.isAuthApi, this.deletePage.bind(this));
 
         //THEME Updated URLs
 
@@ -86,7 +86,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         // BLOG POSTS
         app.post(this.url('page/:id/blog'), this.isAuthApi, this.createBlogPost.bind(this));
-        app.get(this.url('page/:id/blog'), this.setup, this.listBlogPosts.bind(this));
+        app.get(this.url('page/:id/blog'), this.setup, this.listBlogPostsByPageId.bind(this));
         app.get(this.url('blog'), this.setup, this.listBlogPosts.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup, this.getBlogPost.bind(this));
         app.post(this.url('page/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
@@ -561,8 +561,8 @@ _.extend(api.prototype, baseApi.prototype, {
             component = new component({
                 _id: temp,
                 anchor: temp,
-                title: componentObj.title
-
+                title: componentObj.title,
+                visibility : true
             });
 
         }
@@ -666,7 +666,12 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: Add Security
         var self = this;
         self.log.debug('>> createBlogPost');
-        var blogPost = new $$.m.BlogPost(req.body);
+        var blog=req.body;
+        if(!Array.isArray(blog.post_tags))
+            blog.post_tags=blog.post_tags.split(',');
+
+        var blogPost = new $$.m.BlogPost(blog);
+        //var blogPost = new $$.m.BlogPost(req.body);
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
@@ -742,6 +747,20 @@ _.extend(api.prototype, baseApi.prototype, {
 
         cmsManager.listBlogPosts(accountId, limit, function (err, value) {
             self.log.debug('<< listBlogPosts '+value);
+            self.sendResultOrError(res, err, value, "Error listing Blog Posts");
+            self = null;
+        });
+    },
+    listBlogPostsByPageId: function (req, res) {
+        //TODO: Add Security
+        var self = this;
+        self.log.debug('>> listBlogPostsByPageId');
+        var pageId = req.params.id;
+        var limit = parseInt(req.query['limit'] || 0); //suitable default?
+        var skip = parseInt(req.query['skip'] || 0);   //TODO: use skip for paging
+
+        cmsManager.listBlogPostsByPageId(pageId, limit, function (err, value) {
+            self.log.debug('<< listBlogPostsByPageId ' + value);
             self.sendResultOrError(res, err, value, "Error listing Blog Posts");
             self = null;
         });

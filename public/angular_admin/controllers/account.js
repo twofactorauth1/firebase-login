@@ -1,29 +1,53 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress','mediaDirective', 'stateNavDirective'], function(app) {
-    app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', function ($scope, UserService, PaymentService, ngProgress) {
-        ngProgress.start();
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService'], function(app) {
+  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', function($scope, UserService, PaymentService, ngProgress, ToasterService) {
+    ngProgress.start();
 
-        $scope.billing = {};
+    $scope.activeSkeuocard = false;
 
-        $scope.$watch('billing', function (newValue, oldValue) {
-            if (newValue && newValue.customerId) {
-                UserService.getUserSubscriptions(newValue.customerId, function (subscriptions) {
-                    $scope.subscriptions = subscriptions;
-                });
-            }
+    $scope.invoicePageLimit = 5;
+
+    $scope.updateStripeIdFn = function(billing) {
+      $scope.user.stripeId = billing.billing.stripeCustomerId;
+      $scope.activeSkeuocard = false;
+    };
+
+    $scope.activeSkeuocardFn = function(status) {
+      $scope.activeSkeuocard = status;
+    };
+
+    $scope.invoicePageChangeFn = function (invoiceCurrentPage, invoiceTotalPages) {
+       var begin = ((invoiceCurrentPage - 1) * $scope.invoicePageLimit);
+       var end = begin + $scope.invoicePageLimit;
+       $scope.pagedInvoices = $scope.invoices.data.slice(begin, end);
+    };
+
+    $scope.$watch('user.stripeId', function(newValue, oldValue) {
+      if (newValue) {
+        PaymentService.getListStripeSubscriptions(newValue, function(subscriptions) {
+          $scope.subscription = subscriptions.data[0];
         });
 
-    	UserService.getUser(function (user) {
-    		$scope.user = user;
-    		$scope.activeTab = 'account';
-    	});
-
-        UserService.getAccount(function (account) {
-            $scope.account = account;
-            ngProgress.complete();
+        PaymentService.getUpcomingInvoice(newValue, function(upcomingInvoice) {
+          $scope.upcomingInvoice = upcomingInvoice;
         });
+      }
+    });
 
-        UserService.getAccountBilling(function (billing) {
-            $scope.billing = billing;
-        });
-    }]);
+    UserService.getUser(function(user) {
+      $scope.user = user;
+      $scope.activeTab = 'account';
+    });
+
+    UserService.getAccount(function(account) {
+      $scope.account = account;
+    });
+
+    PaymentService.getAllInvoices(function(invoices) {
+      $scope.invoices = invoices;
+      $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
+      ngProgress.complete();
+      ToasterService.processPending();
+    });
+
+  }]);
 });

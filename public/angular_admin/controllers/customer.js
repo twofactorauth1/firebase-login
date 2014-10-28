@@ -1,48 +1,50 @@
-define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngProgress', 'headroom','ngHeadroom','toaster'], function(app) {
-    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'toaster', '$window', function ($scope, CustomerService, ngProgress, toaster, $window) {
+define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngProgress', 'headroom','ngHeadroom','toasterService', 'iStartsWithFilter'], function(app) {
+    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', function ($scope, CustomerService, ngProgress, ToasterService, $window) {
         ngProgress.start();
         $scope.customerFilter = {};
         $scope.customerOrder = 'first';
         $scope.customerSortReverse = false;
+		$scope.customerDisplayFormat = 'first';
 		
 		$scope.contactLabel = function(contact) {
 			return CustomerService.contactLabel(contact);
-		}; 
-		
+		};
+
 		$scope.checkBestEmail = function(contact) {
 			var returnVal =  CustomerService.checkBestEmail(contact);
 			this.email = contact.email;
 			return returnVal;
-		}; 
-		
+		};
+
 		$scope.checkFacebookId = function(contact) {
 			var returnVal =  CustomerService.checkFacebookId(contact);
 			this.facebookId = contact.facebookId;
 			return returnVal;
-		}; 
-		
+		};
+
 		$scope.checkTwitterId = function(contact) {
 			var returnVal =   CustomerService.checkTwitterId(contact);
 			this.twitterId = contact.twitterId;
 			return returnVal;
-		}; 
-		
+		};
+
 		$scope.checkLinkedInId = function(contact) {
 			var returnVal = CustomerService.checkLinkedInId(contact);
 			this.linkedInUrl = contact.linkedInUrl;
 			this.linkedInId = contact.linkedInId;
 			return returnVal;
-		}; 
-		
+		};
+
 		$scope.checkAddress = function(contact) {
 			var returnVal = CustomerService.checkAddress(contact);
 			this.address = contact.address;
 			return returnVal;
-		}; 
-
-        CustomerService.getCustomers(function (customers) {
+		};
+        var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
+        CustomerService.getCustomersShortForm(fetchFields, function (customers) {
             $scope.customers = customers;
             ngProgress.complete();
+            ToasterService.processPending();
             $scope.$watch('searchBar', function (newValue, oldValue) {
                 if (newValue) {
                     var searchBarSplit = newValue.split(' ');
@@ -62,10 +64,28 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
             $scope.alphaFilter = function (alpha) {
                 if (alpha) {
                     $scope.customerFilter.first = alpha;
+                    $(".contentpanel").scrollTop(0);
                 } else {
                     $scope.customerFilter = {};
                 }
-            }; 
+            };
+            
+            
+			$scope.$watch('changeDisplayFormat', function(newValue, oldValue) {
+
+				if (newValue) {
+					newValue = parseInt(newValue);
+					if (newValue == 1) {
+						$scope.customerDisplayFormat = 'first';
+					} else if (newValue == 2) {
+						$scope.customerDisplayFormat = 'last';
+
+					}
+				}
+			}); 
+
+            
+            
 
             $scope.$watch('sortOrder', function (newValue, oldValue) {
                 if (newValue) {
@@ -93,15 +113,15 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
                     }
                 }
             });
-            
-            
-            
-			
+
+
+
+
 			$scope.importFacebookFriends = function() {
 				CustomerService.importFacebookFriends(function(data, success) {
 					if (success) {
 						$('#import-contacts-modal').modal('hide');
-						toaster.pop('success', "Contacts being imported.");
+						ToasterService.show('success', "Contacts being imported.");
 					} else
 						$window.location.href = "/inapplogin/facebook?redirectTo=" + encodeURIComponent('/admin#/customer');
 				});
@@ -111,7 +131,7 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
 				CustomerService.importLinkedInConnections(function(data, success) {
 					if (success) {
 						$('#import-contacts-modal').modal('hide');
-						toaster.pop('success', "Contacts being imported.");
+						ToasterService.show('success', "Contacts being imported.");
 					} else
 						$window.location.href = "/inapplogin/linkedin?redirectTo=" + encodeURIComponent('/admin#/customer');
 				});
@@ -121,13 +141,13 @@ define(['app', 'customerService', 'stateNavDirective','truncateDirective', 'ngPr
 				CustomerService.importGmailContacts(function(data, success) {
 					if (success) {
 						$('#import-contacts-modal').modal('hide');
-						toaster.pop('success', "Contacts being imported.");
+						ToasterService.show('success', "Contacts being imported.");
 					} else
 						$window.location.href = "/inapplogin/google?redirectTo=" + encodeURIComponent('/admin#/customer');;
 				});
 			};
 
-            
+
             $scope.$watch('toggleCategory', function (value) {
                if(angular.isDefined(value))
                		$scope.showContactLabel = value;

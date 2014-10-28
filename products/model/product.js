@@ -39,7 +39,7 @@ var product = $$.m.ModelBase.extend({
                     “total_downloads”:”400”,
                 }
             */
-            product_attributes: [],
+            product_attributes: {},
             /* Example:
                 {
                     “name”:”attribute”,

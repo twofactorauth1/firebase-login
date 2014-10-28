@@ -10,6 +10,7 @@ var userDao = require('../../dao/user.dao');
 var accountDao = require('../../dao/account.dao');
 var passport = require('passport');
 var cookies = require('../../utils/cookieutil');
+var authenticationDao = require('../../dao/authentication.dao');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -23,8 +24,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
+        app.get(this.url('preferences'), this.isAuthApi, this.getUserPreferences.bind(this));
+        app.post(this.url('preferences'), this.isAuthApi, this.updateUserPreferences.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.post(this.url(''), this.createUser.bind(this));
+
         app.put(this.url(':id'), this.isAuthApi, this.updateUser.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteUser.bind(this));
 
@@ -77,13 +81,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
 
         var username = req.params.username;
+        self.log.debug('>> userExists ', username);
 
-        var accountId = this.accountId(req);
-        if (accountId > 0) {
-            req.params.accountId = accountId;
-            return this.userExistsForAccount(req, resp);
-        }
+        // var accountId = this.accountId(req);
+        // if (accountId > 0) {
+        //     req.params.accountId = accountId;
+        //     return this.userExistsForAccount(req, resp);
+        // }
         userDao.usernameExists(username, function(err, value) {
+            self.log.debug('>> usernameExists ', value);
             if (err) {
                 return self.wrapError(resp, 500, "An error occurred checking username", err, value);
             }
@@ -109,7 +115,82 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     createUser: function(req,resp) {
+        var self = this, user, accountToken, deferred;
+        self.log.debug('>> handleSignup');
 
+        var username = req.body.username;
+        var password1 = req.body.password;
+        var password2 = req.body.password2;
+        var email = req.body.username;
+        var accountToken = req.body.accountToken;
+
+        // if (username == null || username.trim() == "") {
+        //     req.flash("error", "You must enter a valid username");
+        //     return resp.redirect("/signup/create");
+        // }
+
+        // if (password1 !== password2) {
+        //     req.flash("error", "Passwords do not match");
+        //     return resp.redirect("/signup/create");
+        // }
+
+        // if (password1 == null || password1.trim() == "" || password1.length < 5) {
+        //     req.flash("error", "You must enter a valid password at least 5 characters long");
+        //     return resp.redirect("/signup/create");
+        // }
+
+        // var isEmail = $$.u.validate(email, { required: true, email: true }).success;
+        // if (isEmail === false) {
+        //     req.flash("error", "You must enter a valid email");
+        //     return resp.redirect("/signup/create");
+        // }
+
+        //ensure we don't have another user with this username;
+        var accountToken = cookies.getAccountToken(req);
+
+        self.log.debug('>> username', username);
+        self.log.debug('>> password1', password1);
+        self.log.debug('>> email', email);
+        self.log.debug('>> accountToken', accountToken);
+
+
+        userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function (err, value) {
+            self.log.debug('createUserFromUsernamePassword >>>');
+                if (!err) {
+
+                    req.login(value, function (err) {
+                        if (err) {
+                            return resp.redirect("/");
+                        } else {
+
+                            var accountId = value.getAllAccountIds()[0];
+                            self.log.debug('createUserFromUsernamePassword accountId >>>', accountId);
+                            authenticationDao.getAuthenticatedUrlForAccount(accountId, self.userId(req), "admin", function (err, value) {
+                                console.log('value url >>> ', value);
+                                if (err) {
+                                    resp.redirect("/home");
+                                    self = null;
+                                    return;
+                                }
+                                console.log('redirect value ', value);
+                                resp.send(value);
+                                self = null;
+                            });
+                        }
+                    });
+                } else {
+                    self.log.debug('createUserFromUsernamePassword >>> ERROR');
+                    req.flash("error", value.toString());
+                    return resp.redirect("/page/signup");
+                }
+        });
+
+        // userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function(err, value) {
+        //     if (err) {
+        //         return self.wrapError(resp, 500, "An error occurred checking username", err, value);
+        //     }
+        //     return resp.send(value);
+        // });
     },
 
 
@@ -131,7 +212,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if (!err && value != null) {
                 value.set("welcome_alert",req.body.welcome_alert);
                 console.log(value);
-                user.set("credentials",value.get("credentials"))
+                user.set("credentials",value.get("credentials"));
 
                 userDao.saveOrUpdate(user, function(err, value) {
                     if (!err && value != null) {
@@ -147,6 +228,48 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+    },
+
+    getUserPreferences: function(req, res) {
+        var self = this;
+        self.log.debug('>> getUserPreferences');
+
+        var user = req.user;
+
+        userDao.getById(user.id(), function(err, value) {
+            if (!err) {
+                self.log.debug('<< getUserPreferences');
+                return res.send(value.get('user_preferences'));
+            } else {
+                self.log.error('Error getting user: ' + err);
+                return self.wrapError(res, 500, null, err, value);
+            }
+        });
+    },
+
+    updateUserPreferences: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateUserPreferences');
+
+        var user = req.user;
+        var preferences = req.body;
+        userDao.getById(user.id(), function(err, savedUser) {
+            if(err) {
+                self.log.error('Error getting user: ' + err);
+                return self.wrapError(res, 500, null, err, value);
+            } else {
+                savedUser.set('user_preferences', preferences);
+                userDao.saveOrUpdate(savedUser, function(err, updatedUser){
+                    if(err) {
+                        self.log.error('Error updating user preferences: ' + err);
+                        return self.wrapError(res, 500, null, err, value);
+                    } else {
+                        self.log.debug('<< updateUserPreferences');
+                        return res.send(updatedUser.get('user_preferences'));
+                    }
+                });
+            }
+        });
     },
 
 

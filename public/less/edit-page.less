@@ -1,11 +1,141 @@
 
-/* Global Styles */
+.website {
+  .pageheader {
+    .btn-group {
+      margin-bottom: 0;
+    }
+  }
+
+  #iframe-website {
+    border: none;
+    width: 100%;
+  }
+
+  .component-icon {
+    font-size: 55px;
+    text-align: center;
+  }
+
+  .componentOption {
+    .thumbnail {
+      &:hover {
+        background: #dddddd;
+      }
+    }
+  }
+  #add-component-modal {
+    .modal-body {
+      height: 300px;
+      overflow-y: auto;
+    }
+    .modal-footer {
+      margin-top: 0;
+    }
+  }
+
+  #change-theme-modal {
+    .modal-body {
+      max-height: 450px;
+      overflow-y: auto;
+    }
+    .modal-footer {
+      margin-top: 0;
+    }
+    .thumbnail {
+      padding: 15px;
+      &:hover {
+        background-color: #54C8E8;
+        border-color: #4eb1ca;
+        cursor: pointer;
+      }
+      img {
+        max-width: 100%;
+        border: 1px solid #ccc;
+      }
+    }
+
+  }
+
+  .component-icon {
+
+    i.custom {
+      background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/component-icons-sprite.png') no-repeat;
+      margin: 0 auto;
+      display: block;
+    }
+
+    i.masthead {
+      background-position: -87px 22px;
+      width: 70px;
+      height: 78px;
+    }
+
+    i.blog {
+      background-position: -28px 22px;
+      width: 55px;
+      height: 78px;
+    }
+
+    i.feature-block {
+      background-position: -155px 22px;
+      width: 70px;
+      height: 78px;
+    }
+
+    i.footer {
+      background-position: -223px 22px;
+      width: 68px;
+      height: 78px;
+    }
+
+    i.image-slider {
+      background-position: -223px 22px;
+      width: 68px;
+      height: 78px;
+    }
+
+    i.image-text {
+      background-position: 0px -46px;
+      width: 65px;
+      height: 58px;
+      margin: 10px auto;
+    }
+
+    i.logo-list {
+      background-position: -212px -49px;
+      width: 93px;
+      height: 58px;
+      margin: 10px 0;
+    }
+
+    i.sign-up-form {
+      background-position: -69px -46px;
+      width: 97px;
+      height: 60px;
+      margin: 10px 0;
+    }
+
+    i.single-post {
+      background-position: -165px -48px;
+      width: 50px;
+      height: 78px;
+    }
+
+    i.social-links {
+      background-position: -306px -48px;
+      width: 60px;
+      height: 78px;
+    }
+
+  }
+
+}
 
 #nestable-menu {
   z-index: 999;
-width: 100%;
-border-radius: 0;
-margin: 0
+  width: 100%;
+  border-radius: 0;
+  margin: 0
 }
 
 .screen-type {
@@ -288,25 +418,19 @@ input[type='file'] {
   text-align: center;
 }
 
-#change-theme-modal .thumbnail:hover {
-  background-color: #54C8E8;
-  border-color: #4eb1ca;
-  cursor: pointer;
-}
-
-#change-theme-modal .thumbnail img {
-  max-width: 150px;
-}
-
-.check-theme {
+.check-theme, .check-component {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -12px;
+  right: -2px;
   z-index: 9999;
-  margin: -15px 1px 0 0;
+  margin: 0 1px 0 0;
   color: green;
   font-size: 29px;
-  width: 25px;
+  background: #fff;
+  width: 24px;
+  height: 26px;
+  border-radius: 55px;
+  line-height: 10px;
 }
 
 .component.dragging {
@@ -335,8 +459,56 @@ input[type='file'] {
   }
   .btn {
     background: none!important;
-    border: 2px solid #fff!important;
+    border: 1px solid #fff!important;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3)!important;
     color: #ffffff!important;
   }
+}
+
+.componentOption {
+  .thumbnail {
+    border: 3px solid #CFCFCF;
+  }
+  .caption {
+    padding: 5px;
+  }
+
+  &.selected {
+    .thumbnail {
+      border:3px solid #4bb0cb;
+    }
+  }
+
+  &.success {
+    .thumbnail {
+      border:3px solid green;
+    }
+    .check-component {
+      display: block!important;
+    }
+  }
+
+}
+
+
+.theme {
+  .thumbnail {
+    border: 3px solid #CFCFCF;
+  }
+
+  &.selected {
+    .thumbnail {
+      border:3px solid #4bb0cb;
+    }
+  }
+
+  &.success {
+    .thumbnail {
+      border:3px solid green;
+    }
+    .check-theme {
+      display: block!important;
+    }
+  }
+
 }

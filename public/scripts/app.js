@@ -30,7 +30,9 @@ var mainApp = angular
         "com.2fdevs.videogular.plugins.controls",
         "com.2fdevs.videogular.plugins.overlayplay",
         "com.2fdevs.videogular.plugins.buffering",
-        "com.2fdevs.videogular.plugins.poster"
+        "com.2fdevs.videogular.plugins.poster",
+        "ngTagsInput",
+        'ngInputDate'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){
@@ -62,6 +64,10 @@ var mainApp = angular
                 controller: 'BlogCtrl as blog'
             })
             .when('/page/:pagename', {
+                templateUrl: '../views/main.html',
+                controller: 'LayoutCtrl as layout'
+            })
+            .when('/signup', {
                 templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
