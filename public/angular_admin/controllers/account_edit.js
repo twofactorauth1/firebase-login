@@ -7,6 +7,25 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
         //back button click function
         $scope.$back = function() {window.history.back();};
 
+        //business phone watch setup
+        $scope.businessPhoneWatchFn = function (index) {
+            $scope.$watch('account.business.phones[' + index + ']', function (newValue, oldValue) {
+                if (newValue && newValue.number.length > phoneCharLimit)
+                    UserService.putAccount($scope.account, function (account) {
+                        //$scope.account = account;
+                    });
+            }, true);
+        };
+
+        $scope.userPhoneWatchFn = function (index) {
+            $scope.$watch('user.details[0].phones[' + index + ']', function (newValue, oldValue) {
+                if (newValue && newValue.number.length > phoneCharLimit)
+                    UserService.putUser($scope.user, function (account) {
+                        //$scope.account = account;
+                    });
+            }, true);
+        };
+
         //user API call for object population
         UserService.getUser(function (user) {
     		$scope.user = user;
@@ -28,16 +47,6 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
                 $scope.businessPhoneWatchFn(index);
             });
         });
-
-        //business phone watch setup
-        $scope.businessPhoneWatchFn = function (index) {
-            $scope.$watch('account.business.phones[' + index + ']', function (newValue, oldValue) {
-                if (newValue && newValue.number.length > phoneCharLimit)
-                    UserService.putAccount($scope.account, function (account) {
-                        //$scope.account = account;
-                    });
-            }, true);
-        };
 
         //business phone field add
         $scope.addBusinessContactFn = function () {
@@ -119,15 +128,6 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
                 typeLabel = 'work';
             $('#user-phone-type-' + index).html(typeLabel);
             $scope.user.details[0].phones[index].type = type;
-        };
-
-        $scope.userPhoneWatchFn = function (index) {
-            $scope.$watch('user.details[0].phones[' + index + ']', function (newValue, oldValue) {
-                if (newValue && newValue.number.length > phoneCharLimit)
-                    UserService.putUser($scope.user, function (account) {
-                        //$scope.account = account;
-                    });
-            }, true);
         };
 
         //business phone field add
