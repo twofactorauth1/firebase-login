@@ -46,12 +46,19 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> listCourses');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_COURSE
-        var userId = self.userId(req);
-        courseDao.listUserCourses(userId, function (err, courses) {
-            self.log.debug('<< listCourses');
-            self.sendResultOrError(resp, err, courses, "Error getting courses");
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var userId = self.userId(req);
+                courseDao.listUserCourses(userId, function (err, courses) {
+                    self.log.debug('<< listCourses');
+                    self.sendResultOrError(resp, err, courses, "Error getting courses");
+                });
+            }
         });
+
     },
 
     getCourseById: function (req, resp) {
@@ -67,8 +74,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
         courseDao.getCourseById(courseId, self.userId(req), function (err, course) {
             var accountId = parseInt(self.accountId(req));
-            //TODO: Add Security - VIEW_COURSE
+
             self.log.debug('<< getCourseById');
+            self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_COURSE, resp, course);
             self.sendResultOrError(resp, err, course, "Error getting course");
         });
     },
@@ -78,11 +86,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         var accountId = parseInt(self.accountId(req));
 
-        //TODO: Add Security - MODIFY_COURSE
-        courseDao.createCourse(req.body, userId, accountId, function (err, createdCourse) {
-            self.sendResultOrError(resp, err, createdCourse, "Error creating course");
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                courseDao.createCourse(req.body, userId, accountId, function (err, createdCourse) {
+                    self.sendResultOrError(resp, err, createdCourse, "Error creating course");
+                });
+            }
         });
-
     },
 
     updateCourse: function (req, resp) {
@@ -97,11 +109,18 @@ _.extend(api.prototype, baseApi.prototype, {
         courseId = parseInt(courseId);
         var userId = self.userId(req);
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_COURSE
 
-        courseDao.updateCourse(updatedCourseData, courseId, userId, function (err, value) {
-            return self.sendResultOrError(resp, err, value, "Error updating course");
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                courseDao.updateCourse(updatedCourseData, courseId, userId, function (err, value) {
+                    return self.sendResultOrError(resp, err, value, "Error updating course");
+                });
+            }
         });
+
+
     },
 
     deleteCourse: function (req, resp) {
@@ -115,11 +134,18 @@ _.extend(api.prototype, baseApi.prototype, {
         courseId = parseInt(courseId);
         var userId = self.userId(req);
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - MODIFY_COURSE
 
-        courseDao.deleteCourse(courseId, userId, function (err, value) {
-            return self.sendResultOrError(resp, err, value, "Error removing course");
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                courseDao.deleteCourse(courseId, userId, function (err, value) {
+                    return self.sendResultOrError(resp, err, value, "Error removing course");
+                });
+            }
         });
+
+
     },
 
     //videos
@@ -135,11 +161,18 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
 
         //TODO: Get accountId from Course
-        //TODO: Add Security - VIEW_COURSE
-
-        courseDao.listCourseVideos(courseId, userId, function (err, videos) {
-            self.sendResultOrError(resp, err, videos, "Error getting course videos");
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                courseDao.listCourseVideos(courseId, userId, function (err, videos) {
+                    self.sendResultOrError(resp, err, videos, "Error getting course videos");
+                });
+            }
         });
+
+
     },
     getCourseVideoById: function (req, resp) {
         var self = this;
@@ -157,11 +190,17 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
 
         //TODO: Get accountId from Course
-        //TODO: Add Security - VIEW_COURSE
-
-        courseDao.findCourseVideoById(courseId, videoId, userId, function (err, video) {
-            self.sendResultOrError(resp, err, video, "Error getting course video");
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                courseDao.findCourseVideoById(courseId, videoId, userId, function (err, video) {
+                    self.sendResultOrError(resp, err, video, "Error getting course video");
+                });
+            }
         });
+
     },
     addVideoToCourse: function (req, resp) {
         var self = this;
@@ -178,11 +217,18 @@ _.extend(api.prototype, baseApi.prototype, {
         courseId = parseInt(courseId);
         var userId = self.userId(req);
         //TODO: Get accountId from Course
-        //TODO: Add Security - MODIFY_COURSE
 
-        courseDao.addVideoToCourse(videoToAdd, courseId, userId, function (err, video) {
-            self.sendResultOrError(resp, err, video, "Error adding video to course");
-        })
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                courseDao.addVideoToCourse(videoToAdd, courseId, userId, function (err, video) {
+                    self.sendResultOrError(resp, err, video, "Error adding video to course");
+                });
+            }
+        });
+
     },
     updateVideoInCourse: function (req, resp) {
         var self = this;
@@ -201,11 +247,18 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
 
         //TODO: Get accountId from Course
-        //TODO: Add Security - MODIFY_COURSE
-
-        courseDao.updateVideoInCourse(videoId, updatedVideoValues, courseId, userId, function (err, video) {
-            self.sendResultOrError(resp, err, video, "Error updating video in course");
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                courseDao.updateVideoInCourse(videoId, updatedVideoValues, courseId, userId, function (err, video) {
+                    self.sendResultOrError(resp, err, video, "Error updating video in course");
+                });
+            }
         });
+
+
     },
     deleteVideoFromCourse: function (req, resp) {
         var self = this;
@@ -224,12 +277,25 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
 
         //TODO: Get accountId from Course
-        //TODO: Add Security - MODIFY_COURSE
-
-        courseDao.deleteVideoFromCourse(videoId, courseId, userId, function (err, video) {
-            self.sendResultOrError(resp, err, video, "Error deleting video from course");
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                courseDao.deleteVideoFromCourse(videoId, courseId, userId, function (err, video) {
+                    self.sendResultOrError(resp, err, video, "Error deleting video from course");
+                });
+            }
         });
+
+
     },
+
+    /**
+     * NO security needed.  Any logged in user may call this method
+     * @param req
+     * @param resp
+     */
     isSubdomainFree: function (req, resp) {
         var self = this;
         var subdomain = req.params.subdomain;
@@ -237,6 +303,7 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, {result: isFree}, "Error while checking subdomain");
         });
     },
+
     getSubscribersList: function (req, resp) {
         var courseId = req.params.id;
         if (!courseId) {
@@ -245,21 +312,32 @@ _.extend(api.prototype, baseApi.prototype, {
         courseId = parseInt(courseId);
         var self = this;
         var userId = self.userId(req);
-        courseDao.getCourseById(courseId, userId, function (err, course) {
-            if (err || !course) {
-                return self.wrapError(resp, 500, null, err, "No course found");
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
             } else {
-                if (course.get("userId") != userId) {
-                    return self.wrapError(resp, 403, null, "Not allowed", "Not allowed");
-                } else {
-                    subscriberDao.listCourseSubscribers(courseId, function (err, docs) {
-                        self.sendResultOrError(resp, err, docs, "Error while getting subscribers");
-                    });
-                }
+                courseDao.getCourseById(courseId, userId, function (err, course) {
+                    if (err || !course) {
+                        return self.wrapError(resp, 500, null, err, "No course found");
+                    } else {
+                        if (course.get("userId") != userId) {
+                            return self.wrapError(resp, 403, null, "Not allowed", "Not allowed");
+                        } else {
+                            subscriberDao.listCourseSubscribers(courseId, function (err, docs) {
+                                self.sendResultOrError(resp, err, docs, "Error while getting subscribers");
+                            });
+                        }
+                    }
+                });
             }
         });
 
+
+
     },
+
+
     getVideoForCurrentUser: function (req, resp) {
         var courseId = req.params.id;
         var videoId = req.params.videoId;
@@ -270,37 +348,47 @@ _.extend(api.prototype, baseApi.prototype, {
         courseId = parseInt(courseId);
         //
         var self = this;
-        if (courseId) {
-            courseDao.getCourseByIdForSubscriber(courseId, function (error, course) {
-                    if (error || !course) {
-                        var msg = "Error getting course: " + (error != null ? error.message : "");
-                        return self.wrapError(resp, 500, msg, msg, msg);
-                    } else {
-                        subscriberDao.findOne({courseId: courseId, email: req.user.get("email")}, function (error, subscriber) {
-                            if (error) {
-                                return self.wrapError(resp, 500, error);
-                            } else if (subscriber == null) {
-                                return self.wrapError(resp, 500, "Error: not subscribed.");
+
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                if (courseId) {
+                    courseDao.getCourseByIdForSubscriber(courseId, function (error, course) {
+                            if (error || !course) {
+                                var msg = "Error getting course: " + (error != null ? error.message : "");
+                                return self.wrapError(resp, 500, msg, msg, msg);
                             } else {
-                                var video = getVideoById(course, videoId);
-                                if (video == null) {
-                                    return self.wrapError(resp, 500, "Error: video not found.");
-                                } else {
-                                    if (!checkIfVideoAlreadySent(subscriber, video)) {
-                                        video.videoId = null;
-                                        video.videoUrl = null;
+                                subscriberDao.findOne({courseId: courseId, email: req.user.get("email")}, function (error, subscriber) {
+                                    if (error) {
+                                        return self.wrapError(resp, 500, error);
+                                    } else if (subscriber == null) {
+                                        return self.wrapError(resp, 500, "Error: not subscribed.");
+                                    } else {
+                                        var video = getVideoById(course, videoId);
+                                        if (video == null) {
+                                            return self.wrapError(resp, 500, "Error: video not found.");
+                                        } else {
+                                            if (!checkIfVideoAlreadySent(subscriber, video)) {
+                                                video.videoId = null;
+                                                video.videoUrl = null;
+                                            }
+                                            return self.sendResultOrError(resp, null, video);
+                                        }
                                     }
-                                    return self.sendResultOrError(resp, null, video);
-                                }
+                                });
                             }
-                        });
-                    }
+                        }
+                    );
+                } else {
+                    return self.wrapError(resp, 500, "Error: Course id should be provided");
                 }
-            );
-        } else {
-            return self.wrapError(resp, 500, "Error: Course id should be provided");
-        }
+            }
+        });
+
     },
+
     subscribeEmailsFromFile: function (req, resp) {
         var courseId = req.params.id;
         req.pipe(req.busboy);
@@ -308,41 +396,50 @@ _.extend(api.prototype, baseApi.prototype, {
         var subscribed = 0;
         var subscribersResultCounter = 0;
         var self = this;
-        req.busboy.on('file', function (fieldname, file, filename) {
-            console.log("Uploading: " + filename);
-            csv.fromStream(file)
-                .on("data", function (data) {
-                    if (data.length > 0) {
-                        var email = data[0];
-                        emailsToSubscribe.push(email);
-                    }
-                })
-                .on("end", function () {
-                    var emailsCount = emailsToSubscribe.length;
-                    for (var i = 0; i < emailsCount; i++) {
-                        var email = emailsToSubscribe[i];
-                        courseDao.getCourseById(courseId, null, function (error, course) {
-                            if (error || !course) {
-                                self.wrapError(resp, 500, error, "Error finding course");
-                            } else {
-                                campaignManager.subscribeToVARCourse(email, course, 0, self.userId, function (result) {
-                                    subscribersResultCounter++;
-                                    if (!result.success) {
-                                        console.log(result.error);
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                req.busboy.on('file', function (fieldname, file, filename) {
+                    console.log("Uploading: " + filename);
+                    csv.fromStream(file)
+                        .on("data", function (data) {
+                            if (data.length > 0) {
+                                var email = data[0];
+                                emailsToSubscribe.push(email);
+                            }
+                        })
+                        .on("end", function () {
+                            var emailsCount = emailsToSubscribe.length;
+                            for (var i = 0; i < emailsCount; i++) {
+                                var email = emailsToSubscribe[i];
+                                courseDao.getCourseById(courseId, null, function (error, course) {
+                                    if (error || !course) {
+                                        self.wrapError(resp, 500, error, "Error finding course");
                                     } else {
-                                        subscribed++;
-                                    }
-                                    if (subscribersResultCounter == emailsCount) {
-                                        var msg = subscribed + " email(s) were subscribed to course(out of " + emailsCount + ")";
-                                        console.log(msg);
-                                        return  self.sendResult(resp, msg);
+                                        campaignManager.subscribeToVARCourse(email, course, 0, self.userId, function (result) {
+                                            subscribersResultCounter++;
+                                            if (!result.success) {
+                                                console.log(result.error);
+                                            } else {
+                                                subscribed++;
+                                            }
+                                            if (subscribersResultCounter == emailsCount) {
+                                                var msg = subscribed + " email(s) were subscribed to course(out of " + emailsCount + ")";
+                                                console.log(msg);
+                                                return  self.sendResult(resp, msg);
+                                            }
+                                        });
                                     }
                                 });
                             }
                         });
-                    }
                 });
+            }
         });
+
+
     }
 
 
