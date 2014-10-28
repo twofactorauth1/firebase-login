@@ -19,7 +19,7 @@ module.exports = {
             fn = testClass;
             testClass = null;
         }
-        userDao.createUserFromUsernamePassword("__test_user_" + $$.u.idutils.generateUniqueAlphaNumeric(), "password", "testuser@indigenous.io", function (err, value) {
+        userDao.createUserFromUsernamePassword("__test_user_" + $$.u.idutils.generateUniqueAlphaNumeric(), "password", "testuser@indigenous.io", null, function (err, value) {
             if (err) {
                 throw Error("Failed to create test user: " + err.toString());
             }
