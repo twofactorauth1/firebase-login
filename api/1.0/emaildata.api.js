@@ -111,7 +111,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var sourceId = req.params.sourceid;
         var messageId = req.paams.messageid;
         var accountId = parseInt(self.accountId(req));
-        
+
         self.checkPermission(req, self.sc.privs.VIEW_EMAIL_MESSAGE, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);

@@ -36,13 +36,20 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var product = req.body;
         var accountId = parseInt(self.accountId(req));
-        //TODO: security - MODIFY_PRODUCT
-        product.accountId = self.accountId(req);
 
-        productManager.createProduct(product, function(err, value){
-            self.log.debug('<< createProduct');
-            self.sendResultOrError(res, err, value, "Error creating product");
+        self.checkPermission(req, self.sc.privs.MODIFY_PRODUCT, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                product.accountId = accountId;
+
+                productManager.createProduct(product, function(err, value){
+                    self.log.debug('<< createProduct');
+                    self.sendResultOrError(res, err, value, "Error creating product");
+                });
+            }
         });
+
 
     },
 
@@ -55,10 +62,21 @@ _.extend(api.prototype, baseApi.prototype, {
         productManager.getProduct(productId, function(err, value){
             if(!err && value != null) {
                 var accountId = value.get('accountId');
-                //TODO: security - VIEW_PRODUCT
+
+                self.checkPermissionForAccount(req, self.sc.privs.VIEW_PRODUCT, accountId, function(err, isAllowed){
+                    if (isAllowed !== true) {
+                        self.log.debug('<< getProduct');
+                        return self.send403(res);
+                    } else {
+                        self.log.debug('<< getProduct');
+                        return self.sendResult(res, value);
+                    }
+                });
+            } else {
+                self.log.debug('<< getProduct');
+                self.sendResultOrError(res, err, value, "Error retrieving product");
             }
-            self.log.debug('<< getProduct');
-            self.sendResultOrError(res, err, value, "Error retrieving product");
+
         });
     },
 
@@ -69,11 +87,16 @@ _.extend(api.prototype, baseApi.prototype, {
         var skip = req.query['skip'];
         var limit = req.query['limit'];
         var accountId = parseInt(self.accountId(req));
-        //TODO: security - VIEW_PRODUCT
 
-        productManager.listProducts(accountId, limit, skip, function(err, list){
-            self.log.debug('<< listProducts');
-            self.sendResultOrError(res, err, list, 'Error listing products');
+        self.checkPermission(req, self.sc.privs.VIEW_PRODUCT, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                productManager.listProducts(accountId, limit, skip, function(err, list){
+                    self.log.debug('<< listProducts');
+                    self.sendResultOrError(res, err, list, 'Error listing products');
+                });
+            }
         });
 
 
@@ -87,14 +110,21 @@ _.extend(api.prototype, baseApi.prototype, {
         var productId = req.params.id;
         product._id = productId;
 
-        //TODO: security
-
-        productManager.updateProduct(product, function(err, value){
-            //TODO: get accountId from value
-            //TODO: security - MODIFY_PRODUCT
-            self.log.debug('<< updateProduct');
-            self.sendResultOrError(res, err, value, 'Error updating product');
+        productManager.getProduct(productId, function(err, savedProduct){
+            var accountId = savedProduct.get('accountId');
+            self.checkPermissionForAccount(req, self.sc.privs.MODIFY_PRODUCT, accountId, function(err, isAllowed) {
+                if (isAllowed !== true) {
+                    return self.send403(res);
+                } else {
+                    productManager.updateProduct(product, function(err, value){
+                        self.log.debug('<< updateProduct');
+                        self.sendResultOrError(res, err, value, 'Error updating product');
+                    });
+                }
+            });
         });
+
+
     },
 
     deleteProduct: function(req, res) {
@@ -102,12 +132,20 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> deleteProduct');
         var productId = req.params.id;
 
-        //TODO: get accountId from product
-        //TODO: security - MODIFY_PRODUCT
-        productManager.deleteProduct(productId, function(err, value){
-            self.log.debug('<< deleteProduct');
-            self.sendResultOrError(res, err, value, 'Error deleting product');
+        productManager.getProduct(productId, function(err, savedProduct) {
+            var accountId = savedProduct.get('accountId');
+            self.checkPermissionForAccount(req, self.sc.privs.MODIFY_PRODUCT, accountId, function (err, isAllowed) {
+                if (isAllowed !== true) {
+                    return self.send403(res);
+                } else {
+                    productManager.deleteProduct(productId, function(err, value){
+                        self.log.debug('<< deleteProduct');
+                        self.sendResultOrError(res, err, value, 'Error deleting product');
+                    });
+                }
+            });
         });
+
     },
 
     getProductsByType: function(req, res) {
@@ -115,11 +153,16 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getProductsByType');
         var type = req.params.type;
         var accountId = parseInt(self.accountId(req));
-        //TODO: security
 
-        productManager.getProductsByType(accountId, type, function(err, list){
-            self.log.debug('<< getProductsByType');
-            self.sendResultOrError(res, err, list, 'Error listing products by type');
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_PRODUCT, accountId, function (err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                productManager.getProductsByType(accountId, type, function(err, list){
+                    self.log.debug('<< getProductsByType');
+                    self.sendResultOrError(res, err, list, 'Error listing products by type');
+                });
+            }
         });
 
     }
