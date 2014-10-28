@@ -173,8 +173,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                     self = null;
                                     return;
                                 }
-                                console.log('redirect value ', value);
-                                userObj.accountUrl = value;
+                                userObj.set("accountUrl",value);
                                 resp.send(userObj);
                                 self = null;
                             });

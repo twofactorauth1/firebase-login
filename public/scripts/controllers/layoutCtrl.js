@@ -320,7 +320,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                     console.log('postAccountBilling ', billing);
                                 });
                                 console.log('successfully added card ', card);
-                                window.location.replace(adminUrl);
+                                window.location.replace(newUser.accountUrl);
                                 // PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
                                 //     window.location.replace(adminUrl);
                                 // });
