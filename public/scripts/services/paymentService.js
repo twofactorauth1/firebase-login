@@ -18,10 +18,12 @@ mainApp.service('PaymentService', ['$http', function ($http) {
       });
     };
 
-    this.postStripeCustomer = function(cardToken, fn) {
+    this.postStripeCustomer = function(cardToken, user, accountId, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'customers'].join('/');
       $http.post(apiUrl, {
-          cardToken: cardToken
+          cardToken: cardToken,
+          user: user,
+          accountId: accountId
         })
         .success(function(data, status, headers, config) {
           fn(data);
