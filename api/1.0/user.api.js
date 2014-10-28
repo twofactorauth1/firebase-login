@@ -34,6 +34,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
+    /**
+     * No security needed.
+     * @param req
+     * @param resp
+     */
     getLoggedInUser: function(req,resp) {
         var self = this;
 
@@ -48,6 +53,11 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     * Utilized for testing.
+     * @param req
+     * @param res
+     */
     initializeSecurity: function(req, res) {
         var self = this;
         var user = req.user;
@@ -58,8 +68,6 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     getUserById: function(req,resp) {
-        //TODO - add granular security;
-
         var self = this;
         var userId = req.params.id;
 
@@ -71,19 +79,30 @@ _.extend(api.prototype, baseApi.prototype, {
 
         userDao.getById(userId, function(err, value) {
             if (!err) {
-                //TODO: granular security - VIEW_USER
-                //TODO: get accountIds from user
+
                 if (value == null) {
                     return self.wrapError(resp, 404, null, "No User found with ID: [" + userId + "]");
                 }
-                return resp.send(value.toJSON("public", {accountId:self.accountId(req)}));
+                var accountId = parseInt(self.accountId(req));
+                if(_.contains(value.getAllAccountIds(), accountId)) {
+                    var responseObj =  value.toJSON("public", {accountId:self.accountId(req)})
+                    self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_USER, res, responseObj);
+                } else {
+                    return self.wrapError(resp, 404, null, "No User found with ID: [" + userId + "]");
+                }
+                //return resp.send(value.toJSON("public", {accountId:self.accountId(req)}));
             } else {
                 return self.wrapError(resp, 401, null, err, value);
             }
         });
     },
 
-
+    /**
+     * No security required.
+     * @param req
+     * @param resp
+     * @returns {*}
+     */
     userExists: function(req,resp) {
         var self = this;
 
@@ -109,14 +128,21 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = req.params.accountId;
 
         accountId = parseInt(accountId);
-        //TODO: granular security - VIEW_USER
 
-        userDao.usernameExistsForAccount(accountId, username, function(err, value) {
-            if (err) {
-                return self.wrapError(resp, 500, "An error occurred checking username for account", err, value);
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_USER, accountId, function (err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                userDao.usernameExistsForAccount(accountId, username, function(err, value) {
+                    if (err) {
+                        return self.wrapError(resp, 500, "An error occurred checking username for account", err, value);
+                    }
+                    return resp.send(value);
+                });
             }
-            return resp.send(value);
         });
+
+
     },
 
 
@@ -144,15 +170,21 @@ _.extend(api.prototype, baseApi.prototype, {
                 value.set("welcome_alert",req.body.welcome_alert);
                 console.log(value);
                 user.set("credentials",value.get("credentials"));
-                //TODO: granular security - MODIFY_USER
 
-                userDao.saveOrUpdate(user, function(err, value) {
-                    if (!err && value != null) {
-                        resp.send(value.toJSON("public"));
+                self.checkPermission(req, self.sc.privs.VIEW_USER, function (err, isAllowed) {
+                    if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
+                        return self.send403(res);
                     } else {
-                        self.wrapError(resp, 500, null, err, value);
+                        userDao.saveOrUpdate(user, function(err, value) {
+                            if (!err && value != null) {
+                                resp.send(value.toJSON("public"));
+                            } else {
+                                self.wrapError(resp, 500, null, err, value);
+                            }
+                        });
                     }
                 });
+
 
             } else {
                 return self.wrapError(resp, 401, null, err, value);
