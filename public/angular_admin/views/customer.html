@@ -170,10 +170,11 @@
 
                                 <div class="clear"></div>
                             </div>
-                            <div class="media-body col-xs-12 hidden-xs">
+                            <div class="media-body col-xs-12 hidden-xs" ng-switch on="customerDisplayFormat">
 
 
-                              <h4 class="person-name" indigeweb-truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                              <h4 class="person-name" ng-switch-when="first" indigeweb-truncate truncate-list=" [customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                              <h4 class="person-name" ng-switch-when="last" indigeweb-truncate truncate-list=" [customer.last, customer.middle, customer.first]" truncate-limit=20 truncate-symbol="'...'"></h4>
 
 
 
@@ -287,7 +288,9 @@
                 <div class="form-group row">
                     <label class="col-xs-12 control-label">Contacts List Display</label>
                     <div class="col-xs-12">
-                        <select class=" form-control chosen-select sort-display" data-placeholder="Sort Contacts" name="one">
+                        <select class=" form-control chosen-select sort-display" ng-model = 'changeDisplayFormat' data-placeholder="Sort Contacts" name="one">
+                        <option value="1">first, last</option>
+                        <option value="2">last, first</option>
                         </select>
                     </div>
                 </div>
