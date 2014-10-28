@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService',
-    function ($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService', 'PaymentService',
+    function ($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService) {
         var account, theme, website, pages, teaserposts, route, postname, that = this;
 
         route = $location.$$path;
@@ -20,6 +20,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     console.log('>>>>> ', window.parent);
         //     window.parent.frames[0].parentNode.activateSettings();
         // };
+
         if(!window.oldScope)
             window.oldScope = $scope;
         $scope.sortingLog = [];
@@ -307,13 +308,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     };
                     console.log('newUser Data >>> ', newUser);
                     userService.createUser(newUser, function (data) {
+                        var adminUrl = data;
                         console.log('created user successfully', data);
-                        window.location.replace(data);
+
+                        PaymentService.getStripeCardToken(newAccount.card, function(token) {
+                              PaymentService.postStripeCustomer(token, function(stripeUser) {
+                                $scope.user.stripeId = stripeUser.id;
+                                PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
+                                console.log('successfully added card ', card);
+                                // PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
+                                //     window.location.replace(adminUrl);
+                                // });
+                              });
+                        });
                     });
                 });
             });
-            //add card and subscribe new user to chosen
-            //redirect to their new admin account
         };
 
         $scope.newAccount = {};
