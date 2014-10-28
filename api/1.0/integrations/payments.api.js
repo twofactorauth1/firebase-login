@@ -167,7 +167,14 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: security
         var cardToken = req.body.cardToken;
         var contact = req.body.contact;
+        if(typeof contact.id !== 'function') {
+            contact = new $$.m.Contact(contact);
+        }
+
         var user = req.body.user || req.user;
+        if(typeof user.id !== 'function') {
+            user = new $$.m.User(user);
+        }
         var _accountId = self.accountId(req);
         //validate arguments
         if(!cardToken && cardToken.length ===0) {
