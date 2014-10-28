@@ -167,16 +167,13 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: security
         var cardToken = req.body.cardToken;
         var contact = req.body.contact;
-<<<<<<< HEAD
+
         if(contact) {
-=======
-        if(typeof contact.id !== 'function') {
->>>>>>> FETCH_HEAD
             contact = new $$.m.Contact(contact);
         }
 
         var user = req.body.user || req.user;
-<<<<<<< HEAD
+
 
         if(req.body.user) {
             self.log.debug('>> user is obj');
@@ -185,12 +182,6 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var _accountId = req.body.accountId || self.accountId(req);
 
-=======
-        if(typeof user.id !== 'function') {
-            user = new $$.m.User(user);
-        }
-        var _accountId = self.accountId(req);
->>>>>>> FETCH_HEAD
         //validate arguments
         if(!cardToken && cardToken.length ===0) {
             return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
