@@ -3,7 +3,7 @@
  *
  * */
 'use strict';
-mainApp.service('PaymentService', [ 'Stripe', function ($http, Stripe) {
+mainApp.service('PaymentService', ['$http', function ($http) {
     var baseUrl = '/api/1.0/';
       Stripe.setPublishableKey('pk_test_EuZhZHVourE3RaRxELJaYEya');
 
