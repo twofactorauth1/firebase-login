@@ -313,6 +313,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
                         PaymentService.getStripeCardToken(newAccount.card, function(token) {
                               PaymentService.postStripeCustomer(token, function(stripeUser) {
+                                console.log('stripuser >>> ', stripeUser);
+                                console.log('stripuser ID >>> ', stripeUser.id);
                                 $scope.user.stripeId = stripeUser.id;
                                 PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
                                 console.log('successfully added card ', card);
