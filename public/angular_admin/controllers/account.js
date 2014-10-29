@@ -2,28 +2,43 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
   app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', function($scope, UserService, PaymentService, ngProgress, ToasterService) {
     ngProgress.start();
 
-    $scope.activeSkeuocard = false;
-
     $scope.invoicePageLimit = 5;
 
     $scope.updateStripeIdFn = function(billing) {
       $scope.user.stripeId = billing.billing.stripeCustomerId;
-      $scope.activeSkeuocard = false;
     };
 
-    $scope.activeSkeuocardFn = function(status) {
-      $scope.activeSkeuocard = status;
+    $scope.invoicePageChangeFn = function(invoiceCurrentPage, invoiceTotalPages) {
+      var begin = ((invoiceCurrentPage - 1) * $scope.invoicePageLimit);
+      var end = begin + $scope.invoicePageLimit;
+      $scope.pagedInvoices = $scope.invoices.data.slice(begin, end);
     };
 
-    $scope.invoicePageChangeFn = function (invoiceCurrentPage, invoiceTotalPages) {
-       var begin = ((invoiceCurrentPage - 1) * $scope.invoicePageLimit);
-       var end = begin + $scope.invoicePageLimit;
-       $scope.pagedInvoices = $scope.invoices.data.slice(begin, end);
+    $scope.switchPlanFn = function(planId) {
+      PaymentService.postCreateStripeSubscription($scope.user.stripeId, planId, function(subscription) {
+        $scope.cancelOldSubscriptionsFn();
+        $scope.subscription = subscription;
+        PaymentService.getUpcomingInvoice($scope.user.stripeId, function(upcomingInvoice) {
+          $scope.upcomingInvoice = upcomingInvoice;
+        });
+        PaymentService.getAllInvoices(function(invoices) {
+          $scope.invoices = invoices;
+          $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
+        });
+        ToasterService.setPending('success', 'Subscribed to new plan.');
+      });
+    };
+
+    $scope.cancelOldSubscriptionsFn = function() {
+      $scope.subscriptions.data.forEach(function(value, index) {
+        PaymentService.deleteStripeSubscription(value.customer, value.id, function(subscription) {});
+      });
     };
 
     $scope.$watch('user.stripeId', function(newValue, oldValue) {
       if (newValue) {
         PaymentService.getListStripeSubscriptions(newValue, function(subscriptions) {
+          $scope.subscriptions = subscriptions;
           $scope.subscription = subscriptions.data[0];
         });
 
