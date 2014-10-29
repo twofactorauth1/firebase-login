@@ -14,7 +14,7 @@
 		</div>
 	    <div ng-include="'/components/component-wrap.html'"></div>
 	    <div ng-class="{'zee-blur': !component.visibility}"></div>
-	    <div class="add-component">
+	    <div class="add-component" data-index = "{{$index + 1}}">
 	    	<a href="">
 	    	<i class="fa fa-plus-circle"></i>
 	    	</a>
@@ -26,7 +26,7 @@
 			<h4 class="center">Add some components and start editing!</h4>
 		</div>
 		<div class="clearfix mb15"></div>
-		<div class="add-component">
+		<div class="add-component" data-index = 1>
 	    	<a href="">
 	    		<i class="fa fa-plus-circle"></i>
 	    	</a>

@@ -155,6 +155,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function (err, value) {
+            var userObj = value;
             self.log.debug('createUserFromUsernamePassword >>>');
                 if (!err) {
 
@@ -172,8 +173,8 @@ _.extend(api.prototype, baseApi.prototype, {
                                     self = null;
                                     return;
                                 }
-                                console.log('redirect value ', value);
-                                resp.send(value);
+                                userObj.set("accountUrl",value);
+                                resp.send(userObj);
                                 self = null;
                             });
                         }

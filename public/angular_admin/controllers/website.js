@@ -126,8 +126,9 @@ define([
                     var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
                     for (var i = 0; i < addComponentBtns.length; i++) {
                         if (typeof addComponentBtns[i].addEventListener != "undefined") {
-                            addComponentBtns[i].addEventListener("click", function(e) {
-                                var element = angular.element('#add-component-modal');
+				addComponentBtns[i].addEventListener("click", function(e) {
+				$scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+				var element = angular.element('#add-component-modal');
                                 element.modal('show');
                                 //get the current index of the component pressed
                             });
@@ -418,7 +419,8 @@ define([
                 WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, function(data) {
                     if (data.components) {
                         var newComponent = data.components[data.components.length - 1];
-                        $scope.currentPage.components.splice(1, 0, newComponent);
+                        var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
+                        $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
                         //$scope.components.push(newComponent);
                         $scope.updateIframeComponents();

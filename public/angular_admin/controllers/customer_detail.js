@@ -28,5 +28,16 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                 console.info(data);
             });
         };
+        $scope.displayAddressFormat = function (address) {
+            return _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip],function(str) {
+            	return str !== "";
+         	 }).join(",")
+        };
+        $scope.showAddress = function (address) {
+           	arrAddress =  _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip, address.lat, address.lon],function(str) {
+            	return str !== "";
+         	 })
+         	 return arrAddress.length > 0 ;
+        };
     }]);
 });
