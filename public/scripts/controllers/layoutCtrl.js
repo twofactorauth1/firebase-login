@@ -1,8 +1,8 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService', 'PaymentService',
-    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService) {
-        var account, theme, website, pages, teaserposts, route, postname, that = this;
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService', 'PaymentService', 'ProductService',
+    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService) {
+        var account, theme, website, pages, teaserposts, route, postname, products, that = this;
 
         route = $location.$$path;
         window.oldScope;
@@ -75,6 +75,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     }
                 }
             }
+        });
+
+        ProductService.getAllProducts(function(data) {
+            console.log('product service data >>> ', data);
+            that.products = data;
         });
 
         $scope.trustSrc = function(src) {
