@@ -33,6 +33,15 @@ define(['app', 'stripe', 'toasterService'], function(app) {
         });
     };
 
+    this.deleteCustomerCard = function(stripeId, cardId, fn) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards', cardId].join('/');
+      $http.delete(apiUrl)
+        .success(function(data, status, headers, config) {
+          ToasterService.show('success', 'Card deleted.');
+          fn(data);
+        });
+    };
+
     this.getCustomerCards = function(stripeId, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards'].join('/');
       $http.get(apiUrl)
