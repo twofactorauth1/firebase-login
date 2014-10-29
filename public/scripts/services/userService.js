@@ -105,6 +105,6 @@ mainApp.service('userService', function ($http) {
             .success(function (data, status, headers, config) {
                 fn(data);
             });
-        };
+    };
 
 });
