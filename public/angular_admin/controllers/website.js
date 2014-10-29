@@ -689,6 +689,11 @@ define([
                 $scope.selectedComponent = type;
             };
 
+            $scope.insertMedia=function(asset){
+                $scope.componentEditing.bg.img.url=asset.url;
+                $scope.updateIframeComponents();
+            };
+
         }
     ]);
 });
