@@ -47,8 +47,12 @@ var mainApp = angular
                 templateUrl: '../views/blog.html',
                 controller: 'BlogCtrl as blog'
             })
+//            .when('/blog/:postname', {
+//                templateUrl: '../views/blog.html',
+//                controller: 'BlogCtrl as blog'
+//            })
             .when('/blog/:postname', {
-                templateUrl: '../views/blog.html',
+                templateUrl: '../views/singlepostpage.html',
                 controller: 'BlogCtrl as blog'
             })
             .when('/tag/:tagname', {

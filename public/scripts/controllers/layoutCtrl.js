@@ -104,6 +104,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         that.teaserposts = data;
                     }
                 }
+                that.blogposts = data;
             }
         });
 
