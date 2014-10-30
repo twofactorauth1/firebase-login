@@ -28,6 +28,7 @@
 	}
 	.filemanager {
 		.media {
+            height: 470px;
 			max-height: 470px;
 			overflow-y: scroll;
 			padding: 20px;
@@ -68,7 +69,12 @@
         display: none;
     }
 
-    .all .media > * {
+    .all .media > *:not([id]),
+    .all .media #all-warning-box,
+    .image .media #image-warning-box,
+    .video .media #video-warning-box,
+    .audio .media #audio-warning-box,
+    .document .media #document-warning-box {
         display: inline;
     }
 
@@ -96,6 +102,21 @@
         text-decoration: underline;
         color: #2A6496;
     }
+    [class*="image"]~#all-warning-box,
+    [class*="audio"]~#all-warning-box,
+    [class*="document"]~#all-warning-box,
+    [class*="video"]~#all-warning-box,
+    [class*="image"]~#image-warning-box,
+    [class*="audio"]~#audio-warning-box,
+    [class*="document"]~#document-warning-box,
+    [class*="video"]~#video-warning-box {
+        display: none !important;
+    }
 
+    [id*="-warning-box"]{
+        padding: 20px;
+        color: red;
+        font-size: 20px;
+    }
 }
 
