@@ -453,7 +453,7 @@ define([
                 document.getElementById("iframe-website").contentWindow.scrollTo(section);
             };
 
-            $scope.activateAloha = function() {
+            $scope.activateAloha = function() {               
                 document.getElementById("iframe-website").contentWindow.activateAloha();
             };
 
@@ -661,7 +661,7 @@ define([
                 },
                 {
                     title: 'Sign Up form',
-                    type: 'sign-up',
+                    type: 'signup-form',
                     icon: 'custom sign-up-form'
                 },
                 {
@@ -671,7 +671,7 @@ define([
                 },
                 {
                     title: 'Social Links',
-                    type: 'social',
+                    type: 'social-feed',
                     icon: 'custom social-links'
                 }
             ];
