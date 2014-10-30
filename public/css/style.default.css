@@ -17447,7 +17447,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .mainpanel {
   margin-left: 240px;
-  height: 100%;
+  height: auto;
 }
 .mainpanel .alert {
   margin: 10px 10px 0px;
