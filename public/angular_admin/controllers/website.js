@@ -233,7 +233,10 @@ define([
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
                 iframe.contentWindow.triggerEditMode();
-                // iframe.contentWindow.copyPostMode();
+
+                if ( iframe.contentWindow.copyPostMode ) {
+                    iframe.contentWindow.copyPostMode();
+                }
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");
             };
@@ -252,7 +255,9 @@ define([
                 
 
                 //TODO Only use on single post
-                //iFrame.contentWindow.updatePostMode();
+                if ( iFrame.contentWindow.updatePostMode ) {
+                    iFrame.contentWindow.updatePostMode();
+                }
             };
 
             $scope.doubleClick = function() {
@@ -345,6 +350,9 @@ define([
                     $scope.isEditing = false;
                     $scope.deactivateAloha();
                     iFrame.contentWindow.triggerEditModeOff();
+                    if ( iFrame.contentWindow.savePostMode ) {
+                        iFrame.contentWindow.savePostMode();
+                    }
                 });
 
                 var data = {
@@ -684,6 +692,11 @@ define([
             $scope.selectComponent = function(type) {
                 console.log('selectComponent', type);
                 $scope.selectedComponent = type;
+            };
+
+            $scope.insertMedia=function(asset){
+                $scope.componentEditing.bg.img.url=asset.url;
+                $scope.updateIframeComponents();
             };
 
         }
