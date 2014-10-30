@@ -26,7 +26,7 @@
                 <span class="fa fa-save"></span>
                 <span class="hidden-xs">Save</span>
             </a>
-            <a class="btn btn-warning pull-right btn-cancel-page" type="button" ng-click="cancelPage()" style="margin-right:10px" ng-show="isEditing">
+            <a ng-confirm-click class="btn btn-warning pull-right btn-cancel-page" type="button"  style="margin-right:10px" confirmed-click = cancelPage() ng-show="isEditing">
                 <span class="fa fa-times"></span>
                 <span class="hidden-xs">Cancel</span>
             </a>

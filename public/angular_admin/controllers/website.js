@@ -11,7 +11,8 @@ define([
     'ngProgress',
     'unsafeHtml',
     'mediaDirective',
-    'confirmClick2'
+    'confirmClick2',
+    'confirmClickDirective'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -239,12 +240,16 @@ define([
 
             $scope.cancelPage = function() {
                 // $scope.components = that.originalCurrentPageComponents;
-
-                $scope.updateIframeComponents();
+                var pageId = $scope.currentPage._id;
+                WebsiteService.getPageComponents(pageId,function(components) {
+                    $scope.components = components;
+                    $scope.updateIframeComponents();
                 //$scope.deactivateAloha();
                 $scope.isEditing = false;
                 $scope.componentEditing = '';
                 iFrame.contentWindow.triggerEditModeOff();
+                });
+                
 
                 //TODO Only use on single post
                 //iFrame.contentWindow.updatePostMode();
