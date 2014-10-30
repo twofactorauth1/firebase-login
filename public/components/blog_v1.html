@@ -14,7 +14,7 @@
                     </div>
                     <article class="entry clearfix" data-ng-if="control.blogposts||blog.blogposts">
                         <div class="single-blog responsive clearfix"
-                             ng-repeat="blogpost in blog.blogposts track by $index"
+                             ng-repeat="blogpost in control.blogposts || blog.blogposts track by $index"
                              data-postId="{{blogpost._id}}">
 
                             <div class="blog-entry clearfix">

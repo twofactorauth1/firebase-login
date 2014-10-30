@@ -7,6 +7,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
     $scope.activeTab = AccountService.getActiveTab();
 
     $scope.$watch('activeTab', function (newValue, oldValue) {
+      console.log('watch activeTab >> ', newValue);
       AccountService.setActiveTab(newValue);
     });
 
@@ -56,6 +57,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
     UserService.getUser(function(user) {
       $scope.user = user;
+
+      $scope.activeTab = $scope.user.app_preferences.account.default_tab;
+
     });
 
     UserService.getAccount(function(account) {
@@ -68,6 +72,8 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
       ngProgress.complete();
       ToasterService.processPending();
     });
-
+    $scope.updateUser = function (user){
+      UserService.putUser(user, function(){});
+    };
   }]);
 });
