@@ -1,4 +1,4 @@
-define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress'], function(app) {
+define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress', 'mediaDirective'], function(app) {
     app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', function ($scope, $stateParams, UserService, ngProgress) {
         ngProgress.start();
         var phoneCharLimit = 4;
@@ -134,6 +134,19 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
         $scope.addUserContactFn = function () {
             $scope.user.details[0].phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false, type: 'm'});
             $scope.userPhoneWatchFn($scope.user.details[0].phones.length-1);
+        };
+
+        $scope.setImage=function(asset){
+            console.log(asset);
+
+            $scope.account.business.logo = asset.url;
+            UserService.putAccount($scope.account, function (account) {
+                // $scope.account = account;
+                $("#media-manager-modal").modal('hide');
+            });
+
+          //  $scope.componentEditing.bg.img.url=asset.url;
+        //    $scope.updateIframeComponents();
         };
 
     }]);
