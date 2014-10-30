@@ -3,7 +3,7 @@
 
         <div id="{{component.anchor}}">
 
-            <div class="{{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background-size: cover; background: {{component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
+            <div class="{{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background-size: cover; background: {{component.bg.img.url?component.bg.img.url:component.bg.color}}; color: {{component.txtcolor||primaryTextColor}};'>
 
                 <div class="component-inner">
 

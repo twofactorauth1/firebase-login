@@ -140,10 +140,12 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         };
 
         window.savePostMode=function(){
-            console.log(that.post);
-            PostService.updatePost()
+            that.post.post_tags.forEach(function(v,i) {
+                that.post.post_tags[i] = v.text;
+            },that.post.post_tags);
+            PostService.updatePost($scope.$parent.currentpage._id, that.post._id,that.post,function(data){
 
-
+            });
         };
 
 

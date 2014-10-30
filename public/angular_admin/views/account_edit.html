@@ -181,9 +181,30 @@
 				            <row>
 				                <div class="col-xs-5 col-md-6">
 				                    <div class="hidden-xs hidden-sm">
-				                        <div class="btn-link btn-edit-photo" data-toggle="modal" data-target="#modal-change-logo">Change Logo</div>
+				                        <div class="media-modal"  on-insert-mediacb="setImage">
+                                            <span class="btn-link btn-edit-photo"> Change Logo</span>
+                                        </div>
 				                    </div>
-				                    <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="/assets/icons/blank-user.jpg">
+                                    <div id="bussiness_logo_container" >
+                                        <div>
+                                            <img id="bussiness_logo" class="img-responsive img-rounded hand btn-edit-photo" ng-src="{{account.business.logo}}" />
+                                        </div>
+                                        <style>
+                                            #bussiness_logo_container {
+                                                background-color: #eee;
+                                                display: table;
+                                                width: 100px;
+                                                height: 100px;
+                                            }
+                                            #bussiness_logo_container > div {
+                                                display: table-cell;
+                                                vertical-align: middle;
+                                                text-align: center;
+                                            }
+                                        </style>
+                                    </div>
+
+
 				                </div>
 
 				                <div class="col-xs-7 col-md-6">
@@ -409,5 +430,5 @@
 			</div>
 		</div>
 	</div>
-
+    <div id="model_container"></div>
 </div>
