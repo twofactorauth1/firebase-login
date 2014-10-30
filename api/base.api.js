@@ -106,6 +106,40 @@ _.extend(apiBase.prototype, {
         resp.send(response.code, response);
     },
 
+    /**
+     * This method verifies that the user is authenticated and the account has a valid subscription.
+     * @param req
+     * @param resp
+     * @param next
+     */
+    isAuthAndSubscribedApi: function(req, resp, next) {
+        var self = this;
+        if(req.isAuthenticated()) {
+            self.sm.verifySubscription(req, function(err, isValid){
+                if(isValid === true && _.contains(req.session.privs, this.base)) {
+                    return next();
+                } else {
+                    var response = {
+                        code: 403,
+                        status: 'Not Authorized',
+                        message: 'Your subscription could not be verified',
+                        detail: ''
+                    };
+                    resp.send(response.code, response);
+                }
+            });
+        } else {
+            var response = {
+                code:401,
+                status:"Not Authenticated",
+                message:"User is not Authenticated",
+                detail: ""
+            };
+
+            resp.send(response.code, response);
+        }
+    },
+
 
     userId: function(req) {
         try {

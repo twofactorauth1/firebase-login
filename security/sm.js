@@ -7,6 +7,12 @@
 
 var log = $$.g.getLogger("sm");
 var dao = require('./dao/privilege.dao.js');
+var subscriptionPrivilegeDao = require('./dao/subscription.privilege.dao');
+var accountDao = require('../dao/account.dao');
+var stripeDao = require('../payments/dao/stripe.dao');
+
+var moment = require('moment');
+
 var defaultPrivileges = [
     'VIEW_ACCOUNT',
     'VIEW_USER',
@@ -118,6 +124,95 @@ var securityManager = {
             }
         });
 
+
+    },
+
+    /**
+     * Returns true if subscription is valid.  Sets subscriptionprivs in session.  Sets subscription name in session.
+     * //if subscription ID and lastVerified within 24rs, set subName and privs
+
+     //if subscription ID and lastVerified > 24hrs
+     //verify sub with Stripe
+     //update lastVerified
+     //set subName and privs
+     * @param req
+     * @param cb(err, isValid)
+     */
+    verifySubscription: function(req, cb) {
+        var self = this;
+        log.debug('>> verifySubscription');
+
+        //check if session has property(subName) --> return if present
+        if(req.session.subName !== null) {
+            return cb(null, true);
+        }
+
+        //get account by ID from session req.session.accountId
+        accountDao.getAccountByID(req.session.accountId, function(err, account){
+            if(err) {
+                log.error('Error getting account: ' + err);
+                return cb(err, null);
+            }
+            if(account === null) {
+                log.warn('Could not find account for id: ' + req.session.accountId);
+                return cb(null, false);
+            }
+            var billing = account.get('billing');
+            if(!billing.subscriptionId) {
+                log.debug('No subscription found for account: ' + req.session.accountId);
+                return cb(null, false);
+            }
+            //if no verification OR verification older than 24 hours
+            if(!billing.lastVerified || moment().diff(billing.lastVerified, 'hours') >24) {
+                //TODO: handle accessToken
+                stripeDao.getStripeSubscription(billing.customerId, billing.subscriptionId, null, function(err, subscription){
+                    if(subscription.status === 'active' || subscription.status === 'trialing') {
+                        billing.lastVerified = new Date();
+                        account.set('billing', billing);
+                        //do this asynchronously...we don't care about the result
+                        accountDao.saveOrUpdate(account, function(err, value){if(err){log.error('Error storing account lastVerified.: ' + err)}});
+                        var planId = subscription.plan.id;
+                        var planName = subscription.plan.name;
+                        subscriptionPrivilegeDao.getByPlanId(req.sessions.accountId, planId, function(err, subPrivs){
+                            if(err) {
+                                log.error('Error getting subscription privileges for plan [' + planId + ']: ' + err);
+                                return cb(err, false);
+                            }
+                            req.session.subName = planName;
+                            req.session.subprivs = subPrivs.get('activePrivs');
+                            return cb(null, true);
+                        });
+                    } else {
+                        //TODO: If the sub is expired, put in privs here
+                        log.warn('The subscription for account ' + req.session.accountId + ' appears to be expired.');
+                        return cb(null, false);
+                    }
+                });
+            } else {
+                //verified within the last 24hrs... set the subname and privs
+                //TODO: handle accessToken
+                stripeDao.getStripeSubscription(billing.customerId, billing.subscriptionId, null, function(err, subscription){
+                    if(subscription.status === 'active' || subscription.status === 'trialing') {
+
+                        var planId = subscription.plan.id;
+                        var planName = subscription.plan.name;
+                        subscriptionPrivilegeDao.getByPlanId(req.sessions.accountId, planId, function(err, subPrivs){
+                            if(err) {
+                                log.error('Error getting subscription privileges for plan [' + planId + ']: ' + err);
+                                return cb(err, false);
+                            }
+                            req.session.subName = planName;
+                            req.session.subprivs = subPrivs.get('activePrivs');
+                            return cb(null, true);
+                        });
+                    } else {
+                        //TODO: If the sub is expired, put in privs here
+                        log.warn('The subscription for account ' + req.session.accountId + ' appears to be expired.');
+                        return cb(null, false);
+                    }
+                });
+            }
+        });
 
     }
 
