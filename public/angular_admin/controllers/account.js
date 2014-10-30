@@ -1,8 +1,14 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService'], function(app) {
-  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', function($scope, UserService, PaymentService, ngProgress, ToasterService) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService'], function(app) {
+  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', function($scope, UserService, PaymentService, ngProgress, ToasterService, AccountService) {
     ngProgress.start();
 
     $scope.invoicePageLimit = 5;
+
+    $scope.activeTab = AccountService.getActiveTab();
+
+    $scope.$watch('activeTab', function (newValue, oldValue) {
+      AccountService.setActiveTab(newValue);
+    });
 
     $scope.updateStripeIdFn = function(billing) {
       $scope.user.stripeId = billing.billing.stripeCustomerId;
@@ -50,7 +56,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
     UserService.getUser(function(user) {
       $scope.user = user;
-      $scope.activeTab = 'account';
     });
 
     UserService.getAccount(function(account) {
