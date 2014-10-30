@@ -6,6 +6,7 @@
  */
 var STRIPE_CONFIG = require('./configs/stripe.config.js');
 var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
+var KEEN_CONFIG = require('./configs/keen.config');
 
 //var wiredepJSAry = require('wiredep')().js;
 
@@ -310,7 +311,10 @@ module.exports = function(grunt) {
                     ENV: {
                         name: 'development',
                         stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY,
-                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY
+                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY,
+                        keenWriteKey: KEEN_CONFIG.KEEN_WRITE_KEY,
+                        keenReadKey: KEEN_CONFIG.KEEN_READ_KEY,
+                        keenProjectId: KEEN_CONFIG.KEEN_PROJECT_ID
                     }
                 }
             },
