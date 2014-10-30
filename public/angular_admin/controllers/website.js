@@ -246,7 +246,7 @@ define([
                     $scope.updateIframeComponents();
                 //$scope.deactivateAloha();
                 $scope.isEditing = false;
-                $scope.componentEditing = '';
+                $scope.componentEditing = null;
                 iFrame.contentWindow.triggerEditModeOff();
                 });
                 
