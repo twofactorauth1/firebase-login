@@ -7,6 +7,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
     $scope.activeTab = AccountService.getActiveTab();
 
     $scope.$watch('activeTab', function (newValue, oldValue) {
+      console.log('watch activeTab >> ', newValue);
       AccountService.setActiveTab(newValue);
     });
 

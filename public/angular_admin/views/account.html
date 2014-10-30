@@ -23,7 +23,7 @@
 
     <div class="row">
         <div class="btn-group col-xs-12 template-btns">
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info active" ng-class="{'active': activeTab === 'account'}" ng-click="activeTab = 'account'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info active" ng-class="{'active': activeTab === 'account_information'}" ng-click="activeTab = 'account_information'">
                 <i class="fa fa-user"></i>
                 <span class="hidden-xs">Account Information
                 </span>
@@ -39,10 +39,9 @@
         </div>
     </div>
 
-
     <div class="contentpanel" ng-switch="activeTab">
 
-        <div class="account-info-section" ng-switch-when="account">
+        <div class="account-info-section" ng-switch-when="account_information">
             <div class="col-sm-6">
                 <div class=" panel panel-default">
                     <div class="panel-heading">
@@ -472,8 +471,40 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="billSummaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="rightpanel rightpanel-account">
+        <tabset>
+            <tab>
+                <tab-heading>
+                    <i class="fa fa-asterisk" tooltip-placement="bottom" tooltip="settings"></i>
+                </tab-heading>
+                <div class="rightpanelinner">
+                    <h5 class="sidebartitle">Settings</h5>
+                    <hr/>
+                    <div id="current-settings">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="default_tab" id="account_information" ng-value="'account_information'" ng-model="user.app_preferences.account.default_tab" ng-change="updateUser(user)">Account Information
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="default_tab" id="billing" ng-value="'billing'" ng-model="user.app_preferences.account.default_tab" ng-change="updateUser(user)">Billing
+                            </label>
+                        </div>
+                        <div class="radio disabled">
+                            <label>
+                                <input type="radio" name="default_tab" id="integration" ng-value="'integrations'" ng-model="user.app_preferences.account.default_tab" ng-change="updateUser(user)">Integration
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+
+    <div class="modal fade" id="billSummaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -828,37 +859,4 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="rightpanel rightpanel-account">
-        <tabset>
-            <tab>
-                <tab-heading>
-                    <i class="fa fa-asterisk" tooltip-placement="bottom" tooltip="settings"></i>
-                </tab-heading>
-                <div class="rightpanelinner">
-                    <h5 class="sidebartitle">Settings</h5>
-                    <hr/>
-                    <div id="current-settings">
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="default_tab" id="account_information" ng-value="'account_information'" ng-model="user.app_preferences.account.default_tab" ng-change="updateUser(user)">Account Information
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="default_tab" id="billing" ng-value="'billing'" ng-model="user.app_preferences.account.default_tab" ng-change="updateUser(user)">Billing
-                            </label>
-                        </div>
-                        <div class="radio disabled">
-                            <label>
-                                <input type="radio" name="default_tab" id="integration" ng-value="'integrations'" ng-model="user.app_preferences.account.default_tab" ng-change="updateUser(user)">Integration
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </tab>
-        </tabset>
-    </div>
-
 </div>
