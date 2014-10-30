@@ -67,6 +67,7 @@ require.config({
         'chartTwoNetService': '/angular_admin/services/chart_two_net',
         'importContactService': '/angular_admin/services/import_contacts',
         'toasterService': '/angular_admin/services/toaster',
+        'accountService': '/angular_admin/services/account',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'hoverClassDirective': '/angular_admin/directives/hover_class',
         'confirmClickDirective': '/angular_admin/directives/confirm_click',
