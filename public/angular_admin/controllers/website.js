@@ -252,7 +252,7 @@ define([
                 $scope.componentEditing = null;
                 iFrame.contentWindow.triggerEditModeOff();
                 });
-                
+
 
                 //TODO Only use on single post
                 if ( iFrame.contentWindow.updatePostMode ) {
@@ -466,7 +466,7 @@ define([
                 document.getElementById("iframe-website").contentWindow.scrollTo(section);
             };
 
-            $scope.activateAloha = function() {               
+            $scope.activateAloha = function() {
                 document.getElementById("iframe-website").contentWindow.activateAloha();
             };
 
@@ -492,6 +492,10 @@ define([
                 var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
                 var last = nodes[nodes.length - 1];
                 angular.element(last).triggerHandler('click');
+
+                WebsiteService.getComponentVersions($scope.componentEditing.type, function (versions) {
+                  $scope.componentEditingVersions = versions;
+                });
             };
 
             $scope.saveComponent = function() {

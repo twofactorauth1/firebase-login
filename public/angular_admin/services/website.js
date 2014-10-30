@@ -194,6 +194,13 @@ define(['app'], function (app) {
 			})
 		};
 
+		this.getComponentVersions = function (componentType, fn) {
+			var apiUrl = baseUrl + ['cms', 'component', componentType, 'versions'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
 
 	});
 });
