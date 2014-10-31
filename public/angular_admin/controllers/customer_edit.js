@@ -6,7 +6,8 @@ define(['app',
   'adminValidationDirective',
   'ngProgress',
   'confirmClick2',
-  'toasterService'
+  'toasterService',
+  'mediaDirective'
 ], function(app) {
   app.register.controller('CustomerEditCtrl', ['$scope',
     'CustomerService',
@@ -213,6 +214,10 @@ define(['app',
           }
         }
       });
+
+    $scope.insertPhoto=function(asset){
+        $scope.customer.photo=asset.url;        
+    };
 
     }
   ]);

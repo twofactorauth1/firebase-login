@@ -89,10 +89,11 @@
             <div id="contact-photo-container" class="row">
               <row>
                 <div class="col-xs-5 col-md-6">
-                  <div class="hidden-xs hidden-sm">
-                    <div class="btn-link btn-edit-photo">Change Photo</div>
+                  <div class="hidden-xs hidden-sm btn-contact-photo">
+                   <div class="btn-link btn-edit-photo"> <a class="btn btn-success pull-right media-modal" on-insert-mediacb="insertPhoto" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Photo</span> </a></div>
+
                   </div>
-                  <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="/assets/icons/blank-user.jpg">
+                  <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}">
                 </div>
 
                 <div class="col-xs-7 col-md-6">
@@ -354,5 +355,5 @@
     </div>
     <!-- End Change Photo Modal -->
   </div>
-
+<div id="model_container"></div>
 </div>
