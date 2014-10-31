@@ -310,7 +310,7 @@ var dao = {
 
                 self.log.debug('<< getComponentVersions');
 
-                fn(null, ""+versionAry);
+                fn(null, versionAry);
                 return;
             }
 
