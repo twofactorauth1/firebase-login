@@ -244,10 +244,11 @@ define([
             $scope.cancelPage = function() {
                 // $scope.components = that.originalCurrentPageComponents;
                 var pageId = $scope.currentPage._id;
+                $scope.deactivateAloha();
                 WebsiteService.getPageComponents(pageId,function(components) {
                     $scope.components = components;
                     $scope.updateIframeComponents();
-                //$scope.deactivateAloha();
+                
                 $scope.isEditing = false;
                 $scope.componentEditing = null;
                 iFrame.contentWindow.triggerEditModeOff();
