@@ -12,87 +12,130 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="btn-group col-xs-12 template-btns">
+            <button type="button" class="btn btn-default btn-lg col-xs-2 active" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
+                <i class="fa fa-pie-chart"></i>
+                <span class="hidden-xs">Analytics</span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'advertising'}" ng-click="activeTab = 'advertising'">
+                <i class="fa fa-bullseye"></i>
+                <span class="hidden-xs">Advertising</span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'integrations'}" ng-click="activeTab = 'integrations'">
+                <i class="fa fa-credit-card"></i>
+                <span class="hidden-xs">Ecommerce</span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'marketing'}" ng-click="activeTab = 'marketing'">
+                <i class="fa fa-bullhorn"></i>
+                <span class="hidden-xs">Marketing</span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'support'}" ng-click="activeTab = 'support'">
+                <i class="fa fa-question-circle"></i>
+                <span class="hidden-xs">Support</span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'testing'}" ng-click="activeTab = 'testing'">
+                <i class="fa fa-flask"></i>
+                <span class="hidden-xs">Testing</span>
+            </button>
+        </div>
+    </div>
+
     <div class="contentpanel">
 
-    	<button type="button" ng-click="addVisit()">Testing</button>
 
-	    <div class="row">
+		<div class="analytics-section" ng-show="activeTab == 'analytics'">
+		    <div class="row">
 
-	        <div class="col-sm-8">
-	            <div class="chart-wrapper">
-	                <div class="chart-title">
-	                    Pageviews by browser (past 24 hours)
-	                </div>
-	                <div class="chart-stage">
-	                    <div id="chart-01"></div>
-	                </div>
-	                <div class="chart-notes">
-	                    This is a sample text region to describe this chart.
-	                </div>
-	            </div>
-	        </div>
+		        <div class="col-sm-8">
+		            <div class="chart-wrapper">
+		                <div class="chart-title">
+		                    Pageviews by browser (past 24 hours)
+		                </div>
+		                <div class="chart-stage">
+		                    <div id="chart-01"></div>
+		                </div>
+		                <div class="chart-notes">
+		                    This is a sample text region to describe this chart.
+		                </div>
+		            </div>
+		        </div>
 
-	        <div class="col-sm-4">
-	            <div class="chart-wrapper">
-	                <div class="chart-title">
-	                    Pageviews by browser (past 5 days)
-	                </div>
-	                <div class="chart-stage">
-	                    <div id="chart-02"></div>
-	                </div>
-	                <div class="chart-notes">
-	                    Notes go down here
-	                </div>
-	            </div>
-	        </div>
+		        <div class="col-sm-4">
+		            <div class="chart-wrapper">
+		                <div class="chart-title">
+		                    Pageviews by browser (past 5 days)
+		                </div>
+		                <div class="chart-stage">
+		                    <div id="chart-02"></div>
+		                </div>
+		                <div class="chart-notes">
+		                    Notes go down here
+		                </div>
+		            </div>
+		        </div>
+		    </div>
 
+
+		    <div class="row">
+
+		        <div class="col-sm-4">
+		            <div class="chart-wrapper">
+		                <div class="chart-title">
+		                    Impressions by advertiser
+		                </div>
+		                <div class="chart-stage">
+		                    <div id="chart-03"></div>
+		                </div>
+		                <div class="chart-notes">
+		                    Notes go down here
+		                </div>
+		            </div>
+		        </div>
+
+		        <div class="col-sm-4">
+		            <div class="chart-wrapper">
+		                <div class="chart-title">
+		                    Pageviews by device
+		                </div>
+		                <div class="chart-stage">
+		                    <div id="chart-04"></div>
+		                </div>
+		                <div class="chart-notes">
+		                    Notes go down here
+		                </div>
+		            </div>
+		        </div>
+
+		        <div class="col-sm-4">
+		            <div class="chart-wrapper">
+		                <div class="chart-title">
+		                    Visitors by country
+		                </div>
+		                <div class="chart-stage">
+		                    <div id="chart-05"></div>
+		                </div>
+		                <div class="chart-notes">
+		                    Notes go down here
+		                </div>
+		            </div>
+		        </div>
+		    </div>
 	    </div>
 
+	    <div class="advertising-section" ng-show="activeTab == 'advertising'">
+	    </div>
 
-	    <div class="row">
+	    <div class="integrations-section" ng-show="activeTab == 'integrations'">
+	    </div>
 
-	        <div class="col-sm-4">
-	            <div class="chart-wrapper">
-	                <div class="chart-title">
-	                    Impressions by advertiser
-	                </div>
-	                <div class="chart-stage">
-	                    <div id="chart-03"></div>
-	                </div>
-	                <div class="chart-notes">
-	                    Notes go down here
-	                </div>
-	            </div>
-	        </div>
+	    <div class="marketing-section" ng-show="activeTab == 'marketing'">
+	    </div>
 
-	        <div class="col-sm-4">
-	            <div class="chart-wrapper">
-	                <div class="chart-title">
-	                    Impressions by device
-	                </div>
-	                <div class="chart-stage">
-	                    <div id="chart-04"></div>
-	                </div>
-	                <div class="chart-notes">
-	                    Notes go down here
-	                </div>
-	            </div>
-	        </div>
+	    <div class="support-section" ng-show="activeTab == 'support'">
+	    </div>
 
-	        <div class="col-sm-4">
-	            <div class="chart-wrapper">
-	                <div class="chart-title">
-	                    Impressions by country
-	                </div>
-	                <div class="chart-stage">
-	                    <div id="chart-05"></div>
-	                </div>
-	                <div class="chart-notes">
-	                    Notes go down here
-	                </div>
-	            </div>
-	        </div>
-
+	    <div class="testing-section" ng-show="activeTab == 'testing'">
 	    </div>
 
     </div>

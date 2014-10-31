@@ -13,7 +13,6 @@ mainApp.controller('MainCtrl', ['$scope', 'accountService', 'websiteService', 't
             html.clientHeight, html.scrollHeight, html.offsetHeight);
         $scope.minHeight = height;
 
-
         $scope.isSection = function(value) {
             if (value == 'section') {
               return true;
