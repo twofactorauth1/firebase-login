@@ -1,4 +1,4 @@
-define(['angularAMD', 'angularFileUpload', 'assetsService'], function (angularAMD) {
+define(['angularAMD', 'angularFileUpload', 'assetsService', 'confirmClick2'], function (angularAMD) {
     angularAMD.directive('mediaModal', [ 'FileUploader', 'AssetsService','$http', function (FileUploader, AssetsService,$http) {
         return {
             require: [],

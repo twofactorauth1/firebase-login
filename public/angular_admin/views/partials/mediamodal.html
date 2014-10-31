@@ -19,7 +19,7 @@
                                 class="fa fa-download"></i> <span class="hidden-xs">Download</span></a></li>
                         <li class="hidden"><a href="" class="itemopt" ng-disabled="!select_all"><i
                                 class="fa fa-pencil"></i> <span class="hidden-xs">Edit</span></a></li>
-                        <li><a href="" class="itemopt" ng-disabled="!select_all" ng-click="m.batchDeleteAsset()"><i
+                        <li><a href="" class="itemopt" ng-disabled="!select_all" confirm-click2 data-placement="top" confirm-click2-confirm="m.batchDeleteAsset()"  ng-click=""><i
                                 class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a></li>
                         <li class="filter-type"> Show: <a href="" data-active="all"
                                                           ng-click="m.showType('all')">All</a> <a href=""
