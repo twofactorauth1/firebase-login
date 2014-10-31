@@ -47,3 +47,7 @@ body.leftpanel-collapsed.rightmenu-open #headerbar {
   color: #c7254e;
   padding-bottom: 10px;
 }
+.btn-contact-photo {
+  float: left;
+  padding-bottom: 5px;
+}
