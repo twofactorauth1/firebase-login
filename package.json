@@ -47,7 +47,8 @@
     "requirejs": "2.1.10",
     "stripe": "~2.4.0",
     "tldtools": "0.0.9",
-    "underscore": ">=1.6.0"
+    "underscore": ">=1.6.0",
+    "wiredep": "^1.8.6"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
@@ -61,8 +62,10 @@
     "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-copy-to": "0.0.10",
+    "grunt-jsdoc-to-markdown": "^0.4.2",
     "grunt-ng-annotate": "^0.4.0",
     "grunt-ng-constant": "^1.0.0",
+    "grunt-prompt": "^1.2.1",
     "superagent": "0.18.1",
     "supertest": "0.13.0"
   },

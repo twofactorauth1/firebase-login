@@ -179,17 +179,29 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> createCustomer');
 
-        var cardToken = req.cardToken;
-        var contact = req.contact;
+
+        var cardToken = req.body.cardToken;
+        var contact = req.body.contact;
+
+        if(contact) {
+            contact = new $$.m.Contact(contact);
+        }
+
         var user = req.body.user || req.user;
-        var _accountId = self.accountId(req);
+
+        if(req.body.user) {
+            self.log.debug('>> user is obj');
+            user = new $$.m.User(user);
+        }
+
+        var _accountId = req.body.accountId || self.accountId(req);
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
                 //validate arguments
-                if(cardToken && cardToken.length ===0) {
+                if(!cardToken && cardToken.length ===0) {
                     return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
                 }
                 if (!contact && !user) {
@@ -499,7 +511,6 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> createSubscription');
-        var accountId = parseInt(self.accountId(req));
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -514,7 +525,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var quantity = req.body.quanity;
                 var application_fee_percent = req.body.application_fee_percent;
                 var metadata = req.body.metadata;
-                var accountId = self.accountId(req);
+                var accountId = parseInt(self.accountId(req));
                 var contactId = req.body.contactId;
                 var userId = req.userId;
 
@@ -614,7 +625,8 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createCard');
         var accessToken = self._getAccessToken(req);
         var customerId = req.params.id;
-        var cardToken = req.body.cardToken;
+
+        var cardToken = req.params.cardToken;
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
@@ -622,14 +634,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 if(!cardToken || cardToken.length < 1) {
                     return self.wrapError(resp, 400, null, "Invalid cardToken parameter.");
                 }
-
                 stripeDao.createStripeCard(customerId, cardToken, function(err, value){
                     self.log.debug('<< createCard');
                     return self.sendResultOrError(resp, err, value, "Error creating card");
                 });
             }
         });
-
 
     },
 

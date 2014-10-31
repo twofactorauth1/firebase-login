@@ -25,7 +25,14 @@ var mainApp = angular
         'mgo-angular-wizard',
         'iso.directives',
         'timer',
-        'google-maps'
+        'ui',
+        "com.2fdevs.videogular",
+        "com.2fdevs.videogular.plugins.controls",
+        "com.2fdevs.videogular.plugins.overlayplay",
+        "com.2fdevs.videogular.plugins.buffering",
+        "com.2fdevs.videogular.plugins.poster",
+        "ngTagsInput",
+        'ngInputDate'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){
@@ -40,8 +47,12 @@ var mainApp = angular
                 templateUrl: '../views/blog.html',
                 controller: 'BlogCtrl as blog'
             })
+//            .when('/blog/:postname', {
+//                templateUrl: '../views/blog.html',
+//                controller: 'BlogCtrl as blog'
+//            })
             .when('/blog/:postname', {
-                templateUrl: '../views/blog.html',
+                templateUrl: '../views/singlepostpage.html',
                 controller: 'BlogCtrl as blog'
             })
             .when('/tag/:tagname', {
@@ -57,6 +68,10 @@ var mainApp = angular
                 controller: 'BlogCtrl as blog'
             })
             .when('/page/:pagename', {
+                templateUrl: '../views/main.html',
+                controller: 'LayoutCtrl as layout'
+            })
+            .when('/signup', {
                 templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })

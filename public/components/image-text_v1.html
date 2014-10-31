@@ -5,44 +5,33 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
-<div ng-show="component" class="component image-text-v1
-{{component.bg.img.parallax?'parallax':''}}" parallax-background
-     parallax-ratio=".4" parallax-vertical-offset="0"
-     parallax-horizontal-offset="0" style='background:
-url("{{component.bg.img.url}}") no-repeat fixed; background:
-{{component.bg.color}}; color:{{component.txtcolor||primaryTextColor}};' data-class="image-text"
-     data-id="{{component._id}}">
-    <div class="component-body" id="{{component.anchor}}">
-        <div class="inner-page row">
-            <div class="col-sm-8 col-xs-12 pull-right" style="padding-left:30px;">
-                <h3 ng-show="component.title" class="image-text-title">
-                    <span  class="editable" data-class="title" data-ng-bind-html="component.title">
-                    </span>
-                </h3>
-                <div class="image-text-text">
-                    <div id="para" class="editable" data-class="text" >
-                        <convert-html contents="{{component.text}}">  </convert-html>
-                        <a ng-show="component.btn.url" class="btn btn-primary btn-lg" style="margin: 0;" href="{{component.btn.url}}">
-                            <i class="{{component.btn.icon}}"></i>
-                            {{component.btn.text}} </a>
-                    </div>
-                </div>
-
-
-            </div>
-            <div class="clearfix mb10 visible-xs"></div>
-
-            <div class="pull-{{component.imagePosition}} col-sm-4
-col-xs-12 image-text-image">
-                <div class="editable" data-class="url">
-                    <img ng-src="{{component.imgurl}}" class="img-responsive col-sm-12 {{component.imagestyle}}">
-                </div>
-                <p class="center editable"
-                   data-class="caption">{{component.caption}}</p>
-            </div>
-
-        </div>
-        <div class="clearfix"></div>
+<div ng-class="component.type+'-v'+component.version">
+    <div ng-show="component.title" class="image-text-title col-xs-12 mb30">
+        <span class="editable" data-class="title" data-ng-bind-html="component.title">
+        </span>
     </div>
+
+    <div class="pull-{{component.imagePosition}} col-sm-4 col-xs-12 image-text-image">
+        <div class="editable" data-class="url">
+            <div class="col-sm-12">
+                <img ng-src="{{component.imgurl}}" class="img-responsive {{component.imagestyle}}">
+            </div>
+        </div>
+        <p class="center editable" data-class="caption">{{component.caption}}</p>
+    </div>
+
+    <div class="col-sm-8 col-xs-12" style="padding-left:30px;">
+        <div class="image-text-text">
+            <div id="para" class="editable" data-class="text">
+                <convert-html contents="{{component.text}}"></convert-html>
+                <button ng-show="component.btn.url" class="btn btn-primary btn-lg" href="{{component.btn.url}}">
+                    <i class="{{component.btn.icon}}"></i>
+                    {{component.btn.text}}
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="clearfix mb10 visible-xs"></div>
 </div>

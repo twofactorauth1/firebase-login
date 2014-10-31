@@ -1,11 +1,12 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div style="">
   <div class="pageheader row">
     <div class="col-xs-8">
-      <button state-nav="customer" id="btn-back-to-contact" class="btn btn-success pull-left" type="button" ng-show="currentState == 'customerAdd'">
+      <button indigeweb-state-nav="customer" id="btn-back-to-contact" class="btn btn-success pull-left" type="button" ng-show="currentState == 'customerAdd'">
         <span class="fa fa-chevron-left"></span>
         <span class="hidden-xs">Back</span>
       </button>
-      <button state-nav="customerDetail" state-id="{{customerId}}" id="btn-back-to-contact" class="btn btn-success pull-left" type="button" ng-show="currentState == 'customerEdit'">
+      <button indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customerId}}" id="btn-back-to-contact" class="btn btn-success pull-left" type="button" ng-show="currentState == 'customerEdit'">
         <span class="fa fa-chevron-left"></span>
         <span class="hidden-xs">Back</span>
       </button>
@@ -21,7 +22,7 @@
   </div>
   <!-- End Page Header -->
 
-  <div style="min-height: 377px;" id="contact-edit-container" class="contentpanel">	
+  <div style="min-height: 377px;" id="contact-edit-container" class="contentpanel">
     <div class="row">
 
       <div class="col-md-6">
@@ -53,7 +54,7 @@
                                             <span id="hint-last">{{customer.last}}</span>
                                         </code>
                                     </small>
-                                    
+
                 </div>
 
                 <div class="row">
@@ -107,6 +108,7 @@
         <!-- END Name & Photo -->
 
         <!-- BioMetric Data -->
+        <!--
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">BioMetric Information</h3>
@@ -121,6 +123,7 @@
                 <div class="form-group col-xs-12 col-sm-8 col-md-10">
                   <div class="input-group">
                     <input class="input-device-phone form-control" value="" placeholder="Enter Device Serial #" type="text" ng-model="device.serial">
+
                     <!--
                                         <div class="btn-group pull-right" style="margin-right:8px;">
                                             <button type="button" class="btn-edit-device-type btn btn-default dropdown-toggle" data-toggle="dropdown" data-type="0">
@@ -132,15 +135,18 @@
 
                                             </ul>
                                         </div>
-                                        -->
+                                        - ->
                   </div>
+
                 </div>
+                <div ng-click="removeItem($index, customer.devices)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
               </div>
             </div>
             <div id="btn-new-device" class="btn btn-primary btn-sm" ng-click="addDeviceFn()">Add Device</div>
           </div>
-          <!-- End Panel Body -->
+          <!-- End Panel Body - ->
         </div>
+      -->
         <!-- End BioMetric Data -->
       </div>
 
@@ -162,18 +168,19 @@
                   <!-- ADD NEW PHONE -->
 
                   <div class="row edit-phone-container" data-id="" style="margin-top:8px;" ng-repeat="phone in customer.details[0].phones">
-                   
+
                     <div class="form-group col-xs-12 col-sm-8 col-md-10">
                       <div class="input-group input-group-lg">
                         <div class="input-group-addon">+1</div>
-                        <input class="input-edit-phone form-control input-lg" validation-type="phone" validate-form-fields value="" type="text" ng-model="phone.number">
+                        <input class="input-edit-phone form-control input-lg" validation-type="phone" indigeweb-validate-form-fields value="" type="text" ng-model="phone.number">
 						 <div class="input-group-btn">
                           <button data-toggle="dropdown" class="btn btn-default btn-edit-phone-type dropdown-toggle" data-type="" type="button">
                             <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'm'">mobile</span>
                             <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'h'">home</span>
                             <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'w'">work</span>
-                            <span class="caret"></span>
+
                           </button>
+
                           <ul class="dropdown-menu pull-right">
 
                             <li class="li-edit-phone-type" ng-click="customerPhoneTypeSaveFn($index, 'm')"><a>mobile</a>
@@ -189,7 +196,7 @@
                         </div>
                       </div>
                     </div>
-                 
+					 <div ng-click="removeItem($index, customer.details[0].phones)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
 
 
@@ -197,7 +204,7 @@
                 <span style="margin-top:-15px;" class="col-xs-10">
                                     <small>e.g. (303-555-5555)</small>
                                 </span>
-                                
+
               </div>
             </div>
             <div class="row">
@@ -212,37 +219,37 @@
                 <div id="edit-addresses-container">
                   <div data-id="llipzogy7u" class="edit-address-container" ng-repeat="address in customer.details[0].addresses">
                     <div class="form form-horizontal">
-                      <div class="fg-address-string form-group" ng-hide="getModifyAddressFn($index)">
-                        <input type="text" value="" class="form-control input-address-string input-lg" ng-model="address.displayName">
-                        <small>
-                            <span class="address-display-name hidden"></span>
-
-                            <div class="btn-link btn-edit-address-fields" ng-click="setModifyAddressFn($index, true)">Modify</div>
-                        </small>
-                      </div>
-                      <div class="edit-address-fields" ng-show="getModifyAddressFn($index)">
+                      <div class="edit-address-fields">
                         <div class="form-group">
-                          <label>Street Address</label>
-                          <input type="text" value="" class="form-control input-address input-address-field" ng-model="address.address2">
+                          <label>Address Line 1</label>
+                          <input type="text" value="" class="form-control input-address input-address-field" ng-model="address.address">
                         </div>
 
                         <div class="form-group">
-                          <label>Suite / Apt</label>
-                          <input type="text" value="" class="form-control input-address2 input-address-field" ng-model="address.address">
+                          <label>Address Line 2</label>
+                          <input type="text" value="" class="form-control input-address2 input-address-field" ng-model="address.address2">
                         </div>
 
                         <div class="form-group">
-                          <label>City, State, Zip</label>
+                          <label>City</label>
                           <input type="text" value="" class="form-control input-city input-address-field" ng-model="address.city">
-                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="address.state">
-                          <input type="text" value="" class="form-control input-zip input-address-field" ng-model="address.zip">
-
-                          <small>
-                            <span class="address-display-name hidden"></span>
-
-                            <div class="btn-link btn-cancel-edit-address-fields" ng-click="setModifyAddressFn($index, false)">Close</div>
-                            </small>
                         </div>
+
+                        <div class="form-group">
+                          <label>State</label>
+                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="address.state">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Country</label>
+                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="address.country">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Zip Code</label>
+                          <input type="text" value="" validation-type="zip" indigeweb-validate-form-fields class="form-control input-zip input-address-field" ng-model="address.zip">
+                        </div>
+
                       </div>
                     </div>
 
@@ -259,6 +266,7 @@
                         </label>
                       </div>
                     </div>
+                    <div ng-click="removeItem($index, customer.details[0].addresses)" style="float:right" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
 
                 </div>
@@ -279,9 +287,10 @@
                 <div id="edit-emails-container">
 
                   <div class="row edit-email-container" ng-repeat="email in customer.details[0].emails">
-                  	 <div class="form-group">
-                      <input class="form-control input-edit-email  input-lg" validate-form-fields validation-type="email" placeholder="new email" check_email="" data-email="" type="email" ng-model="email.email">                                           
+                  	 <div class="form-group col-md-10">
+                      <input class="form-control input-edit-email  input-lg" indigeweb-validate-form-fields validation-type="email" placeholder="new email" check_email="" data-email="" type="email" ng-model="email.email">
                     </div>
+					 <div ng-click="removeItem($index, customer.details[0].emails)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
                 </div>
               </div>
@@ -291,10 +300,7 @@
             <div class="col-md-12">
                 <div class="well well-lg" ng-show="currentState == 'customerEdit'">
                     <label>This is permanent and cannot be reversed.</label>
-                    <div class="btn btn-danger btn-block btn-delete-contact" data-toggle="modal" data-target="#myModal" type="button">
-                        <i class="fa fa-warning"></i>
-                        <span class="hidden-xs">Delete</span>
-                    </div>
+                    <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" data-href="#/customer" confirm="customerDeleteFn()"><i class="fa fa-trash"></i>Delete</button>
                 </div>
             </div>
           </div>

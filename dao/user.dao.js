@@ -23,7 +23,7 @@ var dao = {
 
     //Global LEVEL METHODS
     usernameExists: function(username, fn) {
-        this.exists({'_username':username.toLowerCase()}, fn);
+        this.exists({'username':username.toLowerCase()}, fn);
     },
 
 
@@ -45,11 +45,11 @@ var dao = {
 
     createUserFromUsernamePassword: function(username, password, email, accountToken, fn) {
         if (_.isFunction(accountToken)) {
-            fn = accountToken;
-            accountToken = null;
+             fn = accountToken;
+             accountToken = null;
         }
-
         var self = this;
+        self.log.debug('>> createUserFromUsernamePassword');
         this.getUserByUsername(username, function(err, value) {
             if (err) {
                 return fn(err, value);
@@ -60,6 +60,7 @@ var dao = {
             }
 
             var deferred = $.Deferred();
+
 
             accountDao.convertTempAccount(accountToken, function(err, value) {
                 if (!err) {
@@ -92,6 +93,7 @@ var dao = {
                         }
                     });
 
+
                     user.createOrUpdateLocalCredentials(password);
                     user.createUserAccount(accountId, username, password, ["super","admin","member"]);
                     cmsDao.createWebsiteForAccount(accountId, 'admin', function(err, value){
@@ -116,7 +118,6 @@ var dao = {
                 });
         });
     },
-
 
     createUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, username, socialUrl, accessToken, refreshToken, expires, accountToken, scope, fn) {
         var self = this;

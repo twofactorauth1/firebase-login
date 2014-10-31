@@ -1,3 +1,4 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div style="">
 	<div class="pageheader row">
 		<div class="col-xs-8">
@@ -154,7 +155,7 @@
 									<div class="row edit-email-container">
 										<div class="form-group">
 											<input class="form-control input-edit-email input-lg"
-												validate-form-fields validation-type="email" placeholder="new email" ng-model='user.email' type="email">
+												indigeweb-validate-form-fields validation-type="email" placeholder="new email" ng-model='user.email' type="email">
 										</div>
 									</div>
 
@@ -180,9 +181,30 @@
 				            <row>
 				                <div class="col-xs-5 col-md-6">
 				                    <div class="hidden-xs hidden-sm">
-				                        <div class="btn-link btn-edit-photo" data-toggle="modal" data-target="#modal-change-logo">Change Logo</div>
+				                        <div class="media-modal"  on-insert-mediacb="setImage">
+                                            <span class="btn-link btn-edit-photo"> Change Logo</span>
+                                        </div>
 				                    </div>
-				                    <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" src="/assets/icons/blank-user.jpg">
+                                    <div id="bussiness_logo_container" >
+                                        <div>
+                                            <img id="bussiness_logo" class="img-responsive img-rounded hand btn-edit-photo" ng-src="{{account.business.logo}}" />
+                                        </div>
+                                        <style>
+                                            #bussiness_logo_container {
+                                                background-color: #eee;
+                                                display: table;
+                                                width: 100px;
+                                                height: 100px;
+                                            }
+                                            #bussiness_logo_container > div {
+                                                display: table-cell;
+                                                vertical-align: middle;
+                                                text-align: center;
+                                            }
+                                        </style>
+                                    </div>
+
+
 				                </div>
 
 				                <div class="col-xs-7 col-md-6">
@@ -280,7 +302,7 @@
 				                        <div class="form-group col-xs-12 col-sm-8 col-md-10">
 				                            <div class="input-group">
 				                                <div class="input-group-addon">+1</div>
-				                                <input type="text" class="input-edit-phone form-control input-lg" validation-type="phone" validate-form-fields  ng-model='phone.number'>
+				                                <input type="text" class="input-edit-phone form-control input-lg" validation-type="phone" indigeweb-validate-form-fields  ng-model='phone.number'>
 				                            </div>
 				                        </div>
 				                    </div>
@@ -408,5 +430,5 @@
 			</div>
 		</div>
 	</div>
-
+    <div id="model_container"></div>
 </div>

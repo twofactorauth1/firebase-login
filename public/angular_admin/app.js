@@ -1,6 +1,8 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective'], function (angularAMD) {
-    var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var']);
-
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective','angularFileUpload','jdfontselect', 'img'], function (angularAMD) {
+    var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var','angularFileUpload','jdFontselect']);
+    app.constant('jdFontselectConfig', {
+      googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
+    });
     //routes
     app.config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/website");
@@ -23,6 +25,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
                 templateUrl: '/angular_admin/views/account_edit.html',
                 controller: 'AccountEditCtrl',
                 controllerUrl: '/angular_admin/controllers/account_edit.js'
+            }))
+            .state('accountChoosePlan', angularAMD.route({
+                url: '/account/choose/plan',
+                templateUrl: '/angular_admin/views/account_choose_plan.html',
+                controller: 'AccountChoosePlanCtrl',
+                controllerUrl: '/angular_admin/controllers/account_choose_plan.js'
             }))
             .state('marketing', angularAMD.route({
                 url: '/marketing',

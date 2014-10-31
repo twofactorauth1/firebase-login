@@ -5,7 +5,9 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-var segmentWriteKey = process.env.SEGMENT_WRITE_KEY || 'xot1dd3rul';
+var segmentWriteKey = process.env.SEGMENT_WRITE_KEY || 'vVXdSwotRr';
+//PROD xot1dd3rul
+//TEST vVXdSwotRr
 var segmentReadKey = process.env.SEGMENT_READ_KEY || 'w80757cy56';
 
 module.exports = {

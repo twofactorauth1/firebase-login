@@ -1,4 +1,4 @@
-define(['app', 'userService', 'underscore', 'commonutils','formValidationDirective', 'ngProgress'], function(app) {
+define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress', 'mediaDirective'], function(app) {
     app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', function ($scope, $stateParams, UserService, ngProgress) {
         ngProgress.start();
         var phoneCharLimit = 4;
@@ -6,6 +6,25 @@ define(['app', 'userService', 'underscore', 'commonutils','formValidationDirecti
             $('[name="' + $stateParams.focus + '"]').focus();
         //back button click function
         $scope.$back = function() {window.history.back();};
+
+        //business phone watch setup
+        $scope.businessPhoneWatchFn = function (index) {
+            $scope.$watch('account.business.phones[' + index + ']', function (newValue, oldValue) {
+                if (newValue && newValue.number.length > phoneCharLimit)
+                    UserService.putAccount($scope.account, function (account) {
+                        //$scope.account = account;
+                    });
+            }, true);
+        };
+
+        $scope.userPhoneWatchFn = function (index) {
+            $scope.$watch('user.details[0].phones[' + index + ']', function (newValue, oldValue) {
+                if (newValue && newValue.number.length > phoneCharLimit)
+                    UserService.putUser($scope.user, function (account) {
+                        //$scope.account = account;
+                    });
+            }, true);
+        };
 
         //user API call for object population
         UserService.getUser(function (user) {
@@ -28,16 +47,6 @@ define(['app', 'userService', 'underscore', 'commonutils','formValidationDirecti
                 $scope.businessPhoneWatchFn(index);
             });
         });
-
-        //business phone watch setup
-        $scope.businessPhoneWatchFn = function (index) {
-            $scope.$watch('account.business.phones[' + index + ']', function (newValue, oldValue) {
-                if (newValue && newValue.number.length > phoneCharLimit)
-                    UserService.putAccount($scope.account, function (account) {
-                        //$scope.account = account;
-                    });
-            }, true);
-        };
 
         //business phone field add
         $scope.addBusinessContactFn = function () {
@@ -121,19 +130,23 @@ define(['app', 'userService', 'underscore', 'commonutils','formValidationDirecti
             $scope.user.details[0].phones[index].type = type;
         };
 
-        $scope.userPhoneWatchFn = function (index) {
-            $scope.$watch('user.details[0].phones[' + index + ']', function (newValue, oldValue) {
-                if (newValue && newValue.number.length > phoneCharLimit)
-                    UserService.putUser($scope.user, function (account) {
-                        //$scope.account = account;
-                    });
-            }, true);
-        };
-
         //business phone field add
         $scope.addUserContactFn = function () {
             $scope.user.details[0].phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false, type: 'm'});
             $scope.userPhoneWatchFn($scope.user.details[0].phones.length-1);
+        };
+
+        $scope.setImage=function(asset){
+            console.log(asset);
+
+            $scope.account.business.logo = asset.url;
+            UserService.putAccount($scope.account, function (account) {
+                // $scope.account = account;
+                $("#media-manager-modal").modal('hide');
+            });
+
+          //  $scope.componentEditing.bg.img.url=asset.url;
+        //    $scope.updateIframeComponents();
         };
 
     }]);

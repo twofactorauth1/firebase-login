@@ -85,22 +85,33 @@ _.extend(api.prototype, baseApi.prototype, {
         var dashboard = req.body;
         var dashboardId = req.params.id;
         dashboard._id = dashboardId;
+        var accountId = parseInt(self.accountId(req));
+        dashboard.accountId = accountId;
 
         dashboard.modified = {
             date: new Date(),
             by: req.user
         };
 
+
         self.checkPermission(req, self.sc.privs.MODIFY_DASHBOARD, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
-                manager.updateDashboard(dashboard, function(err, value){
-                    self.log.debug('<< updateDashboard');
-                    self.sendResultOrError(res, err, value, 'Error updating dashboard');
+                var dashboardObj = new $$.m.Dashboard(dashboard);
+
+                manager.updateDashboard(dashboardObj, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating dashboard: ' + err);
+                        self.wrapError(res, 500, null, 'Error updating dashboard');
+                    } else {
+                        self.log.debug('<< updateDashboard');
+                        self.sendResultOrError(res, err, value, 'Error updating dashboard');
+                    }
                 });
             }
         });
+
 
     },
 

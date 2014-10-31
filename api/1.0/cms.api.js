@@ -59,23 +59,19 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url('website/:websiteId/page/:id'), this.isAuthApi, this.updatePage.bind(this));
         app.delete(this.url('website/:websiteId/page/:id/:label'), this.isAuthApi, this.deletePage.bind(this));
 
-        // THEME
-        //app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));()
-        app.get(this.url('theme/:id'), this.getThemeConfigById.bind(this));
-        app.get(this.url(':accountId/cms/theme', "account"), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
-        app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
-        app.get(this.url('theme/:id/preview'), this.isAuthApi, this.getThemePreview.bind(this));
-        app.post(this.url('theme/:id'), this.isAuthApi, this.setTheme.bind(this));
-        /*
-         What it should be:
-         */
-        app.get(this.url('themeconfig/:id'), this.isAuthApi, this.getThemeConfigById.bind(this));
-        app.get(this.url('themeconfig/account/:accountId'), this.isAuthApi, this.getThemeConfigForAccountId.bind(this));
-        app.get(this.url('themeconfig/name/:name'), this.isAuthApi, this.getThemeConfigByName.bind(this));
-        app.get(this.url('themes'), this.isAuthApi, this.getAllThemes.bind(this));
-        app.get(this.url('themes/:id/preview'), this.isAuthApi, this.getThemePreview.bind(this));
-        app.post(this.url('themes/:id'), this.isAuthApi, this.modifyTheme.bind(this));
-        app.post(this.url('website/:websiteId/theme/:themeId'), this.isAuthApi, this.setTheme.bind(this));
+
+        //THEME Updated URLs
+
+        app.get(this.url('theme'), this.isAuthApi, this.listThemes.bind(this));
+        app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeById.bind(this));
+        app.get(this.url('theme/name/:name'), this.isAuthApi, this.getThemeByName.bind(this));
+        app.post(this.url('theme'), this.isAuthApi, this.createTheme.bind(this));
+        app.post(this.url('theme/website/:websiteId'), this.isAuthApi, this.createThemeFromWebsite.bind(this));
+        app.post(this.url('theme/:id'), this.isAuthApi, this.updateTheme.bind(this));
+        app.delete(this.url('theme/:id'), this.isAuthApi, this.deleteTheme.bind(this));
+        app.put(this.url('theme/:id/website'), this.isAuthApi, this.createWebsiteFromTheme.bind(this));
+        app.post(this.url('theme/:id/website/:websiteId/page/:handle'), this.isAuthApi, this.createPageFromTheme.bind(this));
+        app.post(this.url('theme/:themeId/website/:websiteId'), this.isAuthApi, this.setTheme.bind(this));
 
 
         // COMPONENTS
@@ -87,10 +83,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('page/:id/components/:componentId'), this.isAuthApi, this.updateComponent.bind(this));
         app.delete(this.url('page/:id/components/:componentId'), this.isAuthApi, this.deleteComponent.bind(this));
         app.post(this.url('page/:id/components/:componentId/order/:newOrder'), this.isAuthApi, this.updateComponentOrder.bind(this));
+        app.get(this.url('component/:type/versions'), this.isAuthApi, this.getAvailableComponentVersions.bind(this));
 
         // BLOG POSTS
         app.post(this.url('page/:id/blog'), this.isAuthApi, this.createBlogPost.bind(this));
-        app.get(this.url('page/:id/blog'), this.setup, this.listBlogPosts.bind(this));
+        app.get(this.url('page/:id/blog'), this.setup, this.listBlogPostsByPageId.bind(this));
         app.get(this.url('blog'), this.setup, this.listBlogPosts.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup, this.getBlogPost.bind(this));
         app.post(this.url('page/:id/blog/:postId'), this.isAuthApi, this.updateBlogPost.bind(this));
@@ -282,6 +279,12 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     //region PAGE
+
+    /**
+     * This method may be called by unauthenticated users.  No security is needed.
+     * @param req
+     * @param resp
+     */
     getPageByHandle: function(req, resp) {
 
         var self = this;
@@ -289,7 +292,6 @@ _.extend(api.prototype, baseApi.prototype, {
         var pageHandle = req.params.handle;
         self.log.debug('>> getPageByHandle Website Id: '+websiteId+' Handle: '+pageHandle);
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE
 
         cmsDao.getPageForWebsite(websiteId, pageHandle, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website");
@@ -297,12 +299,16 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     * This method may be called by unauthenticated users.  No security is needed.
+     * @param req
+     * @param resp
+     */
     getPagesById: function (req, resp) {
         var self = this;
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
         self.log.debug('>> getPagesById');
-        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
 
         cmsDao.getPagesById(accountId, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page by Id");
@@ -310,6 +316,11 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     * This method may be called by unauthenticated users.  No security is needed.
+     * @param req
+     * @param resp
+     */
     getPageById: function(req, resp) {
 
         var self = this;
@@ -317,7 +328,6 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.log.debug('>> getPageById');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
 
         cmsDao.getPageById(pageId, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page by Id");
@@ -367,7 +377,8 @@ _.extend(api.prototype, baseApi.prototype, {
                     page = new Page({
                         _id: temp,
                         title: pageObj.title,
-                        handle: pageObj.handle
+                        handle: pageObj.handle,
+                        mainmenu: pageObj.mainmenu
                     });
                     page.set('websiteId', websiteId);
                     page.set('accountId', accountId);
@@ -437,6 +448,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    /**
+     * Currently no security.
+     * @param req
+     * @param res
+     */
     getAllPages: function(req, res) {
         var self = this;
         self.log.debug('>> getAllPages');
@@ -454,86 +470,51 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     //region THEME
-    getThemeConfigById: function(req, resp) {
 
+    /*
+     app.get(this.url('theme'), this.isAuthApi, this.listThemes.bind(this));
+     app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeById.bind(this));
+     app.get(this.url('theme/name/:name'), this.isAuthApi, this.getThemeByName.bind(this));
+     app.post(this.url('theme'), this.isAuthApi, this.createTheme.bind(this));
+     app.post(this.url('theme/website/:websiteId'), this.isAuthApi, this.createThemeFromWebsite.bind(this));
+     app.post(this.url('theme/:id'), this.isAuthApi, this.updateTheme.bind(this));
+     app.delete(this.url('theme/:id'), this.isAuthApi, this.deleteTheme.bind(this));
+     app.post(this.url('website/theme/:id'), this.isAuthApi, this.createWebsiteFromTheme.bind(this));
+     app.post(this.url('website/:websiteId/theme/:themeId'), this.isAuthApi, this.setTheme.bind(this));
+     */
+
+    listThemes: function(req, res) {
         var self = this;
-        self.log.debug('>> getThemeConfigById')
-        var themeId = req.params.id;
-
+        self.log.debug('>> listThemes');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_THEME
 
-        cmsManager.getThemeConfigById(themeId, function(err, value){
-            self.log.debug('<< getThemeConfigById')
-            self.sendResultOrError(resp, err, value, "Error retrieving Theme Config for ID: [" + themeId + "]");
-            self = null;
-        });
-
-    },
-
-    getAllThemes: function (req, res) {
-        var self = this;
-        self.log.debug('>> getAllThemes');
-
-        var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_THEME *CURRENTLY GLOBALLY READ*
-
-        cmsManager.getAllThemeConfigs(function(err, value){
-            self.log.debug('<< getAllThemes');
-            if (err) {
-                self.wrapError(res, 500, "Error retrieving all themes", err, value);
-            } else {
-                self.sendResult(res, value);
-            }
-        });
-    },
-
-    getThemeConfigForAccountId: function(req, resp) {
-
-        var self = this;
-        self.log.debug('>> getThemeConfigForAccountId');
-        var accountId = req.params.accountId;
-
-        accountId = parseInt(accountId);
-
-
-        if (isNaN(accountId)) {
-            this.sendResultOrError(resp, "Account Id is not valid", "");
-            self = null;
-            return;
-        }
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                cmsDao.getThemeConfigSignedByAccountId(accountId, function(err, value) {
-                    self.log.debug('<< getThemeConfigForAccountId');
-
-                    self.sendResultOrError(resp, err, value, "Error retrieving Theme Config for AccountId: [" + accountId + "]");
-                    self = null;
+                cmsManager.getAllThemes(accountId, function(err, value){
+                    self.log.debug('<< listThemes');
+                    self.sendResultOrError(res, err, value, 'Error retrieving all themes.');
                 });
             }
         });
 
     },
 
-    getThemePreview: function(req, res) {
-
+    getThemeById: function(req, res) {
         var self = this;
-        self.log.debug('>> getThemePreview');
-        var accountId = parseInt(self.accountId(req));
+        self.log.debug('>> getThemeById');
 
         var themeId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                cmsManager.getThemePreview(themeId, function(err, value){
-                    self.log.debug('<< getThemePreview');
-
-                    self.sendResultOrError(res, err, value, "Error retrieving Theme Preview for ThemeId: [" + themeId + "]");
-                    self = null;
+                cmsManager.getThemeById(themeId, function(err, value){
+                    self.log.debug('<< getThemeById');
+                    self.sendResultOrError(res, err, value, 'Error retrieving theme by id.');
                 });
             }
         });
@@ -541,66 +522,188 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
-    setTheme: function (req, res) {
+    getThemeByName: function(req, res) {
+        var self = this;
+        self.log.debug('>> getThemeByName');
+        var themeName = req.params.name;
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.getThemeByName(themeName, function(err, value){
+                    self.log.debug('<< getThemeByName');
+                    self.sendResultOrError(res, err, value, 'Error retrieving theme by name.');
+                });
+            }
+        });
+
+    },
+
+    createTheme: function(req, res) {
+        var self = this;
+
+        self.log.debug('>> createTheme');
+        var accountId = parseInt(self.accountId(req));
+        var themeObj = new $$.m.cms.Theme(req.body);
+        themeObj.set('accountId', accountId);
+        themeObj.set('created.by', self.userId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_THEME, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.createTheme(themeObj, function(err, value){
+                    self.log.debug('<< createTheme');
+                    self.sendResultOrError(res, err, value, 'Error creating theme.');
+                });
+            }
+        });
+
+
+    },
+
+    /**
+     * This function creates a new theme from an existing website object.
+     * @param {websiteId} websiteID in URL
+     * @param {theme} theme object in body of POST.  The name field MUST be populated.
+     */
+    createThemeFromWebsite: function(req, res) {
+        var self = this;
+        self.log.debug('>> createThemeFromWebsite');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var websiteId = req.params.websiteId;
+                var accountId = parseInt(self.accountId(req));
+                var themeObj = new $$.m.cms.Theme(req.body);
+                if(themeObj.get('name') === '') {
+                    self.wrapError(res, 400, 'Invalid Parameter', 'Invalid parameter provided for Theme Name');
+                }
+                themeObj.set('accountId', accountId);
+                themeObj.set('created.by', self.userId(req));
+
+                cmsManager.createThemeFromWebsite(themeObj, websiteId, null, function(err, value){
+                    self.log.debug('<< createThemeFromWebsite');
+                    self.sendResultOrError(res, err, value, 'Error creating theme from website.');
+                });
+            }
+        });
+
+
+    },
+
+
+    updateTheme: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateTheme');
+        self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var themeId = req.params.id;
+                var accountId = parseInt(self.accountId(req));
+                var themeObj = new $$.m.cms.Theme(req.body);
+                themeObj.set('modified.by', self.userId(req));
+                themeObj.set('modified.date', new Date());
+                themeObj.set('_id', themeId);
+
+                cmsManager.updateTheme(themeObj, function(err, value){
+                    self.log.debug('<< updateTheme');
+                    self.sendResultOrError(res, err, value, 'Error updating theme.');
+
+                });
+            }
+        });
+
+
+
+    },
+
+
+    deleteTheme: function(req, res) {
+        var self = this;
+        self.log.debug('>> deleteTheme');
+        self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var themeId = req.params.id;
+                var accountId = parseInt(self.accountId(req));
+
+                cmsManager.deleteTheme(themeId, function(err, value){
+                    self.log.debug('<< deleteTheme');
+                    self.sendResultOrError(res, err, value, 'Error deleting theme.');
+                });
+            }
+        });
+
+
+    },
+
+    createWebsiteFromTheme: function(req, res) {
+        var self = this;
+
+        self.log.debug('>> createWebsiteFromTheme');
+        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var themeId = req.params.id;
+                var accountId = parseInt(self.accountId(req));
+
+                cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), null, null, function(err, websiteAndPage){
+                    self.log.debug('<< createWebsiteFromTheme');
+                    self.sendResultOrError(res, err, websiteAndPage.website, 'Error creating website from theme.');
+                });
+            }
+        });
+
+
+    },
+
+    createPageFromTheme: function(req, res) {
+        var self = this;
+        self.log.debug('>> createPageFromTheme');
+        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var themeId = req.params.id;
+                var websiteId = req.params.websiteId;
+                var accountId = parseInt(self.accountId(req));
+
+                var handle = req.params.handle;
+                cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), websiteId, handle, function(err, websiteAndPage){
+                    self.log.debug('<< createWebsiteFromTheme');
+                    self.sendResultOrError(res, err, websiteAndPage.page, 'Error creating website from theme.');
+                });
+            }
+        });
+
+    },
+
+    setTheme: function(req, res) {
         var self = this;
         self.log.debug('>> setTheme');
-        var accountId = parseInt(self.accountId(req));
-
-        var themeId = req.params.themeId;
-        var websiteId = req.params.websiteId;
-
-        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_THEME, accountId, function(err, isAllowed) {
+        self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
+                var themeId = req.params.themeId;
+                var websiteId = req.params.websiteId;
+                var accountId = parseInt(self.accountId(req));
+
+                //TODO: validate this method.
                 cmsManager.setThemeForAccount(accountId, themeId, function(err, value){
                     self.log.debug('<< setTheme');
-                    self.sendResultOrError(res, err, value, "Error setting theme for account.");
-                    self = null;
+                    self.sendResultOrError(res, err, value, 'Error setting theme on account.');
                 });
             }
         });
 
-
-    },
-
-    getThemeConfigByName: function(req, res) {
-        var self = this;
-        self.log.debug('>> getThemeConfigByName');
-        var name = req.params.name;
-        self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                cmsManager.getThemeConfigByName(name, function(err, value){
-                    self.log.debug('<< getThemeConfigByName');
-                    self.sendResultOrError(res, err, value, 'Error getting theme by name.');
-                    self = null;
-                });
-            }
-        });
-
-    },
-
-    modifyTheme: function (req, res) {
-        var self = this;
-        self.log.debug('>> modifyTheme');
-        var themeId = req.params.id;
-        var accountId = parseInt(self.accountId(req));
-        var themeConfig = req.body;
-        themeConfig._id = themeId;
-
-        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_THEME, accountId, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                cmsManager.updateThemeConfig(themeConfig, function(err, value){
-                    self.log.debug('<< modifyTheme');
-                    self.sendResultOrError(res, err, value, 'Error modifying theme.');
-                    self = null;
-                });
-            }
-        });
 
     },
 
@@ -668,6 +771,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
 
+
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(req);
@@ -678,19 +782,19 @@ _.extend(api.prototype, baseApi.prototype, {
                     component = new component({
                         _id: temp,
                         anchor: temp,
-                        title: componentObj.title
-
+                        title: componentObj.title,
+                        visibility : true
                     });
 
                 }
 
                 cmsManager.addPageComponent(pageId, component.attributes, function (err, value) {
                     self.log.debug('<< addComponentToPageID' + pageId);
-                    self.log.debug('<< addComponentToPageComponent' + componentObj);
                     self.sendResultOrError(res, err, value, "Error adding components to page");
                     self = null;
                 });
             }
+
         });
 
     },
@@ -709,7 +813,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                var componentId = req.params.componentId;
+                //var componentId = req.params.componentId;
 
                 cmsManager.updatePageComponent(pageId, componentObj, function (err, value) {
                     self.log.debug('<< updateComponent');
@@ -795,14 +899,39 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+
     },
+
+    getAvailableComponentVersions: function(req, res) {
+        var self = this;
+        self.log.debug('>> getAvailableComponentVersions');
+        var type = req.params.type;
+        self.checkPermission(req, self.sc.privs.VIEW_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.getComponentVersions(type, function(err, value){
+                    self.log.debug('<< getAvailableComponentVersions');
+                    self.sendResultOrError(res, err, value, "Error getting component versions");
+                    self = null;
+                });
+            }
+        });
+
+    },
+
 
     //BLOG POSTS
     createBlogPost: function(req, res) {
 
         var self = this;
         self.log.debug('>> createBlogPost');
-        var blogPost = new $$.m.BlogPost(req.body);
+        var blog=req.body;
+        if(!Array.isArray(blog.post_tags))
+            blog.post_tags=blog.post_tags.split(',');
+
+        var blogPost = new $$.m.BlogPost(blog);
+        //var blogPost = new $$.m.BlogPost(req.body);
 
         var pageId = req.params.id;
         var accountId = parseInt(self.accountId(req));
@@ -825,12 +954,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    /**
+     * The method may be called by unauthenticated user.  No security is needed.
+     * @param req
+     * @param res
+     */
     getBlogPost: function(req, res) {
 
         var self = this;
         self.log.debug('>> getBlogPost');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var blogPostId = req.params.postId;
         self.log.debug('Account ID: ' + accountId + ' Blog Post ID: ' + blogPostId);
         cmsManager.getBlogPost(accountId, blogPostId, function (err, value) {
@@ -892,11 +1025,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    /**
+     * This method may be called by unauthenticated users.  No security is needed.
+     * @param req
+     * @param res
+     */
     listBlogPosts: function (req, res) {
         var self = this;
         self.log.debug('>> listBlogPosts');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var limit = parseInt(req.query['limit'] || 0);//suitable default?
         var skip = parseInt(req.query['skip'] || 0);//TODO: use skip for paging
 
@@ -907,12 +1044,35 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     * This method may be called by unauthenticated users.  No security is needed.
+     * @param req
+     * @param res
+     */
+    listBlogPostsByPageId: function (req, res) {
+        var self = this;
+        self.log.debug('>> listBlogPostsByPageId');
+        var pageId = req.params.id;
+        var limit = parseInt(req.query['limit'] || 0); //suitable default?
+        var skip = parseInt(req.query['skip'] || 0);   //TODO: use skip for paging
+
+        cmsManager.listBlogPostsByPageId(pageId, limit, function (err, value) {
+            self.log.debug('<< listBlogPostsByPageId ' + value);
+            self.sendResultOrError(res, err, value, "Error listing Blog Posts");
+            self = null;
+        });
+    },
+
+    /**
+     * This method may be called by unauthenticated users.  No security is needed.
+     * @param req
+     * @param res
+     */
     getPostsByAuthor: function(req, res){
 
         var self = this;
         self.log.debug('>> getPostsByAuthor');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var author = req.params.author;
 
         cmsManager.getPostsByAuthor(accountId, author, function (err, value) {
@@ -923,12 +1083,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    /**
+     * This method may be called by unauthenticated users.  No security is needed.
+     * @param req
+     * @param res
+     */
     getPostsByTitle: function(req, res) {
 
         var self = this;
         self.log.debug('>> getPostsByTitle');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var title = req.params.title;
 
         cmsManager.getPostsByTitle(accountId, title, function (err, value) {
@@ -938,12 +1102,16 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     * This method may be called by unauthenticated users.  No security is needed.
+     * @param req
+     * @param res
+     */
     getPostsByContent: function(req, res) {
 
         var self = this;
         self.log.debug('>> getPostsByContent');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var content = req.params.content;
 
         cmsManager.getPostsByData(accountId, content, function (err, value) {
@@ -953,12 +1121,16 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     * This method may be called by unauthenticated users.  No security is needed.
+     * @param req
+     * @param res
+     */
     getPostsByCategory: function(req, res) {
 
         var self = this;
         self.log.debug('>> getPostsByCategory');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var category = req.params.category;
 
         cmsManager.getPostsByCategory(accountId, category, function (err, value) {
@@ -968,12 +1140,16 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     * This method may be called by unauthenticated users.  No security is needed.
+     * @param req
+     * @param res
+     */
     getPostsByTag: function(req, res) {
 
         var self = this;
         self.log.debug('>> getPostsByTag');
         var accountId = parseInt(self.accountId(req));
-        //TODO: Add Security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
         var tag = req.params.tag;
 
         cmsManager.getPostsByTag(accountId, [tag], function (err, value) {

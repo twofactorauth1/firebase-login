@@ -123,6 +123,7 @@ _.extend(api.prototype, baseApi.prototype, {
     _saveOrUpdateContact: function (req, resp, isNew) {
 
         var self = this;
+        self.log.debug('>> _saveOrUpdateContact');
         var accountId = parseInt(self.accountId(req));
 
         var contact = new $$.m.Contact(req.body);
@@ -132,8 +133,9 @@ _.extend(api.prototype, baseApi.prototype, {
             contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
         }
 
-        contactDao.saveOrUpdate(contact, function (err, value) {
+        contactDao.saveOrUpdateContact(contact, function (err, value) {
             if (!err) {
+                self.log.debug('>> saveOrUpdate', value);
                 self.sendResult(resp, value);
             } else {
                 self.wrapError(resp, 500, "There was an error updating contact", err, value);
@@ -217,12 +219,27 @@ _.extend(api.prototype, baseApi.prototype, {
         var skip = parseInt(req.query['skip'] || 0);
         var limit = parseInt(req.query['limit'] || 0);
         var letter = req.params.letter || 'all';
+        var fields = {_id:1, first:1, last:1, photo:1};
+        if(req.query['fields'] !== undefined) {
+            if (req.query['fields'] instanceof Array) {
+                var fieldsList = req.query['fields'];
+            } else {
+                var fieldsList = req.query['fields'].split(',');
+            }
+            fields = {};
+            _.each(fieldsList, function(element, index, list){
+                fields[element] = 1;
+            });
+            //fields = _.object(fieldsList, [1]);
+            //console.dir(fields);
+        }
+
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                contactDao.findContactsShortForm(accountId, letter, skip, limit, function(err, list){
+                contactDao.findContactsShortForm(accountId, letter, skip, limit, fields, function(err, list){
                     self.log.debug('<< getContactsShortForm');
                     self.sendResultOrError(res, err, list, "Error getting contact short form by letter [" + letter + "]");
                     self = null;
@@ -347,7 +364,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var contact = new $$.m.Contact(req.body);
                 contact.set('accountId', value.id());
                 contact.set('type', 'ld');
-                contactDao.saveOrUpdate(contact, function(err, savedContact){
+                contactDao.saveOrUpdateContact(contact, function(err, savedContact){
                     if(err) {
                         self.log.error('Error signing up: ' + err);
                         req.flash("error", 'There was a problem signing up.  Please try again later.');
@@ -575,4 +592,3 @@ _.extend(api.prototype, baseApi.prototype, {
 });
 
 module.exports = new api();
-

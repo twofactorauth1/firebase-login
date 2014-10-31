@@ -84,4 +84,4 @@ _.extend(api.prototype, baseApi.prototype, {
     }
 });
 
-return new api();
+module.exports = new api();

@@ -4,7 +4,6 @@ define(['app'], function (app) {
 
 		this.getWebsite = function (websiteID, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId].join('/');
-			console.log('Getting Website '+apiUrl);
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
@@ -13,8 +12,9 @@ define(['app'], function (app) {
 
 		//website
 		this.updateWebsite = function(data, fn) {
+			console.log('updateWebsite >>>');
 			var apiUrl = baseUrl + ['cms', 'website'].join('/');
-			$http.get({
+			$http({
 			    url: apiUrl,
 			    method: "POST",
 			    data: angular.toJson(data)
@@ -36,6 +36,23 @@ define(['app'], function (app) {
 			})
 			.error(function (err) {
                 console.log('END:Website Service with ERROR');
+                fn(err, null);
+            });
+		};
+
+		// website/:websiteId/page/:id
+		this.updatePage = function(websiteId, pageId, pagedata, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(pagedata)
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service updatePage with ERROR');
                 fn(err, null);
             });
 		};
@@ -132,12 +149,12 @@ define(['app'], function (app) {
 		};
 
 		//website/:websiteId/page
-		this.createPage = function(websiteId, data, fn) {
+		this.createPage = function(websiteId, pagedata, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page'].join('/');
 			$http({
 			    url: apiUrl,
 			    method: "POST",
-			    data: angular.toJson(data)
+			    data: angular.toJson(pagedata)
 			})
 			.success(function (data, status, headers, config) {
 				fn(data);
@@ -161,6 +178,29 @@ define(['app'], function (app) {
             });
 		};
 
+		this.getThemes = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'theme'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
+		this.getPageComponents = function (pageId, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
+
+		this.getComponentVersions = function (componentType, fn) {
+			var apiUrl = baseUrl + ['cms', 'component', componentType, 'versions'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
 
 	});
 });

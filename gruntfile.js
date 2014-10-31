@@ -6,6 +6,12 @@
  */
 var STRIPE_CONFIG = require('./configs/stripe.config.js');
 var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
+var KEEN_CONFIG = require('./configs/keen.config');
+
+//var wiredepJSAry = require('wiredep')().js;
+
+var hostfileGenerator = require('./utils/hostfile.generator');
+var dbcopyutil = require('./utils/dbcopyutil');
 
 module.exports = function(grunt) {
 
@@ -183,7 +189,20 @@ module.exports = function(grunt) {
                     'public/js/libs/isotope/jquery.isotope.js',
                     'public/js/libs/angular-isotope/dist/angular-isotope.js',
                     'public/js/libs/angular-timer/dist/angular-timer.js',
-                    'public/js/scripts/utils.js'],
+                    'public/js/libs/jquery-ui/jquery-ui.min.js',
+                    'public/js/scripts/utils.js',
+                    'public/js/libs/ng-tags-input/ng-tags-input.js',
+                    'public/js/libs/videogular/videogular.js',
+                    'public/js/libs/videogular-controls/controls.js',
+                    'public/js/libs/videogular-overlay-play/overlay-play.js',
+                    'public/js/libs/videogular-buffering/buffering.js',
+                    'public/js/libs/videogular-poster/poster.js',
+                    'public/js/libs/angular-input-date/src/angular-input-date.js',
+                    'public/js/libs/skeuocard/javascripts/skeuocard.min.js'
+
+
+                    ],
+                /*src: wiredepJSAry,*/
                 dest: 'public/js/indigenous.js'
             }
         },
@@ -206,24 +225,43 @@ module.exports = function(grunt) {
             },
             app1: {
                 files: {
-                    'public/js/ng-indigenous.js':['public/scripts/app.js',
+                    'public/js/ng-indigenous.js':[
+                        'public/js/libs/angular-ui/build/angular-ui.min.js',
+                        'public/js/libs/angular-ui/modules/directives/sortable/sortable.js',
+                        'public/scripts/app.js',
                         'public/scripts/directives/dmStyle.js',
                         'public/scripts/directives/ngEnter.js',
                         'public/scripts/directives/convertHtml.js',
+			            'public/scripts/directives/scrollTo.js',
                         'public/scripts/services/accountService.js',
                         'public/scripts/services/websiteService.js',
                         'public/scripts/services/themeService.js',
                         'public/scripts/services/pagesService.js',
                         'public/scripts/services/postsService.js',
+                        'public/scripts/services/postService.js',
                         'public/scripts/filters/CreateUrlFilter.js',
                         'public/scripts/filters/generateURLforLinks.js',
                         'public/scripts/filters/getByProperty.js',
                         'public/scripts/controllers/mainCtrl.js',
                         'public/scripts/controllers/blogCtrl.js',
-                        'public/scripts/controllers/layoutCtrl.js'
+                        'public/scripts/controllers/layoutCtrl.js',
+                        'public/scripts/directives/skeuocard.js',
+                        'public/scripts/services/paymentService.js',
+                        'public/scripts/services/userService.js'
                     ]
                 }
             }
+        },
+
+        jsdoc2md: {
+
+            separateOutputFilePerInput: {
+                files: [
+                    { src: "api/1.0/cms.api.js", dest: "../wiki-indigeweb/API-CMS.md" },
+                    { src: "api/1.0/product.api.js", dest: "../wiki-indigeweb/API-Product.md" }
+                ]
+            }
+
         },
 
 
@@ -239,6 +277,8 @@ module.exports = function(grunt) {
             contactActivities: ['contactactivities/test/*_test.js'],
             contextio:['test/contextio_test.js'],
             facebook: ['test/facebook_test.js'],
+            functionalPayments: ['payments/tests/payment_functional_test.js'],
+            payments: ['payments/tests/*_test.js'],
             products: ['products/tests/*_test.js'],
             twonet:['biometrics/twonet/adapter/test/**/*_test.js', 'biometrics/twonet/client/test/**/*_test.js',
                 'biometrics/twonet/adapter/test/twonet_test_poll.js'],
@@ -271,7 +311,10 @@ module.exports = function(grunt) {
                     ENV: {
                         name: 'development',
                         stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY,
-                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY
+                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY,
+                        keenWriteKey: KEEN_CONFIG.KEEN_WRITE_KEY,
+                        keenReadKey: KEEN_CONFIG.KEEN_READ_KEY,
+                        keenProjectId: KEEN_CONFIG.KEEN_PROJECT_ID
                     }
                 }
             },
@@ -287,10 +330,70 @@ module.exports = function(grunt) {
                     }
                 }
             }
+        },
+
+        //Adds interactive prompt for grunt tasks
+        prompt: {
+            target: {
+                options: {
+                    questions: [
+                        {
+                            config: 'doCopyAccount.testToProd', // arbitray name or config for any other grunt task
+                            type: 'list', // list, checkbox, confirm, input, password
+                            message: 'Which direction are you copying?', // Question to ask the user, function needs to return a string,
+                            default: true, // default value if nothing is entered
+                            choices: [
+                                { name: 'From Test to Production', value: true, checked:true},
+                                { name: 'From Production to Test', value: false }
+                                ]
+                            //validate: function(value), // return true if valid, error message if invalid
+                            //filter:  function(value){if(value === 'Copy from Production to Test'){ return false} else {return true;}}, // modify the answer
+                            //when: function(answers) // only ask this question when this function returns true
+                        },
+                        {
+                            config: 'doCopyAccount.accountId', // arbitray name or config for any other grunt task
+                            type: 'input', // list, checkbox, confirm, input, password
+                            message: 'Enter the accountId to copy', // Question to ask the user, function needs to return a string,
+                            //default: 0, // default value if nothing is entered
+                            //choices: 'Array|function(answers)',
+                            validate: function(value){
+                                if(isNaN(parseInt(value))){
+                                    return 'please enter a valid id. [' + value + ' is not valid.]';
+                                } else {
+                                    return true;
+                                }
+                            } // return true if valid, error message if invalid
+                            //filter:  function(value), // modify the answer
+                            //when: function(answers) // only ask this question when this function returns true
+                        }
+                    ]
+                }
+            }
         }
 
 
     });
+
+    grunt.registerTask('generateHostfile', 'A simple task that generates host file entries based upon the database', function(){
+        var done = this.async();
+        hostfileGenerator.buildHostEntriesFromDB(done);
+    });
+
+
+    grunt.registerTask('doCopyAccount', 'A task to copy an account with website and pages from one db to another', function(){
+
+        var done = this.async();
+        var accountId = parseInt(grunt.config('doCopyAccount.accountId'));
+        var isTestToProd = grunt.config('doCopyAccount.testToProd');
+        if(isTestToProd === true) {
+            dbcopyutil.copyAccountFromTestToProd(accountId, done);
+        } else {
+            dbcopyutil.copyAccountFromProdToTest(accountId, done);
+        }
+
+    });
+
+    grunt.registerTask('copyAccount',  ['prompt', 'doCopyAccount']);
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
@@ -303,6 +406,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-ng-annotate');
+    grunt.loadNpmTasks("grunt-jsdoc-to-markdown");
+    grunt.loadNpmTasks('grunt-prompt');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
@@ -312,8 +417,8 @@ module.exports = function(grunt) {
     /*
      * This task is run by CI.
      */
-    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:twonet', 'nodeunit:utils',
-            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities']);
+    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:utils',
+            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments']);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
@@ -332,5 +437,8 @@ module.exports = function(grunt) {
     grunt.registerTask('testCms', ['nodeunit:cms']);
     grunt.registerTask('testAssets', ['nodeunit:assets']);
     grunt.registerTask('testContactActivities', ['nodeunit:contactActivities']);
+    grunt.registerTask('testPayments', ['nodeunit:payments']);
+    grunt.registerTask('testFunctionalPayments', ['nodeunit:functionalPayments']);
+    grunt.registerTask('updateDocs', 'jsdoc2md');
     
 };

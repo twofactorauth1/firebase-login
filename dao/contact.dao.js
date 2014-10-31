@@ -8,6 +8,7 @@
 var baseDao = require('./base.dao');
 var accountDao = require('./account.dao');
 var userDao = require('./user.dao');
+var contactActivityManager = require('../contactactivities/contactactivity_manager');
 requirejs('constants/constants');
 require('../models/contact');
 var async = require('async');
@@ -29,7 +30,7 @@ var dao = {
         //this.findManyWithFields(query, fields, fn);
     //    this.findManyWithLimit(query, limit, $$.m.Contact, fn);
 
-
+        //TODO: this can be refactored into a parameter to this method.
         accountDao.getAccountByID(accountId, function (err, res) {
 
             var sort = res.get('settings')
@@ -46,9 +47,10 @@ var dao = {
         });
     },
 
-    findContactsShortForm: function(accountId, letter, skip, limit, fn) {
+    findContactsShortForm: function(accountId, letter, skip, limit, fields, fn) {
         var self=this;
         self.log.debug('>> findContactsShortForm');
+
         var query = {};
         if(letter !='all') {
             var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
@@ -57,7 +59,7 @@ var dao = {
             query = {accountId: accountId};
         }
 
-        var fields = {_id:1, first:1, last:1, photo:1};
+        //var fields = {_id:1, first:1, last:1, photo:1};
 
         accountDao.getAccountByID(accountId, function (err, res) {
 
@@ -538,7 +540,7 @@ var dao = {
                     var mergedContactAry = [];
                     //value is an array of duplicate Arrays.
 
-                    async.each(value,
+                    async.eachSeries(value,
                         function(ary, callback){
 
                             self.mergeDuplicates(ary, accountId, function(err, mergedContact){
@@ -577,7 +579,7 @@ var dao = {
                     return;
                 } else {
                     mainContact = value;
-                    async.each(dupeAry,
+                    async.eachSeries(dupeAry,
                         function(item, callback){
                             self._safeMergeByContactAndID(mainContact, item, function(err, value){
                                 if(err) {
@@ -668,7 +670,48 @@ var dao = {
                 });
             }
         });
+    },
+
+    //Wrapper to create contactActivity
+    saveOrUpdateContact: function(contact, fn) {
+        var self = this;
+        self.log.debug('>> saveOrUpdateContact');
+        if ((contact.id() === null || contact.id() === 0 || contact.id() == "")) {
+
+            //need to create the contactActivity
+            self.saveOrUpdate(contact, function(err, savedContact){
+
+                if(err) {
+                    self.log.error('Error creating contact: ' + err);
+                    fn(err, null);
+                } else {
+                    var activity = new $$.m.ContactActivity({
+                        accountId: savedContact.get('accountId'),
+                        contactId: savedContact.id(),
+                        activityType: $$.m.ContactActivity.types.ACCOUNT_CREATED,
+                        note: "Contact created.",
+                        start:new Date() //datestamp
+
+                    });
+                    contactActivityManager.createActivity(activity, function(err, value){
+                        if(err) {
+                            self.log.error('Error creating contactActivity for new contact with id: ' + savedContact.id());
+                        } else {
+                            self.log.debug('created contactActivity for new contact with id: ' + savedContact.id());
+                        }
+                    });
+                    self.log.debug('<< saveOrUpdateContact');
+                    fn(null, savedContact);
+                }
+            });
+        } else {
+            // just an update
+            self.saveOrUpdate(contact, fn);
+        }
+
     }
+
+
 };
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();

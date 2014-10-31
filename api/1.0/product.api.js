@@ -35,6 +35,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createProduct');
 
         var product = req.body;
+
         var accountId = parseInt(self.accountId(req));
 
         self.checkPermission(req, self.sc.privs.MODIFY_PRODUCT, function(err, isAllowed) {
@@ -42,14 +43,15 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(res);
             } else {
                 product.accountId = accountId;
+                var productObj = new $$.m.Product(product);
 
-                productManager.createProduct(product, function(err, value){
+                productManager.createProduct(productObj, function(err, value){
                     self.log.debug('<< createProduct');
                     self.sendResultOrError(res, err, value, "Error creating product");
                 });
             }
-        });
 
+        });
 
     },
 
@@ -106,9 +108,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> updateProduct');
 
-        var product = req.body;
+        console.dir(req.body);
+        var product = new $$.m.Product(req.body);
         var productId = req.params.id;
-        product._id = productId;
+        product.set('_id', productId);
 
         productManager.getProduct(productId, function(err, savedProduct){
             var accountId = savedProduct.get('accountId');

@@ -73,12 +73,13 @@ _.extend(api.prototype, baseApi.prototype, {
                             }
 
                         });
+
                     }
                     console.dir(asset);
                     assetManager.createAsset(file.path, asset, function(err, value, file){
                         self.log.debug('<< createAsset');
-                        file._id = value.get("_id")
-                        file.date = value.get("created").date
+                        file._id = value.get("_id");
+                        file.date = value.get("created").date;
                         //self.sendResultOrError(res, err, value, "Error creating Asset");
                         self.sendFileUploadResult(res, err, file);
                     });
@@ -258,11 +259,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
         if (!err) {
             var file = {
-                name: value.name,
+                filename: value.name,
                 size: value.size,
                 url: value.url,
                 resource: value.resource,
-                date: value.date,
+                created: {
+                    date: value.date
+                },
                 _id: value._id
             };
 

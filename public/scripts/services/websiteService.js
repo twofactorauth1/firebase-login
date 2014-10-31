@@ -8,10 +8,10 @@
 mainApp.factory('websiteService', ['accountService','$http', function (accountService,$http) {
 
     var that = this;
-    that.website = null;
+    that.website = {};
 
     return function (callback) {
-        if (that.website) {
+        if (Object.getOwnPropertyNames(that.website).length != 0) {
             callback(null,that.website);
         } else {
             accountService(function (err, data) {
@@ -19,7 +19,6 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
                     console.log('Method:accountService Error: ' + err);
                     callback(err, null);
                 } else {
-
                     // API URL: http://yoursubdomain.indigenous.local/api/1.0/cms/website/yourid
                     $http.get('/api/1.0/cms/website/' + data.website.websiteId)
                     .success(function (data) {

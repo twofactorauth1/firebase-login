@@ -1,0 +1,342 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+-->
+
+<script type="text/x-handlebars-template" name="signup-main">
+    <section>
+        <span class="logo"></span>
+        <div class="container">
+            <div class="signuppanel row">
+                <div class="col-xs-8 col-xs-offset-2">
+                        <h3 class="center">Sign Up!</h3>
+                        <hr class="mb30"></hr>
+                         <div class="form-group">
+                            <label for="input-company-name">Business Name</label>
+                            <input class="form-control input-lg" type="text" id="input-company-name" value="{{account.company.name}}" placeholder="My Business Name"/>
+                         </div>
+                         <span id="help-company-name" class="error" />
+                         <hr></hr>
+                        <p class="description center">Choose one of the ways to register below</p>
+                        <div class="form form-inner">
+                            <div class="row social">
+
+                                <div class="social-btn-wrap">
+                                    <a href="/signup/facebook" class="btn btn-large btn-default fb-color">
+                                        <i class="fa fa-facebook" />
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p>Facebook</p>
+                                </div>
+
+                                <div class="social-btn-wrap">
+                                    <a href="/signup/twitter" class="btn btn-large btn-default twitter-color">
+                                        <i class="fa fa-twitter" />
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p>Twitter</p>
+                                </div>
+
+                                <div class="social-btn-wrap">
+                                    <a href="/signup/google" class="btn btn-large btn-default google-color">
+                                        <i class="fa fa-google-plus" />
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p>Google Plus</p>
+                                </div>
+
+                                <div class="social-btn-wrap">
+                                    <a href="/signup/linkedin" class="btn btn-large btn-default linkedin-color">
+                                        <i class="fa fa-linkedin" />
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p>LinkedIn</p>
+                                </div>
+
+                                <div class="social-btn-wrap">
+                                    <a href="#" class="btn btn-large btn-default showEmailForm email-color">
+                                        <i class="fa fa-envelope" />
+                                    </a>
+                                    <div class="clearfix"></div>
+                                    <p>Email</p>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <form role="form" id="form-create-account" action="/signup" method="post">
+                                <div class="form-group row">
+                                    <div class="">
+                                        <label>Email</label>
+                                        <div class="input-group">
+                                            <input class="form-control input-lg" id="input-username" type="text" name="username" placeholder="username" />
+                                            <span class="input-group-addon"><i class="fa fa-user" />
+                                            </span>
+                                        </div>
+                                        <span id="help-username" class="error" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="">
+                                        <label>Password</label>
+                                        <div class="input-group">
+                                            <input class="form-control input-lg" id="input-password" type="password" name="password" placeholder="password" />
+                                            <span class="input-group-addon"><i class="fa fa-lock" />
+                                            </span>
+                                        </div>
+                                        <span id="help-password" class="error" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="">
+                                        <label>Re-enter Password</label>
+
+                                        <div class="input-group">
+                                            <input class="form-control input-lg" id="input-password2" type="password" name="password2" placeholder="password" />
+                                            <span class="input-group-addon"><i class="fa fa-lock" />
+                                            </span>
+                                        </div>
+                                        <span id="help-password2" class="error" />
+                                    </div>
+                                </div>
+
+                                <p class="termsOfuse">By continuing below you agree to the <a href="/terms">Terms of Use</a>
+                                    <p>
+                                        <button class="btn btn-primary btn-default btn-block btn-lg" type="submit" value="Create Account" role="button">Create Account</button>
+                            </form>
+                        </div>
+                </div>
+                <div class="hidden">
+                    <h3>Benefits</h3>
+                    <hr></hr>
+                    <ul class="benefits">
+                        <li><span class="fa fa-clock-o"></span> <h4>Saves Time</h4></li>
+                        <li><span class="fa fa-rocket"></span> <h4>Your Secret Business Weapon</h4></li>
+                        <li><span class="fa fa-money"></span> <h4>Saves you Money</h4></li>
+                    </ul>
+                    <hr>
+                    <div class="testimonial row">
+                        <div class="col-xs-3">
+                            <img src="http://api.randomuser.me/portraits/med/women/17.jpg" class="img-circle"/>
+                        </div>
+                        <div class="col-xs-9 text">
+                            <p>"Indigenous is my secret weapon against my competiton and it is so intutive."</p>
+                            <div class="clearfix"></div>
+                            <span>- Rachel Montgomery</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</script>
+
+<script type="text/x-handlebars-template" name="signup-main-old">
+    <section class="mainpanel">
+        <span class="logo"></span>
+        <div class="signup-inner row">
+            <div class="col-xs-1">
+                <a class="left-nav"></a>
+            </div>
+            <div class="panels col-xs-10">
+                {{> signup-start }}
+                {{> signup-details }}
+                {{> signup-create }}
+            </div>
+            <div class="col-xs-1">
+                <a class="right-nav {{#superUnless "or" isProfessional isBusiness isEnterprise}}hidden{{/superUnless}}"></a>
+            </div>
+        </div>
+    </section>
+</script>
+
+<script type="text/x-handlebars-template" name="signup-start" partial="true">
+    <div id="start" class="signuppanel" style="{{#equals place 'start'}}display:block{{/equals}}">
+            <div class="form form-inner" style="">
+            <ul id="progressbar">
+                <li class="active"></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <h4>Choose Your Business Model</h4>
+            <hr>
+            <div class="models row">
+                <div class="col-sm-4">
+                    <div id="btn-professional" class="btn btn-large btn-bus-model {{#if isProfessional}}btn-primary{{else}}btn-default{{/if}}" data-type="professional"><span class="fa fa-user"></span></div>
+                    <h4>Professional</h4>
+                </div>
+                <div class="col-sm-4">
+                    <div id="btn-business" class="btn btn-large btn-default btn-bus-model {{#if isBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="business"><span class="fa fa-users"></span></div>
+                    <h4>Business</h4>
+                </div>
+                <div class="col-sm-4">
+                    <div id="btn-enterprise" class="btn btn-large btn-default btn-bus-model {{#if isEnterprise}}btn-primary{{else}}btn-default{{/if}}" data-type="enterprise"><span class="fa fa-building-o"></span></div>
+                    <h4>Enterprise</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-handlebars-template" name="signup-details" partial="true">
+    <div id="details" class="signuppanel" style="{{#equals place 'details'}}display:block{{/equals}}">
+        <div class="form form-inner">
+            <ul id="progressbar">
+                <li></li>
+                <li class="active"></li>
+                <li></li>
+            </ul>
+            <h4>Set Up Your Business</h4>
+            <hr>
+            <div>
+                <form role="form">
+                    <div class="form-group row">
+                        <div class="">
+                            <div id="btn-newbusiness" class="btn btn-large {{#if isNewBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="new_business">New</div>
+
+                            <div id="btn-existingbusiness" class="btn btn-large btn-default {{#if isExistingBusiness}}btn-primary{{else}}btn-default{{/if}}" data-type="existing_business">Existing</div>
+
+                        </div>
+                        <div class="">
+                            <label>
+                                {{#if isBusiness}}What is the name of your business{{/if}}
+                                {{#if isProfessional}}Does your professional business have a name?{{/if}}
+                            </label>
+                            <input class="form-control" type="text" id="input-company-name" value="{{account.company.name}}" />
+                            <span id="help-subdomain" class="error"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-xs-6">
+                            <select id="category_parent" class="form-control">
+                              <option>Fitness</option>
+                              <option>Services</option>
+                              <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-6">
+                            <select id="category_child" class="form-control">
+                              <option>Yoga</option>
+                              <option>Personal Trainer</option>
+                              <option>Hair Stylist</option>
+                              <option>Make Up Artist</option>
+                              <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    {{#if isBusiness}}
+                    <div class="form-group row">
+                        <div class="">
+                            <label>
+                                How large is your business?
+                            </label>
+
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-default {{#equals account.company.size 2}}active{{/equals}}">
+                                    <input type="radio" name="radio-company-size" class="radio-company-size" data-size=2> Small (0-4)
+                                </label>
+
+                                <label class="btn btn-default {{#equals account.company.size 3}}active{{/equals}}">
+                                    <input type="radio" name="radio-company-size" class="radio-company-size" data-size=3> Medium (5-24)
+                                </label>
+
+                                <label class="btn btn-default {{#equals account.company.size 4}}active{{/equals}}">
+                                    <input type="radio" name="radio-company-size" class="radio-company-size" data-size=4> Large(25-99)
+                                </label>
+
+                                <label class="btn btn-default {{#equals account.company.size 5}}active{{/equals}}">
+                                    <input type="radio" name="radio-company-size" class="radio-company-size" data-size=5> Enterprise(100+)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    {{/if}}
+                </form>
+
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-handlebars-template" name="signup-create" partial="true">
+    <div id="create" class="signuppanel" style="{{#equals place 'create'}}display:block{{/equals}}">
+        <div class="form form-inner">
+            <ul id="progressbar">
+        	<li></li>
+        	<li></li>
+        	<li class="active"></li>
+            </ul>
+            <h4>Create an account</h4>
+            <hr></hr>
+            <div class="row social">
+                <a href="/signup/facebook" class="btn btn-large btn-default">
+                    <i class="fa fa-facebook"/>
+                </a>
+
+                <a href="/signup/twitter" class="btn btn-large btn-default">
+                    <i class="fa fa-twitter"/>
+                </a>
+
+
+                <a href="/signup/google" class="btn btn-large btn-default">
+                    <i class="fa fa-google-plus"/>
+                </a>
+
+                <a href="/signup/linkedin" class="btn btn-large btn-default">
+                    <i class="fa fa-linkedin"/>
+                </a>
+            </div>
+            <hr/>
+
+            <form role="form" id="form-create-account" action="/signup" method="post">
+                <div class="form-group row">
+                    <div class="">
+                        <label>Or create with your email address</label>
+                        <div class="input-group">
+                            <input class="form-control" id="input-username" type="text" name="username" placeholder="username"/>
+                            <span class="input-group-addon"><i id="icon-username" class="glyphicon"/> </span>
+                        </div>
+                        <span id="help-username" class="error" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="">
+                        <label>Password</label>
+                        <div class="input-group">
+                            <input class="form-control" id="input-password" type="password" name="password" placeholder="password"/>
+                            <span class="input-group-addon"><i id="icon-password" class="glyphicon"/> </span>
+                        </div>
+                        <span id="help-password" class="error" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="">
+                        <label>Re-enter Password</label>
+
+                        <div class="input-group">
+                            <input class="form-control" id="input-password2" type="password" name="password2" placeholder="password"/>
+                            <span class="input-group-addon"><i id="icon-password2" class="glyphicon"/> </span>
+                        </div>
+                        <span id="help-password2" class="error" />
+                    </div>
+                </div>
+
+                <p class="termsOfuse">By continuing below you agree to the <a href="/terms">Terms of Use</a><p>
+                <button class="btn btn-primary btn-default btn-block" type="submit" value="Create Account" role="button">Create Account</button>
+            </form>
+        </div>
+    </div>
+</script>

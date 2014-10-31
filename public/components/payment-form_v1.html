@@ -1,0 +1,173 @@
+<div ng-class="component.type+'-v'+component.version">
+    <section>
+        <span class="logo"></span>
+        <div class="panel row">
+            <div class="wrap">
+                <div class="panel-header">
+                    <h1 class="center">Disruptive Software for Small Businesses</h1>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h3><i class="fa fa-check"></i> Get Organized</h3>
+                        </div>
+                        <div class="col-sm-4">
+                            <h3><i class="fa fa-check"></i> Grow Sales</h3>
+                        </div>
+                        <div class="col-sm-4">
+                            <h3><i class="fa fa-check"></i> Save Time</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                    <!-- EMAIL AND PASSOWORD -->
+
+                    <div id="email" class="form-group col-sm-6 has-feedback">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope" /></span>
+                            <input class="form-control input-lg" type="text" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)"/>
+                            <span class="glyphicon form-control-feedback"></span>
+                        </div>
+                        <span class="error help-block" />
+                    </div>
+
+
+                    <div id="password" class="form-group col-sm-6 has-feedback">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock" /></span>
+                            <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="password" ng-blur="checkPasswordLength(newAccount)"/>
+                            <span class="glyphicon form-control-feedback"></span>
+                        </div>
+                        <span class="error" />
+                    </div>
+
+                    <!-- Business Name -->
+
+                    <div id="business-name" class="form-group col-xs-12 has-feedback">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-building" /></span>
+                            <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)"/>
+                            <span class="glyphicon form-control-feedback"></span>
+                        </div>
+                        <span class="error" />
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <hr></hr>
+
+                    <!-- MEMBERSHIP -->
+
+                    <div class="col-xs-6">
+                        <div class="well well-calm">
+                            <h4 class="center">Monthly Membership</h4>
+                            <h2 class="center">97.00 <span>/ month</span></h2>
+                            <div class="mb30"></div>
+                            <a type="button" class="btn btn-primary" ng-click="newAccount.membership = 'monthly'">Choose</a>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="well well-calm">
+                            <h4 class="center">Yearly Membership</h4>
+                            <h2 class="center">74.00 <span>/ month</span></h2>
+                            <div class="mb30"></div>
+                            <a type="button" class="btn btn-primary" ng-click="newAccount.membership = 'yearly'">Choose</a>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <hr></hr>
+
+                    <!-- PAYMENT DETAILS -->
+
+                    <div class="row">
+                        <div class="col-xs-12 mb30">
+                            <div class="col-sm-2">
+                                <h3 class="center">Amount:</h3>
+                            </div>
+                            <div class="col-sm-10">
+                                <h4>Only $49.00/month (when you prepay $588.00 for 12 months)
+                                    <br/>Save $576.00. Pays for itself in 6 months.
+                                    <br/>Keep Locked In Rate for next year.
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <div class="credit-card-input no-js" id="skeuocard">
+                                <label for="cc_type">Card Type</label>
+                                <select name="cc_type">
+                                    <option value="">...</option>
+                                    <option value="visa">Visa</option>
+                                    <option value="discover">Discover</option>
+                                    <option value="mastercard">MasterCard</option>
+                                    <option value="maestro">Maestro</option>
+                                    <option value="jcb">JCB</option>
+                                    <option value="unionpay">China UnionPay</option>
+                                    <option value="amex">American Express</option>
+                                    <option value="dinersclubintl">Diners Club</option>
+                                </select>
+                                <label for="cc_number">Card Number</label>
+                                <input type="text" name="cc_number" id="cc_number" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" size="19">
+                                <label for="cc_exp_month">Expiration Month</label>
+                                <input type="text" name="cc_exp_month" id="cc_exp_month" placeholder="00">
+                                <label for="cc_exp_year">Expiration Year</label>
+                                <input type="text" name="cc_exp_year" id="cc_exp_year" placeholder="00">
+                                <label for="cc_name">Cardholders Name</label>
+                                <input type="text" name="cc_name" id="cc_name" placeholder="John Doe">
+                                <label for="cc_cvc">Card Validation Code</label>
+                                <input type="text" name="cc_cvc" id="cc_cvc" placeholder="123" maxlength="3" size="3">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="clearfix"></div>
+
+                    <hr></hr>
+
+
+                    <!-- BUY -->
+                    <div class="submit-signup">
+                        <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)">Become an Indigenous Member Now</a>
+                    </div>
+                    <p class="center">By click this button you agree to Indigneous.io <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
+                </div>
+            </div>
+        </div>
+        <ul class="certificates">
+            <li><div class="larger">100%</div><div class="clearfix"></div> Secure Data </li>
+            <li><div class="larger">30 Day</div><div class="clearfix"></div> Money Back Guarantee </li>
+            <li><div class="larger">No Risk</div><div class="clearfix"></div> Cancel Anytime </li>
+            <li><div class="larger">Live</div><div class="clearfix"></div> Customer Support</li>
+        </ul>
+    </section>
+</div>
+
+
+<!-- Add Component Modal -->
+<div class="modal fade" id="terms-of-service">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Terms of Service</h4>
+                </div>
+                <div class="modal-body">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel, possimus, quasi. Necessitatibus praesentium, dolorem blanditiis modi mollitia, non veritatis. In laboriosam maxime vitae! Atque minima voluptates nisi aspernatur nihil. Quos, necessitatibus sint veritatis dolores magnam minima debitis sunt totam sit reiciendis! Suscipit eveniet placeat, velit totam repellendus illo quam quae aliquam voluptatibus deserunt nihil corporis, odio voluptate reiciendis dolorum non asperiores aut. Impedit doloribus aspernatur quasi ea tempora vitae odio eaque reiciendis omnis. Quia, nisi facilis vel non optio in, sit a! Molestiae placeat quae, nostrum officiis, iusto ea at repellat et atque consequatur! Id ut sapiente illo? Quas, deserunt?
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<script type="text/javascript">
+    card = new Skeuocard($("#skeuocard"));
+</script>

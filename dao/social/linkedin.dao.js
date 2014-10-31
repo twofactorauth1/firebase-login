@@ -330,7 +330,7 @@ var dao = {
 
                                             updateContactFromConnection(contact, connection);
 
-                                            contactDao.saveOrUpdate(contact, function(err, value) {
+                                            contactDao.saveOrUpdateContact(contact, function(err, value) {
                                                 if (err) {
                                                     self.log.error("An error occurred updating contact during LinkedIn import", err);
                                                 }
@@ -387,8 +387,22 @@ var dao = {
                             } else {
                                 self.log.info("LinkedIn friend import succeed. " + totalImported + " imports");
                                 //Last step, save the user
-                                userDao.saveOrUpdate(user, function() {});
-                                fn(null);
+                                userDao.saveOrUpdate(user, function(err, value) {
+                                    if(err) {
+                                        self.log.error('Error updating user: '  + err);
+                                        return fn(null);
+                                    }
+                                    self.log.info('User updated. Merging duplicates.');
+                                    contactDao.mergeDuplicates(null, accountId, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error occurred during duplicate merge: ' + err);
+                                            fn(null);
+                                        } else {
+                                            self.log.info('Duplicate merge successful.');
+                                            fn(null);
+                                        }
+                                    });
+                                });
                             }
                         });
                     });
