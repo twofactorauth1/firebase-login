@@ -22,11 +22,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url(''), this.isAuthAndSubscribedApi, this.createProduct.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getProduct.bind(this));
-        app.get(this.url(''), this.isAuthApi, this.listProducts.bind(this));
+        app.get(this.url(''), this.setup, this.listProducts.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi, this.updateProduct.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi, this.deleteProduct.bind(this));
 
-        app.get(this.url('type/:type'), this.isAuthAndSubscribedApi, this.getProductsByType.bind(this));
+        app.get(this.url('type/:type'), this.isAuthApi, this.getProductsByType.bind(this));
 
     },
 
@@ -82,6 +82,11 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     * No security necessary.  Anyone can list products.
+     * @param req
+     * @param res
+     */
     listProducts: function(req, res) {
         var self = this;
         self.log.debug('>> listProducts');
@@ -89,18 +94,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var skip = req.query['skip'];
         var limit = req.query['limit'];
         var accountId = parseInt(self.accountId(req));
-
-        self.checkPermission(req, self.sc.privs.VIEW_PRODUCT, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(res);
-            } else {
-                productManager.listProducts(accountId, limit, skip, function(err, list){
-                    self.log.debug('<< listProducts');
-                    self.sendResultOrError(res, err, list, 'Error listing products');
-                });
-            }
+        productManager.listProducts(accountId, limit, skip, function(err, list){
+            self.log.debug('<< listProducts');
+            self.sendResultOrError(res, err, list, 'Error listing products');
         });
-
 
     },
 
