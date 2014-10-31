@@ -4,8 +4,6 @@ define(['app', 'ngProgress'], function(app) {
 
         $scope.activeTab = 'analytics';
 
-        $scope.hello = 'analytics';
-
         var client = new Keen({
             projectId: "54528c1380a7bd6a92e17d29",       // String (required)
             writeKey: "c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a", // String (required for sending data)
@@ -17,150 +15,32 @@ define(['app', 'ngProgress'], function(app) {
 
         Keen.ready(function(){
 
-
           // ----------------------------------------
-          // Pageviews Area Chart
+          // Pageviews Metric
           // ----------------------------------------
-          var pageviews_timeline = new Keen.Query("count", {
-            eventCollection: "pageviews",
-            interval: "hourly",
-            groupBy: "visitor.tech.browser.family",
-            timeframe: {
-              start: "2014-10-31T00:00:00.000Z",
-              end: "2014-11-01T00:00:00.000Z"
-            }
+          var count = new Keen.Query("count", {
+            eventCollection: "pageviews"
           });
-          console.log('pageviews_timeline >>> ', pageviews_timeline);
-          client.draw(pageviews_timeline, document.getElementById("chart-01"), {
-            chartType: "areachart",
-            title: false,
-            height: 250,
-            width: "auto",
-            chartOptions: {
-              chartArea: {
-                height: "85%",
-                left: "5%",
-                top: "5%",
-                width: "80%"
-              },
-              isStacked: true
-            }
+          client.draw(count, document.getElementById("count-pageviews-metric"), {
+            chartType: "metric",
+            title: "Page Views",
+            width: 345,
+            colors: ["#49c5b1"]
           });
 
-
           // ----------------------------------------
-          // Pageviews Pie Chart
+          // Pageviews Metric
           // ----------------------------------------
-          var pageviews_static = new Keen.Query("count", {
-            eventCollection: "pageviews",
-            groupBy: "visitor.tech.browser.family",
-            timeframe: {
-              start: "2014-10-31T00:00:00.000Z",
-              end: "2014-11-01T00:00:00.000Z"
-            }
+          var count = new Keen.Query("count", {
+            eventCollection: "pageviews"
           });
-          client.draw(pageviews_static, document.getElementById("chart-02"), {
-            chartType: "piechart",
-            title: false,
-            height: 250,
-            width: "auto",
-            chartOptions: {
-              chartArea: {
-                height: "85%",
-                left: "5%",
-                top: "5%",
-                width: "100%"
-              }
-            }
+          client.draw(count, document.getElementById("count-visit-duration-metric"), {
+            chartType: "metric",
+            title: "Avg. Visit Duration",
+            width: 345,
+            colors: ["#49c5b1"]
           });
 
-
-          // ----------------------------------------
-          // Impressions timeline
-          // ----------------------------------------
-          var impressions_timeline = new Keen.Query("count", {
-            eventCollection: "pageviews",
-            groupBy: "visitor.tech.os.family",
-            interval: "hourly",
-            timeframe: {
-              start: "2014-10-31T00:00:00.000Z",
-              end: "2014-11-01T00:00:00.000Z"
-            }
-          });
-          client.draw(impressions_timeline, document.getElementById("chart-03"), {
-            chartType: "table",
-            title: false,
-            height: 250,
-            width: "auto",
-            chartOptions: {
-              sortColumn: 1,
-              sortAscending: false
-            }
-          });
-
-
-          // ----------------------------------------
-          // Impressions timeline (device)
-          // ----------------------------------------
-          var impressions_timeline_by_device = new Keen.Query("count", {
-            eventCollection: "pageviews",
-            groupBy: "visitor.tech.os.family",
-            interval: "hourly",
-            timeframe: {
-              start: "2014-10-31T00:00:00.000Z",
-              end: "2014-11-01T00:00:00.000Z"
-            }
-          });
-          client.draw(impressions_timeline_by_device, document.getElementById("chart-04"), {
-            chartType: "columnchart",
-            title: false,
-            height: 250,
-            width: "auto",
-            chartOptions: {
-              chartArea: {
-                height: "75%",
-                left: "10%",
-                top: "5%",
-                width: "60%"
-              },
-              bar: {
-                groupWidth: "85%"
-              },
-              isStacked: true
-            }
-          });
-
-
-          // ----------------------------------------
-          // Impressions timeline (country)
-          // ----------------------------------------
-          var impressions_timeline_by_country = new Keen.Query("count", {
-            eventCollection: "pageviews",
-            groupBy: "visitor.geo.country",
-            interval: "hourly",
-            timeframe: {
-              start: "2014-10-31T00:00:00.000Z",
-              end: "2014-11-01T00:00:00.000Z"
-            }
-          });
-          client.draw(impressions_timeline_by_country, document.getElementById("chart-05"), {
-            chartType: "columnchart",
-            title: false,
-            height: 250,
-            width: "auto",
-            chartOptions: {
-              chartArea: {
-                height: "75%",
-                left: "10%",
-                top: "5%",
-                width: "60%"
-              },
-              bar: {
-                groupWidth: "85%"
-              },
-              isStacked: true
-            }
-          });
         });
 
     }]);

@@ -14,7 +14,7 @@
 
     <div class="row">
         <div class="btn-group col-xs-12 template-btns">
-            <button type="button" class="btn btn-default btn-lg col-xs-2 active" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
+            <button type="button" class="btn btn-default btn-lg col-xs-2 active tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'" data-toggle="tooltip" data-placement="bottom" title="12 Days ago Robin visited your website.">
                 <i class="fa fa-pie-chart"></i>
                 <span class="hidden-xs">Analytics</span>
             </button>
@@ -44,99 +44,224 @@
     <div class="contentpanel">
 
 
-		<div class="analytics-section" ng-show="activeTab == 'analytics'">
-		    <div class="row">
+        <div class="analytics-section" ng-show="activeTab == 'analytics'">
 
-		        <div class="col-sm-8">
-		            <div class="chart-wrapper">
-		                <div class="chart-title">
-		                    Pageviews by browser (past 24 hours)
-		                </div>
-		                <div class="chart-stage">
-		                    <div id="chart-01"></div>
-		                </div>
-		                <div class="chart-notes">
-		                    This is a sample text region to describe this chart.
-		                </div>
-		            </div>
-		        </div>
+       		<div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div id="pageviews"></div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div id="visit-duration"></div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                   <div id="pageviews"></div>
+                </div>
+            </div>
 
-		        <div class="col-sm-4">
-		            <div class="chart-wrapper">
-		                <div class="chart-title">
-		                    Pageviews by browser (past 5 days)
-		                </div>
-		                <div class="chart-stage">
-		                    <div id="chart-02"></div>
-		                </div>
-		                <div class="chart-notes">
-		                    Notes go down here
-		                </div>
-		            </div>
-		        </div>
-		    </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Traffic Sources
+                        </div>
+                        <div class="chart-stage">
+                            <div id="traffic-sources"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Top Visited Pages
+                        </div>
+                        <div class="chart-stage">
+                            <div id="top-visited-pages"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="row">
+                <!-- end of three -->
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            New vs. Returning
+                        </div>
+                        <div class="chart-stage">
+                            <div id="new-vs-returning"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Device
+                        </div>
+                        <div class="chart-stage">
+                            <div id="device"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Visitor Location
+                        </div>
+                        <div class="chart-stage">
+                            <div id="location"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-		    <div class="row">
+            <div class="container-fluid">
 
-		        <div class="col-sm-4">
-		            <div class="chart-wrapper">
-		                <div class="chart-title">
-		                    Impressions by advertiser
-		                </div>
-		                <div class="chart-stage">
-		                    <div id="chart-03"></div>
-		                </div>
-		                <div class="chart-notes">
-		                    Notes go down here
-		                </div>
-		            </div>
-		        </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Cell Title
+                            </div>
+                            <div class="chart-stage">
+                                <div id="grid-1-1">
+                                    <img data-src="holder.js/100%x240/white/text:#grid-1-1" alt="#grid-1-1" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3OTciIGhlaWdodD0iMjQwIj48cmVjdCB3aWR0aD0iNzk3IiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjM5OC41IiB5PSIxMjAiIHN0eWxlPSJmaWxsOiNhN2E3YTc7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LXNpemU6NTBweDtmb250LWZhbWlseTpBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZjtkb21pbmFudC1iYXNlbGluZTpjZW50cmFsIj4jZ3JpZC0xLTE8L3RleHQ+PC9zdmc+" style="height: 240px; width: 100%; display: block;">
+                                </div>
+                            </div>
+                            <div class="chart-notes">
+                                Notes about this chart
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Cell Title
+                            </div>
+                            <div class="chart-stage">
+                                <img data-src="holder.js/100%x240/white" alt="100%x240" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzODIiIGhlaWdodD0iMjQwIj48cmVjdCB3aWR0aD0iMzgyIiBoZWlnaHQ9IjI0MCIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE5MSIgeT0iMTIwIiBzdHlsZT0iZmlsbDojYTdhN2E3O2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjI0cHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MzgyeDI0MDwvdGV4dD48L3N2Zz4=" style="height: 240px; width: 100%; display: block;">
+                            </div>
+                            <div class="chart-notes">
+                                Notes about this chart
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-		        <div class="col-sm-4">
-		            <div class="chart-wrapper">
-		                <div class="chart-title">
-		                    Pageviews by device
-		                </div>
-		                <div class="chart-stage">
-		                    <div id="chart-04"></div>
-		                </div>
-		                <div class="chart-notes">
-		                    Notes go down here
-		                </div>
-		            </div>
-		        </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Cell Title
+                            </div>
+                            <div class="chart-stage">
+                                <img data-src="holder.js/100%x120/white" alt="100%x120" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzODIiIGhlaWdodD0iMTIwIj48cmVjdCB3aWR0aD0iMzgyIiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE5MSIgeT0iNjAiIHN0eWxlPSJmaWxsOiNhN2E3YTc7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LXNpemU6MjRweDtmb250LWZhbWlseTpBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZjtkb21pbmFudC1iYXNlbGluZTpjZW50cmFsIj4zODJ4MTIwPC90ZXh0Pjwvc3ZnPg==" style="height: 120px; width: 100%; display: block;">
+                            </div>
+                            <div class="chart-notes">
+                                Notes about this chart
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Cell Title
+                            </div>
+                            <div class="chart-stage">
+                                <img data-src="holder.js/100%x120/white" alt="100%x120" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzODIiIGhlaWdodD0iMTIwIj48cmVjdCB3aWR0aD0iMzgyIiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE5MSIgeT0iNjAiIHN0eWxlPSJmaWxsOiNhN2E3YTc7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LXNpemU6MjRweDtmb250LWZhbWlseTpBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZjtkb21pbmFudC1iYXNlbGluZTpjZW50cmFsIj4zODJ4MTIwPC90ZXh0Pjwvc3ZnPg==" style="height: 120px; width: 100%; display: block;">
+                            </div>
+                            <div class="chart-notes">
+                                Notes about this chart
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Cell Title
+                            </div>
+                            <div class="chart-stage">
+                                <img data-src="holder.js/100%x120/white" alt="100%x120" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzODIiIGhlaWdodD0iMTIwIj48cmVjdCB3aWR0aD0iMzgyIiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE5MSIgeT0iNjAiIHN0eWxlPSJmaWxsOiNhN2E3YTc7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LXNpemU6MjRweDtmb250LWZhbWlseTpBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZjtkb21pbmFudC1iYXNlbGluZTpjZW50cmFsIj4zODJ4MTIwPC90ZXh0Pjwvc3ZnPg==" style="height: 120px; width: 100%; display: block;">
+                            </div>
+                            <div class="chart-notes">
+                                Notes about this chart
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end of three -->
+                    <div class="col-sm-6 col-md-4">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Cell Title
+                            </div>
+                            <div class="chart-stage">
+                                <img data-src="holder.js/100%x120/white" alt="100%x120" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzODIiIGhlaWdodD0iMTIwIj48cmVjdCB3aWR0aD0iMzgyIiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE5MSIgeT0iNjAiIHN0eWxlPSJmaWxsOiNhN2E3YTc7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LXNpemU6MjRweDtmb250LWZhbWlseTpBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZjtkb21pbmFudC1iYXNlbGluZTpjZW50cmFsIj4zODJ4MTIwPC90ZXh0Pjwvc3ZnPg==" style="height: 120px; width: 100%; display: block;">
+                            </div>
+                            <div class="chart-notes">
+                                Notes about this chart
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Cell Title
+                            </div>
+                            <div class="chart-stage">
+                                <img data-src="holder.js/100%x120/white" alt="100%x120" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzODIiIGhlaWdodD0iMTIwIj48cmVjdCB3aWR0aD0iMzgyIiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE5MSIgeT0iNjAiIHN0eWxlPSJmaWxsOiNhN2E3YTc7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LXNpemU6MjRweDtmb250LWZhbWlseTpBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZjtkb21pbmFudC1iYXNlbGluZTpjZW50cmFsIj4zODJ4MTIwPC90ZXh0Pjwvc3ZnPg==" style="height: 120px; width: 100%; display: block;">
+                            </div>
+                            <div class="chart-notes">
+                                Notes about this chart
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Cell Title
+                            </div>
+                            <div class="chart-stage">
+                                <img data-src="holder.js/100%x120/white" alt="100%x120" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzODIiIGhlaWdodD0iMTIwIj48cmVjdCB3aWR0aD0iMzgyIiBoZWlnaHQ9IjEyMCIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE5MSIgeT0iNjAiIHN0eWxlPSJmaWxsOiNhN2E3YTc7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LXNpemU6MjRweDtmb250LWZhbWlseTpBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZjtkb21pbmFudC1iYXNlbGluZTpjZW50cmFsIj4zODJ4MTIwPC90ZXh0Pjwvc3ZnPg==" style="height: 120px; width: 100%; display: block;">
+                            </div>
+                            <div class="chart-notes">
+                                Notes about this chart
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-		        <div class="col-sm-4">
-		            <div class="chart-wrapper">
-		                <div class="chart-title">
-		                    Visitors by country
-		                </div>
-		                <div class="chart-stage">
-		                    <div id="chart-05"></div>
-		                </div>
-		                <div class="chart-notes">
-		                    Notes go down here
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-	    </div>
+        </div>
 
-	    <div class="advertising-section" ng-show="activeTab == 'advertising'">
-	    </div>
+        <div class="advertising-section" ng-show="activeTab == 'advertising'">
+        </div>
 
-	    <div class="integrations-section" ng-show="activeTab == 'integrations'">
-	    </div>
+        <div class="integrations-section" ng-show="activeTab == 'integrations'">
+        </div>
 
-	    <div class="marketing-section" ng-show="activeTab == 'marketing'">
-	    </div>
+        <div class="marketing-section" ng-show="activeTab == 'marketing'">
+        </div>
 
-	    <div class="support-section" ng-show="activeTab == 'support'">
-	    </div>
+        <div class="support-section" ng-show="activeTab == 'support'">
+        </div>
 
-	    <div class="testing-section" ng-show="activeTab == 'testing'">
-	    </div>
+        <div class="testing-section" ng-show="activeTab == 'testing'">
+        </div>
 
     </div>
 </div>

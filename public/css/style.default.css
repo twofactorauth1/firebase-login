@@ -17968,7 +17968,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   padding: 8px 10px 5px;
 }
 .dashboard .chart-wrapper .chart-stage {
-  min-height: 240px;
   padding: 5px 10px;
 }
 .dashboard .chart-wrapper .chart-notes {
@@ -17977,6 +17976,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   color: #808080;
   font-size: 12px;
   padding: 8px 10px 5px;
+}
+.dashboard .keen-metric {
+  margin-bottom: 10px;
 }
 .ckbox,
 .rdio {
