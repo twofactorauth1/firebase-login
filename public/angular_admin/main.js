@@ -45,6 +45,7 @@ require.config({
         "headroom":"libs/headroom.js/dist/headroom.min",
         "ngHeadroom":"libs/headroom.js/dist/angular.headroom.min",
         "bootstrap-confirmation": "libs/bootstrap-confirmation/bootstrap-confirmation",
+        "moment": 'libs/moment/min/moment.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -81,6 +82,7 @@ require.config({
         'iStartsWithFilter' : '/angular_admin/filters/i_starts_with',
         'confirmClick2':'/angular_admin/directives/confirm_click2',
         'img':'/angular_admin/directives/img_adv',
+        'timeAgoFilter':'/angular_admin/filters/time_ago',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
