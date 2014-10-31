@@ -20,13 +20,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
 
-        app.post(this.url(''), this.isAuthApi, this.createProduct.bind(this));
+        app.post(this.url(''), this.isAuthAndSubscribedApi, this.createProduct.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getProduct.bind(this));
         app.get(this.url(''), this.isAuthApi, this.listProducts.bind(this));
-        app.post(this.url(':id'), this.isAuthApi, this.updateProduct.bind(this));
-        app.delete(this.url(':id'), this.isAuthApi, this.deleteProduct.bind(this));
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi, this.updateProduct.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi, this.deleteProduct.bind(this));
 
-        app.get(this.url('type/:type'), this.isAuthApi, this.getProductsByType.bind(this));
+        app.get(this.url('type/:type'), this.isAuthAndSubscribedApi, this.getProductsByType.bind(this));
 
     },
 

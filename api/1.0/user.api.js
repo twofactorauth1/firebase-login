@@ -27,14 +27,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('security'), this.isAuthApi, this.initializeSecurity.bind(this));
 
-        app.get(this.url('preferences'), this.isAuthApi, this.getUserPreferences.bind(this));
-        app.post(this.url('preferences'), this.isAuthApi, this.updateUserPreferences.bind(this));
+        app.get(this.url('preferences'), this.isAuthAndSubscribedApi, this.getUserPreferences.bind(this));
+        app.post(this.url('preferences'), this.isAuthAndSubscribedApi, this.updateUserPreferences.bind(this));
 
         app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.post(this.url(''), this.createUser.bind(this));
 
         app.put(this.url(':id'), this.isAuthApi, this.updateUser.bind(this));
-        app.delete(this.url(':id'), this.isAuthApi, this.deleteUser.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi, this.deleteUser.bind(this));
 
         app.get(this.url('exists/:username'), this.setup, this.userExists.bind(this));
         app.get(this.url(':accountId/user/exists/:username', "account"), this.setup, this.userExistsForAccount.bind(this));

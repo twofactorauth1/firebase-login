@@ -21,12 +21,12 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         //EMAIL SOURCES
-        app.get(this.url('sources'), this.isAuthApi, this.getEmailSources.bind(this));
-        app.post(this.url('source'), this.isAuthApi, this.createEmailSource.bind(this));
+        app.get(this.url('sources'), this.isAuthAndSubscribedApi, this.getEmailSources.bind(this));
+        app.post(this.url('source'), this.isAuthAndSubscribedApi, this.createEmailSource.bind(this));
 
         //MESSAGES
-        app.get(this.url(':sourceid/messages'), this.isAuthApi, this.getMessages.bind(this));
-        app.get(this.url(':sourceid/message/:messageid'), this.isAuthApi, this.getMessageById.bind(this));
+        app.get(this.url(':sourceid/messages'), this.isAuthAndSubscribedApi, this.getMessages.bind(this));
+        app.get(this.url(':sourceid/message/:messageid'), this.isAuthAndSubscribedApi, this.getMessageById.bind(this));
     },
 
 

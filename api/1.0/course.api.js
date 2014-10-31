@@ -26,20 +26,20 @@ _.extend(api.prototype, baseApi.prototype, {
         //courses
         app.get(this.url(''), this.isAuthApi, this.listCourses.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getCourseById.bind(this));
-        app.post(this.url(''), this.isAuthApi, this.createCourse.bind(this));
-        app.put(this.url(':id'), this.isAuthApi, this.updateCourse.bind(this));
-        app.delete(this.url(':id'), this.isAuthApi, this.deleteCourse.bind(this));
+        app.post(this.url(''), this.isAuthAndSubscribedApi, this.createCourse.bind(this));
+        app.put(this.url(':id'), this.isAuthAndSubscribedApi, this.updateCourse.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi, this.deleteCourse.bind(this));
         //videos
         app.get(this.url(':id/video'), this.isAuthApi, this.listCourseVideos.bind(this));
         app.get(this.url(':id/video/:videoId'), this.isAuthApi, this.getCourseVideoById.bind(this));
-        app.post(this.url(':id/video'), this.isAuthApi, this.addVideoToCourse.bind(this));
-        app.put(this.url(':id/video/:videoId'), this.isAuthApi, this.updateVideoInCourse.bind(this));
-        app.delete(this.url(':id/video/:videoId'), this.isAuthApi, this.deleteVideoFromCourse.bind(this));
+        app.post(this.url(':id/video'), this.isAuthAndSubscribedApi, this.addVideoToCourse.bind(this));
+        app.put(this.url(':id/video/:videoId'), this.isAuthAndSubscribedApi, this.updateVideoInCourse.bind(this));
+        app.delete(this.url(':id/video/:videoId'), this.isAuthAndSubscribedApi, this.deleteVideoFromCourse.bind(this));
         //other
-        app.get(this.url('free/:subdomain'), this.isAuthApi, this.isSubdomainFree.bind(this));
-        app.get(this.url(':id/subscribers'), this.isAuthApi, this.getSubscribersList.bind(this));
-        app.get(this.url(':id/subscribers/video/:videoId'), this.isAuthApi, this.getVideoForCurrentUser.bind(this));
-        app.post(this.url(':id/subscribers/upload'), this.isAuthApi, this.subscribeEmailsFromFile.bind(this));
+        app.get(this.url('free/:subdomain'), this.isAuthAndSubscribedApi, this.isSubdomainFree.bind(this));
+        app.get(this.url(':id/subscribers'), this.isAuthAndSubscribedApi, this.getSubscribersList.bind(this));
+        app.get(this.url(':id/subscribers/video/:videoId'), this.isAuthAndSubscribedApi, this.getVideoForCurrentUser.bind(this));
+        app.post(this.url(':id/subscribers/upload'), this.isAuthAndSubscribedApi, this.subscribeEmailsFromFile.bind(this));
     },
 
     listCourses: function (req, resp) {
