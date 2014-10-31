@@ -518,7 +518,7 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 var accessToken = self._getAccessToken(req);
                 var customerId = req.params.id;
-                var planId = req.body.planId;//REQUIRED
+                var planId = req.body.plan;//REQUIRED
                 var coupon = req.body.coupon;
                 var trial_end = req.body.trial_end;
                 var card = req.body.card;//this will overwrite customer default card if specified
@@ -536,6 +536,13 @@ _.extend(api.prototype, baseApi.prototype, {
                 stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
                     application_fee_percent, metadata, accountId, contactId, userId, accessToken, function(err, value){
                         self.log.debug('<< createSubscription');
+                        if(!err) {
+                            self.sm.addSubscriptionToAccount(accountId, value.id, planId, userId, function(err, value){
+                                if(err){
+                                    self.log.error('Error adding subscription to account: ' + err);
+                                }
+                            });
+                        }
                         return self.sendResultOrError(resp, err, value, "Error creating subscription");
                     });
             }

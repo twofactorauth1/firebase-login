@@ -27,11 +27,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('webhook/event'), this.verifyEvent, this.showOk.bind(this));
 
         //event CRUDL
-        app.get(this.url('events'), this.isAuthAndSubscribedApi, this.listEvents.bind(this));
-        app.post(this.url('events'), this.isAuthAndSubscribedApi, this.createEvent.bind(this));
-        app.get(this.url('events/:id'), this.isAuthAndSubscribedApi, this.getEvent.bind(this));
-        app.post(this.url('events/:id'), this.isAuthAndSubscribedApi, this.updateEvent.bind(this));
-        app.delete(this.url('events/:id'), this.isAuthAndSubscribedApi, this.deleteEvent.bind(this));
+        app.get(this.url('events'), this.isAuthAndSubscribedApi.bind(this), this.listEvents.bind(this));
+        app.post(this.url('events'), this.isAuthAndSubscribedApi.bind(this), this.createEvent.bind(this));
+        app.get(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.getEvent.bind(this));
+        app.post(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEvent.bind(this));
+        app.delete(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEvent.bind(this));
 
     },
 

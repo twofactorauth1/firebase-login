@@ -44,6 +44,21 @@ var defaultPrivileges = [
     'MODIFY_DASHBOARD'
 ];
 
+var defaultSubscriptionPrivs = [
+    'integrations/payments',
+    'account',
+    'analytics',
+    'assets',
+    'authentication',
+    'cms',
+    'contact',
+    'course',
+    'dashboard',
+    'emaildata',
+    'product',
+    'user'
+];
+
 var securityManager = {
 
     initializeUserPrivileges: function(userId, userName, rolesAry, accountId, cb) {
@@ -136,14 +151,15 @@ var securityManager = {
      //update lastVerified
      //set subName and privs
      * @param req
-     * @param cb(err, isValid)
+     * @param cb
      */
     verifySubscription: function(req, cb) {
         var self = this;
         log.debug('>> verifySubscription');
 
         //check if session has property(subName) --> return if present
-        if(req.session.subName !== null) {
+        if(req.session.subName !== undefined && req.session.subprivs) {
+            log.debug('<< verifySubscription(true[' + req.session.subName + '])');
             return cb(null, true);
         }
 
@@ -165,21 +181,25 @@ var securityManager = {
             //if no verification OR verification older than 24 hours
             if(!billing.lastVerified || moment().diff(billing.lastVerified, 'hours') >24) {
                 //TODO: handle accessToken
-                stripeDao.getStripeSubscription(billing.customerId, billing.subscriptionId, null, function(err, subscription){
-                    if(subscription.status === 'active' || subscription.status === 'trialing') {
+                stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, null, function(err, subscription){
+                    if(err || !subscription) {
+                        log.error('Error getting stripe subscription: ' + err);
+                        return cb(err, false);
+                    } else if(subscription.status === 'active' || subscription.status === 'trialing') {
                         billing.lastVerified = new Date();
                         account.set('billing', billing);
                         //do this asynchronously...we don't care about the result
                         accountDao.saveOrUpdate(account, function(err, value){if(err){log.error('Error storing account lastVerified.: ' + err)}});
                         var planId = subscription.plan.id;
                         var planName = subscription.plan.name;
-                        subscriptionPrivilegeDao.getByPlanId(req.sessions.accountId, planId, function(err, subPrivs){
+                        subscriptionPrivilegeDao.getByPlanId(req.session.accountId, planId, function(err, subPrivs){
                             if(err) {
                                 log.error('Error getting subscription privileges for plan [' + planId + ']: ' + err);
                                 return cb(err, false);
                             }
                             req.session.subName = planName;
                             req.session.subprivs = subPrivs.get('activePrivs');
+                            log.debug('<< verifySubscription(true)');
                             return cb(null, true);
                         });
                     } else {
@@ -191,18 +211,22 @@ var securityManager = {
             } else {
                 //verified within the last 24hrs... set the subname and privs
                 //TODO: handle accessToken
-                stripeDao.getStripeSubscription(billing.customerId, billing.subscriptionId, null, function(err, subscription){
-                    if(subscription.status === 'active' || subscription.status === 'trialing') {
+                stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, null, function(err, subscription){
+                    if(err) {
+                        log.error('Error getting stripe subscription: ' + err);
+                        return cb(err, false);
+                    } else if(subscription && (subscription.status === 'active' || subscription.status === 'trialing')) {
 
                         var planId = subscription.plan.id;
                         var planName = subscription.plan.name;
-                        subscriptionPrivilegeDao.getByPlanId(req.sessions.accountId, planId, function(err, subPrivs){
-                            if(err) {
+                        subscriptionPrivilegeDao.getByPlanId(req.session.accountId, planId, function(err, subPrivs){
+                            if(err || !subPrivs) {
                                 log.error('Error getting subscription privileges for plan [' + planId + ']: ' + err);
                                 return cb(err, false);
                             }
                             req.session.subName = planName;
                             req.session.subprivs = subPrivs.get('activePrivs');
+                            log.debug('<< verifySubscription');
                             return cb(null, true);
                         });
                     } else {
@@ -214,6 +238,35 @@ var securityManager = {
             }
         });
 
+    },
+
+    addSubscriptionToAccount: function(accountId, subscriptionId, planId, userId, fn){
+        var self = this;
+        log.debug('>> addSubscriptionToAccount');
+        accountDao.addSubscriptionToAccount(accountId, subscriptionId, function(err, value){
+            if(err) {
+                log.error('Error adding subscription to account: ' + err);
+                return fn(err, null);
+            }
+            var subpriv = new $$.m.SubscriptionPrivilege({
+                accountId: accountId,
+                subscriptionId: planId,
+                activePrivs: defaultSubscriptionPrivs,
+                created: {
+                    date: new Date(),
+                    by: userId
+                }
+            });
+            subscriptionPrivilegeDao.saveOrUpdate(subpriv, function(err, savedSubPriv){
+                if(err) {
+                    log.error('Error saving subscription privileges: ' + err);
+                    return fn(err, null);
+                } else {
+                    log.debug('<< addSubscriptionToAccount');
+                    return fn(null, savedSubPriv);
+                }
+            });
+        });
     }
 
 

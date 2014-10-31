@@ -25,37 +25,37 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
         //GET
-        app.get(this.url('shortform'), this.isAuthAndSubscribedApi, this.getContactsShortForm.bind(this));
-        app.get(this.url('shortform/:letter'), this.isAuthAndSubscribedApi, this.getContactsShortForm.bind(this));
-        app.get(this.url(':id'), this.isAuthAndSubscribedApi, this.getContactById.bind(this));
-        app.post(this.url(''), this.isAuthAndSubscribedApi, this.createContact.bind(this));
-        app.put(this.url(''), this.isAuthAndSubscribedApi, this.updateContact.bind(this));
-        app.delete(this.url(':id'), this.isAuthAndSubscribedApi, this.deleteContact.bind(this));
-        app.get(this.url(''), this.isAuthAndSubscribedApi, this.listContacts.bind(this)); // for all contacts
-        app.get(this.url('filter/:letter'), this.isAuthAndSubscribedApi, this.getContactsByLetter.bind(this)); // for individual letter
+        app.get(this.url('shortform'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
+        app.get(this.url('shortform/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
+        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createContact.bind(this));
+        app.put(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.updateContact.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteContact.bind(this));
+        app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listContacts.bind(this)); // for all contacts
+        app.get(this.url('filter/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsByLetter.bind(this)); // for individual letter
 
 
         //  app.post("/signupnews", this.signUpNews.bind(this));
         //app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
         app.post(this.url('signupnews'), this.setup, this.signUpNews.bind(this));
 
-        app.get(this.url(':accountId/contacts/:letter/:skip', "account"), this.isAuthAndSubscribedApi, this.getContactsForAccountByLetter.bind(this));
+        app.get(this.url(':accountId/contacts/:letter/:skip', "account"), this.isAuthAndSubscribedApi.bind(this), this.getContactsForAccountByLetter.bind(this));
 
-        app.get(this.url(':accountId/contacts/:letter', "account"), this.isAuthAndSubscribedApi, this.getContactsForAccountByLetter.bind(this));
+        app.get(this.url(':accountId/contacts/:letter', "account"), this.isAuthAndSubscribedApi.bind(this), this.getContactsForAccountByLetter.bind(this));
 
-        app.get(this.url(':id/activity'), this.isAuthAndSubscribedApi, this.getActivityByContactId.bind(this));
-        app.get(this.url('activity/:id'), this.isAuthAndSubscribedApi, this.getActivityById.bind(this));
-        app.post(this.url('activity'), this.isAuthAndSubscribedApi, this.createActivity.bind(this));
-        app.post(this.url('activity/:id'), this.isAuthAndSubscribedApi, this.updateActivity.bind(this));
+        app.get(this.url(':id/activity'), this.isAuthAndSubscribedApi.bind(this), this.getActivityByContactId.bind(this));
+        app.get(this.url('activity/:id'), this.isAuthAndSubscribedApi.bind(this), this.getActivityById.bind(this));
+        app.post(this.url('activity'), this.isAuthAndSubscribedApi.bind(this), this.createActivity.bind(this));
+        app.post(this.url('activity/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateActivity.bind(this));
         //searching
-        app.get(this.url('activity'), this.isAuthAndSubscribedApi, this.findActivities.bind(this));
+        app.get(this.url('activity'), this.isAuthAndSubscribedApi.bind(this), this.findActivities.bind(this));
 
         // http://localhost:3000/api/1.0/contact/:id/fullcontact
-        app.post(this.url(':id/fullcontact'), this.isAuthAndSubscribedApi, this.updateContactByFullContactApi.bind(this));
+        app.post(this.url(':id/fullcontact'), this.isAuthAndSubscribedApi.bind(this), this.updateContactByFullContactApi.bind(this));
 
         //duplicate check
-        app.get(this.url('duplicates/check'), this.isAuthAndSubscribedApi, this.checkForDuplicates.bind(this));
-        app.post(this.url('duplicates/merge'), this.isAuthAndSubscribedApi, this.mergeDuplicates.bind(this));
+        app.get(this.url('duplicates/check'), this.isAuthAndSubscribedApi.bind(this), this.checkForDuplicates.bind(this));
+        app.post(this.url('duplicates/merge'), this.isAuthAndSubscribedApi.bind(this), this.mergeDuplicates.bind(this));
     },
 
 

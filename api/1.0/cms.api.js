@@ -32,15 +32,15 @@ _.extend(api.prototype, baseApi.prototype, {
         //app.get(this.url('website/:id'), this.isAuthApi, this.getWebsiteById.bind(this));
         app.get(this.url('website/:id'), this.getWebsiteById.bind(this)); //Temp Added
         app.get(this.url(':accountid/cms/website', "account"), this.isAuthApi, this.getWebsiteForAccountId.bind(this));
-        app.post(this.url('website'), this.isAuthAndSubscribedApi, this.saveOrUpdateWebsite.bind(this));
-        app.put(this.url('website'), this.isAuthAndSubscribedApi, this.saveOrUpdateWebsite.bind(this));
+        app.post(this.url('website'), this.isAuthAndSubscribedApi.bind(this), this.saveOrUpdateWebsite.bind(this));
+        app.put(this.url('website'), this.isAuthAndSubscribedApi.bind(this), this.saveOrUpdateWebsite.bind(this));
 
         // WEBSITE LINKS
         app.get(this.url('website/:id/linklists'), this.isAuthApi, this.getWebsiteLinklists.bind(this));
         app.get(this.url('website/:id/linklists/:handle'), this.isAuthApi, this.getWebsiteLinklistsByHandle.bind(this));
         app.post(this.url('website/:id/linklists'), this.isAuthApi, this.addWebsiteLinklists.bind(this));
-        app.post(this.url('website/:id/linklists/:handle'), this.isAuthAndSubscribedApi, this.updateWebsiteLinklists.bind(this));
-        app.delete(this.url('website/:id/linklists/:handle'), this.isAuthAndSubscribedApi, this.deleteWebsiteLinklists.bind(this));
+        app.post(this.url('website/:id/linklists/:handle'), this.isAuthAndSubscribedApi.bind(this), this.updateWebsiteLinklists.bind(this));
+        app.delete(this.url('website/:id/linklists/:handle'), this.isAuthAndSubscribedApi.bind(this), this.deleteWebsiteLinklists.bind(this));
 
         // PAGE
         app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
@@ -53,11 +53,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteId/pages/:id'), this.getPagesById.bind(this));
         app.get(this.url('website/:websiteId/pages'), this.getAllPages.bind(this));
         app.get(this.url('website/:websiteId/page/:id'), this.getPageById.bind(this));
-        app.post(this.url('website/:websiteId/page'), this.isAuthAndSubscribedApi, this.createPage.bind(this));
-        app.post(this.url('website/:websiteId/page/:id'), this.isAuthAndSubscribedApi, this.updatePage.bind(this));
-        app.put(this.url('website/:websiteId/page'), this.isAuthAndSubscribedApi, this.createPage.bind(this));
-        app.put(this.url('website/:websiteId/page/:id'), this.isAuthAndSubscribedApi, this.updatePage.bind(this));
-        app.delete(this.url('website/:websiteId/page/:id/:label'), this.isAuthAndSubscribedApi, this.deletePage.bind(this));
+        app.post(this.url('website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));
+        app.post(this.url('website/:websiteId/page/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));
+        app.put(this.url('website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));
+        app.put(this.url('website/:websiteId/page/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));
+        app.delete(this.url('website/:websiteId/page/:id/:label'), this.isAuthAndSubscribedApi.bind(this), this.deletePage.bind(this));
 
 
         //THEME Updated URLs
@@ -65,41 +65,41 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('theme'), this.isAuthApi, this.listThemes.bind(this));
         app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeById.bind(this));
         app.get(this.url('theme/name/:name'), this.isAuthApi, this.getThemeByName.bind(this));
-        app.post(this.url('theme'), this.isAuthAndSubscribedApi, this.createTheme.bind(this));
-        app.post(this.url('theme/website/:websiteId'), this.isAuthAndSubscribedApi, this.createThemeFromWebsite.bind(this));
-        app.post(this.url('theme/:id'), this.isAuthAndSubscribedApi, this.updateTheme.bind(this));
-        app.delete(this.url('theme/:id'), this.isAuthAndSubscribedApi, this.deleteTheme.bind(this));
-        app.put(this.url('theme/:id/website'), this.isAuthAndSubscribedApi, this.createWebsiteFromTheme.bind(this));
-        app.post(this.url('theme/:id/website/:websiteId/page/:handle'), this.isAuthAndSubscribedApi, this.createPageFromTheme.bind(this));
+        app.post(this.url('theme'), this.isAuthAndSubscribedApi.bind(this), this.createTheme.bind(this));
+        app.post(this.url('theme/website/:websiteId'), this.isAuthAndSubscribedApi.bind(this), this.createThemeFromWebsite.bind(this));
+        app.post(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTheme.bind(this));
+        app.delete(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTheme.bind(this));
+        app.put(this.url('theme/:id/website'), this.isAuthAndSubscribedApi.bind(this), this.createWebsiteFromTheme.bind(this));
+        app.post(this.url('theme/:id/website/:websiteId/page/:handle'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTheme.bind(this));
         app.post(this.url('theme/:themeId/website/:websiteId'), this.isAuthApi, this.setTheme.bind(this));
 
 
         // COMPONENTS
-        app.get(this.url('page/:id/components'), this.isAuthAndSubscribedApi, this.getComponentsByPage.bind(this));
-        app.get(this.url('page/:id/components/type/:type'), this.isAuthAndSubscribedApi, this.getComponentsByType.bind(this));
-        app.post(this.url('page/:id/components'), this.isAuthAndSubscribedApi, this.addComponentToPage.bind(this));
-        app.post(this.url('page/:id/components/all'), this.isAuthAndSubscribedApi, this.updateAllComponents.bind(this));
-        app.put(this.url('page/:id/components/:componentId'), this.isAuthAndSubscribedApi, this.updateComponent.bind(this));
-        app.post(this.url('page/:id/components/:componentId'), this.isAuthAndSubscribedApi, this.updateComponent.bind(this));
-        app.delete(this.url('page/:id/components/:componentId'), this.isAuthAndSubscribedApi, this.deleteComponent.bind(this));
-        app.post(this.url('page/:id/components/:componentId/order/:newOrder'), this.isAuthAndSubscribedApi, this.updateComponentOrder.bind(this));
-        app.get(this.url('component/:type/versions'), this.isAuthAndSubscribedApi, this.getAvailableComponentVersions.bind(this));
+        app.get(this.url('page/:id/components'), this.isAuthAndSubscribedApi.bind(this), this.getComponentsByPage.bind(this));
+        app.get(this.url('page/:id/components/type/:type'), this.isAuthAndSubscribedApi.bind(this), this.getComponentsByType.bind(this));
+        app.post(this.url('page/:id/components'), this.isAuthAndSubscribedApi.bind(this), this.addComponentToPage.bind(this));
+        app.post(this.url('page/:id/components/all'), this.isAuthAndSubscribedApi.bind(this), this.updateAllComponents.bind(this));
+        app.put(this.url('page/:id/components/:componentId'), this.isAuthAndSubscribedApi.bind(this), this.updateComponent.bind(this));
+        app.post(this.url('page/:id/components/:componentId'), this.isAuthAndSubscribedApi.bind(this), this.updateComponent.bind(this));
+        app.delete(this.url('page/:id/components/:componentId'), this.isAuthAndSubscribedApi.bind(this), this.deleteComponent.bind(this));
+        app.post(this.url('page/:id/components/:componentId/order/:newOrder'), this.isAuthAndSubscribedApi.bind(this), this.updateComponentOrder.bind(this));
+        app.get(this.url('component/:type/versions'), this.isAuthAndSubscribedApi.bind(this), this.getAvailableComponentVersions.bind(this));
 
         // BLOG POSTS
-        app.post(this.url('page/:id/blog'), this.isAuthAndSubscribedApi, this.createBlogPost.bind(this));
+        app.post(this.url('page/:id/blog'), this.isAuthAndSubscribedApi.bind(this), this.createBlogPost.bind(this));
         app.get(this.url('page/:id/blog'), this.setup, this.listBlogPostsByPageId.bind(this));
         app.get(this.url('blog'), this.setup, this.listBlogPosts.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup, this.getBlogPost.bind(this));
-        app.post(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi, this.updateBlogPost.bind(this));
-        app.put(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi, this.updateBlogPost.bind(this));
-        app.delete(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi, this.deleteBlogPost.bind(this));
+        app.post(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
+        app.put(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
+        app.delete(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.deleteBlogPost.bind(this));
         app.get(this.url('page/:id/blog/author/:author'), this.setup, this.getPostsByAuthor.bind(this));
         app.get(this.url('page/:id/blog/title/:title'), this.setup, this.getPostsByTitle.bind(this));
         app.get(this.url('page/:id/blog/content/:content'), this.setup, this.getPostsByContent.bind(this));
         app.get(this.url('page/:id/blog/category/:category'), this.setup, this.getPostsByCategory.bind(this));
         app.get(this.url('page/:id/blog/tag/:tag'), this.setup, this.getPostsByTag.bind(this));
-        app.post(this.url('page/:id/blog/posts/reorder'), this.isAuthAndSubscribedApi, this.reorderPosts.bind(this));
-        app.post(this.url('page/:id/blog/:postId/reorder/:newOrder'), this.isAuthAndSubscribedApi, this.reorderBlogPost.bind(this));
+        app.post(this.url('page/:id/blog/posts/reorder'), this.isAuthAndSubscribedApi.bind(this), this.reorderPosts.bind(this));
+        app.post(this.url('page/:id/blog/:postId/reorder/:newOrder'), this.isAuthAndSubscribedApi.bind(this), this.reorderBlogPost.bind(this));
     },
 
 

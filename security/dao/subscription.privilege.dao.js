@@ -16,7 +16,13 @@ var dao = {
     },
 
     getByPlanId: function(accountId, planId, fn) {
-
+        var self = this;
+        self.log.debug('>> getByPlanId');
+        var query = {accountId: accountId, subscriptionId: planId};
+        self.findOne(query, $$.m.SubscriptionPrivilege, function(err, subpriv){
+            self.log.debug('<< getByPlanId');
+            fn(err, subpriv);
+        });
     }
 
 

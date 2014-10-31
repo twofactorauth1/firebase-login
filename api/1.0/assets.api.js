@@ -25,15 +25,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
 
-        app.post(this.url(''), this.isAuthAndSubscribedApi, this.createAsset.bind(this));
-        app.get(this.url(':id'), this.isAuthAndSubscribedApi, this.getAsset.bind(this));
-        app.get(this.url(''), this.isAuthAndSubscribedApi, this.listAssets.bind(this));
-        app.post(this.url(':id'), this.isAuthAndSubscribedApi, this.updateAsset.bind(this));
-        app.delete(this.url(':id'), this.isAuthAndSubscribedApi, this.deleteAsset.bind(this));
+        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createAsset.bind(this));
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getAsset.bind(this));
+        app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listAssets.bind(this));
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateAsset.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteAsset.bind(this));
 
-        app.get(this.url('type/:type'), this.isAuthAndSubscribedApi, this.getAssetsByType.bind(this));
-        app.get(this.url('tag/:tag'), this.isAuthAndSubscribedApi, this.getAssetsByTag.bind(this));
-        app.get(this.url('source/:source'), this.isAuthAndSubscribedApi, this.getAssetsBySource.bind(this));
+        app.get(this.url('type/:type'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsByType.bind(this));
+        app.get(this.url('tag/:tag'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsByTag.bind(this));
+        app.get(this.url('source/:source'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsBySource.bind(this));
     },
 
     //file must be uploaded using the 'file' input name

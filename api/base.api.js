@@ -11,14 +11,16 @@ var securityManager = require('../security/sm');
 var securityConstants = require('../security/utils/security.constants');
 
 
-
 var apiBase = function(options) {
+
     this.init.apply(this, arguments);
+
 };
 
 _.extend(apiBase.prototype, {
 
     log: null,
+    base: null,
 
     sm: securityManager,
     sc: securityConstants,
@@ -114,11 +116,15 @@ _.extend(apiBase.prototype, {
      */
     isAuthAndSubscribedApi: function(req, resp, next) {
         var self = this;
+
+        self.sm = securityManager;
         if(req.isAuthenticated()) {
+
             self.sm.verifySubscription(req, function(err, isValid){
-                if(isValid === true && _.contains(req.session.privs, this.base)) {
+                if(isValid === true && _.contains(req.session.subprivs, self.base)) {
                     return next();
                 } else {
+
                     var response = {
                         code: 403,
                         status: 'Not Authorized',
@@ -195,7 +201,9 @@ _.extend(apiBase.prototype, {
     },
 
     send403: function(res) {
+        console.log('before send403');
         res.send(403, {code:403, status:'fail', message:'Unauthorized', detail:'You are not authorized to complete this action.'});
+        console.log('after send403');
     },
 
 
@@ -264,11 +272,12 @@ _.extend(apiBase.prototype, {
     },
 
     checkPermissionAndSendResponse: function(req, priv, res, successObj) {
-        this.checkPermission(req, priv, function(err, isAllowed){
+        var self = this;
+        self.checkPermission(req, priv, function(err, isAllowed){
             if(isAllowed === true) {
                 res.send(successObj);
             } else {
-                this.send403(res);
+                self.send403(res);
             }
         });
     }

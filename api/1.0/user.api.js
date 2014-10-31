@@ -27,14 +27,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('security'), this.isAuthApi, this.initializeSecurity.bind(this));
 
-        app.get(this.url('preferences'), this.isAuthAndSubscribedApi, this.getUserPreferences.bind(this));
-        app.post(this.url('preferences'), this.isAuthAndSubscribedApi, this.updateUserPreferences.bind(this));
+        app.get(this.url('preferences'), this.isAuthAndSubscribedApi.bind(this), this.getUserPreferences.bind(this));
+        app.post(this.url('preferences'), this.isAuthAndSubscribedApi.bind(this), this.updateUserPreferences.bind(this));
 
         app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.post(this.url(''), this.createUser.bind(this));
 
         app.put(this.url(':id'), this.isAuthApi, this.updateUser.bind(this));
-        app.delete(this.url(':id'), this.isAuthAndSubscribedApi, this.deleteUser.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteUser.bind(this));
 
         app.get(this.url('exists/:username'), this.setup, this.userExists.bind(this));
         app.get(this.url(':accountId/user/exists/:username', "account"), this.setup, this.userExistsForAccount.bind(this));
@@ -77,6 +77,7 @@ _.extend(api.prototype, baseApi.prototype, {
     getUserById: function(req,resp) {
         var self = this;
         var userId = req.params.id;
+        self.log.debug('>> getUserById');
 
         if (!userId) {
             return this.wrapError(resp, 400, null, "Invalid parameter for ID");
@@ -88,17 +89,21 @@ _.extend(api.prototype, baseApi.prototype, {
             if (!err) {
 
                 if (value == null) {
+                    self.log.debug('<< getUserById(404)');
                     return self.wrapError(resp, 404, null, "No User found with ID: [" + userId + "]");
                 }
                 var accountId = parseInt(self.accountId(req));
                 if(_.contains(value.getAllAccountIds(), accountId)) {
                     var responseObj =  value.toJSON("public", {accountId:self.accountId(req)})
-                    self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_USER, res, responseObj);
+                    self.log.debug('<< getUserById');
+                    self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_USER, resp, responseObj);
                 } else {
+                    self.log.debug('<< getUserById(404p)');
                     return self.wrapError(resp, 404, null, "No User found with ID: [" + userId + "]");
                 }
                 //return resp.send(value.toJSON("public", {accountId:self.accountId(req)}));
             } else {
+                self.log.debug('<< getUserById(401)');
                 return self.wrapError(resp, 401, null, err, value);
             }
         });

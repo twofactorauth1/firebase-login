@@ -20,11 +20,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
 
-        app.post(this.url(''), this.isAuthAndSubscribedApi, this.createDashboard.bind(this));
-        app.get(this.url(':id'), this.isAuthAndSubscribedApi, this.getDashboard.bind(this));
-        app.get(this.url(''), this.isAuthAndSubscribedApi, this.getDashboardForAccount.bind(this));
-        app.post(this.url(':id'), this.isAuthAndSubscribedApi, this.updateDashboard.bind(this));
-        app.delete(this.url(':id'), this.isAuthAndSubscribedApi, this.deleteDashboard.bind(this));
+        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createDashboard.bind(this));
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getDashboard.bind(this));
+        app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.getDashboardForAccount.bind(this));
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateDashboard.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteDashboard.bind(this));
 
 
     },
