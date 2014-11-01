@@ -55,7 +55,7 @@
                                     <div><img ng-src="{{asset.url}}" alt=""></div>
                                 </div>
                                 <h5 class="fm-title"><a href="">{{asset.filename}}</a></h5>
-                                <small class="text-muted">{{asset.created.date}}</small>
+                                <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                             </div>
                         </div>
                         <div id="image-warning-box"> No Image</div>
@@ -127,25 +127,4 @@
             </div>
         </div>
     </div>
-    <script>
-        function resizeModal(){
-            $('.modal-content', '#media-manager-modal').css('height', $(window).height() - 30 + 'px');
-            var footerHeight=$('.modal-footer', '#media-manager-modal').innerHeight();
-            var headerHeight=$('.modal-header', '#media-manager-modal').innerHeight();
-            var contentHeight=$('.modal-content', '#media-manager-modal').innerHeight();
-            var bodyHeight=contentHeight-(footerHeight+headerHeight + 48);
-
-            $('.media', '#media-manager-modal').css('height', bodyHeight  + 'px');
-        }
-        $('.modal-content', '#media-manager-modal').css('visibility','hidden');
-
-        $('#media-manager-modal').on('shown.bs.modal', function (e) {
-            resizeModal();
-            setTimeout($('.modal-content', '#media-manager-modal').css('visibility','visible'), 50);
-        });
-
-        $(window).resize(function() {
-            resizeModal();
-        });
-    </script>
 </div>
