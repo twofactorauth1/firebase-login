@@ -10,7 +10,29 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
       },
       templateUrl: '/angular_admin/views/partials/_skeocard.html',
       link: function(scope, element, attrs, controllers) {
-        scope.card = new Skeuocard($("#skeuocard"));
+
+        UserService.getUser(function(user) {
+          scope.user = user;
+        });
+
+        scope.$watch('user', function(newValue, oldValue) {
+          if (newValue) {
+            PaymentService.getCustomerCards(newValue.stripeId, function(cards) {
+              scope.cards = cards;
+              if (scope.cards.data.length) {
+                scope.card = new Skeuocard($("#skeuocard"), {
+                  initialValues: {
+                    number: "000000000000" + scope.cards.data[0].last4,
+                    expMonth: scope.cards.data[0].exp_month,
+                    expYear: scope.cards.data[0].exp_year
+                  }
+                });
+              } else {
+                scope.card = new Skeuocard($("#skeuocard"));
+              }
+            });
+          }
+        });
 
         scope.addCardFn = function() {
           var cardInput = {
@@ -25,14 +47,17 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
               UserService.postAccountBilling(scope.user.stripeId, token, function(billing) {
                 scope.updateFn(billing);
               });
-              PaymentService.putCustomerCard(scope.user.stripeId, token, function (card) {});
+              scope.cards.data.forEach(function(value, index) {
+                PaymentService.deleteCustomerCard(value.customer, value.id, function(card) {});
+              });
+              PaymentService.putCustomerCard(scope.user.stripeId, token, function(card) {});
             } else {
               PaymentService.postStripeCustomer(token, function(stripeUser) {
                 scope.user.stripeId = stripeUser.id;
                 UserService.postAccountBilling(stripeUser.id, token, function(billing) {
                   scope.updateFn(billing);
                 });
-                PaymentService.putCustomerCard(stripeUser.id, token, function (card) {});
+                PaymentService.putCustomerCard(stripeUser.id, token, function(card) {});
               });
             }
           });

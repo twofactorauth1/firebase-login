@@ -25,7 +25,12 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
 
       PaymentService.getStripeCardToken(cardInput, function(token) {
         if ($scope.user.stripeId) {
-          PaymentService.putCustomerCard($scope.user.stripeId, token, function (card) {});
+          PaymentService.getCustomerCards($scope.user.stripeId, function(cards) {
+            cards.data.forEach(function(value, index) {
+              PaymentService.deleteCustomerCard(value.customer, value.id, function(card) {});
+            });
+            PaymentService.putCustomerCard($scope.user.stripeId, token, function(card) {});
+          });
           UserService.postAccountBilling($scope.user.stripeId, token, function(billing) {});
           PaymentService.postCreateStripeSubscription($scope.user.stripeId, $scope.selectedPlan, function(subscription) {
             $scope.cancelOldSubscriptionsFn();

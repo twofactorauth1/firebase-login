@@ -11,7 +11,8 @@ define([
     'ngProgress',
     'unsafeHtml',
     'mediaDirective',
-    'confirmClick2'
+    'confirmClick2',
+    'confirmClickDirective'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -242,12 +243,17 @@ define([
 
             $scope.cancelPage = function() {
                 // $scope.components = that.originalCurrentPageComponents;
-
-                $scope.updateIframeComponents();
-                //$scope.deactivateAloha();
+                var pageId = $scope.currentPage._id;
+                $scope.deactivateAloha();
+                WebsiteService.getPageComponents(pageId,function(components) {
+                    $scope.components = components;
+                    $scope.updateIframeComponents();
+                
                 $scope.isEditing = false;
-                $scope.componentEditing = '';
+                $scope.componentEditing = null;
                 iFrame.contentWindow.triggerEditModeOff();
+                });
+
 
                 //TODO Only use on single post
                 if ( iFrame.contentWindow.updatePostMode ) {
@@ -487,6 +493,10 @@ define([
                 var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
                 var last = nodes[nodes.length - 1];
                 angular.element(last).triggerHandler('click');
+
+                WebsiteService.getComponentVersions($scope.componentEditing.type, function (versions) {
+                  $scope.componentEditingVersions = versions;
+                });
             };
 
             $scope.saveComponent = function() {
@@ -669,7 +679,7 @@ define([
                 },
                 {
                     title: 'Sign Up form',
-                    type: 'sign-up',
+                    type: 'signup-form',
                     icon: 'custom sign-up-form'
                 },
                 {
@@ -679,7 +689,7 @@ define([
                 },
                 {
                     title: 'Social Links',
-                    type: 'social',
+                    type: 'social-feed',
                     icon: 'custom social-links'
                 }
             ];

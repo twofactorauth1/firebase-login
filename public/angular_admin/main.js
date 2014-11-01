@@ -45,6 +45,7 @@ require.config({
         "headroom":"libs/headroom.js/dist/headroom.min",
         "ngHeadroom":"libs/headroom.js/dist/angular.headroom.min",
         "bootstrap-confirmation": "libs/bootstrap-confirmation/bootstrap-confirmation",
+        "moment": 'libs/moment/min/moment.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -62,11 +63,13 @@ require.config({
         'websiteService': '/angular_admin/services/website',
         'postService': '/angular_admin/services/post',
         'productService': '/angular_admin/services/product',
+        'dashboardService': '/angular_admin/services/dashboard',
         'chartFacebookService': '/angular_admin/services/chart_facebook',
         'chartStripService': '/angular_admin/services/chart_strip',
         'chartTwoNetService': '/angular_admin/services/chart_two_net',
         'importContactService': '/angular_admin/services/import_contacts',
         'toasterService': '/angular_admin/services/toaster',
+        'accountService': '/angular_admin/services/account',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'hoverClassDirective': '/angular_admin/directives/hover_class',
         'confirmClickDirective': '/angular_admin/directives/confirm_click',
@@ -79,6 +82,7 @@ require.config({
         'iStartsWithFilter' : '/angular_admin/filters/i_starts_with',
         'confirmClick2':'/angular_admin/directives/confirm_click2',
         'img':'/angular_admin/directives/img_adv',
+        'timeAgoFilter':'/angular_admin/filters/time_ago',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",

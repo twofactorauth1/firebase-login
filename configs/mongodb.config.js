@@ -15,12 +15,12 @@ var testString = "mongodb://indiweb-test:testing123@kahana.mongohq.com:10074/tes
 var prodString = "mongodb://indiweb:anime1@lighthouse.0.mongolayer.com:10188,lighthouse.1.mongolayer.com:10188/prod_indigenous";
 
 //LOCAL
-var connectionString = localString;
+//var connectionString = localString;
 
 //PROD
 //var connectionString = prodString;
 //TEST
-//var connectionString = testString;
+var connectionString = testString;
 
 /*
  * Override the connection string with an environment variable

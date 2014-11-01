@@ -8,7 +8,24 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
             $scope.contactLabel = CustomerService.contactLabel(customer);
         });
         CustomerService.getCustomerActivities($scope.customerId, function (activities) {
-            $scope.activities = activities;
+        $scope.activities = activities;
+        $scope.activities.push(
+        {
+            "contactId": $scope.customerId,
+            "activityType": "EMAIL",
+            "note": "Email Received.",
+            "detail": "by abc",
+            "start": "2014-10-28T18:51:52.938Z"
+        },
+        {            
+            "contactId": $scope.customerId,
+            "activityType": "TWEET",
+            "note": "Tweet Received.",
+            "detail": "by xyz",            
+            "start": "2014-10-28T18:51:52.938Z"
+        }
+        )
+            //$scope.activities = activities;
             ngProgress.complete();
             ToasterService.processPending();
         });

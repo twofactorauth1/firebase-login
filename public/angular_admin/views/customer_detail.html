@@ -455,10 +455,31 @@
                 </div>
                 <hr class="clearfix mb30">
                 <div class="smart-timeline">
-                    <ul class="smart-timeline-list">
-                      <li ng-repeat="activity in activities | filter : activityTypeFilter">{{activity.activityType}}</li>
-                    </ul>
-                </div>
+    <ul class="smart-timeline-list">
+    <li ng-repeat="activity in activities | filter : activityTypeFilter">
+        <div class="smart-timeline-icon">
+            <img src="../comps/images/theme-1/woman-1.jpg" width="32" height="32">
+        </div>
+        <div class="smart-timeline-time">
+            <small>{{activity.start | date:'d MMM, yyyy'}}</small>
+        </div>
+        <div class="smart-timeline-content">
+            <p>
+                <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
+            </p>
+            <p>
+                {{activity.note}}
+            </p>
+            <p ng-switch on="activity.activityType">
+                <a ng-switch-when="EMAIL" href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a>
+                 <a ng-switch-when="TWEET" href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Reply to Tweet</a>   
+
+            </p>
+        </div>
+    </li>
+
+</ul>
+</div>
             </div>
         </div>
 
