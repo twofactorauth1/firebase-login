@@ -14,6 +14,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     $scope.customerScrollFn = function() {
       if ($scope.fetchedCustomers) {
         $scope.customerScrollBusy = true;
+        console.log('scroll process');
         $scope.renderedCustomers = $scope.fetchedCustomers.slice($scope.customerScrollOffset, $scope.customerScrollLimit);
         $scope.customerScrollOffset += $scope.customerScrollLimit;
         $scope.customerScrollBusy = false;
@@ -22,6 +23,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
     $scope.contactLabel = function(contact) {
       return CustomerService.contactLabel(contact);
+    };
 
     $scope.checkBestEmail = function(contact) {
       var returnVal = CustomerService.checkBestEmail(contact);
@@ -155,7 +157,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
             $('#import-contacts-modal').modal('hide');
             ToasterService.show('success', "Contacts being imported.");
           } else
-            $window.location.href = "/inapplogin/google?redirectTo=" + encodeURIComponent('/admin#/customer');;
+            $window.location.href = "/inapplogin/google?redirectTo=" + encodeURIComponent('/admin#/customer');
         });
       };
 
