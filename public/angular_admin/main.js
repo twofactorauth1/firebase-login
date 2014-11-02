@@ -46,6 +46,7 @@ require.config({
         "ngHeadroom":"libs/headroom.js/dist/angular.headroom.min",
         "bootstrap-confirmation": "libs/bootstrap-confirmation/bootstrap-confirmation",
         "moment": 'libs/moment/min/moment.min',
+        'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -160,7 +161,8 @@ require.config({
         'bootstrap-iconpicker': {deps: ['jquery']},
         'unsafeHtml': {deps: ['angular']},
         "bootstrap-confirmation" : {deps: ['bootstrap']},
-        'jdfontselect': {deps: ['angular','webfontloader']}
+        'jdfontselect': {deps: ['angular','webfontloader']},
+        'ngInfiniteScroll': {deps: ['angular']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
