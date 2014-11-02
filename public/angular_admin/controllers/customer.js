@@ -13,15 +13,15 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
     $scope.customerScrollFn = function() {
       if ($scope.fetchedCustomers) {
-        console.log('scroll process');
+        $scope.customerScrollBusy = true;
         $scope.renderedCustomers = $scope.fetchedCustomers.slice($scope.customerScrollOffset, $scope.customerScrollLimit);
         $scope.customerScrollOffset += $scope.customerScrollLimit;
+        $scope.customerScrollBusy = false;
       }
     };
 
     $scope.contactLabel = function(contact) {
       return CustomerService.contactLabel(contact);
-    };
 
     $scope.checkBestEmail = function(contact) {
       var returnVal = CustomerService.checkBestEmail(contact);
