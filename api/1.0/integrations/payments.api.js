@@ -98,31 +98,32 @@ _.extend(api.prototype, baseApi.prototype, {
     listCustomers: function(req, resp) {
         //TODO: Add Security
         var self = this;
-        self.log.debug('>> listCustomers');
         var accountId = self.accountId(req);
         var limit = req.body.limit;
 
         stripeDao.listStripeCustomers(accountId, limit, function(err, customers){
 
             if(accountId > 0) {
-                customerLinkDao.getLinksByAccountId(accountId, function(err, accounts){
-                    if(err) {
-                        self.wrapError(resp, null, 500, 'Error building customer list.');
-                    }
-                    //verify customer/account relationship
-                    var customerIDs = _.map(accounts, function(account){return account.get('customerId');});
-                    var results = [];
-                    if(customers && customers.data) {
-                        _.each(customers.data, function(elem){
-                            if(_.contains(customerIDs, elem.id)) {
-                                results.push(elem);
-                            }
-                        });
-                    }
+                // customerLinkDao.getLinksByAccountId(accountId, function(err, accounts){
+                //     if(err) {
+                //         self.wrapError(resp, null, 500, 'Error building customer list.');
+                //     }
+                //     //verify customer/account relationship
+                //     var customerIDs = _.map(accounts, function(account){return account.get('customerId');});
+                //     var results = [];
+                //     if(customers && customers.data) {
+                //         _.each(customers.data, function(elem){
+                //             if(_.contains(customerIDs, elem.id)) {
+                //                 results.push(elem);
+                //             }
+                //         });
+                //     }
 
-                    self.log.debug('<< listCustomers');
-                    self.sendResultOrError(resp, err, results, "Error listing Stripe Customers");
-                });
+                //     self.log.debug('<< listCustomers');
+                //     self.sendResultOrError(resp, err, results, "Error listing Stripe Customers");
+                // });
+
+                self.sendResultOrError(resp, err, customers.data, "Error listing Stripe Customers");
 
             } else {
                 //accountId ==0; return ALL customers
