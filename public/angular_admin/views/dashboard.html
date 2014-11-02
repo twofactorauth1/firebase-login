@@ -69,16 +69,22 @@
                 <div class="col-sm-6 col-md-4">
                     <div id="pageviews"></div>
                 </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="bounces">
+                        <span class="keen-metric-value">{{bounces}}</span>
+                        <span class="keen-metric-title">Bounces</span>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-7">
                     <div class="chart-wrapper">
                         <div class="chart-title">
-                            Traffic Sources
+                            Visitor Location
                         </div>
                         <div class="chart-stage">
-                            <div id="traffic-sources"></div>
+                            <div id="location"></div>
                         </div>
                         <div class="chart-notes">
                             Notes about this chart
@@ -131,10 +137,10 @@
                 <div class="col-sm-6 col-md-4">
                     <div class="chart-wrapper">
                         <div class="chart-title">
-                            Visitor Location
+                            Traffic Sources
                         </div>
                         <div class="chart-stage">
-                            <div id="location"></div>
+                            <div id="traffic-sources"></div>
                         </div>
                         <div class="chart-notes">
                             Notes about this chart
