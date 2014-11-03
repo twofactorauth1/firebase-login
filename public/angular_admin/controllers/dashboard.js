@@ -16,8 +16,8 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
         });
 
         function secToTime(duration) {
-                var minutes = parseInt(Math.floor(duration / 60));
-                var seconds = parseInt(duration - minutes * 60)
+            var minutes = parseInt(Math.floor(duration / 60));
+            var seconds = parseInt(duration - minutes * 60)
 
             minutes = (minutes < 10) ? "0" + minutes : minutes;
             seconds = (seconds < 10) ? "0" + seconds : seconds;
@@ -27,7 +27,7 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
 
         function calculatePercentage(oldval, newval) {
             var result = ((newval - oldval) / newval) * 100;
-            return Math.round(result*100/100);
+            return Math.round(result * 100 / 100);
         };
 
         PaymentService.getCustomers(function(data) {
@@ -38,11 +38,13 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                 gapi.analytics.auth.authorize({
                     container: 'embed-api-auth-container',
                     clientid: '1026246177215-tqpcc51fjk3vm0mgjef2jg7jagcmtuba.apps.googleusercontent.com',
+                    immediate: false
                 });
 
-                window.onresize = function(event) {
-                    drawVisualization();
-                };
+
+                // window.onresize = function(event) {
+                //     drawVisualization();
+                // };
 
                 Keen.ready(function() {
                     ngProgress.complete();
@@ -75,7 +77,7 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
 
                         pageviewsPreviousReport.on('success', function(response2) {
                             var previous = response2.totalsForAllResults['ga:pageviews'];
-                            console.log('previcous' , previous);
+                            console.log('previcous', previous);
                             $scope.pageviewsPercent = calculatePercentage(previous, $scope.pageviews);
                         });
                         pageviewsPreviousReport.execute();
@@ -109,11 +111,11 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
 
                     bouncesReport.on('success', function(response) {
                         $scope.bounces = response.totalsForAllResults['ga:bounces'];
-                            bouncesPreviousReport.on('success', function(response) {
-                                var previous = response.totalsForAllResults['ga:bounces'];
-                                $scope.bouncesPercent = calculatePercentage(previous, $scope.bounces);
-                            });
-                            bouncesPreviousReport.execute();
+                        bouncesPreviousReport.on('success', function(response) {
+                            var previous = response.totalsForAllResults['ga:bounces'];
+                            $scope.bouncesPercent = calculatePercentage(previous, $scope.bounces);
+                        });
+                        bouncesPreviousReport.execute();
                     });
 
                     bouncesReport.execute();
@@ -135,7 +137,7 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
 
                     var rawAvgDuration;
 
-                    var report = new gapi.analytics.report.Data({
+                    var sessionDuration = new gapi.analytics.report.Data({
                         query: {
                             ids: 'ga:82461709',
                             metrics: 'ga:sessions,ga:sessionDuration',
@@ -146,32 +148,32 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                     });
 
                     var sessionDurationPreviousMonth = new gapi.analytics.report.Data({
-                        query: {
-                            ids: 'ga:82461709',
-                            metrics: 'ga:sessions,ga:sessionDuration',
-                            dimensions: 'ga:date',
-                            'start-date': '60daysAgo',
-                            'end-date': '30daysAgo'
-                        }
-                    });
+                            query: {
+                                ids: 'ga:82461709',
+                                metrics: 'ga:sessions,ga:sessionDuration',
+                                dimensions: 'ga:date',
+                                'start-date': '60daysAgo',
+                                'end-date': '30daysAgo'
+                            }
+                        });
 
-                    report.on('success', function(response) {
+                    sessionDuration.on('success', function(response) {
                         var totalDuration = response.totalsForAllResults['ga:sessionDuration'];
                         var totalResults = response.totalsForAllResults['ga:sessions'];
                         var averageDuration = parseInt(totalDuration) / parseInt(totalResults);
                         rawAvgDuration = averageDuration;
                         $scope.visitDuration = secToTime(averageDuration);
-                        sessionDurationPreviousMonth.on('success', function(response) {
-                            var totalDuration2 = response.totalsForAllResults['ga:sessionDuration'];
-                            var totalResults2 = response.totalsForAllResults['ga:sessions'];
+                        sessionDurationPreviousMonth.on('success', function(response2) {
+                            var totalDuration2 = response2.totalsForAllResults['ga:sessionDuration'];
+                            var totalResults2 = response2.totalsForAllResults['ga:sessions'];
                             var averageDuration2 = parseInt(totalDuration2) / parseInt(totalResults2);
                             $scope.visitDurationPercent = calculatePercentage(averageDuration2, rawAvgDuration);
                         });
 
-                        sessionDurationPreviousMonth.execute();
                     });
 
-                    report.execute();
+                    sessionDuration.execute();
+                    sessionDurationPreviousMonth.execute();
 
                     // ----------------------------------------
                     // Top Pageviews
@@ -179,24 +181,24 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
 
                     /*********** From Keen ***********/
 
-                        // var pageNavCount = new Keen.Query('count', {
-                        //     eventCollection: 'pageviews',
-                        //     groupBy: 'page.href',
-                        //     filters: [{
-                        //         'property_name': 'page.href',
-                        //         'operator': 'contains',
-                        //         'property_value': 'main.test.indigenous.io'
-                        //     }]
-                        // });
-                        // client.run(pageNavCount, function(response) {
+                    // var pageNavCount = new Keen.Query('count', {
+                    //     eventCollection: 'pageviews',
+                    //     groupBy: 'page.href',
+                    //     filters: [{
+                    //         'property_name': 'page.href',
+                    //         'operator': 'contains',
+                    //         'property_value': 'main.test.indigenous.io'
+                    //     }]
+                    // });
+                    // client.run(pageNavCount, function(response) {
 
-                        //     new Keen.Visualization(this.data, document.getElementById('top-visited-pages'), {
-                        //         chartType: 'table',
-                        //         title: ' ',
-                        //         height: 300,
-                        //         width: 'auto'
-                        //     });
-                        // });
+                    //     new Keen.Visualization(this.data, document.getElementById('top-visited-pages'), {
+                    //         chartType: 'table',
+                    //         title: ' ',
+                    //         height: 300,
+                    //         width: 'auto'
+                    //     });
+                    // });
 
                     /*********** From Google Analytics ***********/
 
@@ -210,25 +212,27 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
 
                     topPageViews.on('success', function(response) {
 
-                            var data = new google.visualization.DataTable();
-                            // for (var i = 0; i < response.columnHeaders.length; i++) {
-                            //     console.log(response.columnHeaders[i].name);
-                            //     data.addColumn(response.columnHeaders[i].dataType, response.columnHeaders[i].name);
-                            // };
+                        var data = new google.visualization.DataTable();
+                        // for (var i = 0; i < response.columnHeaders.length; i++) {
+                        //     console.log(response.columnHeaders[i].name);
+                        //     data.addColumn(response.columnHeaders[i].dataType, response.columnHeaders[i].name);
+                        // };
 
-                            data.addColumn('string', 'Path');
-                            data.addColumn('number', 'Views');
-                            data.addColumn('string', 'Duration');
-                            data.addRows([
-                              ['/page',  20, '0:23'],
-                              ['/page',  20, '0:23'],
-                              ['/page',  20, '0:23'],
-                              ['/page',  20, '0:23']
-                            ]);
+                        data.addColumn('string', 'Path');
+                        data.addColumn('number', 'Views');
+                        data.addColumn('string', 'Duration');
+                        data.addRows([
+                            ['/page', 20, '0:23'],
+                            ['/page', 20, '0:23'],
+                            ['/page', 20, '0:23'],
+                            ['/page', 20, '0:23']
+                        ]);
 
-                            var table = new google.visualization.Table(document.getElementById('top-visited-pages'));
+                        var table = new google.visualization.Table(document.getElementById('top-visited-pages'));
 
-                            table.draw(data, {showRowNumber: false});
+                        table.draw(data, {
+                            showRowNumber: false
+                        });
                     });
 
                     topPageViews.execute();
@@ -237,23 +241,23 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                     // Device
                     // ----------------------------------------
 
-                            // var visitorLocations = new Keen.Query("count", {
-                            //     eventCollection: "pageviews",
-                            //     groupBy: "visitor.tech.os.family"
-                            // });
+                    // var visitorLocations = new Keen.Query("count", {
+                    //     eventCollection: "pageviews",
+                    //     groupBy: "visitor.tech.os.family"
+                    // });
 
-                            // client.run(visitorLocations, function(response) {
-                            //     new Keen.Visualization(this.data, document.getElementById('device'), {
-                            //         chartType: 'columnchart',
-                            //         height: 300,
-                            //         width: 'auto',
-                            //         chartOptions: {
-                            //             legend: {
-                            //                 position: "none"
-                            //             }
-                            //         }
-                            //     });
-                            // });
+                    // client.run(visitorLocations, function(response) {
+                    //     new Keen.Visualization(this.data, document.getElementById('device'), {
+                    //         chartType: 'columnchart',
+                    //         height: 300,
+                    //         width: 'auto',
+                    //         chartOptions: {
+                    //             legend: {
+                    //                 position: "none"
+                    //             }
+                    //         }
+                    //     });
+                    // });
 
                     var deviceReport = new gapi.analytics.report.Data({
                         query: {
@@ -266,8 +270,12 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                     deviceReport.on('success', function(response) {
                         for (var i = 0; i < response.rows.length; i++) {
                             var category = response.rows[i][0];
-                            if (category === 'desktop') {$scope.desktop = response.rows[i][1]}
-                            if (category === 'mobile') {$scope.mobile = response.rows[i][1]}
+                            if (category === 'desktop') {
+                                $scope.desktop = response.rows[i][1]
+                            }
+                            if (category === 'mobile') {
+                                $scope.mobile = response.rows[i][1]
+                            }
                         };
                     });
 
@@ -287,7 +295,7 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
 
                     visitorLocations.on('success', function(response) {
                         var data = [
-                          ['Country', 'Popularity']
+                            ['Country', 'Popularity']
                         ];
                         var subData = [];
                         for (var i = 0; i < response.rows.length; i++) {
@@ -295,11 +303,14 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                             data.push(subData);
                             subData = [];
                         };
-                        var data = google.visualization.arrayToDataTable( data );
+                        var data = google.visualization.arrayToDataTable(data);
 
                         var options = {
                             region: 'US',
-                            colorAxis:  {minValue: 0,  colors: ['#5ccae0', '#3c92a4']},
+                            colorAxis: {
+                                minValue: 0,
+                                colors: ['#5ccae0', '#3c92a4']
+                            },
                             resolution: "provinces",
                             width: '100%'
                         };
@@ -311,7 +322,6 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
 
                     visitorLocations.execute();
 
-                });
 
                     // ======================================
                     // Monthly Recurring Revenue Metric
@@ -565,7 +575,7 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                     trafficSources.on('success', function(response) {
 
                         var data = [
-                          ['Source', 'Visits']
+                            ['Source', 'Visits']
                         ];
                         var subData = [];
                         for (var i = 0; i < response.rows.length; i++) {
@@ -618,8 +628,9 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
 
                     newVsReturningChart.execute();
 
+                });//keen ready
 
-            });
+            });//gapi ready
 
         }); //end PaymentService.getCustomers
 

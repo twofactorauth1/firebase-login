@@ -1,11 +1,4 @@
-<script>
-(function(w,d,s,g,js,fs){
-  g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
-  js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
-  js.src='https://apis.google.com/js/platform.js';
-  fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
-}(window,document,'script'));
-</script>
+
 <div id="embed-api-auth-container" class="hidden"></div>
 
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
@@ -25,7 +18,7 @@
     <div class="row">
         <div class="btn-group col-xs-12 template-btns">
             <button type="button" class="btn btn-default btn-lg col-xs-6 active tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
-                <div popover="What are customers doing before they churn?" popover-placement="bottom" popover-trigger="mouseenter" title="12 Days ago Robin visited your website.">
+                <div popover="What are customers doing before they churn?" popover-placement="bottom" popover-trigger="mouseenter">
                     <i class="fa fa-pie-chart"></i>
                     <span class="hidden-xs">Analytics</span>
                 </div>
