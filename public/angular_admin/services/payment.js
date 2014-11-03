@@ -24,11 +24,28 @@ define(['app', 'stripe', 'toasterService'], function(app) {
         });
     };
 
+    this.getCustomers = function(fn) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'customers'].join('/');
+      $http.get(apiUrl)
+        .success(function(data, status, headers, config) {
+          fn(data);
+        });
+    };
+
     this.putCustomerCard = function(stripeId, cardToken, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards', cardToken].join('/');
       $http.put(apiUrl)
         .success(function(data, status, headers, config) {
           ToasterService.show('success', 'Card saved.');
+          fn(data);
+        });
+    };
+
+    this.deleteCustomerCard = function(stripeId, cardId, fn) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards', cardId].join('/');
+      $http.delete(apiUrl)
+        .success(function(data, status, headers, config) {
+          ToasterService.show('success', 'Card deleted.');
           fn(data);
         });
     };

@@ -186,6 +186,21 @@ define(['app'], function (app) {
 			});
 		};
 
+		this.getPageComponents = function (pageId, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
+
+		this.getComponentVersions = function (componentType, fn) {
+			var apiUrl = baseUrl + ['cms', 'component', componentType, 'versions'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
 
 	});
 });

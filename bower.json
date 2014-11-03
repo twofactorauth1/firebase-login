@@ -95,20 +95,14 @@
     "bootstrap-confirmation": "https://github.com/Tavicu/bootstrap-confirmation.git",
     "jd-fontselect": "~0.8.13",
     "ng-tags-input": "2.1.0",
-    "angular-input-date": "1.0.4"
+    "angular-input-date": "1.0.4",
+    "ngInfiniteScroll": "1.0.0"
   },
   "resolutions": {
     "angular": "1.2.26",
     "angular-animate": "1.2.8",
-    "angular-isotope": "~0.1.14",
-    "angular-timer": "1.1.7",
-    "angular-wizard": "0.4.0",
-    "blueimp-bootstrap-image-gallery": "~3.1.1",
-    "components-font-awesome": "~4.2.0",
     "es5-shim": ">=3.4.0",
-    "isotope": "2.0.0",
     "bootstrap": "~3.2.0",
-    "jquery": "~2.1.1",
-    "jd-fontselect": "~0.8.13"
+    "jquery": "~2.1.1"
   }
 }

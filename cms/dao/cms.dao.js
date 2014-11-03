@@ -292,15 +292,25 @@ var dao = {
                 self.log.error('Exception in getComponentVersions: ' + err);
                 fn(err, null);
             } else {
+                /*
                 var numVersions = _.reduce(files, function(memo, filename){
                     if(filename.indexOf(type) ===0) {
                         memo++;
                     }
                     return memo;
                 }, 0);
+                */
+                var versionAry = [];
+                _.each(files, function(element, index, list){
+                    if(element.indexOf(type) === 0) {
+                        versionAry.push(element.replace(type + '_v', '').replace('.html',''));
+                    }
+                });
+
+
                 self.log.debug('<< getComponentVersions');
 
-                fn(null, ""+numVersions);
+                fn(null, versionAry);
                 return;
             }
 

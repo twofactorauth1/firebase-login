@@ -29,7 +29,7 @@ require.config({
         'webfontloader': 'libs/jd-fontselect/dist/libs/webfontloader',
         'jdfontselect': 'libs/jd-fontselect/dist/angular-fontselect.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
-        'd3': 'libs/d3/d3',
+        'd3': 'libs/d3/d3.min',
         'c3': 'libs/c3/c3.min',
         'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
         'angularUiRouter': 'libs/angular-ui-router/release/angular-ui-router.min',
@@ -45,6 +45,8 @@ require.config({
         "headroom":"libs/headroom.js/dist/headroom.min",
         "ngHeadroom":"libs/headroom.js/dist/angular.headroom.min",
         "bootstrap-confirmation": "libs/bootstrap-confirmation/bootstrap-confirmation",
+        "moment": 'libs/moment/min/moment.min',
+        'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -62,11 +64,13 @@ require.config({
         'websiteService': '/angular_admin/services/website',
         'postService': '/angular_admin/services/post',
         'productService': '/angular_admin/services/product',
+        'dashboardService': '/angular_admin/services/dashboard',
         'chartFacebookService': '/angular_admin/services/chart_facebook',
         'chartStripService': '/angular_admin/services/chart_strip',
         'chartTwoNetService': '/angular_admin/services/chart_two_net',
         'importContactService': '/angular_admin/services/import_contacts',
         'toasterService': '/angular_admin/services/toaster',
+        'accountService': '/angular_admin/services/account',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'hoverClassDirective': '/angular_admin/directives/hover_class',
         'confirmClickDirective': '/angular_admin/directives/confirm_click',
@@ -79,6 +83,7 @@ require.config({
         'iStartsWithFilter' : '/angular_admin/filters/i_starts_with',
         'confirmClick2':'/angular_admin/directives/confirm_click2',
         'img':'/angular_admin/directives/img_adv',
+        'timeAgoFilter':'/angular_admin/filters/time_ago',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -156,7 +161,8 @@ require.config({
         'bootstrap-iconpicker': {deps: ['jquery']},
         'unsafeHtml': {deps: ['angular']},
         "bootstrap-confirmation" : {deps: ['bootstrap']},
-        'jdfontselect': {deps: ['angular','webfontloader']}
+        'jdfontselect': {deps: ['angular','webfontloader']},
+        'ngInfiniteScroll': {deps: ['angular']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

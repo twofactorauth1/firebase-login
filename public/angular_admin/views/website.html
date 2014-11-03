@@ -26,14 +26,20 @@
                 <span class="fa fa-save"></span>
                 <span class="hidden-xs">Save</span>
             </a>
-            <a class="btn btn-warning pull-right btn-cancel-page" type="button" ng-click="cancelPage()" style="margin-right:10px" ng-show="isEditing">
+            <a ng-confirm-click class="btn btn-warning pull-right btn-cancel-page" type="button"  style="margin-right:10px" confirmed-click = cancelPage() ng-show="isEditing">
                 <span class="fa fa-times"></span>
                 <span class="hidden-xs">Cancel</span>
             </a>
             <!--<a class="btn btn-success pull-right btn-media-manager" type="button" data-toggle="modal" data-target="#media-manager-modal">-->
             <!--<span class="fa fa-image"></span>-->
             <!--<span class="hidden-xs">Media</span>-->
-            <span class="mediaModal" user='user'></span>
+
+            <a      class="btn btn-success pull-right media-modal"
+                    on-insert-mediacb="insertMedia"
+                    user='user'>
+                <span class="fa fa-image"></span>
+                <span class="hidden-xs"> Media</span>
+            </a>
             <!--</a>-->
 
             <!-- <a class="btn btn-success pull-right btn-create-page" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
@@ -144,7 +150,7 @@
 
                     <div class="well">
                         <p>Danger Zone</p>
-                        <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                        <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm-click2-confirm="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
                     </div>
                 </div>
             </tab>
@@ -203,12 +209,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
-                                <input class="form-control input-lg" type="text" ng-model="componentEditing.version" ng-change="saveComponent()">
+                                <select ng-model="componentEditing.version" ng-change="saveComponent()" ng-options="version for version in componentEditingVersions">
+                                </select>
                             </div>
                             <div class="well">
                                 <p>Danger Zone</p>
-                                <!-- <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm="deleteComponent(componentEditing._id)" data-original-title="" title=""><i class="fa fa-trash"></i> Delete Component</button> -->
-                                <button class="btn btn-block btn-danger" ng-click="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete Component</button>
+                                <!-- <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm-click2-confirm="deleteComponent(componentEditing._id)" data-original-title="" title=""><i class="fa fa-trash"></i> Delete Component</button> -->
+                                <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm-click2-confirm="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete Component</button>
                             </div>
                         </accordion-group>
                     </accordion>
@@ -427,7 +434,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger pull-left" data-dismiss="modal" ng-click="deleteComponent(componentEditing._id)">
+                    <button class="btn btn-danger pull-left" data-dismiss="modal"  confirm-click2 data-placement="top"  confirm-click2-confirm="deleteComponent(componentEditing._id)">
                         <i class="fa fa-trash-o"></i> Delete
                     </button>
                     <button type="button" class="btn btn-primary btn-edit-component" data-dismiss="modal" ng-click="saveComponent(componentEditing)">Update</button>

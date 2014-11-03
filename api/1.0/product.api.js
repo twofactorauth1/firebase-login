@@ -21,8 +21,8 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         app.post(this.url(''), this.isAuthApi, this.createProduct.bind(this));
-        app.get(this.url(':id'), this.isAuthApi, this.getProduct.bind(this));
-        app.get(this.url(''), this.isAuthApi, this.listProducts.bind(this));
+        app.get(this.url(':id'), this.setup, this.getProduct.bind(this));
+        app.get(this.url(''), this.setup, this.listProducts.bind(this));
         app.post(this.url(':id'), this.isAuthApi, this.updateProduct.bind(this));
         app.delete(this.url(':id'), this.isAuthApi, this.deleteProduct.bind(this));
 

@@ -11,7 +11,8 @@ define([
     'ngProgress',
     'unsafeHtml',
     'mediaDirective',
-    'confirmClick2'
+    'confirmClick2',
+    'confirmClickDirective'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -126,8 +127,9 @@ define([
                     var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
                     for (var i = 0; i < addComponentBtns.length; i++) {
                         if (typeof addComponentBtns[i].addEventListener != "undefined") {
-                            addComponentBtns[i].addEventListener("click", function(e) {
-                                var element = angular.element('#add-component-modal');
+				addComponentBtns[i].addEventListener("click", function(e) {
+				$scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+				var element = angular.element('#add-component-modal');
                                 element.modal('show');
                                 //get the current index of the component pressed
                             });
@@ -231,22 +233,32 @@ define([
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
                 iframe.contentWindow.triggerEditMode();
-                // iframe.contentWindow.copyPostMode();
+
+                if ( iframe.contentWindow.copyPostMode ) {
+                    iframe.contentWindow.copyPostMode();
+                }
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");
             };
 
             $scope.cancelPage = function() {
                 // $scope.components = that.originalCurrentPageComponents;
-
-                $scope.updateIframeComponents();
-                //$scope.deactivateAloha();
+                var pageId = $scope.currentPage._id;
+                $scope.deactivateAloha();
+                WebsiteService.getPageComponents(pageId,function(components) {
+                    $scope.components = components;
+                    $scope.updateIframeComponents();
+                
                 $scope.isEditing = false;
-                $scope.componentEditing = '';
+                $scope.componentEditing = null;
                 iFrame.contentWindow.triggerEditModeOff();
+                });
+
 
                 //TODO Only use on single post
-                //iFrame.contentWindow.updatePostMode();
+                if ( iFrame.contentWindow.updatePostMode ) {
+                    iFrame.contentWindow.updatePostMode();
+                }
             };
 
             $scope.doubleClick = function() {
@@ -339,6 +351,9 @@ define([
                     $scope.isEditing = false;
                     $scope.deactivateAloha();
                     iFrame.contentWindow.triggerEditModeOff();
+                    if ( iFrame.contentWindow.savePostMode ) {
+                        iFrame.contentWindow.savePostMode();
+                    }
                 });
 
                 var data = {
@@ -410,7 +425,8 @@ define([
                 WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, function(data) {
                     if (data.components) {
                         var newComponent = data.components[data.components.length - 1];
-                        $scope.currentPage.components.splice(1, 0, newComponent);
+                        var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
+                        $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
                         //$scope.components.push(newComponent);
                         $scope.updateIframeComponents();
@@ -477,6 +493,10 @@ define([
                 var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
                 var last = nodes[nodes.length - 1];
                 angular.element(last).triggerHandler('click');
+
+                WebsiteService.getComponentVersions($scope.componentEditing.type, function (versions) {
+                  $scope.componentEditingVersions = versions;
+                });
             };
 
             $scope.saveComponent = function() {
@@ -659,7 +679,7 @@ define([
                 },
                 {
                     title: 'Sign Up form',
-                    type: 'sign-up',
+                    type: 'signup-form',
                     icon: 'custom sign-up-form'
                 },
                 {
@@ -669,7 +689,7 @@ define([
                 },
                 {
                     title: 'Social Links',
-                    type: 'social',
+                    type: 'social-feed',
                     icon: 'custom social-links'
                 }
             ];
@@ -677,6 +697,11 @@ define([
             $scope.selectComponent = function(type) {
                 console.log('selectComponent', type);
                 $scope.selectedComponent = type;
+            };
+
+            $scope.insertMedia=function(asset){
+                $scope.componentEditing.bg.img.url=asset.url;
+                $scope.updateIframeComponents();
             };
 
         }
