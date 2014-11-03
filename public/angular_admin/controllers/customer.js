@@ -7,15 +7,18 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     $scope.customerDisplayFormat = 'first';
 
     $scope.customerScrollBusy = false;
-    $scope.customerScrollLimit = 4;
+    $scope.customerScrollLimit = 40;
     $scope.customerScrollOffset = 0;
     $scope.renderedCustomers = [];
 
     $scope.customerScrollFn = function() {
       if ($scope.fetchedCustomers) {
         $scope.customerScrollBusy = true;
-        console.log('scroll process');
-        $scope.renderedCustomers = $scope.fetchedCustomers.slice($scope.customerScrollOffset, $scope.customerScrollLimit);
+        console.log('$scope.fetchedCustomers >>>', $scope.fetchedCustomers.slice($scope.customerScrollOffset, $scope.customerScrollLimit + $scope.customerScrollOffset));
+        var pushCustomers = $scope.fetchedCustomers.slice($scope.customerScrollOffset, $scope.customerScrollLimit + $scope.customerScrollOffset);
+        for (var i = 0; i < pushCustomers.length; i++) {
+          $scope.renderedCustomers.push(pushCustomers[i]);
+        };
         $scope.customerScrollOffset += $scope.customerScrollLimit;
         $scope.customerScrollBusy = false;
       }
@@ -57,6 +60,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     };
     var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
     CustomerService.getCustomersShortForm(fetchFields, function(customers) {
+      console.log('customers >>> ', customers);
       $scope.fetchedCustomers = customers;
       $scope.customerScrollFn();
       ngProgress.complete();

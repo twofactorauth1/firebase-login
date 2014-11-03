@@ -1,3 +1,13 @@
+<script>
+(function(w,d,s,g,js,fs){
+  g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
+  js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
+  js.src='https://apis.google.com/js/platform.js';
+  fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
+}(window,document,'script'));
+</script>
+<div id="embed-api-auth-container" class="hidden"></div>
+
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="dashboard">
     <div class="pageheader row">
@@ -14,19 +24,19 @@
 
     <div class="row">
         <div class="btn-group col-xs-12 template-btns">
-            <button type="button" class="btn btn-default btn-lg col-xs-2 active" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
+            <button type="button" class="btn btn-default btn-lg col-xs-6 active tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'" data-toggle="tooltip" data-placement="bottom" title="12 Days ago Robin visited your website.">
                 <i class="fa fa-pie-chart"></i>
                 <span class="hidden-xs">Analytics</span>
             </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'advertising'}" ng-click="activeTab = 'advertising'">
+            <!-- <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'advertising'}" ng-click="activeTab = 'advertising'">
                 <i class="fa fa-bullseye"></i>
                 <span class="hidden-xs">Advertising</span>
-            </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'integrations'}" ng-click="activeTab = 'integrations'">
+            </button> -->
+            <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'ecommerce'}" ng-click="activeTab = 'ecommerce'">
                 <i class="fa fa-credit-card"></i>
                 <span class="hidden-xs">Ecommerce</span>
             </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'marketing'}" ng-click="activeTab = 'marketing'">
+            <!-- <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'marketing'}" ng-click="activeTab = 'marketing'">
                 <i class="fa fa-bullhorn"></i>
                 <span class="hidden-xs">Marketing</span>
             </button>
@@ -37,106 +47,395 @@
             <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'testing'}" ng-click="activeTab = 'testing'">
                 <i class="fa fa-flask"></i>
                 <span class="hidden-xs">Testing</span>
-            </button>
+            </button> -->
         </div>
     </div>
 
     <div class="contentpanel">
 
 
-		<div class="analytics-section" ng-show="activeTab == 'analytics'">
-		    <div class="row">
+        <div class="analytics-section" ng-show="activeTab == 'analytics'">
 
-		        <div class="col-sm-8">
-		            <div class="chart-wrapper">
-		                <div class="chart-title">
-		                    Pageviews by browser (past 24 hours)
-		                </div>
-		                <div class="chart-stage">
-		                    <div id="chart-01"></div>
-		                </div>
-		                <div class="chart-notes">
-		                    This is a sample text region to describe this chart.
-		                </div>
-		            </div>
-		        </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div id="pageviews"></div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="visitDuration">
+                        <span class="keen-metric-value">{{visitDuration}}</span>
+                        <span class="keen-metric-title">Avg. Visit Duration</span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div id="pageviews"></div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="bounces">
+                        <span class="keen-metric-value">{{bounces}}</span>
+                        <span class="keen-metric-title">Bounces</span>
+                    </div>
+                </div>
+            </div>
 
-		        <div class="col-sm-4">
-		            <div class="chart-wrapper">
-		                <div class="chart-title">
-		                    Pageviews by browser (past 5 days)
-		                </div>
-		                <div class="chart-stage">
-		                    <div id="chart-02"></div>
-		                </div>
-		                <div class="chart-notes">
-		                    Notes go down here
-		                </div>
-		            </div>
-		        </div>
-		    </div>
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Visitor Location
+                        </div>
+                        <div class="chart-stage">
+                            <div id="location"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Top Visited Pages
+                        </div>
+                        <div class="chart-stage">
+                            <div id="top-visited-pages"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="row">
+                <!-- end of three -->
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            New vs. Returning
+                        </div>
+                        <div class="chart-stage">
+                            <div id="new-vs-returning"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Device
+                        </div>
+                        <div class="chart-stage">
+                            <div id="device"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Traffic Sources
+                        </div>
+                        <div class="chart-stage">
+                            <div id="traffic-sources"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		    <div class="row">
+        <div class="advertising-section" ng-show="activeTab == 'advertising'">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <div id="grid-1-1">
+                                <img data-src="holder.js/100%x240/white/text:#grid-1-1">
+                            </div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x240/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-		        <div class="col-sm-4">
-		            <div class="chart-wrapper">
-		                <div class="chart-title">
-		                    Impressions by advertiser
-		                </div>
-		                <div class="chart-stage">
-		                    <div id="chart-03"></div>
-		                </div>
-		                <div class="chart-notes">
-		                    Notes go down here
-		                </div>
-		            </div>
-		        </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <!-- end of three -->
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		        <div class="col-sm-4">
-		            <div class="chart-wrapper">
-		                <div class="chart-title">
-		                    Pageviews by device
-		                </div>
-		                <div class="chart-stage">
-		                    <div id="chart-04"></div>
-		                </div>
-		                <div class="chart-notes">
-		                    Notes go down here
-		                </div>
-		            </div>
-		        </div>
+        <div class="ecommerce-section" ng-show="activeTab == 'ecommerce'">
 
-		        <div class="col-sm-4">
-		            <div class="chart-wrapper">
-		                <div class="chart-title">
-		                    Visitors by country
-		                </div>
-		                <div class="chart-stage">
-		                    <div id="chart-05"></div>
-		                </div>
-		                <div class="chart-notes">
-		                    Notes go down here
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-	    </div>
+        	<div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div id="monthly-recurring-revenue"></div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div id="net-revenue"></div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                   <div id="fees"></div>
+                </div>
 
-	    <div class="advertising-section" ng-show="activeTab == 'advertising'">
-	    </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div id="other-revenue"></div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div id="average-revenue-per-customer"></div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                        <span class="keen-metric-value">$22,143</span>
+                        <span class="keen-metric-title">Annual Run Rate</span>
+                    </div>
+                </div>
 
-	    <div class="integrations-section" ng-show="activeTab == 'integrations'">
-	    </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                        <span class="keen-metric-value">$1484</span>
+                        <span class="keen-metric-title">Lifetime Value</span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                        <span class="keen-metric-value">5.8%</span>
+                        <span class="keen-metric-title">User Churn</span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                        <span class="keen-metric-value">5%</span>
+                        <span class="keen-metric-title">Revenue churn</span>
+                    </div>
+                </div>
 
-	    <div class="marketing-section" ng-show="activeTab == 'marketing'">
-	    </div>
+            </div>
 
-	    <div class="support-section" ng-show="activeTab == 'support'">
-	    </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div id="total-customer"></div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div id="upgrades"></div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                        <span class="keen-metric-value">2</span>
+                        <span class="keen-metric-title">Downgrades</span>
+                    </div>
+                </div>
 
-	    <div class="testing-section" ng-show="activeTab == 'testing'">
-	    </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                        <span class="keen-metric-value">2</span>
+                        <span class="keen-metric-title">Cancelations</span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                        <span class="keen-metric-value">$456</span>
+                        <span class="keen-metric-title">Coupons</span>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                        <span class="keen-metric-value">33</span>
+                        <span class="keen-metric-title">Failed Charges</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                        <span class="keen-metric-value">$1528</span>
+                        <span class="keen-metric-title">Refunds</span>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div id="total-revenue"></div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                        <span class="keen-metric-value">{{customers.length}}</span>
+                        <span class="keen-metric-title">Total Customers</span>
+                    </div>
+                </div>
+
+            </div> -->
+            <!-- <div class="row">
+                <div class="col-sm-6">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Last 30 Days Revenue
+                        </div>
+                        <div class="chart-stage">
+                            <div id="revenue"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Unique Paying Customers
+                        </div>
+                        <div class="chart-stage">
+                            <div id="unique-customers"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            New Paying Customers
+                        </div>
+                        <div class="chart-stage">
+                            <div id="new-customers"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            New Paying Customers
+                        </div>
+                        <div class="chart-stage">
+                            <div id="upsell-minus-churn"></div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <div class="integrations-section" ng-show="activeTab == 'integrations'">
+        </div>
+
+        <div class="marketing-section" ng-show="activeTab == 'marketing'">
+        </div>
+
+        <div class="support-section" ng-show="activeTab == 'support'">
+        </div>
+
+        <div class="testing-section" ng-show="activeTab == 'testing'">
+        </div>
 
     </div>
 </div>

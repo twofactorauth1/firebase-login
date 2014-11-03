@@ -24,6 +24,14 @@ define(['app', 'stripe', 'toasterService'], function(app) {
         });
     };
 
+    this.getCustomers = function(fn) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'customers'].join('/');
+      $http.get(apiUrl)
+        .success(function(data, status, headers, config) {
+          fn(data);
+        });
+    };
+
     this.putCustomerCard = function(stripeId, cardToken, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards', cardToken].join('/');
       $http.put(apiUrl)

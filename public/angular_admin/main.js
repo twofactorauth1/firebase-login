@@ -29,7 +29,7 @@ require.config({
         'webfontloader': 'libs/jd-fontselect/dist/libs/webfontloader',
         'jdfontselect': 'libs/jd-fontselect/dist/angular-fontselect.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
-        'd3': 'libs/d3/d3',
+        'd3': 'libs/d3/d3.min',
         'c3': 'libs/c3/c3.min',
         'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
         'angularUiRouter': 'libs/angular-ui-router/release/angular-ui-router.min',
