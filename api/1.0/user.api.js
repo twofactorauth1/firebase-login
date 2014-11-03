@@ -11,6 +11,7 @@ var accountDao = require('../../dao/account.dao');
 var passport = require('passport');
 var cookies = require('../../utils/cookieutil');
 var authenticationDao = require('../../dao/authentication.dao');
+var userManager = require('../../dao/user.manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -199,8 +200,8 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> email', email);
         self.log.debug('>> accountToken', accountToken);
 
-
-        userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function (err, value) {
+        //TODO: userManager
+        userManager.createAccountAndUser(username, password1, email, accountToken, function (err, value) {
             var userObj = value;
             self.log.debug('createUserFromUsernamePassword >>>');
                 if (!err) {

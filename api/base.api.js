@@ -271,6 +271,11 @@ _.extend(apiBase.prototype, {
         this.sm.hasPermission(this.userId(req), accountId, priv, cb);
     },
 
+    checkPermissionForAccountAndUser: function(userId, accountId, priv, cb) {
+        console.log('checkPermissionForAccountAndUser(' + userId + ',' + accountId +',' + priv + ',' + cb + ')');
+        this.sm.hasPermission(userId, accountId, priv, cb);
+    },
+
     checkPermissionAndSendResponse: function(req, priv, res, successObj) {
         var self = this;
         self.checkPermission(req, priv, function(err, isAllowed){

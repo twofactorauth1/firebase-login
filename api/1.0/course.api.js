@@ -49,7 +49,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var userId = self.userId(req);
                 courseDao.listUserCourses(userId, function (err, courses) {
@@ -88,7 +88,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 courseDao.createCourse(req.body, userId, accountId, function (err, createdCourse) {
                     self.sendResultOrError(resp, err, createdCourse, "Error creating course");
@@ -112,7 +112,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 courseDao.updateCourse(updatedCourseData, courseId, userId, function (err, value) {
                     return self.sendResultOrError(resp, err, value, "Error updating course");
@@ -137,7 +137,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 courseDao.deleteCourse(courseId, userId, function (err, value) {
                     return self.sendResultOrError(resp, err, value, "Error removing course");
@@ -164,7 +164,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 courseDao.listCourseVideos(courseId, userId, function (err, videos) {
                     self.sendResultOrError(resp, err, videos, "Error getting course videos");
@@ -193,7 +193,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 courseDao.findCourseVideoById(courseId, videoId, userId, function (err, video) {
                     self.sendResultOrError(resp, err, video, "Error getting course video");
@@ -221,7 +221,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 courseDao.addVideoToCourse(videoToAdd, courseId, userId, function (err, video) {
                     self.sendResultOrError(resp, err, video, "Error adding video to course");
@@ -250,7 +250,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 courseDao.updateVideoInCourse(videoId, updatedVideoValues, courseId, userId, function (err, video) {
                     self.sendResultOrError(resp, err, video, "Error updating video in course");
@@ -280,7 +280,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 courseDao.deleteVideoFromCourse(videoId, courseId, userId, function (err, video) {
                     self.sendResultOrError(resp, err, video, "Error deleting video from course");
@@ -315,7 +315,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 courseDao.getCourseById(courseId, userId, function (err, course) {
                     if (err || !course) {
@@ -352,7 +352,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 if (courseId) {
                     courseDao.getCourseByIdForSubscriber(courseId, function (error, course) {
@@ -399,7 +399,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_COURSE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 req.busboy.on('file', function (fieldname, file, filename) {
                     console.log("Uploading: " + filename);

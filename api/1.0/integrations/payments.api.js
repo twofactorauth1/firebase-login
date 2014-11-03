@@ -104,7 +104,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed){
             if(isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 stripeDao.listStripeCustomers(accountId, limit, function(err, customers){
 
@@ -150,7 +150,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var p1 = $.Deferred();
                 customerLinkDao.getLinkByAccountAndCustomer(accountId, customerId, function(err, link){
@@ -196,9 +196,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var _accountId = req.body.accountId || self.accountId(req);
 
-        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+        self.checkPermissionForAccountAndUser(user.id(), _accountId, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 //validate arguments
                 if(!cardToken && cardToken.length ===0) {
@@ -236,7 +236,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var hasUpdates = false;
                 var customerId = req.params.id;
@@ -303,7 +303,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var customerId = req.params.id;
                 if(accountId > 0) {
@@ -340,7 +340,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 stripeDao.listStripePlans(accessToken, function(err, value){
@@ -359,7 +359,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var planId = req.params.id;
                 var accessToken = self._getAccessToken(req);
@@ -380,7 +380,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
 
@@ -429,7 +429,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 //validate params
@@ -464,7 +464,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 //validate params
@@ -496,7 +496,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
             self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
                 if (isAllowed !== true) {
-                    return self.send403(res);
+                    return self.send403(resp);
                 } else {
                     //TODO: get accountId from subs
                     self.log.debug('<< listSubscriptions');
@@ -514,7 +514,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var customerId = req.params.id;
@@ -560,7 +560,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var subscriptionId = req.params.subId;
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 stripeDao.getStripeSubscription(customerId, subscriptionId, accessToken, function(err, value){
                     self.log.debug('<< getSubscription');
@@ -591,7 +591,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 stripeDao.updateStripeSubscription(customerId, subscriptionId, planId, coupon, prorate, trial_end, card,
                     quantity, application_fee_percent, metadata, accessToken, function(err, value){
@@ -615,7 +615,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 stripeDao.cancelStripeSubscription(accountId, customerId, subscriptionId, at_period_end, accessToken, function(err, value){
                     self.log.debug('<< cancelSubscription');
@@ -636,7 +636,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var cardToken = req.params.cardToken;
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 if(!cardToken || cardToken.length < 1) {
                     return self.wrapError(resp, 400, null, "Invalid cardToken parameter.");
@@ -660,7 +660,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 stripeDao.getStripeCard(customerId, cardId, function(err, value){
                     self.log.debug('<< getCard');
@@ -677,7 +677,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updateCard');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var customerId = req.params.id;
@@ -719,7 +719,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> listCards');
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var customerId = req.params.id;
@@ -739,7 +739,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> deleteCard');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var customerId = req.params.id;
@@ -761,7 +761,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> listCharges');
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
 
@@ -787,7 +787,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createCharge');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var amount = req.body.amount;//REQUIRED
@@ -834,7 +834,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getCharge');
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
 
@@ -855,7 +855,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updateCharge');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
 
@@ -880,7 +880,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> captureCharge');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
 
@@ -907,7 +907,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createInvoiceItem');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
 
@@ -942,7 +942,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> listInvoiceItems');
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
 
@@ -967,7 +967,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getInvoiceItem');
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var invoiceItemId = req.params.itemId;
@@ -987,7 +987,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getInvoiceItem');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var invoiceItemId = req.params.itemId;
@@ -1011,7 +1011,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> deleteInvoiceItem');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var invoiceItemId = req.params.itemId;
@@ -1033,7 +1033,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createInvoice');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var customerId = req.params.id;
@@ -1059,7 +1059,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getInvoice');
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var customerId = req.params.id;
@@ -1080,7 +1080,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getUpcomingInvoice');
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var customerId = req.params.id;
@@ -1101,7 +1101,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updateInvoice');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 //var customerId = req.params.id;
@@ -1135,7 +1135,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var customerId = req.params.id;
                 return self._listInvoices(customerId, 'listInvoices', req, resp);
@@ -1150,7 +1150,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 self._listInvoices(null, 'listAllInvoices', req, resp);
             }
@@ -1182,7 +1182,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> payInvoice');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var customerId = req.params.id;
@@ -1203,7 +1203,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createToken');
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var customerId = req.params.id;
@@ -1224,7 +1224,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getToken');
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var tokenId = req.params.id;
@@ -1244,7 +1244,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getEvent');
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
                 var eventId = req.params.id;
@@ -1264,7 +1264,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> listEvents');
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
 
