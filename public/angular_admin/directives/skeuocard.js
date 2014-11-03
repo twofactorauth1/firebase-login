@@ -43,6 +43,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
             exp_year: $('#cc_exp_year').val()
           };
           PaymentService.getStripeCardToken(cardInput, function(token) {
+            scope.card.flip();
             if (scope.user.stripeId) {
               UserService.postAccountBilling(scope.user.stripeId, token, function(billing) {
                 scope.updateFn(billing);
