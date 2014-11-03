@@ -19657,6 +19657,9 @@ div.error label.error:before {
 .website .pageheader .btn-group {
   margin-bottom: 0;
 }
+.website .btn.media-modal {
+  margin-right: 10px;
+}
 .website #iframe-website {
   border: none;
   width: 100%;
