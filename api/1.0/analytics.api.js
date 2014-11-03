@@ -34,24 +34,26 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('events/:id'), this.isAuthApi, this.deleteEvent.bind(this));
 
         app.post(this.url('mandrill/event'), this.sendToKeen.bind(this));
+        //app.post(this.url('mandrill/event'), this.sendToKeen.bind(this));
 
     },
 
     sendToKeen: function(req, res) {
-       var self = this;
-       self.log.debug('>> sendToKeen', req);
-       var request = require('request');
-       var options = {};
-
-        options.url = 'https://api.keen.io/3.0/projects/54528c1380a7bd6a92e17d29/events/mandrill_events?api_key=c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a';
-        options.headers = {
-                'Accept': "application/json",
-                'Content-type': "application/json"
-        };
-       request.post(options, req.body, function(error, response, body) {
-            self.log.debug('<< success sendToKeen', body);
-        });
-       self.sendResult(res, {'ok': 'ok'});
+        var self = this;
+        self.log.debug('>> sendToKeen');
+        //var request = require('request');
+        var request = require('superagent');
+        var url = 'https://api.keen.io/3.0/projects/54528c1380a7bd6a92e17d29/events/mandrill_events?api_key=c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a';
+        var newrequest = request.post(url)
+            //.set('cookie', cookie)
+            .send(req.body)
+            .end(function(result){
+                self.log.debug('result:');
+                console.dir(result);
+            });
+        //TODO: Verify message from mandirll
+        //TODO: parameterize url
+        self.sendResult(res, {'ok': 'ok'});
     },
 
     verifyEvent: function(req, res, next) {
