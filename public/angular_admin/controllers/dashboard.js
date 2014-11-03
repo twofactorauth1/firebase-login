@@ -37,8 +37,7 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
 
                 gapi.analytics.auth.authorize({
                     container: 'embed-api-auth-container',
-                    clientid: '1026246177215-tqpcc51fjk3vm0mgjef2jg7jagcmtuba.apps.googleusercontent.com',
-                    immediate: false
+                    clientid: '1026246177215-tqpcc51fjk3vm0mgjef2jg7jagcmtuba.apps.googleusercontent.com'
                 });
 
 
