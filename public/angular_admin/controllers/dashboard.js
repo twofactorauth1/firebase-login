@@ -25,7 +25,14 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                     clientid: '1026246177215-tqpcc51fjk3vm0mgjef2jg7jagcmtuba.apps.googleusercontent.com',
                 });
 
+                window.onresize = function(event) {
+                    drawVisualization();
+                };
+
                 Keen.ready(function() {
+                    ngProgress.complete();
+
+
 
 
 
@@ -42,6 +49,26 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                         width: 345,
                         colors: ["#49c5b1"]
                     });
+
+                    // ======================================
+                    // Bounces
+                    // ======================================
+
+                    var bounceReport = new gapi.analytics.report.Data({
+                        query: {
+                            ids: 'ga:82461709',
+                            metrics: 'ga:bounces',
+                            dimensions: 'ga:date',
+                            'start-date': '30daysAgo',
+                            'end-date': 'yesterday'
+                        }
+                    });
+
+                    bounceReport.on('success', function(response) {
+                        $scope.bounces = response.totalsForAllResults['ga:bounces'];
+                    });
+
+                    bounceReport.execute();
 
                     // ----------------------------------------
                     // Average Visit Duration
@@ -62,47 +89,141 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                     // Top Pageviews
                     // ----------------------------------------
 
-                    var pageNavCount = new Keen.Query('count', {
-                        eventCollection: 'pageviews',
-                        groupBy: 'page.href',
-                        filters: [{
-                            'property_name': 'page.href',
-                            'operator': 'contains',
-                            'property_value': 'main.test.indigenous.io'
-                        }]
+                    /*********** From Keen ***********/
+
+                        // var pageNavCount = new Keen.Query('count', {
+                        //     eventCollection: 'pageviews',
+                        //     groupBy: 'page.href',
+                        //     filters: [{
+                        //         'property_name': 'page.href',
+                        //         'operator': 'contains',
+                        //         'property_value': 'main.test.indigenous.io'
+                        //     }]
+                        // });
+                        // client.run(pageNavCount, function(response) {
+
+                        //     new Keen.Visualization(this.data, document.getElementById('top-visited-pages'), {
+                        //         chartType: 'table',
+                        //         title: ' ',
+                        //         height: 300,
+                        //         width: 'auto'
+                        //     });
+                        // });
+
+                    /*********** From Google Analytics ***********/
+
+                    var topPageViews = new gapi.analytics.report.Data({
+                        query: {
+                            ids: 'ga:82461709',
+                            metrics: 'ga:entrances',
+                            dimensions: 'ga:landingPagePath'
+                        }
                     });
 
-                    client.run(pageNavCount, function(response) {
+                    topPageViews.on('success', function(response) {
 
-                        new Keen.Visualization(this.data, document.getElementById('top-visited-pages'), {
-                            chartType: 'table',
-                            title: ' ',
-                            height: 300,
-                            width: 'auto'
-                        });
+                            var data = new google.visualization.DataTable();
+                            // for (var i = 0; i < response.columnHeaders.length; i++) {
+                            //     console.log(response.columnHeaders[i].name);
+                            //     data.addColumn(response.columnHeaders[i].dataType, response.columnHeaders[i].name);
+                            // };
+
+                            data.addColumn('string', 'Path');
+                            data.addColumn('number', 'Views');
+                            data.addColumn('string', 'Duration');
+                            data.addRows([
+                              ['/page',  20, '0:23'],
+                              ['/page',  20, '0:23'],
+                              ['/page',  20, '0:23'],
+                              ['/page',  20, '0:23']
+                            ]);
+
+                            var table = new google.visualization.Table(document.getElementById('top-visited-pages'));
+
+                            table.draw(data, {showRowNumber: false});
                     });
+
+                    topPageViews.execute();
 
                     // ----------------------------------------
                     // Device
                     // ----------------------------------------
 
-                    var visitorLocations = new Keen.Query("count", {
-                        eventCollection: "pageviews",
-                        groupBy: "visitor.tech.os.family"
+                            // var visitorLocations = new Keen.Query("count", {
+                            //     eventCollection: "pageviews",
+                            //     groupBy: "visitor.tech.os.family"
+                            // });
+
+                            // client.run(visitorLocations, function(response) {
+                            //     new Keen.Visualization(this.data, document.getElementById('device'), {
+                            //         chartType: 'columnchart',
+                            //         height: 300,
+                            //         width: 'auto',
+                            //         chartOptions: {
+                            //             legend: {
+                            //                 position: "none"
+                            //             }
+                            //         }
+                            //     });
+                            // });
+
+                    var deviceReport = new gapi.analytics.report.Data({
+                        query: {
+                            ids: 'ga:82461709',
+                            metrics: 'ga:sessions',
+                            dimensions: 'ga:deviceCategory'
+                        }
                     });
 
-                    client.run(visitorLocations, function(response) {
-                        new Keen.Visualization(this.data, document.getElementById('device'), {
-                            chartType: 'columnchart',
-                            height: 300,
-                            width: 'auto',
-                            chartOptions: {
-                                legend: {
-                                    position: "none"
-                                }
-                            }
-                        });
+                    deviceReport.on('success', function(response) {
+                        for (var i = 0; i < response.rows.length; i++) {
+                            var category = response.rows[i][0];
+                            if (category === 'desktop') {$scope.desktop = response.rows[i][1]}
+                            if (category === 'mobile') {$scope.mobile = response.rows[i][1]}
+                        };
                     });
+
+                    deviceReport.execute();
+
+                    // ======================================
+                    // Visitor Location Popularity
+                    // ======================================
+
+                    var visitorLocations = new gapi.analytics.report.Data({
+                        query: {
+                            ids: 'ga:82461709',
+                            metrics: 'ga:users',
+                            dimensions: 'ga:region'
+                        }
+                    });
+
+                    visitorLocations.on('success', function(response) {
+                        var data = [
+                          ['Country', 'Popularity']
+                        ];
+                        var subData = [];
+                        for (var i = 0; i < response.rows.length; i++) {
+                            subData.push(response.rows[i][0], parseInt(response.rows[i][1]));
+                            data.push(subData);
+                            subData = [];
+                        };
+                        var data = google.visualization.arrayToDataTable( data );
+
+                        var options = {
+                            region: 'US',
+                            colorAxis:  {minValue: 0,  colors: ['#5ccae0', '#3c92a4']},
+                            resolution: "provinces",
+                            width: '100%'
+                        };
+
+                        var chart = new google.visualization.GeoChart(document.getElementById('location'));
+
+                        chart.draw(data, options);
+                    });
+
+                    visitorLocations.execute();
+
+                });
 
                     // ======================================
                     // Monthly Recurring Revenue Metric
@@ -397,6 +518,7 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                             pieHole: 0.5,
                             width: 310,
                             height: 300,
+                            colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
                             legend: {
                                 position: 'bottom'
                             }
@@ -420,74 +542,19 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                         },
                         chart: {
                             container: 'new-vs-returning',
-                            type: 'BAR',
+                            type: 'COLUMN',
                             options: {
-                                width: '100%'
+                                width: '100%',
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
                             }
                         }
                     });
 
                     newVsReturningChart.execute();
 
-                    // ======================================
-                    // Bounces
-                    // ======================================
-
-                    var bounceReport = new gapi.analytics.report.Data({
-                        query: {
-                            ids: 'ga:82461709',
-                            metrics: 'ga:bounces',
-                            dimensions: 'ga:date',
-                            'start-date': '30daysAgo',
-                            'end-date': 'yesterday'
-                        }
-                    });
-
-                    bounceReport.on('success', function(response) {
-                        $scope.bounces = response.totalsForAllResults['ga:bounces'];
-                    });
-
-                    bounceReport.execute();
-
-
-                    // ======================================
-                    // Visitor Location Popularity
-                    // ======================================
-
-                    var visitorLocations = new gapi.analytics.report.Data({
-                        query: {
-                            ids: 'ga:82461709',
-                            metrics: 'ga:users',
-                            dimensions: 'ga:region'
-                        }
-                    });
-
-                    visitorLocations.on('success', function(response) {
-                        var data = [
-                          ['Country', 'Popularity']
-                        ];
-                        var subData = [];
-                        for (var i = 0; i < response.rows.length; i++) {
-                            subData.push(response.rows[i][0], parseInt(response.rows[i][1]));
-                            data.push(subData);
-                            subData = [];
-                        };
-                        var data = google.visualization.arrayToDataTable( data );
-
-                        var options = {
-                            region: 'US',
-                            colorAxis:  {minValue: 0,  colors: ['#97cffc', '#2c3e50']},
-                            resolution: "provinces"
-                        };
-
-                        var chart = new google.visualization.GeoChart(document.getElementById('location'));
-
-                        chart.draw(data, options);
-                    });
-
-                    visitorLocations.execute();
-
-                });
 
             });
 

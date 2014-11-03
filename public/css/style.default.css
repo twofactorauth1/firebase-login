@@ -17954,6 +17954,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .dashboard {
   background: #e7e7e7;
 }
+.dashboard .btn-clearblack {
+  background: rgba(0, 0, 0, 0.1);
+}
 .dashboard .chart-wrapper {
   background: #fff;
   border: 1px solid #e2e2e2;
@@ -17978,7 +17981,32 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   padding: 8px 10px 5px;
 }
 .dashboard .keen-metric {
-  margin-bottom: 10px;
+  margin: 10px auto;
+  padding: 15px;
+}
+.dashboard .keen-metric.increase {
+  background-color: #44d1ac;
+  border-bottom: 4px solid #3ebc9b;
+}
+.dashboard .keen-metric.increase .keen-metric-title {
+  color: #1e876b;
+  text-shadow: 1px 1px 1px white;
+  font-weight: 400;
+}
+.dashboard .keen-metric.increase .keen-metric-value {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+.dashboard .keen-metric.increase .keen-metric-change-value {
+  font-size: 30px;
+  margin-top: 18px;
+  text-align: left;
+  line-height: 0;
+}
+.dashboard .keen-metric.increase .keen-metric-change-value span {
+  font-size: 14px;
+}
+.dashboard .keen-metric.increase .btn-view-details {
+  display: none;
 }
 .ckbox,
 .rdio {
