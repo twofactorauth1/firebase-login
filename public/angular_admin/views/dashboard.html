@@ -24,17 +24,21 @@
 
     <div class="row">
         <div class="btn-group col-xs-12 template-btns">
-            <button type="button" class="btn btn-default btn-lg col-xs-6 active tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'" data-toggle="tooltip" data-placement="bottom" title="12 Days ago Robin visited your website.">
-                <i class="fa fa-pie-chart"></i>
-                <span class="hidden-xs">Analytics</span>
+            <button type="button" class="btn btn-default btn-lg col-xs-6 active tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
+                <div popover="What are customers doing before they churn?" popover-placement="bottom" popover-trigger="mouseenter" title="12 Days ago Robin visited your website.">
+                    <i class="fa fa-pie-chart"></i>
+                    <span class="hidden-xs">Analytics</span>
+                </div>
             </button>
             <!-- <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'advertising'}" ng-click="activeTab = 'advertising'">
                 <i class="fa fa-bullseye"></i>
                 <span class="hidden-xs">Advertising</span>
             </button> -->
             <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'ecommerce'}" ng-click="activeTab = 'ecommerce'">
-                <i class="fa fa-credit-card"></i>
-                <span class="hidden-xs">Ecommerce</span>
+                <div popover="How do you get Jane to re-open that shopping cart and check out?" popover-trigger="mouseenter" popover-placement="bottom">
+                    <i class="fa fa-credit-card"></i>
+                    <span class="hidden-xs">Ecommerce</span>
+                </div>
             </button>
             <!-- <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'marketing'}" ng-click="activeTab = 'marketing'">
                 <i class="fa fa-bullhorn"></i>
@@ -58,21 +62,23 @@
 
             <div class="row">
                 <div class="col-sm-6 col-md-4">
-                    <div id="pageviews"></div>
+                    <div id="pageviews" tooltip-placement="top" tooltip="Total number of times any page has been viewed on your site."></div>
                 </div>
                 <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="visitDuration">
-                        <span class="keen-metric-value">{{visitDuration}}</span>
-                        <span class="keen-metric-title">Avg. Visit Duration</span>
+                    <div class="keen-widget keen-metric increase" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                        <span class="keen-metric-title mb10">Avg. Visit Duration</span>
+                        <span class="keen-metric-value col-sm-7"><div class="text-right">{{visitDuration}}</div></span>
+                        <span class="keen-metric-change-value col-sm-5"><div class="text-left"><i class="fa fa-chevron-up"></i> 10% </br> <span>previous month</span></div></span>
+                        <div class="clearfix"></div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
                     <div id="pageviews"></div>
                 </div>
                 <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="bounces">
-                        <span class="keen-metric-value">{{bounces}}</span>
+                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="bounces" tooltip-placement="top" tooltip="How many people closed your site without reading anything?">
                         <span class="keen-metric-title">Bounces</span>
+                        <span class="keen-metric-value">{{bounces}}</span>
                     </div>
                 </div>
             </div>
@@ -86,21 +92,25 @@
                         <div class="chart-stage">
                             <div id="location"></div>
                         </div>
-                        <div class="chart-notes">
-                            Notes about this chart
-                        </div>
                     </div>
                 </div>
                 <div class="col-sm-5">
                     <div class="chart-wrapper">
                         <div class="chart-title">
-                            Top Visited Pages
+                            Device
                         </div>
-                        <div class="chart-stage">
-                            <div id="top-visited-pages"></div>
-                        </div>
-                        <div class="chart-notes">
-                            Notes about this chart
+                        <div class="chart-stage" style="padding: 30px;">
+                            <div class="col-xs-6">
+                                <h1 class="center"><i class="fa fa-desktop" style="font-size: 70px;"></i></h1>
+                                <h3 class="center">{{desktop}}</h3>
+                                <h5 class="center">Desktop</h5>
+                            </div>
+                            <div class="col-xs-6">
+                                <h1 class="center"><i class="fa fa-mobile" style="font-size: 70px;"></i></h1>
+                                <h3 class="center">{{mobile}}</h3>
+                                <h5 class="center">Mobile</h5>
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
@@ -116,21 +126,15 @@
                         <div class="chart-stage">
                             <div id="new-vs-returning"></div>
                         </div>
-                        <div class="chart-notes">
-                            Notes about this chart
-                        </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
                     <div class="chart-wrapper">
                         <div class="chart-title">
-                            Device
+                            Top Visited Pages
                         </div>
                         <div class="chart-stage">
-                            <div id="device"></div>
-                        </div>
-                        <div class="chart-notes">
-                            Notes about this chart
+                            <div id="top-visited-pages"></div>
                         </div>
                     </div>
                 </div>
@@ -140,122 +144,7 @@
                             Traffic Sources
                         </div>
                         <div class="chart-stage">
-                            <div id="traffic-sources"></div>
-                        </div>
-                        <div class="chart-notes">
-                            Notes about this chart
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="advertising-section" ng-show="activeTab == 'advertising'">
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Cell Title
-                        </div>
-                        <div class="chart-stage">
-                            <div id="grid-1-1">
-                                <img data-src="holder.js/100%x240/white/text:#grid-1-1">
-                            </div>
-                        </div>
-                        <div class="chart-notes">
-                            Notes about this chart
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Cell Title
-                        </div>
-                        <div class="chart-stage">
-                            <img data-src="holder.js/100%x240/white">
-                        </div>
-                        <div class="chart-notes">
-                            Notes about this chart
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Cell Title
-                        </div>
-                        <div class="chart-stage">
-                            <img data-src="holder.js/100%x120/white">
-                        </div>
-                        <div class="chart-notes">
-                            Notes about this chart
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Cell Title
-                        </div>
-                        <div class="chart-stage">
-                            <img data-src="holder.js/100%x120/white">
-                        </div>
-                        <div class="chart-notes">
-                            Notes about this chart
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Cell Title
-                        </div>
-                        <div class="chart-stage">
-                            <img data-src="holder.js/100%x120/white">
-                        </div>
-                        <div class="chart-notes">
-                            Notes about this chart
-                        </div>
-                    </div>
-                </div>
-                <!-- end of three -->
-                <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Cell Title
-                        </div>
-                        <div class="chart-stage">
-                            <img data-src="holder.js/100%x120/white">
-                        </div>
-                        <div class="chart-notes">
-                            Notes about this chart
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Cell Title
-                        </div>
-                        <div class="chart-stage">
-                            <img data-src="holder.js/100%x120/white">
-                        </div>
-                        <div class="chart-notes">
-                            Notes about this chart
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Cell Title
-                        </div>
-                        <div class="chart-stage">
-                            <img data-src="holder.js/100%x120/white">
+                            <div id="traffic-sources" style="width:400px;"></div>
                         </div>
                     </div>
                 </div>
@@ -264,7 +153,7 @@
 
         <div class="ecommerce-section" ng-show="activeTab == 'ecommerce'">
 
-        	<div class="row">
+            <div class="row">
                 <div class="col-sm-6 col-md-4">
                     <div id="monthly-recurring-revenue"></div>
                 </div>
@@ -425,7 +314,119 @@
             </div> -->
         </div>
 
-        <div class="integrations-section" ng-show="activeTab == 'integrations'">
+       <!--  <div class="advertising-section" ng-show="activeTab == 'advertising'">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <div id="grid-1-1">
+                                <img data-src="holder.js/100%x240/white/text:#grid-1-1">
+                            </div>
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x240/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                        <div class="chart-notes">
+                            Notes about this chart
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Cell Title
+                        </div>
+                        <div class="chart-stage">
+                            <img data-src="holder.js/100%x120/white">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- <div class="integrations-section" ng-show="activeTab == 'integrations'">
         </div>
 
         <div class="marketing-section" ng-show="activeTab == 'marketing'">
@@ -435,7 +436,7 @@
         </div>
 
         <div class="testing-section" ng-show="activeTab == 'testing'">
-        </div>
+        </div> -->
 
     </div>
 </div>

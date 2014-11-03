@@ -1,5 +1,8 @@
 .dashboard {
     background: #e7e7e7;
+    .btn-clearblack {
+        background: rgba(0,0,0,0.1);
+    }
     .chart-wrapper {
         background: #fff;
         border: 1px solid #e2e2e2;
@@ -24,6 +27,31 @@
         padding: 8px 10px 5px;
     }
     .keen-metric {
-        margin-bottom: 10px;
+        margin: 10px auto;
+        padding: 15px;
+        &.increase {
+            background-color: #44d1ac;
+            border-bottom: 4px solid #3ebc9b;
+            .keen-metric-title {
+                color: #1e876b;
+                text-shadow: 1px 1px 1px white;
+                font-weight: 400;
+            }
+            .keen-metric-value {
+                text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+            }
+            .keen-metric-change-value {
+                font-size: 30px;
+                margin-top: 18px;
+                text-align: left;
+                line-height: 0;
+                span {
+                    font-size: 14px;
+                }
+            }
+            .btn-view-details {
+                display: none;
+            }
+        }
     }
 }
