@@ -28,7 +28,7 @@ define([
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
-
+            var subdomainCharLimit = 4;
             $scope.primaryFontStack = '';
             $scope.secondaryFontStack = '';
             $scope.iframeData = {};
@@ -704,6 +704,24 @@ define([
                 $scope.updateIframeComponents();
             };
 
+            $scope.checkIfSubdomainExists = function () {
+                var parent_div = $('div.form-group.subdomain');
+                    UserService.checkDuplicateSubdomain($scope.account.subdomain,$scope.account._id, function(result){
+                    if(result === "true")
+                    {  
+                        parent_div.addClass('has-error');
+                        parent_div.find('span.error').remove();
+                        parent_div.append("<span class='error help-block'>Domain already exists</span>");
+                    }
+                    else
+                    {                        
+                        UserService.putAccount($scope.account, function (account) {
+                        parent_div.removeClass('has-error');
+                        parent_div.find('span.error').remove(); 
+                        });
+                    }
+                });               
+            }
         }
     ]);
 });

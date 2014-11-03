@@ -103,5 +103,13 @@ define(['app'], function (app) {
 				fn(data);
 			});
 		};
+
+		this.checkDuplicateSubdomain = function (subDomain, accountId , fn) {
+			var apiUrl = baseUrl + ['account',  subDomain, accountId, 'duplicate'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
 	});
 });
