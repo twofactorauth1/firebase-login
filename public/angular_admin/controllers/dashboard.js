@@ -61,18 +61,18 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                         }
                     });
 
-                    var pageviewsPreviousReport = new gapi.analytics.report.Data({
-                        query: {
-                            ids: 'ga:82461709',
-                            metrics: 'ga:pageviews',
-                            dimensions: 'ga:date',
-                            'start-date': '60daysAgo',
-                            'end-date': '30daysAgo'
-                        }
-                    });
-
                     pageviewsReport.on('success', function(response) {
                         $scope.pageviews = response.totalsForAllResults['ga:pageviews'];
+                        var pageviewsPreviousReport = new gapi.analytics.report.Data({
+                            query: {
+                                ids: 'ga:82461709',
+                                metrics: 'ga:pageviews',
+                                dimensions: 'ga:date',
+                                'start-date': '60daysAgo',
+                                'end-date': '30daysAgo'
+                            }
+                        });
+
                         pageviewsPreviousReport.on('success', function(response2) {
                             var previous = response2.totalsForAllResults['ga:pageviews'];
                             console.log('previcous' , previous);
