@@ -120,9 +120,9 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group subdomain">
                         <label for="current-domain" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="This is the domain that was automatically created when you signed up.">Indigenous Domain</label>
-                        <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.subdomain">
+                        <input id="current-domain" class="form-control input-lg" type="text" ng-model="account.subdomain" ng-change = "checkIfSubdomainExists()">
                     </div>
                 </div>
             </tab>

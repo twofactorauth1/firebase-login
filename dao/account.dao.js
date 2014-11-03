@@ -29,6 +29,10 @@ var dao = {
     },
 
 
+    getAccountsBySubdomain: function (subdomain, accountId, fn) {
+        this.findOne({ _id: { $ne: accountId }, 'subdomain': subdomain}, fn);
+    },
+
     getAccountBySubdomain: function (subdomain, fn) {
         this.findOne({'subdomain': subdomain}, fn);
     },
