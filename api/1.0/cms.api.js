@@ -565,6 +565,11 @@ _.extend(api.prototype, baseApi.prototype, {
                 visibility : true
             });
 
+            if(componentObj.cmpVersion && componentObj.cmpVersion !== null)
+            {
+                component.attributes.version = componentObj.cmpVersion;
+            }
+
         }
 
         cmsManager.addPageComponent(pageId, component.attributes, function (err, value) {

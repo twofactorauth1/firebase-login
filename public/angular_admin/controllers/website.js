@@ -422,9 +422,20 @@ define([
 
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
-                WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, function(data) {
-                    if (data.components) {
-                        var newComponent = data.components[data.components.length - 1];
+                var cmpVersion = null;
+                if($scope.selectedTheme)
+                {
+                    var selectedType = _.findWhere($scope.selectedTheme.config.components, {
+                        type: $scope.selectedComponent.type
+                    });
+                    if(selectedType)
+                    {
+                        cmpVersion  = selectedType.version;
+                    }
+                }
+                WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, cmpVersion,  function(data) {
+                    if (data.components) { 
+                        var newComponent = data.components[data.components.length - 1];                       
                         var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
                         $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
@@ -581,6 +592,8 @@ define([
             };
 
             $scope.changeSelectedTheme = function(theme) {
+           
+                console.log("selected" + theme)
                 $scope.selectedTheme = theme;
             };
 
