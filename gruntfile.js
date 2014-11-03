@@ -239,6 +239,7 @@ module.exports = function(grunt) {
                         'public/scripts/services/pagesService.js',
                         'public/scripts/services/postsService.js',
                         'public/scripts/services/postService.js',
+                        'public/scripts/services/productService.js',
                         'public/scripts/filters/CreateUrlFilter.js',
                         'public/scripts/filters/generateURLforLinks.js',
                         'public/scripts/filters/getByProperty.js',
