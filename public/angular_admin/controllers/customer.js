@@ -7,7 +7,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     $scope.customerDisplayFormat = 'first';
 
     $scope.customerScrollBusy = false;
-    $scope.customerScrollLimit = 40;
+    $scope.customerScrollLimit = 4;
     $scope.customerScrollOffset = 0;
     $scope.renderedCustomers = [];
 

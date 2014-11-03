@@ -24,7 +24,8 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                   initialValues: {
                     number: "000000000000" + scope.cards.data[0].last4,
                     expMonth: scope.cards.data[0].exp_month,
-                    expYear: scope.cards.data[0].exp_year
+                    expYear: scope.cards.data[0].exp_year,
+                    type: scope.cards.data[0].type.toLowerCase()
                   }
                 });
               } else {
@@ -41,7 +42,6 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
             exp_month: $('#cc_exp_month').val(),
             exp_year: $('#cc_exp_year').val()
           };
-
           PaymentService.getStripeCardToken(cardInput, function(token) {
             if (scope.user.stripeId) {
               UserService.postAccountBilling(scope.user.stripeId, token, function(billing) {
