@@ -34,24 +34,34 @@
             border-bottom: 4px solid #3ebc9b;
             .keen-metric-title {
                 color: #1e876b;
-                text-shadow: 1px 1px 1px white;
-                font-weight: 400;
             }
-            .keen-metric-value {
-                text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+        &.decrease {
+            background-color: #fc7551;
+            border-bottom: 4px solid #e36a49;
+            .keen-metric-title {
+                color: #b12f0c;
             }
-            .keen-metric-change-value {
-                font-size: 30px;
-                margin-top: 18px;
-                text-align: left;
-                line-height: 0;
-                span {
-                    font-size: 14px;
-                }
+        }
+        .keen-metric-title {
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+            font-weight: 400;
+        }
+        .keen-metric-value {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+            font-size: 65px;
+        }
+        .keen-metric-change-value {
+            font-size: 30px;
+            margin-top: 18px;
+            text-align: left;
+            line-height: 0;
+            span {
+                font-size: 14px;
             }
-            .btn-view-details {
-                display: none;
-            }
+        }
+        .btn-view-details {
+            display: none;
         }
     }
 }

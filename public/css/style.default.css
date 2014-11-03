@@ -17990,22 +17990,32 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .dashboard .keen-metric.increase .keen-metric-title {
   color: #1e876b;
-  text-shadow: 1px 1px 1px white;
+}
+.dashboard .keen-metric.decrease {
+  background-color: #fc7551;
+  border-bottom: 4px solid #e36a49;
+}
+.dashboard .keen-metric.decrease .keen-metric-title {
+  color: #b12f0c;
+}
+.dashboard .keen-metric .keen-metric-title {
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
   font-weight: 400;
 }
-.dashboard .keen-metric.increase .keen-metric-value {
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+.dashboard .keen-metric .keen-metric-value {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  font-size: 65px;
 }
-.dashboard .keen-metric.increase .keen-metric-change-value {
+.dashboard .keen-metric .keen-metric-change-value {
   font-size: 30px;
   margin-top: 18px;
   text-align: left;
   line-height: 0;
 }
-.dashboard .keen-metric.increase .keen-metric-change-value span {
+.dashboard .keen-metric .keen-metric-change-value span {
   font-size: 14px;
 }
-.dashboard .keen-metric.increase .btn-view-details {
+.dashboard .keen-metric .btn-view-details {
   display: none;
 }
 .ckbox,

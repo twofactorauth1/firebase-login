@@ -61,24 +61,28 @@
         <div class="analytics-section" ng-show="activeTab == 'analytics'">
 
             <div class="row">
-                <div class="col-sm-6 col-md-4">
-                    <div id="pageviews" tooltip-placement="top" tooltip="Total number of times any page has been viewed on your site."></div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric increase" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
-                        <span class="keen-metric-title mb10">Avg. Visit Duration</span>
-                        <span class="keen-metric-value col-sm-7"><div class="text-right">{{visitDuration}}</div></span>
-                        <span class="keen-metric-change-value col-sm-5"><div class="text-left"><i class="fa fa-chevron-up"></i> 10% </br> <span>previous month</span></div></span>
+                <div class="col-sm-6 col-md-3">
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how many times all pages were viewed on you site.">
+                        <span class="keen-metric-title mb10">Pageviews</span>
+                        <span class="keen-metric-value col-sm-6"><div class="text-right"> {{pageviews}}</div></span>
+                        <span class="keen-metric-change-value col-sm-6"><div class="center"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}% </br> <span>previous month</span></div></span>
                         <div class="clearfix"></div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-4">
-                    <div id="pageviews"></div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                        <span class="keen-metric-title mb10">Avg. Visit Duration</span>
+                        <span class="keen-metric-value col-sm-6"><div class="text-right"> {{visitDuration}}</div></span>
+                        <span class="keen-metric-change-value col-sm-6"><div class="center"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}% </br> <span>previous month</span></div></span>
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="bounces" tooltip-placement="top" tooltip="How many people closed your site without reading anything?">
-                        <span class="keen-metric-title">Bounces</span>
-                        <span class="keen-metric-value">{{bounces}}</span>
+                <div class="col-sm-6 col-md-3">
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': bouncesPercent < 0, 'increase': bouncesPercent > 0 }" ng-if="bounces" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                        <span class="keen-metric-title mb10">Bounces</span>
+                        <span class="keen-metric-value col-sm-6"><div class="text-right"> {{bounces}}</div></span>
+                        <span class="keen-metric-change-value col-sm-6"><div class="center"><i ng-class="{'fa fa-chevron-down': bouncesPercent < 0, 'fa fa-chevron-up': bouncesPercent > 0 }"></i> {{bouncesPercent}}% </br> <span>previous month</span></div></span>
+                        <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
