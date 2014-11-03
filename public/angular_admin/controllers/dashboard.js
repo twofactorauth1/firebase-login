@@ -15,6 +15,21 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
             requestType: "jsonp" // String (optional: jsonp, xhr, beacon)
         });
 
+        function secToTime(duration) {
+                var minutes = parseInt(Math.floor(duration / 60));
+                var seconds = parseInt(duration - minutes * 60)
+
+            minutes = (minutes < 10) ? "0" + minutes : minutes;
+            seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+            return minutes + ":" + seconds;
+        };
+
+        function calculatePercentage(oldval, newval) {
+            var result = ((newval - oldval) / newval) * 100;
+            return Math.round(result*100/100);
+        };
+
         PaymentService.getCustomers(function(data) {
             $scope.customers = data;
 
@@ -32,29 +47,47 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                 Keen.ready(function() {
                     ngProgress.complete();
 
-
-
-
-
                     // ----------------------------------------
                     // Pageviews Metric
                     // ----------------------------------------
 
-                    var count = new Keen.Query("count", {
-                        eventCollection: "pageviews"
+                    var pageviewsReport = new gapi.analytics.report.Data({
+                        query: {
+                            ids: 'ga:82461709',
+                            metrics: 'ga:pageviews',
+                            dimensions: 'ga:date',
+                            'start-date': '30daysAgo',
+                            'end-date': 'today'
+                        }
                     });
-                    client.draw(count, document.getElementById("pageviews"), {
-                        chartType: "metric",
-                        title: "Page Views",
-                        width: 345,
-                        colors: ["#49c5b1"]
+
+                    var pageviewsPreviousReport = new gapi.analytics.report.Data({
+                        query: {
+                            ids: 'ga:82461709',
+                            metrics: 'ga:pageviews',
+                            dimensions: 'ga:date',
+                            'start-date': '60daysAgo',
+                            'end-date': '30daysAgo'
+                        }
                     });
+
+                    pageviewsReport.on('success', function(response) {
+                        $scope.pageviews = response.totalsForAllResults['ga:pageviews'];
+                        pageviewsPreviousReport.on('success', function(response2) {
+                            var previous = response2.totalsForAllResults['ga:pageviews'];
+                            console.log('previcous' , previous);
+                            $scope.pageviewsPercent = calculatePercentage(previous, $scope.pageviews);
+                        });
+                        pageviewsPreviousReport.execute();
+                    });
+
+                    pageviewsReport.execute();
 
                     // ======================================
                     // Bounces
                     // ======================================
 
-                    var bounceReport = new gapi.analytics.report.Data({
+                    var bouncesReport = new gapi.analytics.report.Data({
                         query: {
                             ids: 'ga:82461709',
                             metrics: 'ga:bounces',
@@ -64,11 +97,26 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                         }
                     });
 
-                    bounceReport.on('success', function(response) {
-                        $scope.bounces = response.totalsForAllResults['ga:bounces'];
+                    var bouncesPreviousReport = new gapi.analytics.report.Data({
+                        query: {
+                            ids: 'ga:82461709',
+                            metrics: 'ga:bounces',
+                            dimensions: 'ga:date',
+                            'start-date': '60daysAgo',
+                            'end-date': '30daysAgo'
+                        }
                     });
 
-                    bounceReport.execute();
+                    bouncesReport.on('success', function(response) {
+                        $scope.bounces = response.totalsForAllResults['ga:bounces'];
+                            bouncesPreviousReport.on('success', function(response) {
+                                var previous = response.totalsForAllResults['ga:bounces'];
+                                $scope.bouncesPercent = calculatePercentage(previous, $scope.bounces);
+                            });
+                            bouncesPreviousReport.execute();
+                    });
+
+                    bouncesReport.execute();
 
                     // ----------------------------------------
                     // Average Visit Duration
@@ -84,6 +132,46 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                     //     var durationTime = minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
                     //     $scope.visitDuration = durationTime
                     // });
+
+                    var rawAvgDuration;
+
+                    var report = new gapi.analytics.report.Data({
+                        query: {
+                            ids: 'ga:82461709',
+                            metrics: 'ga:sessions,ga:sessionDuration',
+                            dimensions: 'ga:date',
+                            'start-date': '30daysAgo',
+                            'end-date': 'yesterday'
+                        }
+                    });
+
+                    var sessionDurationPreviousMonth = new gapi.analytics.report.Data({
+                        query: {
+                            ids: 'ga:82461709',
+                            metrics: 'ga:sessions,ga:sessionDuration',
+                            dimensions: 'ga:date',
+                            'start-date': '60daysAgo',
+                            'end-date': '30daysAgo'
+                        }
+                    });
+
+                    report.on('success', function(response) {
+                        var totalDuration = response.totalsForAllResults['ga:sessionDuration'];
+                        var totalResults = response.totalsForAllResults['ga:sessions'];
+                        var averageDuration = parseInt(totalDuration) / parseInt(totalResults);
+                        rawAvgDuration = averageDuration;
+                        $scope.visitDuration = secToTime(averageDuration);
+                        sessionDurationPreviousMonth.on('success', function(response) {
+                            var totalDuration2 = response.totalsForAllResults['ga:sessionDuration'];
+                            var totalResults2 = response.totalsForAllResults['ga:sessions'];
+                            var averageDuration2 = parseInt(totalDuration2) / parseInt(totalResults2);
+                            $scope.visitDurationPercent = calculatePercentage(averageDuration2, rawAvgDuration);
+                        });
+
+                        sessionDurationPreviousMonth.execute();
+                    });
+
+                    report.execute();
 
                     // ----------------------------------------
                     // Top Pageviews
@@ -461,31 +549,6 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
 
                     // dataChart.execute();
 
-                    // ======================================
-                    // Session Duration
-                    // ======================================
-
-                    var report = new gapi.analytics.report.Data({
-                        query: {
-                            ids: 'ga:82461709',
-                            metrics: 'ga:sessionDuration',
-                            dimensions: 'ga:date',
-                            'start-date': '30daysAgo',
-                            'end-date': 'yesterday'
-                        }
-                    });
-
-                    report.on('success', function(response) {
-                        var totalDuration = response.totalsForAllResults['ga:sessionDuration'];
-                        var totalResults = response.totalResults;
-                        var averageDuration = parseInt(totalDuration) / parseInt(totalResults);
-                        var minutes = Math.floor(averageDuration / 60000);
-                        var seconds = ((averageDuration % 60000) / 1000).toFixed(0);
-                        var durationTime = minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-                        $scope.visitDuration = durationTime;
-                    });
-
-                    report.execute();
 
                     // ======================================
                     // Traffic Sources

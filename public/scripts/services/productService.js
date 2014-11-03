@@ -3,7 +3,7 @@
  *
  * */
 'use strict';
-mainApp.service('ProductService', function ($http) {
+mainApp.service('productService', function ($http) {
     var baseUrl = '/api/1.0/';
     this.getAllProducts = function (fn) {
         var apiUrl = baseUrl + ['products'].join('/');
