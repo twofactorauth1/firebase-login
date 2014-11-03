@@ -394,8 +394,12 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                         var data = google.visualization.arrayToDataTable(data);
 
                         var options = {
-                            pieHole: 0.4,
-                            width: 'auto'
+                            pieHole: 0.5,
+                            width: 310,
+                            height: 300,
+                            legend: {
+                                position: 'bottom'
+                            }
                         };
 
                         var chart = new google.visualization.PieChart(document.getElementById('traffic-sources'));
@@ -454,7 +458,7 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                         query: {
                             ids: 'ga:82461709',
                             metrics: 'ga:users',
-                            dimensions: 'ga:country'
+                            dimensions: 'ga:region'
                         }
                     });
 
@@ -470,7 +474,11 @@ define(['app', 'ngProgress', 'd3', 'paymentService'], function(app) {
                         };
                         var data = google.visualization.arrayToDataTable( data );
 
-                        var options = {};
+                        var options = {
+                            region: 'US',
+                            colorAxis:  {minValue: 0,  colors: ['#97cffc', '#2c3e50']},
+                            resolution: "provinces"
+                        };
 
                         var chart = new google.visualization.GeoChart(document.getElementById('location'));
 
