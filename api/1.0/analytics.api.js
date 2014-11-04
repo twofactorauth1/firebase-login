@@ -9,6 +9,7 @@ var baseApi = require('../base.api');
 var cookies = require('../../utils/cookieutil');
 var analyticsDao = require('../../analytics/dao/analytics.dao.js');
 var analyticsManager = require('../../analytics/analytics_manager.js');
+var async = require('async');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -45,11 +46,21 @@ _.extend(api.prototype, baseApi.prototype, {
         var request = require('superagent');
 
         var msg = {};
+        var messagesToSend = [];
         if(req.body.mandrill_events) {
             try {
                 msg = JSON.parse(req.body.mandrill_events);
                 if(_.isArray(msg)) {
-                    msg = {'mandrill_events': JSON.parse(req.body.mandrill_events)};
+                    //msg = {'mandrill_events': JSON.parse(req.body.mandrill_events)};
+                    _.each(msg, function(value, key, list){
+                        var obj = {};
+                        var name = 'mandrill_' + value.event;
+                        obj.collection = name;
+                        obj.value = value;
+                        messagesToSend.push(obj);
+                    });
+                } else {
+                    messagesToSend.push(msg);
                 }
             } catch(err) {
                 self.log.debug('error parsing events: ' + err);
@@ -58,21 +69,31 @@ _.extend(api.prototype, baseApi.prototype, {
 
         } else {
             msg = req.body;
+            messagesToSend.push(msg);
         }
-        self.log.info('Sending the following to keen:');
-        console.dir(msg);
-        var url = 'https://api.keen.io/3.0/projects/54528c1380a7bd6a92e17d29/events/mandrill_events?api_key=c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a';
-        var newrequest = request.post(url)
-            //.set('cookie', cookie)
-            .send(msg)
-            .end(function(error, result){
-                if(error) {
-                    self.log.error("received error: " + error);
-                } else {
-                    //console.dir(result);
-                }
+        //self.log.info('Sending the following to keen:');
+        //console.dir(messagesToSend);
+        var url = "https://api.keen.io/3.0/projects/54528c1380a7bd6a92e17d29/events/";
+        var api_key = "c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a";
+        async.eachSeries(messagesToSend, function(message, callback){
+            //var url = 'https://api.keen.io/3.0/projects/54528c1380a7bd6a92e17d29/events/mandrill_events?api_key=c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a';
+
+            var newrequest = request.post(url + message.collection + '?api_key=' + api_key)
+                .send(message.value)
+                .end(function(error, result){
+                    if(error) {
+                        self.log.error("received error: " + error);
+                    }
+                });
+            callback();
+        }, function(err){
+            if(err) {
+                console.log('Error duing send to keen: ' + err);
+            } else {
                 self.log.debug('<< sendToKeen');
-            });
+            }
+        });
+
         //TODO: Verify message from mandirll
         //TODO: parameterize url
         self.sendResult(res, {'ok': 'ok'});
