@@ -4,7 +4,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
       googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
     });
     //routes
-    app.config(function ($stateProvider, $urlRouterProvider) {
+    app.config(function ($stateProvider, $urlRouterProvider,$httpProvider) {
         $urlRouterProvider.otherwise("/website");
 
         $stateProvider
@@ -80,6 +80,24 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
                 controller: 'WebsiteCtrl',
                 controllerUrl: '/angular_admin/controllers/website.js'
             }));
+
+            var interceptor =
+                function ($q, $window) {
+                    return {
+                        'responseError': function (rejection) { // Handle errors
+                            switch (rejection.status) {
+                                case 401:
+                                    $window.location = "/login";
+                                    break;
+                                case 403:   
+                                    $window.location = "/logout";             
+                                    break;
+                            }
+                            return $q.reject(rejection);
+                        }
+                    }
+                }            
+            $httpProvider.interceptors.push(interceptor);
     });
 
     $('#preloader').fadeOut();
