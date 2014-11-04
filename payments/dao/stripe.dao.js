@@ -163,8 +163,8 @@ var dao = {
     listStripeCustomers: function(accountId, limit, fn) {
         var self = this;
         self.log.debug('>> listStripeCustomers');
-        var _limit = limit ||10;
-        stripe.customers.list({ limit: _limit }, function(err, customers) {
+        var _limit = limit || 0;
+        stripe.customers.list(function(err, customers) {
             // asynchronously called
             if (err) {
                 fn(err, customers);
@@ -172,7 +172,7 @@ var dao = {
                 return;
             }
 
-            self.log.debug('<< listStripeCustomers');
+            self.log.debug('<< listStripeCustomers', customers);
             return fn(err, customers);
         });
     },

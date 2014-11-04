@@ -28,6 +28,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
         app.put(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
         app.get(this.url(':subdomain/available'), this.checkSubdomainAvailability.bind(this));
+        app.get(this.url(':subdomain/:accountId/duplicate'), this.checkSubdomainDuplicacy.bind(this));
         //GET
         //app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
         app.get(this.url(''), this.getCurrentAccount.bind(this)); //Temp Added
@@ -397,6 +398,27 @@ _.extend(api.prototype, baseApi.prototype, {
                 res.send('true');
             } else {
                 res.send('false');
+            }
+        });
+
+    },
+
+    checkSubdomainDuplicacy: function(req, res) {
+        var self = this;
+        self.log.debug('>> checkSubdomainDuplicacy');
+        var subdomain = req.params.subdomain;
+        var accountId = req.params.accountId;
+        accountId = parseInt(accountId);
+        self.log.debug('>> subdomain = ' + subdomain );
+        self.log.debug('>> accountId = ' + accountId );
+
+        accountDao.getAccountsBySubdomain(subdomain, accountId, function(err, value){
+            if(err) {
+                res.wrapError(resp,500,null,err,value);
+            } else if(value === null) {
+                res.send("false");
+            } else {
+                res.send("true");
             }
         });
 

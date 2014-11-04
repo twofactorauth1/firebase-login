@@ -785,11 +785,15 @@ _.extend(api.prototype, baseApi.prototype, {
                         title: componentObj.title,
                         visibility : true
                     });
+                    if(componentObj.cmpVersion && componentObj.cmpVersion !== null) {
+                        component.attributes.version = componentObj.cmpVersion;
+                    }
 
                 }
 
                 cmsManager.addPageComponent(pageId, component.attributes, function (err, value) {
                     self.log.debug('<< addComponentToPageID' + pageId);
+                    self.log.debug('<< addComponentToPageComponent' + componentObj);
                     self.sendResultOrError(res, err, value, "Error adding components to page");
                     self = null;
                 });

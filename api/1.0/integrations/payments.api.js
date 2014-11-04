@@ -98,7 +98,6 @@ _.extend(api.prototype, baseApi.prototype, {
     listCustomers: function(req, resp) {
 
         var self = this;
-        self.log.debug('>> listCustomers');
         var accountId = self.accountId(req);
         var limit = req.body.limit;
 
@@ -108,25 +107,26 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 stripeDao.listStripeCustomers(accountId, limit, function(err, customers){
 
-                    if(accountId > 0) {
-                        customerLinkDao.getLinksByAccountId(accountId, function(err, accounts){
-                            if(err) {
-                                self.wrapError(resp, null, 500, 'Error building customer list.');
-                            }
-                            //verify customer/account relationship
-                            var customerIDs = _.map(accounts, function(account){return account.get('customerId');});
-                            var results = [];
-                            if(customers && customers.data) {
-                                _.each(customers.data, function(elem){
-                                    if(_.contains(customerIDs, elem.id)) {
-                                        results.push(elem);
-                                    }
-                                });
-                            }
 
-                            self.log.debug('<< listCustomers');
-                            self.sendResultOrError(resp, err, results, "Error listing Stripe Customers");
-                        });
+                    if(accountId > 0) {//TODO: fix this logic.  We no longer assume mainAccountId === 0
+//                        customerLinkDao.getLinksByAccountId(accountId, function(err, accounts){
+//                            if(err) {
+//                                self.wrapError(resp, null, 500, 'Error building customer list.');
+//                            }
+//                            //verify customer/account relationship
+//                            var customerIDs = _.map(accounts, function(account){return account.get('customerId');});
+//                            var results = [];
+//                            if(customers && customers.data) {
+//                                _.each(customers.data, function(elem){
+//                                    if(_.contains(customerIDs, elem.id)) {
+//                                        results.push(elem);
+//                                    }
+//                                });
+//                            }
+//
+//                            self.log.debug('<< listCustomers');
+//                            self.sendResultOrError(resp, err, results, "Error listing Stripe Customers");
+//                        });
 
                     } else {
                         //accountId ==0; return ALL customers
@@ -135,6 +135,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
 
                 });
+
             }
         });
 

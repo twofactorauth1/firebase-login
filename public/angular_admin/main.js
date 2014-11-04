@@ -29,7 +29,7 @@ require.config({
         'webfontloader': 'libs/jd-fontselect/dist/libs/webfontloader',
         'jdfontselect': 'libs/jd-fontselect/dist/angular-fontselect.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
-        'd3': 'libs/d3/d3',
+        'd3': 'libs/d3/d3.min',
         'c3': 'libs/c3/c3.min',
         'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
         'angularUiRouter': 'libs/angular-ui-router/release/angular-ui-router.min',
@@ -46,6 +46,7 @@ require.config({
         "ngHeadroom":"libs/headroom.js/dist/angular.headroom.min",
         "bootstrap-confirmation": "libs/bootstrap-confirmation/bootstrap-confirmation",
         "moment": 'libs/moment/min/moment.min',
+        'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -160,7 +161,8 @@ require.config({
         'bootstrap-iconpicker': {deps: ['jquery']},
         'unsafeHtml': {deps: ['angular']},
         "bootstrap-confirmation" : {deps: ['bootstrap']},
-        'jdfontselect': {deps: ['angular','webfontloader']}
+        'jdfontselect': {deps: ['angular','webfontloader']},
+        'ngInfiniteScroll': {deps: ['angular']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
