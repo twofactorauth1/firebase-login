@@ -35,17 +35,23 @@ _.extend(api.prototype, baseApi.prototype, {
             return this.wrapError(resp, 400, "Invalid parameter", "Invalid parameter provided for accountId");
         }
 
-        if (accountId > 0 && !this.sm.canReadAccount(req, accountId)) {
-            return this.wrapError(resp, 401, "Unauthorized access to this account", "Unauthorized access to account [" + accountId + "]");
-        }
-
-        authenticationDao.getAuthenticatedUrlForAccount(accountId, this.userId(req), req.query.path, null, function(err, value) {
-            if (err) {
-                return self.wrapError(resp, 500, "An error occurred", err, value);
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_ACCOUNT, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(req);
+            }
+            if (accountId > 0 && !this.sm.canReadAccount(req, accountId)) {
+                return this.wrapError(resp, 401, "Unauthorized access to this account", "Unauthorized access to account [" + accountId + "]");
             }
 
-            resp.send({url:value});
+            authenticationDao.getAuthenticatedUrlForAccount(accountId, this.userId(req), req.query.path, null, function(err, value) {
+                if (err) {
+                    return self.wrapError(resp, 500, "An error occurred", err, value);
+                }
+
+                resp.send({url:value});
+            });
         });
+
     }
 });
 

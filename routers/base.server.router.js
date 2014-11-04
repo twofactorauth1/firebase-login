@@ -7,7 +7,7 @@
 
 var cookies = require('../utils/cookieutil');
 var authenticationDao = require('../dao/authentication.dao');
-var securityManager = require('../security/securitymanager');
+var securityManager = require('../security/sm');
 var logger = $$.g.getLogger("baserouter");
 var urlUtils = require('../utils/urlutils.js');
 

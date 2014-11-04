@@ -14,7 +14,7 @@ var api = function () {
 
 _.extend(api.prototype, baseApi.prototype, {
 
-    base: "campaignmanager",
+    base: "campaignmanager", //TODO: this should be renamed.  campaigns
 
     log: $$.g.getLogger("campaignmanager.api"),
 
@@ -33,7 +33,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getCampaign: function (req, resp) {
         var self = this;
-
+        //TODO: add security - VIEW_CAMPAIGN
         campaignManager.getCampaign(req.params.id, function (err, value) {
             if (err) {
                 var errorMsg = "There was an error getting campaign " + req.params.id + ": " + err.message;
@@ -49,9 +49,12 @@ _.extend(api.prototype, baseApi.prototype, {
     findCampaigns: function (req, resp) {
         var self = this;
 
+        var accountId = parseInt(self.accountId(req));
+        //TODO: add security - VIEW_CAMPAIGN
         if (!req.query._id) {
             req.query._id = { $ne: "__counter__" };
         }
+        req.query.accountId = accountId;
 
         campaignManager.findCampaigns(req.query, function (err, value) {
             if (err) {
@@ -68,7 +71,10 @@ _.extend(api.prototype, baseApi.prototype, {
     findCampaignMessages: function (req, resp) {
         var self = this;
 
+        var accountId = parseInt(self.accountId(req));
+        //TODO: add security - VIEW_CAMPAIGN
         req.query.campaignId = req.params.id;
+        req.query.accountId = accountId;
 
         if (!req.query._id) {
             req.query._id = { $ne: "__counter__" };
@@ -92,6 +98,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
     cancelCampaign: function (req, resp) {
         var self = this;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: add security - MODIFY_CAMPAIGN
 
         self.log.debug("cancel campaign " + req.params.id);
 
@@ -109,6 +117,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
     cancelContactCampaign: function (req, resp) {
         var self = this;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: add security - MODIFY_CAMPAIGN
 
         self.log.debug("cancel contact " + req.params.contactid + " in campaign " + req.params.id);
 
@@ -128,10 +138,13 @@ _.extend(api.prototype, baseApi.prototype, {
     createCampaign: function (req, resp) {
 
         var self = this;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: add security - MODIFY_CAMPAIGN
+
 
         self.log.debug("creating campaign: " + req.body);
 
-        campaignManager.createMandrillCampaign(
+        campaignManager.createMandrillCampaign(//TODO: Add accountId
             req.body.name,
             req.body.description,
             req.body.revision,
@@ -153,6 +166,9 @@ _.extend(api.prototype, baseApi.prototype, {
     addContactToCampaign: function (req, resp) {
         var self = this;
 
+        var accountId = parseInt(self.accountId(req));
+        //TODO: add security - MODIFY_CAMPAIGN
+
         self.log.debug("add contact " + req.params.contactid + " to campaign " + req.params.id);
 
         campaignManager.addContactToMandrillCampaign(
@@ -171,11 +187,16 @@ _.extend(api.prototype, baseApi.prototype, {
             })
     },
 
+
     subscribeToVARCourse: function (req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        //TODO: add security - MODIFY_CAMPAIGN
+
         var toEmail = req.body.email;
         var course = req.body.course;
         var timezoneOffset = req.body.timezoneOffset;
-        var self = this;
+
         if (!course) {
             self.wrapError(resp,500,"","No course provided","");
         } else {

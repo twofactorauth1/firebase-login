@@ -11,6 +11,7 @@ var contactDao = require('../dao/contact.dao.js');
 var paymentDao = require('../payments/dao/payment.dao.js');
 var blogPostDao = require('../cms/dao/blogpost.dao.js');
 var _log = $$.g.getLogger("testhelpers");
+var userManager = require('../dao/user.manager');
 
 module.exports = {
 
@@ -19,7 +20,7 @@ module.exports = {
             fn = testClass;
             testClass = null;
         }
-        userDao.createUserFromUsernamePassword("__test_user_" + $$.u.idutils.generateUniqueAlphaNumeric(), "password", "testuser@indigenous.io", null, function (err, value) {
+        userManager.createAccountAndUser("__test_user_" + $$.u.idutils.generateUniqueAlphaNumeric(), "password", "testuser@indigenous.io", null, function (err, value) {
             if (err) {
                 throw Error("Failed to create test user: " + err.toString());
             }
