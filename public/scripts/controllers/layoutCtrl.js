@@ -319,6 +319,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             accountToken: data.token
                         };
 
+                        //get the token
+                        PaymentService.getStripeCardToken(newAccount.card, function(token) {
+                            newUser.cardToken = token;
+                            newUser.plan = $scope.selectedPlan;
+                            userService.initializeUser(newUser, function(data){
+                                window.location.replace(newUser.accountUrl);
+                            });
+                        });
+
+                        /*
                         userService.createUser(newUser, function(data) {
                             var newUser = data;
                             PaymentService.getStripeCardToken(newAccount.card, function(token) {
@@ -330,7 +340,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                     // });
                                 });
                             });
-                        });
+                        });*/
                     });
                 });
             };

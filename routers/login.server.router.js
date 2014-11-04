@@ -15,6 +15,7 @@ var LoginView = require('../views/login.server.view');
 var ForgotPasswordView = require('../views/forgotpassword.server.view');
 var SignupView = require('../views/signup.server.view');
 var urlUtils = require('../utils/urlutils');
+var userManager = require('../dao/user.manager');
 
 
 var router = function () {
@@ -252,7 +253,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //ensure we don't have another user with this username;
         var accountToken = cookies.getAccountToken(req);
 
-        userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function (err, value) {
+
+        userManager.createAccountAndUser(username, password1, email, accountToken, function (err, value) {
             if (!err) {
 
                 req.login(value, function (err) {

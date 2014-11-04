@@ -27,11 +27,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('webhook/event'), this.verifyEvent, this.showOk.bind(this));
 
         //event CRUDL
-        app.get(this.url('events'), this.isAuthApi, this.listEvents.bind(this));
-        app.post(this.url('events'), this.isAuthApi, this.createEvent.bind(this));
-        app.get(this.url('events/:id'), this.isAuthApi, this.getEvent.bind(this));
-        app.post(this.url('events/:id'), this.isAuthApi, this.updateEvent.bind(this));
-        app.delete(this.url('events/:id'), this.isAuthApi, this.deleteEvent.bind(this));
+        app.get(this.url('events'), this.isAuthAndSubscribedApi.bind(this), this.listEvents.bind(this));
+        app.post(this.url('events'), this.isAuthAndSubscribedApi.bind(this), this.createEvent.bind(this));
+        app.get(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.getEvent.bind(this));
+        app.post(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEvent.bind(this));
+        app.delete(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEvent.bind(this));
 
         app.post(this.url('mandrill/event'), this.sendToKeen.bind(this));
         //app.post(this.url('mandrill/event'), this.sendToKeen.bind(this));
@@ -103,70 +103,104 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     listEvents: function(req, res) {
-        //TODO - add granular security
-
         var self = this;
         var accountId = parseInt(self.accountId(req));
-        var skip = req.query['skip'];
-        var limit = req.query['limit'];
-        self.log.debug('>> listEvents');
-        analyticsManager.listEvents(accountId, limit, skip, function(err, eventList){
-            self.log.debug('<< listEvents');
-            self.sendResultOrError(res, err, eventList, "Error listing Analytic Events");
+
+        self.checkPermission(req, self.sc.privs.VIEW_ANALYTICS, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var skip = req.query['skip'];
+                var limit = req.query['limit'];
+                self.log.debug('>> listEvents');
+                analyticsManager.listEvents(accountId, limit, skip, function(err, eventList){
+                    self.log.debug('<< listEvents');
+                    self.sendResultOrError(res, err, eventList, "Error listing Analytic Events");
+                });
+            }
         });
     },
 
     createEvent: function(req, res) {
         var self = this;
-        //TODO - add granular security
+        var accountId = parseInt(self.accountId(req));
 
         self.log.debug('>> createEvent');
-        var event = req.body;
-        event.accountId = parseInt(self.accountId(req));
-        analyticsManager.createEvent(event, function(err, value){
-            self.log.debug('<< createEvent');
-            self.sendResultOrError(res, err, value, "Error creating Analytic Event");
+        self.checkPermission(req, self.sc.privs.MODIFY_ANALYTICS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var event = req.body;
+                event.accountId = accountId;
+
+                analyticsManager.createEvent(event, function(err, value){
+                    self.log.debug('<< createEvent');
+                    self.sendResultOrError(res, err, value, "Error creating Analytic Event");
+                });
+            }
         });
+
     },
 
     getEvent: function(req, res) {
         var self = this;
-        //TODO - add granular security
-
+        var accountId = parseInt(self.accountId(req));
         self.log.debug('>> getEvent');
-        var eventId = req.params.id;
-        analyticsManager.getEvent(eventId, function(err, value){
-            self.log.debug('<< getEvent');
-            self.sendResultOrError(res, err, value, "Error retrieving Analytic Event");
+
+        self.checkPermission(req, self.sc.privs.VIEW_ANALYTICS, function(err, isAllowed){
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var eventId = req.params.id;
+                analyticsManager.getEvent(eventId, function(err, value){
+                    self.log.debug('<< getEvent');
+                    self.sendResultOrError(res, err, value, "Error retrieving Analytic Event");
+                });
+            }
         });
+
     },
 
     updateEvent: function(req, res) {
         var self = this;
-        //TODO - add granular security
+        var accountId = parseInt(self.accountId(req));
 
         self.log.debug('>> updateEvent');
-        var eventId = req.params.id;
-        var event = req.body;
-        event._id = eventId;
+        self.checkPermission(req, self.sc.privs.MODIFY_ANALYTICS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var eventId = req.params.id;
+                var event = req.body;
+                event._id = eventId;
 
-        analyticsManager.updateEvent(event, function(err, value){
-            self.log.debug('<< updateEvent');
-            self.sendResultOrError(res, err, value, "Error updating Analytic Event");
+                analyticsManager.updateEvent(event, function(err, value){
+                    self.log.debug('<< updateEvent');
+                    self.sendResultOrError(res, err, value, "Error updating Analytic Event");
+                });
+            }
         });
+
     },
 
     deleteEvent: function(req, res) {
         var self = this;
-        //TODO - add granular security
+        var accountId = parseInt(self.accountId(req));
 
         self.log.debug('>> deleteEvent');
-        var eventId = req.params.id;
+        self.checkPermission(req, self.sc.privs.MODIFY_ANALYTICS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var eventId = req.params.id;
 
-        analyticsManager.removeEvent(eventId, function(err, value){
-            self.log.debug('<< deleteEvent');
-            self.sendResultOrError(res, err, value, "Error deleting Analytic Event");
+                analyticsManager.removeEvent(eventId, function(err, value){
+                    self.log.debug('<< deleteEvent');
+                    self.sendResultOrError(res, err, value, "Error deleting Analytic Event");
+                });
+            }
         });
+
     }
 });
 
