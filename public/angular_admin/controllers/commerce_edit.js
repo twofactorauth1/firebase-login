@@ -46,7 +46,7 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
             }
 
             if ($scope.product === undefined && $scope.product.status === undefined) {
-              $scope.product = {status: $scope.userPreferences.default_product_status}; 
+              $scope.product = {status: $scope.userPreferences.default_product_status};
             }
         }
     });
@@ -72,7 +72,11 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
     });
 
     $('#convert-pref').on('change', function(e) {
-      $scope.userPreferences.default_product_icon = e.icon;
+      if (e.icon) {
+        $scope.userPreferences.default_product_icon = e.icon;
+      } else {
+        $scope.userPreferences.default_product_icon = 'fa-key';
+      }
       $scope.savePreferencesFn();
     });
 
