@@ -45,6 +45,14 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
       placement: 'right',
     });
 
+    $('#convert-pref').iconpicker({
+      iconset: 'fontawesome',
+      icon: 'fa-key',
+      rows: 5,
+      cols: 5,
+      placement: 'left',
+    });
+
     $('#convert').on('change', function(e) {
       $scope.product.icon = e.icon;
     });
