@@ -62,7 +62,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var newrequest = request.post(url)
             //.set('cookie', cookie)
             .send(msg)
-            .end(function(result){
+            .end(function(error, result){
+                if(error) {
+                    self.log.error("received error: " + error);
+                }
                 self.log.debug('<< sendToKeen');
             });
         //TODO: Verify message from mandirll
