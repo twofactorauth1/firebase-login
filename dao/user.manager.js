@@ -10,7 +10,7 @@ var dao = require('./user.dao');
 var accountDao = require('./account.dao');
 var cmsDao = require('../cms/dao/cms.dao');
 var log = $$.g.getLogger("user.manager");
-var securityManager = require('../security/sm');
+var securityManager = require('../security/sm')(true);
 
 module.exports = {
 
@@ -52,15 +52,17 @@ module.exports = {
                     if (accountId == null) {
                         return fn(true, "Failed to create user, no account found");
                     }
-                    var userId = $$.u.idutils.generateUUID();
+
+
+
                     var user = new $$.m.User({
-                        _id: userId,
+
                         username:username,
                         email:email,
                         created: {
                             date: new Date().getTime(),
                             strategy: $$.constants.user.credential_types.LOCAL,
-                            by: userId, //self-created
+                            by: null, //self-created
                             isNew: true
                         }
                     });
@@ -70,41 +72,45 @@ module.exports = {
                     var roleAry = ["super","admin","member"];
                     user.createUserAccount(accountId, username, password, roleAry);
 
-                    log.debug('Initializing user security.');
-                    securityManager.initializeUserPrivileges(user.id(), username, roleAry, accountId, function(err, value){
+                    dao.saveOrUpdate(user, function(err, savedUser){
                         if(err) {
-                            log.error('Error initializing user privileges for userID: ' + user.id());
+                            log.error('Error saving user: ' + err);
                             return fn(err, null);
                         }
-                        log.debug('creating website for account');
-                        cmsDao.createWebsiteForAccount(accountId, 'admin', function(err, value){
+                        var userId = savedUser.id();
+                        log.debug('Created user with id: ' + userId);
+                        log.debug('Initializing user security.');
+                        securityManager.initializeUserPrivileges(userId, username, roleAry, accountId, function(err, value){
                             if(err) {
-                                log.error('Error creating website for account: ' + err);
-                                fn(err, null);
-                            } else {
-                                log.debug('creating default page');
-                                cmsDao.createDefaultPageForAccount(accountId, value.id(), function(err, value){
-                                    if(err) {
-                                        log.error('Error creating default page for account: ' + err);
-                                        fn(err, null);
-                                    } else {
-                                        log.debug('saving user.');
-                                        dao.saveOrUpdate(user, function(err, savedUser){
-                                            if(err) {
-                                                log.error('Error saving user: ' + err);
-                                                fn(err, null);
-                                            } else {
-                                                log.debug('<< createUserFromUsernamePassword');
-                                                fn(null, savedUser);
-                                            }
-                                        });
-                                    }
-
-                                });
+                                log.error('Error initializing user privileges for userID: ' + userId);
+                                return fn(err, null);
                             }
+                            log.debug('creating website for account');
+                            cmsDao.createWebsiteForAccount(accountId, 'admin', function(err, value){
+                                if(err) {
+                                    log.error('Error creating website for account: ' + err);
+                                    fn(err, null);
+                                } else {
+                                    log.debug('creating default page');
+                                    cmsDao.createDefaultPageForAccount(accountId, value.id(), function(err, value){
+                                        if(err) {
+                                            log.error('Error creating default page for account: ' + err);
+                                            fn(err, null);
+                                        } else {
+                                            log.debug('<< createUserFromUsernamePassword');
+                                            fn(null, savedUser);
 
+                                        }
+
+                                    });
+                                }
+
+                            });
                         });
                     });
+
+
+
 
                 });
         });

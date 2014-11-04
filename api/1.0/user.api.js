@@ -12,6 +12,7 @@ var passport = require('passport');
 var cookies = require('../../utils/cookieutil');
 var authenticationDao = require('../../dao/authentication.dao');
 var userManager = require('../../dao/user.manager');
+var paymentsManager = require('../../payments/payments_manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -33,6 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.post(this.url(''), this.createUser.bind(this));
+        app.post(this.url('initialize'), this.initializeUserAndAccount.bind(this));
 
         app.put(this.url(':id'), this.isAuthApi, this.updateUser.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteUser.bind(this));
@@ -84,7 +86,7 @@ _.extend(api.prototype, baseApi.prototype, {
             return this.wrapError(resp, 400, null, "Invalid parameter for ID");
         }
 
-        userId = parseInt(userId);
+        //userId = parseInt(userId);
 
         userDao.getById(userId, function(err, value) {
             if (!err) {
@@ -160,10 +162,103 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    initializeUserAndAccount: function(req, res) {
+        var self = this, user, accountToken, deferred;
+        self.log.debug('>> initializeUserAndAccount');
+        console.dir(req.body);
+
+        var username = req.body.username;
+        var password1 = req.body.password;
+        var password2 = req.body.password2;
+        var email = req.body.username;
+        var accountToken = req.body.accountToken;
+
+        var cardToken = req.body.cardToken;
+        var plan = req.body.plan || 'monthly_access';//TODO: make sure this gets passed
+
+        //createStripeCustomer
+        //updateCurrentAccountBilling
+
+        //ensure we don't have another user with this username;
+        var accountToken = cookies.getAccountToken(req);
+
+        self.log.debug('>> username', username);
+        self.log.debug('>> password1', password1);
+        self.log.debug('>> email', email);
+        self.log.debug('>> accountToken', accountToken);
+        self.log.debug('>> cardToken', cardToken);
+        self.log.debug('>> plan', plan);
+
+        userManager.createAccountAndUser(username, password1, email, accountToken, function (err, user) {
+            if(err) {
+                self.log.error('Error creating account or user: ' + err);
+                return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
+            }
+            self.log.debug('Created user[' + user.id() + '] and account[' + user.getAllAccountIds()[0] + '] objects.');
+            var accountId = user.getAllAccountIds()[0];
+            paymentsManager.createStripeCustomerForUser(cardToken, user, accountId, function(err, stripeCustomer){
+                if(err) {
+                    self.log.error('Error creating Stripe customer: ' + err);
+                    return self.wrapError(res, 500, 'Error creating Stripe Customer', err);
+                }
+                self.log.debug('Created Stripe customer: ' +  stripeCustomer.id);
+                paymentsManager.createStripeSubscription(stripeCustomer.id, plan, accountId, user.id(), function(err, sub){
+                    if(err) {
+                        self.log.error('Error creating Stripe subscription: ' + err);
+                        return self.wrapError(res, 500, 'Error creating Stripe Subscription', err);
+                    }
+                    self.log.debug('Created subscription: ' + sub.id);
+                    accountDao.getAccountByID(accountId, function(err, account){
+                        if(err || account===null) {
+                            self.log.error('Error retrieving new account: ' + err);
+                            return self.wrapError(res, 500, 'Error getting new account', err);
+                        }
+                        var billingObj = account.get('billing');
+                        billingObj.stripeCustomerId=stripeCustomer.id;
+                        billingObj.subscriptionId = sub.id;
+                        account.set('billing', billingObj);
+                        accountDao.saveOrUpdate(account, function(err, updatedAccount){
+                            if(err) {
+                                self.log.error('Error saving billing information to account: ' + err);
+                                return self.wrapError(res, 500, 'Error saving billing information to account', err);
+                            }
+                            self.sm.addSubscriptionToAccount(accountId, billingObj.subscriptionId, plan, user.id(), function(err, value){
+                                authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), "admin", function (err, value) {
+                                    console.log('value url >>> ', value);
+                                    if (err) {
+                                        res.redirect("/home");
+                                        self = null;
+                                        return;
+                                    }
+                                    user.set("accountUrl", value);
+                                    //res.send(user);
+                                    res.send(user.toJSON("public", {accountId:self.accountId(req)}));
+                                });
+                            });
+                            /*req.login(user, function (err) {
+                                if (err) {
+                                    self.log.error('Error logging in: ' + err);
+                                    return self.wrapError(res, 500, 'Error logging in', err);
+                                } else {
+                                    */
+
+
+                            /*    }
+                            });*/
+                        });
+                    });
+                });
+            });
+
+
+        });
+
+    },
+
 
     createUser: function(req,resp) {
         var self = this, user, accountToken, deferred;
-        self.log.debug('>> handleSignup');
+        self.log.debug('>> createUser');
 
         var username = req.body.username;
         var password1 = req.body.password;
@@ -229,7 +324,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     self.log.debug('createUserFromUsernamePassword >>> ERROR');
                     req.flash("error", value.toString());
-                    return resp.redirect("/page/signup");
+                    return resp.redirect("/page/signup");//TODO: Fix this
                 }
         });
 

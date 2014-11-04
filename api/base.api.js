@@ -7,7 +7,7 @@
 
 //var securityManager = require('../security/securitymanager');
 
-var securityManager = require('../security/sm');
+var securityManager = require('../security/sm')(true);
 var securityConstants = require('../security/utils/security.constants');
 
 

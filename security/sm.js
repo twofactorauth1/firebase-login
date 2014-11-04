@@ -5,6 +5,8 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
+var disabled = true;
+
 var log = $$.g.getLogger("sm");
 var dao = require('./dao/privilege.dao.js');
 var subscriptionPrivilegeDao = require('./dao/subscription.privilege.dao');
@@ -124,6 +126,10 @@ var securityManager = {
     hasPermission: function(userId, accountId, priv, cb) {
         var self = this;
         log.debug('>> hasPermission');
+        if(disabled === true) {
+            log.debug('<< hasPermission (disabled)');
+            return cb(null, true);
+        }
         self.getPrivilegesByUserAndAccount(userId, accountId, function(err, privilege){
             if(err) {
                 log.error('Exception while finding privilege by userId[' + userId + '] and account[' + accountId + ']: ' + err );
@@ -134,6 +140,8 @@ var securityManager = {
                     cb(null, true);
                 } else {
                     log.debug('<< hasPermission(false)');
+                    log.debug('... looking for [' + priv + '] and the privilege object is:');
+                    console.dir(privilege);
                     cb(null, false);
                 }
             }
@@ -156,6 +164,10 @@ var securityManager = {
     verifySubscription: function(req, cb) {
         var self = this;
         log.debug('>> verifySubscription');
+        if(disabled === true) {
+            log.debug('<< verifySubscription (disabled)');
+            return cb(null, true);
+        }
 
         //check if session has property(subName) --> return if present
         if(req.session.subName !== undefined && req.session.subprivs) {
@@ -193,7 +205,7 @@ var securityManager = {
                         var planId = subscription.plan.id;
                         var planName = subscription.plan.name;
                         subscriptionPrivilegeDao.getByPlanId(req.session.accountId, planId, function(err, subPrivs){
-                            if(err) {
+                            if(err || !subPrivs) {
                                 log.error('Error getting subscription privileges for plan [' + planId + ']: ' + err);
                                 return cb(err, false);
                             }
@@ -275,4 +287,9 @@ var securityManager = {
 $$.s = $$.s || {};
 $$.s.securityManager = $$.sm = securityManager;
 
-module.exports = securityManager;
+module.exports = function(isDisabled){
+    if(isDisabled !== true) {
+        disabled = false;
+    }
+    return securityManager;
+}
