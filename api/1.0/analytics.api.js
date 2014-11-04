@@ -48,6 +48,9 @@ _.extend(api.prototype, baseApi.prototype, {
         if(req.body.mandrill_events) {
             try {
                 msg = JSON.parse(req.body.mandrill_events);
+                if(_.isArray(msg)) {
+                    msg = {'mandrill_events': JSON.parse(req.body.mandrill_events)};
+                }
             } catch(err) {
                 self.log.debug('error parsing events: ' + err);
                 msg = req.body;
@@ -65,6 +68,8 @@ _.extend(api.prototype, baseApi.prototype, {
             .end(function(error, result){
                 if(error) {
                     self.log.error("received error: " + error);
+                } else {
+                    //console.dir(result);
                 }
                 self.log.debug('<< sendToKeen');
             });
