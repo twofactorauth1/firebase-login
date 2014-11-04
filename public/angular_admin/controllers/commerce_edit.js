@@ -1,5 +1,5 @@
-define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker'], function(app) {
-  app.register.controller('CommerceEditCtrl', ['$scope', '$q', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', function($scope, $q, ngProgress, $stateParams, ProductService, PaymentService) {
+define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService'], function(app) {
+  app.register.controller('CommerceEditCtrl', ['$scope', '$q', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', 'UserService', function($scope, $q, ngProgress, $stateParams, ProductService, PaymentService, UserService) {
     ngProgress.start();
     //back button click function
     $scope.$back = function() {
@@ -37,6 +37,13 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
       }
     });
 
+    UserService.getUserPreferences(function (preferences) {
+        $scope.userPreferences = preferences;
+        if ($scope.userPreferences.default_product_icon) {
+            $('#convert-pref').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
+        }
+    });
+
     $('#convert').iconpicker({
       iconset: 'fontawesome',
       icon: 'fa-key',
@@ -56,6 +63,17 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
     $('#convert').on('change', function(e) {
       $scope.product.icon = e.icon;
     });
+
+    $('#convert-pref').on('change', function(e) {
+      $scope.userPreferences.default_product_icon = e.icon;
+      $scope.savePreferencesFn();
+    });
+
+    $scope.savePreferencesFn = function () {
+      UserService.updateUserPreferences($scope.userPreferences, function (preferences) {
+        $scope.userPreferences = preferences;
+      });
+    };
 
     $scope.addSubscriptionFn = function() {
       console.log('$scope.newSubscription >>> ', $scope.newSubscription);

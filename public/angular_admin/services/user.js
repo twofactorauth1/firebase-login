@@ -1,5 +1,5 @@
-define(['app'], function (app) {
-	app.register.service('UserService', function ($http) {
+define(['app', 'toasterService'], function (app) {
+	app.register.service('UserService', ['$http', 'ToasterService', function ($http, ToasterService) {
 		var account, that = this;
 		var baseUrl = '/api/1.0/';
 		this.getUser = function (fn) {
@@ -120,13 +120,14 @@ define(['app'], function (app) {
 			});
 		};
 
-		this.updateUserPreferences = function (fn, preferences) {
+		this.updateUserPreferences = function (preferences, fn) {
 			var apiUrl = baseUrl + ['user', 'preferences'].join('/');
 			$http.post(apiUrl, preferences)
 			.success(function (data, status, headers, config) {
+				ToasterService.show('success', 'Preferences Updated.');
 				fn(data);
 			});
 		};
 
-	});
+	}]);
 });
