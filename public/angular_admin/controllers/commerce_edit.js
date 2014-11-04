@@ -1,4 +1,4 @@
-define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker'], function(app) {
+define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker'], function(app) {
   app.register.controller('CommerceEditCtrl', ['$scope', '$q', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', function($scope, $q, ngProgress, $stateParams, ProductService, PaymentService) {
     ngProgress.start();
     //back button click function
@@ -18,8 +18,8 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
     ProductService.getProduct($scope.productId, function(product) {
       $scope.product = product;
       var promises = [];
-
-      $('#convert').iconpicker('setIcon', $scope.product.icon);
+      if(angular.isDefined($scope.product.icon))
+        $('#convert').iconpicker('setIcon', $scope.product.icon);
 
       if ('stripePlans' in $scope.product.product_attributes) {
         $scope.product.product_attributes.stripePlans.forEach(function(value, index) {
