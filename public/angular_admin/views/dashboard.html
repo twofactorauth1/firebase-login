@@ -14,6 +14,8 @@
         </div>
     </div>
 
+    <section id="view-selector"></section>
+
     <div class="row">
         <div class="btn-group col-xs-12 template-btns">
             <button type="button" class="btn btn-default btn-lg col-xs-6 active tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
@@ -49,11 +51,20 @@
 
     <div class="contentpanel">
 
+    <div id="active-users-container"></div>
 
         <div class="analytics-section" ng-show="activeTab == 'analytics'">
 
             <div class="row">
-                <div class="col-sm-6 col-md-4">
+                <div class="col-sm-6 col-md-3">
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }" ng-if="visitors" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                        <span class="keen-metric-title mb10">Visitors</span>
+                        <span class="keen-metric-value col-sm-6"><div class="text-right"> {{visitors}}</div></span>
+                        <span class="keen-metric-change-value col-sm-6"><div class="center"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}% </br> <span>previous month</span></div></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how many times all pages were viewed on you site.">
                         <span class="keen-metric-title mb10">Pageviews</span>
                         <span class="keen-metric-value col-sm-6"><div class="text-right"> {{pageviews}}</div></span>
@@ -61,7 +72,7 @@
                         <div class="clearfix"></div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-4">
+                <div class="col-sm-6 col-md-3">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
                         <span class="keen-metric-title mb10">Avg. Visit Duration</span>
                         <span class="keen-metric-value col-sm-6"><div class="text-right"> {{visitDuration}}</div></span>
@@ -69,7 +80,7 @@
                         <div class="clearfix"></div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-4">
+                <div class="col-sm-6 col-md-3">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': bouncesPercent < 0, 'increase': bouncesPercent > 0 }" ng-if="bounces" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
                         <span class="keen-metric-title mb10">Bounces</span>
                         <span class="keen-metric-value col-sm-6"><div class="text-right"> {{bounces}}</div></span>
@@ -115,34 +126,35 @@
             <div class="row">
                 <!-- end of three -->
                 <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            New vs. Returning
-                        </div>
-                        <div class="chart-stage">
-                            <div id="new-vs-returning"></div>
-                        </div>
-                    </div>
+                    <highchart config="newVsReturningConfig"></highchart>
                 </div>
                 <div class="col-sm-6 col-md-4">
                     <div class="chart-wrapper">
                         <div class="chart-title">
                             Top Visited Pages
                         </div>
-                        <div class="chart-stage">
-                            <div id="top-visited-pages"></div>
+                        <div class="chart-stage table">
+                            <div class="table-responsive">
+                                <table class="table table-dark mb0">
+                                    <thead>
+                                      <tr>
+                                        <th>Page</th>
+                                        <th>Visits</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr ng-repeat="topPage in topPages">
+                                        <td>{{topPage[0]}}</td>
+                                        <td>{{topPage[1]}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Traffic Sources
-                        </div>
-                        <div class="chart-stage">
-                            <div id="traffic-sources" style="width:400px;"></div>
-                        </div>
-                    </div>
+                    <highchart config="trafficSourcesConfig"></highchart>
                 </div>
             </div>
         </div>
