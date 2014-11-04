@@ -111,5 +111,22 @@ define(['app'], function (app) {
 				fn(data);
 			});
 		};
+
+		this.getUserPreferences = function (fn) {
+			var apiUrl = baseUrl + ['user', 'preferences'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
+		this.updateUserPreferences = function (fn, preferences) {
+			var apiUrl = baseUrl + ['user', 'preferences'].join('/');
+			$http.post(apiUrl, preferences)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
 	});
 });
