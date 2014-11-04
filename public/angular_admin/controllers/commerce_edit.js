@@ -41,6 +41,13 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
         $scope.userPreferences = preferences;
         if ($scope.userPreferences.default_product_icon) {
             $('#convert-pref').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
+            if ($scope.product === undefined && $scope.product.icon === undefined) {
+              $('#convert').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
+            }
+
+            if ($scope.product === undefined && $scope.product.status === undefined) {
+              $scope.product = {status: $scope.userPreferences.default_product_status}; 
+            }
         }
     });
 
