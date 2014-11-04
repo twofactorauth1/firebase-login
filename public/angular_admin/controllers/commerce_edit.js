@@ -13,12 +13,14 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
 
     $scope.planEdit = false;
 
-    $scope.newSubscription = {planId: $$.u.idutils.generateUniqueAlphaNumericShort()};
+    $scope.newSubscription = {
+      planId: $$.u.idutils.generateUniqueAlphaNumericShort()
+    };
 
     ProductService.getProduct($scope.productId, function(product) {
       $scope.product = product;
       var promises = [];
-      if(angular.isDefined($scope.product.icon))
+      if (angular.isDefined($scope.product.icon))
         $('#convert').iconpicker('setIcon', $scope.product.icon);
 
       if ('stripePlans' in $scope.product.product_attributes) {
@@ -37,18 +39,17 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
       }
     });
 
-    UserService.getUserPreferences(function (preferences) {
-        $scope.userPreferences = preferences;
-        if ($scope.userPreferences.default_product_icon) {
-            $('#convert-pref').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
-            if ($scope.product === undefined && $scope.product.icon === undefined) {
-              $('#convert').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
-            }
-
-            if ($scope.product === undefined && $scope.product.status === undefined) {
-              $scope.product = {status: $scope.userPreferences.default_product_status};
-            }
+    UserService.getUserPreferences(function(preferences) {
+      $scope.userPreferences = preferences;
+      if ($scope.userPreferences.default_product_icon) {
+        $('#convert-pref').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
+        if ($scope.product === undefined) {
+          $('#convert').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
+          $scope.product = {
+            status: $scope.userPreferences.default_product_status
+          };
         }
+      }
     });
 
     $('#convert').iconpicker({
@@ -68,7 +69,9 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
     });
 
     $('#convert').on('change', function(e) {
-      $scope.product.icon = e.icon;
+      if ($scope.product) {
+        $scope.product.icon = e.icon;
+      }
     });
 
     $('#convert-pref').on('change', function(e) {
@@ -80,8 +83,8 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
       $scope.savePreferencesFn();
     });
 
-    $scope.savePreferencesFn = function () {
-      UserService.updateUserPreferences($scope.userPreferences, function (preferences) {
+    $scope.savePreferencesFn = function() {
+      UserService.updateUserPreferences($scope.userPreferences, function(preferences) {
         $scope.userPreferences = preferences;
       });
     };
@@ -96,11 +99,13 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
           $scope.product.product_attributes.stripePlans = [subscription.id];
         }
         $scope.saveProductFn();
-        $scope.newSubscription = {planId: $$.u.idutils.generateUniqueAlphaNumericShort()};
+        $scope.newSubscription = {
+          planId: $$.u.idutils.generateUniqueAlphaNumericShort()
+        };
       });
     };
 
-    $scope.editSubscriptionFn = function (planId) {
+    $scope.editSubscriptionFn = function(planId) {
       $scope.planDeleteFn(planId);
       $scope.addSubscriptionFn();
       $scope.editCancelFn();
@@ -123,9 +128,11 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
       });
     };
 
-    $scope.editCancelFn = function () {
+    $scope.editCancelFn = function() {
       $scope.planEdit = false;
-      $scope.newSubscription = {planId: $$.u.idutils.generateUniqueAlphaNumericShort()};
+      $scope.newSubscription = {
+        planId: $$.u.idutils.generateUniqueAlphaNumericShort()
+      };
     };
 
     $scope.planDeleteFn = function(planId) {
