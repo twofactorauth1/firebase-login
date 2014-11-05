@@ -48,6 +48,8 @@ require.config({
         "bootstrap-confirmation": "libs/bootstrap-confirmation/bootstrap-confirmation",
         "moment": 'libs/moment/min/moment.min',
         'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
+        'highcharts': 'libs/highcharts/highcharts-all',
+        'highcharts-ng': 'libs/highcharts-ng/dist/highcharts-ng.min',
 
         //application related
         'storageutils': 'utils/storageutils',
