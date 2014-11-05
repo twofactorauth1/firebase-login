@@ -17354,7 +17354,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   top: 0;
   right: -240px;
   display: none;
-  z-index: 999999;
 }
 .rightpanel .nav-tabs {
   border-radius: 0;
@@ -17999,7 +17998,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   border-bottom: 4px solid #c0392b;
 }
 .dashboard .keen-metric.decrease .keen-metric-title {
-  color: #c0392b;
+  color: #ac382d;
 }
 .dashboard .keen-metric .keen-metric-title {
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
