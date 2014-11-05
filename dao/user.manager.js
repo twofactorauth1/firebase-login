@@ -11,6 +11,8 @@ var accountDao = require('./account.dao');
 var cmsDao = require('../cms/dao/cms.dao');
 var log = $$.g.getLogger("user.manager");
 var securityManager = require('../security/sm')(true);
+var contactDao = require('./contact.dao');
+var appConfig = require('../configs/app.config');
 
 module.exports = {
 
@@ -79,6 +81,14 @@ module.exports = {
                         }
                         var userId = savedUser.id();
                         log.debug('Created user with id: ' + userId);
+                        log.debug('Creating customer contact for main account.');
+                        contactDao.createCustomerContact(user, appConfig.mainAccountID, function(err, contact){
+                            if(err) {
+                                log.error('Error creating customer for user: ' + userId);
+                            } else {
+                                log.debug('Created customer for user:' + userId);
+                            }
+                        });
                         log.debug('Initializing user security.');
                         securityManager.initializeUserPrivileges(userId, username, roleAry, accountId, function(err, value){
                             if(err) {
