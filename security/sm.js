@@ -165,6 +165,7 @@ var securityManager = {
         var self = this;
         log.debug('>> verifySubscription');
         if(disabled === true) {
+            req.session.subprivs = defaultSubscriptionPrivs;
             log.debug('<< verifySubscription (disabled)');
             return cb(null, true);
         }

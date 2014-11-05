@@ -9,6 +9,7 @@
 
 var securityManager = require('../security/sm')(true);
 var securityConstants = require('../security/utils/security.constants');
+var appConfig = require('../configs/app.config');
 
 
 var apiBase = function(options) {
@@ -119,21 +120,26 @@ _.extend(apiBase.prototype, {
 
         self.sm = securityManager;
         if(req.isAuthenticated()) {
+            //don't need to verify inidigenous main account
+            if(appConfig.mainAccountID === self.accountId(req)) {
+                return next();
+            } else {
+                self.sm.verifySubscription(req, function(err, isValid){
+                    if(isValid === true && _.contains(req.session.subprivs, self.base)) {
+                        return next();
+                    } else {
 
-            self.sm.verifySubscription(req, function(err, isValid){
-                if(isValid === true && _.contains(req.session.subprivs, self.base)) {
-                    return next();
-                } else {
+                        var response = {
+                            code: 403,
+                            status: 'Not Authorized',
+                            message: 'Your subscription could not be verified',
+                            detail: ''
+                        };
+                        resp.send(response.code, response);
+                    }
+                });
+            }
 
-                    var response = {
-                        code: 403,
-                        status: 'Not Authorized',
-                        message: 'Your subscription could not be verified',
-                        detail: ''
-                    };
-                    resp.send(response.code, response);
-                }
-            });
         } else {
             var response = {
                 code:401,
