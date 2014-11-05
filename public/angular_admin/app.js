@@ -14,6 +14,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
         controller: 'DashboardCtrl',
         controllerUrl: '/angular_admin/controllers/dashboard.js'
       }))
+            .state('dashboardNetRevenue', angularAMD.route({
+              url: '/dashboard/net-revenue',
+              templateUrl: '/angular_admin/views/dashboard/net-revenue.html',
+              controller: 'NetRevenueCtrl',
+              controllerUrl: '/angular_admin/controllers/dashboard/net_revenue.js'
+            }))
       .state('account', angularAMD.route({
         url: '/account',
         templateUrl: '/angular_admin/views/account.html',

@@ -30,6 +30,12 @@
         padding: 8px 10px 5px;
     }
     .keen-metric {
+        a {
+            color: inherit;
+            &:hover {
+                text-decoration: none;
+            }
+        }
         margin: 10px auto;
         padding: 15px;
         &.increase {
@@ -65,6 +71,37 @@
         }
         .btn-view-details {
             display: none;
+        }
+    }
+}
+
+.single-metric-top {
+    .top-four {
+        padding: 50px 20px;
+        background: #444;
+        color: #fff;
+        .title {
+            text-align: center;
+            font-size: 50px;
+            line-height: 51px;
+            font-weight: bold;
+        }
+        .metric {
+            text-align: center;
+            font-size: 14px;
+        }
+    }
+    .top-six {
+        padding: 30px;
+        .title {
+            text-align: center;
+            font-size: 30px;
+            line-height: 30px;
+            font-weight: bold;
+        }
+        .metric {
+            text-align: center;
+            font-size: 14px;
         }
     }
 }

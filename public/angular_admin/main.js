@@ -87,6 +87,7 @@ require.config({
         'confirmClick2':'/angular_admin/directives/confirm_click2',
         'img':'/angular_admin/directives/img_adv',
         'timeAgoFilter':'/angular_admin/filters/time_ago',
+        'formatCurrency':'/angular_admin/filters/currency',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",

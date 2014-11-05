@@ -1,4 +1,4 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], function(app) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng', 'formatCurrency'], function(app) {
     app.register.controller('DashboardCtrl', ['$scope', '$window', 'ngProgress', 'PaymentService', function($scope, $window, ngProgress, PaymentService) {
         ngProgress.start();
 
@@ -15,9 +15,9 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
 
                     ngProgress.complete();
 
-                    $scope.activeTab = 'analytics';
+                    $scope.activeTab = 'ecommerce';
 
-                    var client = new Keen({
+                    $scope.client = new Keen({
                         projectId: "54528c1380a7bd6a92e17d29", // String (required)
                         writeKey: "c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a", // String (required for sending data)
                         readKey: "bc102d9d256d3110db7ccc89a2c7efeb6ac37f1ff07b0a1f421516162522a972443b3b58ff6120ea6bd4d9dd469acc83b1a7d8a51cbb82caa89e590492e0579c8b7c65853ec1c6d6ce6f76535480f8c2f17fcb66dca14e699486efb02b83084744c68859b89f71f37ad846f7088ff96b", // String (required for querying data)
@@ -354,6 +354,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                     });
 
                     PaymentService.getCustomers(function(data) {
+                        console.log('get customer >>> ', data);
                         $scope.customers = data;
 
                         // ======================================
@@ -364,7 +365,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                         var monthlyRecurringRevenue = new Keen.Query("sum", {
                             eventCollection: "Stripe_Events",
                             targetProperty: 'data.object.total',
-                            timeframe: 'this_day',
+                            timeframe: 'last_30_days',
                             filters: [{
                                 "property_name": "data.object.subscription",
                                 "operator": "exists",
@@ -375,32 +376,20 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                                 "property_value": "invoice.payment_succeeded"
                             }]
                         });
-                        client.run(monthlyRecurringRevenue, function(response) {
+                        $scope.client.run(monthlyRecurringRevenue, function(response) {
+                            console.log('result mrr >>> ', this.data.result);
                             var totalRevenue = this.data.result;
                             var numOfCustomers = $scope.customers.length;
                             var avgRevenue = totalRevenue / numOfCustomers;
                             var result = avgRevenue * numOfCustomers;
-
-                            var data = {
-                                result: result
-                            };
-
-                            window.chart = new Keen.Visualization(data, document.getElementById('monthly-recurring-revenue'), {
-                                chartType: "metric",
-                                title: "Monthly Recurring Revenue",
-                                width: 345,
-                                colors: ["#49c5b1"],
-                                chartOptions: {
-                                    prefix: '$'
-                                }
-                            });
+                            $scope.monthlyRecurringRevenue = result / 100;
                         });
 
                         // ======================================
                         // Average Revenue Per Customer Metric
                         // ======================================
 
-                        client.run(monthlyRecurringRevenue, function(response) {
+                        $scope.client.run(monthlyRecurringRevenue, function(response) {
                             var totalRevenue = this.data.result;
                             var numOfCustomers = $scope.customers.length;
                             var avgRevenue = totalRevenue / numOfCustomers;
@@ -449,7 +438,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                         eventCollection: "Stripe_Events",
                         targetProperty: "data.object.fee"
                     });
-                    client.run(feesQuery, function(response) {
+                    $scope.client.run(feesQuery, function(response) {
                         var totalFees = this.data.result;
                         var result = totalFees;
 
@@ -473,30 +462,36 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                     // Net revenue = gross revenue – damages/coupons/returns
                     // ======================================
 
-                    var netRevenueQuery = new Keen.Query("sum", {
+                    var netRevenueThisMonth = new Keen.Query("sum", {
                         eventCollection: "Stripe_Events",
                         targetProperty: 'data.object.amount',
-                        timeframe: 'this_day'
+                        timeframe: 'last_30_days',
+                        filters: [{
+                            'property_name':'type',
+                            'operator':'eq',
+                            'property_value':'charge.succeeded'
+                        }]
                     });
-                    client.run([netRevenueQuery, feesQuery], function(response) {
+
+                    var netRevenuePreviousMonth = new Keen.Query("sum", {
+                        eventCollection: "Stripe_Events",
+                        targetProperty: 'data.object.amount',
+                        timeframe: 'previous_month',
+                        filters: [{
+                            'property_name':'type',
+                            'operator':'eq',
+                            'property_value':'charge.succeeded'
+                        }]
+                    });
+
+                    $scope.client.run([netRevenueThisMonth, feesQuery, netRevenuePreviousMonth], function(response) {
                         var totalRevenue = this.data[0].result;
                         var totalFees = this.data[1].result;
+                        var totalRevenuePrevious = this.data[2].result;
+                        var result = ((totalRevenue - totalRevenuePrevious) / totalRevenue) * 100;
+                        $scope.totalRevenuePercent = Math.round(result * 100) / 100;
                         //TODO: Subtract damages/coupons/returns
-                        var result = totalRevenue - totalFees;
-
-                        var data = {
-                            result: result
-                        };
-
-                        window.chart = new Keen.Visualization(data, document.getElementById('net-revenue'), {
-                            chartType: "metric",
-                            title: "Net Revenue",
-                            width: 345,
-                            colors: ["#49c5b1"],
-                            chartOptions: {
-                                prefix: '$'
-                            }
-                        });
+                        $scope.totalRevenue = this.data[0].result / 100;
                     });
 
                     // ======================================
@@ -517,7 +512,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                             "property_value": "invoice.payment_succeeded"
                         }]
                     });
-                    client.run(otherRevenue, function(response) {
+                    $scope.client.run(otherRevenue, function(response) {
                         var totalRevenue = this.data.result;
                         var result = totalRevenue;
 
@@ -549,7 +544,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                             "property_value": "customer.subscription.updated"
                         }]
                     });
-                    client.run(otherRevenueQuery, function(response) {
+                    $scope.client.run(otherRevenueQuery, function(response) {
 
                         var updatedSubscriptions = [];
 

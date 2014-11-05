@@ -17987,6 +17987,12 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin: 10px auto;
   padding: 15px;
 }
+.dashboard .keen-metric a {
+  color: inherit;
+}
+.dashboard .keen-metric a:hover {
+  text-decoration: none;
+}
 .dashboard .keen-metric.increase {
   background-color: #44d1ac;
   border-bottom: 4px solid #3ebc9b;
@@ -17999,7 +18005,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   border-bottom: 4px solid #c0392b;
 }
 .dashboard .keen-metric.decrease .keen-metric-title {
-  color: #c0392b;
+  color: #ac382d;
 }
 .dashboard .keen-metric .keen-metric-title {
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
@@ -18020,6 +18026,34 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .dashboard .keen-metric .btn-view-details {
   display: none;
+}
+.single-metric-top .top-four {
+  padding: 50px 20px;
+  background: #444;
+  color: #fff;
+}
+.single-metric-top .top-four .title {
+  text-align: center;
+  font-size: 50px;
+  line-height: 51px;
+  font-weight: bold;
+}
+.single-metric-top .top-four .metric {
+  text-align: center;
+  font-size: 14px;
+}
+.single-metric-top .top-six {
+  padding: 30px;
+}
+.single-metric-top .top-six .title {
+  text-align: center;
+  font-size: 30px;
+  line-height: 30px;
+  font-weight: bold;
+}
+.single-metric-top .top-six .metric {
+  text-align: center;
+  font-size: 14px;
 }
 .ckbox,
 .rdio {
