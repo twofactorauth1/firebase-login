@@ -4,7 +4,7 @@
      role="dialog"
      aria-labelledby="mediaModelLabel"
      aria-hidden="true"
-     capture-shift on-presskey="m.checkKey">
+     capture-shift on-presskey="m.toggleShiftKey">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -21,8 +21,7 @@
                                 <input type="checkbox"
                                        id="selectall"
                                        ng-model="select_all"
-                                       ng-change="m.selectAll()"
-                                       value="1">
+                                       ng-change="m.selectAll()">
                                 <label for="selectall">Select All</label>
                             </div>
                         </li>
@@ -36,15 +35,15 @@
                             <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-pencil"></i> <span class="hidden-xs">Edit</span></a>
                         </li>
                         <li>
-                            <a href="" class="itemopt" ng-disabled="!select_all" confirm-click2 data-placement="top" confirm-click2-confirm="m.batchDeleteAsset()"  ng-click=""><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
+                            <a href="" class="itemopt" ng-disabled="!select_all" confirm-click2 data-placement="top" confirm-click2-confirm="m.deleteAsset()"  ng-click=""><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
                         </li>
                         <li class="filter-type">
                             Show:
-                            <a href="" data-active="all"        ng-click="select_all=null;showType = 'all'"     >All</a>
-                            <a href="" data-active="document"   ng-click="select_all=null;showType = 'document'">Documents</a>
-                            <a href="" data-active="audio"      ng-click="select_all=null;showType = 'audio'"   >Audio</a>
-                            <a href="" data-active="image"      ng-click="select_all=null;showType = 'image'"   >Images</a>
-                            <a href="" data-active="video"      ng-click="select_all=null;showType = 'video'"   >Videos</a>
+                            <a href="" data-active="all"        ng-click="select_all=false;showType = 'all'     ;m.selectAll()"     >All</a>
+                            <a href="" data-active="document"   ng-click="select_all=false;showType = 'document';m.selectAll()"     >Documents</a>
+                            <a href="" data-active="audio"      ng-click="select_all=false;showType = 'audio'   ;m.selectAll()"     >Audio</a>
+                            <a href="" data-active="image"      ng-click="select_all=false;showType = 'image'   ;m.selectAll()"     >Images</a>
+                            <a href="" data-active="video"      ng-click="select_all=false;showType = 'video'   ;m.selectAll()"     >Videos</a>
                         </li>
                     </ul>
                     <div class="media">
@@ -179,4 +178,12 @@
             </div>
         </div>
     </div>
+    <style>
+    #media-manager-modal * {
+        -ms-user-select: none; /* IE 10+ */
+        -moz-user-select: none; /* Gecko (Firefox) */
+        -webkit-user-select: none; /* Webkit (Safari, Chrome) */
+        user-select: none; /* CSS3 (little to no support) */
+    }
+</style>
 </div>
