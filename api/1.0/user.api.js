@@ -413,7 +413,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> updateUserPreferences');
         self.checkPermission(req, self.sc.privs.MODIFY_USER, function (err, isAllowed) {
-            if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
+            if (isAllowed !== true ) {
                 return self.send403(res);
             } else {
                 var user = req.user;
