@@ -390,7 +390,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var user = req.user;
         self.checkPermission(req, self.sc.privs.VIEW_USER, function (err, isAllowed) {
-            if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
+
+            if (isAllowed !== true ) {
                 return self.send403(res);
             } else {
                 userDao.getById(user.id(), function(err, value) {
