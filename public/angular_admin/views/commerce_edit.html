@@ -1,198 +1,212 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="single-product">
-    <div class="pageheader row">
-        <div class="col-xs-9">
-            <button id="btn-back-to-commerce" ng-click="$back()" class="btn btn-success pull-left" type="button">
-                <span class="fa fa-chevron-left"></span>
-                <span class="hidden-xs">Back</span>
-            </button>
-            <h2><i class="fa fa-shopping-cart"></i> Single Product</h2>
-        </div>
-        <div class="col-xs-3">
-            <a class="btn btn-success pull-right" type="button" ng-click="saveProductFn()">
-                <span class="fa fa-save"></span>
-                <span class="hidden-xs">Save</span>
-            </a>
-        </div>
-        <div class="clear"></div>
+  <div class="pageheader row">
+    <div class="col-xs-9">
+      <button id="btn-back-to-commerce" ng-click="$back()" class="btn btn-success pull-left" type="button">
+        <span class="fa fa-chevron-left"></span>
+        <span class="hidden-xs">Back</span>
+      </button>
+      <h2><i class="fa fa-shopping-cart"></i> Single Product</h2>
     </div>
+    <div class="col-xs-3">
+      <a class="btn btn-success pull-right" type="button" ng-click="saveProductFn()">
+        <span class="fa fa-save"></span>
+        <span class="hidden-xs">Save</span>
+      </a>
+    </div>
+    <div class="clear"></div>
+  </div>
 
-    <div class="product-performance hidden">
+  <div class="product-performance hidden">
+    <div>
+      <div class="col-sm-4 col-xs-12 detail-single">
+        <div class="campaign-overview">
+          <h4>Product Performance</h4>
+          <p># Sold:
+          </p>
+          <p class="subtle-gray">200</p>
+          <p></p>
+          <div class="clearfix"></div>
+          <p># Sold this Month:
+          </p>
+          <p class="subtle-gray">100</p>
+          <p></p>
+          <div class="clearfix"></div>
+          <p>New Customers:
+          </p>
+          <p class="subtle-gray">10</p>
+          <p></p>
+        </div>
+      </div>
+      <div class="col-sm-3 col-xs-12 detail-single">
+        <div class="campaign-overview">
+          <div class="mb40"></div>
+          <p>Metric:
+          </p>
+          <p class="subtle-gray">200</p>
+          <p></p>
+          <div class="clearfix"></div>
+          <p>Metric:
+          </p>
+          <p class="subtle-gray">100</p>
+          <p></p>
+          <div class="clearfix"></div>
+          <p>Metric:
+          </p>
+          <p class="subtle-gray">10</p>
+          <p></p>
+        </div>
+      </div>
+      <div class="col-sm-3 col-xs-12 detail-single">
+        <h4>Circle Graph</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="contentpanel product-details" ng-style="styleCommerce()" indigeweb-resize>
+    <div class="row">
+
+      <div class="col-xs-3">
+        <h4>Product Preview</h4>
+        <div class="mb15"></div>
+        <div class="product-gallery">
+          <div class="panel panel-success">
+            <div class="panel-heading padding5">
+              <p class="product-img">
+                <a id="convert" role="iconpicker"></a>
+              </p>
+            </div>
+            <div class="panel-body">
+              <h4 class="center">{{product.name || 'Product Title'}}</h4>
+              <p class="subtle-gray center">{{product.regular_price || '$0.00'}}</p>
+            </div>
+          </div>
+          <div class="remaining-product-images">
+            <div class="sml-img"><i class="fa fa-picture-o"></i>
+            </div>
+            <div class="sml-img"><i class="fa fa-picture-o"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-9">
         <div>
-            <div class="col-sm-4 col-xs-12 detail-single">
-                <div class="campaign-overview">
-                    <h4>Product Performance</h4>
-                    <p># Sold:
-                        </p><p class="subtle-gray">200</p>
-                    <p></p>
-                    <div class="clearfix"></div>
-                    <p># Sold this Month:
-                        </p><p class="subtle-gray">100</p>
-                    <p></p>
-                    <div class="clearfix"></div>
-                    <p>New Customers:
-                        </p><p class="subtle-gray">10</p>
-                    <p></p>
-                </div>
+          <div class="col-xs-6">
+            <h4>Product Details</h4>
+            <div class="form-group">
+              <label>Status</label>
+              <select class="form-control input-lg" ng-model="product.status">
+                <option>Active</option>
+                <option>Backorder</option>
+                <option>Inactive</option>
+              </select>
             </div>
-            <div class="col-sm-3 col-xs-12 detail-single">
-                <div class="campaign-overview">
-                    <div class="mb40"></div>
-                    <p>Metric:
-                        </p><p class="subtle-gray">200</p>
-                    <p></p>
-                    <div class="clearfix"></div>
-                    <p>Metric:
-                        </p><p class="subtle-gray">100</p>
-                    <p></p>
-                    <div class="clearfix"></div>
-                    <p>Metric:
-                        </p><p class="subtle-gray">10</p>
-                    <p></p>
-                </div>
+
+            <div class="form-group">
+              <label>Title</label>
+              <input class="form-control input-lg mb20" type="text" placeholder="Product Title" ng-model="product.name">
             </div>
-            <div class="col-sm-3 col-xs-12 detail-single">
-                <h4>Circle Graph</h4>
+            <div class="form-group">
+              <label>Type</label>
+              <select class="form-control input-lg" ng-model="product.type">
+                <option value="product_type">Product Type</option>
+                <option value="physical">Physical</option>
+                <option value="digital">Digital</option>
+                <option value="subscription">Subscription</option>
+              </select>
             </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-control input-lg mb15" rows="4" placeholder="Product Description" ng-model="product.description"></textarea>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="mb35"></div>
+            <div class="form-group" ng-hide="product.type == 'subscription'">
+              <label>Regular Price</label>
+              <input class="form-control input-lg mb20" type="text" placeholder="Price" ng-model="product.regular_price">
+            </div>
+            <div class="form-group" ng-hide="product.type == 'subscription'">
+              <label>Sale Price</label>
+              <input class="form-control input-lg mb20" type="text" placeholder="Sales Price" ng-model="product.sale_price">
+            </div>
+            <div class="form-group">
+              <label>Cost</label>
+              <input class="form-control input-lg mb20" type="text" placeholder="Cost" ng-model="product.cost">
+            </div>
+            <div class="form-group">
+              <label>Sku</label>
+              <input class="form-control input-lg mb20" type="text" placeholder="Sku" ng-model="product.sku">
+            </div>
+          </div>
         </div>
-    </div>
-
-    <div class="contentpanel product-details" ng-style="styleCommerce()" indigeweb-resize>
-        <div class="row">
-
-            <div class="col-xs-3">
-                 <h4>Product Preview</h4>
-                <div class="mb15"></div>
-                <div class="product-gallery">
-                    <div class="panel panel-success">
-                        <div class="panel-heading padding5">
-                            <p class="product-img">
-                                <a id="convert" role="iconpicker"></a>
-                            </p>
-                        </div>
-                        <div class="panel-body">
-                            <h4 class="center">{{product.name || 'Product Title'}}</h4>
-                            <p class="subtle-gray center">{{product.regular_price || '$0.00'}}</p>
-                        </div>
-                    </div>
-                    <div class="remaining-product-images">
-                        <div class="sml-img"><i class="fa fa-picture-o"></i>
-                        </div>
-                        <div class="sml-img"><i class="fa fa-picture-o"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-9">
-                <div>
-                    <div class="col-xs-6">
-                        <h4>Product Details</h4>
-                        <div class="form-group">
-                            <label>Status</label>
-                            <select class="form-control input-lg" ng-model="product.status">
-                                <option>Active</option>
-                                <option>Backorder</option>
-                                <option>Inactive</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Title</label>
-                            <input class="form-control input-lg mb20" type="text" placeholder="Product Title" ng-model="product.name">
-                        </div>
-                        <div class="form-group">
-                            <label>Type</label>
-                            <select class="form-control input-lg" ng-model="product.type">
-                                <option value="product_type">Product Type</option>
-                                <option value="physical">Physical</option>
-                                <option value="digital">Digital</option>
-                                <option value="subscription">Subscription</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea class="form-control input-lg mb15" rows="4" placeholder="Product Description" ng-model="product.description"></textarea>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="mb35"></div>
-                        <div class="form-group" ng-hide="product.type == 'subscription'">
-                            <label>Regular Price</label>
-                            <input class="form-control input-lg mb20" type="text" placeholder="Price" ng-model="product.regular_price">
-                        </div>
-                        <div class="form-group" ng-hide="product.type == 'subscription'">
-                            <label>Sale Price</label>
-                            <input class="form-control input-lg mb20" type="text" placeholder="Sales Price" ng-model="product.sale_price">
-                        </div>
-                        <div class="form-group">
-                            <label>Cost</label>
-                            <input class="form-control input-lg mb20" type="text" placeholder="Cost">
-                        </div>
-                        <div class="form-group">
-                            <label>Sku</label>
-                            <input class="form-control input-lg mb20" type="text" placeholder="Sku">
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-                <hr>
-                <div class="col-xs-6 hidden">
-                    <h4>Categories</h4>
-                    <div class="categories form-group panel panel-default">
-                        <div class="ckbox ckbox-primary">
-                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
-                            <label for="checkboxPrimary">Cateogry One</label>
-                        </div>
-                        <div class="ckbox ckbox-primary">
-                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
-                            <label for="checkboxPrimary">Cateogry Two</label>
-                        </div>
-                        <div class="ckbox ckbox-primary">
-                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
-                            <label for="checkboxPrimary">Cateogry Three</label>
-                        </div>
-                        <div class="ckbox ckbox-primary">
-                            <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
-                            <label for="checkboxPrimary">Cateogry Four</label>
-                        </div>
-                    </div>
-                    <button class="btn btn-info pull-right">Add</button>
-                </div>
-                <div class="col-xs-6 hidden">
-                    <h4>Tags</h4>
-                    <input name="tags" id="tags" class="form-control" value="foo,bar,baz">
-                </div>
-            </div>
-        </div>
+        <div class="clearfix"></div>
         <hr>
-        <div class="row product-sections">
-            <ul>
-                <li id="subscription-section" class="panel panel-message">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <h3>Subscriptions</h3>
-                            </div>
-                            <div class="col-xs-2">
-                                <div class="toggle-modern">
-                                    <div class="toggles on" style="height: 35px; width: 110px;"><div class="toggle-slide active"><div class="toggle-inner" style="width: 185px; margin-left: -8px;"><div class="toggle-on active" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div><div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div><div class="toggle-off" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div></div></div></div>
-                                </div>
-                                <!-- NEW SWITCH NOT FUNCTIONAL -->
-                                <!-- <div class="form-group" ng-hide="currentPage.handle == 'index'">
+        <div class="col-xs-6 hidden">
+          <h4>Categories</h4>
+          <div class="categories form-group panel panel-default">
+            <div class="ckbox ckbox-primary">
+              <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+              <label for="checkboxPrimary">Cateogry One</label>
+            </div>
+            <div class="ckbox ckbox-primary">
+              <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+              <label for="checkboxPrimary">Cateogry Two</label>
+            </div>
+            <div class="ckbox ckbox-primary">
+              <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+              <label for="checkboxPrimary">Cateogry Three</label>
+            </div>
+            <div class="ckbox ckbox-primary">
+              <input type="checkbox" value="1" id="checkboxPrimary" checked="checked">
+              <label for="checkboxPrimary">Cateogry Four</label>
+            </div>
+          </div>
+          <button class="btn btn-info pull-right">Add</button>
+        </div>
+        <div class="col-xs-6 hidden">
+          <h4>Tags</h4>
+          <input name="tags" id="tags" class="form-control" value="foo,bar,baz">
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row product-sections">
+      <ul>
+        <li id="subscription-section" class="panel panel-message">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-10">
+                <h3>Subscriptions</h3>
+              </div>
+              <div class="col-xs-2">
+                <div class="toggle-modern">
+                  <div class="toggles on" style="height: 35px; width: 110px;">
+                    <div class="toggle-slide active">
+                      <div class="toggle-inner" style="width: 185px; margin-left: -8px;">
+                        <div class="toggle-on active" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div>
+                        <div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div>
+                        <div class="toggle-off" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- NEW SWITCH NOT FUNCTIONAL -->
+                <!-- <div class="form-group" ng-hide="currentPage.handle == 'index'">
                                     <label>Show:</label>
                                     <input bs-switch ng-model="currentPage.visible.visibility" type="checkbox" class="pull-right" ng-change="editPage()">
                                 </div> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-body" style="display: block;">
-                            <div class="form-horizontal well row" role="form">
-                                    <h4>New Subscription</h4>
-                                    <hr>
-                                    <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body" style="display: block;">
+            <div class="form-horizontal well row" role="form">
+              <h4>New Subscription</h4>
+              <hr>
+              <div class="clearfix"></div>
 
-                                    <!-- <div class="col-sm-7">
+              <!-- <div class="col-sm-7">
                                         <label for="inputBilling" class="col-sm-3 control-label">Bill Every</label>
                                         <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="number" class="form-control input-lg spinner-input ui-spinner-input" id="inputBilling" placeholder="Enter Number" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span></a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a></span>
                                     </div>
@@ -214,182 +228,244 @@
                                     </div>
 
                                     <div class="clearfix mb30"></div> -->
-                                <form>
-                                <div class="col-xs-6">
-                                    <div class="p20">
-                                        <div class="form-group">
-                                            <label for="planId">Unique ID</label> <input type="text"
-                                                class="form-control input-lg" id="planId"
-                                                placeholder="Enter a unique ID for the plan"
-                                                ng-model='newSubscription.planId' />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="amount">Amount</label> <input type="text"
-                                                class="form-control input-lg" id="amount"
-                                                placeholder="Enter amount for the plan"
-                                                ng-model='newSubscription.amount' />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="interval">Interval</label> <select id="interval"
-                                                ng-model="newSubscription.interval" class="form-control input-lg">
-                                                <option value="day">Day</option>
-                                                <option value="week">Week</option>
-                                                <option value="month">Month</option>
-                                                <option value="year">Year</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="interval_count">Interval Count</label> <input
-                                                type="text" class="form-control input-lg" id="interval_count"
-                                                placeholder="Enter a interval count for the interval type"
-                                                ng-model='newSubscription.interval_count' />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="p20">
-                                        <div class="form-group">
-                                            <label for="name">Name</label> <input type="text"
-                                                class="form-control input-lg" id="name" placeholder="Enter name for plan"
-                                                ng-model='newSubscription.name' />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="trial_period_days">Trial Period Days</label> <input
-                                                type="text" class="form-control input-lg" id="trial_period_days"
-                                                placeholder="Enter trial period days for plan"
-                                                ng-model='newSubscription.trial_period_days' />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="statement_description">Statement Description</label> <input
-                                                type="text" class="form-control input-lg" id="statement_description"
-                                                placeholder="Enter statement description for plan"
-                                                ng-model='newSubscription.statement_description' maxlength="15" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <button class="btn btn-lg btn-block btn-success" ng-click="addSubscriptionFn()" ng-hide="planEdit"><span class="fa fa-plus"></span> Add</button>
-                                    <button class="btn btn-lg btn-block btn-success" ng-click="editSubscriptionFn(newSubscription.id)" ng-show="planEdit"><span class="fa fa-plus"></span> Update</button>
-                                    <button class="btn btn-lg btn-block btn-success" ng-click="editCancelFn()" ng-show="planEdit"><span class="fa fa-plus"></span> Cancel</button>
-                                </div>
-                                </form>
+              <form>
+                <div class="col-xs-6">
+                  <div class="p20">
+                    <div class="form-group">
+                      <label for="planId">Unique ID</label>
+                      <input type="text" class="form-control input-lg" id="planId" placeholder="Enter a unique ID for the plan" ng-model='newSubscription.planId' />
+                    </div>
+                    <div class="form-group">
+                      <label for="amount">Amount</label>
+                      <input type="text" class="form-control input-lg" id="amount" placeholder="Enter amount for the plan" ng-model='newSubscription.amount' />
+                    </div>
+                    <div class="form-group">
+                      <label for="interval">Interval</label>
+                      <select id="interval" ng-model="newSubscription.interval" class="form-control input-lg">
+                        <option value="day">Day</option>
+                        <option value="week">Week</option>
+                        <option value="month">Month</option>
+                        <option value="year">Year</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="interval_count">Interval Count</label>
+                      <input type="text" class="form-control input-lg" id="interval_count" placeholder="Enter a interval count for the interval type" ng-model='newSubscription.interval_count' />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-6">
+                  <div class="p20">
+                    <div class="form-group">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control input-lg" id="name" placeholder="Enter name for plan" ng-model='newSubscription.name' />
+                    </div>
+                    <div class="form-group">
+                      <label for="trial_period_days">Trial Period Days</label>
+                      <input type="text" class="form-control input-lg" id="trial_period_days" placeholder="Enter trial period days for plan" ng-model='newSubscription.trial_period_days' />
+                    </div>
+                    <div class="form-group">
+                      <label for="statement_description">Statement Description</label>
+                      <input type="text" class="form-control input-lg" id="statement_description" placeholder="Enter statement description for plan" ng-model='newSubscription.statement_description' maxlength="15" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-6">
+                  <button class="btn btn-lg btn-block btn-success" ng-click="addSubscriptionFn()" ng-hide="planEdit"><span class="fa fa-plus"></span> Add</button>
+                  <button class="btn btn-lg btn-block btn-success" ng-click="editSubscriptionFn(newSubscription.id)" ng-show="planEdit"><span class="fa fa-plus"></span> Update</button>
+                  <button class="btn btn-lg btn-block btn-success" ng-click="editCancelFn()" ng-show="planEdit"><span class="fa fa-plus"></span> Cancel</button>
+                </div>
+              </form>
 
-                            </div>
+            </div>
 
-                            <div class="clearfix"></div>
+            <div class="clearfix"></div>
 
-                            <table class="table table-hover table-primary all-subscriptions">
-                              <thead>
-                                <tr>
-                                  <th>Active</th>
-                                  <th>Name</th>
-                                  <th>Interval</th>
-                                  <th>Amount</th>
-                                  <th>Actions</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr ng-repeat="plan in plans">
-                                  <td><span class="fa fa-check"></span></td>
-                                  <td>{{plan.name}}</td>
-                                  <td>{{plan.interval_count}}</td>
-                                  <td>${{plan.amount}}</td>
-                                  <td class="table-action">
-                                    <a ng-click="planEditFn(plan.id)"><i class="fa fa-pencil"></i></a>
-                                    <a ng-click="planDeleteFn(plan.id)" class="delete-row"><i class="fa fa-trash-o"></i></a>
-                                   </td>
-                                </tr>
-                              </tbody>
-                            </table>
+            <table class="table table-hover table-primary all-subscriptions">
+              <thead>
+                <tr>
+                  <th>Active</th>
+                  <th>Name</th>
+                  <th>Interval</th>
+                  <th>Amount</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="plan in plans">
+                  <td><span class="fa fa-check"></span>
+                  </td>
+                  <td>{{plan.name}}</td>
+                  <td>{{plan.interval_count}}</td>
+                  <td>${{plan.amount}}</td>
+                  <td class="table-action">
+                    <a ng-click="planEditFn(plan.id)"><i class="fa fa-pencil"></i></a>
+                    <a ng-click="planDeleteFn(plan.id)" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </li>
+        <li id="shipping-section" class="panel panel-message hidden">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-10">
+                <h3>Shipping</h3>
+              </div>
+              <div class="col-xs-2">
+                <div class="toggle-modern">
+                  <div class="toggles on" style="height: 35px; width: 110px;">
+                    <div class="toggle-slide">
+                      <div class="toggle-inner" style="width: 185px; margin-left: -75px;">
+                        <div class="toggle-on" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div>
+                        <div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div>
+                        <div class="toggle-off active" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div>
+                      </div>
                     </div>
-                </li>
-                <li id="shipping-section" class="panel panel-message hidden">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <h3>Shipping</h3>
-                            </div>
-                            <div class="col-xs-2">
-                                <div class="toggle-modern">
-                                    <div class="toggles on" style="height: 35px; width: 110px;"><div class="toggle-slide"><div class="toggle-inner" style="width: 185px; margin-left: -75px;"><div class="toggle-on" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div><div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div><div class="toggle-off active" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div></div></div></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-body" style="display: none;">
-                        <div class="row">
-                            <div class="form-horizontal col-xs-9" role="form">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body" style="display: none;">
+            <div class="row">
+              <div class="form-horizontal col-xs-9" role="form">
 
-                                <div class="form-group">
-                                    <label for="inputWeight" class="col-sm-3 control-label">Weight (kg)</label>
-                                    <div class="col-sm-9">
-                                        <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" class="form-control input-lg spinner-input ui-spinner-input" id="inputWeight" placeholder="Enter Weight" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span></a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a></span>
-                                    </div>
-                                </div>
+                <div class="form-group">
+                  <label for="inputWeight" class="col-sm-3 control-label">Weight (kg)</label>
+                  <div class="col-sm-9">
+                    <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" class="form-control input-lg spinner-input ui-spinner-input" id="inputWeight" placeholder="Enter Weight" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span>
+                    </a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a>
+                    </span>
+                  </div>
+                </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">Dimensions (cm)</label>
-                                    <div class="col-sm-3">
-                                        <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" placeholder="Length" class="form-control input-lg spinner-input ui-spinner-input" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span></a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a></span>
-                                        <span class="help-block">Length</span>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" placeholder="Width" class="form-control input-lg spinner-input ui-spinner-input" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span></a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a></span>
-                                        <span class="help-block">Width</span>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" placeholder="Height" class="form-control input-lg spinner-input ui-spinner-input" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span></a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a></span>
-                                        <span class="help-block">Height</span>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label">Dimensions (cm)</label>
+                  <div class="col-sm-3">
+                    <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" placeholder="Length" class="form-control input-lg spinner-input ui-spinner-input" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span>
+                    </a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a>
+                    </span>
+                    <span class="help-block">Length</span>
+                  </div>
+                  <div class="col-sm-3">
+                    <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" placeholder="Width" class="form-control input-lg spinner-input ui-spinner-input" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span>
+                    </a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a>
+                    </span>
+                    <span class="help-block">Width</span>
+                  </div>
+                  <div class="col-sm-3">
+                    <span class="ui-spinner ui-widget ui-widget-content ui-corner-all"><input type="text" placeholder="Height" class="form-control input-lg spinner-input ui-spinner-input" autocomplete="off" role="spinbutton" aria-valuenow="0"><a class="ui-spinner-button ui-spinner-up ui-corner-tr ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-n">▲</span></span>
+                    </a><a class="ui-spinner-button ui-spinner-down ui-corner-br ui-button ui-widget ui-state-default ui-button-text-only" tabindex="-1" role="button"><span class="ui-button-text"><span class="ui-icon ui-icon-triangle-1-s">▼</span></span></a>
+                    </span>
+                    <span class="help-block">Height</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li id="attributes-section" class="panel panel-message hidden">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-10">
+                <h3>Attributes</h3>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <div class="control-label">
+                    <div class="toggles toggle-modern" data-toggle-on="true" data-toggle-height="20" data-toggle-width="60">
+                      <div class="toggle-slide">
+                        <div class="toggle-inner" style="width: 185px; margin-left: -75px;">
+                          <div class="toggle-on" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div>
+                          <div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div>
+                          <div class="toggle-off active" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div>
                         </div>
+                      </div>
                     </div>
-                </li>
-                <li id="attributes-section" class="panel panel-message hidden">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <h3>Attributes</h3>
-                            </div>
-                            <div class="col-xs-2">
-                                <div class="form-group">
-                                    <div class="control-label">
-                                        <div class="toggles toggle-modern" data-toggle-on="true" data-toggle-height="20" data-toggle-width="60"><div class="toggle-slide"><div class="toggle-inner" style="width: 185px; margin-left: -75px;"><div class="toggle-on" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div><div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div><div class="toggle-off active" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div></div></div></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body" style="display: none;">
+            <div class="form-horizontal">
+              <div class="attribute">
+                <h4>Color</h4>
+                <input name="tags" id="tags1409493917144" class="form-control tags col-xs-12" value="red,green,blue" style="display: none;">
+                <div id="tags1409493917144_tagsinput" class="tagsinput" style="width: auto; min-height: 100px; height: 100%;"><span class="tag"><span>red&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a>
+                  </span><span class="tag"><span>green&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a>
+                  </span><span class="tag"><span>blue&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a>
+                  </span>
+                  <div id="tags1409493917144_addTag">
+                    <input id="tags1409493917144_tag" value="" data-default="add a color" style="color: rgb(102, 102, 102); width: 68px;">
+                  </div>
+                  <div class="tags_clear"></div>
+                </div>
+              </div>
+              <div class="clearfix mb15"></div>
+            </div>
+            <button class="btn btn-info pull-right btn-create-attribute">Create Attribute</button>
+          </div>
+        </li>
+        <li id="variations-section" class="panel panel-message hidden">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-10">
+                <h3>Variations</h3>
+              </div>
+              <div class="col-xs-2">
+                <div class="form-group">
+                  <div class="toggles toggle-modern" data-toggle-on="true" data-toggle-height="20" data-toggle-width="60">
+                    <div class="toggle-slide">
+                      <div class="toggle-inner" style="width: 185px; margin-left: -75px;">
+                        <div class="toggle-on" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div>
+                        <div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div>
+                        <div class="toggle-off active" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div>
+                      </div>
                     </div>
-                    <div class="panel-body" style="display: none;">
-                        <div class="form-horizontal">
-                            <div class="attribute">
-                                <h4>Color</h4>
-                                <input name="tags" id="tags1409493917144" class="form-control tags col-xs-12" value="red,green,blue" style="display: none;"><div id="tags1409493917144_tagsinput" class="tagsinput" style="width: auto; min-height: 100px; height: 100%;"><span class="tag"><span>red&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a></span><span class="tag"><span>green&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a></span><span class="tag"><span>blue&nbsp;&nbsp;</span><a href="#" title="Removing tag">x</a></span><div id="tags1409493917144_addTag"><input id="tags1409493917144_tag" value="" data-default="add a color" style="color: rgb(102, 102, 102); width: 68px;"></div><div class="tags_clear"></div></div>
-                            </div>
-                            <div class="clearfix mb15"></div>
-                        </div>
-                            <button class="btn btn-info pull-right btn-create-attribute">Create Attribute</button>
-                    </div>
-                </li>
-                <li id="variations-section" class="panel panel-message hidden">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <h3>Variations</h3>
-                            </div>
-                            <div class="col-xs-2">
-                                <div class="form-group">
-                                    <div class="toggles toggle-modern" data-toggle-on="true" data-toggle-height="20" data-toggle-width="60"><div class="toggle-slide"><div class="toggle-inner" style="width: 185px; margin-left: -75px;"><div class="toggle-on" style="height: 35px; width: 92.5px; text-align: center; text-indent: -17.5px; line-height: 35px;">ON</div><div class="toggle-blob" style="height: 35px; width: 35px; margin-left: -17.5px;"></div><div class="toggle-off active" style="height: 35px; width: 92.5px; margin-left: -17.5px; text-align: center; text-indent: 17.5px; line-height: 35px;">OFF</div></div></div></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-body" style="display: none;">
-                        Panel content
-                    </div>
-                </li>
-            </ul>
-        </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body" style="display: none;">
+            Panel content
+          </div>
+        </li>
+      </ul>
     </div>
+  </div>
+  <div class="rightpanel rightpanel-commerce-edit">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-justified">
+      <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Single Product Settings</a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
+
+    <div class="tab-content">
+      <div class="tab-pane pane-settings active" id="rp-page">
+        <div class="leftpanelinner">
+          <div class="form-group">
+            <label>Default Icon</label>
+            <a id="convert-pref" role="iconpicker"></a>
+          </div>
+          <div class="form-group">
+            <label>Default Status</label>
+            <select class="form-control input-lg" ng-model="userPreferences.default_product_status" ng-change="savePreferencesFn()">
+              <option>Active</option>
+              <option>Backorder</option>
+              <option>Inactive</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- rightpanel -->
 </div>

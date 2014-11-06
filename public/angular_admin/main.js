@@ -21,6 +21,7 @@ require.config({
         'bootstrap': 'libs/bootstrap/dist/js/bootstrap',
         'bootstrapSwitch':'libs/bootstrap-switch/dist/js/bootstrap-switch.min',
         "bootstrap-iconpicker":"libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min",
+        "bootstrap-iconpicker-font-awesome":"libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min",
         'spectrum': 'libs/spectrum/spectrum',
         'colorpicker': 'libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
@@ -29,7 +30,7 @@ require.config({
         'webfontloader': 'libs/jd-fontselect/dist/libs/webfontloader',
         'jdfontselect': 'libs/jd-fontselect/dist/angular-fontselect.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
-        'd3': 'libs/d3/d3',
+        'd3': 'libs/d3/d3.min',
         'c3': 'libs/c3/c3.min',
         'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
         'angularUiRouter': 'libs/angular-ui-router/release/angular-ui-router.min',
@@ -46,6 +47,9 @@ require.config({
         "ngHeadroom":"libs/headroom.js/dist/angular.headroom.min",
         "bootstrap-confirmation": "libs/bootstrap-confirmation/bootstrap-confirmation",
         "moment": 'libs/moment/min/moment.min',
+        'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
+        'highcharts': 'libs/highcharts/highcharts-all',
+        'highcharts-ng': 'libs/highcharts-ng/dist/highcharts-ng.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -157,10 +161,11 @@ require.config({
         'stripeButtonDirective': {deps: ['angular', 'varModules']},
         'htmlify': {deps: ['angular', 'varModules']},
         'ngProgress': {deps: ['angular']},
-        'bootstrap-iconpicker': {deps: ['jquery']},
+        'bootstrap-iconpicker': {deps: ['jquery']},        
         'unsafeHtml': {deps: ['angular']},
         "bootstrap-confirmation" : {deps: ['bootstrap']},
-        'jdfontselect': {deps: ['angular','webfontloader']}
+        'jdfontselect': {deps: ['angular','webfontloader']},
+        'ngInfiniteScroll': {deps: ['angular']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

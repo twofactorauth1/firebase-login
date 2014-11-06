@@ -37,6 +37,21 @@ mainApp.service('userService', function ($http) {
         });
     };
 
+    this.initializeUser = function(user, fn) {
+        var apiUrl = baseUrl + ['user', 'initialize'].join('/');
+        $http({
+            url: apiUrl,
+            method: "POST",
+            data: angular.toJson(user)
+        })
+        .success(function (data, status, headers, config) {
+            fn(data);
+        })
+        .error(function (err) {
+            console.log('END:userService with ERROR', err);
+        });
+    };
+
     this.checkDomainExists = function(businessName, fn) {
         var apiUrl = baseUrl + ['account', businessName, 'available'].join('/');
         $http({

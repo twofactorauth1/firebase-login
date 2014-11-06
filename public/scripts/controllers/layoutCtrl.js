@@ -1,6 +1,6 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService', 'PaymentService', 'ProductService',
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService',
     function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService) {
         var account, theme, website, pages, teaserposts, route, postname, products, that = this;
 
@@ -321,6 +321,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             accountToken: data.token
                         };
 
+                        //get the token
+                        PaymentService.getStripeCardToken(newAccount.card, function(token) {
+                            newUser.cardToken = token;
+                            newUser.plan = $scope.selectedPlan;
+                            newUser.anonymousId = window.analytics.user().anonymousId();
+                            userService.initializeUser(newUser, function(data){
+                                window.location.replace(newUser.accountUrl);
+                            });
+                        });
+
+                        /*
                         userService.createUser(newUser, function(data) {
                             var newUser = data;
                             PaymentService.getStripeCardToken(newAccount.card, function(token) {
@@ -332,7 +343,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                     // });
                                 });
                             });
-                        });
+                        });*/
                     });
                 });
             };

@@ -8,6 +8,9 @@ require('./dao/analytics.dao.js');
 var _log = $$.g.getLogger("analytics_manager");
 var SEGMENTIO = 'segment.io';
 var dao = require('./dao/analytics.dao.js');
+var segmentConfig = require('../configs/segmentio.config');
+var Analytics = require('analytics-node');
+var analytics = new Analytics(segmentConfig.SEGMENT_WRITE_KEY);
 
 module.exports = {
 
@@ -120,6 +123,23 @@ module.exports = {
                 _log.debug('<< listEvents');
                 fn(null, list);
             }
+        });
+    },
+
+    linkUsers: function(oldId, newId, fn) {
+        var self = this;
+        _log.debug('>> linkUsers');
+        analytics.alias({
+            previousId: oldId,
+            userId: newId
+        }, function(err, value){
+            if(err) {
+                _log.error('Error calling segment to link users: ' + err);
+            } else {
+                _log.debug('Linked users: ' + value);
+            }
+            _log.debug('<< linkUsers');
+            fn(null, value);
         });
     }
 

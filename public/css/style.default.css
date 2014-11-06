@@ -17353,8 +17353,8 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   overflow-x: hidden;
   top: 0;
   right: -240px;
-  display: none;
   z-index: 999999;
+  display: none;
 }
 .rightpanel .nav-tabs {
   border-radius: 0;
@@ -17954,6 +17954,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .dashboard {
   background: #e7e7e7;
 }
+.dashboard .btn-clearblack {
+  background: rgba(0, 0, 0, 0.1);
+}
 .dashboard .chart-wrapper {
   background: #fff;
   border: 1px solid #e2e2e2;
@@ -17968,8 +17971,10 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   padding: 8px 10px 5px;
 }
 .dashboard .chart-wrapper .chart-stage {
-  min-height: 240px;
   padding: 5px 10px;
+}
+.dashboard .chart-wrapper .chart-stage.table {
+  padding: 0px;
 }
 .dashboard .chart-wrapper .chart-notes {
   background: #fbfbfb;
@@ -17977,6 +17982,44 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   color: #808080;
   font-size: 12px;
   padding: 8px 10px 5px;
+}
+.dashboard .keen-metric {
+  margin: 10px auto;
+  padding: 15px;
+}
+.dashboard .keen-metric.increase {
+  background-color: #44d1ac;
+  border-bottom: 4px solid #3ebc9b;
+}
+.dashboard .keen-metric.increase .keen-metric-title {
+  color: #1e876b;
+}
+.dashboard .keen-metric.decrease {
+  background-color: #e74c3c;
+  border-bottom: 4px solid #c0392b;
+}
+.dashboard .keen-metric.decrease .keen-metric-title {
+  color: #ac382d;
+}
+.dashboard .keen-metric .keen-metric-title {
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+}
+.dashboard .keen-metric .keen-metric-value {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  font-size: 45px;
+}
+.dashboard .keen-metric .keen-metric-change-value {
+  font-size: 20px;
+  margin-top: 18px;
+  text-align: left;
+  line-height: 12px;
+}
+.dashboard .keen-metric .keen-metric-change-value span {
+  font-size: 14px;
+}
+.dashboard .keen-metric .btn-view-details {
+  display: none;
 }
 .ckbox,
 .rdio {
@@ -19617,6 +19660,9 @@ div.error label.error:before {
 .website .pageheader .btn-group {
   margin-bottom: 0;
 }
+.website .btn.media-modal {
+  margin-right: 10px;
+}
 .website #iframe-website {
   border: none;
   width: 100%;
@@ -20539,293 +20585,6 @@ input[type='file'] {
 #social_dashboard #social_dashboard_rightbar .nav-tabs {
   margin-top: 0!important;
 }
-path {
-  fill: transparent;
-}
-.x-axis text,
-.y-axis text {
-  font-size: 12px;
-  fill: #777;
-}
-.grid1 .x-axis text,
-.grid1 .y-axis text {
-  font-size: 11px;
-}
-.x-axis .domain,
-.y-axis .domain {
-  stroke: #aaa;
-  stroke-width: 1px;
-  shape-rendering: crispEdges;
-}
-.x-axis .tick {
-  stroke: #ccc;
-  stroke-width: 1px;
-  shape-rendering: crispEdges;
-}
-.y-axis .tick,
-.y-axis .domain {
-  fill: transparent;
-  display: none;
-}
-.graph-title {
-  margin: 0;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 15px;
-  line-height: 15px;
-  padding: 6px 10px;
-  background: #f3f3f5;
-  font-size: 15px;
-  color: #aaacb5;
-  font-weight: 400;
-  text-transform: uppercase;
-}
-.graph-likes path,
-.graph-post-interactions path {
-  fill: none;
-  stroke-width: 1px;
-  stroke: #44f;
-}
-.graph-likes path.unlikes,
-.graph-post-interactions path.unlikes {
-  stroke: #f44;
-}
-.graph-likes .tick-x line,
-.graph-post-interactions .tick-x line,
-.graph-likes .tick-y line,
-.graph-post-interactions .tick-y line {
-  stroke-width: 1px;
-  stroke: rgba(0, 0, 0, 0.02);
-}
-.graph-likes .tick-y line,
-.graph-post-interactions .tick-y line {
-  stroke-width: 2px;
-  stroke-dasharray: 5, 5;
-}
-.graph-likes .tick-x line,
-.graph-post-interactions .tick-x line {
-  shape-rendering: crispEdges;
-}
-.graph-likes .domain,
-.graph-post-interactions .domain {
-  display: none;
-}
-.graph-likes .point,
-.graph-post-interactions .point {
-  fill: #99f;
-  stroke-width: 1px;
-  stroke: #fff;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  -webkit-transform-origin: 50% 50%;
-}
-.graph-likes .point.likes,
-.graph-post-interactions .point.likes {
-  fill: #9999ff;
-}
-.graph-likes .point.likes:hover,
-.graph-post-interactions .point.likes:hover {
-  fill: #66f;
-}
-.graph-likes .point.unlikes,
-.graph-post-interactions .point.unlikes {
-  fill: #ff9999;
-}
-.graph-likes .point.unlikes:hover,
-.graph-post-interactions .point.unlikes:hover {
-  fill: #f66;
-}
-.graph-likes .point.max,
-.graph-post-interactions .point.max {
-  fill: #339cff;
-  stroke-width: 2px;
-}
-.graph-likes .area,
-.graph-post-interactions .area {
-  stroke-width: 0;
-}
-.graph-likes .area.likes,
-.graph-post-interactions .area.likes {
-  fill: rgba(153, 153, 255, 0.4);
-}
-.graph-likes .area.unlikes,
-.graph-post-interactions .area.unlikes {
-  fill: rgba(255, 153, 153, 0.4);
-}
-.graph-post-interactions .legend text {
-  fill: #444;
-  font-size: 12px;
-}
-.graph-post-interactions rect {
-  -webkit-transition: fill 0.3s;
-  transition: fill 0.3s;
-}
-.graph-post-interactions rect:hover {
-  fill: #55f;
-}
-.graph-post-interactions .total {
-  stroke-width: 1px;
-  stroke: rgba(0, 0, 255, 0.5);
-}
-.graph-post-timeline circle.post {
-  fill: #77f;
-  stroke-width: 3px;
-  stroke: #55f;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  -webkit-transform: scale(1, );
-  -ms-transform: scale(1, );
-  transform: scale(1, );
-  clip: 0 0 10px 10px;
-}
-.graph-post-timeline circle.post:hover {
-  fill: #99f;
-  stroke: #66f;
-  stroke-width: 2px;
-}
-.graph-post-timeline line.divider {
-  stroke: #ccc;
-  stroke-width: 1px;
-  shape-rendering: crispEdges;
-}
-.graph-post-timeline .domain {
-  display: none;
-}
-.graph-overview {
-  padding: 40px 20px 20px;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-}
-.graph-overview p {
-  font-size: 28px;
-  font-weight: 300;
-  color: #88e;
-  line-height: 1.3;
-}
-.graph-overview p b {
-  color: #666;
-  font-weight: 500;
-}
-.graph-overview sup {
-  color: #aaa;
-  font-size: 13px;
-}
-.graph-top-posts {
-  width: 100%;
-}
-.graph-top-posts th {
-  text-align: left;
-  color: #444;
-  font-weight: 500;
-  vertical-align: bottom;
-  line-height: 1.1;
-  padding-bottom: 4px;
-  border-bottom: 2px solid #eee;
-}
-.graph-top-posts td {
-  color: #55c;
-  border-bottom: 1px dashed #eee;
-  padding: 2px 0;
-}
-.graph-top-posts .title {
-  text-align: center;
-}
-.graph-top-posts .metric {
-  font-weight: bold;
-  font-size: 18px;
-  text-align: center;
-}
-.graph-top-posts .virality div {
-  position: relative;
-}
-.graph-top-posts .virality .text {
-  position: relative;
-  z-index: 3;
-  color: #444;
-  font-size: 12px;
-}
-.graph-top-posts .virality .meter {
-  display: inline-block;
-  height: 18px;
-  vertical-align: top;
-  background: #77e;
-  min-width: 5px;
-  max-width: 50%;
-  z-index: 0;
-}
-.graph-daily-reach .x-axis path {
-  stroke-width: 0;
-}
-.graph-engaged-age-gender .bar {
-  fill: #77f;
-}
-.graph-engaged-age-gender .x-axis .tick,
-.graph-engaged-age-gender .x-axis path {
-  stroke-width: 0;
-}
-.graph-engaged-age-gender .x-axis text {
-  fill: #444;
-}
-.graph-engaged-age-gender .legend {
-  font-size: 12px;
-}
-.graph-top-fans {
-  width: 100%;
-  padding: 33px 10px 10px 10px;
-}
-.graph-top-fans tr {
-  height: 44px;
-}
-.graph-top-fans td {
-  border-bottom: 1px solid #ececec;
-}
-.graph-top-fans td.picture {
-  border-bottom: 0;
-}
-.graph-top-fans .picture {
-  width: 44px;
-}
-.graph-top-fans .picture img {
-  max-width: 44px;
-  max-height: 44px;
-}
-.graph-top-fans .name {
-  padding-left: 20px;
-}
-.graph-top-fans .gender span {
-  font: 0/0 a;
-  color: transparent;
-  text-shadow: none;
-  background-color: transparent;
-  border: 0;
-}
-.graph-top-fans .gender::before {
-  content: 'U';
-  color: #777;
-}
-.graph-top-fans .gender.male::before {
-  content: 'M';
-  color: #77f;
-}
-.graph-top-fans .gender.female::before {
-  content: 'F';
-  color: #f77;
-}
-.graph-top-fans .likes,
-.graph-top-fans .comments {
-  color: #444;
-}
-.graph-top-fans .likes span,
-.graph-top-fans .comments span {
-  display: inline-block;
-  min-width: 40px;
-  text-align: right;
-}
 .daterangepicker {
   display: none;
 }
@@ -21170,6 +20929,9 @@ path {
 .single-product .all-subscriptions .fa-check {
   font-size: 18px;
   color: #2ecc71;
+}
+.single-product .rightpanel.rightpanel-commerce-edit {
+  z-index: 1000;
 }
 .campaign-list,
 .template-list {

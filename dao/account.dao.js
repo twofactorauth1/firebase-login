@@ -29,6 +29,10 @@ var dao = {
     },
 
 
+    getAccountsBySubdomain: function (subdomain, accountId, fn) {
+        this.findOne({ _id: { $ne: accountId }, 'subdomain': subdomain}, fn);
+    },
+
     getAccountBySubdomain: function (subdomain, fn) {
         this.findOne({'subdomain': subdomain}, fn);
     },
@@ -281,8 +285,31 @@ var dao = {
             }
         });
 
-    }
+    },
     //endregion
+
+    addSubscriptionToAccount: function(accountId, subscriptionId, fn) {
+        var self = this;
+        self.log.debug('>> addSubscriptionToAccount');
+        self.getById(accountId, $$.m.Account, function(err, account){
+            if(err) {
+                self.log.error('Error getting account for id [' + accountId + ']: ' + err);
+                return fn(err, null);
+            }
+            var billing = account.get('billing');
+            billing.subscriptionId=subscriptionId;
+            account.set('billing', billing);
+            self.saveOrUpdate(account, function(err, savedAccount){
+                if(err) {
+                    self.log.error('Error updating account for id [' + accountId + ']: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< addSubscriptionToAccount');
+                    return fn(null, savedAccount);
+                }
+            });
+        });
+    }
 };
 
 dao = _.extend(dao, $$.dao.BaseDao.prototype, dao.options).init();

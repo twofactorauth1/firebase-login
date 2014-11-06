@@ -5,18 +5,26 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-var securityManager = require('../security/securitymanager');
+//var securityManager = require('../security/securitymanager');
+
+var securityManager = require('../security/sm')(true);
+var securityConstants = require('../security/utils/security.constants');
+var appConfig = require('../configs/app.config');
 
 
 var apiBase = function(options) {
+
     this.init.apply(this, arguments);
+
 };
 
 _.extend(apiBase.prototype, {
 
     log: null,
+    base: null,
 
     sm: securityManager,
+    sc: securityConstants,
 
     init: function(options) {
         options = options || {};
@@ -101,6 +109,49 @@ _.extend(apiBase.prototype, {
         resp.send(response.code, response);
     },
 
+    /**
+     * This method verifies that the user is authenticated and the account has a valid subscription.
+     * @param req
+     * @param resp
+     * @param next
+     */
+    isAuthAndSubscribedApi: function(req, resp, next) {
+        var self = this;
+
+        self.sm = securityManager;
+        if(req.isAuthenticated()) {
+            //don't need to verify inidigenous main account
+            if(appConfig.mainAccountID === self.accountId(req)) {
+                return next();
+            } else {
+                self.sm.verifySubscription(req, function(err, isValid){
+                    if(isValid === true && _.contains(req.session.subprivs, self.base)) {
+                        return next();
+                    } else {
+
+                        var response = {
+                            code: 403,
+                            status: 'Not Authorized',
+                            message: 'Your subscription could not be verified',
+                            detail: ''
+                        };
+                        resp.send(response.code, response);
+                    }
+                });
+            }
+
+        } else {
+            var response = {
+                code:401,
+                status:"Not Authenticated",
+                message:"User is not Authenticated",
+                detail: ""
+            };
+
+            resp.send(response.code, response);
+        }
+    },
+
 
     userId: function(req) {
         try {
@@ -153,6 +204,12 @@ _.extend(apiBase.prototype, {
 
     send200: function(res) {
         res.send({});
+    },
+
+    send403: function(res) {
+        console.log('before send403');
+        res.send(403, {code:403, status:'fail', message:'Unauthorized', detail:'You are not authorized to complete this action.'});
+        console.log('after send403');
     },
 
 
@@ -210,7 +267,32 @@ _.extend(apiBase.prototype, {
             result.pingDao = "No DAO Defined";
             resp.send(result);
         }
+    },
+
+    checkPermission: function(req, priv, cb) {
+        this.sm.hasPermission(this.userId(req), this.accountId(req), priv, cb);
+    },
+
+    checkPermissionForAccount: function(req, priv, accountId, cb) {
+        this.sm.hasPermission(this.userId(req), accountId, priv, cb);
+    },
+
+    checkPermissionForAccountAndUser: function(userId, accountId, priv, cb) {
+        console.log('checkPermissionForAccountAndUser(' + userId + ',' + accountId +',' + priv + ',' + cb + ')');
+        this.sm.hasPermission(userId, accountId, priv, cb);
+    },
+
+    checkPermissionAndSendResponse: function(req, priv, res, successObj) {
+        var self = this;
+        self.checkPermission(req, priv, function(err, isAllowed){
+            if(isAllowed === true) {
+                res.send(successObj);
+            } else {
+                self.send403(res);
+            }
+        });
     }
+
 });
 
 

@@ -1,5 +1,8 @@
 .dashboard {
     background: #e7e7e7;
+    .btn-clearblack {
+        background: rgba(0,0,0,0.1);
+    }
     .chart-wrapper {
         background: #fff;
         border: 1px solid #e2e2e2;
@@ -14,8 +17,10 @@
         padding: 8px 10px 5px;
     }
     .chart-wrapper .chart-stage {
-        min-height: 240px;
         padding: 5px 10px;
+    }
+    .chart-wrapper .chart-stage.table {
+        padding: 0px;
     }
     .chart-wrapper .chart-notes {
         background: #fbfbfb;
@@ -23,5 +28,43 @@
         color: #808080;
         font-size: 12px;
         padding: 8px 10px 5px;
+    }
+    .keen-metric {
+        margin: 10px auto;
+        padding: 15px;
+        &.increase {
+            background-color: #44d1ac;
+            border-bottom: 4px solid #3ebc9b;
+            .keen-metric-title {
+                color: #1e876b;
+            }
+        }
+        &.decrease {
+            background-color: #e74c3c;
+            border-bottom: 4px solid #c0392b;
+            .keen-metric-title {
+                color: #ac382d;
+            }
+        }
+        .keen-metric-title {
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+            font-weight: 400;
+        }
+        .keen-metric-value {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+            font-size: 45px;
+        }
+        .keen-metric-change-value {
+            font-size: 20px;
+            margin-top: 18px;
+            text-align: left;
+            line-height: 12px;
+            span {
+                font-size: 14px;
+            }
+        }
+        .btn-view-details {
+            display: none;
+        }
     }
 }
