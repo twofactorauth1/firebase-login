@@ -7,8 +7,11 @@
 			</button>
 		</div>
 		<div class="col-xs-6">
-			<h2 class="center">
-				Net Revenue
+			<h2 class="center hidden-xs">
+				Monthly Recurring Revenue
+			</h2>
+			<h2 class="center visible-xs">
+				MRR
 			</h2>
 		</div>
 		<div class="col-xs-3">
@@ -22,65 +25,65 @@
 
 	<div class="contentpanel" ng-style="styleCommerce()" indigeweb-resize>
 		<div class="single-metric-top">
-				<div class="panel">
-					<h1 ng-show="thisMonth != null" ng-class="{'decrease': thisMonth < 0, 'increase': thisMonth > 0 }">{{thisMonth | formatCurrency}}</h1>
-					<h1 ng-show="thisMonth == null">$ --</h1>
-					<highchart config="totalRevenueConfig"></highchart>
-					<div class="row">
-						<div class="col-xs-3 top-four">
-							<div class="metric center">Previous 30 Days</div>
-							<div class="title center" ng-class="{'decrease': thisMonth < 0, 'increase': thisMonth > 0 }">{{thisMonth | formatCurrency}}</div>
-						</div>
-						<div class="col-xs-3 top-four">
-						<div class="metric center">Previous 60 Days</div>
-							<div class="title center" ng-class="{'decrease': lastSixty < 0, 'increase': lastSixty > 0 }">{{lastSixty | formatCurrency}}</div>
-						</div>
-						<div class="col-xs-3 top-four">
-						<div class="metric center">Previous 3 Months</div>
-							<div class="title center" ng-class="{'decrease': previousNinety < 0, 'increase': previousNinety > 0 }">{{previousNinety | formatCurrency}}</div>
-						</div>
-						<div class="col-xs-3 top-four">
-							<div class="metric center">Past Year</div>
-							<div class="title center" ng-class="{'decrease': previousYear < 0, 'increase': previousYear > 0 }">{{previousYear | formatCurrency}}</div>
-						</div>
+			<div class="panel">
+				<h1 ng-show="thisMonth != null" ng-class="{'decrease': thisMonth < 0, 'increase': thisMonth > 0 }">{{thisMonth | formatCurrency}}</h1>
+				<h1 ng-show="thisMonth == null">$ --</h1>
+				<highchart ng-show="totalRevenueConfig" config="totalRevenueConfig"></highchart>
+				<div class="row">
+					<div class="col-sm-3 col-xs-12 top-four">
+						<div class="metric center">Previous 30 Days</div>
+						<div class="title center" ng-class="{'decrease': thisMonth < 0, 'increase': thisMonth > 0 }">{{thisMonth | formatCurrency}}</div>
+					</div>
+					<div class="col-sm-3 col-xs-12 top-four">
+					<div class="metric center">Previous 60 Days</div>
+						<div class="title center" ng-class="{'decrease': lastSixty < 0, 'increase': lastSixty > 0 }">{{lastSixty | formatCurrency}}</div>
+					</div>
+					<div class="col-sm-3 col-xs-12 top-four">
+					<div class="metric center">Previous 3 Months</div>
+						<div class="title center" ng-class="{'decrease': previousNinety < 0, 'increase': previousNinety > 0 }">{{previousNinety | formatCurrency}}</div>
+					</div>
+					<div class="col-sm-3 col-xs-12 top-four">
+						<div class="metric center">Past Year</div>
+						<div class="title center" ng-class="{'decrease': previousYear < 0, 'increase': previousYear > 0 }">{{previousYear | formatCurrency}}</div>
 					</div>
 				</div>
-				<div class="clearfix mb30"></div>
-				<div class="row panel">
-					<div class="col-xs-2 top-six">
+			</div>
+			<div class="clearfix mb15"></div>
+			<div class="panel">
+				<div class="row">
+					<div class="col-sm-2 col-xs-6 top-six">
 						<div class="metric center">30 Day Growth</div>
 						<div class="title center" ng-class="{'decrease': thirtyDayGrowth < 0, 'increase': thirtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': thirtyDayGrowth < 0, 'fa fa-chevron-up': thirtyDayGrowth > 0 }"></i> {{thirtyDayGrowth}}%</div>
 					</div>
-					<div class="col-xs-2 top-six">
+					<div class="col-sm-2 col-xs-6 top-six">
 						<div class="metric center">60 Day Growth</div>
 						<div class="title center" ng-class="{'decrease': sixtyDayGrowth < 0, 'increase': sixtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': sixtyDayGrowth < 0, 'fa fa-chevron-up': sixtyDayGrowth > 0 }"></i> {{sixtyDayGrowth}}%</div>
 					</div>
-					<div class="col-xs-2 top-six">
+					<div class="col-sm-2 col-xs-6 top-six">
 						<div class="metric center">3 Month Growth</div>
-						<div class="title center" ng-class="{'decrease': ninetyDayGrowth < 0, 'increase': ninetyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': ninetyDayGrowth < 0, 'fa fa-chevron-up': ninetyDayGrowth > 0 }"></i> {{ninetyDayGrowth}}%</div>
+						<div class="title center" ng-class="{'decrease': thirtyDayGrowth < 0, 'increase': thirtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': thirtyDayGrowth < 0, 'fa fa-chevron-up': thirtyDayGrowth > 0 }"></i> {{thirtyDayGrowth}}%</div>
 					</div>
-					<div class="col-xs-2 top-six">
+					<div class="col-sm-2 col-xs-6 top-six">
 						<div class="metric center">6 Month Growth</div>
 						<div class="title center" ng-class="{'decrease': thirtyDayGrowth < 0, 'increase': thirtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': thirtyDayGrowth < 0, 'fa fa-chevron-up': thirtyDayGrowth > 0 }"></i> {{thirtyDayGrowth}}%</div>
 					</div>
-					<div class="col-xs-2 top-six">
+					<div class="col-sm-2 col-xs-6 top-six">
 						<div class="metric center">9 Month Growth</div>
 						<div class="title center" ng-class="{'decrease': thirtyDayGrowth < 0, 'increase': thirtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': thirtyDayGrowth < 0, 'fa fa-chevron-up': thirtyDayGrowth > 0 }"></i> {{thirtyDayGrowth}}%</div>
 					</div>
-					<div class="col-xs-2 top-six">
+					<div class="col-sm-2 col-xs-6 top-six">
 						<div class="metric center">Yearly Growth</div>
-						<div class="title center" ng-class="{'decrease': yearlyGrowth < 0, 'increase': yearlyGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': yearlyGrowth < 0, 'fa fa-chevron-up': yearlyGrowth > 0 }"></i> {{yearlyGrowth}}%</div>
+						<div class="title center" ng-class="{'decrease': thirtyDayGrowth < 0, 'increase': thirtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': thirtyDayGrowth < 0, 'fa fa-chevron-up': thirtyDayGrowth > 0 }"></i> {{thirtyDayGrowth}}%</div>
 					</div>
 				</div>
-
-
+			</div>
 			<div class="table-responsive">
                 <table class="table table-dark mb30">
                     <thead>
                       <tr>
                         <th>Plan</th>
                         <th>Customers</th>
-                        <th>Current MRR</th>
+                        <th>Net Revenue</th>
                         <th>Graph</th>
                       </tr>
                     </thead>

@@ -1,3 +1,6 @@
+<script type="text/javascript">
+    !function(a,b){a("Keen","https://d26b395fwzu5fz.cloudfront.net/3.1.0/keen.min.js",b)}(function(a,b,c){var d,e,f;c["_"+a]={},c[a]=function(b){c["_"+a].clients=c["_"+a].clients||{},c["_"+a].clients[b.projectId]=this,this._config=b},c[a].ready=function(b){c["_"+a].ready=c["_"+a].ready||[],c["_"+a].ready.push(b)},d=["addEvent","setGlobalProperties","trackExternalLink","on"];for(var g=0;g<d.length;g++){var h=d[g],i=function(a){return function(){return this["_"+a]=this["_"+a]||[],this["_"+a].push(arguments),this}};c[a].prototype[h]=i(h)}e=document.createElement("script"),e.async=!0,e.src=b,f=document.getElementsByTagName("script")[0],f.parentNode.insertBefore(e,f)},this);
+</script>
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="dashboard">
     <div class="pageheader row">
@@ -164,10 +167,19 @@
             <div class="row">
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }" tooltip-placement="top" tooltip="Gross Volume">
-                        <a href="/admin#/dashboard/net-revenue">
+                        <a href="/admin#/dashboard/monthly-recurring-revenue">
                             <span class="keen-metric-title mb10">Monthly Recurring Revenue</span>
-                            <span class="keen-metric-value col-sm-6"><div class="text-right"> {{monthlyRecurringRevenue | formatCurrency}}</div></span>
-                            <span class="keen-metric-change-value col-sm-6"><div class="center"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}% </br> <span>previous month</span></div></span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center" ng-show="monthlyRecurringRevenue != null"> {{monthlyRecurringRevenue | formatCurrency}}</div>
+                                <div ng-show="monthlyRecurringRevenue == null">$ --</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                            <div class="center">
+                                <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                <div ng-show="totalRevenuePercent == null">-- %</div>
+                                </br> <span>previous month</span>
+                            </div>
+                            </span>
                             <div class="clearfix"></div>
                         </a>
                     </div>
@@ -176,8 +188,17 @@
                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }" tooltip-placement="top" tooltip="Gross Volume">
                         <a href="/admin#/dashboard/net-revenue">
                             <span class="keen-metric-title mb10">Net Revenue</span>
-                            <span class="keen-metric-value col-sm-6"><div class="text-right"> {{totalRevenue | formatCurrency}}</div></span>
-                            <span class="keen-metric-change-value col-sm-6"><div class="center"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}% </br> <span>previous month</span></div></span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center" ng-show="totalRevenue != null"> {{totalRevenue | formatCurrency}}</div>
+                                <div ng-show="totalRevenue == null">$ --</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center">
+                                    <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                    <div ng-show="totalRevenuePercent == null">-- %</div>
+                                    </br> <span>previous month</span>
+                                </div>
+                            </span>
                             <div class="clearfix"></div>
                         </a>
                     </div>
@@ -467,9 +488,9 @@
 <!-- <div id="rightpanel">
   <div class="rightpanel rightpanel-website">
        <ul class="nav nav-tabs nav-justified">
-	        <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
-	        </li>
-    	</ul>
+            <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
+            </li>
+        </ul>
 
     <div class="tab-content">
         <div class="tab-pane pane-settings active" id="rp-settings">

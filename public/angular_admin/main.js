@@ -66,6 +66,7 @@ require.config({
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
         'postService': '/angular_admin/services/post',
+        'googleLogin': '/angular_admin/services/google_login',
         'productService': '/angular_admin/services/product',
         'dashboardService': '/angular_admin/services/dashboard',
         'chartFacebookService': '/angular_admin/services/chart_facebook',

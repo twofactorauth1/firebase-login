@@ -18026,10 +18026,14 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .dashboard .keen-metric .btn-view-details {
   display: none;
 }
+.single-metric-top h1 {
+  padding: 25px;
+  font-size: 60px;
+  margin: 0;
+}
 .single-metric-top .top-four {
   padding: 50px 20px;
-  background: #444;
-  color: #fff;
+  color: #444;
 }
 .single-metric-top .top-four .title {
   text-align: center;
@@ -18053,6 +18057,17 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .single-metric-top .top-six .metric {
   text-align: center;
   font-size: 14px;
+}
+@media (max-width: 767px) {
+  .single-metric-top .top-four {
+    padding: 15px 20px;
+  }
+}
+.increase {
+  color: #2ecc71;
+}
+.decrease {
+  color: #c0392b;
 }
 .ckbox,
 .rdio {

@@ -76,10 +76,14 @@
 }
 
 .single-metric-top {
+    h1 {
+        padding: 25px;
+        font-size: 60px;
+        margin: 0;
+    }
     .top-four {
         padding: 50px 20px;
-        background: #444;
-        color: #fff;
+        color: #444;
         .title {
             text-align: center;
             font-size: 50px;
@@ -105,3 +109,14 @@
         }
     }
 }
+
+@media(max-width:767px){
+    .single-metric-top {
+        .top-four {
+            padding: 15px 20px;
+        }
+    }
+}
+
+.increase { color: #2ecc71; }
+.decrease { color: #c0392b; }
