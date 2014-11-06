@@ -17353,6 +17353,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   overflow-x: hidden;
   top: 0;
   right: -240px;
+  z-index: 999999;
   display: none;
 }
 .rightpanel .nav-tabs {
@@ -20928,6 +20929,9 @@ input[type='file'] {
 .single-product .all-subscriptions .fa-check {
   font-size: 18px;
   color: #2ecc71;
+}
+.single-product .rightpanel.rightpanel-commerce-edit {
+  z-index: 1000;
 }
 .campaign-list,
 .template-list {
