@@ -172,6 +172,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var password2 = req.body.password2;
         var email = req.body.username;
         var accountToken = req.body.accountToken;
+        var anonymousId = req.body.anonymousId;
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'monthly_access';//TODO: make sure this gets passed
@@ -188,8 +189,9 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> accountToken', accountToken);
         self.log.debug('>> cardToken', cardToken);
         self.log.debug('>> plan', plan);
+        self.log.debug('>> anonymousId', anonymousId);
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, function (err, user) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, function (err, user) {
             if(err) {
                 self.log.error('Error creating account or user: ' + err);
                 return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
@@ -265,6 +267,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var password2 = req.body.password2;
         var email = req.body.username;
         var accountToken = req.body.accountToken;
+        var anonymousId = req.body.anonymousId;
 
         // if (username == null || username.trim() == "") {
         //     req.flash("error", "You must enter a valid username");
@@ -294,9 +297,10 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> password1', password1);
         self.log.debug('>> email', email);
         self.log.debug('>> accountToken', accountToken);
+        self.log.debug('>> anonymousId', anonymousId);
 
-        //TODO: userManager
-        userManager.createAccountAndUser(username, password1, email, accountToken, function (err, value) {
+
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, function (err, value) {
             var userObj = value;
             self.log.debug('createUserFromUsernamePassword >>>');
                 if (!err) {

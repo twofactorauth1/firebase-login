@@ -13,10 +13,11 @@ var log = $$.g.getLogger("user.manager");
 var securityManager = require('../security/sm')(true);
 var contactDao = require('./contact.dao');
 var appConfig = require('../configs/app.config');
+var analyticsManager = require('../analytics/analytics_manager');
 
 module.exports = {
 
-    createAccountAndUser: function(username, password, email, accountToken, fn) {
+    createAccountAndUser: function(username, password, email, accountToken, anonymousId, fn) {
         var self = this;
         if (_.isFunction(accountToken)) {
             fn = accountToken;
@@ -81,6 +82,7 @@ module.exports = {
                         }
                         var userId = savedUser.id();
                         log.debug('Created user with id: ' + userId);
+                        analyticsManager.linkUsers(anonymousId, userId, function(err, value){});
                         log.debug('Creating customer contact for main account.');
                         contactDao.createCustomerContact(user, appConfig.mainAccountID, function(err, contact){
                             if(err) {

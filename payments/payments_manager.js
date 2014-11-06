@@ -16,7 +16,7 @@ module.exports = {
     },
 
     createStripeSubscription: function(customerId, planId, accountId, userId, fn) {
-        log.debug('>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',' + fn + ')');
+        log.debug('>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',callback)');
         stripeDao.createStripeSubscription(customerId, planId, null, null, null, null, null, null, accountId, null, userId, null, fn);
     }
 };
