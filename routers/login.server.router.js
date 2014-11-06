@@ -148,10 +148,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     handleLogout: function (req, resp) {
         var accountId = this.accountId(req);
-
-        req.session.accountId = null;        
-        req.session.destroy();
+        req.session.cookie = null;
+        req.session.accountId = null; 
         req.logout();
+        req.session.destroy();
         req.session = null;
         req.user = null;
 

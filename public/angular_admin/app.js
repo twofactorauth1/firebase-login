@@ -81,23 +81,20 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
         controllerUrl: '/angular_admin/controllers/website.js'
       }));
 
-    // var authInterceptor =
-    //   function($q, $window) {
-    //     return {
-    //       'responseError': function(rejection) { // Handle errors
-    //         switch (rejection.status) {
-    //           case 401:
-    //             $window.location = "/login";
-    //             break;
-    //           case 403:
-    //             $window.location = "/logout";
-    //             break;
-    //         }
-    //         return $q.reject(rejection);
-    //       }
-    //     };
-    //   };
-    // $httpProvider.interceptors.push(authInterceptor);
+     var authInterceptor =
+       function($q, $window) {
+         return {
+           'responseError': function(rejection) { // Handle errors
+             switch (rejection.status) {
+               case 401:
+                 $window.location = "/login";
+                 break;               
+             }
+             return $q.reject(rejection);
+           }
+        };
+      };
+     $httpProvider.interceptors.push(authInterceptor);
   });
 
   $('#preloader').fadeOut();
