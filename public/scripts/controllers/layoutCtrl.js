@@ -323,6 +323,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         PaymentService.getStripeCardToken(newAccount.card, function(token) {
                             newUser.cardToken = token;
                             newUser.plan = $scope.selectedPlan;
+                            newUser.anonymousId = window.analytics.user().anonymousId();
                             userService.initializeUser(newUser, function(data){
                                 window.location.replace(newUser.accountUrl);
                             });

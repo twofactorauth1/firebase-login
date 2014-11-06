@@ -240,6 +240,10 @@ var dao = {
         this.findOne({'email': email}, fn);
     },
 
+    getContactByEmailAndAccount: function(email, accountId, fn) {
+        this.findOne({'email:':email, 'accountId':accountId}, fn);
+    },
+
     getContactByEmailAndUserId: function (email, userId, fn) {
         if (email == null || userId == null) {
             return fn(null, null);
@@ -407,6 +411,78 @@ var dao = {
                         }
                     });
                 });
+        });
+    },
+
+    createCustomerContact: function(user, accountId, fn) {
+        var self = this;
+        self.log.debug('>> createCustomerContact');
+        self.getContactByEmailAndAccount(user.get('email'), accountId, function(err, existingContact){
+            if (err) {
+                self.log.error('Error searching for contact by email: ' + err);
+                return fn(err, null);
+            }
+
+            var p1 = $.Deferred();
+            if (existingContact != null) {
+                self.log.info('Attempted to create a new customer for an existing contact');
+                var oldType = existingContact.get('type');
+                existingContact.set('type', 'cu');//set type to customer
+                self.saveOrUpdate(existingContact, function(err, savedContact){
+                    if(err) {
+                        self.log.error('Error saving contact: ' + err);
+                        p1.reject(err);
+                    } else {
+                        self.log.debug('Updated existing contact');
+                        p1.resolve(existingContact);
+                    }
+                });
+            } else {
+                //TODO: new contact
+                var newContact = new $$.m.Contact({
+                    accountId: accountId,           //int
+                    first:user.get('first'),             //string,
+                    last:user.get('last'),              //string,
+                    type:"cu"              //contact_types
+
+                });
+                newContact.createOrUpdateDetails('user', null, null, null, null, null, user.get('email'), null);
+                self.saveOrUpdate(newContact, function(err, savedContact){
+                    if(err) {
+                        self.log.error('Error saving contact: ' + err);
+                        p1.reject(err);
+                    } else {
+                        self.log.debug('created new contact');
+                        p1.resolve(savedContact);
+                    }
+                });
+            }
+            $.when(p1).fail(function(err){
+                return fn(err, null);
+            });
+            $.when(p1).done(function(savedContact){
+                //create activity for subscription purchased
+
+                var activity = new $$.m.ContactActivity({
+                    accountId: savedContact.get('accountId'),
+                    contactId: savedContact.id(),
+                    activityType: $$.m.ContactActivity.types.SUBSCRIBE,
+                    note: "Subscription purchased.",
+                    start:new Date() //datestamp
+
+                });
+                contactActivityManager.createActivity(activity, function(err, value){
+                    if(err) {
+                        self.log.error('Error creating contactActivity for contact with id: ' + savedContact.id());
+                        return fn(err, savedContact);
+                    } else {
+                        self.log.debug('<< createCustomerContact');
+                        return fn(null, savedContact);
+                    }
+                });
+
+            });
+
         });
     },
 

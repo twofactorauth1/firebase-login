@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "amdefine": "0.1.0",
+    "analytics-node": "^1.1.0",
     "async": "~0.2.10",
     "aws-sdk": "~2.0.0-rc9",
     "bcrypt": ">=0.7.5",
