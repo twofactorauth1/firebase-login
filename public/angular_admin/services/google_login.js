@@ -7,20 +7,45 @@ define(['app'], function(app) {
             userEmail,
             deferred = $q.defer();
 
+            // this.handleClientLoad = function () {
+            //     gapi.auth.authorize({ client_id: clientId, scope: scopes, immediate: true }, this.handleAuthResult );
+            //     gapi.auth.setToken('ya29.tgCp1olKmlv6W1n7KNYQTKeYzIb1zyyIaVmfOJ4qxN4ydtSevauz8e6Kxk5zSqZ7nUwY-9n9GdiwLg');
+            //     return deferred.promise;
+            // };
+
             this.handleClientLoad = function () {
-                gapi.auth.authorize({ client_id: clientId, scope: scopes, immediate: true }, this.handleAuthResult );
-                gapi.auth.setToken('ya29.tgBO9IrJ-fbFy00GztwD5qhjdHeZrvOHm9KnPi0Rm7iPpeMYJUX45_LmGrb3k27vb8Cv29xTTP4YjA');
-                return deferred.promise;
+              gapi.client.setApiKey(apiKey);
+              window.setTimeout(checkAuth,1);
+            };
+
+            this.checkAuth = function () {
+              gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, this.handleAuthResult);
             };
 
             this.handleAuthResult = function(authResult) {
-                if (authResult && !authResult.error) {
-                    gapi.client.setApiKey(apiKey);
-                    gapi.client.load('analytics', 'v3');
-                    deferred.resolve(authResult)
-                } else {
-                    deferred.reject('error');
-                }
+              if (authResult) {
+                // The user has authorized access
+                // Load the Analytics Client. This function is defined in the next section.
+                this.loadAnalyticsClient();
+              } else {
+                // User has not Authenticated and Authorized
+                this.handleUnAuthorized();
+              }
+            };
+
+            this.loadAnalyticsClient = function() {
+              // Load the Analytics client and set handleAuthorized as the callback function
+              gapi.client.load('analytics', 'v3', handleAuthorized);
+            };
+
+            // Authorized user
+            this.handleAuthorized = function() {
+              console.log('authorized');
+            };
+
+            // Unauthorized user
+            this.handleUnAuthorized = function() {
+              console.log('Unauthorized');
             };
 
     }]);
