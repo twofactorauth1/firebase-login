@@ -708,7 +708,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var postId = req.params.postId;
         var pageId = req.params.id;
         var accountId = self.accountId(req);
-        blogPost.set('accountId', accountId.toString());
+        blogPost.set('accountId', parseInt(accountId));
         blogPost.set('_id', postId);
         blogPost.set('pageId', pageId);
 

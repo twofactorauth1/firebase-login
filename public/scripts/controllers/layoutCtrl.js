@@ -48,10 +48,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
-
-                PostService.getAllPosts(function(posts) {
+                PostService.getAllPostsByPageId($scope.currentpage._id, function (posts){
                     that.blogposts = posts;
                 });
+                /*PostService.getAllPosts(function(posts) {
+                    that.blogposts = posts;
+                });*/
             }
         });
 
@@ -407,7 +409,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             };
 
         /********** END SIGNUP SECTION **********/
-
 
     }
 ]);
