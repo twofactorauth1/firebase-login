@@ -23,7 +23,7 @@
 
     <div class="row">
         <div class="btn-group col-xs-12 template-btns">
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info active" ng-class="{'active': activeTab === 'account_information'}" ng-click="activeTab = 'account_information'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info" ng-class="{'active': activeTab === 'account_information'}" ng-click="activeTab = 'account_information'">
                 <i class="fa fa-user"></i>
                 <span class="hidden-xs">Account Information
                 </span>
@@ -481,17 +481,17 @@
                     <div id="current-settings">
                         <div class="radio">
                             <label>
-                                <input type="radio" name="default_tab" id="account_information" ng-value="'account_information'" ng-model="user.app_preferences.account.default_tab" ng-change="updateUser(user)">Account Information
+                                <input type="radio" name="default_tab" id="account_information" ng-value="'account_information'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('account_information')">Account Information
                             </label>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="default_tab" id="billing" ng-value="'billing'" ng-model="user.app_preferences.account.default_tab" ng-change="updateUser(user)">Billing
+                                <input type="radio" name="default_tab" id="billing" ng-value="'billing'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('billing')">Billing
                             </label>
                         </div>
                         <div class="radio disabled">
                             <label>
-                                <input type="radio" name="default_tab" id="integration" ng-value="'integrations'" ng-model="user.app_preferences.account.default_tab" ng-change="updateUser(user)">Integration
+                                <input type="radio" name="default_tab" id="integration" ng-value="'integrations'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('integrations')">Integration
                             </label>
                         </div>
                     </div>
