@@ -76,6 +76,9 @@ _.extend(router.prototype, baseRouter.prototype, {
         state.userId = req.user.id();
         state.appState = req.query.state;
         state.appStateDetail = req.query.detail;
+        if(req.query.forceApprovalPrompt) {
+            state.forceApprovalPrompt = true;
+        }
 
         var referringUrl = req.query['redirectTo']|| '/admin';
         authenticationDao.getAuthenticatedUrlForAccount(this.accountId(req), state.userId, referringUrl, 90, function(err, value){
@@ -152,7 +155,14 @@ _.extend(router.prototype, baseRouter.prototype, {
         }
 
         options.accessType = "offline";
-        //options.approvalPrompt = "force"; //-- this causes you to have to reauthorize every time, instead of just logging in
+        if(options.state && options.state.forceApprovalPrompt) {
+            /*
+             * This causes you to have to reauthorize every time, instead of just logging in.
+             * It also ensures you get a refresh token.
+             */
+            options.approvalPrompt = "force";
+        }
+
         self.log.debug('<< _socialLogin');
         passport.authenticate(type, options)(req,resp,next);
     },
