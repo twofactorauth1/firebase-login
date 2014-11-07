@@ -13,9 +13,15 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                 var uploader, footerElement, headerElement, contentElement,mediaElement, mediaModalElement;
                 function resizeModal() {
                     contentElement.css('height', $(window).height() - 30 + 'px');
-                    mediaElement.css(
-                        'height',
-                            (contentElement.innerHeight() - ( footerElement.innerHeight() + headerElement.innerHeight() + 48)) + 'px');
+                    mediaElement.css( 'height', (contentElement.innerHeight() - ( footerElement.innerHeight() + headerElement.innerHeight() + 48)) + 'px');
+
+                    var filterType = $('.filter-type');
+                    $timeout(function (){
+                        filterType.removeClass('filter-type');
+                    },0 );
+                    $timeout(function (){
+                        filterType.addClass('filter-type');
+                    },0 );
                 }
                 uploader = $scope.uploader = new FileUploader({
                     url: '/api/1.0/assets/',
