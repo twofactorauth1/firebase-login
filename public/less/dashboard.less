@@ -1,7 +1,7 @@
 .dashboard {
     background: #e7e7e7;
     .btn-clearblack {
-        background: rgba(0,0,0,0.1);
+        background: rgba(0, 0, 0, 0.1);
     }
     .chart-wrapper {
         background: #fff;
@@ -53,70 +53,91 @@
             }
         }
         .keen-metric-title {
-            text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+            text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.2);
             font-weight: 400;
+            font-size: 21px;
         }
         .keen-metric-value {
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
             font-size: 45px;
         }
         .keen-metric-change-value {
             font-size: 20px;
-            margin-top: 18px;
+            margin-top: 25px;
             text-align: left;
-            line-height: 12px;
+            line-height: 3px;
             span {
                 font-size: 14px;
             }
+        }
+        .nullPercent {
+            line-height: 17px;
         }
         .btn-view-details {
             display: none;
         }
     }
 }
-
 .single-metric-top {
     h1 {
-        padding: 25px;
-        font-size: 60px;
+        padding: 15px;
+        font-size: 55px;
         margin: 0;
-    }
-    .top-four {
-        padding: 50px 20px;
-        color: #444;
-        .title {
-            text-align: center;
-            font-size: 50px;
-            line-height: 51px;
-            font-weight: bold;
-        }
-        .metric {
-            text-align: center;
-            font-size: 14px;
-        }
-    }
-    .top-six {
-        padding: 30px;
-        .title {
-            text-align: center;
-            font-size: 30px;
-            line-height: 30px;
-            font-weight: bold;
-        }
-        .metric {
-            text-align: center;
-            font-size: 14px;
-        }
+        text-align: center;
     }
 }
-
-@media(max-width:767px){
+.top-four {
+    padding: 20px;
+    color: #444;
+    background: #f4f8fb;
+    border-right: 1px solid #cfdde7;
+    border-left: 1px solid #ffffff;
+    &:first-of-type {
+        border-left: none;
+    }
+    &:last-of-type {
+        border-right: none;
+    }
+    .title {
+        text-align: center;
+        font-size: 50px;
+        line-height: 51px;
+        font-weight: bold;
+    }
+    .metric {
+        text-align: center;
+        font-size: 14px;
+    }
+}
+.top-six {
+    padding: 30px;
+    .title {
+        text-align: center;
+        font-size: 30px;
+        line-height: 30px;
+        font-weight: bold;
+    }
+    .metric {
+        text-align: center;
+        font-size: 14px;
+    }
+}
+@media(max-width:767px) {
     .single-metric-top {
         .top-four {
             padding: 15px 20px;
         }
     }
 }
+.increase {
+    color: #2ecc71;
+}
+.decrease {
+    color: #c0392b;
+}
 
-.increase { color: #2ecc71; }
-.decrease { color: #c0392b; }
+.panel-nopadding {
+    .panel-body {
+        padding: 0;
+    }
+}
