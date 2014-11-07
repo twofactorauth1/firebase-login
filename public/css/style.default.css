@@ -17987,6 +17987,12 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin: 10px auto;
   padding: 15px;
 }
+.dashboard .keen-metric a {
+  color: inherit;
+}
+.dashboard .keen-metric a:hover {
+  text-decoration: none;
+}
 .dashboard .keen-metric.increase {
   background-color: #44d1ac;
   border-bottom: 4px solid #3ebc9b;
@@ -18002,8 +18008,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   color: #ac382d;
 }
 .dashboard .keen-metric .keen-metric-title {
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.2);
   font-weight: 400;
+  font-size: 21px;
 }
 .dashboard .keen-metric .keen-metric-value {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
@@ -18011,15 +18018,80 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .dashboard .keen-metric .keen-metric-change-value {
   font-size: 20px;
-  margin-top: 18px;
+  margin-top: 25px;
   text-align: left;
-  line-height: 12px;
+  line-height: 3px;
 }
 .dashboard .keen-metric .keen-metric-change-value span {
   font-size: 14px;
 }
+.dashboard .keen-metric .nullPercent {
+  line-height: 17px;
+}
 .dashboard .keen-metric .btn-view-details {
   display: none;
+}
+.single-metric-top h1 {
+  padding: 15px;
+  font-size: 55px;
+  margin: 0;
+  text-align: center;
+}
+.top-four {
+  padding: 20px;
+  color: #444;
+  background: #f4f8fb;
+  border-right: 1px solid #cfdde7;
+  border-left: 1px solid #ffffff;
+  border-top: 1px solid #cfdde7;
+}
+.top-four:first-of-type {
+  border-left: none;
+}
+.top-four:last-of-type {
+  border-right: none;
+}
+.top-four .title {
+  text-align: center;
+  font-size: 50px;
+  line-height: 51px;
+  font-weight: bold;
+}
+.top-four .metric {
+  text-align: center;
+  font-size: 14px;
+}
+.top-four .percent {
+  font-size: 14px;
+  vertical-align: text-top;
+  line-height: 60px;
+}
+.top-six {
+  padding: 30px;
+}
+.top-six .title {
+  text-align: center;
+  font-size: 30px;
+  line-height: 30px;
+  font-weight: bold;
+}
+.top-six .metric {
+  text-align: center;
+  font-size: 14px;
+}
+@media (max-width: 767px) {
+  .single-metric-top .top-four {
+    padding: 15px 20px;
+  }
+}
+.increase {
+  color: #2ecc71;
+}
+.decrease {
+  color: #c0392b;
+}
+.panel-nopadding .panel-body {
+  padding: 0;
 }
 .ckbox,
 .rdio {

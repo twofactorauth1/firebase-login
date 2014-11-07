@@ -1,3 +1,7 @@
+<script type="text/javascript">
+    !function(a,b){a("Keen","https://d26b395fwzu5fz.cloudfront.net/3.1.0/keen.min.js",b)}(function(a,b,c){var d,e,f;c["_"+a]={},c[a]=function(b){c["_"+a].clients=c["_"+a].clients||{},c["_"+a].clients[b.projectId]=this,this._config=b},c[a].ready=function(b){c["_"+a].ready=c["_"+a].ready||[],c["_"+a].ready.push(b)},d=["addEvent","setGlobalProperties","trackExternalLink","on"];for(var g=0;g<d.length;g++){var h=d[g],i=function(a){return function(){return this["_"+a]=this["_"+a]||[],this["_"+a].push(arguments),this}};c[a].prototype[h]=i(h)}e=document.createElement("script"),e.async=!0,e.src=b,f=document.getElementsByTagName("script")[0],f.parentNode.insertBefore(e,f)},this);
+</script>
+
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="dashboard">
     <div class="pageheader row">
@@ -8,9 +12,6 @@
                 <i class="fa fa-plus"></i>
                 <span class="hidden-xs">Add</span>
             </div> -->
-
-            <div id="embed-api-auth-container"></div>
-
         </div>
     </div>
 
@@ -18,7 +19,7 @@
 
     <div class="row">
         <div class="btn-group col-xs-12 template-btns">
-            <button type="button" class="btn btn-default btn-lg col-xs-6 active tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
                 <div popover="What are customers doing before they churn?" popover-placement="bottom" popover-trigger="mouseenter">
                     <i class="fa fa-pie-chart"></i>
                     <span class="hidden-xs">Analytics</span>
@@ -28,16 +29,17 @@
                 <i class="fa fa-bullseye"></i>
                 <span class="hidden-xs">Advertising</span>
             </button> -->
-            <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'ecommerce'}" ng-click="activeTab = 'ecommerce'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4" ng-class="{'active': activeTab === 'ecommerce'}" ng-click="activeTab = 'ecommerce'">
                 <div popover="How do you get Jane to re-open that shopping cart and check out?" popover-trigger="mouseenter" popover-placement="bottom">
                     <i class="fa fa-credit-card"></i>
                     <span class="hidden-xs">Ecommerce</span>
                 </div>
             </button>
-            <!-- <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'marketing'}" ng-click="activeTab = 'marketing'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4" ng-class="{'active': activeTab === 'marketing'}" ng-click="activeTab = 'marketing'">
                 <i class="fa fa-bullhorn"></i>
                 <span class="hidden-xs">Marketing</span>
             </button>
+            <!--
             <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'support'}" ng-click="activeTab = 'support'">
                 <i class="fa fa-question-circle"></i>
                 <span class="hidden-xs">Support</span>
@@ -51,210 +53,390 @@
 
     <div class="contentpanel">
 
-    <div id="active-users-container"></div>
+        <div id="active-users-container"></div>
 
         <div class="analytics-section" ng-show="activeTab == 'analytics'">
-
-            <div class="row">
-                <div class="col-sm-6 col-md-3">
-                    <div class="keen-widget keen-metric" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }" ng-if="visitors" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
-                        <span class="keen-metric-title mb10">Visitors</span>
-                        <span class="keen-metric-value col-sm-6"><div class="text-right"> {{visitors}}</div></span>
-                        <span class="keen-metric-change-value col-sm-6"><div class="center"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}% </br> <span>previous month</span></div></span>
-                        <div class="clearfix"></div>
+            <div class="col-xs-12">
+                <div class="panel panel-info panel-nopadding">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Overview</h3>
                     </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="keen-widget keen-metric" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how many times all pages were viewed on you site.">
-                        <span class="keen-metric-title mb10">Pageviews</span>
-                        <span class="keen-metric-value col-sm-6"><div class="text-right"> {{pageviews}}</div></span>
-                        <span class="keen-metric-change-value col-sm-6"><div class="center"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}% </br> <span>previous month</span></div></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="keen-widget keen-metric" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
-                        <span class="keen-metric-title mb10">Avg. Visit Duration</span>
-                        <span class="keen-metric-value col-sm-6"><div class="text-right"> {{visitDuration}}</div></span>
-                        <span class="keen-metric-change-value col-sm-6"><div class="center"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}% </br> <span>previous month</span></div></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="keen-widget keen-metric" ng-class="{'decrease': bouncesPercent < 0, 'increase': bouncesPercent > 0 }" ng-if="bounces" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
-                        <span class="keen-metric-title mb10">Bounces</span>
-                        <span class="keen-metric-value col-sm-6"><div class="text-right"> {{bounces}}</div></span>
-                        <span class="keen-metric-change-value col-sm-6"><div class="center"><i ng-class="{'fa fa-chevron-down': bouncesPercent < 0, 'fa fa-chevron-up': bouncesPercent > 0 }"></i> {{bouncesPercent}}% </br> <span>previous month</span></div></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-7">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Visitor Location
-                        </div>
-                        <div class="chart-stage">
-                            <div id="location"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-5">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Device
-                        </div>
-                        <div class="chart-stage" style="padding: 30px;">
-                            <div class="col-xs-6">
-                                <h1 class="center"><i class="fa fa-desktop" style="font-size: 70px;"></i></h1>
-                                <h3 class="center">{{desktop}}</h3>
-                                <h5 class="center">Desktop</h5>
+                    <div class="panel-body">
+                        <highchart config="analyticsOverviewConfig"></highchart>
+                        <div>
+                            <div class="col-sm-4 col-xs-6 top-four">
+                                <div class="metric center">Pageviews</div>
+                                    <div class="title center" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }">
+                                        {{pageviews}}
+                                        <span class="percent"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}%</span>
+                                    </div>
                             </div>
-                            <div class="col-xs-6">
-                                <h1 class="center"><i class="fa fa-mobile" style="font-size: 70px;"></i></h1>
-                                <h3 class="center">{{mobile}}</h3>
-                                <h5 class="center">Mobile</h5>
+                            <div class="col-sm-4 col-xs-6 top-four">
+                                <div class="metric center">Visits</div>
+                                <div class="title center" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }">
+                                    {{visits}}
+                                    <span class="percent"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
+                                </div>
                             </div>
+                            <div class="col-sm-4 col-xs-6 top-four">
+                                <div class="metric center">Visitors</div>
+                                <div class="title center" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }">
+                                    {{visitors}}
+                                    <span class="percent"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="keen-widget keen-metric" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how many times all pages were viewed on you site.">
+                            <span class="keen-metric-title mb10">Pageviews</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center">{{pageviews}}</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}%</br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="keen-widget keen-metric" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how many times all pages were viewed on you site.">
+                            <span class="keen-metric-title mb10">Visits</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center">{{pageviews}}</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}%</br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="keen-widget keen-metric" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }" ng-if="visitors" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                            <span class="keen-metric-title mb10">Visitors</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center">{{visitors}}</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
                             <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" ng-class="{ 'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                        <span class="keen-metric-title mb10">Avg. Visit Duration</span>
+                        <span class="keen-metric-value col-sm-6">
+                            <div class="center">{{visitDuration}}</div>
+                        </span>
+                        <span class="keen-metric-change-value col-sm-6">
+                            <div class="center"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</br>
+                                <span>previous month</span>
+                            </div>
+                        </span>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="keen-widget keen-metric" ng-class="{'decrease': bouncesPercent < 0, 'increase': bouncesPercent > 0 }" ng-if="bounces" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                            <span class="keen-metric-title mb10">Bounces</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center">{{bounces}}</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center"><i ng-class="{'fa fa-chevron-down': bouncesPercent < 0, 'fa fa-chevron-up': bouncesPercent > 0 }"></i> {{bouncesPercent}}%</br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="keen-widget keen-metric" ng-class="{'decrease': bouncesPercent < 0, 'increase': bouncesPercent > 0 }" ng-if="bounces" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                            <span class="keen-metric-title mb10">Exit Rate</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center">{{bounces}}</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center"><i ng-class="{'fa fa-chevron-down': bouncesPercent < 0, 'fa fa-chevron-up': bouncesPercent > 0 }"></i> {{bouncesPercent}}%</br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div> -->
             </div>
 
-            <div class="row">
-                <!-- end of three -->
-                <div class="col-sm-6 col-md-4">
-                    <highchart config="newVsReturningConfig"></highchart>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-info panel-nopadding">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Visitor Locations</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="location"></div>
+                    </div>
                 </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Top Visited Pages
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Device</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-xs-6">
+                            <h1 class="center"><i class="fa fa-desktop" style="font-size: 70px;"></i>
+                            </h1>
+                            <h3 class="center">{{desktop}}</h3>
+                            <h5 class="center">Desktop</h5>
                         </div>
-                        <div class="chart-stage table">
-                            <div class="table-responsive">
-                                <table class="table table-dark mb0">
-                                    <thead>
-                                      <tr>
-                                        <th>Page</th>
-                                        <th>Visits</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr ng-repeat="topPage in topPages">
-                                        <td>{{topPage[0]}}</td>
-                                        <td>{{topPage[1]}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                        <div class="col-xs-6">
+                            <h1 class="center"><i class="fa fa-mobile" style="font-size: 70px;"></i>
+                            </h1>
+                            <h3 class="center">{{mobile}}</h3>
+                            <h5 class="center">Mobile</h5>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                    <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Content Interation</h3>
+                        </div>
+                        <div class="panel-body">
+                            <highchart ng-show="timeonSiteConfig" config="timeonSiteConfig"></highchart>
+                            <div>
+                                <div class="col-xs-6 top-four">
+                                    <div class="metric center">Time on Site</div>
+                                        <div class="title center" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }">
+                                            {{visitDuration}}
+                                            <span class="percent"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
+                                        </div>
+                                </div>
+                                <div class="col-xs-6 top-four">
+                                    <div class="metric center">Bounces</div>
+                                    <div class="title center" ng-class="{'decrease': bouncesPercent < 0, 'increase': bouncesPercent > 0 }">
+                                        {{bounces}}
+                                        <span class="percent"><i ng-class="{'fa fa-chevron-down': bouncesPercent < 0, 'fa fa-chevron-up': bouncesPercent > 0 }"></i> {{bouncesPercent}}%</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-4">
-                    <highchart config="trafficSourcesConfig"></highchart>
+        </div>
+
+        <div class="row">
+            <!-- end of three -->
+            <div class="col-xs-6 col-sm-4" id="new-vs-returning">
+                <div class="panel panel-info panel-nopadding">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">New vs. Returning</h3>
+                    </div>
+                    <div class="panel-body">
+                        <highchart config="newVsReturningConfig"></highchart>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <div class="panel panel-info panel-nopadding">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Top Visited Pages</h3>
+                    </div>
+                    <div class="panel-body">
+                            <div class="table mb0">
+                                <div class="table-responsive">
+                                    <table class="table table-dark mb0">
+                                        <thead>
+                                            <tr>
+                                                <th>Page</th>
+                                                <th>Visits</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="topPage in topPages">
+                                                <td>{{topPage[0]}}</td>
+                                                <td>{{topPage[1]}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4" id="traffic-sources">
+                <div class="panel panel-info panel-nopadding">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Traffic Sources</h3>
+                    </div>
+                    <div class="panel-body">
+                        <highchart config="trafficSourcesConfig"></highchart>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="ecommerce-section" ng-show="activeTab == 'ecommerce'">
+    <div class="ecommerce-section" ng-show="activeTab == 'ecommerce'">
 
-            <div class="row">
-                <div class="col-sm-6 col-md-4">
-                    <div id="monthly-recurring-revenue"></div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div id="net-revenue"></div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                   <div id="fees"></div>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-sm-6 col-md-4">
-                    <div id="other-revenue"></div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div id="average-revenue-per-customer"></div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">$22,143</span>
-                        <span class="keen-metric-title">Annual Run Rate</span>
-                    </div>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">$1484</span>
-                        <span class="keen-metric-title">Lifetime Value</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">5.8%</span>
-                        <span class="keen-metric-title">User Churn</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">5%</span>
-                        <span class="keen-metric-title">Revenue churn</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6 col-md-4">
-                    <div id="total-customer"></div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div id="upgrades"></div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">2</span>
-                        <span class="keen-metric-title">Downgrades</span>
-                    </div>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">2</span>
-                        <span class="keen-metric-title">Cancelations</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">$456</span>
-                        <span class="keen-metric-title">Coupons</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">33</span>
-                        <span class="keen-metric-title">Failed Charges</span>
-                    </div>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">$1528</span>
-                        <span class="keen-metric-title">Refunds</span>
-                    </div>
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }" tooltip-placement="top" tooltip="Gross Volume">
+                    <a href="/admin#/dashboard/monthly-recurring-revenue">
+                        <span class="keen-metric-title mb10">Monthly Recurring Revenue</span>
+                        <span class="keen-metric-value col-sm-6">
+                            <div class="center" ng-show="monthlyRecurringRevenue != null">{{monthlyRecurringRevenue | formatCurrency}}</div>
+                            <div ng-show="monthlyRecurringRevenue == null">$ --</div>
+                        </span>
+                        <span class="keen-metric-change-value col-sm-6">
+                            <div class="center">
+                                <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                <div ng-show="totalRevenuePercent == null">-- %</div>
+                                </br>
+                                <span>previous month</span>
+                            </div>
+                        </span>
+                        <div class="clearfix"></div>
+                    </a>
                 </div>
             </div>
-            <!-- <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }" tooltip-placement="top" tooltip="Gross Volume">
+                    <a href="/admin#/dashboard/net-revenue">
+                        <span class="keen-metric-title mb10">Net Revenue</span>
+                        <span class="keen-metric-value col-sm-6">
+                            <div class="center" ng-show="totalRevenue != null">{{totalRevenue | formatCurrency}}</div>
+                            <div ng-show="totalRevenue == null">$ --</div>
+                        </span>
+                        <span class="keen-metric-change-value col-sm-6">
+                            <div class="center">
+                                <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                <div ng-show="totalRevenuePercent == null">-- %</div>
+                                </br>
+                                <span>previous month</span>
+                            </div>
+                        </span>
+                        <div class="clearfix"></div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" ng-class="{'decrease': totalFeesPercent < 0, 'increase': totalFeesPercent > 0 }" tooltip-placement="top" tooltip="Gross Volume">
+                    <a href="/admin#/dashboard/monthly-recurring-revenue">
+                        <span class="keen-metric-title mb10">Fees</span>
+                        <span class="keen-metric-value col-sm-6">
+                            <div class="center" ng-show="totalFees != null">{{totalFees | formatCurrency}}</div>
+                            <div ng-show="totalFees == null">$ --</div>
+                        </span>
+                        <span class="keen-metric-change-value col-sm-6">
+                            <div class="center">
+                                <div ng-show="totalFeesPercent != null"><i ng-class="{'fa fa-chevron-down': totalFeesPercent < 0, 'fa fa-chevron-up': totalFeesPercent > 0 }"></i> {{totalFeesPercent}}%</div>
+                                <div ng-show="totalFeesPercent == null" class="nullPercent">-- %</div>
+                                </br>
+                                <span>previous month</span>
+                            </div>
+                        </span>
+                        <div class="clearfix"></div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div id="other-revenue"></div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div id="average-revenue-per-customer"></div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                    <span class="keen-metric-value">$22,143</span>
+                    <span class="keen-metric-title">Annual Run Rate</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                    <span class="keen-metric-value">$1484</span>
+                    <span class="keen-metric-title">Lifetime Value</span>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                    <span class="keen-metric-value">5.8%</span>
+                    <span class="keen-metric-title">User Churn</span>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                    <span class="keen-metric-value">5%</span>
+                    <span class="keen-metric-title">Revenue churn</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div id="total-customer"></div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div id="upgrades"></div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                    <span class="keen-metric-value">2</span>
+                    <span class="keen-metric-title">Downgrades</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                    <span class="keen-metric-value">2</span>
+                    <span class="keen-metric-title">Cancelations</span>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                    <span class="keen-metric-value">$456</span>
+                    <span class="keen-metric-title">Coupons</span>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                    <span class="keen-metric-value">33</span>
+                    <span class="keen-metric-title">Failed Charges</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
+                    <span class="keen-metric-value">$1528</span>
+                    <span class="keen-metric-title">Refunds</span>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row">
                 <div class="col-sm-6 col-md-4">
                     <div id="total-revenue"></div>
                 </div>
@@ -266,7 +448,7 @@
                 </div>
 
             </div> -->
-            <!-- <div class="row">
+        <!-- <div class="row">
                 <div class="col-sm-6">
                     <div class="chart-wrapper">
                         <div class="chart-title">
@@ -320,9 +502,9 @@
                     </div>
                 </div>
             </div> -->
-        </div>
+    </div>
 
-       <!--  <div class="advertising-section" ng-show="activeTab == 'advertising'">
+    <!--  <div class="advertising-section" ng-show="activeTab == 'advertising'">
             <div class="row">
                 <div class="col-sm-8">
                     <div class="chart-wrapper">
@@ -434,28 +616,84 @@
             </div>
         </div> -->
 
-        <!-- <div class="integrations-section" ng-show="activeTab == 'integrations'">
+    <!-- <div class="integrations-section" ng-show="activeTab == 'integrations'">
+        </div> -->
+
+    <div class="marketing-section" ng-show="activeTab == 'marketing'">
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }" ng-if="visitors" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                    <span class="keen-metric-title mb10">Leads</span>
+                    <span class="keen-metric-value col-sm-6">
+                        <div class="center">{{visitors}}</div>
+                    </span>
+                    <span class="keen-metric-change-value col-sm-6">
+                        <div class="center"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</br>
+                            <span>previous month</span>
+                        </div>
+                    </span>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }" ng-if="visitors" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                    <span class="keen-metric-title mb10">Visitor to Lead Ratio</span>
+                    <span class="keen-metric-value col-sm-6">
+                        <div class="center">100 : 1</div>
+                    </span>
+                    <span class="keen-metric-change-value col-sm-6">
+                        <div class="center"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</br>
+                            <span>previous month</span>
+                        </div>
+                    </span>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="keen-widget keen-metric" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }" ng-if="visitors" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                    <span class="keen-metric-title mb10">Lead to Win Ratio</span>
+                    <span class="keen-metric-value col-sm-6">
+                        <div class="center">5 : 1</div>
+                    </span>
+                    <span class="keen-metric-change-value col-sm-6">
+                        <div class="center"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</br>
+                            <span>previous month</span>
+                        </div>
+                    </span>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
         </div>
 
-        <div class="marketing-section" ng-show="activeTab == 'marketing'">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-info panel-nopadding">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Visitor Locations</h3>
+                    </div>
+                    <div class="panel-body">
+                        <highchart config="purchaseFunnelConfig"></highchart>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="support-section" ng-show="activeTab == 'support'">
+    </div>
+
+    <!-- <div class="support-section" ng-show="activeTab == 'support'">
         </div>
 
         <div class="testing-section" ng-show="activeTab == 'testing'">
         </div> -->
-
-    </div>
 </div>
 
 
 <!-- <div id="rightpanel">
   <div class="rightpanel rightpanel-website">
        <ul class="nav nav-tabs nav-justified">
-	        <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
-	        </li>
-    	</ul>
+            <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
+            </li>
+        </ul>
 
     <div class="tab-content">
         <div class="tab-pane pane-settings active" id="rp-settings">

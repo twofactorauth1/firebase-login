@@ -351,6 +351,7 @@ define([
                     $scope.isEditing = false;
                     $scope.deactivateAloha();
                     iFrame.contentWindow.triggerEditModeOff();
+                    iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                     if ( iFrame.contentWindow.savePostMode ) {
                         iFrame.contentWindow.savePostMode();
                     }

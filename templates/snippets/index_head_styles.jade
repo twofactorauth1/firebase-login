@@ -9,9 +9,14 @@ link(rel="stylesheet", href="/js/libs_misc/jquery.tagsinput/jquery.tagsinput.css
 link(rel="stylesheet", href="/js/libs/ng-tags-input/ng-tags-input.css")
 
 style(type="text/css").
-
-    h1, h2, h3, h4, h5 { font-family: #{account.website.settings.font_family}!important;}
-    body { font-family: #{account.website.settings.font_family_2}!important; }
+    @font-face {
+        font-family: #{account.website.settings.font_family};
+        font-style: normal;
+        font-weight: 400;
+        src: url(http://fonts.googleapis.com/css?family=#{account.website.settings.font_family}:regular&text=#{account.website.settings.font_family}) format('woff2');
+    }
+    h1, h2, h3, h4, h5, h1 .editable, h2 .editable, h3 .editable, h4 .editable, h5 .editable  { font-family: #{account.website.settings.font_family} !important;}
+    body { font-family: #{account.website.settings.font_family_2} !important; }
 
     .btn-primary {
         background: #{account.website.settings.primary_color};

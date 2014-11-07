@@ -127,6 +127,7 @@ _.extend(api.prototype, baseApi.prototype, {
 //                            self.log.debug('<< listCustomers');
 //                            self.sendResultOrError(resp, err, results, "Error listing Stripe Customers");
 //                        });
+                            self.sendResultOrError(resp, err, customers.data, "Error listing Stripe Customers");
 
                     } else {
                         //accountId ==0; return ALL customers

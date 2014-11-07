@@ -25,6 +25,10 @@
                                             {{blogpost.post_title}}
                                         </div>
                                     </a>
+                                    <a ng-if="isEditing" class="btn btn-warning pull-right btn-delete-post pull-right" type="button" ng-click="deletePost(blogpost._id)" style="margin-right:10px">
+                                        <span class="fa fa-times"></span>
+                                        <span class="hidden-xs">Delete</span>
+                                    </a>
                                 </h2>
 
                                 <div class="blog-meta">
@@ -130,5 +134,63 @@
             <!-- .container -->
         </div>
         <!-- #content-area -->
+    </div>
+</div>
+
+<button ng-if="isEditing" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    Add Post
+</button>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <div id="new_page">
+                    <div class="form-group">
+                        <label for="page-author" tooltip-placement="bottom" tooltip="Provide the author of the post you want to create">Post Author</label>
+                        <input id="page-author" class="form-control input-lg" type="text" ng-model="post.post_author">
+                    </div>
+                    <div class="form-group">
+                        <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the post you want to create">Post Title</label>
+                        <input id="page-title" class="form-control input-lg" type="text" ng-model="post.post_title">
+                    </div>
+                    <div class="form-group">
+                        <label for="page-content" tooltip-placement="bottom" tooltip="Provide the content of the post you want to create">Post Content</label>
+                        <textarea id="page-content" class="form-control input-lg" type="text" ng-model="post.post_content" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="page-excerpt" class="tooltips" tooltip-placement="bottom" tooltip="Modify the excerpt where your post will be reached">Post excerpt</label>
+                        <input id="post-excerpt" class="form-control input-lg" type="text" ng-model="post.post_excerpt">
+                    </div>
+                    <div class="form-group">
+                        <label for="page-tags" class="tooltips" tooltip-placement="bottom" tooltip="Modify the tags where your post will be reached">Post tags</label>
+                        <input id="post-tags" class="form-control input-lg" type="text" ng-model="post.post_tags">
+                    </div>
+                    <div class="form-group">
+                        <label for="page-category" class="tooltips" tooltip-placement="bottom" tooltip="Modify the category where your post will be reached">Post category</label>
+                        <input id="post-category" class="form-control input-lg" type="text" ng-model="post.post_category">
+                    </div>
+                    <div class="form-group">
+                        <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your post will be reached">Post Url</label>
+                        <input id="post-url" class="form-control input-lg" type="text" ng-model="post.post_url">
+                    </div>
+                    <div class="clearfix mb15"></div>
+                    <div class="form-group">
+                        <div class="ckbox ckbox-success">
+                            <input type="checkbox" id="comment_status" ng-model="post.comment_status" checked>
+                            <label for="comment_status">Comment Status On?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="createPost(post, $event)" data-dismiss="modal">Save changes</button>
+            </div>
+        </div>
     </div>
 </div>

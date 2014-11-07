@@ -1,0 +1,216 @@
+<script type="text/javascript">
+    !function(a,b){a("Keen","https://d26b395fwzu5fz.cloudfront.net/3.1.0/keen.min.js",b)}(function(a,b,c){var d,e,f;c["_"+a]={},c[a]=function(b){c["_"+a].clients=c["_"+a].clients||{},c["_"+a].clients[b.projectId]=this,this._config=b},c[a].ready=function(b){c["_"+a].ready=c["_"+a].ready||[],c["_"+a].ready.push(b)},d=["addEvent","setGlobalProperties","trackExternalLink","on"];for(var g=0;g<d.length;g++){var h=d[g],i=function(a){return function(){return this["_"+a]=this["_"+a]||[],this["_"+a].push(arguments),this}};c[a].prototype[h]=i(h)}e=document.createElement("script"),e.async=!0,e.src=b,f=document.getElementsByTagName("script")[0],f.parentNode.insertBefore(e,f)},this);
+</script>
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+<div class="commerce">
+    <div class="pageheader row">
+        <div class="col-xs-3">
+            <button ng-click="$back()" class="btn btn-success pull-left" type="button">
+                <span class="fa fa-chevron-left"></span>
+                <span class="hidden-xs">Back</span>
+            </button>
+        </div>
+        <div class="col-xs-6">
+            <h2 class="center hidden-xs">
+                Monthly Recurring Revenue
+            </h2>
+            <h2 class="center visible-xs">
+                MRR
+            </h2>
+        </div>
+        <div class="col-xs-3">
+            <!-- <a class="btn btn-success pull-right" type="button"
+				data-toggle="modal" data-target="#commerce-add-product"> <span
+				class="fa fa-plus"></span> <span class="hidden-xs">Add</span>
+			</a> -->
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="contentpanel" ng-style="styleCommerce()" indigeweb-resize>
+        <div class="single-metric-top">
+            <div class="col-xs-12">
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="col-xs-6">
+                                    <h1 ng-show="thisMonth != null" class="center" ng-class="{'decrease': thisMonth < 0, 'increase': thisMonth > 0 }">{{thisMonth | formatCurrency}}</h1>
+                                    <h1 class="center" ng-show="thisMonth == null">$ --</h1>
+                                </div>
+                                <span class="keen-metric-change-value col-xs-6">
+                                    <div class="center">
+                                        <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                        <div ng-show="totalRevenuePercent == null">-- %</div>
+                                        </br>
+                                        <span>previous month</span>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="clearfix mb15 visible-xs"></div>
+                            <div class="col-sm-6">
+                                <div class="mb15"></div>
+                                <p>Monthly Recurring Revenue (MRR) is the predicable revenue of your recurring subscriptions you offer. It is calulated by taking new customer revenue + existing customer upgrades - lost customers and downgrades. <a href="">Learn More</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix mb15"></div>
+            <div class="col-xs-12">
+                <div class="panel panel-info panel-nopadding">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Monthly Recurring Revenue Growth</h3>
+                    </div>
+                    <div class="panel-body">
+                        <highchart ng-show="monthlyRevenueGrowthConfig" config="monthlyRevenueGrowthConfig"></highchart>
+                        <div>
+                            <div class="col-sm-3 col-xs-6 top-four">
+                                <div class="metric center">NEW MRR</div>
+                                <div class="title center" ng-class="{'decrease': newMRRSum < 0, 'increase': newMRRSum > 0 }">{{newMRRSum | formatCurrency}}</div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6 top-four">
+                                <div class="metric center">EXPANSION MRR</div>
+                                <div class="title center" ng-class="{'decrease': expansionMRRSum < 0, 'increase': expansionMRRSum > 0 }">{{expansionMRRSum | formatCurrency}}</div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6 top-four">
+                                <div class="metric center">CHURNED MRR</div>
+                                <div class="title center" ng-class="{'decrease': churnedMRRSum < 0, 'increase': churnedMRRSum > 0 }">{{churnedMRRSum | formatCurrency}}</div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6 top-four">
+                                <div class="metric center">NET MRR</div>
+                                <div class="title center" ng-class="{'decrease': netMRRSum < 0, 'increase': netMRRSum > 0 }">{{netMRRSum | formatCurrency}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix mb15"></div>
+        <div class="row">
+	        <div class="col-sm-7">
+	            <div class="panel panel-info panel-nopadding">
+	                <div class="panel-heading">
+	                    <h3 class="panel-title">Total Recurring Revenue</h3>
+	                </div>
+	                <div class="panel-body">
+	                    <highchart ng-show="totalRevenueConfig" config="totalRevenueConfig"></highchart>
+	                    <div>
+	                        <div class="col-sm-3 col-xs-6 top-four">
+	                            <div class="metric center">Previous 30 Days</div>
+	                            <div class="title center" ng-class="{'decrease': thisMonth < 0, 'increase': thisMonth > 0 }">{{thisMonth | formatCurrency}}</div>
+	                        </div>
+	                        <div class="col-sm-3 col-xs-6 top-four">
+	                            <div class="metric center">Previous 60 Days</div>
+	                            <div class="title center" ng-class="{'decrease': lastSixty < 0, 'increase': lastSixty > 0 }">{{lastSixty | formatCurrency}}</div>
+	                        </div>
+	                        <div class="col-sm-3 col-xs-6 top-four">
+	                            <div class="metric center">Previous 3 Months</div>
+	                            <div class="title center" ng-class="{'decrease': previousNinety < 0, 'increase': previousNinety > 0 }">{{previousNinety | formatCurrency}}</div>
+	                        </div>
+	                        <div class="col-sm-3 col-xs-6 top-four">
+	                            <div class="metric center">Past Year</div>
+	                            <div class="title center" ng-class="{'decrease': previousYear < 0, 'increase': previousYear > 0 }">{{previousYear | formatCurrency}}</div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="col-sm-5">
+	            <div class="panel panel-info panel-nopadding">
+	                <div class="panel-heading">
+	                    <h3 class="panel-title">Revenue by Plan</h3>
+	                </div>
+	                <div class="panel-body">
+	                    <highchart ng-show="revenueByPlanConfig" config="revenueByPlanConfig"></highchart>
+	                </div>
+	            </div>
+	        </div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-7">
+        		<div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Growth Percentage</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4 col-xs-6 top-six">
+                            <div class="metric center">30 Day Growth</div>
+                            <div class="title center" ng-class="{'decrease': thirtyDayGrowth < 0, 'increase': thirtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': thirtyDayGrowth < 0, 'fa fa-chevron-up': thirtyDayGrowth > 0 }"></i> {{thirtyDayGrowth}}%</div>
+                        </div>
+                        <div class="col-sm-4 col-xs-6 top-six">
+                            <div class="metric center">60 Day Growth</div>
+                            <div class="title center" ng-class="{'decrease': sixtyDayGrowth < 0, 'increase': sixtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': sixtyDayGrowth < 0, 'fa fa-chevron-up': sixtyDayGrowth > 0 }"></i> {{sixtyDayGrowth}}%</div>
+                        </div>
+                        <div class="col-sm-4 col-xs-6 top-six">
+                            <div class="metric center">3 Month Growth</div>
+                            <div class="title center" ng-class="{'decrease': thirtyDayGrowth < 0, 'increase': thirtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': thirtyDayGrowth < 0, 'fa fa-chevron-up': thirtyDayGrowth > 0 }"></i> {{thirtyDayGrowth}}%</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 col-xs-6 top-six">
+                            <div class="metric center">6 Month Growth</div>
+                            <div class="title center" ng-class="{'decrease': thirtyDayGrowth < 0, 'increase': thirtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': thirtyDayGrowth < 0, 'fa fa-chevron-up': thirtyDayGrowth > 0 }"></i> {{thirtyDayGrowth}}%</div>
+                        </div>
+                        <div class="col-sm-4 col-xs-6 top-six">
+                            <div class="metric center">9 Month Growth</div>
+                            <div class="title center" ng-class="{'decrease': thirtyDayGrowth < 0, 'increase': thirtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': thirtyDayGrowth < 0, 'fa fa-chevron-up': thirtyDayGrowth > 0 }"></i> {{thirtyDayGrowth}}%</div>
+                        </div>
+                        <div class="col-sm-4 col-xs-6 top-six">
+                            <div class="metric center">Yearly Growth</div>
+                            <div class="title center" ng-class="{'decrease': thirtyDayGrowth < 0, 'increase': thirtyDayGrowth > 0 }"><i ng-class="{'fa fa-chevron-down': thirtyDayGrowth < 0, 'fa fa-chevron-up': thirtyDayGrowth > 0 }"></i> {{thirtyDayGrowth}}%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        	</div>
+        	<div class="col-sm-5">
+        		<div class="panel panel-info panel-nopadding">
+	            <div class="panel-heading">
+	                <h3 class="panel-title">Revenue by Plan</h3>
+	            </div>
+	            <div class="panel-body">
+	                <div class="table-responsive">
+	                    <table class="table table-dark mb30">
+	                        <thead>
+	                            <tr>
+	                                <th>Plan</th>
+	                                <th>Customers</th>
+	                                <th>Net Revenue</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                            <tr ng-repeat="plan in planRevenue">
+	                                <td>{{plan['data.object.subscription.plan.name'] || 'Other'}}</td>
+	                                <td>{{plan.customers}}</td>
+	                                <td>{{(plan.result / 100) | formatCurrency}}</td>
+	                            </tr>
+	                        </tbody>
+	                    </table>
+	                </div>
+	            </div>
+	        </div>
+        	</div>
+        </div>
+    </div>
+</div>
+
+<div class="rightpanel rightpanel-commerce">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Commerce Settings</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+
+    <div class="tab-content">
+
+    </div>
+
+</div>
+<!-- rightpanel -->
+</div>
