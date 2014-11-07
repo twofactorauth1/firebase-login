@@ -18043,6 +18043,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   background: #f4f8fb;
   border-right: 1px solid #cfdde7;
   border-left: 1px solid #ffffff;
+  border-top: 1px solid #cfdde7;
 }
 .top-four:first-of-type {
   border-left: none;
@@ -18059,6 +18060,11 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .top-four .metric {
   text-align: center;
   font-size: 14px;
+}
+.top-four .percent {
+  font-size: 14px;
+  vertical-align: text-top;
+  line-height: 60px;
 }
 .top-six {
   padding: 30px;

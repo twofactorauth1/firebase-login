@@ -1,8 +1,8 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng', 'formatCurrency', 'googleLogin'], function(app) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'googleLogin'], function(app) {
     app.register.controller('DashboardCtrl', ['$scope', '$window', 'ngProgress', 'PaymentService', 'googleLogin', function($scope, $window, ngProgress, PaymentService, googleLogin) {
         ngProgress.start();
 
-        $scope.activeTab = 'marketing';
+        $scope.activeTab = 'analytics';
 
         var client = new Keen({
             projectId: "54528c1380a7bd6a92e17d29",
@@ -47,6 +47,10 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng', 'f
                         });
                     };
 
+                    $scope.toUTC = function(str) {
+                        return Date.UTC(str.substring(0, 4), str.substring(4, 6)-1, str.substring(6, 8));
+                    };
+
 
                     var visitorLocations = $scope.query({
                         ids: 'ga:82461709',
@@ -81,12 +85,12 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng', 'f
                     });
 
                     var pageviewsReport = $scope.query({
-                            ids: 'ga:82461709',
-                            metrics: 'ga:pageviews',
-                            dimensions: 'ga:date',
-                            'start-date': '30daysAgo',
-                            'end-date': 'yesterday'
-                        });
+                        ids: 'ga:82461709',
+                        metrics: 'ga:pageviews',
+                        dimensions: 'ga:date',
+                        'start-date': '30daysAgo',
+                        'end-date': 'yesterday'
+                    });
 
                     var pageviewsPreviousReport = $scope.query({
                         ids: 'ga:82461709',
@@ -115,6 +119,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng', 'f
                     var bouncesReport = $scope.query({
                         ids: 'ga:82461709',
                         metrics: 'ga:bounces',
+                        dimensions: 'ga:date',
                         'start-date': '30daysAgo',
                         'end-date': 'yesterday'
                     });
@@ -178,12 +183,28 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng', 'f
                             // ----------------------------------------
 
                             $scope.visitors = results[2].totalsForAllResults['ga:users'];
+                            var visitorsData = [];
+                            for (var i = 0; i < results[2].rows.length; i++) {
+                                var subArr = [];
+                                subArr.push($scope.toUTC(results[2].rows[i][0]));
+                                subArr.push(parseInt(results[2].rows[i][1]));
+                                visitorsData.push(subArr);
+                            };
                             var previous = results[3].totalsForAllResults['ga:users'];
                             $scope.visitorsPercent = $scope.calculatePercentage(previous, $scope.visitors);
 
                             // ----------------------------------------
                             // Pageviews Metric
                             // ----------------------------------------
+
+                            console.log('pageviews result >>> ', results[4].rows);
+                            var pageviewsData = [];
+                            for (var i = 0; i < results[4].rows.length; i++) {
+                                var subArr = [];
+                                subArr.push($scope.toUTC(results[4].rows[i][0]));
+                                subArr.push(parseInt(results[4].rows[i][1]));
+                                pageviewsData.push(subArr);
+                            };
                             $scope.pageviews = results[4].totalsForAllResults['ga:pageviews'];
                             $scope.pageviewsPercent = $scope.calculatePercentage(results[5].totalsForAllResults['ga:pageviews'], results[4].totalsForAllResults['ga:pageviews']);
 
@@ -194,6 +215,21 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng', 'f
 
                             var sessionDuration = parseInt(results[6].totalsForAllResults['ga:sessionDuration']);
                             var sessions = parseInt(results[6].totalsForAllResults['ga:sessions']);
+                            console.log('results[6] >>> ', results[6]);
+                            var sessionsData = [];
+                            var timeOnSiteData = [];
+                            for (var i = 0; i < results[6].rows.length; i++) {
+                                var subArr = [];
+                                subArr.push($scope.toUTC(results[6].rows[i][0]));
+                                subArr.push(parseInt(results[6].rows[i][1]));
+                                sessionsData.push(subArr);
+
+                                var subArr2 = [];
+                                subArr2.push($scope.toUTC(results[6].rows[i][0]));
+                                subArr2.push(parseInt(results[6].rows[i][1]));
+                                timeOnSiteData.push(subArr2);
+                            };
+                            $scope.visits = sessions;
                             var averageDuration = (sessionDuration / sessions);
                             $scope.visitDuration = $scope.secToTime(averageDuration);
 
@@ -206,8 +242,143 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng', 'f
                             // Bounces
                             // ======================================
 
+                            var bouncesData = [];
+                            for (var i = 0; i < results[8].rows.length; i++) {
+                                var subArr = [];
+                                subArr.push($scope.toUTC(results[8].rows[i][0]));
+                                subArr.push(parseInt(results[8].rows[i][1]));
+                                bouncesData.push(subArr);
+                            };
+
                             $scope.bounces = results[8].totalsForAllResults['ga:bounces'];
                             $scope.bouncesPercent = $scope.calculatePercentage(results[9].totalsForAllResults['ga:bounces'], results[8].totalsForAllResults['ga:bounces']);
+
+                            // ======================================
+                            // Overview
+                            // Pageviews, Visits, Vistors
+                            // ======================================
+
+                            $scope.analyticsOverviewConfig = {
+                                options: {
+                                    chart: {
+                                        height: 400,
+                                        spacing: [25, 25, 25, 25]
+                                    },
+                                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                                    title: {
+                                        text: ''
+                                    },
+                                    subtitle: {
+                                        text: ''
+                                    },
+                                    tooltip: {
+                                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                                        pointFormat: '<b class="text-center">{point.y}</b>',
+                                    },
+                                    legend: {
+                                        enabled: true
+                                    },
+                                    exporting: {
+                                        enabled: false
+                                    },
+                                    plotOptions: {
+                                        series: {
+                                            marker: {
+                                                enabled: false
+                                            }
+                                        }
+                                    }
+                                },
+                                xAxis: {
+                                    type: 'datetime',
+                                    labels: {
+                                        format: "{value:%b %d}"
+                                    }
+                                },
+                                yAxis: {
+                                    // min: 0,
+                                    // max: Math.max.apply(Math, lineData) + 100,
+                                    title: {
+                                        text: ''
+                                    }
+                                },
+                                series: [{
+                                    name: 'Pageviews',
+                                    data: pageviewsData
+                                }, {
+                                    name: 'Visits',
+                                    data: sessionsData
+                                }, {
+                                    name: 'Visitors',
+                                    data: visitorsData
+                                }],
+                                credits: {
+                                    enabled: false
+                                }
+                            };
+
+                            // ======================================
+                            // Content
+                            // Time on Site, Bounces
+                            // ======================================
+
+                            console.log('bouncesData >>> ', bouncesData);
+                            console.log('timeOnSiteData >>> ', timeOnSiteData);
+
+                            $scope.timeonSiteConfig = {
+                                options: {
+                                    chart: {
+                                        height: 465,
+                                        spacing: [25, 25, 25, 25]
+                                    },
+                                    title: {
+                                        text: ''
+                                    },
+                                    subtitle: {
+                                        text: ''
+                                    },
+                                    tooltip: {
+                                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                                        pointFormat: '<b class="text-center">{point.y}</b>',
+                                    },
+                                    legend: {
+                                        enabled: true
+                                    },
+                                    exporting: {
+                                        enabled: false
+                                    },
+                                    plotOptions: {
+                                        series: {
+                                            marker: {
+                                                enabled: false
+                                            }
+                                        }
+                                    }
+                                },
+                                xAxis: {
+                                    type: 'datetime',
+                                    labels: {
+                                        format: "{value:%b %d}"
+                                    }
+                                },
+                                yAxis: {
+                                    // min: 0,
+                                    // max: Math.max.apply(Math, lineData) + 100,
+                                    title: {
+                                        text: ''
+                                    }
+                                },
+                                series: [{
+                                    name: 'Time on Site',
+                                    data: timeOnSiteData
+                                }, {
+                                    name: 'Bounces',
+                                    data: bouncesData
+                                }],
+                                credits: {
+                                    enabled: false
+                                }
+                            };
                     });
 
                     setTimeout(function() {
@@ -330,9 +501,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng', 'f
                                                     textShadow: '0px 1px 2px black'
                                                 }
                                             },
-                                            startAngle: -90,
-                                            endAngle: 90,
-                                            center: ['50%', '75%'],
                                             colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
                                         }
                                     },
@@ -602,8 +770,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng', 'f
                                         softConnector: true
                                     },
                                     neckWidth: '30%',
-                                    neckHeight: '25%'
-
+                                    neckHeight: '25%',
+                                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
                                     //-- Other available options
                                     // height: pixels or percent
                                     // width: pixels or percent

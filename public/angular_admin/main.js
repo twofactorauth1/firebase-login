@@ -50,6 +50,7 @@ require.config({
         'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
         'highcharts': 'libs/highcharts/highcharts-all',
         'highcharts-ng': 'libs/highcharts-ng/dist/highcharts-ng.min',
+        'highcharts-funnel': 'libs/highcharts/modules/funnel',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -141,6 +142,7 @@ require.config({
         'jqueryGridster': {deps: ['jquery']},
         'c3': {deps: ['d3']},
         'angularUiRouter': {deps: ['angular']},
+        'highcharts-funnel': {deps: ['highcharts']},
         'angularFileUpload': {deps: ['angular']},
         'xEditable': {deps: ['angular']},
         'ngCsv': {deps: ['angular']},
