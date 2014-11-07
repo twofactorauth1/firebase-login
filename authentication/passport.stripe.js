@@ -46,16 +46,17 @@ passport.use(new StripeStrategy({
             var stateParams = state.split(',');
             stripeAccount.baggage.accountId = stateParams[0];
             if(!req.user) {
-                userId = state[1];
+                userId = parseInt(stateParams[1]);
+                req.session.accountId =parseInt(stateParams[0]);
             } else {
                 userId = req.user.id();
             }
         }
 
         userDao.getById(userId, function(err, value){
-            if (value == null) {
-                log.error("No user found during stripe callback. (" + err + ")");
-                return fn("User not found", "Incorrect username");
+            if (value == null || err) {
+                log.error("No user found during stripe callback for userId[" + userId + "]. (" + err + ")");
+                return done("User not found", "Incorrect username");
             }
             var user = value;
 
@@ -64,7 +65,7 @@ passport.use(new StripeStrategy({
             userDao.saveOrUpdate(user, function(err, value){
                 if(value==null) {
                     log.error("Error during saveOrUpdate of user: (" + err + ")");
-                    return fn(err, "SaveOrUpdate Error");
+                    return done(err, "SaveOrUpdate Error");
                 }
                 log.debug('<< stripeCallback');
                 return done(err, value);
