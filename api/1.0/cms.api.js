@@ -984,7 +984,13 @@ _.extend(api.prototype, baseApi.prototype, {
         var blogPost = new $$.m.BlogPost(req.body);
         var postId = req.params.postId;
         var pageId = req.params.id;
-        var accountId = parseInt(self.accountId(req));
+
+        var accountId = self.accountId(req);
+        blogPost.set('accountId', parseInt(accountId));
+        blogPost.set('_id', postId);
+        blogPost.set('pageId', pageId);
+
+        console.dir(req.body);
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {

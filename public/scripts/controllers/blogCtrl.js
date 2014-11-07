@@ -1,6 +1,6 @@
 'use strict';
 
-mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter','PostService',
+mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter','postService',
     function ($scope, postsService, pagesService, $location, $route, $routeParams, $filter,PostService) {
 
         var account, pages, website, route, postTags, currentTag, categories, currentCat, authors, currentAuthor, latestposts, that = this;

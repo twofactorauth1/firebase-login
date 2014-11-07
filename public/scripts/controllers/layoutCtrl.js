@@ -48,10 +48,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
-
-                PostService.getAllPosts(function(posts) {
+                PostService.getAllPostsByPageId($scope.currentpage._id, function (posts){
                     that.blogposts = posts;
                 });
+                /*PostService.getAllPosts(function(posts) {
+                    that.blogposts = posts;
+                });*/
             }
         });
 
@@ -216,6 +218,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 window.oldScope.isEditing = false;
                 window.oldScope.$digest();
             };
+
+            window.triggerFontUpdate = function(value) {
+//
+                $('h1,h2,h3,h4,h5,h6,h1 .editable,h2 .editable,h3 .editable,h4 .editable,h5 .editable,h6 .editable ').each(function (){
+                    this.style.setProperty( 'font-family', value, 'important' );
+                });
+
+            }
 
             if (!window.oldScope)
                 window.oldScope = $scope;
@@ -418,7 +428,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             };
 
         /********** END SIGNUP SECTION **********/
-
 
     }
 ]);

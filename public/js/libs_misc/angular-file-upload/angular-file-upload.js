@@ -112,6 +112,7 @@ module
 
                 this._render();
                 if (this.autoUpload) this.uploadAll();
+                setTimeout(function (){$(window).trigger( "resize" )},0);
             };
             /**
              * Remove items from the queue. Remove last: index = -1
@@ -124,6 +125,7 @@ module
                 this.queue.splice(index, 1);
                 item._destroy();
                 this.progress = this._getTotalProgress();
+                setTimeout(function (){$(window).trigger( "resize" )},0);
             };
             /**
              * Clears the queue
