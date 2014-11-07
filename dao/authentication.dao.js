@@ -107,6 +107,7 @@ var dao = {
     authenticateBySocialLogin: function (req, socialType, socialId, email, username, socialUrl, accessToken, refreshToken, expires, scope, fn) {
         var self = this;
         self.log.debug('>> authenticateBySocialLogin');
+        self.log.debug('refreshToken is: ' + refreshToken);
         var host = req.get("host");
         accountDao.getAccountByHost(host, function (err, value) {
             if (err) {
