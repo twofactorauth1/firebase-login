@@ -21,8 +21,9 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
               scope.cards = cards;
               if (scope.cards.data.length) {
                 scope.card = new Skeuocard($("#skeuocard"), {
+                  debug: true,
                   initialValues: {
-                    number: "000000000000" + scope.cards.data[0].last4,
+                    number: "4XXXXXXXXXXX" + scope.cards.data[0].last4,
                     expMonth: scope.cards.data[0].exp_month,
                     expYear: scope.cards.data[0].exp_year,
                     type: scope.cards.data[0].type.toLowerCase()

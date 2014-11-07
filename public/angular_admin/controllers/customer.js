@@ -18,7 +18,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         var pushCustomers = $scope.fetchedCustomers.slice($scope.customerScrollOffset, $scope.customerScrollLimit + $scope.customerScrollOffset);
         for (var i = 0; i < pushCustomers.length; i++) {
           $scope.renderedCustomers.push(pushCustomers[i]);
-        };
+        }
         $scope.customerScrollOffset += $scope.customerScrollLimit;
         $scope.customerScrollBusy = false;
       }
