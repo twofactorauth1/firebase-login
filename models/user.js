@@ -571,6 +571,8 @@ var user = $$.m.ModelBase.extend({
 
 
     createOrUpdateSocialCredentials: function(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope) {
+        console.log('user.js >> createOrUpdateSocialCredentials');
+        console.log('refreshToken is ' + refreshToken);
         var creds = this.getCredentials(socialType);
         if (creds == null) {
             creds = {};
@@ -635,6 +637,7 @@ var user = $$.m.ModelBase.extend({
         if (options.refreshToken != null) {
             creds.refreshToken = options.refreshToken;
         }
+        console.log('creds.refreshToken [' + creds.refreshToken + '] and options.refreshToken[' + options.refreshToken + ']');
 
         if (options.expires != null && options.expires > 0) {
             creds.expires = options.expires;

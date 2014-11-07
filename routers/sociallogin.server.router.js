@@ -76,6 +76,13 @@ _.extend(router.prototype, baseRouter.prototype, {
         state.userId = req.user.id();
         state.appState = req.query.state;
         state.appStateDetail = req.query.detail;
+        if(req.query.forceApprovalPrompt) {
+            self.log.debug('state.forceApprovalPrompt = true');
+            state.forceApprovalPrompt = true;
+        }else {
+            self.log.debug('no forceApprovalPrompt');
+            console.dir(req.query);
+        }
 
         var referringUrl = req.query['redirectTo']|| '/admin';
         authenticationDao.getAuthenticatedUrlForAccount(this.accountId(req), state.userId, referringUrl, 90, function(err, value){
@@ -104,7 +111,8 @@ _.extend(router.prototype, baseRouter.prototype, {
         self.log.debug('>> socialAuthInternal');
         var state = req.query.state;
         state = JSON.parse(state);
-
+        self.log.debug('state:');
+        console.dir(state);
         req.session.authMode = state.authMode;
         req.session.state = state;
         self.log.debug('<< socialAuthInternal');
@@ -123,8 +131,8 @@ _.extend(router.prototype, baseRouter.prototype, {
         var type
             , config
             , subdomain
-            , callbackUrl
-            , state;
+            , callbackUrl;
+            //, state;
 
         if (state != null) {
             type = state.socialType;
@@ -152,7 +160,15 @@ _.extend(router.prototype, baseRouter.prototype, {
         }
 
         options.accessType = "offline";
-        //options.approvalPrompt = "force"; //-- this causes you to have to reauthorize every time, instead of just logging in
+        if(state.forceApprovalPrompt) {
+            /*
+             * This causes you to have to reauthorize every time, instead of just logging in.
+             * It also ensures you get a refresh token.
+             */
+            options.approvalPrompt = "force";
+            self.log.debug('approvalPrompt set to force');
+        }
+
         self.log.debug('<< _socialLogin');
         passport.authenticate(type, options)(req,resp,next);
     },

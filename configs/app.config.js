@@ -17,8 +17,7 @@ var environments = {
  */
 var XDHosts = [];
 
-//This contains the testing server for Charles Szymanski
-var DEFAULT_XDHOSTS = ['107.170.183.176', 'http://localhost:3001', 'pipeshift.com'];
+var DEFAULT_XDHOSTS = ['http://localhost:3001', 'pipeshift.com'];
 
 if (process.env.XDHOSTS == null) {
     XDHosts = DEFAULT_XDHOSTS;
