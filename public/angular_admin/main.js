@@ -51,6 +51,8 @@ require.config({
         'highcharts': 'libs/highcharts/highcharts-all',
         'highcharts-ng': 'libs/highcharts-ng/dist/highcharts-ng.min',
         'highcharts-funnel': 'libs/highcharts/modules/funnel',
+        'datatables': 'libs/datatables/media/js/jquery.dataTables.min',
+        'angular-datatables': 'libs/angular-datatables/dist/angular-datatables.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -90,6 +92,8 @@ require.config({
         'img':'/angular_admin/directives/img_adv',
         'timeAgoFilter':'/angular_admin/filters/time_ago',
         'formatCurrency':'/angular_admin/filters/currency',
+        'secTotime': '/angular_admin/filters/sec2time',
+        'formatPercentage': '/angular_admin/filters/formatPercentage',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -130,6 +134,8 @@ require.config({
         'angularResource': {deps: ['angular']},
         'angularUI': {deps: ['angular']},
         'angularSortable': {deps: ['angular']},
+        'datatables': {deps: ['jquery']},
+        'angular-datatables': {deps: ['datatables']},
         'ngAnimate':{deps: ['angular']},
         'toaster': {deps: ['angular', 'ngAnimate']},
         'angularAMD': {deps: ['angular']},
