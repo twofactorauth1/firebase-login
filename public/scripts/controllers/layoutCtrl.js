@@ -219,17 +219,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 window.oldScope.$digest();
             };
 
-            window.triggerFontUpdate = function(value) {
-//
-                $('h1,h2,h3,h4,h5,h6,h1 .editable,h2 .editable,h3 .editable,h4 .editable,h5 .editable,h6 .editable ').each(function (){
-                    this.style.setProperty( 'font-family', value, 'important' );
+            window.triggerFontUpdate = function(font) {
+                WebFont.load({
+                    google: {
+                        families: [font, 'undefined']
+                    }
+                });
+                $('h1,h2,h3,h4,h5,h6,h1 .editable,h2 .editable,h3 .editable,h4 .editable,h5 .editable,h6 .editable ').each( function () {
+                    this.style.setProperty( 'font-family', font, 'important' );
                 });
 
-            }
+            };
 
-            if (!window.oldScope)
+            if ( !window.oldScope ) {
                 window.oldScope = $scope;
-
+            }
             $scope.sortingLog = [];
 
             $scope.wait;
