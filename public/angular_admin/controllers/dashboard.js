@@ -331,6 +331,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         height: 465,
                                         spacing: [25, 25, 25, 25]
                                     },
+                                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
                                     title: {
                                         text: ''
                                     },
@@ -430,16 +431,12 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         type: 'column',
                                         spacing: [25, 25, 25, 25]
                                     },
+                                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
                                     title: {
                                         text: ''
                                     },
                                     exporting: {
                                        enabled: false
-                                    },
-                                    plotOptions: {
-                                        column: {
-                                            colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
-                                        }
                                     }
                                 },
                                 series: dataObjArr,
