@@ -68,19 +68,23 @@
                         <div>
                             <div class="col-sm-3 col-xs-6 top-four">
                                 <div class="metric center">NEW MRR</div>
-                                <div class="title center" ng-class="{'decrease': newMRRSum < 0, 'increase': newMRRSum > 0 }">{{newMRRSum | formatCurrency}}</div>
+                                <div class="title center" ng-show="newMRRSum != null" ng-class="{'decrease': newMRRSum < 0, 'increase': newMRRSum > 0 }">{{newMRRSum | formatCurrency}}</div>
+                                <div class="title center" ng-show="newMRRSum == null">$ --</div>
                             </div>
                             <div class="col-sm-3 col-xs-6 top-four">
                                 <div class="metric center">EXPANSION MRR</div>
-                                <div class="title center" ng-class="{'decrease': expansionMRRSum < 0, 'increase': expansionMRRSum > 0 }">{{expansionMRRSum | formatCurrency}}</div>
+                                <div class="title center" ng-show="expansionMRRSum != null" ng-class="{'decrease': expansionMRRSum < 0, 'increase': expansionMRRSum > 0 }">{{expansionMRRSum | formatCurrency}}</div>
+                                <div class="title center" ng-show="expansionMRRSum == null">$ --</div>
                             </div>
                             <div class="col-sm-3 col-xs-6 top-four">
                                 <div class="metric center">CHURNED MRR</div>
-                                <div class="title center" ng-class="{'decrease': churnedMRRSum < 0, 'increase': churnedMRRSum > 0 }">{{churnedMRRSum | formatCurrency}}</div>
+                                <div class="title center" ng-show="churnedMRRSum != null" ng-class="{'decrease': churnedMRRSum < 0, 'increase': churnedMRRSum > 0 }">{{churnedMRRSum | formatCurrency}}</div>
+                                <div class="title center" ng-show="churnedMRRSum == null">$ --</div>
                             </div>
                             <div class="col-sm-3 col-xs-6 top-four">
                                 <div class="metric center">NET MRR</div>
-                                <div class="title center" ng-class="{'decrease': netMRRSum < 0, 'increase': netMRRSum > 0 }">{{netMRRSum | formatCurrency}}</div>
+                                <div class="title center" ng-show="netMRRSum != null" ng-class="{'decrease': netMRRSum < 0, 'increase': netMRRSum > 0 }">{{netMRRSum | formatCurrency}}</div>
+                                <div class="title center" ng-show="netMRRSum == null">$ --</div>
                             </div>
                         </div>
                     </div>

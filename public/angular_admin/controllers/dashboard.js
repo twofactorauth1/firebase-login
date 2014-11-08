@@ -1,8 +1,8 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'googleLogin'], function(app) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'googleLogin', 'secTotime', 'formatPercentage', 'datatables', 'angular-datatables'], function(app) {
     app.register.controller('DashboardCtrl', ['$scope', '$window', 'ngProgress', 'PaymentService', 'googleLogin', function($scope, $window, ngProgress, PaymentService, googleLogin) {
         ngProgress.start();
 
-        $scope.activeTab = 'analytics';
+        $scope.activeTab = 'ecommerce';
 
         var client = new Keen({
             projectId: "54528c1380a7bd6a92e17d29",
@@ -317,6 +317,10 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 }
                             };
 
+                            setTimeout(function() {
+                                $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 30;
+                            }, 500);
+
                             // ======================================
                             // Content
                             // Time on Site, Bounces
@@ -324,6 +328,11 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                             console.log('bouncesData >>> ', bouncesData);
                             console.log('timeOnSiteData >>> ', timeOnSiteData);
+
+                            $scope.do = function($event) {
+                                console.log('do event');
+                                $event.preventDefault();
+                            };
 
                             $scope.timeonSiteConfig = {
                                 options: {
@@ -380,153 +389,156 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     enabled: false
                                 }
                             };
+
+                            $scope.secondGACall();
                     });
 
-                    setTimeout(function() {
+                    $scope.secondGACall = function() {
 
-                        var newVsReturningChart = $scope.query({
-                            ids: 'ga:82461709',
-                            metrics: 'ga:sessions',
-                            dimensions: 'ga:userType',
-                            'start-date': '30daysAgo',
-                            'end-date': 'yesterday'
-                        });
+                        setTimeout(function() {
 
-                        var topPageViews = $scope.query({
-                            ids: 'ga:82461709',
-                            metrics: 'ga:entrances',
-                            dimensions: 'ga:pageTitle',
-                            'start-date': '30daysAgo',
-                            'end-date': 'yesterday'
-                        });
+                            var newVsReturningChart = $scope.query({
+                                ids: 'ga:82461709',
+                                metrics: 'ga:sessions',
+                                dimensions: 'ga:userType',
+                                'start-date': '30daysAgo',
+                                'end-date': 'yesterday'
+                            });
 
-                        var trafficSources = $scope.query({
-                            ids: 'ga:82461709',
-                            metrics: 'ga:sessions',
-                            dimensions: 'ga:trafficType',
-                            'start-date': '30daysAgo',
-                            'end-date': 'yesterday'
-                        });
+                            var topPageViews = $scope.query({
+                                ids: 'ga:82461709',
+                                metrics: 'ga:pageviews,ga:uniquePageviews,ga:avgTimeOnPage,ga:entrances,ga:bounceRate,ga:exitRate',
+                                dimensions: 'ga:pagePath',
+                                'start-date': '30daysAgo',
+                                'end-date': 'yesterday'
+                            });
 
-                        Promise.all([newVsReturningChart, topPageViews, trafficSources]).then(function(results) {
+                            //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
 
-                            // ======================================
-                            // New vs. Returning Customers
-                            // ======================================
+                            var trafficSources = $scope.query({
+                                ids: 'ga:82461709',
+                                metrics: 'ga:sessions',
+                                dimensions: 'ga:trafficType',
+                                'start-date': '30daysAgo',
+                                'end-date': 'yesterday'
+                            });
 
-                             //colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
+                            Promise.all([newVsReturningChart, topPageViews, trafficSources]).then(function(results) {
 
-                            var dataObjArr = [];
+                                // ======================================
+                                // New vs. Returning Customers
+                                // ======================================
 
-                            for (var i = 0; i < results[0].rows.length; i++) {
-                                var subObj = new Object();
-                                subObj.name = results[0].rows[i][0];
-                                subObj.data = [parseInt(results[0].rows[i][1])];
-                                dataObjArr[i] = subObj;
-                            };
+                                 //colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
 
-                            $scope.newVsReturningConfig = {
-                                options: {
-                                    chart: {
-                                        type: 'column',
-                                        spacing: [25, 25, 25, 25]
-                                    },
-                                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
-                                    title: {
-                                        text: ''
-                                    },
-                                    exporting: {
-                                       enabled: false
-                                    }
-                                },
-                                series: dataObjArr,
-                                yAxis: {
-                                    title: {
-                                        text: 'Visitors'
-                                    }
-                                },
-                                credits: {
-                                    enabled: false
-                                }
-                            };
+                                var dataObjArr = [];
 
-                            setTimeout(function() {
-                                    $scope.newVsReturningConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth / 3) - 30;
-                            }, 500);
+                                for (var i = 0; i < results[0].rows.length; i++) {
+                                    var subObj = new Object();
+                                    subObj.name = results[0].rows[i][0];
+                                    subObj.data = [parseInt(results[0].rows[i][1])];
+                                    dataObjArr[i] = subObj;
+                                };
 
-
-                            ngProgress.complete();
-
-                            // ----------------------------------------
-                            // Top Pageviews
-                            // ----------------------------------------
-                            $scope.topPages = results[1].rows;
-
-                            // ======================================
-                            // Traffic Sources
-                            // ======================================
-
-                            var dataObjArr = [];
-
-                            for (var i = 0; i < results[2].rows.length; i++) {
-                                results[2].rows[i][1] = parseInt(results[2].rows[i][1]);
-                                results[2].rows[i][0] = results[2].rows[i][0].charAt(0).toUpperCase() + results[2].rows[i][0].slice(1);
-                            };
-
-                            $scope.trafficSourcesConfig = {
-                                options: {
-                                    chart: {
-                                        plotBackgroundColor: null,
-                                        plotBorderWidth: 0,
-                                        plotShadow: false,
-                                        spacing: [25, 25, 25, 25]
-                                    },
-                                    title: {
-                                        text: ''
-                                    },
-                                    tooltip: {
-                                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                                    },
-                                    plotOptions: {
-                                        pie: {
-                                            dataLabels: {
-                                                enabled: true,
-                                                distance: -50,
-                                                style: {
-                                                    fontWeight: 'bold',
-                                                    color: 'white',
-                                                    textShadow: '0px 1px 2px black'
-                                                }
-                                            },
-                                            colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
+                                $scope.newVsReturningConfig = {
+                                    options: {
+                                        chart: {
+                                            type: 'column',
+                                            spacing: [25, 25, 25, 25]
+                                        },
+                                        colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                                        title: {
+                                            text: ''
+                                        },
+                                        exporting: {
+                                           enabled: false
                                         }
                                     },
-                                    exporting: {
-                                       enabled: false
+                                    series: dataObjArr,
+                                    yAxis: {
+                                        title: {
+                                            text: 'Visitors'
+                                        }
+                                    },
+                                    credits: {
+                                        enabled: false
                                     }
-                                },
-                                series: [{
-                                    type: 'pie',
-                                    name: 'Traffic Source',
-                                    innerSize: '40%',
-                                    data: results[2].rows
-                                }],
-                                credits: {
-                                    enabled: false
-                                }
-                            };
+                                };
 
-                            setTimeout(function() {
-                                    $scope.trafficSourcesConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth / 3) - 30;
-                            }, 500);
+                                setTimeout(function() {
+                                        $scope.newVsReturningConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth / 3) - 30;
+                                }, 500);
 
 
-                        });
+                                ngProgress.complete();
 
-                     }, 1000);
+                                // ----------------------------------------
+                                // Top Pageviews
+                                // ----------------------------------------
+                                console.log('results[1].rows >>> ', results[1].rows);
+                                $scope.topPages = results[1].rows;
 
+                                // ======================================
+                                // Traffic Sources
+                                // ======================================
 
+                                var dataObjArr = [];
 
+                                for (var i = 0; i < results[2].rows.length; i++) {
+                                    results[2].rows[i][1] = parseInt(results[2].rows[i][1]);
+                                    results[2].rows[i][0] = results[2].rows[i][0].charAt(0).toUpperCase() + results[2].rows[i][0].slice(1);
+                                };
+
+                                $scope.trafficSourcesConfig = {
+                                    options: {
+                                        chart: {
+                                            plotBackgroundColor: null,
+                                            plotBorderWidth: 0,
+                                            plotShadow: false,
+                                            spacing: [25, 25, 25, 25]
+                                        },
+                                        title: {
+                                            text: ''
+                                        },
+                                        tooltip: {
+                                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                        },
+                                        plotOptions: {
+                                            pie: {
+                                                dataLabels: {
+                                                    enabled: true,
+                                                    distance: -50,
+                                                    style: {
+                                                        fontWeight: 'bold',
+                                                        color: 'white',
+                                                        textShadow: '0px 1px 2px black'
+                                                    }
+                                                },
+                                                colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
+                                            }
+                                        },
+                                        exporting: {
+                                           enabled: false
+                                        }
+                                    },
+                                    series: [{
+                                        type: 'pie',
+                                        name: 'Traffic Source',
+                                        innerSize: '40%',
+                                        data: results[2].rows
+                                    }],
+                                    credits: {
+                                        enabled: false
+                                    }
+                                };
+
+                                setTimeout(function() {
+                                        $scope.trafficSourcesConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth / 3) - 30;
+                                }, 500);
+                            });
+
+                         }, 1000);
+                    };
 
                     PaymentService.getCustomers(function(data) {
                         $scope.customers = data;
@@ -550,13 +562,74 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 "property_value": "invoice.payment_succeeded"
                             }]
                         });
-                        client.run(monthlyRecurringRevenue, function(response) {
-                            var totalRevenue = this.data.result;
+
+                        var activeSubscriptions = new Keen.Query("count", {
+                            eventCollection: "Stripe_Events",
+                            timeframe: "last_30_days",
+                            filters: [{
+                                "property_name":"type",
+                                "operator":"eq",
+                                "property_value":"customer.subscription.created"
+                            },{
+                                "property_name":"data.object.status",
+                                "operator":"eq",
+                                "property_value":"active"
+                            }]
+                        });
+
+                        var canceledSubscriptions = new Keen.Query("count", {
+                            eventCollection: "Stripe_Events",
+                            timeframe: "last_30_days",
+                            filters: [{
+                                "property_name":"type",
+                                "operator":"eq",
+                                "property_value":"customer.subscription.deleted"
+                            }]
+                        });
+
+
+                        client.run([monthlyRecurringRevenue, activeSubscriptions, canceledSubscriptions], function(response) {
+                            var totalRevenue = this.data[0].result;
                             var numOfCustomers = $scope.customers.length;
                             var avgRevenue = totalRevenue / numOfCustomers;
                             var result = avgRevenue * numOfCustomers;
                             $scope.monthlyRecurringRevenue = result / 100;
+
+                            // ======================================
+                            // Annual Run Rate Metric
+                            // MRR * 12
+                            // ======================================
+
+                            $scope.annualRunRate = $scope.monthlyRecurringRevenue * 12;
+
+                            // ======================================
+                            // Average monthly Recurring Revenue Per User (ARPU)
+                            // ARPU = MRR / Active Subscriptions.
+                            // ======================================
+
+                            $scope.activeSubscriptions = this.data[1].result;
+
+                            $scope.arpu = $scope.monthlyRecurringRevenue / $scope.activeSubscriptions;
+
+                            // ======================================
+                            // User Churn
+                            // Churn = canceled subscriptions / (canceled subscriptions + active subscriptions)
+                            // ======================================
+
+                            $scope.canceledSubscriptions = this.data[2].result;
+                            var userChurnCalc = this.data[2].result / (this.data[2].result + this.data[1].result) * 100;
+                            $scope.userChurn = userChurnCalc.toFixed(1) * -1;
+
+                            // ======================================
+                            // Lifetime Value (LTV)
+                            // LTV =  ARPU / Churn
+                            // ======================================
+                            console.log('$scope.arpu >>> ', $scope.arpu);
+                            console.log('$scope.userChurn >>> ', $scope.userChurn);
+                            $scope.lifetimeValue = $scope.arpu / $scope.userChurn;
                         });
+
+                        filters: [{"property_name":"type","operator":"eq","property_value":"customer.subscription.created"},{"property_name":"data.object.status","operator":"eq","property_value":"active"}]
 
                         // ======================================
                         // Average Revenue Per Customer Metric
@@ -565,41 +638,14 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         client.run(monthlyRecurringRevenue, function(response) {
                             var totalRevenue = this.data.result;
                             var numOfCustomers = $scope.customers.length;
-                            var avgRevenue = totalRevenue / numOfCustomers;
-                            var result = avgRevenue;
-
-                            var data = {
-                                result: result
-                            };
-
-                            window.chart = new Keen.Visualization(data, document.getElementById('average-revenue-per-customer'), {
-                                chartType: "metric",
-                                title: "Average Revenue Per Customer",
-                                width: 345,
-                                colors: ["#49c5b1"],
-                                chartOptions: {
-                                    prefix: '$'
-                                }
-                            });
+                            $scope.avgRevenue = totalRevenue / numOfCustomers / 100;
                         });
 
                         // ======================================
-                        // Average Revenue Per Customer Metric
+                        // Total Customer Metric
                         // ======================================
 
-                        var numOfCustomers = $scope.customers.length;
-                        var result = numOfCustomers;
-
-                        var data = {
-                            result: result
-                        };
-
-                        window.chart = new Keen.Visualization(data, document.getElementById('total-customer'), {
-                            chartType: "metric",
-                            title: "Customers",
-                            width: 345,
-                            colors: ["#49c5b1"]
-                        });
+                        $scope.totalCustomers = $scope.customers.length;
 
                     }); //end PaymentService.getCustomers
 
@@ -682,22 +728,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         }]
                     });
                     client.run(otherRevenue, function(response) {
-                        var totalRevenue = this.data.result;
-                        var result = totalRevenue;
-
-                        var data = {
-                            result: result
-                        };
-
-                        window.chart = new Keen.Visualization(data, document.getElementById('other-revenue'), {
-                            chartType: "metric",
-                            title: "Other Revenue",
-                            width: 345,
-                            colors: ["#49c5b1"],
-                            chartOptions: {
-                                prefix: '$'
-                            }
-                        });
+                        $scope.totalRevenue = this.data.result;
                     });
 
                     // ======================================
@@ -789,7 +820,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         credits: {
                             enabled: false
                         }
-                    };
+        };
 
     }]);
 });
