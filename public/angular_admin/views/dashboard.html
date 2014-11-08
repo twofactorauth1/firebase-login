@@ -66,23 +66,23 @@
                         <div>
                             <div class="col-sm-4 col-xs-6 top-four">
                                 <div class="metric center">Pageviews</div>
-                                    <div class="title center" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }">
+                                    <div class="title center">
                                         {{pageviews}}
-                                        <span class="percent"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}%</span>
+                                        <span class="percent" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}%</span>
                                     </div>
                             </div>
                             <div class="col-sm-4 col-xs-6 top-four">
                                 <div class="metric center">Visits</div>
-                                <div class="title center" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }">
+                                <div class="title center">
                                     {{visits}}
-                                    <span class="percent"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
+                                    <span class="percent" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-xs-6 top-four">
                                 <div class="metric center">Visitors</div>
-                                <div class="title center" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }">
+                                <div class="title center">
                                     {{visitors}}
-                                    <span class="percent"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</span>
+                                    <span class="percent" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</span>
                                 </div>
                             </div>
                         </div>
@@ -220,16 +220,16 @@
                             <div>
                                 <div class="col-xs-6 top-four">
                                     <div class="metric center">Time on Site</div>
-                                        <div class="title center" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }">
+                                        <div class="title center">
                                             {{visitDuration}}
-                                            <span class="percent"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
+                                            <span class="percent" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
                                         </div>
                                 </div>
                                 <div class="col-xs-6 top-four">
                                     <div class="metric center">Bounces</div>
-                                    <div class="title center" ng-class="{'decrease': bouncesPercent < 0, 'increase': bouncesPercent > 0 }">
+                                    <div class="title center">
                                         {{bounces}}
-                                        <span class="percent"><i ng-class="{'fa fa-chevron-down': bouncesPercent < 0, 'fa fa-chevron-up': bouncesPercent > 0 }"></i> {{bouncesPercent}}%</span>
+                                        <span class="percent" ng-class="{'decrease': bouncesPercent < 0, 'increase': bouncesPercent > 0 }"><i ng-class="{'fa fa-chevron-down': bouncesPercent < 0, 'fa fa-chevron-up': bouncesPercent > 0 }"></i> {{bouncesPercent}}%</span>
                                     </div>
                                 </div>
                             </div>
