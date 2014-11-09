@@ -58,6 +58,8 @@ var dao = {
         }
     },
 
+    
+
 
     checkAccessToken: function(user, fn) {
         var self = this;
