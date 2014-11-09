@@ -198,30 +198,31 @@
                             <div class="panel-body">
                                 <div class="table mb0">
                                     <div class="table-responsive">
-                                        <table class="table table-dark mb0">
+                                        <table class="table table-striped">
                                             <thead>
-                                                <tr>
-                                                    <th>Page</th>
-                                                    <th>Pageviews</th>
-                                                    <th>Unique Pageviews</th>
-                                                    <th>Avg. Time on Page</th>
-                                                    <th>Entrances</th>
-                                                    <th>Bounce Rate</th>
-                                                    <th>Exit</th>
-                                                </tr>
+                                            <tr>
+                                                <th>Page</th>
+                                                <th>Pageviews</th>
+                                                <th>Unique Pageviews</th>
+                                                <th>Avg. Time on Page</th>
+                                                <th>Entrances</th>
+                                                <th>Bounce Rate</th>
+                                                <th>Exit</th>
+                                            </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="topPage in topPages">
-                                                    <td class="truncate">{{topPage[0]}}</td>
-                                                    <td>{{topPage[1]}}</td>
-                                                    <td>{{topPage[2]}}</td>
-                                                    <td>{{topPage[3] | secTotime}}</td>
-                                                    <td>{{topPage[4]}}</td>
-                                                    <td>{{topPage[5] | formatPercentage}}</td>
-                                                    <td>{{topPage[6] | formatPercentage}}</td>
-                                                </tr>
+                                           <tr ng-repeat="topPage in formatedTopPages">
+                                                <td class="truncate">{{topPage.page}}</td>
+                                                <td>{{topPage.pageviews}}</td>
+                                                <td>{{topPage.uniquePageviews}}</td>
+                                                <td>{{topPage.avgTime | secTotime}}</td>
+                                                <td>{{topPage.entrances}}</td>
+                                                <td>{{topPage.bounceRate | formatPercentage}}</td>
+                                                <td>{{topPage.exitRate | formatPercentage}}</td>
+                                            </tr>
                                             </tbody>
                                         </table>
+
                                     </div>
                                 </div>
                             </div>

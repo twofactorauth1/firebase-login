@@ -1,8 +1,8 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'googleLogin', 'secTotime', 'formatPercentage', 'datatables', 'angular-datatables'], function(app) {
-    app.register.controller('DashboardCtrl', ['$scope', '$window', 'ngProgress', 'PaymentService', 'googleLogin', function($scope, $window, ngProgress, PaymentService, googleLogin) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'googleLogin', 'secTotime', 'formatPercentage'], function(app) {
+    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'googleLogin', function($scope, $window, $resource, ngProgress, PaymentService, googleLogin) {
         ngProgress.start();
 
-        $scope.activeTab = 'ecommerce';
+        $scope.activeTab = 'analytics';
 
         var client = new Keen({
             projectId: "54528c1380a7bd6a92e17d29",
@@ -475,8 +475,31 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 // ----------------------------------------
                                 // Top Pageviews
                                 // ----------------------------------------
-                                console.log('results[1].rows >>> ', results[1].rows);
+
                                 $scope.topPages = results[1].rows;
+
+                                var output = [];
+
+                                for (var i = 0; i < $scope.topPages.length; i++) {
+                                    var singleRow = $scope.topPages[i];
+                                    var subObj = {};
+                                    for (var k = 0; k < singleRow.length; k++) {
+                                        if (k == 0) {subObj.page = singleRow[k]}
+                                        if (k == 1) {subObj.pageviews = parseInt(singleRow[k])}
+                                        if (k == 2) {subObj.uniquePageviews = parseInt(singleRow[k])}
+                                        if (k == 3) {subObj.avgTime = parseInt(singleRow[k])}
+                                        if (k == 4) {subObj.entrances = parseInt(singleRow[k])}
+                                        if (k == 5) {subObj.bounceRate = parseInt(singleRow[k])}
+                                        if (k == 6) {subObj.exitRate = parseInt(singleRow[k])}
+                                    };
+                                    if (subObj) {
+                                        output.push(subObj);
+                                    }
+                                };
+
+                                $scope.formatedTopPages = output;
+
+
 
                                 // ======================================
                                 // Traffic Sources
