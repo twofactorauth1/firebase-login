@@ -21,6 +21,15 @@ define(['app'], function (app) {
               });
         };
 
+        this.checkToken = function(fn) {
+            if (!token) {
+                 this.getAccessToken(fn, function(data) {
+                    console.log('result >>> ', data);
+                    fn(data);
+                 });
+            }
+        };
+
         this.encodeData = function(data) {
             return Object.keys(data).map(function(key) {
                 return [key, data[key]].map(encodeURIComponent).join("=");
@@ -28,18 +37,33 @@ define(['app'], function (app) {
         };
 
         this.getAccessToken = function (fn) {
-            var apiUrl = baseUrl + ['assets', assetId].join('/');
+            var self = this;
+            var apiUrl = '/api/1.0/' + ['social', 'google', 'accesstoken'].join('/');
+            $http({
+                url: apiUrl,
+                method: 'GET'
+              })
+              .success(function(data, status, headers, config) {
+                console.log('data >>> ', data);
+                fn(data);
+                token = data.data;
+              })
+              .error(function() {
+                console.log('error retrieving access token');
+                self.login(fn);
+              });
         };
 
-        this.login = function() {
-                gapi.auth.init(function() {});
-                gapi.auth.authorize({
-                    client_id: clientId,
-                    scope: scopes,
-                    immediate: true,
-                    approval_prompt: 'auto'
-                }, this.handleAuthResult);
-                return deferred.promise;
+        this.login = function(fn) {
+            gapi.auth.init(function() {});
+            gapi.auth.authorize({
+                client_id: clientId,
+                scope: scopes,
+                immediate: true,
+                approval_prompt: 'auto'
+            }, this.handleAuthResult());
+            fn('yay');
+            return deferred.promise;
         };
 
         this.handleClientLoad = function() {
@@ -57,12 +81,13 @@ define(['app'], function (app) {
             }, this.handleAuthResult);
         };
 
-        this.handleAuthResult = function(authResult) {
+        this.handleAuthResult = function(authResult, fn) {
             if (authResult) {
                 token = authResult.access_token;
                 // The user has authorized access
                 console.log('authResult >>> ', authResult);
                 this.loadAnalyticsClient;
+                fn(authResult);
                 deferred.resolve(authResult);
             } else {
                 // User has not Authenticated and Authorized
