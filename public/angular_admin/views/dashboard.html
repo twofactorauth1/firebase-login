@@ -11,6 +11,8 @@
                 <i class="fa fa-plus"></i>
                 <span class="hidden-xs">Add</span>
             </div> -->
+
+            <button ng-click="refreshToken()">Authorize</button>
         </div>
     </div>
 
@@ -212,7 +214,7 @@
                                             </thead>
                                             <tbody>
                                            <tr ng-repeat="topPage in formatedTopPages">
-                                                <td class="truncate">{{topPage.page}}</td>
+                                                <td class="truncate"><a href="/admin#/dashboard/single-page/{{}}">{{topPage.page}}</a></td>
                                                 <td>{{topPage.pageviews}}</td>
                                                 <td>{{topPage.uniquePageviews}}</td>
                                                 <td>{{topPage.avgTime | secTotime}}</td>
