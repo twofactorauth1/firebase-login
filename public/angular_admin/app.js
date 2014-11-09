@@ -26,6 +26,18 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
               controller: 'MonthlyRecurringRevenueCtrl',
               controllerUrl: '/angular_admin/controllers/dashboard/monthly-recurring-revenue.js'
             }))
+            .state('dashboardOtherRevenue', angularAMD.route({
+              url: '/dashboard/other-revenue',
+              templateUrl: '/angular_admin/views/dashboard/other-revenue.html',
+              controller: 'OtherRevenueCtrl',
+              controllerUrl: '/angular_admin/controllers/dashboard/other_revenue.js'
+            }))
+            .state('singlePageAnalytics', angularAMD.route({
+              url: '/dashboard/single-page/:pageId',
+              templateUrl: '/angular_admin/views/dashboard/single-page-analytics.html',
+              controller: 'SinglePageAnalyticsCtrl',
+              controllerUrl: '/angular_admin/controllers/dashboard/single_page_analytics.js'
+            }))
 
       .state('account', angularAMD.route({
         url: '/account',
