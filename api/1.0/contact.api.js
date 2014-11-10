@@ -113,7 +113,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                this._saveOrUpdateContact(req, resp, false);
+                self._saveOrUpdateContact(req, resp, false);
             }
         });
 
