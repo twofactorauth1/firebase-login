@@ -13,18 +13,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             requestType: "jsonp"
         });
 
-        $scope.login = function() {
-            dashboardService.login(function(data) {
-                console.log('refreshed', data);
-            });
-        };
-
-        $scope.accessToken = function() {
-            dashboardService.getAccessToken(function(data) {
-                console.log('getAccessToken >>> ', data);
-            });
-        };
-
         dashboardService.checkToken(function(data) {
                 console.log('checkToken', data);
 
