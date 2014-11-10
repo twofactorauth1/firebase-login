@@ -22,7 +22,7 @@ define(['app'], function (app) {
         };
 
         this.checkToken = function(fn) {
-            this.login(fn);
+            // this.login(fn);
             if (!token) {
                  this.getAccessToken(fn, function(data) {
                     console.log('result >>> ', data);
