@@ -65,7 +65,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                 $scope.showType = "all";
                 $scope.select_all = false;
                 $scope.batch = [];
-                $scope.m = {};
+                $scope.m = $scope.m || {};
 
 /*
                 $scope.m.selectAll = function () {
@@ -98,6 +98,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                     $scope.m.getSingleSelect();
                 };
 */
+/*
                 $scope.m.deleteAsset = function (assetId) {
                     AssetsService.deleteAssetById(function (resp, status) {
                         if (status === 1) {
@@ -130,6 +131,23 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                         $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
                     }
                 };
+                $scope.m.singleSelect = function (event) {
+                    if ($scope.lastSelect !== null && $scope.lastSelect.id !== event.target.id && $scope.lastSelect.checked === true) {
+                        $scope.lastSelect.checked = false;
+                    }
+                    $scope.lastSelect = event.target;
+                    $scope.m.getSingleSelect();
+                };
+
+
+                $scope.m.onInsertMedia = function () {
+                    $scope.m.getSingleSelect();
+                    if ($scope.batch.length > 0) {
+                        $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
+                    }
+
+                };
+                */
                 $scope.m.selectAll = function() {
                     $scope.batch = [];
                     $scope.assets.forEach(function (v) {
@@ -209,6 +227,13 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                         }
                     });
                 };
+                $scope.m.onInsertMedia = function () {
+                    if ($scope.batch.length > 0) {
+                        $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
+                    }
+
+                    $("#media-manager-modal").modal('hide');
+                };
             },
 
             link: function (scope, element) {
@@ -218,6 +243,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                 });
                 element.attr("data-toggle", "modal");
                 element.attr("data-target", "#media-manager-modal");
+
             }
         };
     }]).directive('captureShift', function(){
