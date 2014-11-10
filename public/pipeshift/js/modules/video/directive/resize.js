@@ -1,6 +1,5 @@
-define(['angularAMD'], function (angularAMD) {
-    angularAMD.directive('indigewebResize', function ($window) {
-        return function (scope, element) {
+angular.module('var.directives').directive('indigewebResize', function ($window) {
+    return function (scope, element) {
             var w = angular.element($window);
             scope.getWindowDimensions = function () {
                 return { 'h': w.height(), 'w': w.width() };
@@ -17,14 +16,6 @@ define(['angularAMD'], function (angularAMD) {
                     };
                 };
 
-                scope.styleDashboard = function () {
-                    return {
-                        'height': (newValue.h)-108 + 'px',
-                        'width': '100%',
-                        'overflow-y' : 'scroll'
-                    };
-                };
-
                 scope.styleMarketing = function () {
                     return {
                         'height': (newValue.h)+200 + 'px',
@@ -34,22 +25,6 @@ define(['angularAMD'], function (angularAMD) {
                 };
 
                 scope.styleCustomers = function () {
-                    return {
-                        'height': (newValue.h)-63 + 'px',
-                        'width': '100%',
-                        'overflow-y' : 'scroll'
-                    };
-                };
-
-                scope.styleAccount = function () {
-                    return {
-                        'height': (newValue.h)-120 + 'px',
-                        'width': '100%',
-                        'overflow-y' : 'scroll'
-                    };
-                };
-
-                scope.styleAccountEdit = function () {
                     return {
                         'height': (newValue.h)-63 + 'px',
                         'width': '100%',
@@ -70,6 +45,5 @@ define(['angularAMD'], function (angularAMD) {
             w.bind('resize', function () {
                 scope.$apply();
             });
-        }
-    });
+    };
 });

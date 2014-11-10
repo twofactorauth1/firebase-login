@@ -1,6 +1,6 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div style="">
-	<div class="pageheader row">
+	<div class="pageheader">
 		<div class="col-xs-7">
 			<button ng-click="$back()"
  class="btn btn-success pull-left"
@@ -12,9 +12,9 @@
 			</h2>
 		</div>
 
-		<div class="col-xs-4"></div>
+		<div class="col-xs-5"></div>
 	</div>
-	<div id="contact-edit-container" class="contentpanel">
+	<div id="contact-edit-container" class="contentpanel" ng-style="styleAccountEdit()" indigeweb-resize>
 		<div class="row">
 			<div class="col-md-6">
 				<div class="panel panel-default">
