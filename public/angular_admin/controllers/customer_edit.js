@@ -175,8 +175,7 @@ define(['app',
         $state.go('customer');
       };
 
-      $scope.savePreferencesFn = function() {
-        UserService.updateUserPreferences($scope.userPreferences, function(preferences) {});
+      $scope.restoreFn = function() {
         if ($scope.customerId) {
           if ($scope.customer.type === undefined) {
             $scope.customer.type = $scope.userPreferences.default_customer_type;
@@ -198,21 +197,17 @@ define(['app',
         }
       };
 
+      $scope.savePreferencesFn = function() {
+        UserService.updateUserPreferences($scope.userPreferences, function(preferences) {});
+        $scope.restoreFn();
+      };
+
       if ($scope.customerId) {
         CustomerService.getCustomer($scope.customerId, function(customer) {
           $scope.customer = customer;
           UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
-            if ($scope.customer.type === undefined) {
-              $scope.customer.type = $scope.userPreferences.default_customer_type;
-            }
-            if ($scope.customer.details[0].addresses.length === 0) {
-              $scope.customer.details[0].addresses.push({});
-              $scope.customer.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
-              $scope.customer.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
-              $scope.customer.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
-              $scope.customer.details[0].addresses[0].zip = $scope.userPreferences.default_customer_zip;
-            }
+            $scope.restoreFn();
           });
           ngProgress.complete();
           $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
@@ -230,12 +225,7 @@ define(['app',
         $scope.customerAddressWatchFn(0);
         UserService.getUserPreferences(function(preferences) {
           $scope.userPreferences = preferences;
-          $scope.customer.type = $scope.userPreferences.default_customer_type;
-          $scope.customer.details[0].addresses.push({});
-          $scope.customer.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
-          $scope.customer.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
-          $scope.customer.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
-          $scope.customer.details[0].addresses[0].zip = $scope.userPreferences.default_customer_zip;
+          $scope.restoreFn();
         });
       }
 
