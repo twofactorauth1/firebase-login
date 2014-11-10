@@ -26,7 +26,7 @@ require.config({
         'colorpicker': 'libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
         'underscore': 'libs/underscore/underscore',
-        'skeuocard': 'libs/skeuocard/javascripts/skeuocard.min',
+        'skeuocard': 'libs/skeuocard/lib/js/card',
         'webfontloader': 'libs/jd-fontselect/dist/libs/webfontloader',
         'jdfontselect': 'libs/jd-fontselect/dist/angular-fontselect.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
@@ -50,6 +50,7 @@ require.config({
         'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
         'highcharts': 'libs/highcharts/highcharts-all',
         'highcharts-ng': 'libs/highcharts-ng/dist/highcharts-ng.min',
+        'highcharts-funnel': 'libs/highcharts/modules/funnel',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -66,6 +67,7 @@ require.config({
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
         'postService': '/angular_admin/services/post',
+        'googleLogin': '/angular_admin/services/google_login',
         'productService': '/angular_admin/services/product',
         'dashboardService': '/angular_admin/services/dashboard',
         'chartFacebookService': '/angular_admin/services/chart_facebook',
@@ -87,6 +89,9 @@ require.config({
         'confirmClick2':'/angular_admin/directives/confirm_click2',
         'img':'/angular_admin/directives/img_adv',
         'timeAgoFilter':'/angular_admin/filters/time_ago',
+        'formatCurrency':'/angular_admin/filters/currency',
+        'secTotime': '/angular_admin/filters/sec2time',
+        'formatPercentage': '/angular_admin/filters/formatPercentage',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -139,6 +144,7 @@ require.config({
         'jqueryGridster': {deps: ['jquery']},
         'c3': {deps: ['d3']},
         'angularUiRouter': {deps: ['angular']},
+        'highcharts-funnel': {deps: ['highcharts']},
         'angularFileUpload': {deps: ['angular']},
         'xEditable': {deps: ['angular']},
         'ngCsv': {deps: ['angular']},

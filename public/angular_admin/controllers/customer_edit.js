@@ -7,7 +7,8 @@ define(['app',
   'ngProgress',
   'confirmClick2',
   'toasterService',
-  'mediaDirective'
+  'mediaDirective',
+  'userService'
 ], function(app) {
   app.register.controller('CustomerEditCtrl', ['$scope',
     'CustomerService',
@@ -15,7 +16,8 @@ define(['app',
     '$state',
     'ngProgress',
     'ToasterService',
-    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService) {
+    'UserService',
+    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, UserService) {
       ngProgress.start();
       var displayAddressCharLimit = 2;
       $scope.currentState = $state.current.name;
@@ -173,6 +175,16 @@ define(['app',
         $state.go('customer');
       };
 
+      $scope.savePreferencesFn = function() {
+        UserService.updateUserPreferences($scope.userPreferences, function(preferences) {
+          $scope.userPreferences = preferences;
+        });
+      };
+
+      UserService.getUserPreferences(function(preferences) {
+        $scope.userPreferences = preferences;
+      });
+
       if ($scope.customerId) {
         CustomerService.getCustomer($scope.customerId, function(customer) {
           $scope.customer = customer;
@@ -216,7 +228,7 @@ define(['app',
       });
 
     $scope.insertPhoto=function(asset){
-        $scope.customer.photo=asset.url;        
+        $scope.customer.photo=asset.url;
     };
 
     }

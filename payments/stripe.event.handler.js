@@ -16,6 +16,13 @@ var eventQ = async.queue(function(event, fn){
 
 var eventHandler =  {
 
+    /**
+     * This method takes a stripe event, transforms it into an "indigenous stripe event" (payemts/models/stripe_event)
+     * and then puts it on a queue for later processing by the "_handleEvent" method.  This is done so we can return a 200
+     * quickly on the webhook and scale to handle a large number of events.
+     * @param event
+     * @param fn
+     */
     handleEvent: function(event, fn) {
         var self = this;
         //save it

@@ -1,5 +1,5 @@
 define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngProgress', 'headroom', 'ngHeadroom', 'toasterService', 'iStartsWithFilter', 'ngInfiniteScroll'], function(app) {
-  app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', function($scope, CustomerService, ngProgress, ToasterService, $window) {
+  app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', '$filter', function($scope, CustomerService, ngProgress, ToasterService, $window, $filter) {
     ngProgress.start();
     $scope.customerFilter = {};
     $scope.customerOrder = 'first';
@@ -7,7 +7,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     $scope.customerDisplayFormat = 'first';
 
     $scope.customerScrollBusy = false;
-    $scope.customerScrollLimit = 4;
+    $scope.customerScrollLimit = 10;
     $scope.customerScrollOffset = 0;
     $scope.renderedCustomers = [];
 
@@ -18,7 +18,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         var pushCustomers = $scope.fetchedCustomers.slice($scope.customerScrollOffset, $scope.customerScrollLimit + $scope.customerScrollOffset);
         for (var i = 0; i < pushCustomers.length; i++) {
           $scope.renderedCustomers.push(pushCustomers[i]);
-        };
+        }
         $scope.customerScrollOffset += $scope.customerScrollLimit;
         $scope.customerScrollBusy = false;
       }
@@ -58,10 +58,28 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       this.address = contact.address;
       return returnVal;
     };
+
+    $scope.orderByFn = function () {
+      $scope.fetchedCustomers = $filter('orderBy')($scope.fetchedCustomers, $scope.customerOrder, $scope.customerSortReverse);
+    };
+
+    $scope.$watch('customerOrder', function (newValue, oldValue) {
+      if (newValue) {
+        $scope.orderByFn();
+      }
+    });
+
+    $scope.$watch('customerSortReverse', function (newValue, oldValue) {
+      if (newValue) {
+        $scope.orderByFn();
+      }
+    });
+
     var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
     CustomerService.getCustomersShortForm(fetchFields, function(customers) {
       console.log('customers >>> ', customers);
       $scope.fetchedCustomers = customers;
+      $scope.orderByFn();
       $scope.customerScrollFn();
       ngProgress.complete();
       ToasterService.processPending();

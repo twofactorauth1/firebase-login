@@ -9,6 +9,7 @@ var baseRouter = require('./base.server.router.js');
 var passport = require('passport');
 var appConfig = require('../configs/app.config');
 var stripeConfig = require('../configs/stripe.config');
+var authenticationDao = require('../dao/authentication.dao');
 
 
 
@@ -36,8 +37,19 @@ _.extend(router.prototype, baseRouter.prototype, {
     handleStripeCallback: function(req, res) {
         var self = this;
         self.log.debug('>> handleStripeCallback');
-        self.log.debug('<< handleStripeCallback');
-        res.redirect('/login');
+        var accountId = self.accountId(req);
+        var path = "admin";
+
+        authenticationDao.getAuthenticatedUrlForAccount(accountId, req.user.id(), path, null, function(err, value) {
+            self.log.debug('<< handleStripeCallback');
+            if (err) {
+                res.redirect("/home");
+            } else {
+                res.redirect(value);
+            }
+        });
+
+        //res.redirect('/login');
     }
 
 });

@@ -1,32 +1,25 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], function(app) {
-    app.register.controller('DashboardCtrl', ['$scope', '$window', 'ngProgress', 'PaymentService', function($scope, $window, ngProgress, PaymentService) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'googleLogin', 'secTotime', 'formatPercentage', 'dashboardService'], function(app) {
+    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'googleLogin', 'dashboardService', function($scope, $window, $resource, ngProgress, PaymentService, googleLogin, dashboardService) {
         ngProgress.start();
 
-        gapi.analytics.ready(function() {
+        $scope.activeTab = 'analytics';
 
-            gapi.analytics.auth.authorize({
-                container: 'embed-api-auth-container',
-                clientid: '1026246177215-tqpcc51fjk3vm0mgjef2jg7jagcmtuba.apps.googleusercontent.com'
-            });
+        var client = new Keen({
+            projectId: "54528c1380a7bd6a92e17d29",
+            writeKey: "c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a",
+            readKey: "bc102d9d256d3110db7ccc89a2c7efeb6ac37f1ff07b0a1f421516162522a972443b3b58ff6120ea6bd4d9dd469acc83b1a7d8a51cbb82caa89e590492e0579c8b7c65853ec1c6d6ce6f76535480f8c2f17fcb66dca14e699486efb02b83084744c68859b89f71f37ad846f7088ff96b",
+            protocol: "https",
+            host: "api.keen.io/3.0",
+            requestType: "jsonp"
+        });
 
-            gapi.analytics.auth.on('success', function(response) {
+        dashboardService.checkToken(function(data) {
+                console.log('checkToken', data);
 
-                Keen.ready(function() {
+            Keen.ready(function() {
+                gapi.analytics.ready(function() {
 
-                    ngProgress.complete();
-
-                    $scope.activeTab = 'analytics';
-
-                    var client = new Keen({
-                        projectId: "54528c1380a7bd6a92e17d29", // String (required)
-                        writeKey: "c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a", // String (required for sending data)
-                        readKey: "bc102d9d256d3110db7ccc89a2c7efeb6ac37f1ff07b0a1f421516162522a972443b3b58ff6120ea6bd4d9dd469acc83b1a7d8a51cbb82caa89e590492e0579c8b7c65853ec1c6d6ce6f76535480f8c2f17fcb66dca14e699486efb02b83084744c68859b89f71f37ad846f7088ff96b", // String (required for querying data)
-                        protocol: "https", // String (optional: https | http | auto)
-                        host: "api.keen.io/3.0", // String (optional)
-                        requestType: "jsonp" // String (optional: jsonp, xhr, beacon)
-                    });
-
-                    $scope.secToTime = function (duration) {
+                    $scope.secToTime = function(duration) {
                         var minutes = parseInt(Math.floor(duration / 60));
                         var seconds = parseInt(duration - minutes * 60);
 
@@ -36,7 +29,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                         return minutes + ":" + seconds;
                     };
 
-                    $scope.calculatePercentage = function (oldval, newval) {
+                    $scope.calculatePercentage = function(oldval, newval) {
                         oldval = parseInt(oldval);
                         newval = parseInt(newval);
                         var result = ((oldval - newval) / oldval) * 100;
@@ -46,25 +39,20 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                         return Math.round(result * 100) / 100;
                     };
 
-                    $scope.query = function (params) {
+
+                    $scope.query = function(params) {
                         return new Promise(function(resolve, reject) {
-                            var data = new gapi.analytics.report.Data({
-                                query: params
+                            dashboardService.queryGoogleAnalytics(params, function(data) {
+                                resolve(data);
                             });
-                            data.once('success', function(response) {
-                                    resolve(response);
-                                })
-                                .once('error', function(response) {
-                                    reject(response);
-                                })
-                                .execute();
                         });
+
                     };
 
+                    $scope.toUTC = function(str) {
+                        return Date.UTC(str.substring(0, 4), str.substring(4, 6) - 1, str.substring(6, 8));
+                    };
 
-                    // ======================================
-                    // Visitor Location Popularity
-                    // ======================================
 
                     var visitorLocations = $scope.query({
                         ids: 'ga:82461709',
@@ -74,7 +62,84 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                         'end-date': 'yesterday'
                     });
 
-                    Promise.all([visitorLocations]).then(function(results) {
+                    var deviceReport = $scope.query({
+                        ids: 'ga:82461709',
+                        metrics: 'ga:sessions',
+                        dimensions: 'ga:deviceCategory',
+                        'start-date': '30daysAgo',
+                        'end-date': 'yesterday'
+                    });
+
+                    var userReport = $scope.query({
+                        ids: 'ga:82461709',
+                        metrics: 'ga:users',
+                        dimensions: 'ga:date',
+                        'start-date': '30daysAgo',
+                        'end-date': 'yesterday'
+                    });
+
+                    var userReportPreviousMonth = $scope.query({
+                        ids: 'ga:82461709',
+                        metrics: 'ga:users',
+                        dimensions: 'ga:date',
+                        'start-date': '60daysAgo',
+                        'end-date': '30daysAgo'
+                    });
+
+                    var pageviewsReport = $scope.query({
+                        ids: 'ga:82461709',
+                        metrics: 'ga:pageviews',
+                        dimensions: 'ga:date',
+                        'start-date': '30daysAgo',
+                        'end-date': 'yesterday'
+                    });
+
+                    var pageviewsPreviousReport = $scope.query({
+                        ids: 'ga:82461709',
+                        metrics: 'ga:pageviews',
+                        dimensions: 'ga:date',
+                        'start-date': '60daysAgo',
+                        'end-date': '30daysAgo'
+                    });
+
+                    var sessionDurationQuery = $scope.query({
+                        ids: 'ga:82461709',
+                        metrics: 'ga:sessions,ga:sessionDuration',
+                        dimensions: 'ga:date',
+                        'start-date': '30daysAgo',
+                        'end-date': 'yesterday'
+                    });
+
+                    var sessionDurationPreviousQuery = $scope.query({
+                        ids: 'ga:82461709',
+                        metrics: 'ga:sessions,ga:sessionDuration',
+                        dimensions: 'ga:date',
+                        'start-date': '60daysAgo',
+                        'end-date': '30daysAgo'
+                    });
+
+                    var bouncesReport = $scope.query({
+                        ids: 'ga:82461709',
+                        metrics: 'ga:bounces',
+                        dimensions: 'ga:date',
+                        'start-date': '30daysAgo',
+                        'end-date': 'yesterday'
+                    });
+
+                    var bouncesPreviousReport = $scope.query({
+                        ids: 'ga:82461709',
+                        metrics: 'ga:bounces',
+                        dimensions: 'ga:date',
+                        'start-date': '60daysAgo',
+                        'end-date': '30daysAgo'
+                    });
+
+                    Promise.all([visitorLocations, deviceReport, userReport, userReportPreviousMonth, pageviewsReport, pageviewsPreviousReport, sessionDurationQuery, sessionDurationPreviousQuery, bouncesReport, bouncesPreviousReport]).then(function(results) {
+
+                        // ======================================
+                        // Visitor Location Popularity
+                        // ======================================
+
                         var response = results[0];
                         var data = [
                             ['Country', 'Popularity']
@@ -100,258 +165,420 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                         var chart = new google.visualization.GeoChart(document.getElementById('location'));
 
                         chart.draw(data, options);
-                    });
 
-                    // ----------------------------------------
-                    // Device
-                    // ----------------------------------------
+                        // // ----------------------------------------
+                        // // Device
+                        // // ----------------------------------------
 
-                    var deviceReport = $scope.query({
-                        ids: 'ga:82461709',
-                        metrics: 'ga:sessions',
-                        dimensions: 'ga:deviceCategory',
-                        'start-date': '30daysAgo',
-                        'end-date': 'yesterday'
-                    });
-
-                    Promise.all([deviceReport]).then(function(results) {
-                        for (var i = 0; i < results[0].rows.length; i++) {
-                            var category = results[0].rows[i][0];
+                        for (var i = 0; i < results[1].rows.length; i++) {
+                            var category = results[1].rows[i][0];
                             if (category === 'desktop') {
-                                $scope.desktop = results[0].rows[i][1]
+                                $scope.desktop = results[1].rows[i][1]
                             }
                             if (category === 'mobile') {
-                                $scope.mobile = results[0].rows[i][1]
+                                $scope.mobile = results[1].rows[i][1]
                             }
                         };
-                    });
 
-                    // ----------------------------------------
-                    // Visitors
-                    // ----------------------------------------
+                        // // ----------------------------------------
+                        // // Visitors
+                        // // ----------------------------------------
 
-                    var userReport = $scope.query({
-                        ids: 'ga:82461709',
-                        metrics: 'ga:users',
-                        dimensions: 'ga:date',
-                        'start-date': '30daysAgo',
-                        'end-date': 'yesterday'
-                    });
-
-                    var userReportPreviousMonth = $scope.query({
-                        ids: 'ga:82461709',
-                        metrics: 'ga:users',
-                        dimensions: 'ga:date',
-                        'start-date': '60daysAgo',
-                        'end-date': '30daysAgo'
-                    });
-
-                    Promise.all([userReport, userReportPreviousMonth]).then(function(results) {
-                        $scope.visitors = results[0].totalsForAllResults['ga:users'];
-                        var previous = results[1].totalsForAllResults['ga:users'];
+                        $scope.visitors = results[2].totalsForAllResults['ga:users'];
+                        var visitorsData = [];
+                        for (var i = 0; i < results[2].rows.length; i++) {
+                            var subArr = [];
+                            subArr.push($scope.toUTC(results[2].rows[i][0]));
+                            subArr.push(parseInt(results[2].rows[i][1]));
+                            visitorsData.push(subArr);
+                        };
+                        var previous = results[3].totalsForAllResults['ga:users'];
                         $scope.visitorsPercent = $scope.calculatePercentage(previous, $scope.visitors);
-                    });
 
-                    // ======================================
-                    // New vs. Returning Customers
-                    // ======================================
+                        // // ----------------------------------------
+                        // // Pageviews Metric
+                        // // ----------------------------------------
 
-                    var newVsReturningChart = $scope.query({
-                        ids: 'ga:82461709',
-                        metrics: 'ga:sessions',
-                        dimensions: 'ga:userType',
-                        'start-date': '30daysAgo',
-                        'end-date': 'yesterday'
-                    });
+                        var pageviewsData = [];
+                        for (var i = 0; i < results[4].rows.length; i++) {
+                            var subArr = [];
+                            subArr.push($scope.toUTC(results[4].rows[i][0]));
+                            subArr.push(parseInt(results[4].rows[i][1]));
+                            pageviewsData.push(subArr);
+                        };
+                        $scope.pageviews = results[4].totalsForAllResults['ga:pageviews'];
+                        $scope.pageviewsPercent = $scope.calculatePercentage(results[5].totalsForAllResults['ga:pageviews'], results[4].totalsForAllResults['ga:pageviews']);
 
-                    Promise.all([newVsReturningChart]).then(function(results) {
-                        //colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
 
-                        var dataObjArr = [];
+                        // // ----------------------------------------
+                        // // Average Visit Duration
+                        // // ----------------------------------------
 
-                        for (var i = 0; i < results[0].rows.length; i++) {
-                            var subObj = new Object();
-                            subObj.name = results[0].rows[i][0];
-                            subObj.data = [parseInt(results[0].rows[i][1])];
-                            dataObjArr[i] = subObj;
+                        var sessionDuration = parseInt(results[6].totalsForAllResults['ga:sessionDuration']);
+                        var sessions = parseInt(results[6].totalsForAllResults['ga:sessions']);
+                        var sessionsData = [];
+                        var timeOnSiteData = [];
+                        for (var i = 0; i < results[6].rows.length; i++) {
+                            var subArr = [];
+                            subArr.push($scope.toUTC(results[6].rows[i][0]));
+                            subArr.push(parseInt(results[6].rows[i][1]));
+                            sessionsData.push(subArr);
+
+                            var subArr2 = [];
+                            subArr2.push($scope.toUTC(results[6].rows[i][0]));
+                            subArr2.push(parseInt(results[6].rows[i][1]));
+                            timeOnSiteData.push(subArr2);
+                        };
+                        $scope.visits = sessions;
+                        var averageDuration = (sessionDuration / sessions);
+                        $scope.visitDuration = $scope.secToTime(averageDuration);
+
+                        var previousSessionDuration = parseInt(results[7].totalsForAllResults['ga:sessionDuration']);
+                        var previousSessions = parseInt(results[7].totalsForAllResults['ga:sessions']);
+                        var averageDurationPrevious = (previousSessionDuration / previousSessions);
+                        $scope.visitDurationPercent = $scope.calculatePercentage(averageDurationPrevious, averageDuration);
+
+                        // // ======================================
+                        // // Bounces
+                        // // ======================================
+
+                        var bouncesData = [];
+                        for (var i = 0; i < results[8].rows.length; i++) {
+                            var subArr = [];
+                            subArr.push($scope.toUTC(results[8].rows[i][0]));
+                            subArr.push(parseInt(results[8].rows[i][1]));
+                            bouncesData.push(subArr);
                         };
 
-                        $scope.newVsReturningConfig = {
+                        $scope.bounces = results[8].totalsForAllResults['ga:bounces'];
+                        $scope.bouncesPercent = $scope.calculatePercentage(results[9].totalsForAllResults['ga:bounces'], results[8].totalsForAllResults['ga:bounces']);
+
+                        // // ======================================
+                        // // Overview
+                        // // Pageviews, Visits, Vistors
+                        // // ======================================
+
+                        $scope.analyticsOverviewConfig = {
                             options: {
                                 chart: {
-                                    type: 'column'
+                                    height: 400,
+                                    spacing: [25, 25, 25, 25],
+                                    width: 300
                                 },
+                                colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
                                 title: {
-                                    text: 'New vs. Returning'
-                                }
-                            },
-                            series: dataObjArr,
-                            yAxis: {
-                                title: {
-                                    text: 'Visitors'
-                                }
-                            },
-                            credits: {
-                                enabled: false
-                            }
-                        };
-                    });
-
-                    // ======================================
-                    // Traffic Sources
-                    // ======================================
-
-                    var trafficSources = $scope.query({
-                        ids: 'ga:82461709',
-                        metrics: 'ga:sessions',
-                        dimensions: 'ga:trafficType',
-                        'start-date': '30daysAgo',
-                        'end-date': 'yesterday'
-                    });
-
-                    Promise.all([trafficSources]).then(function(results) {
-
-                        var dataObjArr = [];
-
-                        for (var i = 0; i < results[0].rows.length; i++) {
-                            results[0].rows[i][1] = parseInt(results[0].rows[i][1]);
-                            results[0].rows[i][0] = results[0].rows[i][0].charAt(0).toUpperCase() + results[0].rows[i][0].slice(1);
-                        };
-
-                        $scope.trafficSourcesConfig = {
-                            options: {
-                                chart: {
-                                    plotBackgroundColor: null,
-                                    plotBorderWidth: 0,
-                                    plotShadow: false
+                                    text: ''
                                 },
-                                title: {
-                                    text: 'Traffic Sources'
+                                subtitle: {
+                                    text: ''
                                 },
                                 tooltip: {
-                                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                    headerFormat: '<b>{point.x:%b %d}</b><br>',
+                                    pointFormat: '<b class="text-center">{point.y}</b>',
+                                },
+                                legend: {
+                                    enabled: true
+                                },
+                                exporting: {
+                                    enabled: false
                                 },
                                 plotOptions: {
-                                    pie: {
-                                        dataLabels: {
-                                            enabled: true,
-                                            distance: -50,
-                                            style: {
-                                                fontWeight: 'bold',
-                                                color: 'white',
-                                                textShadow: '0px 1px 2px black'
-                                            }
-                                        },
-                                        startAngle: -90,
-                                        endAngle: 90,
-                                        center: ['50%', '75%']
+                                    series: {
+                                        marker: {
+                                            enabled: false
+                                        }
                                     }
                                 }
                             },
+                            xAxis: {
+                                type: 'datetime',
+                                labels: {
+                                    format: "{value:%b %d}"
+                                }
+                            },
+                            yAxis: {
+                                // min: 0,
+                                // max: Math.max.apply(Math, lineData) + 100,
+                                title: {
+                                    text: ''
+                                }
+                            },
                             series: [{
-                                type: 'pie',
-                                name: 'Traffic Source',
-                                innerSize: '40%',
-                                data: results[0].rows
+                                name: 'Pageviews',
+                                data: pageviewsData
+                            }, {
+                                name: 'Visits',
+                                data: sessionsData
+                            }, {
+                                name: 'Visitors',
+                                data: visitorsData
+                            }],
+                            credits: {
+                                enabled: false
+                            },
+                            func: function (chart) {
+                                    $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 40;
+                                    chart.reflow();
+
+                                    $scope.$on('resize', function () {
+                                        $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 40;
+                                        chart.reflow();
+                                    });
+                            }
+                        };
+
+                        // // ======================================
+                        // // Content
+                        // // Time on Site, Bounces
+                        // // ======================================
+
+                        $scope.do = function($event) {
+                            $event.preventDefault();
+                        };
+
+                        $scope.timeonSiteConfig = {
+                            options: {
+                                chart: {
+                                    height: 465,
+                                    spacing: [25, 25, 25, 25]
+                                },
+                                colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                                title: {
+                                    text: ''
+                                },
+                                subtitle: {
+                                    text: ''
+                                },
+                                tooltip: {
+                                    headerFormat: '<b>{point.x:%b %d}</b><br>',
+                                    pointFormat: '<b class="text-center">{point.y}</b>',
+                                },
+                                legend: {
+                                    enabled: true
+                                },
+                                exporting: {
+                                    enabled: false
+                                },
+                                plotOptions: {
+                                    series: {
+                                        marker: {
+                                            enabled: false
+                                        }
+                                    }
+                                }
+                            },
+                            xAxis: {
+                                type: 'datetime',
+                                labels: {
+                                    format: "{value:%b %d}"
+                                }
+                            },
+                            yAxis: {
+                                // min: 0,
+                                // max: Math.max.apply(Math, lineData) + 100,
+                                title: {
+                                    text: ''
+                                }
+                            },
+                            series: [{
+                                name: 'Time on Site',
+                                data: timeOnSiteData
+                            }, {
+                                name: 'Bounces',
+                                data: bouncesData
                             }],
                             credits: {
                                 enabled: false
                             }
                         };
+
+                        $scope.secondGACall();
                     });
 
-                    // ----------------------------------------
-                    // Average Visit Duration
-                    // ----------------------------------------
+                    $scope.secondGACall = function() {
 
-                    var sessionDuration = $scope.query({
-                        ids: 'ga:82461709',
-                        metrics: 'ga:sessions,ga:sessionDuration',
-                        dimensions: 'ga:date',
-                        'start-date': '30daysAgo',
-                        'end-date': 'yesterday'
-                    });
+                        setTimeout(function() {
 
-                    var sessionDurationPreviousMonth = $scope.query({
-                        ids: 'ga:82461709',
-                        metrics: 'ga:sessions,ga:sessionDuration',
-                        dimensions: 'ga:date',
-                        'start-date': '60daysAgo',
-                        'end-date': '30daysAgo'
-                    });
+                            var newVsReturningChart = $scope.query({
+                                ids: 'ga:82461709',
+                                metrics: 'ga:sessions',
+                                dimensions: 'ga:userType',
+                                'start-date': '30daysAgo',
+                                'end-date': 'yesterday'
+                            });
 
-                    Promise.all([sessionDuration, sessionDurationPreviousMonth]).then(function(results) {
-                        var averageDuration = parseInt(results[0].totalsForAllResults['ga:sessionDuration']) / parseInt(results[0].totalsForAllResults['ga:sessions']);
-                        $scope.visitDuration = $scope.secToTime(averageDuration);
-                        var averageDurationPrevious = parseInt(results[1].totalsForAllResults['ga:sessionDuration']) / parseInt(results[1].totalsForAllResults['ga:sessions']);
-                        $scope.visitDurationPercent = $scope.calculatePercentage(averageDurationPrevious, averageDuration);
-                    });
+                            var topPageViews = $scope.query({
+                                ids: 'ga:82461709',
+                                metrics: 'ga:pageviews,ga:uniquePageviews,ga:avgTimeOnPage,ga:entrances,ga:bounceRate,ga:exitRate',
+                                dimensions: 'ga:pagePath',
+                                'start-date': '30daysAgo',
+                                'end-date': 'yesterday'
+                            });
 
-                    // ======================================
-                    // Bounces
-                    // ======================================
+                            //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
 
-                    // var bouncesReport = $scope.query({
-                    //     ids: 'ga:82461709',
-                    //     metrics: 'ga:bounces',
-                    //     dimensions: 'ga:date',
-                    //     'start-date': '30daysAgo',
-                    //     'end-date': 'yesterday'
-                    // });
+                            var trafficSources = $scope.query({
+                                ids: 'ga:82461709',
+                                metrics: 'ga:sessions',
+                                dimensions: 'ga:trafficType',
+                                'start-date': '30daysAgo',
+                                'end-date': 'yesterday'
+                            });
 
-                    // var bouncesPreviousReport = $scope.query({
-                    //     ids: 'ga:82461709',
-                    //     metrics: 'ga:bounces',
-                    //     dimensions: 'ga:date',
-                    //     'start-date': '60daysAgo',
-                    //     'end-date': '30daysAgo'
-                    // });
+                            Promise.all([newVsReturningChart, topPageViews, trafficSources]).then(function(results) {
 
-                    // Promise.all([bouncesReport, bouncesPreviousReport]).then(function(results) {
-                    //     $scope.bounces = results[0].totalsForAllResults['ga:bounces'];
-                    //     $scope.bouncesPercent = $scope.calculatePercentage(results[1].totalsForAllResults['ga:bounces'], results[0].totalsForAllResults['ga:bounces']);
-                    // });
+                                // ======================================
+                                // New vs. Returning Customers
+                                // ======================================
 
-                    // ----------------------------------------
-                    // Top Pageviews
-                    // ----------------------------------------
+                                //colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
 
-                    // var topPageViews = query({
-                    //     ids: 'ga:82461709',
-                    //     metrics: 'ga:entrances',
-                    //     dimensions: 'ga:date',
-                    //     'start-date': '30daysAgo',
-                    //     'end-date': 'yesterday'
-                    // });
+                                var dataObjArr = [];
 
-                    // Promise.all([topPageViews]).then(function(results) {
-                    //     $scope.topPages = results[0].rows;
-                    // });
+                                for (var i = 0; i < results[0].rows.length; i++) {
+                                    var subObj = new Object();
+                                    subObj.name = results[0].rows[i][0];
+                                    subObj.data = [parseInt(results[0].rows[i][1])];
+                                    dataObjArr[i] = subObj;
+                                };
 
-                    // ----------------------------------------
-                    // Pageviews Metric
-                    // ----------------------------------------
+                                $scope.newVsReturningConfig = {
+                                    options: {
+                                        chart: {
+                                            type: 'column',
+                                            spacing: [25, 25, 25, 25]
+                                        },
+                                        colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                                        title: {
+                                            text: ''
+                                        },
+                                        exporting: {
+                                            enabled: false
+                                        }
+                                    },
+                                    series: dataObjArr,
+                                    yAxis: {
+                                        title: {
+                                            text: 'Visitors'
+                                        }
+                                    },
+                                    credits: {
+                                        enabled: false
+                                    }
+                                };
 
-                    var pageviewsReport = $scope.query({
-                        ids: 'ga:82461709',
-                        metrics: 'ga:pageviews',
-                        dimensions: 'ga:date',
-                        'start-date': '30daysAgo',
-                        'end-date': 'yesterday'
-                    });
+                                setTimeout(function() {
+                                    $scope.newVsReturningConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth / 3) - 30;
+                                }, 500);
 
-                    var pageviewsPreviousReport = $scope.query({
-                        ids: 'ga:82461709',
-                        metrics: 'ga:pageviews',
-                        dimensions: 'ga:date',
-                        'start-date': '60daysAgo',
-                        'end-date': '30daysAgo'
-                    });
 
-                    Promise.all([pageviewsReport, pageviewsPreviousReport]).then(function(results) {
-                        $scope.pageviews = results[0].totalsForAllResults['ga:pageviews'];
-                        $scope.pageviewsPercent = $scope.calculatePercentage(results[1].totalsForAllResults['ga:pageviews'], results[0].totalsForAllResults['ga:pageviews']);
-                    });
+                                ngProgress.complete();
+
+                                // ----------------------------------------
+                                // Top Pageviews
+                                // ----------------------------------------
+
+                                $scope.topPages = results[1].rows;
+
+                                var output = [];
+
+                                for (var i = 0; i < $scope.topPages.length; i++) {
+                                    var singleRow = $scope.topPages[i];
+                                    var subObj = {};
+                                    for (var k = 0; k < singleRow.length; k++) {
+                                        if (k == 0) {
+                                            subObj.page = singleRow[k]
+                                        }
+                                        if (k == 1) {
+                                            subObj.pageviews = parseInt(singleRow[k])
+                                        }
+                                        if (k == 2) {
+                                            subObj.uniquePageviews = parseInt(singleRow[k])
+                                        }
+                                        if (k == 3) {
+                                            subObj.avgTime = parseInt(singleRow[k])
+                                        }
+                                        if (k == 4) {
+                                            subObj.entrances = parseInt(singleRow[k])
+                                        }
+                                        if (k == 5) {
+                                            subObj.bounceRate = parseInt(singleRow[k])
+                                        }
+                                        if (k == 6) {
+                                            subObj.exitRate = parseInt(singleRow[k])
+                                        }
+                                    };
+                                    if (subObj) {
+                                        output.push(subObj);
+                                    }
+                                };
+
+                                $scope.formatedTopPages = output;
+
+
+
+                                // ======================================
+                                // Traffic Sources
+                                // ======================================
+
+                                var dataObjArr = [];
+
+                                for (var i = 0; i < results[2].rows.length; i++) {
+                                    results[2].rows[i][1] = parseInt(results[2].rows[i][1]);
+                                    results[2].rows[i][0] = results[2].rows[i][0].charAt(0).toUpperCase() + results[2].rows[i][0].slice(1);
+                                };
+
+                                $scope.trafficSourcesConfig = {
+                                    options: {
+                                        chart: {
+                                            plotBackgroundColor: null,
+                                            plotBorderWidth: 0,
+                                            plotShadow: false,
+                                            spacing: [25, 25, 25, 25]
+                                        },
+                                        title: {
+                                            text: ''
+                                        },
+                                        tooltip: {
+                                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                        },
+                                        plotOptions: {
+                                            pie: {
+                                                dataLabels: {
+                                                    enabled: true,
+                                                    distance: -50,
+                                                    style: {
+                                                        fontWeight: 'bold',
+                                                        color: 'white',
+                                                        textShadow: '0px 1px 2px black'
+                                                    }
+                                                },
+                                                colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
+                                            }
+                                        },
+                                        exporting: {
+                                            enabled: false
+                                        }
+                                    },
+                                    series: [{
+                                        type: 'pie',
+                                        name: 'Traffic Source',
+                                        innerSize: '40%',
+                                        data: results[2].rows
+                                    }],
+                                    credits: {
+                                        enabled: false
+                                    }
+                                };
+
+                                setTimeout(function() {
+                                    $scope.trafficSourcesConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth / 3) - 30;
+                                }, 500);
+                            });
+
+                        }, 1000);
+                    };
+
 
                     PaymentService.getCustomers(function(data) {
                         $scope.customers = data;
@@ -364,7 +591,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                         var monthlyRecurringRevenue = new Keen.Query("sum", {
                             eventCollection: "Stripe_Events",
                             targetProperty: 'data.object.total',
-                            timeframe: 'this_day',
+                            timeframe: 'last_30_days',
                             filters: [{
                                 "property_name": "data.object.subscription",
                                 "operator": "exists",
@@ -375,26 +602,80 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                                 "property_value": "invoice.payment_succeeded"
                             }]
                         });
-                        client.run(monthlyRecurringRevenue, function(response) {
-                            var totalRevenue = this.data.result;
+
+                        var activeSubscriptions = new Keen.Query("count", {
+                            eventCollection: "Stripe_Events",
+                            timeframe: "last_30_days",
+                            filters: [{
+                                "property_name": "type",
+                                "operator": "eq",
+                                "property_value": "customer.subscription.created"
+                            }, {
+                                "property_name": "data.object.status",
+                                "operator": "eq",
+                                "property_value": "active"
+                            }]
+                        });
+
+                        var canceledSubscriptions = new Keen.Query("count", {
+                            eventCollection: "Stripe_Events",
+                            timeframe: "last_30_days",
+                            filters: [{
+                                "property_name": "type",
+                                "operator": "eq",
+                                "property_value": "customer.subscription.deleted"
+                            }]
+                        });
+
+
+                        client.run([monthlyRecurringRevenue, activeSubscriptions, canceledSubscriptions], function(response) {
+                            var totalRevenue = this.data[0].result;
                             var numOfCustomers = $scope.customers.length;
                             var avgRevenue = totalRevenue / numOfCustomers;
                             var result = avgRevenue * numOfCustomers;
+                            $scope.monthlyRecurringRevenue = result / 100;
 
-                            var data = {
-                                result: result
-                            };
+                            // ======================================
+                            // Annual Run Rate Metric
+                            // MRR * 12
+                            // ======================================
 
-                            window.chart = new Keen.Visualization(data, document.getElementById('monthly-recurring-revenue'), {
-                                chartType: "metric",
-                                title: "Monthly Recurring Revenue",
-                                width: 345,
-                                colors: ["#49c5b1"],
-                                chartOptions: {
-                                    prefix: '$'
-                                }
-                            });
+                            $scope.annualRunRate = $scope.monthlyRecurringRevenue * 12;
+
+                            // ======================================
+                            // Average monthly Recurring Revenue Per User (ARPU)
+                            // ARPU = MRR / Active Subscriptions.
+                            // ======================================
+
+                            $scope.activeSubscriptions = this.data[1].result;
+
+                            $scope.arpu = $scope.monthlyRecurringRevenue / $scope.activeSubscriptions;
+
+                            // ======================================
+                            // User Churn
+                            // Churn = canceled subscriptions / (canceled subscriptions + active subscriptions)
+                            // ======================================
+
+                            $scope.canceledSubscriptions = this.data[2].result;
+                            var userChurnCalc = this.data[2].result / (this.data[2].result + this.data[1].result) * 100;
+                            $scope.userChurn = userChurnCalc.toFixed(1) * -1;
+
+                            // ======================================
+                            // Lifetime Value (LTV)
+                            // LTV =  ARPU / Churn
+                            // ======================================
+                            $scope.lifetimeValue = $scope.arpu / $scope.userChurn;
                         });
+
+                        filters: [{
+                            "property_name": "type",
+                            "operator": "eq",
+                            "property_value": "customer.subscription.created"
+                        }, {
+                            "property_name": "data.object.status",
+                            "operator": "eq",
+                            "property_value": "active"
+                        }]
 
                         // ======================================
                         // Average Revenue Per Customer Metric
@@ -403,41 +684,14 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                         client.run(monthlyRecurringRevenue, function(response) {
                             var totalRevenue = this.data.result;
                             var numOfCustomers = $scope.customers.length;
-                            var avgRevenue = totalRevenue / numOfCustomers;
-                            var result = avgRevenue;
-
-                            var data = {
-                                result: result
-                            };
-
-                            window.chart = new Keen.Visualization(data, document.getElementById('average-revenue-per-customer'), {
-                                chartType: "metric",
-                                title: "Average Revenue Per Customer",
-                                width: 345,
-                                colors: ["#49c5b1"],
-                                chartOptions: {
-                                    prefix: '$'
-                                }
-                            });
+                            $scope.avgRevenue = totalRevenue / numOfCustomers / 100;
                         });
 
                         // ======================================
-                        // Average Revenue Per Customer Metric
+                        // Total Customer Metric
                         // ======================================
 
-                        var numOfCustomers = $scope.customers.length;
-                        var result = numOfCustomers;
-
-                        var data = {
-                            result: result
-                        };
-
-                        window.chart = new Keen.Visualization(data, document.getElementById('total-customer'), {
-                            chartType: "metric",
-                            title: "Customers",
-                            width: 345,
-                            colors: ["#49c5b1"]
-                        });
+                        $scope.totalCustomers = $scope.customers.length;
 
                     }); //end PaymentService.getCustomers
 
@@ -445,27 +699,25 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                     // Fees Metric
                     // ======================================
 
-                    var feesQuery = new Keen.Query("sum", {
+                    var feesThisMonth = new Keen.Query("sum", {
                         eventCollection: "Stripe_Events",
-                        targetProperty: "data.object.fee"
+                        targetProperty: "data.object.fee",
+                        timeframe: 'last_30_days',
                     });
-                    client.run(feesQuery, function(response) {
-                        var totalFees = this.data.result;
-                        var result = totalFees;
-
-                        var data = {
-                            result: result
-                        };
-
-                        window.chart = new Keen.Visualization(data, document.getElementById('fees'), {
-                            chartType: "metric",
-                            title: "Fees",
-                            width: 345,
-                            colors: ["#49c5b1"],
-                            chartOptions: {
-                                prefix: '$'
-                            }
-                        });
+                    var feesPreviousMonth = new Keen.Query("sum", {
+                        eventCollection: "Stripe_Events",
+                        targetProperty: "data.object.fee",
+                        timeframe: 'previous_30_days',
+                    });
+                    client.run([feesThisMonth, feesPreviousMonth], function(response) {
+                        $scope.totalFees = this.data[0].result / 100;
+                        $scope.totalFeesPrevious = this.data[1].result / 100;
+                        var result = (($scope.totalFees - $scope.totalFeesPrevious) / $scope.totalFees) * 100;
+                        var format = Math.round(result * 100) / 100;
+                        if (format == 0) {
+                            format = null
+                        }
+                        $scope.totalFeesPercent = format;
                     });
 
                     // ======================================
@@ -473,30 +725,36 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                     // Net revenue = gross revenue – damages/coupons/returns
                     // ======================================
 
-                    var netRevenueQuery = new Keen.Query("sum", {
+                    var netRevenueThisMonth = new Keen.Query("sum", {
                         eventCollection: "Stripe_Events",
                         targetProperty: 'data.object.amount',
-                        timeframe: 'this_day'
+                        timeframe: 'last_30_days',
+                        filters: [{
+                            'property_name': 'type',
+                            'operator': 'eq',
+                            'property_value': 'charge.succeeded'
+                        }]
                     });
-                    client.run([netRevenueQuery, feesQuery], function(response) {
+
+                    var netRevenuePreviousMonth = new Keen.Query("sum", {
+                        eventCollection: "Stripe_Events",
+                        targetProperty: 'data.object.amount',
+                        timeframe: 'previous_month',
+                        filters: [{
+                            'property_name': 'type',
+                            'operator': 'eq',
+                            'property_value': 'charge.succeeded'
+                        }]
+                    });
+
+                    client.run([netRevenueThisMonth, feesThisMonth, netRevenuePreviousMonth], function(response) {
                         var totalRevenue = this.data[0].result;
                         var totalFees = this.data[1].result;
+                        var totalRevenuePrevious = this.data[2].result;
+                        var result = ((totalRevenue - totalRevenuePrevious) / totalRevenue) * 100;
+                        $scope.totalRevenuePercent = Math.round(result * 100) / 100;
                         //TODO: Subtract damages/coupons/returns
-                        var result = totalRevenue - totalFees;
-
-                        var data = {
-                            result: result
-                        };
-
-                        window.chart = new Keen.Visualization(data, document.getElementById('net-revenue'), {
-                            chartType: "metric",
-                            title: "Net Revenue",
-                            width: 345,
-                            colors: ["#49c5b1"],
-                            chartOptions: {
-                                prefix: '$'
-                            }
-                        });
+                        $scope.totalRevenue = this.data[0].result / 100;
                     });
 
                     // ======================================
@@ -518,22 +776,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                         }]
                     });
                     client.run(otherRevenue, function(response) {
-                        var totalRevenue = this.data.result;
-                        var result = totalRevenue;
-
-                        var data = {
-                            result: result
-                        };
-
-                        window.chart = new Keen.Visualization(data, document.getElementById('other-revenue'), {
-                            chartType: "metric",
-                            title: "Other Revenue",
-                            width: 345,
-                            colors: ["#49c5b1"],
-                            chartOptions: {
-                                prefix: '$'
-                            }
-                        });
+                        $scope.totalRevenue = this.data.result;
                     });
 
                     // ======================================
@@ -575,11 +818,101 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-ng'], f
                         });
                     });
 
-                }); //keen ready
+                }); //gapi ready
 
-            }); //gapi auth ready
+            }); //keen ready
 
-        }); //gapi ready
+        });
+
+        $scope.purchaseFunnelConfig = {
+            options: {
+                chart: {
+                    marginRight: 100
+                },
+                title: {
+                    text: ''
+                },
+                exporting: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b> ({point.y:,.0f})',
+                            color: 'black',
+                            softConnector: true
+                        },
+                        neckWidth: '30%',
+                        neckHeight: '25%',
+                        colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
+                            //-- Other available options
+                            // height: pixels or percent
+                            // width: pixels or percent
+                    }
+                }
+            },
+            series: [{
+                name: 'Unique users',
+                type: 'funnel',
+                data: [
+                    ['Website visits', 15654],
+                    ['Downloads', 4064],
+                    ['Requested price list', 1987],
+                    ['Invoice sent', 976],
+                    ['Finalized', 846]
+                ]
+            }],
+            credits: {
+                enabled: false
+            }
+        };
+
+        $scope.genderConfig = {
+            options: {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: 0,
+                    plotShadow: false,
+                    spacing: [25, 25, 25, 25]
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{point.x}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            enabled: true,
+                            distance: -50,
+                            style: {
+                                fontWeight: 'bold',
+                                color: 'white',
+                                textShadow: '0px 1px 2px black'
+                            }
+                        },
+                        colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
+                    }
+                },
+                exporting: {
+                    enabled: false
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Gender',
+                innerSize: '40%',
+                data: [
+                    ['Male',   44.3],
+                    ['Female',       55.7]
+                ]
+            }],
+            credits: {
+                enabled: false
+            }
+        };
 
     }]);
 });

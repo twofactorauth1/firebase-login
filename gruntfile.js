@@ -198,7 +198,7 @@ module.exports = function(grunt) {
                     'public/js/libs/videogular-buffering/buffering.js',
                     'public/js/libs/videogular-poster/poster.js',
                     'public/js/libs/angular-input-date/src/angular-input-date.js',
-                    'public/js/libs/skeuocard/javascripts/skeuocard.min.js'
+                    'public/js/libs/skeuocard/lib/js/card.js'
 
 
                     ],

@@ -90,7 +90,9 @@
               <row>
                 <div class="col-xs-5 col-md-6">
                   <div class="hidden-xs hidden-sm btn-contact-photo">
-                   <div class="btn-link btn-edit-photo"> <a class="btn btn-success pull-right media-modal" on-insert-mediacb="insertPhoto" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Photo</span> </a></div>
+                    <div class="btn-link btn-edit-photo">
+                      <a class="btn btn-success pull-right media-modal" on-insert-mediacb="insertPhoto" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Photo</span> </a>
+                    </div>
 
                   </div>
                   <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}">
@@ -174,7 +176,7 @@
                       <div class="input-group input-group-lg">
                         <div class="input-group-addon">+1</div>
                         <input class="input-edit-phone form-control input-lg" validation-type="phone" indigeweb-validate-form-fields value="" type="text" ng-model="phone.number">
-						 <div class="input-group-btn">
+                        <div class="input-group-btn">
                           <button data-toggle="dropdown" class="btn btn-default btn-edit-phone-type dropdown-toggle" data-type="" type="button">
                             <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'm'">mobile</span>
                             <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'h'">home</span>
@@ -197,7 +199,7 @@
                         </div>
                       </div>
                     </div>
-					 <div ng-click="removeItem($index, customer.details[0].phones)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
+                    <div ng-click="removeItem($index, customer.details[0].phones)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
 
 
@@ -288,10 +290,10 @@
                 <div id="edit-emails-container">
 
                   <div class="row edit-email-container" ng-repeat="email in customer.details[0].emails">
-                  	 <div class="form-group col-md-10">
+                    <div class="form-group col-md-10">
                       <input class="form-control input-edit-email  input-lg" indigeweb-validate-form-fields validation-type="email" placeholder="new email" check_email="" data-email="" type="email" ng-model="email.email">
                     </div>
-					 <div ng-click="removeItem($index, customer.details[0].emails)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
+                    <div ng-click="removeItem($index, customer.details[0].emails)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
                 </div>
               </div>
@@ -299,10 +301,10 @@
             </div>
             <div class="clearfix mb30"></div>
             <div class="col-md-12">
-                <div class="well well-lg" ng-show="currentState == 'customerEdit'">
-                    <label>This is permanent and cannot be reversed.</label>
-                    <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" data-href="#/customer" confirm="customerDeleteFn()"><i class="fa fa-trash"></i>Delete</button>
-                </div>
+              <div class="well well-lg" ng-show="currentState == 'customerEdit'">
+                <label>This is permanent and cannot be reversed.</label>
+                <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" data-href="#/customer" confirm="customerDeleteFn()"><i class="fa fa-trash"></i>Delete</button>
+              </div>
             </div>
           </div>
           <!-- End Panel Body -->
@@ -355,5 +357,40 @@
     </div>
     <!-- End Change Photo Modal -->
   </div>
-<div id="model_container"></div>
+  <div class="rightpanel rightpanel-commerce-edit">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs nav-justified">
+      <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Contact Settings</a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
+
+    <div class="tab-content">
+      <div class="tab-pane pane-settings active" id="rp-page">
+        <div class="leftpanelinner">
+          <div class="form-group">
+            <label>Default Contact Type</label>
+            <select id="select-contact-type" class="form-control input-lg ng-pristine ng-valid" ng-model="userPreferences.default_customer_type"  ng-change="savePreferencesFn()">
+              <option value="cu">Customer</option>
+              <option value="co">Colleague</option>
+              <option value="fr">Friend</option>
+              <option value="mb">Member</option>
+              <option value="fa">Family</option>
+              <option value="ad">Admin</option>
+              <option value="ld">Lead</option>
+              <option value="ot">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+              <label>Default City</label>
+          </div>
+          <input type="text" ng-model="userPreferences.default_customer_city" class="form-control input-address input-address-field ng-pristine ng-valid"  ng-change="savePreferencesFn()">
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div id="model_container"></div>
 </div>
