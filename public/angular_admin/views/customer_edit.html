@@ -385,8 +385,20 @@
           </div>
           <div class="form-group">
               <label>Default City</label>
+              <input type="text" ng-model="userPreferences.default_customer_city" class="form-control input-address input-address-field ng-pristine ng-valid"  ng-change="savePreferencesFn()">
           </div>
-          <input type="text" ng-model="userPreferences.default_customer_city" class="form-control input-address input-address-field ng-pristine ng-valid"  ng-change="savePreferencesFn()">
+          <div class="form-group">
+              <label>Default State</label>
+              <input type="text" ng-model="userPreferences.default_customer_state" class="form-control input-address input-address-field ng-pristine ng-valid"  ng-change="savePreferencesFn()">
+          </div>
+          <div class="form-group">
+              <label>Default Country</label>
+              <input type="text" ng-model="userPreferences.default_customer_country" class="form-control input-address input-address-field ng-pristine ng-valid"  ng-change="savePreferencesFn()">
+          </div>
+          <div class="form-group">
+              <label>Default Zip</label>
+              <input type="text" ng-model="userPreferences.default_customer_zip" class="form-control input-address input-address-field ng-pristine ng-valid"  ng-change="savePreferencesFn()">
+          </div>
         </div>
       </div>
     </div>
