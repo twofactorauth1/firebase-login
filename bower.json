@@ -82,7 +82,6 @@
     "requirejs": "~2.1.14",
     "requirejs-plugins": "~1.0.2",
     "reset-css": "~2.0.20110126",
-    "skeuocard": "~1.0.3",
     "spectrum": "1.5.0",
     "videogular": "~0.4.1",
     "videogular-buffering": "~0.4.1",
@@ -98,7 +97,8 @@
     "jd-fontselect": "~0.8.13",
     "ng-tags-input": "2.1.0",
     "angular-input-date": "1.0.4",
-    "ngInfiniteScroll": "1.0.0"
+    "ngInfiniteScroll": "1.0.0",
+    "skeuocard": "https://github.com/jessepollak/card.git"
   },
   "resolutions": {
     "angular": "1.2.26",

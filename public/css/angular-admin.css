@@ -52,3 +52,9 @@ body.leftpanel-collapsed.rightmenu-open #headerbar {
   float: left;
   padding-bottom: 5px;
 }
+.form-container {
+  padding: 30px;
+}
+.form-container .row {
+  float: left;
+}
