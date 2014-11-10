@@ -16681,6 +16681,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .account .billing-section .panel-body {
   min-height: 275px;
 }
+.account .template-btns {
+  margin-bottom: 0;
+}
 .account .integrations-section .thumbnail {
   max-height: 400px;
   height: 100%;
