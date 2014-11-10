@@ -1,7 +1,7 @@
 define(['app'], function (app) {
     app.register.service('dashboardService', function ($http, $rootScope, $q) {
         var clientId = '1026246177215-tqpcc51fjk3vm0mgjef2jg7jagcmtuba.apps.googleusercontent.com',
-            apiKey = 'AIzaSyAVrtKPAAD24y1t9eC-VMVoGtoocuSHHxg',
+            apiKey = 'AIzaSyCAkloYlXlZx_---WXevaNHv03ReYpnvLs',
             token = "",
             code = "",
             refreshToken = "",
