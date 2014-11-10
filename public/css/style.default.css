@@ -17036,6 +17036,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 200;
 }
 .leftpanel .searchform {
   display: none;
@@ -20124,9 +20125,6 @@ input[type='file'] {
 }
 .website-controls .btn-add {
   margin-right: 10px;
-}
-.website-controls.editing {
-  background: #2ecc71;
 }
 .website-controls.editing h2 {
   color: white!important;
