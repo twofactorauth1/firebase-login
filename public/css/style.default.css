@@ -17957,6 +17957,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .dashboard .btn-clearblack {
   background: rgba(0, 0, 0, 0.1);
 }
+.dashboard .template-btns .btn:last-child {
+  margin-left: 0;
+}
 .dashboard .panel-btns a {
   opacity: 0.7;
   font-size: 24px;
