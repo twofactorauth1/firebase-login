@@ -2,10 +2,10 @@
     <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
     <div class="pageheader row website-controls" ng-class="{true: 'editing', false: ''}[isEditing == true]">
         <div class="col-xs-6">
-            <h2 class="pull-left" style="margin-right: 15px;" ng-show="isEditing"><i class="fa fa-desktop"></i> Editing</h2>
+            <h2 class="pull-left" style="margin-right: 15px;" ng-show="isEditing"><i class="fa fa-desktop"></i> Editing {{currentPage.title || 'Home'}}</h2>
             <h2 class="pull-left" style="margin-right: 15px;" ng-show="!isEditing"><i class="fa fa-desktop"></i> Viewing</h2>
             <div class="btn-group pull-left" dropdown is-open="status.isopen">
-                <button type="button" class="btn btn-orange dropdown-toggle" ng-disabled="disabled">
+                <button type="button" class="btn btn-orange dropdown-toggle" ng-disabled="disabled" ng-show="!isEditing">
                     {{currentPage.title || 'Home'}}
                     <span class="caret"></span>
                 </button>
@@ -50,7 +50,7 @@
                 <span> Post</span>
             </a> -->
 
-            <div class="btn-group pull-right btn-add">
+            <div class="btn-group pull-right btn-add" ng-show="!isEditing">
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                     <span class="fa fa-plus"></span>
                     <span class="hidden-xs"> Add</span>
