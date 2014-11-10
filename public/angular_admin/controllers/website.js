@@ -251,7 +251,8 @@ define([
                 
                 $scope.isEditing = false;
                 $scope.componentEditing = null;
-                iFrame.contentWindow.triggerEditModeOff();
+                var iframe = document.getElementById("iframe-website");
+                iframe.contentWindow.triggerEditModeOff();
                 });
 
 
