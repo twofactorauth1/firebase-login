@@ -27,7 +27,7 @@ define(['angularAMD'], function (angularAMD) {
 
                 scope.styleMarketing = function () {
                     return {
-                        'height': (newValue.h)+200 + 'px',
+                        'height': (newValue.h) - 1000 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };
@@ -43,7 +43,7 @@ define(['angularAMD'], function (angularAMD) {
 
                 scope.styleAccount = function () {
                     return {
-                        'height': (newValue.h)-120 + 'px',
+                        'height': (newValue.h)-108 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };

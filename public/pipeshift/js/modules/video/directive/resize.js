@@ -18,7 +18,7 @@ angular.module('var.directives').directive('indigewebResize', function ($window)
 
                 scope.styleMarketing = function () {
                     return {
-                        'height': (newValue.h)+200 + 'px',
+                        'height': (newValue.h)-63 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };
