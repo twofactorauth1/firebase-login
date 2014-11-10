@@ -868,5 +868,51 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             }
         };
 
+        $scope.genderConfig = {
+            options: {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: 0,
+                    plotShadow: false,
+                    spacing: [25, 25, 25, 25]
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{point.x}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            enabled: true,
+                            distance: -50,
+                            style: {
+                                fontWeight: 'bold',
+                                color: 'white',
+                                textShadow: '0px 1px 2px black'
+                            }
+                        },
+                        colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
+                    }
+                },
+                exporting: {
+                    enabled: false
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Gender',
+                innerSize: '40%',
+                data: [
+                    ['Male',   44.3],
+                    ['Female',       55.7]
+                ]
+            }],
+            credits: {
+                enabled: false
+            }
+        };
+
     }]);
 });
