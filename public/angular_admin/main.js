@@ -26,7 +26,7 @@ require.config({
         'colorpicker': 'libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
         'underscore': 'libs/underscore/underscore',
-        'skeuocard': 'libs/skeuocard/javascripts/skeuocard.min',
+        'skeuocard': 'libs/skeuocard/lib/js/card',
         'webfontloader': 'libs/jd-fontselect/dist/libs/webfontloader',
         'jdfontselect': 'libs/jd-fontselect/dist/angular-fontselect.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',

@@ -1,4 +1,4 @@
-@import "../js/libs/skeuocard/styles/skeuocard.css";
+@import "../js/libs/skeuocard/lib/css/card.css";
 @import '../js/libs/spectrum/spectrum.css';
 @import '../js/libs/AngularJS-Toaster/toaster.css';
 @import '../js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css';
