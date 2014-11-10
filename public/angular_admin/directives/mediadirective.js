@@ -68,23 +68,6 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                 $scope.m = {};
 
 /*
-                $scope.m.deleteAsset = function (assetId) {
-                    AssetsService.deleteAssetById(function (resp, status) {
-                        if (status === 1) {
-                            $scope.assets.forEach(function (v, i) {
-                                if (v._id === assetId) {
-                                    $scope.assets.splice(i, 1);
-                                }
-                            })
-                        }
-                    }, assetId);
-                };
-                $scope.m.batchDeleteAsset = function () {
-                    $scope.assets.forEach(function (v, i) {
-                        if (v.checked)
-                            $scope.m.deleteAsset(v._id);
-                    });
-                };
                 $scope.m.selectAll = function () {
                     $scope.assets.forEach(function (v, i) {
                         if ($scope.showType === 'all' || v.mimeType.match($scope.showType)) {
@@ -107,6 +90,31 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                 $scope.m.resetUploader = function () {
                     $scope.uploadComplete = false;
                 };
+                $scope.m.singleSelect = function (event) {
+                    if ($scope.lastSelect !== null && $scope.lastSelect.id !== event.target.id && $scope.lastSelect.checked === true) {
+                        $scope.lastSelect.checked = false;
+                    }
+                    $scope.lastSelect = event.target;
+                    $scope.m.getSingleSelect();
+                };
+*/
+                $scope.m.deleteAsset = function (assetId) {
+                    AssetsService.deleteAssetById(function (resp, status) {
+                        if (status === 1) {
+                            $scope.assets.forEach(function (v, i) {
+                                if (v._id === assetId) {
+                                    $scope.assets.splice(i, 1);
+                                }
+                            })
+                        }
+                    }, assetId);
+                };
+                $scope.m.batchDeleteAsset = function () {
+                    $scope.assets.forEach(function (v, i) {
+                        if (v.checked)
+                            $scope.m.deleteAsset(v._id);
+                    });
+                };
                 $scope.m.getSingleSelect = function () {
                     $scope.batch = [];
 
@@ -122,14 +130,6 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                         $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
                     }
                 };
-                $scope.m.singleSelect = function (event) {
-                    if ($scope.lastSelect !== null && $scope.lastSelect.id !== event.target.id && $scope.lastSelect.checked === true) {
-                        $scope.lastSelect.checked = false;
-                    }
-                    $scope.lastSelect = event.target;
-                    $scope.m.getSingleSelect();
-                };
-*/
                 $scope.m.selectAll = function() {
                     $scope.batch = [];
                     $scope.assets.forEach(function (v) {
