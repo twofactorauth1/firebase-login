@@ -37,7 +37,7 @@
     <div class="clearfix mb30"></div>
   </div>
 
-  <div style="background: #e7e7e7;" class="contentpanel" ng-style="styleCustomers()" indigeweb-resize scroller>
+  <div style="background: #e7e7e7;" id="scrollTop" class="contentpanel" ng-style="styleCustomers()" indigeweb-resize indiscroller>
 
     <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
       <div class="panel panel-default">
@@ -151,7 +151,7 @@
       <div class="row">
         <div>
           <div indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}" ng-repeat="customer in renderedCustomers | iStartsWithFilter : customerFilter" class="col-xs-12 col-sm-4 col-md-3">
-            <div data-contactid="1799" class="people-item btn-view-contact-details contact-item animate">
+            <div data-contactid="1799" class="people-item btn-view-contact-details contact-item" style="opacity:1">
               <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips">
                         <i class="fa fa-star-o" ng-hide="customer.starred"></i>
                         <i class="fa fa-star" ng-show="customer.starred"></i>

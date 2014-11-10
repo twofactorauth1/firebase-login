@@ -7,14 +7,13 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     $scope.customerDisplayFormat = 'first';
 
     $scope.customerScrollBusy = false;
-    $scope.customerScrollLimit = 10;
+    $scope.customerScrollLimit = 20;
     $scope.customerScrollOffset = 0;
     $scope.renderedCustomers = [];
 
     $scope.customerScrollFn = function() {
       if ($scope.fetchedCustomers) {
         $scope.customerScrollBusy = true;
-        console.log('$scope.fetchedCustomers >>>', $scope.fetchedCustomers.slice($scope.customerScrollOffset, $scope.customerScrollLimit + $scope.customerScrollOffset));
         var pushCustomers = $scope.fetchedCustomers.slice($scope.customerScrollOffset, $scope.customerScrollLimit + $scope.customerScrollOffset);
         for (var i = 0; i < pushCustomers.length; i++) {
           $scope.renderedCustomers.push(pushCustomers[i]);

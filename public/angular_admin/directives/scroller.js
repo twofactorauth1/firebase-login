@@ -1,12 +1,11 @@
 define(['angularAMD'], function (angularAMD) {
-    angularAMD.directive('scroller', function() {
+    angularAMD.directive('indiscroller', function() {
         return {
             restrict: 'A',
             link: function (scope, elem, attrs) {
-                rawElement = elem[0]; // new
+                rawElement = elem[0];
                 elem.bind('scroll', function () {
-                    if((rawElement.scrollTop + rawElement.offsetHeight+1000) >= rawElement.scrollHeight){ //new
-                        console.log('scroll funt execute');
+                    if((rawElement.scrollTop + rawElement.offsetHeight + 500 ) >= rawElement.scrollHeight){
                         scope.$apply('customerScrollFn()');
                     }
                 });
