@@ -3,7 +3,7 @@
  *
  * */
 'use strict';
-mainApp.service('PostService', function ($http) {
+mainApp.service('postService', function ($http) {
     var baseUrl = '/api/1.0/';
     this.getAllPosts = function (fn) {
         var apiUrl = baseUrl + ['cms', 'blog'].join('/');
@@ -63,5 +63,6 @@ mainApp.service('PostService', function ($http) {
                 fn(err, null);
             });
     };
+
 
 });

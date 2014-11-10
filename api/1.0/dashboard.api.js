@@ -20,11 +20,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
 
-        app.post(this.url(''), this.isAuthApi, this.createDashboard.bind(this));
-        app.get(this.url(':id'), this.isAuthApi, this.getDashboard.bind(this));
-        app.get(this.url(''), this.isAuthApi, this.getDashboardForAccount.bind(this));
-        app.post(this.url(':id'), this.isAuthApi, this.updateDashboard.bind(this));
-        app.delete(this.url(':id'), this.isAuthApi, this.deleteDashboard.bind(this));
+        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createDashboard.bind(this));
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getDashboard.bind(this));
+        app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.getDashboardForAccount.bind(this));
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateDashboard.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteDashboard.bind(this));
 
 
     },
@@ -43,11 +43,18 @@ _.extend(api.prototype, baseApi.prototype, {
             by: req.user.id()
         };
         dashboard = new $$.m.Dashboard(dashboard);
-        //TODO: security
-        manager.createDashboard(dashboard, function(err, value){
-            self.log.debug('<< createDashboard');
-            self.sendResultOrError(res, err, value, "Error creating dashboard");
+
+        self.checkPermission(req, self.sc.privs.MODIFY_DASHBOARD, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                manager.createDashboard(dashboard, function(err, value){
+                    self.log.debug('<< createDashboard');
+                    self.sendResultOrError(res, err, value, "Error creating dashboard");
+                });
+            }
         });
+
 
     },
 
@@ -56,12 +63,18 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getDashboard');
 
         var dashboardId = req.params.id;
-        //TODO: security
 
-        manager.getDashboard(dashboardId, function(err, value){
-            self.log.debug('<< getDashboard');
-            self.sendResultOrError(res, err, value, "Error retrieving dashboard");
+        self.checkPermission(req, self.sc.privs.VIEW_DASHBOARD, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                manager.getDashboard(dashboardId, function(err, value){
+                    self.log.debug('<< getDashboard');
+                    self.sendResultOrError(res, err, value, "Error retrieving dashboard");
+                });
+            }
         });
+
 
     },
 
@@ -80,18 +93,26 @@ _.extend(api.prototype, baseApi.prototype, {
             by: req.user
         };
 
-        var dashboardObj = new $$.m.Dashboard(dashboard);
-        //TODO: security
-        manager.updateDashboard(dashboardObj, function(err, value){
-            if(err) {
-                self.log.error('Error getting dashboard by account: ' + err);
-                self.wrapError(res, 500, null, 'Error getting dashboard');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_DASHBOARD, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
             } else {
-                self.log.debug('<< updateDashboard');
-                self.sendResultOrError(res, err, value, 'Error updating dashboard');
+                var dashboardObj = new $$.m.Dashboard(dashboard);
+
+                manager.updateDashboard(dashboardObj, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating dashboard: ' + err);
+                        self.wrapError(res, 500, null, 'Error updating dashboard');
+                    } else {
+                        self.log.debug('<< updateDashboard');
+                        self.sendResultOrError(res, err, value, 'Error updating dashboard');
+                    }
+                });
             }
         });
-       
+
+
     },
 
     deleteDashboard: function(req, res) {
@@ -99,11 +120,17 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> deleteDashboard');
         var dashboardId = req.params.id;
 
-        //TODO: security
-        manager.deleteDashboard(dashboardId, function(err, value){
-            self.log.debug('<< deleteDashboard');
-            self.sendResultOrError(res, err, value, 'Error deleting dashboard');
+        self.checkPermission(req, self.sc.privs.MODIFY_DASHBOARD, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                manager.deleteDashboard(dashboardId, function(err, value){
+                    self.log.debug('<< deleteDashboard');
+                    self.sendResultOrError(res, err, value, 'Error deleting dashboard');
+                });
+            }
         });
+
     },
 
     getDashboardForAccount: function(req, res) {
@@ -111,12 +138,18 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getDashboardForAccount');
 
         var accountId = parseInt(self.accountId(req));
-        //TODO: security
 
-        manager.getDashboardByAccount(accountId, function(err, value){
-            self.log.debug('<< getDashboardForAccount');
-            self.sendResultOrError(res, err, value, 'Error getting dashboard for account.');
+        self.checkPermission(req, self.sc.privs.VIEW_DASHBOARD, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                manager.getDashboardByAccount(accountId, function(err, value){
+                    self.log.debug('<< getDashboardForAccount');
+                    self.sendResultOrError(res, err, value, 'Error getting dashboard for account.');
+                });
+            }
         });
+
 
     }
 });

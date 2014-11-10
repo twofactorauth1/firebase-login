@@ -111,11 +111,12 @@ define(['app'], function (app) {
 		};
 
 		//page/:id/components
-		this.addNewComponent = function(pageId, title, type, fn) {
+		this.addNewComponent = function(pageId, title, type,cmpVersion, fn) {
 			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components'].join('/');
 			var data = {
 				title : title,
-				type : type
+				type : type,
+				cmpVersion : cmpVersion
 			};
 			$http({
 			    url: apiUrl,

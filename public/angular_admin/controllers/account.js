@@ -4,11 +4,12 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
     $scope.invoicePageLimit = 5;
 
-    $scope.activeTab = AccountService.getActiveTab();
-
     $scope.$watch('activeTab', function (newValue, oldValue) {
       console.log('watch activeTab >> ', newValue);
-      AccountService.setActiveTab(newValue);
+      if($scope.userPreferences){
+          $scope.userPreferences.account_default_tab = newValue;
+          $scope.savePreferencesFn();
+        }
     });
 
     $scope.updateStripeIdFn = function(billing) {
@@ -55,13 +56,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
       }
     });
 
-    UserService.getUser(function(user) {
-      $scope.user = user;
-
-      $scope.activeTab = $scope.user.app_preferences.account.default_tab;
-
-    });
-
     UserService.getAccount(function(account) {
       $scope.account = account;
     });
@@ -72,8 +66,22 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
       ngProgress.complete();
       ToasterService.processPending();
     });
-    $scope.updateUser = function (user){
-      UserService.putUser(user, function(){});
+
+    $scope.setActiveTab = function (tab){      
+      $scope.activeTab = tab;
     };
+    UserService.getUserPreferences(function(preferences) {
+        $scope.userPreferences = preferences;
+         var activeTab = $scope.userPreferences.account_default_tab;
+        if(activeTab)
+          $scope.activeTab = activeTab;
+        else
+          $scope.activeTab = AccountService.getActiveTab();
+    });
+
+    $scope.savePreferencesFn = function() {
+      UserService.updateUserPreferences($scope.userPreferences, function(){})
+    };
+
   }]);
 });

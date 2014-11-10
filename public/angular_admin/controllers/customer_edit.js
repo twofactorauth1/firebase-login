@@ -7,7 +7,8 @@ define(['app',
   'ngProgress',
   'confirmClick2',
   'toasterService',
-  'mediaDirective'
+  'mediaDirective',
+  'userService'
 ], function(app) {
   app.register.controller('CustomerEditCtrl', ['$scope',
     'CustomerService',
@@ -15,7 +16,8 @@ define(['app',
     '$state',
     'ngProgress',
     'ToasterService',
-    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService) {
+    'UserService',
+    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, UserService) {
       ngProgress.start();
       var displayAddressCharLimit = 2;
       $scope.currentState = $state.current.name;
@@ -173,9 +175,40 @@ define(['app',
         $state.go('customer');
       };
 
+      $scope.restoreFn = function() {
+        if ($scope.customerId) {
+          if ($scope.customer.type === undefined) {
+            $scope.customer.type = $scope.userPreferences.default_customer_type;
+          }
+          if ($scope.customer.details[0].addresses.length === 0) {
+            $scope.customer.details[0].addresses.push({});
+            $scope.customer.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
+            $scope.customer.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
+            $scope.customer.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
+            $scope.customer.details[0].addresses[0].zip = $scope.userPreferences.default_customer_zip;
+          }
+        } else {
+          $scope.customer.type = $scope.userPreferences.default_customer_type;
+          $scope.customer.details[0].addresses.push({});
+          $scope.customer.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
+          $scope.customer.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
+          $scope.customer.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
+          $scope.customer.details[0].addresses[0].zip = $scope.userPreferences.default_customer_zip;
+        }
+      };
+
+      $scope.savePreferencesFn = function() {
+        UserService.updateUserPreferences($scope.userPreferences, function(preferences) {});
+        $scope.restoreFn();
+      };
+
       if ($scope.customerId) {
         CustomerService.getCustomer($scope.customerId, function(customer) {
           $scope.customer = customer;
+          UserService.getUserPreferences(function(preferences) {
+            $scope.userPreferences = preferences;
+            $scope.restoreFn();
+          });
           ngProgress.complete();
           $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
           if ($scope.customer.details[0].addresses.length) {
@@ -190,6 +223,10 @@ define(['app',
       } else {
         ngProgress.complete();
         $scope.customerAddressWatchFn(0);
+        UserService.getUserPreferences(function(preferences) {
+          $scope.userPreferences = preferences;
+          $scope.restoreFn();
+        });
       }
 
       $scope.$watch('fullName', function(newValue, oldValue) {
@@ -215,9 +252,9 @@ define(['app',
         }
       });
 
-    $scope.insertPhoto=function(asset){
-        $scope.customer.photo=asset.url;        
-    };
+      $scope.insertPhoto = function(asset) {
+        $scope.customer.photo = asset.url;
+      };
 
     }
   ]);

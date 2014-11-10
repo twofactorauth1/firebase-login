@@ -20,29 +20,37 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
             PaymentService.getCustomerCards(newValue.stripeId, function(cards) {
               scope.cards = cards;
               if (scope.cards.data.length) {
-                scope.card = new Skeuocard($("#skeuocard"), {
-                  initialValues: {
-                    number: "000000000000" + scope.cards.data[0].last4,
-                    expMonth: scope.cards.data[0].exp_month,
-                    expYear: scope.cards.data[0].exp_year
+                $('form').card({
+                  container: '.card-wrapper',
+                  values: {
+                    number: "4XXXXXXXXXXX" + scope.cards.data[0].last4,
+                    expiry: scope.cards.data[0].exp_month + '/' + scope.cards.data[0].exp_year
                   }
                 });
               } else {
-                scope.card = new Skeuocard($("#skeuocard"));
+                $('form').card({
+                  container: '.card-wrapper'
+                });
               }
             });
           }
         });
 
         scope.addCardFn = function() {
+          var expiry = $('#expiry').val().split("/")
+          var exp_month = expiry[0].trim();
+          var exp_year = "";
+          if(expiry.length > 1)
+            exp_year = expiry[1].trim();
+          $('#expiry').val().split("/")[0].trim()
           var cardInput = {
-            number: $('#cc_number').val(),
-            cvc: $('#cc_cvc').val(),
-            exp_month: $('#cc_exp_month').val(),
-            exp_year: $('#cc_exp_year').val()
+            number: $('#number').val(),
+            cvc: $('#cvc').val(),
+            exp_month: exp_month,
+            exp_year: exp_year
           };
-
           PaymentService.getStripeCardToken(cardInput, function(token) {
+            //scope.card.flip();
             if (scope.user.stripeId) {
               UserService.postAccountBilling(scope.user.stripeId, token, function(billing) {
                 scope.updateFn(billing);

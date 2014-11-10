@@ -1,6 +1,6 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'PostService', 'PaymentService', 'ProductService',
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService',
     function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService) {
         var account, theme, website, pages, teaserposts, route, postname, products, that = this;
 
@@ -48,10 +48,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
-
-                PostService.getAllPosts(function(posts) {
+                PostService.getAllPostsByPageId($scope.currentpage._id, function (posts){
                     that.blogposts = posts;
                 });
+                /*PostService.getAllPosts(function(posts) {
+                    that.blogposts = posts;
+                });*/
             }
         });
 
@@ -217,6 +219,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 window.oldScope.$digest();
             };
 
+            window.triggerFontUpdate = function(value) {
+//
+                $('h1,h2,h3,h4,h5,h6,h1 .editable,h2 .editable,h3 .editable,h4 .editable,h5 .editable,h6 .editable ').each(function (){
+                    this.style.setProperty( 'font-family', value, 'important' );
+                });
+
+            }
+
             if (!window.oldScope)
                 window.oldScope = $scope;
 
@@ -319,6 +329,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             accountToken: data.token
                         };
 
+                        //get the token
+                        PaymentService.getStripeCardToken(newAccount.card, function(token) {
+                            newUser.cardToken = token;
+                            newUser.plan = $scope.selectedPlan;
+                            newUser.anonymousId = window.analytics.user().anonymousId();
+                            userService.initializeUser(newUser, function(data){
+                                window.location.replace(newUser.accountUrl);
+                            });
+                        });
+
+                        /*
                         userService.createUser(newUser, function(data) {
                             var newUser = data;
                             PaymentService.getStripeCardToken(newAccount.card, function(token) {
@@ -330,7 +351,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                     // });
                                 });
                             });
-                        });
+                        });*/
                     });
                 });
             };
@@ -407,7 +428,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             };
 
         /********** END SIGNUP SECTION **********/
-
 
     }
 ]);

@@ -1,13 +1,6 @@
-<script>
-(function(w,d,s,g,js,fs){
-  g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}};
-  js=d.createElement(s);fs=d.getElementsByTagName(s)[0];
-  js.src='https://apis.google.com/js/platform.js';
-  fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
-}(window,document,'script'));
+<script type="text/javascript">
+    !function(a,b){a("Keen","https://d26b395fwzu5fz.cloudfront.net/3.1.0/keen.min.js",b)}(function(a,b,c){var d,e,f;c["_"+a]={},c[a]=function(b){c["_"+a].clients=c["_"+a].clients||{},c["_"+a].clients[b.projectId]=this,this._config=b},c[a].ready=function(b){c["_"+a].ready=c["_"+a].ready||[],c["_"+a].ready.push(b)},d=["addEvent","setGlobalProperties","trackExternalLink","on"];for(var g=0;g<d.length;g++){var h=d[g],i=function(a){return function(){return this["_"+a]=this["_"+a]||[],this["_"+a].push(arguments),this}};c[a].prototype[h]=i(h)}e=document.createElement("script"),e.async=!0,e.src=b,f=document.getElementsByTagName("script")[0],f.parentNode.insertBefore(e,f)},this);
 </script>
-<div id="embed-api-auth-container" class="hidden"></div>
-
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="dashboard">
     <div class="pageheader row">
@@ -18,32 +11,34 @@
                 <i class="fa fa-plus"></i>
                 <span class="hidden-xs">Add</span>
             </div> -->
-
         </div>
     </div>
 
-    <div class="row">
-        <div class="btn-group col-xs-12 template-btns">
-            <button type="button" class="btn btn-default btn-lg col-xs-6 active tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
-                <div popover="What are customers doing before they churn?" popover-placement="bottom" popover-trigger="mouseenter" title="12 Days ago Robin visited your website.">
+    <section id="view-selector"></section>
+
+    <div class="col-xs-12 nopadding">
+        <div class="btn-group col-xs-12 template-btns nopadding">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
+                <div tooltip-placement="bottom" tooltip-html-unsafe="What are customers doing </br> before they churn?">
                     <i class="fa fa-pie-chart"></i>
-                    <span class="hidden-xs">Analytics</span>
+                    <span class="hidden-xs">Site Analytics</span>
                 </div>
             </button>
             <!-- <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'advertising'}" ng-click="activeTab = 'advertising'">
                 <i class="fa fa-bullseye"></i>
                 <span class="hidden-xs">Advertising</span>
             </button> -->
-            <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'ecommerce'}" ng-click="activeTab = 'ecommerce'">
-                <div popover="How do you get Jane to re-open that shopping cart and check out?" popover-trigger="mouseenter" popover-placement="bottom">
+            <button type="button" class="btn btn-default btn-lg col-xs-4" ng-class="{'active': activeTab === 'ecommerce'}" ng-click="activeTab = 'ecommerce'">
+                <div tooltip-placement="bottom" tooltip-html-unsafe="How do you get Jane to re-open </br> that shopping cart and check out?">
                     <i class="fa fa-credit-card"></i>
                     <span class="hidden-xs">Ecommerce</span>
                 </div>
             </button>
-            <!-- <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'marketing'}" ng-click="activeTab = 'marketing'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4" ng-class="{'active': activeTab === 'marketing'}" ng-click="activeTab = 'marketing'">
                 <i class="fa fa-bullhorn"></i>
                 <span class="hidden-xs">Marketing</span>
             </button>
+            <!--
             <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'support'}" ng-click="activeTab = 'support'">
                 <i class="fa fa-question-circle"></i>
                 <span class="hidden-xs">Support</span>
@@ -57,56 +52,78 @@
 
     <div class="contentpanel">
 
+        <div id="active-users-container"></div>
 
         <div class="analytics-section" ng-show="activeTab == 'analytics'">
-
             <div class="row">
-                <div class="col-sm-6 col-md-4">
-                    <div id="pageviews" tooltip-placement="top" tooltip="Total number of times any page has been viewed on your site."></div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric increase" ng-if="visitDuration" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
-                        <span class="keen-metric-title mb10">Avg. Visit Duration</span>
-                        <span class="keen-metric-value col-sm-7"><div class="text-right">{{visitDuration}}</div></span>
-                        <span class="keen-metric-change-value col-sm-5"><div class="text-left"><i class="fa fa-chevron-up"></i> 10% </br> <span>previous month</span></div></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div id="pageviews"></div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="bounces" tooltip-placement="top" tooltip="How many people closed your site without reading anything?">
-                        <span class="keen-metric-title">Bounces</span>
-                        <span class="keen-metric-value">{{bounces}}</span>
+                <div class="col-xs-12">
+                    <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <div class="panel-btns">
+                                <a data-toggle="modal" data-target="#visitor-overview" class="panel-edit"><i class="fa fa-info-circle"></i></a>
+                            </div>
+                            <h3 class="panel-title">Visitor Overview</h3>
+                        </div>
+                        <div class="panel-body">
+                            <highchart config="analyticsOverviewConfig"></highchart>
+                            <div>
+                                <div class="col-sm-4 col-xs-6 top-four">
+                                    <div class="metric center">Pageviews</div>
+                                    <div class="title center">
+                                        {{pageviews}}
+                                        <span class="percent" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}%</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-xs-6 top-four">
+                                    <div class="metric center">Visits</div>
+                                    <div class="title center">
+                                        {{visits}}
+                                        <span class="percent" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-xs-6 top-four">
+                                    <div class="metric center">Visitors</div>
+                                    <div class="title center">
+                                        {{visitors}}
+                                        <span class="percent" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-7">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Visitor Location
+                <div class="col-sm-6">
+                    <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <div class="panel-btns">
+                                <a data-toggle="modal" data-target="#visitor-locations" class="panel-edit"><i class="fa fa-info-circle"></i></a>
+                            </div>
+                            <h3 class="panel-title">Visitor Locations</h3>
                         </div>
-                        <div class="chart-stage">
+                        <div class="panel-body">
                             <div id="location"></div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-5">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Device
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="panel-btns">
+                                <a data-toggle="modal" data-target="#device-info" class="panel-edit"><i class="fa fa-info-circle"></i></a>
+                            </div>
+                            <h3 class="panel-title">Device</h3>
                         </div>
-                        <div class="chart-stage" style="padding: 30px;">
+                        <div class="panel-body">
                             <div class="col-xs-6">
-                                <h1 class="center"><i class="fa fa-desktop" style="font-size: 70px;"></i></h1>
+                                <h1 class="center"><i class="fa fa-desktop" style="font-size: 70px;"></i>
+                                </h1>
                                 <h3 class="center">{{desktop}}</h3>
                                 <h5 class="center">Desktop</h5>
                             </div>
                             <div class="col-xs-6">
-                                <h1 class="center"><i class="fa fa-mobile" style="font-size: 70px;"></i></h1>
+                                <h1 class="center"><i class="fa fa-mobile" style="font-size: 70px;"></i>
+                                </h1>
                                 <h3 class="center">{{mobile}}</h3>
                                 <h5 class="center">Mobile</h5>
                             </div>
@@ -114,40 +131,109 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <div class="panel-btns">
+                                <a data-toggle="modal" data-target="#content-interaction" class="panel-edit"><i class="fa fa-info-circle"></i></a>
+                            </div>
+                            <h3 class="panel-title">Content Interaction</h3>
+                        </div>
+                        <div class="panel-body">
+                            <highchart ng-show="timeonSiteConfig" config="timeonSiteConfig"></highchart>
+                            <div>
+                                <div class="col-xs-6 top-four">
+                                    <div class="metric center">Time on Site</div>
+                                    <div class="title center">
+                                        {{visitDuration}}
+                                        <span class="percent" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 top-four">
+                                    <div class="metric center">Bounces</div>
+                                    <div class="title center">
+                                        {{bounces}}
+                                        <span class="percent" ng-class="{'decrease': bouncesPercent < 0, 'increase': bouncesPercent > 0 }"><i ng-class="{'fa fa-chevron-down': bouncesPercent < 0, 'fa fa-chevron-up': bouncesPercent > 0 }"></i> {{bouncesPercent}}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
-                <!-- end of three -->
-                <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            New vs. Returning
+                <div class="col-xs-6 col-sm-4">
+                    <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Gender</h3>
                         </div>
-                        <div class="chart-stage">
-                            <div id="new-vs-returning"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Top Visited Pages
-                        </div>
-                        <div class="chart-stage">
-                            <div id="top-visited-pages"></div>
+                        <div class="panel-body">
+                            <highchart config="genderConfig"></highchart>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="chart-wrapper">
-                        <div class="chart-title">
-                            Traffic Sources
+                <div class="col-xs-6 col-sm-4" id="new-vs-returning">
+                    <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">New vs. Returning</h3>
                         </div>
-                        <div class="chart-stage">
-                            <div id="traffic-sources" style="width:400px;"></div>
+                        <div class="panel-body">
+                            <highchart config="newVsReturningConfig"></highchart>
                         </div>
                     </div>
                 </div>
+                <div class="col-xs-6 col-sm-4" id="traffic-sources">
+                    <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Traffic Sources</h3>
+                        </div>
+                        <div class="panel-body">
+                            <highchart config="trafficSourcesConfig"></highchart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                     <div class="panel panel-info panel-nopadding">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Individual Page Analytics</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table mb0">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Page</th>
+                                                <th>Pageviews</th>
+                                                <th>Unique Pageviews</th>
+                                                <th>Avg. Time on Page</th>
+                                                <th>Entrances</th>
+                                                <th>Bounce Rate</th>
+                                                <th>Exit</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                           <tr ng-repeat="topPage in formatedTopPages">
+                                                <td class="truncate"><a href="/admin#/dashboard/single-page/{{}}">{{topPage.page}}</a></td>
+                                                <td>{{topPage.pageviews}}</td>
+                                                <td>{{topPage.uniquePageviews}}</td>
+                                                <td>{{topPage.avgTime | secTotime}}</td>
+                                                <td>{{topPage.entrances}}</td>
+                                                <td>{{topPage.bounceRate | formatPercentage}}</td>
+                                                <td>{{topPage.exitRate | formatPercentage}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </div>
 
@@ -155,42 +241,169 @@
 
             <div class="row">
                 <div class="col-sm-6 col-md-4">
-                    <div id="monthly-recurring-revenue"></div>
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
+                        <a href="/admin#/dashboard/monthly-recurring-revenue">
+                            <span class="keen-metric-title mb10">Monthly Recurring Revenue</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center" ng-show="monthlyRecurringRevenue != null">{{monthlyRecurringRevenue | formatCurrency}}</div>
+                                <div ng-show="monthlyRecurringRevenue == null">$ --</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center">
+                                    <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                    <div ng-show="totalRevenuePercent == null">-- %</div>
+                                    </br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </a>
+                    </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
-                    <div id="net-revenue"></div>
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
+                        <a href="/admin#/dashboard/net-revenue">
+                            <span class="keen-metric-title mb10">Net Revenue</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center" ng-show="totalRevenue != null">{{totalRevenue | formatCurrency}}</div>
+                                <div ng-show="totalRevenue == null">$ --</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center">
+                                    <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                    <div ng-show="totalRevenuePercent == null">-- %</div>
+                                    </br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </a>
+                    </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
-                   <div id="fees"></div>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-sm-6 col-md-4">
-                    <div id="other-revenue"></div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div id="average-revenue-per-customer"></div>
-                </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">$22,143</span>
-                        <span class="keen-metric-title">Annual Run Rate</span>
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': totalFeesPercent < 0, 'increase': totalFeesPercent > 0 }">
+                        <a href="/admin#/dashboard/monthly-recurring-revenue">
+                            <span class="keen-metric-title mb10">Fees</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center" ng-show="totalFees != null">{{totalFees | formatCurrency}}</div>
+                                <div ng-show="totalFees == null">$ --</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center">
+                                    <div ng-show="totalFeesPercent != null"><i ng-class="{'fa fa-chevron-down': totalFeesPercent < 0, 'fa fa-chevron-up': totalFeesPercent > 0 }"></i> {{totalFeesPercent}}%</div>
+                                    <div ng-show="totalFeesPercent == null" class="nullPercent">-- %</div>
+                                    </br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </a>
                     </div>
                 </div>
 
             </div>
             <div class="row">
                 <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">$1484</span>
-                        <span class="keen-metric-title">Lifetime Value</span>
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
+                        <a href="/admin#/dashboard/other-revenue">
+                            <span class="keen-metric-title mb10">Other Revenue</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center" ng-show="totalRevenue != null">{{totalRevenue | formatCurrency}}</div>
+                                <div ng-show="totalRevenue == null">$ --</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center">
+                                    <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                    <div ng-show="totalRevenuePercent == null">-- %</div>
+                                    </br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </a>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
-                    <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
-                        <span class="keen-metric-value">5.8%</span>
-                        <span class="keen-metric-title">User Churn</span>
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
+                        <a href="/admin#/dashboard/other-revenue">
+                            <span class="keen-metric-title mb10">Average Revenue per Customer</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center" ng-show="arpu != null">{{arpu | formatCurrency}}</div>
+                                <div ng-show="arpu == null">$ --</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center">
+                                    <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                    <div ng-show="totalRevenuePercent == null">-- %</div>
+                                    </br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
+                        <a href="/admin#/dashboard/other-revenue">
+                            <span class="keen-metric-title mb10">Annual Run Rate</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center" ng-show="annualRunRate != null">{{annualRunRate | formatCurrency}}</div>
+                                <div ng-show="annualRunRate == null">$ --</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center">
+                                    <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                    <div ng-show="totalRevenuePercent == null">-- %</div>
+                                    </br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
+                        <a href="/admin#/dashboard/other-revenue">
+                            <span class="keen-metric-title mb10">Lifetime Value</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center" ng-show="lifetimeValue != null">{{lifetimeValue | formatCurrency}}</div>
+                                <div ng-show="lifetimeValue == null">$ --</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center">
+                                    <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                    <div ng-show="totalRevenuePercent == null">-- %</div>
+                                    </br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
+                        <a href="/admin#/dashboard/other-revenue">
+                            <span class="keen-metric-title mb10">User Churn</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center" ng-show="annualRunRate != null">{{userChurn}}%</div>
+                                <div ng-show="annualRunRate == null">$ --</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center">
+                                    <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                    <div ng-show="totalRevenuePercent == null">-- %</div>
+                                    </br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </a>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
@@ -204,7 +417,24 @@
 
             <div class="row">
                 <div class="col-sm-6 col-md-4">
-                    <div id="total-customer"></div>
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
+                        <a href="/admin#/dashboard/other-revenue">
+                            <span class="keen-metric-title mb10">Total Customers</span>
+                            <span class="keen-metric-value col-sm-6">
+                                <div class="center" ng-show="totalCustomers != null">{{totalCustomers}}</div>
+                                <div ng-show="totalCustomers == null">$ --</div>
+                            </span>
+                            <span class="keen-metric-change-value col-sm-6">
+                                <div class="center">
+                                    <div ng-show="totalRevenuePercent != null"><i ng-class="{'fa fa-chevron-down': totalRevenuePercent < 0, 'fa fa-chevron-up': totalRevenuePercent > 0 }"></i> {{totalRevenuePercent}}%</div>
+                                    <div ng-show="totalRevenuePercent == null">-- %</div>
+                                    </br>
+                                    <span>previous month</span>
+                                </div>
+                            </span>
+                            <div class="clearfix"></div>
+                        </a>
+                    </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
                     <div id="upgrades"></div>
@@ -314,7 +544,7 @@
             </div> -->
         </div>
 
-       <!--  <div class="advertising-section" ng-show="activeTab == 'advertising'">
+        <!--  <div class="advertising-section" ng-show="activeTab == 'advertising'">
             <div class="row">
                 <div class="col-sm-8">
                     <div class="chart-wrapper">
@@ -427,27 +657,83 @@
         </div> -->
 
         <!-- <div class="integrations-section" ng-show="activeTab == 'integrations'">
-        </div>
+        </div> -->
 
         <div class="marketing-section" ng-show="activeTab == 'marketing'">
+            <div class="row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }" ng-if="visitors" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                        <span class="keen-metric-title mb10">Leads</span>
+                        <span class="keen-metric-value col-sm-6">
+                            <div class="center">{{visitors}}</div>
+                        </span>
+                        <span class="keen-metric-change-value col-sm-6">
+                            <div class="center"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</br>
+                                <span>previous month</span>
+                            </div>
+                        </span>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }" ng-if="visitors" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                        <span class="keen-metric-title mb10">Visitor to Lead Ratio</span>
+                        <span class="keen-metric-value col-sm-6">
+                            <div class="center">100 : 1</div>
+                        </span>
+                        <span class="keen-metric-change-value col-sm-6">
+                            <div class="center"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</br>
+                                <span>previous month</span>
+                            </div>
+                        </span>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }" ng-if="visitors" tooltip-placement="top" tooltip="This is how long people stay on your site on average.">
+                        <span class="keen-metric-title mb10">Lead to Win Ratio</span>
+                        <span class="keen-metric-value col-sm-6">
+                            <div class="center">5 : 1</div>
+                        </span>
+                        <span class="keen-metric-change-value col-sm-6">
+                            <div class="center"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</br>
+                                <span>previous month</span>
+                            </div>
+                        </span>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Visitor Locations</h3>
+                        </div>
+                        <div class="panel-body">
+                            <highchart config="purchaseFunnelConfig"></highchart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="support-section" ng-show="activeTab == 'support'">
+        <!-- <div class="support-section" ng-show="activeTab == 'support'">
         </div>
 
         <div class="testing-section" ng-show="activeTab == 'testing'">
         </div> -->
-
     </div>
-</div>
 
 
-<!-- <div id="rightpanel">
+    <!-- <div id="rightpanel">
   <div class="rightpanel rightpanel-website">
        <ul class="nav nav-tabs nav-justified">
-	        <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
-	        </li>
-    	</ul>
+            <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
+            </li>
+        </ul>
 
     <div class="tab-content">
         <div class="tab-pane pane-settings active" id="rp-settings">
@@ -456,3 +742,130 @@
     </div>
   </div>
 </div> -->
+
+    <!-- Vistor Overview Info Modal-->
+    <div class="modal fade" id="visitor-overview">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Why is the Visitor Overview important?</h4>
+                </div>
+                <div class="modal-body modal-nopadding">
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="active"><a href="#watch2" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a>
+                        </li>
+                        <li class=""><a href="#read2" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="watch2" class="tab-pane active">
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <iframe width="100%" height="315" src="//www.youtube.com/embed/kpeL6WGlvEI?showinfo=0"></iframe>
+                            </div>
+                        </div>
+                        <div id="read2" class="tab-pane">
+                            <p>The visitor overview gives you an idea of how many people are visting your website, how many pages they view and how often they visit. The graph consists of pageviews, visits, and vistors. They are displayed in a rolling 30 day line graph, which means its the last 30 days starting from today.</p>
+                            <ul>
+                                <li><b>Visits</b> represent the number of times the website was visited, without regard to repeat visitors.</li>
+                                <li><b>Page Views</b> represent the total number of pages that visitors looked at on our site.</li>
+                                <li><b>Visitors</b> represent the number of actual people that visited our site.</li>
+                            </ul>
+                            <p>These metrics are important because they show you how many people are coming through your virtual store.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!-- Vistor Locations Info Modal-->
+    <div class="modal fade" id="visitor-locations">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Why is the Visitor Locations important?</h4>
+                </div>
+                <div class="modal-body modal-nopadding">
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="active"><a href="#watch" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a></li>
+                        <li class=""><a href="#read" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="watch" class="tab-pane active">
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <iframe width="100%" height="315" src="//www.youtube.com/embed/EGBdMrwXxWo?showinfo=0"></iframe>
+                            </div>
+                        </div>
+                        <div id="read" class="tab-pane">
+                            <p>Knowing exactly where your visitors are located will help you focus your marketing exactly where it's wanted. You don't have to waste money on adwards in the wrong city and instead can put your advertising money where it will do the most work.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!-- Content Interaction Info Modal-->
+    <div class="modal fade" id="content-interaction">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">What is Time on Site and Bounces?</h4>
+                </div>
+                <div class="modal-body modal-nopadding">
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="active"><a href="#watch-3" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a></li>
+                        <li class=""><a href="#read-3" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="watch-3" class="tab-pane active">
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <iframe width="100%" height="315" src="//www.youtube.com/embed/-m7ZPgOB8Y8?showinfo=0"></iframe>
+                            </div>
+                        </div>
+                        <div id="read-3" class="tab-pane">
+                            <p>On the Internet, a high bounce rate is the kiss of death — and a sure sign that your website and marketing strategy need a major overhaul. By definition, bounce rate is the percentage of site visitors who leave after visiting one page. Why would these users "bounce"? It's probably an indication that your site isn't providing the information the user seeks, the site could be taking too long to load or hard to navigate, or perhaps there's some larger disconnect between your site and your users. The simple metric is a general way to gauge the efficacy of your site.</p>
+                            <p>Bounce rate is closely related to time spent (more on that in an upcoming Metrics That Matter article), as it's a measure of engagement that demonstrates the degree to which people are enjoying and interacting with content in a deeper way, says Stephanie Fried, VP of digital insights and marketing at Discovery Communications.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!-- Device Info Modal-->
+    <div class="modal fade" id="device-info">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">How can the device people are using help me?</h4>
+                </div>
+                <div class="modal-body modal-nopadding">
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="active"><a href="#read-4" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="read-4" class="tab-pane active">
+                            <p>What device your audience is using is important so that you can determine what types of advertising you might invest in.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->

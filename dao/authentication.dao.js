@@ -107,6 +107,8 @@ var dao = {
     authenticateBySocialLogin: function (req, socialType, socialId, email, username, socialUrl, accessToken, refreshToken, expires, scope, fn) {
         var self = this;
         self.log.debug('>> authenticateBySocialLogin');
+        self.log.debug('(req, ' + socialType + ',' + socialId + ',' + email + ',' + username + ',' + socialUrl + ',' + accessToken + ','
+            + refreshToken + ',' + expires + ',' + scope + ',fn)');
         var host = req.get("host");
         accountDao.getAccountByHost(host, function (err, value) {
             if (err) {
@@ -444,6 +446,7 @@ var dao = {
 
     getAuthenticatedUrlForRedirect: function(accountId, userId, path, fn) {
         var self = this;
+        self.log.debug('>> getAuthetnicatedUrlForRedirect(' + accountId + ',' + userId + ',' + path +',fn)');
         accountDao.getServerUrlByAccount(accountId, function(err, value) {
             if (err) {
                 return fn(err, value);
@@ -468,7 +471,7 @@ var dao = {
             }
 
 
-
+            self.log.debug('<< getAuthenticatedUrlForRedirect(' + serverUrl + ')');
             fn(null, serverUrl);
         });
     },
@@ -476,6 +479,7 @@ var dao = {
 
     getAuthenticatedUrlForAccount: function(accountId, userId, path, expirationSeconds, fn) {
         var self = this;
+        self.log.debug('>> getAuthenticatedUrlForAccount(' + accountId +',' + userId + ',' + path + ',' + expirationSeconds + ',fn)');
         if (_.isFunction(expirationSeconds)) {
             fn = expirationSeconds;
             expirationSeconds = null;

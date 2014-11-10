@@ -1,3 +1,4 @@
+@thirty: 30px;
 #media-manager-modal {
 	.modal-body {
 		padding: 0;
@@ -28,7 +29,8 @@
 	}
 	.filemanager {
 		.media {
-			max-height: 470px;
+//            height: 470px;
+//			max-height: 470px;
 			overflow-y: scroll;
 			padding: 20px;
 			margin-right: 10px;
@@ -39,5 +41,90 @@
 			top: 100%;
 			left: -100px;
 		}
+
+        .thmb-prev {
+            background: #eee;
+            overflow: hidden;
+            display: table;
+            width: 100%;
+            height: 150px;
+        }
+
+        .thmb-prev > div {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .thmb-prev img {
+            max-height: 150px;
+            width: auto;
+            max-width: 100%;
+        }
 	}
+    label[for="upload_image"] {
+        margin-bottom: 0 !important;
+    }
+
+    .media > * {
+        display: none;
+    }
+
+    .all .media > *:not([id]),
+    .all .media #all-warning-box,
+    .image .media #image-warning-box,
+    .video .media #video-warning-box,
+    .audio .media #audio-warning-box,
+    .document .media #document-warning-box {
+        display: inline;
+    }
+
+    .document .media > [class*="documnet"] {
+        display: inline;
+    }
+
+    .audio .media > [class*="audio"] {
+        display: inline;
+    }
+
+    .video .media > [class*="video"] {
+        display: inline;
+    }
+
+    .image .media > [class*="image"] {
+        display: inline;
+    }
+
+    .all [data-active="all"],
+    .video [data-active="video"],
+    .audio [data-active="audio"],
+    .image [data-active="image"],
+    .document [data-active="document"] {
+        text-decoration: underline;
+        color: #2A6496;
+    }
+    [class*="image"]~#all-warning-box,
+    [class*="audio"]~#all-warning-box,
+    [class*="document"]~#all-warning-box,
+    [class*="video"]~#all-warning-box,
+    [class*="image"]~#image-warning-box,
+    [class*="audio"]~#audio-warning-box,
+    [class*="document"]~#document-warning-box,
+    [class*="video"]~#video-warning-box {
+        display: none !important;
+    }
+
+    [id*="-warning-box"]{
+        padding: 20px;
+        color: red;
+        font-size: 20px;
+    }
+
+    .modal-dialog.modal-lg {
+        //max-width: calc(100% - 30px);
+        //max-width: calc(95%);
+        max-width: ~"calc(100% - @{thirty})";
+        margin: 15px auto;
+    }
 }
+

@@ -9,14 +9,17 @@ define(['app'], function (app) {
                 });
         };
 
-        this.deleteAssetById = function (fn, assetId) {
-            var apiUrl = baseUrl + ['assets', assetId].join('/');
-            $http.delete(apiUrl)
-                .error(function (data, status, headers, config){
-                    fn(data, status);
-                })
-                .finally(function () {
-                });
+        this.deleteAssetById = function (assets, fn) {
+            assets.forEach(function (v, i){
+                var apiUrl = baseUrl + ['assets', v._id].join('/');
+                $http.delete(apiUrl)
+                    .error(function (data, status, headers, config){
+                        fn(v._id, data, status);
+                    })
+                    .finally(function () {
+                    });
+            })
+
         };
     });
 });
