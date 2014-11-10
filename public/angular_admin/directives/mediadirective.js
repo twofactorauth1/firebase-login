@@ -65,7 +65,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                 $scope.showType = "all";
                 $scope.select_all = false;
                 $scope.batch = [];
-                $scope.m = {};
+                $scope.m = $scope.m || {};
 
 /*
                 $scope.m.deleteAsset = function (assetId) {
@@ -130,6 +130,14 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                     $scope.m.getSingleSelect();
                 };
 */
+
+                $scope.m.onInsertMedia = function () {
+                    $scope.m.getSingleSelect();
+                    if ($scope.batch.length > 0) {
+                        $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
+                    }
+
+                };
                 $scope.m.selectAll = function() {
                     $scope.batch = [];
                     $scope.assets.forEach(function (v) {
@@ -209,6 +217,13 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                         }
                     });
                 };
+                $scope.m.onInsertMedia = function () {
+                    if ($scope.batch.length > 0) {
+                        $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
+                    }
+
+                    $("#media-manager-modal").modal('hide');
+                };
             },
 
             link: function (scope, element) {
@@ -218,6 +233,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                 });
                 element.attr("data-toggle", "modal");
                 element.attr("data-target", "#media-manager-modal");
+
             }
         };
     }]).directive('captureShift', function(){
