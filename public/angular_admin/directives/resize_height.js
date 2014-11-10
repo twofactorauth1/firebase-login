@@ -19,7 +19,7 @@ define(['angularAMD'], function (angularAMD) {
 
                 scope.styleMarketing = function () {
                     return {
-                        'height': (newValue.h)-215 + 'px',
+                        'height': (newValue.h)-168 + 'px',
                         'width': '100%',
                         'overflow-x' : 'hidden'
                     };
@@ -27,7 +27,7 @@ define(['angularAMD'], function (angularAMD) {
 
                 scope.styleCustomers = function () {
                     return {
-                        'height': (newValue.h)-115 + 'px',
+                        'height': (newValue.h)-63 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };
@@ -35,7 +35,7 @@ define(['angularAMD'], function (angularAMD) {
 
                 scope.styleCommerce = function () {
                     return {
-                        'height': (newValue.h)-115 + 'px',
+                        'height': (newValue.h)-68 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };
