@@ -12,23 +12,23 @@ define(['app'], function (app) {
 
         this.queryGoogleAnalytics = function (params, fn) {
             params.access_token = token;
-            // $http({
-            //     url: 'https://www.googleapis.com/analytics/v3/data/ga?'+this.encodeData(params),
-            //     method: 'GET'
-            //   })
-            //   .success(function(data, status, headers, config) {
-            //     fn(data);
-            //   });
+            $http({
+                url: 'https://www.googleapis.com/analytics/v3/data/ga?'+this.encodeData(params),
+                method: 'GET'
+              })
+              .success(function(data, status, headers, config) {
+                fn(data);
+              });
         };
 
         this.checkToken = function(fn) {
             this.login(fn);
-            // if (!token) {
-            //      this.getAccessToken(fn, function(data) {
-            //         console.log('result >>> ', data);
-            //         fn(data);
-            //      });
-            // }
+            if (!token) {
+                 this.getAccessToken(fn, function(data) {
+                    console.log('result >>> ', data);
+                    fn(data);
+                 });
+            }
         };
 
         this.encodeData = function(data) {
@@ -61,7 +61,7 @@ define(['app'], function (app) {
                 client_id: clientId,
                 scope: scopes,
                 immediate: true,
-                approval_prompt: 'force'
+                approval_prompt: 'auto'
             }, this.handleAuthResult());
             return deferred.promise;
         };

@@ -25,7 +25,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             });
         };
 
-        dashboardService.checkAuth(function(data) {
+        dashboardService.checkToken(function(data) {
                 console.log('checkToken', data);
 
             Keen.ready(function() {
