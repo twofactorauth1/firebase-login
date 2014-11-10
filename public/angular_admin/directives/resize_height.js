@@ -11,7 +11,7 @@ define(['angularAMD'], function (angularAMD) {
 
                 scope.style = function () {
                     return {
-                        'height': (newValue.h)-125 + 'px',
+                        'height': (newValue.h)-68 + 'px',
                         'width': '100%',
                         'overflow' : 'hidden'
                     };
