@@ -1,7 +1,7 @@
 define(['app'], function (app) {
     app.register.service('dashboardService', function ($http, $rootScope, $q) {
         var clientId = '1026246177215-tqpcc51fjk3vm0mgjef2jg7jagcmtuba.apps.googleusercontent.com',
-            apiKey = 'AIzaSyAVrtKPAAD24y1t9eC-VMVoGtoocuSHHxg',
+            apiKey = 'AIzaSyCAkloYlXlZx_---WXevaNHv03ReYpnvLs',
             token = "",
             code = "",
             refreshToken = "",
@@ -22,6 +22,7 @@ define(['app'], function (app) {
         };
 
         this.checkToken = function(fn) {
+            this.login(fn);
             if (!token) {
                  this.getAccessToken(fn, function(data) {
                     console.log('result >>> ', data);
@@ -54,7 +55,7 @@ define(['app'], function (app) {
               });
         };
 
-        this.login = function(fn) {
+        this.login = function() {
             gapi.auth.init(function() {});
             gapi.auth.authorize({
                 client_id: clientId,
@@ -62,7 +63,6 @@ define(['app'], function (app) {
                 immediate: true,
                 approval_prompt: 'auto'
             }, this.handleAuthResult());
-            fn('yay');
             return deferred.promise;
         };
 
@@ -87,7 +87,7 @@ define(['app'], function (app) {
                 // The user has authorized access
                 console.log('authResult >>> ', authResult);
                 this.loadAnalyticsClient;
-                fn(authResult);
+                // fn(authResult);
                 deferred.resolve(authResult);
             } else {
                 // User has not Authenticated and Authorized

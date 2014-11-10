@@ -13,7 +13,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             requestType: "jsonp"
         });
 
-        $scope.refreshToken = function() {
+        $scope.login = function() {
             dashboardService.login(function(data) {
                 console.log('refreshed', data);
             });
