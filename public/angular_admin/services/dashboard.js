@@ -51,7 +51,6 @@ define(['app'], function (app) {
               })
               .error(function() {
                 console.log('error retrieving access token');
-                self.login(fn);
               });
         };
 

@@ -50,7 +50,7 @@ require.config({
         'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
         'highcharts': 'libs/highcharts/highcharts-all',
         'highcharts-ng': 'libs/highcharts-ng/dist/highcharts-ng.min',
-        'highcharts-funnel': 'libs/highcharts/modules/funnel',
+        'highcharts-funnel': 'libs/highcharts/modules/funnel'
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -64,6 +64,7 @@ require.config({
         'assetsService': '/angular_admin/services/assets',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'mediaDirective': '/angular_admin/directives/mediadirective',
+        'indi-datatable': '/angular_admin/directives/datatable',
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
         'postService': '/angular_admin/services/post',
@@ -124,7 +125,7 @@ require.config({
     shim: {
         'jqueryUI': {deps: ['jquery']},
         'adminCommon': {deps: ['jquery', 'storageutils', 'namespaces']},
-        'angular': {deps: ['jquery']},
+        'angular': {deps: ['jquery'],'exports' : 'angular'},
         'angularBootstrap': {deps: ['angular']},
         'angularBootstrapSwitch': {deps: ['angular', 'bootstrapSwitch']},
         'angularRoute': {deps: ['angular']},
