@@ -136,17 +136,13 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
             $scope.userPhoneWatchFn($scope.user.details[0].phones.length-1);
         };
 
-        $scope.setImage=function(asset){
-            console.log(asset);
+        $scope.insertMedia = function(asset){
 
             $scope.account.business.logo = asset.url;
             UserService.putAccount($scope.account, function (account) {
-                // $scope.account = account;
+
                 $("#media-manager-modal").modal('hide');
             });
-
-          //  $scope.componentEditing.bg.img.url=asset.url;
-        //    $scope.updateIframeComponents();
         };
 
     }]);

@@ -64,6 +64,7 @@ require.config({
         'assetsService': '/angular_admin/services/assets',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'mediaDirective': '/angular_admin/directives/mediadirective',
+        'indi-datatable': '/angular_admin/directives/datatable',
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
         'postService': '/angular_admin/services/post',
@@ -80,6 +81,7 @@ require.config({
         'hoverClassDirective': '/angular_admin/directives/hover_class',
         'confirmClickDirective': '/angular_admin/directives/confirm_click',
         'resizeHeightDirective': '/angular_admin/directives/resize_height',
+        'scrollerDirective': '/angular_admin/directives/scroller',
         'truncateDirective': '/angular_admin/directives/truncate',
         'adminValidationDirective': '/angular_admin/directives/form_validations',
         "constants": 'constants/constants',
@@ -124,7 +126,7 @@ require.config({
     shim: {
         'jqueryUI': {deps: ['jquery']},
         'adminCommon': {deps: ['jquery', 'storageutils', 'namespaces']},
-        'angular': {deps: ['jquery']},
+        'angular': {deps: ['jquery'],'exports' : 'angular'},
         'angularBootstrap': {deps: ['angular']},
         'angularBootstrapSwitch': {deps: ['angular', 'bootstrapSwitch']},
         'angularRoute': {deps: ['angular']},
@@ -171,7 +173,8 @@ require.config({
         'unsafeHtml': {deps: ['angular']},
         "bootstrap-confirmation" : {deps: ['bootstrap']},
         'jdfontselect': {deps: ['angular','webfontloader']},
-        'ngInfiniteScroll': {deps: ['angular']}
+        'ngInfiniteScroll': {deps: ['angular']},
+        'timeAgoFilter': {deps: ['moment']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

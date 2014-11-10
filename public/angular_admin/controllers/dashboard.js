@@ -14,7 +14,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
         });
 
         dashboardService.checkToken(function(data) {
-                console.log('checkToken', data);
+            console.log('checkToken', data);
 
             Keen.ready(function() {
                 gapi.analytics.ready(function() {
@@ -316,16 +316,17 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             credits: {
                                 enabled: false
                             },
-                            func: function (chart) {
+                            func: function(chart) {
+                                $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 40;
+                                chart.reflow();
+
+                                $scope.$on('resize', function() {
                                     $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 40;
                                     chart.reflow();
-
-                                    $scope.$on('resize', function () {
-                                        $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 40;
-                                        chart.reflow();
-                                    });
+                                });
                             }
                         };
+
 
                         // // ======================================
                         // // Content
@@ -513,9 +514,9 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     }
                                 };
 
-                                $scope.formatedTopPages = output;
 
-
+                                $scope.formattedTopPages = output;
+                                $scope.pagedformattedTopPages = $scope.formattedTopPages.slice(0, $scope.pageLimit);
 
                                 // ======================================
                                 // Traffic Sources
@@ -905,13 +906,35 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                 name: 'Gender',
                 innerSize: '40%',
                 data: [
-                    ['Male',   44.3],
-                    ['Female',       55.7]
+                    ['Male', 44.3],
+                    ['Female', 55.7]
                 ]
             }],
             credits: {
                 enabled: false
             }
+        };
+        $scope.sort = {
+            column: '',
+            descending: false
+        };
+        $scope.changeSorting = function(column) {
+
+            var sort = $scope.sort;
+            if (sort.column == column) {
+                sort.descending = !sort.descending;
+            } else {
+                sort.column = column;
+                sort.descending = false;
+            }
+        };
+
+        $scope.pageLimit = 15;
+
+        $scope.pageChangeFn = function(currentPage, totalPages) {
+            var begin = ((currentPage - 1) * $scope.pageLimit);
+            var end = begin + $scope.pageLimit;
+            $scope.pagedformattedTopPages = $scope.formattedTopPages.slice(begin, end);
         };
 
     }]);

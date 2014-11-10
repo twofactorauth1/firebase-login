@@ -16631,7 +16631,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   z-index: 10;
   right: 16px;
   left: 241px;
-  top: 114px;
+  top: 62px;
 }
 .rightmenu-open .header--fixed {
   right: 256px;
@@ -16760,7 +16760,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .logopanel,
 .headerbar {
   background: #272727!important;
-  border-bottom: 5px solid #161616!important;
 }
 .headerbar .searchform input {
   background: #000!important;
@@ -16774,7 +16773,8 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   content: '';
 }
 .menutoggle {
-  border-color: #161616!important;
+  border-right: 1px solid #161616!important;
+  background-color: #272727;
 }
 .headermenu > li {
   border-color: #161616!important;
@@ -16785,26 +16785,27 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .menutoggle,
 .menutoggle-right {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 62px;
   font-size: 22px;
-  padding: 14px 0 0 15px;
+  padding: 22px 0 0 15px;
   cursor: pointer;
   float: left;
   color: #1d2939;
-  border-right: 1px solid #161616;
+  border-left: 1px solid #161616;
   -webkit-transition: all 0.2s ease-out 0s;
   transition: all 0.2s ease-out 0s;
 }
 .menutoggle-right {
+  background-color: #272727;
   float: right;
 }
 .menutoggle-right i {
   color: #ffffff;
 }
 .menutoggle:hover {
-  color: #1d2939;
-  background-color: #f7f7f7;
+  /*color: #1d2939;*/
+  background-color: #272727!important;
 }
 #header-actions {
   padding-top: 8px;
@@ -16952,7 +16953,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .headermenu .dropdown-toggle:active,
 .headermenu .dropdown-toggle.active,
 .headermenu .open .dropdown-toggle.dropdown-toggle {
-  background: #f9f9f9;
+  background: #272727;
   color: #333;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -17035,6 +17036,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 200;
 }
 .leftpanel .searchform {
   display: none;
@@ -17087,7 +17089,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   overflow-y: auto;
 }
 .logopanel {
-  padding: 10px;
+  padding: 15px 14px 16px 14px;
   background: #fff;
 }
 .logopanel h1 {
@@ -17253,6 +17255,11 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .leftpanel-collapsed .leftpanelinner {
   padding: 0;
+}
+.leftpanel-collapsed .leftpanelinner li > a:hover > span {
+  display: block;
+  min-width: 73px;
+  width: auto;
 }
 .leftpanel-collapsed .nav-bracket {
   margin: 5px;
@@ -17454,20 +17461,19 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .mainpanel .pageheader {
   padding: 15px 0px;
-  border-bottom: 1px solid #d3d7db;
-  border-top: 1px solid #eee;
-  background: #f7f7f7;
+  background: #272727;
+  margin-right: 52px;
   position: relative;
-  margin: 0;
   height: 62px;
   z-index: 11;
 }
 .mainpanel .pageheader h2 {
   font-size: 28px;
-  color: #1D2939;
+  color: #FFFFFF;
   letter-spacing: -0.5px;
-  margin: 0;
   padding-left: 20px;
+  margin: 0 15px 0 0;
+  line-height: 34px;
 }
 .mainpanel .pageheader h2 span {
   font-size: 13px;
@@ -17486,7 +17492,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   font-size: 24px;
   margin-right: 5px;
   padding: 6px 7px;
-  border: 2px solid #1D2939;
+  border: 2px solid #FFFFFF;
   border-radius: 50px;
 }
 .mainpanel .pageheader .btn.pull-left {
@@ -17515,6 +17521,10 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .mainpanel .pageheader .fa-clock-o {
   padding: 6px 8px;
+}
+.mainpanel .pageheader .btn {
+  height: 36px;
+  margin-top: -2px;
 }
 .mainpanel .pageheader .btn:last-child {
   margin-right: 10px;
@@ -20115,9 +20125,6 @@ input[type='file'] {
 }
 .website-controls .btn-add {
   margin-right: 10px;
-}
-.website-controls.editing {
-  background: #2ecc71;
 }
 .website-controls.editing h2 {
   color: white!important;

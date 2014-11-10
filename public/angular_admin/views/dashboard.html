@@ -4,7 +4,7 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="dashboard">
     <div class="pageheader row">
-        <h2 class="col-xs-8"><i class="fa fa-bar-chart"></i> Dashboard</h2>
+        <h2 class="col-xs-7"><i class="fa fa-bar-chart"></i> Dashboard</h2>
 
         <div class="col-xs-4">
             <!-- <div class="btn btn-success pull-right btn-create-contact" type="button">
@@ -50,7 +50,7 @@
         </div>
     </div>
 
-    <div class="contentpanel">
+    <div class="contentpanel" ng-style="styleCommerce()" indigeweb-resize>
 
         <div id="active-users-container"></div>
 
@@ -207,18 +207,19 @@
                                         <table class="table table-striped">
                                             <thead>
                                             <tr>
-                                                <th>Page</th>
-                                                <th>Pageviews</th>
-                                                <th>Unique Pageviews</th>
-                                                <th>Avg. Time on Page</th>
-                                                <th>Entrances</th>
-                                                <th>Bounce Rate</th>
-                                                <th>Exit</th>
+                                                <th >Page</th>
+                                                <th ng-click="changeSorting('pageviews')">Pageviews</th>
+                                                <th ng-click="changeSorting('uniquePageviews')">Unique Pageviews</th>
+                                                <th ng-click="changeSorting('avgTime')">Avg. Time on Page</th>
+                                                <th ng-click="changeSorting('entrances')">Entrances</th>
+                                                <th ng-click="changeSorting('bounceRate')">Bounce Rate</th>
+                                                <th ng-click="changeSorting('exitRate')">Exit</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                           <tr ng-repeat="topPage in formatedTopPages">
-                                                <td class="truncate"><a href="/admin#/dashboard/single-page/{{}}">{{topPage.page}}</a></td>
+
+                                           <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:sort.column:sort.descending">
+                                                <td class="truncate"><a href="/admin#/dashboard/single-page/?pageurl={{topPage.page}}">{{topPage.page}}</a></td>
                                                 <td>{{topPage.pageviews}}</td>
                                                 <td>{{topPage.uniquePageviews}}</td>
                                                 <td>{{topPage.avgTime | secTotime}}</td>
@@ -228,7 +229,9 @@
                                             </tr>
                                             </tbody>
                                         </table>
-
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <pagination total-items="formattedTopPages.length" ng-model="currentPage" ng-change="pageChangeFn(currentPage, totalPages)" items-per-page="pageLimit" num-pages="totalPages"></pagination>
                                     </div>
                                 </div>
                             </div>
