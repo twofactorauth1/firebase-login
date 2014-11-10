@@ -5,7 +5,7 @@ define(['app'], function(app) {
       var matchRegex = {};
 
       for (var field in filterObj) {
-        matchRegex[field] = new RegExp(filterObj[field], 'i');
+        matchRegex[field] = new RegExp('^'+filterObj[field], 'i');
       }
       if (!items) {
         return items;
