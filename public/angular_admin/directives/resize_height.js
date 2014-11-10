@@ -41,6 +41,14 @@ define(['angularAMD'], function (angularAMD) {
                     };
                 };
 
+                scope.styleAccount = function () {
+                    return {
+                        'height': (newValue.h)-120 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
                 scope.styleCommerce = function () {
                     return {
                         'height': (newValue.h)-63 + 'px',
