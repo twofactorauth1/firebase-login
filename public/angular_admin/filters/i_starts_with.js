@@ -10,6 +10,7 @@ define(['app'], function(app) {
       if (!items) {
         return items;
       }
+
       items.forEach(function(value, index) {
         var add = true;
 
@@ -18,7 +19,7 @@ define(['app'], function(app) {
             add = false;
             continue;
           }
-          if (!matchRegex[field].test(value[field].substring(0, 1))) {
+          if (!matchRegex[field].test(value[field])) {
             add = false;
           }
         }

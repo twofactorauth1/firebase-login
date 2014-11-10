@@ -10,7 +10,7 @@ define(['angularAMD'], function (angularAMD) {
                 scope.windowWidth = newValue.w;
 
                 scope.style = function () {
-                    return { 
+                    return {
                         'height': (newValue.h)-125 + 'px',
                         'width': '100%',
                         'overflow' : 'hidden'
@@ -18,7 +18,7 @@ define(['angularAMD'], function (angularAMD) {
                 };
 
                 scope.styleMarketing = function () {
-                    return { 
+                    return {
                         'height': (newValue.h)-215 + 'px',
                         'width': '100%',
                         'overflow-x' : 'hidden'
@@ -26,7 +26,7 @@ define(['angularAMD'], function (angularAMD) {
                 };
 
                 scope.styleCustomers = function () {
-                    return { 
+                    return {
                         'height': (newValue.h)-115 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
@@ -34,7 +34,7 @@ define(['angularAMD'], function (angularAMD) {
                 };
 
                 scope.styleCommerce = function () {
-                    return { 
+                    return {
                         'height': (newValue.h)-115 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
