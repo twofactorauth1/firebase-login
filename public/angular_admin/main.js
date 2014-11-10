@@ -50,7 +50,7 @@ require.config({
         'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
         'highcharts': 'libs/highcharts/highcharts-all',
         'highcharts-ng': 'libs/highcharts-ng/dist/highcharts-ng.min',
-        'highcharts-funnel': 'libs/highcharts/modules/funnel'
+        'highcharts-funnel': 'libs/highcharts/modules/funnel',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -81,6 +81,7 @@ require.config({
         'hoverClassDirective': '/angular_admin/directives/hover_class',
         'confirmClickDirective': '/angular_admin/directives/confirm_click',
         'resizeHeightDirective': '/angular_admin/directives/resize_height',
+        'scrollerDirective': '/angular_admin/directives/scroller',
         'truncateDirective': '/angular_admin/directives/truncate',
         'adminValidationDirective': '/angular_admin/directives/form_validations',
         "constants": 'constants/constants',
