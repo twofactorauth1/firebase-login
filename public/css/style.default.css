@@ -16680,6 +16680,42 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
     opacity: 1;
   }
 }
+.tb-col {
+  display: table-cell;
+  float: none;
+  text-align: center;
+  vertical-align: middle;
+}
+.tb-col .vcenter {
+  display: table-cell;
+  vertical-align: middle;
+  height: 100%;
+  float: none;
+}
+.tb-col .media {
+  padding: 0;
+}
+.tb-col .people-item {
+  box-shadow: none;
+  height: auto;
+  margin: 0;
+  min-height: inherit;
+  padding: 0;
+}
+.tb-col .people-item .media-object {
+  border-radius: 3px;
+  height: auto;
+  margin: 10px auto;
+  width: 80px;
+}
+.tb-row {
+  display: table;
+  width: 100%;
+}
+.tb-row > div {
+  border-bottom: 1px solid #e6e6e6;
+  border-right: 1px solid #e6e6e6;
+}
 .account {
   overflow: hidden;
   background: #e4e7ea;
@@ -19218,6 +19254,7 @@ div.error label.error:before {
 .person-name {
   margin: 0 0 5px 0;
   color: #222;
+  text-align: left;
 }
 .people-item .important-star:hover,
 .people-item .important-star .fa-star {
