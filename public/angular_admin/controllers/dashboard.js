@@ -1,5 +1,5 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'googleLogin', 'secTotime', 'formatPercentage', 'dashboardService'], function(app) {
-    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'googleLogin', 'dashboardService', function($scope, $window, $resource, ngProgress, PaymentService, googleLogin, dashboardService) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService'], function(app) {
+    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService) {
         ngProgress.start();
 
         $scope.activeTab = 'analytics';
@@ -14,7 +14,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
         });
 
         dashboardService.checkToken(function(data) {
-            console.log('checkToken', data);
 
             Keen.ready(function() {
                 gapi.analytics.ready(function() {
@@ -206,7 +205,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             subArr.push(parseInt(results[4].rows[i][1]));
                             pageviewsData.push(subArr);
                         };
-                        console.log('pageviewsData >>> ', JSON.stringify(pageviewsData));
                         $scope.pageviews = results[4].totalsForAllResults['ga:pageviews'];
                         $scope.pageviewsPercent = $scope.calculatePercentage(results[5].totalsForAllResults['ga:pageviews'], results[4].totalsForAllResults['ga:pageviews']);
 
@@ -250,7 +248,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             subArr.push(parseInt(results[8].rows[i][1]));
                             bouncesData.push(subArr);
                         };
-                        console.log('bounces data >>> ', JSON.stringify(bouncesData));
 
                         $scope.bounces = results[8].totalsForAllResults['ga:bounces'];
                         $scope.bouncesPercent = $scope.calculatePercentage(results[9].totalsForAllResults['ga:bounces'], results[8].totalsForAllResults['ga:bounces']);
@@ -319,11 +316,11 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 enabled: false
                             },
                             func: function(chart) {
-                                $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 40;
+                                $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
                                 chart.reflow();
 
                                 $scope.$on('resize', function() {
-                                    $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 40;
+                                    $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
                                     chart.reflow();
                                 });
                             }
