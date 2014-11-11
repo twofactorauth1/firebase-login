@@ -92,6 +92,8 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           } else if (searchBarSplit.length == 1) {
             $scope.customerFilter.first = searchBarSplit[0];
           }
+        } else {
+          $scope.customerFilter = {};
         }
       });
 
