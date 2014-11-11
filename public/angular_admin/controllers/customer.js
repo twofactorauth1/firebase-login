@@ -10,6 +10,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     $scope.customerScrollLimit = 20;
     $scope.customerScrollOffset = 0;
     $scope.renderedCustomers = [];
+    $scope.gridViewDisplay = "true";
 
     $scope.customerScrollFn = function() {
       if ($scope.fetchedCustomers) {
@@ -91,6 +92,8 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           } else if (searchBarSplit.length == 1) {
             $scope.customerFilter.first = searchBarSplit[0];
           }
+        } else {
+          $scope.customerFilter = {};
         }
       });
 
@@ -213,6 +216,9 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         else
           $scope.showAddress = true;
       });
+      $scope.setDefaultView=function(value) {      
+        $scope.gridViewDisplay = value;
+      }
     });
   }]);
 });

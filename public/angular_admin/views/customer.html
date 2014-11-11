@@ -149,8 +149,8 @@
       <!-- panel -->
     </headroom>
 
-    <div class="people-list">
-      <div class="row">
+    <div ng-switch on="gridViewDisplay" class="people-list">
+      <div ng-switch-when="true" class="row">
         <div>
           <div indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}" ng-repeat="customer in renderedCustomers | iStartsWithFilter : customerFilter" class="col-xs-12 col-sm-4 col-md-3">
             <div data-contactid="1799" class="people-item btn-view-contact-details contact-item" style="opacity:1">
@@ -242,9 +242,40 @@
             </div>
           </div>
         </div>
-
       </div>
-
+       <div ng-switch-when="false" class="row">
+        <div>
+          <div class="tb-main table table-bordered">            
+            <div class="container-fluid tb-row"  ng-repeat="customer in renderedCustomers | iStartsWithFilter : customerFilter">
+              <div class="tb-col col-md-1">                
+                  <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips"> <i class="fa fa-star-o" ng-hide="customer.starred"></i> <i class="fa fa-star" ng-show="customer.starred"></i> </span></div>
+              <div class="tb-col col-md-4">
+              <div class="people-item btn-view-contact-details contact-item"  indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}"  style="opacity:1">
+              <div class="media">
+                <div class="col-xs-4 vcenter">
+                  <img  ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}" class="img-circle media-object thumbnail standard">
+                  <span class="name visible-xs"> <h4 class="person-name" indigeweb-truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4> </span>
+                </div>
+                <div class="media-body vcenter col-xs-7 hidden-xs" ng-switch on="customerDisplayFormat">
+                <h4 class="person-name" ng-switch-when="first" indigeweb-truncate truncate-list=" [customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                <h4 class="person-name" ng-switch-when="last" indigeweb-truncate truncate-list=" [customer.last, customer.middle, customer.first]" truncate-limit=20 truncate-symbol="'...'"></h4>
+              </div>
+              </div>
+              </div></div>
+              <div class="tb-col col-md-4">
+              <div class="" style="opacity:1"> 
+              <ul class="social-list hidden-xs">
+                <li>
+                  <a ng-show="showEmail && checkBestEmail(customer)" href="mailto:{{email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="tb-col col-md-4"></div>
+        </div>
+        </div>
+      </div>
+      </div>
     </div>
   </div>
 
@@ -287,7 +318,17 @@
             </li>
           </ul>
         </div>
-
+        <div class="form-group">
+          <label>Default View</label>
+          <div class="btn-group">
+            <button type="button" ng-click="setDefaultView('true')" class="btn btn-default">
+            <span class="fa fa-th"></span> Grid
+          </button>
+            <button type="button" ng-click="setDefaultView('false')" class="btn btn-default">
+            <span class="fa fa-list"></span> List
+          </button>
+          </div>
+        </div>
         <h5 class="sidebartitle mb20">Display Settings</h5>
         <div class="form-group row">
           <label class="col-xs-12 control-label">Contacts List Display</label>
