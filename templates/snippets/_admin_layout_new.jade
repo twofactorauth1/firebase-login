@@ -31,11 +31,12 @@ html(class="no-js", lang="en")
             link(rel='stylesheet', href='/js/libs/jd-fontselect/dist/angular-fontselect.min.css')
             link(rel='stylesheet', href='/css/angular-admin.css')
             link(rel='stylesheet', href='/js/libs/ngprogress/ngProgress.css')
-            link(rel='stylesheet', href='/js/libs/skeuocard-new/lib/css/card.css')
+            //- link(rel='stylesheet', href='/js/libs/skeuocard-new/lib/css/card.css')
             
 
     body.leftpanel-collapsed
         section.body-wrap
+            .headerbg
             include _admin_leftnav
 
             .mainpanel
@@ -59,7 +60,7 @@ html(class="no-js", lang="en")
                         button.close(type="button" aria-hidden="true") &times;
                         span.message #{infoMsg}
 
-                #main-viewport
+                #main-viewport(style="padding-top: 0;")
                     block content
                         //- Anything here gets overwritten by sub views that extend "block content"
 

@@ -7,9 +7,11 @@
   z-index: 200;
   top: 0;
   right: 0;
+  height: 0;
+  border: 0 !important;
 }
 .leftpanel-show #headerbar {
-  left: 240px;
+  left: 190px;
 }
 body.leftpanel-collapsed #headerbar {
   left: 52px;

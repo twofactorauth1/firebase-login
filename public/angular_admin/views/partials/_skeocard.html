@@ -1,29 +1,32 @@
 <div class="modal-body">
   <div class="demo-container">
   <div class="card-wrapper"></div>
-  <div class="form-container active">
+  <div class="clearfix mb20"></div>
+  <div class="active">
     <form action="">
       <div class="row">
-        <div class="small-6 columns">
-          <input placeholder="Card number" type="text" name="number" id="number">
+        <div class="small-6 columns col-sm-6">
+          <input placeholder="Card number" type="text" name="number" id="number" class="form-control input-lg">
         </div>
-        <div class="small-6 columns">
-          <input placeholder="Full name" type="text" id="name" name="name">
+        <div class="visible-xs mb20"></div>
+        <div class="small-6 columns col-sm-6">
+          <input placeholder="Full name" type="text" id="name" name="name" class="form-control input-lg">
         </div>
       </div>
+      <div class="clearfix mb20"></div>
       <div class="row">
-        <div class="small-3 columns">
-          <input placeholder="MM/YY" type="text" id="expiry" name="expiry">
+        <div class="small-3 columns col-xs-6">
+          <input placeholder="MM/YY" type="text" id="expiry" name="expiry" class="form-control input-lg">
         </div>
-
-        <div class="small-3 columns">
-          <input placeholder="CVC" type="text" id="cvc" name="cvc">
+        <div class="small-3 columns col-xs-6">
+          <input placeholder="CVC" type="text" id="cvc" name="cvc" class="form-control input-lg">
         </div>
       </div>
+      <div class="clearfix mb20"></div>
     </form>
   </div>
 </div>
-<div class="panel-footer">
+<div class="panel-footer row">
   <button id="btn-new-address" class="btn btn-success btn-lg btn-block" ng-click="addCardFn()" data-dismiss="modal">Modify Card</button>
 </div>
 

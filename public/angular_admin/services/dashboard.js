@@ -22,12 +22,13 @@ define(['app'], function (app) {
         };
 
         this.checkToken = function(fn) {
-            this.login(fn);
+            // this.login(fn);
             if (!token) {
                  this.getAccessToken(fn, function(data) {
-                    console.log('result >>> ', data);
                     fn(data);
                  });
+            } else {
+                fn(true);
             }
         };
 
@@ -45,13 +46,11 @@ define(['app'], function (app) {
                 method: 'GET'
               })
               .success(function(data, status, headers, config) {
-                console.log('data >>> ', data);
                 fn(data);
                 token = data.data;
               })
               .error(function() {
                 console.log('error retrieving access token');
-                self.login(fn);
               });
         };
 

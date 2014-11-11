@@ -13646,8 +13646,8 @@ strong {
   color: #ffffff;
 }
 .menutoggle:hover {
-  color: #1d2939;
-  background-color: #f7f7f7;
+  /*color: #1d2939;*/
+  /*background-color: #f7f7f7;*/
 }
 .searchform input {
   width: 250px;
@@ -14187,6 +14187,7 @@ strong {
   background: #131d29;
   position: relative;
   width: 240px;
+  height: 62px;
 }
 .rightpanel .nav-tabs > li {
   display: table-cell;

@@ -2,17 +2,17 @@
 <div class="account">
 
     <div class="pageheader row">
-        <div class="col-xs-9">
+        <div class="col-xs-8">
             <h2>
                 <i class="fa fa-cog"></i> Account
             </h2>
         </div>
 
-        <div class=" col-xs-offset-1 col-xs-1">
+        <div class="col-xs-1">
             <!-- <span class="mediaModal" user='user'></span> -->
         </div>
 
-        <div class="col-xs-1">
+        <div class="col-xs-3">
             <a href="#/account/edit" class="btn btn-success pull-right" type="button">
                 <span class="fa fa-edit"></span>
                 <span class="hidden-xs">Edit</span>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="contentpanel" ng-switch="activeTab">
+    <div class="contentpanel" ng-switch="activeTab" ng-style="styleAccount()" indigeweb-resize>
 
         <div class="account-info-section" ng-switch-when="account_information">
             <div class="col-sm-6">
@@ -204,7 +204,9 @@
 
                                 <li class="col-xs-12">
                                     <div class="col-xs-2">
-                                        <p><strong>Name: </strong></p>
+                                        <p>
+                                            <strong>Name:</strong>
+                                        </p>
                                     </div>
                                     <div class="col-xs-8">
                                         <p>{{account.business.name}}</p>
@@ -214,7 +216,9 @@
                                 </li>
                                 <li class="col-xs-12">
                                     <div class="col-xs-2">
-                                        <p><strong>Size: </strong></p>
+                                        <p>
+                                            <strong>Size:</strong>
+                                        </p>
                                     </div>
                                     <div class="col-xs-8">
                                         <p ng-show="account.business.size==1">Single</p>
@@ -228,7 +232,9 @@
                                 </li>
                                 <li class="col-xs-12">
                                     <div class="col-xs-2">
-                                        <p><strong>Description:</strong></p>
+                                        <p>
+                                            <strong>Description:</strong>
+                                        </p>
                                     </div>
                                     <div class="col-xs-8">
                                         <p>{{account.business.description}}</p>
@@ -238,7 +244,9 @@
                                 </li>
                                 <li class="col-xs-12">
                                     <div class="col-xs-2">
-                                        <p><strong>Cateogry: </strong></p>
+                                        <p>
+                                            <strong>Cateogry:</strong>
+                                        </p>
                                     </div>
                                     <div class="col-xs-8">
                                         <p>{{account.business.category}}</p>
@@ -310,8 +318,8 @@
                 </div>
                 </div> -->
 
-                <div class="col-sm-12">
-                    <div class="panel panel-default">
+                <div class="col-xs-12">
+                    <div class="panel panel-default row">
                         <div class="panel-heading">
                             <h3 class="panel-title">Transactions</h3>
                         </div>
@@ -470,14 +478,17 @@
     </div>
 
     <div class="rightpanel rightpanel-account">
-        <tabset>
-            <tab>
-                <tab-heading>
-                    <i class="fa fa-asterisk" tooltip-placement="bottom" tooltip="settings"></i>
-                </tab-heading>
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+
+        <div class="tab-content">
+            <div class="tab-pane pane-settings active" id="rp-settings">
+
                 <div class="rightpanelinner">
-                    <h5 class="sidebartitle">Settings</h5>
-                    <hr/>
                     <div id="current-settings">
                         <div class="radio">
                             <label>
@@ -496,361 +507,361 @@
                         </div>
                     </div>
                 </div>
-            </tab>
-        </tabset>
+            </div>
+        </div>
     </div>
 
     <div class="modal fade" id="billSummaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">Bill Summary</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <div class="mb40"></div>
-                                <h4 class="center">Amount Due</h4>
-                                <h1 class="center total">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}</h1>
-                            </div>
-                            <div class="col-xs-6">
-                                <h4>Current Payment:</h4>
-                                <span>due {{upcomingInvoice.period_end*1000 | date : 'longDate'}}</span>
-                                <!--<h4>Last Payment:</h4>-->
-                                <!--<span>recieved 01AUG14</span>-->
-                            </div>
-                            <div class="col-xs-6">
-                                {{subscription.plan.name}} Plan
-                            </div>
-                        </div>
-                        <div class="mb30"></div>
-                        <div class="table-responsive summary">
-                            <table class="table mb30">
-                                <thead>
-                                    <tr class="info">
-                                        <th>Item</th>
-                                        <th>Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="item in upcomingInvoice.lines.data">
-                                        <td>{{item.plan.statement_description}}</td>
-                                        <td>${{(item.amount/100).toFixed( 2 )}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="pull-right">
-                                                <h4>Sub-Total</h4>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <h4>${{(upcomingInvoice.subtotal/100).toFixed( 2 )}}</h4>
-                                        </td>
-                                    </tr>
-                                    <!--<tr>-->
-                                    <!--<td><span class="pull-right"><h4>Taxes</h4></span></td>-->
-                                    <!--<td><h4>3.86</h4></td>-->
-                                    <!--</tr>-->
-                                    <tr>
-                                        <td>
-                                            <span class="pull-right">
-                                                <h4>TOTAL</h4>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <h4>${{(upcomingInvoice.total/100).toFixed( 2 )}}</h4>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!--<div class="modal-footer">-->
-                    <!--<button type="button" class="btn btn-primary btn-lg btn-make-payment"-->
-                    <!--id="" data-dismiss="modal" data-toggle="modal" data-target="#payBillModal"><span class="fa fa-credit-card"></span> Pay Bill</button>-->
-                    <!--</div>-->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Bill Summary</h4>
                 </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="payBillModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">Verify Payment</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row mb20">
-                            <div class="col-xs-6">
-                                <div class="mb30"></div>
-                                <h4 class="center">Amount Due</h4>
-                                <h1 class="center total">$99.98</h1>
-                            </div>
-                            <div class="col-xs-6">
-                                <h4>Current Payment:</h4>
-                                <span>due 01SEP14</span>
-                                <h4>Period:</h4>
-                                <span>01AUG14 - 31AUG14</span>
-                            </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="mb40"></div>
+                            <h4 class="center">Amount Due</h4>
+                            <h1 class="center total">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}</h1>
                         </div>
-                        <hr></hr>
-                        <h4>Pay To:
-                            <span class="pull-right">Indigenous Software Inc.</span>
-                        </h4>
-                        <h4 class="pull-left">Payment Method:</h4>
-                        <span class="pull-right">
-                            <select class="form-control">
-                                <option>Visa xxxx-xxxx-xxxx-2345 06/15</option>
-                                <option>Mastercard xxxx-xxxx-xxxx-9894 09/15</option>
-                                <option>Paypal mypaypalemail@gmail.com</option>
-                            </select>
-                        </span>
-                        <div class="clearfix"></div>
-                        <!-- <h4>Date: <span class="pull-right">Monday, September 1st, 2014</span></h4> -->
-                        <!-- <h4>Amount: <span class="pull-right">$99.98</span></h4> -->
+                        <div class="col-xs-6">
+                            <h4>Current Payment:</h4>
+                            <span>due {{upcomingInvoice.period_end*1000 | date : 'longDate'}}</span>
+                            <!--<h4>Last Payment:</h4>-->
+                            <!--<span>recieved 01AUG14</span>-->
+                        </div>
+                        <div class="col-xs-6">
+                            {{subscription.plan.name}} Plan
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <label class="col-xs-9">Please verify the information above and click "Submit" to authorize us to complete your payment.</label>
-                        <button type="button" class="btn btn-success btn-lg btn-pay-bill" id="" data-dismiss="modal">
-                            <span class="fa fa-lock"></span>Submit</button>
+                    <div class="mb30"></div>
+                    <div class="table-responsive summary">
+                        <table class="table mb30">
+                            <thead>
+                                <tr class="info">
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in upcomingInvoice.lines.data">
+                                    <td>{{item.plan.statement_description}}</td>
+                                    <td>${{(item.amount/100).toFixed( 2 )}}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="pull-right">
+                                            <h4>Sub-Total</h4>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <h4>${{(upcomingInvoice.subtotal/100).toFixed( 2 )}}</h4>
+                                    </td>
+                                </tr>
+                                <!--<tr>-->
+                                <!--<td><span class="pull-right"><h4>Taxes</h4></span></td>-->
+                                <!--<td><h4>3.86</h4></td>-->
+                                <!--</tr>-->
+                                <tr>
+                                    <td>
+                                        <span class="pull-right">
+                                            <h4>TOTAL</h4>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <h4>${{(upcomingInvoice.total/100).toFixed( 2 )}}</h4>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+                <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-primary btn-lg btn-make-payment"-->
+                <!--id="" data-dismiss="modal" data-toggle="modal" data-target="#payBillModal"><span class="fa fa-credit-card"></span> Pay Bill</button>-->
+                <!--</div>-->
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="viewTransactionModal-{{invoice.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-repeat="invoice in invoices.data">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">Transaction #{{$index + 1}}</h4>
-                    </div>
-                    <div class="modal-body">
-                        <img src="../assets/images/paid-in-full.png" class="center paid" />
-                        <h4>Pay To:
-                            <span class="pull-right">Indigenous Software Inc.</span>
-                        </h4>
-                        <!--<h4>Payment Method: <span class="pull-right">Visa xxxx-xxxx-xxxx-2345 06/15</span></h4>-->
-                        <h4>Date:
-                            <span class="pull-right">{{invoice.date * 1000 | date : 'longDate'}}</span>
-                        </h4>
-                        <h4>Period:
-                            <span class="pull-right">{{invoice.lines.data[0].period.start * 1000 | date : 'longDate'}} - {{invoice.lines.data[0].period.end * 1000 | date : 'longDate'}}</span>
-                        </h4>
-                        <h4>Amount Paid:
-                            <span class="pull-right">${{(invoice.total/100).toFixed( 2 )}}</span>
-                        </h4>
-                    </div>
-                    <!--<div class="modal-footer">-->
-                    <!--<button type="button" class="btn btn-primary btn-lg btn-download-bill"-->
-                    <!--id="" data-dismiss="modal"><span class="fa fa-download"></span> Download</button>-->
-                    <!--<button type="button" class="btn btn-primary btn-lg btn-print-bill"-->
-                    <!--id="" data-dismiss="modal"><span class="fa fa-print"></span> Print</button>-->
-                    <!--</div>-->
+    <div class="modal fade" id="payBillModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Verify Payment</h4>
                 </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="facebookSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">Facebook Settings</h4>
-                    </div>
-                    <div class="modal-body">
-                        <h4>Facebook Admins:
-                            <span class="fa fa-info-circle"></span>
-                        </h4>
-                        <input type="text" placeholder="Facebook Admin ID" class="form-control mb15 input-lg">
-                        <div class="well">
-                            <h4>Facebook App:
-                                <span class="fa fa-info-circle"></span>
-                            </h4>
-                            <input type="text" placeholder="Facebook App ID" class="form-control mb15 input-lg">
-                            <input type="text" placeholder="Facebook App Secret" class="form-control mb15 input-lg">
+                <div class="modal-body">
+                    <div class="row mb20">
+                        <div class="col-xs-6">
+                            <div class="mb30"></div>
+                            <h4 class="center">Amount Due</h4>
+                            <h1 class="center total">$99.98</h1>
                         </div>
-                        <h4>Facebook Page:
-                            <span class="fa fa-info-circle"></span>
-                        </h4>
-                        <input type="text" placeholder="Facebook Page Url" class="form-control mb15 input-lg">
-
-                        <h4>Landing Page Redirect:
-                            <span class="fa fa-info-circle"></span>
-                        </h4>
-                        <select class="form-control input-lg">
-                            <option>Landing Page 1</option>
-                            <option>Landing Page 2</option>
-                            <option>Landing Page 3</option>
+                        <div class="col-xs-6">
+                            <h4>Current Payment:</h4>
+                            <span>due 01SEP14</span>
+                            <h4>Period:</h4>
+                            <span>01AUG14 - 31AUG14</span>
+                        </div>
+                    </div>
+                    <hr></hr>
+                    <h4>Pay To:
+                        <span class="pull-right">Indigenous Software Inc.</span>
+                    </h4>
+                    <h4 class="pull-left">Payment Method:</h4>
+                    <span class="pull-right">
+                        <select class="form-control">
+                            <option>Visa xxxx-xxxx-xxxx-2345 06/15</option>
+                            <option>Mastercard xxxx-xxxx-xxxx-9894 09/15</option>
+                            <option>Paypal mypaypalemail@gmail.com</option>
                         </select>
-
-                    </div>
-                    <div class="modal-footer">
-                        <span>Last synced 3hrs ago</span>
-                        <button type="button" class="btn btn-primary btn-lg btn-print-bill" id="" data-dismiss="modal">
-                            <span class="fa fa-repeat"></span>Sync</button>
-                    </div>
+                    </span>
+                    <div class="clearfix"></div>
+                    <!-- <h4>Date: <span class="pull-right">Monday, September 1st, 2014</span></h4> -->
+                    <!-- <h4>Amount: <span class="pull-right">$99.98</span></h4> -->
+                </div>
+                <div class="modal-footer">
+                    <label class="col-xs-9">Please verify the information above and click "Submit" to authorize us to complete your payment.</label>
+                    <button type="button" class="btn btn-success btn-lg btn-pay-bill" id="" data-dismiss="modal">
+                        <span class="fa fa-lock"></span>Submit</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="planChangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">Plan Change</h4>
+    <div class="modal fade" id="viewTransactionModal-{{invoice.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-repeat="invoice in invoices.data">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Transaction #{{$index + 1}}</h4>
+                </div>
+                <div class="modal-body">
+                    <img src="../assets/images/paid-in-full.png" class="center paid" />
+                    <h4>Pay To:
+                        <span class="pull-right">Indigenous Software Inc.</span>
+                    </h4>
+                    <!--<h4>Payment Method: <span class="pull-right">Visa xxxx-xxxx-xxxx-2345 06/15</span></h4>-->
+                    <h4>Date:
+                        <span class="pull-right">{{invoice.date * 1000 | date : 'longDate'}}</span>
+                    </h4>
+                    <h4>Period:
+                        <span class="pull-right">{{invoice.lines.data[0].period.start * 1000 | date : 'longDate'}} - {{invoice.lines.data[0].period.end * 1000 | date : 'longDate'}}</span>
+                    </h4>
+                    <h4>Amount Paid:
+                        <span class="pull-right">${{(invoice.total/100).toFixed( 2 )}}</span>
+                    </h4>
+                </div>
+                <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-primary btn-lg btn-download-bill"-->
+                <!--id="" data-dismiss="modal"><span class="fa fa-download"></span> Download</button>-->
+                <!--<button type="button" class="btn btn-primary btn-lg btn-print-bill"-->
+                <!--id="" data-dismiss="modal"><span class="fa fa-print"></span> Print</button>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="facebookSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Facebook Settings</h4>
+                </div>
+                <div class="modal-body">
+                    <h4>Facebook Admins:
+                        <span class="fa fa-info-circle"></span>
+                    </h4>
+                    <input type="text" placeholder="Facebook Admin ID" class="form-control mb15 input-lg">
+                    <div class="well">
+                        <h4>Facebook App:
+                            <span class="fa fa-info-circle"></span>
+                        </h4>
+                        <input type="text" placeholder="Facebook App ID" class="form-control mb15 input-lg">
+                        <input type="text" placeholder="Facebook App Secret" class="form-control mb15 input-lg">
                     </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-xs-12 col-md-4 col-md-offset-2">
-                                <div class="panel  panel-selected plan-selected">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">
-                                            Monthly</h3>
+                    <h4>Facebook Page:
+                        <span class="fa fa-info-circle"></span>
+                    </h4>
+                    <input type="text" placeholder="Facebook Page Url" class="form-control mb15 input-lg">
+
+                    <h4>Landing Page Redirect:
+                        <span class="fa fa-info-circle"></span>
+                    </h4>
+                    <select class="form-control input-lg">
+                        <option>Landing Page 1</option>
+                        <option>Landing Page 2</option>
+                        <option>Landing Page 3</option>
+                    </select>
+
+                </div>
+                <div class="modal-footer">
+                    <span>Last synced 3hrs ago</span>
+                    <button type="button" class="btn btn-primary btn-lg btn-print-bill" id="" data-dismiss="modal">
+                        <span class="fa fa-repeat"></span>Sync</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="planChangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Plan Change</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-4 col-md-offset-2">
+                            <div class="panel  panel-selected plan-selected">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Monthly</h3>
+                                </div>
+                                <div class="panel-body center">
+                                    <div class="the-price">
+                                        <h1>
+                                            $49.95
+                                            <span class="subscript">/mo</span>
+                                        </h1>
+                                        <small>
+                                            <p>$599.40 Annually</p>
+                                        </small>
                                     </div>
-                                    <div class="panel-body center">
-                                        <div class="the-price">
-                                            <h1>
-                                                $49.95
-                                                <span class="subscript">/mo</span>
-                                            </h1>
-                                            <small>
-                                                <p>$599.40 Annually</p>
-                                            </small>
-                                        </div>
-                                        <table class="table">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        1 Account
-                                                    </td>
-                                                </tr>
-                                                <tr class="active">
-                                                    <td>
-                                                        1 Project
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        100K API Access
-                                                    </td>
-                                                </tr>
-                                                <tr class="active">
-                                                    <td>
-                                                        100MB Storage
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Custom Cloud Services
-                                                    </td>
-                                                </tr>
-                                                <tr class="active">
-                                                    <td>
-                                                        Weekly Reports
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="panel-footer">
-                                        <a ng-click="switchPlanFn('monthly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
-                                    </div>
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    1 Account
+                                                </td>
+                                            </tr>
+                                            <tr class="active">
+                                                <td>
+                                                    1 Project
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    100K API Access
+                                                </td>
+                                            </tr>
+                                            <tr class="active">
+                                                <td>
+                                                    100MB Storage
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Custom Cloud Services
+                                                </td>
+                                            </tr>
+                                            <tr class="active">
+                                                <td>
+                                                    Weekly Reports
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+                                    <a ng-click="switchPlanFn('monthly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-md-4">
-                                <div class="panel panel-selected plan-selected">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">
-                                            Annually</h3>
-                                    </div>
-                                    <div class="panel-body center">
-                                        <div class="the-price">
-                                            <h1>
-                                                $395
-                                                <span class="subscript">/yr</span>
-                                            </h1>
-                                            <small>
-                                                <p class="center">$32.91/mo with $200 Savings</p>
-                                            </small>
-                                        </div>
-                                        <table class="table">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        2 Account
-                                                    </td>
-                                                </tr>
-                                                <tr class="active">
-                                                    <td>
-                                                        5 Project
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        100K API Access
-                                                    </td>
-                                                </tr>
-                                                <tr class="active">
-                                                    <td>
-                                                        200MB Storage
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Custom Cloud Services
-                                                    </td>
-                                                </tr>
-                                                <tr class="active">
-                                                    <td>
-                                                        Weekly Reports
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="panel-footer">
-                                        <a ng-click="switchPlanFn('yearly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="clearfix mb30"></div>
                         </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="panel panel-selected plan-selected">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        Annually</h3>
+                                </div>
+                                <div class="panel-body center">
+                                    <div class="the-price">
+                                        <h1>
+                                            $395
+                                            <span class="subscript">/yr</span>
+                                        </h1>
+                                        <small>
+                                            <p class="center">$32.91/mo with $200 Savings</p>
+                                        </small>
+                                    </div>
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    2 Account
+                                                </td>
+                                            </tr>
+                                            <tr class="active">
+                                                <td>
+                                                    5 Project
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    100K API Access
+                                                </td>
+                                            </tr>
+                                            <tr class="active">
+                                                <td>
+                                                    200MB Storage
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Custom Cloud Services
+                                                </td>
+                                            </tr>
+                                            <tr class="active">
+                                                <td>
+                                                    Weekly Reports
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+                                    <a ng-click="switchPlanFn('yearly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix mb30"></div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="changeCardModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">Change Payment Method</h4>
-                    </div>
-                    <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn'></div>
+    <div class="modal fade" id="changeCardModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Change Payment Method</h4>
                 </div>
+                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn'></div>
             </div>
         </div>
+    </div>
 </div>
