@@ -15436,6 +15436,12 @@ strong {
   font-family: 'LatoBold';
   font-weight: normal;
 }
+.headerbg {
+  background: #272727;
+  height: 63px;
+  position: absolute;
+  width: 100%;
+}
 .mainpanel {
   background: #e7e7e7;
 }

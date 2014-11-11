@@ -1,5 +1,5 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'googleLogin', 'secTotime', 'formatPercentage', 'dashboardService'], function(app) {
-    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'googleLogin', 'dashboardService', function($scope, $window, $resource, ngProgress, PaymentService, googleLogin, dashboardService) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService'], function(app) {
+    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService) {
         ngProgress.start();
 
         $scope.activeTab = 'analytics';

@@ -22,16 +22,12 @@ define(['app'], function (app) {
         };
 
         this.checkToken = function(fn) {
-            console.log('checking token >>> ', token);
             // this.login(fn);
             if (!token) {
-                console.log('token exists');
                  this.getAccessToken(fn, function(data) {
-                    console.log('<<< checking token ', data);
                     fn(data);
                  });
             } else {
-                console.log('token exists');
                 fn(true);
             }
         };
@@ -43,7 +39,6 @@ define(['app'], function (app) {
         };
 
         this.getAccessToken = function (fn) {
-            console.log('getting access token >>> ');
             var self = this;
             var apiUrl = '/api/1.0/' + ['social', 'google', 'accesstoken'].join('/');
             $http({
@@ -51,7 +46,6 @@ define(['app'], function (app) {
                 method: 'GET'
               })
               .success(function(data, status, headers, config) {
-                console.log('<<< getting access token ', data);
                 fn(data);
                 token = data.data;
               })
