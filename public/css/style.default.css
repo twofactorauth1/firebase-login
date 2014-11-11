@@ -16699,7 +16699,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   box-shadow: none;
   height: auto;
   margin: 0;
-  min-height: inherit;
+  min-height: 0;
   padding: 0;
 }
 .tb-col .people-item .media-object {
