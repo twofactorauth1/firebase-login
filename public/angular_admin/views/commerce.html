@@ -58,14 +58,14 @@
 		<headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
 			<div class="panel panel-default row commerce-filter">
 				<div class="panel-body">
-					<div class="col-sm-6">
-						<input type="text" placeholder="Search Products"
+					<div class="col-xs-6">
+						<input type="text" placeholder="Search"
 							class="form-control input-lg" ng-model="productSearch.name"/>
 					</div>
-					<div class="col-sm-6 form-horizontal">
+					<div class="col-xs-6 form-horizontal">
 						<div class="form-group row">
 							<select class=" form-control chosen-select input-lg">
-								<option value="">Filter Products</option>
+								<option value="">Filter</option>
 							</select>
 						</div>
 					</div>
@@ -76,9 +76,8 @@
 		<div class="products-list">
 			<div class="row">
 
-				<div class="visible-xs col-xs-10">
+				<div class="hidden col-xs-10">
 					<h3>No Products Available</h3>
-
 				</div>
 
 				<div class="col-xs-12 col-sm-4" ng-repeat="product in products | filter:productSearch">
