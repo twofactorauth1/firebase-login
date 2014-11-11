@@ -238,6 +238,14 @@ define(['app', 'constants', 'importContactService'], function(app) {
         });
     };
 
+    this.getAllCustomerActivities = function(fn) {
+      var apiUrl = baseUrl + ['contact', 'activity'].join('/');
+      $http.get(apiUrl)
+        .success(function(data, status, headers, config) {
+          fn(data);
+        });
+    };
+
     this.getActivityTypes = function(fn) {
       var activityTypes = $$.constants.contact.customer_activity_types.dp;
       fn(activityTypes);

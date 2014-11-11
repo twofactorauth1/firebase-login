@@ -71,14 +71,14 @@
                                 <div class="col-xs-6 top-four">
                                     <div class="metric center">New Customers</div>
                                     <div class="title center">
-                                        {{pageviews}}
+                                        {{totalPayingCustomers}}
                                         <span class="percent" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}%</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 top-four">
                                     <div class="metric center">Cancelations</div>
                                     <div class="title center">
-                                        {{visits}}
+                                        {{totalCanceledSubscriptions}}
                                         <span class="percent" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
                                     </div>
                                 </div>

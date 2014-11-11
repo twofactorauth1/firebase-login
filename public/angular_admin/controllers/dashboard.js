@@ -1,5 +1,5 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService'], function(app) {
-    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService', 'customerService'], function(app) {
+    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService) {
         ngProgress.start();
 
         $scope.activeTab = 'activity';
@@ -11,6 +11,10 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             protocol: "https",
             host: "api.keen.io/3.0",
             requestType: "jsonp"
+        });
+
+        CustomerService.getAllCustomerActivities(function(data) {
+            console.log('data >>> ', data);
         });
 
         dashboardService.checkToken(function(data) {
@@ -584,6 +588,12 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         $scope.customers = data;
 
                         // ======================================
+                        // Total Customer Metric
+                        // ======================================
+
+                        $scope.totalCustomers = $scope.customers.length;
+
+                        // ======================================
                         // Monthly Recurring Revenue Metric
                         // Monthly Recurring = Avg Revenue Per Customer * # of Customers
                         // ======================================
@@ -620,6 +630,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         var canceledSubscriptions = new Keen.Query("count", {
                             eventCollection: "Stripe_Events",
                             timeframe: "last_30_days",
+                            interval: 'daily',
                             filters: [{
                                 "property_name": "type",
                                 "operator": "eq",
@@ -627,13 +638,40 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             }]
                         });
 
+                        // =========================================
+                        // Create Unique Paying Customers Line Chart
+                        // =========================================
 
-                        client.run([monthlyRecurringRevenue, activeSubscriptions, canceledSubscriptions], function(response) {
+                        var payingCustomersSeries = new Keen.Query('count_unique', {
+                            eventCollection: 'Stripe_Events',
+                            timeframe: 'last_30_days',
+                            targetProperty: 'data.object.customer',
+                            interval: 'daily',
+                            filters: [{
+                                'property_name':'type',
+                                'operator':'eq',
+                                'property_value':'invoice.payment_succeeded'
+                            },
+                            {
+                                'property_name':'data.object.total',
+                                'operator':'gt',
+                                'property_value': 0
+                            }]
+                        });
+
+
+                        client.run([monthlyRecurringRevenue, activeSubscriptions, canceledSubscriptions, payingCustomersSeries], function(response) {
                             var totalRevenue = this.data[0].result;
                             var numOfCustomers = $scope.customers.length;
                             var avgRevenue = totalRevenue / numOfCustomers;
                             var result = avgRevenue * numOfCustomers;
                             $scope.monthlyRecurringRevenue = result / 100;
+
+                            // ======================================
+                            // Average Revenue Per Customer Metric
+                            // ======================================
+
+                            $scope.avgRevenue = avgRevenue;
 
                             // ======================================
                             // Annual Run Rate Metric
@@ -656,7 +694,14 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             // Churn = canceled subscriptions / (canceled subscriptions + active subscriptions)
                             // ======================================
 
-                            $scope.canceledSubscriptions = this.data[2].result;
+                            var cancelSubscriptionData = [];
+                            $scope.totalCanceledSubscriptions = 0;
+                            for (var i = 0; i < this.data[2].result.length; i++) {
+                                cancelSubscriptionData.push(this.data[2].result[i].value);
+                                $scope.totalCanceledSubscriptions += parseInt(this.data[2].result[i].value);
+                            };
+                            $scope.canceledSubscriptions = cancelSubscriptionData;
+
                             var userChurnCalc = this.data[2].result / (this.data[2].result + this.data[1].result) * 100;
                             $scope.userChurn = userChurnCalc.toFixed(1) * -1;
 
@@ -665,33 +710,66 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             // LTV =  ARPU / Churn
                             // ======================================
                             $scope.lifetimeValue = $scope.arpu / $scope.userChurn;
+
+
+                            var totalCustomerData = [];
+                            $scope.totalPayingCustomers = 0;
+                            for (var i = 0; i < this.data[3].result.length; i++) {
+                                totalCustomerData.push(this.data[3].result[i].value);
+                                $scope.totalPayingCustomers += this.data[3].result[i].value;
+                            };
+
+                            console.log('$scope.canceledSubscriptions >>> ', $scope.canceledSubscriptions);
+                            $scope.customerOverviewConfig = {
+                                options: {
+                                    chart: {
+                                        height: 250,
+                                    },
+                                    title: {
+                                        text: ''
+                                    },
+                                    tooltip: {
+                                        pointFormat: '<b>{point.y}</b>'
+                                    },
+                                    exporting: {
+                                        enabled: false
+                                    }
+                                },
+                                xAxis: {
+                                    type: 'datetime',
+                                    labels: {
+                                        format: "{value:%b %d}"
+                                    },
+                                    minRange: 30 * 24 * 3600000 // fourteen days
+                                },
+                                yAxis: {
+                                    min: 0,
+                                    max: Math.max.apply(Math, totalCustomerData) + 100,
+                                    title: {
+                                        text: ''
+                                    }
+                                },
+                                series: [{
+                                    type: 'area',
+                                    name: 'Customers',
+                                    pointInterval: 24 * 3600 * 1000,
+                                    pointStart: Date.parse(this.data[3].result[0].timeframe.start),
+                                    color: '#ef9f22',
+                                    data: totalCustomerData
+                                },
+                                {
+                                    type: 'area',
+                                    name: 'Cancellations',
+                                    pointInterval: 24 * 3600 * 1000,
+                                    pointStart: Date.parse(this.data[2].result[0].timeframe.start),
+                                    data: cancelSubscriptionData
+                                }],
+                                credits: {
+                                    enabled: false
+                                }
+                            };
                         });
 
-                        filters: [{
-                            "property_name": "type",
-                            "operator": "eq",
-                            "property_value": "customer.subscription.created"
-                        }, {
-                            "property_name": "data.object.status",
-                            "operator": "eq",
-                            "property_value": "active"
-                        }]
-
-                        // ======================================
-                        // Average Revenue Per Customer Metric
-                        // ======================================
-
-                        client.run(monthlyRecurringRevenue, function(response) {
-                            var totalRevenue = this.data.result;
-                            var numOfCustomers = $scope.customers.length;
-                            $scope.avgRevenue = totalRevenue / numOfCustomers / 100;
-                        });
-
-                        // ======================================
-                        // Total Customer Metric
-                        // ======================================
-
-                        $scope.totalCustomers = $scope.customers.length;
 
                     }); //end PaymentService.getCustomers
 
@@ -821,7 +899,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                 }); //gapi ready
 
             }); //keen ready
-
         });
 
         $scope.purchaseFunnelConfig = {
@@ -1098,62 +1175,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
         };
 
         $scope.pageLimit = 15;
-
-        $scope.customerOverviewConfig = {
-            options: {
-                chart: {
-                    height: 250,
-                },
-                title: {
-                    text: ''
-                },
-                tooltip: {
-                    pointFormat: '{point.x}: <b>{point.percentage:.1f}%</b>'
-                },
-                plotOptions: {
-                    pie: {
-                        dataLabels: {
-                            enabled: true,
-                            distance: -50,
-                            style: {
-                                fontWeight: 'bold',
-                                color: 'white',
-                                textShadow: '0px 1px 2px black'
-                            }
-                        },
-                        colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
-                    }
-                },
-                exporting: {
-                    enabled: false
-                }
-            },
-            series: [{
-                type: 'column',
-                name: 'Jane',
-                data: [3, 2, 1, 3, 4]
-            }, {
-                type: 'column',
-                name: 'John',
-                data: [2, 3, 5, 7, 6]
-            }, {
-                type: 'column',
-                name: 'Joe',
-                data: [4, 3, 3, 9, 0]
-            }, {
-                type: 'spline',
-                name: 'Average',
-                data: [3, 2.67, 3, 6.33, 3.33],
-                marker: {
-                    lineWidth: 2,
-                    lineColor: Highcharts.getOptions().colors[3],
-                    fillColor: 'white'
-                }
-            }],
-            credits: {
-                enabled: false
-            }
-        };
 
         $scope.pageChangeFn = function(currentPage, totalPages) {
             var begin = ((currentPage - 1) * $scope.pageLimit);
