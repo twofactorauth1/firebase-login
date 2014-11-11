@@ -349,12 +349,17 @@ define([
                 WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id,  $scope.currentPage, function(data) {
                     toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                     $scope.isEditing = false;
-                    $scope.deactivateAloha();
                     iFrame.contentWindow.triggerEditModeOff();
                     iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
+                    document.getElementById('iframe-website').contentWindow.location.reload(true);
+                    $scope.deactivateAloha();
+
                     if ( iFrame.contentWindow.savePostMode ) {
                         iFrame.contentWindow.savePostMode();
                     }
+               //     document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
+
+
                 });
 
                 var data = {
