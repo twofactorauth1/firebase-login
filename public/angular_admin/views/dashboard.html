@@ -725,6 +725,62 @@
         </div>
 
         <div class="support-section" ng-show="activeTab == 'support'">
+            <!-- # of Conversations -->
+             <div class="col-xs-12">
+                    <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <div class="panel-btns">
+                                <a data-toggle="modal" data-target="#visitor-overview" class="panel-edit"><i class="fa fa-info-circle"></i></a>
+                            </div>
+                            <h3 class="panel-title">Conversations</h3>
+                        </div>
+                        <div class="panel-body">
+                            <highchart config="conversationsConfig"></highchart>
+                            <div>
+                                <div class="col-sm-4 col-xs-6 top-four">
+                                    <div class="metric center">Conversations</div>
+                                    <div class="title center">
+                                        {{pageviews}}
+                                        <span class="percent" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}%</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-xs-6 top-four">
+                                    <div class="metric center">Avg Customer per Day</div>
+                                    <div class="title center">
+                                        {{visits}}
+                                        <span class="percent" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-xs-6 top-four">
+                                    <div class="metric center">Busiest Day / Time</div>
+                                    <div class="title center">
+                                        {{visitors}}
+                                        <span class="percent" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4">
+                    <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Response Time</h3>
+                        </div>
+                        <div class="panel-body">
+                            <highchart config="responseTimeConfig"></highchart>
+                        </div>
+                    </div>
+                </div>
+            <!-- Replied -->
+            <!-- Avg Reply Time -->
+            <!-- Avg 1st Reply Time -->
+            <!-- Avg Handle Time -->
+            <!-- Replies per Ticket -->
+            <!-- Total Ratings -->
+                <!-- Good -->
+                <!-- Okay -->
+                <!-- Bad -->
         </div>
 
         <!-- <div class="testing-section" ng-show="activeTab == 'testing'">
