@@ -205,7 +205,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         else
           $scope.showTwitterId = true;
       });
-      $scope.$watch('toggleLinkedInId', function(value) {
+      $scope.$watch('toggleLinkedId', function(value) {
         if (angular.isDefined(value))
           $scope.showLinkedInId = value;
         else
