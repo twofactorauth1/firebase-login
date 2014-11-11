@@ -41,7 +41,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     route = 'index';
                     route = route.replace('/', '');
                     that.pages = data[route];
-                    console.log('that.pages >>> ', that.pages);
                 } else {
                     route = $scope.$location.$$path.replace('/page/', '');
                     console.log('route ', route);
@@ -81,7 +80,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
 
         ProductService.getAllProducts(function(data) {
-            console.log('product service data >>> ', data);
             that.products = data;
         });
 
