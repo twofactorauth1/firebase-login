@@ -58,20 +58,17 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       return returnVal;
     };
 
-    $scope.orderByFn = function () {
+    $scope.orderByFn = function() {
       $scope.fetchedCustomers = $filter('orderBy')($scope.fetchedCustomers, $scope.customerOrder, $scope.customerSortReverse);
+      $scope.renderedCustomers = $filter('orderBy')($scope.renderedCustomers, $scope.customerOrder, $scope.customerSortReverse);
     };
 
-    $scope.$watch('customerOrder', function (newValue, oldValue) {
-      if (newValue) {
-        $scope.orderByFn();
-      }
+    $scope.$watch('customerOrder', function(newValue, oldValue) {
+      $scope.orderByFn();
     });
 
-    $scope.$watch('customerSortReverse', function (newValue, oldValue) {
-      if (newValue) {
-        $scope.orderByFn();
-      }
+    $scope.$watch('customerSortReverse', function(newValue, oldValue) {
+      $scope.orderByFn();
     });
 
     var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
@@ -124,27 +121,25 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
 
       $scope.$watch('sortOrder', function(newValue, oldValue) {
-        if (newValue) {
-          newValue = parseInt(newValue);
-          if (newValue === 0) {
-            $scope.customerOrder = 'first';
-            $scope.customerSortReverse = false;
-          } else if (newValue == 1) {
-            $scope.customerOrder = 'first';
-            $scope.customerSortReverse = false;
-          } else if (newValue == 2) {
-            $scope.customerOrder = 'first';
-            $scope.customerSortReverse = true;
-          } else if (newValue == 3) {
-            $scope.customerOrder = 'created.date';
-            $scope.customerSortReverse = false;
-          } else if (newValue == 4) {
-            $scope.customerOrder = 'last';
-            $scope.customerSortReverse = false;
-          } else if (newValue == 5) {
-            $scope.customerOrder = 'lastActivity';
-            $scope.customerSortReverse = true;
-          }
+        newValue = parseInt(newValue);
+        if (newValue === 0) {
+          $scope.customerOrder = 'first';
+          $scope.customerSortReverse = false;
+        } else if (newValue == 1) {
+          $scope.customerOrder = 'first';
+          $scope.customerSortReverse = false;
+        } else if (newValue == 2) {
+          $scope.customerOrder = 'first';
+          $scope.customerSortReverse = true;
+        } else if (newValue == 3) {
+          $scope.customerOrder = 'created.date';
+          $scope.customerSortReverse = false;
+        } else if (newValue == 4) {
+          $scope.customerOrder = 'last';
+          $scope.customerSortReverse = false;
+        } else if (newValue == 5) {
+          $scope.customerOrder = 'lastActivity';
+          $scope.customerSortReverse = true;
         }
       });
 
