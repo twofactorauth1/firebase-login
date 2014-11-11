@@ -61,18 +61,15 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
     $scope.orderByFn = function () {
       $scope.fetchedCustomers = $filter('orderBy')($scope.fetchedCustomers, $scope.customerOrder, $scope.customerSortReverse);
+      $scope.renderedCustomers = $filter('orderBy')($scope.renderedCustomers, $scope.customerOrder, $scope.customerSortReverse);
     };
 
     $scope.$watch('customerOrder', function (newValue, oldValue) {
-      if (newValue) {
-        $scope.orderByFn();
-      }
+      $scope.orderByFn();
     });
 
     $scope.$watch('customerSortReverse', function (newValue, oldValue) {
-      if (newValue) {
-        $scope.orderByFn();
-      }
+      $scope.orderByFn();
     });
 
     var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
