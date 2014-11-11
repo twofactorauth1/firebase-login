@@ -6394,7 +6394,7 @@ h4,
   border-bottom: 0;
 }
 .panel-success .panel-heading {
-  background-color: #54C8E8;
+  background-color: #1CAF9A;
 }
 .panel-warning .panel-heading {
   background-color: #F0AD4E;

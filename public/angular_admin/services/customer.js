@@ -37,7 +37,6 @@ define(['app', 'constants', 'importContactService'], function(app) {
           })
           .success(function(data, status, headers, config) {
             cache.put('customers', data);
-            console.info('Customers call set in cache');
             fn(data);
           });
       }

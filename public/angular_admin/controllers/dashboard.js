@@ -2,7 +2,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
     app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService) {
         ngProgress.start();
 
-        $scope.activeTab = 'analytics';
+        $scope.activeTab = 'activity';
 
         var client = new Keen({
             projectId: "54528c1380a7bd6a92e17d29",
@@ -1098,6 +1098,62 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
         };
 
         $scope.pageLimit = 15;
+
+        $scope.customerOverviewConfig = {
+            options: {
+                chart: {
+                    height: 250,
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{point.x}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        dataLabels: {
+                            enabled: true,
+                            distance: -50,
+                            style: {
+                                fontWeight: 'bold',
+                                color: 'white',
+                                textShadow: '0px 1px 2px black'
+                            }
+                        },
+                        colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
+                    }
+                },
+                exporting: {
+                    enabled: false
+                }
+            },
+            series: [{
+                type: 'column',
+                name: 'Jane',
+                data: [3, 2, 1, 3, 4]
+            }, {
+                type: 'column',
+                name: 'John',
+                data: [2, 3, 5, 7, 6]
+            }, {
+                type: 'column',
+                name: 'Joe',
+                data: [4, 3, 3, 9, 0]
+            }, {
+                type: 'spline',
+                name: 'Average',
+                data: [3, 2.67, 3, 6.33, 3.33],
+                marker: {
+                    lineWidth: 2,
+                    lineColor: Highcharts.getOptions().colors[3],
+                    fillColor: 'white'
+                }
+            }],
+            credits: {
+                enabled: false
+            }
+        };
 
         $scope.pageChangeFn = function(currentPage, totalPages) {
             var begin = ((currentPage - 1) * $scope.pageLimit);
