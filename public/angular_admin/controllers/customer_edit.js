@@ -197,9 +197,18 @@ define(['app',
         }
       };
 
+      $scope.savePreferencesFnWait = false;
+
       $scope.savePreferencesFn = function() {
-        UserService.updateUserPreferences($scope.userPreferences, function(preferences) {});
-        $scope.restoreFn();
+        if ($scope.savePreferencesFnWait) {
+          return;
+        }
+        $scope.savePreferencesFnWait = true;
+        setTimeout(function() {
+          UserService.updateUserPreferences($scope.userPreferences, function(preferences) {});
+          $scope.restoreFn();
+          $scope.savePreferencesFnWait = false;
+        }, 1500);
       };
 
       if ($scope.customerId) {
