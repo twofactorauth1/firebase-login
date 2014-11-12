@@ -64,8 +64,12 @@
 					</div>
 					<div class="col-xs-6 form-horizontal">
 						<div class="form-group row">
-							<select class=" form-control chosen-select input-lg">
-								<option value="">Filter</option>
+
+							<select class="form-control chosen-select input-lg" ng-model="sortOrder">
+								<option value="" disabled selected>Filter Contacts</option>
+								<option value="1">A to Z</option>
+								<option value="2">Z to A</option>
+								<option value="3">Date Added</option>
 							</select>
 						</div>
 					</div>
@@ -80,7 +84,7 @@
 					<h3>No Products Available</h3>
 				</div>
 
-				<div class="col-xs-12 col-sm-4" ng-repeat="product in products | filter:productSearch">
+				<div class="col-xs-12 col-sm-4" ng-repeat="product in products | filter : productSearch | orderBy : productOrder : productSortReverse">
 					<a href="#/commerce/edit/{{product._id}}">
 						<div class="commerce-item btn-view-product-details"
 							data-productid="1">

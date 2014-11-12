@@ -1,16 +1,15 @@
-define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngProgress', 'headroom', 'ngHeadroom', 'toasterService', 'iStartsWithFilter', 'ngInfiniteScroll', 'scrollerDirective'], function(app) {
-  app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', '$filter', function($scope, CustomerService, ngProgress, ToasterService, $window, $filter) {
+define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngProgress', 'headroom', 'ngHeadroom', 'toasterService', 'iStartsWithFilter', 'ngInfiniteScroll', 'scrollerDirective', 'userService'], function(app) {
+  app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', '$filter', 'UserService', function($scope, CustomerService, ngProgress, ToasterService, $window, $filter, UserService ) {
     ngProgress.start();
     $scope.customerFilter = {};
     $scope.customerOrder = 'first';
-    $scope.customerSortReverse = false;
-    $scope.customerDisplayFormat = 'first';
+    $scope.customerSortReverse = false;    
 
     $scope.customerScrollBusy = false;
     $scope.customerScrollLimit = 20;
     $scope.customerScrollOffset = 0;
     $scope.renderedCustomers = [];
-    $scope.gridViewDisplay = "true";
+    //$scope.gridViewDisplay = "true";    
 
     $scope.customerScrollFn = function() {
       if ($scope.fetchedCustomers) {
@@ -64,8 +63,33 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       $scope.renderedCustomers = $filter('orderBy')($scope.renderedCustomers, $scope.customerOrder, $scope.customerSortReverse);
     };
 
+    $scope.alphaList = [];
+
+    $scope.alphaFilterStatus = {};
+
+    $scope.alphaFilterStatusFn = function() {
+      var a = 97;
+      for (var i = 0; i < 26; i++) {
+        $scope.alphaList.push(String.fromCharCode(a + i));
+        $scope.alphaFilterStatus[String.fromCharCode(a + i)] = false;
+      }
+
+      $scope.fetchedCustomers.forEach(function(value, index) {
+        var field = null;
+        if ($scope.customerOrder === 'created.date') {
+          field = 'first';
+        } else {
+          field = $scope.customerOrder;
+        }
+        $scope.alphaFilterStatus[value[field].substring(0, 1).toLowerCase()] = true;
+      });
+    };
+
     $scope.$watch('customerOrder', function(newValue, oldValue) {
       $scope.orderByFn();
+      if ($scope.fetchedCustomers!==undefined) {
+        $scope.alphaFilterStatusFn();
+      }
     });
 
     $scope.$watch('customerSortReverse', function(newValue, oldValue) {
@@ -77,6 +101,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       $scope.fetchedCustomers = customers;
       $scope.orderByFn();
       $scope.customerScrollFn();
+      $scope.alphaFilterStatusFn();
       ngProgress.complete();
       ToasterService.processPending();
       $scope.$watch('searchBar', function(newValue, oldValue) {
@@ -112,11 +137,12 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         if (newValue) {
           newValue = parseInt(newValue);
           if (newValue == 1) {
-            $scope.customerDisplayFormat = 'first';
+            $scope.userPreferences.customerSettings.customerDisplayFormat = 'first';
           } else if (newValue == 2) {
-            $scope.customerDisplayFormat = 'last';
-
+            $scope.userPreferences.customerSettings.customerDisplayFormat = 'last';
           }
+          // Save user preferences 
+          $scope.savePreferencesFn();        
         }
       });
 
@@ -144,6 +170,13 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $scope.customerOrder = 'lastActivity';
           $scope.customerSortReverse = true;
         }
+        // Save user preferences 
+        if (newValue &&  $scope.userPreferences && $scope.userPreferences.customerSettings) {
+          $scope.userPreferences.customerSettings.customerOrder = $scope.customerOrder;
+          $scope.userPreferences.customerSettings.customerSortReverse = $scope.customerSortReverse;
+          $scope.savePreferencesFn();
+        }
+
       });
 
 
@@ -204,7 +237,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         else
           $scope.showTwitterId = true;
       });
-      $scope.$watch('toggleLinkedId', function(value) {
+      $scope.$watch('toggleLinkedInId', function(value) {
         if (angular.isDefined(value))
           $scope.showLinkedInId = value;
         else
@@ -217,7 +250,10 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $scope.showAddress = true;
       });
       $scope.setDefaultView=function(value) {      
-        $scope.gridViewDisplay = value;
+        //$scope.gridViewDisplay = value;   
+        // Save user preferences     
+        $scope.userPreferences.customerSettings.gridViewDisplay = value;
+        $scope.savePreferencesFn();
       }
       $scope.setImportantContact=function(customer) {  
         customer.starred = true;    
@@ -225,6 +261,31 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           ToasterService.show('success', "Contact updated succesfully.");
         })     
       }
+
+      UserService.getUserPreferences(function(preferences) {
+        $scope.userPreferences = preferences;
+        var customerSettings = $scope.userPreferences.customerSettings;
+        if(customerSettings)
+          {            
+            $scope.userPreferences.customerSettings = customerSettings;
+            $scope.customerOrder = $scope.userPreferences.customerSettings.customerOrder;
+            $scope.customerSortReverse = $scope.userPreferences.customerSettings.customerSortReverse;            
+          }
+        else
+          {
+            $scope.userPreferences.customerSettings = {
+                customerOrder : 'first',
+                customerSortReverse : false,
+                customerDisplayFormat : 'first',
+                gridViewDisplay : "true"
+              }
+          } 
+                 
+      }); 
+      $scope.savePreferencesFn = function() {
+        UserService.updateUserPreferences($scope.userPreferences, function(){})
+      };
+
     });
   }]);
 });
