@@ -10,6 +10,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     $scope.customerScrollLimit = 20;
     $scope.customerScrollOffset = 0;
     $scope.renderedCustomers = [];
+    $scope.gridViewDisplay = "true";
 
     $scope.customerScrollFn = function() {
       if ($scope.fetchedCustomers) {
@@ -242,6 +243,16 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         else
           $scope.showAddress = true;
       });
+      $scope.setDefaultView=function(value) {      
+        $scope.gridViewDisplay = value;
+      }
+      $scope.setImportantContact=function(customer) {  
+        customer.starred = true;    
+        CustomerService.saveCustomer(customer, function(customers) {
+          ToasterService.show('success', "Contact updated succesfully.");
+        })     
+      }
+
     });
   }]);
 });
