@@ -75,12 +75,21 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       }
 
       $scope.fetchedCustomers.forEach(function(value, index) {
-        $scope.alphaFilterStatus[value.first.substring(0, 1).toLowerCase()] = true;
+        var field = null;
+        if ($scope.customerOrder === 'created.date') {
+          field = 'first';
+        } else {
+          field = $scope.customerOrder;
+        }
+        $scope.alphaFilterStatus[value[field].substring(0, 1).toLowerCase()] = true;
       });
     };
 
     $scope.$watch('customerOrder', function(newValue, oldValue) {
       $scope.orderByFn();
+      if ($scope.fetchedCustomers!==undefined) {
+        $scope.alphaFilterStatusFn();
+      }
     });
 
     $scope.$watch('customerSortReverse', function(newValue, oldValue) {
