@@ -18,17 +18,17 @@ exports.subscription_dao_test = {
     setUp: function (cb) {
         var self = this;
         //delete all objects
-        if(!initialized) {
-            dao.findMany({}, $$.m.ContactActivity, function(err, list){
-                if(err) {
+        if (!initialized) {
+            dao.findMany({}, $$.m.ContactActivity, function (err, list) {
+                if (err) {
                     _log.error('Exception removing events.  Tests may not be accurate.');
                 } else {
                     async.each(list,
-                        function(activity, callback){
-                            dao.remove(activity, function(err, value){
+                        function (activity, callback) {
+                            dao.remove(activity, function (err, value) {
                                 callback();
                             });
-                        }, function(err){
+                        }, function (err) {
                             initialized = true;
                             cb();
                         });
@@ -44,7 +44,7 @@ exports.subscription_dao_test = {
         cb();
     },
 
-    testCreateContactActivity: function(test) {
+    testCreateContactActivity: function (test) {
 
         var date = new Date();
         testContext.date = date;
@@ -54,14 +54,14 @@ exports.subscription_dao_test = {
             contactId: 0,
             activityType: $$.m.ContactActivity.types.PAGE_VIEW,
             note: "Page View",
-            detail:"Viewed page",
-            duration:null,
-            start:date, //datestamp
-            end:date   //datestamp
+            detail: "Viewed page",
+            duration: null,
+            start: date, //datestamp
+            end: date   //datestamp
         });
 
-        manager.createActivity(ca, function(err, value){
-            if(err) {
+        manager.createActivity(ca, function (err, value) {
+            if (err) {
                 test.ok(false, 'Create activity failed.');
                 test.done();
             } else {
@@ -71,10 +71,10 @@ exports.subscription_dao_test = {
 
     },
 
-    testListActivities: function(test) {
+    testListActivities: function (test) {
         test.expect(2);
-        manager.listActivities(0, null, null, function(err, value){
-            if(err) {
+        manager.listActivities(0, null, null, function (err, value) {
+            if (err) {
                 test.ok(false, 'list activities failed.');
                 test.done();
             } else {
@@ -85,10 +85,10 @@ exports.subscription_dao_test = {
         });
     },
 
-    testListActivitiesByContactId: function(test) {
+    testListActivitiesByContactId: function (test) {
         test.expect(2);
-        manager.listActivitiesByContactId(0, 0, null, null, function(err, list){
-            if(err) {
+        manager.listActivitiesByContactId(0, 0, null, null, function (err, list) {
+            if (err) {
                 test.ok(false, 'list activities by contact failed.');
                 test.done();
             } else {
@@ -97,56 +97,56 @@ exports.subscription_dao_test = {
                 test.done();
             }
         });
+    },
+
+    testFindActivitiesByActivityType: function (test) {
+        test.expect(2);
+        var activityTypeAry = [$$.m.ContactActivity.types.PAGE_VIEW];
+
+        manager.findActivities(null, null, activityTypeAry, null, null, null, null, null, null, function (err, list) {
+            if (err) {
+                test.ok(false, 'list activities by activity type failed.');
+                test.done();
+            } else {
+                test.equals(1, list.length);
+                test.equals(0, list[0].get('contactId'));
+                test.done();
+            }
+        });
+
+    },
+
+    testFindActivitiesByText: function (test) {
+        var text = 'ge';
+        test.expect(2);
+        manager.findActivities(null, null, null, text, null, null, null, null, null, function (err, list) {
+            if (err) {
+                test.ok(false, 'list activities by text failed.');
+                test.done();
+            } else {
+                test.equals(1, list.length);
+                test.equals(0, list[0].get('contactId'));
+                test.done();
+            }
+        });
+    },
+
+    testFindActivitiesByDateRange: function (test) {
+        var date = testContext.date;
+
+        manager.findActivities(null, null, null, null, null, date, date, null, null, function (err, list) {
+            if (err) {
+                test.ok(false, 'list activities by date range.');
+                test.done();
+            } else {
+                test.equals(1, list.length);
+                test.equals(0, list[0].get('contactId'));
+                test.done();
+            }
+        });
+
+
     }
-
-    // testFindActivitiesByActivityType: function(test) {
-    //     test.expect(2);
-    //     var activityTypeAry = [$$.m.ContactActivity.types.PAGE_VIEW];
-
-    //     manager.findActivities(null, null, activityTypeAry, null, null, null, null, null, null, function(err, list){
-    //         if(err) {
-    //             test.ok(false, 'list activities by activity type failed.');
-    //             test.done();
-    //         } else {
-    //             test.equals(1, list.length);
-    //             test.equals(0, list[0].get('contactId'));
-    //             test.done();
-    //         }
-    //     });
-
-    // },
-
-    // testFindActivitiesByText: function(test) {
-    //     var text = 'ge';
-    //     test.expect(2);
-    //     manager.findActivities(null, null, null, text, null, null, null, null, null, function(err, list){
-    //         if(err) {
-    //             test.ok(false, 'list activities by text failed.');
-    //             test.done();
-    //         } else {
-    //             test.equals(1, list.length);
-    //             test.equals(0, list[0].get('contactId'));
-    //             test.done();
-    //         }
-    //     });
-    // },
-
-    // testFindActivitiesByDateRange: function(test) {
-    //     var date = testContext.date;
-
-    //     manager.findActivities(null, null, null, null, null, date, date, null, null, function(err, list){
-    //         if(err) {
-    //             test.ok(false, 'list activities by date range.');
-    //             test.done();
-    //         } else {
-    //             test.equals(1, list.length);
-    //             test.equals(0, list[0].get('contactId'));
-    //             test.done();
-    //         }
-    //     });
-
-
-    // }
 
 
 
