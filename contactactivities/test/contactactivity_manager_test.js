@@ -97,56 +97,56 @@ exports.subscription_dao_test = {
                 test.done();
             }
         });
-    },
-
-    testFindActivitiesByActivityType: function(test) {
-        test.expect(2);
-        var activityTypeAry = [$$.m.ContactActivity.types.PAGE_VIEW];
-
-        manager.findActivities(null, null, activityTypeAry, null, null, null, null, null, null, function(err, list){
-            if(err) {
-                test.ok(false, 'list activities by activity type failed.');
-                test.done();
-            } else {
-                test.equals(1, list.length);
-                test.equals(0, list[0].get('contactId'));
-                test.done();
-            }
-        });
-
-    },
-
-    testFindActivitiesByText: function(test) {
-        var text = 'ge';
-        test.expect(2);
-        manager.findActivities(null, null, null, text, null, null, null, null, null, function(err, list){
-            if(err) {
-                test.ok(false, 'list activities by text failed.');
-                test.done();
-            } else {
-                test.equals(1, list.length);
-                test.equals(0, list[0].get('contactId'));
-                test.done();
-            }
-        });
-    },
-
-    testFindActivitiesByDateRange: function(test) {
-        var date = testContext.date;
-
-        manager.findActivities(null, null, null, null, null, date, date, null, null, function(err, list){
-            if(err) {
-                test.ok(false, 'list activities by date range.');
-                test.done();
-            } else {
-                test.equals(1, list.length);
-                test.equals(0, list[0].get('contactId'));
-                test.done();
-            }
-        });
-
-
     }
+
+    // testFindActivitiesByActivityType: function(test) {
+    //     test.expect(2);
+    //     var activityTypeAry = [$$.m.ContactActivity.types.PAGE_VIEW];
+
+    //     manager.findActivities(null, null, activityTypeAry, null, null, null, null, null, null, function(err, list){
+    //         if(err) {
+    //             test.ok(false, 'list activities by activity type failed.');
+    //             test.done();
+    //         } else {
+    //             test.equals(1, list.length);
+    //             test.equals(0, list[0].get('contactId'));
+    //             test.done();
+    //         }
+    //     });
+
+    // },
+
+    // testFindActivitiesByText: function(test) {
+    //     var text = 'ge';
+    //     test.expect(2);
+    //     manager.findActivities(null, null, null, text, null, null, null, null, null, function(err, list){
+    //         if(err) {
+    //             test.ok(false, 'list activities by text failed.');
+    //             test.done();
+    //         } else {
+    //             test.equals(1, list.length);
+    //             test.equals(0, list[0].get('contactId'));
+    //             test.done();
+    //         }
+    //     });
+    // },
+
+    // testFindActivitiesByDateRange: function(test) {
+    //     var date = testContext.date;
+
+    //     manager.findActivities(null, null, null, null, null, date, date, null, null, function(err, list){
+    //         if(err) {
+    //             test.ok(false, 'list activities by date range.');
+    //             test.done();
+    //         } else {
+    //             test.equals(1, list.length);
+    //             test.equals(0, list[0].get('contactId'));
+    //             test.done();
+    //         }
+    //     });
+
+
+    // }
 
 
 
