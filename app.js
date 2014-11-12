@@ -149,6 +149,15 @@ app.use(function (req, res, next) {
     next();
 });
 
+// Middleware for login redirect
+app.use(function (req, res, next) {
+  var paths = ['/login', '/login/'];
+  if ((paths.indexOf(req.path)>=0) && req.user!==undefined) {
+    req.redirect('/admin');
+  }
+  next();
+});
+
 //app.use(express.session({ secret:'mys3cr3ts3sEss10n' }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -342,4 +351,3 @@ process.on('uncaughtException', function (err) {
     process.exit(1);
     //});
 });
-
