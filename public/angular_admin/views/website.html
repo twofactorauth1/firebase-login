@@ -194,6 +194,10 @@
                                 <label for="colorpicker">Button:</label>
                                 <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
                             </div>
+                            <div class="form-group">
+                                <label for="colorpicker">Blur Background</label>
+                                <input bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                            </div>
                         </accordion-group>
                         <accordion-group is-open="status2.open">
                             <accordion-heading>
