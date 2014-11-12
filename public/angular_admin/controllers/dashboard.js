@@ -25,9 +25,10 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                     console.log('customer >>> ', customer);
                     console.log('customer[0] >>> ', customer[0]);
                     activites[i]['customer'] = customer[0];
+                    activites[i]['activityType'] = activites[i]['activityType'];
                     console.log('activites[i] >>> ', activites[i]);
                 };
-                $scope.activities = activites;
+                $scope.activities = _.sortBy(activites, function(o) { return o.start; }).reverse();
 
             });
         });
