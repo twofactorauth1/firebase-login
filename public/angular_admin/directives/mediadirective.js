@@ -1,5 +1,5 @@
 define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFilter','confirmClick2'], function (angularAMD) {
-    angularAMD.directive('mediaModal', [ 'FileUploader', 'AssetsService', '$http', '$timeout', function (FileUploader, AssetsService, $http, $timeout) {
+    angularAMD.directive('mediaModal', [ 'FileUploader', 'AssetsService', '$http', '$timeout', 'ToasterService',function (FileUploader, AssetsService, $http, $timeout, ToasterService) {
         return {
             require: [],
             restrict: 'C',
@@ -25,7 +25,28 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                 }
                 uploader = $scope.uploader = new FileUploader({
                     url: '/api/1.0/assets/',
-                    removeAfterUpload: true
+                    removeAfterUpload: true,
+                    filters: [
+                        {
+                            name: "SizeLimit",
+                            fn: function (item) {
+                                switch (item.type.substring(0, item.type.indexOf('/'))) {
+                                    case "image":
+                                    case "video":
+                                    case "audio":
+                                    case "document":
+                                    default:
+                                        //size in bytes
+                                        if (10 * 1024 * 1024  > parseInt(item.size)) {
+                                            return true;
+                                        } else {
+                                            ToasterService.show('error', 'Max file size 10MB. Unable to Upload.');
+                                        }
+                                }
+                                return false;
+                            }
+                        }
+                    ]
                 });
                 uploader.filters.push({
                     name: 'customFilter',
@@ -39,6 +60,12 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                     response.files[0].mimeType = fileItem.file.type;
                     $scope.assets.push( response.files[0] );
                 };
+
+                uploader.onErrorItem = function (item, response, status, headers) {
+                    $scope.uploadComplete = false;
+                    ToasterService.show('error', 'Connection timed out');
+                };
+
                 $http.get('/angular_admin/views/partials/mediamodal.html').success(function(data){
                     $compile(data)($scope).appendTo($('#model_container'));
 
