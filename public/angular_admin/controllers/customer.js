@@ -63,6 +63,12 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       $scope.renderedCustomers = $filter('orderBy')($scope.renderedCustomers, $scope.customerOrder, $scope.customerSortReverse);
     };
 
+    $scope.alphaFilterStatus = {};
+
+    $scope.alphaFilterStatusFn = function () {
+
+    };
+
     $scope.$watch('customerOrder', function(newValue, oldValue) {
       $scope.orderByFn();
     });
@@ -77,6 +83,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       $scope.fetchedCustomers = customers;
       $scope.orderByFn();
       $scope.customerScrollFn();
+      $scope.alphaFilterStatusFn();
       ngProgress.complete();
       ToasterService.processPending();
       $scope.$watch('searchBar', function(newValue, oldValue) {
