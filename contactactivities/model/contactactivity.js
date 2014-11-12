@@ -41,7 +41,6 @@ var contactActivity = $$.m.ModelBase.extend({
     types: {
         PAGE_VIEW: 'PAGE_VIEW',
         SUBSCRIBE: 'SUBSCRIBE',
-        SUBSCRIBE_CANCEL: 'SUBSCRIBE_CANCEL',
         ACCOUNT_CREATED: 'ACCOUNT_CREATED',
         EMAIL: 'EMAIL',
         PHONECALL: 'PHONECALL',

@@ -19,7 +19,7 @@ define(['angularAMD'], function (angularAMD) {
 
                 scope.styleDashboard = function () {
                     return {
-                        'height': (newValue.h)-108 + 'px',
+                        'height': (newValue.h)-100 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };
