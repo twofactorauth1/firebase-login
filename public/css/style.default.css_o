@@ -6394,7 +6394,7 @@ h4,
   border-bottom: 0;
 }
 .panel-success .panel-heading {
-  background-color: #54C8E8;
+  background-color: #1CAF9A;
 }
 .panel-warning .panel-heading {
   background-color: #F0AD4E;
@@ -6657,9 +6657,6 @@ h4,
   border-radius: 2px;
   padding: 4px 8px;
   font-weight: normal;
-}
-.label-success {
-  background-color: #54C8E8;
 }
 .label-info {
   background-color: #00aeef;

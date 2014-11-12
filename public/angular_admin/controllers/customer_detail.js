@@ -1,6 +1,7 @@
 define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService'], function(app) {
     app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', 'ToasterService', function ($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService) {
         ngProgress.start();
+        $scope.$back = function() {window.history.back();};
         $scope.customerId = $stateParams.id;
         CustomerService.getCustomer($scope.customerId, function (customer) {
             $scope.customer = customer;

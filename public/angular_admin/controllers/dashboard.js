@@ -1,8 +1,8 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService'], function(app) {
-    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService', 'customerService'], function(app) {
+    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService) {
         ngProgress.start();
 
-        $scope.activeTab = 'analytics';
+        $scope.activeTab = 'activity';
 
         var client = new Keen({
             projectId: "54528c1380a7bd6a92e17d29",
@@ -11,6 +11,26 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             protocol: "https",
             host: "api.keen.io/3.0",
             requestType: "jsonp"
+        });
+
+        CustomerService.getCustomers(function(customers) {
+            var find = _.where($scope.customers, {_id: 1598});
+            $scope.customers = customers;
+            console.log('customers >>> ', customers);
+
+            CustomerService.getAllCustomerActivities(function(activites) {
+                for (var i = 0; i < activites.length; i++) {
+                    console.log('activites[i].contactId >>> ', activites[i].contactId);
+                    var customer = _.where(customers, {_id: activites[i].contactId});
+                    console.log('customer >>> ', customer);
+                    console.log('customer[0] >>> ', customer[0]);
+                    activites[i]['customer'] = customer[0];
+                    activites[i]['activityType'] = activites[i]['activityType'];
+                    console.log('activites[i] >>> ', activites[i]);
+                };
+                $scope.activities = _.sortBy(activites, function(o) { return o.start; }).reverse();
+
+            });
         });
 
         dashboardService.checkToken(function(data) {
@@ -584,6 +604,12 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         $scope.customers = data;
 
                         // ======================================
+                        // Total Customer Metric
+                        // ======================================
+
+                        $scope.totalCustomers = $scope.customers.length;
+
+                        // ======================================
                         // Monthly Recurring Revenue Metric
                         // Monthly Recurring = Avg Revenue Per Customer * # of Customers
                         // ======================================
@@ -620,6 +646,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         var canceledSubscriptions = new Keen.Query("count", {
                             eventCollection: "Stripe_Events",
                             timeframe: "last_30_days",
+                            interval: 'daily',
                             filters: [{
                                 "property_name": "type",
                                 "operator": "eq",
@@ -627,13 +654,40 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             }]
                         });
 
+                        // =========================================
+                        // Create Unique Paying Customers Line Chart
+                        // =========================================
 
-                        client.run([monthlyRecurringRevenue, activeSubscriptions, canceledSubscriptions], function(response) {
+                        var payingCustomersSeries = new Keen.Query('count_unique', {
+                            eventCollection: 'Stripe_Events',
+                            timeframe: 'last_30_days',
+                            targetProperty: 'data.object.customer',
+                            interval: 'daily',
+                            filters: [{
+                                'property_name':'type',
+                                'operator':'eq',
+                                'property_value':'invoice.payment_succeeded'
+                            },
+                            {
+                                'property_name':'data.object.total',
+                                'operator':'gt',
+                                'property_value': 0
+                            }]
+                        });
+
+
+                        client.run([monthlyRecurringRevenue, activeSubscriptions, canceledSubscriptions, payingCustomersSeries], function(response) {
                             var totalRevenue = this.data[0].result;
                             var numOfCustomers = $scope.customers.length;
                             var avgRevenue = totalRevenue / numOfCustomers;
                             var result = avgRevenue * numOfCustomers;
                             $scope.monthlyRecurringRevenue = result / 100;
+
+                            // ======================================
+                            // Average Revenue Per Customer Metric
+                            // ======================================
+
+                            $scope.avgRevenue = avgRevenue;
 
                             // ======================================
                             // Annual Run Rate Metric
@@ -656,7 +710,14 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             // Churn = canceled subscriptions / (canceled subscriptions + active subscriptions)
                             // ======================================
 
-                            $scope.canceledSubscriptions = this.data[2].result;
+                            var cancelSubscriptionData = [];
+                            $scope.totalCanceledSubscriptions = 0;
+                            for (var i = 0; i < this.data[2].result.length; i++) {
+                                cancelSubscriptionData.push(this.data[2].result[i].value);
+                                $scope.totalCanceledSubscriptions += parseInt(this.data[2].result[i].value);
+                            };
+                            $scope.canceledSubscriptions = cancelSubscriptionData;
+
                             var userChurnCalc = this.data[2].result / (this.data[2].result + this.data[1].result) * 100;
                             $scope.userChurn = userChurnCalc.toFixed(1) * -1;
 
@@ -665,33 +726,66 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             // LTV =  ARPU / Churn
                             // ======================================
                             $scope.lifetimeValue = $scope.arpu / $scope.userChurn;
+
+
+                            var totalCustomerData = [];
+                            $scope.totalPayingCustomers = 0;
+                            for (var i = 0; i < this.data[3].result.length; i++) {
+                                totalCustomerData.push(this.data[3].result[i].value);
+                                $scope.totalPayingCustomers += this.data[3].result[i].value;
+                            };
+
+                            console.log('$scope.canceledSubscriptions >>> ', $scope.canceledSubscriptions);
+                            $scope.customerOverviewConfig = {
+                                options: {
+                                    chart: {
+                                        height: 250,
+                                    },
+                                    title: {
+                                        text: ''
+                                    },
+                                    tooltip: {
+                                        pointFormat: '<b>{point.y}</b>'
+                                    },
+                                    exporting: {
+                                        enabled: false
+                                    }
+                                },
+                                xAxis: {
+                                    type: 'datetime',
+                                    labels: {
+                                        format: "{value:%b %d}"
+                                    },
+                                    minRange: 30 * 24 * 3600000 // fourteen days
+                                },
+                                yAxis: {
+                                    min: 0,
+                                    max: Math.max.apply(Math, totalCustomerData) + 100,
+                                    title: {
+                                        text: ''
+                                    }
+                                },
+                                series: [{
+                                    type: 'area',
+                                    name: 'Customers',
+                                    pointInterval: 24 * 3600 * 1000,
+                                    pointStart: Date.parse(this.data[3].result[0].timeframe.start),
+                                    color: '#ef9f22',
+                                    data: totalCustomerData
+                                },
+                                {
+                                    type: 'area',
+                                    name: 'Cancellations',
+                                    pointInterval: 24 * 3600 * 1000,
+                                    pointStart: Date.parse(this.data[2].result[0].timeframe.start),
+                                    data: cancelSubscriptionData
+                                }],
+                                credits: {
+                                    enabled: false
+                                }
+                            };
                         });
 
-                        filters: [{
-                            "property_name": "type",
-                            "operator": "eq",
-                            "property_value": "customer.subscription.created"
-                        }, {
-                            "property_name": "data.object.status",
-                            "operator": "eq",
-                            "property_value": "active"
-                        }]
-
-                        // ======================================
-                        // Average Revenue Per Customer Metric
-                        // ======================================
-
-                        client.run(monthlyRecurringRevenue, function(response) {
-                            var totalRevenue = this.data.result;
-                            var numOfCustomers = $scope.customers.length;
-                            $scope.avgRevenue = totalRevenue / numOfCustomers / 100;
-                        });
-
-                        // ======================================
-                        // Total Customer Metric
-                        // ======================================
-
-                        $scope.totalCustomers = $scope.customers.length;
 
                     }); //end PaymentService.getCustomers
 
@@ -821,7 +915,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                 }); //gapi ready
 
             }); //keen ready
-
         });
 
         $scope.purchaseFunnelConfig = {

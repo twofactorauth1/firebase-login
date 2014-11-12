@@ -98,7 +98,6 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
     var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
     CustomerService.getCustomersShortForm(fetchFields, function(customers) {
-      console.log('customers >>> ', customers);
       $scope.fetchedCustomers = customers;
       $scope.orderByFn();
       $scope.customerScrollFn();
