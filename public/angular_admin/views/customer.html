@@ -64,85 +64,7 @@
 
             <li class="active"><a class="btn-letter" ng-click="alphaFilter()">all</a>
             </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('a')">A</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('b')">B</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('c')">C</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('d')">D</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('e')">E</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('f')">F</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('g')">G</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('h')">H</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('i')">I</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('j')">J</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('k')">K</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('l')">L</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('m')">M</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('n')">N</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('o')">O</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('p')">P</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('q')">Q</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('r')">R</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('s')">S</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('t')">T</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('u')">U</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('v')">V</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('w')">W</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('x')">X</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('y')">Y</a>
-            </li>
-
-            <li class=""><a class="btn-letter" ng-click="alphaFilter('z')">Z</a>
-            </li>
-
+            <li ng-class="{disabled: !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList"><a class="btn-letter" ng-click="alphaFilter(alpha)">{{alpha}}</a></li>
           </ul>
         </div>
       </div>
@@ -243,13 +165,13 @@
           </div>
         </div>
       </div>
-       <div ng-switch-when="false" class="row">       
-          <div class="tb-main table table-bordered">            
+       <div ng-switch-when="false" class="row">
+          <div class="tb-main table table-bordered">
             <div class="container-fluid tb-row"  ng-repeat="customer in renderedCustomers | iStartsWithFilter : customerFilter">
-              <div class="tb-col col-md-1">  
+              <div class="tb-col col-md-1">
                   <div class="people-item" style="opacity:1">
                     <span data-original-title="Important Contact" ng-click="setImportantContact(customer)" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips"> <i class="fa fa-star-o" ng-hide="customer.starred"></i> <i class="fa fa-star" ng-show="customer.starred"></i> </span>
-                  </div>              
+                  </div>
                   </div>
               <div class="tb-col col-md-4">
               <div class="people-item btn-view-contact-details contact-item"  indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}"  style="opacity:1">
@@ -265,7 +187,7 @@
               </div>
               </div></div>
               <div class="tb-col col-md-4">
-              <div class="" style="opacity:1"> 
+              <div class="" style="opacity:1">
               <ul class="social-list hidden-xs">
                 <li>
                   <a ng-show="showEmail && checkBestEmail(customer)" href="mailto:{{email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>

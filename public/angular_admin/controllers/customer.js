@@ -10,7 +10,6 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     $scope.customerScrollLimit = 20;
     $scope.customerScrollOffset = 0;
     $scope.renderedCustomers = [];
-    $scope.gridViewDisplay = "true";
 
     $scope.customerScrollFn = function() {
       if ($scope.fetchedCustomers) {
@@ -64,10 +63,20 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       $scope.renderedCustomers = $filter('orderBy')($scope.renderedCustomers, $scope.customerOrder, $scope.customerSortReverse);
     };
 
+    $scope.alphaList = [];
+
     $scope.alphaFilterStatus = {};
 
-    $scope.alphaFilterStatusFn = function () {
+    $scope.alphaFilterStatusFn = function() {
+      var a = 97;
+      for (var i = 0; i < 26; i++) {
+        $scope.alphaList.push(String.fromCharCode(a + i));
+        $scope.alphaFilterStatus[String.fromCharCode(a + i)] = false;
+      }
 
+      $scope.fetchedCustomers.forEach(function(value, index) {
+        $scope.alphaFilterStatus[value.first.substring(0, 1).toLowerCase()] = true;
+      });
     };
 
     $scope.$watch('customerOrder', function(newValue, oldValue) {
@@ -212,7 +221,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         else
           $scope.showTwitterId = true;
       });
-      $scope.$watch('toggleLinkedId', function(value) {
+      $scope.$watch('toggleLinkedInId', function(value) {
         if (angular.isDefined(value))
           $scope.showLinkedInId = value;
         else
@@ -224,15 +233,6 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         else
           $scope.showAddress = true;
       });
-      $scope.setDefaultView=function(value) {      
-        $scope.gridViewDisplay = value;
-      }
-      $scope.setImportantContact=function(customer) {  
-        customer.starred = true;    
-        CustomerService.saveCustomer(customer, function(customers) {
-          ToasterService.show('success', "Contact updated succesfully.");
-        })     
-      }
     });
   }]);
 });
