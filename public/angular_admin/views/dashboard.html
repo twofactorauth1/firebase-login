@@ -124,7 +124,7 @@
                             <div class="clearfix"></div>
                             <div>
                                 <div class="col-xs-6 top-four">
-                                    <div class="metric center">Cancelation</div>
+                                    <div class="metric center">Customers</div>
                                     <div class="title center">
                                         1
                                     </div>
@@ -177,7 +177,7 @@
                             <div class="clearfix"></div>
                             <div>
                                 <div class="col-xs-6 top-four">
-                                    <div class="metric center">Customers</div>
+                                    <div class="metric center">Cancelations</div>
                                     <div class="title center">
                                         1
                                     </div>
@@ -256,7 +256,7 @@
                                                 {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} canceled account.</p>
                                             <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                         </div>
-                                        <div ng-switch-when="PAGEVIEW">
+                                        <div ng-switch-when="PAGE_VIEW">
                                             <p>
                                                 <span class="label label-default">{{activity.activityType}}</span>
                                             </p>
