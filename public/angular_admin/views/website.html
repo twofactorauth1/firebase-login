@@ -187,16 +187,20 @@
                                 <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
                             </div>
                             <div class="form-group">
+                                <label for="colorpicker">Blur BG</label>
+                                <input bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                            </div>
+                            <div class="form-group">
+                                <label for="colorpicker">Show BG</label>
+                                <input bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                            </div>
+                            <div class="form-group">
                                 <label for="colorpicker">Parallax:</label>
                                 <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
                             </div>
                             <div class="form-group">
                                 <label for="colorpicker">Button:</label>
                                 <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                            </div>
-                            <div class="form-group">
-                                <label for="colorpicker">Blur Background</label>
-                                <input bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right" ng-change="saveComponent()">
                             </div>
                         </accordion-group>
                         <accordion-group is-open="status2.open">

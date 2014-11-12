@@ -3,6 +3,7 @@
 
         <div id="{{component.anchor}}">
             <div
+                    ng-show="component.bg.img.show"
                     class="bgimg {{component.bg.img.parallax?'parallax':''}} {{component.bg.img.blur? 'blur-image' : '';}}"
                     parallax-background
                     parallax-ratio="0.4"
