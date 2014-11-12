@@ -18187,6 +18187,10 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .modal-nopadding .nav-tabs {
   margin-top: 0!important;
 }
+.smart-timeline .panel-title {
+  margin-top: 15px;
+  padding-left: 0;
+}
 .truncate {
   width: 250px;
   white-space: nowrap;
@@ -18194,6 +18198,10 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   text-overflow: ellipsis;
   display: block;
   position: relative;
+}
+.activity-section .panel-btns {
+  margin-top: -7px;
+  margin-bottom: -10px;
 }
 .ckbox,
 .rdio {

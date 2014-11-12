@@ -25,6 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
         //GET
+        app.get(this.url('activities'), this.isAuthAndSubscribedApi.bind(this), this.findActivities.bind(this));
         app.get(this.url('shortform'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
         app.get(this.url('shortform/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
@@ -48,7 +49,6 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('activity'), this.isAuthAndSubscribedApi.bind(this), this.createActivity.bind(this));
         app.post(this.url('activity/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateActivity.bind(this));
         //searching
-        app.get(this.url('activity'), this.isAuthAndSubscribedApi.bind(this), this.findActivities.bind(this));
 
         // http://localhost:3000/api/1.0/contact/:id/fullcontact
         app.post(this.url(':id/fullcontact'), this.isAuthAndSubscribedApi.bind(this), this.updateContactByFullContactApi.bind(this));
@@ -474,6 +474,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> findActivities');
 
         var accountId = parseInt(self.accountId(req));
+        self.log.debug('>> accountId', accountId);
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(req);
@@ -481,10 +482,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 var contactId = req.query['contactId'];
                 var activityTypes = req.query['activityType'];
                 var activityTypeAry = [];
-                if(activityTypes.indexOf(',') != -1) {
-                    activityTypeAry = activityTypes.split(',');
-                } else {
-                    activityTypeAry.push(activityTypes);
+                if(activityTypes) {
+                    if(activityTypes.indexOf(',') != -1) {
+                        activityTypeAry = activityTypes.split(',');
+                    } else {
+                        activityTypeAry.push(activityTypes);
+                    }
                 }
                 var noteText = req.query['note'];
                 var detailText = req.query['detail'];

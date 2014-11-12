@@ -239,7 +239,7 @@ define(['app', 'constants', 'importContactService'], function(app) {
     };
 
     this.getAllCustomerActivities = function(fn) {
-      var apiUrl = baseUrl + ['contact', 'activity'].join('/');
+      var apiUrl = baseUrl + ['contact', 'activities'].join('/');
       $http.get(apiUrl)
         .success(function(data, status, headers, config) {
           fn(data);

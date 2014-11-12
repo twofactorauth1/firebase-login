@@ -13,8 +13,23 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             requestType: "jsonp"
         });
 
-        CustomerService.getAllCustomerActivities(function(data) {
-            console.log('data >>> ', data);
+        CustomerService.getCustomers(function(customers) {
+            var find = _.where($scope.customers, {_id: 1598});
+            $scope.customers = customers;
+            console.log('customers >>> ', customers);
+
+            CustomerService.getAllCustomerActivities(function(activites) {
+                for (var i = 0; i < activites.length; i++) {
+                    console.log('activites[i].contactId >>> ', activites[i].contactId);
+                    var customer = _.where(customers, {_id: activites[i].contactId});
+                    console.log('customer >>> ', customer);
+                    console.log('customer[0] >>> ', customer[0]);
+                    activites[i]['customer'] = customer[0];
+                    console.log('activites[i] >>> ', activites[i]);
+                };
+                $scope.activities = activites;
+
+            });
         });
 
         dashboardService.checkToken(function(data) {
