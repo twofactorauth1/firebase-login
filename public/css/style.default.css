@@ -19126,6 +19126,10 @@ div.error label.error:before {
   transition: all 0.2s ease-out 0s;
   width: 100%;
 }
+.letter-list li a.active {
+  background: #428BCA;
+  color: white;
+}
 .letter-list li a:hover {
   color: #fff;
   background: #428BCA;

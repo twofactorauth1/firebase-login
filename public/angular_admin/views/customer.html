@@ -62,11 +62,11 @@
         <div style="width:100%; text-align:center">
           <ul class="pagination hidden-xs letter-list">
 
-            <li class="active"><a class="btn-letter" ng-click="alphaFilter()">all</a>
+            <li><a class="btn-letter" ng-click="alphaFilter()" ng-class="{'active': alphaSelected == 'all'}">all</a>
             </li>
-            <li ng-class="{disabled: !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList">
+            <li ng-class="{'disabled': !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList">
 
-            <a class="btn-letter" ng-click="alphaFilter(alpha)" ng-if="alphaFilterStatus[alpha]">{{alpha}}</a>
+            <a class="btn-letter" ng-click="alphaFilter(alpha)" ng-if="alphaFilterStatus[alpha]" ng-class="{'active': alphaSelected == alpha}">{{alpha}}</a>
             <a class="btn-letter" ng-if="!alphaFilterStatus[alpha]" tooltip="No Contact with {{alpha}}">{{alpha}}</a>
             </li>
           </ul>
@@ -78,7 +78,7 @@
     <div ng-switch on="userPreferences.customerSettings.gridViewDisplay" class="people-list">
       <div ng-switch-when="true" class="row">
         <div>
-          <div  ng-repeat="customer in renderedCustomers " class="col-xs-12 col-sm-4 col-md-3">
+          <div  ng-repeat="customer in renderedCustomers" class="col-xs-12 col-sm-4 col-md-3">
             <div data-contactid="1799" class="people-item btn-view-contact-details contact-item" style="opacity:1">
               <span data-original-title="Important Contact" ng-click="setImportantContact(customer)" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips">
                         <i class="fa fa-star-o" ng-hide="customer.starred"></i>

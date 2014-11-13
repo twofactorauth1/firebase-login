@@ -136,9 +136,10 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         }
       });
 
-      $scope.alphaSelected = null;
+      $scope.alphaSelected = 'all';
       $scope.alphaFilter = function(alpha) {
-        $scope.alphaSelected = alpha;
+        console.log('alpha >>> ', alpha);
+        $scope.alphaSelected = alpha || 'all';
         var orginal = $scope.originalCustomers;
         $scope.renderedCustomers = [];
         $scope.fetchedCustomers = [];
