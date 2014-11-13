@@ -184,7 +184,8 @@
                             <div class="clearfix"></div>
                             <div class="form-group">
                                 <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
-                                <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
+                                <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail" ng-if="componentEditing.bg.img.url">
+                                <button class="btn btn-primary btn-block" ng-if="!componentEditing.bg.img.url">Add BG Image</button>
                             </div>
                             <div class="form-group">
                                 <label for="colorpicker">Blur BG</label>
