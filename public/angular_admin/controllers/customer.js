@@ -58,8 +58,8 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       return returnVal;
     };
 
-    $scope.orderByFn = function() {
-      var customers = $scope.fetchedCustomers || [];
+    $scope.orderByFn = function(data) {
+      var customers = data || $scope.fetchedCustomers || [];
       var present = customers.filter(function(elem) { if(elem[$scope.customerOrder]) {return elem[$scope.customerOrder] != ''; }});
       var sortedAlphabetically = present.sort(function(a, b) {
             return $scope.sortCustomers(a.first,b.first) || $scope.sortCustomers(a.last,b.last)
@@ -159,7 +159,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $scope.fetchedCustomers = orginal;
           $scope.customerFilter = {};
         }
-        $scope.orderByFn();
+        // $scope.orderByFn();
         $scope.customerScrollOffset = 0;
         $scope.customerScrollFn();
       };
