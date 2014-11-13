@@ -33,7 +33,7 @@ define([
             $scope.secondaryFontStack = '';
             $scope.iframeData = {};
             $scope.allPages = [];
-
+            $scope.backup = {};
             $scope.components = [];
 
             $scope.isEditing = false;
@@ -239,6 +239,8 @@ define([
                 }
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");
+
+                $scope.backup['website'] = angular.copy($scope['website']);
             };
 
             $scope.cancelPage = function() {
@@ -259,6 +261,10 @@ define([
                 if ( iFrame.contentWindow.updatePostMode ) {
                     iFrame.contentWindow.updatePostMode();
                 }
+                $scope['website'] = angular.copy($scope.backup['website']);
+                $scope.primaryFontStack = $scope.website.settings.font_family;
+                $scope.secondaryFontStack = $scope.website.settings.font_family_2;
+                iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family)
             };
 
             $scope.doubleClick = function() {
@@ -350,8 +356,8 @@ define([
                     toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                     $scope.isEditing = false;
                     iFrame.contentWindow.triggerEditModeOff();
-                    iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
-                    document.getElementById('iframe-website').contentWindow.location.reload(true);
+                    //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
+                  //  document.getElementById('iframe-website').contentWindow.location.reload(true);
                     $scope.deactivateAloha();
 
                     if ( iFrame.contentWindow.savePostMode ) {
@@ -593,8 +599,12 @@ define([
             };
 
             $scope.updatePrimaryFont = function(font) {
-                $scope.website.settings.font_family = font.name;
-                //document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
+
+                if ($scope.website.settings.font_family !== font.name) {
+                    $scope.website.settings.font_family = font.name;
+                    iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
+                    //document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
+                }
             };
 
             $scope.changeSelectedTheme = function(theme) {
