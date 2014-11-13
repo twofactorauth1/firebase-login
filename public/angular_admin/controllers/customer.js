@@ -69,6 +69,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
     $scope.alphaFilterStatusFn = function() {
       var a = 97;
+      $scope.alphaList = [];
       for (var i = 0; i < 26; i++) {
         $scope.alphaList.push(String.fromCharCode(a + i));
         $scope.alphaFilterStatus[String.fromCharCode(a + i)] = false;
