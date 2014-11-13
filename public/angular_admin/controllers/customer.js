@@ -60,19 +60,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     };
 
     $scope.orderByFn = function() {
-      var customers = $scope.fetchedCustomers || [];
-      var present = customers.filter(function(elem) { if(elem[$scope.customerOrder]) {return elem[$scope.customerOrder] != ''; }});
-      var sortedAlphabetically = present.sort(function(a, b) {
-            return $scope.sortCustomers(a.first,b.first) || $scope.sortCustomers(a.last,b.last)
-      });
-      var empty = customers.filter(function(elem) { return elem.first == ""; });
-      var concatCustomers = sortedAlphabetically.concat(empty);
-      // if ($scope.customerSortReverse) {
-      //   concatCustomers = concatCustomers.reverse();
-      // }
-      $scope.renderedCustomers = [];
-      $scope.fetchedCustomers = [];
-      $scope.fetchedCustomers = concatCustomers;
+       $scope.fetchedCustomers = $filter('orderBy')($scope.fetchedCustomers, $scope.customerOrder, $scope.customerSortReverse);
       // $scope.customerScrollOffset = 0;
       // $scope.customerScrollFn();
     };
@@ -111,14 +99,15 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     };
 
     $scope.$watch('customerOrder', function(newValue, oldValue) {
-      if ($scope.fetchedCustomers !== undefined) {
-        $scope.alphaFilterStatusFn();
-        $scope.orderByFn();
+      if ($scope.alphaFilter) {
+        $scope.alphaFilter($scope.alphaSelected);
       }
     });
 
     $scope.$watch('customerSortReverse', function(newValue, oldValue) {
-      $scope.orderByFn();
+      if ($scope.alphaFilter) {
+        $scope.alphaFilter($scope.alphaSelected);
+      }
     });
 
     var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
@@ -147,7 +136,9 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         }
       });
 
+      $scope.alphaSelected = null;
       $scope.alphaFilter = function(alpha) {
+        $scope.alphaSelected = alpha;
         var orginal = $scope.originalCustomers;
         $scope.renderedCustomers = [];
         $scope.fetchedCustomers = [];
@@ -183,9 +174,8 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
 
       $scope.$watch('sortOrder', function(newValue, oldValue) {
-        console.log('sort order ', newValue);
         newValue = parseInt(newValue);
-        if (newValue == '') {
+        if (newValue === '') {
           $scope.customerOrder = 'first';
           $scope.customerSortReverse = false;
         } else if (newValue == 1) {
@@ -288,13 +278,14 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         // Save user preferences
         $scope.userPreferences.customerSettings.gridViewDisplay = value;
         $scope.savePreferencesFn();
-      }
+      };
+
       $scope.setImportantContact = function(customer) {
         customer.starred = true;
         CustomerService.saveCustomer(customer, function(customers) {
           ToasterService.show('success', "Contact updated succesfully.");
-        })
-      }
+        });
+      };
 
       UserService.getUserPreferences(function(preferences) {
         $scope.userPreferences = preferences;
@@ -309,12 +300,12 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
             customerSortReverse: false,
             customerDisplayFormat: 'first',
             gridViewDisplay: "true"
-          }
+          };
         }
 
       });
       $scope.savePreferencesFn = function() {
-        UserService.updateUserPreferences($scope.userPreferences, function() {})
+        UserService.updateUserPreferences($scope.userPreferences, function() {});
       };
 
     });
