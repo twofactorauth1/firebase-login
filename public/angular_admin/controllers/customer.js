@@ -20,6 +20,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         }
         $scope.customerScrollOffset += $scope.customerScrollLimit;
         $scope.customerScrollBusy = false;
+        $scope.alphaFilterStatusFn();
       }
     };
 
@@ -126,7 +127,6 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       $scope.fetchedCustomers = customers;
       $scope.orderByFn();
       $scope.customerScrollFn();
-      $scope.alphaFilterStatusFn();
       ngProgress.complete();
       ToasterService.processPending();
       $scope.$watch('searchBar', function(newValue, oldValue) {
