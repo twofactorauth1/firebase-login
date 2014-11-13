@@ -44,13 +44,13 @@
     <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
       <div class="panel panel-default">
         <div class="panel-body">
-          <div class="col-xs-6">
-            <input ng-model="searchBar" placeholder="Search" class="form-control input-lg  search-contacts" type="text">
+          <div class="col-sm-6">
+            <input ng-model="searchBar" placeholder="Search Customers" class="form-control input-lg  search-contacts" type="text">
           </div>
-          <div class="col-xs-6">
+          <div class="col-sm-6">
             <div class="mb0">
               <select class="form-control chosen-select input-lg" ng-model="sortOrder">
-                <option value="" disabled selected>Filter</option>
+                <option value="" disabled selected>Filter Contacts</option>
                 <option value="1">A to Z</option>
                 <option value="2">Z to A</option>
                 <option value="3">Date Added</option>
@@ -64,7 +64,11 @@
 
             <li class="active"><a class="btn-letter" ng-click="alphaFilter()">all</a>
             </li>
-            <li ng-class="{disabled: !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList"><a class="btn-letter" ng-click="alphaFilter(alpha)">{{alpha}}</a></li>
+            <li ng-class="{disabled: !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList">
+
+            <a class="btn-letter" ng-click="alphaFilter(alpha)" ng-if="alphaFilterStatus[alpha]">{{alpha}}</a>
+            <a class="btn-letter" ng-if="!alphaFilterStatus[alpha]" tooltip="No Contact with {{alpha}}">{{alpha}}</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -74,7 +78,7 @@
     <div ng-switch on="userPreferences.customerSettings.gridViewDisplay" class="people-list">
       <div ng-switch-when="true" class="row">
         <div>
-          <div  ng-repeat="customer in renderedCustomers | iStartsWithFilter : customerFilter" class="col-xs-12 col-sm-4 col-md-3">
+          <div  ng-repeat="customer in renderedCustomers " class="col-xs-12 col-sm-4 col-md-3">
             <div data-contactid="1799" class="people-item btn-view-contact-details contact-item" style="opacity:1">
               <span data-original-title="Important Contact" ng-click="setImportantContact(customer)" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips">
                         <i class="fa fa-star-o" ng-hide="customer.starred"></i>
@@ -167,7 +171,7 @@
       </div>
        <div ng-switch-when="false" class="row">
           <div class="tb-main table">
-            <div class="container-fluid tb-row"  ng-repeat="customer in renderedCustomers | iStartsWithFilter : customerFilter">
+            <div class="container-fluid tb-row"  ng-repeat="customer in renderedCustomers">
               <div class="tb-col col-md-1">
                   <div class="people-item" style="opacity:1">
                     <span data-original-title="Important Contact" ng-click="setImportantContact(customer)" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips"> <i class="fa fa-star-o" ng-hide="customer.starred"></i> <i class="fa fa-star" ng-show="customer.starred"></i> </span>

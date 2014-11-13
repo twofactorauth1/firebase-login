@@ -9,11 +9,11 @@ define(['angularAMD'], function (angularAMD) {
                 scope.windowHeight = newValue.h;
                 scope.windowWidth = newValue.w;
 
-                scope.style = function () {
+                scope.styleWebsite = function () {
                     return {
-                        'height': (newValue.h)-68 + 'px',
+                        'height': (newValue.h)-70 + 'px',
                         'width': '100%',
-                        'overflow' : 'hidden'
+                        'overflow-y' : 'scroll'
                     };
                 };
 
