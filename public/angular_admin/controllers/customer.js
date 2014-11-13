@@ -100,12 +100,24 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       $scope.orderByFn();
     });
 
+    $scope.sortCustomers = function(a, b) {
+            if (a > b) return +1;
+            if (a < b) return -1;
+            return 0;
+    };
+
     var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
     CustomerService.getCustomersShortForm(fetchFields, function(customers) {
       console.log('customers >>> ', customers);
       $scope.originalCustomers = customers;
-      $scope.fetchedCustomers = customers;
-      $scope.orderByFn();
+      var present = customers.filter(function(elem) { if(elem.first) {return elem.first != ''; }});
+      console.log('present ', present.length);
+      var sortedAlphabetically = present.sort(function(a, b) { 
+            return $scope.sortCustomers(a.first,b.first) || $scope.sortCustomers(a.last,b.last)
+        });
+      var empty = customers.filter(function(elem) { return elem.first == ""; });
+      console.log('empty ', empty);
+      $scope.fetchedCustomers = sortedAlphabetically.concat(empty);
       $scope.customerScrollFn();
       $scope.alphaFilterStatusFn();
       ngProgress.complete();
@@ -131,16 +143,22 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       $scope.alphaFilter = function(alpha) {
         var orginal = $scope.originalCustomers;
         $scope.renderedCustomers = [];
-        $scope.customerScrollOffset = 0;
-        $scope.fetchedCustomers = orginal.filter(function(elem) { if(elem.first) {return elem.first.charAt(0).toLowerCase() == alpha; }});
-        $scope.customerScrollFn();
-        console.log('fetched customers >>> ', $scope.fetchedCustomers);
+        $scope.fetchedCustomers = [];
         if (alpha) {
-          $scope.customerFilter.first = alpha;
+          $scope.fetchedCustomers = orginal.filter(function(elem) { if(elem.first) {return elem.first.charAt(0).toLowerCase() == alpha; }});
           $(".contentpanel").scrollTop(0);
+          $scope.customerFilter.first = alpha;
         } else {
+            var present = orginal.filter(function(elem) { if(elem.first) {return elem.first != ''; }});
+            var sortedAlphabetically = _.sortBy(present, function(o) {
+                return o.first;
+            });
+            var empty = orginal.filter(function(elem) { if(elem.first) {return elem.first == ''; }});
+          $scope.fetchedCustomers = sortedAlphabetically.concat(empty);
           $scope.customerFilter = {};
         }
+        $scope.customerScrollOffset = 0;
+        $scope.customerScrollFn();
       };
 
 
