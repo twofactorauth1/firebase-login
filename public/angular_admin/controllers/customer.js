@@ -69,6 +69,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
     $scope.alphaFilterStatusFn = function() {
       var a = 97;
+      $scope.alphaList = [];
       for (var i = 0; i < 26; i++) {
         $scope.alphaList.push(String.fromCharCode(a + i));
         $scope.alphaFilterStatus[String.fromCharCode(a + i)] = false;
@@ -82,7 +83,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           field = $scope.customerOrder;
         }
 
-        if (value[field]) {
+        if (value && (field in value) && value[field] && (value[field].substring(0, 1).toLowerCase() in $scope.alphaFilterStatus)) {
           $scope.alphaFilterStatus[value[field].substring(0, 1).toLowerCase()] = true;
         }
       });
