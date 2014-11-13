@@ -64,7 +64,7 @@
 
             <li class="active"><a class="btn-letter" ng-click="alphaFilter()">all</a>
             </li>
-            <li ng-class="{disabled: !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList"><a class="btn-letter" ng-click="alphaFilter(alpha)">{{alpha}}</a></li>
+            <li ng-class="{disabled: !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList track by $index"><a class="btn-letter" ng-click="alphaFilter(alpha)">{{alpha}}</a></li>
           </ul>
         </div>
       </div>
@@ -244,10 +244,10 @@
         <div class="form-group">
           <label>Default View</label>
           <div class="btn-group">
-            <button type="button" ng-click="setDefaultView('true')" class="btn btn-default">
+            <button type="button" ng-click="gridViewDisplay(true)" class="btn btn-default" ng-class="{ 'active' : listgrid }">
             <span class="fa fa-th"></span> Grid
           </button>
-            <button type="button" ng-click="setDefaultView('false')" class="btn btn-default">
+            <button type="button" ng-click="gridViewDisplay(false)" class="btn btn-default" ng-class="{ 'active' : !listgrid }">
             <span class="fa fa-list"></span> List
           </button>
           </div>

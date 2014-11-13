@@ -15961,6 +15961,7 @@ strong {
 }
 #toast-container {
   height: auto!important;
+  z-index: 100000000;
 }
 #ngProgress {
   margin: 0;
@@ -15993,7 +15994,7 @@ strong {
   top: 0;
   width: 100%;
   z-index: 99999;
-  background: #2ecc71;
+  background: #29b87f;
   display: none;
   right: 0;
   height: 50px;
@@ -16012,8 +16013,13 @@ strong {
   height: 50px;
 }
 .aloha-ui.btn-toolbar .btn:hover {
-  color: white;
+  color: #128658;
   background: rgba(255, 255, 255, 0.2);
+}
+.aloha-ui.btn-toolbar .btn:hover span,
+.aloha-ui.btn-toolbar .btn:hover i,
+.aloha-ui.btn-toolbar .btn:hover b {
+  color: #128658;
 }
 .aloha-link-toolbar {
   background-color: #4ea9de !important;
@@ -16641,6 +16647,12 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .leftpanel-collapsed .header--fixed {
   left: 53px;
+}
+#btn-new-device {
+  margin-right: 40px;
+}
+.btn-edit-photo {
+  text-decoration: none;
 }
 @media (max-width: 1024px) {
   .leftpanel-collapsed .header--fixed {
@@ -22057,6 +22069,21 @@ ul.ui-sortable.active .fragment .componentActions h4 {
 .contact-us-v4 .map {
   height: 344px;
   margin-right: 50px;
+}
+.component-wrap .blur-image {
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+}
+.component-wrap .component > [id] > div.bgimg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
 }
 /********** Feature List v1 **********/
 .feature-list-v1 .features-wrap {
