@@ -60,19 +60,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     };
 
     $scope.orderByFn = function() {
-      var customers = $scope.fetchedCustomers || [];
-      var present = customers.filter(function(elem) { if(elem[$scope.customerOrder]) {return elem[$scope.customerOrder] !== ''; }});
-      var sortedAlphabetically = present.sort(function(a, b) {
-            return $scope.sortCustomers(a.first,b.first) || $scope.sortCustomers(a.last,b.last);
-      });
-      var empty = customers.filter(function(elem) { return elem.first === ""; });
-      var concatCustomers = sortedAlphabetically.concat(empty);
-      // if ($scope.customerSortReverse) {
-      //   concatCustomers = concatCustomers.reverse();
-      // }
-      $scope.renderedCustomers = [];
-      $scope.fetchedCustomers = [];
-      $scope.fetchedCustomers = concatCustomers;
+       $scope.fetchedCustomers = $filter('orderBy')($scope.fetchedCustomers, $scope.customerOrder, $scope.customerSortReverse);
       // $scope.customerScrollOffset = 0;
       // $scope.customerScrollFn();
     };
