@@ -22,7 +22,8 @@ define([
         'UserService',
         'toaster',
         'ngProgress',
-        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress) {
+        '$rootScope',
+        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress, $rootScope) {
             ngProgress.start();
 
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -246,25 +247,24 @@ define([
             $scope.cancelPage = function() {
                 // $scope.components = that.originalCurrentPageComponents;
                 var pageId = $scope.currentPage._id;
-                $scope.deactivateAloha();
+                //$scope.deactivateAloha && $scope.deactivateAloha();
                 WebsiteService.getPageComponents(pageId,function(components) {
                     $scope.components = components;
-                    $scope.updateIframeComponents();
-                
-                $scope.isEditing = false;
-                $scope.componentEditing = null;
-                iFrame.contentWindow.triggerEditModeOff();
+                    $scope.updateIframeComponents && $scope.updateIframeComponents();
+                    $scope.isEditing = false;
+                    $scope.componentEditing = null;
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
                 });
 
 
                 //TODO Only use on single post
-                if ( iFrame.contentWindow.updatePostMode ) {
-                    iFrame.contentWindow.updatePostMode();
-                }
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updatePostMode && iFrame.contentWindow.updatePostMode();
+
                 $scope['website'] = angular.copy($scope.backup['website']);
+                $scope.backup = {};
                 $scope.primaryFontStack = $scope.website.settings.font_family;
                 $scope.secondaryFontStack = $scope.website.settings.font_family_2;
-                iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family)
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerFontUpdate && iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family)
             };
 
             $scope.doubleClick = function() {
@@ -334,6 +334,7 @@ define([
                             }
                         }
                     }
+                    $scope.backup = {};
                 };
 
                 //sort the components in currentPage to match iframe
@@ -355,14 +356,12 @@ define([
                 WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id,  $scope.currentPage, function(data) {
                     toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                     $scope.isEditing = false;
-                    iFrame.contentWindow.triggerEditModeOff();
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
                     //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
-                  //  document.getElementById('iframe-website').contentWindow.location.reload(true);
-                    $scope.deactivateAloha();
+                    //document.getElementById('iframe-website').contentWindow.location.reload(true);
+                    $scope.deactivateAloha && $scope.deactivateAloha();
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
 
-                    if ( iFrame.contentWindow.savePostMode ) {
-                        iFrame.contentWindow.savePostMode();
-                    }
                //     document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
 
 
@@ -483,19 +482,23 @@ define([
             };
 
             $scope.updateIframeComponents = function() {
-                document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
+                //document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateComponents && iFrame.contentWindow.updateComponents($scope.components);
             };
 
             $scope.scrollToIframeComponent = function(section) {
-                document.getElementById("iframe-website").contentWindow.scrollTo(section);
+                //document.getElementById("iframe-website").contentWindow.scrollTo(section);
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.scrollTo && iFrame.contentWindow.scrollTo(section)
             };
 
             $scope.activateAloha = function() {
-                document.getElementById("iframe-website").contentWindow.activateAloha();
+                //document.getElementById("iframe-website").contentWindow.activateAloha();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
             };
 
             $scope.deactivateAloha = function() {
-                document.getElementById("iframe-website").contentWindow.deactivateAloha();
+                //document.getElementById("iframe-website").contentWindow.deactivateAloha();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.deactivateAloha && iFrame.contentWindow.deactivateAloha()
             };
 
             $scope.editComponent = function(componentId) {
@@ -751,6 +754,23 @@ define([
                     }
                 });               
             }
+
+
+            var offFn = $rootScope.$on('$locationChangeStart', function () {
+                if(!$scope.backup['website']){
+
+                }
+                else if ( confirm("are you want to save?") ) {
+                    $scope.savePage();
+
+                } else {
+                    $scope.cancelPage();
+                }
+
+                offFn();
+
+
+            });
         }
     ]);
 });
