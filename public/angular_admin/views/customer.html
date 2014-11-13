@@ -44,13 +44,13 @@
     <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
       <div class="panel panel-default">
         <div class="panel-body">
-          <div class="col-xs-6">
-            <input ng-model="searchBar" placeholder="Search" class="form-control input-lg  search-contacts" type="text">
+          <div class="col-sm-6">
+            <input ng-model="searchBar" placeholder="Search Customers" class="form-control input-lg  search-contacts" type="text">
           </div>
-          <div class="col-xs-6">
+          <div class="col-sm-6">
             <div class="mb0">
               <select class="form-control chosen-select input-lg" ng-model="sortOrder">
-                <option value="" disabled selected>Filter</option>
+                <option value="" disabled selected>Filter Contacts</option>
                 <option value="1">A to Z</option>
                 <option value="2">Z to A</option>
                 <option value="3">Date Added</option>
@@ -64,7 +64,7 @@
 
             <li class="active"><a class="btn-letter" ng-click="alphaFilter()">all</a>
             </li>
-            <li ng-class="{disabled: !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList track by $index"><a class="btn-letter" ng-click="alphaFilter(alpha)">{{alpha}}</a></li>
+            <li ng-class="{disabled: !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList"><a class="btn-letter" ng-click="alphaFilter(alpha)">{{alpha}}</a></li>
           </ul>
         </div>
       </div>
@@ -72,7 +72,7 @@
     </headroom>
 
     <div ng-switch on="userPreferences.customerSettings.gridViewDisplay" class="people-list">
-      <div ng-switch-when="1" class="row">
+      <div ng-switch-when="true" class="row">
         <div>
           <div  ng-repeat="customer in renderedCustomers | iStartsWithFilter : customerFilter" class="col-xs-12 col-sm-4 col-md-3">
             <div data-contactid="1799" class="people-item btn-view-contact-details contact-item" style="opacity:1">
@@ -165,7 +165,7 @@
           </div>
         </div>
       </div>
-       <div ng-switch-when="2" class="row">
+       <div ng-switch-when="false" class="row">
           <div class="tb-main table">
             <div class="container-fluid tb-row"  ng-repeat="customer in renderedCustomers | iStartsWithFilter : customerFilter">
               <div class="tb-col col-md-1">
@@ -181,8 +181,8 @@
                   <span class="name visible-xs"> <h4 class="person-name" indigeweb-truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4> </span>
                 </div>
                 <div class="media-body vcenter col-xs-7 hidden-xs" ng-switch on="userPreferences.customerSettings.customerDisplayFormat">
-                <h4 class="person-name" ng-switch-when="1" indigeweb-truncate truncate-list=" [customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
-                <h4 class="person-name" ng-switch-when="2" indigeweb-truncate truncate-list=" [customer.last, customer.middle, customer.first]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                <h4 class="person-name" ng-switch-when="first" indigeweb-truncate truncate-list=" [customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                <h4 class="person-name" ng-switch-when="last" indigeweb-truncate truncate-list=" [customer.last, customer.middle, customer.first]" truncate-limit=20 truncate-symbol="'...'"></h4>
               </div>
               </div>
               </div></div>
@@ -244,10 +244,10 @@
         <div class="form-group">
           <label>Default View</label>
           <div class="btn-group">
-            <button type="button" ng-click="gridViewDisplay(true)" class="btn btn-default" ng-class="{ 'active' : listgrid }">
+            <button type="button" ng-click="setDefaultView('true')" class="btn btn-default">
             <span class="fa fa-th"></span> Grid
           </button>
-            <button type="button" ng-click="gridViewDisplay(false)" class="btn btn-default" ng-class="{ 'active' : !listgrid }">
+            <button type="button" ng-click="setDefaultView('false')" class="btn btn-default">
             <span class="fa fa-list"></span> List
           </button>
           </div>
