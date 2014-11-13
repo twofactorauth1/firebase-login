@@ -59,8 +59,23 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     };
 
     $scope.orderByFn = function() {
-      $scope.fetchedCustomers = $filter('orderBy')($scope.fetchedCustomers, $scope.customerOrder, $scope.customerSortReverse);
-      $scope.renderedCustomers = $filter('orderBy')($scope.renderedCustomers, $scope.customerOrder, $scope.customerSortReverse);
+        console.log(' orderByFn >>> ', $scope.customerOrder);
+      var customers = $scope.fetchedCustomers || [];
+      var present = customers.filter(function(elem) { if(elem[$scope.customerOrder]) {return elem[$scope.customerOrder] != ''; }});
+      var sortedAlphabetically = present.sort(function(a, b) {
+            return $scope.sortCustomers(a.first,b.first) || $scope.sortCustomers(a.last,b.last)
+        });
+      var empty = customers.filter(function(elem) { return elem.first == ""; });
+      var concatCustomers = sortedAlphabetically.concat(empty)
+      if ($scope.customerSortReverse) { concatCustomers = concatCustomers.reverse()}
+      $scope.fetchedCustomers = concatCustomers;
+        console.log('$scope.fetchedCustomers >>> ', $scope.fetchedCustomers.length);
+    };
+
+    $scope.sortCustomers = function(a, b) {
+        if (a > b) return +1;
+        if (a < b) return -1;
+        return 0;
     };
 
     $scope.alphaList = [];
@@ -74,50 +89,39 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         $scope.alphaList.push(String.fromCharCode(a + i));
         $scope.alphaFilterStatus[String.fromCharCode(a + i)] = false;
       }
+        if($scope.originalCustomers) {
+          $scope.originalCustomers.forEach(function(value, index) {
+            var field = null;
+            if ($scope.customerOrder === 'created.date') {
+              field = 'first';
+            } else {
+              field = $scope.customerOrder;
+            }
 
-      $scope.fetchedCustomers.forEach(function(value, index) {
-        var field = null;
-        if ($scope.customerOrder === 'created.date') {
-          field = 'first';
-        } else {
-          field = $scope.customerOrder;
+            if (value && (field in value) && value[field] && (value[field].substring(0, 1).toLowerCase() in $scope.alphaFilterStatus)) {
+              $scope.alphaFilterStatus[value[field].substring(0, 1).toLowerCase()] = true;
+            }
+          });
         }
-
-        if (value && (field in value) && value[field] && (value[field].substring(0, 1).toLowerCase() in $scope.alphaFilterStatus)) {
-          $scope.alphaFilterStatus[value[field].substring(0, 1).toLowerCase()] = true;
-        }
-      });
     };
 
     $scope.$watch('customerOrder', function(newValue, oldValue) {
-      $scope.orderByFn();
       if ($scope.fetchedCustomers !== undefined) {
         $scope.alphaFilterStatusFn();
+        $scope.orderByFn();
       }
     });
 
     $scope.$watch('customerSortReverse', function(newValue, oldValue) {
-      $scope.orderByFn();
+      // $scope.orderByFn();
     });
-
-    $scope.sortCustomers = function(a, b) {
-            if (a > b) return +1;
-            if (a < b) return -1;
-            return 0;
-    };
 
     var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
     CustomerService.getCustomersShortForm(fetchFields, function(customers) {
-      console.log('customers >>> ', customers);
+      console.log('customers >>> ', customers.length);
       $scope.originalCustomers = customers;
-      var present = customers.filter(function(elem) { if(elem.first) {return elem.first != ''; }});
-      console.log('present ', present.length);
-      var sortedAlphabetically = present.sort(function(a, b) { 
-            return $scope.sortCustomers(a.first,b.first) || $scope.sortCustomers(a.last,b.last)
-        });
-      var empty = customers.filter(function(elem) { return elem.first == ""; });
-      console.log('empty ', empty);
-      $scope.fetchedCustomers = sortedAlphabetically.concat(empty);
+      $scope.fetchedCustomers = customers;
+      $scope.orderByFn();
       $scope.customerScrollFn();
       $scope.alphaFilterStatusFn();
       ngProgress.complete();
@@ -149,14 +153,10 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $(".contentpanel").scrollTop(0);
           $scope.customerFilter.first = alpha;
         } else {
-            var present = orginal.filter(function(elem) { if(elem.first) {return elem.first != ''; }});
-            var sortedAlphabetically = _.sortBy(present, function(o) {
-                return o.first;
-            });
-            var empty = orginal.filter(function(elem) { if(elem.first) {return elem.first == ''; }});
-          $scope.fetchedCustomers = sortedAlphabetically.concat(empty);
+          $scope.fetchedCustomers = orginal;
           $scope.customerFilter = {};
         }
+        // $scope.orderByFn();
         $scope.customerScrollOffset = 0;
         $scope.customerScrollFn();
       };
@@ -184,8 +184,8 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         if (newValue === 0) {
           $scope.customerOrder = 'first';
           $scope.customerSortReverse = false;
-        } else if (newValue == 1) {
-          $scope.customerOrder = 'first';
+        } else if (newValue == 2) {
+          $scope.customerOrder = 'last';
           $scope.customerSortReverse = false;
         } else if (newValue == 2) {
           $scope.customerOrder = 'first';
