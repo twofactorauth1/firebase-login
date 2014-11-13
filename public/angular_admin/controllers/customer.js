@@ -59,17 +59,21 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     };
 
     $scope.orderByFn = function() {
-        console.log(' orderByFn >>> ', $scope.customerOrder);
       var customers = $scope.fetchedCustomers || [];
       var present = customers.filter(function(elem) { if(elem[$scope.customerOrder]) {return elem[$scope.customerOrder] != ''; }});
       var sortedAlphabetically = present.sort(function(a, b) {
             return $scope.sortCustomers(a.first,b.first) || $scope.sortCustomers(a.last,b.last)
-        });
+      });
       var empty = customers.filter(function(elem) { return elem.first == ""; });
-      var concatCustomers = sortedAlphabetically.concat(empty)
-      if ($scope.customerSortReverse) { concatCustomers = concatCustomers.reverse()}
+      var concatCustomers = sortedAlphabetically.concat(empty);
+      if ($scope.customerSortReverse) {
+        concatCustomers = concatCustomers.reverse();
+      }
+      $scope.renderedCustomers = [];
+      $scope.fetchedCustomers = [];
       $scope.fetchedCustomers = concatCustomers;
-        console.log('$scope.fetchedCustomers >>> ', $scope.fetchedCustomers.length);
+      $scope.customerScrollOffset = 0;
+      $scope.customerScrollFn();
     };
 
     $scope.sortCustomers = function(a, b) {
@@ -113,12 +117,11 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     });
 
     $scope.$watch('customerSortReverse', function(newValue, oldValue) {
-      // $scope.orderByFn();
+      $scope.orderByFn();
     });
 
     var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
     CustomerService.getCustomersShortForm(fetchFields, function(customers) {
-      console.log('customers >>> ', customers.length);
       $scope.originalCustomers = customers;
       $scope.fetchedCustomers = customers;
       $scope.orderByFn();
@@ -156,7 +159,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $scope.fetchedCustomers = orginal;
           $scope.customerFilter = {};
         }
-        // $scope.orderByFn();
+        $scope.orderByFn();
         $scope.customerScrollOffset = 0;
         $scope.customerScrollFn();
       };
@@ -180,14 +183,15 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
 
       $scope.$watch('sortOrder', function(newValue, oldValue) {
+        console.log('sort order ', newValue);
         newValue = parseInt(newValue);
-        if (newValue === 0) {
+        if (newValue == '') {
           $scope.customerOrder = 'first';
           $scope.customerSortReverse = false;
-        } else if (newValue == 2) {
-          $scope.customerOrder = 'last';
+        } else if (newValue == 1) {
+          $scope.customerOrder = 'first';
           $scope.customerSortReverse = false;
-        } else if (newValue == 2) {
+          } else if (newValue == 2) {
           $scope.customerOrder = 'first';
           $scope.customerSortReverse = true;
         } else if (newValue == 3) {
