@@ -81,7 +81,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         } else {
           field = $scope.customerOrder;
         }
-        if (value[field].substring(0, 1).toLowerCase() in $scope.alphaFilterStatus) {
+        if (value && (field in value) && (value[field].substring(0, 1).toLowerCase() in $scope.alphaFilterStatus)) {
           $scope.alphaFilterStatus[value[field].substring(0, 1).toLowerCase()] = true;
         }
       });
