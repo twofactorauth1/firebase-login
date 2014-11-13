@@ -111,14 +111,15 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     };
 
     $scope.$watch('customerOrder', function(newValue, oldValue) {
-      if ($scope.fetchedCustomers !== undefined) {
-        $scope.alphaFilterStatusFn();
-        $scope.orderByFn();
+      if ($scope.alphaFilter) {
+        $scope.alphaFilter($scope.alphaSelected);
       }
     });
 
     $scope.$watch('customerSortReverse', function(newValue, oldValue) {
-      $scope.orderByFn();
+      if ($scope.alphaFilter) {
+        $scope.alphaFilter($scope.alphaSelected);
+      }
     });
 
     var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
@@ -147,7 +148,9 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         }
       });
 
+      $scope.alphaSelected = null;
       $scope.alphaFilter = function(alpha) {
+        $scope.alphaSelected = alpha;
         var orginal = $scope.originalCustomers;
         $scope.renderedCustomers = [];
         $scope.fetchedCustomers = [];
@@ -183,7 +186,6 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
 
       $scope.$watch('sortOrder', function(newValue, oldValue) {
-        console.log('sort order ', newValue);
         newValue = parseInt(newValue);
         if (newValue === '') {
           $scope.customerOrder = 'first';
