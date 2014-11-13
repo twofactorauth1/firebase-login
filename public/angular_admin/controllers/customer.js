@@ -103,6 +103,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
     CustomerService.getCustomersShortForm(fetchFields, function(customers) {
       console.log('customers >>> ', customers);
+      $scope.originalCustomers = customers;
       $scope.fetchedCustomers = customers;
       $scope.orderByFn();
       $scope.customerScrollFn();
@@ -128,6 +129,12 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       });
 
       $scope.alphaFilter = function(alpha) {
+        var orginal = $scope.originalCustomers;
+        $scope.renderedCustomers = [];
+        $scope.customerScrollOffset = 0;
+        $scope.fetchedCustomers = orginal.filter(function(elem) { if(elem.first) {return elem.first.charAt(0).toLowerCase() == alpha; }});
+        $scope.customerScrollFn();
+        console.log('fetched customers >>> ', $scope.fetchedCustomers);
         if (alpha) {
           $scope.customerFilter.first = alpha;
           $(".contentpanel").scrollTop(0);
