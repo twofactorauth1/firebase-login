@@ -39,7 +39,7 @@
     <div class="clearfix mb30"></div>
   </div>
 
-  <div style="background: #e7e7e7;" id="scrollTop" class="contentpanel" ng-style="styleCustomers()" indigeweb-resize indiscroller>
+  <div style="background: #e7e7e7;" id="scrollTop" class="contentpanel" ng-style="styleCustomers()" indigeweb-resize indiscroller indiscroller-update='saveScrollFn'>
 
     <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
       <div class="panel panel-default">
@@ -170,7 +170,7 @@
                     <span data-original-title="Important Contact" ng-click="setImportantContact(customer)" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips"> <i class="fa fa-star-o" ng-hide="customer.starred"></i> <i class="fa fa-star" ng-show="customer.starred"></i> </span>
                   </div>
                   </div>
-              <div class="tb-col col-md-4">
+              <div class="tb-col col-md-3">
               <div class="people-item btn-view-contact-details contact-item"  indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}"  style="opacity:1">
               <div class="media">
                 <div class="col-xs-4 vcenter">
@@ -183,16 +183,48 @@
               </div>
               </div>
               </div></div>
-              <div class="tb-col col-md-4">
-              <div class="" style="opacity:1">
-              <ul class="social-list hidden-xs">
-                <li>
-                  <a ng-show="showEmail && checkBestEmail(customer)" href="mailto:{{email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
-                </li>
-              </ul>
+              <div class="tb-col col-md-1">
+              <div class="people-item" ng-if="showEmail && checkBestEmail(customer) && email">
+                      <i class="fa fa-envelope-o pull-left title"></i><span class="pull-right value">{{email}}</span>
+              </div>
+          </div>
+          <div class="tb-col col-md-2">
+            <div class="people-item" ng-if="showAddress && checkAddress(customer)">
+                      <i class="fa fa-map-marker pull-left title"></i>
+                      <span class="pull-right value" ng-if="customer.details[0].addresses[0].city && customer.details[0].addresses[0].state">{{customer.details[0].addresses[0].city+', '+customer.details[0].addresses[0].state}}</span>
+                      <span class="pull-right value" ng-if="customer.details[0].addresses[0].address && !customer.details[0].addresses[0].city">{{customer.details[0].addresses[0].address}}</span>
             </div>
           </div>
-          <div class="tb-col col-md-4"></div>
+          <div  class="tb-col col-md-1">
+             <div class="people-item" ng-if="customer.details[0].phones[0].number">
+                      <i class="fa fa-mobile pull-left title"></i><span class="pull-right value">{{customer.details[0].phones[0].number}}</span>
+              </div>
+          </div>
+          <div class="tb-col col-md-2">
+            <div  class="people-item" ng-if="showSocial && (checkFacebookId(customer) || checkTwitterId(customer) || checkLinkedInId(customer))">
+            <p class="pull-left title">
+            Social Accounts:
+            </p>
+            <ul class="pull-right social-list value">
+            <li ng-if="checkFacebookId(customer)">
+            <i class="fa fa-facebook-square"></i>
+            </li>
+            <li ng-if="checkTwitterId(customer)">
+            <i class="fa fa-twitter-square"></i>
+            </li>
+            <li ng-if="checkLinkedInId(customer)">
+            <i class="fa fa-linkedin-square"></i>
+            </li>
+            </ul>
+            </div>
+          </div>
+
+          <div class="tb-col col-md-2">
+          <div class="people-item" ng-if="showCustomerSince && customer.created.date">
+            <p class="pull-left title">Customer Since:</p>
+            <span class="pull-right value">{{customer.created.date | timeAgoFilter}}</span>
+          </div>
+          </div>
         </div>
       </div>
       </div>
