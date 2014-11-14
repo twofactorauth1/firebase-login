@@ -6620,11 +6620,18 @@ h4,
 }
 .modal-title {
   font-size: 20px;
-  color: #333;
-  font-weight: bold;
+  color: #474747;
+  font-family: 'Open Sans Bold';
 }
 .modal-header .close {
   margin-top: 4px;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1;
+  color: #b6b6b6;
+  font-family: 'Open Sans Bold';
+  opacity: 1;
 }
 .modal-backdrop.in {
   opacity: 0.65;
@@ -16589,7 +16596,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 #import-contacts-modal .btn {
   margin-left: 10px;
-  min-width: 115px;
+  min-width: 65px;
   color: white;
 }
 #import-contacts-modal .btn:first-child {
@@ -16729,6 +16736,13 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .tb-row > div {
   border-bottom: 1px solid #e6e6e6;
   border-right: 1px solid #e6e6e6;
+}
+.choose-import {
+  text-align: center;
+}
+.choose-import ul li {
+  display: inline-block;
+  margin-right: 15px;
 }
 .account {
   overflow: hidden;
@@ -21720,8 +21734,8 @@ input[type='file'] {
   font-style: normal;
 }
 @font-face {
-  font-family: 'open_sansregular';
-  src: url('../fonts/opensans/OpenSans-Regular.ttf');
+  font-family: 'Open Sans Bold';
+  src: url('../fonts/opensans/OpenSans-Bold.ttf');
   font-weight: normal;
   font-style: normal;
 }
@@ -23208,6 +23222,9 @@ div[data-class='image-text'] p {
 .masthead-v1 .masthead-title {
   font-size: 32px;
   padding-bottom: 20px;
+}
+.masthead-v1 .masthead-title h1 {
+  font-size: 45px;
 }
 .masthead-v1 .btn {
   height: 50px;

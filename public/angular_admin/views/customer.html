@@ -344,14 +344,25 @@
       <div class="modal-body">
 
         <div class="row choose-import" data-import-section="choose">
-          <p>Choose one of the import options from below:</p>
+          <p class="center"><b>Choose one of the import options from below:</b></p>
           <div class="clearfix mb30"></div>
-          <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook" ng-click="importFacebookFriends()"><span class="fa fa-facebook"></span>
-            <div class="clearfix mb5"></div>Facebook</button>
-          <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin" ng-click="importLinkedInConnections()"><span class="fa fa-linkedin"></span>
-            <div class="clearfix mb5"></div>LinkedIn</button>
-          <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus" ng-click="importGmailContacts()"><span class="fa fa-google"></span>
-            <div class="clearfix mb5"></div>Gmail</button>
+          <ul>
+          <li>
+            <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook" ng-click="importFacebookFriends()"><span class="fa fa-facebook"></span></button>
+            <div class="clearfix mb5"></div>
+            Facebook
+          </li>
+          <li>
+             <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin" ng-click="importLinkedInConnections()"><span class="fa fa-linkedin"></span></button>
+             <div class="clearfix mb5"></div>
+             LinkedIn
+          </li>
+          <li>
+            <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus" ng-click="importGmailContacts()"><span class="fa fa-google"></span></button>
+            <div class="clearfix mb5"></div>
+            Gmail
+          </li>
+          </ul>
           <div class="clearfix mb30"></div>
         </div>
 
