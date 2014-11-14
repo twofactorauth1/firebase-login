@@ -37,7 +37,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     $scope.checkFacebookId = function(contact) {
       var returnVal = CustomerService.checkFacebookId(contact);
       this.facebookId = contact.facebookId;
-      return returnVal;
+      return true;
     };
 
     $scope.checkTwitterId = function(contact) {
@@ -316,6 +316,12 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $scope.showAddress = value;
         else
           $scope.showAddress = true;
+      });
+      $scope.$watch('toggleCustomerSince', function(value) {
+        if (angular.isDefined(value))
+          $scope.showCustomerSince = value;
+        else
+          $scope.showCustomerSince = true;
       });
       $scope.setDefaultView = function(value) {
         $scope.gridViewDisplay = value;

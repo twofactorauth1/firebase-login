@@ -127,7 +127,7 @@
                     </div>
                   </li>
                   <li class="socialList">
-                    <div ng-if="showSocial && checkFacebookId(customer) || checkTwitterId(customer) || checkLinkedInId(customer)">
+                    <div ng-if="showSocial && (checkFacebookId(customer) || checkTwitterId(customer) || checkLinkedInId(customer))">
                       <p class="pull-left title">Social Accounts:</p>
                       <ul class="pull-right value">
                         <li ng-if="checkFacebookId(customer)"><i class="fa fa-facebook-square"></i></li>
@@ -137,7 +137,7 @@
                     </div>
                   </li>
                   <li>
-                    <div ng-if="customer.created.date">
+                    <div ng-if="showCustomerSince && customer.created.date">
                       <p class="pull-left title">Customer Since:</p>
                       <span class="pull-right value">{{customer.created.date | timeAgoFilter}}</span>
                     </div>
@@ -292,6 +292,10 @@
           <div class="col-xs-12 ckbox ckbox-success">
             <input type="checkbox" id="address_id" ng-checked="true" ng-model="toggleAddress">
             <label for="address_id">Address</label>
+          </div>
+          <div class="col-xs-12 ckbox ckbox-success">
+            <input type="checkbox" id="customer_since_id" ng-checked="true" ng-model="toggleCustomerSince">
+            <label for="customer_since_id">Customer Since</label>
           </div>
         </div>
       </div>
