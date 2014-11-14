@@ -19181,7 +19181,7 @@ div.error label.error:before {
   CONTACTS LIST - PEOPLE ITEM
 **********************************************************/
 .people-item {
-  min-height: 320px;
+  min-height: 330px;
   cursor: pointer;
   background: #fcfcfc;
   padding: 15px;

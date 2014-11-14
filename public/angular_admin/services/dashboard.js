@@ -47,13 +47,9 @@ define(['app'], function (app) {
                 method: 'GET'
               })
               .success(function(data, status, headers, config) {
+                return;
                 fn(data);
                 token = data.data;
-              })
-              .error(function(response) {
-                if(response.status === 401) {
-                    fn('error');
-                }
               });
         };
 
