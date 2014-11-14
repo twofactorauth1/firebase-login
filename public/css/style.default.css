@@ -17449,6 +17449,18 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .rightpanel .bootstrap-switch {
   float: right;
 }
+.rightpanel .bgimg {
+  position: relative;
+}
+.rightpanel .bgimg i {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: black;
+}
+.rightpanel .bgimg i:hover {
+  color: red;
+}
 #post-url {
   text-transform: lowercase;
 }
@@ -19125,6 +19137,10 @@ div.error label.error:before {
   -webkit-transition: all 0.2s ease-out 0s;
   transition: all 0.2s ease-out 0s;
   width: 100%;
+}
+.letter-list li a.active {
+  background: #428BCA;
+  color: white;
 }
 .letter-list li a:hover {
   color: #fff;
