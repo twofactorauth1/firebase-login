@@ -86,15 +86,15 @@ _.extend(router.prototype, baseRouter.prototype, {
 
         var referringUrl = req.query['redirectTo']|| '/admin';
         authenticationDao.getAuthenticatedUrlForAccount(this.accountId(req), state.userId, referringUrl, 90, function(err, value){
-            if(err) {
-                self.log.error('Error getting referring url for: ' + referringUrl);
-                self.log.debug('<< inAppSocialLogin redirecting to /login');
-                resp.redirect('/login');
-            } else {
-                state.redirectUrl = encodeURIComponent(value);
-                self.log.debug('<< inAppSocialLogin');
-                resp.redirect(self.getInternalAuthRedirect(state));
-            }
+            // if(err) {
+            //     self.log.error('Error getting referring url for: ' + referringUrl);
+            //     self.log.debug('<< inAppSocialLogin redirecting to /login');
+            //     resp.redirect('/login');
+            // } else {
+            //     state.redirectUrl = encodeURIComponent(value);
+            //     self.log.debug('<< inAppSocialLogin');
+            //     resp.redirect(self.getInternalAuthRedirect(state));
+            // }
         });
 
     },
