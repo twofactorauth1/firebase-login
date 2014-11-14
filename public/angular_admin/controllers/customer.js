@@ -37,7 +37,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
     $scope.checkFacebookId = function(contact) {
       var returnVal = CustomerService.checkFacebookId(contact);
       this.facebookId = contact.facebookId;
-      return true;
+      return returnVal;
     };
 
     $scope.checkTwitterId = function(contact) {
