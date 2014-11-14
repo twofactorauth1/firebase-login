@@ -28,7 +28,7 @@ define(['app'], function (app) {
                     if (data) {fn(data);};
                  });
             } else {
-                fn(true);
+                fn(false);
             }
         };
 
@@ -47,6 +47,7 @@ define(['app'], function (app) {
               })
               .success(function(data, status, headers, config) {
                 if (data != 'error') {
+                    console.log('access data >>> ', data);
                     fn(data);
                     token = data.data;
                 } else {
