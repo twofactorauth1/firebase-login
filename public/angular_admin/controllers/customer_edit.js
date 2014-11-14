@@ -205,7 +205,7 @@ define(['app',
         }
         $scope.savePreferencesFnWait = true;
         setTimeout(function() {
-          UserService.updateUserPreferences($scope.userPreferences, function(preferences) {});
+          UserService.updateUserPreferences($scope.userPreferences, true, function(preferences) {});
           $scope.restoreFn();
           $scope.savePreferencesFnWait = false;
         }, 1500);

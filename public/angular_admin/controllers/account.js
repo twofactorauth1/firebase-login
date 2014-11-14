@@ -67,7 +67,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
       ToasterService.processPending();
     });
 
-    $scope.setActiveTab = function (tab){      
+    $scope.setActiveTab = function (tab){
       $scope.activeTab = tab;
     };
     UserService.getUserPreferences(function(preferences) {
@@ -80,7 +80,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
     });
 
     $scope.savePreferencesFn = function() {
-      UserService.updateUserPreferences($scope.userPreferences, function(){})
+      UserService.updateUserPreferences($scope.userPreferences, true, function(){})
     };
 
   }]);

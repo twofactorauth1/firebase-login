@@ -84,7 +84,7 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
     });
 
     $scope.savePreferencesFn = function() {
-      UserService.updateUserPreferences($scope.userPreferences, function(preferences) {
+      UserService.updateUserPreferences($scope.userPreferences, true, function(preferences) {
         $scope.userPreferences = preferences;
         if ($scope.product.icon === undefined) {
           $('#convert').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
