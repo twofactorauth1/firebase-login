@@ -174,7 +174,8 @@ require.config({
         'unsafeHtml': {deps: ['angular']},
         "bootstrap-confirmation" : {deps: ['bootstrap']},
         'jdfontselect': {deps: ['angular','webfontloader']},
-        'ngInfiniteScroll': {deps: ['angular']}
+        'ngInfiniteScroll': {deps: ['angular']},
+        'timeAgoFilter': {deps: ['moment']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
