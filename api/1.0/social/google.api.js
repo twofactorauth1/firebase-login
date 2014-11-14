@@ -64,10 +64,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 if (googleCreds != null) {
                     resp.send({data:googleCreds.accessToken});
                 } else {
+                    self.log.debug('>> 500 1');
                     self.wrapError(resp, 500, "Cannot retrieve access token, Google API access not verified", err, value);
                 }
             } else {
-                self.wrapError(resp, 500, "Cannot retrieve access token, Google API access not verified", err, value);
+                resp.send('error');
+                //self.wrapError(resp, 500, "Cannot retrieve access token, Google API access not verified", err, value);
             }
         });
     },
