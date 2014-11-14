@@ -50,6 +50,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 PostService.getAllPostsByPageId($scope.currentpage._id, function (posts){
                     that.blogposts = posts;
                 });
+//                $scope.currentpage.components.forEach(function(component){
+//                    if (component.bg.img) {
+//                        component.bgimg = {
+//                            "background": "url(" + component.bg.img.url + ") no-repeat fixed",
+//                            "background-size": "cover",
+//                            "color": component.txtcolor || $scope.primaryTextColor
+//                        };
+//                    }
+//
+//                })
+
+
                 /*PostService.getAllPosts(function(posts) {
                     that.blogposts = posts;
                 });*/
