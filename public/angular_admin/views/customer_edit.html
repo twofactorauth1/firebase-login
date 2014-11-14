@@ -1,6 +1,6 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div style="">
-  <div class="pageheader row">
+  <div class="pageheader">
     <div class="col-xs-7">
       <button indigeweb-state-nav="customer" id="btn-back-to-contact" class="btn btn-success pull-left" type="button" ng-show="currentState == 'customerAdd'">
         <span class="fa fa-chevron-left"></span>
@@ -12,7 +12,7 @@
       </button>
       <h2><i class="fa fa-users"></i> Edit Contact</h2>
     </div>
-    <div class="col-xs-4">
+    <div class="col-xs-5">
       <div class="btn btn-success pull-right btn-save-contact" type="button" ng-click="customerSaveFn()">
         <i class="fa fa-save"></i>
         <span class="hidden-xs">Save</span>
@@ -22,7 +22,7 @@
   </div>
   <!-- End Page Header -->
 
-  <div style="min-height: 377px;" id="contact-edit-container" class="contentpanel">
+  <div id="contact-edit-container" class="contentpanel" ng-style="styleCustomers()" indigeweb-resize>
     <div class="row">
 
       <div class="col-md-6">
@@ -37,23 +37,45 @@
             <div class="row">
               <!-- UPDATE NAME -->
               <div class="col-xs-12 form" role="form">
+              <!-- UPDATE PHOTO -->
+                  <div id="contact-photo-container" class="row">
+                    <row>
+                      <div class="col-xs-4 col-xs-offset-4">
+                      <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo center" ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}">
+                      <div class="clearfix mb15"></div>
+                        <div class="hidden-xs hidden-sm btn-contact-photo">
+                          <div class="btn-link btn-edit-photo">
+                            <a class="btn btn-success btn-block media-modal" on-insert-mediacb="insertPhoto" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Photo</span> </a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-xs-7 col-md-6">
+                        <div class="btn-edit-photo-controls hidden-md hidden-lg">
+                          <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
+                          <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+                        </div>
+                      </div>
+                    </row>
+                  </div>
+
                 <div class="form-group">
                   <label class="">Contact Name</label>
                   <input id="input-fullname" class="form-control input-lg" value="  " ng-model="fullName" placeholder="full name" type="text">
                   <small style="margin-left:10px;">
-                                        <strong>first:</strong>
-                                        <code>
-                                            <span id="hint-first">{{customer.first}}</span>
-                                        </code>
-                                        <strong>middle:</strong>
-                                        <code>
-                                            <span id="hint-middle">{{customer.middle}}</span>
-                                        </code>
-                                        <strong>last:</strong>
-                                        <code>
-                                            <span id="hint-last">{{customer.last}}</span>
-                                        </code>
-                                    </small>
+                      <strong>first:</strong>
+                      <code>
+                          <span id="hint-first">{{customer.first}}</span>
+                      </code>
+                      <strong>middle:</strong>
+                      <code>
+                          <span id="hint-middle">{{customer.middle}}</span>
+                      </code>
+                      <strong>last:</strong>
+                      <code>
+                          <span id="hint-last">{{customer.last}}</span>
+                      </code>
+                  </small>
 
                 </div>
 
@@ -84,28 +106,6 @@
               </div>
             </div>
 
-
-            <!-- UPDATE PHOTO -->
-            <div id="contact-photo-container" class="row">
-              <row>
-                <div class="col-xs-5 col-md-6">
-                  <div class="hidden-xs hidden-sm btn-contact-photo">
-                    <div class="btn-link btn-edit-photo">
-                      <a class="btn btn-success pull-right media-modal" on-insert-mediacb="insertPhoto" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Photo</span> </a>
-                    </div>
-
-                  </div>
-                  <img id="contact-photo" class="img-responsive img-rounded hand btn-edit-photo" ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}">
-                </div>
-
-                <div class="col-xs-7 col-md-6">
-                  <div class="btn-edit-photo-controls hidden-md hidden-lg">
-                    <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
-                    <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
-                  </div>
-                </div>
-              </row>
-            </div>
           </div>
         </div>
         <!-- END Name & Photo -->
@@ -164,7 +164,7 @@
             <div id="phone-row" class="row">
               <div class="col-xs-1"><i class="icon-main fa fa-phone"></i>
               </div>
-              <div class="col-xs-10">
+              <div class="col-xs-11">
                 <div id="edit-phones-container">
 
 
@@ -211,7 +211,9 @@
               </div>
             </div>
             <div class="row">
-              <div ng-click="addCustomerContactFn()" class="btn btn-primary btn-sm" id="btn-new-device">Add Contact</div>
+              <div class="col-xs-11">
+              <div ng-click="addCustomerContactFn()" class="btn btn-primary btn-sm pull-right" id="btn-new-device">Add Contact</div>
+              </div>
             </div>
             <hr>
 
@@ -385,8 +387,20 @@
           </div>
           <div class="form-group">
               <label>Default City</label>
+              <input type="text" ng-model="userPreferences.default_customer_city" class="form-control input-address input-address-field ng-pristine ng-valid"  ng-change="savePreferencesFn()">
           </div>
-          <input type="text" ng-model="userPreferences.default_customer_city" class="form-control input-address input-address-field ng-pristine ng-valid"  ng-change="savePreferencesFn()">
+          <div class="form-group">
+              <label>Default State</label>
+              <input type="text" ng-model="userPreferences.default_customer_state" class="form-control input-address input-address-field ng-pristine ng-valid"  ng-change="savePreferencesFn()">
+          </div>
+          <div class="form-group">
+              <label>Default Country</label>
+              <input type="text" ng-model="userPreferences.default_customer_country" class="form-control input-address input-address-field ng-pristine ng-valid"  ng-change="savePreferencesFn()">
+          </div>
+          <div class="form-group">
+              <label>Default Zip</label>
+              <input type="text" ng-model="userPreferences.default_customer_zip" class="form-control input-address input-address-field ng-pristine ng-valid"  ng-change="savePreferencesFn()">
+          </div>
         </div>
       </div>
     </div>

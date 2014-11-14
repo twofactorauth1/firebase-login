@@ -41,7 +41,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     route = 'index';
                     route = route.replace('/', '');
                     that.pages = data[route];
-                    console.log('that.pages >>> ', that.pages);
                 } else {
                     route = $scope.$location.$$path.replace('/page/', '');
                     console.log('route ', route);
@@ -81,7 +80,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
 
         ProductService.getAllProducts(function(data) {
-            console.log('product service data >>> ', data);
             that.products = data;
         });
 
@@ -142,7 +140,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             window.deactivateAloha = function() {
                 if(aloha.editor && aloha.editor.selection)
                     aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
-                aloha.dom.query('.editable', document).forEach(aloha.mahalo);
+                    // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
             };
 
             window.updateWebsite = function(data) {

@@ -7,10 +7,7 @@
         <h2 class="col-xs-7"><i class="fa fa-bar-chart"></i> Dashboard</h2>
 
         <div class="col-xs-4">
-            <!-- <div class="btn btn-success pull-right btn-create-contact" type="button">
-                <i class="fa fa-plus"></i>
-                <span class="hidden-xs">Add</span>
-            </div> -->
+
         </div>
     </div>
 
@@ -18,6 +15,10 @@
 
     <div class="col-xs-12 nopadding">
         <div class="btn-group col-xs-12 template-btns nopadding">
+            <button type="button" class="btn btn-default btn-lg col-xs-4" ng-class="{'active': activeTab === 'activity'}" ng-click="activeTab = 'activity'">
+                <i class="fa fa-comments"></i>
+                <span class="hidden-xs">Activity <span class="badge badge-info">2</span></span>
+            </button>
             <button type="button" class="btn btn-default btn-lg col-xs-4 tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
                 <div tooltip-placement="bottom" tooltip-html-unsafe="What are customers doing </br> before they churn?">
                     <i class="fa fa-pie-chart"></i>
@@ -34,15 +35,15 @@
                     <span class="hidden-xs">Ecommerce</span>
                 </div>
             </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-4" ng-class="{'active': activeTab === 'marketing'}" ng-click="activeTab = 'marketing'">
+            <!-- <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'marketing'}" ng-click="activeTab = 'marketing'">
                 <i class="fa fa-bullhorn"></i>
                 <span class="hidden-xs">Marketing</span>
             </button>
-            <!--
             <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'support'}" ng-click="activeTab = 'support'">
                 <i class="fa fa-question-circle"></i>
                 <span class="hidden-xs">Support</span>
-            </button>
+            </button> -->
+            <!--
             <button type="button" class="btn btn-default btn-lg col-xs-2" ng-class="{'active': activeTab === 'testing'}" ng-click="activeTab = 'testing'">
                 <i class="fa fa-flask"></i>
                 <span class="hidden-xs">Testing</span>
@@ -50,9 +51,224 @@
         </div>
     </div>
 
-    <div class="contentpanel">
+    <div class="contentpanel" ng-style="styleDashboard()" indigeweb-resize>
 
-        <div id="active-users-container"></div>
+        <div class="activity-section" ng-show="activeTab == 'activity'">
+            <div class="col-md-6">
+                <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <div class="panel-btns">
+                               <!--  <a data-toggle="modal" data-target="#visitor-overview" class="panel-edit"><i class="fa fa-info-circle"></i></a> -->
+                            </div>
+                            <h3 class="panel-title">Customer Overview</h3>
+                        </div>
+                        <div class="panel-body">
+                            <highchart config="customerOverviewConfig"></highchart>
+                            <div>
+                                <div class="col-xs-6 top-four">
+                                    <div class="metric center">New Customers</div>
+                                    <div class="title center">
+                                        {{totalPayingCustomers}}
+                                        <span class="percent" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}%</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 top-four">
+                                    <div class="metric center">Cancelations</div>
+                                    <div class="title center">
+                                        {{totalCanceledSubscriptions}}
+                                        <span class="percent" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="panel panel-success panel-nopadding">
+                        <div class="panel-heading">
+                            <div class="panel-btns">
+                                <!-- <a data-toggle="modal" data-target="#visitor-overview" class="panel-edit"><i class="fa fa-info-circle"></i></a> -->
+                            </div>
+                            <h3 class="panel-title">New Leads</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="smart-timeline">
+                                <ul class="smart-timeline-list">
+                                    <li ng-repeat="activity in activities | filter : { activityType: 'ACCOUNT_CREATED' }">
+                                        <div class="col-xs-12">
+                                            <a href="/admin#/customer/{{activity.customer._id}}" class="smart-timeline-icon">
+                                                <img ng-src="{{ activity.customer.photo ? activity.customer.photo : '/assets/icons/blank-user.jpg' }}" width="32" height="32">
+                                            </a>
+                                            <div class="smart-timeline-time">
+                                                <small>{{activity.start | date:'d MMM, yyyy'}}</small>
+                                            </div>
+                                            <div class="smart-timeline-content">
+                                                <div class="col-xs-8">
+                                                    <p>
+                                                        <span class="label label-info">{{activity.activityType}}</span> {{activity.detail}}
+                                                    </p>
+                                                    <p>
+                                                        <b>{{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}}</b> signed up for an account.
+                                                    </p>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                <h3 class="center">+$97</h3>
+                                                    <p class="center">Potential MRR</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div>
+                                <div class="col-xs-6 top-four">
+                                    <div class="metric center">Customers</div>
+                                    <div class="title center">
+                                        1
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 top-four">
+                                    <div class="metric center">MRR Loss</div>
+                                    <div class="title center">
+                                       + $97
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="panel panel-danger panel-nopadding">
+                        <div class="panel-heading">
+                            <div class="panel-btns">
+                               <!--  <a data-toggle="modal" data-target="#visitor-overview" class="panel-edit"><i class="fa fa-info-circle"></i></a> -->
+                            </div>
+                            <h3 class="panel-title">Customers at Risk</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="smart-timeline">
+                                <ul class="smart-timeline-list">
+                                    <li ng-repeat="activity in activities | filter : { activityType: 'SUBSCRIBE_CANCEL' }">
+                                        <div class="col-xs-12">
+                                            <a href="/admin#/customer/{{activity.customer._id}}" class="smart-timeline-icon">
+                                                <img ng-src="{{ activity.customer.photo ? activity.customer.photo : '/assets/icons/blank-user.jpg' }}" width="32" height="32">
+                                            </a>
+                                            <div class="smart-timeline-time">
+                                                <small>{{activity.start | date:'d MMM, yyyy'}}</small>
+                                            </div>
+                                            <div class="smart-timeline-content">
+                                                <div class="col-xs-8">
+                                                    <p>
+                                                        <span class="label label-danger">{{activity.activityType}}</span> {{activity.detail}}
+                                                    </p>
+                                                    <p>
+                                                        <b>{{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}}</b> canceled account.
+                                                    </p>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                <h3 class="center">-$97</h3>
+                                                    <p class="center">MRR Loss</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div>
+                                <div class="col-xs-6 top-four">
+                                    <div class="metric center">Cancelations</div>
+                                    <div class="title center">
+                                        1
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 top-four">
+                                    <div class="metric center">Potential MRR Loss</div>
+                                    <div class="title center">
+                                       - $97
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="col-md-6 activity-section">
+                <div class="panel panel-default panel-nopadding">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                 <h3 class="panel-title">Activity</h3>
+                            </div>
+                            <div class="panel-btns col-xs-6">
+                                <select class="form-control chosen-select input">
+                                    <option value="">All Activity</option>
+                                    <!-- <option value="">Filter Activity</option>
+                                    <option value="">My Activity</option>
+                                    <option value="">Orders</option>
+                                    <option value="">FB Like</option>
+                                    <option value="">Tweets</option>
+                                    <option value="">Page View</option> -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body smart-timeline">
+                        <ul class="smart-timeline-list">
+                            <li ng-repeat="activity in activities | filter:orderBy:activity.start:true">
+                                <a href="/admin#/customer/{{activity.customer._id}}" class="smart-timeline-icon">
+                                    <img ng-src="{{ activity.customer.photo ? activity.customer.photo : '/assets/icons/blank-user.jpg' }}" width="32" height="32">
+                                </a>
+                                <div class="smart-timeline-time">
+                                    <small>{{activity.start | date:'d MMM, yyyy'}}</small>
+                                </div>
+                                <div class="smart-timeline-content">
+                                    <div ng-switch on="activity.activityType">
+                                        <div ng-switch-when="EMAIL">
+                                            <p>
+                                                <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
+                                            </p>
+                                            <p>An email was sent</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
+                                         <a ng-switch-when="TWEET" href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Reply to Tweet</a>
+                                        <div ng-switch-when="ACCOUNT_CREATED">
+                                            <p>
+                                                <span class="label label-info">{{activity.activityType}}</span> {{activity.detail}}
+                                            </p>
+                                            <p>
+                                                {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} signed up for an account.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="SUBSCRIBE">
+                                            <p>
+                                                <span class="label label-success">{{activity.activityType}}</span> {{activity.detail}}
+                                            </p>
+                                            <p>
+                                                {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}}
+                                                subscribed to a <a href="">Indigenous Yearly</a> for $99.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> See User Flow</a> -->
+                                        </div>
+                                        <div ng-switch-when="SUBSCRIBE_CANCEL">
+                                            <p>
+                                                <span class="label label-danger">{{activity.activityType}}</span> {{activity.detail}}
+                                            </p>
+                                            <p>
+                                                {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} canceled account.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="PAGE_VIEW">
+                                            <p>
+                                                <span class="label label-default">{{activity.activityType}}</span>
+                                            </p>
+                                            <p>
+                                                {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="analytics-section" ng-show="activeTab == 'analytics'">
             <div class="row">
@@ -197,28 +413,30 @@
 
             <div class="row">
                 <div class="col-xs-12">
-                     <div class="panel panel-info panel-nopadding">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Individual Page Analytics</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="table mb0">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped">
-                                            <thead>
+                    <div class="panel panel-info panel-nopadding">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Individual Page Analytics</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table mb0">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
                                             <tr>
                                                 <th>Page</th>
-                                                <th>Pageviews</th>
-                                                <th>Unique Pageviews</th>
-                                                <th>Avg. Time on Page</th>
-                                                <th>Entrances</th>
-                                                <th>Bounce Rate</th>
-                                                <th>Exit</th>
+                                                <th ng-click="changeSorting('pageviews')">Pageviews</th>
+                                                <th ng-click="changeSorting('uniquePageviews')">Unique Pageviews</th>
+                                                <th ng-click="changeSorting('avgTime')">Avg. Time on Page</th>
+                                                <th ng-click="changeSorting('entrances')">Entrances</th>
+                                                <th ng-click="changeSorting('bounceRate')">Bounce Rate</th>
+                                                <th ng-click="changeSorting('exitRate')">Exit</th>
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                           <tr ng-repeat="topPage in formatedTopPages">
-                                                <td class="truncate"><a href="/admin#/dashboard/single-page/{{}}">{{topPage.page}}</a></td>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:sort.column:sort.descending">
+                                                <td class="truncate"><a href="/admin#/dashboard/single-page/?pageurl={{topPage.page}}">{{topPage.page}}</a>
+                                                </td>
                                                 <td>{{topPage.pageviews}}</td>
                                                 <td>{{topPage.uniquePageviews}}</td>
                                                 <td>{{topPage.avgTime | secTotime}}</td>
@@ -226,14 +444,16 @@
                                                 <td>{{topPage.bounceRate | formatPercentage}}</td>
                                                 <td>{{topPage.exitRate | formatPercentage}}</td>
                                             </tr>
-                                            </tbody>
-                                        </table>
-
-                                    </div>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-sm-12">
+                                    <pagination total-items="formattedTopPages.length" ng-model="currentPage" ng-change="pageChangeFn(currentPage, totalPages)" items-per-page="pageLimit" num-pages="totalPages"></pagination>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
 
@@ -367,7 +587,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-6 col-md-4">
-                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
+                    <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
                         <a href="/admin#/dashboard/other-revenue">
                             <span class="keen-metric-title mb10">Lifetime Value</span>
                             <span class="keen-metric-value col-sm-6">
@@ -720,152 +940,214 @@
 
         </div>
 
-        <!-- <div class="support-section" ng-show="activeTab == 'support'">
+        <div class="support-section" ng-show="activeTab == 'support'">
+            <!-- # of Conversations -->
+            <div class="col-xs-12">
+                <div class="panel panel-info panel-nopadding">
+                    <div class="panel-heading">
+                        <div class="panel-btns">
+                            <a data-toggle="modal" data-target="#visitor-overview" class="panel-edit"><i class="fa fa-info-circle"></i></a>
+                        </div>
+                        <h3 class="panel-title">Conversations</h3>
+                    </div>
+                    <div class="panel-body">
+                        <highchart config="conversationsConfig"></highchart>
+                        <div>
+                            <div class="col-sm-4 col-xs-6 top-four">
+                                <div class="metric center">Conversations</div>
+                                <div class="title center">
+                                    {{pageviews}}
+                                    <span class="percent" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}%</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-6 top-four">
+                                <div class="metric center">Avg Customer per Day</div>
+                                <div class="title center">
+                                    {{visits}}
+                                    <span class="percent" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-6 top-four">
+                                <div class="metric center">Busiest Day / Time</div>
+                                <div class="title center">
+                                    {{visitors}}
+                                    <span class="percent" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i> {{visitorsPercent}}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-4">
+                <div class="panel panel-info panel-nopadding">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Response Time</h3>
+                    </div>
+                    <div class="panel-body">
+                        <highchart config="responseTimeConfig"></highchart>
+                    </div>
+                </div>
+            </div>
+            <!-- Replied -->
+            <!-- Avg Reply Time -->
+            <!-- Avg 1st Reply Time -->
+            <!-- Avg Handle Time -->
+            <!-- Replies per Ticket -->
+            <!-- Total Ratings -->
+            <!-- Good -->
+            <!-- Okay -->
+            <!-- Bad -->
         </div>
 
-        <div class="testing-section" ng-show="activeTab == 'testing'">
+        <!-- <div class="testing-section" ng-show="activeTab == 'testing'">
         </div> -->
     </div>
 
 
-    <!-- <div id="rightpanel">
-  <div class="rightpanel rightpanel-website">
-       <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
-            </li>
-        </ul>
+    <div id="rightpanel">
+        <div class="rightpanel rightpanel-website">
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
+                </li>
+            </ul>
 
-    <div class="tab-content">
-        <div class="tab-pane pane-settings active" id="rp-settings">
-
+            <div class="tab-content">
+                <div class="tab-pane pane-settings active" id="rp-settings">
+                    <h4>No Settings Avaliable</h4>
+                </div>
+            </div>
         </div>
     </div>
-  </div>
-</div> -->
+</div>
 
-    <!-- Vistor Overview Info Modal-->
-    <div class="modal fade" id="visitor-overview">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Why is the Visitor Overview important?</h4>
-                </div>
-                <div class="modal-body modal-nopadding">
-                    <ul class="nav nav-tabs nav-justified">
-                        <li class="active"><a href="#watch2" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a>
-                        </li>
-                        <li class=""><a href="#read2" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="watch2" class="tab-pane active">
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <iframe width="100%" height="315" src="//www.youtube.com/embed/kpeL6WGlvEI?showinfo=0"></iframe>
-                            </div>
+<!-- Vistor Overview Info Modal-->
+<div class="modal fade" id="visitor-overview">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Why is the Visitor Overview important?</h4>
+            </div>
+            <div class="modal-body modal-nopadding">
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a href="#watch2" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a>
+                    </li>
+                    <li class=""><a href="#read2" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="watch2" class="tab-pane active">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe width="100%" height="315" src="//www.youtube.com/embed/kpeL6WGlvEI?showinfo=0"></iframe>
                         </div>
-                        <div id="read2" class="tab-pane">
-                            <p>The visitor overview gives you an idea of how many people are visting your website, how many pages they view and how often they visit. The graph consists of pageviews, visits, and vistors. They are displayed in a rolling 30 day line graph, which means its the last 30 days starting from today.</p>
-                            <ul>
-                                <li><b>Visits</b> represent the number of times the website was visited, without regard to repeat visitors.</li>
-                                <li><b>Page Views</b> represent the total number of pages that visitors looked at on our site.</li>
-                                <li><b>Visitors</b> represent the number of actual people that visited our site.</li>
-                            </ul>
-                            <p>These metrics are important because they show you how many people are coming through your virtual store.</p>
-                        </div>
+                    </div>
+                    <div id="read2" class="tab-pane">
+                        <p>The visitor overview gives you an idea of how many people are visting your website, how many pages they view and how often they visit. The graph consists of pageviews, visits, and vistors. They are displayed in a rolling 30 day line graph, which means its the last 30 days starting from today.</p>
+                        <ul>
+                            <li><b>Visits</b> represent the number of times the website was visited, without regard to repeat visitors.</li>
+                            <li><b>Page Views</b> represent the total number of pages that visitors looked at on our site.</li>
+                            <li><b>Visitors</b> represent the number of actual people that visited our site.</li>
+                        </ul>
+                        <p>These metrics are important because they show you how many people are coming through your virtual store.</p>
                     </div>
                 </div>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
+        <!-- /.modal-content -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
-    <!-- Vistor Locations Info Modal-->
-    <div class="modal fade" id="visitor-locations">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Why is the Visitor Locations important?</h4>
-                </div>
-                <div class="modal-body modal-nopadding">
-                    <ul class="nav nav-tabs nav-justified">
-                        <li class="active"><a href="#watch" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a></li>
-                        <li class=""><a href="#read" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="watch" class="tab-pane active">
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <iframe width="100%" height="315" src="//www.youtube.com/embed/EGBdMrwXxWo?showinfo=0"></iframe>
-                            </div>
+<!-- Vistor Locations Info Modal-->
+<div class="modal fade" id="visitor-locations">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Why is the Visitor Locations important?</h4>
+            </div>
+            <div class="modal-body modal-nopadding">
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a href="#watch" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a>
+                    </li>
+                    <li class=""><a href="#read" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="watch" class="tab-pane active">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe width="100%" height="315" src="//www.youtube.com/embed/EGBdMrwXxWo?showinfo=0"></iframe>
                         </div>
-                        <div id="read" class="tab-pane">
-                            <p>Knowing exactly where your visitors are located will help you focus your marketing exactly where it's wanted. You don't have to waste money on adwards in the wrong city and instead can put your advertising money where it will do the most work.</p>
-                        </div>
+                    </div>
+                    <div id="read" class="tab-pane">
+                        <p>Knowing exactly where your visitors are located will help you focus your marketing exactly where it's wanted. You don't have to waste money on adwards in the wrong city and instead can put your advertising money where it will do the most work.</p>
                     </div>
                 </div>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
+        <!-- /.modal-content -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
-    <!-- Content Interaction Info Modal-->
-    <div class="modal fade" id="content-interaction">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">What is Time on Site and Bounces?</h4>
-                </div>
-                <div class="modal-body modal-nopadding">
-                    <ul class="nav nav-tabs nav-justified">
-                        <li class="active"><a href="#watch-3" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a></li>
-                        <li class=""><a href="#read-3" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="watch-3" class="tab-pane active">
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <iframe width="100%" height="315" src="//www.youtube.com/embed/-m7ZPgOB8Y8?showinfo=0"></iframe>
-                            </div>
+<!-- Content Interaction Info Modal-->
+<div class="modal fade" id="content-interaction">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">What is Time on Site and Bounces?</h4>
+            </div>
+            <div class="modal-body modal-nopadding">
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a href="#watch-3" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a>
+                    </li>
+                    <li class=""><a href="#read-3" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="watch-3" class="tab-pane active">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe width="100%" height="315" src="//www.youtube.com/embed/-m7ZPgOB8Y8?showinfo=0"></iframe>
                         </div>
-                        <div id="read-3" class="tab-pane">
-                            <p>On the Internet, a high bounce rate is the kiss of death — and a sure sign that your website and marketing strategy need a major overhaul. By definition, bounce rate is the percentage of site visitors who leave after visiting one page. Why would these users "bounce"? It's probably an indication that your site isn't providing the information the user seeks, the site could be taking too long to load or hard to navigate, or perhaps there's some larger disconnect between your site and your users. The simple metric is a general way to gauge the efficacy of your site.</p>
-                            <p>Bounce rate is closely related to time spent (more on that in an upcoming Metrics That Matter article), as it's a measure of engagement that demonstrates the degree to which people are enjoying and interacting with content in a deeper way, says Stephanie Fried, VP of digital insights and marketing at Discovery Communications.</p>
-                        </div>
+                    </div>
+                    <div id="read-3" class="tab-pane">
+                        <p>On the Internet, a high bounce rate is the kiss of death — and a sure sign that your website and marketing strategy need a major overhaul. By definition, bounce rate is the percentage of site visitors who leave after visiting one page. Why would these users "bounce"? It's probably an indication that your site isn't providing the information the user seeks, the site could be taking too long to load or hard to navigate, or perhaps there's some larger disconnect between your site and your users. The simple metric is a general way to gauge the efficacy of your site.</p>
+                        <p>Bounce rate is closely related to time spent (more on that in an upcoming Metrics That Matter article), as it's a measure of engagement that demonstrates the degree to which people are enjoying and interacting with content in a deeper way, says Stephanie Fried, VP of digital insights and marketing at Discovery Communications.</p>
                     </div>
                 </div>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
+        <!-- /.modal-content -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
-    <!-- Device Info Modal-->
-    <div class="modal fade" id="device-info">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">How can the device people are using help me?</h4>
-                </div>
-                <div class="modal-body modal-nopadding">
-                    <ul class="nav nav-tabs nav-justified">
-                        <li class="active"><a href="#read-4" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="read-4" class="tab-pane active">
-                            <p>What device your audience is using is important so that you can determine what types of advertising you might invest in.</p>
-                        </div>
+<!-- Device Info Modal-->
+<div class="modal fade" id="device-info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">How can the device people are using help me?</h4>
+            </div>
+            <div class="modal-body modal-nopadding">
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a href="#read-4" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="read-4" class="tab-pane active">
+                        <p>What device your audience is using is important so that you can determine what types of advertising you might invest in.</p>
                     </div>
                 </div>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
+        <!-- /.modal-content -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

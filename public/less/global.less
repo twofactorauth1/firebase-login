@@ -36,6 +36,12 @@ strong {
     font-family:'LatoBold';
     font-weight: normal;
 }
+.headerbg {
+    background: #272727;
+    height: 63px;
+    position: absolute;
+    width: 100%;
+}
 .mainpanel {
     background: #e7e7e7;
 }
@@ -638,7 +644,7 @@ font-weight: 900;
     top: 0;
     width: 100%;
     z-index: 99999;
-    background: #2ecc71;
+    background: #29b87f;
     display: none;
     right: 0;
     height: 50px;
@@ -659,7 +665,10 @@ font-weight: 900;
         height: 50px;
 
         &:hover {
-            color: white;
+            span, i, b {
+                color: #128658;
+            }
+            color: #128658;
             background: rgba(255,255,255,0.2);
         }
     }

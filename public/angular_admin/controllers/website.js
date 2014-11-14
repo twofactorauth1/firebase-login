@@ -250,10 +250,12 @@ define([
                 //$scope.deactivateAloha && $scope.deactivateAloha();
                 WebsiteService.getPageComponents(pageId,function(components) {
                     $scope.components = components;
+
                     $scope.updateIframeComponents && $scope.updateIframeComponents();
                     $scope.isEditing = false;
                     $scope.componentEditing = null;
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
+
                 });
 
 

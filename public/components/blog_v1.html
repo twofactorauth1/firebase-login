@@ -52,8 +52,8 @@
                                     <li data-ng-repeat="post_tags in blogpost.post_tags track by $index"><a href="/tag/{{post_tags}}">{{post_tags}}</a></li>
                                 </ul>
 
-                                <div class="blog-thumb alignleft" data-ng-if="blogpost.featured_image">
-                                    <img src="{{blogpost.featured_image}}"/>
+                                <div class="blog-thumb alignleft" ng-if="blogpost.featured_image">
+                                    <img ng-src="{{blogpost.featured_image}}"/>
                                 </div>
                                 <!-- end .thumb -->
 

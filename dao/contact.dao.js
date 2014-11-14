@@ -49,7 +49,6 @@ var dao = {
 
     findContactsShortForm: function(accountId, letter, skip, limit, fields, fn) {
         var self=this;
-        self.log.debug('>> findContactsShortForm');
 
         var query = {};
         if(letter !='all') {
@@ -70,6 +69,11 @@ var dao = {
             } else {
                 sort = 'last';
             }
+            self.log.debug('>> query ', query);
+            self.log.debug('>> skip ', skip);
+            self.log.debug('>> limit ', limit);
+            self.log.debug('>> sort ', sort);
+            self.log.debug('>> fields ', fields);
 
             self.findAllWithFieldsAndLimit(query, skip, limit, sort, fields, $$.m.Contact, fn);
         });

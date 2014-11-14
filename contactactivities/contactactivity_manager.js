@@ -81,7 +81,7 @@ module.exports = {
                              afterTimestamp, skip, limit, fn) {
 
         var self = this;
-        log.debug('>> findActivities');
+        log.debug('>> findActivities', activityTypeAry);
         var queryObj = {};
 
         if(accountId) {
@@ -90,9 +90,9 @@ module.exports = {
         if(contactId) {
             queryObj.contactId = contactId;
         }
-        if(activityTypeAry && $.isArray(activityTypeAry)) {
+        if(activityTypeAry && activityTypeAry.indexOf(',') != -1 && $.isArray(activityTypeAry)) {
             queryObj.activityType = {'$in' : activityTypeAry};
-        } else if(activityTypeAry) {
+        } else if(activityTypeAry && activityTypeAry.indexOf(',') != -1) {
             queryObj.activityType = activityTypeAry;
         }
         if(noteText) {

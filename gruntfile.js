@@ -247,6 +247,7 @@ module.exports = function(grunt) {
                         'public/scripts/controllers/blogCtrl.js',
                         'public/scripts/controllers/layoutCtrl.js',
                         'public/scripts/directives/skeuocard.js',
+                        'public/scripts/directives/angularparallax.js',
                         'public/scripts/services/paymentService.js',
                         'public/scripts/services/userService.js'
                     ]

@@ -126,23 +126,6 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                 };
 */
 /*
-                $scope.m.deleteAsset = function (assetId) {
-                    AssetsService.deleteAssetById(function (resp, status) {
-                        if (status === 1) {
-                            $scope.assets.forEach(function (v, i) {
-                                if (v._id === assetId) {
-                                    $scope.assets.splice(i, 1);
-                                }
-                            })
-                        }
-                    }, assetId);
-                };
-                $scope.m.batchDeleteAsset = function () {
-                    $scope.assets.forEach(function (v, i) {
-                        if (v.checked)
-                            $scope.m.deleteAsset(v._id);
-                    });
-                };
                 $scope.m.getSingleSelect = function () {
                     $scope.batch = [];
 
@@ -175,6 +158,24 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
 
                 };
                 */
+
+                $scope.m.deleteAsset = function (assetId) {
+                    AssetsService.deleteAssetById(function (resp, status) {
+                        if (status === 1) {
+                            $scope.assets.forEach(function (v, i) {
+                                if (v._id === assetId) {
+                                    $scope.assets.splice(i, 1);
+                                }
+                            })
+                        }
+                    }, assetId);
+                };
+                $scope.m.batchDeleteAsset = function () {
+                    $scope.assets.forEach(function (v, i) {
+                        if (v.checked)
+                            $scope.m.deleteAsset(v._id);
+                    });
+                };
                 $scope.m.selectAll = function() {
                     $scope.batch = [];
                     $scope.assets.forEach(function (v) {
