@@ -16716,26 +16716,53 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .tb-col .media {
   padding: 0;
 }
+.tb-col .people-item:hover {
+  background: none;
+  box-shadow: none;
+}
 .tb-col .people-item {
   box-shadow: none;
   height: auto;
   margin: 0;
   min-height: 0;
   padding: 0;
+  opacity: 1;
 }
 .tb-col .people-item .media-object {
   border-radius: 3px;
   height: auto;
   margin: 10px auto;
-  width: 80px;
+  width: 70px;
+}
+.tb-col .people-item .media {
+  border-left: 1px solid #e6e6e6;
+  border-right: 1px solid #e6e6e6;
+}
+.tb-col .pull-left {
+  width: 100%;
+  color: #c2c2c2;
+}
+.tb-col .pull-right.social-list > li {
+  display: inline-block;
+  float: none;
+  width: auto;
+}
+.tb-col .pull-right {
+  float: none !important;
 }
 .tb-row {
   display: table;
   width: 100%;
-}
-.tb-row > div {
   border-bottom: 1px solid #e6e6e6;
+}
+.tb-main.table {
+  border-top: 1px solid #e6e6e6;
+  border-left: 1px solid #e6e6e6;
   border-right: 1px solid #e6e6e6;
+}
+.container-fluid.tb-row {
+  table-layout: fixed;
+  word-wrap: break-word;
 }
 .choose-import {
   text-align: center;
@@ -19181,7 +19208,7 @@ div.error label.error:before {
   CONTACTS LIST - PEOPLE ITEM
 **********************************************************/
 .people-item {
-  min-height: 320px;
+  min-height: 330px;
   cursor: pointer;
   background: #fcfcfc;
   padding: 15px;
