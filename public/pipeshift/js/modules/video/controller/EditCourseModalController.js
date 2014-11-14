@@ -69,6 +69,7 @@ define(['angularAMD', 'app'], function (angularAMD, app) {
             }, 250)
         }
         $scope.showSubscribersCsvUploadModal = function () {
+            console.log('showSubscribersCsvUploadModal >>> ');
             var modalInstance = $modal.open({
                 templateUrl: '/pipeshift/views/video/modal/subsCsvUpload.html',
                 controller: 'SubscribersCsvUploadController',
