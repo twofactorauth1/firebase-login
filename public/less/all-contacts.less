@@ -70,10 +70,10 @@
   CONTACTS LIST - PEOPLE ITEM
 **********************************************************/
 .people-item {
-  min-height: 280px;
+  min-height: 320px;
   cursor: pointer;
   background: #fcfcfc;
-  padding: 15px 5px;
+  padding: 15px;
   font-size: 13px;
   border-radius: 3px;
   .box-shadow(0 3px 0 rgba(12, 12, 12, 0.03));
@@ -130,7 +130,11 @@
   }
 
   .fa {
-    margin-right: 5px;
+    margin-right: 10px;
+    font-size: 16px;
+    &.fa-envelope-o {font-size: 18px;}
+    &.fa-map-marker {font-size: 18px;padding-left: 4px;}
+    &.fa-mobile {font-size: 22px;padding-left: 4px;}
   }
 
   .important-star {
@@ -158,16 +162,31 @@
   }
 }
 
+.socialList {
+   .title {margin-bottom: 0;}
+   ul {
+      padding-left: 0;
+      text-align: center;
+      margin-bottom: 0;
+      li {
+        list-style-type: none;
+      }
+    }
+}
+
 
 .social-list {
-  margin: 0px 0 -4px 8px;
+  margin: 0px;
   list-style: none;
   padding: 0;
 
   li {
     float: left;
-    margin-right: 5px;
-    margin-bottom: 5px;
+    width: 100%;
+    line-height: 22px;
+
+    .title {color: #c2c2c2;}
+    .value {color: #484848;font-weight: bold}
 
     a.disabled {
       cursor: default;
@@ -232,7 +251,6 @@
 .person-name {
   margin: 0 0 5px 0;
   color: #222;
-  text-align: left;
 }
 
 .people-item .important-star:hover, .people-item .important-star .fa-star {
