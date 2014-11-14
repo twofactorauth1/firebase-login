@@ -62,7 +62,7 @@
         <div style="width:100%; text-align:center">
           <ul class="pagination hidden-xs letter-list">
 
-            <li><a class="btn-letter" ng-click="alphaFilter()" ng-class="{'active': alphaSelected == 'all'}">all</a>
+            <li><a class="btn-letter" ng-click="alphaFilter()" ng-class="{'active': alphaSelected == null}">all</a>
             </li>
             <li ng-class="{'disabled': !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList">
 
@@ -248,10 +248,10 @@
         <div class="form-group">
           <label>Default View</label>
           <div class="btn-group">
-            <button type="button" ng-click="setDefaultView('true')" class="btn btn-default">
+            <button type="button" ng-click="setDefaultView('true')" class="btn btn-default" ng-class="{'active': gridViewDisplay === 'true'}">
             <span class="fa fa-th"></span> Grid
           </button>
-            <button type="button" ng-click="setDefaultView('false')" class="btn btn-default">
+            <button type="button" ng-click="setDefaultView('false')" class="btn btn-default" ng-class="{'active': gridViewDisplay === 'false'}">
             <span class="fa fa-list"></span> List
           </button>
           </div>
@@ -270,7 +270,7 @@
         <div class="form-group row">
           <label class="col-xs-12 control-label">Contacts List Ordering</label>
           <div class="col-xs-12">
-            <select class=" form-control chosen-select sort-ordering" ng-model="sortOrder" data-placeholder="Sort Contacts" name="two">
+            <select class=" form-control chosen-select sort-ordering" ng-model="sortOrderSettings" data-placeholder="Sort Contacts" name="two">
               <option value="1">A to Z</option>
               <option value="2">Z to A</option>
               <option value="3">Date Added</option>

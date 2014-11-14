@@ -118,28 +118,50 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       $scope.customerScrollFn();
       ngProgress.complete();
       ToasterService.processPending();
+      var initializeSearchBar = 0;
       $scope.$watch('searchBar', function(newValue, oldValue) {
-        if (newValue) {
-          var searchBarSplit = newValue.split(' ');
-          if (searchBarSplit.length >= 3) {
-            $scope.customerFilter.first = searchBarSplit[0];
-            $scope.customerFilter.middle = searchBarSplit[1];
-            $scope.customerFilter.last = searchBarSplit[2];
-          } else if (searchBarSplit.length == 2) {
-            $scope.customerFilter.first = searchBarSplit[0];
-            $scope.customerFilter.last = searchBarSplit[1];
-          } else if (searchBarSplit.length == 1) {
-            $scope.customerFilter.first = searchBarSplit[0];
+        if(initializeSearchBar >= 1 ) {
+          console.log('searching ', newValue);
+          if (newValue) {
+            var searchBarSplit = newValue.split(' ');
+            if (searchBarSplit.length >= 1) {
+              $scope.customerFilter.first = searchBarSplit[0];
+              $scope.customerFilter.middle = searchBarSplit[1];
+              $scope.customerFilter.last = searchBarSplit[2];
+            } else if (searchBarSplit.length == 2) {
+              $scope.customerFilter.first = searchBarSplit[0];
+              $scope.customerFilter.last = searchBarSplit[1];
+            } else if (searchBarSplit.length == 1) {
+              $scope.customerFilter.first = searchBarSplit[0];
+            }
+
+            console.log('$scope.customerOrder >>> ', $scope.customerOrder);
+            if ($scope.customerFilter) {
+              if ($scope.customerOrder === 'first') {
+                $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) { if(elem.first) {return elem.first.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1; }});
+              } else {
+                $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) { if(elem.last) {return elem.last.toLowerCase().indexOf($scope.customerFilter.last.toLowerCase()) != -1; }});
+              }
+              console.log('$scope.fetchedCustomers >>> ', $scope.fetchedCustomers);
+            } else {
+              console.log('no filter');
+            }
+            $scope.renderedCustomers = [];
+            $scope.orderByFn();
+            $scope.customerScrollOffset = 0;
+            $scope.customerScrollFn();
+
+          } else {
+            $scope.customerFilter = {};
           }
-        } else {
-          $scope.customerFilter = {};
         }
+        initializeSearchBar += 1;
+
       });
 
-      $scope.alphaSelected = 'all';
+      $scope.alphaSelected = null;
       $scope.alphaFilter = function(alpha) {
-        console.log('alpha >>> ', alpha);
-        $scope.alphaSelected = alpha || 'all';
+        $scope.alphaSelected = alpha;
         var orginal = $scope.originalCustomers;
         $scope.renderedCustomers = [];
         $scope.fetchedCustomers = [];
@@ -156,10 +178,11 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         $scope.customerScrollFn();
       };
 
+      var initializeDisplaySort = 0;
 
       $scope.$watch('changeDisplayFormat', function(newValue, oldValue) {
-
-        if (newValue) {
+        //must check initializeDisplaySort twice - once for the init model and once to set the model
+        if (newValue && initializeDisplaySort >= 2) {
           newValue = parseInt(newValue);
           if (newValue == 1) {
             $scope.userPreferences.customerSettings.customerDisplayFormat = 'first';
@@ -169,6 +192,8 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           // Save user preferences
           $scope.savePreferencesFn();
         }
+
+        initializeDisplaySort += 1;
       });
 
 
@@ -195,12 +220,42 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $scope.customerOrder = 'lastActivity';
           $scope.customerSortReverse = true;
         }
-        // Save user preferences
-        if (newValue && $scope.userPreferences && $scope.userPreferences.customerSettings) {
-          $scope.userPreferences.customerSettings.customerOrder = $scope.customerOrder;
-          $scope.userPreferences.customerSettings.customerSortReverse = $scope.customerSortReverse;
-          $scope.savePreferencesFn();
+
+      });
+
+      var initializeSortOrder = 0;
+
+      $scope.$watch('sortOrderSettings', function(newValue, oldValue) {
+        if (initializeSortOrder >= 2) {
+          newValue = parseInt(newValue);
+          $scope.sortOrder = newValue;
+          if (newValue === '') {
+            $scope.customerOrder = 'first';
+            $scope.customerSortReverse = false;
+          } else if (newValue == 1) {
+            $scope.customerOrder = 'first';
+            $scope.customerSortReverse = false;
+            } else if (newValue == 2) {
+            $scope.customerOrder = 'first';
+            $scope.customerSortReverse = true;
+          } else if (newValue == 3) {
+            $scope.customerOrder = 'created.date';
+            $scope.customerSortReverse = false;
+          } else if (newValue == 4) {
+            $scope.customerOrder = 'last';
+            $scope.customerSortReverse = false;
+          } else if (newValue == 5) {
+            $scope.customerOrder = 'lastActivity';
+            $scope.customerSortReverse = true;
+          }
+
+          if (newValue && $scope.userPreferences && $scope.userPreferences.customerSettings) {
+            $scope.userPreferences.customerSettings.customerOrder = $scope.customerOrder;
+            $scope.userPreferences.customerSettings.customerSortReverse = $scope.customerSortReverse;
+            $scope.savePreferencesFn();
+          }
         }
+        initializeSortOrder += 1;
 
       });
 
@@ -275,7 +330,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $scope.showAddress = true;
       });
       $scope.setDefaultView = function(value) {
-        //$scope.gridViewDisplay = value;
+        $scope.gridViewDisplay = value;
         // Save user preferences
         $scope.userPreferences.customerSettings.gridViewDisplay = value;
         $scope.savePreferencesFn();
@@ -295,6 +350,24 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $scope.userPreferences.customerSettings = customerSettings;
           $scope.customerOrder = $scope.userPreferences.customerSettings.customerOrder;
           $scope.customerSortReverse = $scope.userPreferences.customerSettings.customerSortReverse;
+          var displayFormat = $scope.userPreferences.customerSettings.customerDisplayFormat;
+          if (displayFormat === 'first') {
+            console.log('first');
+             $scope.changeDisplayFormat = 1;
+          }
+          if(displayFormat === 'last') {
+            console.log('last');
+              $scope.changeDisplayFormat = 2;
+          }
+          var customerOrder = $scope.customerOrder;
+          var orderNum;
+          if (customerOrder === 'first') {orderNum=1;}
+          if (customerOrder === 'last') {orderNum=2;}
+          if (customerOrder === 'created.date') {orderNum=3;}
+          $scope.sortOrder = orderNum;
+          $scope.sortOrderSettings = orderNum;
+          console.log('$scope.userPreferences.customerSettings.gridViewDisplay >>> ', $scope.userPreferences.customerSettings.gridViewDisplay);
+          $scope.gridViewDisplay = $scope.userPreferences.customerSettings.gridViewDisplay;
         } else {
           $scope.userPreferences.customerSettings = {
             customerOrder: 'first',
