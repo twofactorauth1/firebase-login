@@ -1,4 +1,4 @@
-define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngProgress', 'headroom', 'ngHeadroom', 'toasterService', 'iStartsWithFilter', 'ngInfiniteScroll', 'scrollerDirective', 'userService'], function(app) {
+define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngProgress', 'headroom', 'ngHeadroom', 'toasterService', 'iStartsWithFilter', 'ngInfiniteScroll', 'scrollerDirective', 'userService', 'moment', 'timeAgoFilter'], function(app) {
   app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', '$filter', 'UserService', function($scope, CustomerService, ngProgress, ToasterService, $window, $filter, UserService) {
     ngProgress.start();
     $scope.customerFilter = {};
@@ -110,7 +110,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       }
     });
 
-    var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details'];
+    var fetchFields = ['_id', 'first', 'middle', 'last', 'starred', 'photo', 'type', 'details', 'address', 'created'];
     CustomerService.getCustomersShortForm(fetchFields, function(customers) {
       $scope.originalCustomers = customers;
       $scope.fetchedCustomers = customers;
@@ -305,23 +305,11 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         else
           $scope.showEmail = true;
       });
-      $scope.$watch('toggleFacebook', function(value) {
+      $scope.$watch('toggleSocial', function(value) {
         if (angular.isDefined(value))
-          $scope.showFacebookId = value;
+          $scope.showSocial = value;
         else
-          $scope.showFacebookId = true;
-      });
-      $scope.$watch('toggleTwitter', function(value) {
-        if (angular.isDefined(value))
-          $scope.showTwitterId = value;
-        else
-          $scope.showTwitterId = true;
-      });
-      $scope.$watch('toggleLinkedInId', function(value) {
-        if (angular.isDefined(value))
-          $scope.showLinkedInId = value;
-        else
-          $scope.showLinkedInId = true;
+          $scope.showSocial = true;
       });
       $scope.$watch('toggleAddress', function(value) {
         if (angular.isDefined(value))

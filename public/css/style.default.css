@@ -6620,11 +6620,18 @@ h4,
 }
 .modal-title {
   font-size: 20px;
-  color: #333;
-  font-weight: bold;
+  color: #474747;
+  font-family: 'Open Sans Bold';
 }
 .modal-header .close {
   margin-top: 4px;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1;
+  color: #b6b6b6;
+  font-family: 'Open Sans Bold';
+  opacity: 1;
 }
 .modal-backdrop.in {
   opacity: 0.65;
@@ -16589,7 +16596,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 #import-contacts-modal .btn {
   margin-left: 10px;
-  min-width: 115px;
+  min-width: 65px;
   color: white;
 }
 #import-contacts-modal .btn:first-child {
@@ -16729,6 +16736,13 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .tb-row > div {
   border-bottom: 1px solid #e6e6e6;
   border-right: 1px solid #e6e6e6;
+}
+.choose-import {
+  text-align: center;
+}
+.choose-import ul li {
+  display: inline-block;
+  margin-right: 15px;
 }
 .account {
   overflow: hidden;
@@ -19167,10 +19181,10 @@ div.error label.error:before {
   CONTACTS LIST - PEOPLE ITEM
 **********************************************************/
 .people-item {
-  min-height: 280px;
+  min-height: 320px;
   cursor: pointer;
   background: #fcfcfc;
-  padding: 15px 5px;
+  padding: 15px;
   font-size: 13px;
   border-radius: 3px;
   -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
@@ -19221,7 +19235,19 @@ div.error label.error:before {
   }
 }
 .people-item .fa {
-  margin-right: 5px;
+  margin-right: 10px;
+  font-size: 16px;
+}
+.people-item .fa.fa-envelope-o {
+  font-size: 18px;
+}
+.people-item .fa.fa-map-marker {
+  font-size: 18px;
+  padding-left: 4px;
+}
+.people-item .fa.fa-mobile {
+  font-size: 22px;
+  padding-left: 4px;
 }
 .people-item .important-star {
   position: absolute;
@@ -19244,15 +19270,33 @@ div.error label.error:before {
   -webkit-box-shadow: 0 3px 0 rgba(51, 51, 51, 0.2);
   box-shadow: 0 3px 0 rgba(51, 51, 51, 0.2);
 }
+.socialList .title {
+  margin-bottom: 0;
+}
+.socialList ul {
+  padding-left: 0;
+  text-align: center;
+  margin-bottom: 0;
+}
+.socialList ul li {
+  list-style-type: none;
+}
 .social-list {
-  margin: 0px 0 -4px 8px;
+  margin: 0px;
   list-style: none;
   padding: 0;
 }
 .social-list li {
   float: left;
-  margin-right: 5px;
-  margin-bottom: 5px;
+  width: 100%;
+  line-height: 22px;
+}
+.social-list li .title {
+  color: #c2c2c2;
+}
+.social-list li .value {
+  color: #484848;
+  font-weight: bold;
 }
 .social-list li a.disabled {
   cursor: default;
@@ -19306,7 +19350,6 @@ div.error label.error:before {
 .person-name {
   margin: 0 0 5px 0;
   color: #222;
-  text-align: left;
 }
 .people-item .important-star:hover,
 .people-item .important-star .fa-star {
@@ -21691,8 +21734,8 @@ input[type='file'] {
   font-style: normal;
 }
 @font-face {
-  font-family: 'open_sansregular';
-  src: url('../fonts/opensans/OpenSans-Regular.ttf');
+  font-family: 'Open Sans Bold';
+  src: url('../fonts/opensans/OpenSans-Bold.ttf');
   font-weight: normal;
   font-style: normal;
 }
@@ -23179,6 +23222,9 @@ div[data-class='image-text'] p {
 .masthead-v1 .masthead-title {
   font-size: 32px;
   padding-bottom: 20px;
+}
+.masthead-v1 .masthead-title h1 {
+  font-size: 45px;
 }
 .masthead-v1 .btn {
   height: 50px;

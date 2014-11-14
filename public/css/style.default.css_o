@@ -6613,11 +6613,18 @@ h4,
 }
 .modal-title {
   font-size: 20px;
-  color: #333;
-  font-weight: bold;
+  color: #474747;
+  font-family: 'Open Sans Bold';
 }
 .modal-header .close {
   margin-top: 4px;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1;
+  color: #b6b6b6;
+  font-family: 'Open Sans Bold';
+  opacity: 1;
 }
 .modal-backdrop.in {
   opacity: 0.65;

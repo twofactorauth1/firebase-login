@@ -50,7 +50,7 @@
           <div class="col-sm-6">
             <div class="mb0">
               <select class="form-control chosen-select input-lg" ng-model="sortOrder">
-                <option value="" disabled selected>Filter Contacts</option>
+                <option value="" disabled selected>Sort Contacts</option>
                 <option value="1">A to Z</option>
                 <option value="2">Z to A</option>
                 <option value="3">Date Added</option>
@@ -79,75 +79,68 @@
       <div ng-switch-when="true" class="row">
         <div>
           <div  ng-repeat="customer in renderedCustomers" class="col-xs-12 col-sm-4 col-md-3">
-            <div data-contactid="1799" class="people-item btn-view-contact-details contact-item" style="opacity:1">
+            <div data-contactid="{{customer._id}}" class="people-item btn-view-contact-details contact-item" style="opacity:1">
               <span data-original-title="Important Contact" ng-click="setImportantContact(customer)" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips">
                         <i class="fa fa-star-o" ng-hide="customer.starred"></i>
                         <i class="fa fa-star" ng-show="customer.starred"></i>
                     </span>
+                    <span class="label label-info contact-cat" ng-show="showContactLabel">{{contactLabel(customer)}}</span>
 
               <div indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}" class="media">
-                <div class="col-xs-12f">
+                <div class="col-xs-12">
                   <!--//  //  // -->
                   <img ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}" class="img-circle media-object thumbnail standard">
                   <!-- //  //  -->
 
                   <span class="name visible-xs">
 
-                                <h4 class="person-name" indigeweb-truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
-                                </span>
+                  <h4 class="person-name center" indigeweb-truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                  </span>
 
                   <div class="clear"></div>
                 </div>
                 <div class="media-body col-xs-12 hidden-xs" ng-switch on="userPreferences.customerSettings.customerDisplayFormat">
 
 
-                  <h4 class="person-name" ng-switch-when="first" indigeweb-truncate truncate-list=" [customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
-                  <h4 class="person-name" ng-switch-when="last" indigeweb-truncate truncate-list=" [customer.last, customer.middle, customer.first]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                  <h4 class="person-name center" ng-switch-when="first" indigeweb-truncate truncate-list=" [customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                  <h4 class="person-name center" ng-switch-when="last" indigeweb-truncate truncate-list=" [customer.last, customer.middle, customer.first]" truncate-limit=20 truncate-symbol="'...'"></h4>
 
-
-
-                  <!-- <h4 class="person-name">  Jaideep Das</h4>-->
-
-                  <span class="label label-info contact-cat" ng-show="showContactLabel">{{contactLabel(customer)}}</span>
-
-                  <div class="hidden">
-                    <div class="last-active text-muted">Last Active: n/a
-                    </div>
-
-                    <div class="purchased text-muted">
-                      Purchased: n/a
-                    </div>
-
-                    <div class="emails-opened text-muted">
-                      Emails Opened: n/a
-                    </div>
-
-                    <div class="calls-made text-muted">
-                      Calls Made: n/a
-                    </div>
-
-                    <div class="customer-since text-muted">
-                      Customer since: n/a
-                    </div>
-                  </div>
                 </div>
+
                 <div class="clearfix mb10"></div>
                 <ul class="social-list hidden-xs">
                   <li>
-                    <a ng-show="showEmail && checkBestEmail(customer)" href="mailto:{{email}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope-o"></i></a>
+                    <div ng-if="showEmail && checkBestEmail(customer) && email">
+                      <i class="fa fa-envelope-o pull-left title"></i><span class="pull-right value">{{email}}</span>
+                    </div>
                   </li>
                   <li>
-                    <a ng-show="showFacebookId && checkFacebookId(customer)" href="https://www.facebook.com/{{facebookId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                    <div ng-if="showAddress && checkAddress(customer)">
+                      <i class="fa fa-map-marker pull-left title"></i>
+                      <span class="pull-right value" ng-if="customer.details[0].addresses[0].city && customer.details[0].addresses[0].state">{{customer.details[0].addresses[0].city+', '+customer.details[0].addresses[0].state}}</span>
+                      <span class="pull-right value" ng-if="customer.details[0].addresses[0].address && !customer.details[0].addresses[0].city">{{customer.details[0].addresses[0].address}}</span>
+                    </div>
+                  </li>
+                   <li>
+                    <div ng-if="customer.details[0].phones[0].number">
+                      <i class="fa fa-mobile pull-left title"></i><span class="pull-right value">{{customer.details[0].phones[0].number}}</span>
+                    </div>
+                  </li>
+                  <li class="socialList">
+                    <div ng-if="showSocial && checkFacebookId(customer) || checkTwitterId(customer) || checkLinkedInId(customer)">
+                      <p class="pull-left title">Social Accounts:</p>
+                      <ul class="pull-right value">
+                        <li ng-if="checkFacebookId(customer)"><i class="fa fa-facebook-square"></i></li>
+                        <li ng-if="checkTwitterId(customer)"><i class="fa fa-twitter-square"></i></li>
+                        <li ng-if="checkLinkedInId(customer)"><i class="fa fa-linkedin-square"></i></li>
+                      </ul>
+                    </div>
                   </li>
                   <li>
-                    <a ng-show="showTwitterId && checkTwitterId(customer)" href="https://twitter.com/intent/user?user_id={{twitterId}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
-                  </li>
-                  <li>
-                    <a ng-show="showLinkedInId && checkLinkedInId(customer)" href="{{ linkedInUrl ? linkedInUrl : 'http://www.linkedin.com/profile/view?id='+ linkedInId }}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="LinkedIn"
-                    target="_blank"><i class="fa fa-linkedin"></i></a>
-                  </li>
-                  <li>
-                    <a ng-show="showAddress && checkAddress(customer)" href="https://www.google.com/maps?q={{address}}" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                    <div ng-if="customer.created.date">
+                      <p class="pull-left title">Customer Since:</p>
+                      <span class="pull-right value">{{customer.created.date | timeAgoFilter}}</span>
+                    </div>
                   </li>
                 </ul>
                 <div class="pull-right">
@@ -248,7 +241,8 @@
         <div class="form-group">
           <label>Default View</label>
           <div class="btn-group">
-            <button type="button" ng-click="setDefaultView('true')" class="btn btn-default" ng-class="{'active': gridViewDisplay === 'true'}">
+            <button type="button" ng-click="setDefaultView('true')" class="btn btn-default" ng-class="{'active': gridViewDisplay
+ === 'true'}">
             <span class="fa fa-th"></span> Grid
           </button>
             <button type="button" ng-click="setDefaultView('false')" class="btn btn-default" ng-class="{'active': gridViewDisplay === 'false'}">
@@ -292,16 +286,8 @@
             <label for="email_id">Email</label>
           </div>
           <div class="col-xs-12 ckbox ckbox-success">
-            <input type="checkbox" id="facebook_id" ng-checked="true" ng-model="toggleFacebook">
-            <label for="facebook_id">Facebook</label>
-          </div>
-          <div class="col-xs-12 ckbox ckbox-success">
-            <input type="checkbox" id="twitter_id" ng-checked="true" ng-model="toggleTwitter">
-            <label for="twitter_id">Twitter</label>
-          </div>
-          <div class="col-xs-12 ckbox ckbox-success">
-            <input type="checkbox" id="linked_id" ng-checked="true" ng-model="toggleLinkedId">
-            <label for="linked_id">LinkedIn</label>
+            <input type="checkbox" id="social_id" ng-checked="true" ng-model="toggleSocial">
+            <label for="social_id">Social</label>
           </div>
           <div class="col-xs-12 ckbox ckbox-success">
             <input type="checkbox" id="address_id" ng-checked="true" ng-model="toggleAddress">
@@ -358,14 +344,25 @@
       <div class="modal-body">
 
         <div class="row choose-import" data-import-section="choose">
-          <p>Choose one of the import options from below:</p>
+          <p class="center"><b>Choose one of the import options from below:</b></p>
           <div class="clearfix mb30"></div>
-          <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook" ng-click="importFacebookFriends()"><span class="fa fa-facebook"></span>
-            <div class="clearfix mb5"></div>Facebook</button>
-          <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin" ng-click="importLinkedInConnections()"><span class="fa fa-linkedin"></span>
-            <div class="clearfix mb5"></div>LinkedIn</button>
-          <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus" ng-click="importGmailContacts()"><span class="fa fa-google"></span>
-            <div class="clearfix mb5"></div>Gmail</button>
+          <ul>
+          <li>
+            <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook" ng-click="importFacebookFriends()"><span class="fa fa-facebook"></span></button>
+            <div class="clearfix mb5"></div>
+            Facebook
+          </li>
+          <li>
+             <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin" ng-click="importLinkedInConnections()"><span class="fa fa-linkedin"></span></button>
+             <div class="clearfix mb5"></div>
+             LinkedIn
+          </li>
+          <li>
+            <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus" ng-click="importGmailContacts()"><span class="fa fa-google"></span></button>
+            <div class="clearfix mb5"></div>
+            Gmail
+          </li>
+          </ul>
           <div class="clearfix mb30"></div>
         </div>
 
