@@ -19280,6 +19280,7 @@ div.error label.error:before {
 }
 .socialList ul li {
   list-style-type: none;
+  width: auto;
 }
 .social-list {
   margin: 0px;
@@ -19293,6 +19294,7 @@ div.error label.error:before {
 }
 .social-list li .title {
   color: #c2c2c2;
+  margin-bottom: 0;
 }
 .social-list li .value {
   color: #484848;
