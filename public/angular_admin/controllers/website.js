@@ -394,9 +394,6 @@ define([
                 }
                 if (sPage === 'single-post') {
                     route = '';
-                }
-                if (sPage === 'blog') {
-                    route = "/" + sPage;
                 } else {
                     route = '/page/' + sPage;
                 }
