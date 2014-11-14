@@ -19,8 +19,11 @@
 
             </div>
 
+
             <div    ng-if="component.bg.img.url"
-                    ng-class="{parallax: component.bg.img.parallax, blur-image: component.bg.img.blur}"
+                    ng-class="{parallax:component.bg.img.parallax}"
+                    parallax-background
+                    parallax-ratio="0.4"
                     style='
                         background: url("{{component.bg.img.url}}") no-repeat fixed;
                         background-size: cover;
@@ -30,6 +33,7 @@
                    >
                 <div>
                     <div class="component-inner">
+                        <div class="blur-image" ng-if="component.bg.img.blur"></div>
 
                         <div class="container inner-page" ng-if="component.type != 'navigation' && component.type != 'footer'">
                             <div ng-include="'/components/'+component.type+'_v'+component.version+'.html'"></div>
