@@ -68,6 +68,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.wrapError(resp, 500, "Cannot retrieve access token, Google API access not verified", err, value);
                 }
             } else {
+                //TODO Find a better way to send error
                 resp.send('error');
                 //self.wrapError(resp, 500, "Cannot retrieve access token, Google API access not verified", err, value);
             }
