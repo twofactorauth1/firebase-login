@@ -25,6 +25,7 @@ define(['app'], function (app) {
             // this.login(fn);
             if (!token) {
                  this.getAccessToken(fn, function(data) {
+                    console.log('check token ', data);
                     fn(data);
                  });
             } else {
@@ -49,8 +50,10 @@ define(['app'], function (app) {
                 fn(data);
                 token = data.data;
               })
-              .error(function() {
-                console.log('error retrieving access token');
+              .error(function(response) {
+                if(response.status === 401) {
+                    fn('error');
+                }
               });
         };
 
