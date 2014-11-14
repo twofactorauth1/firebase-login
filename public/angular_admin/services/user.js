@@ -120,11 +120,13 @@ define(['app', 'toasterService'], function (app) {
 			});
 		};
 
-		this.updateUserPreferences = function (preferences, fn) {
+		this.updateUserPreferences = function (preferences, showToaster, fn) {
 			var apiUrl = baseUrl + ['user', 'preferences'].join('/');
 			$http.post(apiUrl, preferences)
 			.success(function (data, status, headers, config) {
-				ToasterService.show('success', 'Preferences Updated.');
+				if (showToaster) {
+					ToasterService.show('success', 'Preferences Updated.');
+				}
 				fn(data);
 			});
 		};

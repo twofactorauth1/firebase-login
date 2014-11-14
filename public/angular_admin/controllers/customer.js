@@ -13,7 +13,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
     $scope.saveScrollFn = function(pos) {
       $scope.userPreferences.customerSettings.scrollPos = pos;
-      $scope.savePreferencesFn();
+      $scope.savePreferencesDelayedFn(false, 1500);
     };
 
     $scope.customerScrollFn = function() {
@@ -404,14 +404,18 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
       $scope.savePreferencesFnWait = false;
 
-      $scope.savePreferencesFn = function() {
+      $scope.savePreferencesDelayedFn = function(toaster, ms) {
         if ($scope.savePreferencesFnWait) {
           return;
         }
         $scope.savePreferencesFnWait = true;
-        setTimeout(UserService.updateUserPreferences($scope.userPreferences, function() {
+        setTimeout(UserService.updateUserPreferences($scope.userPreferences, toaster, function() {
           $scope.savePreferencesFnWait = false;
-        }), 1500);
+        }), ms);
+      };
+
+      $scope.savePreferencesFn = function() {
+        UserService.updateUserPreferences($scope.userPreferences, true, function() {});
       };
 
     });
