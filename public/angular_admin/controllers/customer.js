@@ -173,12 +173,15 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       });
 
       $scope.alphaSelected = null;
+      $scope.alphaSelectedCharCode = null;
+
       $scope.alphaFilter = function(alpha) {
         $scope.alphaSelected = alpha;
         var orginal = $scope.originalCustomers;
         $scope.renderedCustomers = [];
         $scope.fetchedCustomers = [];
         if (alpha) {
+          $scope.alphaSelectedCharCode = alpha.charCodeAt(0);
           $scope.fetchedCustomers = orginal.filter(function(elem) {
             if (elem.first) {
               return elem.first.charAt(0).toLowerCase() == alpha;
@@ -187,6 +190,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $(".contentpanel").scrollTop(0);
           $scope.customerFilter.first = alpha;
         } else {
+          $scope.alphaSelectedCharCode = null;
           $scope.fetchedCustomers = orginal;
           $scope.customerFilter = {};
         }
@@ -194,6 +198,20 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         $scope.customerScrollOffset = 0;
         $scope.customerScrollFn();
       };
+
+      $scope.$watch('alphaSelectedCharCode', function(newValue, oldValue) {
+        if (newValue) {
+          $('.search-contacts').unbind('keypress');
+          $('.search-contacts').keypress(function(e) {
+            if (($(this).val().length===0) && (e.charCode != $scope.alphaSelectedCharCode)) {
+              e.preventDefault();
+              return false;
+            }
+          });
+        } else {
+          $('.search-contacts').unbind('keypress');
+        }
+      });
 
       var initializeDisplaySort = 0;
 
