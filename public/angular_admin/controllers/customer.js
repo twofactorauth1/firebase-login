@@ -204,6 +204,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $('.search-contacts').unbind('keypress');
           $('.search-contacts').keypress(function(e) {
             if (($(this).val().length===0) && (e.charCode != $scope.alphaSelectedCharCode)) {
+              ToasterService.show('warning', 'Alphabet filter is on.');
               e.preventDefault();
               return false;
             }
