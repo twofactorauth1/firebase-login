@@ -68,7 +68,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
     //region LOGIN / LOGOUT
     showLogin: function (req, resp) {
         var self = this;
-        if (req.isAuthenticated()&& req._passport.instance._userProperty != 'user') {
+        self.log.debug('>> showLogin')
+        
+        if (req.isAuthenticated()) {
             console.log('req.isAuthenticated is true.');
             if (self.accountId(req) > 0) {
                 resp.redirect("/admin");
@@ -101,6 +103,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var self = this;
         self.log.debug('>> onLogin');
         if (req.body.remembermepresent != null && req.body.rememberme == null) {
+            self.log.warn('cookie never expires!!!')
             req.session.cookie.expires = false;
         }
 
@@ -167,7 +170,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
             }
         }
         */
-        return resp.redirect("/login");
+        setTimeout(function() {
+            resp.redirect("/login");
+        }, 2000);
+        //return resp.redirect("/login");
     },
     //endregion
 
