@@ -8,7 +8,7 @@ include standardhead
 
 script(data-main="/angular_admin/main", src="/js/libs/requirejs/require.js")
 script(type="text/javascript").
-
+    window.location.hash===""?window.location="/admin#/"+"#{user.app_preferences.tab.current}":"/admin#/website";
     window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
         return function () {
             var a = Array.prototype.slice.call(arguments);

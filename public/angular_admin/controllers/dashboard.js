@@ -1,7 +1,7 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService', 'customerService'], function(app) {
-    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService', 'customerService', 'navigationService'], function(app) {
+    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', 'NavigationService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, NavigationService) {
         ngProgress.start();
-
+        NavigationService.updateNavigation();
         dashboardService.checkToken(function(data) {
 
             if (data) {

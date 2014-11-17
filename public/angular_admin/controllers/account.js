@@ -1,7 +1,17 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService'], function(app) {
-  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', function($scope, UserService, PaymentService, ngProgress, ToasterService, AccountService) {
+define([
+    'app',
+    'userService',
+    'paymentService',
+    'skeuocardDirective',
+    'ngProgress',
+    'mediaDirective',
+    'stateNavDirective',
+    'toasterService',
+    'accountService',
+    'navigationService'], function(app) {
+  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService',function($scope, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService) {
     ngProgress.start();
-
+    NavigationService.updateNavigation();
     $scope.invoicePageLimit = 5;
 
     $scope.$watch('activeTab', function (newValue, oldValue) {
