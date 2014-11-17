@@ -214,10 +214,15 @@ define(['app',
       if ($scope.customerId) {
         CustomerService.getCustomer($scope.customerId, function(customer) {
           $scope.customer = customer;
+          if ($scope.customer.details[0].phones && $scope.customer.details[0].phones.length == 0)
+          {
+            $scope.addCustomerContactFn();
+          }         
           UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
             $scope.restoreFn();
           });
+
           ngProgress.complete();
           $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
           if ($scope.customer.details[0].addresses.length) {
