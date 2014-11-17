@@ -84,7 +84,7 @@
                         <i class="fa fa-star-o" ng-hide="customer.starred"></i>
                         <i class="fa fa-star" ng-show="customer.starred"></i>
                     </span>
-                    <span class="label label-info contact-cat" ng-show="showContactLabel">{{contactLabel(customer)}}</span>
+                    <span class="label label-info contact-cat" ng-show="userPreferences.customerSettings.showContactLabel">{{contactLabel(customer)}}</span>
 
               <div indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}" class="media">
                 <div class="col-xs-12">
@@ -110,12 +110,12 @@
                 <div class="clearfix mb10"></div>
                 <ul class="social-list hidden-xs">
                   <li>
-                    <div ng-if="showEmail && checkBestEmail(customer) && email">
+                    <div ng-if="userPreferences.customerSettings.showEmail && checkBestEmail(customer) && email">
                       <i class="fa fa-envelope-o pull-left title"></i><span class="pull-right value">{{email}}</span>
                     </div>
                   </li>
                   <li>
-                    <div ng-if="showAddress && checkAddress(customer)">
+                    <div ng-if="userPreferences.customerSettings.showAddress && checkAddress(customer)">
                       <i class="fa fa-map-marker pull-left title"></i>
                       <span class="pull-right value" ng-if="customer.details[0].addresses[0].city && customer.details[0].addresses[0].state">{{customer.details[0].addresses[0].city+', '+customer.details[0].addresses[0].state}}</span>
                       <span class="pull-right value" ng-if="customer.details[0].addresses[0].address && !customer.details[0].addresses[0].city">{{customer.details[0].addresses[0].address}}</span>
@@ -127,7 +127,7 @@
                     </div>
                   </li>
                   <li class="socialList">
-                    <div ng-if="showSocial && (checkFacebookId(customer) || checkTwitterId(customer) || checkLinkedInId(customer))">
+                    <div ng-if="userPreferences.customerSettings.showSocial && (checkFacebookId(customer) || checkTwitterId(customer) || checkLinkedInId(customer))">
                       <p class="pull-left title">Social Accounts:</p>
                       <ul class="pull-right value">
                         <li ng-if="checkFacebookId(customer)"><i class="fa fa-facebook-square"></i></li>
@@ -137,7 +137,7 @@
                     </div>
                   </li>
                   <li>
-                    <div ng-if="showCustomerSince && customer.created.date">
+                    <div ng-if="userPreferences.customerSettings.showCustomerSince && customer.created.date">
                       <p class="pull-left title">Customer Since:</p>
                       <span class="pull-right value">{{customer.created.date | timeAgoFilter}}</span>
                     </div>
@@ -184,12 +184,12 @@
               </div>
               </div></div>
               <div class="tb-col col-md-1">
-              <div class="people-item" ng-if="showEmail && checkBestEmail(customer) && email">
+              <div class="people-item" ng-if="userPreferences.customerSettings.showEmail && checkBestEmail(customer) && email">
                       <i class="fa fa-envelope-o pull-left title"></i><span class="pull-right value">{{email}}</span>
               </div>
           </div>
           <div class="tb-col col-md-2">
-            <div class="people-item" ng-if="showAddress && checkAddress(customer)">
+            <div class="people-item" ng-if="userPreferences.customerSettings.showAddress && checkAddress(customer)">
                       <i class="fa fa-map-marker pull-left title"></i>
                       <span class="pull-right value" ng-if="customer.details[0].addresses[0].city && customer.details[0].addresses[0].state">{{customer.details[0].addresses[0].city+', '+customer.details[0].addresses[0].state}}</span>
                       <span class="pull-right value" ng-if="customer.details[0].addresses[0].address && !customer.details[0].addresses[0].city">{{customer.details[0].addresses[0].address}}</span>
@@ -201,7 +201,7 @@
               </div>
           </div>
           <div class="tb-col col-md-2">
-            <div  class="people-item" ng-if="showSocial && (checkFacebookId(customer) || checkTwitterId(customer) || checkLinkedInId(customer))">
+            <div  class="people-item" ng-if="userPreferences.customerSettings.showSocial && (checkFacebookId(customer) || checkTwitterId(customer) || checkLinkedInId(customer))">
             <p class="pull-left title">
             Social Accounts:
             </p>
@@ -220,7 +220,7 @@
           </div>
 
           <div class="tb-col col-md-2">
-          <div class="people-item" ng-if="showCustomerSince && customer.created.date">
+          <div class="people-item" ng-if="userPreferences.customerSettings.showCustomerSince && customer.created.date">
             <p class="pull-left title">Customer Since:</p>
             <span class="pull-right value">{{customer.created.date | timeAgoFilter}}</span>
           </div>
@@ -310,23 +310,23 @@
           <label class="col-xs-12 control-label">Show / Hide Attributes</label>
 
           <div class="col-xs-12 ckbox ckbox-success">
-            <input type="checkbox" id="contact-cat" ng-checked="true" ng-model="toggleCategory">
+            <input type="checkbox" id="contact-cat" ng-checked="userPreferences.customerSettings.showContactLabel" ng-model="toggleCategory">
             <label for="contact-cat">Category</label>
           </div>
           <div class="col-xs-12 ckbox ckbox-success">
-            <input type="checkbox" id="email_id" ng-checked="true" ng-model="toggleEmail">
+            <input type="checkbox" id="email_id" ng-checked="userPreferences.customerSettings.showEmail" ng-model="toggleEmail">
             <label for="email_id">Email</label>
           </div>
           <div class="col-xs-12 ckbox ckbox-success">
-            <input type="checkbox" id="social_id" ng-checked="true" ng-model="toggleSocial">
+            <input type="checkbox" id="social_id" ng-checked="scope.userPreferences.customerSettings.showSocial" ng-model="toggleSocial">
             <label for="social_id">Social</label>
           </div>
           <div class="col-xs-12 ckbox ckbox-success">
-            <input type="checkbox" id="address_id" ng-checked="true" ng-model="toggleAddress">
+            <input type="checkbox" id="address_id" ng-checked="userPreferences.customerSettings.showAddress" ng-model="toggleAddress">
             <label for="address_id">Address</label>
           </div>
           <div class="col-xs-12 ckbox ckbox-success">
-            <input type="checkbox" id="customer_since_id" ng-checked="true" ng-model="toggleCustomerSince">
+            <input type="checkbox" id="customer_since_id" ng-checked="userPreferences.customerSettings.showCustomerSince" ng-model="toggleCustomerSince">
             <label for="customer_since_id">Customer Since</label>
           </div>
         </div>
