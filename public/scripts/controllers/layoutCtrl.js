@@ -29,7 +29,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.getCourse = function(campaignId) {
             console.log('campaign Id ', campaignId);
             for (var i = 0; i < that.courses.length; i++) {
-                if (that.courses[i]._id === campaignId) {
+                if (that.courses[i]._id === parseInt(campaignId)) {
                     return that.courses[i];
                 }
             };

@@ -80,6 +80,7 @@ require.config({
         'toasterService': '/angular_admin/services/toaster',
         'accountService': '/angular_admin/services/account',
         'keenService': '/angular_admin/services/keen',
+        'courseServiceAdmin': '/angular_admin/services/course',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'hoverClassDirective': '/angular_admin/directives/hover_class',
         'confirmClickDirective': '/angular_admin/directives/confirm_click',

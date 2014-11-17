@@ -66,6 +66,12 @@ var component = $$.m.ModelBase.extend({
              */
             txtcolor: "#444",
 
+             /**
+             *
+             *
+             */
+            campaignId: 1,
+
             /**
              *
              *

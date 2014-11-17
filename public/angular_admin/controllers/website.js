@@ -12,7 +12,8 @@ define([
     'unsafeHtml',
     'mediaDirective',
     'confirmClick2',
-    'confirmClickDirective'
+    'confirmClickDirective',
+    'courseServiceAdmin'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -23,7 +24,8 @@ define([
         'toaster',
         'ngProgress',
         '$rootScope',
-        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress, $rootScope) {
+        'CourseService',
+        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService) {
             ngProgress.start();
 
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -610,7 +612,6 @@ define([
             };
 
             $scope.changeSelectedTheme = function(theme) {
-           
                 console.log("selected" + theme)
                 $scope.selectedTheme = theme;
             };
@@ -641,6 +642,10 @@ define([
                 $scope.updateThemeSettings();
             };
 
+            CourseService.getAllCourses(function(data) {
+                $scope.courses = data;
+            });
+
             //an array of component types and icons for the add component modal
             $scope.componentTypes = [
                 {
@@ -657,6 +662,11 @@ define([
                     title: 'Feature List',
                     type: 'feature-list',
                     icon: 'fa fa-list-ul'
+                },
+                {
+                    title: 'Campaign',
+                    type: 'campaign',
+                    icon: 'fa fa-bullhorn'
                 },
                 {
                     title: 'Contact Us',
