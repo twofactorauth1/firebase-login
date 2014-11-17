@@ -1,6 +1,7 @@
 define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService'], function(app) {
   app.register.controller('CommerceEditCtrl', ['$scope', '$q', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', 'UserService', function($scope, $q, ngProgress, $stateParams, ProductService, PaymentService, UserService) {
     ngProgress.start();
+    $scope.showToaster = false;
     //back button click function
     $scope.$back = function() {
       window.history.back();
@@ -49,6 +50,7 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
         if ($scope.product.status === undefined) {
           $scope.product.status = $scope.userPreferences.default_product_status;
         }
+        $scope.showToaster = true;
       });
     });
 
@@ -84,7 +86,7 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
     });
 
     $scope.savePreferencesFn = function() {
-      UserService.updateUserPreferences($scope.userPreferences, true, function(preferences) {
+      UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function(preferences) {
         $scope.userPreferences = preferences;
         if ($scope.product.icon === undefined) {
           $('#convert').iconpicker('setIcon', $scope.userPreferences.default_product_icon);

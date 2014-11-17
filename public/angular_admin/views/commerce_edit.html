@@ -283,12 +283,15 @@
 
             <table class="table table-hover table-primary all-subscriptions">
               <thead>
-                <tr>
+                <tr ng-if="plans.length > 0">
                   <th>Active</th>
                   <th>Name</th>
                   <th>Interval</th>
                   <th>Amount</th>
                   <th>Actions</th>
+                </tr>
+                <tr ng-if="plans.length == 0">
+                  <th style="text-align:center">No Subscriptions Added</th>
                 </tr>
               </thead>
               <tbody>
