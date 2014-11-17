@@ -16389,6 +16389,9 @@ strong {
 #contact-details-container #contact-information .edit-address-container:last-child {
   margin-bottom: 0px;
 }
+#contact-edit-container .input-lg {
+  height: 48px;
+}
 #contact-edit-container #btn-back-to-contact i {
   font-weight: bold;
   font-size: 2.0em;
@@ -22002,9 +22005,15 @@ hr {
 .add-component i {
   margin-top: -3px;
 }
+.add-component a {
+  color: #29b87f;
+}
 .add-component:hover {
-  background: #4eb1ca;
+  background: #fff;
   pointer-events: auto;
+}
+.add-component:hover a {
+  color: #219265;
 }
 body.editing {
   margin-top: 50px;
