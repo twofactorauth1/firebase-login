@@ -16389,6 +16389,9 @@ strong {
 #contact-details-container #contact-information .edit-address-container:last-child {
   margin-bottom: 0px;
 }
+#contact-edit-container .input-lg {
+  height: 48px;
+}
 #contact-edit-container #btn-back-to-contact i {
   font-weight: bold;
   font-size: 2.0em;
