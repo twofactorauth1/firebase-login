@@ -70,6 +70,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
     });
 
     $scope.setActiveTab = function (tab){
+      $scope.showToaster = true;
       $scope.activeTab = tab;
     };
     UserService.getUserPreferences(function(preferences) {
