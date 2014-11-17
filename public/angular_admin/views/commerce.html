@@ -89,7 +89,9 @@
 						<div class="commerce-item btn-view-product-details"
 							data-productid="1">
 							<div class="media">
-								<span class="important-star"><i class="fa fa-star-o"></i>
+								<span class="important-star">
+									<i class="fa fa-star-o" ng-hide="product.starred" ng-click="productStarredFn(product, true)"></i>
+									<i class="fa fa-star" ng-show="product.starred"  ng-click="productStarredFn(product, false)"></i>
 								</span>
 								<div class="media">
 									<div class="col-xs-12">
