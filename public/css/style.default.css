@@ -3,6 +3,8 @@
 @import '../js/libs/AngularJS-Toaster/toaster.css';
 @import '../js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css';
 @import '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css';
+@import '../js/libs/animate.css/animate.min.css';
+@import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -16044,6 +16046,9 @@ strong {
 .aloha-link-toolbar input:-ms-input-placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
+.nopadding {
+  padding: 0!important;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -18229,9 +18234,23 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   text-align: center;
   font-size: 14px;
 }
+.analytics-overview {
+  height: 300px!important;
+}
 @media (max-width: 767px) {
   .single-metric-top .top-four {
     padding: 15px 20px;
+  }
+  .top-four .percent {
+    line-height: inherit;
+  }
+  .top-four {
+    padding: 10px;
+  }
+  .top-four .title {
+    font-size: 50px;
+    height: 70px;
+    line-height: 40px;
   }
 }
 .increase {

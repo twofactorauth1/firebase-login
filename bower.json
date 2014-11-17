@@ -33,12 +33,14 @@
     "angular-spectrum-colorpicker": "1.2.0",
     "angular-stepper": "~0.0.1",
     "angular-timer": "*",
+    "angular-count-to": "https://github.com/sparkalow/angular-count-to.git",
     "angular-touch": "1.2.16",
     "angular-ui": "0.4.0",
     "angular-ui-bootstrap": "~0.11.0",
     "angular-ui-router": "~0.2.11",
     "angular-wizard": "0.4.0",
     "angular-xeditable": "~0.1.8",
+    "animate.css": "3.2.0",
     "aloha-editor": "1.1.0",
     "backbone": "~1.1.2",
     "backbone-associations": "~0.6.2",
@@ -78,6 +80,7 @@
     "ng-csv": "~0.2.3",
     "nestable": "4f93032cfafe2002f24ed6bd7dc1510931498503",
     "ouibounce": "~0.0.10",
+    "purl":"2.3.1",
     "require-css": "~0.1.5",
     "requirejs": "~2.1.14",
     "requirejs-plugins": "~1.0.2",
@@ -98,7 +101,8 @@
     "ng-tags-input": "2.1.0",
     "angular-input-date": "1.0.4",
     "ngInfiniteScroll": "1.0.0",
-    "skeuocard": "https://github.com/jessepollak/card.git"
+    "skeuocard": "https://github.com/jessepollak/card.git",
+    "ua-parser-js":"0.7.3"
   },
   "resolutions": {
     "angular": "1.2.26",
