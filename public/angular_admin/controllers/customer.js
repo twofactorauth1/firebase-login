@@ -331,33 +331,43 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
       $scope.$watch('toggleCategory', function(value) {
         if (angular.isDefined(value))
-          $scope.showContactLabel = value;
-        else
-          $scope.showContactLabel = true;
+        {
+          $scope.userPreferences.customerSettings.showContactLabel = value;
+          // Save user preferences
+          $scope.savePreferencesFn();
+        }          
       });
       $scope.$watch('toggleEmail', function(value) {
         if (angular.isDefined(value))
-          $scope.showEmail = value;
-        else
-          $scope.showEmail = true;
+        {
+          $scope.userPreferences.customerSettings.showEmail = value;
+          // Save user preferences
+          $scope.savePreferencesFn();
+        }        
       });
       $scope.$watch('toggleSocial', function(value) {
         if (angular.isDefined(value))
-          $scope.showSocial = value;
-        else
-          $scope.showSocial = true;
+        {
+          $scope.userPreferences.customerSettings.showSocial = value;       
+          // Save user preferences
+          $scope.savePreferencesFn();
+        }        
       });
       $scope.$watch('toggleAddress', function(value) {
         if (angular.isDefined(value))
-          $scope.showAddress = value;
-        else
-          $scope.showAddress = true;
+        {
+          $scope.userPreferences.customerSettings.showAddress = value;
+          // Save user preferences
+          $scope.savePreferencesFn();
+        }         
       });
       $scope.$watch('toggleCustomerSince', function(value) {
         if (angular.isDefined(value))
-          $scope.showCustomerSince = value;
-        else
-          $scope.showCustomerSince = true;
+        {
+          $scope.userPreferences.customerSettings.showCustomerSince = value;
+          // Save user preferences
+         $scope.savePreferencesFn();
+        }          
       });
       $scope.setDefaultView = function(value) {
         $scope.gridViewDisplay = value;
@@ -376,7 +386,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       UserService.getUserPreferences(function(preferences) {
         $scope.userPreferences = preferences;
         var customerSettings = $scope.userPreferences.customerSettings;
-        if ($scope.userPreferences.customerSettings.scrollPos) {
+        if (customerSettings && customerSettings.scrollPos) {
           setTimeout(function() {
             console.info('restore scroll');
             $(".contentpanel").scrollTop($scope.userPreferences.customerSettings.scrollPos);
@@ -410,12 +420,18 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           $scope.sortOrderSettings = orderNum;
           console.log('$scope.userPreferences.customerSettings.gridViewDisplay >>> ', $scope.userPreferences.customerSettings.gridViewDisplay);
           $scope.gridViewDisplay = $scope.userPreferences.customerSettings.gridViewDisplay;
+          
         } else {
           $scope.userPreferences.customerSettings = {
             customerOrder: 'first',
             customerSortReverse: false,
             customerDisplayFormat: 'first',
-            gridViewDisplay: "true"
+            gridViewDisplay: "true",
+            showEmail: true,
+            showAddress: true,
+            showSocial: true,
+            showCustomerSince: true,
+            showContactLabel :true
           };
         }
 
