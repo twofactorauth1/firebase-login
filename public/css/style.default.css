@@ -22624,9 +22624,9 @@ ul.nav {
   text-align: center;
   font-size: 85px;
   background: #4bb0cb;
+  border: 10px solid #35a2bf;
   width: 215px;
   height: 215px;
-  border: 10px solid #35a2bf;
   border-radius: 110px;
   line-height: 195px;
   margin: 0 auto;
@@ -22761,6 +22761,8 @@ contenthover a {
   transition: opacity 0.5s ease-out;
 }
 .meet-team-v1 .profilepic .thumbnail {
+  background-color: transparent;
+  border: none;
   display: block;
   max-width: 230px;
   margin: 10px auto;
@@ -23309,6 +23311,9 @@ div[data-class='image-text'] p {
   text-align: center;
 }
 /********** Social **********/
+div[data-type="social"] .inner-page {
+  padding: 0;
+}
 .social-v1 .inner-page {
   padding: 0;
 }
@@ -23333,6 +23338,7 @@ div[data-class='image-text'] p {
 .social-v1 ul li a span {
   background: none!important;
   line-height: 48px;
+  font-size: 28px;
 }
 .social-v1 .facebook {
   background: #395a93;
@@ -23377,7 +23383,6 @@ div[data-class='image-text'] p {
   font-weight: 600;
   font-family: Capita;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-  font-size: 28px;
   margin-top: 10px;
 }
 .signup-form-v1 p {
