@@ -22078,21 +22078,11 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   text-align: center;
   margin-bottom: 20px;
 }
-.inner-page {
-  padding: 50px 0;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-.btn-outline {
-  background: none;
-  border: 2px solid #fff!important;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-  color: #ffffff;
-}
-.btn-outline:hover {
-  background-color: #16778b!important;
-  border: 2px solid #fff!important;
-  color: #ffffff;
+div[data-type='campaign'] .inner-page {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
 }
 .contact-us-v1 .contact-us-title {
   text-align: center;
@@ -22191,6 +22181,22 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   left: 0;
   right: 0;
   z-index: -1;
+}
+.inner-page {
+  padding: 50px 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.btn-outline {
+  background: none;
+  border: 2px solid #fff!important;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+}
+.btn-outline:hover {
+  background-color: #16778b!important;
+  border: 2px solid #fff!important;
+  color: #ffffff;
 }
 /********** Feature List v1 **********/
 .feature-list-v1 .features-wrap {

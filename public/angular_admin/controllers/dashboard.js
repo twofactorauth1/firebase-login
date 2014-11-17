@@ -447,29 +447,29 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 console.log('previous session >>> ', results[7]);
                                 console.log('avg session length >>> ', results[8]);
 
-                                // var sessionDuration = parseInt(results[6].totalsForAllResults['ga:sessionDuration']);
-                                // var sessions = parseInt(results[6].totalsForAllResults['ga:sessions']);
-                                // var sessionsData = [];
-                                // var timeOnSiteData = [];
-                                // for (var i = 0; i < results[6].rows.length; i++) {
-                                //     var subArr = [];
-                                //     subArr.push($scope.toUTC(results[6].rows[i][0]));
-                                //     subArr.push(parseInt(results[6].rows[i][1]));
-                                //     sessionsData.push(subArr);
+                                // ----------------------------------------
+                                // Session Duration
+                                // ----------------------------------------
 
-                                //     var subArr2 = [];
-                                //     subArr2.push($scope.toUTC(results[6].rows[i][0]));
-                                //     subArr2.push(parseInt(results[6].rows[i][1]));
-                                //     timeOnSiteData.push(subArr2);
-                                // };
-                                // $scope.visits = sessions;
-                                // var averageDuration = (sessionDuration / sessions);
-                                // $scope.visitDuration = $scope.secToTime(averageDuration);
+                                _sessionsData = [];
+                                _totalSessions = 0;
+                                for (var j = 0; j < results[6].result.length; j++) {
+                                    var subArr = [];
+                                    var value = results[6].result[j].value || 0;
+                                    _totalSessions += value;
+                                    subArr.push(new Date(results[6].result[j].timeframe.start).getTime());
+                                    subArr.push(value);
+                                    _sessionsData.push(subArr);
+                                };
 
-                                // var previousSessionDuration = parseInt(results[7].totalsForAllResults['ga:sessionDuration']);
-                                // var previousSessions = parseInt(results[7].totalsForAllResults['ga:sessions']);
-                                // var averageDurationPrevious = (previousSessionDuration / previousSessions);
-                                // $scope.visitDurationPercent = $scope.calculatePercentage(averageDurationPrevious, averageDuration);
+                                if (_totalSessions > $scope.sessions) {
+                                    $scope.sessions = _totalSessions;
+                                    if ($scope.firstQuery) {
+                                        $scope.sessionsData = _sessionsData;
+                                    } else {
+                                        $scope.analyticsOverviewConfig.series[1].data = _sessionsData;
+                                    }
+                                }
 
                                 // ======================================
                                 // Bounces
