@@ -1,8 +1,8 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService',
-    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService) {
-        var account, theme, website, pages, teaserposts, route, postname, products, that = this;
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService',
+    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService) {
+        var account, theme, website, pages, teaserposts, route, postname, products, courses, that = this;
 
         route = $location.$$path;
         window.oldScope;
@@ -20,6 +20,20 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     console.log('>>>>> ', window.parent);
         //     window.parent.frames[0].parentNode.activateSettings();
         // };
+
+        CourseService.getAllCourses(function(data) {
+            console.log('courses ', data);
+            that.courses = data;
+        });
+
+        $scope.getCourse = function(campaignId) {
+            console.log('campaign Id ', campaignId);
+            for (var i = 0; i < that.courses.length; i++) {
+                if (that.courses[i]._id === campaignId) {
+                    return that.courses[i];
+                }
+            };
+        };
 
         accountService(function(err, data) {
             if (err) {
@@ -47,19 +61,19 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
-                PostService.getAllPostsByPageId($scope.currentpage._id, function (posts){
+                PostService.getAllPostsByPageId($scope.currentpage._id, function(posts) {
                     that.blogposts = posts;
                 });
-//                $scope.currentpage.components.forEach(function(component){
-//                    if (component.bg.img) {
-//                        component.bgimg = {
-//                            "background": "url(" + component.bg.img.url + ") no-repeat fixed",
-//                            "background-size": "cover",
-//                            "color": component.txtcolor || $scope.primaryTextColor
-//                        };
-//                    }
-//
-//                })
+                //                $scope.currentpage.components.forEach(function(component){
+                //                    if (component.bg.img) {
+                //                        component.bgimg = {
+                //                            "background": "url(" + component.bg.img.url + ") no-repeat fixed",
+                //                            "background-size": "cover",
+                //                            "color": component.txtcolor || $scope.primaryTextColor
+                //                        };
+                //                    }
+                //
+                //                })
 
 
                 /*PostService.getAllPosts(function(posts) {
@@ -145,302 +159,302 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         /********** CMS RELATED **********/
 
-            window.activateAloha = function() {
-                aloha.dom.query('.editable', document).forEach(aloha);
-            };
+        window.activateAloha = function() {
+            aloha.dom.query('.editable', document).forEach(aloha);
+        };
 
-            window.deactivateAloha = function() {
-                if(aloha.editor && aloha.editor.selection)
-                    aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
-                    // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
-            };
+        window.deactivateAloha = function() {
+            if (aloha.editor && aloha.editor.selection)
+                aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
+            // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
+        };
 
-            window.updateWebsite = function(data) {
-                that.account.website = data;
-                // $scope.$apply(function() {
-                //     $scope.primaryColor = data.settings.primary_color;
-                //     $scope.primaryHighlight = data.settings.primary_highlight;
-                //     $scope.secondaryColor = data.settings.secondary_color;
-                //     $scope.navHover = data.settings.nav_hover;
-                //     $scope.primaryTextColor = data.settings.primary_text_color;
-                //     $scope.fontFamily = data.settings.font_family;
-                //     $scope.fontFamily2 = data.settings.font_family_2;
-                // });
-            };
+        window.updateWebsite = function(data) {
+            that.account.website = data;
+            // $scope.$apply(function() {
+            //     $scope.primaryColor = data.settings.primary_color;
+            //     $scope.primaryHighlight = data.settings.primary_highlight;
+            //     $scope.secondaryColor = data.settings.secondary_color;
+            //     $scope.navHover = data.settings.nav_hover;
+            //     $scope.primaryTextColor = data.settings.primary_text_color;
+            //     $scope.fontFamily = data.settings.font_family;
+            //     $scope.fontFamily2 = data.settings.font_family_2;
+            // });
+        };
 
-            $scope.createPost = function(postData) {
+        $scope.createPost = function(postData) {
 
 
-                //            var data = {
-                //                _id: $scope.website._id,
-                //                accountId: $scope.website.accountId,
-                //                settings: $scope.website.settings
-                //            };
-                PostService.createPost($scope.currentpage._id, postData, function(data) {});
-            };
+            //            var data = {
+            //                _id: $scope.website._id,
+            //                accountId: $scope.website.accountId,
+            //                settings: $scope.website.settings
+            //            };
+            PostService.createPost($scope.currentpage._id, postData, function(data) {});
+        };
 
-            $scope.deletePost = function(postId) {
-                PostService.deletePost($scope.currentpage._id, postId, function(data) {
+        $scope.deletePost = function(postId) {
+            PostService.deletePost($scope.currentpage._id, postId, function(data) {
 
-                });
-            };
+            });
+        };
 
-            $scope.resfeshIframe = function() {
-                //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
-            };
+        $scope.resfeshIframe = function() {
+            //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
+        };
 
-            window.updateComponents = function(data) {
-                $scope.$apply(function() {
-                    $scope.currentpage.components = data;
-                    for (var i = 0; i < $scope.currentpage.components.length; i++) {
-                        if ($scope.currentpage.components[i].type == 'navigation') {
-                            var body = document.getElementsByTagName('body')[0];
-                            body.className = body.className.replace('navbar-v', '');
-                            body.className = body.className + ' navbar-v' + $scope.currentpage.components[i].version;
-                        }
-                    };
-                });
-            };
-
-            window.triggerEditMode = function() {
-                var body = document.getElementsByTagName('body')[0];
-                var hasClass = body.classList.contains('editing');
-                if (hasClass === false) {
-                    body.className += ' editing';
-                }
-
-                var toolbar = body.querySelectorAll('.btn-toolbar')[0];
-                if (toolbar.classList.contains('editing') === false) {
-                    toolbar.className += ' editing';
-                }
-                window.oldScope.isEditing = true;
-
-                window.oldScope.$digest();
-            };
-
-            window.triggerEditModeOff = function() {
-                var body = document.getElementsByTagName('body')[0];
-                body.className = body.className.replace(/(?:^|\s)editing(?!\S)/, '');
-
-                var toolbar = body.querySelectorAll('.btn-toolbar')[0];
-                toolbar.className = toolbar.className.replace(/(?:^|\s)editing(?!\S)/, '');
-                console.log(window.oldScope);
-                window.oldScope.isEditing = false;
-                window.oldScope.$digest();
-            };
-
-            window.triggerFontUpdate = function(font) {
-                WebFont.load({
-                    google: {
-                        families: [font, 'undefined']
+        window.updateComponents = function(data) {
+            $scope.$apply(function() {
+                $scope.currentpage.components = data;
+                for (var i = 0; i < $scope.currentpage.components.length; i++) {
+                    if ($scope.currentpage.components[i].type == 'navigation') {
+                        var body = document.getElementsByTagName('body')[0];
+                        body.className = body.className.replace('navbar-v', '');
+                        body.className = body.className + ' navbar-v' + $scope.currentpage.components[i].version;
                     }
-                });
+                };
+            });
+        };
 
-                $('h1,h2,h3,h4,h5,h6,h1 .editable,h2 .editable,h3 .editable,h4 .editable,h5 .editable,h6 .editable ').each( function () {
-                  this.style.setProperty( 'font-family', font, 'important' );
-               });
-
-            };
-
-            if ( !window.oldScope ) {
-                window.oldScope = $scope;
+        window.triggerEditMode = function() {
+            var body = document.getElementsByTagName('body')[0];
+            var hasClass = body.classList.contains('editing');
+            if (hasClass === false) {
+                body.className += ' editing';
             }
-            $scope.sortingLog = [];
 
-            $scope.wait;
+            var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            if (toolbar.classList.contains('editing') === false) {
+                toolbar.className += ' editing';
+            }
+            window.oldScope.isEditing = true;
 
-            $scope.sortableOptions = {
-                handle: '.reorder',
-                start: function(e, ui) {
-                    console.log('ui >>> ', ui);
-                    ui.item[0].parentNode.className += ' active';
-                    ui.item[0].className += ' dragging';
-                    clearTimeout($scope.wait);
-                    ui.placeholder.height('60px');
-                    // ui.item.sortable('refreshPositions');
-                    angular.element(ui.item[0].parentNode).sortable("refresh");
-                },
-                update: function(e, ui) {
-                    console.log('sorting update');
-                },
-                stop: function(e, ui) {
-                    ui.item[0].classList.remove('dragging');
-                    $scope.wait = setTimeout(function() {
-                        ui.item[0].parentNode.classList.remove('active');
-                    }, 1500);
-                    // var componentId = ui.item[0].querySelectorAll('.component')[0].attributes['data-id'].value;
-                    // var newOrder = ui.item.index();
+            window.oldScope.$digest();
+        };
+
+        window.triggerEditModeOff = function() {
+            var body = document.getElementsByTagName('body')[0];
+            body.className = body.className.replace(/(?:^|\s)editing(?!\S)/, '');
+
+            var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            toolbar.className = toolbar.className.replace(/(?:^|\s)editing(?!\S)/, '');
+            console.log(window.oldScope);
+            window.oldScope.isEditing = false;
+            window.oldScope.$digest();
+        };
+
+        window.triggerFontUpdate = function(font) {
+            WebFont.load({
+                google: {
+                    families: [font, 'undefined']
                 }
-            };
+            });
+
+            $('h1,h2,h3,h4,h5,h6,h1 .editable,h2 .editable,h3 .editable,h4 .editable,h5 .editable,h6 .editable ').each(function() {
+                this.style.setProperty('font-family', font, 'important');
+            });
+
+        };
+
+        if (!window.oldScope) {
+            window.oldScope = $scope;
+        }
+        $scope.sortingLog = [];
+
+        $scope.wait;
+
+        $scope.sortableOptions = {
+            handle: '.reorder',
+            start: function(e, ui) {
+                console.log('ui >>> ', ui);
+                ui.item[0].parentNode.className += ' active';
+                ui.item[0].className += ' dragging';
+                clearTimeout($scope.wait);
+                ui.placeholder.height('60px');
+                // ui.item.sortable('refreshPositions');
+                angular.element(ui.item[0].parentNode).sortable("refresh");
+            },
+            update: function(e, ui) {
+                console.log('sorting update');
+            },
+            stop: function(e, ui) {
+                ui.item[0].classList.remove('dragging');
+                $scope.wait = setTimeout(function() {
+                    ui.item[0].parentNode.classList.remove('active');
+                }, 1500);
+                // var componentId = ui.item[0].querySelectorAll('.component')[0].attributes['data-id'].value;
+                // var newOrder = ui.item.index();
+            }
+        };
 
         /********** END CMS RELATED **********/
 
         /********** SIGNUP SECTION **********/
 
-            $scope.createUser = function(user) {
-                console.log('user', user);
+        $scope.createUser = function(user) {
+            console.log('user', user);
 
-                //create contact
-                userService.addContact(user, function(data) {
-                    console.log('data ', data);
-                });
+            //create contact
+            userService.addContact(user, function(data) {
+                console.log('data ', data);
+            });
 
-                //redirect to signup with details
-                window.location.href = "http://app.indigenous.local:3000/signup";
+            //redirect to signup with details
+            window.location.href = "http://app.indigenous.local:3000/signup";
+        };
+
+        $scope.createAccount = function(newAccount) {
+            //validate
+            //email
+            if (!$scope.newAccount.email) {
+                $scope.checkEmailExists(newAccount);
+                return;
+            }
+
+            //pass
+            if (!$scope.newAccount.password) {
+                $scope.checkPasswordLength(newAccount);
+                return;
+            }
+
+            //business name
+            if (!$scope.newAccount.businessName) {
+                $scope.checkDomainExists(newAccount);
+                return;
+            }
+
+            //membership selection
+            if (!$scope.newAccount.membership) {
+                $scope.checkMembership(newAccount);
+                return;
+            }
+
+            //credit card
+            newAccount.card = {
+                number: $('#cc_number').val(),
+                cvc: $('#cc_cvc').val(),
+                exp_month: $('#cc_exp_month').val(),
+                exp_year: $('#cc_exp_year').val()
             };
 
-            $scope.createAccount = function(newAccount) {
-                //validate
-                    //email
-                    if (!$scope.newAccount.email) {
-                        $scope.checkEmailExists(newAccount);
-                        return;
-                    }
+            var cc_name = $('#cc_name').val();
 
-                    //pass
-                    if (!$scope.newAccount.password) {
-                        $scope.checkPasswordLength(newAccount);
-                        return;
-                    }
+            if (!newAccount.card.number || !newAccount.card.cvc || !newAccount.card.exp_month || !newAccount.card.exp_year || !cc_name) {
+                console.log('card invalid');
+                //hightlight card in red
+                return;
+            }
+            //end validate
 
-                    //business name
-                    if (!$scope.newAccount.businessName) {
-                        $scope.checkDomainExists(newAccount);
-                        return;
-                    }
+            userService.getTmpAccount(function(data) {
+                var tmpAccount = data;
+                tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+                userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
 
-                    //membership selection
-                    if (!$scope.newAccount.membership) {
-                        $scope.checkMembership(newAccount);
-                        return;
-                    }
-
-                    //credit card
-                    newAccount.card = {
-                        number: $('#cc_number').val(),
-                        cvc: $('#cc_cvc').val(),
-                        exp_month: $('#cc_exp_month').val(),
-                        exp_year: $('#cc_exp_year').val()
+                    var newUser = {
+                        username: newAccount.email,
+                        password: newAccount.password,
+                        email: newAccount.email,
+                        accountToken: data.token
                     };
 
-                    var cc_name = $('#cc_name').val();
+                    //get the token
+                    PaymentService.getStripeCardToken(newAccount.card, function(token) {
+                        newUser.cardToken = token;
+                        newUser.plan = $scope.selectedPlan;
+                        newUser.anonymousId = window.analytics.user().anonymousId();
+                        userService.initializeUser(newUser, function(data) {
+                            window.location.replace(newUser.accountUrl);
+                        });
+                    });
 
-                    if (!newAccount.card.number || !newAccount.card.cvc || !newAccount.card.exp_month || !newAccount.card.exp_year || !cc_name) {
-                        console.log('card invalid');
-                        //hightlight card in red
-                        return;
-                    }
-                //end validate
-
-                userService.getTmpAccount(function(data) {
-                    var tmpAccount = data;
-                    tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
-                    userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
-
-                        var newUser = {
-                            username: newAccount.email,
-                            password: newAccount.password,
-                            email: newAccount.email,
-                            accountToken: data.token
-                        };
-
-                        //get the token
+                    /*
+                    userService.createUser(newUser, function(data) {
+                        var newUser = data;
                         PaymentService.getStripeCardToken(newAccount.card, function(token) {
-                            newUser.cardToken = token;
-                            newUser.plan = $scope.selectedPlan;
-                            newUser.anonymousId = window.analytics.user().anonymousId();
-                            userService.initializeUser(newUser, function(data){
+                            PaymentService.postStripeCustomer(token, newUser, newUser.accounts[0].accountId, function(stripeUser) {
+                                userService.postAccountBilling(stripeUser.id, token, function(billing) {});
                                 window.location.replace(newUser.accountUrl);
+                                // PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
+                                //     window.location.replace(adminUrl);
+                                // });
                             });
                         });
-
-                        /*
-                        userService.createUser(newUser, function(data) {
-                            var newUser = data;
-                            PaymentService.getStripeCardToken(newAccount.card, function(token) {
-                                PaymentService.postStripeCustomer(token, newUser, newUser.accounts[0].accountId, function(stripeUser) {
-                                    userService.postAccountBilling(stripeUser.id, token, function(billing) {});
-                                    window.location.replace(newUser.accountUrl);
-                                    // PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
-                                    //     window.location.replace(adminUrl);
-                                    // });
-                                });
-                            });
-                        });*/
-                    });
+                    });*/
                 });
-            };
+            });
+        };
 
-            $scope.newAccount = {};
+        $scope.newAccount = {};
 
-            $scope.checkDomainExists = function(newAccount) {
-                console.log('checking to see if the domiain exists ', newAccount.businessName);
-                if (!newAccount.businessName) {
-                    $("#business-name .error").html("Business Name Required");
-                    $("#business-name").addClass('has-error');
-                    $("#business-name .glyphicon").addClass('glyphicon-remove');
-                } else {
-                    var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
-                    userService.checkDomainExists(name, function(data) {
-                        if (data != 'true') {
-                            $("#business-name .error").html("Domain Already Exists");
-                            $("#business-name").addClass('has-error');
-                            $("#business-name .glyphicon").addClass('glyphicon-remove');
-                        } else {
-                            $("#business-name .error").html("");
-                            $("#business-name").removeClass('has-error').addClass('has-success');
-                            $("#business-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                        }
-                    });
-                }
-            };
+        $scope.checkDomainExists = function(newAccount) {
+            console.log('checking to see if the domiain exists ', newAccount.businessName);
+            if (!newAccount.businessName) {
+                $("#business-name .error").html("Business Name Required");
+                $("#business-name").addClass('has-error');
+                $("#business-name .glyphicon").addClass('glyphicon-remove');
+            } else {
+                var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+                userService.checkDomainExists(name, function(data) {
+                    if (data != 'true') {
+                        $("#business-name .error").html("Domain Already Exists");
+                        $("#business-name").addClass('has-error');
+                        $("#business-name .glyphicon").addClass('glyphicon-remove');
+                    } else {
+                        $("#business-name .error").html("");
+                        $("#business-name").removeClass('has-error').addClass('has-success');
+                        $("#business-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    }
+                });
+            }
+        };
 
-            $scope.checkEmailExists = function(newAccount) {
-                $scope.newAccount.email = newAccount.email;
-                console.log('checking to see if the username exists ', newAccount.email);
-                if (!newAccount.email) {
-                    $("#email .error").html("Email Required");
-                    $("#email").addClass('has-error');
-                    $("#email .glyphicon").addClass('glyphicon-remove');
-                } else {
-                    userService.checkEmailExists(newAccount.email, function(data) {
-                        if (data === 'true') {
-                            // $("#input-company-name").val('');
-                            $("#email .error").html("Email Already Exists");
-                            $("#email").addClass('has-error');
-                            $("#email .glyphicon").addClass('glyphicon-remove');
-                        } else {
-                            console.log('email avaliable');
-                            $("#email .error").html("");
-                            $("#email").removeClass('has-error').addClass('has-success');
-                            $("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                        }
-                    });
-                }
-            };
+        $scope.checkEmailExists = function(newAccount) {
+            $scope.newAccount.email = newAccount.email;
+            console.log('checking to see if the username exists ', newAccount.email);
+            if (!newAccount.email) {
+                $("#email .error").html("Email Required");
+                $("#email").addClass('has-error');
+                $("#email .glyphicon").addClass('glyphicon-remove');
+            } else {
+                userService.checkEmailExists(newAccount.email, function(data) {
+                    if (data === 'true') {
+                        // $("#input-company-name").val('');
+                        $("#email .error").html("Email Already Exists");
+                        $("#email").addClass('has-error');
+                        $("#email .glyphicon").addClass('glyphicon-remove');
+                    } else {
+                        console.log('email avaliable');
+                        $("#email .error").html("");
+                        $("#email").removeClass('has-error').addClass('has-success');
+                        $("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    }
+                });
+            }
+        };
 
-            $scope.checkPasswordLength = function(newAccount) {
-                console.log('checking to see if the password exists ', newAccount.password);
+        $scope.checkPasswordLength = function(newAccount) {
+            console.log('checking to see if the password exists ', newAccount.password);
 
-                if (!newAccount.password) {
-                    // $("#input-company-name").val('');
-                    $("#password .error").html("Password must contain at least 5 characters");
-                    $("#password").addClass('has-error');
-                    $("#password .glyphicon").addClass('glyphicon-remove');
-                } else {
-                    $("#password .error").html("");
-                    $("#password").removeClass('has-error').addClass('has-success');
-                    $("#password .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                }
-            };
+            if (!newAccount.password) {
+                // $("#input-company-name").val('');
+                $("#password .error").html("Password must contain at least 5 characters");
+                $("#password").addClass('has-error');
+                $("#password .glyphicon").addClass('glyphicon-remove');
+            } else {
+                $("#password .error").html("");
+                $("#password").removeClass('has-error').addClass('has-success');
+                $("#password .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+            }
+        };
 
-            $scope.checkMembership = function(newAccount) {
-                if (!newAccount.membership) {
-                    console.log('membership not selected');
-                } else {
-                    console.log('membership has been selected');
-                }
-            };
+        $scope.checkMembership = function(newAccount) {
+            if (!newAccount.membership) {
+                console.log('membership not selected');
+            } else {
+                console.log('membership has been selected');
+            }
+        };
 
         /********** END SIGNUP SECTION **********/
 
