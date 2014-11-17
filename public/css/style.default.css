@@ -22002,9 +22002,15 @@ hr {
 .add-component i {
   margin-top: -3px;
 }
+.add-component a {
+  color: #29b87f;
+}
 .add-component:hover {
-  background: #4eb1ca;
+  background: #fff;
   pointer-events: auto;
+}
+.add-component:hover a {
+  color: #219265;
 }
 body.editing {
   margin-top: 50px;
