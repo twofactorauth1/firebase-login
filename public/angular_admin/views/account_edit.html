@@ -69,11 +69,10 @@
 							<div class="col-xs-1">
 								<i class="icon-main fa fa-phone"></i>
 							</div>
-							<div class="col-xs-11">
+							<div class="col-xs-9">
 								<div id="edit-phones-container">
 
-									<div class="row edit-phone-container" data-id=""
-										style="margin-top: 8px;">
+									<div class="edit-phone-container">
 										<div class="form-group col-xs-12">
 											<div class="input-group">
 								                <label class="input-group-addon input-lg">+1 </label>
@@ -120,11 +119,9 @@
 								</small>
 								</span>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12">
+							<div class="col-xs-2">
 
-								<button id="btn-new-address" class="btn btn-primary btn-sm pull-right" ng-click="addUserContactFn()">Add Contact</button>
+								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addUserContactFn()"><i class="fa fa-plus"></i></button>
 							</div>
 						</div>
 
@@ -286,19 +283,13 @@
 				        <div id="phone-row" class="row" ng-repeat="phone in account.business.phones">
 				            <div class="col-xs-1"><i class="icon-main fa fa-phone"></i>
 				            </div>
-				            <div class="col-xs-10">
+				            <div class="col-xs-9">
 				                <div id="edit-phones-container">
 
-
-
-
-
-				                    <!-- ADD NEW PHONE -->
-
-				                    <div class="row edit-phone-container" data-id="" style="margin-top:8px;">
-				                        <div class="form-group col-xs-12 col-sm-8 col-md-10">
+				                    <div class="edit-phone-container">
+				                        <div class="form-group col-xs-12">
 				                            <div class="input-group">
-				                                <div class="input-group-addon">+1</div>
+				                                <div class="input-group-addon input-lg">+1</div>
 				                                <input type="text" class="input-edit-phone form-control input-lg" validation-type="phone" indigeweb-validate-form-fields  ng-model='phone.number'>
 				                            </div>
 				                        </div>
@@ -309,31 +300,25 @@
 				                    <small>e.g. (303-555-5555)</small>
 				                </span>
 				            </div>
+				            <div class="col-xs-2">
+								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addBusinessContactFn()"><i class="fa fa-plus"></i></button>
+							</div>
 
 				        </div>
-						<div class="row">
-							<button id="btn-new-address" class="btn btn-primary btn-sm" ng-click="addBusinessContactFn()">Add Contact</button>
-						</div>
-
-
-
-
 
 				        <div id="address-row" class="row">
 				            <div class="col-xs-1"><i class="icon-main fa fa-map-marker"></i>
 				            </div>
-				            <div class="col-xs-10">
+				            <div class="col-xs-9">
 				                <div id="edit-addresses-container">
-
-
+									<div class="form-group">
+										<input class="form-control input-edit-map input-lg" placeholder="Address" ng-model='user.address' type="text">
+									</div>
 				                </div>
-
-				                <br>
-
-
-				                <div id="btn-new-address" class="btn btn-primary btn-sm">Add Address</div>
-
 				            </div>
+				            <div class="col-xs-2">
+		                		<div id="btn-new-address" class="btn btn-primary btn-lg pull-right"><i class="fa fa-plus"></i></div>
+		                	</div>
 				        </div>
 					</div>
 				</div>
