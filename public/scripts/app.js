@@ -88,11 +88,10 @@ var mainApp = angular
         var pageProperties;
         var sessionProperties;
         var pages = [];
-        var entrance = parsedUrl.attr("host");
 
         //get and parse current url
         var fullUrl = window.location.href;
-        var parsedUrl = $.url(fullUrl);
+        var parsedEntranceUrl = $.url(fullUrl);
         var parser = new UAParser();
 
         var addPageData = function() {
@@ -114,6 +113,7 @@ var mainApp = angular
         $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
             $rootScope.transitionState = "active";
             var startPageTimer = new Date().getTime();
+            var parsedUrl = $.url(fullUrl);
 
             pageProperties = {
                 url: {
@@ -287,7 +287,7 @@ var mainApp = angular
                     ip_address : "${keen.ip}",
                     fingerprint: fingerprint,
                     session_start: start,
-                    entrance: entrance,
+                    entrance: parsedEntranceUrl.attr("host"),
                     pages: []
                 };
 

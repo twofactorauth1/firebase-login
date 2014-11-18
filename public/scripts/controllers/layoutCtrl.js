@@ -294,13 +294,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.createUser = function(user) {
             console.log('user', user);
 
+            var formatted = {
+                details: {
+                    emails: []
+                }
+            };
+
+            formatted.details.emails.push(user.email);
+
             //create contact
-            userService.addContact(user, function(data) {
+            userService.addContact(formatted, function(data) {
                 console.log('data ', data);
             });
 
             //redirect to signup with details
-            window.location.href = "http://app.indigenous.local:3000/signup";
+            //window.location.href = "http://app.indigenous.local:3000/signup";
         };
 
         $scope.createAccount = function(newAccount) {
