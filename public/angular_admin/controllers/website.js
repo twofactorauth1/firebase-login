@@ -13,7 +13,6 @@ define([
     'mediaDirective',
     'confirmClick2',
     'confirmClickDirective',
-    'navigationService',
     'courseServiceAdmin'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
@@ -25,12 +24,10 @@ define([
         'toaster',
         'ngProgress',
         '$rootScope',
-        'NavigationService',
         'CourseService',
-        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress, $rootScope, NavigationService, CourseService) {
-
+        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService) {
             ngProgress.start();
-            NavigationService.updateNavigation();
+
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;

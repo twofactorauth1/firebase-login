@@ -1,29 +1,9 @@
-define([
-    'app',
-    'userService',
-    'paymentService',
-    'skeuocardDirective',
-    'ngProgress',
-    'mediaDirective',
-    'stateNavDirective',
-    'toasterService',
-    'accountService',
-    'navigationService'], function(app) {
-  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService',function($scope, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService'], function(app) {
+  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', function($scope, UserService, PaymentService, ngProgress, ToasterService, AccountService) {
     ngProgress.start();
-    NavigationService.updateNavigation();
     $scope.showToaster = false;
-    $scope.invoicePageLimit = 5;
 
-    $scope.tabList = [
-      {v:'last_tab_visited',n:'Last Tab Visited'},
-      {v:'website',n:'Website'},
-      {v:'customer',n:'Customer'},
-      {v:'marketing',n:'Marketing'},
-      {v:'commerce',n:'Commerce'},
-      {v:'dashboard',n:'Dashboard'},
-      {v:'account',n:'Account'}]
-    }]);
+    $scope.invoicePageLimit = 5;
 
     $scope.$watch('activeTab', function (newValue, oldValue) {
       console.log('watch activeTab >> ', newValue);
@@ -105,7 +85,6 @@ define([
     $scope.savePreferencesFn = function() {
       UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function(){})
     };
-    $scope.updateDefaultTab = function (user){
-        NavigationService.updateNavigation2(user);
-    };
+
+  }]);
 });

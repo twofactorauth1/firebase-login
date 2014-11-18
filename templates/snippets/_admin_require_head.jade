@@ -8,14 +8,6 @@ include standardhead
 
 script(data-main="/angular_admin/main", src="/js/libs/requirejs/require.js")
 script(type="text/javascript").
-    window.location.hash===""?window.location="/admin#/" + (function(){
-        var single_view = "#{user.app_preferences.tab.single_view}"
-        , last = "#{user.app_preferences.tab.last}";
-        if (single_view === "last_tab_visited") {
-            return last;
-        }
-        return single_view
-    }()) : "/admin#/website";
 
     window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
         return function () {

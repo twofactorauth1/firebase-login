@@ -1,7 +1,6 @@
-define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ngProgress', 'navigationService'], function(app) {
-  app.register.controller('CommerceCtrl', ['$scope', 'ProductService', 'PaymentService', 'ngProgress', 'NavigationService', function($scope, ProductService, PaymentService, ngProgress, NavigationService) {
+define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ngProgress'], function(app) {
+  app.register.controller('CommerceCtrl', ['$scope', 'ProductService', 'PaymentService', 'ngProgress', function($scope, ProductService, PaymentService, ngProgress) {
     ngProgress.start();
-    NavigationService.updateNavigation();
     $scope.addProductFn = function() {
       ProductService.postProduct($scope.newProduct, function(product) {
         $scope.products.push(product);
