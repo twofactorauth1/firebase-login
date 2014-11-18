@@ -138,6 +138,7 @@ var eventHandler =  {
             case 'invoice.payment_succeeded':
                 break;
             case 'invoice.payment_failed':
+                self.onInvoicePaymentFailed(iEvent, fn);
                 break;
             case 'invoiceitem.created':
                 break;
@@ -253,8 +254,7 @@ var eventHandler =  {
     },
 
     onChargeFailed: function(iEvent, fn) {
-        var self = this;
-        this.sendEmailToOperationFn(iEvent, fn);
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onChargeRefunded: function(iEvent, fn) {
@@ -283,8 +283,7 @@ var eventHandler =  {
     },
 
     onChargeDisputeCreated: function(iEvent, fn) {
-      var self = this;
-      this.sendEmailToOperationFn(iEvent, fn);
+      self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onChargeDisputeUpdated: function(iEvent, fn) {
@@ -348,7 +347,7 @@ var eventHandler =  {
     },
 
     onInvoicePaymentFailed: function(iEvent, fn) {
-
+      self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onInvoiceItemCreated: function(iEvent, fn) {
