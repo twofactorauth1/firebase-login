@@ -1,8 +1,11 @@
 /********** MastHead **********/
   .navbar-v2 {
-    .masthead-v1 {
-       .home-text {
-        margin-top: 140px!important;
+    div[data-type='masthead'] {
+       .inner-page {
+        margin-top: -210px;
+      }
+      .home-text {
+        margin-top: 130px;
       }
     }
   }
@@ -66,3 +69,15 @@
         text-align: center;
       }
   }
+
+@media (max-width: 625px) {
+  .navbar-v2 .masthead-v1 .home-text {
+    margin-top: 60px!important;
+  }
+  .masthead-v1 .masthead-subtitle {
+    max-width: 100%;
+  }
+  .navigation-v2 .navbar ul.navbar-nav li {
+    display: block;
+  }
+}
