@@ -547,6 +547,16 @@ var contact = $$.m.ModelBase.extend({
         storage: "mongo",
         table: "contacts",
         idStrategy: "increment"
+    },
+    types: {
+        CONTACT: 'c',
+        CUSTOMER: 'cu',
+        COLLEAGUE: 'co',
+        FRIEND: 'fr',
+        MEMBER: 'mb',
+        FAMILY: 'fa',
+        ADMIN: 'ad',
+        LEAD: 'ld'
     }
 });
 
