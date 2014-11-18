@@ -4,7 +4,7 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
-
+var jade = require('jade');
 var stripeDao = require('./dao/stripe.dao.js');
 var eventDao = require('./dao/stripe_event.dao.js');
 var userDao = require('../dao/user.dao.js');
@@ -87,6 +87,7 @@ var eventHandler =  {
                 self.onChargeSucceeded(iEvent, fn);
                 break;
             case 'charge.failed':
+                self.onChargeFailed(iEvent, fn);
                 break;
             case 'charge.refunded':
                 break;
@@ -95,6 +96,7 @@ var eventHandler =  {
             case 'charge.updated':
                 break;
             case 'charge.dispute.created':
+              self.onChargeDisputeCreated(iEvent, fn);
                 break;
             case 'charge.dispute.updated':
                 break;
@@ -177,6 +179,20 @@ var eventHandler =  {
 
     },
 
+    sendEmailToOperationFn: function(iEvent, fn) {
+        var context = {name: 'Operation Manager', event: iEvent.get('type'), response: JSON.stringify(iEvent.get('body'))};
+        var emailBody = jade.renderFile('./../templates/emails/stripe/common.jade', context);
+        $$.g.mailer.sendMail('admin@indigenous.io', 'operations@indigenous.io', null, iEvent.get('type') + ' Event', emailBody, null, function () {});
+
+        $.when(p1).done(function(){
+            eventDao.updateStripeEventState(iEvent.id(), status, function(err, value){
+                //err or not... we're done here.
+                log.debug('<< ' + iEvent.get('type'));
+                fn(err, value);
+            });
+        });
+    },
+
     onAccountUpdated: function(iEvent, fn) {
         log.debug('>> onAccountUpdated');
         log.debug('<<onAccountUpdated');
@@ -237,12 +253,8 @@ var eventHandler =  {
     },
 
     onChargeFailed: function(iEvent, fn) {
-        /*
-         * Look for payment record.
-         * - if found, update it
-         * - if missing, create it
-         * Notify customer.
-         */
+        var self = this;
+        this.sendEmailToOperationFn(iEvent, fn);
     },
 
     onChargeRefunded: function(iEvent, fn) {
@@ -271,7 +283,8 @@ var eventHandler =  {
     },
 
     onChargeDisputeCreated: function(iEvent, fn) {
-
+      var self = this;
+      this.sendEmailToOperationFn(iEvent, fn);
     },
 
     onChargeDisputeUpdated: function(iEvent, fn) {
