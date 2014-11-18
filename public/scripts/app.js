@@ -331,6 +331,9 @@ var mainApp = angular
                     requestType: "jsonp"
                 });
 
+                /*
+                 * Commenting this out until we can find a better way - Kyle
+                 *
                 window.onbeforeunload = function (e) {
 
                     if (pages.length <= 0) {
@@ -346,6 +349,7 @@ var mainApp = angular
 
                     return 'Are you sure you want to exit?';
                 };
+                */
         });
 
     })
