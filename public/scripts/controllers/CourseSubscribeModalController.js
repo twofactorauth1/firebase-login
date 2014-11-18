@@ -1,4 +1,6 @@
-angular.module('app.modules.course').controller('CourseSubscribeModalController', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+'use strict';
+
+mainApp.controller('CourseSubscribeModalController', ['$scope', '$modalInstance', function ($scope, $modalInstance) {
     $scope.modal = {}
     $scope.close = function () {
         $modalInstance.dismiss();

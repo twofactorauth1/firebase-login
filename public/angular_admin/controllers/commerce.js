@@ -9,6 +9,13 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
       });
     };
 
+    $scope.productStarredFn = function (product, starred) {
+      product.starred = starred;
+      ProductService.saveProduct(product, function (product) {
+        console.log(product);
+      });
+    };
+
     $scope.productOrder = 'name';
     $scope.productSortReverse = false;
 

@@ -3,6 +3,8 @@
 @import '../js/libs/AngularJS-Toaster/toaster.css';
 @import '../js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css';
 @import '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css';
+@import '../js/libs/animate.css/animate.min.css';
+@import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -3211,6 +3213,7 @@ input[type="button"].btn-block {
   line-height: 1.33;
   border-radius: 6px;
   padding: 12px 20px;
+  font-size: 14px;
 }
 .btn-group > .btn + .dropdown-toggle {
   padding-left: 8px;
@@ -16044,6 +16047,9 @@ strong {
 .aloha-link-toolbar input:-ms-input-placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
+.nopadding {
+  padding: 0!important;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -16384,6 +16390,9 @@ strong {
 #contact-details-container #contact-information .edit-address-container:last-child {
   margin-bottom: 0px;
 }
+#contact-edit-container .input-lg {
+  height: 48px;
+}
 #contact-edit-container #btn-back-to-contact i {
   font-weight: bold;
   font-size: 2.0em;
@@ -16716,26 +16725,53 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .tb-col .media {
   padding: 0;
 }
+.tb-col .people-item:hover {
+  background: none;
+  box-shadow: none;
+}
 .tb-col .people-item {
   box-shadow: none;
   height: auto;
   margin: 0;
   min-height: 0;
   padding: 0;
+  opacity: 1;
 }
 .tb-col .people-item .media-object {
   border-radius: 3px;
   height: auto;
   margin: 10px auto;
-  width: 80px;
+  width: 70px;
+}
+.tb-col .people-item .media {
+  border-left: 1px solid #e6e6e6;
+  border-right: 1px solid #e6e6e6;
+}
+.tb-col .pull-left {
+  width: 100%;
+  color: #c2c2c2;
+}
+.tb-col .pull-right.social-list > li {
+  display: inline-block;
+  float: none;
+  width: auto;
+}
+.tb-col .pull-right {
+  float: none !important;
 }
 .tb-row {
   display: table;
   width: 100%;
-}
-.tb-row > div {
   border-bottom: 1px solid #e6e6e6;
+}
+.tb-main.table {
+  border-top: 1px solid #e6e6e6;
+  border-left: 1px solid #e6e6e6;
   border-right: 1px solid #e6e6e6;
+}
+.container-fluid.tb-row {
+  table-layout: fixed;
+  word-wrap: break-word;
 }
 .choose-import {
   text-align: center;
@@ -18202,9 +18238,23 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   text-align: center;
   font-size: 14px;
 }
+.analytics-overview {
+  height: 300px!important;
+}
 @media (max-width: 767px) {
   .single-metric-top .top-four {
     padding: 15px 20px;
+  }
+  .top-four .percent {
+    line-height: inherit;
+  }
+  .top-four {
+    padding: 10px;
+  }
+  .top-four .title {
+    font-size: 50px;
+    height: 70px;
+    line-height: 40px;
   }
 }
 .increase {
@@ -19181,7 +19231,7 @@ div.error label.error:before {
   CONTACTS LIST - PEOPLE ITEM
 **********************************************************/
 .people-item {
-  min-height: 320px;
+  min-height: 330px;
   cursor: pointer;
   background: #fcfcfc;
   padding: 15px;
@@ -21851,6 +21901,9 @@ hr {
   border: 0;
   border-top: 1px solid #eeeeee;
 }
+.btn-lg {
+  font-size: 14px;
+}
 .goback {
   background: #d0ecf6;
   padding: 38px;
@@ -21956,9 +22009,15 @@ hr {
 .add-component i {
   margin-top: -3px;
 }
+.add-component a {
+  color: #29b87f;
+}
 .add-component:hover {
-  background: #4eb1ca;
+  background: #fff;
   pointer-events: auto;
+}
+.add-component:hover a {
+  color: #219265;
 }
 body.editing {
   margin-top: 50px;
@@ -22032,21 +22091,11 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   text-align: center;
   margin-bottom: 20px;
 }
-.inner-page {
-  padding: 50px 0;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-.btn-outline {
-  background: none;
-  border: 2px solid #fff!important;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-  color: #ffffff;
-}
-.btn-outline:hover {
-  background-color: #16778b!important;
-  border: 2px solid #fff!important;
-  color: #ffffff;
+div[data-type='campaign'] .inner-page {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
 }
 .contact-us-v1 .contact-us-title {
   text-align: center;
@@ -22146,6 +22195,22 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   right: 0;
   z-index: -1;
 }
+.inner-page {
+  padding: 50px 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.btn-outline {
+  background: none;
+  border: 2px solid #fff!important;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+}
+.btn-outline:hover {
+  background-color: #16778b!important;
+  border: 2px solid #fff!important;
+  color: #ffffff;
+}
 /********** Feature List v1 **********/
 .feature-list-v1 .features-wrap {
   margin: 2%;
@@ -22221,7 +22286,7 @@ ul.ui-sortable.active .fragment .componentActions h4 {
 }
 .feature-list-v2 .feature-icon {
   text-align: center;
-  margin: 0 auto;
+  margin: 0 auto 30px;
   display: block;
   font-size: 3em;
 }
@@ -22235,6 +22300,7 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   opacity: .95;
   padding-bottom: 4px;
   font-weight: bold;
+  line-height: 28px;
 }
 .feature-list-v2 .feature-btn {
   text-align: center;
@@ -22563,9 +22629,9 @@ ul.nav {
   text-align: center;
   font-size: 85px;
   background: #4bb0cb;
+  border: 10px solid #35a2bf;
   width: 215px;
   height: 215px;
-  border: 10px solid #35a2bf;
   border-radius: 110px;
   line-height: 195px;
   margin: 0 auto;
@@ -22700,6 +22766,8 @@ contenthover a {
   transition: opacity 0.5s ease-out;
 }
 .meet-team-v1 .profilepic .thumbnail {
+  background-color: transparent;
+  border: none;
   display: block;
   max-width: 230px;
   margin: 10px auto;
@@ -23234,6 +23302,8 @@ div[data-class='image-text'] p {
 }
 .masthead-v1 .btn .fa {
   float: left;
+  margin-right: 10px;
+  margin-top: 2px;
 }
 .masthead-v1 .row {
   margin: 0;
@@ -23248,6 +23318,9 @@ div[data-class='image-text'] p {
   text-align: center;
 }
 /********** Social **********/
+div[data-type="social"] .inner-page {
+  padding: 0;
+}
 .social-v1 .inner-page {
   padding: 0;
 }
@@ -23272,6 +23345,7 @@ div[data-class='image-text'] p {
 .social-v1 ul li a span {
   background: none!important;
   line-height: 48px;
+  font-size: 28px;
 }
 .social-v1 .facebook {
   background: #395a93;
@@ -23316,7 +23390,6 @@ div[data-class='image-text'] p {
   font-weight: 600;
   font-family: Capita;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-  font-size: 28px;
   margin-top: 10px;
 }
 .signup-form-v1 p {

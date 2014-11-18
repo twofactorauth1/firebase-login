@@ -119,6 +119,7 @@ module.exports = {
     mainAccountID: MAIN_ACCOUNT_ID,
 
     SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
+    cookie_subdomain: '.' + process.env.ROOT_HOST,
 
     getServerUrl: function (subdomain, domain) {
         if (subdomain == null && domain == null) {

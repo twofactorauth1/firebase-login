@@ -23,8 +23,13 @@ _.extend(api.prototype, baseApi.prototype, {
     dao: courseDao,
 
     initialize: function () {
+
+        //PUBLIC (no security) APIs
+        app.get(this.url(''), this.setup.bind(this), this.listCoursesBySubdomain.bind(this));
+
+
         //courses
-        app.get(this.url(''), this.isAuthApi, this.listCourses.bind(this));
+        //app.get(this.url(''), this.isAuthApi, this.listCourses.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getCourseById.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createCourse.bind(this));
         app.put(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateCourse.bind(this));
@@ -40,6 +45,21 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id/subscribers'), this.isAuthAndSubscribedApi.bind(this), this.getSubscribersList.bind(this));
         app.get(this.url(':id/subscribers/video/:videoId'), this.isAuthAndSubscribedApi.bind(this), this.getVideoForCurrentUser.bind(this));
         app.post(this.url(':id/subscribers/upload'), this.isAuthAndSubscribedApi.bind(this), this.subscribeEmailsFromFile.bind(this));
+    },
+
+    listCoursesBySubdomain: function(req, res) {
+        var self = this;
+        self.log.debug('>> listCoursesBySubdomain');
+        /*
+         * this.setup was called.  We should have an accountId based on the subdomain
+         */
+        var accountId = parseInt(self.accountId(req));
+        self.log.debug('listing courses for account: ' + accountId);
+
+        courseDao.listCoursesByAccount(accountId, function(err, courses){
+            self.log.debug('<< listCoursesBySubdomain');
+            self.sendResultOrError(res, err, courses, "Error getting courses");
+        });
     },
 
     listCourses: function (req, resp) {

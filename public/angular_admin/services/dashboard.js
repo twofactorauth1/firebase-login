@@ -25,11 +25,10 @@ define(['app'], function (app) {
             // this.login(fn);
             if (!token) {
                  this.getAccessToken(fn, function(data) {
-                    console.log('check token ', data);
-                    fn(data);
+                    if (data) {fn(data);};
                  });
             } else {
-                fn(true);
+                fn(false);
             }
         };
 
@@ -47,12 +46,12 @@ define(['app'], function (app) {
                 method: 'GET'
               })
               .success(function(data, status, headers, config) {
-                fn(data);
-                token = data.data;
-              })
-              .error(function(response) {
-                if(response.status === 401) {
-                    fn('error');
+                if (data != 'error') {
+                    console.log('access data >>> ', data);
+                    fn(data);
+                    token = data.data;
+                } else {
+                    console.log('error');
                 }
               });
         };
@@ -75,7 +74,6 @@ define(['app'], function (app) {
         };
 
         this.checkAuth = function() {
-            console.log('checking auth');
             gapi.auth.authorize({
                 client_id: clientId,
                 scope: scopes,
@@ -87,7 +85,6 @@ define(['app'], function (app) {
             if (authResult) {
                 token = authResult.access_token;
                 // The user has authorized access
-                console.log('authResult >>> ', authResult);
                 this.loadAnalyticsClient;
                 // fn(authResult);
                 deferred.resolve(authResult);

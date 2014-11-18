@@ -7,6 +7,7 @@ define(['angularAMD'], function (angularAMD) {
                 elem.bind('scroll', function () {
                     if((rawElement.scrollTop + rawElement.offsetHeight + 1000 ) >= rawElement.scrollHeight){
                         scope.$apply('customerScrollFn()');
+                        scope.$apply('saveScrollFn(' + rawElement.scrollTop + ')');
                     }
                 });
             }

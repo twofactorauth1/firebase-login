@@ -2,7 +2,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
     app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', 'ToasterService', function ($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService) {
         ngProgress.start();
         $scope.$back = function() {
-            window.history.back();
+            $state.go($scope.lastState.state, $scope.lastState.params);
         };
         $scope.customerId = $stateParams.id;
         CustomerService.getCustomer($scope.customerId, function (customer) {
@@ -20,11 +20,11 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
         //     "detail": "by abc",
         //     "start": "2014-10-28T18:51:52.938Z"
         // },
-        // {            
+        // {
         //     "contactId": $scope.customerId,
         //     "activityType": "TWEET",
         //     "note": "Tweet Received.",
-        //     "detail": "by xyz",            
+        //     "detail": "by xyz",
         //     "start": "2014-10-28T18:51:52.938Z"
         // }
         // )

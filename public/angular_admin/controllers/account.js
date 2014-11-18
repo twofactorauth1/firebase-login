@@ -12,6 +12,7 @@ define([
   app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService',function($scope, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService) {
     ngProgress.start();
     NavigationService.updateNavigation();
+    $scope.showToaster = false;
     $scope.invoicePageLimit = 5;
 
     $scope.tabList = [
@@ -84,10 +85,12 @@ define([
       $scope.invoices = invoices;
       $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
       ngProgress.complete();
+      $scope.showToaster = true;
       ToasterService.processPending();
     });
 
-    $scope.setActiveTab = function (tab){      
+    $scope.setActiveTab = function (tab){
+      $scope.showToaster = true;
       $scope.activeTab = tab;
     };
     UserService.getUserPreferences(function(preferences) {
@@ -96,11 +99,11 @@ define([
         if(activeTab)
           $scope.activeTab = activeTab;
         else
-          $scope.activeTab = AccountService.getActiveTab();
+          $scope.activeTab = AccountService.getActiveTab();        
     });
 
     $scope.savePreferencesFn = function() {
-      UserService.updateUserPreferences($scope.userPreferences, function(){})
+      UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function(){})
     };
     $scope.updateDefaultTab = function (user){
         NavigationService.updateNavigation2(user);
