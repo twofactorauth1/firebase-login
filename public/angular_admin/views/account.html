@@ -486,6 +486,17 @@
         <!-- Tab panes -->
 
         <div class="tab-content">
+            <div class="form-group row">
+                <label class="col-xs-12 control-label">Default Tab</label>
+                <div class="col-xs-12">
+                    <select
+                            class="form-control chosen-select"
+                            ng-model="user.app_preferences.tab.single_view"
+                            ng-change="updateDefaultTab(user)"
+                            ng-options="op.v as op.n for op in tabList">
+                    </select>
+                </div>
+            </div>
             <div class="tab-pane pane-settings active" id="rp-settings">
 
                 <div class="rightpanelinner">

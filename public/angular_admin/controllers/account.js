@@ -14,6 +14,16 @@ define([
     NavigationService.updateNavigation();
     $scope.invoicePageLimit = 5;
 
+    $scope.tabList = [
+      {v:'last_tab_visited',n:'Last Tab Visited'},
+      {v:'website',n:'Website'},
+      {v:'customer',n:'Customer'},
+      {v:'marketing',n:'Marketing'},
+      {v:'commerce',n:'Commerce'},
+      {v:'dashboard',n:'Dashboard'},
+      {v:'account',n:'Account'}]
+    }]);
+
     $scope.$watch('activeTab', function (newValue, oldValue) {
       console.log('watch activeTab >> ', newValue);
       if($scope.userPreferences){
@@ -92,6 +102,7 @@ define([
     $scope.savePreferencesFn = function() {
       UserService.updateUserPreferences($scope.userPreferences, function(){})
     };
-
-  }]);
+    $scope.updateDefaultTab = function (user){
+        NavigationService.updateNavigation2(user);
+    };
 });
