@@ -327,6 +327,9 @@ var mainApp = angular
                     requestType: "jsonp"
                 });
 
+                /*
+                 * Commenting this out until we can find a better way - Kyle
+                 *
                 window.onbeforeunload = function (e) {
 
                     var end = new Date().getTime();
@@ -338,6 +341,7 @@ var mainApp = angular
 
                     return 'Are you sure you want to exit?';
                 };
+                */
         });
 
     })
