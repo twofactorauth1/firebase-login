@@ -174,7 +174,7 @@ module.exports = function(grunt) {
                     'public/js/libs/json3/lib/json3.js',
                     'public/js/libs/underscore/underscore.js',
                     'public/js/libs/angular-resource/angular-resource.js',
-                    'public/js/libs/angular-cookies/angular-cookies.js',
+                    'public/js/libs/angular-cookie/angular-cookie.js',
                     'public/js/libs/angular-sanitize/angular-sanitize.js',
                     'public/js/libs/angular-animate/angular-animate.js',
                     'public/js/libs/angular-touch/angular-touch.js',
@@ -182,6 +182,7 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-ui-router/release/angular-ui-router.js',
                     'public/js/libs/jquery-waypoints/waypoints.js',
                     'public/js/libs/angular-parallax/scripts/angular-parallax.js',
+                    'public/js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
                     'public/js/libs/moment/moment.js',
                     'public/js/libs/angular-moment/angular-moment.js',
                     'public/js/libs/angular-scroll/angular-scroll.js',
@@ -198,10 +199,14 @@ module.exports = function(grunt) {
                     'public/js/libs/videogular-buffering/buffering.js',
                     'public/js/libs/videogular-poster/poster.js',
                     'public/js/libs/angular-input-date/src/angular-input-date.js',
-                    'public/js/libs/skeuocard/lib/js/card.js'
+                    'public/js/libs/skeuocard/lib/js/card.js',
+                    'public/js/libs/fingerprint/fingerprint.js',
+                    'public/js/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
+                    'public/js/libs/purl/purl.js',
+                    'public/js/libs/ua-parser-js/dist/ua-parser.min.js',
+                    'public/js/libs_misc/uuid.js'
 
-
-                    ],
+                ],
                 /*src: wiredepJSAry,*/
                 dest: 'public/js/indigenous.js'
             }
@@ -229,27 +234,30 @@ module.exports = function(grunt) {
                         'public/js/libs/angular-ui/build/angular-ui.min.js',
                         'public/js/libs/angular-ui/modules/directives/sortable/sortable.js',
                         'public/scripts/app.js',
+                        'public/scripts/directives/angularparallax.js',
+                        'public/scripts/directives/convertHtml.js',
+                        'public/scripts/directives/coursePreview.js',
                         'public/scripts/directives/dmStyle.js',
                         'public/scripts/directives/ngEnter.js',
-                        'public/scripts/directives/convertHtml.js',
 			            'public/scripts/directives/scrollTo.js',
+                        'public/scripts/directives/skeuocard.js',
                         'public/scripts/services/accountService.js',
-                        'public/scripts/services/websiteService.js',
-                        'public/scripts/services/themeService.js',
+                        'public/scripts/services/courseService.js',
                         'public/scripts/services/pagesService.js',
+                        'public/scripts/services/paymentService.js',
                         'public/scripts/services/postsService.js',
                         'public/scripts/services/postService.js',
                         'public/scripts/services/productService.js',
+                        'public/scripts/services/themeService.js',
+                        'public/scripts/services/userService.js',
+                        'public/scripts/services/websiteService.js',
                         'public/scripts/filters/CreateUrlFilter.js',
                         'public/scripts/filters/generateURLforLinks.js',
                         'public/scripts/filters/getByProperty.js',
-                        'public/scripts/controllers/mainCtrl.js',
                         'public/scripts/controllers/blogCtrl.js',
+                        'public/scripts/controllers/CourseSubscribeModalController.js',
                         'public/scripts/controllers/layoutCtrl.js',
-                        'public/scripts/directives/skeuocard.js',
-                        'public/scripts/directives/angularparallax.js',
-                        'public/scripts/services/paymentService.js',
-                        'public/scripts/services/userService.js'
+                        'public/scripts/controllers/mainCtrl.js',
                     ]
                 }
             }
