@@ -10,6 +10,7 @@ require('./dao/campaign_message.dao.js');
 
 var accountDao = require('../dao/account.dao');
 var contactDao = require('../dao/contact.dao');
+var contactActivityManager = require('../contactactivities/contactactivity_manager');
 var courseDao = require('../dao/course.dao');
 var subscriberDao = require('../dao/subscriber.dao');
 var userDao = require('../dao/user.dao');
@@ -255,6 +256,81 @@ module.exports = {
 
     cancelContactMandrillCampaign: function (campaignId, contactId, callback) {
         this._cancelMandrillCampaignMessages({'campaignId': campaignId, 'contactId': contactId}, callback);
+    },
+
+    subscribeToCourse: function(toEmail, course, accountId, timezoneOffset, callback) {
+        var self = this;
+        self.log.debug('>> subscribeToCourse');
+
+        //getOrCreateContact for account/email
+        var p1 = $.Deferred();
+        //If customer does not exist, create as a lead
+        contactDao.getContactByEmailAndAccount(toEmail, accountId, function(err, value){
+            if(err) {
+                self.log.error('Error searching for contact: ' + err);
+                p1.reject();
+            } else if(value === null) {
+                //sweet.  The contact doesn't exist.  Let's create him/her
+                contactDao.createContactLeadFromEmail(toEmail, accountId, function(err, savedContact){
+                    if(err) {
+                        self.log.error('Error creating contact: ' + err);
+                        p1.reject();
+                    } else {
+                        self.log.debug('Created contact');
+                        p1.resolve(savedContact);
+                    }
+                });
+            } else {
+                self.log.debug('contact already exists');
+                p1.resolve(value);
+            }
+        });
+
+        $.when(p1).done(function(contact){
+            //create contact activity for subscribing to course
+            var contactActivity = new $$.m.ContactActivity({
+                accountId: accountId,
+                contactId: contact.id(),
+                activityType: $$.m.ContactActivity.types.COURSE_SUBSCRIBE,
+                start:new Date(), //datestamp
+                end:new Date()   //datestamp
+            });
+            contactActivityManager.createActivity(contactActivity, function(err, value){
+                if(err) {
+                    self.log.error('Error creating contact activity: ' + err);
+                    return callback(err, null);
+                }
+                self.log.debug('Created subscribe to course activity');
+                //addSubscriber
+                self._addSubscriberByAccount(toEmail, course, accountId, timezoneOffset, contact.id(), function(err, value){
+                    if(err) {
+                        self.log.error('Error creating subscriber: ' + err);
+                        return callback(err, null);
+                    } else {
+                        self.log.debug('Added subscriber');
+                        accountDao.getAccountByID(accountId, function(err, account){
+                            if(err) {
+                                self.log.error('Error retrieving account: ' + err);
+                                return callback(err, null);
+                            }
+                            self.log.debug('Got account.');
+                            self.log.debug('toEmail: ' + toEmail + ', course: ' + course +', timezoneOffset:' + timezoneOffset + ', account: ' + account);
+                            self._sendVAREmails(toEmail, course, timezoneOffset, account, function (result) {
+                                self.log.debug('<< subscribeToCourse');
+                                callback(null, result);
+                            });
+                        });
+
+                    }
+                });
+
+            });
+        });
+
+
+
+
+
     },
 
     subscribeToVARCourse: function (toEmail, courseMock, timezoneOffset, curUserId, callback) {
@@ -615,6 +691,21 @@ module.exports = {
             }
         }
         return result;
+    },
+
+    _addSubscriberByAccount: function(toEmail, course, accountId, timezoneOffset, contactId, callback) {
+        var userNowDateUtc = this._getNowDateUtc();
+        var subscriber = new $$.m.Subscriber({
+            accountId: accountId,
+            email: toEmail,
+            contactId: contactId,
+            courseId: course.id(),
+            subscribeDate: userNowDateUtc,
+            timezoneOffset: timezoneOffset
+        });
+        subscriberDao.saveOrUpdate(subscriber, function(err, value){
+            callback(err, value);
+        });
     },
 
     _addSubscriber: function (toEmail, course, userId, timezoneOffset, callback) {

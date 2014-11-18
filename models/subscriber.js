@@ -13,7 +13,9 @@ var subscriber = $$.m.ModelBase.extend({
     defaults: function () {
         return {
             _id: null,
+            accountId: null,
             email: null,
+            contactId: null,
             courseId: null,
             subscribeDate: null,
             timezoneOffset: null,

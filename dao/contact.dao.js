@@ -357,6 +357,20 @@ var dao = {
         });
     },
 
+    createContactLeadFromEmail: function(email, accountId, fn) {
+        var self = this;
+        self.log.debug('>> createContactLeadFromEmail');
+        var contact = new $$.m.Contact();
+        contact.set('email', email);
+        contact.set('accountId', accountId);
+        contact.set('type', $$.m.Contact.types.LEAD);
+
+        self.saveOrUpdateContact(contact, function(err, value){
+            self.log.debug('<< createContactLeadFromEmail');
+            fn(err, value);
+        });
+    },
+
     createContactFromData: function (data, accountToken, fn) {
         var self = this;
         var email = data.email
