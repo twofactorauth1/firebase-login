@@ -331,21 +331,21 @@ var mainApp = angular
                     requestType: "jsonp"
                 });
 
-                window.onbeforeunload = function (e) {
+                // window.onbeforeunload = function (e) {
 
-                    if (pages.length <= 0) {
-                        addPageData();
-                    }
+                //     if (pages.length <= 0) {
+                //         addPageData();
+                //     }
 
-                    var end = new Date().getTime();
-                    sessionProperties["session_end"] = end;
-                    sessionProperties["pages"] = pages;
-                    sessionProperties["page_length"] = pages.length;
-                    sessionProperties["session_length"] = end-start;
-                    client.addEvent("frontsessions", sessionProperties);
+                //     var end = new Date().getTime();
+                //     sessionProperties["session_end"] = end;
+                //     sessionProperties["pages"] = pages;
+                //     sessionProperties["page_length"] = pages.length;
+                //     sessionProperties["session_length"] = end-start;
+                //     client.addEvent("frontsessions", sessionProperties);
 
-                    return 'Are you sure you want to exit?';
-                };
+                //     return 'Are you sure you want to exit?';
+                // };
         });
 
     })
