@@ -5,29 +5,30 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
-<h3 class="image-text-title">
-    <div class="editable" data-class="title">
-        {{component.title}}
-    </div>
-</h3>
-<div class="section-title-border"></div>
-<div class="col-sm-8 col-xs-12 pull-right">
-    <div class="image-text-text">
-        <div class="editable" data-class="text">
-            <span ng-bind-html="component.text"></span>
+<div ng-class="component.type+'-v'+component.version">
+    <div class="image-text-title">
+        <div class="editable" data-class="title">
+            <span ng-bind-html="component.title"></span>
         </div>
     </div>
+    <div class="section-title-border"></div>
+    <div class="col-sm-8 col-xs-12 pull-right">
+        <div class="image-text-text">
+            <div class="editable" data-class="text">
+                <span ng-bind-html="component.text"></span>
+            </div>
+        </div>
 
-    <a ng-show="component.btn.url" class="btn btn-outline btn-lg" href="{{component.btn.url}}"> {{component.btn.text}} <span
-                        class="fa fa-arrow-circle-o-right"></span></a>
+        <a ng-show="component.btn.url" class="btn btn-outline btn-lg" href="{{component.btn.url}}"> {{component.btn.text}} <span
+                            class="fa fa-arrow-circle-o-right"></span></a>
 
-</div>
-<div class="clearfix mb10 visible-xs"></div>
-
-<div ng-show="component.imgurl" class="pull-{{component.imagePosition}} col-sm-4 col-xs-12 image-text-image">
-    <div class="editable" data-class="url">
-        <img ng-src="{{component.imgurl}}" class="img-responsive">
     </div>
-    <p class="center editable" data-class="caption">{{component.caption}}</p>
+    <div class="clearfix mb10 visible-xs"></div>
+
+    <div ng-show="component.imgurl" class="pull-{{component.imagePosition}} col-sm-4 col-xs-12 image-text-image">
+        <div class="editable" data-class="url">
+            <img ng-src="{{component.imgurl}}" class="img-responsive">
+        </div>
+        <p class="center editable" data-class="caption">{{component.caption}}</p>
+    </div>
 </div>

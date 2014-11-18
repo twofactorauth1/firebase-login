@@ -3213,6 +3213,7 @@ input[type="button"].btn-block {
   line-height: 1.33;
   border-radius: 6px;
   padding: 12px 20px;
+  font-size: 14px;
 }
 .btn-group > .btn + .dropdown-toggle {
   padding-left: 8px;
@@ -21900,6 +21901,9 @@ hr {
   border: 0;
   border-top: 1px solid #eeeeee;
 }
+.btn-lg {
+  font-size: 14px;
+}
 .goback {
   background: #d0ecf6;
   padding: 38px;
@@ -22282,7 +22286,7 @@ div[data-type='campaign'] .inner-page {
 }
 .feature-list-v2 .feature-icon {
   text-align: center;
-  margin: 0 auto;
+  margin: 0 auto 30px;
   display: block;
   font-size: 3em;
 }
@@ -22296,6 +22300,7 @@ div[data-type='campaign'] .inner-page {
   opacity: .95;
   padding-bottom: 4px;
   font-weight: bold;
+  line-height: 28px;
 }
 .feature-list-v2 .feature-btn {
   text-align: center;
@@ -23297,6 +23302,8 @@ div[data-class='image-text'] p {
 }
 .masthead-v1 .btn .fa {
   float: left;
+  margin-right: 10px;
+  margin-top: 2px;
 }
 .masthead-v1 .row {
   margin: 0;

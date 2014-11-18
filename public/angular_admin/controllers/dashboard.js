@@ -145,7 +145,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var userReport = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "fingerprint",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -155,7 +155,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var userReportPreviousMonth = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "fingerprint",
                             timeframe: {
                                 "start" : timeframePreviousStart,
@@ -165,7 +165,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var pageviewsReport = new Keen.Query("sum", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "page_length",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -175,7 +175,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var pageviewsPreviousReport = new Keen.Query("sum", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "page_length",
                             timeframe: {
                                 "start" : timeframePreviousStart,
@@ -202,7 +202,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
 
                         var sessionsReport = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_id",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -212,7 +212,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var sessionsPreviousReport = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_id",
                             timeframe: {
                                 "start" : timeframePreviousStart,
@@ -222,7 +222,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var sessionLengthReport = new Keen.Query("count", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_length",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -232,7 +232,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                           });
 
                         var sessionAvgLengthReport = new Keen.Query("average", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_length",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -241,7 +241,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                           });
 
                         var bouncesReport = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_id",
                             filters: [{"property_name":"page_length","operator":"eq","property_value":1}],
                             timeframe: {
@@ -252,7 +252,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var bouncesPreviousReport = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_id",
                             filters: [{"property_name":"page_length","operator":"eq","property_value":1}],
                             timeframe: {
