@@ -300,7 +300,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 }
             };
 
-            formatted.details.emails.push(user.email);
+            formatted.details.emails.push({
+                    email : user.email
+                });
 
             //create contact
             userService.addContact(formatted, function(data) {
