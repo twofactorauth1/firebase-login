@@ -334,7 +334,7 @@ var mainApp = angular
                     sessionProperties["pages"] = pages;
                     sessionProperties["page_length"] = pages.length;
                     sessionProperties["session_length"] = end-start;
-                    client.addEvent("sessions", sessionProperties);
+                    client.addEvent("frontsessions", sessionProperties);
 
                     return 'Are you sure you want to exit?';
                 };
