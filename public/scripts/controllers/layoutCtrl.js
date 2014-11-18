@@ -21,10 +21,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     window.parent.frames[0].parentNode.activateSettings();
         // };
 
-        // CourseService.getAllCourses(function(data) {
-        //     console.log('courses ', data);
-        //     that.courses = data;
-        // });
+        CourseService.getAllCourses(function(data) {
+            console.log('courses ', data);
+            that.courses = data;
+        });
 
         $scope.getCourse = function(campaignId) {
             console.log('campaign Id ', campaignId);
