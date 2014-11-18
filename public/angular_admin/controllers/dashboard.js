@@ -135,13 +135,16 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             groupBy: "ip_geo_info.city"
                         });
 
+                        console.log('window.location.host ', window.location.hostname);
+
                         var deviceReportByCategory = new Keen.Query("count", {
                             eventCollection: "frontsessions",
                             timeframe: {
                                 "start" : timeframeStart,
                                 "end" : timeframeEnd
                             },
-                            groupBy: "user_agent.device"
+                            groupBy: "user_agent.device",
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                         });
 
                         var userReport = new Keen.Query("count_unique", {
@@ -152,6 +155,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 "end" : timeframeEnd
                             },
                             interval: interval,
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                         });
 
                         var userReportPreviousMonth = new Keen.Query("count_unique", {
@@ -161,7 +165,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 "start" : timeframePreviousStart,
                                 "end" : timeframePreviousEnd
                             },
-                            interval: interval
+                            interval: interval,
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                         });
 
                         var pageviewsReport = new Keen.Query("sum", {
@@ -171,7 +176,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 "start" : timeframeStart,
                                 "end" : timeframeEnd
                             },
-                            interval: interval
+                            interval: interval,
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                         });
 
                         var pageviewsPreviousReport = new Keen.Query("sum", {
@@ -181,7 +187,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 "start" : timeframePreviousStart,
                                 "end" : timeframePreviousEnd
                             },
-                            interval: interval
+                            interval: interval,
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                         });
 
                         // var sessionDurationQuery = $scope.query({
@@ -208,7 +215,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 "start" : timeframeStart,
                                 "end" : timeframeEnd
                             },
-                            interval: interval
+                            interval: interval,
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                         });
 
                         var sessionsPreviousReport = new Keen.Query("count_unique", {
@@ -218,7 +226,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 "start" : timeframePreviousStart,
                                 "end" : timeframePreviousEnd
                             },
-                            interval: interval
+                            interval: interval,
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                         });
 
                         var sessionLengthReport = new Keen.Query("count", {
@@ -228,7 +237,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 "start" : timeframeStart,
                                 "end" : timeframeEnd
                             },
-                            interval: interval
+                            interval: interval,
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                           });
 
                         var sessionAvgLengthReport = new Keen.Query("average", {
@@ -237,7 +247,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             timeframe: {
                                 "start" : timeframeStart,
                                 "end" : timeframeEnd
-                            }
+                            },
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                           });
 
                         var bouncesReport = new Keen.Query("count_unique", {
@@ -248,7 +259,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 "start" : timeframeStart,
                                 "end" : timeframeEnd
                             },
-                            interval: interval
+                            interval: interval,
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                         });
 
                         var bouncesPreviousReport = new Keen.Query("count_unique", {
@@ -258,7 +270,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             timeframe: {
                                 "start" : timeframeStart,
                                 "end" : timeframeEnd
-                            }
+                            },
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                         });
 
                         $scope.newDesktop = false;

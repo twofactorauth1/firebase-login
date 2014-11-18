@@ -386,12 +386,12 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
       UserService.getUserPreferences(function(preferences) {
         $scope.userPreferences = preferences;
         var customerSettings = $scope.userPreferences.customerSettings;
-        if (customerSettings && customerSettings.scrollPos) {
-          setTimeout(function() {
-            console.info('restore scroll');
-            $(".contentpanel").scrollTop($scope.userPreferences.customerSettings.scrollPos);
-          }, 1000);
-        }
+        // if (customerSettings && customerSettings.scrollPos) {
+        //   setTimeout(function() {
+        //     console.info('restore scroll');
+        //     $(".contentpanel").scrollTop($scope.userPreferences.customerSettings.scrollPos);
+        //   }, 1000);
+        // }
         if (customerSettings) {
           $scope.userPreferences.customerSettings = customerSettings;
           $scope.customerOrder = $scope.userPreferences.customerSettings.customerOrder;
