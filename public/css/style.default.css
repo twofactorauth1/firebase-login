@@ -22534,7 +22534,6 @@ ul.nav {
 .navigation-v2 .navbar {
   border: none!important;
   background: none;
-  margin-bottom: -210px;
 }
 .navigation-v2 .navbar .navbar-header {
   float: none;
@@ -23268,8 +23267,11 @@ div[data-class='image-text'] p {
   overflow-y: auto;
 }
 /********** MastHead **********/
-.navbar-v2 .masthead-v1 .home-text {
-  margin-top: 140px!important;
+.navbar-v2 div[data-type='masthead'] .inner-page {
+  margin-top: -210px;
+}
+.navbar-v2 div[data-type='masthead'] .home-text {
+  margin-top: 130px;
 }
 .masthead .btn .fa {
   margin-top: 8px;
@@ -23318,6 +23320,17 @@ div[data-class='image-text'] p {
 .masthead-v1 .home-text {
   padding: 50px 30px;
   text-align: center;
+}
+@media (max-width: 625px) {
+  .navbar-v2 .masthead-v1 .home-text {
+    margin-top: 60px!important;
+  }
+  .masthead-v1 .masthead-subtitle {
+    max-width: 100%;
+  }
+  .navigation-v2 .navbar ul.navbar-nav li {
+    display: block;
+  }
 }
 /********** Social **********/
 div[data-type="social"] .inner-page {
@@ -23891,6 +23904,9 @@ div[data-type="social"] .inner-page {
 .footer-logo {
   margin: -35px 5px 0 0;
   float: right;
+}
+#footer {
+  font-family: Helvetica;
 }
 /********** Single Blog ***********/
 div[data-type=single-post] .container {
