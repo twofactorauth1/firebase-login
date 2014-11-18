@@ -141,7 +141,7 @@ app.use(express.session({
     secret: 'mys3cr3t',
     cookie: {
         maxAge: 24 * 60 * 60 * 1000,
-        domain: appConfig.cookie_subdomain
+        //domain: appConfig.cookie_subdomain
         } //stay open for 1 day of inactivity across all subdomains
 }));
 
