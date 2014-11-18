@@ -88,15 +88,14 @@ var mainApp = angular
         var pageProperties;
         var sessionProperties;
         var pages = [];
+        var entrance = parsedUrl.attr("host");
 
         //get and parse current url
         var fullUrl = window.location.href;
         var parsedUrl = $.url(fullUrl);
         var parser = new UAParser();
 
-        $rootScope.$on("$routeChangeStart", function (scope, next, current) {
-            console.log('routeChangeStart >>> ');
-            var self = this;
+        var addPageData = function() {
             if (!firstVisit) {
                 var end = new Date().getTime();
                 pageProperties.session_end = end;
@@ -105,10 +104,14 @@ var mainApp = angular
                 sessionProperties.pages = pages;
             }
             firstVisit = false;
+        };
+
+        $rootScope.$on("$routeChangeStart", function (scope, next, current) {
+            var self = this;
+            addPageData();
         });
 
         $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
-            console.log('routeChangeSuccess >>> ');
             $rootScope.transitionState = "active";
             var startPageTimer = new Date().getTime();
 
@@ -284,6 +287,7 @@ var mainApp = angular
                     ip_address : "${keen.ip}",
                     fingerprint: fingerprint,
                     session_start: start,
+                    entrance: entrance,
                     pages: []
                 };
 
@@ -328,6 +332,10 @@ var mainApp = angular
                 });
 
                 window.onbeforeunload = function (e) {
+
+                    if (pages.length <= 0) {
+                        addPageData();
+                    }
 
                     var end = new Date().getTime();
                     sessionProperties["session_end"] = end;
