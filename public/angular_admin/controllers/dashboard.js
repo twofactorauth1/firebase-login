@@ -136,7 +136,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var deviceReportByCategory = new Keen.Query("count", {
-                            eventCollection: "pageviews",
+                            eventCollection: "frontsessions",
                             timeframe: {
                                 "start" : timeframeStart,
                                 "end" : timeframeEnd
@@ -521,7 +521,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                         window.setInterval(function(){
                             $scope.runReports();
-                        }, 15000);
+                        }, 5000);
 
                         // ======================================
                         // Overview

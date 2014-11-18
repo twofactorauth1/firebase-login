@@ -2,7 +2,7 @@
     <div class="coming-soon-wrap">
         <div class="inner-page">
             <div>
-                <img ng-src="{{layout.account.business.logo}}" alt="Logo" class="logo">
+                <img ng-if="layout.account.business.logo" ng-src="{{layout.account.business.logo}}" alt="Logo" class="logo">
                 <h1 class="heading">
                     <div class="editable" data-class="title" ng-bind-html="component.title"></div>
                 </h1>
