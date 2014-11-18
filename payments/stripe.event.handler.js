@@ -8,6 +8,7 @@ var jade = require('jade');
 var stripeDao = require('./dao/stripe.dao.js');
 var eventDao = require('./dao/stripe_event.dao.js');
 var userDao = require('../dao/user.dao.js');
+var subscriptionDao = require('./subscription.dao.js');
 var log = $$.g.getLogger("stripe.event.handler");
 var async = require('async');
 var eventQ = async.queue(function(event, fn){
@@ -119,6 +120,7 @@ var eventHandler =  {
             case 'customer.subscription.updated':
                 break;
             case 'customer.subscription.deleted':
+                self.onCustomerSubscriptionDeleted(iEvent, fn);
                 break;
             case 'customer.subscription.trial_will_end':
                 break;
@@ -327,7 +329,11 @@ var eventHandler =  {
     },
 
     onCustomerSubscriptionDeleted: function(iEvent, fn) {
-
+      var subId = iEvent.get('body').id;
+      subscriptionDao.removeByQuery({stripeSubscriptionId: subId}, function (err, res) {
+        log.error('Subscription deletion failed:' % err.message);
+      });
+      self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onCustomerSubscriptionTrialWillEnd: function(iEvent, fn) {
