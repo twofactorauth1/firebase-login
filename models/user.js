@@ -167,6 +167,10 @@ var user = $$.m.ModelBase.extend({
             "app_preferences": {
                 "account":{
                     "default_tab": "account_information" //"account_information", "billing", "integration"
+                },
+                "tab" : {
+                    "single_view": "last_tab_visited",// last_tab_visited, website, account, etc.
+                    "last" : "website"
                 }
             }
         };

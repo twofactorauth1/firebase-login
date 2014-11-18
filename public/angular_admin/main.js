@@ -79,6 +79,7 @@ require.config({
         'importContactService': '/angular_admin/services/import_contacts',
         'toasterService': '/angular_admin/services/toaster',
         'accountService': '/angular_admin/services/account',
+        'navigationService': '/angular_admin/services/navigationService',
         'keenService': '/angular_admin/services/keen',
         'courseServiceAdmin': '/angular_admin/services/course',
         'stateNavDirective': '/angular_admin/directives/state_nav',
