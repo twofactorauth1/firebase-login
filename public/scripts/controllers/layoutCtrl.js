@@ -21,10 +21,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     window.parent.frames[0].parentNode.activateSettings();
         // };
 
-        CourseService.getAllCourses(function(data) {
-            console.log('courses ', data);
-            that.courses = data;
-        });
+        // CourseService.getAllCourses(function(data) {
+        //     console.log('courses ', data);
+        //     that.courses = data;
+        // });
 
         $scope.getCourse = function(campaignId) {
             console.log('campaign Id ', campaignId);
@@ -61,9 +61,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
-                PostService.getAllPostsByPageId($scope.currentpage._id, function(posts) {
-                    that.blogposts = posts;
-                });
+                // PostService.getAllPostsByPageId($scope.currentpage._id, function(posts) {
+                //     that.blogposts = posts;
+                // });
                 //                $scope.currentpage.components.forEach(function(component){
                 //                    if (component.bg.img) {
                 //                        component.bgimg = {
