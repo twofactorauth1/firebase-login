@@ -10,7 +10,6 @@
  */
 var mainApp = angular
     .module('mainApp', [
-        'ngAnimate',
         'ipCookie',
         'ngResource',
         'ngRoute',

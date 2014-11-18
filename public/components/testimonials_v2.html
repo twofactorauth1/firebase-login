@@ -2,10 +2,16 @@
     .title {
         color: #444444;
     }
+    .carousel-control {
+        display: none;
+    }
     .carousel-caption .text,
     .carousel-caption .name,
     .carousel-caption .site {
         color:{{component.txtcolor || 'white'}};
+    }
+    .carousel-indicators li.active {
+        background: {{primaryColor}};
     }
 </style>
 <div ng-class="component.type+'-v'+component.version">
@@ -49,8 +55,16 @@
 
     </div> -->
 
-   <div style="height: 305px">
-    <carousel interval="myInterval">
+    <div class="title col-xs-12">
+        <div class="editable" data-class="title">
+            <span ng-bind-html="component.title"></span>
+        </div>
+    </div>
+
+   <div class="clearfix"></div>
+
+   <div style="height: 200px">
+    <carousel interval="5000">
       <slide ng-repeat="testimonial in component.testimonials track by $index" active="testimonial.active">
         <img ng-src="{{testimonial.image}}" style="margin:auto;">
         <div class="carousel-caption">
