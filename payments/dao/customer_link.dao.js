@@ -91,7 +91,10 @@ var dao = {
         var self = this;
         self.log.debug('>> removeLinksByCustomer');
         var query = {'customerId': customerId};
-        self.removeByQuery(query, $$.m.CustomerLink, fn);
+        self.removeByQuery(query, $$.m.CustomerLink, function(err, value){
+            self.log.debug('<< removeLinksByCustomer(' + err + ',' + value + ')');
+            fn(err, value);
+        });
     },
 
     safeCreate: function(accountId, contactId, customerId, fn) {
@@ -110,7 +113,7 @@ var dao = {
             });
             return self.saveOrUpdate(link, fn);
         };
-        return self.getLinkByIds(accountId, customerId, contactId, safetyFunction);
+        return self.getLinkByIds(accountId, customerId, contactId, null, safetyFunction);
     },
 
     safeCreateWithUser: function(accountId, userId, customerId, fn) {

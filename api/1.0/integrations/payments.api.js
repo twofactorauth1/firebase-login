@@ -96,41 +96,51 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     listCustomers: function(req, resp) {
-        //TODO: Add Security
+
         var self = this;
-        self.log.debug('>> listCustomers');
         var accountId = self.accountId(req);
         var limit = req.body.limit;
 
-        stripeDao.listStripeCustomers(accountId, limit, function(err, customers){
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                stripeDao.listStripeCustomers(accountId, limit, function(err, customers){
 
-            if(accountId > 0) {
-                customerLinkDao.getLinksByAccountId(accountId, function(err, accounts){
-                    if(err) {
-                        self.wrapError(resp, null, 500, 'Error building customer list.');
-                    }
-                    //verify customer/account relationship
-                    var customerIDs = _.map(accounts, function(account){return account.get('customerId');});
-                    var results = [];
-                    if(customers && customers.data) {
-                        _.each(customers.data, function(elem){
-                            if(_.contains(customerIDs, elem.id)) {
-                                results.push(elem);
-                            }
-                        });
+
+                    if(accountId > 0) {//TODO: fix this logic.  We no longer assume mainAccountId === 0
+//                        customerLinkDao.getLinksByAccountId(accountId, function(err, accounts){
+//                            if(err) {
+//                                self.wrapError(resp, null, 500, 'Error building customer list.');
+//                            }
+//                            //verify customer/account relationship
+//                            var customerIDs = _.map(accounts, function(account){return account.get('customerId');});
+//                            var results = [];
+//                            if(customers && customers.data) {
+//                                _.each(customers.data, function(elem){
+//                                    if(_.contains(customerIDs, elem.id)) {
+//                                        results.push(elem);
+//                                    }
+//                                });
+//                            }
+//
+//                            self.log.debug('<< listCustomers');
+//                            self.sendResultOrError(resp, err, results, "Error listing Stripe Customers");
+//                        });
+                            self.sendResultOrError(resp, err, customers.data, "Error listing Stripe Customers");
+
+                    } else {
+                        //accountId ==0; return ALL customers
+                        self.log.debug('<< listCustomers');
+                        self.sendResultOrError(resp, err, customers.data, "Error listing Stripe Customers");
                     }
 
-                    self.log.debug('<< listCustomers');
-                    self.sendResultOrError(resp, err, results, "Error listing Stripe Customers");
                 });
 
-            } else {
-                //accountId ==0; return ALL customers
-                self.log.debug('<< listCustomers');
-                self.sendResultOrError(resp, err, customers.data, "Error listing Stripe Customers");
             }
-
         });
+
+
 
     },
 
@@ -140,110 +150,144 @@ _.extend(api.prototype, baseApi.prototype, {
         var customerId = req.params.id;
         var accountId = self.accountId(req);
 
-        var p1 = $.Deferred();
-        customerLinkDao.getLinkByAccountAndCustomer(accountId, customerId, function(err, link){
-            if(err) {
-                p1.reject();
-                self.sendResultOrError(resp, err, null, "Error validating customerId.");
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var p1 = $.Deferred();
+                customerLinkDao.getLinkByAccountAndCustomer(accountId, customerId, function(err, link){
+                    if(err) {
+                        p1.reject();
+                        self.sendResultOrError(resp, err, null, "Error validating customerId.");
+                    }
+                    //a result here means this is a valid customer/account link.
+                    p1.resolve(link);
+                });
+
+                $.when(p1).done(function(){
+                    stripeDao.getStripeCustomer(customerId, function(err, value){
+                        self.log.debug('<< getCustomer');
+                        self.sendResultOrError(resp, err, value, "Error retrieving Stripe Customer");
+                    });
+                });
             }
-            //a result here means this is a valid customer/account link.
-            p1.resolve();
         });
 
-        $.when(p1).done(function(){
-            stripeDao.getStripeCustomer(customerId, function(err, value){
-                self.log.debug('<< getCustomer');
-                self.sendResultOrError(resp, err, value, "Error retrieving Stripe Customer");
-                self = value = null;
-            });
-        });
+
 
     },
 
     createCustomer: function(req, resp) {
         var self = this;
         self.log.debug('>> createCustomer');
-        //TODO: security
-        var cardToken = req.cardToken;
-        var contact = req.contact;
-        var user = req.body.user || req.user;
-        var _accountId = self.accountId(req);
-        //validate arguments
-        if(cardToken && cardToken.length ===0) {
-            return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
-        }
-        if (!contact && !user) {
-            return this.wrapError(resp, 400, null, "Must have either contact or user");
-        }
-        if(contact && contact.stripeId && contact.stripeId.length > 0) {
-            return this.wrapError(resp, 409, null, "Customer already exists.");
-        }
+
+
+        var cardToken = req.body.cardToken;
+        var contact = req.body.contact;
 
         if(contact) {
-            stripeDao.createStripeCustomer(cardToken, contact, _accountId, function(err, value){
-                self.log.debug('<< createCustomer');
-                self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
-                self = value = null;
-            });
-        } else {
-            stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, function(err, value){
-                self.log.debug('<< createCustomer');
-                self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
-                self = value = null;
-            });
+            contact = new $$.m.Contact(contact);
         }
+
+        var user = req.body.user || req.user;
+
+        if(req.body.user) {
+            self.log.debug('>> user is obj');
+            user = new $$.m.User(user);
+        }
+
+        var _accountId = req.body.accountId || self.accountId(req);
+
+        self.checkPermissionForAccountAndUser(user.id(), _accountId, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                //validate arguments
+                if(!cardToken && cardToken.length ===0) {
+                    return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
+                }
+                if (!contact && !user) {
+                    return this.wrapError(resp, 400, null, "Must have either contact or user");
+                }
+                if(contact && contact.stripeId && contact.stripeId.length > 0) {
+                    return this.wrapError(resp, 409, null, "Customer already exists.");
+                }
+
+                if(contact) {
+                    stripeDao.createStripeCustomer(cardToken, contact, _accountId, function(err, value){
+                        self.log.debug('<< createCustomer');
+                        self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
+                        self = value = null;
+                    });
+                } else {
+                    stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, function(err, value){
+                        self.log.debug('<< createCustomer');
+                        self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
+                    });
+                }
+            }
+        });
+
 
     },
 
     updateCustomer: function(req, resp) {
         var self = this;
         self.log.debug('>> updateCustomer');
-        //TODO: security
-        var hasUpdates = false;
-        var customerId = req.params.id;
-        var params = {};
+        //var accountId = parseInt(self.accountId(req));
 
-        if(!customerId || customerId.length ===0) {
-            return this.wrapError(resp, 400, null, "Invalid parameter for customerId.");
-        }
-        if(req.body.account_balance) {
-            params.account_balance = req.body.account_balance;
-            hasUpdates = true;
-        }
-        if(req.body.cardToken) {
-            params.cardToken = req.body.cardToken;
-            hasUpdates = true;
-        }
-        if(req.body.coupon) {
-            params.coupon = req.body.coupon;
-            hasUpdates = true;
-        }
-        if(req.body.default_card) {
-            params.default_card = req.body.default_card;
-            hasUpdates = true;
-        }
-        if(req.body.description) {
-            params.description = req.body.description;
-            hasUpdates = true;
-        }
-        if(req.body.email) {
-            params.email = req.body.email;
-            hasUpdates = true;
-        }
-        if(req.body.metadata) {
-            params.metadata = req.body.metadata;
-            hasUpdates = true;
-        }
-        if(hasUpdates!==true) {
-            return this.wrapError(resp, 400, null, "Invalid parameters for updateCustomer.");
-        }
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var hasUpdates = false;
+                var customerId = req.params.id;
+                var params = {};
 
-        stripeDao.updateStripeCustomer(customerId, params.account_balance, params.cardToken, params.coupon, params.default_card,
-            params.description, params.email, params.metadata, function(err, value){
-                self.log.debug('<< updateCustomer');
-                return self.sendResultOrError(resp, err, value, "Error updating Stripe Customer");
-            });
-        self = params = null;
+                if(!customerId || customerId.length ===0) {
+                    return this.wrapError(resp, 400, null, "Invalid parameter for customerId.");
+                }
+                if(req.body.account_balance) {
+                    params.account_balance = req.body.account_balance;
+                    hasUpdates = true;
+                }
+                if(req.body.cardToken) {
+                    params.cardToken = req.body.cardToken;
+                    hasUpdates = true;
+                }
+                if(req.body.coupon) {
+                    params.coupon = req.body.coupon;
+                    hasUpdates = true;
+                }
+                if(req.body.default_card) {
+                    params.default_card = req.body.default_card;
+                    hasUpdates = true;
+                }
+                if(req.body.description) {
+                    params.description = req.body.description;
+                    hasUpdates = true;
+                }
+                if(req.body.email) {
+                    params.email = req.body.email;
+                    hasUpdates = true;
+                }
+                if(req.body.metadata) {
+                    params.metadata = req.body.metadata;
+                    hasUpdates = true;
+                }
+                if(hasUpdates!==true) {
+                    return this.wrapError(resp, 400, null, "Invalid parameters for updateCustomer.");
+                }
+
+                stripeDao.updateStripeCustomer(customerId, params.account_balance, params.cardToken, params.coupon, params.default_card,
+                    params.description, params.email, params.metadata, function(err, value){
+                        self.log.debug('<< updateCustomer');
+                        return self.sendResultOrError(resp, err, value, "Error updating Stripe Customer");
+                    });
+
+            }
+        });
+
 
     },
 
@@ -256,204 +300,282 @@ _.extend(api.prototype, baseApi.prototype, {
     deleteCustomer: function(req, resp) {
         var self = this;
         self.log.debug('>> deleteCustomer');
-        //TODO: security
 
         var accountId = self.accountId(req);
-        var customerId = req.params.id;
-        if(accountId > 0) {
-            customerLinkDao.removeLinkByAccountAndCustomer(accountId, customerId, function(err, value){
-                self.log.debug('<< deleteCustomer');
-                self.sendResultOrError(resp, err, value, "Error removing Stripe Customer");
-            });
-        } else {
-            var contactId = req.body.contactId;//TODO: Is this the right way to do it?
-            //delete Stripe Customer AND all links
-            stripeDao.deleteStripeCustomer(customerId, contactId, function(err, value){
-                if(err) {
-                    self.log.error('Error deleting customer from Stripe: ' + err);
-                    return self.wrapError(resp, null, 500, 'Error removing Stripe Customer');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var customerId = req.params.id;
+                if(accountId > 0) {
+                    customerLinkDao.removeLinkByAccountAndCustomer(accountId, customerId, function(err, value){
+                        self.log.debug('<< deleteCustomer');
+                        self.sendResultOrError(resp, err, value, "Error removing Stripe Customer");
+                    });
+                } else {
+                    var contactId = req.body.contactId;
+                    var userId = req.body.userId;
+
+                    //delete Stripe Customer AND all links
+                    stripeDao.deleteStripeCustomer(customerId, contactId, userId, function(err, value){
+                        if(err) {
+                            self.log.error('Error deleting customer from Stripe: ' + err);
+                            return self.wrapError(resp, null, 500, 'Error removing Stripe Customer');
+                        }
+                        customerLinkDao.removeLinksByCustomer(customerId, function(err, value){
+                            self.log.debug('<< deleteCustomer');
+                            return self.sendResultOrError(resp, err, value, "Error removing Stripe Customer");
+                        });
+                    });
                 }
-                customerLinkDao.removeLinksByCustomer(customerId, function(err, value){
-                    self.log.debug('<< deleteCustomer');
-                    return self.sendResultOrError(resp, err, value, "Error removing Stripe Customer");
-                });
-            });
-        }
-        self = value = null;
+            }
+        });
+
 
     },
 
     listPlans: function(req, resp) {
         var self = this;
         self.log.debug('>> listPlans');
-        //TODO: Security
-        var accessToken = self._getAccessToken(req);
-        stripeDao.listStripePlans(accessToken, function(err, value){
-            self.log.debug('<< listPlans');
-            return self.sendResultOrError(resp, err, value, "Error listing Stripe Plans");
-            self = value = null;
+        //var accountId = parseInt(self.accountId(req));
+
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                stripeDao.listStripePlans(accessToken, function(err, value){
+                    self.log.debug('<< listPlans');
+                    return self.sendResultOrError(resp, err, value, "Error listing Stripe Plans");
+                });
+            }
         });
+
     },
 
     getPlan: function(req, resp) {
         var self = this;
         self.log.debug('>> getPlan');
-        //TODO: Security
-        var planId = req.params.id;
-        var accessToken = self._getAccessToken(req);
-        stripeDao.getStripePlan(planId, accessToken, function(err, value){
-            self.log.debug('<< getPlan');
-            return self.sendResultOrError(resp, err, value, "Error retrieving Stripe Plan");
-            self = value = null;
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var planId = req.params.id;
+                var accessToken = self._getAccessToken(req);
+                stripeDao.getStripePlan(planId, accessToken, function(err, value){
+                    self.log.debug('<< getPlan');
+                    return self.sendResultOrError(resp, err, value, "Error retrieving Stripe Plan");
+                });
+            }
         });
+
     },
 
     createPlan: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> createPlan');
-        var accessToken = self._getAccessToken(req);
+        //var accountId = parseInt(self.accountId(req));
 
-        var planId = req.body.planId;
-        var amount = req.body.amount;
-        var currency = req.body.currency || 'usd';
-        var interval = req.body.interval;
-        var interval_count = req.body.interval_count;
-        var name = req.body.name;
-        var trial_period_days = req.body.trial_period_days;
-        var metadata = req.body.metadata;
-        var statement_description = req.body.statement_description;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
 
-        //validate params
-        if(!planId || planId.length < 1) {
-            return self.wrapError(resp, 400, null, "Invalid parameter for planId.");
-        }
-        if(!amount) {
-            return self.wrapError(resp, 400, null, "Invalid parameter for amount.");
-        }
-        if(!currency || currency.length<1) {
-            return self.wrapError(resp, 400, null, "Invalid parameter for currency.");
-        }
-        if(!interval || !_.contains(['week', 'month', 'year'], interval)) {
-            return self.wrapError(resp, 400, null, "Invalid parameter for interval.");
-        }
-        if(!name || name.length<1) {
-            return self.wrapError(resp, 400, null, "Invalid parameter for name.");
-        }
+                var planId = req.body.planId;
+                var amount = req.body.amount;
+                var currency = req.body.currency || 'usd';
+                var interval = req.body.interval;
+                var interval_count = req.body.interval_count;
+                var name = req.body.name;
+                var trial_period_days = req.body.trial_period_days;
+                var metadata = req.body.metadata;
+                var statement_description = req.body.statement_description;
 
-        stripeDao.createStripePlan(planId, amount, currency, interval, interval_count, name, trial_period_days, metadata,
-            statement_description, accessToken, function(err, value){
-                self.log.debug('<< createPlan');
-                return self.sendResultOrError(resp, err, value, "Error creating Stripe Plan");
-                self = value = null;
-            });
+                //validate params
+                if(!planId || planId.length < 1) {
+                    return self.wrapError(resp, 400, null, "Invalid parameter for planId.");
+                }
+                if(!amount) {
+                    return self.wrapError(resp, 400, null, "Invalid parameter for amount.");
+                }
+                if(!currency || currency.length<1) {
+                    return self.wrapError(resp, 400, null, "Invalid parameter for currency.");
+                }
+                if(!interval || !_.contains(['week', 'month', 'year'], interval)) {
+                    return self.wrapError(resp, 400, null, "Invalid parameter for interval.");
+                }
+                if(!name || name.length<1) {
+                    return self.wrapError(resp, 400, null, "Invalid parameter for name.");
+                }
+
+                stripeDao.createStripePlan(planId, amount, currency, interval, interval_count, name, trial_period_days, metadata,
+                    statement_description, accessToken, function(err, value){
+                        self.log.debug('<< createPlan');
+                        return self.sendResultOrError(resp, err, value, "Error creating Stripe Plan");
+                    });
+            }
+        });
+
     },
 
     updatePlan: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> updatePlan');
-        var accessToken = self._getAccessToken(req);
-        //validate params
-        var needsUpdate = false;
-        var planId = req.params.id;//REQUIRED
-        var name = req.body.name;
-        var metadata = req.body.metadata;
-        var statement_description = req.body.statement_description;
-        if(!planId || planId.length < 1) {
-            return self.wrapError(resp, 400, null, "Invalid planId parameter.");
-        }
-        if(name || metadata || statement_description) {
-            needsUpdate = true;
-        } else {
-            return self.wrapError(resp, 400, null, "Invalid update parameters.");
-        }
+        var accountId = parseInt(self.accountId(req));
 
-        stripeDao.updateStripePlan(planId, name, metadata, statement_description, accessToken, function(err, value){
-            self.log.debug('<< updatePlan');
-            return self.sendResultOrError(resp, err, value, "Error updating Stripe Plan");
-            self = value = null;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                //validate params
+                var needsUpdate = false;
+                var planId = req.params.id;//REQUIRED
+                var name = req.body.name;
+                var metadata = req.body.metadata;
+                var statement_description = req.body.statement_description;
+                if(!planId || planId.length < 1) {
+                    return self.wrapError(resp, 400, null, "Invalid planId parameter.");
+                }
+                if(name || metadata || statement_description) {
+                    needsUpdate = true;
+                } else {
+                    return self.wrapError(resp, 400, null, "Invalid update parameters.");
+                }
+
+                stripeDao.updateStripePlan(planId, name, metadata, statement_description, accessToken, function(err, value){
+                    self.log.debug('<< updatePlan');
+                    return self.sendResultOrError(resp, err, value, "Error updating Stripe Plan");
+                });
+            }
         });
+
     },
 
     deletePlan: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> deletePlan');
-        var accessToken = self._getAccessToken(req);
-        //validate params
-        var planId = req.params.id;//REQUIRED
-        if(!planId || planId.length < 1) {
-            return self.wrapError(resp, 400, null, "Invalid planId parameter.");
-        }
+        var accountId = parseInt(self.accountId(req));
 
-        stripeDao.deleteStripePlan(planId, accessToken, function(err, value){
-            self.log.debug('<< deletePlan');
-            return self.sendResultOrError(resp, err, value, "Error updating Stripe Plan");
-            self = value = null;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                //validate params
+                var planId = req.params.id;//REQUIRED
+                if(!planId || planId.length < 1) {
+                    return self.wrapError(resp, 400, null, "Invalid planId parameter.");
+                }
+
+                stripeDao.deleteStripePlan(planId, accessToken, function(err, value){
+                    self.log.debug('<< deletePlan');
+                    return self.sendResultOrError(resp, err, value, "Error updating Stripe Plan");
+                });
+            }
         });
+
     },
 
     listSubscriptions: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> listSubscriptions');
+        var accountId = parseInt(self.accountId(req));
+
         var accessToken = self._getAccessToken(req);
         var customerId = req.params.id;
         var limit = req.body.limit;
 
         stripeDao.listStripeSubscriptions(customerId, limit, function(err, value){
-            self.log.debug('<< listSubscriptions');
-            return self.sendResultOrError(resp, err, value, "Error listing subscriptions");
-            self = value = null;
+
+            self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+                if (isAllowed !== true) {
+                    return self.send403(resp);
+                } else {
+                    //TODO: get accountId from subs
+                    self.log.debug('<< listSubscriptions');
+                    return self.sendResultOrError(resp, err, value, "Error listing subscriptions");
+                }
+            });
+
         });
     },
 
     createSubscription: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> createSubscription');
-        var accessToken = self._getAccessToken(req);
-        var customerId = req.params.id;
-        var planId = req.body.planId;//REQUIRED
-        var coupon = req.body.coupon;
-        var trial_end = req.body.trial_end;
-        var card = req.body.card;//this will overwrite customer default card if specified
-        var quantity = req.body.quanity;
-        var application_fee_percent = req.body.application_fee_percent;
-        var metadata = req.body.metadata;
-        var accountId = self.accountId(req);
-        var contactId = req.body.contactId;//TODO: determine if this is best way
 
-        if(!planId || planId.length < 1) {
-            return self.wrapError(resp, 400, null, "Invalid planId parameter.");
-        }
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var customerId = req.params.id;
+                var planId = req.body.plan;//REQUIRED
+                var coupon = req.body.coupon;
+                var trial_end = req.body.trial_end;
+                var card = req.body.card;//this will overwrite customer default card if specified
+                var quantity = req.body.quanity;
+                var application_fee_percent = req.body.application_fee_percent;
+                var metadata = req.body.metadata;
+                var accountId = parseInt(self.accountId(req));
+                var contactId = req.body.contactId;
+                var userId = req.userId;
 
-        stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
-                    application_fee_percent, metadata, accountId, contactId, accessToken, function(err, value){
-                self.log.debug('<< createSubscription');
-                return self.sendResultOrError(resp, err, value, "Error creating subscription");
-                self = value = null;
-            });
+                if(!planId || planId.length < 1) {
+                    return self.wrapError(resp, 400, null, "Invalid planId parameter.");
+                }
+
+                stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
+                    application_fee_percent, metadata, accountId, contactId, userId, accessToken, function(err, value){
+                        self.log.debug('<< createSubscription');
+                        if(!err) {
+                            self.sm.addSubscriptionToAccount(accountId, value.id, planId, userId, function(err, value){
+                                if(err){
+                                    self.log.error('Error adding subscription to account: ' + err);
+                                }
+                            });
+                        }
+                        return self.sendResultOrError(resp, err, value, "Error creating subscription");
+                    });
+            }
+        });
+
+
     },
 
     getSubscription: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> getSubscription');
         var accessToken = self._getAccessToken(req);
         var customerId = req.params.id;
         var subscriptionId = req.params.subId;
-
-        stripeDao.getStripeSubscription(customerId, subscriptionId, accessToken, function(err, value){
-            self.log.debug('<< getSubscription');
-            return self.sendResultOrError(resp, err, value, "Error retrieving subscription");
-            self = value = null;
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                stripeDao.getStripeSubscription(customerId, subscriptionId, accessToken, function(err, value){
+                    self.log.debug('<< getSubscription');
+                    return self.sendResultOrError(resp, err, value, "Error retrieving subscription");
+                });
+            }
         });
+
+
     },
 
     updateSubscription: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> updateSubscription');
         var accessToken = self._getAccessToken(req);
@@ -469,16 +591,22 @@ _.extend(api.prototype, baseApi.prototype, {
         var application_fee_percent = req.body.application_fee_percent;
         var metadata = req.body.metadata;
 
-        stripeDao.updateStripeSubscription(customerId, subscriptionId, planId, coupon, prorate, trial_end, card,
-            quantity, application_fee_percent, metadata, accessToken, function(err, value){
-                self.log.debug('<< updateSubscription');
-                return self.sendResultOrError(resp, err, value, "Error updating subscription");
-                self = value = null;
-            });
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                stripeDao.updateStripeSubscription(customerId, subscriptionId, planId, coupon, prorate, trial_end, card,
+                    quantity, application_fee_percent, metadata, accessToken, function(err, value){
+                        self.log.debug('<< updateSubscription');
+                        return self.sendResultOrError(resp, err, value, "Error updating subscription");
+                    });
+            }
+        });
+
     },
 
     cancelSubscription: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> cancelSubscription');
         var accessToken = self._getAccessToken(req);
@@ -487,418 +615,549 @@ _.extend(api.prototype, baseApi.prototype, {
         var at_period_end = req.body.at_period_end;
         var accountId = self.accountId(req);
 
-        stripeDao.cancelStripeSubscription(accountId, customerId, subscriptionId, at_period_end, accessToken, function(err, value){
-            self.log.debug('<< cancelSubscription');
-            return self.sendResultOrError(resp, err, value, "Error cancelling subscription");
-            self = value = null;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                stripeDao.cancelStripeSubscription(accountId, customerId, subscriptionId, at_period_end, accessToken, function(err, value){
+                    self.log.debug('<< cancelSubscription');
+                    return self.sendResultOrError(resp, err, value, "Error cancelling subscription");
+                });
+            }
         });
+
     },
 
     createCard: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> createCard');
         var accessToken = self._getAccessToken(req);
         var customerId = req.params.id;
-        var cardToken = req.body.cardToken;
-        if(!cardToken || cardToken.length < 1) {
-            return self.wrapError(resp, 400, null, "Invalid cardToken parameter.");
-        }
 
-        stripeDao.createStripeCard(customerId, cardToken, function(err, value){
-            self.log.debug('<< createCard');
-            return self.sendResultOrError(resp, err, value, "Error creating card");
-            self = value = null;
+        var cardToken = req.params.cardToken;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                if(!cardToken || cardToken.length < 1) {
+                    return self.wrapError(resp, 400, null, "Invalid cardToken parameter.");
+                }
+                stripeDao.createStripeCard(customerId, cardToken, function(err, value){
+                    self.log.debug('<< createCard');
+                    return self.sendResultOrError(resp, err, value, "Error creating card");
+                });
+            }
         });
+
     },
 
     getCard: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> getCard');
         var accessToken = self._getAccessToken(req);
         var customerId = req.params.id;
         var cardId = req.params.cardId;
 
-        stripeDao.getStripeCard(customerId, cardId, function(err, value){
-            self.log.debug('<< getCard');
-            return self.sendResultOrError(resp, err, value, "Error creating card");
-            self = value = null;
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                stripeDao.getStripeCard(customerId, cardId, function(err, value){
+                    self.log.debug('<< getCard');
+                    return self.sendResultOrError(resp, err, value, "Error creating card");
+                });
+            }
         });
+
+
     },
 
     updateCard: function(req, resp) {
-        //TODO - Security
         var self = this;
         self.log.debug('>> updateCard');
-        var accessToken = self._getAccessToken(req);
-        var customerId = req.params.id;
-        var cardId = req.params.cardId;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var customerId = req.params.id;
+                var cardId = req.params.cardId;
 
-        var isUpdated = false;
-        var name = req.body.name;
-        var address_city = req.body.address_city;
-        var address_country = req.body.address_country;
-        var address_line1 = req.body.address_line1;
-        var address_line2 = req.body.address_line2;
-        var address_state = req.body.address_state;
-        var address_zip = req.body.address_zip;
-        var exp_month = req.body.exp_month;
-        var exp_year = req.body.exp_year;
+                var isUpdated = false;
+                var name = req.body.name;
+                var address_city = req.body.address_city;
+                var address_country = req.body.address_country;
+                var address_line1 = req.body.address_line1;
+                var address_line2 = req.body.address_line2;
+                var address_state = req.body.address_state;
+                var address_zip = req.body.address_zip;
+                var exp_month = req.body.exp_month;
+                var exp_year = req.body.exp_year;
 
-        //check that we have at least one parameter to update
-        if(name || address_city || address_country || address_line1 || address_line2 || address_state || address_zip
-            || exp_month || exp_year) {
-            isUpdated = true;//in case we need to do anything else here
-        } else {
-            self.log.error('No parameters passed to updateCard.');
-            return self.wrapError(resp, 400, null, "Invalid card parameters.");
-        }
+                //check that we have at least one parameter to update
+                if(name || address_city || address_country || address_line1 || address_line2 || address_state || address_zip
+                    || exp_month || exp_year) {
+                    isUpdated = true;//in case we need to do anything else here
+                } else {
+                    self.log.error('No parameters passed to updateCard.');
+                    return self.wrapError(resp, 400, null, "Invalid card parameters.");
+                }
 
-        stripeDao.updateStripeCard(customerId, cardId, name, address_city, address_country, address_line1,
-            address_line2, address_state, address_zip, exp_month, exp_year, function(err, value){
-                self.log.debug('<< updateCard');
-                return self.sendResultOrError(resp, err, value, "Error updating card");
-                self = value = null;
-            });
+                stripeDao.updateStripeCard(customerId, cardId, name, address_city, address_country, address_line1,
+                    address_line2, address_state, address_zip, exp_month, exp_year, function(err, value){
+                        self.log.debug('<< updateCard');
+                        return self.sendResultOrError(resp, err, value, "Error updating card");
+                });
+            }
+        });
+
     },
 
     listCards: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> listCards');
-        var accessToken = self._getAccessToken(req);
-        var customerId = req.params.id;
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var customerId = req.params.id;
 
-        stripeDao.listStripeCards(customerId, function(err, value){
-            self.log.debug('<< listCards');
-            return self.sendResultOrError(resp, err, value, "Error listing cards");
-            self = value = null;
+                stripeDao.listStripeCards(customerId, function(err, value){
+                    self.log.debug('<< listCards');
+                    return self.sendResultOrError(resp, err, value, "Error listing cards");
+                });
+            }
         });
+
     },
 
     deleteCard: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> deleteCard');
-        var accessToken = self._getAccessToken(req);
-        var customerId = req.params.id;
-        var cardId = req.params.cardId;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var customerId = req.params.id;
+                var cardId = req.params.cardId;
 
-        stripeDao.deleteStripeCard(customerId, cardId, function(err, value){
-            self.log.debug('<< deleteCard');
-            return self.sendResultOrError(resp, err, value, "Error listing cards");
-            self = value = null;
+                stripeDao.deleteStripeCard(customerId, cardId, function(err, value){
+                    self.log.debug('<< deleteCard');
+                    return self.sendResultOrError(resp, err, value, "Error listing cards");
+                });
+            }
         });
+
     },
 
     //CHARGES
     listCharges: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> listCharges');
-        var accessToken = self._getAccessToken(req);
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
 
-        var created = req.body.created;
-        var customerId = req.body.customerId;
-        var ending_before = req.body.ending_before;
-        var limit = req.body.limit;
-        var starting_after = req.body.starting_after;
+                var created = req.body.created;
+                var customerId = req.body.customerId;
+                var ending_before = req.body.ending_before;
+                var limit = req.body.limit;
+                var starting_after = req.body.starting_after;
 
-        stripeDao.listStripeCharges(created, customerId, ending_before, limit, starting_after, accessToken,
-            function(err, value){
-                self.log.debug('<< listCharges');
-                return self.sendResultOrError(resp, err, value, "Error listing charges");
-                self = value = null;
-            });
+                stripeDao.listStripeCharges(created, customerId, ending_before, limit, starting_after, accessToken,
+                    function(err, value){
+                        self.log.debug('<< listCharges');
+                        return self.sendResultOrError(resp, err, value, "Error listing charges");
+                    });
+            }
+        });
+
     },
 
     createCharge: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> createCharge');
-        var accessToken = self._getAccessToken(req);
-        var amount = req.body.amount;//REQUIRED
-        var currency = req.body.currency || 'usd';//REQUIRED
-        var card = req.body.card; //card or customer REQUIRED
-        var customerId = req.body.customerId; //card or customer REQUIRED
-        var contactId = req.body.contactId;//REQUIRED
-        var description = req.body.description;
-        var metadata = req.body.metadata;
-        var capture = req.body.capture;
-        var statement_description = req.body.statement_description;
-        var receipt_email = req.body.receipt_email;
-        var application_fee = req.body.application_fee;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var amount = req.body.amount;//REQUIRED
+                var currency = req.body.currency || 'usd';//REQUIRED
+                var card = req.body.card; //card or customer REQUIRED
+                var customerId = req.body.customerId; //card or customer REQUIRED
+                var contactId = req.body.contactId;//contact or user REQUIRED
+                var userId = req.body.userId; //contact or user REQUIRED
+                var description = req.body.description;
+                var metadata = req.body.metadata;
+                var capture = req.body.capture;
+                var statement_description = req.body.statement_description;
+                var receipt_email = req.body.receipt_email;
+                var application_fee = req.body.application_fee;
 
-        //validate params
-        if(!amount) {
-            return self.wrapError(resp, 400, null, "Invalid amount parameter.");
-        }
-        if(!currency) {
-            return self.wrapError(resp, 400, null, "Invalid currency parameter.");
-        }
-        if(!card && !customerId) {
-            return self.wrapError(resp, 400, null, "Missing card or customer parameter.");
-        }
-        if(!contactId) {
-            return self.wrapError(resp, 400, null, "Invalid contact parameter.");
-        }
+                //validate params
+                if(!amount) {
+                    return self.wrapError(resp, 400, null, "Invalid amount parameter.");
+                }
+                if(!currency) {
+                    return self.wrapError(resp, 400, null, "Invalid currency parameter.");
+                }
+                if(!card && !customerId) {
+                    return self.wrapError(resp, 400, null, "Missing card or customer parameter.");
+                }
 
-        stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata, capture,
-            statement_description, receipt_email, application_fee, accessToken, function(err, value){
-                self.log.debug('<< createCharge');
-                return self.sendResultOrError(resp, err, value, "Error creating a charge.");
-                self = value = null;
-            });
+                if(!contactId && !userId) {
+                    return self.wrapError(resp, 400, null, "Invalid contact or user parameter.");
+                }
+
+                stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata, capture,
+                    statement_description, receipt_email, application_fee, userId, accessToken, function(err, value){
+                        self.log.debug('<< createCharge');
+                        return self.sendResultOrError(resp, err, value, "Error creating a charge.");
+                    });
+            }
+        });
+
     },
 
     getCharge: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> getCharge');
-        var accessToken = self._getAccessToken(req);
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
 
-        var chargeId = req.params.chargeId;
+                var chargeId = req.params.chargeId;
 
-        stripeDao.getStripeCharge(chargeId, accessToken, function(err, value){
-            self.log.debug('<< getCharge');
-            return self.sendResultOrError(resp, err, value, "Error retrieving a charge.");
-            self = value = null;
+                stripeDao.getStripeCharge(chargeId, accessToken, function(err, value){
+                    self.log.debug('<< getCharge');
+                    return self.sendResultOrError(resp, err, value, "Error retrieving a charge.");
+                });
+            }
         });
-
 
     },
 
     updateCharge: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> updateCharge');
-        var accessToken = self._getAccessToken(req);
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
 
-        var chargeId = req.params.chargeId;
-        var description = req.body.description;
-        var metadata = req.body.metadata;
-        if(!description && !metadata) {
-            return self.wrapError(resp, 400, null, "Missing update parameter.");
-        }
+                var chargeId = req.params.chargeId;
+                var description = req.body.description;
+                var metadata = req.body.metadata;
+                if(!description && !metadata) {
+                    return self.wrapError(resp, 400, null, "Missing update parameter.");
+                }
 
-        stripeDao.updateStripeCharge(chargeId, description, metadata, accessToken, function(err, value){
-            self.log.debug('<< updateCharge');
-            return self.sendResultOrError(resp, err, value, "Error updating a charge.");
-            self = value = null;
+                stripeDao.updateStripeCharge(chargeId, description, metadata, accessToken, function(err, value){
+                    self.log.debug('<< updateCharge');
+                    return self.sendResultOrError(resp, err, value, "Error updating a charge.");
+                });
+            }
         });
+
     },
 
     captureCharge: function(req, resp) {
-        //TODO - Security
         var self = this;
         self.log.debug('>> captureCharge');
-        var accessToken = self._getAccessToken(req);
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
 
-        var chargeId = req.params.chargeId;
-        var amount = req.body.amount;
-        var application_fee = req.body.application_fee;
-        var receipt_email = req.body.receipt_email;
+                var chargeId = req.params.chargeId;
+                var amount = req.body.amount;
+                var application_fee = req.body.application_fee;
+                var receipt_email = req.body.receipt_email;
 
-        stripeDao.captureStripeCharge(chargeId, amount, application_fee, receipt_email, accessToken,
-            function(err, value){
-                self.log.debug('<< captureCharge');
-                return self.sendResultOrError(resp, err, value, "Error capturing a charge.");
-                self = value = null;
-            });
+                stripeDao.captureStripeCharge(chargeId, amount, application_fee, receipt_email, accessToken,
+                    function(err, value){
+                        self.log.debug('<< captureCharge');
+                        return self.sendResultOrError(resp, err, value, "Error capturing a charge.");
+                    });
+            }
+        });
+
     },
 
     //INVOICE ITEMS
 
     createInvoiceItem: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> createInvoiceItem');
-        var accessToken = self._getAccessToken(req);
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
 
-        var customerId = req.params.id;
-        var amount = req.body.amount;//REQUIRED
-        var currency = req.body.currency || 'usd';//REQUIRED
-        var invoiceId = req.body.invoiceId;
-        var subscriptionId = req.body.subscriptionId;
-        var description = req.body.description;
-        var metadata = req.body.metaata;
+                var customerId = req.params.id;
+                var amount = req.body.amount;//REQUIRED
+                var currency = req.body.currency || 'usd';//REQUIRED
+                var invoiceId = req.body.invoiceId;
+                var subscriptionId = req.body.subscriptionId;
+                var description = req.body.description;
+                var metadata = req.body.metaata;
 
-        if(!amount) {
-            return self.wrapError(resp, 400, null, "Missing amount parameter.");
-        }
-        if(!currency) {
-            return self.wrapError(resp, 400, null, "Missing currency parameter.");
-        }
+                if(!amount) {
+                    return self.wrapError(resp, 400, null, "Missing amount parameter.");
+                }
+                if(!currency) {
+                    return self.wrapError(resp, 400, null, "Missing currency parameter.");
+                }
 
-        stripeDao.createInvoiceItem(customerId, amount, currency, invoiceId, subscriptionId, description, metadata,
-            accessToken, function(err, value){
-                self.log.debug('<< createInvoiceItem');
-                return self.sendResultOrError(resp, err, value, "Error creating an invoice item.");
-                self = value = null;
-            });
+                stripeDao.createInvoiceItem(customerId, amount, currency, invoiceId, subscriptionId, description, metadata,
+                    accessToken, function(err, value){
+                        self.log.debug('<< createInvoiceItem');
+                        return self.sendResultOrError(resp, err, value, "Error creating an invoice item.");
+                    });
+            }
+        });
+
     },
 
     listInvoiceItems: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> listInvoiceItems');
-        var accessToken = self._getAccessToken(req);
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
 
-        var created = req.body.created;
-        var customerId = req.body.customerId;
-        var ending_before = req.body.ending_before;
-        var limit = req.body.limit;
-        var starting_after = req.body.starting_after;
+                var created = req.body.created;
+                var customerId = req.body.customerId;
+                var ending_before = req.body.ending_before;
+                var limit = req.body.limit;
+                var starting_after = req.body.starting_after;
 
-        stripeDao.listInvoiceItems(created, customerId, ending_before, limit, starting_after, accessToken,
-            function(err, value){
-                self.log.debug('<< listInvoiceItems');
-                return self.sendResultOrError(resp, err, value, "Error listing invoice items.");
-                self = value = null;
-            });
+                stripeDao.listInvoiceItems(created, customerId, ending_before, limit, starting_after, accessToken,
+                    function(err, value){
+                        self.log.debug('<< listInvoiceItems');
+                        return self.sendResultOrError(resp, err, value, "Error listing invoice items.");
+                    });
+            }
+        });
+
     },
 
     getInvoiceItem: function(req, resp) {
-        //TODO - Security
         var self = this;
         self.log.debug('>> getInvoiceItem');
-        var accessToken = self._getAccessToken(req);
-        var invoiceItemId = req.params.itemId;
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var invoiceItemId = req.params.itemId;
 
-        stripeDao.getInvoiceItem(invoiceItemId, accessToken, function(err, value){
-            self.log.debug('<< getInvoiceItem');
-            return self.sendResultOrError(resp, err, value, "Error retrieving invoice item.");
-            self = value = null;
+                stripeDao.getInvoiceItem(invoiceItemId, accessToken, function(err, value){
+                    self.log.debug('<< getInvoiceItem');
+                    return self.sendResultOrError(resp, err, value, "Error retrieving invoice item.");
+                });
+            }
         });
+
     },
 
     updateInvoiceItem: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> getInvoiceItem');
-        var accessToken = self._getAccessToken(req);
-        var invoiceItemId = req.params.itemId;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var invoiceItemId = req.params.itemId;
 
-        var amount = req.body.amount;
-        var description = req.body.description;
-        var metadata = req.body.metadata;
+                var amount = req.body.amount;
+                var description = req.body.description;
+                var metadata = req.body.metadata;
 
 
-        stripeDao.updateInvoiceItem(invoiceItemId, amount, description, metadata, accessToken, function(err, value){
-            self.log.debug('<< getInvoiceItem');
-            return self.sendResultOrError(resp, err, value, "Error retrieving invoice item.");
-            self = value = null;
+                stripeDao.updateInvoiceItem(invoiceItemId, amount, description, metadata, accessToken, function(err, value){
+                    self.log.debug('<< getInvoiceItem');
+                    return self.sendResultOrError(resp, err, value, "Error retrieving invoice item.");
+                });
+            }
         });
+
     },
 
     deleteInvoiceItem: function(req, resp) {
-        //TODO - Security
         var self = this;
         self.log.debug('>> deleteInvoiceItem');
-        var accessToken = self._getAccessToken(req);
-        var invoiceItemId = req.params.itemId;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var invoiceItemId = req.params.itemId;
 
-        stripeDao.deleteInvoiceItem(invoiceItemId, accessToken, function(err, value){
-            self.log.debug('<< deleteInvoiceItem');
-            return self.sendResultOrError(resp, err, value, "Error deleting invoice item.");
-            self = value = null;
+                stripeDao.deleteInvoiceItem(invoiceItemId, accessToken, function(err, value){
+                    self.log.debug('<< deleteInvoiceItem');
+                    return self.sendResultOrError(resp, err, value, "Error deleting invoice item.");
+                });
+            }
         });
+
     },
 
     //INVOICES
 
     createInvoice: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> createInvoice');
-        var accessToken = self._getAccessToken(req);
-        var customerId = req.params.id;
-        var application_fee = req.body.application_fee;
-        var description = req.body.description;
-        var metadata = req.body.metadata;
-        var statement_description = req.body.statement_description;
-        var subscriptionId = req.body.subscriptionId;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var customerId = req.params.id;
+                var application_fee = req.body.application_fee;
+                var description = req.body.description;
+                var metadata = req.body.metadata;
+                var statement_description = req.body.statement_description;
+                var subscriptionId = req.body.subscriptionId;
 
-        stripeDao.createInvoice(customerId, application_fee, description, metadata, statement_description,
-            subscriptionId, accessToken, function(err, value){
-                self.log.debug('<< createInvoice');
-                return self.sendResultOrError(resp, err, value, "Error creating invoice.");
-                self = value = null;
-            });
+                stripeDao.createInvoice(customerId, application_fee, description, metadata, statement_description,
+                    subscriptionId, accessToken, function(err, value){
+                        self.log.debug('<< createInvoice');
+                        return self.sendResultOrError(resp, err, value, "Error creating invoice.");
+                    });
+            }
+        });
+
     },
 
     getInvoice: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> getInvoice');
-        var accessToken = self._getAccessToken(req);
-        var customerId = req.params.id;
-        var invoiceId = req.params.invoiceId;
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var customerId = req.params.id;
+                var invoiceId = req.params.invoiceId;
 
-        stripeDao.getInvoice(invoiceId, accessToken, function(err, value){
-            self.log.debug('<< getInvoice');
-            return self.sendResultOrError(resp, err, value, "Error retrieving invoice.");
-            self = value = null;
+                stripeDao.getInvoice(invoiceId, accessToken, function(err, value){
+                    self.log.debug('<< getInvoice');
+                    return self.sendResultOrError(resp, err, value, "Error retrieving invoice.");
+                });
+            }
         });
+
     },
 
     getUpcomingInvoice: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> getUpcomingInvoice');
-        var accessToken = self._getAccessToken(req);
-        var customerId = req.params.id;
-        var subscriptionId = req.body.subscriptionId;
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var customerId = req.params.id;
+                var subscriptionId = req.body.subscriptionId;
 
-        stripeDao.getUpcomingInvoice(customerId, subscriptionId, accessToken, function(err, value){
-            self.log.debug('<< getUpcomingInvoice');
-            return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.");
-            self = value = null;
+                stripeDao.getUpcomingInvoice(customerId, subscriptionId, accessToken, function(err, value){
+                    self.log.debug('<< getUpcomingInvoice');
+                    return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.");
+                });
+            }
         });
+
     },
 
     updateInvoice: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> updateInvoice');
-        var accessToken = self._getAccessToken(req);
-        var customerId = req.params.id;
-        var invoiceId = req.params.invoiceId;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                //var customerId = req.params.id;
+                var invoiceId = req.params.invoiceId;
 
-        var application_fee = req.body.application_fee;
-        var closed = req.body.closed;
-        var description = req.body.description;
-        var forgiven = req.body.forgiven;
-        var metadata = req.body.metadata;
-        var statement_description = req.body.statement_description;
+                var application_fee = req.body.application_fee;
+                var closed = req.body.closed;
+                var description = req.body.description;
+                var forgiven = req.body.forgiven;
+                var metadata = req.body.metadata;
+                var statement_description = req.body.statement_description;
 
-        if(application_fee || closed || description || forgiven || metadata || statement_description) {
-            //at least one param was passed.  Careful about the booleans
-        } else {
-            return self.wrapError(resp, 400, null, "Missing invoice parameter.");
-        }
+                if(application_fee || closed || description || forgiven || metadata || statement_description) {
+                    //at least one param was passed.  Careful about the booleans
+                } else {
+                    return self.wrapError(resp, 400, null, "Missing invoice parameter.");
+                }
 
-        stripeDao.updateInvoice(invoiceId, application_fee, closed, description, forgiven, metadata,
-            statement_description, accessToken, function(err, value){
-                self.log.debug('<< updateInvoice');
-                return self.sendResultOrError(resp, err, value, "Error updating invoice.");
-                self = value = null;
-            });
+                stripeDao.updateInvoice(invoiceId, application_fee, closed, description, forgiven, metadata,
+                    statement_description, accessToken, function(err, value){
+                        self.log.debug('<< updateInvoice');
+                        return self.sendResultOrError(resp, err, value, "Error updating invoice.");
+                    });
+            }
+        });
+
     },
 
     listInvoices: function(req, resp) {
-        //TODO - Security
+
         var self = this;
-        var customerId = req.params.id;
-        return self._listInvoices(customerId, 'listInvoices', req, resp);
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var customerId = req.params.id;
+                return self._listInvoices(customerId, 'listInvoices', req, resp);
+            }
+        });
+
 
     },
 
     listAllInvoices: function(req, resp) {
-        //TODO - Security
+
         var self = this;
-        self._listInvoices(null, 'listAllInvoices', req, resp);
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                self._listInvoices(null, 'listAllInvoices', req, resp);
+            }
+        });
+
     },
 
     _listInvoices: function(customerId, methodName, req, resp) {
@@ -920,80 +1179,110 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     payInvoice: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> payInvoice');
-        var accessToken = self._getAccessToken(req);
-        var customerId = req.params.id;
-        var invoiceId = req.params.invoiceId;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var customerId = req.params.id;
+                var invoiceId = req.params.invoiceId;
 
-        stripeDao.payInvoice(invoiceId, accessToken, function(err, value){
-            self.log.debug('<< payInvoice');
-            return self.sendResultOrError(resp, err, value, "Error paying invoice.");
-            self = value = null;
+                stripeDao.payInvoice(invoiceId, accessToken, function(err, value){
+                    self.log.debug('<< payInvoice');
+                    return self.sendResultOrError(resp, err, value, "Error paying invoice.");
+                });
+            }
         });
+
     },
 
     createToken: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> createToken');
-        var accessToken = self._getAccessToken(req);
-        var customerId = req.params.id;
-        var cardId = req.params.cardId;
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var customerId = req.params.id;
+                var cardId = req.params.cardId;
 
-        stripeDao.createToken(cardId, customerId, accessToken, function(err, value){
-            self.log.debug('<< createToken');
-            return self.sendResultOrError(resp, err, value, "Error creating token.");
-            self = value = null;
+                stripeDao.createToken(cardId, customerId, accessToken, function(err, value){
+                    self.log.debug('<< createToken');
+                    return self.sendResultOrError(resp, err, value, "Error creating token.");
+                });
+            }
         });
+
     },
 
     getToken: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> getToken');
-        var accessToken = self._getAccessToken(req);
-        var tokenId = req.params.id;
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var tokenId = req.params.id;
 
-        stripeDao.getToken(tokenId, function(err, value){
-            self.log.debug('<< getToken');
-            return self.sendResultOrError(resp, err, value, "Error retrieving token.");
+                stripeDao.getToken(tokenId, function(err, value){
+                    self.log.debug('<< getToken');
+                    return self.sendResultOrError(resp, err, value, "Error retrieving token.");
+                });
+            }
         });
-        self = accessToken = null;
+
     },
 
     getEvent: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> getEvent');
-        var accessToken = self._getAccessToken(req);
-        var eventId = req.params.id;
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var eventId = req.params.id;
 
-        stripeDao.getEvent(eventId, accessToken, function(err, value){
-            self.log.debug('<< getEvent');
-            return self.sendResultOrError(resp, err, value, "Error retrieving event.");
+                stripeDao.getEvent(eventId, accessToken, function(err, value){
+                    self.log.debug('<< getEvent');
+                    return self.sendResultOrError(resp, err, value, "Error retrieving event.");
+                });
+            }
         });
-        self = accessToken = eventId = null;
+
     },
 
     listEvents: function(req, resp) {
-        //TODO - Security
+
         var self = this;
         self.log.debug('>> listEvents');
-        var accessToken = self._getAccessToken(req);
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
 
-        var created = req.body.created;
-        var ending_before = req.body.ending_before;
-        var limit = req.body.limit;
-        var starting_after = req.body.starting_after;
-        var type = req.body.type;
+                var created = req.body.created;
+                var ending_before = req.body.ending_before;
+                var limit = req.body.limit;
+                var starting_after = req.body.starting_after;
+                var type = req.body.type;
 
-        stripeDao.listEvents(created, ending_before, limit, starting_after, type, accessToken, function(err, value){
-            self.log.debug('<< listEvents');
-            return self.sendResultOrError(resp, err, value, "Error listing events.");
+                stripeDao.listEvents(created, ending_before, limit, starting_after, type, accessToken, function(err, value){
+                    self.log.debug('<< listEvents');
+                    return self.sendResultOrError(resp, err, value, "Error listing events.");
+                });
+            }
         });
-        self = accessToken = null;
+
     },
 
     verifyEvent: function(req, res, next) {

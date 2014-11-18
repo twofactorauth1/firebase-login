@@ -45,7 +45,7 @@ var customerLink = $$.m.ModelBase.extend({
     db: {
         storage: "mongo",
         table: "customer_link",
-        idStrategy: "increment"
+        idStrategy: "uuid"
     }
 });
 

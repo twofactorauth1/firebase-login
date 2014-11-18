@@ -1,4 +1,4 @@
-script(src="http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js")
+script(src="//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js")
 script(type="text/javascript").
 
     window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
@@ -20,9 +20,12 @@ script(type="text/javascript").
         }
     }, window.analytics.SNIPPET_VERSION = "2.0.9",
             window.analytics.load('#{segmentIOWriteKey}');
-    window.analytics.page();
+    window.analytics.page('Index', {accountId:#{account._id}});
     WebFont.load({
                       google: {
-                             families: ['Spinnaker', 'Lato']
+                             families: [#{"'"+account.website.settings.font_family+"'"}, #{"'"+account.website.settings.font_family_2+"'"}]
                        }
            });
+
+script(type="text/javascript").
+  !function(a,b){a("Keen","https://d26b395fwzu5fz.cloudfront.net/3.0.9/keen.min.js",b)}(function(a,b,c){var d,e,f;c["_"+a]={},c[a]=function(b){c["_"+a].clients=c["_"+a].clients||{},c["_"+a].clients[b.projectId]=this,this._config=b},c[a].ready=function(b){c["_"+a].ready=c["_"+a].ready||[],c["_"+a].ready.push(b)},d=["addEvent","setGlobalProperties","trackExternalLink","on"];for(var g=0;g<d.length;g++){var h=d[g],i=function(a){return function(){return this["_"+a]=this["_"+a]||[],this["_"+a].push(arguments),this}};c[a].prototype[h]=i(h)}e=document.createElement("script"),e.async=!0,e.src=b,f=document.getElementsByTagName("script")[0],f.parentNode.insertBefore(e,f)},this);

@@ -5843,7 +5843,6 @@ URL: http://themepixels.com/
 */
 label {
   font-weight: normal;
-  margin-bottom: 5px !important;
   color: #4a535e;
 }
 code {
@@ -6022,8 +6021,8 @@ h4,
   box-shadow: none;
 }
 .btn-success {
-  background-color: #54C8E8!important;
-  border-color: #4eb1ca!important;
+  background-color: #54C8E8;
+  border-color: #4eb1ca;
 }
 .btn-success:hover,
 .btn-success:active,
@@ -6395,7 +6394,7 @@ h4,
   border-bottom: 0;
 }
 .panel-success .panel-heading {
-  background-color: #54C8E8;
+  background-color: #1CAF9A;
 }
 .panel-warning .panel-heading {
   background-color: #F0AD4E;
@@ -6614,14 +6613,27 @@ h4,
 }
 .modal-title {
   font-size: 20px;
-  color: #333;
-  font-weight: bold;
+  color: #474747;
+  font-family: 'Open Sans Bold';
 }
 .modal-header .close {
   margin-top: 4px;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1;
+  color: #b6b6b6;
+  font-family: 'Open Sans Bold';
+  opacity: 1;
 }
 .modal-backdrop.in {
   opacity: 0.65;
+}
+.modal {
+  z-index: 9999999;
+}
+.modal-backdrop {
+  z-index: 9999998;
 }
 .modal-footer {
   background: #eeeeee;
@@ -6652,9 +6664,6 @@ h4,
   border-radius: 2px;
   padding: 4px 8px;
   font-weight: normal;
-}
-.label-success {
-  background-color: #54C8E8;
 }
 .label-info {
   background-color: #00aeef;
@@ -13641,8 +13650,8 @@ strong {
   color: #ffffff;
 }
 .menutoggle:hover {
-  color: #1d2939;
-  background-color: #f7f7f7;
+  /*color: #1d2939;*/
+  /*background-color: #f7f7f7;*/
 }
 .searchform input {
   width: 250px;
@@ -14182,6 +14191,7 @@ strong {
   background: #131d29;
   position: relative;
   width: 240px;
+  height: 62px;
 }
 .rightpanel .nav-tabs > li {
   display: table-cell;

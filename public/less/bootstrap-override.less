@@ -5,7 +5,6 @@ URL: http://themepixels.com/
 
 label {
   font-weight: normal;
-  margin-bottom: 5px !important;
   color: #4a535e;
 }
 
@@ -184,8 +183,8 @@ h4, .h4 {
 }
 
 .btn-success {
-  background-color: #54C8E8!important;
-  border-color: #4eb1ca!important;
+  background-color: #54C8E8;
+  border-color: #4eb1ca;
 }
 
 .btn-success:hover,
@@ -618,7 +617,7 @@ h4, .h4 {
 }
 
 .panel-success .panel-heading {
-  background-color: #54C8E8;
+  background-color: #1CAF9A;
 }
 
 .panel-warning .panel-heading {
@@ -883,16 +882,31 @@ h4, .h4 {
 
 .modal-title {
   font-size: 20px;
-  color: #333;
-  font-weight: bold;
+  color: #474747;
+  font-family: 'Open Sans Bold';
 }
 
 .modal-header .close {
   margin-top: 4px;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  line-height: 1;
+  color: #b6b6b6;
+  font-family: 'Open Sans Bold';
+  opacity: 1;
 }
 
 .modal-backdrop.in {
   opacity: 0.65;
+}
+
+.modal {
+  z-index: 9999999;
+}
+
+.modal-backdrop {
+  z-index: 9999998;
 }
 
 .modal-footer {
@@ -934,7 +948,7 @@ h4, .h4 {
 }
 
 .label-success {
-  background-color: #54C8E8;
+  // background-color: #54C8E8;
 }
 
 .label-info {

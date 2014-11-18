@@ -6,7 +6,7 @@
     <tabset>
         <tab >
             <tab-heading>
-                <span class='fa fa-info-circle'></span> Course Info
+                <span class='fa fa-info-circle'></span> Campaign Info
             </tab-heading>
             <form name="$parent.courseForm" class="col-md-12">
                 <div class="row">
@@ -32,11 +32,11 @@
                                    ng-change="onSubdomainChange()" tooltip="{{isSubdomainFree?'':'Subdomain is already taken'}}">
                             <!--ng-href="{{protocol+(hostHasWWW?'www.':'')+playlist.subdomain+'.'+domain}}"-->
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-xs-6" ng-hide="isAdd">
                             <div class="mb25"></div>
-                            <a ng-href="{{protocol + domain + '/course/' + course.subdomain }}" target="_blank"
+                            <a ng-href="{{protocol + domain + '/campaign/' + course.subdomain }}" target="_blank"
                                class="btn btn-primary btn-block btn-lg"
-                               ng-disabled="!isSubdomainChecked || !isSubdomainFree || course.subdomain==null || course.subdomain.trim().length==0">Course
+                               ng-disabled="!isSubdomainChecked || !isSubdomainFree || course.subdomain==null || course.subdomain.trim().length==0">Campaign
                                 Link</a>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                   </div>
             </form>
         </tab>
-        <tab disabled="tab.disabled" ng-hide="isAdd">
+        <tab disabled="tab.disabled">
             <tab-heading>
                 <span class='fa fa-edit' ng-click="editMode=!editMode"></span> Edit Template
             </tab-heading>
@@ -75,16 +75,17 @@
                     </div>
                     <div class="col-xs-12">
                         <course-preview course="course" edit-mode="editMode" standalone="true"></course-preview>
+                        }
                     </div>
                 </div>
         </tab>
-        <tab disabled="tab.disabled" ng-hide="isAdd">
+        <tab disabled="tab.disabled">
             <tab-heading>
                 <span class='fa fa-users'></span> Subscribers <span class="badge">{{subscribers.length}}</span>
             </tab-heading>
             <div class="col-md-12 subscribers-list-div">
                     <div class="btn-group pull-right">
-                      <button class="btn btn-default" type="button" ng-click="showSubscribersCsvUploadModal()"><span class="fa fa-upload"></span> Upload</button>
+                      <!-- <button class="btn btn-default" type="button" ng-click="showSubscribersCsvUploadModal()"><span class="fa fa-upload"></span> Upload</button> -->
                         <button class="btn btn-default" type="button" ng-csv="subscribers" filename="test.csv"><span class="fa fa-download"></span> Export</button>
                     </div>
                     <div class="clearfix mb20"></div>

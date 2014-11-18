@@ -4,9 +4,6 @@
     * All use or reproduction of any or all of this content must be approved.
     * Please contact info@indigenous.io for approval or questions.
 
-#preloader
-           #status
-            img(src='/assets/icons/loader.gif')
 
 #leftnav.leftpanel
     .logopanel
@@ -31,15 +28,15 @@
                     h4 #{user.first} #{user.last}
 
         ul.nav.nav-pills.nav-stacked.nav-bracket
+            li().website-li: a(href="#/website")
+                i.fa.fa-desktop
+                span Website
             li().contacts-li: a(href="#/customer")
                 i.fa.fa-users
                 span Customers
-            li().website-li: a(href="/admin/website")
-                i.fa.fa-desktop
-                span Website
             li().commerce-li: a(href="#/commerce")
                 i.fa.fa-shopping-cart
-                span Products
+                span Commerce
             li().marketing-li: a(href="#/marketing")
                     i.fa.fa-bullhorn
                     span Marketing

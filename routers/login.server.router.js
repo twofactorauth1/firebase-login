@@ -14,6 +14,8 @@ var FacebookConfig = require('../configs/facebook.config');
 var LoginView = require('../views/login.server.view');
 var ForgotPasswordView = require('../views/forgotpassword.server.view');
 var SignupView = require('../views/signup.server.view');
+var urlUtils = require('../utils/urlutils');
+var userManager = require('../dao/user.manager');
 
 
 var router = function () {
@@ -53,9 +55,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         // SIGNUP
         //-------------------------------------------------
-        app.get("/signup", this.setup, this.showSignup.bind(this));
-        app.get("/signup/*", this.setup, this.showSignup.bind(this)); //catch all routed routes
-        app.post("/signup", this.setup, this.handleSignup.bind(this));
+        // app.get("/signup", this.setup, this.showSignup.bind(this));
+        // app.get("/signup/*", this.setup, this.showSignup.bind(this)); //catch all routed routes
+        // app.post("/signup", this.setup, this.handleSignup.bind(this));
 
         app.get("/current-user", this.setup, this.getCurrentUser.bind(this));
 
@@ -66,7 +68,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
     //region LOGIN / LOGOUT
     showLogin: function (req, resp) {
         var self = this;
-        if (req.isAuthenticated()&& req._passport.instance._userProperty != 'user') {
+        self.log.debug('>> showLogin')
+        
+        if (req.isAuthenticated()) {
             console.log('req.isAuthenticated is true.');
             if (self.accountId(req) > 0) {
                 resp.redirect("/admin");
@@ -96,25 +100,33 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
     onLogin: function (req, resp) {
+        var self = this;
+        self.log.debug('>> onLogin');
         if (req.body.remembermepresent != null && req.body.rememberme == null) {
+            self.log.warn('cookie never expires!!!')
             req.session.cookie.expires = false;
         }
 
         var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
+        self.log.debug('onLogin redirectUrl from cookie: ' + redirectUrl);
         if (redirectUrl != null) {
             authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function (err, value) {
+                self.log.debug('onLogin authenticatedUrl: ' + redirectUrl);
+                self.log.debug('<< onLogin');
                 return resp.redirect(redirectUrl);
             });
             return;
         }
-        var self = this;
+
         this.setup(req, resp, function (err, value) {
             if (self.accountId(value) > 0) {
+                self.log.debug('redirecting to /admin');
                 resp.redirect("/admin");
                 self = req = resp = null;
             } else {
                 var accountIds = req.user.getAllAccountIds();
                 if (accountIds.length > 1) {
+                    self.log.debug('redirecting to /home');
                     resp.redirect("/home");
                     self = req = resp = null;
                     return;
@@ -122,10 +134,13 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                 authenticationDao.getAuthenticatedUrlForAccount(accountIds[0], self.userId(req), "admin", function (err, value) {
                     if (err) {
+                        self.log.debug('redirecting to /home');
                         resp.redirect("/home");
                         self = null;
                         return;
                     }
+
+                    self.log.debug('redirecting to ' + value);
                     resp.redirect(value);
                     self = null;
                 });
@@ -136,8 +151,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     handleLogout: function (req, resp) {
         var accountId = this.accountId(req);
-
-        req.session.accountId = null;
+        req.session.cookie = null;
+        req.session.accountId = null; 
         req.logout();
         req.session.destroy();
         req.session = null;
@@ -155,7 +170,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
             }
         }
         */
-        return resp.redirect("/login");
+        setTimeout(function() {
+            resp.redirect("/login");
+        }, 2000);
+        //return resp.redirect("/login");
     },
     //endregion
 
@@ -219,29 +237,30 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         if (username == null || username.trim() == "") {
             req.flash("error", "You must enter a valid username");
-            return resp.redirect("/signup/create");
+            return resp.redirect("/signup");
         }
 
         if (password1 !== password2) {
             req.flash("error", "Passwords do not match");
-            return resp.redirect("/signup/create");
+            return resp.redirect("/signup");
         }
 
         if (password1 == null || password1.trim() == "" || password1.length < 5) {
             req.flash("error", "You must enter a valid password at least 5 characters long");
-            return resp.redirect("/signup/create");
+            return resp.redirect("/signup");
         }
 
         var isEmail = $$.u.validate(email, { required: true, email: true }).success;
         if (isEmail === false) {
             req.flash("error", "You must enter a valid email");
-            return resp.redirect("/signup/create");
+            return resp.redirect("/signup");
         }
 
         //ensure we don't have another user with this username;
         var accountToken = cookies.getAccountToken(req);
 
-        userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function (err, value) {
+
+        userManager.createAccountAndUser(username, password1, email, accountToken, function (err, value) {
             if (!err) {
 
                 req.login(value, function (err) {

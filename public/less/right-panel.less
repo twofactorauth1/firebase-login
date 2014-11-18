@@ -5,6 +5,14 @@
         right: 0;
     }
 }
+
+.rightpanel-website .nav-tabs li {
+    width: auto!important;
+    a {
+        padding: 20px 15px!important;
+    }
+}
+
 .rightpanel {
     width: 240px;
     height: 100%;
@@ -13,6 +21,7 @@
     overflow-x: hidden;
     top: 0;
     right: -240px;
+    z-index: 999999;
     display: none;
     .nav-tabs {
         border-radius: 0;
@@ -36,6 +45,23 @@
     }
     .pane-settings {
         font-size: 13px;
+    }
+    .bootstrap-switch {
+        float: right;
+    }
+
+    .bgimg {
+        position: relative;
+
+        i {
+          &:hover{
+            color: red;
+          }
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          color: black;
+        }
     }
 }
 

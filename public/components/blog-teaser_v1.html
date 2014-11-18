@@ -6,59 +6,55 @@
 *
 -->
 
-<div class="component" ng-show="component" data-class="blog-teaser" data-id="{{component._id}}">
-    <div class="component-body">
-        <div class="blog-teaser {{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style='background: url("{{component.bg.img.url}}") no-repeat fixed; background: {{component.bg.color}}; color: {{component.txtcolor}};' id="{{component.anchor}}" du-scroll-container="blog">
-            <h3 class="title">
-                <div class="editable" data-class="title">
-                    {{component.title}}
-                </div>
-            </h3>
-
-            <div class="posts row">
-
-                <div class="col-sm-4" ng-repeat="blogpost in layout.teaserposts|limitTo: 3">
-                    <a class="single-blog" data-ng-href="/blog/{{blogpost['post_url']}}">
-
-                        <div class="featured-image" ng-show="blogpost['featured_image']">
-                            <div class="editable" data-class="featured-image">
-                                <img src="{{blogpost['featured_image']}}"/>
-                            </div>
-                        </div>
-
-                        <div class="blog-content">
-                            <h4 class="title">
-                                <div class="editable" data-class="title">
-                                    {{blogpost.post_title}}
-                                </div>
-                            </h4>
-                            <div class="excerpt">
-                                <div class="editable" data-class="subtitle">
-                                    {{blogpost.post_excerpt}}
-                                </div>
-                            </div>
-                            <div class="clearfix mb15"></div>
-                            <div class="footer">
-                                <div class="date col-xs-6">
-                                    <span class="fa fa-calendar"></span>
-                                    {{blogpost.created.date | amDateFormat:'DD-MM-YYYY'}}
-                                </div>
-                                <div class="comments col-xs-6 hidden">
-                                    <span class="fa fa-comments"></span>
-                                    170 Comments
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="clearfix mb15 visible-xs"></div>
-
-            </div>
-            <div class="clearfix mb30"></div>
-            <div class="col-xs-12 mb15">
-                <a class="btn btn-primary center btn-lg btn-full-blog" href="/blog">See Full Blog</a>
-            </div>
-            <div class="clearfix"></div>
+<div ng-class="component.type+'-v'+component.version">
+    <h3 class="title">
+        <div class="editable" data-class="title">
+            {{component.title}}
         </div>
+    </h3>
+
+    <div class="posts row">
+
+        <div class="col-sm-4" ng-repeat="blogpost in layout.teaserposts|limitTo: 3">
+            <a class="single-blog" data-ng-href="/blog/{{blogpost['post_url']}}">
+
+                <div class="featured-image" ng-if="blogpost.featured_image">
+                    <div class="editable" data-class="featimage">
+                        <img ng-src="{{blogpost.featured_image}}" />
+                    </div>
+                </div>
+
+                <div class="blog-content">
+                    <h4 class="title">
+                        <div class="editable" data-class="title">
+                            {{blogpost.post_title}}
+                        </div>
+                    </h4>
+                    <div class="excerpt">
+                        <div class="editable" data-class="subtitle">
+                            {{blogpost.post_excerpt}}
+                        </div>
+                    </div>
+                    <div class="clearfix mb15"></div>
+                    <div class="footer">
+                        <div class="date col-xs-6">
+                            <span class="fa fa-calendar"></span>
+                            {{blogpost.created.date | amDateFormat:'DD-MM-YYYY'}}
+                        </div>
+                        <div class="comments col-xs-6 hidden">
+                            <span class="fa fa-comments"></span>
+                            170 Comments
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="clearfix mb15 visible-xs"></div>
+
     </div>
+    <div class="clearfix mb30"></div>
+    <div class="col-xs-12 mb15">
+        <a class="btn btn-primary center btn-lg btn-full-blog" href="/blog">See Full Blog</a>
+    </div>
+    <div class="clearfix"></div>
 </div>

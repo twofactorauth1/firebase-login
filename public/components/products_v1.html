@@ -22,22 +22,24 @@
 
     <!-- Tab panes -->
 
-    <div class="tab-content container" ng-repeat="productSection in component['product-sections'] track by $index">
+    <!-- <div class="tab-content container" ng-repeat="productSection in component['product-sections'] track by $index"> -->
 
         <div class="tab-pane active" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id" ng-repeat="product in productSection.products track by $index">
-                <div class="row container product" id="{{product.id}}">
+            <div data-class="product-section-id" ng-repeat="product in layout.products track by $index">
+                <div class="row product" id="{{product.id}}">
                     <div>
                         <div class="col-sm-3 col-xs-12 editable product-img">
                             <img src="{{product.image}}" class="img-responsive">
                         </div>
                         <div class="col-sm-9 col-xs-12 product-content">
-                            <h4>{{product.title}}</h4>
+                            <h4>{{product.name}}</h4>
 
-                            <p>{{product.subtitle}}</p>
-                            <button class="btn btn-primary center" href="{{product.btn.url}}">
+                            <h5>$ {{product.regular_price}}</h5>
+
+                            <p>{{product.description}}</p>
+                            <button class="btn btn-primary center" href="#">
                                 <div data-class="btn-text" class="editable">
-                                    <span class="fa fa-shopping-cart"></span>{{product.btn.text}}
+                                    <span class="fa fa-shopping-cart"></span> Add to Cart
                                 </div>
                             </button>
                         </div>
@@ -46,7 +48,7 @@
             </div>
         </div>
 
-    </div>
+    <!-- </div> -->
 </div>
 
 

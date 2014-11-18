@@ -1,0 +1,58 @@
+#leftnav {
+  position: fixed;
+}
+#headerbar {
+  left: 0px;
+  position: fixed;
+  z-index: 200;
+  top: 0;
+  right: 0;
+  height: 0;
+  border: 0 !important;
+}
+.leftpanel-show #headerbar {
+  left: 190px;
+}
+body.leftpanel-collapsed #headerbar {
+  left: 52px;
+}
+body.leftpanel-collapsed.rightmenu-open #headerbar {
+  right: 240px;
+}
+#main-viewport {
+  padding: 52px 0 0 0;
+  overflow: auto;
+}
+#ngProgress-container {
+  height: 2px;
+}
+.jdfs-main {
+  width: 200px;
+  height: 50px;
+  position: relative;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  background: #fbfbfb;
+}
+.jdfs-window {
+  background: #bcbcbc;
+  width: 200px;
+  top: 100%;
+  left: 0;
+  z-index: 3000;
+  position: absolute;
+  padding: .5em;
+}
+.glyphicon-remove-icon {
+  color: #c7254e;
+  padding-bottom: 10px;
+}
+.form-container {
+  padding: 30px;
+}
+.form-container .row {
+  float: left;
+}

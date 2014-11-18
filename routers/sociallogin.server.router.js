@@ -69,14 +69,34 @@ _.extend(router.prototype, baseRouter.prototype, {
 
 
     inAppSocialLogin: function(req, resp) {
+        var self = this;
+        self.log.debug('>> inAppSocialLogin');
         var appState = req.query.state;
         var state = this.getState(this.accountId(req), "in_app", req.params.socialtype);
         state.userId = req.user.id();
         state.appState = req.query.state;
         state.appStateDetail = req.query.detail;
-        var referringUrl = req.headers['referer'];
-        state.redirectUrl = encodeURIComponent(referringUrl);
-        resp.redirect(this.getInternalAuthRedirect(state));
+        if(req.query.forceApprovalPrompt) {
+            self.log.debug('state.forceApprovalPrompt = true');
+            state.forceApprovalPrompt = true;
+        }else {
+            self.log.debug('no forceApprovalPrompt');
+            console.dir(req.query);
+        }
+
+        var referringUrl = req.query['redirectTo']|| '/admin';
+        authenticationDao.getAuthenticatedUrlForAccount(this.accountId(req), state.userId, referringUrl, 90, function(err, value){
+            // if(err) {
+            //     self.log.error('Error getting referring url for: ' + referringUrl);
+            //     self.log.debug('<< inAppSocialLogin redirecting to /login');
+            //     resp.redirect('/login');
+            // } else {
+            //     state.redirectUrl = encodeURIComponent(value);
+            //     self.log.debug('<< inAppSocialLogin');
+            //     resp.redirect(self.getInternalAuthRedirect(state));
+            // }
+        });
+
     },
 
 
@@ -87,11 +107,15 @@ _.extend(router.prototype, baseRouter.prototype, {
 
 
     socialAuthInternal: function(req, resp, next) {
+        var self = this;
+        self.log.debug('>> socialAuthInternal');
         var state = req.query.state;
         state = JSON.parse(state);
-
+        self.log.debug('state:');
+        console.dir(state);
         req.session.authMode = state.authMode;
         req.session.state = state;
+        self.log.debug('<< socialAuthInternal');
         this._socialLogin(req, resp, state, next);
     },
 
@@ -102,11 +126,13 @@ _.extend(router.prototype, baseRouter.prototype, {
 
 
     _socialLogin: function(req, resp, state, next) {
+        var self = this;
+        self.log.debug('>> _socialLogin');
         var type
             , config
             , subdomain
-            , callbackUrl
-            , state;
+            , callbackUrl;
+            //, state;
 
         if (state != null) {
             type = state.socialType;
@@ -134,8 +160,16 @@ _.extend(router.prototype, baseRouter.prototype, {
         }
 
         options.accessType = "offline";
-        //options.approvalPrompt = "force"; //-- this causes you to have to reauthorize every time, instead of just logging in
+        if(state.forceApprovalPrompt) {
+            /*
+             * This causes you to have to reauthorize every time, instead of just logging in.
+             * It also ensures you get a refresh token.
+             */
+            options.approvalPrompt = "force";
+            self.log.debug('approvalPrompt set to force');
+        }
 
+        self.log.debug('<< _socialLogin');
         passport.authenticate(type, options)(req,resp,next);
     },
 
@@ -193,7 +227,7 @@ _.extend(router.prototype, baseRouter.prototype, {
                 resp.redirect(value);
             }
         });
-        console.log(state);
+        //console.log(state);
     },
 
 

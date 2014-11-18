@@ -7,10 +7,10 @@
 mainApp.factory('accountService', ['$location', '$http', function ($location, $http) {
 
     var that = this;
-    that.account = null;
+    that.account = {};
 
     return function (callback) {
-        if (that.account) {
+        if (Object.getOwnPropertyNames(that.account).length != 0) {
             callback(null,that.account);
         } else {
             // API URL: http://yoursubdomain.indigenous.local/api/1.0/account

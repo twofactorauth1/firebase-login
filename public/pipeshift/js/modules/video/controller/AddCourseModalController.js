@@ -10,7 +10,7 @@ define(['angularAMD', 'app'], function (angularAMD, app) {
         }
         $scope.domain = host + ":" + $location.port();
         $scope.isAdd = true;
-        $scope.title = "Add course";
+        $scope.title = "Add Campaign";
         $scope.linkTooltip = "";
         $scope.templates = templates;
         //todo: change body and subtitle later

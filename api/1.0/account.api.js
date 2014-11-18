@@ -10,6 +10,7 @@ var accountDao = require('../../dao/account.dao');
 var cookies = require('../../utils/cookieutil');
 var Account = require('../../models/account');
 var userDao = require('../../dao/user.dao');
+var appConfig = require('../../configs/app.config');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -27,9 +28,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
         app.put(this.url('tmp'), this.saveOrUpdateTmpAccount.bind(this));
         app.get(this.url(':subdomain/available'), this.checkSubdomainAvailability.bind(this));
+        app.get(this.url(':subdomain/:accountId/duplicate'), this.checkSubdomainDuplicacy.bind(this));
         //GET
         //app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
         app.get(this.url(''), this.getCurrentAccount.bind(this)); //Temp Added
+
         app.get(this.url('billing'), this.isAuthApi, this.getCurrentAccountBilling.bind(this));
         app.post(this.url('billing'), this.isAuthApi, this.updateCurrentAccountBilling.bind(this));
         app.get(this.url(':id'), this.isAuthApi, this.getAccountById.bind(this));
@@ -48,8 +51,6 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     getCurrentAccount: function(req, resp) {
-        //TODO - add granular security
-
         var self = this;
         self.log.debug('>> getCurrentAccount');
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
@@ -59,7 +60,9 @@ _.extend(api.prototype, baseApi.prototype, {
                     return resp.send({});
                 } else {
                     self.log.debug('<< getCurrentAccount');
-                    return resp.send(value.toJSON("public"));
+                    //no security for now.  Currently can be called without authentication.
+                    //return self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_ACCOUNT, resp, value.toJSON('public'));
+                    return resp.send(value.toJSON('public'));
                 }
             } else {
                 return self.wrapError(resp, 500, null, err, value);
@@ -77,7 +80,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.wrapError(res, 500, null, err, account);
             } else {
                 self.log.debug('<< getCurrentAccountBilling');
-                return res.send(account.get('billing'));
+                return self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_ACCOUNT, resp, account.get('billing'));
+                //return res.send(account.get('billing'));
             }
         });
     },
@@ -86,32 +90,37 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> updateCurrentAccountBilling');
         var accountId = self.accountId(req);
-        //TODO: add security - MODIFY_ACCOUNT
-        var userId = self.userId(req);
-        var billingObj = req.body;
-        billingObj.userId = userId;
-        accountDao.getAccountByID(accountId, function(err, account){
-            if(err) {
-                self.log.error('Exception retrieving current account: ' + err);
-                return self.wrapError(res, 500, null, err, err);
+        self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(res);
             } else {
-                account.set('billing', billingObj);
-                accountDao.saveOrUpdate(account, function(err, updatedAccount){
+                var userId = self.userId(req);
+                var billingObj = req.body;
+                billingObj.userId = userId;
+                accountDao.getAccountByID(accountId, function(err, account){
                     if(err) {
-                        self.log.error('Exception updating billing object on account: ' + err);
+                        self.log.error('Exception retrieving current account: ' + err);
                         return self.wrapError(res, 500, null, err, err);
                     } else {
-                        self.log.debug('<< updateCurrentAccountBilling');
-                        return res.send(updatedAccount);
+                        account.set('billing', billingObj);
+                        accountDao.saveOrUpdate(account, function(err, updatedAccount){
+                            if(err) {
+                                self.log.error('Exception updating billing object on account: ' + err);
+                                return self.wrapError(res, 500, null, err, err);
+                            } else {
+                                self.log.debug('<< updateCurrentAccountBilling');
+                                return res.send(updatedAccount);
+                            }
+                        });
                     }
                 });
             }
         });
+
     },
 
 
     getAccountById: function(req,resp) {
-        //TODO - add granular security
 
         var self = this;
         var accountId = req.params.id;
@@ -121,19 +130,24 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         accountId = parseInt(accountId);
-        accountDao.getById(accountId, function(err, value) {
-            if (!err && value != null) {
-                resp.send(value.toJSON("public"));
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_ACCOUNT, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
             } else {
-                self.wrapError(resp, 500, null, err, value);
+                accountDao.getById(accountId, function(err, value) {
+                    if (!err && value != null) {
+                        resp.send(value.toJSON("public"));
+                    } else {
+                        self.wrapError(resp, 500, null, err, value);
+                    }
+                });
             }
         });
+
     },
 
 
     getAllAccountsForUserId: function(req,resp) {
-        //TODO - add granular security
-
         var self = this;
         var userId = req.params.userid;
 
@@ -145,7 +159,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
         accountDao.getAllAccountsForUserId(userId, function(err, value) {
             if (!err) {
-                self.sendResult(resp, value);
+                //TODO: Do we need to filter out values that the requestor can't see?
+                self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_USER, resp, value);
+                //self.sendResult(resp, value);
             } else {
                 self.wrapError(resp, 500, null, err, value);
             }
@@ -161,32 +177,21 @@ _.extend(api.prototype, baseApi.prototype, {
 
     updateAccount: function(req,resp) {
         var account = new $$.m.Account(req.body);
-        accountDao.saveOrUpdate(account, function(err, value){
-            if(!err &&value != null){
-                resp.send(value.toJSON("public"));
-            } else {
-                self.wrapError(resp, 500, null, err, value);
-            }
-        });
-/*
-        var self = this;
-        var account = new $$.m.Account(req.body);
-        var accountId= req.body._id;
 
-        accountDao.getById(accountId, function(err, value) {
-            if (!err && value != null) {
-                accountDao.saveOrUpdate(account, function(){
+        self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                accountDao.saveOrUpdate(account, function(err, value){
                     if(!err &&value != null){
                         resp.send(value.toJSON("public"));
                     } else {
                         self.wrapError(resp, 500, null, err, value);
                     }
                 });
-            } else {
-                return self.wrapError(resp, 401, null, err, value);
             }
         });
-        */
+
     },
 
     updateAccountDisplaySetting: function(req,resp) {
@@ -200,26 +205,30 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         accountId = parseInt(accountId);
-        accountDao.getById(accountId, function(err, value) {
 
-            if (!err && value != null) {
-
-//                value.set("settings", account.sort_type );
-                value.set("displaysettings", account.display_type );
-
-                accountDao.saveOrUpdate(value, function(err, value) {
-                    console.log(value);
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ACCOUNT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                accountDao.getById(accountId, function(err, value) {
                     if (!err && value != null) {
+                        value.set("displaysettings", account.display_type );
+                        accountDao.saveOrUpdate(value, function(err, value) {
+                            console.log(value);
+                            if (!err && value != null) {
+                                resp.send(value.toJSON("public"));
+                            } else {
+                                self.wrapError(resp, 500, null, err, value);
+                            }
+                        });
                         resp.send(value.toJSON("public"));
                     } else {
                         self.wrapError(resp, 500, null, err, value);
                     }
                 });
-                resp.send(value.toJSON("public"));
-            } else {
-                self.wrapError(resp, 500, null, err, value);
             }
         });
+
     },
     updateAccountSetting: function(req,resp) {
         console.log(req.body);
@@ -232,24 +241,30 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         accountId = parseInt(accountId);
-        accountDao.getById(accountId, function(err, value) {
 
-            if (!err && value != null) {
-
-                value.set("settings", account.sort_type );
-                accountDao.saveOrUpdate(value, function(err, value) {
-                    console.log(value);
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ACCOUNT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                accountDao.getById(accountId, function(err, value) {
                     if (!err && value != null) {
+                        value.set("settings", account.sort_type );
+                        accountDao.saveOrUpdate(value, function(err, value) {
+                            console.log(value);
+                            if (!err && value != null) {
+                                resp.send(value.toJSON("public"));
+                            } else {
+                                self.wrapError(resp, 500, null, err, value);
+                            }
+                        });
                         resp.send(value.toJSON("public"));
                     } else {
                         self.wrapError(resp, 500, null, err, value);
                     }
                 });
-                resp.send(value.toJSON("public"));
-            } else {
-                self.wrapError(resp, 500, null, err, value);
             }
         });
+
     },
 
     updateAccountWebsiteInfo: function(req,resp) {
@@ -263,34 +278,68 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         accountId = parseInt(accountId);
-        accountDao.getById(accountId, function(err, value) {
 
-            if (!err && value != null) {
-
-                value.set("website",{themeId:account.website.themeId, websiteId:value.get("website").websiteId});
-                accountDao.saveOrUpdate(value, function(err, value) {
-                    console.log(value);
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ACCOUNT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                accountDao.getById(accountId, function(err, value) {
                     if (!err && value != null) {
+                        value.set("website",{themeId:account.website.themeId, websiteId:value.get("website").websiteId});
+                        accountDao.saveOrUpdate(value, function(err, value) {
+                            console.log(value);
+                            if (!err && value != null) {
+                                resp.send(value.toJSON("public"));
+                            } else {
+                                self.wrapError(resp, 500, null, err, value);
+                            }
+                        });
                         resp.send(value.toJSON("public"));
                     } else {
                         self.wrapError(resp, 500, null, err, value);
                     }
                 });
-                resp.send(value.toJSON("public"));
-            } else {
-                self.wrapError(resp, 500, null, err, value);
             }
         });
+
+
     },
 
 
-    deleteAccount: function(req,resp) {
+    deleteAccount: function(req,res) {
+        var self = this;
+        self.log.debug('>> deleteAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        var accountIdParam = parseInt(req.params.id);
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ACCOUNT, accountIdParam, function(err, isAllowed){
+                if (isAllowed !== true) {
+                    return self.send403(res);
+                } else {
+                    //make sure we are not trying to delete main
+                    if(accountIdParam === appConfig.mainAccountID) {
+                        self.log.warn('Attempt to delete main denied.  This must be done manually.');
+                        self.wrapError(res, 401, null, 'Unauthorized', 'You are not authorized to perform this operation');
+                    } else if(accountId === accountIdParam || accountId === appConfig.mainAccountID) {
+                        accountDao.deleteAccountAndArtifacts(accountIdParam, function(err, value){
+                            self.log.debug('<< deleteAccount');
+                            self.send200(res);
+                        });
+                    } else {
+                        self.log.debug('<< deleteAccount');
+                        self.wrapError(res, 401, null, 'Unauthorized', 'You are not authorized to perform this operation');
+                    }
+                }
+        });
 
     },
 
 
     getTempAccount: function(req,resp) {
+
         var self = this;
+        self.log.debug(' getTempAccount >>>');
         var token = cookies.getAccountToken(req);
 
         accountDao.getTempAccount(token, function(err, value) {
@@ -309,10 +358,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
     saveOrUpdateTmpAccount: function(req,resp) {
         var self = this;
+        self.log.debug('>> saveOrUpdateTmpAccount');
+
         var account = new $$.m.Account(req.body);
+
         accountDao.saveOrUpdateTmpAccount(account, function(err, value) {
            if (!err && value != null) {
                cookies.setAccountToken(resp, value.get("token"));
+               self.log.debug('<< saveOrUpdateTmpAccount')
                resp.send(value.toJSON("public"));
            } else {
                self.wrapError(resp, 500, null, err, value);
@@ -345,6 +398,27 @@ _.extend(api.prototype, baseApi.prototype, {
                 res.send('true');
             } else {
                 res.send('false');
+            }
+        });
+
+    },
+
+    checkSubdomainDuplicacy: function(req, res) {
+        var self = this;
+        self.log.debug('>> checkSubdomainDuplicacy');
+        var subdomain = req.params.subdomain;
+        var accountId = req.params.accountId;
+        accountId = parseInt(accountId);
+        self.log.debug('>> subdomain = ' + subdomain );
+        self.log.debug('>> accountId = ' + accountId );
+
+        accountDao.getAccountsBySubdomain(subdomain, accountId, function(err, value){
+            if(err) {
+                res.wrapError(resp,500,null,err,value);
+            } else if(value === null) {
+                res.send("false");
+            } else {
+                res.send("true");
             }
         });
 

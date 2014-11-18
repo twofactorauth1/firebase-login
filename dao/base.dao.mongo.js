@@ -341,7 +341,13 @@ var mongodao = {
             });
             return;
         }
-
+        /*
+         * DEBUG CODE FOR USER CORRUPTION
+         */
+        if(collection === 'users') {
+            var log = $$.g.getLogger("USER.DEBUG");
+            log.warn('updating user to the following:' + JSON.stringify(model));
+        }
         this.mongo(collection).save(model.toJSON("db"), function (err, result) {
             if (!err) {
                 if (fn != null) {

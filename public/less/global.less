@@ -36,6 +36,12 @@ strong {
     font-family:'LatoBold';
     font-weight: normal;
 }
+.headerbg {
+    background: #272727;
+    height: 63px;
+    position: absolute;
+    width: 100%;
+}
 .mainpanel {
     background: #e7e7e7;
 }
@@ -131,6 +137,9 @@ strong {
 }
 .width30 {
     width: 30px;
+}
+.p20 {
+    padding: 20px;
 }
 #preloader {
     position: fixed;
@@ -233,8 +242,10 @@ strong {
     }
 }
 .signuppanel {
-    margin: 5% auto 0 auto;
-    width: 780px;
+    margin: 0 auto;
+    max-width: 780px;
+    border: 2px solid #dddddd;
+    padding: 23px;
     .row {
         margin-left: -5px;
         margin-right: -5px;
@@ -594,4 +605,91 @@ font-weight: 900;
 
 #main-viewport .alert-info {
     display: none;
+}
+
+#toast-container {
+    height: auto!important;
+    z-index: 100000000;
+}
+
+#ngProgress {
+    margin: 0;
+    padding: 0;
+    z-index: 99998;
+    background-color: #44b2cc!important;
+    color: #44b2cc!important;
+    box-shadow: 0 0 10px 0; /* Inherits the font color */
+    height: 4px!important;
+    opacity: 0;
+
+    /* Add CSS3 styles for transition smoothing */
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+/* Styling for the ngProgress-container */
+#ngProgress-container {
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
+}
+.aloha-ui.btn-toolbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 99999;
+    background: #29b87f;
+    display: none;
+    right: 0;
+    height: 50px;
+
+    &.editing {
+        display: block;
+    }
+
+    .btn-group {
+        margin-bottom: 0;
+    }
+
+    .btn {
+        background: none;
+        border: none;
+        color: white;
+        padding: 12px 20px 15px 20px;
+        height: 50px;
+
+        &:hover {
+            span, i, b {
+                color: #128658;
+            }
+            color: #128658;
+            background: rgba(255,255,255,0.2);
+        }
+    }
+}
+
+.aloha-link-toolbar {
+    background-color: rgb(78, 169, 222)!important;
+    input::-webkit-input-placeholder {
+        color: rgba(255,255,255,.5);
+    }
+    input::-moz-placeholder {
+        color: rgba(255,255,255,.5);
+    }
+    input:-moz-placeholder {   /* Older versions of Firefox */
+        color: rgba(255,255,255,.5);
+    }
+    input:-ms-input-placeholder { 
+        color: rgba(255,255,255,.5);
+    }
+}
+
+.nopadding {
+    padding: 0!important;
 }

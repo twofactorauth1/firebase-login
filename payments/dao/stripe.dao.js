@@ -9,7 +9,7 @@ var baseDao = require('../../dao/base.dao.js');
 var stripeConfigs = require('../../configs/stripe.config.js');
 var appConfig = require('../../configs/app.config.js');
 var contactDao = require('../../dao/contact.dao.js');
-var userDao = require('../../dao/user.dao.js');
+var userDao = require('../../dao/user.dao');
 var subscriptionDao = require('./subscription.dao.js');
 var paymentDao = require('./payment.dao.js');
 var customerLinkDao = require('./customer_link.dao.js');
@@ -43,7 +43,7 @@ var dao = {
         params.metadata.contactId = contact.get('id');
         params.metadata.accountId_0 = accountId;
         if(cardToken && cardToken.length > 0) {
-            params.cardToken = cardToken;
+            params.card = cardToken;
         }
 
         stripe.customers.create(params, function(err, customer) {
@@ -56,20 +56,22 @@ var dao = {
             self.log.debug('Setting contact stripeId to ' + contact.get('stripeId'));
             var p1 = $.Deferred(), p2 = $.Deferred();
             var savedCustomer = customer;
-            contactDao.saveOrMerge(contact, function(err, value){
+            contactDao.saveOrUpdateContact(contact, function(err, value){
                 if (err) {
                     fn(err, value);
                     fn = null;
                 }
+                self.log.debug('updated contact');
                 p1.resolve();
             });
 
-            customerLinkDao.safeCreate(accountId, contact.get('_id'), customer.id, function(err, value){
+            customerLinkDao.safeCreate(accountId, contact.id(), customer.id, function(err, value){
                 if (err) {
                     self.log.warn('attempted to create a customer link that already exists.');
                     //fn(err, value);
                     //fn = null;
                 }
+                self.log.debug('Created link');
                 p2.resolve();
             });
 
@@ -92,49 +94,65 @@ var dao = {
         params.metadata.contactId = user.id();
         params.metadata.accountId_0 = accountId;
         if(cardToken && cardToken.length > 0) {
-            params.cardToken = cardToken;
+            params.card = cardToken;
         }
+        //TODO: CHeck
+        if(user.get('stripeId') === '') {
+            stripe.customers.create(params, function(err, customer) {
 
-        stripe.customers.create(params, function(err, customer) {
-
-            if(err) {
-                fn(err, customer);
-                fn = null;
-                return;
-            }
-            user.set('stripeId', customer.id);
-            self.log.debug('Setting user stripeId to ' + user.get('stripeId'));
-            var p1 = $.Deferred(), p2 = $.Deferred();
-            var savedCustomer = customer;
-            userDao.saveOrUpdate(user, function(err, value){
-                if (err) {
-                    fn(err, value);
+                if(err) {
+                    fn(err, customer);
                     fn = null;
                     return;
                 }
-                p1.resolve();
-            });
-
-
-            customerLinkDao.safeCreateWithUser(accountId, user.id(), customer.id, function(err, value){
-                if (err) {
-                    if(err.toString() === 'The customer link already exists.') {
-                        //that's ok.
-                    } else {
+                user.set('stripeId', customer.id);
+                self.log.debug('Setting user stripeId to ' + user.get('stripeId'));
+                var p1 = $.Deferred(), p2 = $.Deferred();
+                var savedCustomer = customer;
+                userDao.saveOrUpdate(user, function(err, value){
+                    if (err) {
                         fn(err, value);
                         fn = null;
                         return;
                     }
+                    p1.resolve();
+                });
+
+
+                customerLinkDao.safeCreateWithUser(accountId, user.id(), customer.id, function(err, value){
+                    if (err) {
+                        if(err.toString() === 'The customer link already exists.') {
+                            //that's ok.
+                        } else {
+                            fn(err, value);
+                            fn = null;
+                            return;
+                        }
+                    }
+                    p2.resolve();
+                });
+
+                $.when(p1,p2).done(function(){
+                    self.log.debug('<< createStripeCustomerForUser');
+                    return fn(err, savedCustomer);
+                });
+
+            });
+        } else {
+            self.log.warn('Attempted to create customer that already exists.');
+            stripe.customers.retrieve(user.get('stripeId'), function(err, customer) {
+                // asynchronously called
+                if (err) {
+                    fn(err, customer);
+                    fn = null;
+                    return;
                 }
-                p2.resolve();
-            });
 
-            $.when(p1,p2).done(function(){
                 self.log.debug('<< createStripeCustomerForUser');
-                return fn(err, savedCustomer);
+                return fn(err, customer);
             });
+        }
 
-        });
     },
 
     /*
@@ -145,8 +163,8 @@ var dao = {
     listStripeCustomers: function(accountId, limit, fn) {
         var self = this;
         self.log.debug('>> listStripeCustomers');
-        var _limit = limit ||10;
-        stripe.customers.list({ limit: _limit }, function(err, customers) {
+        var _limit = limit || 0;
+        stripe.customers.list(function(err, customers) {
             // asynchronously called
             if (err) {
                 fn(err, customers);
@@ -154,7 +172,7 @@ var dao = {
                 return;
             }
 
-            self.log.debug('<< listStripeCustomers');
+            self.log.debug('<< listStripeCustomers', customers);
             return fn(err, customers);
         });
     },
@@ -218,14 +236,22 @@ var dao = {
     /**
      * This permanently removes customer payment info from Stripe and cancels any subscriptions.
      * It cannot be undone.  Care must be taken to ensure that no other account has a reference
-     * to this customer.  Additionally, this removes the stripeId from the contact object.
+     * to this customer.  Additionally, this removes the stripeId from the contact or user object.
      * @param stripeCustomerId
+     * @param contactId
+     * @param userId
      * @param fn
      */
         //TODO: handle customers on a user
-    deleteStripeCustomer: function(stripeCustomerId, contactId, fn) {
+    deleteStripeCustomer: function(stripeCustomerId, contactId, userId, fn) {
         var self = this;
         self.log.debug('>> deleteStripeCustomer');
+        if(fn === null) {
+            fn = userId;
+            userId = null;
+        }
+
+
         stripe.customers.del(stripeCustomerId, function(err, confirmation){
             if(err) {
                 fn(err, confirmation);
@@ -235,16 +261,40 @@ var dao = {
                 self.log.debug('removing stripeId from contact.');
                 contactDao.getById(contactId, $$.m.Contact, function(err, contact){
                     if(err) {
+                        self.log.error('Error removing stripeId from contact: ' + err);
                         fn(err, contact);
                         fn = null;
+                        return;
                     }
                     contact.set('stripeId', null);
                     contactDao.saveOrMerge(contact, function(err, contact){
                         if(err) {
+                            self.log.error('Error removing stripeId from contact: ' + err);
                             fn(err, contact);
                             fn = null;
+                            return;
                         }
                         return fn(null, confirmation);
+                    });
+                });
+            } else if(userId && userId.length > 0) {
+                self.log.debug('removing stripeId from user.');
+                userDao.getById(userId, $$.m.User, function(err, user){
+                    if(err) {
+                        self.log.error('Error removing stripeId from user: ' + err);
+                        fn(err, user);
+                        fn = null;
+                        return;
+                    }
+                    user.set('stripeId', null);
+                    userDao.saveOrUpdate(user, function(err, value){
+                        if(err) {
+                            self.log.error('Error removing stripeId from user: ' + err);
+                            fn(err, value);
+                            fn = null;
+                            return;
+                        }
+                        return fn(null, value);
                     });
                 });
             } else {
@@ -393,9 +443,8 @@ var dao = {
      *
      * Returns Stripe Subscription object.  *Note* An internal subscription object has also been created.
      */
-        //TODO: handle subs on User
     createStripeSubscription: function(customerId, planId, coupon, trial_end, card, quantity, application_fee_percent,
-                                       metadata, accountId, contactId, accessToken, fn) {
+                                       metadata, accountId, contactId, userId, accessToken, fn) {
         var self = this;
         self.log.debug('>> createStripeSubscription');
         var params = {};
@@ -419,6 +468,7 @@ var dao = {
                 var sub = new $$.m.Subscription({
                     accountId: accountId,
                     contactId: contactId,
+                    userId: userId,
                     stripeCustomerId: customerId,
                     stripeSubscriptionId: subscription.id,
                     stripePlanId: planId
@@ -714,9 +764,9 @@ var dao = {
      *
      * @return result object containing charge and payment objects
      */
-        //TODO: handle charges for User
+
     createStripeCharge: function(amount, currency, card, customerId, contactId, description, metadata, capture,
-                                 statement_description, receipt_email, application_fee, accessToken, fn) {
+                                 statement_description, receipt_email, application_fee, userId, accessToken, fn) {
         var self = this;
         self.log.debug('>> createStripeCharge');
         var paymentId = $$.u.idutils.generateUUID();//create the id for the local object
@@ -760,6 +810,7 @@ var dao = {
                 balance_transaction: charge.balance_transaction,
                 customerId: customerId,
                 contactId: contactId,
+                userId: userId,
                 failure_code: charge.failure_code,
                 failure_message: charge.failure_message,
                 invoiceId: charge.invoice,

@@ -8,6 +8,7 @@ process.env.NODE_ENV = "testing";
 var app = require('../../app');
 var testHelpers = require('../../testhelpers/testhelpers.js');
 var eventDao = require('../dao/stripe_event.dao.js');
+var async = require('async');
 
 var _log = $$.g.getLogger("stripe.event.dao.test");
 var testContext = {};
@@ -17,36 +18,25 @@ testContext.plans = [];
 exports.stripe_event_dao_test = {
     setUp: function (cb) {
         var self = this;
-        var promiseAry = [];
-        promiseAry[0] = $.Deferred();
 
-        //remove all existing subscription records
-        eventDao.findMany(null, $$.m.StripeEvent, function(err, events){
-            promiseAry[0].resolve();
-            //if all we have is the counter, we are done.
-            if(events.length === 1 && events[0].get('_id') === '__counter__') {
-                //;
+        eventDao.findMany({}, $$.m.StripeEvent, function(err, list){
+            if(err) {
+                _log.error('Exception removing events.  Tests may not be accurate.');
             } else {
-                for(var i=0; i<events.length; i++) {
-                    var id = events[i].get('_id');
-
-                    if(id !== '__counter__') {
-                        promiseAry[id] = $.Deferred();
-                        eventDao.removeById(id, $$.m.StripeEvent, function(err, obj){
-                            if(err) {_log.error('Error: ' + err);}
-                            promiseAry[id].resolve();
+                async.each(list,
+                    function(event, callback){
+                        eventDao.remove(event, function(err, value){
+                            callback();
                         });
-                    }
-
-                }
+                    }, function(err){
+                        cb();
+                    });
             }
+        });
 
 
-        });
-        $.when(promiseAry).done(function(){
-            _log.debug('setUp');
-            cb();
-        });
+
+
     },
 
     tearDown: function (cb) {
@@ -65,7 +55,6 @@ exports.stripe_event_dao_test = {
         var event2 = new $$.m.StripeEvent({'eventId':'event2','type':'bogus.event', 'created':createdTime});
 
         eventDao.saveOrUpdate(event1, function(err, evnt){
-            _log.debug('cb for saveOrUpdate');
             if(err) {
                 p1.reject();
                 test.ok(false, 'Error creating event: ' + err);
@@ -88,6 +77,7 @@ exports.stripe_event_dao_test = {
 
         _log.debug('waiting...');
         $.when(p1,p2).done(function(){
+            _log.debug('done waiting');
             eventDao.getStripeEventByStripeId('event1', function(err, evnt){
                 if(err) {
                     test.ok(false, 'Error getting event: ' + err);
@@ -106,6 +96,7 @@ exports.stripe_event_dao_test = {
         var self = this;
         _log.debug('>> testGetStripeEventsByState');
         test.expect(3);
+
         var createdTime = Date.now();
         var p1 = $.Deferred(), p2 = $.Deferred(), p3 = $.Deferred();
         var event1 = new $$.m.StripeEvent({'eventId':'event1','type':'bogus.event', 'created':createdTime});
@@ -146,22 +137,28 @@ exports.stripe_event_dao_test = {
 
         _log.debug('waiting...');
         $.when(p1,p2,p3).done(function(){
+            _log.debug('done waiting.');
             eventDao.getStripeEventsByState('NEW', function(err, events){
                 if(err) {
                     test.ok(false, 'Error: ' + err);
                     test.done();
+                } else {
+                    test.equals(1, events.length);
+                    test.equals('event1', events[0].get('eventId'));
+                    eventDao.getStripeEventsByState('PROCESSED', function(err, events){
+                        if(err) {
+                            test.ok(false, 'Error: ' + err);
+                            test.done();
+                        } else {
+                            test.equals(2, events.length);
+                            test.done();
+                        }
+
+                    });
                 }
-                test.equals(1, events.length);
-                test.equals('event1', events[0].get('eventId'));
+
             });
-            eventDao.getStripeEventsByState('PROCESSED', function(err, events){
-                if(err) {
-                    test.ok(false, 'Error: ' + err);
-                    test.done();
-                }
-                test.equals(2, events.length);
-                test.done();
-            });
+
         });
     },
 
@@ -194,7 +191,8 @@ exports.stripe_event_dao_test = {
                 test.done();
             }
             _log.debug('saved 2');
-            event2Id = evnt.get('_id');
+            event2Id = evnt.id();
+            _log.debug('Event2 ID: ' + event2Id);
             p2.resolve();
 
         });

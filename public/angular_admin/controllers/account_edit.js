@@ -1,10 +1,30 @@
-define(['app', 'userService', 'underscore', 'commonutils'], function(app) {
-    app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', function ($scope, $stateParams, UserService) {
+define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirective', 'ngProgress', 'mediaDirective'], function(app) {
+    app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', function ($scope, $stateParams, UserService, ngProgress) {
+        ngProgress.start();
         var phoneCharLimit = 4;
         if ($stateParams.focus)
             $('[name="' + $stateParams.focus + '"]').focus();
         //back button click function
         $scope.$back = function() {window.history.back();};
+
+        //business phone watch setup
+        $scope.businessPhoneWatchFn = function (index) {
+            $scope.$watch('account.business.phones[' + index + ']', function (newValue, oldValue) {
+                if (newValue && newValue.number.length > phoneCharLimit)
+                    UserService.putAccount($scope.account, function (account) {
+                        //$scope.account = account;
+                    });
+            }, true);
+        };
+
+        $scope.userPhoneWatchFn = function (index) {
+            $scope.$watch('user.details[0].phones[' + index + ']', function (newValue, oldValue) {
+                if (newValue && newValue.number.length > phoneCharLimit)
+                    UserService.putUser($scope.user, function (account) {
+                        //$scope.account = account;
+                    });
+            }, true);
+        };
 
         //user API call for object population
         UserService.getUser(function (user) {
@@ -20,22 +40,13 @@ define(['app', 'userService', 'underscore', 'commonutils'], function(app) {
         //account API call for object population
         UserService.getAccount(function (account) {
             $scope.account = account;
+            ngProgress.complete();
             if (!$scope.account.business.phones.length)
                 $scope.account.business.phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false});
             $scope.account.business.phones.forEach(function (value, index) {
                 $scope.businessPhoneWatchFn(index);
             });
         });
-
-        //business phone watch setup
-        $scope.businessPhoneWatchFn = function (index) {
-            $scope.$watch('account.business.phones[' + index + ']', function (newValue, oldValue) {
-                if (newValue && newValue.number.length > phoneCharLimit)
-                    UserService.putAccount($scope.account, function (account) {
-                        //$scope.account = account;
-                    });
-            }, true);
-        };
 
         //business phone field add
         $scope.addBusinessContactFn = function () {
@@ -119,19 +130,19 @@ define(['app', 'userService', 'underscore', 'commonutils'], function(app) {
             $scope.user.details[0].phones[index].type = type;
         };
 
-        $scope.userPhoneWatchFn = function (index) {
-            $scope.$watch('user.details[0].phones[' + index + ']', function (newValue, oldValue) {
-                if (newValue && newValue.number.length > phoneCharLimit)
-                    UserService.putUser($scope.user, function (account) {
-                        //$scope.account = account;
-                    });
-            }, true);
-        };
-
         //business phone field add
         $scope.addUserContactFn = function () {
             $scope.user.details[0].phones.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort(), number: '', default: false, type: 'm'});
             $scope.userPhoneWatchFn($scope.user.details[0].phones.length-1);
+        };
+
+        $scope.insertMedia = function(asset){
+
+            $scope.account.business.logo = asset.url;
+            UserService.putAccount($scope.account, function (account) {
+
+                $("#media-manager-modal").modal('hide');
+            });
         };
 
     }]);

@@ -35,16 +35,22 @@ var component = $$.m.ModelBase.extend({
             type: "feature-list",
 
             /**
-             * The label for the component
-             * (optional)
+             * Version
              */
-            label:"",
+            version: 1,
 
             /**
-             * A description that appears at the top of the component
-             * (optional)
+             *
+             *
              */
-            description:"",
+            maintitle:"<h2>Feature List</h2>",
+
+            /**
+             *
+             *
+             */
+            subtitle : "<h3>This is the feature list subtitle.</h3>",
+
 
             /**
              * An array of features of the form
@@ -55,8 +61,66 @@ var component = $$.m.ModelBase.extend({
              *      iconClass: null         //The classname of the icon to display
              * ]}
              */
-            features: [],
-            title:""
+            features: [
+                {
+                    "title" : "Feature One",
+                    "subtitle" : "This is a great feature!",
+                    "icon" : "fa fa-credit-card"
+                },
+                {
+                    "title" : "Feature One",
+                    "subtitle" : "This is a great feature!",
+                    "icon" : "fa fa-credit-card"
+                },
+                {
+                    "title" : "Feature One",
+                    "subtitle" : "This is a great feature!",
+                    "icon" : "fa fa-credit-card"
+                },
+                {
+                    "title" : "Feature One",
+                    "subtitle" : "This is a great feature!",
+                    "icon" : "fa fa-credit-card"
+                }
+            ],
+
+            /**
+             *
+             *
+             */
+            txtcolor : "",
+
+            /**
+             *
+             *
+             */
+            bg: {
+                img : {
+                    url : "",
+                    width : null,
+                    height : null,
+                    parallax : false,
+                    blur : false
+                },
+                color : ""
+            },
+
+            /**
+             *
+             *
+             */
+            btn : {
+                visibility: true,
+                text : "Learn More",
+                url : "#features",
+                icon : "fa fa-rocket"
+            },
+
+            /**
+             *
+             *
+             */
+            visibility: true
         }
     },
 

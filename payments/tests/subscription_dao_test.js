@@ -9,6 +9,7 @@ var app = require('../../app');
 var contactDao = require('../../dao/contact.dao.js');
 var testHelpers = require('../../testhelpers/testhelpers.js');
 var subscriptionDao = require('../dao/subscription.dao.js');
+var async = require('async');
 
 var stripeDao = require('../dao/stripe.dao.js');
 var _log = $$.g.getLogger("subscription.dao.test");
@@ -19,34 +20,22 @@ testContext.plans = [];
 exports.subscription_dao_test = {
     setUp: function (cb) {
         var self = this;
-        var promiseAry = [];
-        promiseAry[0] = $.Deferred();
 
         //remove all existing subscription records
-        subscriptionDao.findMany(null, $$.m.Subscription, function(err, subscriptions){
-            promiseAry[0].resolve();
-            //if all we have is the counter, we are done.
-            if(subscriptions.length === 1 && subscriptions[0].get('_id') === '__counter__') {
-                //;
+        subscriptionDao.findMany({}, $$.m.Subscription, function(err, list){
+            if(err) {
+                _log.error('Exception removing events.  Tests may not be accurate.');
             } else {
-                for(var i=0; i<subscriptions.length; i++) {
-                    var id = subscriptions[i].get('_id');
-
-                    if(id !== '__counter__') {
-                        promiseAry[id] = $.Deferred();
-                        subscriptionDao.removeById(id, $$.m.Subscription, function(err, obj){
-                            if(err) {_log.error('Error: ' + err);}
-                            promiseAry[id].resolve();
+                async.each(list,
+                    function(sub, callback){
+                        subscriptionDao.remove(sub, function(err, value){
+                            callback();
                         });
-                    }
-
-                }
+                    }, function(err){
+                        _log.debug('<< setUp');
+                        cb();
+                    });
             }
-
-
-        });
-        $.when(promiseAry).done(function(){
-            cb();
         });
 
     },

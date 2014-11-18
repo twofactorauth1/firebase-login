@@ -238,7 +238,7 @@ var dao = {
 
                                         updateContactFromFacebookFriend(contact, facebookFriend);
 
-                                        contactDao.saveOrUpdate(contact, function (err, value) {
+                                        contactDao.saveOrUpdateContact(contact, function (err, value) {
                                             if (err) {
                                                 self.log.error("An error occurred updating contact during Facebook import", err);
                                                 ;
@@ -289,8 +289,16 @@ var dao = {
                                     importFriends(friends, pagingInfo.nextPage);
                                 });
                             } else {
-                                self.log.info("Facebook friend import succeed. " + totalImported + " imports");
-                                fn(null);
+                                self.log.info("Facebook friend import succeed. " + totalImported + " imports. Now merging duplicates.");
+                                contactDao.mergeDuplicates(null, accountId, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error occurred during duplicate merge: ' + err);
+                                        fn(null);
+                                    } else {
+                                        self.log.info('Duplicate merge successful.');
+                                        fn(null);
+                                    }
+                                });
                             }
                         });
                     });
@@ -660,7 +668,27 @@ var dao = {
         var myFacebookId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
     },
-
+    
+    getAppInsights: function (user, urlOptions, fn) {
+        var self = this;
+        var myFacebookId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+        var apiOptions = {access_token: accessToken};
+        var url = [facebookConfig.CLIENT_ID, 'insights'];
+        if (urlOptions.metric) {
+            url.push(urlOptions.metric);
+            url.push(urlOptions.period);
+            url.push(urlOptions.breakdown);
+        }
+        url = url.join('/');
+        console.info('Fetch App Insights : ' + url);
+        FB.api(url, 'get', apiOptions, function (res) {
+            console.info('Received insight data');
+            console.log(res);
+            fn(res.error, res.data || [])
+        });
+    },
+    
     //region PRIVATE
     _batchRequest: function(batchName, options, fn){
         // default == last 7 days

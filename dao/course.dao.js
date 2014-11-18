@@ -43,10 +43,16 @@ var dao = {
             this.findMany({userId: userId, _id: { $ne: "__counter__" }}, fn);
         },
 
-        createCourse: function (courseData, userId, fn) {
+        listCoursesByAccount: function(accountId, fn) {
+            var self = this;
+            this.findMany({accountId: accountId, _id: {$ne: "__counter__"}}, fn);
+        },
+
+        createCourse: function (courseData, userId, accountId, fn) {
             var newCourse = new $$.m.Course(courseData);
             newCourse.set('_id', null);
             newCourse.set('userId', userId);
+            newCourse.set('accountId', accountId);
             this.saveOrUpdate(newCourse, fn);
         },
 
@@ -245,6 +251,11 @@ var dao = {
                 }
                 return fn(err, course, video);
             });
+        },
+
+        deleteCourseByUser: function(userId, fn) {
+            var self = this;
+            self.removeByQuery({'userId': userId}, $$.m.Course, fn);
         }
 
 
@@ -258,6 +269,6 @@ function clearVideoFieldsForUnauthorizedUser(video) {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.UserDao = dao;
+$$.dao.CourseDao = dao;
 
 module.exports = dao;

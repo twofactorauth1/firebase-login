@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter',
-    function ($scope, postsService, pagesService, $location, $route, $routeParams, $filter) {
+mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter','postService',
+    function ($scope, postsService, pagesService, $location, $route, $routeParams, $filter,PostService) {
 
         var account, pages, website, route, postTags, currentTag, categories, currentCat, authors, currentAuthor, latestposts, that = this;
         var post = {};
@@ -24,10 +24,13 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                         route = 'blog';
                     }
                     that.pages = data[route];
+                    console.log("current Page");
+                   // console.log($scope.$parent)
             }
         });
-
+        console.log('BlogCtrl: postsService >>> ');
         postsService(function(err, data){
+            console.log('BlogCtrl: postsService >>> ', post);
             if(err) {
                 console.log('BlogCtrl Error: ' + err);
             } else {
@@ -129,5 +132,30 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             }
         });
 
+        window.copyPostMode=function(){
+            console.log(that.post);
+            that.tempPost=angular.copy(that.post);
+
+
+        };
+
+        window.savePostMode=function(){
+            that.post.post_tags.forEach(function(v,i) {
+                that.post.post_tags[i] = v.text;
+            },that.post.post_tags);
+            PostService.updatePost($scope.$parent.currentpage._id, that.post._id,that.post,function(data){
+
+            });
+        };
+
+
+        window.updatePostMode = function() {
+            console.log('post cancel');
+            console.log(that.post);
+            console.log(that.tempPost);
+            that.post=that.tempPost;
+            $scope.$$phase||$scope.$digest();
+
+        };
 
     }]);

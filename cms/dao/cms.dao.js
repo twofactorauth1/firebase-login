@@ -281,6 +281,44 @@ var dao = {
     },
     //endregion
 
+    //region COMPONENT
+
+    getComponentVersions: function(type, fn) {
+        //TODO: This should be in the DB eventually.
+        var self = this;
+        self.log.debug('>> getComponentVersions');
+        fs.readdir(themesConfig.PATH_TO_COMPONENTS, function(err, files){
+            if(err) {
+                self.log.error('Exception in getComponentVersions: ' + err);
+                fn(err, null);
+            } else {
+                /*
+                var numVersions = _.reduce(files, function(memo, filename){
+                    if(filename.indexOf(type) ===0) {
+                        memo++;
+                    }
+                    return memo;
+                }, 0);
+                */
+                var versionAry = [];
+                _.each(files, function(element, index, list){
+                    if(element.indexOf(type) === 0) {
+                        versionAry.push(element.replace(type + '_v', '').replace('.html',''));
+                    }
+                });
+
+
+                self.log.debug('<< getComponentVersions');
+
+                fn(null, versionAry);
+                return;
+            }
+
+        });
+    },
+
+    //endregion
+
 
     //region PAGE
     getPageById: function(pageId, fn) {
@@ -1147,31 +1185,60 @@ var dao = {
                 "displayOn" : null
             },
             "components" : [
-            {
-                "_id" : $$.u.idutils.generateUUID(),
-                "anchor" : null,
-                "type" : "masthead",
-                "version" : 1,
-                "title" : "Title",
-                "subtitle" : "Subtitle.",
-                "txtcolor" : "#fff",
-                "bg" : {
-                    "img" : {
-                        "url" : "",
-                        "width" : 1235,
-                        "height" : 935,
-                        "parallax" : true,
-                        "blur" : false
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "coming-soon",
+                    "version" : 1,
+                    "visibility": true,
+                    "title" : "Coming Soon",
+                    "subtitle" : "Subtitle.",
+                    "text" : "Coming soon",
+                    "txtcolor" : "#2aa9c9",
+                    "logo" : "",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
                     },
-                    "color" : ""
+                    "btn" : {
+                        "text" : "",
+                        "url" : "#signup",
+                        "icon" : ""
+                    }
                 },
-                "btn" : {
-                    "text" : "",
-                    "url" : "",
-                    "icon" : ""
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "footer",
+                    "version" : 1,
+                    "visibility": true,
+                    "title" : "Title",
+                    "subtitle" : "Subtitle.",
+                    "txtcolor" : "#fff",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "btn" : {
+                        "text" : "",
+                        "url" : "",
+                        "icon" : ""
+                    }
                 }
-            }
-        ],
+
+            ],
             "created" : new Date(),
             "modified" : null
 

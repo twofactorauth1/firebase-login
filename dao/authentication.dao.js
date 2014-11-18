@@ -106,6 +106,9 @@ var dao = {
 
     authenticateBySocialLogin: function (req, socialType, socialId, email, username, socialUrl, accessToken, refreshToken, expires, scope, fn) {
         var self = this;
+        self.log.debug('>> authenticateBySocialLogin');
+        self.log.debug('(req, ' + socialType + ',' + socialId + ',' + email + ',' + username + ',' + socialUrl + ',' + accessToken + ','
+            + refreshToken + ',' + expires + ',' + scope + ',fn)');
         var host = req.get("host");
         accountDao.getAccountByHost(host, function (err, value) {
             if (err) {
@@ -120,7 +123,7 @@ var dao = {
             }
 
             //We are at the main indigenous level application, not at a custom subdomain
-            else if (account === true) {
+            else if (account === true || account.id() === appConfig.mainAccountID) {
                 req.session.accountId = 0;
                 //Lets look up the user by socialId
                 userDao.getUserBySocialId(socialType, socialId, function (err, value) {
@@ -431,15 +434,19 @@ var dao = {
             }
 
             if (url.indexOf("?") == -1) {
-                url += "?";
+                url += "?authtoken=value";
+            } else {
+                url += "&authtoken=value";
             }
-            url += "&authtoken=value";
+
+
             fn(null, url);
         });
     },
 
     getAuthenticatedUrlForRedirect: function(accountId, userId, path, fn) {
         var self = this;
+        self.log.debug('>> getAuthetnicatedUrlForRedirect(' + accountId + ',' + userId + ',' + path +',fn)');
         accountDao.getServerUrlByAccount(accountId, function(err, value) {
             if (err) {
                 return fn(err, value);
@@ -464,7 +471,7 @@ var dao = {
             }
 
 
-
+            self.log.debug('<< getAuthenticatedUrlForRedirect(' + serverUrl + ')');
             fn(null, serverUrl);
         });
     },
@@ -472,6 +479,7 @@ var dao = {
 
     getAuthenticatedUrlForAccount: function(accountId, userId, path, expirationSeconds, fn) {
         var self = this;
+        self.log.debug('>> getAuthenticatedUrlForAccount(' + accountId +',' + userId + ',' + path + ',' + expirationSeconds + ',fn)');
         if (_.isFunction(expirationSeconds)) {
             fn = expirationSeconds;
             expirationSeconds = null;

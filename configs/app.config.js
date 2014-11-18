@@ -17,8 +17,7 @@ var environments = {
  */
 var XDHosts = [];
 
-//This contains the testing server for Charles Szymanski
-var DEFAULT_XDHOSTS = ['107.170.183.176', 'http://localhost:3001', 'pipeshift.com'];
+var DEFAULT_XDHOSTS = ['http://localhost:3001', 'pipeshift.com'];
 
 if (process.env.XDHOSTS == null) {
     XDHosts = DEFAULT_XDHOSTS;
@@ -120,6 +119,7 @@ module.exports = {
     mainAccountID: MAIN_ACCOUNT_ID,
 
     SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
+    cookie_subdomain: '.' + process.env.ROOT_HOST,
 
     getServerUrl: function (subdomain, domain) {
         if (subdomain == null && domain == null) {

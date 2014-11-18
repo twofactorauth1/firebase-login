@@ -141,6 +141,7 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
             var modalInstance = $modal.open({
                 templateUrl: '/pipeshift/views/video/modal/courseEdit.html',
                 controller: 'AddCourseModalController',
+                size: 'lg',
                 resolve: {
                     templates: function () {
                         return $scope.templates;

@@ -58,6 +58,8 @@ var dao = {
         }
     },
 
+    
+
 
     checkAccessToken: function(user, fn) {
         var self = this;
@@ -336,7 +338,7 @@ var dao = {
 
                                         updateContactFromContactObj(contact, googleContact);
 
-                                        contactDao.saveOrUpdate(contact, function(err, value) {
+                                        contactDao.saveOrUpdateContact(contact, function(err, value) {
                                             if (err) {
                                                 self.log.error("An error occurred updating contact during Google import", err);
                                             }
@@ -390,8 +392,23 @@ var dao = {
                                 self.log.info("Google Contact Import Succeeded. " + totalImported + " imports");
                                 //Last step, save the user
                                 //TODO: I think this clobbers passwords.
-                                userDao.saveOrUpdate(user, function() {});
-                                fn(null);
+                                userDao.saveOrUpdate(user, function(err, value) {
+                                    if(err) {
+                                        self.log.error('Error during user save: ' + err);
+                                        return fn(null);
+                                    } else {
+                                        self.log.info('Saved user.  Merging duplicates.');
+                                        contactDao.mergeDuplicates(null, accountId, function(err, value){
+                                            if(err) {
+                                                self.log.error('Error occurred during duplicate merge: ' + err);
+                                                fn(null);
+                                            } else {
+                                                self.log.info('Duplicate merge successful.');
+                                                fn(null);
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
                     });

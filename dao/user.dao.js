@@ -13,6 +13,7 @@ var cmsDao = require('../cms/dao/cms.dao');
 require('../models/user');
 
 
+
 var dao = {
 
     options: {
@@ -23,7 +24,7 @@ var dao = {
 
     //Global LEVEL METHODS
     usernameExists: function(username, fn) {
-        this.exists({'_username':username.toLowerCase()}, fn);
+        this.exists({'username':username.toLowerCase()}, fn);
     },
 
 
@@ -43,13 +44,14 @@ var dao = {
         this.findOne( {'credentials.type': socialType, 'credentials.userName': socialUsername}, fn);
     },
 
+    //TODO: This method is bad.  And you should feel bad.
     createUserFromUsernamePassword: function(username, password, email, accountToken, fn) {
-        if (_.isFunction(accountToken)) {
-            fn = accountToken;
-            accountToken = null;
+        /*if (_.isFunction(accountToken)) {
+             fn = accountToken;
+             accountToken = null;
         }
-
         var self = this;
+        self.log.debug('>> createUserFromUsernamePassword');
         this.getUserByUsername(username, function(err, value) {
             if (err) {
                 return fn(err, value);
@@ -60,6 +62,7 @@ var dao = {
             }
 
             var deferred = $.Deferred();
+
 
             accountDao.convertTempAccount(accountToken, function(err, value) {
                 if (!err) {
@@ -80,43 +83,64 @@ var dao = {
                     if (accountId == null) {
                         return fn(true, "Failed to create user, no account found");
                     }
-
+                    var userId = $$.u.idutils.generateUUID();
                     var user = new $$.m.User({
+                        _id: userId,
                         username:username,
                         email:email,
                         created: {
                             date: new Date().getTime(),
                             strategy: $$.constants.user.credential_types.LOCAL,
-                            by: null, //self-created
+                            by: userId, //self-created
                             isNew: true
                         }
                     });
 
+
                     user.createOrUpdateLocalCredentials(password);
-                    user.createUserAccount(accountId, username, password, ["super","admin","member"]);
-                    cmsDao.createWebsiteForAccount(accountId, 'admin', function(err, value){
+                    var roleAry = ["super","admin","member"];
+                    user.createUserAccount(accountId, username, password, roleAry);
+
+                    self.log.debug('Initializing user security.');
+                    securityManager.initializeUserPrivileges(user.id(), username, roleAry, accountId, function(err, value){
                         if(err) {
-                            self.log.error('Error creating website for account: ' + err);
-                            fn(err, null);
-                        } else {
-                            cmsDao.createDefaultPageForAccount(accountId, value.id(), function(err, value){
-                                if(err) {
-                                    self.log.error('Error creating default page for account: ' + err);
-                                    fn(err, null);
-                                } else {
-                                    self.saveOrUpdate(user, fn);
-                                }
-
-                            });
+                            self.log.error('Error initializing user privileges for userID: ' + user.id());
+                            return fn(err, null);
                         }
+                        self.log.debug('creating website for account');
+                        cmsDao.createWebsiteForAccount(accountId, 'admin', function(err, value){
+                            if(err) {
+                                self.log.error('Error creating website for account: ' + err);
+                                fn(err, null);
+                            } else {
+                                self.log.debug('creating default page');
+                                cmsDao.createDefaultPageForAccount(accountId, value.id(), function(err, value){
+                                    if(err) {
+                                        self.log.error('Error creating default page for account: ' + err);
+                                        fn(err, null);
+                                    } else {
+                                        self.log.debug('saving user.');
+                                        self.saveOrUpdate(user, function(err, savedUser){
+                                            if(err) {
+                                                self.log.error('Error saving user: ' + err);
+                                                fn(err, null);
+                                            } else {
+                                                self.log.debug('<< createUserFromUsernamePassword');
+                                                fn(null, savedUser);
+                                            }
+                                        });
+                                    }
 
+                                });
+                            }
 
+                        });
                     });
 
                 });
         });
+        */
     },
-
 
     createUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, username, socialUrl, accessToken, refreshToken, expires, accountToken, scope, fn) {
         var self = this;
@@ -237,6 +261,11 @@ var dao = {
     getUserForAccountBySocialProfile: function(accountId, socialType, socialId, fn) {
         var query = { "accounts.accountId":accountId, "credentials.type":socialType, "credentials.socialId":socialId };
         return this.findOne(query, fn);
+    },
+
+    getUsersForAccount: function(accountId, fn) {
+        var query = {'accounts.accountId':accountId};
+        return this.findMany(query, $$.m.User, fn);
     }
 };
 

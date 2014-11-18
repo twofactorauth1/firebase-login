@@ -17,14 +17,21 @@ exports.payment_dao_test = {
     setUp: function (cb) {
         var self = this;
         testContext.testAccountId = 1;
-        testHelpers.createTestContact(1, function(err, value){
-            contactsToDelete.push(value);
-            testHelpers.createTestContact(1, function(err, value){
-                contactsToDelete.push(value);
-                cb();
-            });
-        });
 
+        //delete everything with testAccountId before we start.
+        contactDao.removeByQuery({'accountId': testContext.testAccountId}, $$.m.Contact, function(err, value){
+            if(err) {
+                _log.warn('Error deleting contacts.  Tests may be incorrect.');
+            } else {
+                testHelpers.createTestContact(1, function(err, value){
+                    contactsToDelete.push(value);
+                    testHelpers.createTestContact(1, function(err, value){
+                        contactsToDelete.push(value);
+                        cb();
+                    });
+                });
+            }
+        });
     },
 
     tearDown: function (cb) {
@@ -86,14 +93,14 @@ exports.payment_dao_test = {
             ]
         });
 
-        contactDao.saveOrUpdate(c1, function(err, contact){
+        contactDao.saveOrUpdateContact(c1, function(err, contact){
             if(err) {
                 test.ok(false);
                 test.done();
             } else {
                 _log.debug('saved 1.');
                 contactsToDelete.push(contact);
-                contactDao.saveOrUpdate(c2, function(err, contact){
+                contactDao.saveOrUpdateContact(c2, function(err, contact){
                     if(err) {
                         test.ok(false);
                         test.done();

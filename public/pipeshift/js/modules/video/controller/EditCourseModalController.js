@@ -11,7 +11,7 @@ define(['angularAMD', 'app'], function (angularAMD, app) {
         }
         $scope.domain = host + ":" + $location.port();
         $scope.isAdd = false;
-        $scope.title = "Course Edit";
+        $scope.title = "Campaign Edit";
         $scope.course = $.extend({}, course);
         $scope.templates = templates;
         $scope.subscribers = [];
@@ -69,6 +69,7 @@ define(['angularAMD', 'app'], function (angularAMD, app) {
             }, 250)
         }
         $scope.showSubscribersCsvUploadModal = function () {
+            console.log('showSubscribersCsvUploadModal >>> ');
             var modalInstance = $modal.open({
                 templateUrl: '/pipeshift/views/video/modal/subsCsvUpload.html',
                 controller: 'SubscribersCsvUploadController',

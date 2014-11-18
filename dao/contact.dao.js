@@ -8,6 +8,7 @@
 var baseDao = require('./base.dao');
 var accountDao = require('./account.dao');
 var userDao = require('./user.dao');
+var contactActivityManager = require('../contactactivities/contactactivity_manager');
 requirejs('constants/constants');
 require('../models/contact');
 var async = require('async');
@@ -29,7 +30,7 @@ var dao = {
         //this.findManyWithFields(query, fields, fn);
     //    this.findManyWithLimit(query, limit, $$.m.Contact, fn);
 
-
+        //TODO: this can be refactored into a parameter to this method.
         accountDao.getAccountByID(accountId, function (err, res) {
 
             var sort = res.get('settings')
@@ -42,6 +43,38 @@ var dao = {
             //['sort_type'] || 'last';
 
             //self.findAllWithFields(query, skip, sort, fields, fn);
+            self.findAllWithFieldsAndLimit(query, skip, limit, sort, fields, $$.m.Contact, fn);
+        });
+    },
+
+    findContactsShortForm: function(accountId, letter, skip, limit, fields, fn) {
+        var self=this;
+
+        var query = {};
+        if(letter !='all') {
+            var nextLetter = String.fromCharCode(letter.charCodeAt() + 1);
+            query = {accountId: accountId, _last: { $gte: letter, $lt: nextLetter } };
+        } else {
+            query = {accountId: accountId};
+        }
+
+        //var fields = {_id:1, first:1, last:1, photo:1};
+
+        accountDao.getAccountByID(accountId, function (err, res) {
+
+            var sort = res.get('settings')
+
+            if (sort) {
+                sort = sort.sort_type;
+            } else {
+                sort = 'last';
+            }
+            self.log.debug('>> query ', query);
+            self.log.debug('>> skip ', skip);
+            self.log.debug('>> limit ', limit);
+            self.log.debug('>> sort ', sort);
+            self.log.debug('>> fields ', fields);
+
             self.findAllWithFieldsAndLimit(query, skip, limit, sort, fields, $$.m.Contact, fn);
         });
     },
@@ -209,6 +242,10 @@ var dao = {
             return fn(null, null);
         }
         this.findOne({'email': email}, fn);
+    },
+
+    getContactByEmailAndAccount: function(email, accountId, fn) {
+        this.findOne({'email:':email, 'accountId':accountId}, fn);
     },
 
     getContactByEmailAndUserId: function (email, userId, fn) {
@@ -381,6 +418,78 @@ var dao = {
         });
     },
 
+    createCustomerContact: function(user, accountId, fn) {
+        var self = this;
+        self.log.debug('>> createCustomerContact');
+        self.getContactByEmailAndAccount(user.get('email'), accountId, function(err, existingContact){
+            if (err) {
+                self.log.error('Error searching for contact by email: ' + err);
+                return fn(err, null);
+            }
+
+            var p1 = $.Deferred();
+            if (existingContact != null) {
+                self.log.info('Attempted to create a new customer for an existing contact');
+                var oldType = existingContact.get('type');
+                existingContact.set('type', 'cu');//set type to customer
+                self.saveOrUpdate(existingContact, function(err, savedContact){
+                    if(err) {
+                        self.log.error('Error saving contact: ' + err);
+                        p1.reject(err);
+                    } else {
+                        self.log.debug('Updated existing contact');
+                        p1.resolve(existingContact);
+                    }
+                });
+            } else {
+                //TODO: new contact
+                var newContact = new $$.m.Contact({
+                    accountId: accountId,           //int
+                    first:user.get('first'),             //string,
+                    last:user.get('last'),              //string,
+                    type:"cu"              //contact_types
+
+                });
+                newContact.createOrUpdateDetails('user', null, null, null, null, null, user.get('email'), null);
+                self.saveOrUpdate(newContact, function(err, savedContact){
+                    if(err) {
+                        self.log.error('Error saving contact: ' + err);
+                        p1.reject(err);
+                    } else {
+                        self.log.debug('created new contact');
+                        p1.resolve(savedContact);
+                    }
+                });
+            }
+            $.when(p1).fail(function(err){
+                return fn(err, null);
+            });
+            $.when(p1).done(function(savedContact){
+                //create activity for subscription purchased
+
+                var activity = new $$.m.ContactActivity({
+                    accountId: savedContact.get('accountId'),
+                    contactId: savedContact.id(),
+                    activityType: $$.m.ContactActivity.types.SUBSCRIBE,
+                    note: "Subscription purchased.",
+                    start:new Date() //datestamp
+
+                });
+                contactActivityManager.createActivity(activity, function(err, value){
+                    if(err) {
+                        self.log.error('Error creating contactActivity for contact with id: ' + savedContact.id());
+                        return fn(err, savedContact);
+                    } else {
+                        self.log.debug('<< createCustomerContact');
+                        return fn(null, savedContact);
+                    }
+                });
+
+            });
+
+        });
+    },
+
     findDuplicates: function(accountId, fn) {
         var self = this;
         self.log.debug('>> findDuplicates(' + accountId + ')');
@@ -511,7 +620,7 @@ var dao = {
                     var mergedContactAry = [];
                     //value is an array of duplicate Arrays.
 
-                    async.each(value,
+                    async.eachSeries(value,
                         function(ary, callback){
 
                             self.mergeDuplicates(ary, accountId, function(err, mergedContact){
@@ -550,7 +659,7 @@ var dao = {
                     return;
                 } else {
                     mainContact = value;
-                    async.each(dupeAry,
+                    async.eachSeries(dupeAry,
                         function(item, callback){
                             self._safeMergeByContactAndID(mainContact, item, function(err, value){
                                 if(err) {
@@ -641,7 +750,48 @@ var dao = {
                 });
             }
         });
+    },
+
+    //Wrapper to create contactActivity
+    saveOrUpdateContact: function(contact, fn) {
+        var self = this;
+        self.log.debug('>> saveOrUpdateContact');
+        if ((contact.id() === null || contact.id() === 0 || contact.id() == "")) {
+
+            //need to create the contactActivity
+            self.saveOrUpdate(contact, function(err, savedContact){
+
+                if(err) {
+                    self.log.error('Error creating contact: ' + err);
+                    fn(err, null);
+                } else {
+                    var activity = new $$.m.ContactActivity({
+                        accountId: savedContact.get('accountId'),
+                        contactId: savedContact.id(),
+                        activityType: $$.m.ContactActivity.types.ACCOUNT_CREATED,
+                        note: "Contact created.",
+                        start:new Date() //datestamp
+
+                    });
+                    contactActivityManager.createActivity(activity, function(err, value){
+                        if(err) {
+                            self.log.error('Error creating contactActivity for new contact with id: ' + savedContact.id());
+                        } else {
+                            self.log.debug('created contactActivity for new contact with id: ' + savedContact.id());
+                        }
+                    });
+                    self.log.debug('<< saveOrUpdateContact');
+                    fn(null, savedContact);
+                }
+            });
+        } else {
+            // just an update
+            self.saveOrUpdate(contact, fn);
+        }
+
     }
+
+
 };
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();

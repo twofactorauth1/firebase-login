@@ -153,6 +153,21 @@ var user = $$.m.ModelBase.extend({
                 dashboard: true,
                 marketing: true,
                 marketingsingle: true
+            },
+            user_preferences: {
+                default_contact_address: {
+                    address1:'',
+                    address2:'',
+                    city:'',
+                    state:'',
+                    zip:'',
+                    country:''
+                }
+            },
+            "app_preferences": {
+                "account":{
+                    "default_tab": "account_information" //"account_information", "billing", "integration"
+                }
             }
         };
     },
@@ -556,6 +571,8 @@ var user = $$.m.ModelBase.extend({
 
 
     createOrUpdateSocialCredentials: function(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope) {
+        console.log('user.js >> createOrUpdateSocialCredentials');
+        console.log('refreshToken is ' + refreshToken);
         var creds = this.getCredentials(socialType);
         if (creds == null) {
             creds = {};
@@ -620,6 +637,7 @@ var user = $$.m.ModelBase.extend({
         if (options.refreshToken != null) {
             creds.refreshToken = options.refreshToken;
         }
+        console.log('creds.refreshToken [' + creds.refreshToken + '] and options.refreshToken[' + options.refreshToken + ']');
 
         if (options.expires != null && options.expires > 0) {
             creds.expires = options.expires;
@@ -711,6 +729,22 @@ var user = $$.m.ModelBase.extend({
         }
 
         return _.pluck(accounts, "accountId");
+    },
+
+    removeAccount: function(accountId) {
+        var accounts = this.get('accounts');
+        if(accounts == null) {
+            return this;
+        }
+        _.each(accounts, function(account, index, list){
+            if(account.id() === accountId) {
+
+            }
+        });
+
+        var updatedAccounts = _.filter(accounts, function(account){return account.id() !== accountId});
+        this.set('accounts', updatedAccounts);
+        return this;
     },
 
 

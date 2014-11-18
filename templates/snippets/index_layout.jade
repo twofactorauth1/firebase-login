@@ -18,8 +18,8 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main")
         block head
             //- override this to include a different head section (e.g. requirehead.jade)
             block headattributes
-                include index_head_scripts
                 include index_head_styles
+                include index_head_scripts
             title=title
             meta(charset="utf-8")
             meta(name="viewport", content="width=device-width, initial-scale=1.0")
@@ -29,9 +29,13 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main")
             base(href="/")
             link(rel="shortcut icon", href=account.website.settings.favicon)
 
-    body(class='theme-main navbar-v#{ account.website.nav_version }', ng-controller="LayoutCtrl as layout", ng-cloak)
+    body(class='theme-main navbar-v#{ account.website.nav_version } ng-cloak', ng-controller="LayoutCtrl as layout", ng-cloak)
         block body_content
             div(id='fb-root')
+            div(id='toolbar')
         block content
+        block footer_scripts
+            script(type="text/javascript").
+                window.analytics.identify({accountId:#{account._id}});
         block body_scripts
             include index_body_scripts

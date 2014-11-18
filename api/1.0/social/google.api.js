@@ -64,10 +64,13 @@ _.extend(api.prototype, baseApi.prototype, {
                 if (googleCreds != null) {
                     resp.send({data:googleCreds.accessToken});
                 } else {
+                    self.log.debug('>> 500 1');
                     self.wrapError(resp, 500, "Cannot retrieve access token, Google API access not verified", err, value);
                 }
             } else {
-                self.wrapError(resp, 500, "Cannot retrieve access token, Google API access not verified", err, value);
+                //TODO Find a better way to send error
+                resp.send('error');
+                //self.wrapError(resp, 500, "Cannot retrieve access token, Google API access not verified", err, value);
             }
         });
     },
@@ -101,6 +104,13 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = this.accountId(req);
         var groupIdAry = (req.query['groupIDs'] || '').split(',');
+
+        var user = req.user;
+        if(user.getCredentials($$.constants.user.credential_types.GOOGLE) === null) {
+            self.wrapError(resp, 401, "Unauthorized action", "User has not authorized Indigenous to access Google data.");
+            self = null;
+            return;
+        }
         if (accountId > 0) {
             googleDao.importContactsForUser(accountId, req.user, groupIdAry, function(err, value) {
                 if (err) {

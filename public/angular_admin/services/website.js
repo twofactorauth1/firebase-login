@@ -2,24 +2,57 @@ define(['app'], function (app) {
 	app.register.service('WebsiteService', function ($http) {
 		var baseUrl = '/api/1.0/';
 
-		this.getWebsite = function (fn) {
-			var apiUrl = baseUrl + ['cms/website/', $$.server.websiteId].join('/');
-			console.log('Getting Website '+apiUrl);
+		this.getWebsite = function (websiteID, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
 			});
 		};
 
-		this.getPages = function (accountId, fn) {
-			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
-			$http.get(apiUrl)
+		//website
+		this.updateWebsite = function(data, fn) {
+			console.log('updateWebsite >>>');
+			var apiUrl = baseUrl + ['cms', 'website'].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(data)
+			})
 			.success(function (data, status, headers, config) {
-				console.log('Pages: ', data);
 				fn(data);
 			})
 			.error(function (err) {
                 console.log('END:Website Service with ERROR');
+                fn(err, null);
+            });
+		};
+
+		this.getPages = function (accountId, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+                fn(err, null);
+            });
+		};
+
+		// website/:websiteId/page/:id
+		this.updatePage = function(websiteId, pageId, pagedata, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(pagedata)
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service updatePage with ERROR');
                 fn(err, null);
             });
 		};
@@ -39,6 +72,135 @@ define(['app'], function (app) {
                 console.log('END:Website Service with ERROR');
                 fn(err, null);
             });
+		};
+
+		//page/:id/components/all
+		this.updateAllComponents = function(pageId, componentJSON, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', 'all'].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    //angular.toJson() used instead of JSON.stringify to remove $$hashkey value
+			    data: angular.toJson(componentJSON)
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:updateAllComponents with ERROR', err);
+                fn(err);
+            });
+		};
+
+		//page/:id/components/:componentId
+		this.updateComponent = function(pageId, componentId, componentJSON, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', componentId].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    //angular.toJson() used instead of JSON.stringify to remove $$hashkey value
+			    data: angular.toJson(componentJSON)
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+                fn(err);
+            });
+		};
+
+		//page/:id/components
+		this.addNewComponent = function(pageId, title, type,cmpVersion, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components'].join('/');
+			var data = {
+				title : title,
+				type : type,
+				cmpVersion : cmpVersion
+			};
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(data)
+			})
+			.success(function (data, status, headers, config) {
+				console.log('Added New Component: ', data);
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+            });
+		};
+
+		//page/:id/components/:componentId
+		this.deleteComponent = function(pageId, componentId, fn) {
+			console.log('PageID: '+pageId+' ComponentID: '+componentId);
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', componentId].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "DELETE"
+			})
+			.success(function (data, status, headers, config) {
+				console.log('Component Successfully Deleted from the DB.');
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+            });
+		};
+
+		//website/:websiteId/page
+		this.createPage = function(websiteId, pagedata, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page'].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(pagedata)
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Create Page with ERROR');
+            });
+		};
+
+		//website/:websiteId/page/:id/:label
+		this.deletePage = function(pageId, websiteId, label, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId, label].join('/');
+			$http.delete(apiUrl)
+			.success(function (data, status, headers, config) {
+
+				console.log('page deleted');
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Delete Page with ERROR', err);
+            });
+		};
+
+		this.getThemes = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'theme'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			});
+		};
+
+		this.getPageComponents = function (pageId, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
+
+		this.getComponentVersions = function (componentType, fn) {
+			var apiUrl = baseUrl + ['cms', 'component', componentType, 'versions'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
 		};
 
 	});

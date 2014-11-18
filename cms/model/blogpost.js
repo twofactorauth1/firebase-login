@@ -62,6 +62,8 @@ var blogpost = $$.m.ModelBase.extend({
 
             comment_count: null,
 
+            post_url:null,
+
             /**
              * Created by data
              *

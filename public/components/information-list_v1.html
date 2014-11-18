@@ -1,0 +1,26 @@
+<style>
+    .information-list-v1{
+        color:{{component.textcolor || 'inherit'}};
+    }
+</style>
+
+<div class="row" style="width: 100%;">
+    <div class="col-md-12 text-center">
+        <h2>{{component.title}}</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h4>{{component.subtitle}}</h4>
+        <br/>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6" ng-repeat="content in component.contents track by $index">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <i class="{{component.ovalstyle}}"></i> {{content.data}}
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>

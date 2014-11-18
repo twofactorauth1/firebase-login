@@ -25,15 +25,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
 
-        app.post(this.url(''), this.isAuthApi, this.createAsset.bind(this));
-        app.get(this.url(':id'), this.isAuthApi, this.getAsset.bind(this));
-        app.get(this.url(''), this.isAuthApi, this.listAssets.bind(this));
-        app.post(this.url(':id'), this.isAuthApi, this.updateAsset.bind(this));
-        app.delete(this.url(':id'), this.isAuthApi, this.deleteAsset.bind(this));
+        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createAsset.bind(this));
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getAsset.bind(this));
+        app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listAssets.bind(this));
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateAsset.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteAsset.bind(this));
 
-        app.get(this.url('type/:type'), this.isAuthApi, this.getAssetsByType.bind(this));
-        app.get(this.url('tag/:tag'), this.isAuthApi, this.getAssetsByTag.bind(this));
-        app.get(this.url('source/:source'), this.isAuthApi, this.getAssetsBySource.bind(this));
+        app.get(this.url('type/:type'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsByType.bind(this));
+        app.get(this.url('tag/:tag'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsByTag.bind(this));
+        app.get(this.url('source/:source'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsBySource.bind(this));
     },
 
     //file must be uploaded using the 'file' input name
@@ -42,43 +42,54 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createAsset');
         var form = new formidable.IncomingForm();
         var accountId = parseInt(self.accountId(req));
-        var userId = self.userId(req);
 
-        form.parse(req, function(err, fields, files) {
-            if(err) {
-                self.wrapError(res, 500, 'fail', 'The upload failed', err);
-                self = null;
+        self.checkPermission(req, self.sc.privs.MODIFY_ASSET, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(res);
             } else {
+                var userId = self.userId(req);
 
-                //var file = files['file'];
-                var file = files["files[]"];
-                var source = fields['source'] || 'S3';
-                var tagAry = (fields['tag'] && fields['tag'].split(','))  || [];
-                var asset = new $$.m.Asset({
-                    accountId: accountId,
-                    mimeType: file.type,
-                    size: file.size,
-                    filename: file.name,
-                    url: '',
-                    source: source,
-                    tags: tagAry,
-                    created: {
-                        date: new Date(),
-                        by: userId
+                form.parse(req, function(err, fields, files) {
+                    if(err) {
+                        self.wrapError(res, 500, 'fail', 'The upload failed', err);
+                        self = null;
+                    } else {
+
+                        var file = files['file'];
+                        //var file = files["files[]"];
+                        var source = fields['source'] || 'S3';
+                        var tagAry = (fields['tag'] && fields['tag'].split(','))  || [];
+                        var asset = new $$.m.Asset({
+                            accountId: accountId,
+                            mimeType: file.type,
+                            size: file.size,
+                            filename: file.name,
+                            url: '',
+                            source: source,
+                            tags: tagAry,
+                            created: {
+                                date: new Date(),
+                                by: userId
+                            }
+
+                        });
+
                     }
+                    console.dir(asset);
+                    assetManager.createAsset(file.path, asset, function(err, value, file){
+                        self.log.debug('<< createAsset');
+                        file._id = value.get("_id");
+                        file.date = value.get("created").date;
+                        //self.sendResultOrError(res, err, value, "Error creating Asset");
+                        self.sendFileUploadResult(res, err, file);
+                    });
 
                 });
             }
-            console.dir(asset);
-            assetManager.createAsset(file.path, asset, function(err, value, file){
-                self.log.debug('<< createAsset');
-                file._id = value.get("_id")
-                file.date = value.get("created").date
-                //self.sendResultOrError(res, err, value, "Error creating Asset");
-                self.sendFileUploadResult(res, err, file);
-            });
-
         });
+
+
+
     },
 
     getAsset: function(req, res) {
@@ -87,7 +98,19 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var assetId = req.params.id;
         assetManager.getAsset(assetId, function(err, value){
+
             self.log.debug('<< getAsset');
+            if(value != null) {
+                self.checkPermissionForAccount(req, self.sc.privs.VIEW_ASSET, value.get('account'), function(err, isAllowed){
+                    if(isAllowed !== true) {
+                        return self.send403(res);
+                    } else {
+                        return self.sendResultOrError(res, err, value, "Error retrieving Asset");
+                    }
+                });
+            }
+            //error if we got here
+
             self.sendResultOrError(res, err, value, "Error retrieving Asset");
         });
     },
@@ -97,55 +120,93 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> listAssets');
 
         var accountId = parseInt(self.accountId(req));
-        var skip = req.query['skip'];
-        var limit = req.query['limit'];
-        assetManager.listAssets(accountId, skip, limit, function(err, value){
-            self.log.debug('<< listAssets');
-            self.sendResultOrError(res, err, value, "Error listing Asset");
+        self.checkPermission(req, self.sc.privs.VIEW_ASSET, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var skip = req.query['skip'];
+                var limit = req.query['limit'];
+                assetManager.listAssets(accountId, skip, limit, function(err, value){
+                    self.log.debug('<< listAssets');
+                    self.sendResultOrError(res, err, value, "Error listing Asset");
+                });
+            }
         });
+
     },
 
     updateAsset: function(req, res) {
         var self = this;
         self.log.debug('>> updateAsset');
-        //TODO: check security.
+
         var assetId = req.params.id;
         var accountId = parseInt(self.accountId(req));
-        var asset = new $$.m.Asset(req.body);
-
-        assetManager.updateAsset(asset, function(err, value) {
-            self.log.debug('<< updateAsset');
-            self.sendResultOrError(res, err, value, "Error updating Asset");
+        assetManager.getAsset(assetId, function(err, savedAsset){
+            if(err) {
+                return self.wrapError(res, 404, 'Asset not found', 'Could not find asset with id [' + assetId + '].');
+            }
+            self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ASSET, savedAsset.get('accountId'), function(err, isAllowed){
+                if(isAllowed !== true) {
+                    return self.send403(res);
+                } else {
+                    var asset = new $$.m.Asset(req.body);
+                    asset.set('_id', assetId);
+                    assetManager.updateAsset(asset, function(err, value) {
+                        self.log.debug('<< updateAsset');
+                        self.sendResultOrError(res, err, value, "Error updating Asset");
+                    });
+                }
+            });
         });
+
     },
 
     deleteAsset: function(req, res) {
         var self = this;
         self.log.debug('>> deleteAsset');
 
-        //TODO: check security
         var assetId = req.params.id;
         var accountId = parseInt(self.accountId(req));
 
-        assetManager.deleteAsset(assetId, function(err, value){
-            self.log.debug('<< deleteAsset');
-            self.sendResultOrError(res, err, value, "Error deleting Asset");
+        assetManager.getAsset(assetId, function(err, savedAsset){
+            if(err) {
+                return self.wrapError(res, 404, 'Asset not found', 'Could not find asset with id [' + assetId + '].');
+            }
+            self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ASSET, savedAsset.get('accountId'), function(err, isAllowed) {
+                if (isAllowed !== true) {
+                    return self.send403(res);
+                } else {
+                    assetManager.deleteAsset(assetId, function(err, value){
+                        self.log.debug('<< deleteAsset');
+                        self.sendResultOrError(res, err, value, "Error deleting Asset");
+                    });
+                }
+            });
         });
+
+
     },
 
     getAssetsByType: function(req, res) {
         var self = this;
-        self.log.debug('getAssetsByType');
+        self.log.debug('>> getAssetsByType');
 
         var accountId = parseInt(self.accountId(req));
-        var skip = req.query['skip'];
-        var limit = req.query['limit'];
-        var type = req.params.type;
+        self.checkPermission(req, self.sc.privs.VIEW_ASSET, function(err, isAllowed){
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var skip = req.query['skip'];
+                var limit = req.query['limit'];
+                var type = req.params.type;
 
-        assetManager.findByType(accountId, type, skip, limit, function(err, list){
-            self.log.debug('<< getAssetsByType');
-            self.sendResultOrError(res, err, list, "Error getting Assets by type");
+                assetManager.findByType(accountId, type, skip, limit, function(err, list){
+                    self.log.debug('<< getAssetsByType');
+                    self.sendResultOrError(res, err, list, "Error getting Assets by type");
+                });
+            }
         });
+
     },
 
     getAssetsBySource: function(req, res) {
@@ -153,14 +214,21 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('getAssetsBySource');
 
         var accountId = parseInt(self.accountId(req));
-        var skip = req.query['skip'];
-        var limit = req.query['limit'];
-        var source = req.params.source;
+        self.checkPermission(req, self.sc.privs.VIEW_ASSET, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var skip = req.query['skip'];
+                var limit = req.query['limit'];
+                var source = req.params.source;
 
-        assetManager.findBySource(accountId, source, skip, limit, function(err, list){
-            self.log.debug('<< getAssetsBySource');
-            self.sendResultOrError(res, err, list, "Error getting Assets by source");
+                assetManager.findBySource(accountId, source, skip, limit, function(err, list){
+                    self.log.debug('<< getAssetsBySource');
+                    self.sendResultOrError(res, err, list, "Error getting Assets by source");
+                });
+            }
         });
+
     },
 
     getAssetsByTag: function(req, res) {
@@ -168,14 +236,21 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('getAssetsByTag');
 
         var accountId = parseInt(self.accountId(req));
-        var skip = req.query['skip'];
-        var limit = req.query['limit'];
-        var tag = req.params.tag;
+        self.checkPermission(req, self.sc.privs.VIEW_ASSET, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var skip = req.query['skip'];
+                var limit = req.query['limit'];
+                var tag = req.params.tag;
 
-        assetManager.findByTag(accountId, tag, skip, limit, function(err, list){
-            self.log.debug('<< getAssetsByTag');
-            self.sendResultOrError(res, err, list, "Error getting Assets by tag");
+                assetManager.findByTag(accountId, tag, skip, limit, function(err, list){
+                    self.log.debug('<< getAssetsByTag');
+                    self.sendResultOrError(res, err, list, "Error getting Assets by tag");
+                });
+            }
         });
+
     },
 
     sendFileUploadResult: function (resp, err, value) {
@@ -184,11 +259,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
         if (!err) {
             var file = {
-                name: value.name,
+                filename: value.name,
                 size: value.size,
                 url: value.url,
                 resource: value.resource,
-                date: value.date,
+                created: {
+                    date: value.date
+                },
                 _id: value._id
             };
 

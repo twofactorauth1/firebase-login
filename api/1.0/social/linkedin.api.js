@@ -70,6 +70,13 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = this.accountId(req);
 
+        var user = req.user;
+        if(user.getCredentials($$.constants.user.credential_types.LINKEDIN) === null) {
+            self.wrapError(resp, 401, "Unauthorized action", "User has not authorized Indigenous to access LinkedIn data.");
+            self = null;
+            return;
+        }
+
         if (accountId > 0) {
             linkedInDao.importConnectionsAsContactsForUser(accountId, req.user, function(err, value) {
                 console.log("LinkedIn import succeeded");
