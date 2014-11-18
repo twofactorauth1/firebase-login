@@ -1,50 +1,64 @@
-<div class="carousel slide" data-ride="carousel">
+<style>
+    .title {
+        color: #444444;
+    }
+    .carousel-caption .text,
+    .carousel-caption .name,
+    .carousel-caption .site {
+        color:{{component.txtcolor || 'white'}};
+    }
+</style>
+<div ng-class="component.type+'-v'+component.version">
+    <div class="carousel slide" data-ride="carousel">
 
-    <div class="title col-xs-12">
-        <div class="editable" data-class="title">
-            <span ng-bind-html="component.title"></span>
+        <div class="title col-xs-12">
+            <div class="editable" data-class="title">
+                <span ng-bind-html="component.title"></span>
+            </div>
         </div>
-    </div>
 
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner">
-        <div class="{{$index==0?'item active':'item' }} " ng-repeat="testimonial in component.testimonials track by $index">
-            <div class="single-testimonial row carousel-caption">
-                <div class="col-sm-12">
-                    <div class="text">
-                        <div class="editable" data-class="testimonials.item.text" data-index="{{$index}}">
-                            <span ng-bind-html="testimonial.text"></span>
+        <div class="clearfix"></div>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="{{$index==0?'item active':'item' }} " ng-repeat="testimonial in component.testimonials track by $index">
+                <div class="single-testimonial row carousel-caption">
+                    <div class="col-sm-12">
+                        <div class="text">
+                            <div class="editable" data-class="testimonials.item.text" data-index="{{$index}}">
+                                <span ng-bind-html="testimonial.text"></span>
+                            </div>
                         </div>
-                    </div>
-                    <h4 class="name">
-                        <div class="editable" data-class="testimonials.item.name" data-index="{{$index}}">
-                            <convert-html contents="{{testimonial.name}}"></convert-html>
-                        </div>
-                    </h4>
-                    <div class="site">
-                        <div class="editable" data-class="testimonials.item.site" data-index="{{$index}}">
-                            <span ng-bind-html="testimonial.site"></span>
+                        <h4 class="name">
+                            <div class="editable" data-class="testimonials.item.name" data-index="{{$index}}">
+                                <convert-html contents="{{testimonial.name}}"></convert-html>
+                            </div>
+                        </h4>
+                        <div class="site">
+                            <div class="editable" data-class="testimonials.item.site" data-index="{{$index}}">
+                                <span ng-bind-html="testimonial.site"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li ng-repeat="testimonial in component.testimonials track by $index" data-target="#{{component.anchor}}" data-slide-to="{{$index}}" class="{{$index==0?'active':'' }}" style="background-color: {{component.ovalcolor}};"></li>
+        </ol>
+
+        <!-- Controls -->
+        <!-- <span ng-if="component.testimonials.length > 1">
+
+            <a class="left carousel-control" data-target="#{{component.anchor}}" style="background:none" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a class="right carousel-control" data-target="#{{component.anchor}}" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+
+        </span> -->
     </div>
-
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-        <li ng-repeat="testimonial in component.testimonials track by $index" data-target="#{{component.anchor}}" data-slide-to="{{$index}}" class="{{$index==0?'active':'' }}" style="background-color: {{component.ovalcolor}};"></li>
-    </ol>
-
-    <!-- Controls -->
-    <!-- <span ng-if="component.testimonials.length > 1">
-
-        <a class="left carousel-control" data-target="#{{component.anchor}}" style="background:none" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left"></span>
-        </a>
-        <a class="right carousel-control" data-target="#{{component.anchor}}" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-        </a>
-
-    </span> -->
 </div>

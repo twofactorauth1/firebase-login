@@ -136,7 +136,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var deviceReportByCategory = new Keen.Query("count", {
-                            eventCollection: "pageviews",
+                            eventCollection: "frontsessions",
                             timeframe: {
                                 "start" : timeframeStart,
                                 "end" : timeframeEnd
@@ -145,7 +145,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var userReport = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "fingerprint",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -155,7 +155,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var userReportPreviousMonth = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "fingerprint",
                             timeframe: {
                                 "start" : timeframePreviousStart,
@@ -165,7 +165,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var pageviewsReport = new Keen.Query("sum", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "page_length",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -175,7 +175,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var pageviewsPreviousReport = new Keen.Query("sum", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "page_length",
                             timeframe: {
                                 "start" : timeframePreviousStart,
@@ -202,7 +202,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
 
                         var sessionsReport = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_id",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -212,7 +212,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var sessionsPreviousReport = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_id",
                             timeframe: {
                                 "start" : timeframePreviousStart,
@@ -222,7 +222,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var sessionLengthReport = new Keen.Query("count", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_length",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -232,7 +232,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                           });
 
                         var sessionAvgLengthReport = new Keen.Query("average", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_length",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -241,7 +241,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                           });
 
                         var bouncesReport = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_id",
                             filters: [{"property_name":"page_length","operator":"eq","property_value":1}],
                             timeframe: {
@@ -252,7 +252,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var bouncesPreviousReport = new Keen.Query("count_unique", {
-                            eventCollection: "sessions",
+                            eventCollection: "frontsessions",
                             targetProperty: "session_id",
                             filters: [{"property_name":"page_length","operator":"eq","property_value":1}],
                             timeframe: {
@@ -521,7 +521,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                         window.setInterval(function(){
                             $scope.runReports();
-                        }, 15000);
+                        }, 5000);
 
                         // ======================================
                         // Overview
@@ -842,316 +842,316 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         // };
 
 
-                        // PaymentService.getCustomers(function(data) {
-                        //     $scope.customers = data;
+                        PaymentService.getCustomers(function(data) {
+                            $scope.customers = data;
 
-                        //     // ======================================
-                        //     // Total Customer Metric
-                        //     // ======================================
+                            // ======================================
+                            // Total Customer Metric
+                            // ======================================
 
-                        //     $scope.totalCustomers = $scope.customers.length;
+                            $scope.totalCustomers = $scope.customers.length;
 
-                        //     // ======================================
-                        //     // Monthly Recurring Revenue Metric
-                        //     // Monthly Recurring = Avg Revenue Per Customer * # of Customers
-                        //     // ======================================
+                            // ======================================
+                            // Monthly Recurring Revenue Metric
+                            // Monthly Recurring = Avg Revenue Per Customer * # of Customers
+                            // ======================================
 
-                        //     var monthlyRecurringRevenue = new Keen.Query("sum", {
-                        //         eventCollection: "Stripe_Events",
-                        //         targetProperty: 'data.object.total',
-                        //         timeframe: 'last_30_days',
-                        //         filters: [{
-                        //             "property_name": "data.object.subscription",
-                        //             "operator": "exists",
-                        //             "property_value": true
-                        //         }, {
-                        //             "property_name": "type",
-                        //             "operator": "eq",
-                        //             "property_value": "invoice.payment_succeeded"
-                        //         }]
-                        //     });
+                            var monthlyRecurringRevenue = new Keen.Query("sum", {
+                                eventCollection: "Stripe_Events",
+                                targetProperty: 'data.object.total',
+                                timeframe: 'last_30_days',
+                                filters: [{
+                                    "property_name": "data.object.subscription",
+                                    "operator": "exists",
+                                    "property_value": true
+                                }, {
+                                    "property_name": "type",
+                                    "operator": "eq",
+                                    "property_value": "invoice.payment_succeeded"
+                                }]
+                            });
 
-                        //     var activeSubscriptions = new Keen.Query("count", {
-                        //         eventCollection: "Stripe_Events",
-                        //         timeframe: "last_30_days",
-                        //         filters: [{
-                        //             "property_name": "type",
-                        //             "operator": "eq",
-                        //             "property_value": "customer.subscription.created"
-                        //         }, {
-                        //             "property_name": "data.object.status",
-                        //             "operator": "eq",
-                        //             "property_value": "active"
-                        //         }]
-                        //     });
+                            var activeSubscriptions = new Keen.Query("count", {
+                                eventCollection: "Stripe_Events",
+                                timeframe: "last_30_days",
+                                filters: [{
+                                    "property_name": "type",
+                                    "operator": "eq",
+                                    "property_value": "customer.subscription.created"
+                                }, {
+                                    "property_name": "data.object.status",
+                                    "operator": "eq",
+                                    "property_value": "active"
+                                }]
+                            });
 
-                        //     var canceledSubscriptions = new Keen.Query("count", {
-                        //         eventCollection: "Stripe_Events",
-                        //         timeframe: "last_30_days",
-                        //         interval: 'daily',
-                        //         filters: [{
-                        //             "property_name": "type",
-                        //             "operator": "eq",
-                        //             "property_value": "customer.subscription.deleted"
-                        //         }]
-                        //     });
+                            var canceledSubscriptions = new Keen.Query("count", {
+                                eventCollection: "Stripe_Events",
+                                timeframe: "last_30_days",
+                                interval: 'daily',
+                                filters: [{
+                                    "property_name": "type",
+                                    "operator": "eq",
+                                    "property_value": "customer.subscription.deleted"
+                                }]
+                            });
 
-                        //     // =========================================
-                        //     // Create Unique Paying Customers Line Chart
-                        //     // =========================================
+                            // =========================================
+                            // Create Unique Paying Customers Line Chart
+                            // =========================================
 
-                        //     var payingCustomersSeries = new Keen.Query('count_unique', {
-                        //         eventCollection: 'Stripe_Events',
-                        //         timeframe: 'last_30_days',
-                        //         targetProperty: 'data.object.customer',
-                        //         interval: 'daily',
-                        //         filters: [{
-                        //             'property_name':'type',
-                        //             'operator':'eq',
-                        //             'property_value':'invoice.payment_succeeded'
-                        //         },
-                        //         {
-                        //             'property_name':'data.object.total',
-                        //             'operator':'gt',
-                        //             'property_value': 0
-                        //         }]
-                        //     });
-
-
-                        //     client.run([monthlyRecurringRevenue, activeSubscriptions, canceledSubscriptions, payingCustomersSeries], function(response) {
-                        //         var totalRevenue = this.data[0].result;
-                        //         var numOfCustomers = $scope.customers.length;
-                        //         var avgRevenue = totalRevenue / numOfCustomers;
-                        //         var result = avgRevenue * numOfCustomers;
-                        //         $scope.monthlyRecurringRevenue = result / 100;
-
-                        //         // ======================================
-                        //         // Average Revenue Per Customer Metric
-                        //         // ======================================
-
-                        //         $scope.avgRevenue = avgRevenue;
-
-                        //         // ======================================
-                        //         // Annual Run Rate Metric
-                        //         // MRR * 12
-                        //         // ======================================
-
-                        //         $scope.annualRunRate = $scope.monthlyRecurringRevenue * 12;
-
-                        //         // ======================================
-                        //         // Average monthly Recurring Revenue Per User (ARPU)
-                        //         // ARPU = MRR / Active Subscriptions.
-                        //         // ======================================
-
-                        //         $scope.activeSubscriptions = this.data[1].result;
-
-                        //         $scope.arpu = $scope.monthlyRecurringRevenue / $scope.activeSubscriptions;
-
-                        //         // ======================================
-                        //         // User Churn
-                        //         // Churn = canceled subscriptions / (canceled subscriptions + active subscriptions)
-                        //         // ======================================
-
-                        //         var cancelSubscriptionData = [];
-                        //         $scope.totalCanceledSubscriptions = 0;
-                        //         for (var i = 0; i < this.data[2].result.length; i++) {
-                        //             cancelSubscriptionData.push(this.data[2].result[i].value);
-                        //             $scope.totalCanceledSubscriptions += parseInt(this.data[2].result[i].value);
-                        //         };
-                        //         $scope.canceledSubscriptions = cancelSubscriptionData;
-
-                        //         var userChurnCalc = this.data[2].result / (this.data[2].result + this.data[1].result) * 100;
-                        //         $scope.userChurn = userChurnCalc.toFixed(1) * -1;
-
-                        //         // ======================================
-                        //         // Lifetime Value (LTV)
-                        //         // LTV =  ARPU / Churn
-                        //         // ======================================
-                        //         $scope.lifetimeValue = $scope.arpu / $scope.userChurn;
+                            var payingCustomersSeries = new Keen.Query('count_unique', {
+                                eventCollection: 'Stripe_Events',
+                                timeframe: 'last_30_days',
+                                targetProperty: 'data.object.customer',
+                                interval: 'daily',
+                                filters: [{
+                                    'property_name':'type',
+                                    'operator':'eq',
+                                    'property_value':'invoice.payment_succeeded'
+                                },
+                                {
+                                    'property_name':'data.object.total',
+                                    'operator':'gt',
+                                    'property_value': 0
+                                }]
+                            });
 
 
-                        //         var totalCustomerData = [];
-                        //         $scope.totalPayingCustomers = 0;
-                        //         for (var i = 0; i < this.data[3].result.length; i++) {
-                        //             totalCustomerData.push(this.data[3].result[i].value);
-                        //             $scope.totalPayingCustomers += this.data[3].result[i].value;
-                        //         };
+                            client.run([monthlyRecurringRevenue, activeSubscriptions, canceledSubscriptions, payingCustomersSeries], function(response) {
+                                var totalRevenue = this.data[0].result;
+                                var numOfCustomers = $scope.customers.length;
+                                var avgRevenue = totalRevenue / numOfCustomers;
+                                var result = avgRevenue * numOfCustomers;
+                                $scope.monthlyRecurringRevenue = result / 100;
 
-                        //         $scope.customerOverviewConfig = {
-                        //             options: {
-                        //                 chart: {
-                        //                     height: 250,
-                        //                 },
-                        //                 title: {
-                        //                     text: ''
-                        //                 },
-                        //                 tooltip: {
-                        //                     pointFormat: '<b>{point.y}</b>'
-                        //                 },
-                        //                 exporting: {
-                        //                     enabled: false
-                        //                 }
-                        //             },
-                        //             xAxis: {
-                        //                 type: 'datetime',
-                        //                 labels: {
-                        //                     format: "{value:%b %d}"
-                        //                 },
-                        //                 minRange: 30 * 24 * 3600000 // fourteen days
-                        //             },
-                        //             yAxis: {
-                        //                 min: 0,
-                        //                 max: Math.max.apply(Math, totalCustomerData) + 100,
-                        //                 title: {
-                        //                     text: ''
-                        //                 }
-                        //             },
-                        //             series: [{
-                        //                 type: 'area',
-                        //                 name: 'Customers',
-                        //                 pointInterval: 24 * 3600 * 1000,
-                        //                 pointStart: Date.parse(this.data[3].result[0].timeframe.start),
-                        //                 color: '#ef9f22',
-                        //                 data: totalCustomerData
-                        //             },
-                        //             {
-                        //                 type: 'area',
-                        //                 name: 'Cancellations',
-                        //                 pointInterval: 24 * 3600 * 1000,
-                        //                 pointStart: Date.parse(this.data[2].result[0].timeframe.start),
-                        //                 data: cancelSubscriptionData
-                        //             }],
-                        //             credits: {
-                        //                 enabled: false
-                        //             }
-                        //         };
-                        //     });
+                                // ======================================
+                                // Average Revenue Per Customer Metric
+                                // ======================================
+
+                                $scope.avgRevenue = avgRevenue;
+
+                                // ======================================
+                                // Annual Run Rate Metric
+                                // MRR * 12
+                                // ======================================
+
+                                $scope.annualRunRate = $scope.monthlyRecurringRevenue * 12;
+
+                                // ======================================
+                                // Average monthly Recurring Revenue Per User (ARPU)
+                                // ARPU = MRR / Active Subscriptions.
+                                // ======================================
+
+                                $scope.activeSubscriptions = this.data[1].result;
+
+                                $scope.arpu = $scope.monthlyRecurringRevenue / $scope.activeSubscriptions;
+
+                                // ======================================
+                                // User Churn
+                                // Churn = canceled subscriptions / (canceled subscriptions + active subscriptions)
+                                // ======================================
+
+                                var cancelSubscriptionData = [];
+                                $scope.totalCanceledSubscriptions = 0;
+                                for (var i = 0; i < this.data[2].result.length; i++) {
+                                    cancelSubscriptionData.push(this.data[2].result[i].value);
+                                    $scope.totalCanceledSubscriptions += parseInt(this.data[2].result[i].value);
+                                };
+                                $scope.canceledSubscriptions = cancelSubscriptionData;
+
+                                var userChurnCalc = this.data[2].result / (this.data[2].result + this.data[1].result) * 100;
+                                $scope.userChurn = userChurnCalc.toFixed(1) * -1;
+
+                                // ======================================
+                                // Lifetime Value (LTV)
+                                // LTV =  ARPU / Churn
+                                // ======================================
+                                $scope.lifetimeValue = $scope.arpu / $scope.userChurn;
 
 
-                        // }); //end PaymentService.getCustomers
+                                var totalCustomerData = [];
+                                $scope.totalPayingCustomers = 0;
+                                for (var i = 0; i < this.data[3].result.length; i++) {
+                                    totalCustomerData.push(this.data[3].result[i].value);
+                                    $scope.totalPayingCustomers += this.data[3].result[i].value;
+                                };
+
+                                $scope.customerOverviewConfig = {
+                                    options: {
+                                        chart: {
+                                            height: 250,
+                                        },
+                                        title: {
+                                            text: ''
+                                        },
+                                        tooltip: {
+                                            pointFormat: '<b>{point.y}</b>'
+                                        },
+                                        exporting: {
+                                            enabled: false
+                                        }
+                                    },
+                                    xAxis: {
+                                        type: 'datetime',
+                                        labels: {
+                                            format: "{value:%b %d}"
+                                        },
+                                        minRange: 30 * 24 * 3600000 // fourteen days
+                                    },
+                                    yAxis: {
+                                        min: 0,
+                                        max: Math.max.apply(Math, totalCustomerData) + 100,
+                                        title: {
+                                            text: ''
+                                        }
+                                    },
+                                    series: [{
+                                        type: 'area',
+                                        name: 'Customers',
+                                        pointInterval: 24 * 3600 * 1000,
+                                        pointStart: Date.parse(this.data[3].result[0].timeframe.start),
+                                        color: '#ef9f22',
+                                        data: totalCustomerData
+                                    },
+                                    {
+                                        type: 'area',
+                                        name: 'Cancellations',
+                                        pointInterval: 24 * 3600 * 1000,
+                                        pointStart: Date.parse(this.data[2].result[0].timeframe.start),
+                                        data: cancelSubscriptionData
+                                    }],
+                                    credits: {
+                                        enabled: false
+                                    }
+                                };
+                            });
+
+
+                        }); //end PaymentService.getCustomers
 
                         // ======================================
                         // Fees Metric
                         // ======================================
 
-                        // var feesThisMonth = new Keen.Query("sum", {
-                        //     eventCollection: "Stripe_Events",
-                        //     targetProperty: "data.object.fee",
-                        //     timeframe: 'last_30_days',
-                        // });
-                        // var feesPreviousMonth = new Keen.Query("sum", {
-                        //     eventCollection: "Stripe_Events",
-                        //     targetProperty: "data.object.fee",
-                        //     timeframe: 'previous_30_days',
-                        // });
-                        // client.run([feesThisMonth, feesPreviousMonth], function(response) {
-                        //     $scope.totalFees = this.data[0].result / 100;
-                        //     $scope.totalFeesPrevious = this.data[1].result / 100;
-                        //     var result = (($scope.totalFees - $scope.totalFeesPrevious) / $scope.totalFees) * 100;
-                        //     var format = Math.round(result * 100) / 100;
-                        //     if (format == 0) {
-                        //         format = null
-                        //     }
-                        //     $scope.totalFeesPercent = format;
-                        // });
+                        var feesThisMonth = new Keen.Query("sum", {
+                            eventCollection: "Stripe_Events",
+                            targetProperty: "data.object.fee",
+                            timeframe: 'last_30_days',
+                        });
+                        var feesPreviousMonth = new Keen.Query("sum", {
+                            eventCollection: "Stripe_Events",
+                            targetProperty: "data.object.fee",
+                            timeframe: 'previous_30_days',
+                        });
+                        client.run([feesThisMonth, feesPreviousMonth], function(response) {
+                            $scope.totalFees = this.data[0].result / 100;
+                            $scope.totalFeesPrevious = this.data[1].result / 100;
+                            var result = (($scope.totalFees - $scope.totalFeesPrevious) / $scope.totalFees) * 100;
+                            var format = Math.round(result * 100) / 100;
+                            if (format == 0) {
+                                format = null
+                            }
+                            $scope.totalFeesPercent = format;
+                        });
 
                         // ======================================
                         // Net Revenue Metric
                         // Net revenue = gross revenue – damages/coupons/returns
                         // ======================================
 
-                        // var netRevenueThisMonth = new Keen.Query("sum", {
-                        //     eventCollection: "Stripe_Events",
-                        //     targetProperty: 'data.object.amount',
-                        //     timeframe: 'last_30_days',
-                        //     filters: [{
-                        //         'property_name': 'type',
-                        //         'operator': 'eq',
-                        //         'property_value': 'charge.succeeded'
-                        //     }]
-                        // });
+                        var netRevenueThisMonth = new Keen.Query("sum", {
+                            eventCollection: "Stripe_Events",
+                            targetProperty: 'data.object.amount',
+                            timeframe: 'last_30_days',
+                            filters: [{
+                                'property_name': 'type',
+                                'operator': 'eq',
+                                'property_value': 'charge.succeeded'
+                            }]
+                        });
 
-                        // var netRevenuePreviousMonth = new Keen.Query("sum", {
-                        //     eventCollection: "Stripe_Events",
-                        //     targetProperty: 'data.object.amount',
-                        //     timeframe: 'previous_month',
-                        //     filters: [{
-                        //         'property_name': 'type',
-                        //         'operator': 'eq',
-                        //         'property_value': 'charge.succeeded'
-                        //     }]
-                        // });
+                        var netRevenuePreviousMonth = new Keen.Query("sum", {
+                            eventCollection: "Stripe_Events",
+                            targetProperty: 'data.object.amount',
+                            timeframe: 'previous_month',
+                            filters: [{
+                                'property_name': 'type',
+                                'operator': 'eq',
+                                'property_value': 'charge.succeeded'
+                            }]
+                        });
 
-                        // client.run([netRevenueThisMonth, feesThisMonth, netRevenuePreviousMonth], function(response) {
-                        //     var totalRevenue = this.data[0].result;
-                        //     var totalFees = this.data[1].result;
-                        //     var totalRevenuePrevious = this.data[2].result;
-                        //     var result = ((totalRevenue - totalRevenuePrevious) / totalRevenue) * 100;
-                        //     $scope.totalRevenuePercent = Math.round(result * 100) / 100;
-                        //     //TODO: Subtract damages/coupons/returns
-                        //     $scope.totalRevenue = this.data[0].result / 100;
-                        // });
+                        client.run([netRevenueThisMonth, feesThisMonth, netRevenuePreviousMonth], function(response) {
+                            var totalRevenue = this.data[0].result;
+                            var totalFees = this.data[1].result;
+                            var totalRevenuePrevious = this.data[2].result;
+                            var result = ((totalRevenue - totalRevenuePrevious) / totalRevenue) * 100;
+                            $scope.totalRevenuePercent = Math.round(result * 100) / 100;
+                            //TODO: Subtract damages/coupons/returns
+                            $scope.totalRevenue = this.data[0].result / 100;
+                        });
 
                         // ======================================
                         // Other Revenue Metric
                         // ======================================
 
-                        // var otherRevenue = new Keen.Query("sum", {
-                        //     eventCollection: "Stripe_Events",
-                        //     targetProperty: 'data.object.total',
-                        //     timeframe: 'this_day',
-                        //     filters: [{
-                        //         "property_name": "data.object.subscription",
-                        //         "operator": "exists",
-                        //         "property_value": false
-                        //     }, {
-                        //         "property_name": "type",
-                        //         "operator": "eq",
-                        //         "property_value": "invoice.payment_succeeded"
-                        //     }]
-                        // });
-                        // client.run(otherRevenue, function(response) {
-                        //     $scope.totalRevenue = this.data.result;
-                        // });
+                        var otherRevenue = new Keen.Query("sum", {
+                            eventCollection: "Stripe_Events",
+                            targetProperty: 'data.object.total',
+                            timeframe: 'this_day',
+                            filters: [{
+                                "property_name": "data.object.subscription",
+                                "operator": "exists",
+                                "property_value": false
+                            }, {
+                                "property_name": "type",
+                                "operator": "eq",
+                                "property_value": "invoice.payment_succeeded"
+                            }]
+                        });
+                        client.run(otherRevenue, function(response) {
+                            $scope.totalRevenue = this.data.result;
+                        });
 
                         // ======================================
                         // Upgrades Metric
                         // ======================================
 
-                        // var otherRevenueQuery = new Keen.Query("extraction", {
-                        //     eventCollection: "Stripe_Events",
-                        //     timeframe: 'this_day',
-                        //     filters: [{
-                        //         "property_name": "type",
-                        //         "operator": "eq",
-                        //         "property_value": "customer.subscription.updated"
-                        //     }]
-                        // });
-                        // client.run(otherRevenueQuery, function(response) {
+                        var otherRevenueQuery = new Keen.Query("extraction", {
+                            eventCollection: "Stripe_Events",
+                            timeframe: 'this_day',
+                            filters: [{
+                                "property_name": "type",
+                                "operator": "eq",
+                                "property_value": "customer.subscription.updated"
+                            }]
+                        });
+                        client.run(otherRevenueQuery, function(response) {
 
-                        //     var updatedSubscriptions = [];
+                            var updatedSubscriptions = [];
 
-                        //     var result = this.data.result;
+                            var result = this.data.result;
 
-                        //     for (var x in result) {
-                        //         if (result[x].data.previous_attributes.plan.amount >= result[x].data.object.plan.amount) {
-                        //             updatedSubscriptions.push(result[x]);
-                        //         }
-                        //     }
+                            for (var x in result) {
+                                if (result[x].data.previous_attributes.plan.amount >= result[x].data.object.plan.amount) {
+                                    updatedSubscriptions.push(result[x]);
+                                }
+                            }
 
-                        //     var result = updatedSubscriptions.length;
+                            var result = updatedSubscriptions.length;
 
-                        //     var data = {
-                        //         result: result
-                        //     };
+                            var data = {
+                                result: result
+                            };
 
-                        //     window.chart = new Keen.Visualization(data, document.getElementById('upgrades'), {
-                        //         chartType: "metric",
-                        //         title: "Upgrades",
-                        //         width: 345,
-                        //         colors: ["#49c5b1"]
-                        //     });
-                        // });
+                            window.chart = new Keen.Visualization(data, document.getElementById('upgrades'), {
+                                chartType: "metric",
+                                title: "Upgrades",
+                                width: 345,
+                                colors: ["#49c5b1"]
+                            });
+                        });
 
                 }); //keen ready
 

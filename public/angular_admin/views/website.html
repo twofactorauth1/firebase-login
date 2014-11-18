@@ -167,7 +167,7 @@
                             <h5 class="center">{{componentEditing.title}}</h5>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-if="componentEditing.type === 'campaign'">
                         <label>Campaign ID:</label>
                         <select ng-model="componentEditing.campaignId" ng-change="saveComponent()" class="form-control input-lg">
                             <option ng-repeat="course in courses" value="{{course._id}}">{{course.title}}</option>
