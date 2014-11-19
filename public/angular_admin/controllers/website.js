@@ -732,11 +732,6 @@ define([
                     title: 'Social Links',
                     type: 'social-feed',
                     icon: 'custom social-links'
-                },
-                {
-                    title: 'Product',
-                    type: 'products',
-                    icon: 'custom single-post'
                 }
             ];
 
