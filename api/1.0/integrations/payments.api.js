@@ -797,7 +797,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var card = req.body.card; //card or customer REQUIRED
                 var customerId = req.body.customerId; //card or customer REQUIRED
                 var contactId = req.body.contactId;//contact or user REQUIRED
-                var userId = req.body.userId; //contact or user REQUIRED
+                var userId = req.body.userId || req.user.id();//contact or user REQUIRED
                 var description = req.body.description;
                 var metadata = req.body.metadata;
                 var capture = req.body.capture;
