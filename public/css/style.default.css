@@ -24638,3 +24638,114 @@ div[data-type=blog] .container {
   font-weight: bold;
   text-shadow: none;
 }
+/********** Image Text v5 **********/
+.image-text-v5 .image-text-title {
+  color: #444;
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: normal;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+  display: block;
+  position: relative;
+}
+.image-text-v5 .image-text-subtitle {
+  text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.45);
+  margin-bottom: 5px;
+}
+.image-text-v5 .btn {
+  margin: 20px auto;
+}
+.image-text-v5 .image-text-image img {
+  margin-right: 25px auto;
+  min-width: 250px;
+}
+.image-text-v5 .image-text-panel {
+  padding: 20px;
+}
+.image-text-v5 .image-text-text a {
+  color: white;
+  text-decoration: underline;
+}
+div[data-class='image-text'] h3 {
+  font-weight: bold;
+}
+div[data-class='text'] {
+  font-size: 14px;
+}
+div[data-class='image-text'] p {
+  font-size: 14px;
+}
+.image-text {
+  padding: 0 20px;
+  display: inline-block;
+}
+.image-text .img-responsive {
+  margin: 0 auto;
+}
+.image-gallery-v2 .image-gallery-title {
+  text-align: center;
+}
+.image-gallery-v2 .image-gallery-subtitle {
+  text-align: center;
+}
+.image-gallery-v2 .single-image {
+  padding: 0;
+  margin: 0;
+}
+.image-gallery-v2 .thumbnail {
+  position: relative;
+}
+.image-gallery-v2 a.thumbnail .caption {
+  display: block;
+  background: #222;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  opacity: 0;
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  -ms-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+}
+.image-gallery-v2 a.thumbnail:hover .caption {
+  opacity: 0.9;
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  -ms-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+}
+.image-gallery-v2 a.thumbnail .caption i {
+  display: block;
+  font-size: 40px;
+  color: #EEE;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -20px 0 0 -24px;
+  opacity: 0;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.image-gallery-v2 a.thumbnail:hover .caption i {
+  opacity: 1;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.image-gallery-v2 .thumbnail img {
+  height: 240px;
+  width: 310px;
+}
+.image-gallery-v2 .imgHeight {
+  height: 285px;
+}
