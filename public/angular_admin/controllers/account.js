@@ -22,9 +22,8 @@ define([
       {v:'marketing',n:'Marketing'},
       {v:'commerce',n:'Commerce'},
       {v:'dashboard',n:'Dashboard'},
-      {v:'account',n:'Account'}]
-    }]);
-
+      {v:'account',n:'Account'}
+    ];
     $scope.$watch('activeTab', function (newValue, oldValue) {
       console.log('watch activeTab >> ', newValue);
       if($scope.userPreferences){
@@ -108,4 +107,7 @@ define([
     $scope.updateDefaultTab = function (user){
         NavigationService.updateNavigation2(user);
     };
+
+  }]);
+
 });
