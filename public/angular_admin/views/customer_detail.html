@@ -198,7 +198,10 @@
                         <div class="col-xs-12">
                         <!-- <span class="btn btn-success btn-full-contacts" ng-click="importContactFn()">Import Contact</span>-->
 
-
+                            <span data-original-title="Important Contact" ng-click="setImportantContact(customer)" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips">
+                        <i class="fa fa-star-o" ng-hide="customer.starred"></i>
+                        <i class="fa fa-star" ng-show="customer.starred"></i>
+                    </span>
                             <img class="img-circle media-object thumbnail standard thumb-lg" ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}">
 
 

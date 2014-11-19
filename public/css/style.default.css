@@ -16390,6 +16390,22 @@ strong {
 #contact-details-container #contact-information .edit-address-container:last-child {
   margin-bottom: 0px;
 }
+#contact-details-container .important-star {
+  position: absolute;
+  right: 0;
+  margin: 0px 13px;
+  font-size: 22px;
+}
+#contact-details-container .important-star .fa-star-o {
+  cursor: pointer;
+}
+#contact-details-container .important-star .fa-star-o:hover {
+  color: #f1c40f;
+}
+#contact-details-container .important-star .fa-star {
+  cursor: pointer;
+  color: #f1c40f;
+}
 #contact-edit-container .input-lg {
   height: 48px;
 }
