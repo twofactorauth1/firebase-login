@@ -80,9 +80,9 @@
         <div>
           <div  ng-repeat="customer in renderedCustomers" class="col-xs-12 col-sm-4 col-md-3">
             <div data-contactid="{{customer._id}}" class="people-item btn-view-contact-details contact-item" style="opacity:1">
-              <span data-original-title="Important Contact" ng-click="setImportantContact(customer)" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips">
-                        <i class="fa fa-star-o" ng-hide="customer.starred"></i>
-                        <i class="fa fa-star" ng-show="customer.starred"></i>
+              <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips">
+                        <i class="fa fa-star-o" ng-hide="customer.starred" ng-click="setImportantContact(customer, true)"></i>
+                        <i class="fa fa-star" ng-show="customer.starred" ng-click="setImportantContact(customer, false)"></i>
                     </span>
                     <span class="label label-info contact-cat" ng-show="userPreferences.customerSettings.showContactLabel">{{contactLabel(customer)}}</span>
 
@@ -167,7 +167,8 @@
             <div class="container-fluid tb-row"  ng-repeat="customer in renderedCustomers">
               <div class="tb-col col-md-1">
                   <div class="people-item" style="opacity:1">
-                    <span data-original-title="Important Contact" ng-click="setImportantContact(customer)" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips"> <i class="fa fa-star-o" ng-hide="customer.starred"></i> <i class="fa fa-star" ng-show="customer.starred"></i> </span>
+                    <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips"><i class="fa fa-star-o" ng-hide="customer.starred" ng-click="setImportantContact(customer, true)"></i>
+                        <i class="fa fa-star" ng-show="customer.starred" ng-click="setImportantContact(customer, false)"></i></span>
                   </div>
                   </div>
               <div class="tb-col col-md-3">
