@@ -340,19 +340,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
 
             //credit card
+
             newAccount.card = {
-                number: $('#cc_number').val(),
-                cvc: $('#cc_cvc').val(),
-                exp_month: $('#cc_exp_month').val(),
-                exp_year: $('#cc_exp_year').val()
+                number: $('#number').val(),
+                cvc: $('#cvc').val(),
+                exp_month: parseInt($('#expiry').val().split('/')[0]),
+                exp_year: parseInt($('#expiry').val().split('/')[1])
             };
 
-            var cc_name = $('#cc_name').val();
+            var cc_name = $('#name').val();
 
-            console.log(newAccount.card.number);
-            console.log(newAccount.card.cvc);
-            console.log(newAccount.card.exp_month);
-            console.log(newAccount.card.exp_year);
+            console.info(newAccount.card.number);
+            console.info(newAccount.card.cvc);
+            console.info(newAccount.card.exp_month);
+            console.info(newAccount.card.exp_year);
+            console.info(cc_name);
 
             if (!newAccount.card.number || !newAccount.card.cvc || !newAccount.card.exp_month || !newAccount.card.exp_year ) {
                 //|| !cc_name
