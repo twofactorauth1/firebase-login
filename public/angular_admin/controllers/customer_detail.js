@@ -65,5 +65,11 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
       })
       return arrAddress.length > 0;
     };
+    $scope.setImportantContact = function(customer, value) {
+        customer.starred = value;
+        CustomerService.saveCustomer(customer, function(customers) {
+          ToasterService.show('success', "Contact updated succesfully.");
+        });
+      };
   }]);
 });
