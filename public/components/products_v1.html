@@ -37,9 +37,9 @@
                             <h5>$ {{product.regular_price}}</h5>
 
                             <p>{{product.description}}</p>
-                            <button class="btn btn-primary center" href="#">
+                            <button class="btn btn-primary center" ng-click = "addDetailsToCart(product)" href="#">
                                 <div data-class="btn-text" class="editable">
-                                    <span class="fa fa-shopping-cart"></span> Add to Cart
+                                    <span class="fa fa-shopping-cart" ></span> Add to Cart
                                 </div>
                             </button>
                         </div>
@@ -61,7 +61,7 @@
 
 <!--not in use now-->
 
-<button class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#cart-checkout-modal">
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#cart-checkout-modal">
     Launch Cart modal
 </button>
 
@@ -80,64 +80,38 @@
     <div class="col-sm-8 order-line-items">
         <div class="mb15">
             <ul>
-                <li>
+                <li ng-repeat="item in cartDetails track by $index">
                     <div class="line-item-header row">
                         <button type="button" class="close" aria-hidden="true">×</button>
-                        <h4 class="col-sm-6">Lorem Ipsum E-Book</h4>
+                        <h4 class="col-sm-6">{{item.name}}</h4>
 
                         <div class="col-sm-3">
-                            <input type="text" class="form-control spinner-input">
+                            <input type="text" ng-model = "item.quantity" ng-change = "calculateTotalChargesfn()" class="form-control spinner-input">
                         </div>
-                        <p class="price col-sm-3">$50.00</p>
+                        <p class="price col-sm-3">$ {{item.regular_price}}</p>
                     </div>
 
                     <p class="description">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error sint dolores expedita tempore
-                        sunt quos, a facilis soluta architecto ratione, enim fugiat ab quisquam beatae dicta ullam
-                        minima neque optio.
+                        {{item.description}}
                     </p>
-                </li>
-                <li>
-                    <div class="line-item-header row">
-                        <button type="button" class="close" aria-hidden="true">×</button>
-                        <h4 class="col-sm-6">Lorem Ipsum E-Book</h4>
-
-                        <div class="col-sm-3">
-                            <input type="text" class="form-control spinner-input">
-                        </div>
-                        <p class="price col-sm-3">$50.00</p>
-                    </div>
-
-                    <p class="description">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error sint dolores expedita tempore
-                        sunt quos, a facilis soluta architecto ratione, enim fugiat ab quisquam beatae dicta ullam
-                        minima neque optio.
-                    </p>
-                </li>
+                </li>                
             </ul>
         </div>
     </div>
     <div class="col-sm-4 gray-bg order-summary">
         <h4 class="text-center">Order Summary</h4>
-        <ul>
-            <li>
-                <p class="text-left product-name">Product Name</p>
-
-                <p class="text-right product-price">$0.00</p>
-            </li>
-            <li>
-                <p class="text-left product-name">Product Name</p>
-
-                <p class="text-right product-price">$0.00</p>
+        <ul style="list-style:none;">
+            <li ng-repeat="item in cartDetails track by $index">
+                <p class="text-left product-name">{{item.name}}</p>
+                <p class="text-right product-price">$ {{item.regular_price * item.quantity}}</p>
             </li>
         </ul>
         <div class="row">
             <div class="col-xs-6"></div>
             <div class="clearfix mb30"></div>
             <div class="col-xs-offset-6 col-xs-6">
-                <p>Subtotal: $0.00</p>
-
-                <p>Tax (8%): $0.00</p>
+                <p>Subtotal: $ {{ subTotal }}</p>
+                <p>Tax (8%): $ {{ totalTax }}</p>
             </div>
         </div>
         <div class="row">
@@ -145,7 +119,7 @@
                 <h2>Total</h2>
             </div>
             <div class="col-xs-6">
-                <h2>$0.00</h2>
+                <h2>$ {{ total }}</h2>
             </div>
         </div>
         <div class="mb15"></div>
@@ -310,7 +284,8 @@
 </div>
 
 
-<div class="row payment hidden">
+<div class="row payment">
+    <!--  
     <div class="col-xs-8 card-details">
         <div class="row">
             <div class="col-sm-8">
@@ -373,7 +348,36 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-4 gray-bg order-summary">
+    -->
+
+     <div class="col-xs-12">
+      <div class="card-wrapper"></div> 
+      <div class="active">
+        <form name="product-card-details" action="">
+          <div class="row">
+            <div class="small-6 columns col-sm-6">
+              <input placeholder="Card number" type="text" name="number" id="number" class="form-control input-lg">
+            </div>
+            <div class="visible-xs mb20"></div>
+            <div class="small-6 columns col-sm-6">
+              <input placeholder="Full name" type="text" id="name" name="name" class="form-control input-lg">
+            </div>
+          </div>
+          <div class="clearfix mb20"></div>
+          <div class="row">
+            <div class="small-3 columns col-xs-6">
+              <input placeholder="MM/YY" type="text" id="expiry" name="expiry" class="form-control input-lg">
+            </div>
+            <div class="small-3 columns col-xs-6">
+              <input placeholder="CVC" type="text" id="cvc" name="cvc" class="form-control input-lg">
+            </div>
+          </div>
+          <div class="clearfix mb20"></div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-sm-4 gray-bg order-summary hidden">
         <h4 class="text-center">Order Summary</h4>
         <ul>
             <li>
@@ -438,7 +442,7 @@
 <div class="clearfix"></div>
 </div>
 <div class="modal-footer cart-footer">
-    <button class="btn btn-orange btn-checkout pull-right"><i class="fa fa-shopping-cart"></i> Checkout</button>
+    <button class="btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
     <button class="btn btn-info continue-shopping pull-left"><i class="fa fa-chevron-left"></i> Continue Shopping
     </button>
 </div>
@@ -463,3 +467,8 @@
 </div>
 <!-- /.modal -->
 </div>
+<script type="text/javascript">
+    card = $('form[name="product-card-details"]').card({
+                  container: '.card-wrapper'
+                });
+</script>
