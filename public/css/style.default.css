@@ -21249,6 +21249,9 @@ input[type='file'] {
 .single-product .rightpanel.rightpanel-commerce-edit {
   z-index: 1000;
 }
+.single-product .rightpanel.rightpanel-commerce-edit .iconpicker .fa {
+  font-size: 24px;
+}
 .campaign-list,
 .template-list {
   padding: 0;
