@@ -66,4 +66,26 @@ mainApp.service('paymentService', ['$http', function ($http) {
         });
     };
 
+    this.saveCartDetails = function(card, total, fn) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'charges'].join('/');
+      $http.post(apiUrl, {
+          amount : total,//REQUIRED
+          currency : 'usd',//REQUIRED
+          card : card //card or customer REQUIRED
+          //customerId = req.body.customerId; //card or customer REQUIRED
+          //contactId = req.body.contactId;//contact or user REQUIRED
+          //userId = req.body.userId; //contact or user REQUIRED
+          //description = req.body.description;
+          //metadata = req.body.metadata;
+          //capture = req.body.capture;
+         // statement_description = req.body.statement_description;
+         // receipt_email = req.body.receipt_email;
+         // application_fee = req.body.application_fee;
+        })
+        .success(function(data, status, headers, config) {
+          //ToasterService.show('success', 'Payment details');
+          fn(data);
+        });
+    };
+
 }]);

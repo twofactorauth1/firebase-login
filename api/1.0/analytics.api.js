@@ -35,6 +35,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEvent.bind(this));
 
         app.post(this.url('mandrill/event'), this.sendToKeen.bind(this));
+
+        //visit
+        app.post(this.url(':id/visit'), this.storeVisitInfo.bind(this));
         //app.post(this.url('mandrill/event'), this.sendToKeen.bind(this));
 
     },
@@ -222,6 +225,13 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    storeVisitInfo: function(req, res) {
+        var self = this;
+
+        
+        self.send200(res);
     }
 });
 
