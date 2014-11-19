@@ -10,7 +10,6 @@
  */
 var mainApp = angular
     .module('mainApp', [
-        'ngAnimate',
         'ipCookie',
         'ngResource',
         'ngRoute',
@@ -91,12 +90,10 @@ var mainApp = angular
 
         //get and parse current url
         var fullUrl = window.location.href;
-        var parsedUrl = $.url(fullUrl);
+        var parsedEntranceUrl = $.url(fullUrl);
         var parser = new UAParser();
 
-        $rootScope.$on("$routeChangeStart", function (scope, next, current) {
-            console.log('routeChangeStart >>> ');
-            var self = this;
+        var addPageData = function() {
             if (!firstVisit) {
                 var end = new Date().getTime();
                 pageProperties.session_end = end;
@@ -105,12 +102,17 @@ var mainApp = angular
                 sessionProperties.pages = pages;
             }
             firstVisit = false;
+        };
+
+        $rootScope.$on("$routeChangeStart", function (scope, next, current) {
+            var self = this;
+            addPageData();
         });
 
         $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
-            console.log('routeChangeSuccess >>> ');
             $rootScope.transitionState = "active";
             var startPageTimer = new Date().getTime();
+            var parsedUrl = $.url(fullUrl);
 
             pageProperties = {
                 url: {
@@ -284,6 +286,7 @@ var mainApp = angular
                     ip_address : "${keen.ip}",
                     fingerprint: fingerprint,
                     session_start: start,
+                    entrance: parsedEntranceUrl.attr("host"),
                     pages: []
                 };
 
@@ -327,21 +330,21 @@ var mainApp = angular
                     requestType: "jsonp"
                 });
 
-                /*
-                 * Commenting this out until we can find a better way - Kyle
-                 *
-                window.onbeforeunload = function (e) {
+                // window.onbeforeunload = function (e) {
 
-                    var end = new Date().getTime();
-                    sessionProperties["session_end"] = end;
-                    sessionProperties["pages"] = pages;
-                    sessionProperties["page_length"] = pages.length;
-                    sessionProperties["session_length"] = end-start;
-                    client.addEvent("frontsessions", sessionProperties);
+                //     if (pages.length <= 0) {
+                //         addPageData();
+                //     }
 
-                    return 'Are you sure you want to exit?';
-                };
-                */
+                //     var end = new Date().getTime();
+                //     sessionProperties["session_end"] = end;
+                //     sessionProperties["pages"] = pages;
+                //     sessionProperties["page_length"] = pages.length;
+                //     sessionProperties["session_length"] = end-start;
+                //     client.addEvent("frontsessions", sessionProperties);
+
+                //     return 'Are you sure you want to exit?';
+                // };
         });
 
     })

@@ -283,6 +283,7 @@ module.exports = function(grunt) {
             api:['api/test/*_test.js'],
             assets:['assets/test/*_test.js'],
             biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
+            campaign:['campaign/test/*_test.js'],
             cms: ['cms/test/cms_manager_test.js'],
             contacts: ['test/contact.dao_test.js'],
             contactActivities: ['contactactivities/test/*_test.js'],
@@ -450,6 +451,8 @@ module.exports = function(grunt) {
     grunt.registerTask('testContactActivities', ['nodeunit:contactActivities']);
     grunt.registerTask('testPayments', ['nodeunit:payments']);
     grunt.registerTask('testFunctionalPayments', ['nodeunit:functionalPayments']);
+    grunt.registerTask('testCampaigns', ['nodeunit:campaign']);
     grunt.registerTask('updateDocs', 'jsdoc2md');
+
     
 };

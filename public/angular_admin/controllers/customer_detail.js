@@ -1,9 +1,11 @@
 define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService'], function(app) {
     app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', 'ToasterService', function ($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService) {
         ngProgress.start();
-        $scope.$back = function() {
+         $scope.$back = function() {
+            console.log('$scope.lastState.state ', $scope.lastState.state);
+                console.log('$scope.lastState.params ', $scope.lastState.params);
             $state.go($scope.lastState.state, $scope.lastState.params);
-        };
+         };
         $scope.customerId = $stateParams.id;
         CustomerService.getCustomer($scope.customerId, function (customer) {
             $scope.customer = customer;

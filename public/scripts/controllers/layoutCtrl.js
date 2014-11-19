@@ -21,10 +21,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     window.parent.frames[0].parentNode.activateSettings();
         // };
 
-        // CourseService.getAllCourses(function(data) {
-        //     console.log('courses ', data);
-        //     that.courses = data;
-        // });
+        CourseService.getAllCourses(function(data) {
+            console.log('courses ', data);
+            that.courses = data;
+        });
 
         $scope.getCourse = function(campaignId) {
             console.log('campaign Id ', campaignId);
@@ -294,13 +294,23 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.createUser = function(user) {
             console.log('user', user);
 
+            var formatted = {
+                details: {
+                    emails: []
+                }
+            };
+
+            formatted.details.emails.push({
+                    email : user.email
+                });
+
             //create contact
-            userService.addContact(user, function(data) {
+            userService.addContact(formatted, function(data) {
                 console.log('data ', data);
             });
 
             //redirect to signup with details
-            window.location.href = "http://app.indigenous.local:3000/signup";
+            //window.location.href = "http://app.indigenous.local:3000/signup";
         };
 
         $scope.createAccount = function(newAccount) {
