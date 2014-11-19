@@ -188,13 +188,12 @@ var eventHandler =  {
         var emailBody = jade.renderFile('./../templates/emails/stripe/common.jade', context);
         $$.g.mailer.sendMail(notificationConfig.FROM_EMAIL, notificationConfig.TO_EMAIL, null, iEvent.get('type') + ' Event', emailBody, null, function () {});
 
-        $.when(p1).done(function(){
-            eventDao.updateStripeEventState(iEvent.id(), status, function(err, value){
-                //err or not... we're done here.
-                log.debug('<< ' + iEvent.get('type'));
-                fn(err, value);
-            });
+        eventDao.updateStripeEventState(iEvent.id(), 'PROCESSED', function(err, value){
+            //err or not... we're done here.
+            log.debug('<< ' + iEvent.get('type'));
+            fn(err, value);
         });
+        
     },
 
     onAccountUpdated: function(iEvent, fn) {
