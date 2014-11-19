@@ -290,6 +290,7 @@ module.exports = function(grunt) {
             facebook: ['test/facebook_test.js'],
             functionalPayments: ['payments/tests/payment_functional_test.js'],
             payments: ['payments/tests/*_test.js'],
+            paymentEvents: ['payments/tests/stripe_event_handler_test.js'],
             products: ['products/tests/*_test.js'],
             twonet:['biometrics/twonet/adapter/test/**/*_test.js', 'biometrics/twonet/client/test/**/*_test.js',
                 'biometrics/twonet/adapter/test/twonet_test_poll.js'],
@@ -451,6 +452,7 @@ module.exports = function(grunt) {
     grunt.registerTask('testPayments', ['nodeunit:payments']);
     grunt.registerTask('testFunctionalPayments', ['nodeunit:functionalPayments']);
     grunt.registerTask('testCampaigns', ['nodeunit:campaign']);
+    grunt.registerTask('testPaymentEvents', ['nodeunit:paymentEvents']);
     grunt.registerTask('updateDocs', 'jsdoc2md');
 
     
