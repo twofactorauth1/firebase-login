@@ -22399,6 +22399,13 @@ div[data-type='campaign'] .inner-page {
 .feature-list-v4 .title {
   text-align: center;
 }
+.feature-list-v4 .feature-title h1,
+.feature-list-v4 .feature-title h2,
+.feature-list-v4 .feature-title h3,
+.feature-list-v4 .feature-title h4,
+.feature-list-v4 .feature-title h5 {
+  margin-top: 0;
+}
 .feature-list-v4 .container-xs-height {
   display: table;
   padding-left: 0px;

@@ -349,7 +349,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
             var cc_name = $('#cc_name').val();
 
-            if (!newAccount.card.number || !newAccount.card.cvc || !newAccount.card.exp_month || !newAccount.card.exp_year || !cc_name) {
+            console.log(newAccount.card.number);
+            console.log(newAccount.card.cvc);
+            console.log(newAccount.card.exp_month);
+            console.log(newAccount.card.exp_year);
+
+            if (!newAccount.card.number || !newAccount.card.cvc || !newAccount.card.exp_month || !newAccount.card.exp_year ) {
+                //|| !cc_name
                 console.log('card invalid');
                 //hightlight card in red
                 return;
