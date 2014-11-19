@@ -9,6 +9,7 @@ var stripeDao = require('./dao/stripe.dao.js');
 var eventDao = require('./dao/stripe_event.dao.js');
 var userDao = require('../dao/user.dao.js');
 var subscriptionDao = require('./subscription.dao.js');
+var notificationConfig = require('./configs/notification.config.js');
 var log = $$.g.getLogger("stripe.event.handler");
 var async = require('async');
 var eventQ = async.queue(function(event, fn){
@@ -185,7 +186,7 @@ var eventHandler =  {
     sendEmailToOperationFn: function(iEvent, fn) {
         var context = {name: 'Operation Manager', event: iEvent.get('type'), response: JSON.stringify(iEvent.get('body'))};
         var emailBody = jade.renderFile('./../templates/emails/stripe/common.jade', context);
-        $$.g.mailer.sendMail('admin@indigenous.io', 'operations@indigenous.io', null, iEvent.get('type') + ' Event', emailBody, null, function () {});
+        $$.g.mailer.sendMail(notificationConfig.FROM_EMAIL, notificationConfig.TO_EMAIL, null, iEvent.get('type') + ' Event', emailBody, null, function () {});
 
         $.when(p1).done(function(){
             eventDao.updateStripeEventState(iEvent.id(), status, function(err, value){
