@@ -15,7 +15,7 @@
     <div class="mb30"></div>
 
     <div class="row ">
-        <div ng-repeat="feature in component.features track by $index">
+        <div ng-repeat="feature in component.features track by $index"  class="single-feature" data-index="{{$index}}">
             <div class="row row-xs-height">
                 <div class="col-sm-3 col-xs-12 col-xs-height">
                     <img src="{{feature.imgurl}}" class="img-rounded" height="250px" width="250px" />
