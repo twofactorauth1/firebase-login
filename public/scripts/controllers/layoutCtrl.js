@@ -161,35 +161,35 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.addDetailsToCart = function(product) {
            if(!$scope.cartDetails)
            {
-                $scope.cartDetails = [];       
-           } 
+                $scope.cartDetails = [];
+           }
            if(!product.quantity)
            {
-                product.quantity = 1;     
-           }                     
+                product.quantity = 1;
+           }
             var match = _.find($scope.cartDetails, function(item) { return item._id === product._id })
             if (match) {
-                match.quantity = parseInt(match.quantity) + 1;                
+                match.quantity = parseInt(match.quantity) + 1;
             }
             else
             {
                 $scope.cartDetails.push(product);
-            } 
+            }
            $scope.calculateTotalChargesfn();
-         
+
         };
 
         $scope.calculateTotalChargesfn = function()
         {
-            var subTotal = 0; 
+            var subTotal = 0;
             var totalTax =  0;
             var total = 0;
             $scope.cartDetails.forEach(function(item){
                 subTotal = parseFloat(subTotal) + (parseFloat(item.regular_price) * item.quantity );
             })
-            $scope.subTotal = subTotal;               
-            $scope.totalTax = parseFloat(($scope.subTotal * 8) / 100 );  
-            $scope.total = $scope.subTotal + $scope.totalTax;       
+            $scope.subTotal = subTotal;
+            $scope.totalTax = parseFloat(($scope.subTotal * 8) / 100 );
+            $scope.total = $scope.subTotal + $scope.totalTax;
         }
 
         $scope.makeCartPayment = function() {
@@ -214,13 +214,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
 
             PaymentService.getStripeCardToken(cardInput, function(token) {
-                 PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {                   
-                        $('#cart-checkout-modal').modal('hide'); 
-                 });       
+                 PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {
+                        $('#cart-checkout-modal').modal('hide');
+                 });
             });
-         
+
         };
-       
+
 
         /********** END PRODUCT RELATED **********/
 
@@ -450,7 +450,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         newUser.plan = $scope.selectedPlan;
                         newUser.anonymousId = window.analytics.user().anonymousId();
                         userService.initializeUser(newUser, function(data) {
-                            window.location.replace(newUser.accountUrl);
+                            $window.location.href = tmpAccount.accountUrl;
                         });
                     });
 
