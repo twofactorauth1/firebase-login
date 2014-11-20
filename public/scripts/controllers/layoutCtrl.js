@@ -358,7 +358,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         /********** END CMS RELATED **********/
 
         /********** SIGNUP SECTION **********/
-
+        $scope.monthly_sub_cost = 49.95;
+        $scope.yearly_sub_cost = 32.91;
+        $scope.selected_sub_cost = $scope.monthly_sub_cost;
+        
         $scope.createUser = function(user) {
             console.log('user', user);
 
