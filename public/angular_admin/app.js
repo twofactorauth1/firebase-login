@@ -122,6 +122,9 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
       $httpProvider.interceptors.push(authInterceptor);
     })
     .run(['$rootScope', function($rootScope) {
+      var p = $('.nav.nav-pills.nav-stacked.nav-bracket')
+        , includeList = ['account', 'commerce', 'customer', 'website', 'marketing', 'dashboard'];
+
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
           var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit'];
@@ -130,6 +133,14 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
               state: fromState.name,
               params: fromParams
             };
+          }
+
+          // update active tab
+          if (includeList.indexOf(toState.name) >= 0) {
+            p = p || $('.nav.nav-pills.nav-stacked.nav-bracket');
+
+            $('[href="#/' + toState.name + '"]', p).parent().addClass('active')
+            $('[href="#/' + fromState.name + '"]', p).parent().removeClass('active')
           }
         });
     }]);
