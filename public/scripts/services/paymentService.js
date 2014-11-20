@@ -69,7 +69,7 @@ mainApp.service('paymentService', ['$http', function ($http) {
     this.saveCartDetails = function(card, total, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'charges'].join('/');
       $http.post(apiUrl, {
-          amount : parseInt(total),//REQUIRED
+          amount : total,//REQUIRED
           currency : 'usd',//REQUIRED
           card : card //card or customer REQUIRED
           //customerId = req.body.customerId; //card or customer REQUIRED
