@@ -41,6 +41,7 @@ var eventHandler =  {
             accountId: 0
         });
         eventDao.saveOrUpdate(iEvent, function(err, value){
+            console.dir(value);
             if(err) {
                 log.error('Error saving indigenous event: ' + err);
                 fn(err, null);
@@ -185,16 +186,20 @@ var eventHandler =  {
 
     sendEmailToOperationFn: function(iEvent, fn) {
         var context = {name: 'Operation Manager', event: iEvent.get('type'), response: JSON.stringify(iEvent.get('body'))};
-        var emailBody = jade.renderFile('./../templates/emails/stripe/common.jade', context);
-        $$.g.mailer.sendMail(notificationConfig.FROM_EMAIL, notificationConfig.TO_EMAIL, null, iEvent.get('type') + ' Event', emailBody, null, function () {});
-
-        $.when(p1).done(function(){
-            eventDao.updateStripeEventState(iEvent.id(), status, function(err, value){
+        var emailBody = jade.renderFile('templates/emails/stripe/common.jade', context);
+        $$.g.mailer.sendMail(notificationConfig.FROM_EMAIL, notificationConfig.TO_EMAIL, null, iEvent.get('type') + ' Event', emailBody, null, function (err, value) {
+            if(err) {
+                log.error('Error sending notification');
+            }
+            eventDao.updateStripeEventState(iEvent.id(), 'PROCESSED', function(err, value){
                 //err or not... we're done here.
                 log.debug('<< ' + iEvent.get('type'));
                 fn(err, value);
             });
         });
+
+
+
     },
 
     onAccountUpdated: function(iEvent, fn) {
@@ -257,6 +262,7 @@ var eventHandler =  {
     },
 
     onChargeFailed: function(iEvent, fn) {
+        var self = this;
         self.sendEmailToOperationFn(iEvent, fn);
     },
 
@@ -286,7 +292,8 @@ var eventHandler =  {
     },
 
     onChargeDisputeCreated: function(iEvent, fn) {
-      self.sendEmailToOperationFn(iEvent, fn);
+        var self = this;
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onChargeDisputeUpdated: function(iEvent, fn) {
@@ -330,11 +337,12 @@ var eventHandler =  {
     },
 
     onCustomerSubscriptionDeleted: function(iEvent, fn) {
-      var subId = iEvent.get('body').id;
-      subscriptionDao.removeByQuery({stripeSubscriptionId: subId}, function (err, res) {
-        log.error('Subscription deletion failed:' % err.message);
-      });
-      self.sendEmailToOperationFn(iEvent, fn);
+        var self = this;
+        var subId = iEvent.get('body').id;
+        subscriptionDao.removeByQuery({stripeSubscriptionId: subId}, function (err, res) {
+            log.error('Subscription deletion failed:' % err.message);
+        });
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onCustomerSubscriptionTrialWillEnd: function(iEvent, fn) {
@@ -354,7 +362,8 @@ var eventHandler =  {
     },
 
     onInvoicePaymentFailed: function(iEvent, fn) {
-      self.sendEmailToOperationFn(iEvent, fn);
+        var self = this;
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onInvoiceItemCreated: function(iEvent, fn) {
