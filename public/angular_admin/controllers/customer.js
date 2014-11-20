@@ -376,8 +376,8 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
         $scope.savePreferencesFn();
       };
 
-      $scope.setImportantContact = function(customer) {
-        customer.starred = true;
+      $scope.setImportantContact = function(customer, value) {
+        customer.starred = value;
         CustomerService.saveCustomer(customer, function(customers) {
           ToasterService.show('success', "Contact updated succesfully.");
         });

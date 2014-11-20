@@ -113,6 +113,25 @@ define([
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility="visible";
                     }
 
+                    //add media modal click events to all images
+                    var images = iframeDoc.getElementById('body').querySelectorAll('img');
+                    console.log('imgs ', images);
+                    for (var i = 0; i < images.length; i++) {
+                        if (typeof images[i].addEventListener != "undefined") {
+                            images[i].addEventListener("click", function(e) {
+                                console.log('e.currentTarget.attributes >>> ', $(e.currentTarget).closest('.component').data('id'));
+                                $("#media-manager-modal").modal('show');
+                                $scope.imageChange = true;
+                                $scope.componentArrTarget = e.currentTarget;
+                                $scope.componentEditing = _.findWhere($scope.components, {
+                                    _id: $(e.currentTarget).closest('.component').data('id')
+                                });
+                            });
+                        } else if (typeof images.attachEvent != "undefined") {
+                            images[i].attachEvent("onclick", iframeClickHandler);
+                        }
+                    };
+
                     //add click events for all the settings buttons
                     var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
                     for (var i = 0; i < settingsBtns.length; i++) {
@@ -447,7 +466,7 @@ define([
                 }
                 WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, cmpVersion,  function(data) {
                     if (data.components) { 
-                        var newComponent = data.components[data.components.length - 1];                       
+                        var newComponent = data.components[data.components.length - 1];
                         var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
                         $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
@@ -741,7 +760,24 @@ define([
             };
 
             $scope.insertMedia=function(asset){
-                $scope.componentEditing.bg.img.url=asset.url;
+                if ($scope.imageChange) {
+                    $scope.imageChange = false;
+                    var type = $scope.componentEditing.type;
+                    //if image/text component
+                    if(type == 'image-text') {
+                        $scope.componentEditing.imgurl = asset.url;
+                    } else if(type == 'feature-list') {
+                        console.log('feature list $scope.componentEditing >>> ', $scope.componentEditing.features[0].imgurl);
+                        var targetIndex = $($scope.componentArrTarget).closest('.single-feature').data('index');
+                        console.log('targetIndex >>> ', targetIndex);
+                        $scope.componentEditing.features[targetIndex].imgurl = asset.url;
+                    } else {
+                        console.log('unknown component or image location');
+                    }
+                    $scope.bindEvents();
+                } else {
+                    $scope.componentEditing.bg.img.url=asset.url;
+                }
                 $scope.updateIframeComponents();
             };
 

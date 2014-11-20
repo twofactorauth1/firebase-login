@@ -1,5 +1,5 @@
-define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ngProgress'], function(app) {
-  app.register.controller('CommerceCtrl', ['$scope', 'ProductService', 'PaymentService', 'ngProgress', function($scope, ProductService, PaymentService, ngProgress) {
+define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ngProgress', 'userService'], function(app) {
+  app.register.controller('CommerceCtrl', ['$scope', 'ProductService', 'PaymentService', 'ngProgress', 'UserService', function($scope, ProductService, PaymentService, ngProgress, UserService) {
     ngProgress.start();
     $scope.addProductFn = function() {
       ProductService.postProduct($scope.newProduct, function(product) {
@@ -39,11 +39,19 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         $scope.productOrder = 'lastActivity';
         $scope.productSortReverse = true;
       }
+      else
+      {
+        $scope.sortOrder = 1;
+      }
     });
 
     ProductService.getProducts(function(products) {
       $scope.products = products;
       ngProgress.complete();
     });
+    UserService.getUserPreferences(function(preferences) {
+        $scope.default_product_icon = preferences.default_product_icon;       
+    });
+
   }]);
 });

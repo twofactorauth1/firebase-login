@@ -1,65 +1,75 @@
 define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService'], function(app) {
-    app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', 'ToasterService', function ($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService) {
-        ngProgress.start();
-         $scope.$back = function() {
-            console.log('$scope.lastState.state ', $scope.lastState.state);
-                console.log('$scope.lastState.params ', $scope.lastState.params);
-            $state.go($scope.lastState.state, $scope.lastState.params);
-         };
-        $scope.customerId = $stateParams.id;
-        CustomerService.getCustomer($scope.customerId, function (customer) {
-            $scope.customer = customer;
-            $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
-            $scope.contactLabel = CustomerService.contactLabel(customer);
+  app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', 'ToasterService', function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService) {
+    ngProgress.start();
+    $scope.$back = function() {
+      console.log('$scope.lastState.state ', $scope.lastState.state);
+      console.log('$scope.lastState.params ', $scope.lastState.params);
+      if ($scope.lastState === undefined || $state.is($scope.lastState.state, $scope.lastState.params)) {
+        $state.go('customer');
+      } else {
+        $state.go($scope.lastState.state, $scope.lastState.params);
+      }
+    };
+    $scope.customerId = $stateParams.id;
+    CustomerService.getCustomer($scope.customerId, function(customer) {
+      $scope.customer = customer;
+      $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
+      $scope.contactLabel = CustomerService.contactLabel(customer);
+    });
+    CustomerService.getCustomerActivities($scope.customerId, function(activities) {
+      $scope.activities = activities;
+      // $scope.activities.push(
+      // {
+      //     "contactId": $scope.customerId,
+      //     "activityType": "EMAIL",
+      //     "note": "Email Received.",
+      //     "detail": "by abc",
+      //     "start": "2014-10-28T18:51:52.938Z"
+      // },
+      // {
+      //     "contactId": $scope.customerId,
+      //     "activityType": "TWEET",
+      //     "note": "Tweet Received.",
+      //     "detail": "by xyz",
+      //     "start": "2014-10-28T18:51:52.938Z"
+      // }
+      // )
+      //$scope.activities = activities;
+      ngProgress.complete();
+      ToasterService.processPending();
+    });
+    CustomerService.getActivityTypes(function(activity_types) {
+      $scope.activity_types = activity_types;
+    });
+    $scope.moreToggleFn = function(type) {
+      var id = '.li-' + type + '.more';
+      if ($(id).hasClass('hidden')) {
+        $(id).removeClass('hidden');
+      } else {
+        $(id).addClass('hidden');
+      }
+    };
+    $scope.importContactFn = function() {
+      CustomerService.postFullContact($scope.customerId, function(data) {
+        console.info(data);
+      });
+    };
+    $scope.displayAddressFormat = function(address) {
+      return _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip], function(str) {
+        return str !== "";
+      }).join(",")
+    };
+    $scope.showAddress = function(address) {
+      arrAddress = _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip, address.lat, address.lon], function(str) {
+        return str !== "";
+      })
+      return arrAddress.length > 0;
+    };
+    $scope.setImportantContact = function(customer, value) {
+        customer.starred = value;
+        CustomerService.saveCustomer(customer, function(customers) {
+          ToasterService.show('success', "Contact updated succesfully.");
         });
-        CustomerService.getCustomerActivities($scope.customerId, function (activities) {
-        $scope.activities = activities;
-        // $scope.activities.push(
-        // {
-        //     "contactId": $scope.customerId,
-        //     "activityType": "EMAIL",
-        //     "note": "Email Received.",
-        //     "detail": "by abc",
-        //     "start": "2014-10-28T18:51:52.938Z"
-        // },
-        // {
-        //     "contactId": $scope.customerId,
-        //     "activityType": "TWEET",
-        //     "note": "Tweet Received.",
-        //     "detail": "by xyz",
-        //     "start": "2014-10-28T18:51:52.938Z"
-        // }
-        // )
-            //$scope.activities = activities;
-            ngProgress.complete();
-            ToasterService.processPending();
-        });
-        CustomerService.getActivityTypes(function (activity_types) {
-            $scope.activity_types = activity_types;
-        });
-        $scope.moreToggleFn = function (type) {
-            var id = '.li-' + type + '.more';
-            if ($(id).hasClass('hidden')) {
-                $(id).removeClass('hidden');
-            } else {
-                $(id).addClass('hidden');
-            }
-        };
-        $scope.importContactFn = function () {
-            CustomerService.postFullContact($scope.customerId, function (data) {
-                console.info(data);
-            });
-        };
-        $scope.displayAddressFormat = function (address) {
-            return _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip],function(str) {
-            	return str !== "";
-         	 }).join(",")
-        };
-        $scope.showAddress = function (address) {
-           	arrAddress =  _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip, address.lat, address.lon],function(str) {
-            	return str !== "";
-         	 })
-         	 return arrAddress.length > 0 ;
-        };
-    }]);
+      };
+  }]);
 });
