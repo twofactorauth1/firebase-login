@@ -74,9 +74,14 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('customers/:id/invoices/:invoiceId'), this.isAuthApi, this.getInvoice.bind(this));
         app.get(this.url('customers/:id/upcomingInvoice'), this.isAuthApi, this.getUpcomingInvoice.bind(this));
         app.post(this.url('customers/:id/invoices/:invoiceId'), this.isAuthApi, this.updateInvoice.bind(this));
+        app.get(this.url('customers/all/invoices'), this.isAuthApi, this.listAllInvoices.bind(this));
         app.get(this.url('customers/:id/invoices'), this.isAuthApi, this.listInvoices.bind(this));
-        app.get(this.url('invoices'), this.isAuthApi, this.listAllInvoices.bind(this));
+
         app.post(this.url('customers/:id/invoices/:invoiceId/pay'), this.isAuthApi, this.payInvoice.bind(this));
+
+        //Special operations for main account
+        app.get(this.url('upcomingInvoice'), this.isAuthApi, this.getMyUpcomingInvoice.bind(this));
+        app.get(this.url('invoices'), this.isAuthApi, this.getMyInvoices.bind(this));
 
         //Coupons
         //Discounts
@@ -1193,6 +1198,35 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+
+    },
+
+    getMyUpcomingInvoice: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getMyUpcomingInvoice');
+        var customerId = self.customerId(req);
+        var subscriptionId = req.body.subscriptionId;
+        stripeDao.getUpcomingInvoice(customerId, subscriptionId, null, function(err, value){
+            self.log.debug('<< getMyUpcomingInvoice');
+            return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.");
+        });
+    },
+
+    getMyInvoices: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getMyInvoices');
+        var customerId = self.customerId(req);
+        
+        var dateFilter = req.body.dateFilter;
+        var ending_before = req.body.ending_before;
+        var limit = req.body.limit;
+        var starting_after = req.body.starting_after;
+
+        stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null,
+            function(err, value){
+                self.log.debug('<< getMyInvoices');
+                return self.sendResultOrError(resp, err, value, "Error listing invoices.");
+            });
 
     },
 
