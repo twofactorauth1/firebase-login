@@ -5,7 +5,7 @@
 </div> -->
 
 <ul ui-sortable="sortableOptions">
-	<li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;">
+	<li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;" last-item >
 		<div class="componentActions">
 			<span class="reorder fa fa-arrows"></span>
             <span class="" ng-if="!component.visibility">Hidden</span>
