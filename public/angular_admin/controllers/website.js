@@ -138,6 +138,7 @@ define([
                         if (typeof settingsBtns[i].addEventListener != "undefined") {
                             settingsBtns[i].addEventListener("click", function(e) {
                                 console.log('e.currentTarget.attributes >>> ', e.currentTarget.attributes);
+                                $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                             });
                         } else if (typeof settingsBtns.attachEvent != "undefined") {
                             settingsBtns[i].attachEvent("onclick", iframeClickHandler);
