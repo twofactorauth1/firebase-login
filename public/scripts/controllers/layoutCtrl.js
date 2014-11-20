@@ -363,12 +363,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.log('user', user);
 
             var formatted = {
-                details: {
+                details: [{
                     emails: []
-                }
+                }]
             };
 
-            formatted.details.emails.push({
+            formatted.details[0].emails.push({
                     email : user.email
                 });
 

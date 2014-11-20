@@ -214,11 +214,19 @@ define(['app',
       if ($scope.customerId) {
         CustomerService.getCustomer($scope.customerId, function(customer) {
           $scope.customer = customer;
-          if ($scope.customer.details[0].phones && $scope.customer.details[0].phones.length == 0)
+          if(!$scope.customer.details[0].phones)
+          {
+            $scope.customer.details[0].phones = [];
+          }
+          if ($scope.customer.details[0].phones.length == 0)
           {
             $scope.addCustomerContactFn();
           }
-          if ($scope.customer.details[0].emails && $scope.customer.details[0].emails.length == 0)
+          if(!$scope.customer.details[0].emails)
+          {
+            $scope.customer.details[0].emails = [];
+          }
+          if ($scope.customer.details[0].emails.length == 0)
           {
             $scope.customerAddEmailFn();
           }         
@@ -229,6 +237,10 @@ define(['app',
 
           ngProgress.complete();
           $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
+          if(!$scope.customer.details[0].addresses)
+          {
+            $scope.customer.details[0].addresses = [];
+          }
           if ($scope.customer.details[0].addresses.length) {
             $scope.customer.details[0].addresses.forEach(function(value, index) {
               $scope.customerAddressWatchFn(index);
