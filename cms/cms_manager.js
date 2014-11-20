@@ -42,7 +42,7 @@ module.exports = {
 
     getAllThemes: function(accountId, fn) {
         log.debug('>> getAllThemes');
-        themeDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}]}, $$.m.cms.Theme, function(err, list){
+        themeDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}, {'isPublic': 'true'}]}, $$.m.cms.Theme, function(err, list){
             if(err) {
                 log.error('Exception thrown listing themes: ' + err);
                 fn(err, null);
