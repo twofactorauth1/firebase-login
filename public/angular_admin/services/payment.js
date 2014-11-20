@@ -67,11 +67,19 @@ define(['app', 'stripe', 'toasterService'], function(app) {
     };
 
     this.getUpcomingInvoice = function(stripeId, fn) {
-      var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'upcomingInvoice'].join('/');
+      var apiUrl = baseUrl + ['integrations', 'payments', 'upcomingInvoice'].join('/');
       $http.get(apiUrl)
         .success(function(data, status, headers, config) {
           fn(data);
         });
+    };
+
+    this.getUpcomingInvoiceForCustomer = function(stripeId, fn) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'upcomingInvoice'].join('/');
+      $http.get(apiUrl)
+          .success(function(data, status, headers, config) {
+              fn(data);
+          });
     };
 
 

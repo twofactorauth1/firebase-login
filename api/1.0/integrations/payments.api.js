@@ -1216,7 +1216,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getMyInvoices');
         var customerId = self.customerId(req);
-        
+
         var dateFilter = req.body.dateFilter;
         var ending_before = req.body.ending_before;
         var limit = req.body.limit;
