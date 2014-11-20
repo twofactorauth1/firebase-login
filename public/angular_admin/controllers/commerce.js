@@ -39,6 +39,10 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         $scope.productOrder = 'lastActivity';
         $scope.productSortReverse = true;
       }
+      else
+      {
+        $scope.sortOrder = 1;
+      }
     });
 
     ProductService.getProducts(function(products) {
