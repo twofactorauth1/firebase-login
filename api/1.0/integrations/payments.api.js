@@ -85,7 +85,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('invoices'), this.isAuthApi, this.getMyInvoices.bind(this));
         app.get(this.url('account/invoices'), this.isAuthApi, this.getInvoicesForAccount.bind(this));
         app.get(this.url('indigenous/plans'), this.listIndigenousPlans.bind(this));
-        app.get(this.url('indigneous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
+        app.post(this.url('indigenous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
 
         //Coupons
         //Discounts
@@ -125,7 +125,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> subscribeToIndigenous');
 
         var customerId = req.body.customerId; //REQUIRED
-        var planId = req.body.plan;//REQUIRED
+        var planId = req.params.planId;//REQUIRED
         var coupon = req.body.coupon;
         var trial_end = req.body.trial_end;
         var card = req.body.card;//this will overwrite customer default card if specified
@@ -154,7 +154,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.error('Error subscribing to Indigenous: ' + err);
                     return self.sendResultOrError(resp, err, value, 'Error creating subscription');
                 } else {
-                    self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, value){
+                    self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, subPrivs){
                         if(err) {
                             self.log.error('Error adding billing info to account: ' + err);
                             return self.sendResultOrError(resp, err, value, 'Error creating subscription');
@@ -1304,7 +1304,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.error('Error getting account: ' + err);
                 return self.wrapError(resp, 500, 'Could not find account.');
             }
-            var customerId = account.get('billing').customerId;
+            var customerId = account.get('billing').stripeCustomerId;
             if(!customerId || customerId === '') {
                 self.log.error('No stripe customerId found for account: ' + account.id());
                 return self.wrapError(resp, 400, 'No Stripe CustomerId found for account.');
