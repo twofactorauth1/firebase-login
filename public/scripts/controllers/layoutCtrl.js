@@ -161,11 +161,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         window.activateAloha = function() {
             aloha.dom.query('.editable', document).forEach(aloha);
+            $('.aloha-caret.aloha-ephemera', document).css('visibility','visible');
         };
 
         window.deactivateAloha = function() {
-            if (aloha.editor && aloha.editor.selection)
+            if (aloha.editor && aloha.editor.selection) {
                 aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
+                $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');
+            }
             // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
 
