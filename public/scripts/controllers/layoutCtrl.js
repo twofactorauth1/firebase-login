@@ -478,7 +478,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         newUser.plan = $scope.selectedPlan;
                         newUser.anonymousId = window.analytics.user().anonymousId();
                         userService.initializeUser(newUser, function(data) {
-                            window.location = tmpAccount.accountUrl;
+                            window.location = data.accountUrl;
                         }); 
                         
                     });
