@@ -3,7 +3,7 @@
 	    <div ng-include src="component.url"></div>
 	</div>
 </div> -->
-
+<div ng-show="isEditing" style="height: 50px;"></div>
 <ul ui-sortable="sortableOptions">
 	<li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;" last-item >
 		<div class="componentActions">
