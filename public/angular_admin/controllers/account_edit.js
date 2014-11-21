@@ -46,7 +46,10 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
             $scope.account.business.phones.forEach(function (value, index) {
                 $scope.businessPhoneWatchFn(index);
             });
-        });
+
+            if (!$scope.account.business.addresses.length)
+              $scope.account.business.addresses.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort()});
+            });
 
         //business phone field add
         $scope.addBusinessContactFn = function () {
@@ -156,7 +159,7 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
         $scope.accountSaveFn = function (value) {
           if (value.length%4===0) {
             UserService.putAccount($scope.account, function (account) {
-              
+
             });
           }
         };
