@@ -84,6 +84,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('upcomingInvoice'), this.isAuthApi, this.getMyUpcomingInvoice.bind(this));
         app.get(this.url('invoices'), this.isAuthApi, this.getMyInvoices.bind(this));
         app.get(this.url('account/invoices'), this.isAuthApi, this.getInvoicesForAccount.bind(this));
+        app.get(this.url('indigenous/plans'), this.listIndigenousPlans.bind(this));
+        app.post(this.url('indigenous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
 
         //Coupons
         //Discounts
@@ -101,6 +103,68 @@ _.extend(api.prototype, baseApi.prototype, {
         // ------------------------------------------------
         app.post('stripe/webhook', this.verifyEvent.bind(this), this.handleEvent.bind(this));
 
+    },
+
+    listIndigenousPlans: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listIndigenousPlans');
+        stripeDao.listStripePlans(null, function(err, value){
+            self.log.debug('<< listIndigenousPlans');
+            return self.sendResultOrError(resp, err, value, "Error listing Stripe Plans");
+        });
+
+    },
+
+    /**
+     * This method creates a subscription to an indigenous plan, and then updates the account billing information
+     * @param req
+     * @param resp
+     */
+    subscribeToIndigenous: function(req, resp) {
+        var self = this;
+        self.log.debug('>> subscribeToIndigenous');
+
+        var customerId = req.body.customerId; //REQUIRED
+        var planId = req.params.planId;//REQUIRED
+        var coupon = req.body.coupon;
+        var trial_end = req.body.trial_end;
+        var card = req.body.card;//this will overwrite customer default card if specified
+        var quantity = req.body.quanity;
+        var application_fee_percent = req.body.application_fee_percent;
+        var metadata = req.body.metadata;
+        var accountId = parseInt(req.body.accountId) || parseInt(self.accountId(req));//REQUIRED
+        var contactId = req.body.contactId;
+        var userId = req.userId;
+
+        if(!planId || planId.length < 1) {
+            return self.wrapError(resp, 400, null, "Invalid planId parameter.");
+        }
+
+        if(!customerId || customerId.length < 1) {
+            return self.wrapError(resp, 400, null, "Invalid customerId parameter.");
+        }
+
+        if(!accountId || accountId===0) {
+            return self.wrapError(resp, 400, null, 'Invalid accountId parameter');
+        }
+
+        stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
+            application_fee_percent, metadata, accountId, contactId, userId, null, function(err, value){
+                if(err) {
+                    self.log.error('Error subscribing to Indigenous: ' + err);
+                    return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                } else {
+                    self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, subPrivs){
+                        if(err) {
+                            self.log.error('Error adding billing info to account: ' + err);
+                            return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                        }
+                        self.log.debug('<< subscribeToIndigenous');
+                        return self.sendResultOrError(resp, err, value, "Error creating subscription");
+                    });
+                }
+
+            });
     },
 
     listCustomers: function(req, resp) {
@@ -1240,7 +1304,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.error('Error getting account: ' + err);
                 return self.wrapError(resp, 500, 'Could not find account.');
             }
-            var customerId = account.get('billing').customerId;
+            var customerId = account.get('billing').stripeCustomerId;
             if(!customerId || customerId === '') {
                 self.log.error('No stripe customerId found for account: ' + account.id());
                 return self.wrapError(resp, 400, 'No Stripe CustomerId found for account.');

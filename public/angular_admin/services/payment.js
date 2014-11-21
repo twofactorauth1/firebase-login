@@ -166,6 +166,18 @@ define(['app', 'stripe', 'toasterService'], function(app) {
         });
     };
 
+    this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, fn) {
+          var apiUrl = baseUrl + ['integrations', 'payments','indigenous', 'plans', planId, 'subscribe'].join('/');
+          var params = {customerId: stripeCustomerId};
+          if(accountId) {
+              params.accountId = accountId;
+          }
+          $http.post(apiUrl, params)
+              .success(function(data, status, headers, config){
+                  fn(data);
+              });
+      };
+
     this.deleteStripeSubscription = function(stripeId, subId, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'subscriptions', subId].join('/');
       $http.delete(apiUrl)
