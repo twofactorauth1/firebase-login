@@ -176,6 +176,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     updateAccount: function(req,resp) {
+        var self = this;
+        self.log.debug('>> updateAccount');
         var account = new $$.m.Account(req.body);
 
         self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
@@ -184,8 +186,10 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 accountDao.saveOrUpdate(account, function(err, value){
                     if(!err &&value != null){
+                        self.log.debug('<< updateAccount');
                         resp.send(value.toJSON("public"));
                     } else {
+                        self.log.error('Error updating account: ' + err);
                         self.wrapError(resp, 500, null, err, value);
                     }
                 });

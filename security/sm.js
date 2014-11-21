@@ -57,7 +57,7 @@ var defaultSubscriptionPrivs = [
     'courses',
     'dashboard',
     'emaildata',
-    'product',
+    'products',
     'user'
 ];
 

@@ -341,6 +341,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
+    /**
+     * This method WILL NOT update credentials for the user nor the account/credentials object.
+     * @param req
+     * @param resp
+     */
     updateUser: function(req,resp) {
         //TODO - ensure user accounts are not tampered with
         var self = this;
@@ -358,8 +363,9 @@ _.extend(api.prototype, baseApi.prototype, {
         userDao.getById(userId, function(err, value) {
             if (!err && value != null) {
                 value.set("welcome_alert",req.body.welcome_alert);
-                console.log(value);
+                //console.log(value);
                 user.set("credentials",value.get("credentials"));
+                user.set('accounts', value.get('accounts'));
 
                 self.checkPermission(req, self.sc.privs.VIEW_USER, function (err, isAllowed) {
                     if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
