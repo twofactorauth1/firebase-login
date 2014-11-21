@@ -465,7 +465,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                     break;
                                 case "exp_year":
                                     $("#card_expiry .error").html(error.message);
-                                    $("#card_number").addClass('has-error');
+                                    $("#card_expiry").addClass('has-error');
                                     break;
                                 case "cvc":
                                     $("#card_cvc .error").html(error.message);
