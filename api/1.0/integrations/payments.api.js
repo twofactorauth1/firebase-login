@@ -11,6 +11,7 @@ var userDao = require('../../../dao/user.dao.js');
 var customerLinkDao = require('../../../payments/dao/customer_link.dao.js');
 var stripeEventHandler = require('../../../payments/stripe.event.handler.js');
 var appConfig = require('../../../configs/app.config');
+var accountDao = require('../../../dao/account.dao');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -82,6 +83,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //Special operations for main account
         app.get(this.url('upcomingInvoice'), this.isAuthApi, this.getMyUpcomingInvoice.bind(this));
         app.get(this.url('invoices'), this.isAuthApi, this.getMyInvoices.bind(this));
+        app.get(this.url('account/invoices'), this.isAuthApi, this.getInvoicesForAccount.bind(this));
 
         //Coupons
         //Discounts
@@ -1227,6 +1229,33 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug('<< getMyInvoices');
                 return self.sendResultOrError(resp, err, value, "Error listing invoices.");
             });
+
+    },
+
+    getInvoicesForAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getInvoicesForAccount');
+        accountDao.getAccountByHost(req.host, function(err, account){
+            if(err || account==null) {
+                self.log.error('Error getting account: ' + err);
+                return self.wrapError(resp, 500, 'Could not find account.');
+            }
+            var customerId = account.get('billing').customerId;
+            if(customerId === null || customerId === '') {
+                self.log.error('No stripe customerId found for account: ' + account.id());
+                return self.wrapError(resp, 400, 'No Stripe CustomerId found for account.');
+            }
+            var dateFilter = req.body.dateFilter;
+            var ending_before = req.body.ending_before;
+            var limit = req.body.limit;
+            var starting_after = req.body.starting_after;
+
+            stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null,
+                function(err, value){
+                    self.log.debug('<< getInvoicesForAccount');
+                    return self.sendResultOrError(resp, err, value, "Error listing invoices.");
+                });
+        });
 
     },
 

@@ -71,12 +71,22 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
       $scope.account = account;
     });
 
+    /*
     PaymentService.getAllInvoices(function(invoices) {
       $scope.invoices = invoices;
       $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
       ngProgress.complete();
       $scope.showToaster = true;
       ToasterService.processPending();
+    });
+    */
+
+    PaymentService.getInvoicesForAccount(function(invoices){
+        $scope.invoices = invoices;
+        $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
+        ngProgress.complete();
+        $scope.showToaster = true;
+        ToasterService.processPending();
     });
 
     $scope.setActiveTab = function (tab){

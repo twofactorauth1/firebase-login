@@ -91,6 +91,14 @@ define(['app', 'stripe', 'toasterService'], function(app) {
         });
     };
 
+    this.getInvoicesForAccount = function(fn) {
+        var apiUrl = baseUrl + ['integrations', 'payments', 'account', 'invoices'].join('/');
+        $http.get(apiUrl)
+            .success(function(data, status, headers, config) {
+                fn(data);
+            });
+    }
+
     this.postCreatePlan = function(newProduct, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'plans'].join('/');
       $http.post(apiUrl, newProduct)
