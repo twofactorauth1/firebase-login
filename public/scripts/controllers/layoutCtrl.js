@@ -2,7 +2,7 @@
 
 mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService',
     function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService) {
-        var account, theme, website, pages, teaserposts, route, postname, products, courses, that = this;
+        var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
         route = $location.$$path;
         window.oldScope;
@@ -79,6 +79,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 /*PostService.getAllPosts(function(posts) {
                     that.blogposts = posts;
                 });*/
+                setNavigation(data);
             }
         });
 
@@ -460,6 +461,32 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         /********** END SIGNUP SECTION **********/
+        setNavigation = function (data) {
+            var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
+            tempPageComponents = data['index'].components;
+            indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
 
+//            indexNavComponent._id = null;
+//            indexNavComponent.anchor = null;
+//            indexNavComponent.visibility = null;
+
+            ['_id', 'anchor', 'visibility'].forEach(function (v){
+                indexNavComponent[v] = null;
+            })
+
+            for ( page in data ) {
+                if ( data.hasOwnProperty(page) && page != 'index' ) {
+                    tempPageComponents = data[page].components;
+                    pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
+                }
+                if (pageNavComponent !== null){
+                    for (setting in indexNavComponent) {
+                        if (indexNavComponent[setting] !== null) {
+                            pageNavComponent[setting] = indexNavComponent[setting];
+                        }
+                    }
+                }
+            }
+        };
     }
 ]);
