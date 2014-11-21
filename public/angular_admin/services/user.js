@@ -14,6 +14,7 @@ define(['app', 'toasterService'], function (app) {
 			var apiUrl = baseUrl + ['user', $$.server.userId].join('/');
 			$http.put(apiUrl, user)
 			.success(function (data, status, headers, config) {
+				// ToasterService.show('success', 'User update.');
 				fn(data);
 			});
 		};
