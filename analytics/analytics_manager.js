@@ -141,6 +141,18 @@ module.exports = {
             _log.debug('<< linkUsers');
             fn(null, value);
         });
+    },
+
+    storeSessionEvent: function(sessionEvent, fn) {
+
+    },
+
+    storePageEvent: function(pageEvent, fn) {
+
+    },
+
+    storePingEvent: function(pingEvent, fn) {
+
     }
 
 }
