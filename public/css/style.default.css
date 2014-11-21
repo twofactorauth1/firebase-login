@@ -24592,8 +24592,22 @@ div[data-type=blog] .container {
   height: 344px;
   margin-right: 50px;
 }
-.contact-us-v5 .contact-padding {
-  padding: 0 20px 20px;
+.contact-us-v5 .contact-right {
+  padding: 0 40px 20px;
+}
+.contact-us-v5 .contact-img {
+  width: 152px;
+}
+.contact-us-v5 .contact-left {
+  color: white;
+  border-radius: 5px;
+  margin: 0 15px;
+}
+.contact-us-v5 .contact-left p {
+  margin-bottom: 0;
+}
+.contact-us-v5 input[type="radio"] {
+  margin-right: 5px;
 }
 /********** Video **********/
 .video-block .btn .fa {
