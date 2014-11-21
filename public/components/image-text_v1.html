@@ -24,10 +24,10 @@
         <div class="image-text-text">
             <div id="para" class="editable" data-class="text">
                 <convert-html contents="{{component.text}}"></convert-html>
-                <button ng-show="component.btn.url && component.btn.visibility != false" class="btn btn-primary btn-lg" href="{{component.btn.url}}">
+                <a ng-show="component.btn.url && component.btn.visibility != false" class="btn btn-primary btn-lg" href="{{component.btn.url}}">
                     <i class="{{component.btn.icon}}"></i>
                     {{component.btn.text}}
-                </button>
+                </a>
             </div>
         </div>
 

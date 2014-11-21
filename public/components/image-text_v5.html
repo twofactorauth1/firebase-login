@@ -14,7 +14,7 @@
     <div class="col-sm-8 col-xs-12 pull-right image-text-panel">
 
         <div class="image-text-subtitle">
-            <div class="editable" data-class="text">
+            <div class="editable" data-class="subtitle">
                 <span ng-bind-html="component.subtitle"></span>
             </div>
         </div>
@@ -24,10 +24,10 @@
             </div>
         </div>
 
-       <button ng-show="component.btn.url" class="form-control btn btn-primary" href="{{component.btn.url}}">
-                    <i class="{{component.btn.icon}}"></i>
-                    {{component.btn.text}}
-                </button>
+       <a ng-show="component.btn.url" class="btn {{component.btn.class}} btn-primary" href="{{component.btn.url}}">
+            <i class="{{component.btn.icon}}"></i>
+            {{component.btn.text}}
+        </a>
 
     </div>
     <div class="clearfix mb10 visible-xs"></div>

@@ -173,6 +173,10 @@
                             <option ng-repeat="course in courses" value="{{course._id}}">{{course.title}}</option>
                         </select>
                     </div>
+                    <div class="form-group" ng-if="componentEditing.type === 'navigation'">
+                        <label>Nav BG Color:</label>
+                        <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
+                    </div>
                     <accordion close-others="true">
 
                         <accordion-group is-open="status.open">

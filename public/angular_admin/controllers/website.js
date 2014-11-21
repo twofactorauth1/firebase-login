@@ -353,6 +353,8 @@ define([
                             }
                             //simple
                             if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                                console.log('Saving '+componentType+' component.');
+                                console.log('Contents '+componentVarContents);
                                 matchingComponent[componentVar] = componentVarContents;
                             }
                         }
@@ -501,9 +503,12 @@ define([
                 });
             };
 
-            $scope.updateIframeComponents = function() {
+            $scope.updateIframeComponents = function(fn) {
                 //document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.updateComponents && iFrame.contentWindow.updateComponents($scope.components);
+                if(fn) {
+                    fn();
+                }
             };
 
             $scope.scrollToIframeComponent = function(section) {
@@ -554,7 +559,9 @@ define([
                     }
                 }
 
-                $scope.updateIframeComponents();
+                $scope.updateIframeComponents(function() {
+                     $scope.bindEvents();
+                });
                 $scope.isEditing = true;
 
                 //update the scope as the temppage until save
