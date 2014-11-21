@@ -27,6 +27,11 @@
 	        transform-style: preserve-3d;
 }
 
+.aloha-ui.btn-toolbar { 
+	display: inline-block; 
+	float: right;
+}
+
 .aloha-ui input,
 .aloha-ui .btn,
 .aloha-ui .btn:focus,
@@ -59,7 +64,7 @@
 	font-size: 16px;
 }
 
-
+.aloha-ui.btn-toolbar,
 .aloha-ui a,
 .aloha-ui a:focus,
 .aloha-ui button,
@@ -199,6 +204,9 @@
 
 .menu-wrap { height: 45px; }
 
+.aloha-editable {
+	padding-top: 40px;
+}
 
 .aloha-editable a {
 	cursor: text;
@@ -214,6 +222,11 @@
 	display: block;
 }
 
+.aloha-editable {
+	max-width: 800px;
+	margin: 50px auto;
+	padding: 50px;
+}
 .aloha-editable p,
 .aloha-editable h1,
 .aloha-editable h2,

@@ -13,11 +13,11 @@
 
     <div class="row">
         <div class="col-md-6" data-ng-show="component.personalDetail.imgurl && component.personalDetail.text">
-                <div class="row" style="background-color:{{component.personalDetail.color}};height:350px; color: {{component.personalDetail.txtcolor}}">
+                <div class="row contact-padding" style="background-color:{{component.personalDetail.color}};height:350px; color: {{component.personalDetail.txtcolor}}">
                     <div class="col-xs-12">
                         <br>
                         <div class="editable" data-class="url">
-                            <img ng-src="{{component.personalDetail.imgurl}}" class="img-responsive col-md-12 {{component.personalDetail.imagestyle}}">
+                            <img ng-src="{{component.personalDetail.imgurl}}" class="img-responsive center {{component.personalDetail.imagestyle}}">
                         </div>
                     </div>
                     <div id="para" class="editable col-xs-12" data-class="text">
@@ -25,7 +25,7 @@
                     </div>
                 </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 contact-padding">
                 <form class="form-horizontal" action="" method="post">
                     <fieldset>
 
