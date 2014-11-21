@@ -141,6 +141,22 @@ module.exports = {
             _log.debug('<< linkUsers');
             fn(null, value);
         });
+    },
+
+    storeSessionEvent: function(sessionEvent, fn) {
+        _log.debug('>> storeSessionEvent');
+        dao.saveOrUpdate(sessionEvent, fn);
+
+    },
+
+    storePageEvent: function(pageEvent, fn) {
+        _log.debug('>> storePageEvent');
+        dao.saveOrUpdate(pageEvent, fn);
+    },
+
+    storePingEvent: function(pingEvent, fn) {
+        _log.debug('>> storePingEvent');
+        dao.saveOrUpdate(pingEvent, fn);
     }
 
 }

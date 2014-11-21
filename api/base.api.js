@@ -161,6 +161,14 @@ _.extend(apiBase.prototype, {
         }
     },
 
+    customerId: function(req) {
+        try {
+            return req.user.attributes.stripeId;
+        }catch(exception) {
+            return null;
+        }
+    },
+
 
     accountId: function(req) {
         try {

@@ -57,7 +57,7 @@ var defaultSubscriptionPrivs = [
     'courses',
     'dashboard',
     'emaildata',
-    'product',
+    'products',
     'user'
 ];
 
@@ -251,6 +251,35 @@ var securityManager = {
             }
         });
 
+    },
+
+    addBillingInfoToAccount: function(accountId, customerId, subscriptionId, planId, userId, fn) {
+        var self = this;
+        log.debug('>> addBillingInfoToAccount');
+        accountDao.updateAccountBilling(accountId, customerId, subscriptionId, function(err, account){
+            if(err) {
+                log.error('Error adding subscription to account: ' + err);
+                return fn(err, null);
+            }
+            var subpriv = new $$.m.SubscriptionPrivilege({
+                accountId: accountId,
+                subscriptionId: planId,
+                activePrivs: defaultSubscriptionPrivs,
+                created: {
+                    date: new Date(),
+                    by: userId
+                }
+            });
+            subscriptionPrivilegeDao.saveOrUpdate(subpriv, function(err, savedSubPriv){
+                if(err) {
+                    log.error('Error saving subscription privileges: ' + err);
+                    return fn(err, null);
+                } else {
+                    log.debug('<< addBillingInfoToAccount');
+                    return fn(null, savedSubPriv);
+                }
+            });
+        });
     },
 
     addSubscriptionToAccount: function(accountId, subscriptionId, planId, userId, fn){

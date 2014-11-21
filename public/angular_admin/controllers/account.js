@@ -34,6 +34,24 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
     };
 
     $scope.switchPlanFn = function(planId) {
+        if($scope.user.stripeId) {
+            PaymentService.postSubscribeToIndigenous($scope.user.stripeId, planId, null, function(subscription){
+                $scope.cancelOldSubscriptionsFn();
+                $scope.subscription = subscription;
+                PaymentService.getUpcomingInvoice($scope.user.stripeId, function(upcomingInvoice){
+                    $scope.upcomingInvoice = upcomingInvoice;
+                });
+                PaymentService.getInvoicesForAccount(function(invoices){
+                    $scope.invoices = invoices;
+                    $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
+                });
+                ToasterService.setPending('success', 'Subscribed to new plan.');
+
+            });
+        } else {
+            ToasterService.setPending('error', 'No Stripe customer ID.');
+        }
+        /*
       PaymentService.postCreateStripeSubscription($scope.user.stripeId, planId, function(subscription) {
         $scope.cancelOldSubscriptionsFn();
         $scope.subscription = subscription;
@@ -46,6 +64,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
         });
         ToasterService.setPending('success', 'Subscribed to new plan.');
       });
+      */
     };
 
     $scope.cancelOldSubscriptionsFn = function() {
@@ -71,12 +90,22 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
       $scope.account = account;
     });
 
+    /*
     PaymentService.getAllInvoices(function(invoices) {
       $scope.invoices = invoices;
       $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
       ngProgress.complete();
       $scope.showToaster = true;
       ToasterService.processPending();
+    });
+    */
+
+    PaymentService.getInvoicesForAccount(function(invoices){
+        $scope.invoices = invoices;
+        $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
+        ngProgress.complete();
+        $scope.showToaster = true;
+        ToasterService.processPending();
     });
 
     $scope.setActiveTab = function (tab){

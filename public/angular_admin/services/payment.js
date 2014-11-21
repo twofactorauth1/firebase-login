@@ -67,11 +67,19 @@ define(['app', 'stripe', 'toasterService'], function(app) {
     };
 
     this.getUpcomingInvoice = function(stripeId, fn) {
-      var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'upcomingInvoice'].join('/');
+      var apiUrl = baseUrl + ['integrations', 'payments', 'upcomingInvoice'].join('/');
       $http.get(apiUrl)
         .success(function(data, status, headers, config) {
           fn(data);
         });
+    };
+
+    this.getUpcomingInvoiceForCustomer = function(stripeId, fn) {
+      var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'upcomingInvoice'].join('/');
+      $http.get(apiUrl)
+          .success(function(data, status, headers, config) {
+              fn(data);
+          });
     };
 
 
@@ -82,6 +90,14 @@ define(['app', 'stripe', 'toasterService'], function(app) {
           fn(data);
         });
     };
+
+    this.getInvoicesForAccount = function(fn) {
+        var apiUrl = baseUrl + ['integrations', 'payments', 'account', 'invoices'].join('/');
+        $http.get(apiUrl)
+            .success(function(data, status, headers, config) {
+                fn(data);
+            });
+    }
 
     this.postCreatePlan = function(newProduct, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'plans'].join('/');
@@ -149,6 +165,18 @@ define(['app', 'stripe', 'toasterService'], function(app) {
           fn(data);
         });
     };
+
+    this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, fn) {
+          var apiUrl = baseUrl + ['integrations', 'payments','indigenous', 'plans', planId, 'subscribe'].join('/');
+          var params = {customerId: stripeCustomerId};
+          if(accountId) {
+              params.accountId = accountId;
+          }
+          $http.post(apiUrl, params)
+              .success(function(data, status, headers, config){
+                  fn(data);
+              });
+      };
 
     this.deleteStripeSubscription = function(stripeId, subId, fn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'subscriptions', subId].join('/');

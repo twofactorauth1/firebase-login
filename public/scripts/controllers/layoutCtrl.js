@@ -161,35 +161,35 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.addDetailsToCart = function(product) {
            if(!$scope.cartDetails)
            {
-                $scope.cartDetails = [];       
-           } 
+                $scope.cartDetails = [];
+           }
            if(!product.quantity)
            {
-                product.quantity = 1;     
-           }                     
+                product.quantity = 1;
+           }
             var match = _.find($scope.cartDetails, function(item) { return item._id === product._id })
             if (match) {
-                match.quantity = parseInt(match.quantity) + 1;                
+                match.quantity = parseInt(match.quantity) + 1;
             }
             else
             {
                 $scope.cartDetails.push(product);
-            } 
+            }
            $scope.calculateTotalChargesfn();
-         
+
         };
 
         $scope.calculateTotalChargesfn = function()
         {
-            var subTotal = 0; 
+            var subTotal = 0;
             var totalTax =  0;
             var total = 0;
             $scope.cartDetails.forEach(function(item){
                 subTotal = parseFloat(subTotal) + (parseFloat(item.regular_price) * item.quantity );
             })
-            $scope.subTotal = subTotal;               
-            $scope.totalTax = parseFloat(($scope.subTotal * 8) / 100 );  
-            $scope.total = $scope.subTotal + $scope.totalTax;       
+            $scope.subTotal = subTotal;
+            $scope.totalTax = parseFloat(($scope.subTotal * 8) / 100 );
+            $scope.total = $scope.subTotal + $scope.totalTax;
         }
 
         $scope.makeCartPayment = function() {
@@ -214,13 +214,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
 
             PaymentService.getStripeCardToken(cardInput, function(token) {
-                 PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {                   
-                        $('#cart-checkout-modal').modal('hide'); 
-                 });       
+                 PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {
+                        $('#cart-checkout-modal').modal('hide');
+                 });
             });
-         
+
         };
-       
+
 
         /********** END PRODUCT RELATED **********/
 
@@ -358,6 +358,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         /********** END CMS RELATED **********/
 
         /********** SIGNUP SECTION **********/
+        $scope.monthly_sub_cost = 49.95;
+        $scope.yearly_sub_cost = 32.91;
+        $scope.selected_sub_cost = $scope.monthly_sub_cost;
 
         $scope.createUser = function(user) {
             console.log('user', user);
@@ -375,6 +378,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             //create contact
             userService.addContact(formatted, function(data) {
                 console.log('data ', data);
+                user.email = "";
+                user.success = true;
             });
 
             //redirect to signup with details
@@ -384,6 +389,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.createAccount = function(newAccount) {
             //validate
             //email
+            $scope.isFormValid = false;
             if (!$scope.newAccount.email) {
                 $scope.checkEmailExists(newAccount);
                 return;
@@ -428,10 +434,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 //|| !cc_name
                 console.log('card invalid');
                 //hightlight card in red
+                $scope.checkCardNumber();
+                $scope.checkCardExpiry();
+                $scope.checkCardCvv();
                 return;
             }
             //end validate
-
+            $scope.isFormValid = true;
             userService.getTmpAccount(function(data) {
                 var tmpAccount = data;
                 tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
@@ -445,14 +454,35 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     };
 
                     //get the token
-                    PaymentService.getStripeCardToken(newAccount.card, function(token) {
+                    PaymentService.getStripeCardToken(newAccount.card, function(token, error) {                        
+                       if(error)
+                        {
+                            console.info(error);   
+                            switch(error.param) {
+                                case "number":
+                                    $("#card_number .error").html(error.message);
+                                    $("#card_number").addClass('has-error');
+                                    break;
+                                case "exp_year":
+                                    $("#card_expiry .error").html(error.message);
+                                    $("#card_expiry").addClass('has-error');
+                                    break;
+                                case "cvc":
+                                    $("#card_cvc .error").html(error.message);
+                                    $("#card_cvc").addClass('has-error');
+                                    break;                                   
+                           }
+                        }
+                        $scope.isFormValid = false; 
                         newUser.cardToken = token;
                         newUser.plan = $scope.selectedPlan;
                         newUser.anonymousId = window.analytics.user().anonymousId();
                         userService.initializeUser(newUser, function(data) {
-                            window.location.replace(newUser.accountUrl);
-                        });
+                            window.location = data.accountUrl;
+                        }); 
+                        
                     });
+                   
 
                     /*
                     userService.createUser(newUser, function(data) {
@@ -539,6 +569,59 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 console.log('membership not selected');
             } else {
                 console.log('membership has been selected');
+            }
+        };
+
+        $scope.checkCardNumber = function() {            
+            var card_number = $('#number').val();    
+            console.log('checking to see if the card numer exists ', card_number);
+
+            if (!card_number) {                
+                $("#card_number .error").html("Card Number Required");
+                $("#card_number").addClass('has-error');
+            } else {
+                $("#card_number .error").html("");
+                $("#card_number").removeClass('has-error').addClass('has-success');                
+            }
+        };
+
+        $scope.checkCardExpiry = function() {
+          var expiry = $('#expiry').val();
+          var card_expiry = expiry.split("/")
+          var exp_month = card_expiry[0].trim();
+          var exp_year;
+          if(card_expiry.length > 1)
+            exp_year = card_expiry[1].trim();
+
+           
+           
+            console.log('checking to see if the card expiry details exists ', card_expiry);
+
+            if (!expiry || !exp_month || !exp_year) {
+                if (!expiry  )
+                    $("#card_expiry .error").html("Expiry Required");
+                else if(!exp_month)
+                    $("#card_expiry .error").html("Expiry Month Required");
+                else if(!exp_year)
+                    $("#card_expiry .error").html("Expiry Year Required");
+                $("#card_expiry").addClass('has-error');
+            } else {
+                $("#card_expiry .error").html("");
+                $("#card_expiry").removeClass('has-error').addClass('has-success');                
+            }
+        };
+
+        $scope.checkCardCvv = function() {
+           
+            var card_cvc = $('#cvc').val();    
+            console.log('checking to see if the card cvc exists ', card_cvc);
+
+            if (!card_cvc) {                
+                $("#card_cvc .error").html("CVC Required");
+                $("#card_cvc").addClass('has-error');
+            } else {
+                $("#card_cvc .error").html("");
+                $("#card_cvc").removeClass('has-error').addClass('has-success');                
             }
         };
 
