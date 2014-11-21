@@ -164,5 +164,9 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
           }
         };
 
+        $scope.addBusinessAddressFn = function () {
+          $scope.account.business.addresses.push({_id: $$.u.idutils.generateUniqueAlphaNumericShort()});
+        };
+
     }]);
 });

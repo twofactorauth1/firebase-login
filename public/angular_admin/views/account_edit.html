@@ -326,11 +326,11 @@
 
 				        </div>
 
-				        <div id="address-row" class="row">
+				        <div id="address-row" class="row"  ng-repeat="address in account.business.addresses">
 				            <div class="col-xs-1"><i class="icon-main fa fa-map-marker"></i>
 				            </div>
 				            <div class="col-xs-9">
-											<div class="row" ng-repeat="address in account.business.addresses">
+											<div class="row">
 												<div id="edit-addresses-container">
 													<div class="form-group">
 														<input class="form-control input-edit-map input-lg" placeholder="Address 1" ng-model='address.address1' type="text" ng-change="accountSaveFn(address.address1)">
@@ -357,7 +357,7 @@
 											</div>
 				            </div>
 				            <div class="col-xs-2">
-		                		<div id="btn-new-address" class="btn btn-primary btn-lg pull-right"><i class="fa fa-plus"></i></div>
+											<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addBusinessAddressFn()"><i class="fa fa-plus"></i></button>
 		                	</div>
 				        </div>
 					</div>
