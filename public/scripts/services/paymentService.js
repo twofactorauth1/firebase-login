@@ -14,7 +14,7 @@ mainApp.service('paymentService', ['$http', function ($http) {
         } else {
             console.log('card added successfully');
         }
-        fn(response.id);
+        fn(response.id, response.error);
       });
     };
 

@@ -288,6 +288,31 @@ var dao = {
     },
     //endregion
 
+    updateAccountBilling: function(accountId, customerId, subscriptionId, fn) {
+        var self = this;
+        self.log.debug('>> updateAccountBilling');
+        self.getById(accountId, $$.m.Account, function(err, account){
+            if(err) {
+                self.log.error('Error getting account for id [' + accountId + ']: ' + err);
+                return fn(err, null);
+            }
+            var billing = account.get('billing');
+            billing.subscriptionId=subscriptionId;
+            billing.stripeCustomerId=customerId;
+
+            account.set('billing', billing);
+            self.saveOrUpdate(account, function(err, savedAccount){
+                if(err) {
+                    self.log.error('Error updating account for id [' + accountId + ']: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< updateAccountBilling');
+                    return fn(null, savedAccount);
+                }
+            });
+        });
+    },
+
     addSubscriptionToAccount: function(accountId, subscriptionId, fn) {
         var self = this;
         self.log.debug('>> addSubscriptionToAccount');

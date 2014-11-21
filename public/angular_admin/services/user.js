@@ -14,6 +14,7 @@ define(['app', 'toasterService'], function (app) {
 			var apiUrl = baseUrl + ['user', $$.server.userId].join('/');
 			$http.put(apiUrl, user)
 			.success(function (data, status, headers, config) {
+				// ToasterService.show('success', 'User update.');
 				fn(data);
 			});
 		};
@@ -71,6 +72,18 @@ define(['app', 'toasterService'], function (app) {
 				fn(data);
 			});
 		};
+
+        this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, fn) {
+            var apiUrl = baseUrl + ['integrations', 'payments','indigenous', 'plans', planId, 'subscribe'].join('/');
+            var params = {customerId: stripeCustomerId};
+            if(accountId) {
+                params.accountId = accountId;
+            }
+            $http.post(apiUrl, params)
+                .success(function(data, status, headers, config){
+                    fn(data);
+                });
+        };
 
 		this.postUserSubscriptions = function (stripeCustomerId, planId, fn) {
 			var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeCustomerId, 'subscriptions'].join('/');

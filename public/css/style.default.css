@@ -20184,6 +20184,10 @@ div.error label.error:before {
 }
 .componentActions {
   position: absolute;
+  /*
+    100000 is for
+      .add-component
+  */
   z-index: 99999;
   width: 100%;
   margin-right: 10px;
@@ -22026,7 +22030,11 @@ hr {
   position: absolute;
   margin-top: -25px;
   left: 50%;
-  z-index: 999;
+  z-index: 100000;
+  /*
+      99999 is for
+        .componentActions
+    */
 }
 .add-component i {
   margin-top: -3px;
@@ -22040,9 +22048,6 @@ hr {
 }
 .add-component:hover a {
   color: #219265;
-}
-body.editing {
-  margin-top: 50px;
 }
 body.editing .no-component {
   display: block;
@@ -23078,9 +23083,6 @@ contenthover a {
 .image-text-v1 .image-text-image img {
   margin: 25px auto;
   min-width: 250px;
-}
-.image-text-v1 .image-text-text a {
-  text-decoration: underline;
 }
 #paradata span h4 {
   font-size: 22px;
@@ -24482,6 +24484,36 @@ div[data-type=blog] .container {
 .triangle-text-v1 .align-text-center {
   text-align: center;
 }
+.payment-form-v1 .glyphicon-refresh-animate {
+  -animation: spin .7s infinite linear;
+  -ms-animation: spin .7s infinite linear;
+  -webkit-animation: spinw .7s infinite linear;
+  -moz-animation: spinm .7s infinite linear;
+}
+@keyframes spin {
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}
+@-webkit-keyframes spinw {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-moz-keyframes spinm {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
 .payment-form-v1 .panel {
   padding: 15px;
   background: none;
@@ -24594,6 +24626,23 @@ div[data-type=blog] .container {
 .contact-us-v5 .map {
   height: 344px;
   margin-right: 50px;
+}
+.contact-us-v5 .contact-right {
+  padding: 0 40px 20px;
+}
+.contact-us-v5 .contact-img {
+  width: 152px;
+}
+.contact-us-v5 .contact-left {
+  color: white;
+  border-radius: 5px;
+  margin: 0 15px;
+}
+.contact-us-v5 .contact-left p {
+  margin-bottom: 0;
+}
+.contact-us-v5 input[type="radio"] {
+  margin-right: 5px;
 }
 /********** Video **********/
 .video-block .btn .fa {
