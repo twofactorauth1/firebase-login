@@ -153,5 +153,13 @@ define(['app', 'userService', 'underscore', 'commonutils','adminValidationDirect
           }
         };
 
+        $scope.accountSaveFn = function (value) {
+          if (value.length%4===0) {
+            UserService.putAccount($scope.account, function (account) {
+              
+            });
+          }
+        };
+
     }]);
 });
