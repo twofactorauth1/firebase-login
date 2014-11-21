@@ -269,6 +269,7 @@ define([
                 // $scope.components = that.originalCurrentPageComponents;
                 var pageId = $scope.currentPage._id;
                 //$scope.deactivateAloha && $scope.deactivateAloha();
+                $scope.deactivateAloha();
                 WebsiteService.getPageComponents(pageId,function(components) {
                     $scope.components = components;
 
@@ -384,14 +385,14 @@ define([
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
                     //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                     //document.getElementById('iframe-website').contentWindow.location.reload(true);
-                    $scope.deactivateAloha && $scope.deactivateAloha();
+
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
 
                //     document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
 
 
                 });
-
+                //$scope.deactivateAloha();
                 var data = {
                     _id: $scope.website._id,
                     accountId: $scope.website.accountId,

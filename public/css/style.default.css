@@ -20184,6 +20184,10 @@ div.error label.error:before {
 }
 .componentActions {
   position: absolute;
+  /*
+    100000 is for
+      .add-component
+  */
   z-index: 99999;
   width: 100%;
   margin-right: 10px;
@@ -22026,7 +22030,11 @@ hr {
   position: absolute;
   margin-top: -25px;
   left: 50%;
-  z-index: 999;
+  z-index: 100000;
+  /*
+      99999 is for
+        .componentActions
+    */
 }
 .add-component i {
   margin-top: -3px;
@@ -22040,9 +22048,6 @@ hr {
 }
 .add-component:hover a {
   color: #219265;
-}
-body.editing {
-  margin-top: 50px;
 }
 body.editing .no-component {
   display: block;
