@@ -378,6 +378,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             //create contact
             userService.addContact(formatted, function(data) {
                 console.log('data ', data);
+                user.email = "";
+                user.success = true;
             });
 
             //redirect to signup with details
