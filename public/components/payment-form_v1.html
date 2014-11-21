@@ -18,8 +18,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
-
+                <div class="panel-body" >
+                    <fieldset ng-disabled="isFormValid">
                     <!-- EMAIL AND PASSOWORD -->
 
                     <div id="email" class="form-group col-sm-6 has-feedback">
@@ -61,18 +61,18 @@
                     <div class="col-xs-6">
                         <div class="well well-calm">
                             <h4 class="center">Monthly Membership</h4>
-                            <h2 class="center">97.00 <span>/ month</span></h2>
+                            <h2 class="center">{{monthly_sub_cost}} <span>/ month</span></h2>
                             <div class="mb30"></div>
-                            <a type="button" class="btn btn-primary" ng-click="newAccount.membership = 'monthly'">Choose</a>
+                            <a type="button" class="btn btn-primary" ng-click="newAccount.membership = 'monthly_access'; selected_sub_cost = monthly_sub_cost;">Choose</a>
                         </div>
                     </div>
 
                     <div class="col-xs-6">
                         <div class="well well-calm">
                             <h4 class="center">Yearly Membership</h4>
-                            <h2 class="center">74.00 <span>/ month</span></h2>
+                            <h2 class="center">{{yearly_sub_cost}} <span>/ month</span></h2>
                             <div class="mb30"></div>
-                            <a type="button" class="btn btn-primary" ng-click="newAccount.membership = 'yearly'">Choose</a>
+                            <a type="button" class="btn btn-primary" ng-click="newAccount.membership = 'yearly_access'; selected_sub_cost = yearly_sub_cost;">Choose</a>
                         </div>
                     </div>
 
@@ -88,10 +88,13 @@
                                 <h3 class="center">Amount:</h3>
                             </div>
                             <div class="col-sm-10">
+                                <h4>Only {{selected_sub_cost}}/month</h4>    
+                                <!--
                                 <h4>Only $49.00/month (when you prepay $588.00 for 12 months)
                                     <br/>Save $576.00. Pays for itself in 6 months.
                                     <br/>Keep Locked In Rate for next year.
                                 </h4>
+                                -->
                             </div>
                         </div>
 
@@ -100,21 +103,25 @@
                           <div class="active">
                             <form name="card-details" action="">
                               <div class="row">
-                                <div class="small-6 columns col-sm-6">
-                                  <input placeholder="Card number" type="text" name="number" id="number" class="form-control input-lg">
-                                </div>
+                                <div id="card_number" class="form-group small-6 columns col-sm-6">     
+                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>                               
                                 <div class="visible-xs mb20"></div>
-                                <div class="small-6 columns col-sm-6">
+                                <div id="card_name" class="form-group small-6 columns col-sm-6">
                                   <input placeholder="Full name" type="text" id="name" name="name" class="form-control input-lg">
+                                  <span class="error help-block" />
                                 </div>
                               </div>
                               <div class="clearfix mb20"></div>
                               <div class="row">
-                                <div class="small-3 columns col-xs-6">
-                                  <input placeholder="MM/YY" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                                <div id="card_expiry" class="form-group small-3 columns col-xs-6">
+                                  <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                                  <span class="error help-block" />
                                 </div>
-                                <div class="small-3 columns col-xs-6">
-                                  <input placeholder="CVC" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                                <div id="card_cvc" class="form-group small-3 columns col-xs-6">
+                                  <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                                  <span class="error help-block" />
                                 </div>
                               </div>
                               <div class="clearfix mb20"></div>
@@ -130,10 +137,12 @@
 
 
                     <!-- BUY -->
-                    <div class="submit-signup">
-                        <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)">Become an Indigenous Member Now</a>
+                   
+                    <div class="submit-signup">                        
+                        <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)"><span ng-show="isFormValid" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Become an Indigenous Member Now</a>
                     </div>
                     <p class="center">By click this button you agree to Indigneous.io <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
+                </fieldset>
                 </div>
             </div>
         </div>

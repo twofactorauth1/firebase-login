@@ -72,6 +72,18 @@ define(['app', 'toasterService'], function (app) {
 			});
 		};
 
+        this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, fn) {
+            var apiUrl = baseUrl + ['integrations', 'payments','indigenous', 'plans', planId, 'subscribe'].join('/');
+            var params = {customerId: stripeCustomerId};
+            if(accountId) {
+                params.accountId = accountId;
+            }
+            $http.post(apiUrl, params)
+                .success(function(data, status, headers, config){
+                    fn(data);
+                });
+        };
+
 		this.postUserSubscriptions = function (stripeCustomerId, planId, fn) {
 			var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeCustomerId, 'subscriptions'].join('/');
 			$http.post(apiUrl, {plan: planId})

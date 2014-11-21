@@ -17625,6 +17625,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin: 0 10px 0 5px;
   color: #ccc;
 }
+.mainpanel .pageheader h2 .div-header {
+  display: inline;
+}
 .mainpanel .pageheader .glyphicon {
   font-size: 24px;
   margin-right: 5px;
@@ -19980,7 +19983,7 @@ div.error label.error:before {
   margin-bottom: 0;
 }
 .website .btn.media-modal {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 .website #iframe-website {
   border: none;
@@ -20336,7 +20339,7 @@ input[type='file'] {
   float: right;
 }
 .website-controls .btn-add {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 .website-controls.editing h2 {
   color: white!important;
@@ -24475,6 +24478,36 @@ div[data-type=blog] .container {
 }
 .triangle-text-v1 .align-text-center {
   text-align: center;
+}
+.payment-form-v1 .glyphicon-refresh-animate {
+  -animation: spin .7s infinite linear;
+  -ms-animation: spin .7s infinite linear;
+  -webkit-animation: spinw .7s infinite linear;
+  -moz-animation: spinm .7s infinite linear;
+}
+@keyframes spin {
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}
+@-webkit-keyframes spinw {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-moz-keyframes spinm {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
 }
 .payment-form-v1 .panel {
   padding: 15px;
