@@ -1241,7 +1241,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.wrapError(resp, 500, 'Could not find account.');
             }
             var customerId = account.get('billing').customerId;
-            if(customerId === null || customerId === '') {
+            if(!customerId || customerId === '') {
                 self.log.error('No stripe customerId found for account: ' + account.id());
                 return self.wrapError(resp, 400, 'No Stripe CustomerId found for account.');
             }
