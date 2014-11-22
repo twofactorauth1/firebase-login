@@ -22,7 +22,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         // };
 
         CourseService.getAllCourses(function(data) {
-            console.log('courses ', data);
             that.courses = data;
         });
 

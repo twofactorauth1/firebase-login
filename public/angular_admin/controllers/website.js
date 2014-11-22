@@ -115,7 +115,7 @@ define([
 
                     //add media modal click events to all images
                     var images = iframeDoc.getElementById('body').querySelectorAll('img');
-                    console.log('imgs ', images);
+
                     for (var i = 0; i < images.length; i++) {
                         if (typeof images[i].addEventListener != "undefined") {
                             images[i].addEventListener("click", function(e) {
@@ -261,6 +261,10 @@ define([
                 }
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");
+
+                $scope.$watch('currentPage', function (newValue, oldValue) {
+                  console.log('watch currentPage >> ', newValue);
+                });
 
                 $scope.backup['website'] = angular.copy($scope['website']);
             };
@@ -454,6 +458,7 @@ define([
                 });
             };
 
+
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
                 var cmpVersion = null;
@@ -510,6 +515,7 @@ define([
                 if(fn) {
                     fn();
                 }
+                $scope.bindEvents();
             };
 
             $scope.scrollToIframeComponent = function(section) {
@@ -666,7 +672,6 @@ define([
                 };
                 $scope.components = $scope.currentPage.components;
                 $scope.updateIframeComponents();
-                $scope.updateThemeSettings();
             };
 
             CourseService.getAllCourses(function(data) {
@@ -793,19 +798,19 @@ define([
                 var parent_div = $('div.form-group.subdomain');
                     UserService.checkDuplicateSubdomain($scope.account.subdomain,$scope.account._id, function(result){
                     if(result === "true")
-                    {  
+                    {
                         parent_div.addClass('has-error');
                         parent_div.find('span.error').remove();
                         parent_div.append("<span class='error help-block'>Domain already exists</span>");
                     }
                     else
-                    {                        
+                    {
                         UserService.putAccount($scope.account, function (account) {
                         parent_div.removeClass('has-error');
                         parent_div.find('span.error').remove(); 
                         });
                     }
-                });               
+                });
             }
 
 
@@ -813,7 +818,7 @@ define([
                 if(!$scope.backup['website']){
 
                 }
-                else if ( confirm("are you want to save?") ) {
+                else if ( confirm("Do you want to Save your changes?") ) {
                     $scope.savePage();
 
                 } else {
