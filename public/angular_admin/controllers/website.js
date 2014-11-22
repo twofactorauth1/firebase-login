@@ -269,6 +269,7 @@ define([
                 // $scope.components = that.originalCurrentPageComponents;
                 var pageId = $scope.currentPage._id;
                 //$scope.deactivateAloha && $scope.deactivateAloha();
+                $scope.deactivateAloha();
                 WebsiteService.getPageComponents(pageId,function(components) {
                     $scope.components = components;
 
@@ -353,6 +354,8 @@ define([
                             }
                             //simple
                             if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                                console.log('Saving '+componentType+' component.');
+                                console.log('Contents '+componentVarContents);
                                 matchingComponent[componentVar] = componentVarContents;
                             }
                         }
@@ -382,14 +385,14 @@ define([
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
                     //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                     //document.getElementById('iframe-website').contentWindow.location.reload(true);
-                    $scope.deactivateAloha && $scope.deactivateAloha();
+
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
 
                //     document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
 
 
                 });
-
+                //$scope.deactivateAloha();
                 var data = {
                     _id: $scope.website._id,
                     accountId: $scope.website.accountId,
@@ -501,9 +504,12 @@ define([
                 });
             };
 
-            $scope.updateIframeComponents = function() {
+            $scope.updateIframeComponents = function(fn) {
                 //document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.updateComponents && iFrame.contentWindow.updateComponents($scope.components);
+                if(fn) {
+                    fn();
+                }
             };
 
             $scope.scrollToIframeComponent = function(section) {
@@ -554,7 +560,9 @@ define([
                     }
                 }
 
-                $scope.updateIframeComponents();
+                $scope.updateIframeComponents(function() {
+                     $scope.bindEvents();
+                });
                 $scope.isEditing = true;
 
                 //update the scope as the temppage until save
