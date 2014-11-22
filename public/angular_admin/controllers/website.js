@@ -100,6 +100,7 @@ define([
             }
 
             $scope.bindEvents = function() {
+                console.log('bindEvents >>>');
                 var iframe = document.getElementById("iframe-website");
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
@@ -511,6 +512,7 @@ define([
                 if(fn) {
                     fn();
                 }
+                $scope.bindEvents();
             };
 
             $scope.scrollToIframeComponent = function(section) {
