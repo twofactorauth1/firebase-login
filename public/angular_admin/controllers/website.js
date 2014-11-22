@@ -454,6 +454,7 @@ define([
                 });
             };
 
+
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
                 var cmpVersion = null;
@@ -666,7 +667,6 @@ define([
                 };
                 $scope.components = $scope.currentPage.components;
                 $scope.updateIframeComponents();
-                $scope.updateThemeSettings();
             };
 
             CourseService.getAllCourses(function(data) {
