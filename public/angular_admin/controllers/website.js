@@ -100,7 +100,6 @@ define([
             }
 
             $scope.bindEvents = function() {
-                console.log('bindEvents >>>');
                 var iframe = document.getElementById("iframe-website");
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
@@ -116,7 +115,7 @@ define([
 
                     //add media modal click events to all images
                     var images = iframeDoc.getElementById('body').querySelectorAll('img');
-                    console.log('imgs ', images);
+
                     for (var i = 0; i < images.length; i++) {
                         if (typeof images[i].addEventListener != "undefined") {
                             images[i].addEventListener("click", function(e) {
@@ -262,6 +261,10 @@ define([
                 }
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");
+
+                $scope.$watch('currentPage', function (newValue, oldValue) {
+                  console.log('watch currentPage >> ', newValue);
+                });
 
                 $scope.backup['website'] = angular.copy($scope['website']);
             };
@@ -795,19 +798,19 @@ define([
                 var parent_div = $('div.form-group.subdomain');
                     UserService.checkDuplicateSubdomain($scope.account.subdomain,$scope.account._id, function(result){
                     if(result === "true")
-                    {  
+                    {
                         parent_div.addClass('has-error');
                         parent_div.find('span.error').remove();
                         parent_div.append("<span class='error help-block'>Domain already exists</span>");
                     }
                     else
-                    {                        
+                    {
                         UserService.putAccount($scope.account, function (account) {
                         parent_div.removeClass('has-error');
                         parent_div.find('span.error').remove(); 
                         });
                     }
-                });               
+                });
             }
 
 
@@ -815,7 +818,7 @@ define([
                 if(!$scope.backup['website']){
 
                 }
-                else if ( confirm("are you want to save?") ) {
+                else if ( confirm("Do you want to Save your changes?") ) {
                     $scope.savePage();
 
                 } else {
