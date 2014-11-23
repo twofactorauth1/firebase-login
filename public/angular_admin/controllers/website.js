@@ -690,11 +690,11 @@ define([
 
             //an array of component types and icons for the add component modal
             $scope.componentTypes = [
-                {
-                    title: 'Blog',
-                    type: 'blog',
-                    icon: 'custom blog'
-                },
+                // {
+                //     title: 'Blog',
+                //     type: 'blog',
+                //     icon: 'custom blog'
+                // },
                 {
                     title: 'Masthead',
                     type: 'masthead',
@@ -764,12 +764,12 @@ define([
                     title: 'Simple form',
                     type: 'simple-form',
                     icon: 'custom simple-form'
-                },
-                {
-                    title: 'Single Post',
-                    type: 'single-post',
-                    icon: 'custom single-post'
                 }
+                // {
+                //     title: 'Single Post',
+                //     type: 'single-post',
+                //     icon: 'custom single-post'
+                // },
                 // {
                 //     title: 'Social Links',
                 //     type: 'social-feed',
