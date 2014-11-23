@@ -219,7 +219,11 @@ var user = $$.m.ModelBase.extend({
                     }
                 }
             }
+            if(!String.isNullOrEmpty(json.accountUrl)) {
+                json.accountUrl = json.accountUrl.toLowerCase();
+            }
         }
+
     },
 
 
