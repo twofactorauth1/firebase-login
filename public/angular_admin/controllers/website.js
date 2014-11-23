@@ -573,9 +573,9 @@ define([
             $scope.createPageValidated = false;
 
              $scope.validateCreatePage = function(page) {
-                console.log('page >>> ', page);
-
-               if (page && page.title && page.handle) {
+               if (page.handle != '') { $scope.handleError = true }
+               if (page && page.title && page.title != '' && page.handle && page.handle != '') {
+                console.log('page validated');
                 $scope.createPageValidated = true;
                }
             };
