@@ -573,7 +573,11 @@ define([
             $scope.createPageValidated = false;
 
              $scope.validateCreatePage = function(page) {
-               if (page.handle != '') { $scope.handleError = true }
+                console.log('page ', page);
+               if (page.handle == '') { $scope.handleError = true } else { $scope.handleError = false }
+               if (page.title == '') { $scope.titleError = true } else { $scope.titleError = false }
+                 console.log('$scope.titleError ', $scope.titleError);
+              console.log('$scope.handleError  ', $scope.handleError );
                if (page && page.title && page.title != '' && page.handle && page.handle != '') {
                 console.log('page validated');
                 $scope.createPageValidated = true;

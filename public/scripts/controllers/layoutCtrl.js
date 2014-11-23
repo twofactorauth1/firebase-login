@@ -324,15 +324,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         /********** CMS RELATED **********/
 
         window.activateAloha = function() {
-            aloha.dom.query('.editable', document).forEach(aloha);
-            $('.aloha-caret.aloha-ephemera', document).css('visibility','visible');
+            $('.editable').aloha();
+            // aloha.dom.query('.editable', document).forEach(aloha);
+            // $('.aloha-caret.aloha-ephemera', document).css('visibility','visible');
         };
 
         window.deactivateAloha = function() {
-            if (aloha.editor && aloha.editor.selection) {
-                aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
-                $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');
-            }
+             $('.editable').mahalo();
+            // if (aloha.editor && aloha.editor.selection) {
+            //     // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
+            //     // $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');
+            // }
             // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
 
@@ -390,11 +392,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 body.className += ' editing';
             }
 
-            var toolbar = body.querySelectorAll('.btn-toolbar')[0];
-            if (toolbar.classList.contains('editing') === false) {
-                toolbar.className += ' editing';
-            }
-            window.oldScope.isEditing = true;
+            // var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            // if (toolbar.classList.contains('editing') === false) {
+            //     toolbar.className += ' editing';
+            // }
+            // window.oldScope.isEditing = true;
 
             window.oldScope.$digest();
         };
