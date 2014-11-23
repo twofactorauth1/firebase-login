@@ -232,7 +232,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                         self = null;
                                         return;
                                     }
-                                    user.set("accountUrl", value);
+                                    user.set("accountUrl", value.toLowerCase());
                                     //res.send(user);
                                     res.send(user.toJSON("public", {accountId:self.accountId(req)}));
                                 });
@@ -319,7 +319,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                     self = null;
                                     return;
                                 }
-                                userObj.set("accountUrl",value);
+                                userObj.set("accountUrl",value.toLowerCase());
                                 resp.send(userObj);
                                 self = null;
                             });

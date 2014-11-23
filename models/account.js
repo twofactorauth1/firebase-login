@@ -87,6 +87,11 @@ var account = $$.m.ModelBase.extend({
             if (this.get("subdomain") != null) {
                 json.accountUrl = appConfig.getServerUrl(this.get("subdomain"), this.get("domain"));
             }
+        },
+        db: function(json) {
+            if(!String.isNullOrEmpty(json.subdomain)) {
+                json.subdomain = json.subdomain.toLowerCase();
+            }
         }
     },
 
