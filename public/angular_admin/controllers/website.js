@@ -690,96 +690,115 @@ define([
 
             //an array of component types and icons for the add component modal
             $scope.componentTypes = [
-                // {
-                //     title: 'Blog',
-                //     type: 'blog',
-                //     icon: 'custom blog'
-                // },
+                {
+                    title: 'Blog',
+                    type: 'blog',
+                    icon: 'custom blog',
+                    enabled: false
+                },
                 {
                     title: 'Masthead',
                     type: 'masthead',
-                    icon: 'custom masthead'
+                    icon: 'custom masthead',
+                    enabled: true
                 },
-                // {
-                //     title: 'Feature List',
-                //     type: 'feature-list',
-                //     icon: 'fa fa-list-ul'
-                // },
+                {
+                    title: 'Feature List',
+                    type: 'feature-list',
+                    icon: 'fa fa-list-ul',
+                    enabled: false
+                },
                 {
                     title: 'Campaign',
                     type: 'campaign',
-                    icon: 'fa fa-bullhorn'
+                    icon: 'fa fa-bullhorn',
+                    enabled: true
                 },
-                // {
-                //     title: 'Contact Us',
-                //     type: 'contact-us',
-                //     icon: 'fa fa-map-marker'
-                // },
+                {
+                    title: 'Contact Us',
+                    type: 'contact-us',
+                    icon: 'fa fa-map-marker',
+                    enabled: false
+                },
                 {
                     title: 'Coming Soon',
                     type: 'coming-soon',
-                    icon: 'fa fa-clock-o'
+                    icon: 'fa fa-clock-o',
+                    enabled: true
                 },
                 {
                     title: 'Feature block',
                     type: 'feature-block',
-                    icon: 'custom feature-block'
+                    icon: 'custom feature-block',
+                    enabled: true
                 },
                 {
                     title: 'Footer',
                     type: 'footer',
-                    icon: 'custom footer'
+                    icon: 'custom footer',
+                    enabled: true
                 },
-                // {
-                //     title: 'Image Gallery',
-                //     type: 'image-gallery',
-                //     icon: 'fa fa-image'
-                // },
-                // {
-                //     title: 'Image Slider',
-                //     type: 'image-slider' ,
-                //     icon: 'custom image-slider'
-                // },
+                {
+                    title: 'Image Gallery',
+                    type: 'image-gallery',
+                    icon: 'fa fa-image',
+                    enabled: false
+                },
+                {
+                    title: 'Image Slider',
+                    type: 'image-slider' ,
+                    icon: 'custom image-slider',
+                    enabled: false
+                },
                 {
                     title: 'Image Text',
                     type: 'image-text',
-                    icon: 'custom image-text'
+                    icon: 'custom image-text',
+                    enabled: true
                 },
-                // {
-                //     title: 'Logo List',
-                //     type: 'logo-list',
-                //     icon: 'custom logo-list'
-                // },
-                // {
-                //     title: 'Meet Team',
-                //     type: 'meet-team',
-                //     icon: 'fa fa-users'
-                // },
+                {
+                    title: 'Logo List',
+                    type: 'logo-list',
+                    icon: 'custom logo-list',
+                    enabled: false
+                },
+                {
+                    title: 'Meet Team',
+                    type: 'meet-team',
+                    icon: 'fa fa-users',
+                    enabled: false
+                },
                 {
                     title: 'Navigation',
                     type: 'navigation',
-                    icon: 'fa fa-location-arrow'
+                    icon: 'fa fa-location-arrow',
+                    enabled: true
                 },
                 {
                     title: 'Simple form',
                     type: 'simple-form',
-                    icon: 'custom simple-form'
+                    icon: 'custom simple-form',
+                    enabled: true
+                },
+                {
+                    title: 'Single Post',
+                    type: 'single-post',
+                    icon: 'custom single-post',
+                    enabled: false
+                },
+                {
+                    title: 'Social Links',
+                    type: 'social-feed',
+                    icon: 'custom social-links',
+                    enabled: false
                 }
-                // {
-                //     title: 'Single Post',
-                //     type: 'single-post',
-                //     icon: 'custom single-post'
-                // },
-                // {
-                //     title: 'Social Links',
-                //     type: 'social-feed',
-                //     icon: 'custom social-links'
-                // }
             ];
 
 
             $scope.selectComponent = function(type) {
-                $scope.selectedComponent = type;
+                if (type.enabled) {
+                    $scope.selectedComponent = type;
+                }
             };
 
             $scope.insertMedia=function(asset){
