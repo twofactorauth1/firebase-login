@@ -1,13 +1,17 @@
-<div id="error-msg" class="alert alert-danger hidden">
-    <button type="button" aria-hidden="true" class="close">×</button>
-    <span class="message"></span>
-</div>
-<div>
+<div ng-class="component.type+'-v'+component.version">
+    <div id="error-msg" class="alert alert-danger hidden">
+        <button type="button" aria-hidden="true" class="close">×</button>
+        <span class="message"></span>
+    </div>
+    <div>
 
     <div class="component-body">
-        <div class="signup-form-v1">
             <div class="inner-page row">
-                <h3 ng-bind-html="component.title" class="mb15"></h3>
+                <div class="simple-form-title">
+                    <div class="editable text-center" data-class="title" data-index="{{$index}}">
+                        <span ng-bind-html="component.title"></span>
+                    </div>
+                </div>
                 <div class="col-sm-9">
                     <div class="left-inner-addon">
                         <span><i class="fa fa-envelope"></i></span>
@@ -22,10 +26,9 @@
                     </div>
                 </div>
                 <div ng-if="user.success" class="row thank-you">
-                    <h3 class="center mb20">Thank You For Sign Up</h3>                      
+                    <h3 class="center mb20">Thank You For Sign Up</h3>
                 </div>
             </div>
         </div>
     </div>
-
 </div>

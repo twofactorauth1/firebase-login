@@ -1,4 +1,4 @@
-<div class="website">
+<div class="website" ng-class="{true: 'editing', false: ''}[isEditing == true]">
     <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
     <div class="pageheader row website-controls" ng-class="{true: 'editing', false: ''}[isEditing == true]">
         <div class="col-xs-5">
@@ -18,18 +18,15 @@
         <div class="col-xs-7">
 
             <a class="btn btn-success pull-right btn-edit-page" type="button" ng-click="editPage()" ng-show="!isEditing">
-               
                 <i class="fa fa fa-edit"></i>
                 <span class="hidden-xs">Edit</span>
             </a>
 
             <a class="btn btn-success pull-right btn-save-page" type="button" ng-click="savePage()" ng-show="isEditing">
-                
                 <i class="fa fa fa-save"></i>
                 <span class="hidden-xs">Save</span>
             </a>
             <a ng-confirm-click class="btn btn-warning pull-right btn-cancel-page" type="button"  style="margin-right:5px" confirmed-click = cancelPage() ng-show="isEditing">
-                
                 <i class="fa fa fa-times"></i>
                 <span class="hidden-xs">Cancel</span>
             </a>
@@ -39,7 +36,7 @@
 
             <a class="btn btn-success pull-right media-modal"
                     on-insert-mediacb="insertMedia"
-                    user='user'>               
+                    user='user'>
                 <i class="fa fa fa-image"></i>
                 <span class="hidden-xs">Media</span>
             </a>
@@ -115,11 +112,11 @@
                         </div>
                         <div class="form-group">
                             <label for="colorpicker">Font Family Primary:</label>
-                            <jd-fontselect  on-open="editPage()"  stack="primaryFontStack" on-change="updatePrimaryFont(font)"></jd-fontselect>
+                            <jd-fontselect  on-open="editPage()"  stack="primaryFontStack" on-change="updatePrimaryFont(font)" rawText="{ toggleOpenLabel: 'Mach uff!' }"></jd-fontselect>
                         </div>
                         <div class="form-group">
                             <label for="colorpicker">Font Family Secondary:</label>
-                            <jd-fontselect stack="secondaryFontStack"></jd-fontselect>
+                            <jd-fontselect stack="secondaryFontStack" rawText="{ toggleOpenLabel: 'Mach uff!' }"></jd-fontselect>
                         </div>
                     </div>
 
@@ -365,13 +362,13 @@
                 </div>
                 <div class="modal-body">
                     <div id="new_page">
-                        <div class="form-group">
+                        <div class="form-group" ng-class="{ 'has-error': titleError}">
                             <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
-                            <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title">
+                            <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title" ng-change="validateCreatePage(page)">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-class="{ 'has-error': handleError}">
                             <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
-                            <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle">
+                            <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle" ng-change="validateCreatePage(page)">
                         </div>
                         <div class="clearfix mb15"></div>
                         <div class="form-group">
@@ -384,7 +381,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-click="createPage(page, $event)" data-dismiss="modal">Create Page</button>
+                    <button type="button" class="btn btn-primary" ng-click="createPage(page, $event)">Create Page</button>
                 </div>
             </div>
             <!-- /.modal-content -->

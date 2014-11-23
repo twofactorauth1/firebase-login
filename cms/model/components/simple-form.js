@@ -6,10 +6,9 @@
  */
 
 /**
- * The Contact Us Component
+ * Logo list component
  *
- * Stores data that represents information required
- * to dispaly Contact Us information
+ * Stores data that represents a list of logos used for marketing purposes.
  */
 require('../../../models/base.model.js');
 
@@ -34,11 +33,10 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "contact-us",
+            type: "simple-form",
 
             /**
-             * The version of the component
-             *
+             * Version
              */
             version: 1,
 
@@ -46,64 +44,43 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            title: "<h3>CONTACT US</h3>",
+            maintitle : "<h1>Simple Form</h1>",
 
             /**
              *
              *
              */
-            subtitle: "<h5>We will be happy to assist you!</h5>",
+            subtitle : "<h4>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </h4>",
 
             /**
              *
              *
              */
-            text: "",
+            text : "<p>Ullam molestiae est, recusandae ratione rem sit, praesentium laborum corporis. Molestiae quidem libero minima earum error minus voluptatum eligendi cum culpa impedit, dicta tenetur quis similique magni rerum doloribus excepturi aspernatur saepe dignissimos ad est aliquid? Voluptas inventore dignissimos possimus perspiciatis enim.</p>",
 
             /**
              *
              *
              */
-            imgurl: "",
-
-            /**
-             * The hours a business is open, array
-             *[
-             *  "mon-friday: 8-5",
-             *  "saturday: 9-4",
-             *  "sunday: "closed"
-             * ]
-             */
-            hours: [],
-
-            /**
-             * The location object
-             */
-            location: {
-                address:"",
-                address2:"",
-                city:"",
-                state:"",
-                zip:"",
-                lat:"",
-                lon:"",
-                showMap: false,
-                addressDisplayLabel: ""
-            },
-
-            /**
-             * Email and phone
-             */
-            contact: {
-                email: "",
-                phone: ""
-            },
+            imgurl : "http://api.randomuser.me/portraits/med/women/51.jpg",
 
             /**
              *
              *
              */
-            txtcolor: "#888888",
+            fields : [],
+
+            /**
+             *
+             *
+             */
+            contact_type : "Lead",
+
+            /**
+             *
+             *
+             */
+            txtcolor : "#ffffff",
 
             /**
              *
@@ -117,13 +94,27 @@ var component = $$.m.ModelBase.extend({
                     parallax : false,
                     blur : false
                 },
-                color : "#FFFFFF"
-            }
+                color : "#4bb0cb"
+            },
+
+            /**
+             *
+             *
+             */
+            btn : {
+                visibility: true,
+                text : "Learn More",
+                url : "#features",
+                icon : "fa fa-rocket"
+            },
+
+            visibility: true
         }
     },
 
 
     initialize: function(options) {
+
     }
 
 
@@ -136,6 +127,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.ContactUs = component;
+$$.m.cms.modules.SimpleForm = component;
 
 module.exports = component;
