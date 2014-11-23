@@ -119,7 +119,6 @@ define([
                     for (var i = 0; i < images.length; i++) {
                         if (typeof images[i].addEventListener != "undefined") {
                             images[i].addEventListener("click", function(e) {
-                                console.log('e.currentTarget.attributes >>> ', $(e.currentTarget).closest('.component').data('id'));
                                 $("#media-manager-modal").modal('show');
                                 $scope.imageChange = true;
                                 $scope.componentArrTarget = e.currentTarget;
@@ -137,7 +136,6 @@ define([
                     for (var i = 0; i < settingsBtns.length; i++) {
                         if (typeof settingsBtns[i].addEventListener != "undefined") {
                             settingsBtns[i].addEventListener("click", function(e) {
-                                console.log('e.currentTarget.attributes >>> ', e.currentTarget.attributes);
                                 $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                             });
                         } else if (typeof settingsBtns.attachEvent != "undefined") {
@@ -358,8 +356,6 @@ define([
                             }
                             //simple
                             if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
-                                console.log('Saving '+componentType+' component.');
-                                console.log('Contents '+componentVarContents);
                                 matchingComponent[componentVar] = componentVarContents;
                             }
                         }
@@ -414,7 +410,6 @@ define([
                 $scope.isEditing = false;
 
                 $scope.pageSelected = handle || 'index';
-
                 var route;
                 var sPage = $scope.pageSelected;
                 if (sPage === 'index') {
@@ -440,7 +435,7 @@ define([
                     }
                     $scope.allPages = arr;
                     that.allPages = arr;
-                    $scope.currentPage = _.findWhere(pages, {
+                    $scope.currentPage = _.findWhere(that.allPages, {
                         handle: currentPage
                     });
 
@@ -475,7 +470,6 @@ define([
                 WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, cmpVersion,  function(data) {
                     if (data.components) {
                         var newComponent = data.components[data.components.length - 1];
-                        console.log('newComponent >>> ', newComponent);
                         var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
                         $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
@@ -492,7 +486,6 @@ define([
             };
 
             $scope.deleteComponent = function(componentId) {
-                console.log('deleting component');
                 var pageId = $scope.currentPage._id;
                 var deletedType;
                 WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
@@ -628,7 +621,7 @@ define([
 
                 WebsiteService.deletePage(pageId, websiteId, title, function(data) {
                     toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
-                    document.getElementById("iframe-website").setAttribute("src", "/");
+                    $scope.updatePage("index");
                 });
             };
 
@@ -646,7 +639,6 @@ define([
             };
 
             $scope.changeSelectedTheme = function(theme) {
-                console.log("selected" + theme)
                 $scope.selectedTheme = theme;
             };
 
@@ -770,7 +762,6 @@ define([
 
 
             $scope.selectComponent = function(type) {
-                console.log('selectComponent', type);
                 $scope.selectedComponent = type;
             };
 
@@ -782,9 +773,7 @@ define([
                     if(type == 'image-text') {
                         $scope.componentEditing.imgurl = asset.url;
                     } else if(type == 'feature-list') {
-                        console.log('feature list $scope.componentEditing >>> ', $scope.componentEditing.features[0].imgurl);
                         var targetIndex = $($scope.componentArrTarget).closest('.single-feature').data('index');
-                        console.log('targetIndex >>> ', targetIndex);
                         $scope.componentEditing.features[targetIndex].imgurl = asset.url;
                     } else if(type == 'simple-form') {
                         $scope.componentEditing.imgurl = asset.url;
@@ -830,8 +819,6 @@ define([
                 }
 
                 offFn();
-
-
             });
         }
     ]);

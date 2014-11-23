@@ -437,7 +437,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var label = req.params.label;
 
                 cmsManager.deletePage(pageId, function (err, value) {
-                    self.log.debug('<< deletePage', err);
+                    self.log.debug('<< deletePage');
                     self.sendResultOrError(res, err, value, "Error deleting Page");
                     self = null;
                 });
