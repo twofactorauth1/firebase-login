@@ -26,7 +26,6 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
     //api/1.0/analytics/session/{sessionId}/sessionStart
     this.sessionStart = function(fn) {
-        console.log('sessionStart >>>');
         var loc = $location.hash();
         var top = 400;
         var duration = 2000;
@@ -161,12 +160,10 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         }
 
         sessionProperties["referrer"] = referrerObject;
-        console.log('sessionProperties >>> ', sessionProperties);
         fn(true);
     };
 
     this.pageStart = function() {
-        console.log('pageStart >>>');
         var startPageTimer = new Date().getTime();
         var parsedUrl = $.url(fullUrl);
 

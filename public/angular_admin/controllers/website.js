@@ -258,11 +258,7 @@ define([
                     iframe.contentWindow.copyPostMode();
                 }
                 // var src = iframe.src;
-                // iframe.setAttribute("src", src+"/?editor=true");
-
-                $scope.$watch('currentPage', function (newValue, oldValue) {
-                  console.log('watch currentPage >> ', newValue);
-                });
+                // iframe.setAttribute("src", src+"/?editor=true");`
 
                 $scope.backup['website'] = angular.copy($scope['website']);
             };
@@ -574,7 +570,23 @@ define([
                 // });
             };
 
+            $scope.createPageValidated = false;
+
+             $scope.validateCreatePage = function(page) {
+                console.log('page >>> ', page);
+
+               if (page && page.title && page.handle) {
+                $scope.createPageValidated = true;
+               }
+            };
+
             $scope.createPage = function(page, $event) {
+
+                console.log('$scope.createPageValidated ', $scope.createPageValidated);
+
+                if (!$scope.createPageValidated) {
+                    return false;
+                }
 
                 var websiteId = $scope.currentPage.websiteId;
 
@@ -599,6 +611,7 @@ define([
                         document.getElementById("iframe-website").setAttribute("src", "/page/" + newpage.handle);
                         $scope.currentPage = newpage;
                         $scope.pageSelected = newpage.handle;
+                        $('#create-page-modal').modal('hide');
                         //get components from page
                         if ($scope.currentPage && $scope.currentPage.components) {
                             $scope.components = $scope.currentPage.components;

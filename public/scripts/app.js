@@ -84,7 +84,6 @@ var mainApp = angular
     .run(function( $rootScope, $location, $anchorScroll, $routeParams, $document, $timeout, ipCookie, analyticsService) {
 
         analyticsService.sessionStart(function(data) {
-            console.log('sessionStart >>> ', data);
         });
 
 
