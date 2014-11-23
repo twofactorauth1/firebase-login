@@ -473,8 +473,9 @@ define([
                     }
                 }
                 WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, cmpVersion,  function(data) {
-                    if (data.components) { 
+                    if (data.components) {
                         var newComponent = data.components[data.components.length - 1];
+                        console.log('newComponent >>> ', newComponent);
                         var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
                         $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
@@ -690,21 +691,21 @@ define([
                     type: 'masthead',
                     icon: 'custom masthead'
                 },
-                {
-                    title: 'Feature List',
-                    type: 'feature-list',
-                    icon: 'fa fa-list-ul'
-                },
+                // {
+                //     title: 'Feature List',
+                //     type: 'feature-list',
+                //     icon: 'fa fa-list-ul'
+                // },
                 {
                     title: 'Campaign',
                     type: 'campaign',
                     icon: 'fa fa-bullhorn'
                 },
-                {
-                    title: 'Contact Us',
-                    type: 'contact-us',
-                    icon: 'fa fa-map-marker'
-                },
+                // {
+                //     title: 'Contact Us',
+                //     type: 'contact-us',
+                //     icon: 'fa fa-map-marker'
+                // },
                 {
                     title: 'Coming Soon',
                     type: 'coming-soon',
@@ -720,52 +721,53 @@ define([
                     type: 'footer',
                     icon: 'custom footer'
                 },
-                {
-                    title: 'Image Gallery',
-                    type: 'image-gallery',
-                    icon: 'fa fa-image'
-                },
-                {
-                    title: 'Image Slider',
-                    type: 'image-slider' ,
-                    icon: 'custom image-slider'
-                },
+                // {
+                //     title: 'Image Gallery',
+                //     type: 'image-gallery',
+                //     icon: 'fa fa-image'
+                // },
+                // {
+                //     title: 'Image Slider',
+                //     type: 'image-slider' ,
+                //     icon: 'custom image-slider'
+                // },
                 {
                     title: 'Image Text',
                     type: 'image-text',
                     icon: 'custom image-text'
                 },
-                {
-                    title: 'Logo List',
-                    type: 'logo-list',
-                    icon: 'custom logo-list'
-                },
-                {
-                    title: 'Meet Team',
-                    type: 'meet-team',
-                    icon: 'fa fa-users'
-                },
+                // {
+                //     title: 'Logo List',
+                //     type: 'logo-list',
+                //     icon: 'custom logo-list'
+                // },
+                // {
+                //     title: 'Meet Team',
+                //     type: 'meet-team',
+                //     icon: 'fa fa-users'
+                // },
                 {
                     title: 'Navigation',
                     type: 'navigation',
                     icon: 'fa fa-location-arrow'
                 },
                 {
-                    title: 'Sign Up form',
-                    type: 'signup-form',
-                    icon: 'custom sign-up-form'
+                    title: 'Simple form',
+                    type: 'simple-form',
+                    icon: 'custom simple-form'
                 },
                 {
                     title: 'Single Post',
                     type: 'single-post',
                     icon: 'custom single-post'
-                },
-                {
-                    title: 'Social Links',
-                    type: 'social-feed',
-                    icon: 'custom social-links'
                 }
+                // {
+                //     title: 'Social Links',
+                //     type: 'social-feed',
+                //     icon: 'custom social-links'
+                // }
             ];
+
 
             $scope.selectComponent = function(type) {
                 console.log('selectComponent', type);

@@ -19987,6 +19987,12 @@ div.error label.error:before {
 .website .pageheader .btn-group {
   margin-bottom: 0;
 }
+.website .jdfs-search-indicator,
+.website .jdfs-meta,
+.website .jdfs-footer-con,
+.website .jdfs-close {
+  display: none;
+}
 .website .btn.media-modal {
   margin-right: 5px;
 }
@@ -20069,11 +20075,11 @@ div.error label.error:before {
   height: 58px;
   margin: 10px 0;
 }
-.website .component-icon i.sign-up-form {
+.website .component-icon i.simple-form {
   background-position: -69px -46px;
   width: 97px;
   height: 60px;
-  margin: 10px 0;
+  margin: 10px auto;
 }
 .website .component-icon i.single-post {
   background-position: -165px -48px;
@@ -22129,88 +22135,41 @@ div[data-type='campaign'] .inner-page {
   width: 100%;
   max-width: 100%;
 }
-.contact-us-v1 .contact-us-title {
-  text-align: center;
-  text-transform: uppercase;
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.4);
-}
-.contact-us-v1 .contact-us-subtitle {
-  text-align: center;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-}
-.contact-us-v1 form {
-  max-width: 400px;
-  margin: 0 auto;
-  margin-top: 30px;
-}
-.contact-us-v1 form .btn-primary {
-  background: none;
-  border: 2px solid #ffffff;
-}
-.contact-us-v1 form .form-control {
-  border-color: #176134;
-}
-.contact-us-v3 {
-  /* Small devices (tablets, 768px and up) */
-}
-.contact-us-v3 .title {
-  text-align: center;
-  margin-bottom: 20px;
-}
-.contact-us-v3 p {
-  margin-bottom: 20px;
-  font-size: 16px;
-}
-.contact-us-v3 #contact {
-  background: #2d2e2e;
-}
-.contact-us-v3 .list-contacts {
-  list-style: none;
-  padding-left: 0;
-  margin: 2em 0;
-}
-.contact-us-v3 .list-contacts li {
-  margin-bottom: 10px;
-  display: table;
-}
-.contact-us-v3 .list-contacts .fa {
-  width: 40px;
-  font-size: 24px;
-  top: 4px;
-  position: relative;
-}
-.contact-us-v3 .section-title-border {
-  width: 70px;
-  height: 3px;
-  background: rgba(0, 0, 0, 0.13);
-  margin: 0 auto 45px;
-  border-radius: 3px;
-}
-@media (min-width: 768px) {
-  .contact-us-v3 .list-contacts {
-    list-style: none;
-    padding-left: 0;
-    margin-top: 2em;
-  }
-}
-.contact-us-v4 .angular-google-map-container {
+.contact-us-v5 .angular-google-map-container {
   height: 100%;
   width: 100%;
   position: absolute;
 }
-.contact-us-v4 .container {
+.contact-us-v5 .container {
   width: 50%;
   padding-left: 0;
   padding-right: 0;
 }
-.contact-us-v4 .map-component {
+.contact-us-v5 .map-component {
   background-color: #C5E2E2;
   margin: 5%;
   color: #000000;
 }
-.contact-us-v4 .map {
+.contact-us-v5 .map {
   height: 344px;
   margin-right: 50px;
+}
+.contact-us-v5 .contact-right {
+  padding: 0 40px 20px;
+}
+.contact-us-v5 .contact-img {
+  width: 152px;
+}
+.contact-us-v5 .contact-left {
+  color: white;
+  border-radius: 5px;
+  margin: 0 15px;
+}
+.contact-us-v5 .contact-left p {
+  margin-bottom: 0;
+}
+.contact-us-v5 input[type="radio"] {
+  margin-right: 5px;
 }
 .component-wrap .blur-image {
   -webkit-filter: blur(5px);
@@ -23430,12 +23389,12 @@ div[data-type="social"] .inner-page {
 .social-v1 .google-plus:hover {
   opacity: 1;
 }
-/********** SignUp Form v1 **********/
-.signup-form-v1 {
+/********** Simple Form v1 **********/
+.simple-form-v1 {
   padding: 0px!important;
   margin: 0px!important;
 }
-.signup-form-v1 h3 {
+.simple-form-v1 h3 {
   color: white;
   padding: 0 0 0 10px;
   font-weight: 600;
@@ -23443,59 +23402,59 @@ div[data-type="social"] .inner-page {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
   margin-top: 10px;
 }
-.signup-form-v1 p {
+.simple-form-v1 p {
   padding: 0 0 0 10px;
 }
-.signup-form-v1 input {
+.simple-form-v1 input {
   width: 100%;
   text-indent: 10px;
 }
-.signup-form-v1 .inner-page {
+.simple-form-v1 .inner-page {
   padding: 15px 0 30px;
   max-width: 1100px;
   margin: 0 auto;
 }
-.signup-form-v1 .btn,
-.signup-form-v1 input {
+.simple-form-v1 .btn,
+.simple-form-v1 input {
   height: 50px;
   margin: 0;
   padding: 0;
   border: 0;
 }
-.signup-form-v1 .btn .fa,
-.signup-form-v1 input .fa {
+.simple-form-v1 .btn .fa,
+.simple-form-v1 input .fa {
   padding: 0 0 0 10px;
 }
-.signup-form-v1 .left-inner-addon {
+.simple-form-v1 .left-inner-addon {
   position: relative;
   color: #d1d1d1;
 }
-.signup-form-v1 .left-inner-addon input {
+.simple-form-v1 .left-inner-addon input {
   padding-left: 30px;
 }
-.signup-form-v1 .left-inner-addon i {
+.simple-form-v1 .left-inner-addon i {
   position: absolute;
   padding: 17px 13px;
   pointer-events: none;
 }
-.signup-form-v1 .right-inner-addon {
+.simple-form-v1 .right-inner-addon {
   position: relative;
 }
-.signup-form-v1 .right-inner-addon input {
+.simple-form-v1 .right-inner-addon input {
   padding-right: 30px;
 }
-.signup-form-v1 .right-inner-addon i {
+.simple-form-v1 .right-inner-addon i {
   position: absolute;
   right: 0px;
   padding: 10px 12px;
   pointer-events: none;
 }
-/********** SignUp Form v2 **********/
-.signup-form-v2 {
+/********** Simple Form v2 **********/
+.simple-form-v2 {
   background: black;
   padding: 0px!important;
 }
-.signup-form-v2 h3 {
+.simple-form-v2 h3 {
   color: white;
   padding: 0 0 20px 10px;
   font-weight: 600;
@@ -23504,21 +23463,20 @@ div[data-type="social"] .inner-page {
   font-size: 28px;
   margin-top: 10px;
 }
-.signup-form-v2 input {
+.simple-form-v2 input {
   width: 100%;
   text-indent: 10px;
 }
-.signup-form-v2 .inner-page {
+.simple-form-v2 .inner-page {
   padding: 15px 0 30px;
 }
-.signup-form-v2 .btn,
-.signup-form-v2 input {
+.simple-form-v2 .btn {
   height: 50px;
   margin: 0;
   padding: 0;
   border: 0;
 }
-.signup-form-v2 .btn {
+.simple-form-v2 .btn {
   text-transform: uppercase;
 }
 /********** Products v1 component **********/
@@ -24612,42 +24570,6 @@ div[data-type=blog] .container {
 }
 .thumbnail-slider-v1 .carousel-indicators {
   bottom: -25px;
-}
-.contact-us-v5 .angular-google-map-container {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-}
-.contact-us-v5 .container {
-  width: 50%;
-  padding-left: 0;
-  padding-right: 0;
-}
-.contact-us-v5 .map-component {
-  background-color: #C5E2E2;
-  margin: 5%;
-  color: #000000;
-}
-.contact-us-v5 .map {
-  height: 344px;
-  margin-right: 50px;
-}
-.contact-us-v5 .contact-right {
-  padding: 0 40px 20px;
-}
-.contact-us-v5 .contact-img {
-  width: 152px;
-}
-.contact-us-v5 .contact-left {
-  color: white;
-  border-radius: 5px;
-  margin: 0 15px;
-}
-.contact-us-v5 .contact-left p {
-  margin-bottom: 0;
-}
-.contact-us-v5 input[type="radio"] {
-  margin-right: 5px;
 }
 /********** Video **********/
 .video-block .btn .fa {
