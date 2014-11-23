@@ -22060,6 +22060,9 @@ hr {
 .add-component:hover a {
   color: #219265;
 }
+body.editing a {
+  pointer-events: none;
+}
 body.editing .no-component {
   display: block;
   visibility: visible;

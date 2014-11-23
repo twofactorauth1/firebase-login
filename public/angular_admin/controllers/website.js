@@ -506,7 +506,7 @@ define([
                     }
                     $scope.updateIframeComponents();
                     $scope.componentEditing = null;
-                    toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
+                    //toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
                 });
             };
 
@@ -786,6 +786,8 @@ define([
                         var targetIndex = $($scope.componentArrTarget).closest('.single-feature').data('index');
                         console.log('targetIndex >>> ', targetIndex);
                         $scope.componentEditing.features[targetIndex].imgurl = asset.url;
+                    } else if(type == 'simple-form') {
+                        $scope.componentEditing.imgurl = asset.url;
                     } else {
                         console.log('unknown component or image location');
                     }
