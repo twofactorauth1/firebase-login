@@ -1,33 +1,34 @@
 <div class="modal-body">
-  <div class="demo-container">
-  <div class="card-wrapper"></div>
-  <div class="clearfix mb20"></div>
-  <div class="active">
-    <form action="">
-      <div class="row">
-        <div class="small-6 columns col-sm-6">
-          <input placeholder="Card number" type="text" name="number" id="number" class="form-control input-lg">
-        </div>
-        <div class="visible-xs mb20"></div>
-        <div class="small-6 columns col-sm-6">
-          <input placeholder="Full name" type="text" id="name" name="name" class="form-control input-lg">
-        </div>
-      </div>
-      <div class="clearfix mb20"></div>
-      <div class="row">
-        <div class="small-3 columns col-xs-6">
-          <input placeholder="MM/YY" type="text" id="expiry" name="expiry" class="form-control input-lg">
-        </div>
-        <div class="small-3 columns col-xs-6">
-          <input placeholder="CVC" type="text" id="cvc" name="cvc" class="form-control input-lg">
-        </div>
-      </div>
-      <div class="clearfix mb20"></div>
-    </form>
-  </div>
+<div class="demo-container">
+    <div class="clearfix mb20"></div>
+    <div class="active">
+        <form action="">
+            <div class="row">
+                <div class="small-6 columns col-sm-6">
+                    <input placeholder="Card number" type="text" name="number" id="number" class="form-control input-lg">
+                </div>
+                <div class="visible-xs mb20"></div>
+                <div class="small-6 columns col-sm-6">
+                    <input placeholder="Full name" type="text" id="name" name="name" class="form-control input-lg">
+                </div>
+            </div>
+            <div class="clearfix mb20"></div>
+            <div class="row">
+                <div class="small-3 columns col-xs-6">
+                    <input placeholder="MM/YY" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                </div>
+                <div class="small-3 columns col-xs-6">
+                    <input placeholder="CVC" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                </div>
+            </div>
+            <div class="clearfix mb20"></div>
+        </form>
+    </div>
 </div>
 <div class="panel-footer row">
-  <button id="btn-new-address" class="btn btn-success btn-lg btn-block" ng-click="addCardFn()" data-dismiss="modal">Modify Card</button>
+    <button id="btn-new-address" class="btn btn-success btn-lg btn-block" ng-click="addCardFn()" data-dismiss="modal" ng-show="autoClose">Modify Card</button>
+    <button id="btn-new-address" class="btn btn-success btn-lg btn-block" ng-click="addCardFn()" ng-hide="autoClose">Add Card</button>
+
 </div>
 
 

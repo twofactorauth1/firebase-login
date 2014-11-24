@@ -850,7 +850,8 @@
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Change Payment Method</h4>
                 </div>
-                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn'></div>
+                <div class="card-wrapper-change"></div>
+                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=true wrapper-div="'card-wrapper-change'"></div>
             </div>
         </div>
     </div>
@@ -865,7 +866,8 @@
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Select Plan</h4>
                 </div>
-                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' ng-show="selectPlanView=='card'"></div>
+                <div class="card-wrapper-add" ng-show="selectPlanView=='card'"></div>
+                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=false ng-show="selectPlanView=='card'" wrapper-div="'card-wrapper-add'"></div>
                 <div class="modal-body" ng-show="selectPlanView=='plan'">
                     <div class="row">
                         <div class="col-xs-12 col-md-6">

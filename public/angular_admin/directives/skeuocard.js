@@ -6,11 +6,12 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
             transclude: false,
             scope: {
                 user: '=user',
-                updateFn: '=update'
+                updateFn: '=update',
+                autoClose: '=autoClose',
+                wrapper: '=wrapperDiv'
             },
             templateUrl: '/angular_admin/views/partials/_skeocard.html',
             link: function(scope, element, attrs, controllers) {
-
                 UserService.getUser(function(user) {
                     scope.user = user;
                 });
@@ -20,7 +21,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                             scope.cards = cards;
                             if (scope.cards.data.length) {
                                 element.find('form').card({
-                                    container: '.card-wrapper',
+                                    container: '.' + scope.wrapper,
                                     values: {
                                         number: "4XXXXXXXXXXX" + scope.cards.data[0].last4,
                                         expiry: scope.cards.data[0].exp_month + '/' + scope.cards.data[0].exp_year
