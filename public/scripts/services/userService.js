@@ -122,4 +122,20 @@ mainApp.service('userService', function ($http) {
             });
     };
 
+    this.addContactActivity = function (activity, fn) {
+        var apiUrl = baseUrl + ['contact', 'activity'].join('/');
+        $http({
+            url: apiUrl,
+            method: "POST",
+            data: angular.toJson(activity)
+        })
+        .success(function (data, status, headers, config) {
+            console.log('success created ', data);
+            fn(data);
+        })
+        .error(function (err) {
+            console.log('END:userService with ERROR');
+        });
+    };
+
 });
