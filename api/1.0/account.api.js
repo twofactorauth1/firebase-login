@@ -365,7 +365,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> saveOrUpdateTmpAccount');
 
         var account = new $$.m.Account(req.body);
-
+        account.set('subdomain', account.get('subdomain').toLowerCase());
         accountDao.saveOrUpdateTmpAccount(account, function(err, value) {
            if (!err && value != null) {
                cookies.setAccountToken(resp, value.get("token"));
@@ -394,7 +394,7 @@ _.extend(api.prototype, baseApi.prototype, {
     checkSubdomainAvailability: function(req, res) {
         var self = this;
         self.log.debug('>> checkSubdomainAvailability');
-        var subdomain = req.params.subdomain;
+        var subdomain = req.params.subdomain.toLowerCase();
         accountDao.getAccountBySubdomain(subdomain, function(err, value){
             if(err) {
                 res.wrapError(resp,500,null,err,value);

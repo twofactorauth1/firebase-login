@@ -1,26 +1,28 @@
 <div ng-class="component.type+'-v'+component.version">
-    <h2 class="contact-us-title">
-        <div class="editable text-center" data-class="title" data-ng-bind-html="component.title">
-            <convert-html contents="{{component.title}}"></convert-html>
-        </div>
-    </h2>
-    <div class="contact-us-subtitle">
-        <div class="editable text-center" data-class="subtitle">
-            {{component.subtitle}}
+    <div class="contact-us-title">
+        <div class="editable text-center" data-class="title">
+            <span ng-bind-html="component.title"></span>
         </div>
     </div>
-    <br>
+
+    <div class="contact-us-subtitle">
+        <div class="editable text-center" data-class="subtitle">
+            <span ng-bind-html="component.subtitle"></span>
+        </div>
+    </div>
+
+    <div class="clearfix mb20"></div>
 
     <div class="row">
-        <div class="col-sm-6 col-xs-12" data-ng-show="component.personalDetail.imgurl && component.personalDetail.text">
-                <div class="row panel-body contact-left" style="background-color:{{primaryColor}};color: {{component.personalDetail.txtcolor}}">
+        <div class="col-sm-6 col-xs-12" data-ng-show="component.imgurl && component.text">
+                <div class="row panel-body contact-left" style="background-color:{{primaryColor}};color: {{component.txtcolor}}">
                     <div class="col-xs-12">
                         <div class="editable" data-class="url">
-                            <img ng-src="{{component.personalDetail.imgurl}}" class="img-responsive contact-img center {{component.personalDetail.imagestyle}}">
+                            <img ng-src="{{component.imgurl}}" class="img-responsive contact-img center {{component.imagestyle}}">
                         </div>
                     </div>
                     <div id="para" class="editable col-xs-12" data-class="text">
-                        <convert-html contents="{{component.personalDetail.text}}"></convert-html>
+                        <convert-html contents="{{component.text}}"></convert-html>
                     </div>
                 </div>
         </div>

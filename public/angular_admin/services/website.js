@@ -176,6 +176,7 @@ define(['app'], function (app) {
 			})
 			.error(function (err) {
                 console.log('END:Delete Page with ERROR', err);
+                fn(err);
             });
 		};
 

@@ -129,7 +129,6 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
         function(event, toState, toParams, fromState, fromParams) {
           var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail'];
           if (excludeList.indexOf(fromState.name) == -1) {
-            console.info('State Change >>', fromState.name);
             $rootScope.lastState = {
               state: fromState.name,
               params: fromParams

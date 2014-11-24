@@ -1,55 +1,7 @@
-div.aloha-ui.btn-toolbar(role='toolbar')
-  div.btn-group
-    button.aloha-action-B.btn.btn-default(type='button', title='Bold')
-      b B
-    button.aloha-action-I.btn.btn-default(type='button', title='Italic')
-      i I
-    button.aloha-action-unformat.btn.btn-default(type='button', title='Remove formatting')
-      span.glyphicon.glyphicon-remove
-  div.btn-group
-    button.aloha-action-OL.btn.btn-default(type='button', title='Ordered List')
-      span.glyphicon.glyphicon-list
-    button.aloha-action-UL.btn.btn-default.active(type='button', title='Unordered List')
-      span.glyphicon.glyphicon-list
-  //
-    div class="btn-group">
-                            <button type="button" class="aloha-action-undo btn btn-default" title="Undo"><span class="glyphicon glyphicon-step-backward"></span></button>
-                            <button type="button" class="aloha-action-redo btn btn-default" title="Redo"><span class="glyphicon glyphicon-step-forward"></span></button>
-                        </div
-  div.btn-group
-    button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown')
-      | Paragraph 
-      span.caret
-    ul.dropdown-menu.funky(role='menu', style='background-color: rgb(146, 204, 143);')
-      li
-        a.aloha-action-H2(href='#') Heading 2
-      li
-        a.aloha-action-H3(href='#') Heading 3
-      li
-        a.aloha-action-H4(href='#') Heading 4
-      li
-        a.aloha-action-P(href='#') Paragraph
-      li
-        a.aloha-action-PRE(href='#') Preformatted
-  div.btn-group
-    button.aloha-action-A.btn.btn-default(type='button', data-activeon='a', title='Create Link')
-      span.glyphicon.glyphicon-link
-
-.aloha-3d.aloha-ui
-    .aloha-link-toolbar.btn-toolbar.funky(role='toolbar')
-        input(type='text', name='href', placeholder='http://www.indigenous.io', value='')
-        button.aloha-action-target.btn.btn-default(title='Toggle to open link in new window')
-          span.glyphicon.glyphicon-new-window
-        a.aloha-link-follow.btn.btn-default(href='#', target='_blank', rel='noreferrer', title='Follow this link')
-          span.glyphicon.glyphicon-share-alt
-
-
 script(src="/js/libs/requirejs/require.js")
 
+script(type='text/javascript') Aloha = {}; Aloha.settings = { sidebar: { disabled: true }, contentHandler: { insertHtml: [ 'word', 'generic', 'oembed', 'sanitize', 'video' ] }, toolbar: { tabs: [{ label: 'Video', showOn: {scope: 'Aloha.Block.VideoBlock'}, components: [ [ 'video-url', 'remove-video' ] ] } ]}, plugins: { videoblock: { 'width': '800px', 'height': '600px', 'embedUrl': 'https://youtube.com/embed/' } } };
 
-script(src="js/libs_misc/aloha-editor/js/aloha.min.js")
-script(src="js/libs_misc/aloha-editor/js/aloha-ui.js")
-script(src="js/libs_misc/aloha-editor/js/aloha-ui-links.js")
+script(src='js/libs/aloha-editor/src/lib/aloha.js', data-aloha-plugins=' common/ui, common/format, common/table, common/list, common/link, common/highlighteditables, common/block, common/undo, common/image, common/contenthandler, common/paste, common/characterpicker, common/commands, common/align, common/abbr, extra/videoblock',)
 
-link(href='js/libs_misc/aloha-editor/css/aloha.css')
-link(href='js/libs_misc/aloha-editor/css/aloha-ui.css')
+link(href='js/libs/aloha-editor/src/css/aloha.css', rel='stylesheet', type='text/css')
