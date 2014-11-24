@@ -62,7 +62,7 @@
         <div style="width:100%; text-align:center">
           <ul class="pagination hidden-xs letter-list">
 
-            <li><a class="btn-letter" ng-click="alphaFilter()" ng-class="{'active': alphaSelected == null}">all</a>
+            <li ng-show ="alphaList.length"><a class="btn-letter" ng-click="alphaFilter()" ng-class="{'active': alphaSelected == null}">all</a>
             </li>
             <li ng-class="{'disabled': !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList">
 
