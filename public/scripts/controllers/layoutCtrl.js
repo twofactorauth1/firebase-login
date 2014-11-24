@@ -496,6 +496,44 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             //window.location.href = "http://app.indigenous.local:3000/signup";
         };
 
+        $scope.createContactwithFormActivity = function(contact) {
+            console.log('contact', contact);
+
+            var contact_info = {
+                first:contact.first_name,
+                last:contact.last_name,
+                details: [{
+                    emails: []
+                }]
+            };
+            
+            contact_info.details[0].emails.push({
+                    email : contact.email
+            });
+
+         
+            //create contact
+            userService.addContact(contact_info, function(data) {
+                console.log('data ', data);
+                //create activity
+                var activity_info = {
+                accountId: data.accountId,
+                contactId: data._id,
+                activityType: 'CONTACT_FORM',
+                note : "Contact form data.",
+                start: new Date(),
+                extraFields: contact
+                };
+                userService.addContactActivity(activity_info, function(data) {
+                    console.log('data ', data);
+                });
+            });
+            
+
+            //redirect to signup with details
+            //window.location.href = "http://app.indigenous.local:3000/signup";
+        };
+
         $scope.createAccount = function(newAccount) {
             //validate
             //email

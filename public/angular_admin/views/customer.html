@@ -62,7 +62,7 @@
         <div style="width:100%; text-align:center">
           <ul class="pagination hidden-xs letter-list">
 
-            <li><a class="btn-letter" ng-click="alphaFilter()" ng-class="{'active': alphaSelected == null}">all</a>
+            <li ng-show ="alphaList.length"><a class="btn-letter" ng-click="alphaFilter()" ng-class="{'active': alphaSelected == null}">all</a>
             </li>
             <li ng-class="{'disabled': !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList">
 
@@ -138,7 +138,7 @@
                   </li>
                   <li>
                     <div ng-if="userPreferences.customerSettings.showCustomerSince && customer.created.date">
-                      <p class="pull-left title">Customer Since:</p>
+                      <p class="pull-left title">Created:</p>
                       <span class="pull-right value">{{customer.created.date | timeAgoFilter}}</span>
                     </div>
                   </li>
@@ -222,7 +222,7 @@
 
           <div class="tb-col col-md-2">
           <div class="people-item" ng-if="userPreferences.customerSettings.showCustomerSince && customer.created.date">
-            <p class="pull-left title">Customer Since:</p>
+            <p class="pull-left title">Created:</p>
             <span class="pull-right value">{{customer.created.date | timeAgoFilter}}</span>
           </div>
           </div>
@@ -328,7 +328,7 @@
           </div>
           <div class="col-xs-12 ckbox ckbox-success">
             <input type="checkbox" id="customer_since_id" ng-checked="userPreferences.customerSettings.showCustomerSince" ng-model="toggleCustomerSince">
-            <label for="customer_since_id">Customer Since</label>
+            <label for="customer_since_id">Created</label>
           </div>
         </div>
       </div>

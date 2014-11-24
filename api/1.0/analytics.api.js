@@ -41,6 +41,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('session/:id/pageStart'), this.storePageInfo.bind(this));
         app.post(this.url('session/:id/ping'), this.storePingInfo.bind(this));
 
+
     },
 
     sendToKeen: function(req, res) {
@@ -258,6 +259,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var pingEvent = new $$.m.PingEvent(req.body);
         pingEvent.set('session_id', req.params.id);
+        pingEvent.set('server_time', new Date().getTime());
         analyticsManager.storePingEvent(pingEvent, function(err){
             if(err) {
                 self.log.error('Error saving ping event: ' + err);
