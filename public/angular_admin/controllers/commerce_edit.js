@@ -161,7 +161,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
       $scope.saveProductFn();
     };
 
-    $scope.insertImage = function(asset) {
+    $scope.insertMedia = function(asset) {
         $scope.product.icon = asset.url;
     };
   }]);
