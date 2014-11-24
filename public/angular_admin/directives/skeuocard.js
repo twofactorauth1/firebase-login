@@ -29,12 +29,12 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                                 });
                             } else {
                                 element.find('form').card({
-                                    container: '.card-wrapper'
+                                    container: '.' + scope.wrapper
                                 });
                             }
                         }, function (data) {
                             element.find('form').card({
-                                container: '.card-wrapper'
+                                container: '.' + scope.wrapper
                             });
 
                         });
