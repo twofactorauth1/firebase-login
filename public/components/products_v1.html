@@ -7,7 +7,7 @@
         </div>
     </div>
 
-<div class="row products">
+<div class="products">
     <div class="mb15"></div>
 
     <!--<div class="container">
@@ -27,11 +27,16 @@
 
         <div class="tab-pane active" id="{{productSection['product-section-id']}}">
             <div data-class="product-section-id" ng-repeat="product in layout.products track by $index">
-                <div class="row product" id="{{product.id}}">
+                <div class="product" id="{{product.id}}">
                     <div>
-                        <div class="col-sm-3 col-xs-12 editable product-img">
-                            <img src="{{product.image}}" class="img-responsive">
+                        <div class="col-sm-3 col-xs-12 editable product-img" ng-if="product.icon">
+                            <div class="img-wrap">
+                                <img ng-src="{{product.icon}}" class="img-responsive">
+                            </div>
                         </div>
+                        <!-- <div class="col-sm-3 col-xs-12 editable product-img" ng-if="product.icon">
+                            <i class="{{product.icon}}"></i>
+                        </div> -->
                         <div class="col-sm-9 col-xs-12 product-content">
                             <h4>{{product.name}}</h4>
 

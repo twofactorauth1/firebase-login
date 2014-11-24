@@ -23566,7 +23566,8 @@ div[data-type="social"] .inner-page {
 }
 .products-v1 .product-img img {
   margin-right: 15px;
-  float: right;
+  max-height: 225px;
+  margin: 0 auto;
 }
 .products-v1 .product-content {
   min-height: 225px;

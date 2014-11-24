@@ -106,36 +106,39 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 that.currentTag, that.currentAuthor, that.currentCat = '';
                 //get post tags for sidebar
                     //should be replaced by get tags filter
-                    that.postTags = [];
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].post_tags) {
-                            var tags = data[i].post_tags;
-                            for (var j = 0; j < tags.length; j++) {
-                                if(that.postTags.indexOf(tags[j]) == -1) {
-                                    that.postTags.push(tags[j]);
-                                }
-                            };
-                        }
-                    };
 
-                     //get post cateogires for sidebar
-                    //should be replaced by get cateogires filter
-                    that.categories = [];
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].post_category) {
-                            if(that.categories.indexOf(data[i].post_category) <= -1) {
-                                that.categories.push(data[i].post_category);
+                    if (data) {
+                        that.postTags = [];
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].post_tags) {
+                                var tags = data[i].post_tags;
+                                for (var j = 0; j < tags.length; j++) {
+                                    if(that.postTags.indexOf(tags[j]) == -1) {
+                                        that.postTags.push(tags[j]);
+                                    }
+                                };
                             }
-                        }
-                    };
+                        };
 
-                     //get latest posts for sidebar
-                    //should be replaced by get latest posts filter
-                    that.latestposts = [];
-                    for (var i = 0; i < data.length; i++) {
-                        that.latestposts.push(data[i]);
-                    };
-                    that.latestposts.slice(Math.max(data.length - 3, 1));
+                         //get post cateogires for sidebar
+                        //should be replaced by get cateogires filter
+                        that.categories = [];
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].post_category) {
+                                if(that.categories.indexOf(data[i].post_category) <= -1) {
+                                    that.categories.push(data[i].post_category);
+                                }
+                            }
+                        };
+
+                         //get latest posts for sidebar
+                        //should be replaced by get latest posts filter
+                        that.latestposts = [];
+                        for (var i = 0; i < data.length; i++) {
+                            that.latestposts.push(data[i]);
+                        };
+                        that.latestposts.slice(Math.max(data.length - 3, 1));
+                    }
 
                 if (route.indexOf('blog') > -1)  {
                     that.blogposts = data;
