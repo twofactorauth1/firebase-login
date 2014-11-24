@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService',
-    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie',
+    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie) {
         var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
         route = $location.$$path;
@@ -457,7 +457,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 // var componentId = ui.item[0].querySelectorAll('.component')[0].attributes['data-id'].value;
                 // var newOrder = ui.item.index();
             }
-        };
+        }; 
 
         /********** END CMS RELATED **********/
 
@@ -506,29 +506,39 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     emails: []
                 }]
             };
-            
+
             contact_info.details[0].emails.push({
                     email : contact.email
             });
 
-         
+            console.log('ipCookie("session_cookie") >>> ', ipCookie("session_cookie"));
+
             //create contact
             userService.addContact(contact_info, function(data) {
                 console.log('data ', data);
                 //create activity
                 var activity_info = {
-                accountId: data.accountId,
-                contactId: data._id,
-                activityType: 'CONTACT_FORM',
-                note : "Contact form data.",
-                start: new Date(),
-                extraFields: contact
+                    accountId: data.accountId,
+                    contactId: data._id,
+                    activityType: 'CONTACT_FORM',
+                    note : "Contact form data.",
+                    start: new Date(),
+                    extraFields: contact,
+                    sessionId: ipCookie("session_cookie")["id"]
                 };
                 userService.addContactActivity(activity_info, function(data) {
                     console.log('data ', data);
+                    contact.email = '';
+                    contact.message = '';
+                    contact.full_name = '';
+                    contact.success = true;
+                    setTimeout(function() {
+                    $scope.$apply(function () {
+                        contact.success = false;
+                    });
+                }, 3000);
                 });
             });
-            
 
             //redirect to signup with details
             //window.location.href = "http://app.indigenous.local:3000/signup";
