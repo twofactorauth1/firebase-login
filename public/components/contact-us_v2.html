@@ -30,15 +30,15 @@
                     <fieldset>
 
                         <div class="form-group">
-                            <input id="firstName" name="name" type="text" placeholder="First Name" class="form-control">
+                            <input id="firstName" ng-model = 'contact.first_name' name="name" type="text" placeholder="First Name" class="form-control">
                         </div>
 
                         <div class="form-group">
-                            <input id="lastName" name="name" type="text" placeholder="Last Name" class="form-control">
+                            <input id="lastName" name="name" ng-model = 'contact.last_name' type="text" placeholder="Last Name" class="form-control">
                         </div>
 
                         <div class="form-group">
-                            <input id="email" name="email" type="text" placeholder="Email" class="form-control">
+                            <input id="email" name="email" ng-model = 'contact.email' type="text" placeholder="Email" class="form-control">
                         </div>
 
                         <div class="form-group">
@@ -46,21 +46,20 @@
                             <div class="row">
                                 <span class="col-md-2">Topic:</span>
                                 <span class="col-md-3">
-                                    <input type="radio" name="topic" value="Personal">Personal</span>
+                                    <input type="radio" ng-model = 'contact.topic' name="topic" value="Personal">Personal</span>
                                 <span class="col-md-3">
-                                    <input type="radio" name="topic" value="Coaching">Coaching</span>
+                                    <input type="radio" name="topic" ng-model = 'contact.topic' value="Coaching">Coaching</span>
                                 <span class="col-md-3">
-                                    <input type="radio" name="topic" value="Services">Services</span>
+                                    <input type="radio" name="topic" ng-model = 'contact.topic' value="Services">Services</span>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <textarea class="form-control" id="message" name="message" placeholder="Message" rows="5"></textarea>
+                            <textarea class="form-control" id="message" ng-model = 'contact.message' name="message" placeholder="Message" rows="5"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-lg btn-block btn-success ">Send
-
+                            <button type="submit" ng-click="createContactwithFormActivity(contact, $event)" class="btn btn-lg btn-block btn-success ">Send
                             </button>
                         </div>
                     </fieldset>
