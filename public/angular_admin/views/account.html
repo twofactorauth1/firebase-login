@@ -272,7 +272,7 @@
                                 </h2>
                                 <p class="center">Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
                             </div>
-                            <div class="no-plan well" ng-show="user.stripeId">
+                            <div class="no-plan well" ng-hide="user.stripeId">
                                 <h3 class="center">No Subscription Plan Selected</h3>
                                 <div class="cleatfix mb15"></div>
                                 <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
