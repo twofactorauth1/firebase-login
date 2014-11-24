@@ -23,7 +23,8 @@ var contactActivity = $$.m.ModelBase.extend({
             duration:null,
             start:null, //datestamp
             end:null,   //datestamp
-            v:0.1
+            v:0.1,
+            extraFields:null
         }
     },
 
@@ -46,7 +47,8 @@ var contactActivity = $$.m.ModelBase.extend({
         EMAIL: 'EMAIL',
         PHONECALL: 'PHONECALL',
         FACEBOOK_LIKE: 'FACEBOOK_LIKE',
-        TWEET: 'TWEET'
+        TWEET: 'TWEET',
+        CONTACT_FORM: 'CONTACT_FORM'
     }
 });
 

@@ -50,11 +50,14 @@ define(['app', 'stripe', 'toasterService'], function(app) {
         });
     };
 
-    this.getCustomerCards = function(stripeId, fn) {
+    this.getCustomerCards = function(stripeId, successFn, errorFn) {
       var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards'].join('/');
       $http.get(apiUrl)
         .success(function(data, status, headers, config) {
-          fn(data);
+          successFn(data);
+        })
+        .error(function(data, status, headers, config) {
+          errorFn(data);
         });
     };
 

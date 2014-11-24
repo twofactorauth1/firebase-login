@@ -74,7 +74,8 @@
             <div class="panel panel-success">
               <div class="panel-heading padding5">
                 <p class="product-img">
-                  <a id="convert" role="iconpicker"></a>
+                  <a ng-hide="product.is_image" id="convert" role="iconpicker"></a>
+                  <img ng-show="product.is_image" id="product-image" style="width:75px" class="img-responsive img-rounded hand center" ng-src="{{ product.icon }}">
                 </p>
               </div>
               <div class="panel-body">
@@ -85,7 +86,8 @@
           </div>
         </div>
         <div class="row">
-          <input bs-switch ng-model="togglePicker" type="checkbox" switch-label="Image">
+          <input bs-switch ng-model="product.is_image" type="checkbox" switch-label="Image">
+          <a ng-if="product.is_image" class="btn btn-success media-modal pull-right" on-insert-mediacb="insertMedia" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Image</span> </a>
         </div>
         <div class="row">
           <div class="remaining-product-images">
@@ -528,5 +530,6 @@
     </div>
 
   </div>
+  <div id="model_container"></div>
   <!-- rightpanel -->
 </div>
