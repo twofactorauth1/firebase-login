@@ -72,6 +72,7 @@
             &:last-child {
                 margin-right: 10px;
             }
+
         }
         .breadcrumb-wrapper {
             position: absolute;
@@ -94,6 +95,26 @@
             }
             li.active {
                 color: #333;
+            }
+        }
+        .pages {
+            max-width: 45%;
+            button {
+                max-width: 100%;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        }
+        .pages-editing {
+            max-width: 100%;
+
+            h2 {
+                margin-right: 15px;
+                max-width: 100%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
             }
         }
     }
