@@ -1,4 +1,4 @@
-define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService'], function(app) {
+define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService'], function(app) {
   app.register.controller('CommerceEditCtrl', ['$scope', '$q', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', 'UserService', function($scope, $q, ngProgress, $stateParams, ProductService, PaymentService, UserService) {
     ngProgress.start();
     $scope.showToaster = false;
@@ -21,7 +21,7 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
     ProductService.getProduct($scope.productId, function(product) {
       $scope.product = product;
       var promises = [];
-      if (angular.isDefined($scope.product.icon))
+      if (angular.isDefined($scope.product.icon) && !$scope.product.is_image)
         $('#convert').iconpicker('setIcon', $scope.product.icon);
 
       if ('stripePlans' in $scope.product.product_attributes) {
@@ -43,7 +43,7 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
         $scope.userPreferences = preferences;
         if ($scope.userPreferences.default_product_icon) {
           $('#convert-pref').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
-          if ($scope.product.icon === undefined) {
+          if ($scope.product.icon === undefined && !$scope.product.is_image) {
             $('#convert').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
           }
         }
@@ -159,6 +159,10 @@ define(['app', 'commonutils', 'ngProgress', 'stateNavDirective', 'productService
       });
 
       $scope.saveProductFn();
+    };
+
+    $scope.insertImage = function(asset) {
+        $scope.product.icon = asset.url;
     };
   }]);
 });
