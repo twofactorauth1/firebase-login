@@ -405,9 +405,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var body = document.getElementsByTagName('body')[0];
             body.className = body.className.replace(/(?:^|\s)editing(?!\S)/, '');
 
-            var toolbar = body.querySelectorAll('.btn-toolbar')[0];
-            toolbar.className = toolbar.className.replace(/(?:^|\s)editing(?!\S)/, '');
-            console.log(window.oldScope);
+            // var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            // toolbar.className = toolbar.className.replace(/(?:^|\s)editing(?!\S)/, '');
+            // console.log(window.oldScope);
             window.oldScope.isEditing = false;
             window.oldScope.$digest();
         };
@@ -481,6 +481,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 console.log('data ', data);
                 user.email = "";
                 user.success = true;
+
+                setTimeout(function() {
+                    $scope.$apply(function () {
+                        user.success = false;
+                    });
+                }, 3000);
             });
 
             //redirect to signup with details

@@ -325,6 +325,7 @@ define([
                             if (span) {
                                 var spanParent = span.parentNode;
                                 var spanInner = span.innerHTML;
+                                console.log('spanParent.classList >>> ', spanParent.classList);
                                 if (spanParent.classList.contains('editable')) {
                                     componentVarContents = spanInner;
                                 } else {
@@ -381,12 +382,8 @@ define([
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
                     //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                     //document.getElementById('iframe-website').contentWindow.location.reload(true);
-
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
-
-               //     document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
-
-
+                    //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
                 });
                 //$scope.deactivateAloha();
                 var data = {
@@ -396,7 +393,7 @@ define([
                 };
 
                 WebsiteService.updateWebsite(data, function(data) {
-                    // console.log('updated website settings', data);
+                    console.log('updated website settings', data);
                 });
 
                 //website service - save page data

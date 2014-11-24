@@ -21994,7 +21994,8 @@ hr {
   position: absolute;
   display: block;
 }
-#body .aloha-editable-active {
+#body .aloha-editable-active,
+#body .editing .editable:hover {
   outline: none!important;
   border: 2px dashed #efa022;
   transition: all .2s linear;
@@ -22640,9 +22641,10 @@ ul.nav {
   color: white;
 }
 .feature-block-v1 .feature-block-subtitle {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 15px auto;
   text-align: center;
+  padding: 0 15px;
 }
 .feature-block-v1 .feature-block-subtitle a {
   color: white;
@@ -23289,7 +23291,7 @@ div[data-class='image-text'] p {
   line-height: 18px;
 }
 .masthead-v1 .masthead-subtitle {
-  max-width: 70%;
+  max-width: 80%;
   margin: 0 auto;
 }
 .masthead-v1 .masthead-title {
@@ -23397,6 +23399,13 @@ div[data-type="social"] .inner-page {
   padding: 0px!important;
   margin: 0px!important;
 }
+.simple-form-v1 .simple-form-subtitle {
+  margin: 0 10px;
+}
+.simple-form-v1 .thank-you {
+  padding: 0;
+  margin-bottom: -70px;
+}
 .simple-form-v1 h3 {
   color: white;
   padding: 0 0 0 10px;
@@ -23427,6 +23436,9 @@ div[data-type="social"] .inner-page {
 .simple-form-v1 .btn .fa,
 .simple-form-v1 input .fa {
   padding: 0 0 0 10px;
+}
+.simple-form-v1 .btn:focus {
+  color: white;
 }
 .simple-form-v1 .left-inner-addon {
   position: relative;
@@ -24130,22 +24142,18 @@ div[data-type=blog] .container {
   width: 100%;
 }
 .coming-soon-v1 .logo {
-  margin: 5% auto 0;
+  margin: 0 auto 0;
   display: block;
 }
 .coming-soon-v1 div[ng-transclude] {
   height: 100%;
 }
-.coming-soon-v1 .coming-soon-wrap {
-  background: rgba(255, 255, 255, 0.9);
-}
 .coming-soon-v1 .heading {
   font-size: 50px;
   margin: 45px 0 10px;
   text-align: center;
-  text-transform: uppercase;
   font-weight: 700;
-  margin: 30px 0 10px;
+  margin: 0px 0 10px;
 }
 .coming-soon-v1 .text {
   margin-bottom: 20px;
@@ -24154,6 +24162,7 @@ div[data-type=blog] .container {
 }
 .coming-soon-v1 .inner-page {
   padding-bottom: 15px;
+  padding-top: 0;
 }
 @-webkit-keyframes arrowBounce {
   0% {
@@ -24251,6 +24260,9 @@ div[data-type=blog] .container {
   -moz-animation: arrowBounce 2.5s infinite;
   -ms-animation: arrowBounce 2.5s infinite;
   animation: arrowBounce 2.5s infinite;
+}
+div[data-type="coming-soon"] .component-inner {
+  background: rgba(255, 255, 255, 0.9);
 }
 .image-gallery-v1 .image-gallery-title {
   text-align: center;
