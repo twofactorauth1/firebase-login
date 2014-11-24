@@ -482,8 +482,8 @@
                 <div class="col-xs-12">
                     <select
                             class="form-control chosen-select"
-                            ng-model="user.app_preferences.tab.single_view"
-                            ng-change="updateDefaultTab(user)"
+                            ng-model="userPreferences.single_view"
+                            ng-change="updateDefaultTab(userPreferences)"
                             ng-options="op.v as op.n for op in tabList">
                     </select>
                 </div>

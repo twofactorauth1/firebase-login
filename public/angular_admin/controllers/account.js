@@ -104,8 +104,8 @@ define([
     $scope.savePreferencesFn = function() {
       UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function(){})
     };
-    $scope.updateDefaultTab = function (user){
-        NavigationService.updateNavigation2(user);
+    $scope.updateDefaultTab = function (preferences){
+        NavigationService.updateNavigation2(preferences);
     };
 
   }]);
