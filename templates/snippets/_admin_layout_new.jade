@@ -93,4 +93,7 @@ html(class="no-js", lang="en")
 
         include _serverprops
         script(type="text/javascript").
-            window.analytics.identify(#{user._id}, {accountId:#{account._id}});
+            if(window.analytics) {
+                window.analytics.identify(#{user._id}, {accountId:#{account._id}});
+            }
+
