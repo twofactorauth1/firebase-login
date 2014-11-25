@@ -15,6 +15,9 @@ var contactDao = require('./contact.dao');
 var appConfig = require('../configs/app.config');
 var analyticsManager = require('../analytics/analytics_manager');
 
+var mandrillHelper = require('../utils/mandrillhelper');
+var notificationConfig = require('../configs/notification.config');
+
 module.exports = {
 
     createAccountAndUser: function(username, password, email, accountToken, anonymousId, sendWelcomeEmail, fn) {
@@ -83,6 +86,12 @@ module.exports = {
                         var userId = savedUser.id();
                         log.debug('Created user with id: ' + userId);
                         analyticsManager.linkUsers(anonymousId, userId, function(err, value){});
+                        //TODO: send email
+                        /*
+                        mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                            notificationConfig.WELCOME_FROM_NAME, email, username, 'Welcome to Indigenous!',
+                            htmlContent, accountId, userId, function(err, result){});
+                        */
                         log.debug('Creating customer contact for main account.');
                         contactDao.createCustomerContact(user, appConfig.mainAccountID, function(err, contact){
                             if(err) {
