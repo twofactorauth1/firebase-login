@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService',
-    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie',
+    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie) {
         var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
         route = $location.$$path;
@@ -106,36 +106,39 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 that.currentTag, that.currentAuthor, that.currentCat = '';
                 //get post tags for sidebar
                     //should be replaced by get tags filter
-                    that.postTags = [];
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].post_tags) {
-                            var tags = data[i].post_tags;
-                            for (var j = 0; j < tags.length; j++) {
-                                if(that.postTags.indexOf(tags[j]) == -1) {
-                                    that.postTags.push(tags[j]);
-                                }
-                            };
-                        }
-                    };
 
-                     //get post cateogires for sidebar
-                    //should be replaced by get cateogires filter
-                    that.categories = [];
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].post_category) {
-                            if(that.categories.indexOf(data[i].post_category) <= -1) {
-                                that.categories.push(data[i].post_category);
+                    if (data) {
+                        that.postTags = [];
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].post_tags) {
+                                var tags = data[i].post_tags;
+                                for (var j = 0; j < tags.length; j++) {
+                                    if(that.postTags.indexOf(tags[j]) == -1) {
+                                        that.postTags.push(tags[j]);
+                                    }
+                                };
                             }
-                        }
-                    };
+                        };
 
-                     //get latest posts for sidebar
-                    //should be replaced by get latest posts filter
-                    that.latestposts = [];
-                    for (var i = 0; i < data.length; i++) {
-                        that.latestposts.push(data[i]);
-                    };
-                    that.latestposts.slice(Math.max(data.length - 3, 1));
+                         //get post cateogires for sidebar
+                        //should be replaced by get cateogires filter
+                        that.categories = [];
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].post_category) {
+                                if(that.categories.indexOf(data[i].post_category) <= -1) {
+                                    that.categories.push(data[i].post_category);
+                                }
+                            }
+                        };
+
+                         //get latest posts for sidebar
+                        //should be replaced by get latest posts filter
+                        that.latestposts = [];
+                        for (var i = 0; i < data.length; i++) {
+                            that.latestposts.push(data[i]);
+                        };
+                        that.latestposts.slice(Math.max(data.length - 3, 1));
+                    }
 
                 if (route.indexOf('blog') > -1)  {
                     that.blogposts = data;
@@ -405,9 +408,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var body = document.getElementsByTagName('body')[0];
             body.className = body.className.replace(/(?:^|\s)editing(?!\S)/, '');
 
-            var toolbar = body.querySelectorAll('.btn-toolbar')[0];
-            toolbar.className = toolbar.className.replace(/(?:^|\s)editing(?!\S)/, '');
-            console.log(window.oldScope);
+            // var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            // toolbar.className = toolbar.className.replace(/(?:^|\s)editing(?!\S)/, '');
+            // console.log(window.oldScope);
             window.oldScope.isEditing = false;
             window.oldScope.$digest();
         };
@@ -454,7 +457,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 // var componentId = ui.item[0].querySelectorAll('.component')[0].attributes['data-id'].value;
                 // var newOrder = ui.item.index();
             }
-        };
+        }; 
 
         /********** END CMS RELATED **********/
 
@@ -481,6 +484,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 console.log('data ', data);
                 user.email = "";
                 user.success = true;
+
+                setTimeout(function() {
+                    $scope.$apply(function () {
+                        user.success = false;
+                    });
+                }, 3000);
             });
 
             //redirect to signup with details
@@ -497,29 +506,39 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     emails: []
                 }]
             };
-            
+
             contact_info.details[0].emails.push({
                     email : contact.email
             });
 
-         
+            console.log('ipCookie("session_cookie") >>> ', ipCookie("session_cookie"));
+
             //create contact
             userService.addContact(contact_info, function(data) {
                 console.log('data ', data);
                 //create activity
                 var activity_info = {
-                accountId: data.accountId,
-                contactId: data._id,
-                activityType: 'CONTACT_FORM',
-                note : "Contact form data.",
-                start: new Date(),
-                extraFields: contact
+                    accountId: data.accountId,
+                    contactId: data._id,
+                    activityType: 'CONTACT_FORM',
+                    note : "Contact form data.",
+                    start: new Date(),
+                    extraFields: contact,
+                    sessionId: ipCookie("session_cookie")["id"]
                 };
                 userService.addContactActivity(activity_info, function(data) {
                     console.log('data ', data);
+                    contact.email = '';
+                    contact.message = '';
+                    contact.full_name = '';
+                    contact.success = true;
+                    setTimeout(function() {
+                    $scope.$apply(function () {
+                        contact.success = false;
+                    });
+                }, 3000);
                 });
             });
-            
 
             //redirect to signup with details
             //window.location.href = "http://app.indigenous.local:3000/signup";

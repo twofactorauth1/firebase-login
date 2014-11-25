@@ -26,140 +26,140 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
     //api/1.0/analytics/session/{sessionId}/sessionStart
     this.sessionStart = function(fn) {
-        // var loc = $location.hash();
-        // var top = 400;
-        // var duration = 2000;
-        // var offset = 0;
-        // var start = new Date().getTime();
+        var loc = $location.hash();
+        var top = 400;
+        var duration = 2000;
+        var offset = 0;
+        var start = new Date().getTime();
 
-        // //Set the amount of time a session should last.
-        // var sessionExpireTime = new Date();
-        // sessionExpireTime.setMinutes(sessionExpireTime.getMinutes()+30);
+        //Set the amount of time a session should last.
+        var sessionExpireTime = new Date();
+        sessionExpireTime.setMinutes(sessionExpireTime.getMinutes()+30);
 
-        // //Check if we have a session cookie:
-        // var session_cookie = ipCookie("session_cookie");
+        //Check if we have a session cookie:
+        var session_cookie = ipCookie("session_cookie");
 
-        // //If it is undefined, set a new one.
-        // if(session_cookie == undefined){
-        //     ipCookie("session_cookie", {
-        //         id: Math.uuid()
-        //     }, {
-        //         expires: sessionExpireTime,
-        //         path: "/" //Makes this cookie readable from all pages
-        //     });
-        // }
-        // //If it does exist, delete it and set a new one with new expiration time
-        // else{
-        //     ipCookie.remove("session_cookie", {
-        //         path: "/"
-        //     });
-        //     ipCookie("session_cookie", session_cookie, {
-        //         expires: sessionExpireTime,
-        //         path: "/"
-        //     });
-        // }
+        //If it is undefined, set a new one.
+        if(session_cookie == undefined){
+            ipCookie("session_cookie", {
+                id: Math.uuid()
+            }, {
+                expires: sessionExpireTime,
+                path: "/" //Makes this cookie readable from all pages
+            });
+        }
+        //If it does exist, delete it and set a new one with new expiration time
+        else{
+            ipCookie.remove("session_cookie", {
+                path: "/"
+            });
+            ipCookie("session_cookie", session_cookie, {
+                expires: sessionExpireTime,
+                path: "/"
+            });
+        }
 
-        // var permanent_cookie = ipCookie("permanent_cookie");
+        var permanent_cookie = ipCookie("permanent_cookie");
 
-        // //If it is undefined, set a new one.
-        // if(permanent_cookie == undefined){
-        //     ipCookie("permanent_cookie", {
-        //         id: Math.uuid()
-        //     }, {
-        //         expires: 3650, //10 year expiration date
-        //         path: "/" //Makes this cookie readable from all pages
-        //     });
-        // }
+        //If it is undefined, set a new one.
+        if(permanent_cookie == undefined){
+            ipCookie("permanent_cookie", {
+                id: Math.uuid()
+            }, {
+                expires: 3650, //10 year expiration date
+                path: "/" //Makes this cookie readable from all pages
+            });
+        }
 
-        // //determine if the device is mobile or not
-        // var device;
-        // var isMobile = {
-        //     Android: function() {
-        //         return navigator.userAgent.match(/Android/i);
-        //     },
-        //     BlackBerry: function() {
-        //         return navigator.userAgent.match(/BlackBerry/i);
-        //     },
-        //     iOS: function() {
-        //         return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-        //     },
-        //     Opera: function() {
-        //         return navigator.userAgent.match(/Opera Mini/i);
-        //     },
-        //     Windows: function() {
-        //         return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
-        //     },
-        //     any: function() {
-        //         return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-        //     }
-        // };
+        //determine if the device is mobile or not
+        var device;
+        var isMobile = {
+            Android: function() {
+                return navigator.userAgent.match(/Android/i);
+            },
+            BlackBerry: function() {
+                return navigator.userAgent.match(/BlackBerry/i);
+            },
+            iOS: function() {
+                return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+            },
+            Opera: function() {
+                return navigator.userAgent.match(/Opera Mini/i);
+            },
+            Windows: function() {
+                return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+            },
+            any: function() {
+                return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+            }
+        };
 
-        // if( isMobile.any() ) {
-        //     device = 'mobile';
-        // } else {
-        //     device = 'desktop'
-        // }
+        if( isMobile.any() ) {
+            device = 'mobile';
+        } else {
+            device = 'desktop'
+        }
 
-        // //get browser fingerprint
-        // var fingerprint = new Fingerprint().get();
+        //get browser fingerprint
+        var fingerprint = new Fingerprint().get();
 
-        // //all the properties of the session
-        // sessionProperties = {
-        //     session_id: ipCookie("session_cookie")["id"],
-        //     permanent_tracker: ipCookie("permanent_cookie")["id"],
-        //     keen : {
-        //         addons : [
-        //             {
-        //                 name : "keen:ip_to_geo",
-        //                 input : {
-        //                     ip : "ip_address"
-        //                 },
-        //                 output : "ip_geo_info"
-        //             }
-        //         ]
-        //     },
-        //     user_agent: {
-        //         browser: parser.getBrowser(),
-        //         engine: parser.getEngine(),
-        //         os: parser.getOS(),
-        //         device: device
-        //     },
-        //     ip_address : "${keen.ip}",
-        //     fingerprint: fingerprint,
-        //     session_start: start,
-        //     entrance: parsedEntranceUrl.attr("host"),
-        //     pages: []
-        // };
+        //all the properties of the session
+        sessionProperties = {
+            session_id: ipCookie("session_cookie")["id"],
+            permanent_tracker: ipCookie("permanent_cookie")["id"],
+            keen : {
+                addons : [
+                    {
+                        name : "keen:ip_to_geo",
+                        input : {
+                            ip : "ip_address"
+                        },
+                        output : "ip_geo_info"
+                    }
+                ]
+            },
+            user_agent: {
+                browser: parser.getBrowser(),
+                engine: parser.getEngine(),
+                os: parser.getOS(),
+                device: device
+            },
+            ip_address : "${keen.ip}",
+            fingerprint: fingerprint,
+            session_start: start,
+            entrance: parsedEntranceUrl.attr("host"),
+            pages: []
+        };
 
-        // /*
-        // //If you know that the user is currently logged in, add information about the user.
-        // sessionProperties["user"] = {
-        //     id: "",
-        //     signupDate: ""
-        //     etc: ".."
-        // };
-        // */
+        /*
+        //If you know that the user is currently logged in, add information about the user.
+        sessionProperties["user"] = {
+            id: "",
+            signupDate: ""
+            etc: ".."
+        };
+        */
 
-        // //TODO: determine if the user is logged into any social sites
+        //TODO: determine if the user is logged into any social sites
 
-        // //Add information about the referrer of the same format as the current page
-        // var referrer = document.referrer;
-        // var referrerObject = null;
+        //Add information about the referrer of the same format as the current page
+        var referrer = document.referrer;
+        var referrerObject = null;
 
-        // if(referrer != undefined){
-        //     var parsedReferrer = $.url(referrer);
+        if(referrer != undefined){
+            var parsedReferrer = $.url(referrer);
 
-        //     referrerObject = {
-        //         source: parsedReferrer.attr("source"),
-        //         protocol: parsedReferrer.attr("protocol"),
-        //         domain: parsedReferrer.attr("host"),
-        //         port: parsedReferrer.attr("port"),
-        //         path: parsedReferrer.attr("path"),
-        //         anchor: parsedReferrer.attr("anchor")
-        //     }
-        // }
+            referrerObject = {
+                source: parsedReferrer.attr("source"),
+                protocol: parsedReferrer.attr("protocol"),
+                domain: parsedReferrer.attr("host"),
+                port: parsedReferrer.attr("port"),
+                path: parsedReferrer.attr("path"),
+                anchor: parsedReferrer.attr("anchor")
+            }
+        }
 
-        // sessionProperties["referrer"] = referrerObject;
+        sessionProperties["referrer"] = referrerObject;
         fn(true);
     };
 
