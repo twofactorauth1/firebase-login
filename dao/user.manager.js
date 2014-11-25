@@ -17,7 +17,7 @@ var analyticsManager = require('../analytics/analytics_manager');
 
 module.exports = {
 
-    createAccountAndUser: function(username, password, email, accountToken, anonymousId, fn) {
+    createAccountAndUser: function(username, password, email, accountToken, anonymousId, sendWelcomeEmail, fn) {
         var self = this;
         if (_.isFunction(accountToken)) {
             fn = accountToken;
