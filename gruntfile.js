@@ -284,6 +284,7 @@ module.exports = function(grunt) {
         nodeunit: {
             all:['test/**/*_test.js'],
             analytics: ['analytics/tests/*_test.js'],
+            analyticsCollater: ['analytics/tests/analytics_collater_test.js'],
             api:['api/test/*_test.js'],
             assets:['assets/test/*_test.js'],
             biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
@@ -458,6 +459,7 @@ module.exports = function(grunt) {
     grunt.registerTask('testFunctionalPayments', ['nodeunit:functionalPayments']);
     grunt.registerTask('testCampaigns', ['nodeunit:campaign']);
     grunt.registerTask('testPaymentEvents', ['nodeunit:paymentEvents']);
+    grunt.registerTask('testCollater', ['nodeunit:analyticsCollater']);
     grunt.registerTask('updateDocs', 'jsdoc2md');
 
     

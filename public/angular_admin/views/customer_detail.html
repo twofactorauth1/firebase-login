@@ -473,17 +473,57 @@
                                     <small>{{activity.start | date:'d MMM, yyyy'}}</small>
                                 </div>
                                 <div class="smart-timeline-content">
-                                    <p>
-                                        <span class="label label-default">{{activity.activityType}}</span>{{activity.detail}}
-                                    </p>
-                                    <p>
-                                        {{activity.note}}
-                                    </p>
-                                    <p ng-switch on="activity.activityType">
-                                        <a ng-switch-when="EMAIL" href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a>
-                                        <a ng-switch-when="TWEET" href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Reply to Tweet</a>
-                                        <a ng-switch-when="ACCOUNT_CREATED" href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a>
-                                    </p>
+                                    <div ng-switch on="activity.activityType">
+                                        <div ng-switch-when="EMAIL">
+                                            <p>
+                                                <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
+                                            </p>
+                                            <p>An email was sent</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
+                                         <a ng-switch-when="TWEET" href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Reply to Tweet</a>
+                                        <div ng-switch-when="ACCOUNT_CREATED">
+                                            <p>
+                                                <span class="label label-info">{{activity.activityType}}</span> {{activity.detail}}
+                                            </p>
+                                            <p>
+                                                {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} signed up for an account.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="SUBSCRIBE">
+                                            <p>
+                                                <span class="label label-success">{{activity.activityType}}</span> {{activity.detail}}
+                                            </p>
+                                            <p>
+                                                {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}}
+                                                subscribed to a <a href="">Indigenous Yearly</a> for $99.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> See User Flow</a> -->
+                                        </div>
+                                        <div ng-switch-when="SUBSCRIBE_CANCEL">
+                                            <p>
+                                                <span class="label label-danger">{{activity.activityType}}</span> {{activity.detail}}
+                                            </p>
+                                            <p>
+                                                {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} canceled account.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="PAGE_VIEW">
+                                            <p>
+                                                <span class="label label-default">{{activity.activityType}}</span>
+                                            </p>
+                                            <p>
+                                                {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="CONTACT_FORM">
+                                            <p>
+                                                <span class="label label-default">{{activity.activityType}}</span>
+                                            </p>
+                                            <p>
+                                                {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} submitted a form with the message: "{{extraFields.message}}".</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                        </div>
+                                    </div>
                                 </div>
                             </li>
                         </ul>

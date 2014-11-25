@@ -10,6 +10,8 @@ require('../model/analytic_event');
 
 var dao = {
 
+
+
     options: {
         name:"analytics.dao",
         defaultModel: $$.m.AnalyticsEvent

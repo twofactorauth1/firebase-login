@@ -5,6 +5,8 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
     $scope.invoicePageLimit = 5;
 
+    $scope.selectPlanView = 'card';
+
     $scope.tabList = [
       {v:'last_tab_visited',n:'Last Tab Visited'},
       {v:'website',n:'Website'},
@@ -25,6 +27,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
     $scope.updateStripeIdFn = function(billing) {
       $scope.user.stripeId = billing.billing.stripeCustomerId;
+      $scope.selectPlanView = 'plan';
     };
 
     $scope.invoicePageChangeFn = function(invoiceCurrentPage, invoiceTotalPages) {
@@ -65,6 +68,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
         ToasterService.setPending('success', 'Subscribed to new plan.');
       });
       */
+        $scope.selectPlanView = 'card';
     };
 
     $scope.cancelOldSubscriptionsFn = function() {
@@ -118,7 +122,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
         if(activeTab)
           $scope.activeTab = activeTab;
         else
-          $scope.activeTab = AccountService.getActiveTab();        
+          $scope.activeTab = AccountService.getActiveTab();
     });
 
     $scope.savePreferencesFn = function() {
