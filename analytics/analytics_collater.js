@@ -40,7 +40,7 @@ module.exports = {
                 log.error('Error finding session events: ' + err);
                 return;
             }
-            if(list != null && list.length > 0) {
+            if(list != null && list.length > 0 && self._processSessionEventWithCallback !== undefined) {
                 log.info('processing ' + list.length + ' session events');
                 //_.each(list,  self._processSessionEvent, self);
                 async.each(list, self._processSessionEventWithCallback.bind(self), function(err){
