@@ -261,7 +261,7 @@ module.exports = function(grunt) {
                         'public/scripts/controllers/blogCtrl.js',
                         'public/scripts/controllers/CourseSubscribeModalController.js',
                         'public/scripts/controllers/layoutCtrl.js',
-                        'public/scripts/controllers/mainCtrl.js',
+                        'public/scripts/controllers/mainCtrl.js'
                     ]
                 }
             }
@@ -435,7 +435,8 @@ module.exports = function(grunt) {
      * This task is run by CI.
      */
     grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:utils',
-            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments']);
+            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments',
+            'nodeunit:analyticsCollater']);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
