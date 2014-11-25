@@ -177,6 +177,11 @@ _.extend(api.prototype, baseApi.prototype, {
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'monthly_access';//TODO: make sure this gets passed
 
+        var sendWelcomeEmail = true;//this can be overridden in the request.
+        if(req.body.sendWelcomeEmail && req.body.sendWelcomeEmail === false) {
+            sendWelcomeEmail = false;
+        }
+
         //createStripeCustomer
         //updateCurrentAccountBilling
 
@@ -191,7 +196,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> plan', plan);
         self.log.debug('>> anonymousId', anonymousId);
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, function (err, user) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, sendWelcomeEmail, function (err, user) {
             if(err) {
                 self.log.error('Error creating account or user: ' + err);
                 return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
@@ -233,20 +238,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                         return;
                                     }
                                     user.set("accountUrl", value.toLowerCase());
-                                    //res.send(user);
                                     res.send(user.toJSON("public", {accountId:self.accountId(req)}));
                                 });
                             });
-                            /*req.login(user, function (err) {
-                                if (err) {
-                                    self.log.error('Error logging in: ' + err);
-                                    return self.wrapError(res, 500, 'Error logging in', err);
-                                } else {
-                                    */
 
-
-                            /*    }
-                            });*/
                         });
                     });
                 });
@@ -268,6 +263,11 @@ _.extend(api.prototype, baseApi.prototype, {
         var email = req.body.username;
         var accountToken = req.body.accountToken;
         var anonymousId = req.body.anonymousId;
+
+        var sendWelcomeEmail = true;//this can be overridden in the request.
+        if(req.body.sendWelcomeEmail && req.body.sendWelcomeEmail === false) {
+            sendWelcomeEmail = false;
+        }
 
         // if (username == null || username.trim() == "") {
         //     req.flash("error", "You must enter a valid username");
@@ -300,7 +300,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> anonymousId', anonymousId);
 
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, function (err, value) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, sendWelcomeEmail, function (err, value) {
             var userObj = value;
             self.log.debug('createUserFromUsernamePassword >>>');
                 if (!err) {
