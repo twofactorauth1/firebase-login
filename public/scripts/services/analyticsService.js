@@ -127,6 +127,8 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             ip_address : "${keen.ip}",
             fingerprint: fingerprint,
             session_start: start,
+            session_end: 0,
+            session_length: 0,
             entrance: parsedEntranceUrl.attr("host"),
             pages: []
         };
@@ -160,7 +162,15 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         }
 
         sessionProperties["referrer"] = referrerObject;
-        fn(true);
+        console.log('sessionProperties >>> ', sessionProperties);
+
+        //api/1.0/analytics/session/{sessionId}/sessionStart
+        var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'sessionStart'].join('/');
+          $http.post(apiUrl, sessionProperties)
+            .success(function(data, status, headers, config) {
+                console.log('success >>> ', data);
+              fn(data);
+            });
     };
 
     this.pageStart = function() {
