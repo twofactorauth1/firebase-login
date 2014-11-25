@@ -397,7 +397,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var subdomain = req.params.subdomain.toLowerCase();
         accountDao.getAccountBySubdomain(subdomain, function(err, value){
             if(err) {
-                res.wrapError(resp,500,null,err,value);
+                res.wrapError(res,500,null,err,value);
             } else if(value === null) {
                 res.send('true');
             } else {
@@ -418,7 +418,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         accountDao.getAccountsBySubdomain(subdomain, accountId, function(err, value){
             if(err) {
-                res.wrapError(resp,500,null,err,value);
+                res.wrapError(res,500,null,err,value);
             } else if(value === null) {
                 res.send("false");
             } else {
