@@ -711,7 +711,7 @@ define([
                     title: 'Feature List',
                     type: 'feature-list',
                     icon: 'fa fa-list-ul',
-                    enabled: false
+                    enabled: true
                 },
                 {
                     title: 'Campaign',
@@ -802,6 +802,12 @@ define([
                     type: 'social-feed',
                     icon: 'custom social-links',
                     enabled: false
+                },
+                {
+                    title: 'Video',
+                    type: 'video',
+                    icon: 'fa fa-video',
+                    enabled: true
                 }
             ];
 
