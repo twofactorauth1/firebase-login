@@ -772,6 +772,12 @@ define([
                     enabled: true
                 },
                 {
+                    title: 'Products',
+                    type: 'products',
+                    icon: 'fa fa-money',
+                    enabled: false
+                },
+                {
                     title: 'Simple form',
                     type: 'simple-form',
                     icon: 'custom simple-form',

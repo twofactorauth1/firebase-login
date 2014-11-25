@@ -6034,6 +6034,10 @@ h4,
   background-color: #54C8E8;
   border-color: #4eb1ca;
 }
+.btn-success:focus {
+  background-color: #54C8E8;
+  border-color: #4eb1ca;
+}
 .btn-success:hover,
 .btn-success:active,
 .btn-success.active,
@@ -22497,7 +22501,8 @@ div[data-type='campaign'] .inner-page {
 }
 .navbar-brand {
   height: 80px;
-  max-width: 300px;
+  max-width: 300px!important;
+  margin: 5px auto!important;
 }
 .navbar-toggle {
   margin-top: 20px;
@@ -22543,6 +22548,9 @@ ul.nav {
 }
 .navigation-v2 .navbar .navbar-header .navbar-toggle {
   margin-top: 50px;
+}
+.navigation-v2 .navbar .navbar-brand {
+  margin: 25px auto!important;
 }
 .navigation-v2 .navbar ul.navbar-nav {
   width: 100%;
@@ -22653,6 +22661,14 @@ ul.nav {
 .feature-block-v1 .feature-block-text {
   text-align: center;
 }
+.feature-block-v1 .feature-block-text h1,
+.feature-block-v1 .feature-block-text h2,
+.feature-block-v1 .feature-block-text h3,
+.feature-block-v1 .feature-block-text h4,
+.feature-block-v1 .feature-block-text h5,
+.feature-block-v1 .feature-block-text p {
+  line-height: 20px;
+}
 .feature-block-v1 ul {
   color: white;
   text-align: center;
@@ -22660,20 +22676,11 @@ ul.nav {
   list-style-type: circle;
   list-style-position: inside;
 }
-.feature-block.parallax {
-  height: 440px;
+div[data-type="feature-block"] .component-inner {
+  min-height: 340px;
 }
-.feature-block.parallax .feature-block-title {
-  color: white;
-  text-shadow: 1px 1px 1px black;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 15px;
-}
-.feature-block.parallax .feature-block-subtitle {
-  color: white;
-  text-shadow: 1px 1px 1px black;
-  text-align: center;
+.feature-block.parallax-background {
+  min-height: 340px;
 }
 /********** Gallery **********/
 .overlay-gallery-image {
@@ -23271,7 +23278,8 @@ div[data-class='image-text'] p {
   margin-top: -210px;
 }
 .navbar-v2 div[data-type='masthead'] .home-text {
-  margin-top: 130px;
+  margin-top: 200px;
+  min-height: 300px;
 }
 .masthead .btn .fa {
   margin-top: 8px;
@@ -23303,7 +23311,6 @@ div[data-class='image-text'] p {
 }
 .masthead-v1 .btn {
   height: 50px;
-  margin-top: 30px;
 }
 .masthead-v1 .btn .fa {
   float: left;
