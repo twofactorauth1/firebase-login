@@ -179,13 +179,12 @@ exports.collater_test = {
                                 return test.done();
                             }
                             _log.debug('running collater');
-                            collater.findCheckGroupAndSend(null);
-                            console.log('waiting 10 seconds.');
-                            setTimeout(function(){
-                                console.log('ending test');
+                            collater.findCheckGroupAndSend(function(err, result){
+                                _log.debug('returned from collater: ' + err + ',' + result);
                                 test.ok(true);
                                 test.done();
-                            }, 10000);
+                            });
+
                         });
                     });
                 });
