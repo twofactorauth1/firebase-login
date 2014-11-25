@@ -15,7 +15,6 @@ var analyticsTimerConfig = require('../configs/analyticstimer.config');
 var Keen = require('keen.io');
 var keenConfig = require('../configs/keen.config');
 var async = require('async');
-var moment = require('moment');
 
 // Configure instance. Only projectId and writeKey are required to send data.
 var client = Keen.configure({
@@ -27,9 +26,7 @@ var client = Keen.configure({
 
 var secondsSinceLastPingThreshold = analyticsTimerConfig.ANALYTICS_LAST_PING_SECONDS;
 
-var collator = {
-
-    secondsThreshold: 120,
+module.exports = {
 
     findCheckGroupAndSend: function(cb) {
         var self = this;
@@ -43,10 +40,10 @@ var collator = {
                 log.error('Error finding session events: ' + err);
                 return;
             }
-            if(list != null && list.length > 0) {
+            if(list != null && list.length > 0 && self._processSessionEventWithCallback !== undefined) {
                 log.info('processing ' + list.length + ' session events');
                 //_.each(list,  self._processSessionEvent, self);
-                async.each(list, collator._processSessionEventWithCallback.bind(self), function(err){
+                async.each(list, self._processSessionEventWithCallback.bind(self), function(err){
                     if(err) {
                         log.error('error processing session events.');
                         if(cb) {
@@ -83,25 +80,19 @@ var collator = {
                 log.error('Error finding max server_time for sessionEvent ' + sessionEvent.get('session_id'));
                 return;
             }
-            //log.debug('maxValue: ', value);
-            if(value === undefined) {
-                log.debug('No pings found for session ' + sessionEvent.id() + '.  Closing.');
-                collator._closeSessionWithNoPings(sessionEvent, callback);
-            } else {
-                var lastSeenVsNowInSecs = (new Date().getTime() - value) / 1000;
-                if(lastSeenVsNowInSecs >= secondsSinceLastPingThreshold) {
-                    collator._groupAndSendWithCallback(sessionEvent, value, function(err, value){
-                        if(err) {
-                            log.error('Error grouping and sending: ' + err);
-                            callback(err);
-                        } else {
-                            log.debug('<< _processSessionEvent');
-                            callback();
-                        }
-                    });
-                }
+            log.debug('maxValue: ', value);
+            var lastSeenVsNowInSecs = (new Date().getTime() - value) / 1000;
+            if(lastSeenVsNowInSecs >= secondsSinceLastPingThreshold) {
+                self._groupAndSendWithCallback(sessionEvent, value, function(err, value){
+                    if(err) {
+                        log.error('Error grouping and sending: ' + err);
+                        callback(err);
+                    } else {
+                        log.debug('<< _processSessionEvent');
+                        callback();
+                    }
+                });
             }
-
 
         });
     },
@@ -193,48 +184,6 @@ var collator = {
         });
     },
 
-    _closeSessionWithNoPings: function(sessionEvent, callback){
-        var serverTime = moment();
-        var secondsToSubtract = collator.secondsThreshold*2;
-
-        var serverTime = serverTime.subtract(secondsToSubtract, 'seconds');
-
-        if(sessionEvent.get('server_time') === undefined || sessionEvent.get('server_time')===null) {
-            //close it right now.
-        } else {
-            serverTime = moment(sessionEvent.get('server_time'));
-        }
-        var now = moment().valueOf();
-        var serverTimeMS = serverTime.valueOf();
-        //console.log('comparing ' + now + ' to ' + serverTimeMS +' is ' + (now - serverTimeMS));
-        if(moment().valueOf() - moment(serverTime).valueOf() > (collator.secondsThreshold*1000)) {
-            sessionEvent.set('session_end', moment().valueOf());
-            sessionEvent.set('session_length', collator.secondsThreshold*1000);
-
-            if (process.env.NODE_ENV !== "testing") {
-                client.addEvents({
-                    "session_data": [sessionEvent]
-                }, function (err, res) {
-                    if (err) {
-                        log.error('Error sending data to keen.');
-                    } else {
-                        log.info('Successfully sent events to keen.');
-                    }
-                });
-            } else {
-                log.info('skipping keen because of testing environment.');
-            }
-            dao.saveOrUpdate(sessionEvent, function(err, value) {
-                if (err) {
-                    log.error('Error updating session event: ' + err);
-                    callback(err);
-                } else {
-                    callback(null);
-                }
-            });
-        }
-    },
-
     _processSessionEvent: function(sessionEvent, index, list) {
         var self = this;
         log.debug('processing sessionEvent #' + index + ' of '+list.length);
@@ -324,5 +273,3 @@ var collator = {
     }
 
 }
-
-module.exports = collator;
