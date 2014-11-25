@@ -118,6 +118,7 @@ define([
 
                     for (var i = 0; i < images.length; i++) {
                         if (typeof images[i].addEventListener != "undefined") {
+                            images[i].removeEventListener("click");
                             images[i].addEventListener("click", function(e) {
                                 $("#media-manager-modal").modal('show');
                                 $scope.imageChange = true;
@@ -127,6 +128,7 @@ define([
                                 });
                             });
                         } else if (typeof images.attachEvent != "undefined") {
+                            images[i].removeEvent("onclick");
                             images[i].attachEvent("onclick", iframeClickHandler);
                         }
                     };
@@ -135,10 +137,12 @@ define([
                     var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
                     for (var i = 0; i < settingsBtns.length; i++) {
                         if (typeof settingsBtns[i].addEventListener != "undefined") {
+                            settingsBtns[i].removeEventListener("click");
                             settingsBtns[i].addEventListener("click", function(e) {
                                 $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                             });
                         } else if (typeof settingsBtns.attachEvent != "undefined") {
+                            settingsBtns[i].removeEvent("onclick");
                             settingsBtns[i].attachEvent("onclick", iframeClickHandler);
                         }
                     };
@@ -147,13 +151,15 @@ define([
                     var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
                     for (var i = 0; i < addComponentBtns.length; i++) {
                         if (typeof addComponentBtns[i].addEventListener != "undefined") {
-				addComponentBtns[i].addEventListener("click", function(e) {
-				$scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
-				var element = angular.element('#add-component-modal');
+                            addComponentBtns[i].removeEventListener("click");
+				            addComponentBtns[i].addEventListener("click", function(e) {
+				            $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+				            var element = angular.element('#add-component-modal');
                                 element.modal('show');
                                 //get the current index of the component pressed
                             });
                         } else if (typeof addComponentBtns.attachEvent != "undefined") {
+                            addComponentBtns[i].removeEvent("onclick");
                             addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
                         }
                     };
@@ -521,6 +527,7 @@ define([
             };
 
             $scope.editComponent = function(componentId) {
+                console.log('editComponent >>> ');
                 $scope.$apply(function() {
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: componentId
@@ -541,6 +548,7 @@ define([
 
                 WebsiteService.getComponentVersions($scope.componentEditing.type, function (versions) {
                   $scope.componentEditingVersions = versions;
+                  $scope.versionSelected = $scope.componentEditing.version;
                 });
             };
 
@@ -797,7 +805,6 @@ define([
                 }
             ];
 
-
             $scope.selectComponent = function(type) {
                 if (type.enabled) {
                     $scope.selectedComponent = type;
@@ -844,7 +851,6 @@ define([
                     }
                 });
             }
-
 
             var offFn = $rootScope.$on('$locationChangeStart', function () {
                 if(!$scope.backup['website']){
