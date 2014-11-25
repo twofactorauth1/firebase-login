@@ -22630,6 +22630,22 @@ ul.nav {
   background: #195490;
   border-bottom: 4px solid #154474;
 }
+/********** Navbar v4 **********/
+.navigation-v4 .nav {
+  margin-top: 10px!important;
+}
+.navigation-v4 .navbar-nav {
+  width: 100%;
+  text-align: center;
+}
+.navigation-v4 .navbar-nav > li {
+  float: none;
+  display: inline-block;
+}
+.navigation-v4 .navbar {
+  min-height: 54px;
+  border: none;
+}
 /********** Feature Block **********/
 .feature-block-v1 .feature-block-title {
   text-align: center;
@@ -23292,8 +23308,7 @@ div[data-class='image-text'] p {
   overflow: hidden;
   background-size: cover!important;
 }
-.masthead-v1 h4 div,
-.masthead-v1 h4 i {
+.masthead-v1 h4 div {
   float: left;
   text-indent: 17px;
   line-height: 18px;
@@ -23304,7 +23319,7 @@ div[data-class='image-text'] p {
 }
 .masthead-v1 .masthead-title {
   font-size: 32px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 }
 .masthead-v1 .masthead-title h1 {
   font-size: 45px;
@@ -24604,7 +24619,6 @@ div[data-type="coming-soon"] .component-inner {
 }
 .video-block {
   transition: none;
-  padding: 5em 0;
   height: 100%;
   overflow: hidden;
   background-size: cover!important;

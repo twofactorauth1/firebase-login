@@ -747,7 +747,7 @@ define([
                     title: 'Image Gallery',
                     type: 'image-gallery',
                     icon: 'fa fa-image',
-                    enabled: false
+                    enabled: true
                 },
                 {
                     title: 'Image Slider',
