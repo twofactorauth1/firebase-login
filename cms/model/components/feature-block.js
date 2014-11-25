@@ -58,7 +58,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            text: "<h5>The Feature Block component is great for a quick testiomonial or a list of <br> features for a single product. It works great with an image background and parallax.</h5>",
+            text: "<h5>The Feature Block component is great for a quick testimonial or a list of <br> features for a single product. It works great with an image background and parallax.</h5>",
 
             /**
              *

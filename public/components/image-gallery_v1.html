@@ -9,10 +9,7 @@
 
 <div class="image-gallery-title">
     <div class="editable" data-class="maintitle" data-index="{{$index}}">
-        <div data-ng-bind-html="component.maintitle" data-ng-show="component.maintitle"></div>
-        <div ng-show="!component.maintitle">
-            <h1>Image Gallery Title</h1>
-        </div>
+        <div ng-bind-html="component.maintitle | unsafe"></div>
     </div>
 </div>
 
@@ -34,8 +31,8 @@
                     <a class="thumbnail" href="{{image.url}}" title="{{image.label}}" data-gallery>
 
                         <img class="img-responsive" alt="{{image.label}}" ng-src="{{image.url}}">
-                        <span class="caption"><i class="fa fa-plus-circle"></i>
-                        </span>
+                        <!-- <span class="caption"><i class="fa fa-plus-circle"></i>
+                        </span> -->
                     </a>
                 </div>
             </div>
