@@ -6,7 +6,7 @@
  */
 
 var notificationFromEmail = 'admin@indigenous.io';
-var notificaitonToEmail = 'operations@indigenous.io';
+var notificaitonToEmail = 'test_operations@indigenous.io';
 
 /*
  * Override the connection string with an environment variable
