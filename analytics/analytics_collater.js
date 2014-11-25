@@ -10,9 +10,11 @@ var dao = require('./dao/analytics.dao.js');
 require('./model/page_event');
 require('./model/session_event');
 require('./model/ping_event');
+var analyticsTimerConfig = require('../configs/analyticstimer.config');
 
 var Keen = require('keen.io');
 var keenConfig = require('../configs/keen.config');
+var async = require('async');
 
 // Configure instance. Only projectId and writeKey are required to send data.
 var client = Keen.configure({
@@ -22,13 +24,15 @@ var client = Keen.configure({
     masterKey: keenConfig.KEEN_MASTER_KEY
 });
 
-var secondsSinceLastPingThreshold = 120;//2 minutes since last seen is end of session
+var secondsSinceLastPingThreshold = analyticsTimerConfig.ANALYTICS_LAST_PING_SECONDS;
 
 module.exports = {
 
     findCheckGroupAndSend: function(cb) {
         var self = this;
+
         log.debug('>> findCheckGroupAndSend');
+        var startTime = new Date();
         //search through session events where session_end = 0
         var query = {session_end:0};
         dao.findMany(query, $$.m.SessionEvent, function(err, list){
@@ -38,13 +42,146 @@ module.exports = {
             }
             if(list != null && list.length > 0) {
                 log.info('processing ' + list.length + ' session events');
-                _.each(list,  self._processSessionEvent, self);
+                //_.each(list,  self._processSessionEvent, self);
+                async.each(list, self._processSessionEventWithCallback.bind(self), function(err){
+                    if(err) {
+                        log.error('error processing session events.');
+                        if(cb) {
+                            cb(err);
+                        }
+
+                    } else {
+                        var duration = new Date().getTime() - startTime.getTime();
+                        log.debug('<< findCheckGroupAndSend');
+                        if(cb) {
+                            cb(null, 'Processed '+ list.length + ' sessionEvents in ' + duration + 'ms.');
+                        }
+                    }
+
+                });
+            } else {
+                log.debug('<< findCheckGroupAndSend(0)');
+                if(cb) {
+                    cb(null, '0 records to process');
+                }
             }
-            log.debug('<< findCheckGroupAndSend');
+
         });
 
 
 
+    },
+
+    _processSessionEventWithCallback: function(sessionEvent, callback) {
+        var self = this;
+        log.debug('processing session event with id: ' + sessionEvent.id());
+        dao.getMaxValue({session_id:sessionEvent.get('session_id')}, 'server_time', $$.m.PingEvent, function(err, value){
+            if(err) {
+                log.error('Error finding max server_time for sessionEvent ' + sessionEvent.get('session_id'));
+                return;
+            }
+            log.debug('maxValue: ', value);
+            var lastSeenVsNowInSecs = (new Date().getTime() - value) / 1000;
+            if(lastSeenVsNowInSecs >= secondsSinceLastPingThreshold) {
+                self._groupAndSendWithCallback(sessionEvent, value, function(err, value){
+                    if(err) {
+                        log.error('Error grouping and sending: ' + err);
+                        callback(err);
+                    } else {
+                        log.debug('<< _processSessionEvent');
+                        callback();
+                    }
+                });
+            }
+
+        });
+    },
+
+    _groupAndSendWithCallback: function(sessionEvent, lastSeenMS, fn) {
+        var self = this;
+        log.debug('>> _groupAndSendWithCallback');
+        //set endtime so we don't get caught up in another run.
+        sessionEvent.set('session_end', lastSeenMS);
+        sessionEvent.set('session_length', lastSeenMS - sessionEvent.get('session_start'));
+
+        async.waterfall([
+            function(cb){
+                dao.saveOrUpdate(sessionEvent, function(err, value) {
+                    if (err) {
+                        log.error('Error updating session event: ' + err);
+                        cb(err);
+                    } else {
+                        cb(null);
+                    }
+                });
+            },
+            function(cb) {
+                dao.findAndOrder({session_id:sessionEvent.get('session_id')}, null, $$.m.PageEvent, 'start_time', 1, function(err, pageList) {
+                    if (err) {
+                        log.error('Error retrieving page list for session event with id: ' + sessionEvent.get('session_id'));
+                        cb(err);
+                    } else {
+                        cb(null, pageList);
+                    }
+                });
+            },
+            function(pageList, cb) {
+                dao.findAndOrder({session_id:sessionEvent.get('session_id')}, null, $$.m.PingEvent, 'ping_time', 1, function(err, pingList) { //order by ping_time
+                    if (err) {
+                        log.error('Error retrieving ping list for session event with id: ' + sessionEvent.get('session_id'));
+                        cb(err);
+                    }
+                    //set the end_time for each page as the start_time from the next one.
+                    _.each(pageList, function (page, index, list) {
+                        if (index < list.length - 1) {//not the last one.
+                            page.set('end_time', list[index + 1].get('start_time'));
+                        } else {//last one
+                            page.set('end_time', lastSeenMS);
+                        }
+                    });
+                    _.each(pingList, function (ping, index, list) {
+                        //var page = _.findWhere(pageList, {url: ping.get('url')});
+                        var page = _.find(pageList, function(page){
+                            return _.isEqual(page.get('url'), ping.get('url'));
+                        });
+
+
+                        if (page != undefined) {
+                            page.get('pageActions').push(ping.get('pageActions'));
+                        } else {
+                            log.warn('no page found for ping event', ping);
+                        }
+                    });
+
+                    //send to keen unless test environment
+                    if (process.env.NODE_ENV !== "testing") {
+                        client.addEvents({
+                            "session_data": [sessionEvent],
+                            "page_data": pageList
+                        }, function (err, res) {
+                            if (err) {
+                                log.error('Error sending data to keen.');
+                            } else {
+                                log.info('Successfully sent events to keen.');
+                            }
+                        });
+                    } else {
+                        log.info('skipping keen because of testing environment.');
+                    }
+                    dao.batchUpdate(pageList, $$.m.PageEvent, function(err, value){
+                        if(err) {
+                            log.error('Error saving page events for session with id: ' + sessionEvent.get('session_id'));
+                        } else {
+                            log.debug('finished processing session event ' + sessionEvent.get('session_id'));
+                        }
+                        cb(null, 'OK');
+                        log.debug('<< _groupAndSend');
+                    });
+                });
+            }
+        ], function(err, result){
+            fn(err, result);
+        });
     },
 
     _processSessionEvent: function(sessionEvent, index, list) {
@@ -132,9 +269,7 @@ module.exports = {
                 });
             });
         });
-        //group ping data into page data
 
-        //send to Keen
     }
 
 }
