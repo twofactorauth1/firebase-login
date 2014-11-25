@@ -17,6 +17,7 @@ module.exports = {
 
     intervalObj : null,
 
+
     startJob: function() {
         var self = this;
         self.intervalObj = setInterval(collater.findCheckGroupAndSend, analyticsJobMS);
