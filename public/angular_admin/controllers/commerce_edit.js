@@ -101,6 +101,9 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
         $scope.addSubscriptionFn = function() {
             if($scope.user.stripeId===undefined || $scope.user.stripeId===null) {
                 ToasterService.setPending('error', 'Need to add a stripe account first.');
+                $scope.userPreferences.account_default_tab = 'integrations';
+                $scope.savePreferencesFn();
+                $state.go('account');
             }
             console.log('$scope.newSubscription >>> ', $scope.newSubscription);
             PaymentService.postCreatePlan($scope.newSubscription, function(subscription) {
