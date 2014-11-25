@@ -168,7 +168,8 @@ module.exports = {
         log.debug('>> setThemeForAccount');
         //validateThemeId
         var p1 = $.Deferred();
-        cmsDao.themeExists(themeId, function(err, value){
+
+        themeDao.getById(themeId, function(err, value){
             if(err) {
                 p1.reject();
                 fn(err, null);
@@ -179,6 +180,8 @@ module.exports = {
                 p1.resolve();
             }
         });
+
+        
         $.when(p1).done(function(){
             accountDao.getById(accountId, $$.m.Account, function(err, account){
                 if(err) {

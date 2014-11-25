@@ -35,38 +35,38 @@ module.exports = {
         var startTime = new Date();
         //search through session events where session_end = 0
         var query = {session_end:0};
-        // dao.findMany(query, $$.m.SessionEvent, function(err, list){
-        //     if(err) {
-        //         log.error('Error finding session events: ' + err);
-        //         return;
-        //     }
-        //     if(list != null && list.length > 0) {
-        //         log.info('processing ' + list.length + ' session events');
-        //         //_.each(list,  self._processSessionEvent, self);
-        //         async.each(list, self._processSessionEventWithCallback.bind(self), function(err){
-        //             if(err) {
-        //                 log.error('error processing session events.');
-        //                 if(cb) {
-        //                     cb(err);
-        //                 }
+        dao.findMany(query, $$.m.SessionEvent, function(err, list){
+            if(err) {
+                log.error('Error finding session events: ' + err);
+                return;
+            }
+            if(list != null && list.length > 0 && self._processSessionEventWithCallback !== undefined) {
+                log.info('processing ' + list.length + ' session events');
+                //_.each(list,  self._processSessionEvent, self);
+                async.each(list, self._processSessionEventWithCallback.bind(self), function(err){
+                    if(err) {
+                        log.error('error processing session events.');
+                        if(cb) {
+                            cb(err);
+                        }
 
-        //             } else {
-        //                 var duration = new Date().getTime() - startTime.getTime();
-        //                 log.debug('<< findCheckGroupAndSend');
-        //                 if(cb) {
-        //                     cb(null, 'Processed '+ list.length + ' sessionEvents in ' + duration + 'ms.');
-        //                 }
-        //             }
+                    } else {
+                        var duration = new Date().getTime() - startTime.getTime();
+                        log.debug('<< findCheckGroupAndSend');
+                        if(cb) {
+                            cb(null, 'Processed '+ list.length + ' sessionEvents in ' + duration + 'ms.');
+                        }
+                    }
 
-        //         });
-        //     } else {
-        //         log.debug('<< findCheckGroupAndSend(0)');
-        //         if(cb) {
-        //             cb(null, '0 records to process');
-        //         }
-        //     }
+                });
+            } else {
+                log.debug('<< findCheckGroupAndSend(0)');
+                if(cb) {
+                    cb(null, '0 records to process');
+                }
+            }
 
-        // });
+        });
 
 
 
