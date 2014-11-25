@@ -17690,6 +17690,25 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   font-weight: normal;
   display: inline-block;
 }
+.mainpanel .pageheader .pages {
+  max-width: 45%;
+}
+.mainpanel .pageheader .pages button {
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.mainpanel .pageheader .pages-editing {
+  max-width: 100%;
+}
+.mainpanel .pageheader .pages-editing h2 {
+  margin-right: 15px;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
 .mainpanel .pageheader .breadcrumb {
   background: none;
   display: inline-block;
