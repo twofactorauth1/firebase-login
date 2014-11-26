@@ -235,6 +235,9 @@ _.extend(api.prototype, baseApi.prototype, {
         sessionEvent.set('session_id', req.params.id);
         console.log('Storing Session API >>> ', new Date().getTime());
         sessionEvent.set('server_time', new Date().getTime());
+        sessionEvent.set('ip_address', self.ip(req));
+        var geoInfo = self.geo(req);
+        sessionEvent.set('ip_geo_info', geoInfo);
         analyticsManager.storeSessionEvent(sessionEvent, function(err){
             if(err) {
                 self.log.error('Error saving session event: ' + err);
@@ -248,6 +251,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var pageEvent = new $$.m.PageEvent(req.body);
         pageEvent.set('session_id', req.params.id);
+        pageEvent.set('server_time', new Date().getTime());
         analyticsManager.storePageEvent(pageEvent, function(err){
             if(err) {
                 self.log.error('Error saving page event: ' + err);
