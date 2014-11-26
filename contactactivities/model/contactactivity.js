@@ -43,12 +43,12 @@ var contactActivity = $$.m.ModelBase.extend({
         PAGE_VIEW: 'PAGE_VIEW',
         SUBSCRIBE: 'SUBSCRIBE',
         COURSE_SUBSCRIBE: 'COURSE_SUBSCRIBE',
-        ACCOUNT_CREATED: 'ACCOUNT_CREATED',
+        CONTACT_CREATED: 'CONTACT_CREATED',
         EMAIL: 'EMAIL',
         PHONECALL: 'PHONECALL',
         FACEBOOK_LIKE: 'FACEBOOK_LIKE',
         TWEET: 'TWEET',
-        CONTACT_FORM: 'CONTACT_FORM'
+        FORM_SUBMISSION: 'FORM_SUBMISSION'
     }
 });
 

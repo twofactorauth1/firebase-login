@@ -129,8 +129,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             session_start: start,
             session_end: 0,
             session_length: 0,
-            entrance: parsedEntranceUrl.attr("host"),
-            pages: []
+            entrance: parsedEntranceUrl.attr("host")
         };
 
         /*
