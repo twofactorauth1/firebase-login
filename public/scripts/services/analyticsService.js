@@ -239,10 +239,6 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                   });
                 };
             });
-
-            setInterval(function(){
-                self.pagePing();
-            }, 5000);
     };
 
     ///api/1.0/analytics/session/{sessionId}/ping
@@ -255,34 +251,5 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             console.log('Successfull Ping >>> ', data);
         });
     };
-
-    // this.postStripeCustomer = function(cardToken, user, accountId, fn) {
-    //   var apiUrl = baseUrl + ['integrations', 'payments', 'customers'].join('/');
-    //   $http.post(apiUrl, {
-    //       cardToken: cardToken,
-    //       user: user,
-    //       accountId: accountId
-    //     })
-    //     .success(function(data, status, headers, config) {
-    //       fn(data);
-    //     });
-    // };
-
-    // this.putCustomerCard = function(stripeId, cardToken, fn) {
-    //   var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards', cardToken].join('/');
-    //   $http.put(apiUrl)
-    //     .success(function(data, status, headers, config) {
-    //       fn(data);
-    //     });
-    // };
-
-    // this.getStripeCustomer = function(fn) {
-    //   var apiUrl = baseUrl + ['integrations', 'payments', 'customers'].join('/');
-    //   $http.get(apiUrl)
-    //     .success(function(data, status, headers, config) {
-    //       fn(data);
-    //     });
-    // };
-
 
 }]);
