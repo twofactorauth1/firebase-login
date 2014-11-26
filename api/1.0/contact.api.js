@@ -362,20 +362,35 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
             } else {
                 self.log.debug('signing up contact with account: ' + value.get('token'));
-                var contact = new $$.m.Contact(req.body);
-                contact.set('accountId', value.id());
-                contact.set('type', 'ld');
-                contact.created("date", new Date().getTime());
-                contactDao.saveOrUpdateContact(contact, function(err, savedContact){
+                //TODO: check if contact exists
+                var query = req.body;
+                query.accountId = value.id();
+                contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
-                        self.log.error('Error signing up: ' + err);
-                        req.flash("error", 'There was a problem signing up.  Please try again later.');
-                        return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
-                    } else {
-                        req.flash("info", "Thank you for subscribing.");
-                        return self.sendResult(resp, savedContact);
+                        self.log.error('Error checking for existing contact: ' + err);
+                        return self.wrapError(resp, 500, "There was a problem signign up.  Please try again later")
                     }
+                    if(list.length > 0) {
+                        return self.wrapError(resp, 409, "This user already exists for this account.");
+                    }
+                    var contact = new $$.m.Contact(req.body);
+                    contact.set('accountId', value.id());
+                    contact.set('type', 'ld');
+                    contact.created("date", new Date().getTime());
+                    contactDao.saveOrUpdateContact(contact, function(err, savedContact){
+                        if(err) {
+                            self.log.error('Error signing up: ' + err);
+                            req.flash("error", 'There was a problem signing up.  Please try again later.');
+                            return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
+                        } else {
+                            req.flash("info", "Thank you for subscribing.");
+                            return self.sendResult(resp, savedContact);
+                        }
+                    });
                 });
+
+
+
             }
         });
 

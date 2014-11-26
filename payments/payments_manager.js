@@ -15,8 +15,8 @@ module.exports = {
         stripeDao.createStripeCustomerForUser(cardToken, user, accountId, fn);
     },
 
-    createStripeSubscription: function(customerId, planId, accountId, userId, fn) {
-        log.debug('>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',callback)');
-        stripeDao.createStripeSubscription(customerId, planId, null, null, null, null, null, null, accountId, null, userId, null, fn);
+    createStripeSubscription: function(customerId, planId, accountId, userId, coupon, fn) {    	
+        log.debug('>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',' + coupon + ',callback)');
+        stripeDao.createStripeSubscription(customerId, planId, coupon, null, null, null, null, null, accountId, null, userId, null, fn);
     }
 };
