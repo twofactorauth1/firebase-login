@@ -5,7 +5,7 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-var analyticsJobMS = process.env.ANALYTICS_JOB_MS || 20000;
+var analyticsJobMS = process.env.ANALYTICS_JOB_MS || 60000;
 var secondsSinceLastPingThreshold = process.env.ANALYTICS_LAST_PING_SECONDS || 120;
 var runJob = false || process.env.ANALYTICS_RUN_JOB;
 
