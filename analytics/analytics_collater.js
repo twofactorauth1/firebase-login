@@ -25,7 +25,7 @@ var client = Keen.configure({
     masterKey: keenConfig.KEEN_MASTER_KEY
 });
 
-var secondsSinceLastPingThreshold = analyticsTimerConfig.ANALYTICS_LAST_PING_SECONDS;
+var secondsSinceLastPingThreshold = analyticsTimerConfig.ANALYTICS_LAST_PING_SECONDS || 120;
 
 var collator = {
 
@@ -89,6 +89,7 @@ var collator = {
                 collator._closeSessionWithNoPings(sessionEvent, callback);
             } else {
                 var lastSeenVsNowInSecs = (new Date().getTime() - value) / 1000;
+                log.debug('lastSeenVsNowInSecs '+ lastSeenVsNowInSecs+' secondsSinceLastPingThreshold '+secondsSinceLastPingThreshold);
                 if(lastSeenVsNowInSecs >= secondsSinceLastPingThreshold) {
                     collator._groupAndSendWithCallback(sessionEvent, value, function(err, value){
                         if(err) {
