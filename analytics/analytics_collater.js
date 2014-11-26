@@ -148,6 +148,8 @@ var collator = {
                         } else {//last one
                             page.set('end_time', lastSeenMS);
                         }
+                        var timeOnPage = page.get('end_time') - page.get('start_time');
+                        page.set('timeOnPage', timeOnPage);
                     });
                     _.each(pingList, function (ping, index, list) {
                         //var page = _.findWhere(pageList, {url: ping.get('url')});

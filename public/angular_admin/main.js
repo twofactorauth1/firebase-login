@@ -127,6 +127,7 @@ require.config({
         "videoPlayerDirective": "/pipeshift/js/modules/video/directive/videoPlayer",
         "psEditableDirective": "/pipeshift/js/modules/video/directive/psEditable",
         "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
+        'datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
