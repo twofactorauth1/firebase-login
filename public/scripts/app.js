@@ -83,17 +83,6 @@ var mainApp = angular
         });
 
 
-        // var addPageData = function() {
-        //     if (!firstVisit) {
-        //         var end = new Date().getTime();
-        //         pageProperties.session_end = end;
-        //         pageProperties.session_length = end-pageProperties.session_start;
-        //         pages.push(pageProperties);
-        //         sessionProperties.pages = pages;
-        //     }
-        //     firstVisit = false;
-        // };
-
         $rootScope.$on("$routeChangeStart", function (scope, next, current) {
             var self = this;
         });
@@ -103,6 +92,9 @@ var mainApp = angular
             analyticsService.pageStart();
 
             //every 15 seconds send page tracking data
+            setInterval(function(){
+                analyticsService.pagePing();
+            }, 5000);
         });
 
         $rootScope.$on('$viewContentLoaded', function(scope, newRoute, oldRoute) {
