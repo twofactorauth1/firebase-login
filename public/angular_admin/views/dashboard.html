@@ -16,12 +16,14 @@
     <div class="col-xs-12 nopadding">
         <div class="btn-group col-xs-12 template-btns nopadding">
             <button type="button" class="btn btn-default btn-lg col-xs-4" ng-class="{'active': activeTab === 'activity'}" ng-click="activeTab = 'activity'">
+                <div tooltip-placement="bottom" tooltip-html-unsafe="What are customers doing?">
                 <i class="fa fa-comments"></i>
                 <span class="hidden-xs">Activity <!-- <span class="badge badge-info">2</span> -->
+                </div>
                 </span>
             </button>
             <button type="button" class="btn btn-default btn-lg col-xs-4 tooltips" ng-class="{'active': activeTab === 'analytics'}" ng-click="activeTab = 'analytics'">
-                <div tooltip-placement="bottom" tooltip-html-unsafe="What are customers doing </br> before they churn?">
+                <div tooltip-placement="bottom" tooltip-html-unsafe="Who is visiting your site?">
                     <i class="fa fa-pie-chart"></i>
                     <span class="hidden-xs">Site Analytics</span>
                 </div>
@@ -31,7 +33,7 @@
                 <span class="hidden-xs">Advertising</span>
             </button> -->
             <button type="button" class="btn btn-default btn-lg col-xs-4" ng-class="{'active': activeTab === 'ecommerce'}" ng-click="activeTab = 'ecommerce'">
-                <div tooltip-placement="bottom" tooltip-html-unsafe="How do you get Jane to re-open </br> that shopping cart and check out?">
+                <div tooltip-placement="bottom" tooltip-html-unsafe="How much money are you making?">
                     <i class="fa fa-credit-card"></i>
                     <span class="hidden-xs">Ecommerce</span>
                 </div>
