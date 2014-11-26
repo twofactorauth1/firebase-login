@@ -1,4 +1,4 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng', 'formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService', 'customerService', 'angular-daterangepicker', 'daterangepicker', 'count-to', 'keenService'], function(app) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-ng','formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService', 'customerService', 'angular-daterangepicker', 'daterangepicker', 'count-to', 'keenService'], function(app) {
     app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', 'keenService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService) {
         ngProgress.start();
 
@@ -65,20 +65,30 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                 // });
 
                 var params2 = {
-                    "event_collection": 'pageviews',
+                    "event_collection": 'page_data',
                     "timeframe": 'this_month',
-                    "groub_by": 'page.href',
+                    "group_by": 'url.path',
                     "analyses": {
-                        "total_sessions":{
+                        "pageviews":{
                             "analysis_type":"count_unique",
                             "target_property":"session_id"
                         },
-                        "average_session":{
+                        "timeOnPage":{
+                            "analysis_type":"sum",
+                            "target_property":"session_length"
+                        },
+                        "avgTimeOnPage":{
+                            "analysis_type":"average",
+                            "target_property":"session_length"
+                        },
+                        "avgTimeOnPage":{
                             "analysis_type":"average",
                             "target_property":"session_length"
                         }
                     }
                 };
+
+                //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
 
                 keenService.multiAnalysis(params2, function(data){
                     console.log('keen data >>> ', data);
@@ -138,7 +148,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         console.log('window.location.host ', window.location.hostname);
 
                         var deviceReportByCategory = new Keen.Query("count", {
-                            eventCollection: "frontsessions",
+                            eventCollection: "session_data",
                             timeframe: {
                                 "start" : timeframeStart,
                                 "end" : timeframeEnd
@@ -148,7 +158,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var userReport = new Keen.Query("count_unique", {
-                            eventCollection: "frontsessions",
+                            eventCollection: "session_data",
                             targetProperty: "fingerprint",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -159,7 +169,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var userReportPreviousMonth = new Keen.Query("count_unique", {
-                            eventCollection: "frontsessions",
+                            eventCollection: "session_data",
                             targetProperty: "fingerprint",
                             timeframe: {
                                 "start" : timeframePreviousStart,
@@ -169,26 +179,24 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                         });
 
-                        var pageviewsReport = new Keen.Query("sum", {
-                            eventCollection: "frontsessions",
-                            targetProperty: "page_length",
+                        var pageviewsReport = new Keen.Query("count", {
+                            eventCollection: "page_data",
                             timeframe: {
                                 "start" : timeframeStart,
                                 "end" : timeframeEnd
                             },
                             interval: interval,
-                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                            filters: [{"property_name":"url.domain","operator":"eq","property_value": window.location.hostname}]
                         });
 
-                        var pageviewsPreviousReport = new Keen.Query("sum", {
-                            eventCollection: "frontsessions",
-                            targetProperty: "page_length",
+                        var pageviewsPreviousReport = new Keen.Query("count", {
+                            eventCollection: "page_data",
                             timeframe: {
                                 "start" : timeframePreviousStart,
                                 "end" : timeframePreviousEnd
                             },
                             interval: interval,
-                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                            filters: [{"property_name":"url.domain","operator":"eq","property_value": window.location.hostname}]
                         });
 
                         // var sessionDurationQuery = $scope.query({
@@ -209,7 +217,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
 
                         var sessionsReport = new Keen.Query("count_unique", {
-                            eventCollection: "frontsessions",
+                            eventCollection: "session_data",
                             targetProperty: "session_id",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -220,7 +228,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var sessionsPreviousReport = new Keen.Query("count_unique", {
-                            eventCollection: "frontsessions",
+                            eventCollection: "session_data",
                             targetProperty: "session_id",
                             timeframe: {
                                 "start" : timeframePreviousStart,
@@ -231,7 +239,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var sessionLengthReport = new Keen.Query("count", {
-                            eventCollection: "frontsessions",
+                            eventCollection: "session_data",
                             targetProperty: "session_length",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -242,7 +250,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                           });
 
                         var sessionAvgLengthReport = new Keen.Query("average", {
-                            eventCollection: "frontsessions",
+                            eventCollection: "session_data",
                             targetProperty: "session_length",
                             timeframe: {
                                 "start" : timeframeStart,
@@ -252,7 +260,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                           });
 
                         var bouncesReport = new Keen.Query("count_unique", {
-                            eventCollection: "frontsessions",
+                            eventCollection: "session_data",
                             targetProperty: "session_id",
                             filters: [{"property_name":"page_length","operator":"eq","property_value":1}],
                             timeframe: {
@@ -264,7 +272,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         });
 
                         var bouncesPreviousReport = new Keen.Query("count_unique", {
-                            eventCollection: "frontsessions",
+                            eventCollection: "session_data",
                             targetProperty: "session_id",
                             filters: [{"property_name":"page_length","operator":"eq","property_value":1}],
                             timeframe: {
@@ -273,6 +281,35 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             },
                             filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
                         });
+
+                        var trafficSources = new Keen.Query("count_unique", {
+                            eventCollection: "session_data",
+                            targetProperty: "session_id",
+                            groupBy: "source_type",
+                            timeframe: {
+                                "start" : timeframeStart,
+                                "end" : timeframeEnd
+                            },
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                        });
+
+                        //  var newVsReturningChart = $scope.query({
+                        //         ids: 'ga:82461709',
+                        //         metrics: 'ga:sessions',
+                        //         dimensions: 'ga:userType',
+                        //         'start-date': '30daysAgo',
+                        //         'end-date': 'yesterday'
+                        // });
+
+                        // var topPageViews = $scope.query({
+                        //     ids: 'ga:82461709',
+                        //     metrics: 'ga:pageviews,ga:uniquePageviews,ga:avgTimeOnPage,ga:entrances,ga:bounceRate,ga:exitRate',
+                        //     dimensions: 'ga:pagePath',
+                        //     'start-date': '30daysAgo',
+                        //     'end-date': 'yesterday'
+                        // });
+
+                        //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
 
                         $scope.newDesktop = false;
 
@@ -295,6 +332,9 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         $scope.bounces = 0;
                         $scope.bouncesData = [];
 
+                        $scope.totalTypes = 0;
+                        $scope.trafficSourceData = [];
+
                         $scope.runReports = function() {
                             client.run([
                                 visitorLocations,
@@ -308,7 +348,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 sessionLengthReport,
                                 sessionAvgLengthReport,
                                 bouncesReport,
-                                bouncesPreviousReport
+                                bouncesPreviousReport,
+                                trafficSources
                                 ], function(results) {
 
                                 // ======================================
@@ -457,8 +498,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 // Average Visit Duration
                                 // ----------------------------------------
 
-                                console.log('previous session >>> ', results[7]);
-                                console.log('avg session length >>> ', results[8]);
+                                // console.log('previous session >>> ', results[7]);
+                                // console.log('avg session length >>> ', results[8]);
 
                                 // ----------------------------------------
                                 // Session Duration
@@ -510,6 +551,35 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                                 $scope.bouncesPercent = $scope.calculatePercentage(_totalBounces, results[11].result);
 
+                                // ======================================
+                                    // Traffic Sources
+                                    // ======================================
+
+                                    var _trafficSourceData = [];
+                                    var _totalTypes = 0;
+                                    console.log('result[12] >>> ', results[12].result);
+                                    for (var i = 0; i < results[12].result.length; i++) {
+                                        var subObj = [];
+                                        if (results[12].result[i].source_type) {
+                                            subObj.push(results[12].result[i].source_type.charAt(0).toUpperCase() + results[12].result[i].source_type.slice(1));
+                                        } else {
+                                            subObj.push('Other');
+                                        }
+                                        subObj.push(results[12].result[i].result);
+                                        _totalTypes += results[12].result[i].result;
+                                        _trafficSourceData.push(subObj);
+                                    };
+
+                                    if (_totalTypes >= $scope.totalTypes) {
+                                        $scope.totalTypes = _totalTypes;
+                                        if ($scope.firstQuery) {
+                                            $scope.totalTypes = _totalTypes;
+                                            $scope.trafficSourceData = _trafficSourceData;
+                                        } else {
+                                            $scope.trafficSourcesConfig.series[0].data = _trafficSourceData;
+                                        }
+                                    }
+
 
                                 // // // ======================================
                                 // // // Content
@@ -521,7 +591,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 // };
 
 
-                                // $scope.secondGACall();
                                 if($scope.firstQuery) {
                                     ngProgress.complete();
                                     $scope.renderAnalyticsChart();
@@ -667,192 +736,235 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         enabled: false
                                     }
                                 };
+
+                                 $scope.trafficSourcesConfig = {
+                                        options: {
+                                            chart: {
+                                                plotBackgroundColor: null,
+                                                plotBorderWidth: 0,
+                                                plotShadow: false,
+                                                spacing: [25, 25, 25, 25]
+                                            },
+                                            title: {
+                                                text: ''
+                                            },
+                                            tooltip: {
+                                                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                            },
+                                            plotOptions: {
+                                                pie: {
+                                                    dataLabels: {
+                                                        enabled: true,
+                                                        distance: -50,
+                                                        style: {
+                                                            fontWeight: 'bold',
+                                                            color: 'white',
+                                                            textShadow: '0px 1px 2px black'
+                                                        }
+                                                    },
+                                                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
+                                                }
+                                            },
+                                            exporting: {
+                                                enabled: false
+                                            }
+                                        },
+                                        series: [{
+                                            type: 'pie',
+                                            name: 'Traffic Source',
+                                            innerSize: '40%',
+                                            data: $scope.trafficSourceData
+                                        }],
+                                        credits: {
+                                            enabled: false
+                                        }
+                                };
                         };
 
 
-                        // $scope.secondGACall = function() {
+                        $scope.secondGACall = function() {
 
-                        //     setTimeout(function() {
+                            setTimeout(function() {
 
-                        //         var newVsReturningChart = $scope.query({
-                        //             ids: 'ga:82461709',
-                        //             metrics: 'ga:sessions',
-                        //             dimensions: 'ga:userType',
-                        //             'start-date': '30daysAgo',
-                        //             'end-date': 'yesterday'
-                        //         });
+                                var newVsReturningChart = $scope.query({
+                                    ids: 'ga:82461709',
+                                    metrics: 'ga:sessions',
+                                    dimensions: 'ga:userType',
+                                    'start-date': '30daysAgo',
+                                    'end-date': 'yesterday'
+                                });
 
-                        //         var topPageViews = $scope.query({
-                        //             ids: 'ga:82461709',
-                        //             metrics: 'ga:pageviews,ga:uniquePageviews,ga:avgTimeOnPage,ga:entrances,ga:bounceRate,ga:exitRate',
-                        //             dimensions: 'ga:pagePath',
-                        //             'start-date': '30daysAgo',
-                        //             'end-date': 'yesterday'
-                        //         });
+                                var topPageViews = $scope.query({
+                                    ids: 'ga:82461709',
+                                    metrics: 'ga:pageviews,ga:uniquePageviews,ga:avgTimeOnPage,ga:entrances,ga:bounceRate,ga:exitRate',
+                                    dimensions: 'ga:pagePath',
+                                    'start-date': '30daysAgo',
+                                    'end-date': 'yesterday'
+                                });
 
-                        //         //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
+                                //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
 
-                        //         var trafficSources = $scope.query({
-                        //             ids: 'ga:82461709',
-                        //             metrics: 'ga:sessions',
-                        //             dimensions: 'ga:trafficType',
-                        //             'start-date': '30daysAgo',
-                        //             'end-date': 'yesterday'
-                        //         });
+                                var trafficSources = $scope.query({
+                                    ids: 'ga:82461709',
+                                    metrics: 'ga:sessions',
+                                    dimensions: 'ga:trafficType',
+                                    'start-date': '30daysAgo',
+                                    'end-date': 'yesterday'
+                                });
 
-                        //         Promise.all([newVsReturningChart, topPageViews, trafficSources]).then(function(results) {
+                                Promise.all([newVsReturningChart, topPageViews, trafficSources]).then(function(results) {
 
-                        //             // ======================================
-                        //             // New vs. Returning Customers
-                        //             // ======================================
+                                    // ======================================
+                                    // New vs. Returning Customers
+                                    // ======================================
 
-                        //             //colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
+                                    //colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
 
-                        //             var dataObjArr = [];
+                                    var dataObjArr = [];
 
-                        //             for (var i = 0; i < results[0].rows.length; i++) {
-                        //                 var subObj = new Object();
-                        //                 subObj.name = results[0].rows[i][0];
-                        //                 subObj.data = [parseInt(results[0].rows[i][1])];
-                        //                 dataObjArr[i] = subObj;
-                        //             };
+                                    for (var i = 0; i < results[0].rows.length; i++) {
+                                        var subObj = new Object();
+                                        subObj.name = results[0].rows[i][0];
+                                        subObj.data = [parseInt(results[0].rows[i][1])];
+                                        dataObjArr[i] = subObj;
+                                    };
 
-                        //             $scope.newVsReturningConfig = {
-                        //                 options: {
-                        //                     chart: {
-                        //                         type: 'column',
-                        //                         spacing: [25, 25, 25, 25]
-                        //                     },
-                        //                     colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
-                        //                     title: {
-                        //                         text: ''
-                        //                     },
-                        //                     exporting: {
-                        //                         enabled: false
-                        //                     }
-                        //                 },
-                        //                 series: dataObjArr,
-                        //                 yAxis: {
-                        //                     title: {
-                        //                         text: 'Visitors'
-                        //                     }
-                        //                 },
-                        //                 credits: {
-                        //                     enabled: false
-                        //                 }
-                        //             };
+                                    $scope.newVsReturningConfig = {
+                                        options: {
+                                            chart: {
+                                                type: 'column',
+                                                spacing: [25, 25, 25, 25]
+                                            },
+                                            colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                                            title: {
+                                                text: ''
+                                            },
+                                            exporting: {
+                                                enabled: false
+                                            }
+                                        },
+                                        series: dataObjArr,
+                                        yAxis: {
+                                            title: {
+                                                text: 'Visitors'
+                                            }
+                                        },
+                                        credits: {
+                                            enabled: false
+                                        }
+                                    };
 
-                        //             setTimeout(function() {
-                        //                 $scope.newVsReturningConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth / 3) - 30;
-                        //             }, 500);
-
-
-                        //             ngProgress.complete();
-
-                        //             // ----------------------------------------
-                        //             // Top Pageviews
-                        //             // ----------------------------------------
-
-                        //             $scope.topPages = results[1].rows;
-
-                        //             var output = [];
-
-                        //             for (var i = 0; i < $scope.topPages.length; i++) {
-                        //                 var singleRow = $scope.topPages[i];
-                        //                 var subObj = {};
-                        //                 for (var k = 0; k < singleRow.length; k++) {
-                        //                     if (k == 0) {
-                        //                         subObj.page = singleRow[k]
-                        //                     }
-                        //                     if (k == 1) {
-                        //                         subObj.pageviews = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 2) {
-                        //                         subObj.uniquePageviews = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 3) {
-                        //                         subObj.avgTime = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 4) {
-                        //                         subObj.entrances = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 5) {
-                        //                         subObj.bounceRate = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 6) {
-                        //                         subObj.exitRate = parseInt(singleRow[k])
-                        //                     }
-                        //                 };
-                        //                 if (subObj) {
-                        //                     output.push(subObj);
-                        //                 }
-                        //             };
+                                    setTimeout(function() {
+                                        $scope.newVsReturningConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth / 3) - 30;
+                                    }, 500);
 
 
-                        //             $scope.formattedTopPages = output;
-                        //             $scope.pagedformattedTopPages = $scope.formattedTopPages.slice(0, $scope.pageLimit);
+                                    ngProgress.complete();
 
-                        //             // ======================================
-                        //             // Traffic Sources
-                        //             // ======================================
+                                    // ----------------------------------------
+                                    // Top Pageviews
+                                    // ----------------------------------------
 
-                        //             var dataObjArr = [];
+                                    $scope.topPages = results[1].rows;
 
-                        //             for (var i = 0; i < results[2].rows.length; i++) {
-                        //                 results[2].rows[i][1] = parseInt(results[2].rows[i][1]);
-                        //                 results[2].rows[i][0] = results[2].rows[i][0].charAt(0).toUpperCase() + results[2].rows[i][0].slice(1);
-                        //             };
+                                    var output = [];
 
-                        //             $scope.trafficSourcesConfig = {
-                        //                 options: {
-                        //                     chart: {
-                        //                         plotBackgroundColor: null,
-                        //                         plotBorderWidth: 0,
-                        //                         plotShadow: false,
-                        //                         spacing: [25, 25, 25, 25]
-                        //                     },
-                        //                     title: {
-                        //                         text: ''
-                        //                     },
-                        //                     tooltip: {
-                        //                         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                        //                     },
-                        //                     plotOptions: {
-                        //                         pie: {
-                        //                             dataLabels: {
-                        //                                 enabled: true,
-                        //                                 distance: -50,
-                        //                                 style: {
-                        //                                     fontWeight: 'bold',
-                        //                                     color: 'white',
-                        //                                     textShadow: '0px 1px 2px black'
-                        //                                 }
-                        //                             },
-                        //                             colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
-                        //                         }
-                        //                     },
-                        //                     exporting: {
-                        //                         enabled: false
-                        //                     }
-                        //                 },
-                        //                 series: [{
-                        //                     type: 'pie',
-                        //                     name: 'Traffic Source',
-                        //                     innerSize: '40%',
-                        //                     data: results[2].rows
-                        //                 }],
-                        //                 credits: {
-                        //                     enabled: false
-                        //                 }
-                        //             };
+                                    for (var i = 0; i < $scope.topPages.length; i++) {
+                                        var singleRow = $scope.topPages[i];
+                                        var subObj = {};
+                                        for (var k = 0; k < singleRow.length; k++) {
+                                            if (k == 0) {
+                                                subObj.page = singleRow[k]
+                                            }
+                                            if (k == 1) {
+                                                subObj.pageviews = parseInt(singleRow[k])
+                                            }
+                                            if (k == 2) {
+                                                subObj.uniquePageviews = parseInt(singleRow[k])
+                                            }
+                                            if (k == 3) {
+                                                subObj.avgTime = parseInt(singleRow[k])
+                                            }
+                                            if (k == 4) {
+                                                subObj.entrances = parseInt(singleRow[k])
+                                            }
+                                            if (k == 5) {
+                                                subObj.bounceRate = parseInt(singleRow[k])
+                                            }
+                                            if (k == 6) {
+                                                subObj.exitRate = parseInt(singleRow[k])
+                                            }
+                                        };
+                                        if (subObj) {
+                                            output.push(subObj);
+                                        }
+                                    };
 
-                        //             setTimeout(function() {
-                        //                 $scope.trafficSourcesConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth / 3) - 30;
-                        //             }, 500);
-                        //         });
 
-                        //     }, 1000);
-                        // };
+                                    $scope.formattedTopPages = output;
+                                    $scope.pagedformattedTopPages = $scope.formattedTopPages.slice(0, $scope.pageLimit);
+
+                                    // ======================================
+                                    // Traffic Sources
+                                    // ======================================
+
+                                    var dataObjArr = [];
+
+                                    for (var i = 0; i < results[2].rows.length; i++) {
+                                        results[2].rows[i][1] = parseInt(results[2].rows[i][1]);
+                                        results[2].rows[i][0] = results[2].rows[i][0].charAt(0).toUpperCase() + results[2].rows[i][0].slice(1);
+                                    };
+
+                                    $scope.trafficSourcesConfig = {
+                                        options: {
+                                            chart: {
+                                                plotBackgroundColor: null,
+                                                plotBorderWidth: 0,
+                                                plotShadow: false,
+                                                spacing: [25, 25, 25, 25]
+                                            },
+                                            title: {
+                                                text: ''
+                                            },
+                                            tooltip: {
+                                                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                            },
+                                            plotOptions: {
+                                                pie: {
+                                                    dataLabels: {
+                                                        enabled: true,
+                                                        distance: -50,
+                                                        style: {
+                                                            fontWeight: 'bold',
+                                                            color: 'white',
+                                                            textShadow: '0px 1px 2px black'
+                                                        }
+                                                    },
+                                                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
+                                                }
+                                            },
+                                            exporting: {
+                                                enabled: false
+                                            }
+                                        },
+                                        series: [{
+                                            type: 'pie',
+                                            name: 'Traffic Source',
+                                            innerSize: '40%',
+                                            data: results[2].rows
+                                        }],
+                                        credits: {
+                                            enabled: false
+                                        }
+                                    };
+
+                                    setTimeout(function() {
+                                        $scope.trafficSourcesConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth / 3) - 30;
+                                    }, 500);
+                                });
+
+                            }, 1000);
+                        };
 
 
                         PaymentService.getCustomers(function(data) {

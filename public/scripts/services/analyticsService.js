@@ -161,6 +161,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         }
 
         sessionProperties["referrer"] = referrerObject;
+        sessionProperties["source_type"] = this.getSourceType(parsedReferrer.attr("host"));
         console.log('sessionProperties >>> ', sessionProperties);
 
         //api/1.0/analytics/session/{sessionId}/sessionStart
@@ -170,6 +171,19 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                 console.log('success >>> ', data);
               fn(data);
             });
+    };
+
+    this.getSourceType = function(host) {
+        var type = 'direct';
+        //TODO: Add Email
+        if (host) {
+            var type = 'referral';
+        }
+        var organicSources = ['google.com', 'daum.net', 'eniro.se', 'naver.com', 'yahoo.com', 'msn.com', 'bing.com', 'aol.com', 'lycos.com', 'ask.com', 'altavista.com', 'search.netscape.com', 'cnn.com/SEARCH', 'about.com', 'mamma.com', 'alltheweb.com', 'voila.fr', 'search.virgilio.it', 'baidu.com', 'alice.com', 'yandex.com', 'najdi.org.mk', 'aol.com', 'mamma.com', 'seznam.cz', 'search.com', 'wp.pl', 'online.onetcenter.org', 'szukacz.pl', 'yam.com', 'pchome.com', 'kvasir.no', 'sesam.no', 'ozu.es', 'terra.com', 'mynet.com', 'ekolay.net', 'rambler.ru'];
+        if (organicSources.indexOf(host) !== -1) {
+            type = 'organic';
+        }
+        return type;
     };
 
     ///api/1.0/analytics/session/{sessionId}/pageStart
