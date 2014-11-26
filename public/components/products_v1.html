@@ -57,7 +57,7 @@
 
     <!--not in use now-->
 
-    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#cart-checkout-modal">
+    <button class="btn btn-primary btn-lg btnLauchCart"  data-toggle="modal" data-target="#cart-checkout-modal">
         Launch Cart modal
     </button>
 
@@ -460,7 +460,10 @@
     <!-- /.modal -->
 </div>
 <script type="text/javascript">
-card = $('form[name="product-card-details"]').card({
-    container: '.card-wrapper'
+$(".btnLauchCart").on("click",function(){
+            card = $('form[name="product-card-details"]').card({
+            container: '.card-wrapper'
+        });
 });
+
 </script>
