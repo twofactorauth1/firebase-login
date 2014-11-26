@@ -10,7 +10,7 @@
 var securityManager = require('../security/sm')(true);
 var securityConstants = require('../security/utils/security.constants');
 var appConfig = require('../configs/app.config');
-var geoip = require('geoip-lite');
+//var geoip = require('geoip-lite');
 
 
 var apiBase = function(options) {
@@ -198,7 +198,8 @@ _.extend(apiBase.prototype, {
     },
 
     geo: function(req) {
-        return geoip.lookup(this.ip(req));
+        //return geoip.lookup(this.ip(req));
+        return null;
     },
 
 
