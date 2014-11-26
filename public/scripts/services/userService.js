@@ -15,10 +15,11 @@ mainApp.service('userService', function ($http) {
         })
         .success(function (data, status, headers, config) {
             console.log('success created ', data);
-            fn(data);
+            fn(data, null);
         })
         .error(function (err) {
             console.log('END:userService with ERROR');
+            fn(null, err)
         });
     };
 
