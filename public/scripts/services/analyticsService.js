@@ -174,6 +174,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
     ///api/1.0/analytics/session/{sessionId}/pageStart
     this.pageStart = function() {
+        var self = this;
         console.log('pageStart >>>');
         var startPageTimer = new Date().getTime();
         var parsedUrl = $.url(fullUrl);
@@ -190,7 +191,6 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             pageActions: [],
             start_time: startPageTimer,
             end_time: 0,
-            total_length: 0,
             session_id: ipCookie("session_cookie")["id"]
         };
         console.log('pageProperties ', pageProperties);
@@ -239,10 +239,21 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                   });
                 };
             });
+
+            setInterval(function(){
+                self.pagePing();
+            }, 5000);
     };
 
+    ///api/1.0/analytics/session/{sessionId}/ping
     this.pagePing = function() {
-
+        var _pageProperties = pageProperties;
+        _pageProperties.ping_time = new Date().getTime();
+        console.log('Page Ping >>> ', _pageProperties);
+        var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'ping'].join('/');
+        $http.post(apiUrl, _pageProperties).success(function(data, status, headers, config) {
+            console.log('Successfull Ping >>> ', data);
+        });
     };
 
     // this.postStripeCustomer = function(cardToken, user, accountId, fn) {
