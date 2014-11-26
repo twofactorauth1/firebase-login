@@ -204,5 +204,13 @@ define(['app'], function (app) {
 			})
 		};
 
+		this.setWebsiteTheme = function (themeId, websiteId, fn) {
+			var apiUrl = baseUrl + ['cms', 'theme', themeId, 'website', websiteId].join('/');
+			$http.post(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
+
 	});
 });
