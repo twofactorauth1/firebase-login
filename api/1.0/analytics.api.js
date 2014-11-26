@@ -233,6 +233,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var sessionEvent = new $$.m.SessionEvent(req.body);
         sessionEvent.set('session_id', req.params.id);
+        sessionEvent.set('server_time', new Date().getTime());
         analyticsManager.storeSessionEvent(sessionEvent, function(err){
             if(err) {
                 self.log.error('Error saving session event: ' + err);

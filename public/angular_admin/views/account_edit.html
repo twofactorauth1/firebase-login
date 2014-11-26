@@ -28,11 +28,12 @@
 							<row>
 							<div class="col-xs-5 col-md-6">
 								<div class="hidden-xs hidden-sm">
-									<div class="btn-link btn-edit-photo" data-toggle="modal" data-target="#modal-change-photo">Change Photo</div>
+									<div class="btn-link btn-edit-photo media-modal" ng-click = "logo = false" on-insert-mediacb="insertMedia" user='user'>Change Photo</div>
 								</div>
 								<img id="contact-photo"
 									class="img-responsive img-rounded hand btn-edit-photo"
-									src="/assets/icons/blank-user.jpg">
+									ng-src="{{ user.profilePhotos[0] ? user.profilePhotos[0] : '/assets/icons/blank-user.jpg' }}"
+									class="img-responsive img-rounded hand btn-edit-photo">
 							</div>
 
 							<div class="col-xs-7 col-md-6">
@@ -192,7 +193,7 @@
 				            <row>
 				                <div class="col-xs-5 col-md-6">
 				                    <div class="hidden-xs hidden-sm">
-				                        <div class="media-modal"  on-insert-mediacb="insertMedia">
+				                        <div class="media-modal" ng-click = "logo = true"  on-insert-mediacb="insertMedia">
                                             <span class="btn-link btn-edit-photo"> Change Logo</span>
                                         </div>
 				                    </div>

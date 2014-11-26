@@ -87,7 +87,7 @@
               <div class="media">
                 <a href="#/commerce/edit/{{product._id}}">
                   <div class="col-xs-12">
-                    <span ng-if="!product.is_image" class="icon"> <i class="fa {{product.icon || default_product_icon}}"></i>
+                    <span ng-if="!product.is_image" class="icon"> <i class="fa {{product.icon || userPreferences.default_product_icon}}"></i>
 										</span>
                     <img ng-if = "product.is_image" style="width:75px" class="img-responsive img-circle hand center" ng-src="{{ product.icon }}">
                     <div class="clear"></div>

@@ -12,154 +12,104 @@
         <meta charset="utf-8">
         <title>Page Not Found :(</title>
         <style>
-            ::-moz-selection {
-                background: #b3d4fc;
-                text-shadow: none;
+
+            @font-face {
+                font-family: 'LatoRegular';
+                src: url('../fonts/lato/Lato-Reg-webfont.eot');
+                src: url('../fonts/lato/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'),
+                     url('../fonts/lato/Lato-Reg-webfont.woff') format('woff'),
+                     url('../fonts/lato/Lato-Reg-webfont.ttf') format('truetype'),
+                     url('../fonts/lato/Lato-Reg-webfont.svg#LatoRegular') format('svg');
+                font-weight: normal;
+                font-style: normal;
+
             }
 
-            ::selection {
-                background: #b3d4fc;
-                text-shadow: none;
-            }
+            @font-face {
+                font-family: 'LatoBold';
+                src: url('../fonts/lato/Lato-Bol-webfont.eot');
+                src: url('../fonts/lato/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'),
+                     url('../fonts/lato/Lato-Bol-webfont.woff') format('woff'),
+                     url('../fonts/lato/Lato-Bol-webfont.ttf') format('truetype'),
+                     url('../fonts/lato/Lato-Bol-webfont.svg#LatoBold') format('svg');
+                font-weight: normal;
+                font-style: normal;
 
-            html {
-                padding: 30px 10px;
-                font-size: 20px;
-                line-height: 1.4;
-                color: #737373;
-                background: #f0f0f0;
-                -webkit-text-size-adjust: 100%;
-                -ms-text-size-adjust: 100%;
-            }
-
-            html,
-            input {
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             }
 
             body {
-                max-width: 500px;
-                _width: 500px;
-                padding: 30px 20px 50px;
-                border: 1px solid #b3b3b3;
-                border-radius: 4px;
-                margin: 0 auto;
-                box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
-                background: #fcfcfc;
+                background: #e4e7ea;
+                font-family: 'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif !important;
+                line-height: 21px;
+                color: #636e7b;
+            }
+            h1, h2, h3, h4, h5 {
+                font-family: 'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;
             }
 
-            h1 {
-                margin: 0 10px;
-                font-size: 50px;
+            .notfoundpanel {
                 text-align: center;
+                margin-top: 10%;
+                width: 600px;
+                margin: 10% auto 0 auto;
             }
 
-            h1 span {
-                color: #bbb;
-            }
-
-            h3 {
-                margin: 1.5em 0 0.5em;
-            }
-
-            p {
-                margin: 1em 0;
-            }
-
-            ul {
-                padding: 0 0 0 40px;
-                margin: 1em 0;
-            }
-
-            .container {
-                max-width: 380px;
-                _width: 380px;
-                margin: 0 auto;
-            }
-
-            /* google search */
-
-            #goog-fixurl ul {
-                list-style: none;
-                padding: 0;
+            .notfoundpanel h3 {
+                color: #333;
                 margin: 0;
             }
 
-            #goog-fixurl form {
+            .notfoundpanel h1 {
+                font-size: 130px;
+                font-family: 'LatoBold', sans-serif;
+                color: #333;
                 margin: 0;
+                line-height: 130px;
             }
 
-            #goog-wm-qt,
-            #goog-wm-sb {
-                border: 1px solid #bbb;
-                font-size: 16px;
-                line-height: normal;
-                vertical-align: top;
-                color: #444;
-                border-radius: 2px;
+            .notfound h4 {
+                font-size: 14px;
             }
 
-            #goog-wm-qt {
-                width: 220px;
-                height: 20px;
-                padding: 5px;
-                margin: 5px 10px 0 0;
-                box-shadow: inset 0 1px 1px #ccc;
+            .btn-success {
+                background-color: #1CAF9A;
+                border-color: #17a08c;
             }
 
-            #goog-wm-sb {
+            .btn {
+                color: white;
+                -moz-border-radius: 3px;
+                -webkit-border-radius: 3px;
+                border-radius: 3px;
+                line-height: 21px;
+                -moz-transition: all 0.2s ease-out 0s;
+                -webkit-transition: all 0.2s ease-out 0s;
+                transition: all 0.2s ease-out 0s;
                 display: inline-block;
-                height: 32px;
-                padding: 0 10px;
-                margin: 5px 0 0;
+                padding: 12px 20px;
+                margin-bottom: 0;
+                font-size: 18px;
+                font-weight: 400;
+                text-align: center;
                 white-space: nowrap;
+                vertical-align: middle;
                 cursor: pointer;
-                background-color: #f5f5f5;
-                background-image: -webkit-linear-gradient(rgba(255,255,255,0), #f1f1f1);
-                background-image: -moz-linear-gradient(rgba(255,255,255,0), #f1f1f1);
-                background-image: -ms-linear-gradient(rgba(255,255,255,0), #f1f1f1);
-                background-image: -o-linear-gradient(rgba(255,255,255,0), #f1f1f1);
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                appearance: none;
-                *overflow: visible;
-                *display: inline;
-                *zoom: 1;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                background-image: none;
+                border: 1px solid transparent;
             }
 
-            #goog-wm-sb:hover,
-            #goog-wm-sb:focus {
-                border-color: #aaa;
-                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-                background-color: #f8f8f8;
-            }
-
-            #goog-wm-qt:hover,
-            #goog-wm-qt:focus {
-                border-color: #105cb6;
-                outline: 0;
-                color: #222;
-            }
-
-            input::-moz-focus-inner {
-                padding: 0;
-                border: 0;
-            }
         </style>
     </head>
-    <body>
-        <div class="container">
-            <h1>Not found <span>:(</span></h1>
-            <p>Sorry, but the page you were trying to view does not exist.</p>
-            <p>It looks like this was the result of either:</p>
-            <ul>
-                <li>a mistyped address</li>
-                <li>an out-of-date link</li>
-            </ul>
-            <script>
-                var GOOG_FIXURL_LANG = (navigator.language || '').slice(0,2),GOOG_FIXURL_SITE = location.host;
-            </script>
-            <script src="//linkhelp.clients.google.com/tbproxy/lh/wm/fixurl.js"></script>
+    <body class="notfound">
+        <div class="notfoundpanel">
+            <h1>404!</h1>
+            <h3>The page you are looking for has not been found!</h3>
+            <h4>The page you are looking for might have been removed, had its name changed, or unavailable.</h4>
+            <button href="http://indigenous.io" class="btn btn-success btn-lg">Back to Home</button>
         </div>
     </body>
 </html>

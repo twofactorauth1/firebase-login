@@ -58,8 +58,8 @@ switch(process.env.NODE_ENV) {
 }
 
 var smtpTransport = nodemailer.createTransport("SMTP", smtpTransportConfigs);
-console.log('Email password is: ' + smtpTransportConfigs.auth.password);
-console.dir(smtpTransportConfigs);
+//console.log('Email password is: ' + smtpTransportConfigs.auth.password);
+//console.dir(smtpTransportConfigs);
 
 var recreateSmptTransport = function() {
     smtpTransport = nodemailer.createTransport("SMTP", smtpTransportConfigs);

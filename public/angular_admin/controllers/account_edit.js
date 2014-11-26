@@ -167,14 +167,21 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     };
 
     $scope.insertMedia = function(asset) {
-
-      $scope.account.business.logo = asset.url;
-      UserService.putAccount($scope.account, function(account) {
-
+      if($scope.logo)
+      {
+        $scope.account.business.logo = asset.url;
+        UserService.putAccount($scope.account, function(account) {
         $("#media-manager-modal").modal('hide');
-      });
+        });
+      }
+      else
+      {
+        $scope.user.profilePhotos[0] = asset.url;   
+        UserService.putUser($scope.user, function(user) {
+          //$scope.user = user;
+        });
+      } 
     };
-
     $scope.userSaveFn = function(value) {
       if (value.length % 4 === 0) {
         UserService.putUser($scope.user, function(user) {

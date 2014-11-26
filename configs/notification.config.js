@@ -6,7 +6,10 @@
  */
 
 var notificationFromEmail = 'admin@indigenous.io';
-var notificaitonToEmail = 'operations@indigenous.io';
+var notificaitonToEmail = 'test_operations@indigenous.io';
+
+var welcomeFromEmail = process.env.WELCOME_FROM_EMAIL || 'help@indigneous.io';
+var welcomeFromName =  process.env.WELCOME_FROM_NAME || 'Indigenous.io';
 
 /*
  * Override the connection string with an environment variable
@@ -25,6 +28,8 @@ module.exports = {
   /**
    * System mailer configuration
    */
-  FROM_EMAIL: notificationFromEmail,
-  TO_EMAIL: notificaitonToEmail
+    FROM_EMAIL: notificationFromEmail,
+    TO_EMAIL: notificaitonToEmail,
+    WELCOME_FROM_EMAIL: welcomeFromEmail,
+    WELCOME_FROM_NAME: welcomeFromName
 };
