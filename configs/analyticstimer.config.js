@@ -7,6 +7,7 @@
 
 var analyticsJobMS = process.env.ANALYTICS_JOB_MS || 20000;
 var secondsSinceLastPingThreshold = process.env.ANALYTICS_LAST_PING_SECONDS || 120;
+var runJob = false || process.env.ANALYTICS_RUN_JOB;
 
 var collater = require('../analytics/analytics_collater');
 
@@ -17,9 +18,15 @@ module.exports = {
 
     intervalObj : null,
 
+
     startJob: function() {
         var self = this;
-        self.intervalObj = setInterval(collater.findCheckGroupAndSend, analyticsJobMS);
+        if(runJob =='true') {
+            self.intervalObj = setInterval(collater.findCheckGroupAndSend, analyticsJobMS);
+        } else {
+            console.log('Skipping analytics job');
+        }
+
     },
 
     stopJob: function() {

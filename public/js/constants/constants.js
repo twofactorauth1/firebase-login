@@ -150,7 +150,7 @@ define([], function () {
             customer_activity_types: {
 					PAGE_VIEW: "PAGE_VIEW",
 					SUBSCRIBE: "SUBSCRIBE",
-					ACCOUNT_CREATED:"ACCOUNT_CREATED",
+					CONTACT_CREATED:"CONTACT_CREATED",
 					EMAIL: "EMAIL",
 					PHONECALL: "PHONECALL",
 					FACEBOOK_LIKE: "FACEBOOK_LIKE",
@@ -158,7 +158,7 @@ define([], function () {
 
                    dp: [ {label: "Page View",data:"PAGE_VIEW"},
 	                    {label:"Subscribe", data:"SUBSCRIBE"},
-	                    {label:"Account Created", data:"ACCOUNT_CREATED"},
+	                    {label:"Contact Created", data:"CONTACT_CREATED"},
 	                    {label:"Emails", data:"EMAIL"},
 	                    {label:"Phone Calls", data:"PHONECALL"},
 	                    {label:"Facebook Likes", data:"FACEBOOK_LIKE"},

@@ -232,7 +232,7 @@ define([
                 WebsiteService.getThemes(function(themes) {
                     $scope.themes = themes;
                     $scope.currentTheme = _.findWhere($scope.themes, {
-                        name: account.website.themeId
+                        _id: account.website.themeId
                     });
                 });
             });
@@ -687,6 +687,9 @@ define([
                 };
                 $scope.components = $scope.currentPage.components;
                 $scope.updateIframeComponents();
+                WebsiteService.setWebsiteTheme($scope.currentTheme._id, $scope.website._id, function(data) {
+                   toaster.pop('success', "Theme saved successfully");
+                });
             };
 
             CourseService.getAllCourses(function(data) {

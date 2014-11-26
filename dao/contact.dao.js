@@ -782,7 +782,7 @@ var dao = {
                     var activity = new $$.m.ContactActivity({
                         accountId: savedContact.get('accountId'),
                         contactId: savedContact.id(),
-                        activityType: $$.m.ContactActivity.types.ACCOUNT_CREATED,
+                        activityType: $$.m.ContactActivity.types.CONTACT_CREATED,
                         note: "Contact created.",
                         start:new Date() //datestamp
 
