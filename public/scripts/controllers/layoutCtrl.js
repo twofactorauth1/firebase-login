@@ -649,7 +649,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         username: newAccount.email,
                         password: newAccount.password,
                         email: newAccount.email,
-                        accountToken: data.token
+                        accountToken: data.token,
+                        coupon: newAccount.coupon
                     };
 
                     //get the token
