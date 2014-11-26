@@ -79,7 +79,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 /*PostService.getAllPosts(function(posts) {
                     that.blogposts = posts;
                 });*/
-                setNavigation(data);
+             //   setNavigation(data);
             }
         });
 
@@ -487,6 +487,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     }
                 }
             }
+        };
+
+        $scope.uploadImage=function(asset){
+
+            console.log("image Changed");
+
+        }
+        $scope.currentComponent="sgsgsdgsd";
+        $scope.currentImage="";
+        $scope.insertMedia=function(asset){
+
+         console.log(asset);
+         console.log($scope.currentComponent);
+         console.log($scope.currentImage);
+         //   $scope.componentEditing.bg.img.url=asset.url;
+          //  $scope.updateIframeComponents();
         };
     }
 ]);

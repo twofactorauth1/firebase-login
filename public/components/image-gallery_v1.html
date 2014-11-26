@@ -37,12 +37,11 @@
 
                     </a>
                     <span class="caption" ng-if="isEditing">
-                        <i class="fa fa-plus-circle"></i>
+                        <i class="fa fa-plus-circle media-modal" ng-click="currentComponent=component"  on-insert-mediacb="insertMedia"></i>
                         <i class="fa fa-times-circle" ng-click="$parent.component.images.splice($index,1)"></i>
-                        <label for="upload_image" class="fa fa-edit">
-                            <input type="file"  id="upload_image" gallery-list="img-gallery-$index"  class="hidden"  custom-on-change="uploadImage" multiple>
-                        </label>
-                        </span>
+                        <i class="fa fa-edit media-modal"  ng-click="currentImage=image"  on-insert-mediacb="insertMedia"></i>
+
+                    </span>
 
                 </div>
             </div>
