@@ -17,6 +17,7 @@ var analyticsManager = require('../analytics/analytics_manager');
 
 var mandrillHelper = require('../utils/mandrillhelper');
 var notificationConfig = require('../configs/notification.config');
+var fs = require('fs');
 
 module.exports = {
 
