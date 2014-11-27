@@ -25,6 +25,36 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             that.courses = data;
         });
 
+//         setNavigation = function (data) {
+//             var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
+//             tempPageComponents = data['index'].components;
+//             indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
+
+// //          indexNavComponent._id = null;
+// //          indexNavComponent.anchor = null;
+// //          indexNavComponent.visibility = null;
+//             if (indexNavComponent !== null) {
+//                 ['_id', 'anchor', 'visibility'].forEach(function (v){
+//                     indexNavComponent[v] = null;
+//                 })
+
+//                 for ( page in data ) {
+//                     if ( data.hasOwnProperty(page) && page != 'index' ) {
+//                         tempPageComponents = data[page].components;
+//                         pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
+//                     }
+//                     if (pageNavComponent !== null){
+//                         for (setting in indexNavComponent) {
+//                             if (indexNavComponent[setting] !== null) {
+//                                 pageNavComponent[setting] = indexNavComponent[setting];
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+
+//         };
+
         $scope.getCourse = function(campaignId) {
             console.log('campaign Id ', campaignId);
             for (var i = 0; i < that.courses.length; i++) {
@@ -468,29 +498,47 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.createUser = function(user) {
             console.log('user', user);
-
-            var formatted = {
-                details: [{
-                    emails: []
-                }]
-            };
-
-            formatted.details[0].emails.push({
-                    email : user.email
-                });
-
-            //create contact
-            userService.addContact(formatted, function(data) {
-                console.log('data ', data);
-                user.email = "";
-                user.success = true;
-
-                setTimeout(function() {
-                    $scope.$apply(function () {
-                        user.success = false;
+            if (!user || !user.email) {
+                $("#user_email .error").html("Email Required");
+                $("#user_email").addClass('has-error');
+                $("#user_email .glyphicon").addClass('glyphicon-remove');
+                return;
+            }
+            if (user.email) {
+                var formatted = {
+                    details: [{
+                        emails: []
+                        }]
+                    };
+                    formatted.details[0].emails.push({
+                        email : user.email
                     });
-                }, 3000);
-            });
+                    //create contact
+                    userService.addContact(formatted, function(data, err) {
+                       if (err && err.code === 409) {
+                        // $("#input-company-name").val('');
+                        $("#user_email .error").html("Email already exists");
+                        $("#user_email").addClass('has-error');
+                        $("#user_email .glyphicon").addClass('glyphicon-remove');
+
+                    } else if(data) {
+                        console.log('email avaliable');
+                        $("#user_email .error").html("");
+                        $("#user_email").removeClass('has-error').addClass('has-success');
+                        $("#user_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                        console.log('data ', data);
+                        user.email = "";
+                        user.success = true;
+
+                        setTimeout(function() {
+                            $scope.$apply(function () {
+                                user.success = false;
+                            });
+                        }, 3000);
+                    }
+
+                    });               
+            }
 
             //redirect to signup with details
             //window.location.href = "http://app.indigenous.local:3000/signup";
@@ -498,47 +546,70 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.createContactwithFormActivity = function(contact) {
             console.log('contact', contact);
+            if (!contact || !contact.email) {
+                $("#contact_email .error").html("Email Required");
+                $("#contact_email").addClass('has-error');
+                $("#contact_email .glyphicon").addClass('glyphicon-remove');
+                return;
+            }
+            if(contact.email)
+            {
+                var contact_info = {
+                    first:contact.first_name,
+                    last:contact.last_name,
+                    details: [{
+                        emails: []
+                    }]
+                };
 
-            var contact_info = {
-                first:contact.first_name,
-                last:contact.last_name,
-                details: [{
-                    emails: []
-                }]
-            };
+                contact_info.details[0].emails.push({
+                        email : contact.email
+                });
 
-            contact_info.details[0].emails.push({
-                    email : contact.email
+                console.log('ipCookie("session_cookie") >>> ', ipCookie("session_cookie"));
+                userService.addContact(contact_info, function(data, err) {
+                console.log('data ', data);
+                if (err && err.code === 409) {
+                        // $("#input-company-name").val('');
+                        $("#contact_email .error").html("Email already exists");
+                        $("#contact_email").addClass('has-error');
+                        $("#contact_email .glyphicon").addClass('glyphicon-remove');
+
+                    } else if(data) {
+                        console.log('email avaliable');
+                        $("#contact_email .error").html("");
+                        $("#contact_email").removeClass('has-error').addClass('has-success');
+                        $("#contact_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                        //create activity
+                        var activity_info = {
+                            accountId: data.accountId,
+                            contactId: data._id,
+                            activityType: 'CONTACT_FORM',
+                            note : "Contact form data.",
+                            start: new Date(),
+                            extraFields: contact,
+                            sessionId: ipCookie("session_cookie")["id"]
+                        };
+                        userService.addContactActivity(activity_info, function(data) {
+                            console.log('data ', data);
+                            contact.email = '';
+                            contact.message = '';
+                            contact.full_name = '';
+                            contact.success = true;
+                            setTimeout(function() {
+                            $scope.$apply(function () {
+                                contact.success = false;
+                            });
+                        }, 3000);
+                        });
+                    }
+                
             });
-
-            console.log('ipCookie("session_cookie") >>> ', ipCookie("session_cookie"));
+            }
+            
 
             //create contact
-            userService.addContact(contact_info, function(data) {
-                console.log('data ', data);
-                //create activity
-                var activity_info = {
-                    accountId: data.accountId,
-                    contactId: data._id,
-                    activityType: 'CONTACT_FORM',
-                    note : "Contact form data.",
-                    start: new Date(),
-                    extraFields: contact,
-                    sessionId: ipCookie("session_cookie")["id"]
-                };
-                userService.addContactActivity(activity_info, function(data) {
-                    console.log('data ', data);
-                    contact.email = '';
-                    contact.message = '';
-                    contact.full_name = '';
-                    contact.success = true;
-                    setTimeout(function() {
-                    $scope.$apply(function () {
-                        contact.success = false;
-                    });
-                }, 3000);
-                });
-            });
+            
 
             //redirect to signup with details
             //window.location.href = "http://app.indigenous.local:3000/signup";
@@ -608,7 +679,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         username: newAccount.email,
                         password: newAccount.password,
                         email: newAccount.email,
-                        accountToken: data.token
+                        accountToken: data.token,
+                        coupon: newAccount.coupon
                     };
 
                     //get the token
@@ -784,32 +856,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         /********** END SIGNUP SECTION **********/
-        setNavigation = function (data) {
-            var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
-            tempPageComponents = data['index'].components;
-            indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
 
-//            indexNavComponent._id = null;
-//            indexNavComponent.anchor = null;
-//            indexNavComponent.visibility = null;
 
-            ['_id', 'anchor', 'visibility'].forEach(function (v){
-                indexNavComponent[v] = null;
-            })
+        $scope.uploadImage=function(asset){
 
-            for ( page in data ) {
-                if ( data.hasOwnProperty(page) && page != 'index' ) {
-                    tempPageComponents = data[page].components;
-                    pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
-                }
-                if (pageNavComponent !== null){
-                    for (setting in indexNavComponent) {
-                        if (indexNavComponent[setting] !== null) {
-                            pageNavComponent[setting] = indexNavComponent[setting];
-                        }
-                    }
-                }
-            }
+            console.log("image Changed");
+
+        }
+        $scope.currentComponent="sgsgsdgsd";
+        $scope.currentImage="";
+        $scope.insertMedia=function(asset){
+
+         console.log(asset);
+         console.log($scope.currentComponent);
+         console.log($scope.currentImage);
+         //   $scope.componentEditing.bg.img.url=asset.url;
+          //  $scope.updateIframeComponents();
         };
     }
 ]);

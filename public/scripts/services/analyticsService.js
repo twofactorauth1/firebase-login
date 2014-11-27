@@ -13,6 +13,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
     var fullUrl = window.location.href;
     var parsedEntranceUrl = $.url(fullUrl);
     var parser = new UAParser();
+    var entrance = false;
 
     //start keen client
     // var client = new Keen({
@@ -41,6 +42,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
         //If it is undefined, set a new one.
         if(session_cookie == undefined){
+            entrance = true;
             ipCookie("session_cookie", {
                 id: Math.uuid()
             }, {
@@ -60,6 +62,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         }
 
         var permanent_cookie = ipCookie("permanent_cookie");
+        var new_visitor = true;
 
         //If it is undefined, set a new one.
         if(permanent_cookie == undefined){
@@ -69,6 +72,8 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                 expires: 3650, //10 year expiration date
                 path: "/" //Makes this cookie readable from all pages
             });
+        } else {
+            new_visitor = false;
         }
 
         //determine if the device is mobile or not
@@ -129,7 +134,8 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             session_start: start,
             session_end: 0,
             session_length: 0,
-            entrance: parsedEntranceUrl.attr("host")
+            new_visitor: new_visitor,
+            entrance: parsedEntranceUrl.attr("path")
         };
 
         /*
@@ -161,20 +167,32 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         }
 
         sessionProperties["referrer"] = referrerObject;
-        console.log('sessionProperties >>> ', sessionProperties);
+        sessionProperties["source_type"] = this.getSourceType(parsedReferrer.attr("host"));
 
         //api/1.0/analytics/session/{sessionId}/sessionStart
         var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'sessionStart'].join('/');
           $http.post(apiUrl, sessionProperties)
             .success(function(data, status, headers, config) {
-                console.log('success >>> ', data);
               fn(data);
             });
     };
 
+    this.getSourceType = function(host) {
+        var type = 'direct';
+        //TODO: Add Email
+        if (host) {
+            var type = 'referral';
+        }
+        var organicSources = ['google.com', 'daum.net', 'eniro.se', 'naver.com', 'yahoo.com', 'msn.com', 'bing.com', 'aol.com', 'lycos.com', 'ask.com', 'altavista.com', 'search.netscape.com', 'cnn.com/SEARCH', 'about.com', 'mamma.com', 'alltheweb.com', 'voila.fr', 'search.virgilio.it', 'baidu.com', 'alice.com', 'yandex.com', 'najdi.org.mk', 'aol.com', 'mamma.com', 'seznam.cz', 'search.com', 'wp.pl', 'online.onetcenter.org', 'szukacz.pl', 'yam.com', 'pchome.com', 'kvasir.no', 'sesam.no', 'ozu.es', 'terra.com', 'mynet.com', 'ekolay.net', 'rambler.ru'];
+        if (organicSources.indexOf(host) !== -1) {
+            type = 'organic';
+        }
+        return type;
+    };
+
     ///api/1.0/analytics/session/{sessionId}/pageStart
     this.pageStart = function() {
-        console.log('pageStart >>>');
+        var self = this;
         var startPageTimer = new Date().getTime();
         var parsedUrl = $.url(fullUrl);
 
@@ -190,10 +208,11 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             pageActions: [],
             start_time: startPageTimer,
             end_time: 0,
-            total_length: 0,
-            session_id: ipCookie("session_cookie")["id"]
+            session_id: ipCookie("session_cookie")["id"],
+            entrance: entrance
         };
-        console.log('pageProperties ', pageProperties);
+
+        entrance = false;
 
         var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'pageStart'].join('/');
         $http.post(apiUrl, pageProperties)
@@ -241,37 +260,14 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             });
     };
 
+    ///api/1.0/analytics/session/{sessionId}/ping
     this.pagePing = function() {
+        var _pageProperties = pageProperties;
+        _pageProperties.ping_time = new Date().getTime();
+        var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'ping'].join('/');
+        $http.post(apiUrl, _pageProperties).success(function(data, status, headers, config) {
 
+        });
     };
-
-    // this.postStripeCustomer = function(cardToken, user, accountId, fn) {
-    //   var apiUrl = baseUrl + ['integrations', 'payments', 'customers'].join('/');
-    //   $http.post(apiUrl, {
-    //       cardToken: cardToken,
-    //       user: user,
-    //       accountId: accountId
-    //     })
-    //     .success(function(data, status, headers, config) {
-    //       fn(data);
-    //     });
-    // };
-
-    // this.putCustomerCard = function(stripeId, cardToken, fn) {
-    //   var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards', cardToken].join('/');
-    //   $http.put(apiUrl)
-    //     .success(function(data, status, headers, config) {
-    //       fn(data);
-    //     });
-    // };
-
-    // this.getStripeCustomer = function(fn) {
-    //   var apiUrl = baseUrl + ['integrations', 'payments', 'customers'].join('/');
-    //   $http.get(apiUrl)
-    //     .success(function(data, status, headers, config) {
-    //       fn(data);
-    //     });
-    // };
-
 
 }]);

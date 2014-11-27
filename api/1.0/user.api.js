@@ -173,6 +173,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var email = req.body.username;
         var accountToken = req.body.accountToken;
         var anonymousId = req.body.anonymousId;
+        var coupon = req.body.coupon;
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'monthly_access';//TODO: make sure this gets passed
@@ -195,6 +196,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> cardToken', cardToken);
         self.log.debug('>> plan', plan);
         self.log.debug('>> anonymousId', anonymousId);
+        self.log.debug('>> coupon', coupon);
 
         userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, sendWelcomeEmail, function (err, user) {
             if(err) {
@@ -209,7 +211,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.wrapError(res, 500, 'Error creating Stripe Customer', err);
                 }
                 self.log.debug('Created Stripe customer: ' +  stripeCustomer.id);
-                paymentsManager.createStripeSubscription(stripeCustomer.id, plan, accountId, user.id(), function(err, sub){
+                paymentsManager.createStripeSubscription(stripeCustomer.id, plan, accountId, user.id(), coupon, function(err, sub){
                     if(err) {
                         self.log.error('Error creating Stripe subscription: ' + err);
                         return self.wrapError(res, 500, 'Error creating Stripe Subscription', err);

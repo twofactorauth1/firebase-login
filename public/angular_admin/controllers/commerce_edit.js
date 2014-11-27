@@ -1,4 +1,4 @@
-define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService', 'toasterService'], function(app) {
+define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService', 'toasterService', 'datepicker'], function(app) {
     app.register.controller('CommerceEditCtrl', ['$scope', '$q', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', 'UserService', 'ToasterService', '$state', function($scope, $q, ngProgress, $stateParams, ProductService, PaymentService, UserService, ToasterService, $state) {
         ngProgress.start();
         $scope.showToaster = false;
