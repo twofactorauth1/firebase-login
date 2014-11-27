@@ -13,6 +13,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
     var fullUrl = window.location.href;
     var parsedEntranceUrl = $.url(fullUrl);
     var parser = new UAParser();
+    var entrance = false;
 
     //start keen client
     // var client = new Keen({
@@ -41,6 +42,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
         //If it is undefined, set a new one.
         if(session_cookie == undefined){
+            entrance = true;
             ipCookie("session_cookie", {
                 id: Math.uuid()
             }, {
@@ -133,7 +135,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             session_end: 0,
             session_length: 0,
             new_visitor: new_visitor,
-            entrance: parsedEntranceUrl.attr("host")
+            entrance: parsedEntranceUrl.attr("path")
         };
 
         /*
@@ -209,9 +211,12 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             pageActions: [],
             start_time: startPageTimer,
             end_time: 0,
-            session_id: ipCookie("session_cookie")["id"]
+            session_id: ipCookie("session_cookie")["id"],
+            entrance: entrance
         };
         console.log('pageProperties ', pageProperties);
+
+        entrance = false;
 
         var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'pageStart'].join('/');
         $http.post(apiUrl, pageProperties)

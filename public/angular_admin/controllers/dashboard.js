@@ -848,6 +848,9 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     "group_by": 'url.path',
                                     "analyses": {
                                         "pageviews":{
+                                            "analysis_type":"count"
+                                        },
+                                        "uniquePageviews":{
                                             "analysis_type":"count_unique",
                                             "target_property":"session_id"
                                         },
@@ -885,7 +888,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                             subObj.page = singleRow['url.path'];
                                             subObj.pageviews = singleRow['pageviews'];
                                             subObj.avgTime = singleRow['avgTimeOnPage'];
-                                            //unique pageviews
+                                            subObj.uniquePageviews = singleRow['uniquePageviews'];
                                             //entrances
                                             //bounce rate exit rate
                                         }

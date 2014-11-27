@@ -146,8 +146,10 @@ var collator = {
                     _.each(pageList, function (page, index, list) {
                         if (index < list.length - 1) {//not the last one.
                             page.set('end_time', list[index + 1].get('start_time'));
+                            page.set('exit', false);
                         } else {//last one
                             page.set('end_time', lastSeenMS);
+                            page.set('exit', true);
                         }
                         var timeOnPage = page.get('end_time') - page.get('start_time');
                         page.set('timeOnPage', timeOnPage);
@@ -284,8 +286,10 @@ var collator = {
                     _.each(pageList, function(page, index, list){
                         if(index < list.length-1) {//not the last one.
                             page.set('end_time', list[index+1].get('start_time'));
+                            page.set('exit', false);
                         } else {//last one
                             page.set('end_time', lastSeenMS);
+                            page.set('exit', true);
                         }
                     });
                     _.each(pingList, function(ping, index, list){
