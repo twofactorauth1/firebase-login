@@ -51,9 +51,12 @@ require.config({
         "bootstrap-confirmation": "libs/bootstrap-confirmation/bootstrap-confirmation",
         "moment": 'libs/moment/min/moment.min',
         'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll.min',
+        'highcharts-standalone': 'libs/highcharts/adapters/standalone-framework',
         'highcharts': 'libs/highcharts/highcharts-all',
         'highcharts-ng': 'libs/highcharts-ng/dist/highcharts-ng.min',
         'highcharts-funnel': 'libs/highcharts/modules/funnel',
+        'highmaps-us': 'libs_misc/highmaps/us-all',
+        'highmaps-data': 'libs/highmaps/modules/map',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -155,7 +158,10 @@ require.config({
         'jqueryGridster': {deps: ['jquery']},
         'c3': {deps: ['d3']},
         'angularUiRouter': {deps: ['angular']},
+        'highcharts': {deps: ['jquery']},
         'highcharts-funnel': {deps: ['highcharts']},
+        'highmaps-us': {deps: ['highcharts']},
+        'highmaps-data': {deps: ['highcharts']},
         'angularFileUpload': {deps: ['angular']},
         'xEditable': {deps: ['angular']},
         'ngCsv': {deps: ['angular']},

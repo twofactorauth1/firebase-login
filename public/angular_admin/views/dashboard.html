@@ -335,7 +335,7 @@
                             <h3 class="panel-title">Visitor Locations</h3>
                         </div>
                         <div class="panel-body">
-                            <div id="location"></div>
+                            <div id="visitor_locations"></div>
                         </div>
                     </div>
                     <div class="panel panel-info">
@@ -1043,20 +1043,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title">Why is the Visitor Overview important?</h4>
             </div>
-            <div class="modal-body modal-nopadding">
-                <ul class="nav nav-tabs nav-justified">
-                    <li class="active"><a href="#watch2" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a>
-                    </li>
-                    <li class=""><a href="#read2" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div id="watch2" class="tab-pane active">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe width="100%" height="315" src="//www.youtube.com/embed/kpeL6WGlvEI?showinfo=0"></iframe>
-                        </div>
-                    </div>
-                    <div id="read2" class="tab-pane">
+            <div class="modal-body">
+                <div id="read2" class="tab-pane active">
                         <p>The visitor overview gives you an idea of how many people are visting your website, how many pages they view and how often they visit. The graph consists of pageviews, visits, and vistors. They are displayed in a rolling 30 day line graph, which means its the last 30 days starting from today.</p>
                         <ul>
                             <li><b>Visits</b> represent the number of times the website was visited, without regard to repeat visitors.</li>
@@ -1065,7 +1053,6 @@
                         </ul>
                         <p>These metrics are important because they show you how many people are coming through your virtual store.</p>
                     </div>
-                </div>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -1082,23 +1069,10 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title">Why is the Visitor Locations important?</h4>
             </div>
-            <div class="modal-body modal-nopadding">
-                <ul class="nav nav-tabs nav-justified">
-                    <li class="active"><a href="#watch" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a>
-                    </li>
-                    <li class=""><a href="#read" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div id="watch" class="tab-pane active">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe width="100%" height="315" src="//www.youtube.com/embed/EGBdMrwXxWo?showinfo=0"></iframe>
-                        </div>
-                    </div>
-                    <div id="read" class="tab-pane">
+            <div class="modal-body">
+                <div id="read" class="tab-pane active">
                         <p>Knowing exactly where your visitors are located will help you focus your marketing exactly where it's wanted. You don't have to waste money on adwards in the wrong city and instead can put your advertising money where it will do the most work.</p>
                     </div>
-                </div>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -1115,24 +1089,11 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title">What is Time on Site and Bounces?</h4>
             </div>
-            <div class="modal-body modal-nopadding">
-                <ul class="nav nav-tabs nav-justified">
-                    <li class="active"><a href="#watch-3" data-toggle="tab" ng-click="do($event)"><i class="fa fa-video-camera"></i> <b>Watch</b></a>
-                    </li>
-                    <li class=""><a href="#read-3" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div id="watch-3" class="tab-pane active">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe width="100%" height="315" src="//www.youtube.com/embed/-m7ZPgOB8Y8?showinfo=0"></iframe>
-                        </div>
-                    </div>
-                    <div id="read-3" class="tab-pane">
+            <div class="modal-body">
+                 <div id="read-3" class="tab-pane active">
                         <p>On the Internet, a high bounce rate is the kiss of death — and a sure sign that your website and marketing strategy need a major overhaul. By definition, bounce rate is the percentage of site visitors who leave after visiting one page. Why would these users "bounce"? It's probably an indication that your site isn't providing the information the user seeks, the site could be taking too long to load or hard to navigate, or perhaps there's some larger disconnect between your site and your users. The simple metric is a general way to gauge the efficacy of your site.</p>
                         <p>Bounce rate is closely related to time spent (more on that in an upcoming Metrics That Matter article), as it's a measure of engagement that demonstrates the degree to which people are enjoying and interacting with content in a deeper way, says Stephanie Fried, VP of digital insights and marketing at Discovery Communications.</p>
                     </div>
-                </div>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -1149,15 +1110,9 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title">How can the device people are using help me?</h4>
             </div>
-            <div class="modal-body modal-nopadding">
-                <ul class="nav nav-tabs nav-justified">
-                    <li class="active"><a href="#read-4" data-toggle="tab" ng-click="do($event)"><i class="fa fa-book"></i> <b>Read</b></a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div id="read-4" class="tab-pane active">
-                        <p>What device your audience is using is important so that you can determine what types of advertising you might invest in.</p>
-                    </div>
+            <div class="modal-body">
+                <div id="read-4" class="tab-pane active">
+                    <p>What device your audience is using is important so that you can determine what types of advertising you might invest in.</p>
                 </div>
             </div>
         </div>
