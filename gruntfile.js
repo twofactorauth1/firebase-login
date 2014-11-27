@@ -204,7 +204,8 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
                     'public/js/libs/purl/purl.js',
                     'public/js/libs/ua-parser-js/dist/ua-parser.min.js',
-                    'public/js/libs_misc/uuid.js'
+                    'public/js/libs_misc/uuid.js',
+                    'public/js/libs_misc/angular-file-upload/angular-file-upload.js'
 
                 ],
                 /*src: wiredepJSAry,*/
