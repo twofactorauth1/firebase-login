@@ -78,14 +78,20 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         };
 
                         $scope.calculatePercentage = function(oldval, newval) {
+                            var result;
                             oldval = parseInt(oldval);
                             newval = parseInt(newval);
                             if(oldval == 0 && newval == 0) {
                                 return 0;
                             }
-                            var result = ((oldval - newval) / oldval) * 100;
                             if (newval < oldval) {
-                                result = result;
+                                result = ((oldval - newval) / oldval) * 100;
+                            } else {
+                                result = ((newval - oldval) / newval) * 100;
+                            }
+
+                            if (newval === oldval) {
+                                result = 100;
                             }
                             return Math.round(result * 100) / 100;
                         };
@@ -856,15 +862,19 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         },
                                         "timeOnPage":{
                                             "analysis_type":"sum",
-                                            "target_property":"session_length"
+                                            "target_property":"timeOnPage"
                                         },
                                         "avgTimeOnPage":{
                                             "analysis_type":"average",
-                                            "target_property":"session_length"
+                                            "target_property":"timeOnPage"
                                         },
-                                        "avgTimeOnPage":{
-                                            "analysis_type":"average",
-                                            "target_property":"session_length"
+                                        "entrances":{
+                                            "analysis_type":"count",
+                                            "filters": [{"property_name":"entrance","operator":"eq","property_value":true}]
+                                        },
+                                        "exits":{
+                                            "analysis_type":"count",
+                                            "filters": [{"property_name":"exit","operator":"eq","property_value":true}]
                                         }
                                     }
                                 };
@@ -883,14 +893,17 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     for (var i = 0; i < data.result.length; i++) {
                                         var singleRow = data.result[i];
                                         var subObj = {};
-                                        console.log('singleRow ', singleRow);
+                                        console.log('singleRow ', singleRow['exits']);
                                         if (singleRow['url.path']) {
                                             subObj.page = singleRow['url.path'];
                                             subObj.pageviews = singleRow['pageviews'];
                                             subObj.avgTime = singleRow['avgTimeOnPage'];
                                             subObj.uniquePageviews = singleRow['uniquePageviews'];
-                                            //entrances
-                                            //bounce rate exit rate
+                                            subObj.entrances = singleRow['entrances'];
+
+                                            //bounce rate
+                                            //exit rate
+                                            subObj.exitRate = $scope.calculatePercentage(singleRow['exits'], $scope.totalPageviews);
                                         }
                                         if (subObj) {
                                             output.push(subObj);

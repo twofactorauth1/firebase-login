@@ -151,7 +151,7 @@ var collator = {
                             page.set('end_time', lastSeenMS);
                             page.set('exit', true);
                         }
-                        var timeOnPage = page.get('end_time') - page.get('start_time');
+                        var timeOnPage = page.get('start_time') - page.get('end_time');
                         page.set('timeOnPage', timeOnPage);
                     });
                     _.each(pingList, function (ping, index, list) {
