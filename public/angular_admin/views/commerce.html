@@ -74,8 +74,8 @@
 				<!-- panel-body -->
 			</div>
 		</headroom>
-		<div class="products-list">
-			<div class="row">
+		<div class="products-list" ng-switch on="commerceSettings.gridViewDisplay">
+			<div ng-switch-when="true" class="row">
 
         <div class="hidden col-xs-10">
           <h3>No Products Available</h3>
@@ -117,6 +117,70 @@
           </div>
         </div>
       </div>
+      <div ng-switch-when="false" class="row">
+        <div class="tb-main table">
+          <div class="container-fluid tb-row" ng-repeat="product in products | filter : productSearch | orderBy : productOrder : productSortReverse">
+            <div class="tb-col col-md-1">
+              <div class="commerce-item">
+                <div class="media">
+                  <span class="important-star">
+                      <i class="fa fa-star-o" ng-hide="product.starred" ng-click="productStarredFn(product, true)"></i>
+                      <i class="fa fa-star" ng-show="product.starred"  ng-click="productStarredFn(product, false)"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="tb-col col-md-4">
+              <div class="commerce-item">
+                <a href="#/commerce/edit/{{product._id}}">
+                  <div class="media">
+                    <div class="vcenter img-outer">
+                    <div class="col-xs-5 hidden-xs vcenter" ng-if="commerceSettings.showProductThumb">
+                      <span ng-if="!product.is_image" class="icon media-object"> <i class="fa {{product.icon || userPreferences.default_product_icon}}"></i>
+                      </span>
+                      <img ng-if = "product.is_image" class="img-responsive img-circle hand center media-object" ng-src="{{ product.icon }}">                    
+                    </div>
+                    </div>
+
+                    <div class="media-body col-xs-7 hidden-xs vcenter">
+                      <h4 class="person-name">{{product.name}}</h4>            
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>  
+            <div class="tb-col col-md-2">
+              <div class="commerce-item">
+                <div class="">
+                  <div class="last-active"  ng-if="commerceSettings.showSku">
+                              <p class="pull-left title pull-right value"><i class="fa fa-bolt"></i> Sku: </p> <span class="data  pull-right value">{{product.sku}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tb-col col-md-2">
+              <div class="commerce-item">
+                <div class="">
+                  <div class="purchased"  ng-if="commerceSettings.showPrice">
+                    <p class="pull-left title"><i class="fa fa-money"></i> Price:</p>
+                        <span class="data  pull-right value">${{product.regular_price}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tb-col col-md-3">
+              <div class="commerce-item">
+                <div class="">
+                 <div class="emails-opened"  ng-if="commerceSettings.showProductType">
+                     <p class="pull-left title"><i class="fa fa-envelope"></i> Product Type:</p>
+                        <span class="data pull-right value">{{product.type}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>           
+        </div>
+      </div>     
     </div>
   </div>
 
@@ -139,8 +203,8 @@
           <div class="form-group">
             <label>Default View</label>
             <div class="btn-group">
-              <button type="button" class="btn btn-default"> <span class="fa fa-th"></span> Grid</button>
-              <button type="button" class="btn btn-default"><span class="fa fa-list"></span> List</button>
+              <button type="button" ng-click="setDefaultView('true')" ng-class="{'active': commerceSettings.gridViewDisplay === 'true'}" class="btn btn-default"> <span class="fa fa-th"></span> Grid</button>
+              <button type="button" ng-click="setDefaultView('false')" class="btn btn-default" ng-class="{'active': commerceSettings.gridViewDisplay === 'false'}"><span class="fa fa-list"></span> List</button>
             </div>
           </div>
           <div class="form-group">
