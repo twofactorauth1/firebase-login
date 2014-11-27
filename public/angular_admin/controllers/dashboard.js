@@ -64,37 +64,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                 //     console.log('keen data >>> ', data);
                 // });
 
-                var params2 = {
-                    "event_collection": 'page_data',
-                    "timeframe": 'this_month',
-                    "group_by": 'url.path',
-                    "analyses": {
-                        "pageviews":{
-                            "analysis_type":"count_unique",
-                            "target_property":"session_id"
-                        },
-                        "timeOnPage":{
-                            "analysis_type":"sum",
-                            "target_property":"session_length"
-                        },
-                        "avgTimeOnPage":{
-                            "analysis_type":"average",
-                            "target_property":"session_length"
-                        },
-                        "avgTimeOnPage":{
-                            "analysis_type":"average",
-                            "target_property":"session_length"
-                        }
-                    }
-                };
-
-                //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
-
-                keenService.multiAnalysis(params2, function(data){
-                    console.log('keen data >>> ', data);
-                });
-
-
                 Keen.ready(function() {
 
 
@@ -128,7 +97,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 //     resolve(data);
                                 // });
                             });
-
                         };
 
                         $scope.stateToAbbr = function(strInput) {
@@ -874,6 +842,63 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 // Time on Site, Bounces
                                 // ======================================
 
+                                var params2 = {
+                                    "event_collection": 'page_data',
+                                    "timeframe": 'this_month',
+                                    "group_by": 'url.path',
+                                    "analyses": {
+                                        "pageviews":{
+                                            "analysis_type":"count_unique",
+                                            "target_property":"session_id"
+                                        },
+                                        "timeOnPage":{
+                                            "analysis_type":"sum",
+                                            "target_property":"session_length"
+                                        },
+                                        "avgTimeOnPage":{
+                                            "analysis_type":"average",
+                                            "target_property":"session_length"
+                                        },
+                                        "avgTimeOnPage":{
+                                            "analysis_type":"average",
+                                            "target_property":"session_length"
+                                        }
+                                    }
+                                };
+
+                                //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
+
+                                keenService.multiAnalysis(params2, function(data){
+                                    console.log('params2 >>> ', data);
+                                    // ----------------------------------------
+                                    // Top Pageviews
+                                    // ----------------------------------------
+
+
+                                    var output = [];
+
+                                    for (var i = 0; i < data.result.length; i++) {
+                                        var singleRow = data.result[i];
+                                        var subObj = {};
+                                        console.log('singleRow ', singleRow);
+                                        if (singleRow['url.path']) {
+                                            subObj.page = singleRow['url.path'];
+                                            subObj.pageviews = singleRow['pageviews'];
+                                            subObj.avgTime = singleRow['avgTimeOnPage'];
+                                            //unique pageviews
+                                            //entrances
+                                            //bounce rate exit rate
+                                        }
+                                        if (subObj) {
+                                            output.push(subObj);
+                                        }
+                                    };
+                                    console.log('output >>> ', output);
+
+                                    $scope.formattedTopPages = output;
+                                    $scope.pagedformattedTopPages = $scope.formattedTopPages.slice(0, $scope.pageLimit);
+                                });
+
                                 // $scope.do = function($event) {
                                 //     $event.preventDefault();
                                 // };
@@ -881,8 +906,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 // ======================================
                                 // Visitor Locations
                                 // ======================================
-
-                                console.log('results[15].result >>> ', results[15].result);
 
                                 $scope.locationData = [];
 
@@ -892,9 +915,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     subObj.value = results[15].result[i].result;
                                     $scope.locationData.push(subObj);
                                 };
-
-                                console.log('$scope.locationData >>> ', $scope.locationData);
-
 
                                 if($scope.firstQuery) {
                                     ngProgress.complete();
@@ -1137,21 +1157,23 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                             text : ''
                                         },
 
-                                        legend: {
-                                            layout: 'horizontal',
-                                            borderWidth: 0,
-                                            backgroundColor: 'rgba(255,255,255,0.85)',
-                                            floating: true,
-                                            verticalAlign: 'top',
-                                            y: 25
-                                        },
-
                                         exporting: {
                                             enabled: false
                                         },
 
+                                        legend: {
+                                            enabled: false
+                                        },
+
                                         mapNavigation: {
-                                            enabled: true
+                                            buttonOptions: {
+                                                align: 'right',
+                                                verticalAlign: 'bottom'
+                                            },
+                                            enableButtons: true,
+                                            enableDoubleClickZoomTo: true,
+                                            enableDoubleClickZoom: true,
+                                            enableTouchZoom: false
                                         },
 
                                         colorAxis: {
@@ -1169,9 +1191,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                             mapData: Highcharts.maps['countries/us/us-all'],
                                             joinBy: ['postal-code', 'code'],
                                             dataLabels: {
-                                                enabled: true,
-                                                color: 'white',
-                                                format: '{point.code}'
+                                                enabled: false
                                             },
                                             name: '# of Visitors',
                                             tooltip: {
@@ -1197,15 +1217,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         //             'end-date': 'yesterday'
                         //         });
 
-                        //         //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
-
-                        //         var trafficSources = $scope.query({
-                        //             ids: 'ga:82461709',
-                        //             metrics: 'ga:sessions',
-                        //             dimensions: 'ga:trafficType',
-                        //             'start-date': '30daysAgo',
-                        //             'end-date': 'yesterday'
-                        //         });
 
                         //         Promise.all([newVsReturningChart, topPageViews, trafficSources]).then(function(results) {
 
@@ -1255,71 +1266,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                         //             $scope.formattedTopPages = output;
                         //             $scope.pagedformattedTopPages = $scope.formattedTopPages.slice(0, $scope.pageLimit);
-
-                        //             // ======================================
-                        //             // Traffic Sources
-                        //             // ======================================
-
-                        //             var dataObjArr = [];
-
-                        //             for (var i = 0; i < results[2].rows.length; i++) {
-                        //                 results[2].rows[i][1] = parseInt(results[2].rows[i][1]);
-                        //                 results[2].rows[i][0] = results[2].rows[i][0].charAt(0).toUpperCase() + results[2].rows[i][0].slice(1);
-                        //             };
-
-                        //             $scope.trafficSourcesConfig = {
-                        //                 options: {
-                        //                     chart: {
-                        //                         plotBackgroundColor: null,
-                        //                         plotBorderWidth: 0,
-                        //                         plotShadow: false,
-                        //                         spacing: [25, 25, 25, 25]
-                        //                     },
-                        //                     title: {
-                        //                         text: ''
-                        //                     },
-                        //                     tooltip: {
-                        //                         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                        //                     },
-                        //                     plotOptions: {
-                        //                         pie: {
-                        //                             dataLabels: {
-                        //                                 enabled: true,
-                        //                                 distance: -50,
-                        //                                 style: {
-                        //                                     fontWeight: 'bold',
-                        //                                     color: 'white',
-                        //                                     textShadow: '0px 1px 2px black'
-                        //                                 }
-                        //                             },
-                        //                             colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949']
-                        //                         }
-                        //                     },
-                        //                     exporting: {
-                        //                         enabled: false
-                        //                     }
-                        //                 },
-                        //                 series: [{
-                        //                     type: 'pie',
-                        //                     name: 'Traffic Source',
-                        //                     innerSize: '40%',
-                        //                     data: results[2].rows
-                        //                 }],
-                        //                 credits: {
-                        //                     enabled: false
-                        //                 }
-                        //             };
-
-                        //             setTimeout(function() {
-                        //                 $scope.trafficSourcesConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth / 3) - 30;
-                        //             }, 500);
-                        //         });
-
-                        //     }, 1000);
-                        // };
-
-
-
 
                         PaymentService.getCustomers(function(data) {
                             $scope.customers = data;
