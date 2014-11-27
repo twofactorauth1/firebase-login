@@ -17,6 +17,7 @@ var keenConfig = require('../configs/keen.config');
 var async = require('async');
 var moment = require('moment');
 
+
 // Configure instance. Only projectId and writeKey are required to send data.
 var client = Keen.configure({
     projectId: keenConfig.KEEN_PROJECT_ID,
