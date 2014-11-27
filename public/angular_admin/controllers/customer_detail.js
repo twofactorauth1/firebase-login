@@ -4,7 +4,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
     $scope.$back = function() {
       console.log('$scope.lastState.state ', $scope.lastState.state);
       console.log('$scope.lastState.params ', $scope.lastState.params);
-      if ($scope.lastState === undefined || $state.is($scope.lastState.state, $scope.lastState.params)) {
+      if ($scope.lastState === undefined || $scope.lastState.state === '' || $state.is($scope.lastState.state, $scope.lastState.params)) {
         $state.go('customer');
       } else {
         $state.go($scope.lastState.state, $scope.lastState.params);
