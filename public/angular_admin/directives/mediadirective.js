@@ -6,6 +6,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
             transclude: false,
             replace: true,
             scope: {
+                insertMediaType: "=",
                 onInsertMediacb: "=",
                 user: '=user'
             },
@@ -257,7 +258,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
                 };
                 $scope.m.onInsertMedia = function () {
                     if ($scope.batch.length > 0) {
-                        $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
+                        $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+                        $scope.type = null;
                     }
 
                     $("#media-manager-modal").modal('hide');
@@ -266,12 +268,19 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
 
             link: function (scope, element) {
                 scope.assets = [];
-                AssetsService.getAssetsByAccount(function(data){
+                AssetsService.getAssetsByAccount(function(data) {
                     scope.assets = data;
                 });
                 element.attr("data-toggle", "modal");
                 element.attr("data-target", "#media-manager-modal");
-
+                $(document).on("add_image", function (event) {
+                    $("#media-manager-modal").modal('show');
+                    scope.type = "image_gallery_add_image";
+                })
+                $(document).on("delete_image", function (event, index) {
+                    scope.type = "image_gallery_delete_image";
+                    scope.onInsertMediacb && scope.onInsertMediacb(index, scope.type );
+                })
             }
         };
     }]).directive('captureShift', function(){

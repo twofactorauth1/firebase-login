@@ -744,8 +744,21 @@ define([
                 $scope.selectedComponent = type;
             };
 
-            $scope.insertMedia=function(asset){
-                $scope.componentEditing.bg.img.url=asset.url;
+            $scope.insertMedia=function(asset, type){
+                switch(type){
+                    case "mast_head_bg_image":
+                        $scope.componentEditing.bg.img.url=asset.url;
+                        break;
+                    case "image_gallery_add_image":
+                        if ( !$scope.componentEditing.images ) {
+                            $scope.componentEditing.images = [];
+                        }
+                        $scope.componentEditing.images.push({url: asset.url});
+                        break;
+                    case "image_gallery_delete_image":
+                        $scope.componentEditing.images.splice(asset,1);
+                        break;
+                }
                 $scope.updateIframeComponents();
             };
 
