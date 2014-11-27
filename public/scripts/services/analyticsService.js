@@ -168,13 +168,11 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
         sessionProperties["referrer"] = referrerObject;
         sessionProperties["source_type"] = this.getSourceType(parsedReferrer.attr("host"));
-        console.log('sessionProperties >>> ', sessionProperties);
 
         //api/1.0/analytics/session/{sessionId}/sessionStart
         var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'sessionStart'].join('/');
           $http.post(apiUrl, sessionProperties)
             .success(function(data, status, headers, config) {
-                console.log('success >>> ', data);
               fn(data);
             });
     };
@@ -195,7 +193,6 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
     ///api/1.0/analytics/session/{sessionId}/pageStart
     this.pageStart = function() {
         var self = this;
-        console.log('pageStart >>>');
         var startPageTimer = new Date().getTime();
         var parsedUrl = $.url(fullUrl);
 
@@ -214,7 +211,6 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             session_id: ipCookie("session_cookie")["id"],
             entrance: entrance
         };
-        console.log('pageProperties ', pageProperties);
 
         entrance = false;
 
@@ -268,10 +264,9 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
     this.pagePing = function() {
         var _pageProperties = pageProperties;
         _pageProperties.ping_time = new Date().getTime();
-        console.log('Page Ping >>> ', _pageProperties);
         var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'ping'].join('/');
         $http.post(apiUrl, _pageProperties).success(function(data, status, headers, config) {
-            console.log('Successfull Ping >>> ', data);
+
         });
     };
 
