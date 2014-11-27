@@ -335,7 +335,7 @@
                             <h3 class="panel-title">Visitor Locations</h3>
                         </div>
                         <div class="panel-body">
-                            <div id="vistor_locations"></div>
+                            <div id="visitor_locations"></div>
                         </div>
                     </div>
                     <div class="panel panel-info">
@@ -1051,12 +1051,7 @@
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div id="watch2" class="tab-pane active">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe width="100%" height="315" src="//www.youtube.com/embed/kpeL6WGlvEI?showinfo=0"></iframe>
-                        </div>
-                    </div>
-                    <div id="read2" class="tab-pane">
+                    <div id="read2" class="tab-pane active">
                         <p>The visitor overview gives you an idea of how many people are visting your website, how many pages they view and how often they visit. The graph consists of pageviews, visits, and vistors. They are displayed in a rolling 30 day line graph, which means its the last 30 days starting from today.</p>
                         <ul>
                             <li><b>Visits</b> represent the number of times the website was visited, without regard to repeat visitors.</li>
@@ -1090,12 +1085,7 @@
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div id="watch" class="tab-pane active">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe width="100%" height="315" src="//www.youtube.com/embed/EGBdMrwXxWo?showinfo=0"></iframe>
-                        </div>
-                    </div>
-                    <div id="read" class="tab-pane">
+                    <div id="read" class="tab-pane active">
                         <p>Knowing exactly where your visitors are located will help you focus your marketing exactly where it's wanted. You don't have to waste money on adwards in the wrong city and instead can put your advertising money where it will do the most work.</p>
                     </div>
                 </div>
@@ -1123,12 +1113,8 @@
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div id="watch-3" class="tab-pane active">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe width="100%" height="315" src="//www.youtube.com/embed/-m7ZPgOB8Y8?showinfo=0"></iframe>
-                        </div>
-                    </div>
-                    <div id="read-3" class="tab-pane">
+
+                    <div id="read-3" class="tab-pane active">
                         <p>On the Internet, a high bounce rate is the kiss of death — and a sure sign that your website and marketing strategy need a major overhaul. By definition, bounce rate is the percentage of site visitors who leave after visiting one page. Why would these users "bounce"? It's probably an indication that your site isn't providing the information the user seeks, the site could be taking too long to load or hard to navigate, or perhaps there's some larger disconnect between your site and your users. The simple metric is a general way to gauge the efficacy of your site.</p>
                         <p>Bounce rate is closely related to time spent (more on that in an upcoming Metrics That Matter article), as it's a measure of engagement that demonstrates the degree to which people are enjoying and interacting with content in a deeper way, says Stephanie Fried, VP of digital insights and marketing at Discovery Communications.</p>
                     </div>
@@ -1166,3 +1152,71 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+<script type="text/javascript">
+var chart1; // globally available
+$(function () {
+
+    $.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=us-population-density.json&callback=?', function (data) {
+
+        // Make codes uppercase to match the map data
+        $.each(data, function () {
+            this.code = this.code.toUpperCase();
+        });
+
+      chart1 = new Highcharts.Map({
+         chart : {
+                renderTo: 'visitor_locations',
+                borderWidth : 1
+            },
+
+            title : {
+                text : 'US population density (/km²)'
+            },
+
+            legend: {
+                layout: 'horizontal',
+                borderWidth: 0,
+                backgroundColor: 'rgba(255,255,255,0.85)',
+                floating: true,
+                verticalAlign: 'top',
+                y: 25
+            },
+
+            mapNavigation: {
+                enabled: true
+            },
+
+            colorAxis: {
+                min: 1,
+                type: 'logarithmic',
+                minColor: '#EEEEFF',
+                maxColor: '#000022',
+                stops: [
+                    [0, '#EFEFFF'],
+                    [0.67, '#4444FF'],
+                    [1, '#000022']
+                ]
+            },
+
+            series : [{
+                animation: {
+                    duration: 1000
+                },
+                data : data,
+                mapData: Highcharts.maps['countries/us/us-all'],
+                joinBy: ['postal-code', 'code'],
+                dataLabels: {
+                    enabled: true,
+                    color: 'white',
+                    format: '{point.code}'
+                },
+                name: 'Population density',
+                tooltip: {
+                    pointFormat: '{point.code}: {point.value}/km²'
+                }
+            }]
+         });
+      });
+   });
+</script>

@@ -22306,10 +22306,11 @@ div[data-type='campaign'] .inner-page {
   text-align: center;
   margin: 0 auto 30px;
   display: block;
-  font-size: 3em;
+  font-size: 5em;
 }
 .feature-list-v2 .feature-subtitle {
   text-align: center;
+  padding: 0 20px;
 }
 .feature-list-v2 .feature-title {
   margin-bottom: 13px;
@@ -22766,6 +22767,9 @@ contenthover a {
 }
 .contenthover a.mybutton:hover {
   background: #34742d;
+}
+.single-image img {
+  height: 170px;
 }
 /********** Meet Team **********/
 .meet-team-v1 {
@@ -23364,7 +23368,7 @@ div[data-class='image-text'] p {
 }
 @media (max-width: 625px) {
   .navbar-v2 .masthead-v1 .home-text {
-    margin-top: 60px!important;
+    margin-top: 140px!important;
   }
   .masthead-v1 .masthead-subtitle {
     max-width: 100%;
@@ -24664,7 +24668,6 @@ div[data-type="coming-soon"] .component-inner {
   text-align: center;
 }
 .video-block .video-subtitle {
-  max-width: 60%;
   margin: 0 auto;
   text-align: center;
 }
