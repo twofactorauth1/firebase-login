@@ -33,7 +33,8 @@ var mainApp = angular
         "com.2fdevs.videogular.plugins.buffering",
         "com.2fdevs.videogular.plugins.poster",
         "ngTagsInput",
-        'ngInputDate'
+        'ngInputDate',
+        'angularFileUpload'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){
@@ -79,6 +80,8 @@ var mainApp = angular
     })
     .run(function( $rootScope, $location, $anchorScroll, $routeParams, $document, $timeout, ipCookie, analyticsService) {
 
+        var runningInterval;
+
         analyticsService.sessionStart(function(data) {
         });
 
@@ -91,8 +94,10 @@ var mainApp = angular
             // $rootScope.transitionState = "active";
             analyticsService.pageStart();
 
+            clearInterval(runningInterval);
+
             //every 15 seconds send page tracking data
-            setInterval(function(){
+            runningInterval = setInterval(function(){
                 analyticsService.pagePing();
             }, 5000);
         });

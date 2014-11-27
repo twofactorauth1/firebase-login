@@ -3,7 +3,7 @@
         color:{{component.txtcolor || 'white'}};
     }
     .navigation-v4 .navbar-header {
-        background: {{component.bg.color}};
+        background: {{component.nav.bg}};
     }
     .navbar-collapse {
         background: {{component.nav.bg}}!important;
@@ -18,6 +18,15 @@
 <div ng-class="component.type+'-v'+component.version">
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
+         <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+        </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">

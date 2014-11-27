@@ -23,17 +23,23 @@
 
 <div class=" clearfix mb20"></div>
 
-<div class="">
-    <div ng-cloak class="row">
+<div>
+    <div ng-cloak>
         <div ng-repeat="image in component.images track by $index">
             <div class="col-sm-3 col-xs-12">
-                <div class="imgHeight single-image">
-                    <a class="thumbnail" href="{{image.url}}" title="{{image.label}}" data-gallery>
+                <div class="thumbnail imgHeight single-image">
+                    <a  href="{{image.url}}" title="{{image.label}}" data-gallery>
 
-                        <img class="img-responsive" alt="{{image.label}}" ng-src="{{image.url}}">
-                        <!-- <span class="caption"><i class="fa fa-plus-circle"></i>
-                        </span> -->
+                        <img class="img-responsive img-gallery-{{$index}}" alt="{{image.label}}" ng-src="{{image.url}}">
+
                     </a>
+                    <span class="caption" ng-if="isEditing">
+                        <i class="fa fa-plus-circle media-modal" ng-click="currentComponent=component"  on-insert-mediacb="insertMedia"></i>
+                        <i class="fa fa-times-circle" ng-click="$parent.component.images.splice($index,1)"></i>
+                        <i class="fa fa-edit media-modal"  ng-click="currentImage=image"  on-insert-mediacb="insertMedia"></i>
+
+                    </span>
+
                 </div>
             </div>
         </div>
