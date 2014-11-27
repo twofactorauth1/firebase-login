@@ -55,7 +55,7 @@ require.config({
         'highcharts': 'libs/highcharts/highcharts-all',
         'highcharts-ng': 'libs/highcharts-ng/dist/highcharts-ng.min',
         'highcharts-funnel': 'libs/highcharts/modules/funnel',
-        //'highmaps': 'libs/highmaps/highmaps',
+        'highmaps-us': 'libs_misc/highmaps/us-all',
         'highmaps-data': 'libs/highmaps/modules/map',
 
         //application related
@@ -160,7 +160,7 @@ require.config({
         'angularUiRouter': {deps: ['angular']},
         'highcharts': {deps: ['jquery']},
         'highcharts-funnel': {deps: ['highcharts']},
-        //'highmaps': {deps: ['highcharts']},
+        'highmaps-us': {deps: ['highcharts']},
         'highmaps-data': {deps: ['highcharts']},
         'angularFileUpload': {deps: ['angular']},
         'xEditable': {deps: ['angular']},

@@ -1,4 +1,4 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-standalone', 'highmaps-data', 'highcharts-ng','formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService', 'customerService', 'angular-daterangepicker', 'daterangepicker', 'count-to', 'keenService'], function(app) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-standalone', 'highmaps-data', 'highmaps-us', 'highcharts-ng','formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService', 'customerService', 'angular-daterangepicker', 'daterangepicker', 'count-to', 'keenService'], function(app) {
     app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', 'keenService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService) {
         ngProgress.start();
 
@@ -129,6 +129,259 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 // });
                             });
 
+                        };
+
+                        $scope.stateToAbbr = function(strInput) {
+                            if(strInput) {
+                                var strOutput;
+                                var arrStates = [
+                                        {
+                                            "name": "Alabama",
+                                            "abbreviation": "AL"
+                                        },
+                                        {
+                                            "name": "Alaska",
+                                            "abbreviation": "AK"
+                                        },
+                                        {
+                                            "name": "American Samoa",
+                                            "abbreviation": "AS"
+                                        },
+                                        {
+                                            "name": "Arizona",
+                                            "abbreviation": "AZ"
+                                        },
+                                        {
+                                            "name": "Arkansas",
+                                            "abbreviation": "AR"
+                                        },
+                                        {
+                                            "name": "California",
+                                            "abbreviation": "CA"
+                                        },
+                                        {
+                                            "name": "Colorado",
+                                            "abbreviation": "CO"
+                                        },
+                                        {
+                                            "name": "Connecticut",
+                                            "abbreviation": "CT"
+                                        },
+                                        {
+                                            "name": "Delaware",
+                                            "abbreviation": "DE"
+                                        },
+                                        {
+                                            "name": "District Of Columbia",
+                                            "abbreviation": "DC"
+                                        },
+                                        {
+                                            "name": "Federated States Of Micronesia",
+                                            "abbreviation": "FM"
+                                        },
+                                        {
+                                            "name": "Florida",
+                                            "abbreviation": "FL"
+                                        },
+                                        {
+                                            "name": "Georgia",
+                                            "abbreviation": "GA"
+                                        },
+                                        {
+                                            "name": "Guam",
+                                            "abbreviation": "GU"
+                                        },
+                                        {
+                                            "name": "Hawaii",
+                                            "abbreviation": "HI"
+                                        },
+                                        {
+                                            "name": "Idaho",
+                                            "abbreviation": "ID"
+                                        },
+                                        {
+                                            "name": "Illinois",
+                                            "abbreviation": "IL"
+                                        },
+                                        {
+                                            "name": "Indiana",
+                                            "abbreviation": "IN"
+                                        },
+                                        {
+                                            "name": "Iowa",
+                                            "abbreviation": "IA"
+                                        },
+                                        {
+                                            "name": "Kansas",
+                                            "abbreviation": "KS"
+                                        },
+                                        {
+                                            "name": "Kentucky",
+                                            "abbreviation": "KY"
+                                        },
+                                        {
+                                            "name": "Louisiana",
+                                            "abbreviation": "LA"
+                                        },
+                                        {
+                                            "name": "Maine",
+                                            "abbreviation": "ME"
+                                        },
+                                        {
+                                            "name": "Marshall Islands",
+                                            "abbreviation": "MH"
+                                        },
+                                        {
+                                            "name": "Maryland",
+                                            "abbreviation": "MD"
+                                        },
+                                        {
+                                            "name": "Massachusetts",
+                                            "abbreviation": "MA"
+                                        },
+                                        {
+                                            "name": "Michigan",
+                                            "abbreviation": "MI"
+                                        },
+                                        {
+                                            "name": "Minnesota",
+                                            "abbreviation": "MN"
+                                        },
+                                        {
+                                            "name": "Mississippi",
+                                            "abbreviation": "MS"
+                                        },
+                                        {
+                                            "name": "Missouri",
+                                            "abbreviation": "MO"
+                                        },
+                                        {
+                                            "name": "Montana",
+                                            "abbreviation": "MT"
+                                        },
+                                        {
+                                            "name": "Nebraska",
+                                            "abbreviation": "NE"
+                                        },
+                                        {
+                                            "name": "Nevada",
+                                            "abbreviation": "NV"
+                                        },
+                                        {
+                                            "name": "New Hampshire",
+                                            "abbreviation": "NH"
+                                        },
+                                        {
+                                            "name": "New Jersey",
+                                            "abbreviation": "NJ"
+                                        },
+                                        {
+                                            "name": "New Mexico",
+                                            "abbreviation": "NM"
+                                        },
+                                        {
+                                            "name": "New York",
+                                            "abbreviation": "NY"
+                                        },
+                                        {
+                                            "name": "North Carolina",
+                                            "abbreviation": "NC"
+                                        },
+                                        {
+                                            "name": "North Dakota",
+                                            "abbreviation": "ND"
+                                        },
+                                        {
+                                            "name": "Northern Mariana Islands",
+                                            "abbreviation": "MP"
+                                        },
+                                        {
+                                            "name": "Ohio",
+                                            "abbreviation": "OH"
+                                        },
+                                        {
+                                            "name": "Oklahoma",
+                                            "abbreviation": "OK"
+                                        },
+                                        {
+                                            "name": "Oregon",
+                                            "abbreviation": "OR"
+                                        },
+                                        {
+                                            "name": "Palau",
+                                            "abbreviation": "PW"
+                                        },
+                                        {
+                                            "name": "Pennsylvania",
+                                            "abbreviation": "PA"
+                                        },
+                                        {
+                                            "name": "Puerto Rico",
+                                            "abbreviation": "PR"
+                                        },
+                                        {
+                                            "name": "Rhode Island",
+                                            "abbreviation": "RI"
+                                        },
+                                        {
+                                            "name": "South Carolina",
+                                            "abbreviation": "SC"
+                                        },
+                                        {
+                                            "name": "South Dakota",
+                                            "abbreviation": "SD"
+                                        },
+                                        {
+                                            "name": "Tennessee",
+                                            "abbreviation": "TN"
+                                        },
+                                        {
+                                            "name": "Texas",
+                                            "abbreviation": "TX"
+                                        },
+                                        {
+                                            "name": "Utah",
+                                            "abbreviation": "UT"
+                                        },
+                                        {
+                                            "name": "Vermont",
+                                            "abbreviation": "VT"
+                                        },
+                                        {
+                                            "name": "Virgin Islands",
+                                            "abbreviation": "VI"
+                                        },
+                                        {
+                                            "name": "Virginia",
+                                            "abbreviation": "VA"
+                                        },
+                                        {
+                                            "name": "Washington",
+                                            "abbreviation": "WA"
+                                        },
+                                        {
+                                            "name": "West Virginia",
+                                            "abbreviation": "WV"
+                                        },
+                                        {
+                                            "name": "Wisconsin",
+                                            "abbreviation": "WI"
+                                        },
+                                        {
+                                            "name": "Wyoming",
+                                            "abbreviation": "WY"
+                                        }
+                                    ];
+
+                                for (var i = 0; i < arrStates.length; i++) {
+                                    if ((arrStates[i]['name']).toLowerCase() == (strInput).toLowerCase()) {
+                                                strOutput = arrStates[i]['abbreviation'];
+                                            break;
+                                        }
+                                };
+                            }
+
+                                return strOutput || false;
                         };
 
                         $scope.toUTC = function(str) {
@@ -321,6 +574,17 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         //     'end-date': 'yesterday'
                         // });
 
+                        var visitorLocations = new Keen.Query("count", {
+                            eventCollection: "session_data",
+                            targetProperty: "permanent_tracker",
+                            groupBy: "ip_geo_info.province",
+                            timeframe: {
+                                "start" : timeframeStart,
+                                "end" : timeframeEnd
+                            },
+                            filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname},{"property_name":"ip_geo_info","operator":"ne","property_value":"null"}]
+                        });
+
                         //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
 
                         $scope.newDesktop = false;
@@ -363,7 +627,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 bouncesPreviousReport,
                                 trafficSources,
                                 returningVisitors,
-                                newVisitors
+                                newVisitors,
+                                visitorLocations
                                 ], function(results) {
 
                                 // ======================================
@@ -594,9 +859,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         }
                                     }
 
-                                console.log('results[13].result >>> ', results[13].result);
-                                console.log('results[14].result >>> ', results[14].result);
-
                                 // ======================================
                                 // New vs. Returning Customers
                                 // ======================================
@@ -607,14 +869,31 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 ];
 
 
-                                // // // ======================================
-                                // // // Content
-                                // // // Time on Site, Bounces
-                                // // // ======================================
+                                // ======================================
+                                // Content
+                                // Time on Site, Bounces
+                                // ======================================
 
                                 // $scope.do = function($event) {
                                 //     $event.preventDefault();
                                 // };
+
+                                // ======================================
+                                // Visitor Locations
+                                // ======================================
+
+                                console.log('results[15].result >>> ', results[15].result);
+
+                                $scope.locationData = [];
+
+                                for (var i = 0; i < results[15].result.length; i++) {
+                                    var subObj = {};
+                                    subObj.code = $scope.stateToAbbr( results[15].result[i]['ip_geo_info.province'] );
+                                    subObj.value = results[15].result[i].result;
+                                    $scope.locationData.push(subObj);
+                                };
+
+                                console.log('$scope.locationData >>> ', $scope.locationData);
 
 
                                 if($scope.firstQuery) {
@@ -846,6 +1125,63 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         enabled: false
                                     }
                                 };
+
+                                var data = [{"value":438,"code":"NJ"},{"value":387.35,"code":"RI"},{"value":312.68,"code":"MA"},{"value":271.4,"code":"CT"},{"value":209.23,"code":"MD"},{"value":195.18,"code":"NY"},{"value":154.87,"code":"DE"},{"value":114.43,"code":"FL"},{"value":107.05,"code":"OH"},{"value":105.8,"code":"PA"},{"value":86.27,"code":"IL"},{"value":83.85,"code":"CA"},{"value":72.83,"code":"HI"},{"value":69.03,"code":"VA"},{"value":67.55,"code":"MI"},{"value":65.46,"code":"IN"},{"value":63.8,"code":"NC"},{"value":54.59,"code":"GA"},{"value":53.29,"code":"TN"},{"value":53.2,"code":"NH"},{"value":51.45,"code":"SC"},{"value":39.61,"code":"LA"},{"value":39.28,"code":"KY"},{"value":38.13,"code":"WI"},{"value":34.2,"code":"WA"},{"value":33.84,"code":"AL"},{"value":31.36,"code":"MO"},{"value":30.75,"code":"TX"},{"value":29,"code":"WV"},{"value":25.41,"code":"VT"},{"value":23.86,"code":"MN"},{"value":23.42,"code":"MS"},{"value":20.22,"code":"IA"},{"value":19.82,"code":"AR"},{"value":19.4,"code":"OK"},{"value":17.43,"code":"AZ"},{"value":16.01,"code":"CO"},{"value":15.95,"code":"ME"},{"value":13.76,"code":"OR"},{"value":12.69,"code":"KS"},{"value":10.5,"code":"UT"},{"value":8.6,"code":"NE"},{"value":7.03,"code":"NV"},{"value":6.04,"code":"ID"},{"value":5.79,"code":"NM"},{"value":3.84,"code":"SD"},{"value":3.59,"code":"ND"},{"value":2.39,"code":"MT"},{"value":1.96,"code":"WY"},{"value":0.42,"code":"AK"}];
+
+                                var chart1 = new Highcharts.Map({
+                                     chart : {
+                                            renderTo: 'visitor_locations'
+                                        },
+
+                                        title : {
+                                            text : ''
+                                        },
+
+                                        legend: {
+                                            layout: 'horizontal',
+                                            borderWidth: 0,
+                                            backgroundColor: 'rgba(255,255,255,0.85)',
+                                            floating: true,
+                                            verticalAlign: 'top',
+                                            y: 25
+                                        },
+
+                                        exporting: {
+                                            enabled: false
+                                        },
+
+                                        mapNavigation: {
+                                            enabled: true
+                                        },
+
+                                        colorAxis: {
+                                            min: 1,
+                                            type: 'logarithmic',
+                                            minColor: '#4cb0ca',
+                                            maxColor: '#224f5b'
+                                        },
+
+                                        series : [{
+                                            animation: {
+                                                duration: 1000
+                                            },
+                                            data : $scope.locationData,
+                                            mapData: Highcharts.maps['countries/us/us-all'],
+                                            joinBy: ['postal-code', 'code'],
+                                            dataLabels: {
+                                                enabled: true,
+                                                color: 'white',
+                                                format: '{point.code}'
+                                            },
+                                            name: '# of Visitors',
+                                            tooltip: {
+                                                pointFormat: '{point.code}: {point.value}'
+                                            }
+                                        }],
+                                        credits: {
+                                            enabled: false
+                                        }
+                                });
                         };
 
 
