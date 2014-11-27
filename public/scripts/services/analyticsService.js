@@ -60,6 +60,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         }
 
         var permanent_cookie = ipCookie("permanent_cookie");
+        var new_visitor = true;
 
         //If it is undefined, set a new one.
         if(permanent_cookie == undefined){
@@ -69,6 +70,8 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                 expires: 3650, //10 year expiration date
                 path: "/" //Makes this cookie readable from all pages
             });
+        } else {
+            new_visitor = false;
         }
 
         //determine if the device is mobile or not
@@ -129,6 +132,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             session_start: start,
             session_end: 0,
             session_length: 0,
+            new_visitor: new_visitor,
             entrance: parsedEntranceUrl.attr("host")
         };
 
