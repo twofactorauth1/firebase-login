@@ -41,7 +41,8 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
             showPrice: true,
             showProductType: true,
             showProductStatus: true,
-            showProductCost: true
+            showProductCost: true,
+            gridViewDisplay: true
         };
 
         $scope.$watch('sortOrder', function(newValue, oldValue) {
@@ -121,6 +122,9 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         
         $scope.savePreferencesFn = function() {
             UserService.updateUserPreferences($scope.userPreferences, true, function() {});
+        };
+        $scope.setDefaultView = function(value) {
+            $scope.commerceSettings.gridViewDisplay = value;
         };
 
         ProductService.getProducts(function(products) {
