@@ -86,7 +86,7 @@
 								</span>
               <div class="media">
                 <a href="#/commerce/edit/{{product._id}}">
-                  <div class="col-xs-12">
+                  <div class="col-xs-12" ng-if="commerceSettings.showProductThumb">
                     <span ng-if="!product.is_image" class="icon"> <i class="fa {{product.icon || userPreferences.default_product_icon}}"></i>
 										</span>
                     <img ng-if = "product.is_image" style="width:75px" class="img-responsive img-circle hand center" ng-src="{{ product.icon }}">
@@ -96,13 +96,13 @@
                     <h4 class="person-name center">{{product.name}}</h4>
                     <hr class="clearfix mb15">
                     <div class="customer-stats">
-                      <div class="last-active">
+                      <div class="last-active"  ng-if="commerceSettings.showSku">
                         <i class="fa fa-bolt"></i> Sku: <span class="data">{{product.sku}}</span>
                       </div>
-                      <div class="purchased">
+                      <div class="purchased"  ng-if="commerceSettings.showPrice">
                         <i class="fa fa-money"></i> Price: <span class="data">${{product.regular_price}}</span>
                       </div>
-                      <div class="emails-opened">
+                      <div class="emails-opened"  ng-if="commerceSettings.showProductType">
                         <i class="fa fa-envelope"></i> Product Type: <span class="data">{{product.type}}</span>
                       </div>
                     </div>
@@ -154,27 +154,27 @@
           <div class="form-group">
             <label>Show/Hide</label>
             <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showProductThumb" checked="checked">
+              <input type="checkbox" value="1" ng-model="toggleProductThumb" id="showProductThumb" ng-checked="true">
               <label for="showProductThumb">Thumbnail</label>
             </div>
             <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showSku" checked="checked">
+              <input type="checkbox" value="1" ng-model="toggleSku" ng-checked="true" id="showSku">
               <label for="showSku">Sku</label>
             </div>
             <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showPrice" checked="checked">
+              <input type="checkbox" value="1" ng-model="togglePrice" ng-checked="true" id="showPrice">
               <label for="showPrice">Price</label>
             </div>
             <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showProductType" checked="checked">
+              <input type="checkbox" value="1" id="showProductType" ng-model="toggleProductType" ng-checked="true" >
               <label for="showProductType">Type</label>
             </div>
             <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showProductStatus" checked="checked">
+              <input type="checkbox" value="1" id="showProductStatus" checked="true">
               <label for="showProductStatus">Status</label>
             </div>
             <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showProductCost" checked="checked">
+              <input type="checkbox" value="1" id="showProductCost" checked="true">
               <label for="showProductCost">Cost</label>
             </div>
           </div>

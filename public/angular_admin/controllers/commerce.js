@@ -14,6 +14,35 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 console.log(product);
             });
         };
+        $scope.$watch('toggleProductThumb', function(value) {
+            if (angular.isDefined(value)) {
+                $scope.commerceSettings.showProductThumb = value;             
+            }
+        });
+        $scope.$watch('toggleSku', function(value) {
+            if (angular.isDefined(value)) {
+                $scope.commerceSettings.showSku = value;             
+            }
+        });
+        $scope.$watch('togglePrice', function(value) {
+            if (angular.isDefined(value)) {
+                $scope.commerceSettings.showPrice = value;             
+            }
+        });
+        $scope.$watch('toggleProductType', function(value) {
+            if (angular.isDefined(value)) {
+                $scope.commerceSettings.showProductType = value;             
+            }
+        });
+
+        $scope.commerceSettings = {
+            showProductThumb: true,
+            showSku: true,
+            showPrice: true,
+            showProductType: true,
+            showProductStatus: true,
+            showProductCost: true
+        };
 
         $scope.productOrder = 'name';
         $scope.productSortReverse = false;
