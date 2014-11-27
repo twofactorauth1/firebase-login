@@ -25,6 +25,35 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     console.log('courses ', data);
         //     that.courses = data;
         // });
+        setNavigation = function (data) {
+            var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
+            tempPageComponents = data['index'].components;
+            indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
+
+//          indexNavComponent._id = null;
+//          indexNavComponent.anchor = null;
+//          indexNavComponent.visibility = null;
+            if (indexNavComponent !== null) {
+                ['_id', 'anchor', 'visibility'].forEach(function (v){
+                    indexNavComponent[v] = null;
+                })
+
+                for ( page in data ) {
+                    if ( data.hasOwnProperty(page) && page != 'index' ) {
+                        tempPageComponents = data[page].components;
+                        pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
+                    }
+                    if (pageNavComponent !== null){
+                        for (setting in indexNavComponent) {
+                            if (indexNavComponent[setting] !== null) {
+                                pageNavComponent[setting] = indexNavComponent[setting];
+                            }
+                        }
+                    }
+                }
+            }
+
+        };
 
         $scope.getCourse = function(campaignId) {
             console.log('campaign Id ', campaignId);
@@ -79,7 +108,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 /*PostService.getAllPosts(function(posts) {
                     that.blogposts = posts;
                 });*/
-             //   setNavigation(data);
+                setNavigation(data);
             }
         });
 
@@ -461,33 +490,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         /********** END SIGNUP SECTION **********/
-        setNavigation = function (data) {
-            var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
-            tempPageComponents = data['index'].components;
-            indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
 
-//            indexNavComponent._id = null;
-//            indexNavComponent.anchor = null;
-//            indexNavComponent.visibility = null;
-
-            ['_id', 'anchor', 'visibility'].forEach(function (v){
-                indexNavComponent[v] = null;
-            })
-
-            for ( page in data ) {
-                if ( data.hasOwnProperty(page) && page != 'index' ) {
-                    tempPageComponents = data[page].components;
-                    pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
-                }
-                if (pageNavComponent !== null){
-                    for (setting in indexNavComponent) {
-                        if (indexNavComponent[setting] !== null) {
-                            pageNavComponent[setting] = indexNavComponent[setting];
-                        }
-                    }
-                }
-            }
-        };
 
         $scope.uploadImage=function(asset){
 
