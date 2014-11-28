@@ -820,24 +820,21 @@ define([
                 }
             };
 
-            $scope.insertMedia=function(asset){
-                if ($scope.imageChange) {
-                    $scope.imageChange = false;
-                    var type = $scope.componentEditing.type;
-                    //if image/text component
-                    if(type == 'image-text') {
-                        $scope.componentEditing.imgurl = asset.url;
-                    } else if(type == 'feature-list') {
-                        var targetIndex = $($scope.componentArrTarget).closest('.single-feature').data('index');
-                        $scope.componentEditing.features[targetIndex].imgurl = asset.url;
-                    } else if(type == 'simple-form') {
-                        $scope.componentEditing.imgurl = asset.url;
-                    } else {
-                        console.log('unknown component or image location');
-                    }
-                    $scope.bindEvents();
-                } else {
-                    $scope.componentEditing.bg.img.url=asset.url;
+
+            $scope.insertMedia=function(asset, type){
+                switch(type){
+                    case "mast_head_bg_image":
+                        $scope.componentEditing.bg.img.url=asset.url;
+                        break;
+                    case "image_gallery_add_image":
+                        if ( !$scope.componentEditing.images ) {
+                            $scope.componentEditing.images = [];
+                        }
+                        $scope.componentEditing.images.push({url: asset.url});
+                        break;
+                    case "image_gallery_delete_image":
+                        $scope.componentEditing.images.splice(asset,1);
+                        break;
                 }
                 $scope.updateIframeComponents();
             };
