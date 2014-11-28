@@ -362,6 +362,63 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             return Date.UTC(str.substring(0, 4), str.substring(4, 6) - 1, str.substring(6, 8));
                         };
 
+                        $scope.countDuplicates = function(array_elements) {
+                            console.log('array_elements >>> ', array_elements);
+                            array_elements.sort();
+                            var duplicates = [];
+                            var current = null;
+                            var cnt = 0;
+                            for (var i = 0; i < array_elements.length; i++) {
+                                var subObj = {};
+                                if (array_elements[i] != current) {
+                                    if (cnt > 0) {
+                                        subObj.depth = current;
+                                        subObj.count = cnt;
+                                        console.log('pushing >>> ', subObj);
+                                        duplicates.push(subObj);
+                                    }
+                                    current = array_elements[i];
+                                    cnt = 1;
+                                } else {
+                                    cnt++;
+                                }
+                            }
+
+                            //fill in blank numbers and anything > 20 add together
+                            var over20count = 0;
+                            duplicates = _.sortBy( duplicates, 'depth' );
+
+                            for (var k = 0; k < 20; k++) {
+                                var subObj = {};
+
+                                if (duplicates[k]){
+
+                                    console.log('duplicate exists ', k);
+
+                                    // if(array_elements.indexOf(duplicates[k].depth) === -1 && duplicates[k].depth < 20) {
+                                    //     subObj.depth = k+1;
+                                    //     subObj.count = 0;
+                                    //     duplicates.push(subObj);
+                                    // } else if (duplicates[k].depth >= 20) {
+                                    //     over20count += duplicates[k].count;
+                                    //     duplicates.splice(k,1);
+                                    // }
+                                }
+                            };
+
+                            if (over20count > 0) {
+                                var subObj = {};
+                                subObj.depth = 20;
+                                subObj.count = over20count;
+                                duplicates.push(subObj);
+                            }
+
+                            duplicates = _.sortBy( duplicates, 'depth' );
+
+                            return duplicates;
+
+                        };
+
                         var visitorLocations = new Keen.Query("count", {
                             eventCollection: "pageviews",
                             timeframe: {
@@ -559,6 +616,16 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname},{"property_name":"ip_geo_info","operator":"ne","property_value":"null"}]
                         });
 
+                        var pageDepth = new Keen.Query("count", {
+                            eventCollection: "page_data",
+                            groupBy: "session_id",
+                            timeframe: {
+                                "start" : timeframeStart,
+                                "end" : timeframeEnd
+                            },
+                            filters: [{"property_name":"url.domain","operator":"eq","property_value": window.location.hostname}]
+                        });
+
                         //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
 
                         $scope.newDesktop = false;
@@ -602,7 +669,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 trafficSources,
                                 returningVisitors,
                                 newVisitors,
-                                visitorLocations
+                                visitorLocations,
+                                pageDepth
                                 ], function(results) {
 
                                 // ======================================
@@ -931,6 +999,24 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     subObj.value = results[15].result[i].result;
                                     $scope.locationData.push(subObj);
                                 };
+
+                                // ======================================
+                                // Page Depth
+                                // ======================================
+
+                                console.log('pageDepth >>> ', results[16].result);
+
+                                var _depthValues = [];
+                                for (var i = 0; i < results[16].result.length; i++) {
+                                    _depthValues.push( results[16].result[i].result );
+                                };
+
+                                var testing = $scope.countDuplicates(_depthValues);
+
+                                console.log('_depthValues >>> ', _depthValues);
+                                console.log('countDuplicates >>> ', testing);
+
+
 
                                 if($scope.firstQuery) {
                                     ngProgress.complete();
