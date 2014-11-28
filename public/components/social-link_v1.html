@@ -1,0 +1,13 @@
+<div ng-class="component.type+'-v'+component.version">
+    <div class="social-link">
+        <ul>
+            <li ng-repeat="network in component.networks" class="{{network.class_name}}">
+                <div>
+                    <a href="{{network.url}}">
+                        <span class="fa fa-{{network.icon}}"></span>
+                    </a>
+                </div>
+            </li>            
+        </ul>
+    </div>
+</div>

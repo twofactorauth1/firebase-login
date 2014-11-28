@@ -51,6 +51,11 @@ define([
                 isopen: false
             };
 
+            $scope.addSocialLink = function(social, component ) {
+                 console.log('social', social);
+                 console.log('component', component);
+            };
+
             $scope.spectrum = {
                 options: {
                     showPalette: true,
@@ -90,6 +95,11 @@ define([
 
             window.activateSettings = function() {
                 // console.log('Activate Settings!');
+            };
+
+            window.checkIfExists = function(component)
+            {
+                alert(1)
             };
 
             document.getElementById("iframe-website").onload = function() {
@@ -389,6 +399,7 @@ define([
                     //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                     //document.getElementById('iframe-website').contentWindow.location.reload(true);
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
                     //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
                 });
                 //$scope.deactivateAloha();
@@ -451,7 +462,28 @@ define([
                     that.originalCurrentPageComponents = localPage.components;
                 });
             };
+            $scope.addSocialLink = function(social) {
+                if(social && social.name && social.url)
+                {
+                    var selectedName = _.findWhere($scope.componentEditing.networks, {
+                        name: social.name
+                    });
+                    if(selectedName)
+                    {
+                        return;
+                    }
 
+                    $scope.componentEditing.networks.push({
+                    name : social.name,
+                    url : social.url,
+                    icon : social.name,
+                    class_name : social.name
+                    }); 
+                    social.name = ""; 
+                    social.url = ""; 
+                    $scope.saveComponent();
+                }            
+            };
 
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
@@ -560,7 +592,7 @@ define([
                         $scope.components[i] = $scope.componentEditing
                     }
                 }
-
+                $scope.currentPage.components = $scope.components;
                 $scope.updateIframeComponents(function() {
                      $scope.bindEvents();
                 });
@@ -802,7 +834,7 @@ define([
                 },
                 {
                     title: 'Social Links',
-                    type: 'social-feed',
+                    type: 'social',
                     icon: 'custom social-links',
                     enabled: false
                 },
@@ -811,7 +843,13 @@ define([
                     type: 'video',
                     icon: 'fa fa-video',
                     enabled: true
-                }
+                },
+                {
+                    title: 'Social Links',
+                    type: 'social-link',
+                    icon: 'custom social-links',
+                    enabled: true
+                },
             ];
 
             $scope.selectComponent = function(type) {
