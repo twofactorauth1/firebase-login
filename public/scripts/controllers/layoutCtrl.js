@@ -429,7 +429,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             // if (toolbar.classList.contains('editing') === false) {
             //     toolbar.className += ' editing';
             // }
-            // window.oldScope.isEditing = true;
+            window.oldScope.isEditing = true;
 
             window.oldScope.$digest();
         };
