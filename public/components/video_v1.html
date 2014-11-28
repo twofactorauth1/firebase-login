@@ -37,8 +37,10 @@
                                     </videogular> -->
 
                     <videogular vg-theme="config.theme.url" vg-autoplay="config.autoPlay">
-                        <video class='videoPlayer' controls preload='metadata'>
-                            <source src='{{trustSrc(component.video.src)}}' type='video/mp4'>
+                        <video class='videoPlayer' preload='metadata'>
+                            <source src='{{trustSrc(component.video.src.ogv)}}' type='video/ogv'>
+                            <source src="{{trustSrc(component.video.src.mp4)}}" type='video/mp4' />
+                            <source src="{{trustSrc(component.video.src.webm)}}" type='video/webm' />
                         </video>
 
                         <vg-overlay-play></vg-overlay-play>
