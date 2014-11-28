@@ -25,7 +25,8 @@ define([
     'models/cms/components/social',
     'models/cms/components/navigation',
     'models/cms/components/footer',
-], function(Freeform, MastHead, ContactUs, FeatureBlock, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost, SignupForm, Blog, BlogTeaser, Products, SinglePage, Testimonials, Social, Navigation, Footer) {
+    'models/cms/components/payment-form'
+], function(Freeform, MastHead, ContactUs, FeatureBlock, FeatureList, ImageGallery, ImageSlider, ImageText, MeetTeam, SinglePost, SignupForm, Blog, BlogTeaser, Products, SinglePage, Testimonials, Social, Navigation, Footer, PaymentForm) {
 
     var components = {
         "freeform": Freeform,
@@ -47,7 +48,8 @@ define([
         "testimonials": Testimonials,
         "social": Social,
         "navigation": Navigation,
-        "footer": Footer
+        "footer": Footer,
+        'payment-form': PaymentForm
     };
 
     var collection = Backbone.Collection.extend({

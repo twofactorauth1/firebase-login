@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie',
-    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q',
+    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q) {
         var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
         route = $location.$$path;
@@ -25,35 +25,35 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             that.courses = data;
         });
 
-//         setNavigation = function (data) {
-//             var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
-//             tempPageComponents = data['index'].components;
-//             indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
+        //         setNavigation = function (data) {
+        //             var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
+        //             tempPageComponents = data['index'].components;
+        //             indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
 
-// //          indexNavComponent._id = null;
-// //          indexNavComponent.anchor = null;
-// //          indexNavComponent.visibility = null;
-//             if (indexNavComponent !== null) {
-//                 ['_id', 'anchor', 'visibility'].forEach(function (v){
-//                     indexNavComponent[v] = null;
-//                 })
+        // //          indexNavComponent._id = null;
+        // //          indexNavComponent.anchor = null;
+        // //          indexNavComponent.visibility = null;
+        //             if (indexNavComponent !== null) {
+        //                 ['_id', 'anchor', 'visibility'].forEach(function (v){
+        //                     indexNavComponent[v] = null;
+        //                 })
 
-//                 for ( page in data ) {
-//                     if ( data.hasOwnProperty(page) && page != 'index' ) {
-//                         tempPageComponents = data[page].components;
-//                         pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
-//                     }
-//                     if (pageNavComponent !== null){
-//                         for (setting in indexNavComponent) {
-//                             if (indexNavComponent[setting] !== null) {
-//                                 pageNavComponent[setting] = indexNavComponent[setting];
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
+        //                 for ( page in data ) {
+        //                     if ( data.hasOwnProperty(page) && page != 'index' ) {
+        //                         tempPageComponents = data[page].components;
+        //                         pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
+        //                     }
+        //                     if (pageNavComponent !== null){
+        //                         for (setting in indexNavComponent) {
+        //                             if (indexNavComponent[setting] !== null) {
+        //                                 pageNavComponent[setting] = indexNavComponent[setting];
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
 
-//         };
+        //         };
 
         $scope.getCourse = function(campaignId) {
             console.log('campaign Id ', campaignId);
@@ -120,8 +120,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
         });
 
-        postsService(function(err, data){
-            if(err) {
+        postsService(function(err, data) {
+            if (err) {
                 console.log('BlogCtrl Error: ' + err);
             } else {
 
@@ -135,42 +135,42 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
                 that.currentTag, that.currentAuthor, that.currentCat = '';
                 //get post tags for sidebar
-                    //should be replaced by get tags filter
+                //should be replaced by get tags filter
 
-                    if (data) {
-                        that.postTags = [];
-                        for (var i = 0; i < data.length; i++) {
-                            if (data[i].post_tags) {
-                                var tags = data[i].post_tags;
-                                for (var j = 0; j < tags.length; j++) {
-                                    if(that.postTags.indexOf(tags[j]) == -1) {
-                                        that.postTags.push(tags[j]);
-                                    }
-                                };
-                            }
-                        };
-
-                         //get post cateogires for sidebar
-                        //should be replaced by get cateogires filter
-                        that.categories = [];
-                        for (var i = 0; i < data.length; i++) {
-                            if (data[i].post_category) {
-                                if(that.categories.indexOf(data[i].post_category) <= -1) {
-                                    that.categories.push(data[i].post_category);
+                if (data) {
+                    that.postTags = [];
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].post_tags) {
+                            var tags = data[i].post_tags;
+                            for (var j = 0; j < tags.length; j++) {
+                                if (that.postTags.indexOf(tags[j]) == -1) {
+                                    that.postTags.push(tags[j]);
                                 }
+                            };
+                        }
+                    };
+
+                    //get post cateogires for sidebar
+                    //should be replaced by get cateogires filter
+                    that.categories = [];
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].post_category) {
+                            if (that.categories.indexOf(data[i].post_category) <= -1) {
+                                that.categories.push(data[i].post_category);
                             }
-                        };
+                        }
+                    };
 
-                         //get latest posts for sidebar
-                        //should be replaced by get latest posts filter
-                        that.latestposts = [];
-                        for (var i = 0; i < data.length; i++) {
-                            that.latestposts.push(data[i]);
-                        };
-                        that.latestposts.slice(Math.max(data.length - 3, 1));
-                    }
+                    //get latest posts for sidebar
+                    //should be replaced by get latest posts filter
+                    that.latestposts = [];
+                    for (var i = 0; i < data.length; i++) {
+                        that.latestposts.push(data[i]);
+                    };
+                    that.latestposts.slice(Math.max(data.length - 3, 1));
+                }
 
-                if (route.indexOf('blog') > -1)  {
+                if (route.indexOf('blog') > -1) {
                     that.blogposts = data;
                 }
 
@@ -288,54 +288,51 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         /********** PRODUCT RELATED **********/
         $scope.addDetailsToCart = function(product) {
-           if(!$scope.cartDetails)
-           {
+            if (!$scope.cartDetails) {
                 $scope.cartDetails = [];
-           }
-           if(!product.quantity)
-           {
+            }
+            if (!product.quantity) {
                 product.quantity = 1;
-           }
-            var match = _.find($scope.cartDetails, function(item) { return item._id === product._id })
+            }
+            var match = _.find($scope.cartDetails, function(item) {
+                return item._id === product._id
+            })
             if (match) {
                 match.quantity = parseInt(match.quantity) + 1;
-            }
-            else
-            {
+            } else {
                 $scope.cartDetails.push(product);
             }
-           $scope.calculateTotalChargesfn();
+            $scope.calculateTotalChargesfn();
 
         };
 
-        $scope.calculateTotalChargesfn = function()
-        {
+        $scope.calculateTotalChargesfn = function() {
             var subTotal = 0;
-            var totalTax =  0;
+            var totalTax = 0;
             var total = 0;
-            $scope.cartDetails.forEach(function(item){
-                subTotal = parseFloat(subTotal) + (parseFloat(item.regular_price) * item.quantity );
+            $scope.cartDetails.forEach(function(item) {
+                subTotal = parseFloat(subTotal) + (parseFloat(item.regular_price) * item.quantity);
             })
             $scope.subTotal = subTotal;
-            $scope.totalTax = parseFloat(($scope.subTotal * 8) / 100 );
+            $scope.totalTax = parseFloat(($scope.subTotal * 8) / 100);
             $scope.total = $scope.subTotal + $scope.totalTax;
         }
 
         $scope.makeCartPayment = function() {
-          var expiry = $('#expiry').val().split("/")
-          var exp_month = expiry[0].trim();
-          var exp_year = "";
-          if(expiry.length > 1)
-            exp_year = expiry[1].trim();
-          $('#expiry').val().split("/")[0].trim()
-          var cardInput = {
-            number: $('#number').val(),
-            cvc: $('#cvc').val(),
-            exp_month: exp_month,
-            exp_year: exp_year
-          };
+            var expiry = $('#expiry').val().split("/")
+            var exp_month = expiry[0].trim();
+            var exp_year = "";
+            if (expiry.length > 1)
+                exp_year = expiry[1].trim();
+            $('#expiry').val().split("/")[0].trim()
+            var cardInput = {
+                number: $('#number').val(),
+                cvc: $('#cvc').val(),
+                exp_month: exp_month,
+                exp_year: exp_year
+            };
 
-           if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year ) {
+            if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
                 //|| !cc_name
                 console.log('card invalid');
                 //hightlight card in red
@@ -343,9 +340,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
 
             PaymentService.getStripeCardToken(cardInput, function(token) {
-                 PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {
-                        $('#cart-checkout-modal').modal('hide');
-                 });
+                PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {
+                    $('#cart-checkout-modal').modal('hide');
+                });
             });
 
         };
@@ -363,7 +360,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         window.deactivateAloha = function() {
-             $('.editable').mahalo();
+            $('.editable').mahalo();
             // if (aloha.editor && aloha.editor.selection) {
             //     // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
             //     // $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');
@@ -487,11 +484,45 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 // var componentId = ui.item[0].querySelectorAll('.component')[0].attributes['data-id'].value;
                 // var newOrder = ui.item.index();
             }
-        }; 
+        };
 
         /********** END CMS RELATED **********/
 
         /********** SIGNUP SECTION **********/
+        $scope.$watch('currentpage.components', function(newValue, oldValue) {
+            if (newValue) {
+                newValue.forEach(function(value, index) {
+                    if (value.type === 'payment-form') {
+                        var productId = value.productId;
+                        ProductService.getProduct(productId, function(product) {
+                            $scope.paymentFormProduct = product;
+                            var promises = [];
+                            $scope.subscriptionPlans = [];
+                            if ('stripePlans' in $scope.paymentFormProduct.product_attributes) {
+                                $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value, index) {
+                                    promises.push(PaymentService.getPlanPromise(value));
+                                });
+                                $q.all(promises)
+                                    .then(function(data) {
+                                        data.forEach(function(value, index) {
+                                            $scope.subscriptionPlans.push(value.data);
+                                        });
+                                    })
+                                    .catch(function(err) {
+                                        console.error(err);
+                                    });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        $scope.selectSubscriptionPlanFn = function(planId, amount, interval) {
+            $scope.newAccount.membership = planId;
+            $scope.subscriptionPlanAmount = amount;
+            $scope.subscriptionPlanInterval = interval;
+        };
         $scope.monthly_sub_cost = 49.95;
         $scope.yearly_sub_cost = 32.91;
         $scope.selected_sub_cost = $scope.monthly_sub_cost;
@@ -508,20 +539,20 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 var formatted = {
                     details: [{
                         emails: []
-                        }]
-                    };
-                    formatted.details[0].emails.push({
-                        email : user.email
-                    });
-                    //create contact
-                    userService.addContact(formatted, function(data, err) {
-                       if (err && err.code === 409) {
+                    }]
+                };
+                formatted.details[0].emails.push({
+                    email: user.email
+                });
+                //create contact
+                userService.addContact(formatted, function(data, err) {
+                    if (err && err.code === 409) {
                         // $("#input-company-name").val('');
                         $("#user_email .error").html("Email already exists");
                         $("#user_email").addClass('has-error');
                         $("#user_email .glyphicon").addClass('glyphicon-remove');
 
-                    } else if(data) {
+                    } else if (data) {
                         console.log('email avaliable');
                         $("#user_email .error").html("");
                         $("#user_email").removeClass('has-error').addClass('has-success');
@@ -531,13 +562,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         user.success = true;
 
                         setTimeout(function() {
-                            $scope.$apply(function () {
+                            $scope.$apply(function() {
                                 user.success = false;
                             });
                         }, 3000);
                     }
 
-                    });               
+                });
             }
 
             //redirect to signup with details
@@ -552,30 +583,29 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 $("#contact_email .glyphicon").addClass('glyphicon-remove');
                 return;
             }
-            if(contact.email)
-            {
+            if (contact.email) {
                 var contact_info = {
-                    first:contact.first_name,
-                    last:contact.last_name,
+                    first: contact.first_name,
+                    last: contact.last_name,
                     details: [{
                         emails: []
                     }]
                 };
 
                 contact_info.details[0].emails.push({
-                        email : contact.email
+                    email: contact.email
                 });
 
                 console.log('ipCookie("session_cookie") >>> ', ipCookie("session_cookie"));
                 userService.addContact(contact_info, function(data, err) {
-                console.log('data ', data);
-                if (err && err.code === 409) {
+                    console.log('data ', data);
+                    if (err && err.code === 409) {
                         // $("#input-company-name").val('');
                         $("#contact_email .error").html("Email already exists");
                         $("#contact_email").addClass('has-error');
                         $("#contact_email .glyphicon").addClass('glyphicon-remove');
 
-                    } else if(data) {
+                    } else if (data) {
                         console.log('email avaliable');
                         $("#contact_email .error").html("");
                         $("#contact_email").removeClass('has-error').addClass('has-success');
@@ -585,7 +615,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             accountId: data.accountId,
                             contactId: data._id,
                             activityType: 'CONTACT_FORM',
-                            note : "Contact form data.",
+                            note: "Contact form data.",
                             start: new Date(),
                             extraFields: contact,
                             sessionId: ipCookie("session_cookie")["id"]
@@ -597,19 +627,19 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             contact.full_name = '';
                             contact.success = true;
                             setTimeout(function() {
-                            $scope.$apply(function () {
-                                contact.success = false;
-                            });
-                        }, 3000);
+                                $scope.$apply(function() {
+                                    contact.success = false;
+                                });
+                            }, 3000);
                         });
                     }
-                
-            });
+
+                });
             }
-            
+
 
             //create contact
-            
+
 
             //redirect to signup with details
             //window.location.href = "http://app.indigenous.local:3000/signup";
@@ -659,7 +689,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.info(newAccount.card.exp_year);
             console.info(cc_name);
 
-            if (!newAccount.card.number || !newAccount.card.cvc || !newAccount.card.exp_month || !newAccount.card.exp_year ) {
+            if (!newAccount.card.number || !newAccount.card.cvc || !newAccount.card.exp_month || !newAccount.card.exp_year) {
                 //|| !cc_name
                 console.log('card invalid');
                 //hightlight card in red
@@ -684,11 +714,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     };
 
                     //get the token
-                    PaymentService.getStripeCardToken(newAccount.card, function(token, error) {                        
-                       if(error)
-                        {
-                            console.info(error);   
-                            switch(error.param) {
+                    PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
+                        if (error) {
+                            console.info(error);
+                            switch (error.param) {
                                 case "number":
                                     $("#card_number .error").html(error.message);
                                     $("#card_number").addClass('has-error');
@@ -700,19 +729,19 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                 case "cvc":
                                     $("#card_cvc .error").html(error.message);
                                     $("#card_cvc").addClass('has-error');
-                                    break;                                   
-                           }
+                                    break;
+                            }
                         }
-                        $scope.isFormValid = false; 
+                        $scope.isFormValid = false;
                         newUser.cardToken = token;
                         newUser.plan = $scope.selectedPlan;
                         newUser.anonymousId = window.analytics.user().anonymousId();
                         userService.initializeUser(newUser, function(data) {
                             window.location = data.accountUrl;
-                        }); 
-                        
+                        });
+
                     });
-                   
+
 
                     /*
                     userService.createUser(newUser, function(data) {
@@ -802,61 +831,77 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
         };
 
-        $scope.checkCardNumber = function() {            
-            var card_number = $('#number').val();    
+        $scope.checkCardNumber = function() {
+            var card_number = $('#number').val();
             console.log('checking to see if the card numer exists ', card_number);
 
-            if (!card_number) {                
+            if (!card_number) {
                 $("#card_number .error").html("Card Number Required");
                 $("#card_number").addClass('has-error');
             } else {
                 $("#card_number .error").html("");
-                $("#card_number").removeClass('has-error').addClass('has-success');                
+                $("#card_number").removeClass('has-error').addClass('has-success');
             }
         };
 
         $scope.checkCardExpiry = function() {
-          var expiry = $('#expiry').val();
-          var card_expiry = expiry.split("/")
-          var exp_month = card_expiry[0].trim();
-          var exp_year;
-          if(card_expiry.length > 1)
-            exp_year = card_expiry[1].trim();
+            var expiry = $('#expiry').val();
+            var card_expiry = expiry.split("/")
+            var exp_month = card_expiry[0].trim();
+            var exp_year;
+            if (card_expiry.length > 1)
+                exp_year = card_expiry[1].trim();
 
-           
-           
+
+
             console.log('checking to see if the card expiry details exists ', card_expiry);
 
             if (!expiry || !exp_month || !exp_year) {
-                if (!expiry  )
+                if (!expiry)
                     $("#card_expiry .error").html("Expiry Required");
-                else if(!exp_month)
+                else if (!exp_month)
                     $("#card_expiry .error").html("Expiry Month Required");
-                else if(!exp_year)
+                else if (!exp_year)
                     $("#card_expiry .error").html("Expiry Year Required");
                 $("#card_expiry").addClass('has-error');
             } else {
                 $("#card_expiry .error").html("");
-                $("#card_expiry").removeClass('has-error').addClass('has-success');                
+                $("#card_expiry").removeClass('has-error').addClass('has-success');
             }
         };
 
         $scope.checkCardCvv = function() {
-           
-            var card_cvc = $('#cvc').val();    
+
+            var card_cvc = $('#cvc').val();
             console.log('checking to see if the card cvc exists ', card_cvc);
 
-            if (!card_cvc) {                
+            if (!card_cvc) {
                 $("#card_cvc .error").html("CVC Required");
                 $("#card_cvc").addClass('has-error');
             } else {
                 $("#card_cvc .error").html("");
-                $("#card_cvc").removeClass('has-error').addClass('has-success');                
+                $("#card_cvc").removeClass('has-error').addClass('has-success');
             }
         };
 
         /********** END SIGNUP SECTION **********/
 
+        // $scope.uploadImage = function(asset) {
+
+        //     console.log("image Changed");
+
+        // }
+        // $scope.currentComponent = "sgsgsdgsd";
+        // $scope.currentImage = "";
+        // $scope.insertMedia = function(asset) {
+
+        //     console.log(asset);
+        //     console.log($scope.currentComponent);
+        //     console.log($scope.currentImage);
+        //     //   $scope.componentEditing.bg.img.url=asset.url;
+        //     //  $scope.updateIframeComponents();
+
+        // };
 
         $scope.addImage = function (component) {
             parent.$('body').trigger('add_image');
