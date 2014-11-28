@@ -487,11 +487,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 // var componentId = ui.item[0].querySelectorAll('.component')[0].attributes['data-id'].value;
                 // var newOrder = ui.item.index();
             }
-        }; 
+        };
 
         /********** END CMS RELATED **********/
 
         /********** SIGNUP SECTION **********/
+        $scope.$watch('currentpage', function(newValue, oldValue) {
+            console.log(newValue);
+        });
         $scope.monthly_sub_cost = 49.95;
         $scope.yearly_sub_cost = 32.91;
         $scope.selected_sub_cost = $scope.monthly_sub_cost;
@@ -537,7 +540,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         }, 3000);
                     }
 
-                    });               
+                    });
             }
 
             //redirect to signup with details
@@ -603,13 +606,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         }, 3000);
                         });
                     }
-                
+
             });
             }
-            
+
 
             //create contact
-            
+
 
             //redirect to signup with details
             //window.location.href = "http://app.indigenous.local:3000/signup";
@@ -684,10 +687,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     };
 
                     //get the token
-                    PaymentService.getStripeCardToken(newAccount.card, function(token, error) {                        
+                    PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
                        if(error)
                         {
-                            console.info(error);   
+                            console.info(error);
                             switch(error.param) {
                                 case "number":
                                     $("#card_number .error").html(error.message);
@@ -700,19 +703,19 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                 case "cvc":
                                     $("#card_cvc .error").html(error.message);
                                     $("#card_cvc").addClass('has-error');
-                                    break;                                   
+                                    break;
                            }
                         }
-                        $scope.isFormValid = false; 
+                        $scope.isFormValid = false;
                         newUser.cardToken = token;
                         newUser.plan = $scope.selectedPlan;
                         newUser.anonymousId = window.analytics.user().anonymousId();
                         userService.initializeUser(newUser, function(data) {
                             window.location = data.accountUrl;
-                        }); 
-                        
+                        });
+
                     });
-                   
+
 
                     /*
                     userService.createUser(newUser, function(data) {
@@ -802,16 +805,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
         };
 
-        $scope.checkCardNumber = function() {            
-            var card_number = $('#number').val();    
+        $scope.checkCardNumber = function() {
+            var card_number = $('#number').val();
             console.log('checking to see if the card numer exists ', card_number);
 
-            if (!card_number) {                
+            if (!card_number) {
                 $("#card_number .error").html("Card Number Required");
                 $("#card_number").addClass('has-error');
             } else {
                 $("#card_number .error").html("");
-                $("#card_number").removeClass('has-error').addClass('has-success');                
+                $("#card_number").removeClass('has-error').addClass('has-success');
             }
         };
 
@@ -823,8 +826,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           if(card_expiry.length > 1)
             exp_year = card_expiry[1].trim();
 
-           
-           
+
+
             console.log('checking to see if the card expiry details exists ', card_expiry);
 
             if (!expiry || !exp_month || !exp_year) {
@@ -837,21 +840,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 $("#card_expiry").addClass('has-error');
             } else {
                 $("#card_expiry .error").html("");
-                $("#card_expiry").removeClass('has-error').addClass('has-success');                
+                $("#card_expiry").removeClass('has-error').addClass('has-success');
             }
         };
 
         $scope.checkCardCvv = function() {
-           
-            var card_cvc = $('#cvc').val();    
+
+            var card_cvc = $('#cvc').val();
             console.log('checking to see if the card cvc exists ', card_cvc);
 
-            if (!card_cvc) {                
+            if (!card_cvc) {
                 $("#card_cvc .error").html("CVC Required");
                 $("#card_cvc").addClass('has-error');
             } else {
                 $("#card_cvc .error").html("");
-                $("#card_cvc").removeClass('has-error').addClass('has-success');                
+                $("#card_cvc").removeClass('has-error').addClass('has-success');
             }
         };
 
