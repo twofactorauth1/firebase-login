@@ -85,6 +85,9 @@ define([
             UserService.getUser(function(user) {
                 $scope.user = user;
                 that.user = user;
+                if(that.user.user_preferences.lastPageHandle && that.user.user_preferences.lastPageHandle!='index' )
+                     $scope.updatePage(that.user.user_preferences.lastPageHandle)
+
             });
 
             window.getUpdatediFrameRoute = function(data) {
@@ -245,8 +248,13 @@ define([
                 }
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");
-
                 $scope.backup['website'] = angular.copy($scope['website']);
+                UserService.getUserPreferences(function(preferences){
+                   preferences.lastPageHandle = $scope.pageSelected;
+
+                    UserService.updateUserPreferences(preferences, false, function(){} );
+                });
+
             };
 
             $scope.cancelPage = function() {
@@ -407,32 +415,33 @@ define([
 
                 //TODO - replace with sending route through scope to update without iframe refresh
                 document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
+                UserService.getAccount(function(account) {
+                    WebsiteService.getPages(account.website.websiteId, function (pages) {
+                        var currentPage = $scope.pageSelected;
+                        var parsed = angular.fromJson(pages);
+                        var arr = [];
 
-                WebsiteService.getPages(that.account.website.websiteId, function(pages) {
-                    var currentPage = $scope.pageSelected;
-                    var parsed = angular.fromJson(pages);
-                    var arr = [];
+                        for (var x in parsed) {
+                            arr.push(parsed[x]);
+                        }
+                        $scope.allPages = arr;
+                        that.allPages = arr;
+                        $scope.currentPage = _.findWhere(pages, {
+                            handle: currentPage
+                        });
 
-                    for (var x in parsed) {
-                        arr.push(parsed[x]);
-                    }
-                    $scope.allPages = arr;
-                    that.allPages = arr;
-                    $scope.currentPage = _.findWhere(pages, {
-                        handle: currentPage
+                        var localPage = _.findWhere(pages, {
+                            handle: currentPage
+                        });
+                        //get components from page
+                        if ($scope.currentPage && $scope.currentPage.components) {
+                            $scope.components = $scope.currentPage.components;
+                        } else {
+                            $scope.components = [];
+                        }
+
+                        that.originalCurrentPageComponents = localPage.components;
                     });
-
-                    var localPage = _.findWhere(pages, {
-                        handle: currentPage
-                    });
-                    //get components from page
-                    if ($scope.currentPage && $scope.currentPage.components) {
-                        $scope.components = $scope.currentPage.components;
-                    } else {
-                        $scope.components = [];
-                    }
-
-                    that.originalCurrentPageComponents = localPage.components;
                 });
             };
 
