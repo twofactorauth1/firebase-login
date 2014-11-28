@@ -493,7 +493,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         /********** SIGNUP SECTION **********/
         $scope.$watch('currentpage', function(newValue, oldValue) {
-            console.log(newValue);
+            //console.log(newValue);
         });
         $scope.monthly_sub_cost = 49.95;
         $scope.yearly_sub_cost = 32.91;
