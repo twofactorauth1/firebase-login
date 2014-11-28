@@ -519,7 +519,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
 
         $scope.selectSubscriptionPlanFn = function(planId, amount, interval) {
-            newAccount.membership = planId;
+            $scope.newAccount.membership = planId;
             $scope.subscriptionPlanAmount = amount;
             $scope.subscriptionPlanInterval = interval;
         };

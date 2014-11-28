@@ -61,7 +61,7 @@
                     <div class="col-xs-6" ng-repeat="plan in subscriptionPlans">
                         <div class="well well-calm">
                             <h4 class="center">{{plan.name}}</h4>
-                            <h2 class="center">{{(plan.amount/100).toFixed(2}} <span>/ {{plan.interval}}</span></h2>
+                            <h2 class="center">{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
                             <div class="mb30"></div>
                             <a type="button" class="btn btn-primary" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval)">Choose</a>
                         </div>
