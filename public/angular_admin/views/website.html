@@ -239,6 +239,9 @@
                                 </select>
 
                             </div>
+                            <div class="form-group" ng-if = "componentEditing.type == 'social-link'">
+                                 <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#socialModal">Add Social Link</button>
+                            </div>
                             <div class="well">
                                 <p>Danger Zone</p>
                                 <!-- <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm-click2-confirm="deleteComponent(componentEditing._id)" data-original-title="" title=""><i class="fa fa-trash"></i> Delete Component</button> -->
@@ -472,6 +475,43 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+    <!-- Add Social Links Modal -->
+
+    <div class="modal fade" id="socialModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Add social links</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="new_page">
+                        <div class="form-group">
+                            <label for="Link Type"  tooltip-placement="bottom" tooltip="Add url for link">Link Type</label>
+                            <select class="form-control" ng-model="social.name">
+                                <option value="facebook">Facebook</option>
+                                <option value="twitter">Twitter</option>
+                                <option value="linkedin">Linkedin</option>
+                                <option value="pinterest">Pinterest</option>
+                                <option value="google-plus">Google</option>
+                                <option value="flickr">Flickr</option>
+                            </select>
+                        </div> 
+                         <div class="form-group">
+                            <label for="link-url" tooltip-placement="bottom" tooltip="Add url for link">Link Url</label>
+                            <input id="link-url" class="form-control input-lg" type="text" ng-model="social.url">
+                        </div> 
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="addSocialLink(social, component)" data-dismiss="modal">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="model_container"></div>
 </div>
