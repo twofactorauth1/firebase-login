@@ -7,6 +7,7 @@
 
 require.config({
     baseUrl: '/js',
+    waitSeconds: 0,
     paths: {
         'jquery': 'libs/jquery/dist/jquery',
         'jqueryUI': 'libs/jquery-ui/jquery-ui.min',
