@@ -2,7 +2,7 @@
 
 mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService',
     function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService) {
-        var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
+        var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, setNavigation2,that = this;
 
         route = $location.$$path;
         window.oldScope;
@@ -25,34 +25,35 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //     console.log('courses ', data);
         //     that.courses = data;
         // });
+
         setNavigation = function (data) {
-            var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
-            tempPageComponents = data['index'].components;
-            indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
+            var tempPageComponents, indexNavComponent, page, pageNavComponents, setting;
 
-//          indexNavComponent._id = null;
-//          indexNavComponent.anchor = null;
-//          indexNavComponent.visibility = null;
-            if (indexNavComponent !== null) {
-                ['_id', 'anchor', 'visibility'].forEach(function (v){
+            $scope.indexNavComponent = indexNavComponent = angular.copy($filter('getByType')(data['index'].components, 'navigation'))[0];
+
+            if ( indexNavComponent !== undefined ) {
+                ['_id', 'anchor', 'visibility','$$hashKey'].forEach(function (v) {
                     indexNavComponent[v] = null;
-                })
+                });
 
-                for ( page in data ) {
-                    if ( data.hasOwnProperty(page) && page != 'index' ) {
-                        tempPageComponents = data[page].components;
-                        pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
-                    }
-                    if (pageNavComponent !== null){
-                        for (setting in indexNavComponent) {
-                            if (indexNavComponent[setting] !== null) {
-                                pageNavComponent[setting] = indexNavComponent[setting];
-                            }
+                for (page in data) {
+                    pageNavComponents = $filter('getByType')(data[page].components, 'navigation');
+                    setNavigation2(indexNavComponent, pageNavComponents);
+                }
+            }
+        };
+
+        setNavigation2 = function (indexNavComponent, components) {
+            var setting;
+            components.forEach(function (component) {
+                if ( component !== null ) {
+                    for ( setting in indexNavComponent ) {
+                        if ( indexNavComponent.hasOwnProperty(setting)&& indexNavComponent[setting] !== null ) {
+                            component[setting] = indexNavComponent[setting];
                         }
                     }
                 }
-            }
-
+            });
         };
 
         $scope.getCourse = function(campaignId) {
@@ -87,6 +88,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 } else {
                     route = $scope.$location.$$path.replace('/page/', '');
                     console.log('route ', route);
+                    that.allPages=data;
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
@@ -244,6 +246,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         var body = document.getElementsByTagName('body')[0];
                         body.className = body.className.replace('navbar-v', '');
                         body.className = body.className + ' navbar-v' + $scope.currentpage.components[i].version;
+                        setNavigation2($scope.indexNavComponent,  [ $scope.currentpage.components[i] ]);
                     }
                 };
             });

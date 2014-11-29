@@ -1,11 +1,11 @@
 mainApp.filter('getByType', function() {
     return function(input, type) {
-        var i = 0, len = input.length;
+        var i = 0, len = input.length, arr = [];
         for (; i < len; i = i + 1) {
             if (input[i].type === type) {
-                return input[i];
+                 arr.push(input[i]);
             }
         }
-        return null;
+        return arr;
     }
 });
