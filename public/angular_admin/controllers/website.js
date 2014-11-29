@@ -162,9 +162,9 @@ define([
                     for (var i = 0; i < addComponentBtns.length; i++) {
                         if (typeof addComponentBtns[i].addEventListener != "undefined") {
                             addComponentBtns[i].removeEventListener("click");
-				            addComponentBtns[i].addEventListener("click", function(e) {
-				            $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
-				            var element = angular.element('#add-component-modal');
+                            addComponentBtns[i].addEventListener("click", function(e) {
+                            $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+                            var element = angular.element('#add-component-modal');
                                 element.modal('show');
                                 //get the current index of the component pressed
                             });

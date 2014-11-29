@@ -426,7 +426,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             // if (toolbar.classList.contains('editing') === false) {
             //     toolbar.className += ' editing';
             // }
-            // window.oldScope.isEditing = true;
+            window.oldScope.isEditing = true;
 
             window.oldScope.$digest();
         };
@@ -886,21 +886,28 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         /********** END SIGNUP SECTION **********/
 
+        // $scope.uploadImage = function(asset) {
 
-        $scope.uploadImage = function(asset) {
+        //     console.log("image Changed");
 
-            console.log("image Changed");
+        // }
+        // $scope.currentComponent = "sgsgsdgsd";
+        // $scope.currentImage = "";
+        // $scope.insertMedia = function(asset) {
 
-        }
-        $scope.currentComponent = "sgsgsdgsd";
-        $scope.currentImage = "";
-        $scope.insertMedia = function(asset) {
+        //     console.log(asset);
+        //     console.log($scope.currentComponent);
+        //     console.log($scope.currentImage);
+        //     //   $scope.componentEditing.bg.img.url=asset.url;
+        //     //  $scope.updateIframeComponents();
 
-            console.log(asset);
-            console.log($scope.currentComponent);
-            console.log($scope.currentImage);
-            //   $scope.componentEditing.bg.img.url=asset.url;
-            //  $scope.updateIframeComponents();
+        // };
+
+        $scope.addImage = function (component) {
+            parent.$('body').trigger('add_image');
+        };
+        $scope.deleteImage = function (component, index) {
+            parent.$('body').trigger('delete_image', [index]);
         };
     }
 ]);
