@@ -938,7 +938,13 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         },
                                         "entrances":{
                                             "analysis_type":"count",
-                                            "filters": [{"property_name":"entrance","operator":"eq","property_value":true}]
+                                            "filters": [
+                                                {
+                                                    "property_name":"entrance",
+                                                    "operator":"eq",
+                                                    "property_value":true
+                                                }
+                                            ]
                                         },
                                         "exits":{
                                             "analysis_type":"count",
@@ -946,7 +952,23 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         },
                                         "bounces":{
                                             "analysis_type":"count",
-                                            "filters": [{"property_name":"timeOnPage","operator":"gt","property_value":-10000},{"property_name":"timeOnPage","operator":"lt","property_value":10000},{"property_name":"url.path","operator":"eq","property_value":"/"}]
+                                            "filters": [
+                                                {
+                                                    "property_name":"timeOnPage",
+                                                    "operator":"gt",
+                                                    "property_value":-10000
+                                                },
+                                                {
+                                                    "property_name":"timeOnPage",
+                                                    "operator":"lt",
+                                                    "property_value":10000
+                                                },
+                                                {
+                                                    "property_name":"url.path",
+                                                    "operator":"eq",
+                                                    "property_value":"/"
+                                                }
+                                            ]
                                         }
                                     }
                                 };
