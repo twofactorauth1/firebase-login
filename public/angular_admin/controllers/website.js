@@ -912,6 +912,42 @@ define([
 
                 offFn();
             });
+
+            $scope.updateLinkList = function(linkLists)
+            {
+                var linkLabelsArr = [];
+                var editedLinksLists = document.getElementById("reorderNavBarModal").querySelectorAll('.head-menu-links');
+                for (var i = 0; i < editedLinksLists.length; i++) {
+                    var linkLabel = editedLinksLists[i].attributes['data-label'].value;
+                    if(linkLabel)
+                        linkLabelsArr.push(linkLabel);
+                }              
+                if(linkLabelsArr.length)
+                {
+                   $scope.website.linkLists.forEach(function(value, index) {
+                     if(value.handle === "head-menu")
+                     {
+                        var newLinkListOrder = [];
+                        for (var i = 0; i < editedLinksLists.length; i++) {
+                            var matchedLinkList = _.findWhere(value.links, {
+                                label: linkLabelsArr[i]
+                            });
+                            newLinkListOrder.push(matchedLinkList);
+                        };
+                        if(newLinkListOrder.length)
+                        {
+                            $scope.website.linkLists[index].links = newLinkListOrder;
+                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                            console.log('updated website navigation link list', data);
+                            toaster.pop('success', "Navigation updated successfully.");
+                        });
+                        }  
+                        
+                     }
+                 });  
+                }
+                         
+            }
         }
     ]);
 });
