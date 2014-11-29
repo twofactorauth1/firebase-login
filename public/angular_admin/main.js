@@ -75,6 +75,7 @@ require.config({
         'websiteService': '/angular_admin/services/website',
         'postService': '/angular_admin/services/post',
         'productService': '/angular_admin/services/product',
+        'navigationService': '/angular_admin/services/navigationService',
         'dashboardService': '/angular_admin/services/dashboard',
         'chartFacebookService': '/angular_admin/services/chart_facebook',
         'chartStripService': '/angular_admin/services/chart_strip',

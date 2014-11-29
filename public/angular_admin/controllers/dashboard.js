@@ -943,6 +943,10 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         "exits":{
                                             "analysis_type":"count",
                                             "filters": [{"property_name":"exit","operator":"eq","property_value":true}]
+                                        },
+                                        "bounces":{
+                                            "analysis_type":"count",
+                                            "filters": [{"property_name":"timeOnPage","operator":"gt","property_value":-10000},{"property_name":"timeOnPage","operator":"lt","property_value":10000},{"property_name":"url.path","operator":"eq","property_value":"/"}]
                                         }
                                     }
                                 };
@@ -961,13 +965,16 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     for (var i = 0; i < data.result.length; i++) {
                                         var singleRow = data.result[i];
                                         var subObj = {};
-                                        console.log('singleRow ', singleRow['exits']);
+
                                         if (singleRow['url.path']) {
                                             subObj.page = singleRow['url.path'];
                                             subObj.pageviews = singleRow['pageviews'];
-                                            subObj.avgTime = singleRow['avgTimeOnPage'];
+                                            subObj.avgTime = Math.abs(singleRow['avgTimeOnPage'])/1000;
                                             subObj.uniquePageviews = singleRow['uniquePageviews'];
                                             subObj.entrances = singleRow['entrances'];
+                                            console.log('bounces >>> ', singleRow['bounces']);
+                                            console.log('pageviews >>> ', singleRow['pageviews']);
+                                            subObj.bounceRate = singleRow['bounces']/singleRow['pageviews'];
 
                                             //bounce rate
                                             //exit rate
@@ -1030,7 +1037,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                         window.setInterval(function(){
                             $scope.runReports();
-                        }, 5000);
+                        }, 15000);
 
                         // ======================================
                         // Overview
@@ -1078,7 +1085,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         }
                                     },
                                     yAxis: {
-                                        // min: 0,
+                                        min: 0,
                                         // max: Math.max.apply(Math, lineData) + 100,
                                         title: {
                                             text: ''

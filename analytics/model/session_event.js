@@ -25,7 +25,7 @@ var sessionEvent = $$.m.ModelBase.extend({
                 "anchor": ""
                 */
             },
-
+            "page_depth" 1,
             "session_length": 0,
             "permanent_tracker": "",
             "fingerprint": 0,
