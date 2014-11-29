@@ -34,6 +34,12 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
                                 switch (item.type.substring(0, item.type.indexOf('/'))) {
                                     case "image":
                                     case "video":
+                                        if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
+                                            return true;
+                                        } else {
+                                            ToasterService.show('error', 'Max Video file size 500MB. Unable to Upload.');
+                                        }
+                                        break;
                                     case "audio":
                                     case "document":
                                     default:
