@@ -10,6 +10,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
         $scope.$url = $location.$$url;
+        $scope.pageLoading=true;
 
         //var config = angular.module('config');
         //that.segmentIOWriteKey = ENV.segmentKey;
@@ -111,6 +112,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.blogposts = posts;
                 });*/
                 setNavigation(data);
+                $scope.pageLoading=false;
             }
         });
 
