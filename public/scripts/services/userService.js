@@ -4,7 +4,7 @@
 
 
 'use strict';
-mainApp.service('userService', function ($http) {
+mainApp.service('userService', 'ipCookie', function ($http, ipCookie) {
     var baseUrl = '/api/1.0/';
     this.addContact = function (user, fn) {
         var apiUrl = baseUrl + ['contact', 'signupnews'].join('/');
@@ -39,6 +39,8 @@ mainApp.service('userService', function ($http) {
     };
 
     this.initializeUser = function(user, fn) {
+        user.session_permanent = ipCookie("permanent_cookie");
+        user.fingerprint = new Fingerprint().get();
         var apiUrl = baseUrl + ['user', 'initialize'].join('/');
         $http({
             url: apiUrl,
