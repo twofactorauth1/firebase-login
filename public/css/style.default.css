@@ -20222,7 +20222,7 @@ div.error label.error:before {
     100000 is for
       .add-component
   */
-  z-index: 99999;
+  z-index: 1032;
   width: 100%;
   margin-right: 10px;
 }
@@ -22685,6 +22685,7 @@ ul.nav {
 .navbar-v3 {
   background-color: rgba(54, 155, 217, 0.8);
   border-bottom: 3px solid #18477a !important;
+  height: 65px;
 }
 .navbar-v3 .maintitle {
   float: left;

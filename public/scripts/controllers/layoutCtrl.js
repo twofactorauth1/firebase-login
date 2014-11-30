@@ -596,7 +596,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     email: contact.email
                 });
 
-                console.log('ipCookie("session_cookie") >>> ', ipCookie("session_cookie"));
                 userService.addContact(contact_info, function(data, err) {
                     console.log('data ', data);
                     if (err && err.code === 409) {
@@ -736,6 +735,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         newUser.cardToken = token;
                         newUser.plan = $scope.selectedPlan;
                         newUser.anonymousId = window.analytics.user().anonymousId();
+                        newUser.permanent_cookie = ipCookie("permanent_cookie");
+                        newUser.fingerprint = new Fingerprint().get();
                         userService.initializeUser(newUser, function(data) {
                             window.location = data.accountUrl;
                         });
