@@ -24696,6 +24696,12 @@ div[data-type="coming-soon"] .component-inner {
 .thumbnail-slider-v1 .carousel-indicators {
   bottom: -25px;
 }
+.thumbnail-slider-v1 .carousel-control.right {
+  background: none;
+}
+.thumbnail-slider-v1 .carousel-inner {
+  max-height: 200px;
+}
 /********** Video **********/
 .video-block .btn .fa {
   margin-top: 8px;

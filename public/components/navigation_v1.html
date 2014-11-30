@@ -1,9 +1,15 @@
 <style>
-    .navbar-v2 #header .navbar ul.navbar-nav li a {
+    .navigation-v1 .navbar ul.navbar-nav li a {
         color:{{component.txtcolor || 'white'}};
     }
-    .navbar-v2 #header .navbar ul.navbar-nav li a {
-        color:{{component.txtcolor || 'white'}};
+    .navigation-v1 .navbar {
+        background: {{component.nav.bg}};
+    }
+    .navbar-collapse {
+        background: {{component.nav.bg}}!important;
+    }
+    .navigation-v1 .navbar ul.navbar-nav li:hover {
+        border-bottom: 4px solid {{component.nav.hover}};
     }
 </style>
 <div ng-class="component.type+'-v'+component.version">
