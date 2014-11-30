@@ -3,6 +3,9 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
         ngProgress.start();
 
                 $scope.activeTab = 'analytics';
+                $scope.$watch('activeTab', function() {
+                    console.log('tab changed');
+                });
 
                 $scope.date = {startDate: null, endDate: null};
                 $scope.pickerOptions = {
@@ -363,7 +366,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         };
 
                         $scope.countDuplicates = function(array_elements) {
-                            console.log('array_elements >>> ', array_elements);
                             array_elements.sort();
                             var duplicates = [];
                             var current = null;
@@ -374,7 +376,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     if (cnt > 0) {
                                         subObj.depth = current;
                                         subObj.count = cnt;
-                                        console.log('pushing >>> ', subObj);
                                         duplicates.push(subObj);
                                     }
                                     current = array_elements[i];
@@ -393,7 +394,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                                 if (duplicates[k]){
 
-                                    console.log('duplicate exists ', k);
 
                                     // if(array_elements.indexOf(duplicates[k].depth) === -1 && duplicates[k].depth < 20) {
                                     //     subObj.depth = k+1;
@@ -429,7 +429,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             groupBy: "ip_geo_info.city"
                         });
 
-                        console.log('window.location.host ', window.location.hostname);
 
                         var deviceReportByCategory = new Keen.Query("count", {
                             eventCollection: "session_data",
@@ -878,7 +877,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                                     var _trafficSourceData = [];
                                     var _totalTypes = 0;
-                                    console.log('result[12] >>> ', results[12].result);
                                     for (var i = 0; i < results[12].result.length; i++) {
                                         var subObj = [];
                                         if (results[12].result[i].source_type) {
@@ -976,7 +974,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
 
                                 keenService.multiAnalysis(params2, function(data){
-                                    console.log('params2 >>> ', data);
                                     // ----------------------------------------
                                     // Top Pageviews
                                     // ----------------------------------------
@@ -994,8 +991,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                             subObj.avgTime = Math.abs(singleRow['avgTimeOnPage'])/1000;
                                             subObj.uniquePageviews = singleRow['uniquePageviews'];
                                             subObj.entrances = singleRow['entrances'];
-                                            console.log('bounces >>> ', singleRow['bounces']);
-                                            console.log('pageviews >>> ', singleRow['pageviews']);
                                             subObj.bounceRate = singleRow['bounces']/singleRow['pageviews'];
 
                                             //bounce rate
@@ -1006,7 +1001,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                             output.push(subObj);
                                         }
                                     };
-                                    console.log('output >>> ', output);
 
                                     $scope.formattedTopPages = output;
                                     $scope.pagedformattedTopPages = $scope.formattedTopPages.slice(0, $scope.pageLimit);
@@ -1033,7 +1027,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 // Page Depth
                                 // ======================================
 
-                                console.log('pageDepth >>> ', results[16].result);
 
                                 var _depthValues = [];
                                 for (var i = 0; i < results[16].result.length; i++) {
@@ -1041,11 +1034,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 };
 
                                 var testing = $scope.countDuplicates(_depthValues);
-
-                                console.log('_depthValues >>> ', _depthValues);
-                                console.log('countDuplicates >>> ', testing);
-
-
 
                                 if($scope.firstQuery) {
                                     ngProgress.complete();
@@ -1072,8 +1060,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     options: {
                                         chart: {
                                             height: 300,
-                                            spacing: [25, 25, 25, 25],
-                                            width: 300
+                                            spacing: [25, 25, 25, 25]
                                         },
                                         colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
                                         title: {
@@ -1127,14 +1114,20 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         enabled: false
                                     },
                                     func: function(chart) {
-                                        $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
-                                        chart.reflow();
 
-                                        $scope.$on('resize', function() {
-                                            $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
-                                            chart.reflow();
-                                        });
                                     }
+                                };
+
+                                var resizeTimer = 0;
+                                window.onresize =  function() {
+                                    if (resizeTimer)
+                                        clearTimeout(resizeTimer);
+
+                                    resizeTimer = setTimeout(function() {
+                                        $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
+                                        console.log('activity section width >>> ', document.getElementById('activity-section').offsetWidth);
+                                        $scope.customerOverviewConfig.options.chart.width = (document.getElementById('activity-section').offsetWidth) - 20;
+                                    }, 100);
                                 };
 
                                 $scope.timeonSiteConfig = {
@@ -1281,7 +1274,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                                 var chart1 = new Highcharts.Map({
                                      chart : {
-                                            renderTo: 'visitor_locations'
+                                            renderTo: 'visitor_locations',
+                                            height: 360
                                         },
 
                                         title : {
@@ -1537,6 +1531,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     options: {
                                         chart: {
                                             height: 250,
+                                            spacing: [25, 25, 25, 25]
                                         },
                                         title: {
                                             text: ''
@@ -1579,6 +1574,9 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     }],
                                     credits: {
                                         enabled: false
+                                    },
+                                    func: function(chart) {
+                                        chart.width = (document.getElementById('activity-section').offsetWidth) - 20;
                                     }
                                 };
                             });
