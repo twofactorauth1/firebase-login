@@ -240,7 +240,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                 };
 
                 //track clicks
-                document.body.onclick = function(ev) {
+                document.body.onclick = function(event) {
                   var now = new Date().getTime();
                   var node;
                   if (event.target.id) {
@@ -254,8 +254,8 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                     type: 'cl',
                     ms:now-startPageTimer,
                     ev: node,
-                    x: ev.layerX,
-                    y: ev.layerY
+                    x: event.layerX,
+                    y: event.layerY
                   });
                 };
 

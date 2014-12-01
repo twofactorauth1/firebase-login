@@ -1,4 +1,4 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-standalone', 'highmaps-data', 'highmaps-us', 'highcharts-ng','formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService', 'customerService', 'angular-daterangepicker', 'daterangepicker', 'count-to', 'keenService'], function(app) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-standalone', 'highmaps-data', 'highmaps-us', 'highcharts-ng','formatCurrency', 'secTotime', 'formatText', 'formatPercentage', 'dashboardService', 'customerService', 'angular-daterangepicker', 'daterangepicker', 'count-to', 'keenService'], function(app) {
     app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', 'keenService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService) {
         ngProgress.start();
 
@@ -1480,6 +1480,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     $scope.totalCanceledSubscriptions += parseInt(this.data[2].result[i].value);
                                 };
                                 $scope.canceledSubscriptions = cancelSubscriptionData;
+                                //TODO: get average of monthly subscription price instead of $97
+                                $scope.potentialMRRLoss = cancelSubscriptionData.length * 97;
 
                                 var userChurnCalc = this.data[2].result / (this.data[2].result + this.data[1].result) * 100;
                                 $scope.userChurn = userChurnCalc.toFixed(1) * -1;
