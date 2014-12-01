@@ -20,7 +20,7 @@
 	    	</a>
 	    </div>
 	</li>
-	<li ng-if="!currentpage.components.length" ng-hide="pageLoading" class="no-component">
+	<li ng-if="(currentpage.components.length===0)" class="no-component">
 		<div class="well empty-page">
 			<h1 class="center">This Page is Empty.</h1>
 			<h4 class="center">Add some components and start editing!</h4>
