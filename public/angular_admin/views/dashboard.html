@@ -65,7 +65,7 @@
                             </div>
                             <h3 class="panel-title">Customer Overview</h3>
                         </div>
-                        <div class="panel-body">
+                        <div class="panel-body" style="overflow: hidden;">
                             <highchart config="customerOverviewConfig" id="customerOverviewChart"></highchart>
                             <div>
                                 <div class="col-xs-6 top-four">
@@ -225,7 +225,7 @@
                                     <div ng-switch on="activity.activityType">
                                         <div ng-switch-when="EMAIL">
                                             <p>
-                                                <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
+                                                <span class="label label-default">EMAIL SENT</span> {{activity.detail}}
                                             </p>
                                             <p>An email was sent</p>
                                             <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
@@ -233,15 +233,23 @@
                                          <a ng-switch-when="TWEET" href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Reply to Tweet</a>
                                         <div ng-switch-when="CONTACT_CREATED">
                                             <p>
-                                                <span class="label label-info">{{activity.activityType}}</span> {{activity.detail}}
+                                                <span class="label label-info">CONTACT CREATED</span> {{activity.detail}}
                                             </p>
                                             <p>
                                                 {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} signed up for an account.</p>
                                             <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                         </div>
+                                            <div ng-switch-when="ACCOUNT_CREATED">
+                                                <p>
+                                                    <span class="label label-info">CONTACT CREATED</span> {{activity.detail}}
+                                                </p>
+                                                <p>
+                                                    {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} signed up for an account.</p>
+                                                <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                            </div>
                                         <div ng-switch-when="SUBSCRIBE">
                                             <p>
-                                                <span class="label label-success">{{activity.activityType}}</span> {{activity.detail}}
+                                                <span class="label label-success">SUBSCRIBE</span> {{activity.detail}}
                                             </p>
                                             <p>
                                                 {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}}
@@ -250,7 +258,7 @@
                                         </div>
                                         <div ng-switch-when="SUBSCRIBE_CANCEL">
                                             <p>
-                                                <span class="label label-danger">{{activity.activityType}}</span> {{activity.detail}}
+                                                <span class="label label-danger">CANCELED SUBSCRIPTION</span> {{activity.detail}}
                                             </p>
                                             <p>
                                                 {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} canceled account.</p>
@@ -258,11 +266,22 @@
                                         </div>
                                         <div ng-switch-when="PAGE_VIEW">
                                             <p>
-                                                <span class="label label-default">{{activity.activityType}}</span>
+                                                <span class="label label-default">PAGE VIEW</span>
                                             </p>
                                             <p>
                                                 {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
                                             <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="CONTACT_FORM">
+                                            <p>
+                                                <span class="label label-default">CONTACT FORM</span>
+                                            </p>
+                                            <p>
+                                                was submitted with the data:
+                                                <ul>
+                                                    <li ng-repeat="(k,v) in activity.extraFields">{{k}}: {{v}}</li>
+                                                </ul>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -338,29 +357,6 @@
                             <div id="visitor_locations"></div>
                         </div>
                     </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <div class="panel-btns">
-                                <a data-toggle="modal" data-target="#device-info" class="panel-edit"><i class="fa fa-info-circle"></i></a>
-                            </div>
-                            <h3 class="panel-title">Device</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="col-xs-6">
-                                <h1 class="center"><i class="fa fa-desktop" style="font-size: 70px;" ng-class="{'animated tada': newDesktop}"></i>
-                                </h1>
-                                <h3 class="center">{{desktop}}</h3>
-                                <h5 class="center">Desktop</h5>
-                            </div>
-                            <div class="col-xs-6">
-                                <h1 class="center"><i class="fa fa-mobile" style="font-size: 70px;"></i>
-                                </h1>
-                                <h3 class="center">{{mobile}}</h3>
-                                <h5 class="center">Mobile</h5>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="panel panel-info panel-nopadding">
@@ -395,12 +391,37 @@
 
             <div class="row">
                 <div class="col-xs-12 col-sm-4">
-                    <div class="panel panel-info panel-nopadding">
+                    <!-- <div class="panel panel-info panel-nopadding">
                         <div class="panel-heading">
                             <h3 class="panel-title">Gender</h3>
                         </div>
                         <div class="panel-body">
                             <highchart config="genderConfig"></highchart>
+                        </div>
+                    </div> -->
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <div class="panel-btns">
+                                <a data-toggle="modal" data-target="#device-info" class="panel-edit"><i class="fa fa-info-circle"></i></a>
+                            </div>
+                            <h3 class="panel-title">Device</h3>
+                        </div>
+                        <div class="panel-body">
+                        <div class="clearfix mb45"></div>
+                            <div class="col-xs-12">
+                                <h1 class="center"><i class="fa fa-desktop" style="font-size: 70px;" ng-class="{'animated tada': newDesktop}"></i>
+                                </h1>
+                                <h3 class="center">{{desktop}}</h3>
+                                <h5 class="center">Desktop</h5>
+                            </div>
+                            <div class="clearfix mb45"></div>
+                            <div class="col-xs-12">
+                                <h1 class="center"><i class="fa fa-mobile" style="font-size: 70px;"></i>
+                                </h1>
+                                <h3 class="center">{{mobile}}</h3>
+                                <h5 class="center">Mobile</h5>
+                            </div>
+                            <div class="clearfix mb45"></div>
                         </div>
                     </div>
                 </div>
@@ -442,22 +463,22 @@
                                                 <th ng-click="changeSorting('pageviews')">Pageviews</th>
                                                 <th ng-click="changeSorting('uniquePageviews')">Unique Pageviews</th>
                                                 <th ng-click="changeSorting('avgTime')">Avg. Time on Page</th>
-                                                <th ng-click="changeSorting('entrances')">Entrances</th>
+                                                <!-- <th ng-click="changeSorting('entrances')">Entrances</th>
                                                 <th ng-click="changeSorting('bounceRate')">Bounce Rate</th>
-                                                <th ng-click="changeSorting('exitRate')">Exit</th>
+                                                <th ng-click="changeSorting('exitRate')">Exit</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
 
                                             <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:sort.column:sort.descending">
-                                                <td class="truncate"><a href="/admin#/dashboard/single-page/?pageurl={{topPage.page}}">{{topPage.page}}</a>
+                                                <td><a href="/admin#/dashboard/single-page/?pageurl={{topPage.page}}" class="truncate">{{topPage.page}}</a>
                                                 </td>
                                                 <td>{{topPage.pageviews}}</td>
                                                 <td>{{topPage.uniquePageviews}}</td>
                                                 <td>{{topPage.avgTime | secTotime}}</td>
-                                                <td>{{topPage.entrances}}</td>
+                                                <!-- <td>{{topPage.entrances}}</td>
                                                 <td>{{topPage.bounceRate | formatPercentage}}</td>
-                                                <td>{{topPage.exitRate | formatPercentage}}</td>
+                                                <td>{{topPage.exitRate | formatPercentage}}</td> -->
                                             </tr>
                                         </tbody>
                                     </table>

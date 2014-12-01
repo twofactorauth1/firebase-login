@@ -914,66 +914,37 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 // Time on Site, Bounces
                                 // ======================================
 
+                                 //"filters": [{"property_name":"url.domain","operator":"eq","property_value":"main.indigenous.local"}],
+
+                                 // "entrances":{
+                                 //            "analysis_type":"count"
+                                 //        },
+                                 //        "exits":{
+                                 //            "analysis_type":"count"
+                                 //        },
+                                 //        "bounces":{
+                                 //            "analysis_type":"count"
+                                 //        }
+                                 //    }
+
                                 var params2 = {
-                                    "event_collection": 'page_data',
-                                    "timeframe": 'this_month',
-                                    "group_by": 'url.path',
-                                    "analyses": {
-                                        "pageviews":{
-                                            "analysis_type":"count"
-                                        },
-                                        "uniquePageviews":{
-                                            "analysis_type":"count_unique",
-                                            "target_property":"session_id"
-                                        },
-                                        "timeOnPage":{
-                                            "analysis_type":"sum",
-                                            "target_property":"timeOnPage"
-                                        },
-                                        "avgTimeOnPage":{
-                                            "analysis_type":"average",
-                                            "target_property":"timeOnPage"
-                                        },
-                                        "entrances":{
-                                            "analysis_type":"count",
-                                            "filters": [
-                                                {
-                                                    "property_name":"entrance",
-                                                    "operator":"eq",
-                                                    "property_value":true
-                                                }
-                                            ]
-                                        },
-                                        "exits":{
-                                            "analysis_type":"count",
-                                            "filters": [{"property_name":"exit","operator":"eq","property_value":true}]
-                                        },
-                                        "bounces":{
-                                            "analysis_type":"count",
-                                            "filters": [
-                                                {
-                                                    "property_name":"timeOnPage",
-                                                    "operator":"gt",
-                                                    "property_value":-10000
-                                                },
-                                                {
-                                                    "property_name":"timeOnPage",
-                                                    "operator":"lt",
-                                                    "property_value":10000
-                                                },
-                                                {
-                                                    "property_name":"url.path",
-                                                    "operator":"eq",
-                                                    "property_value":"/"
-                                                }
-                                            ]
-                                        }
-                                    }
+                                    event_collection: 'page_data',
+                                    analyses: {
+                                        "pageviews":{"analysis_type":"count"},
+                                        "uniquePageviews":{"analysis_type":"count_unique","target_property":"session_id"},
+                                        "timeOnPage":{"analysis_type":"sum","target_property":"timeOnPage"},
+                                        "avgTimeOnPage":{"analysis_type":"average","target_property":"timeOnPage"},
+                                        "entrances":{"analysis_type":"count","target_property":"entrance"},
+                                        "exits":{"analysis_type":"count","target_property":"exit"}
+                                    },
+                                    timeframe: {"start":timeframeStart,"end":timeframeEnd},
+                                    group_by: 'url.path'
                                 };
 
                                 //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
 
                                 keenService.multiAnalysis(params2, function(data){
+                                    console.log('page data >>> ', data);
                                     // ----------------------------------------
                                     // Top Pageviews
                                     // ----------------------------------------
@@ -1133,7 +1104,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 $scope.timeonSiteConfig = {
                                     options: {
                                         chart: {
-                                            height: 465,
+                                            height: 265,
                                             spacing: [25, 25, 25, 25]
                                         },
                                         colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
@@ -1275,7 +1246,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 var chart1 = new Highcharts.Map({
                                      chart : {
                                             renderTo: 'visitor_locations',
-                                            height: 360
+                                            height: 385
                                         },
 
                                         title : {
@@ -1574,9 +1545,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     }],
                                     credits: {
                                         enabled: false
-                                    },
-                                    func: function(chart) {
-                                        chart.width = (document.getElementById('activity-section').offsetWidth) - 20;
                                     }
                                 };
                             });
