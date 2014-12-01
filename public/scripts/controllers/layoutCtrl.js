@@ -243,12 +243,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }
 
         $scope.config = {
-            width: 740,
-            height: 380,
+            width: 780,
+            height: 320,
             autoHide: true,
             autoPlay: false,
             autoHideTime: 1500,
-            responsive: false,
+            responsive: true,
+            stretch: 'fit',
             theme: {
                 url: "../../js/libs/videogular-themes-default/videogular.css",
                 playIcon: "&#xe000;",
