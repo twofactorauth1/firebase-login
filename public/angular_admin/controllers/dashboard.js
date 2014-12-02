@@ -112,6 +112,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                     }
                 }, 100);
             };
+
+            ngProgress.complete();
         };
 
         $scope.renderCommerceCharts = function() {
