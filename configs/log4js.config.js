@@ -21,7 +21,7 @@ var props = {
 
 switch(process.env.NODE_ENV) {
     case 'production':
-        props.logLevel = log4js.levels.DEBUG; //TODO: Change back to "ERROR"
+        props.logLevel = log4js.levels.WARN;//TODO: Make this configurable
         break;
     case 'staging':
         props.logLevel = log4js.levels.DEBUG;

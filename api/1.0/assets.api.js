@@ -169,7 +169,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
 
         assetManager.getAsset(assetId, function(err, savedAsset){
-            if(err) {
+            if(err || savedAsset === null) {
                 return self.wrapError(res, 404, 'Asset not found', 'Could not find asset with id [' + assetId + '].');
             }
             self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ASSET, savedAsset.get('accountId'), function(err, isAllowed) {
