@@ -23705,6 +23705,9 @@ div[data-type="social"] .inner-page {
 .products-v1 .product-content .btn {
   margin-bottom: 15px;
 }
+.shopping-cart {
+  color: #444!important;
+}
 /*--------------------------
 ----Project Modal Styles----
 ----------------------------*/
