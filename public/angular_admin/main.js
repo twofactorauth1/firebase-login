@@ -81,6 +81,7 @@ require.config({
         'chartFacebookService': '/angular_admin/services/chart_facebook',
         'chartStripService': '/angular_admin/services/chart_strip',
         'chartTwoNetService': '/angular_admin/services/chart_two_net',
+        'chartAnalyticsService': '/angular_admin/services/chart_analytics',
         'importContactService': '/angular_admin/services/import_contacts',
         'toasterService': '/angular_admin/services/toaster',
         'accountService': '/angular_admin/services/account',

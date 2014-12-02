@@ -27,7 +27,6 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
     //api/1.0/analytics/session/{sessionId}/sessionStart
     this.sessionStart = function(fn) {
-        console.log('session start');
         var loc = $location.hash();
         var top = 400;
         var duration = 2000;
