@@ -228,16 +228,69 @@ var collator = {
             } else {
                 log.info('skipping keen because of testing environment.');
             }
+            
             dao.saveOrUpdate(sessionEvent, function(err, value) {
                 if (err) {
                     log.error('Error updating session event: ' + err);
                     callback(err);
                 } else {
-                    callback(null);
+                    //handle any pages that don't have pings
+                    collator._closePagesWithNoPings(sessionEvent, callback);
                 }
             });
         }
     },
+
+    _closePagesWithNoPings: function(sessionEvent, callback) {
+        var lastSeenMS = sessionEvent.get('session_end');
+        dao.findAndOrder({session_id:sessionEvent.get('session_id')}, null, $$.m.PageEvent, 'start_time', 1, function(err, pageList) {
+            if (err) {
+                log.error('Error retrieving page list for session event with id: ' + sessionEvent.get('session_id'));
+                cb(err);
+            } else {
+                //set the end_time for each page as the start_time from the next one.
+                _.each(pageList, function (page, index, list) {
+                    if (index < list.length - 1) {//not the last one.
+                        page.set('end_time', list[index + 1].get('start_time'));
+                    } else {//last one
+                        page.set('end_time', lastSeenMS);
+                    }
+                    var timeOnPage = page.get('end_time') - page.get('start_time');
+                    page.set('timeOnPage', timeOnPage);
+                });
+                //send to keen unless test environment
+                if (process.env.NODE_ENV !== "testing") {
+                    client.addEvents({
+                        "session_data": [sessionEvent],
+                        "page_data": pageList
+                    }, function (err, res) {
+                        if (err) {
+                            log.error('Error sending data to keen.');
+                        } else {
+                            log.info('Successfully sent events to keen.');
+                        }
+                    });
+                } else {
+                    log.info('skipping keen because of testing environment.');
+                }
+                dao.batchUpdate(pageList, $$.m.PageEvent, function(err, value){
+                    if(err) {
+                        log.error('Error saving page events for session with id: ' + sessionEvent.get('session_id'));
+                    } else {
+                        log.debug('finished processing session event ' + sessionEvent.get('session_id'));
+                    }
+                    callback(null, 'OK');
+                });
+
+            }
+        });
+
+
+
+
+
+    },
+
 
     _processSessionEvent: function(sessionEvent, index, list) {
         var self = this;
