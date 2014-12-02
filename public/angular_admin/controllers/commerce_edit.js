@@ -115,9 +115,15 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 PaymentService.postCreatePlan($scope.newSubscription, function(subscription) {
                     $scope.plans.push(subscription);
                     if ('stripePlans' in $scope.product.product_attributes) {
-                        $scope.product.product_attributes.stripePlans.push({id: subscription.id, active: true});
+                        $scope.product.product_attributes.stripePlans.push({
+                            id: subscription.id,
+                            active: true
+                        });
                     } else {
-                        $scope.product.product_attributes.stripePlans = [{id: subscription.id, active: true}];
+                        $scope.product.product_attributes.stripePlans = [{
+                            id: subscription.id,
+                            active: true
+                        }];
                     }
                     productPlanStatus[subscription.id] = true;
                     $scope.saveProductFn();
@@ -171,6 +177,15 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                     }
                 });
 
+                $scope.saveProductFn();
+            };
+
+            $scope.planToggleActiveFn = function(planId, active) {
+                $scope.product.product_attributes.stripePlans.forEach(function(value, index) {
+                    if (value.id == planId) {
+                        $scope.product.product_attributes.stripePlans[index].active = active;
+                    }
+                });
                 $scope.saveProductFn();
             };
 
