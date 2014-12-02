@@ -145,7 +145,23 @@ module.exports = {
 
     storeSessionEvent: function(sessionEvent, fn) {
         _log.debug('>> storeSessionEvent');
-        dao.saveOrUpdate(sessionEvent, fn);
+        //check if we have one already....
+        dao.findOne({session_id: sessionEvent.get('session_id')}, $$.m.SessionEvent, function(err, value){
+            if(err) {
+                _log.error('Error looking for duplicate sessionEvents: ' + err);
+                fn(err, null);
+            } else if(value=== null) {
+                dao.saveOrUpdate(sessionEvent, fn);
+            } else {
+                //already have one.  Store a ping instead.
+                var pingEvent = new $$.m.PingEvent({
+                    session_id: sessionEvent.get('session_id'),
+                    server_time: sessionEvent.get('server_time')
+                });
+                dao.saveOrUpdate(pingEvent, fn);
+            }
+        });
+
 
     },
 

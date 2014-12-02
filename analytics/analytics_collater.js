@@ -30,7 +30,7 @@ var secondsSinceLastPingThreshold = analyticsTimerConfig.ANALYTICS_LAST_PING_SEC
 
 var collator = {
 
-    secondsThreshold: 120,
+    secondsThreshold: secondsSinceLastPingThreshold,
 
     findCheckGroupAndSend: function(cb) {
         var self = this;
@@ -99,6 +99,8 @@ var collator = {
                             callback();
                         }
                     });
+                } else {
+                    callback();
                 }
             }
 
