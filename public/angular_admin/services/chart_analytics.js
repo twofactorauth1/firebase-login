@@ -1,299 +1,289 @@
 define(['app', 'keenService'], function(app) {
     app.register.service('ChartAnalyticsService', ['keenService', function(keenService) {
 
-        //start keen client
-        var client;
+        //common functions
 
-        // $scope.secToTime = function(duration) {
-        //         var minutes = parseInt(Math.floor(duration / 60));
-        //         var seconds = parseInt(duration - minutes * 60);
+        this.secToTime = function(duration) {
+                var minutes = parseInt(Math.floor(duration / 60));
+                var seconds = parseInt(duration - minutes * 60);
 
-        //         minutes = (minutes < 10) ? "0" + minutes : minutes;
-        //         seconds = (seconds < 10) ? "0" + seconds : seconds;
+                minutes = (minutes < 10) ? "0" + minutes : minutes;
+                seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-        //         return minutes + ":" + seconds;
-        // };
+                return minutes + ":" + seconds;
+        };
 
-        // $scope.calculatePercentage = function(oldval, newval) {
-        //     var result;
-        //     oldval = parseInt(oldval);
-        //     newval = parseInt(newval);
-        //     if(oldval == 0 && newval == 0) {
-        //         return 0;
-        //     }
-        //     if (newval < oldval) {
-        //         result = ((oldval - newval) / oldval) * 100;
-        //     } else {
-        //         result = ((newval - oldval) / newval) * 100;
-        //     }
+        this.calculatePercentage = function(oldval, newval) {
+            var result;
+            oldval = parseInt(oldval);
+            newval = parseInt(newval);
+            if(oldval == 0 && newval == 0) {
+                return 0;
+            }
+            if (newval < oldval) {
+                result = ((oldval - newval) / oldval) * 100;
+            } else {
+                result = ((newval - oldval) / newval) * 100;
+            }
 
-        //     if (newval === oldval) {
-        //         result = 100;
-        //     }
-        //     return Math.round(result * 100) / 100;
-        // };
+            if (newval === oldval) {
+                result = 100;
+            }
+            return Math.round(result * 100) / 100;
+        };
 
+        this.stateToAbbr = function(strInput) {
+            if(strInput) {
+                var strOutput;
+                var arrStates = [
+                        {
+                            "name": "Alabama",
+                            "abbreviation": "AL"
+                        },
+                        {
+                            "name": "Alaska",
+                            "abbreviation": "AK"
+                        },
+                        {
+                            "name": "American Samoa",
+                            "abbreviation": "AS"
+                        },
+                        {
+                            "name": "Arizona",
+                            "abbreviation": "AZ"
+                        },
+                        {
+                            "name": "Arkansas",
+                            "abbreviation": "AR"
+                        },
+                        {
+                            "name": "California",
+                            "abbreviation": "CA"
+                        },
+                        {
+                            "name": "Colorado",
+                            "abbreviation": "CO"
+                        },
+                        {
+                            "name": "Connecticut",
+                            "abbreviation": "CT"
+                        },
+                        {
+                            "name": "Delaware",
+                            "abbreviation": "DE"
+                        },
+                        {
+                            "name": "District Of Columbia",
+                            "abbreviation": "DC"
+                        },
+                        {
+                            "name": "Federated States Of Micronesia",
+                            "abbreviation": "FM"
+                        },
+                        {
+                            "name": "Florida",
+                            "abbreviation": "FL"
+                        },
+                        {
+                            "name": "Georgia",
+                            "abbreviation": "GA"
+                        },
+                        {
+                            "name": "Guam",
+                            "abbreviation": "GU"
+                        },
+                        {
+                            "name": "Hawaii",
+                            "abbreviation": "HI"
+                        },
+                        {
+                            "name": "Idaho",
+                            "abbreviation": "ID"
+                        },
+                        {
+                            "name": "Illinois",
+                            "abbreviation": "IL"
+                        },
+                        {
+                            "name": "Indiana",
+                            "abbreviation": "IN"
+                        },
+                        {
+                            "name": "Iowa",
+                            "abbreviation": "IA"
+                        },
+                        {
+                            "name": "Kansas",
+                            "abbreviation": "KS"
+                        },
+                        {
+                            "name": "Kentucky",
+                            "abbreviation": "KY"
+                        },
+                        {
+                            "name": "Louisiana",
+                            "abbreviation": "LA"
+                        },
+                        {
+                            "name": "Maine",
+                            "abbreviation": "ME"
+                        },
+                        {
+                            "name": "Marshall Islands",
+                            "abbreviation": "MH"
+                        },
+                        {
+                            "name": "Maryland",
+                            "abbreviation": "MD"
+                        },
+                        {
+                            "name": "Massachusetts",
+                            "abbreviation": "MA"
+                        },
+                        {
+                            "name": "Michigan",
+                            "abbreviation": "MI"
+                        },
+                        {
+                            "name": "Minnesota",
+                            "abbreviation": "MN"
+                        },
+                        {
+                            "name": "Mississippi",
+                            "abbreviation": "MS"
+                        },
+                        {
+                            "name": "Missouri",
+                            "abbreviation": "MO"
+                        },
+                        {
+                            "name": "Montana",
+                            "abbreviation": "MT"
+                        },
+                        {
+                            "name": "Nebraska",
+                            "abbreviation": "NE"
+                        },
+                        {
+                            "name": "Nevada",
+                            "abbreviation": "NV"
+                        },
+                        {
+                            "name": "New Hampshire",
+                            "abbreviation": "NH"
+                        },
+                        {
+                            "name": "New Jersey",
+                            "abbreviation": "NJ"
+                        },
+                        {
+                            "name": "New Mexico",
+                            "abbreviation": "NM"
+                        },
+                        {
+                            "name": "New York",
+                            "abbreviation": "NY"
+                        },
+                        {
+                            "name": "North Carolina",
+                            "abbreviation": "NC"
+                        },
+                        {
+                            "name": "North Dakota",
+                            "abbreviation": "ND"
+                        },
+                        {
+                            "name": "Northern Mariana Islands",
+                            "abbreviation": "MP"
+                        },
+                        {
+                            "name": "Ohio",
+                            "abbreviation": "OH"
+                        },
+                        {
+                            "name": "Oklahoma",
+                            "abbreviation": "OK"
+                        },
+                        {
+                            "name": "Oregon",
+                            "abbreviation": "OR"
+                        },
+                        {
+                            "name": "Palau",
+                            "abbreviation": "PW"
+                        },
+                        {
+                            "name": "Pennsylvania",
+                            "abbreviation": "PA"
+                        },
+                        {
+                            "name": "Puerto Rico",
+                            "abbreviation": "PR"
+                        },
+                        {
+                            "name": "Rhode Island",
+                            "abbreviation": "RI"
+                        },
+                        {
+                            "name": "South Carolina",
+                            "abbreviation": "SC"
+                        },
+                        {
+                            "name": "South Dakota",
+                            "abbreviation": "SD"
+                        },
+                        {
+                            "name": "Tennessee",
+                            "abbreviation": "TN"
+                        },
+                        {
+                            "name": "Texas",
+                            "abbreviation": "TX"
+                        },
+                        {
+                            "name": "Utah",
+                            "abbreviation": "UT"
+                        },
+                        {
+                            "name": "Vermont",
+                            "abbreviation": "VT"
+                        },
+                        {
+                            "name": "Virgin Islands",
+                            "abbreviation": "VI"
+                        },
+                        {
+                            "name": "Virginia",
+                            "abbreviation": "VA"
+                        },
+                        {
+                            "name": "Washington",
+                            "abbreviation": "WA"
+                        },
+                        {
+                            "name": "West Virginia",
+                            "abbreviation": "WV"
+                        },
+                        {
+                            "name": "Wisconsin",
+                            "abbreviation": "WI"
+                        },
+                        {
+                            "name": "Wyoming",
+                            "abbreviation": "WY"
+                        }
+                    ];
 
-        // $scope.query = function(params) {
-        //     return new Promise(function(resolve, reject) {
-        //         // dashboardService.queryGoogleAnalytics(params, function(data) {
-        //         //     resolve(data);
-        //         // });
-        //     });
-        // };
+                for (var i = 0; i < arrStates.length; i++) {
+                    if ((arrStates[i]['name']).toLowerCase() == (strInput).toLowerCase()) {
+                                strOutput = arrStates[i]['abbreviation'];
+                            break;
+                        }
+                };
+            }
 
-        // $scope.stateToAbbr = function(strInput) {
-        //     if(strInput) {
-        //         var strOutput;
-        //         var arrStates = [
-        //                 {
-        //                     "name": "Alabama",
-        //                     "abbreviation": "AL"
-        //                 },
-        //                 {
-        //                     "name": "Alaska",
-        //                     "abbreviation": "AK"
-        //                 },
-        //                 {
-        //                     "name": "American Samoa",
-        //                     "abbreviation": "AS"
-        //                 },
-        //                 {
-        //                     "name": "Arizona",
-        //                     "abbreviation": "AZ"
-        //                 },
-        //                 {
-        //                     "name": "Arkansas",
-        //                     "abbreviation": "AR"
-        //                 },
-        //                 {
-        //                     "name": "California",
-        //                     "abbreviation": "CA"
-        //                 },
-        //                 {
-        //                     "name": "Colorado",
-        //                     "abbreviation": "CO"
-        //                 },
-        //                 {
-        //                     "name": "Connecticut",
-        //                     "abbreviation": "CT"
-        //                 },
-        //                 {
-        //                     "name": "Delaware",
-        //                     "abbreviation": "DE"
-        //                 },
-        //                 {
-        //                     "name": "District Of Columbia",
-        //                     "abbreviation": "DC"
-        //                 },
-        //                 {
-        //                     "name": "Federated States Of Micronesia",
-        //                     "abbreviation": "FM"
-        //                 },
-        //                 {
-        //                     "name": "Florida",
-        //                     "abbreviation": "FL"
-        //                 },
-        //                 {
-        //                     "name": "Georgia",
-        //                     "abbreviation": "GA"
-        //                 },
-        //                 {
-        //                     "name": "Guam",
-        //                     "abbreviation": "GU"
-        //                 },
-        //                 {
-        //                     "name": "Hawaii",
-        //                     "abbreviation": "HI"
-        //                 },
-        //                 {
-        //                     "name": "Idaho",
-        //                     "abbreviation": "ID"
-        //                 },
-        //                 {
-        //                     "name": "Illinois",
-        //                     "abbreviation": "IL"
-        //                 },
-        //                 {
-        //                     "name": "Indiana",
-        //                     "abbreviation": "IN"
-        //                 },
-        //                 {
-        //                     "name": "Iowa",
-        //                     "abbreviation": "IA"
-        //                 },
-        //                 {
-        //                     "name": "Kansas",
-        //                     "abbreviation": "KS"
-        //                 },
-        //                 {
-        //                     "name": "Kentucky",
-        //                     "abbreviation": "KY"
-        //                 },
-        //                 {
-        //                     "name": "Louisiana",
-        //                     "abbreviation": "LA"
-        //                 },
-        //                 {
-        //                     "name": "Maine",
-        //                     "abbreviation": "ME"
-        //                 },
-        //                 {
-        //                     "name": "Marshall Islands",
-        //                     "abbreviation": "MH"
-        //                 },
-        //                 {
-        //                     "name": "Maryland",
-        //                     "abbreviation": "MD"
-        //                 },
-        //                 {
-        //                     "name": "Massachusetts",
-        //                     "abbreviation": "MA"
-        //                 },
-        //                 {
-        //                     "name": "Michigan",
-        //                     "abbreviation": "MI"
-        //                 },
-        //                 {
-        //                     "name": "Minnesota",
-        //                     "abbreviation": "MN"
-        //                 },
-        //                 {
-        //                     "name": "Mississippi",
-        //                     "abbreviation": "MS"
-        //                 },
-        //                 {
-        //                     "name": "Missouri",
-        //                     "abbreviation": "MO"
-        //                 },
-        //                 {
-        //                     "name": "Montana",
-        //                     "abbreviation": "MT"
-        //                 },
-        //                 {
-        //                     "name": "Nebraska",
-        //                     "abbreviation": "NE"
-        //                 },
-        //                 {
-        //                     "name": "Nevada",
-        //                     "abbreviation": "NV"
-        //                 },
-        //                 {
-        //                     "name": "New Hampshire",
-        //                     "abbreviation": "NH"
-        //                 },
-        //                 {
-        //                     "name": "New Jersey",
-        //                     "abbreviation": "NJ"
-        //                 },
-        //                 {
-        //                     "name": "New Mexico",
-        //                     "abbreviation": "NM"
-        //                 },
-        //                 {
-        //                     "name": "New York",
-        //                     "abbreviation": "NY"
-        //                 },
-        //                 {
-        //                     "name": "North Carolina",
-        //                     "abbreviation": "NC"
-        //                 },
-        //                 {
-        //                     "name": "North Dakota",
-        //                     "abbreviation": "ND"
-        //                 },
-        //                 {
-        //                     "name": "Northern Mariana Islands",
-        //                     "abbreviation": "MP"
-        //                 },
-        //                 {
-        //                     "name": "Ohio",
-        //                     "abbreviation": "OH"
-        //                 },
-        //                 {
-        //                     "name": "Oklahoma",
-        //                     "abbreviation": "OK"
-        //                 },
-        //                 {
-        //                     "name": "Oregon",
-        //                     "abbreviation": "OR"
-        //                 },
-        //                 {
-        //                     "name": "Palau",
-        //                     "abbreviation": "PW"
-        //                 },
-        //                 {
-        //                     "name": "Pennsylvania",
-        //                     "abbreviation": "PA"
-        //                 },
-        //                 {
-        //                     "name": "Puerto Rico",
-        //                     "abbreviation": "PR"
-        //                 },
-        //                 {
-        //                     "name": "Rhode Island",
-        //                     "abbreviation": "RI"
-        //                 },
-        //                 {
-        //                     "name": "South Carolina",
-        //                     "abbreviation": "SC"
-        //                 },
-        //                 {
-        //                     "name": "South Dakota",
-        //                     "abbreviation": "SD"
-        //                 },
-        //                 {
-        //                     "name": "Tennessee",
-        //                     "abbreviation": "TN"
-        //                 },
-        //                 {
-        //                     "name": "Texas",
-        //                     "abbreviation": "TX"
-        //                 },
-        //                 {
-        //                     "name": "Utah",
-        //                     "abbreviation": "UT"
-        //                 },
-        //                 {
-        //                     "name": "Vermont",
-        //                     "abbreviation": "VT"
-        //                 },
-        //                 {
-        //                     "name": "Virgin Islands",
-        //                     "abbreviation": "VI"
-        //                 },
-        //                 {
-        //                     "name": "Virginia",
-        //                     "abbreviation": "VA"
-        //                 },
-        //                 {
-        //                     "name": "Washington",
-        //                     "abbreviation": "WA"
-        //                 },
-        //                 {
-        //                     "name": "West Virginia",
-        //                     "abbreviation": "WV"
-        //                 },
-        //                 {
-        //                     "name": "Wisconsin",
-        //                     "abbreviation": "WI"
-        //                 },
-        //                 {
-        //                     "name": "Wyoming",
-        //                     "abbreviation": "WY"
-        //                 }
-        //             ];
-
-        //         for (var i = 0; i < arrStates.length; i++) {
-        //             if ((arrStates[i]['name']).toLowerCase() == (strInput).toLowerCase()) {
-        //                         strOutput = arrStates[i]['abbreviation'];
-        //                     break;
-        //                 }
-        //         };
-        //     }
-
-        //         return strOutput || false;
-        // };
+            return strOutput || false;
+        };
 
         // $scope.toUTC = function(str) {
         //     return Date.UTC(str.substring(0, 4), str.substring(4, 6) - 1, str.substring(6, 8));
@@ -353,29 +343,16 @@ define(['app', 'keenService'], function(app) {
         // };
 
         //local variables
+        var client;
         var timeframeStart = '2014-11-01T23:05:20.075Z';
         var timeframeEnd = '2014-11-30T23:05:20.075Z';
         var timeframePreviousStart = '2014-10-02T23:05:20.075Z';
         var timeframePreviousEnd = '2014-10-31T23:05:20.075Z';
         var interval = "daily";
         var firstQuery = true;
-
         var totalVisitors = 0;
 
-        this.keenClient = function(fn) {
-            Keen.ready(function() {
-
-                fn(client = new Keen({
-                    projectId: "54528c1380a7bd6a92e17d29",
-                    writeKey: "c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a",
-                    readKey: "bc102d9d256d3110db7ccc89a2c7efeb6ac37f1ff07b0a1f421516162522a972443b3b58ff6120ea6bd4d9dd469acc83b1a7d8a51cbb82caa89e590492e0579c8b7c65853ec1c6d6ce6f76535480f8c2f17fcb66dca14e699486efb02b83084744c68859b89f71f37ad846f7088ff96b",
-                    protocol: "https",
-                    host: "api.keen.io/3.0",
-                    requestType: "jsonp"
-                }));
-
-            });
-        };
+        //reports
 
         this.queryReports = function() {
             var queryData = {};
@@ -565,14 +542,58 @@ define(['app', 'keenService'], function(app) {
         };
 
         this.runReports = function(fn) {
-            console.log('runReports >>> ');
             var self = this;
 
             var reportData = {};
-            this.keenClient(function(client) {
-                console.log('client >>> ', client);
+            var params2 = {
+                event_collection: 'page_data',
+                analyses: {
+                    "pageviews":{"analysis_type":"count"},
+                    "uniquePageviews":{"analysis_type":"count_unique","target_property":"session_id"},
+                    "timeOnPage":{"analysis_type":"sum","target_property":"timeOnPage"},
+                    "avgTimeOnPage":{"analysis_type":"average","target_property":"timeOnPage"},
+                    "entrances":{"analysis_type":"count","target_property":"entrance"},
+                    "exits":{"analysis_type":"count","target_property":"exit"}
+                },
+                timeframe: {"start":timeframeStart,"end":timeframeEnd},
+                group_by: 'url.path'
+            };
+
+            keenService.multiAnalysis(params2, function(multidata){
+                var formattedTopPages = [];
+                var pagedformattedTopPages;
+
+                // ----------------------------------------
+                // Top Pageviews
+                // ----------------------------------------
+
+                for (var i = 0; i < multidata.result.length; i++) {
+                    var singleRow = multidata.result[i];
+                    var subObj = {};
+
+                    if (singleRow['url.path']) {
+                        subObj.page = singleRow['url.path'];
+                        subObj.pageviews = singleRow['pageviews'];
+                        subObj.avgTime = Math.abs(singleRow['avgTimeOnPage'])/1000;
+                        subObj.uniquePageviews = singleRow['uniquePageviews'];
+                        //TODO
+                        //subObj.entrances = singleRow['entrances'];
+                        //subObj.bounceRate = singleRow['bounces']/singleRow['pageviews'];
+                        //subObj.exitRate = self.calculatePercentage(singleRow['exits'], currentTotalPageviews);
+                    }
+                    if (subObj) {
+                        formattedTopPages.push(subObj);
+                    }
+                };
+
+                pagedformattedTopPages = formattedTopPages.slice(0, 15);
+
+                reportData.formattedTopPages = formattedTopPages;
+                reportData.pagedformattedTopPages = pagedformattedTopPages;
+            });
+
+            keenService.keenClient(function(client) {
                 var queryData = self.queryReports();
-                console.log('queryData >>> ', queryData);
                 client.run([
                     queryData.visitorLocations,
                     queryData.deviceReportByCategory,
@@ -624,39 +645,39 @@ define(['app', 'keenService'], function(app) {
                         visitorsData.push(subArr);
                     };
 
-                    var readyVisitorsData = [];
-                    if (currentTotalVisitors > totalVisitors) {
-                        totalVisitors = currentTotalVisitors;
-                        readyVisitorsData = visitorsData;
-                        if (firstQuery) {
-                            readyVisitorsData = visitorsData;
-                        } else {
-                            $scope.analyticsOverviewConfig.series[2].data = visitorsData;
-                        }
-                    }
+                    // var readyVisitorsData = [];
+                    // if (currentTotalVisitors > totalVisitors) {
+                    //     totalVisitors = currentTotalVisitors;
+                    //     readyVisitorsData = visitorsData;
+                    //     if (firstQuery) {
+                    //         readyVisitorsData = visitorsData;
+                    //     } else {
+                    //         $scope.analyticsOverviewConfig.series[2].data = visitorsData;
+                    //     }
+                    // }
 
-                    // var vistorsPreviousData = 0;
-                    // for (var h = 0; h < results[3].result.length; h++) {
-                    //     var value = results[3].result[h].value || 0;
-                    //     vistorsPreviousData += value;
-                    // };
+                    var vistorsPreviousData = 0;
+                    for (var h = 0; h < results[3].result.length; h++) {
+                        var value = results[3].result[h].value || 0;
+                        vistorsPreviousData += value;
+                    };
 
-                    // $scope.visitorsPercent = $scope.calculatePercentage($scope.visitors, vistorsPreviousData);
+                    var visitorsPercent = self.calculatePercentage(currentTotalVisitors, vistorsPreviousData);
 
-                    // // ----------------------------------------
-                    // // Pageviews Metric
-                    // // ----------------------------------------
+                    // ----------------------------------------
+                    // Pageviews Metric
+                    // ----------------------------------------
 
-                    // $scope.pageviewsData = [];
-                    // $scope.currentTotalPageviews = 0;
-                    // for (var j = 0; j < results[4].result.length; j++) {
-                    //     var subArr = [];
-                    //     var value = results[4].result[j].value || 0;
-                    //     $scope.currentTotalPageviews += value;
-                    //     subArr.push(new Date(results[4].result[j].timeframe.start).getTime());
-                    //     subArr.push(value);
-                    //     $scope.pageviewsData.push(subArr);
-                    // };
+                    var pageviewsData = [];
+                    var currentTotalPageviews = 0;
+                    for (var j = 0; j < results[4].result.length; j++) {
+                        var subArr = [];
+                        var value = results[4].result[j].value || 0;
+                        currentTotalPageviews += value;
+                        subArr.push(new Date(results[4].result[j].timeframe.start).getTime());
+                        subArr.push(value);
+                        pageviewsData.push(subArr);
+                    };
 
                     // if ($scope.currentTotalPageviews > $scope.totalPageviews) {
                     //     $scope.totalPageviews = $scope.currentTotalPageviews;
@@ -668,61 +689,28 @@ define(['app', 'keenService'], function(app) {
                     //     }
                     // }
 
-                    // var pageviewsPreviousData = 0;
-                    // for (var r = 0; r < results[5].result.length; r++) {
-                    //     var value = results[5].result[r].value || 0;
-                    //     pageviewsPreviousData += value;
-                    // };
+                    var pageviewsPreviousData = 0;
+                    for (var r = 0; r < results[5].result.length; r++) {
+                        var value = results[5].result[r].value || 0;
+                        pageviewsPreviousData += value;
+                    };
 
-                    // $scope.pageviewsPercent = $scope.calculatePercentage($scope.currentTotalPageviews, pageviewsPreviousData);
+                    var pageviewsPercent = self.calculatePercentage(currentTotalPageviews, pageviewsPreviousData);
 
-                    // // ----------------------------------------
-                    // // Sessions
-                    // // ----------------------------------------
+                    // ----------------------------------------
+                    // Sessions
+                    // ----------------------------------------
 
-                    // _sessionsData = [];
-                    // _totalSessions = 0;
-                    // for (var j = 0; j < results[6].result.length; j++) {
-                    //     var subArr = [];
-                    //     var value = results[6].result[j].value || 0;
-                    //     _totalSessions += value;
-                    //     subArr.push(new Date(results[6].result[j].timeframe.start).getTime());
-                    //     subArr.push(value);
-                    //     _sessionsData.push(subArr);
-                    // };
-
-                    // if (_totalSessions > $scope.sessions) {
-                    //     $scope.sessions = _totalSessions;
-                    //     if ($scope.firstQuery) {
-                    //         $scope.sessionsData = _sessionsData;
-                    //     } else {
-                    //         $scope.analyticsOverviewConfig.series[1].data = _sessionsData;
-                    //     }
-                    // }
-
-                    // $scope.visitDuration = $scope.secToTime(results[9].result / 1000);
-
-                    // // ----------------------------------------
-                    // // Average Visit Duration
-                    // // ----------------------------------------
-
-                    // // console.log('previous session >>> ', results[7]);
-                    // // console.log('avg session length >>> ', results[8]);
-
-                    // // ----------------------------------------
-                    // // Session Duration
-                    // // ----------------------------------------
-
-                    // _sessionsData = [];
-                    // _totalSessions = 0;
-                    // for (var j = 0; j < results[6].result.length; j++) {
-                    //     var subArr = [];
-                    //     var value = results[6].result[j].value || 0;
-                    //     _totalSessions += value;
-                    //     subArr.push(new Date(results[6].result[j].timeframe.start).getTime());
-                    //     subArr.push(value);
-                    //     _sessionsData.push(subArr);
-                    // };
+                    _sessionsData = [];
+                    _totalSessions = 0;
+                    for (var j = 0; j < results[6].result.length; j++) {
+                        var subArr = [];
+                        var value = results[6].result[j].value || 0;
+                        _totalSessions += value;
+                        subArr.push(new Date(results[6].result[j].timeframe.start).getTime());
+                        subArr.push(value);
+                        _sessionsData.push(subArr);
+                    };
 
                     // if (_totalSessions > $scope.sessions) {
                     //     $scope.sessions = _totalSessions;
@@ -733,20 +721,39 @@ define(['app', 'keenService'], function(app) {
                     //     }
                     // }
 
-                    // // ======================================
-                    // // Bounces
-                    // // ======================================
+                    var visitDuration = self.secToTime(results[9].result / 1000);
 
-                    // var _bouncesData = [];
-                    // var _totalBounces = 0;
-                    // for (var r = 0; r < results[10].result.length; r++) {
-                    //     var subArr = [];
-                    //     var value = results[10].result[r].value || 0;
-                    //     _totalBounces += value;
-                    //     subArr.push(new Date(results[10].result[r].timeframe.start).getTime());
-                    //     subArr.push(value);
-                    //     _bouncesData.push(subArr);
-                    // };
+                    // ----------------------------------------
+                    // Average Visit Duration
+                    // ----------------------------------------
+
+                    console.log('previous session >>> ', results[7]);
+                    console.log('avg session length >>> ', results[8]);
+
+                    var avgSessionData = [];
+                    for (var b = 0; b < results[8].result.length; b++) {
+                        var subArr = [];
+                        var value = results[8].result[b].value || 0;
+                        subArr.push(new Date(results[8].result[b].timeframe.start).getTime());
+                        subArr.push(value);
+                        avgSessionData.push(subArr);
+                    };
+
+
+                    // ======================================
+                    // Bounces
+                    // ======================================
+
+                    var _bouncesData = [];
+                    var _totalBounces = 0;
+                    for (var r = 0; r < results[10].result.length; r++) {
+                        var subArr = [];
+                        var value = results[10].result[r].value || 0;
+                        _totalBounces += value;
+                        subArr.push(new Date(results[10].result[r].timeframe.start).getTime());
+                        subArr.push(value);
+                        _bouncesData.push(subArr);
+                    };
 
                     // if (_totalBounces >= $scope.bounces) {
                     //     $scope.bounces = _totalBounces;
@@ -757,25 +764,25 @@ define(['app', 'keenService'], function(app) {
                     //     }
                     // }
 
-                    // $scope.bouncesPercent = $scope.calculatePercentage(_totalBounces, results[11].result);
+                    var bouncesPercent = self.calculatePercentage(_totalBounces, results[11].result);
 
                     // // ======================================
                     // // Traffic Sources
                     // // ======================================
 
-                    // var _trafficSourceData = [];
-                    // var _totalTypes = 0;
-                    // for (var i = 0; i < results[12].result.length; i++) {
-                    //     var subObj = [];
-                    //     if (results[12].result[i].source_type) {
-                    //         subObj.push(results[12].result[i].source_type.charAt(0).toUpperCase() + results[12].result[i].source_type.slice(1));
-                    //     } else {
-                    //         subObj.push('Other');
-                    //     }
-                    //     subObj.push(results[12].result[i].result);
-                    //     _totalTypes += results[12].result[i].result;
-                    //     _trafficSourceData.push(subObj);
-                    // };
+                    var _trafficSourceData = [];
+                    var _totalTypes = 0;
+                    for (var i = 0; i < results[12].result.length; i++) {
+                        var subObj = [];
+                        if (results[12].result[i].source_type) {
+                            subObj.push(results[12].result[i].source_type.charAt(0).toUpperCase() + results[12].result[i].source_type.slice(1));
+                        } else {
+                            subObj.push('Other');
+                        }
+                        subObj.push(results[12].result[i].result);
+                        _totalTypes += results[12].result[i].result;
+                        _trafficSourceData.push(subObj);
+                    };
 
                     // if (_totalTypes >= $scope.totalTypes) {
                     //     $scope.totalTypes = _totalTypes;
@@ -791,10 +798,10 @@ define(['app', 'keenService'], function(app) {
                     // // New vs. Returning Customers
                     // // ======================================
 
-                    // $scope.newVsReturning = [
-                    //     ['New', results[14].result],
-                    //     ['Returning', results[13].result]
-                    // ];
+                    var newVsReturning = [
+                        ['New', results[14].result],
+                        ['Returning', results[13].result]
+                    ];
 
 
                     // // ======================================
@@ -815,69 +822,18 @@ define(['app', 'keenService'], function(app) {
                     //  //        }
                     //  //    }
 
-                    // var params2 = {
-                    //     event_collection: 'page_data',
-                    //     analyses: {
-                    //         "pageviews":{"analysis_type":"count"},
-                    //         "uniquePageviews":{"analysis_type":"count_unique","target_property":"session_id"},
-                    //         "timeOnPage":{"analysis_type":"sum","target_property":"timeOnPage"},
-                    //         "avgTimeOnPage":{"analysis_type":"average","target_property":"timeOnPage"},
-                    //         "entrances":{"analysis_type":"count","target_property":"entrance"},
-                    //         "exits":{"analysis_type":"count","target_property":"exit"}
-                    //     },
-                    //     timeframe: {"start":timeframeStart,"end":timeframeEnd},
-                    //     group_by: 'url.path'
-                    // };
+                    // ======================================
+                    // Visitor Locations
+                    // ======================================
 
-                    // keenService.multiAnalysis(params2, function(data){
-                    //     // ----------------------------------------
-                    //     // Top Pageviews
-                    //     // ----------------------------------------
+                    var locationData = [];
 
-
-                    //     var output = [];
-
-                    //     for (var i = 0; i < data.result.length; i++) {
-                    //         var singleRow = data.result[i];
-                    //         var subObj = {};
-
-                    //         if (singleRow['url.path']) {
-                    //             subObj.page = singleRow['url.path'];
-                    //             subObj.pageviews = singleRow['pageviews'];
-                    //             subObj.avgTime = Math.abs(singleRow['avgTimeOnPage'])/1000;
-                    //             subObj.uniquePageviews = singleRow['uniquePageviews'];
-                    //             subObj.entrances = singleRow['entrances'];
-                    //             subObj.bounceRate = singleRow['bounces']/singleRow['pageviews'];
-
-                    //             //bounce rate
-                    //             //exit rate
-                    //             subObj.exitRate = $scope.calculatePercentage(singleRow['exits'], $scope.totalPageviews);
-                    //         }
-                    //         if (subObj) {
-                    //             output.push(subObj);
-                    //         }
-                    //     };
-
-                    //     $scope.formattedTopPages = output;
-                    //     $scope.pagedformattedTopPages = $scope.formattedTopPages.slice(0, $scope.pageLimit);
-                    // });
-
-                    // // $scope.do = function($event) {
-                    // //     $event.preventDefault();
-                    // // };
-
-                    // // ======================================
-                    // // Visitor Locations
-                    // // ======================================
-
-                    // $scope.locationData = [];
-
-                    // for (var i = 0; i < results[15].result.length; i++) {
-                    //     var subObj = {};
-                    //     subObj.code = $scope.stateToAbbr( results[15].result[i]['ip_geo_info.province'] );
-                    //     subObj.value = results[15].result[i].result;
-                    //     $scope.locationData.push(subObj);
-                    // };
+                    for (var i = 0; i < results[15].result.length; i++) {
+                        var subObj = {};
+                        subObj.code = self.stateToAbbr( results[15].result[i]['ip_geo_info.province'] );
+                        subObj.value = results[15].result[i].result;
+                        locationData.push(subObj);
+                    };
 
                     // // ======================================
                     // // Page Depth
@@ -897,16 +853,36 @@ define(['app', 'keenService'], function(app) {
                     //     $scope.firstQuery = false;
                     // }
 
-                    reportData.visitors = totalVisitors;
+
+                    //put all data is reportData
                     reportData.desktop = desktop;
                     reportData.mobile = mobile;
                     reportData.visitorsData = visitorsData;
                     reportData.currentTotalVisitors = currentTotalVisitors;
+                    reportData.vistorsPreviousData = vistorsPreviousData;
+                    reportData.visitorsPercent = visitorsPercent;
+                    reportData.currentTotalPageviews = currentTotalPageviews;
+                    reportData.pageviewsData = pageviewsData;
+                    reportData.sessionData = _sessionsData;
+                    reportData.totalSessions = _totalSessions;
+                    reportData.pageviewsPreviousData = pageviewsPreviousData;
+                    reportData.pageviewsPercent = pageviewsPercent;
+                    reportData.bouncesData = _bouncesData;
+                    reportData.totalBounces = _totalBounces;
+                    reportData.bouncesPercent = bouncesPercent;
+                    reportData.trafficSourceData = _trafficSourceData;
+                    reportData.totalTypes = _totalTypes;
+                    reportData.newVsReturning = newVsReturning;
+                    reportData.locationData = locationData;
+                    reportData.visitDuration = visitDuration;
+                    reportData.avgSessionData = avgSessionData;
 
                     fn(reportData);
                 });
             });
         };
+
+        //charts
 
         this.pageDepth = function() {
             var pageDepthConfig = {
@@ -1023,7 +999,7 @@ define(['app', 'keenService'], function(app) {
             fn(analyticsOverviewConfig);
         };
 
-        this.timeOnSite = function(bouncesData, fn) {
+        this.timeOnSite = function(timeOnSiteData, bouncesData, fn) {
             var timeonSiteConfig = {
                 options: {
                     chart: {
@@ -1070,7 +1046,7 @@ define(['app', 'keenService'], function(app) {
                 },
                 series: [{
                     name: 'Time on Site',
-                    data: bouncesData
+                    data: timeOnSiteData
                 }, {
                     name: 'Bounces',
                     data: bouncesData
@@ -1169,7 +1145,7 @@ define(['app', 'keenService'], function(app) {
                 }
             };
 
-            fn(newVsReturning);
+            fn(newVsReturningConfig);
         };
 
         this.visitorLocations = function(locationData, highchartsData) {

@@ -18197,6 +18197,12 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   padding: 8px 10px 5px;
 }
 .dashboard .keen-metric {
+  background: #49c5b1;
+  border-radius: 4px;
+  color: #fff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 10px 0;
+  text-align: center;
   margin: 10px auto;
   padding: 15px;
 }
@@ -18221,6 +18227,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   color: #ac382d;
 }
 .dashboard .keen-metric .keen-metric-title {
+  display: block;
   text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.2);
   font-weight: 400;
   font-size: 21px;
@@ -18228,6 +18235,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .dashboard .keen-metric .keen-metric-value {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
   font-size: 45px;
+  display: block;
+  font-weight: 700;
+  line-height: 84px;
 }
 .dashboard .keen-metric .keen-metric-change-value {
   font-size: 20px;
