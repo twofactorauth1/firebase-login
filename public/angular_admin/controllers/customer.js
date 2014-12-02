@@ -1,6 +1,7 @@
-define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngProgress', 'headroom', 'ngHeadroom', 'toasterService', 'iStartsWithFilter', 'ngInfiniteScroll', 'scrollerDirective', 'userService', 'moment', 'timeAgoFilter'], function(app) {
-    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', '$filter', 'UserService',
-        function($scope, CustomerService, ngProgress, ToasterService, $window, $filter, UserService) {
+define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngProgress', 'headroom', 'ngHeadroom', 'toasterService', 'iStartsWithFilter', 'ngInfiniteScroll', 'scrollerDirective', 'userService', 'moment', 'timeAgoFilter', 'navigationService'], function(app) {
+    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', '$filter', 'UserService', 'NavigationService',
+        function($scope, CustomerService, ngProgress, ToasterService, $window, $filter, UserService, NavigationService) {
+            NavigationService.updateNavigation();
             ngProgress.start();
             $scope.customerFilter = {};
             $scope.customerOrder = 'first';

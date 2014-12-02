@@ -13,7 +13,8 @@ define([
     'mediaDirective',
     'confirmClick2',
     'confirmClickDirective',
-    'courseServiceAdmin'
+    'courseServiceAdmin',
+    'navigationService'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -25,9 +26,10 @@ define([
         'ngProgress',
         '$rootScope',
         'CourseService',
-        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService) {
+        'NavigationService',
+        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService) {
             ngProgress.start();
-
+            NavigationService.updateNavigation();
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
@@ -49,6 +51,11 @@ define([
 
             $scope.status = {
                 isopen: false
+            };
+
+            $scope.addSocialLink = function(social, component ) {
+                 console.log('social', social);
+                 console.log('component', component);
             };
 
             $scope.spectrum = {
@@ -92,6 +99,11 @@ define([
                 // console.log('Activate Settings!');
             };
 
+            window.checkIfExists = function(component)
+            {
+                alert(1)
+            };
+
             document.getElementById("iframe-website").onload = function() {
                 ngProgress.complete();
                 var iframe = document.getElementById("iframe-website");
@@ -106,79 +118,80 @@ define([
                 //wait for iframe to load completely
                 $timeout(function() {
                     //unhide no-component
+                    if (iframeDoc.getElementById('body')) {
 
+                            if(iframeDoc.body.querySelectorAll('.no-component')[0]) {
+                                iframeDoc.body.querySelectorAll('.no-component')[0].style.display="block";
+                                iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility="visible";
+                            }
 
-                    if(iframeDoc.body.querySelectorAll('.no-component')[0]) {
-                        iframeDoc.body.querySelectorAll('.no-component')[0].style.display="block";
-                        iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility="visible";
+                            //add media modal click events to all images
+                            var images = iframeDoc.getElementById('body').querySelectorAll('img');
+
+                            for (var i = 0; i < images.length; i++) {
+                                if (typeof images[i].addEventListener != "undefined") {
+                                    images[i].removeEventListener("click");
+                                    images[i].addEventListener("click", function(e) {
+                                        $("#media-manager-modal").modal('show');
+                                        $scope.imageChange = true;
+                                        $scope.componentArrTarget = e.currentTarget;
+                                        $scope.componentEditing = _.findWhere($scope.components, {
+                                            _id: $(e.currentTarget).closest('.component').data('id')
+                                        });
+                                    });
+                                } else if (typeof images.attachEvent != "undefined") {
+                                    images[i].removeEvent("onclick");
+                                    images[i].attachEvent("onclick", iframeClickHandler);
+                                }
+                            };
+
+                            //add click events for all the settings buttons
+                            var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
+                            for (var i = 0; i < settingsBtns.length; i++) {
+                                if (typeof settingsBtns[i].addEventListener != "undefined") {
+                                    settingsBtns[i].removeEventListener("click");
+                                    settingsBtns[i].addEventListener("click", function(e) {
+                                        $scope.editComponent(e.currentTarget.attributes['data-id'].value);
+                                    });
+                                } else if (typeof settingsBtns.attachEvent != "undefined") {
+                                    settingsBtns[i].removeEvent("onclick");
+                                    settingsBtns[i].attachEvent("onclick", iframeClickHandler);
+                                }
+                            };
+
+                            //add click events for all the add component buttons
+                            var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
+                            for (var i = 0; i < addComponentBtns.length; i++) {
+                                if (typeof addComponentBtns[i].addEventListener != "undefined") {
+                                    addComponentBtns[i].removeEventListener("click");
+                                    addComponentBtns[i].addEventListener("click", function(e) {
+                                    $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+                                    var element = angular.element('#add-component-modal');
+                                        element.modal('show');
+                                        //get the current index of the component pressed
+                                    });
+                                } else if (typeof addComponentBtns.attachEvent != "undefined") {
+                                    addComponentBtns[i].removeEvent("onclick");
+                                    addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
+                                }
+                            };
+
+                            //TODO get event from stop
+
+                            iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
+                                setTimeout(function(){
+                                    $scope.$apply(function() {
+                                        $scope.editPage;
+                                    });
+                                });
+                            }, false);
+
+                            iframeDoc.addEventListener("dblclick", function(e) {
+                                $scope.editPage();
+                            }, false);
                     }
 
-                    //add media modal click events to all images
-                    var images = iframeDoc.getElementById('body').querySelectorAll('img');
-
-                    for (var i = 0; i < images.length; i++) {
-                        if (typeof images[i].addEventListener != "undefined") {
-                            images[i].removeEventListener("click");
-                            images[i].addEventListener("click", function(e) {
-                                $("#media-manager-modal").modal('show');
-                                $scope.imageChange = true;
-                                $scope.componentArrTarget = e.currentTarget;
-                                $scope.componentEditing = _.findWhere($scope.components, {
-                                    _id: $(e.currentTarget).closest('.component').data('id')
-                                });
-                            });
-                        } else if (typeof images.attachEvent != "undefined") {
-                            images[i].removeEvent("onclick");
-                            images[i].attachEvent("onclick", iframeClickHandler);
-                        }
-                    };
-
-                    //add click events for all the settings buttons
-                    var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
-                    for (var i = 0; i < settingsBtns.length; i++) {
-                        if (typeof settingsBtns[i].addEventListener != "undefined") {
-                            settingsBtns[i].removeEventListener("click");
-                            settingsBtns[i].addEventListener("click", function(e) {
-                                $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-                            });
-                        } else if (typeof settingsBtns.attachEvent != "undefined") {
-                            settingsBtns[i].removeEvent("onclick");
-                            settingsBtns[i].attachEvent("onclick", iframeClickHandler);
-                        }
-                    };
-
-                    //add click events for all the add component buttons
-                    var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
-                    for (var i = 0; i < addComponentBtns.length; i++) {
-                        if (typeof addComponentBtns[i].addEventListener != "undefined") {
-                            addComponentBtns[i].removeEventListener("click");
-				            addComponentBtns[i].addEventListener("click", function(e) {
-				            $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
-				            var element = angular.element('#add-component-modal');
-                                element.modal('show');
-                                //get the current index of the component pressed
-                            });
-                        } else if (typeof addComponentBtns.attachEvent != "undefined") {
-                            addComponentBtns[i].removeEvent("onclick");
-                            addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
-                        }
-                    };
-
-                    //TODO get event from stop
-
-                    iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
-                        setTimeout(function(){
-                            $scope.$apply(function() {
-                                $scope.editPage;
-                            });
-                        });
-                    }, false);
-
-                    iframeDoc.addEventListener("dblclick", function(e) {
-                        $scope.editPage();
-                    }, false);
-
-                }, 5000);
+                }, 100);
             };
 
             UserService.getAccount(function(account) {
@@ -389,6 +402,7 @@ define([
                     //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                     //document.getElementById('iframe-website').contentWindow.location.reload(true);
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
                     //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
                 });
                 //$scope.deactivateAloha();
@@ -451,7 +465,28 @@ define([
                     that.originalCurrentPageComponents = localPage.components;
                 });
             };
+            $scope.addSocialLink = function(social) {
+                if(social && social.name && social.url)
+                {
+                    var selectedName = _.findWhere($scope.componentEditing.networks, {
+                        name: social.name
+                    });
+                    if(selectedName)
+                    {
+                        return;
+                    }
 
+                    $scope.componentEditing.networks.push({
+                    name : social.name,
+                    url : social.url,
+                    icon : social.name,
+                    class_name : social.name
+                    }); 
+                    social.name = ""; 
+                    social.url = ""; 
+                    $scope.saveComponent();
+                }            
+            };
 
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
@@ -560,7 +595,7 @@ define([
                         $scope.components[i] = $scope.componentEditing
                     }
                 }
-
+                $scope.currentPage.components = $scope.components;
                 $scope.updateIframeComponents(function() {
                      $scope.bindEvents();
                 });
@@ -802,7 +837,7 @@ define([
                 },
                 {
                     title: 'Social Links',
-                    type: 'social-feed',
+                    type: 'social',
                     icon: 'custom social-links',
                     enabled: false
                 },
@@ -811,7 +846,13 @@ define([
                     type: 'video',
                     icon: 'fa fa-video',
                     enabled: true
-                }
+                },
+                {
+                    title: 'Social Links',
+                    type: 'social-link',
+                    icon: 'custom social-links',
+                    enabled: true
+                },
             ];
 
             $scope.selectComponent = function(type) {
@@ -874,6 +915,42 @@ define([
 
                 offFn();
             });
+
+            $scope.updateLinkList = function(linkLists)
+            {
+                var linkLabelsArr = [];
+                var editedLinksLists = document.getElementById("reorderNavBarModal").querySelectorAll('.head-menu-links');
+                for (var i = 0; i < editedLinksLists.length; i++) {
+                    var linkLabel = editedLinksLists[i].attributes['data-label'].value;
+                    if(linkLabel)
+                        linkLabelsArr.push(linkLabel);
+                }              
+                if(linkLabelsArr.length)
+                {
+                   $scope.website.linkLists.forEach(function(value, index) {
+                     if(value.handle === "head-menu")
+                     {
+                        var newLinkListOrder = [];
+                        for (var i = 0; i < editedLinksLists.length; i++) {
+                            var matchedLinkList = _.findWhere(value.links, {
+                                label: linkLabelsArr[i]
+                            });
+                            newLinkListOrder.push(matchedLinkList);
+                        };
+                        if(newLinkListOrder.length)
+                        {
+                            $scope.website.linkLists[index].links = newLinkListOrder;
+                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                            console.log('updated website navigation link list', data);
+                            toaster.pop('success', "Navigation updated successfully.");
+                        });
+                        }  
+                        
+                     }
+                 });  
+                }
+                         
+            }
         }
     ]);
 });

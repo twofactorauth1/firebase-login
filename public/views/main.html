@@ -3,7 +3,7 @@
 	    <div ng-include src="component.url"></div>
 	</div>
 </div> -->
-<div ng-show="isEditing" style="height: 50px;"></div>
+<div ng-show="isEditing"></div>
 <ul ui-sortable="sortableOptions">
 	<li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;" last-item >
 		<div class="componentActions">
@@ -20,7 +20,7 @@
 	    	</a>
 	    </div>
 	</li>
-	<li ng-if="!currentpage.components.length" class="no-component">
+	<li ng-if="(currentpage.components.length===0)" class="no-component">
 		<div class="well empty-page">
 			<h1 class="center">This Page is Empty.</h1>
 			<h4 class="center">Add some components and start editing!</h4>
@@ -33,7 +33,6 @@
 	    </div>
 	</li>
 </ul>
-<div id="model_container"></div>
 
 <style>
     .zee-blur {

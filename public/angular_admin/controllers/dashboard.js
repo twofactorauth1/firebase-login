@@ -1,8 +1,11 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-standalone', 'highmaps-data', 'highmaps-us', 'highcharts-ng','formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService', 'customerService', 'angular-daterangepicker', 'daterangepicker', 'count-to', 'keenService'], function(app) {
-    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', 'keenService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-standalone', 'highmaps-data', 'highmaps-us', 'highcharts-ng','formatCurrency', 'secTotime', 'formatText', 'formatPercentage', 'dashboardService', 'customerService', 'angular-daterangepicker', 'daterangepicker', 'count-to', 'keenService', 'navigationService'], function(app) {
+    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', 'keenService', 'NavigationService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService) {
         ngProgress.start();
-
+                NavigationService.updateNavigation();
                 $scope.activeTab = 'analytics';
+                $scope.$watch('activeTab', function() {
+                    console.log('tab changed');
+                });
 
                 $scope.date = {startDate: null, endDate: null};
                 $scope.pickerOptions = {
@@ -45,25 +48,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                     });
                 });
 
-                // var params = {
-                //     "event_collection": 'sessions',
-                //     "timeframe": 'this_month',
-                //     "analyses": {
-                //         "total_sessions":{
-                //             "analysis_type":"count_unique",
-                //             "target_property":"session_id"
-                //         },
-                //         "average_session":{
-                //             "analysis_type":"average",
-                //             "target_property":"session_length"
-                //         }
-                //     }
-                // };
-
-                // keenService.multiAnalysis(params, function(data){
-                //     console.log('keen data >>> ', data);
-                // });
-
                 Keen.ready(function() {
 
 
@@ -94,15 +78,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 result = 100;
                             }
                             return Math.round(result * 100) / 100;
-                        };
-
-
-                        $scope.query = function(params) {
-                            return new Promise(function(resolve, reject) {
-                                // dashboardService.queryGoogleAnalytics(params, function(data) {
-                                //     resolve(data);
-                                // });
-                            });
                         };
 
                         $scope.stateToAbbr = function(strInput) {
@@ -363,7 +338,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                         };
 
                         $scope.countDuplicates = function(array_elements) {
-                            console.log('array_elements >>> ', array_elements);
                             array_elements.sort();
                             var duplicates = [];
                             var current = null;
@@ -374,7 +348,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     if (cnt > 0) {
                                         subObj.depth = current;
                                         subObj.count = cnt;
-                                        console.log('pushing >>> ', subObj);
                                         duplicates.push(subObj);
                                     }
                                     current = array_elements[i];
@@ -393,7 +366,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                                 if (duplicates[k]){
 
-                                    console.log('duplicate exists ', k);
 
                                     // if(array_elements.indexOf(duplicates[k].depth) === -1 && duplicates[k].depth < 20) {
                                     //     subObj.depth = k+1;
@@ -429,7 +401,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                             groupBy: "ip_geo_info.city"
                         });
 
-                        console.log('window.location.host ', window.location.hostname);
 
                         var deviceReportByCategory = new Keen.Query("count", {
                             eventCollection: "session_data",
@@ -878,7 +849,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                                     var _trafficSourceData = [];
                                     var _totalTypes = 0;
-                                    console.log('result[12] >>> ', results[12].result);
                                     for (var i = 0; i < results[12].result.length; i++) {
                                         var subObj = [];
                                         if (results[12].result[i].source_type) {
@@ -916,41 +886,37 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 // Time on Site, Bounces
                                 // ======================================
 
+                                 //"filters": [{"property_name":"url.domain","operator":"eq","property_value":"main.indigenous.local"}],
+
+                                 // "entrances":{
+                                 //            "analysis_type":"count"
+                                 //        },
+                                 //        "exits":{
+                                 //            "analysis_type":"count"
+                                 //        },
+                                 //        "bounces":{
+                                 //            "analysis_type":"count"
+                                 //        }
+                                 //    }
+
                                 var params2 = {
-                                    "event_collection": 'page_data',
-                                    "timeframe": 'this_month',
-                                    "group_by": 'url.path',
-                                    "analyses": {
-                                        "pageviews":{
-                                            "analysis_type":"count"
-                                        },
-                                        "uniquePageviews":{
-                                            "analysis_type":"count_unique",
-                                            "target_property":"session_id"
-                                        },
-                                        "timeOnPage":{
-                                            "analysis_type":"sum",
-                                            "target_property":"timeOnPage"
-                                        },
-                                        "avgTimeOnPage":{
-                                            "analysis_type":"average",
-                                            "target_property":"timeOnPage"
-                                        },
-                                        "entrances":{
-                                            "analysis_type":"count",
-                                            "filters": [{"property_name":"entrance","operator":"eq","property_value":true}]
-                                        },
-                                        "exits":{
-                                            "analysis_type":"count",
-                                            "filters": [{"property_name":"exit","operator":"eq","property_value":true}]
-                                        }
-                                    }
+                                    event_collection: 'page_data',
+                                    analyses: {
+                                        "pageviews":{"analysis_type":"count"},
+                                        "uniquePageviews":{"analysis_type":"count_unique","target_property":"session_id"},
+                                        "timeOnPage":{"analysis_type":"sum","target_property":"timeOnPage"},
+                                        "avgTimeOnPage":{"analysis_type":"average","target_property":"timeOnPage"},
+                                        "entrances":{"analysis_type":"count","target_property":"entrance"},
+                                        "exits":{"analysis_type":"count","target_property":"exit"}
+                                    },
+                                    timeframe: {"start":timeframeStart,"end":timeframeEnd},
+                                    group_by: 'url.path'
                                 };
 
                                 //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
 
                                 keenService.multiAnalysis(params2, function(data){
-                                    console.log('params2 >>> ', data);
+                                    console.log('page data >>> ', data);
                                     // ----------------------------------------
                                     // Top Pageviews
                                     // ----------------------------------------
@@ -961,13 +927,14 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     for (var i = 0; i < data.result.length; i++) {
                                         var singleRow = data.result[i];
                                         var subObj = {};
-                                        console.log('singleRow ', singleRow['exits']);
+
                                         if (singleRow['url.path']) {
                                             subObj.page = singleRow['url.path'];
                                             subObj.pageviews = singleRow['pageviews'];
-                                            subObj.avgTime = singleRow['avgTimeOnPage'];
+                                            subObj.avgTime = Math.abs(singleRow['avgTimeOnPage'])/1000;
                                             subObj.uniquePageviews = singleRow['uniquePageviews'];
                                             subObj.entrances = singleRow['entrances'];
+                                            subObj.bounceRate = singleRow['bounces']/singleRow['pageviews'];
 
                                             //bounce rate
                                             //exit rate
@@ -977,7 +944,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                             output.push(subObj);
                                         }
                                     };
-                                    console.log('output >>> ', output);
 
                                     $scope.formattedTopPages = output;
                                     $scope.pagedformattedTopPages = $scope.formattedTopPages.slice(0, $scope.pageLimit);
@@ -1004,7 +970,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 // Page Depth
                                 // ======================================
 
-                                console.log('pageDepth >>> ', results[16].result);
 
                                 var _depthValues = [];
                                 for (var i = 0; i < results[16].result.length; i++) {
@@ -1012,11 +977,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 };
 
                                 var testing = $scope.countDuplicates(_depthValues);
-
-                                console.log('_depthValues >>> ', _depthValues);
-                                console.log('countDuplicates >>> ', testing);
-
-
 
                                 if($scope.firstQuery) {
                                     ngProgress.complete();
@@ -1030,7 +990,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                         window.setInterval(function(){
                             $scope.runReports();
-                        }, 5000);
+                        }, 15000);
 
                         // ======================================
                         // Overview
@@ -1043,8 +1003,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     options: {
                                         chart: {
                                             height: 300,
-                                            spacing: [25, 25, 25, 25],
-                                            width: 300
+                                            spacing: [25, 25, 25, 25]
                                         },
                                         colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
                                         title: {
@@ -1078,7 +1037,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         }
                                     },
                                     yAxis: {
-                                        // min: 0,
+                                        min: 0,
                                         // max: Math.max.apply(Math, lineData) + 100,
                                         title: {
                                             text: ''
@@ -1098,20 +1057,26 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         enabled: false
                                     },
                                     func: function(chart) {
-                                        $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
-                                        chart.reflow();
 
-                                        $scope.$on('resize', function() {
-                                            $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
-                                            chart.reflow();
-                                        });
                                     }
+                                };
+
+                                var resizeTimer = 0;
+                                window.onresize =  function() {
+                                    if (resizeTimer)
+                                        clearTimeout(resizeTimer);
+
+                                    resizeTimer = setTimeout(function() {
+                                        $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
+                                        console.log('activity section width >>> ', document.getElementById('activity-section').offsetWidth);
+                                        $scope.customerOverviewConfig.options.chart.width = (document.getElementById('activity-section').offsetWidth) - 20;
+                                    }, 100);
                                 };
 
                                 $scope.timeonSiteConfig = {
                                     options: {
                                         chart: {
-                                            height: 465,
+                                            height: 265,
                                             spacing: [25, 25, 25, 25]
                                         },
                                         colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
@@ -1252,7 +1217,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                                 var chart1 = new Highcharts.Map({
                                      chart : {
-                                            renderTo: 'visitor_locations'
+                                            renderTo: 'visitor_locations',
+                                            height: 385
                                         },
 
                                         title : {
@@ -1305,69 +1271,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                         }
                                 });
                         };
-
-
-                        // $scope.secondGACall = function() {
-
-                        //     setTimeout(function() {
-
-                        //         var topPageViews = $scope.query({
-                        //             ids: 'ga:82461709',
-                        //             metrics: 'ga:pageviews,ga:uniquePageviews,ga:avgTimeOnPage,ga:entrances,ga:bounceRate,ga:exitRate',
-                        //             dimensions: 'ga:pagePath',
-                        //             'start-date': '30daysAgo',
-                        //             'end-date': 'yesterday'
-                        //         });
-
-
-                        //         Promise.all([newVsReturningChart, topPageViews, trafficSources]).then(function(results) {
-
-
-
-                        //             ngProgress.complete();
-
-                        //             // ----------------------------------------
-                        //             // Top Pageviews
-                        //             // ----------------------------------------
-
-                        //             $scope.topPages = results[1].rows;
-
-                        //             var output = [];
-
-                        //             for (var i = 0; i < $scope.topPages.length; i++) {
-                        //                 var singleRow = $scope.topPages[i];
-                        //                 var subObj = {};
-                        //                 for (var k = 0; k < singleRow.length; k++) {
-                        //                     if (k == 0) {
-                        //                         subObj.page = singleRow[k]
-                        //                     }
-                        //                     if (k == 1) {
-                        //                         subObj.pageviews = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 2) {
-                        //                         subObj.uniquePageviews = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 3) {
-                        //                         subObj.avgTime = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 4) {
-                        //                         subObj.entrances = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 5) {
-                        //                         subObj.bounceRate = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 6) {
-                        //                         subObj.exitRate = parseInt(singleRow[k])
-                        //                     }
-                        //                 };
-                        //                 if (subObj) {
-                        //                     output.push(subObj);
-                        //                 }
-                        //             };
-
-
-                        //             $scope.formattedTopPages = output;
-                        //             $scope.pagedformattedTopPages = $scope.formattedTopPages.slice(0, $scope.pageLimit);
 
                         PaymentService.getCustomers(function(data) {
                             $scope.customers = data;
@@ -1486,6 +1389,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     $scope.totalCanceledSubscriptions += parseInt(this.data[2].result[i].value);
                                 };
                                 $scope.canceledSubscriptions = cancelSubscriptionData;
+                                //TODO: get average of monthly subscription price instead of $97
+                                $scope.potentialMRRLoss = cancelSubscriptionData.length * 97;
 
                                 var userChurnCalc = this.data[2].result / (this.data[2].result + this.data[1].result) * 100;
                                 $scope.userChurn = userChurnCalc.toFixed(1) * -1;
@@ -1508,6 +1413,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     options: {
                                         chart: {
                                             height: 250,
+                                            spacing: [25, 25, 25, 25]
                                         },
                                         title: {
                                             text: ''
@@ -1660,8 +1566,11 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                             var result = this.data.result;
 
+                            console.log('result >>> ', result);
+
                             for (var x in result) {
-                                if (result[x].data.previous_attributes.plan.amount >= result[x].data.object.plan.amount) {
+                                //result[x].data.previous_attributes.plan.amount >= 
+                                if (result[x].data.object.plan.amount) {
                                     updatedSubscriptions.push(result[x]);
                                 }
                             }

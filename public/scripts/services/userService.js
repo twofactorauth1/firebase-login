@@ -39,6 +39,8 @@ mainApp.service('userService', function ($http) {
     };
 
     this.initializeUser = function(user, fn) {
+        user.session_permanent = ipCookie("permanent_cookie");
+        user.fingerprint = new Fingerprint().get();
         var apiUrl = baseUrl + ['user', 'initialize'].join('/');
         $http({
             url: apiUrl,

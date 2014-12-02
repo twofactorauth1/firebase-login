@@ -7,6 +7,7 @@
 
 require.config({
     baseUrl: '/js',
+    waitSeconds: 0,
     paths: {
         'jquery': 'libs/jquery/dist/jquery',
         'jqueryUI': 'libs/jquery-ui/jquery-ui.min',
@@ -75,10 +76,12 @@ require.config({
         'websiteService': '/angular_admin/services/website',
         'postService': '/angular_admin/services/post',
         'productService': '/angular_admin/services/product',
+        'navigationService': '/angular_admin/services/navigationService',
         'dashboardService': '/angular_admin/services/dashboard',
         'chartFacebookService': '/angular_admin/services/chart_facebook',
         'chartStripService': '/angular_admin/services/chart_strip',
         'chartTwoNetService': '/angular_admin/services/chart_two_net',
+        'chartAnalyticsService': '/angular_admin/services/chart_analytics',
         'importContactService': '/angular_admin/services/import_contacts',
         'toasterService': '/angular_admin/services/toaster',
         'accountService': '/angular_admin/services/account',
@@ -101,6 +104,7 @@ require.config({
         'formatCurrency':'/angular_admin/filters/currency',
         'secTotime': '/angular_admin/filters/sec2time',
         'formatPercentage': '/angular_admin/filters/formatPercentage',
+        'formatText': '/angular_admin/filters/format_text',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",

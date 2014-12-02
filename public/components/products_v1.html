@@ -41,11 +41,16 @@
                             <h5>$ {{product.regular_price}}</h5>
 
                             <p>{{product.description}}</p>
-                            <button class="btn btn-primary center" ng-click="addDetailsToCart(product)" href="#">
+                            <button class="btn btn-primary center" ng-click="addDetailsToCart(product)" href="#" ng-if="product.type != 'external_link'">
                                 <div data-class="btn-text" class="editable">
                                     <span class="fa fa-shopping-cart"></span>Add to Cart
                                 </div>
                             </button>
+                            <a class="btn btn-primary center" href="http://{{product.externalLinklinkUrl}}" ng-if="product.type == 'external_link'" target="{{product.externalLinkOpenIn}}">
+                                <div data-class="btn-text" class="editable">
+                                    <span class="fa fa-shopping-cart hidden"></span>{{product.externalLinklinkText}}
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
