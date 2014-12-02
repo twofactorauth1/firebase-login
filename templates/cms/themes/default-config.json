@@ -14,22 +14,6 @@
                         "type": "home",
                         "data": "index"
                     }
-                },
-                {
-                    "label": "About us",
-                    "type": "link",
-                    "linkTo": {
-                        "type": "page",
-                        "data": "about-us"
-                    }
-                },
-                {
-                    "label": "Indigenous",
-                    "type": "link",
-                    "linkTo": {
-                        "type": "url",
-                        "data": "http://INDIGENOUS SOFTWARE, INC."
-                    }
                 }
             ]
         },

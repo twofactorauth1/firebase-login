@@ -110,7 +110,12 @@
                                    ng-click="resetUploader()"
                                    multiple>
                         </label>
-                        <button type="button" ng-show="$parent.insertMedia" class="btn btn-primary insert-image" ng-click="m.onInsertMedia()">Insert
+                        <button
+                                ng-show="showInsert"
+                                type="button"
+                                ng-show="$parent.insertMedia"
+                                class="btn btn-primary insert-image"
+                                ng-click="m.onInsertMedia()">Insert
                             Images
                         </button>
                     </div>

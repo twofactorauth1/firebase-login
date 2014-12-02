@@ -44,14 +44,14 @@ var mainApp = angular
                 templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
-            .when('/blog', {
-                templateUrl: '../views/blog.html',
-                controller: 'BlogCtrl as blog'
-            })
-            .when('/blog/:postname', {
-                templateUrl: '../views/singlepostpage.html',
-                controller: 'BlogCtrl as blog'
-            })
+            // .when('/blog', {
+            //     templateUrl: '../views/blog.html',
+            //     controller: 'BlogCtrl as blog'
+            // })
+            // .when('/blog/:postname', {
+            //     templateUrl: '../views/singlepostpage.html',
+            //     controller: 'BlogCtrl as blog'
+            // })
             .when('/tag/:tagname', {
                 templateUrl: '../views/blog.html',
                 controller: 'BlogCtrl as blog'
@@ -62,6 +62,10 @@ var mainApp = angular
             })
             .when('/author/:authorname', {
                 templateUrl: '../views/blog.html',
+                controller: 'BlogCtrl as blog'
+            })
+            .when('/page/blog/:postname', {
+                templateUrl: '../views/singlepostpage.html',
                 controller: 'BlogCtrl as blog'
             })
             .when('/page/:pagename', {
@@ -79,6 +83,8 @@ var mainApp = angular
     })
     .run(function( $rootScope, $location, $anchorScroll, $routeParams, $document, $timeout, ipCookie, analyticsService) {
 
+        var runningInterval;
+
         analyticsService.sessionStart(function(data) {
         });
 
@@ -89,12 +95,15 @@ var mainApp = angular
 
         $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
             // $rootScope.transitionState = "active";
-            analyticsService.pageStart();
-
-            //every 15 seconds send page tracking data
-            setInterval(function(){
+            analyticsService.pageStart(function() {
                 analyticsService.pagePing();
-            }, 5000);
+                clearInterval(runningInterval);
+
+                //every 15 seconds send page tracking data
+                runningInterval = setInterval(function(){
+                    analyticsService.pagePing();
+                }, 15000);
+            });
         });
 
         $rootScope.$on('$viewContentLoaded', function(scope, newRoute, oldRoute) {

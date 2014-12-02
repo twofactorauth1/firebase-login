@@ -72,8 +72,6 @@ var collator = {
 
         });
 
-
-
     },
 
     _processSessionEventWithCallback: function(sessionEvent, callback) {
@@ -142,14 +140,17 @@ var collator = {
                         log.error('Error retrieving ping list for session event with id: ' + sessionEvent.get('session_id'));
                         cb(err);
                     }
+
                     //set the end_time for each page as the start_time from the next one.
                     _.each(pageList, function (page, index, list) {
                         if (index < list.length - 1) {//not the last one.
                             page.set('end_time', list[index + 1].get('start_time'));
+                            page.set('exit', false);
                         } else {//last one
                             page.set('end_time', lastSeenMS);
+                            page.set('exit', true);
                         }
-                        var timeOnPage = page.get('end_time') - page.get('start_time');
+                        var timeOnPage = page.get('start_time') - page.get('end_time');
                         page.set('timeOnPage', timeOnPage);
                     });
                     _.each(pingList, function (ping, index, list) {
@@ -166,6 +167,7 @@ var collator = {
                         }
                     });
 
+                    sessionEvent.set('page_depth', pageList.length);
                     //send to keen unless test environment
                     if (process.env.NODE_ENV !== "testing") {
                         client.addEvents({
@@ -214,6 +216,7 @@ var collator = {
         if(moment().valueOf() - moment(serverTime).valueOf() > (collator.secondsThreshold*1000)) {
             sessionEvent.set('session_end', moment().valueOf());
             sessionEvent.set('session_length', collator.secondsThreshold*1000);
+            sessionEvent.set('page_depth', 1);
 
             if (process.env.NODE_ENV !== "testing") {
                 client.addEvents({
@@ -337,8 +340,10 @@ var collator = {
                     _.each(pageList, function(page, index, list){
                         if(index < list.length-1) {//not the last one.
                             page.set('end_time', list[index+1].get('start_time'));
+                            page.set('exit', false);
                         } else {//last one
                             page.set('end_time', lastSeenMS);
+                            page.set('exit', true);
                         }
                     });
                     _.each(pingList, function(ping, index, list){
@@ -349,6 +354,8 @@ var collator = {
                             log.warn('no page found for ping event', ping);
                         }
                     });
+
+                    sessionEvent.set('page_depth', pageList.length);
 
                     //send to keen unless test environment
                     if (process.env.NODE_ENV !== "testing") {
