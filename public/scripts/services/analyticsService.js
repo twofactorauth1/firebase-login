@@ -27,7 +27,6 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
     //api/1.0/analytics/session/{sessionId}/sessionStart
     this.sessionStart = function(fn) {
-        console.log('session start');
         var loc = $location.hash();
         var top = 400;
         var duration = 2000;
@@ -240,7 +239,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                 };
 
                 //track clicks
-                document.body.onclick = function(ev) {
+                document.body.onclick = function(event) {
                   var now = new Date().getTime();
                   var node;
                   if (event.target.id) {
@@ -254,8 +253,8 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                     type: 'cl',
                     ms:now-startPageTimer,
                     ev: node,
-                    x: ev.layerX,
-                    y: ev.layerY
+                    x: event.layerX,
+                    y: event.layerY
                   });
                 };
 

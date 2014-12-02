@@ -18146,6 +18146,13 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .dashboard {
   background: #e7e7e7;
 }
+.dashboard .smart-timeline-list > li {
+  padding: 15px 5px 15px 5px;
+  min-height: 85px;
+}
+.dashboard .form-values li {
+  padding: 0;
+}
 .dashboard .btn-clearblack {
   background: rgba(0, 0, 0, 0.1);
 }
@@ -18230,6 +18237,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .dashboard .keen-metric .keen-metric-change-value span {
   font-size: 14px;
+  line-height: 25px;
 }
 .dashboard .keen-metric .nullPercent {
   line-height: 17px;

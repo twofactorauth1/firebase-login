@@ -1,4 +1,4 @@
-define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','confirmClick2'], function (angularAMD) {
+define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','confirmClick2', 'toasterService'], function (angularAMD) {
     angularAMD.directive('mediaModal', [ 'FileUploader', 'AssetsService', '$http', '$timeout', 'ToasterService',function (FileUploader, AssetsService, $http, $timeout, ToasterService) {
         return {
             require: [],
@@ -84,6 +84,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
 
                     contentElement.css('visibility','hidden');
                     mediaModalElement.on('shown.bs.modal', function (e) {
+                        $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
                         $(window).trigger( "resize" )
                         contentElement.css('visibility', 'visible')
                     });

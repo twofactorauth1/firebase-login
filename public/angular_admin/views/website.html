@@ -31,7 +31,7 @@
                 <span class="hidden-xs">Save</span>
             </a>
             <a ng-confirm-click class="btn btn-warning pull-right btn-cancel-page" type="button"
-            style="margin-right:5px" confirmed-click=c ancelPage() ng-show="isEditing">
+            style="margin-right:5px" confirmed-click=cancelPage() ng-show="isEditing">
                 <i class="fa fa fa-times"></i>
                 <span class="hidden-xs">Cancel</span>
             </a>
@@ -230,11 +230,19 @@
                                 </div>
 
                             </div>
-                            <div class="form-group" ng-if="!componentEditing.bg.img.url && componentEditing.type != 'navigation' && componentEditing.version != 1">
-                                <input id="abi" ng-model="componentEditing.bg.img.url" type="button" class="pull-right btn btn-primary"
-                                ng-model="componentEditing.bg.img.url" data-toggle="modal"
-                                data-target="#media-manager-modal" ng-change="saveComponent()"
-                                value="Add BG Image">
+
+                            <div class="form-group" ng-if="!componentEditing.bg.img.url">
+                                <input
+                                        id="abi"
+                                        ng-model="componentEditing.bg.img.url"
+                                        media-modal-show-insert="true"
+                                        type="button"
+                                        class="pull-right btn btn-primary"
+                                        ng-model="componentEditing.bg.img.url"
+                                        data-toggle="modal"
+                                        data-target="#media-manager-modal"
+                                        ng-change="saveComponent()"
+                                        value="Add BG Image">
                             </div>
                             <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.version != 1">
                                 <label for="colorpicker">Blur BG</label>

@@ -1,7 +1,7 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-standalone', 'highmaps-data', 'highmaps-us', 'highcharts-ng','formatCurrency', 'secTotime', 'formatPercentage', 'dashboardService', 'customerService', 'angular-daterangepicker', 'daterangepicker', 'count-to', 'keenService'], function(app) {
-    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', 'keenService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService) {
+define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-standalone', 'highmaps-data', 'highmaps-us', 'highcharts-ng','formatCurrency', 'secTotime', 'formatText', 'formatPercentage', 'dashboardService', 'customerService', 'angular-daterangepicker', 'daterangepicker', 'count-to', 'keenService', 'navigationService'], function(app) {
+    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', 'keenService', 'NavigationService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService) {
         ngProgress.start();
-
+                NavigationService.updateNavigation();
                 $scope.activeTab = 'analytics';
                 $scope.$watch('activeTab', function() {
                     console.log('tab changed');
@@ -48,25 +48,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                     });
                 });
 
-                // var params = {
-                //     "event_collection": 'sessions',
-                //     "timeframe": 'this_month',
-                //     "analyses": {
-                //         "total_sessions":{
-                //             "analysis_type":"count_unique",
-                //             "target_property":"session_id"
-                //         },
-                //         "average_session":{
-                //             "analysis_type":"average",
-                //             "target_property":"session_length"
-                //         }
-                //     }
-                // };
-
-                // keenService.multiAnalysis(params, function(data){
-                //     console.log('keen data >>> ', data);
-                // });
-
                 Keen.ready(function() {
 
 
@@ -97,15 +78,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 result = 100;
                             }
                             return Math.round(result * 100) / 100;
-                        };
-
-
-                        $scope.query = function(params) {
-                            return new Promise(function(resolve, reject) {
-                                // dashboardService.queryGoogleAnalytics(params, function(data) {
-                                //     resolve(data);
-                                // });
-                            });
                         };
 
                         $scope.stateToAbbr = function(strInput) {
@@ -1300,69 +1272,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                 });
                         };
 
-
-                        // $scope.secondGACall = function() {
-
-                        //     setTimeout(function() {
-
-                        //         var topPageViews = $scope.query({
-                        //             ids: 'ga:82461709',
-                        //             metrics: 'ga:pageviews,ga:uniquePageviews,ga:avgTimeOnPage,ga:entrances,ga:bounceRate,ga:exitRate',
-                        //             dimensions: 'ga:pagePath',
-                        //             'start-date': '30daysAgo',
-                        //             'end-date': 'yesterday'
-                        //         });
-
-
-                        //         Promise.all([newVsReturningChart, topPageViews, trafficSources]).then(function(results) {
-
-
-
-                        //             ngProgress.complete();
-
-                        //             // ----------------------------------------
-                        //             // Top Pageviews
-                        //             // ----------------------------------------
-
-                        //             $scope.topPages = results[1].rows;
-
-                        //             var output = [];
-
-                        //             for (var i = 0; i < $scope.topPages.length; i++) {
-                        //                 var singleRow = $scope.topPages[i];
-                        //                 var subObj = {};
-                        //                 for (var k = 0; k < singleRow.length; k++) {
-                        //                     if (k == 0) {
-                        //                         subObj.page = singleRow[k]
-                        //                     }
-                        //                     if (k == 1) {
-                        //                         subObj.pageviews = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 2) {
-                        //                         subObj.uniquePageviews = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 3) {
-                        //                         subObj.avgTime = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 4) {
-                        //                         subObj.entrances = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 5) {
-                        //                         subObj.bounceRate = parseInt(singleRow[k])
-                        //                     }
-                        //                     if (k == 6) {
-                        //                         subObj.exitRate = parseInt(singleRow[k])
-                        //                     }
-                        //                 };
-                        //                 if (subObj) {
-                        //                     output.push(subObj);
-                        //                 }
-                        //             };
-
-
-                        //             $scope.formattedTopPages = output;
-                        //             $scope.pagedformattedTopPages = $scope.formattedTopPages.slice(0, $scope.pageLimit);
-
                         PaymentService.getCustomers(function(data) {
                             $scope.customers = data;
 
@@ -1480,6 +1389,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                                     $scope.totalCanceledSubscriptions += parseInt(this.data[2].result[i].value);
                                 };
                                 $scope.canceledSubscriptions = cancelSubscriptionData;
+                                //TODO: get average of monthly subscription price instead of $97
+                                $scope.potentialMRRLoss = cancelSubscriptionData.length * 97;
 
                                 var userChurnCalc = this.data[2].result / (this.data[2].result + this.data[1].result) * 100;
                                 $scope.userChurn = userChurnCalc.toFixed(1) * -1;
@@ -1655,8 +1566,11 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
                             var result = this.data.result;
 
+                            console.log('result >>> ', result);
+
                             for (var x in result) {
-                                if (result[x].data.previous_attributes.plan.amount >= result[x].data.object.plan.amount) {
+                                //result[x].data.previous_attributes.plan.amount >= 
+                                if (result[x].data.object.plan.amount) {
                                     updatedSubscriptions.push(result[x]);
                                 }
                             }
