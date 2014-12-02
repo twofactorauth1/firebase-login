@@ -84,6 +84,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
 
                     contentElement.css('visibility','hidden');
                     mediaModalElement.on('shown.bs.modal', function (e) {
+                        $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
                         $(window).trigger( "resize" )
                         contentElement.css('visibility', 'visible')
                     });
