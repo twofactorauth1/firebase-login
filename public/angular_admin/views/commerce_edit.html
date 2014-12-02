@@ -367,7 +367,7 @@
                             <tbody>
                                 <tr ng-repeat="plan in plans">
                                     <td>
-                                        <span class="fa fa-check" ng-class="{'fa-check': plan.active, 'fa-close': !plan.active}"></span>
+                                        <input bs-switch ng-model="plan.active" type="checkbox" ng-change="planToggleActiveFn(plan.id, plan.active)">
                                     </td>
                                     <td>{{plan.name}}</td>
                                     <td>{{plan.interval_count}}</td>
