@@ -367,7 +367,7 @@
                             <tbody>
                                 <tr ng-repeat="plan in plans">
                                     <td>
-                                        <span class="fa fa-check"></span>
+                                        <span class="fa fa-check" ng-class="{'fa-check': plan.active, 'fa-close': !plan.active}"></span>
                                     </td>
                                     <td>{{plan.name}}</td>
                                     <td>{{plan.interval_count}}</td>
