@@ -89,6 +89,10 @@ define([
             UserService.getUser(function(user) {
                 $scope.user = user;
                 that.user = user;
+                console.log('that.user.user_preferences.lastPageHandle >> ');
+                if(that.user.user_preferences.lastPageHandle && that.user.user_preferences.lastPageHandle!='index' ) {
+                     $scope.updatePage(that.user.user_preferences.lastPageHandle);
+                }
             });
 
             window.getUpdatediFrameRoute = function(data) {
@@ -116,6 +120,7 @@ define([
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
                 //wait for iframe to load completely
+                //TODO: get trigger instead of timeout
                 $timeout(function() {
                     //unhide no-component
                     if (iframeDoc.getElementById('body')) {
@@ -280,6 +285,11 @@ define([
                 // iframe.setAttribute("src", src+"/?editor=true");`
 
                 $scope.backup['website'] = angular.copy($scope['website']);
+                UserService.getUserPreferences(function(preferences){
+                   preferences.lastPageHandle = $scope.pageSelected;
+
+                    UserService.updateUserPreferences(preferences, false, function(){} );
+                });
             };
 
             $scope.cancelPage = function() {
