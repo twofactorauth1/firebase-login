@@ -14,12 +14,12 @@
                     </div>
                     <article class="entry clearfix" data-ng-if="control.blogposts||blog.blogposts">
                         <div class="single-blog responsive clearfix"
-                             ng-repeat="blogpost in control.blogposts || blog.blogposts track by $index"
+                             ng-repeat="blogpost in control.blogposts || blog.blogposts | filter: blogpost.created.date"
                              data-postId="{{blogpost._id}}">
 
                             <div class="blog-entry clearfix">
                                 <h2 class="blog-title">
-                                    <a data-ng-if="blogpost.post_url" href="/blog/{{blogpost.post_url}}">
+                                    <a data-ng-if="blogpost.post_url" href="/page/blog/{{blogpost.post_url}}">
                                         <div class="editable" data-class="post_title"
                                              data-ng-if="blogpost.post_title">
                                             {{blogpost.post_title}}
@@ -65,7 +65,7 @@
                                     </div>
                                     </p></div>
                                 <a data-ng-if="blogpost.post_url"
-                                   href="/blog/{{blogpost.post_url}}"
+                                   href="/page/blog/{{blogpost.post_url}}"
                                    class="btn btn-orange pull-right"><span>READ MORE</span></a>
                                    <div class="clearfix"></div>
                                    <hr></hr>

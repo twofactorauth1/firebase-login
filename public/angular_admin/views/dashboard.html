@@ -504,8 +504,8 @@
                         <a href="/admin#/dashboard/net-revenue">
                             <span class="keen-metric-title mb10">Net Revenue</span>
                             <span class="keen-metric-value col-sm-6">
-                                <div class="center" ng-show="totalRevenue != null">{{totalRevenue | formatCurrency}}</div>
-                                <div ng-show="totalRevenue == null">$ --</div>
+                                <div class="center" ng-show="netRevenue != null">{{netRevenue | formatCurrency}}</div>
+                                <div ng-show="netRevenue == null">$ --</div>
                             </span>
                             <span class="keen-metric-change-value col-sm-6">
                                 <div class="center">
@@ -604,7 +604,7 @@
                 </div>
 
             </div>
-            <div class="row">
+            <div class="row hidden">
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
                         <a href="/admin#/dashboard/other-revenue">
@@ -654,7 +654,7 @@
 
             </div>
 
-            <div class="row">
+            <div class="row hidden">
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
                         <a href="/admin#/dashboard/other-revenue">
@@ -686,7 +686,7 @@
                 </div>
 
             </div>
-            <div class="row">
+            <div class="row hidden">
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
                         <span class="keen-metric-value">2</span>
@@ -707,7 +707,7 @@
                 </div>
 
             </div>
-            <div class="row">
+            <div class="row hidden">
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
                         <span class="keen-metric-value">$1528</span>

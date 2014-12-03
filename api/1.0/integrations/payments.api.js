@@ -35,8 +35,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('customers/:id'), this.isAuthApi, this.deleteCustomer.bind(this));
 
         //Plans
-        app.get(this.url('plans'), this.isAuthApi, this.listPlans.bind(this));
-        app.get(this.url('plans/:id'), this.isAuthApi, this.getPlan.bind(this));
+        app.get(this.url('plans'), this.setup, this.listPlans.bind(this));
+        app.get(this.url('plans/:id'), this.setup, this.getPlan.bind(this));
         app.post(this.url('plans'), this.isAuthApi, this.createPlan.bind(this));
         app.post(this.url('plans/:id'), this.isAuthApi, this.updatePlan.bind(this));
         app.delete(this.url('plans/:id'), this.isAuthApi, this.deletePlan.bind(this));
