@@ -13,6 +13,11 @@ var cookies = require('../../utils/cookieutil');
 var Contact = require('../../models/contact');
 var request = require('request');
 var fullContactConfig = require('../../configs/fullcontact.config');
+
+var mandrillHelper = require('../../utils/mandrillhelper');
+var notificationConfig = require('../../configs/notification.config');
+var fs = require('fs');
+
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -383,7 +388,22 @@ _.extend(api.prototype, baseApi.prototype, {
                             req.flash("error", 'There was a problem signing up.  Please try again later.');
                             return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
                         } else {
-                            req.flash("info", "Thank you for subscribing.");
+                            /*
+                             * Send welcome email.  This is done asynchronously.
+                             */
+                            fs.readFile(notificationConfig.WELCOME_HTML, function(err, htmlContent){
+                                if(err) {
+                                    log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
+                                } else {
+                                    var contactEmail = savedContact.getEmails()[0];
+                                    var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
+                                    mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                                        notificationConfig.WELCOME_FROM_NAME, contactEmail, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
+                                        htmlContent, value.id(), savedContact.id(), function(err, result){});
+                                }
+
+                            });
+                            //req.flash("info", "Thank you for subscribing.");
                             return self.sendResult(resp, savedContact);
                         }
                     });
