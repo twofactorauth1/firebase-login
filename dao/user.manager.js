@@ -91,7 +91,7 @@ module.exports = {
                         /*
                          * Send welcome email.  This is done asynchronously.
                          */
-                        fs.readFile(notificationConfig.WELCOME_HTML, function(err, htmlContent){
+                        fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function(err, htmlContent){
                             if(err) {
                                 log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
                             } else {
