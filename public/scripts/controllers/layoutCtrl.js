@@ -503,7 +503,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             $scope.subscriptionPlans = [];
                             if ('stripePlans' in $scope.paymentFormProduct.product_attributes) {
                                 $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value, index) {
-                                    promises.push(PaymentService.getPlanPromise(value));
+                                    promises.push(PaymentService.getPlanPromise(value.id));
                                 });
                                 $q.all(promises)
                                     .then(function(data) {
